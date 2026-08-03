@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HÄLL.SE</title>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: #111;
+      color: #eee;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    main {
+      width: min(680px, 88vw);
+    }
+
+    h1 {
+      font-size: clamp(3rem, 12vw, 7rem);
+      margin: 0 0 2rem;
+      letter-spacing: -0.06em;
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      font-size: 1.15rem;
+      margin-bottom: 3rem;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      background: #5bd675;
+      border-radius: 50%;
+      box-shadow: 0 0 14px #5bd675;
+    }
+
+    .big {
+      font-size: clamp(1.5rem, 4vw, 2.4rem);
+      line-height: 1.3;
+      margin-bottom: 2rem;
+    }
+
+    .muted {
+      color: #888;
+      line-height: 1.7;
+    }
+
+    .uptime {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #333;
+      font-family: monospace;
+      color: #aaa;
+    }
+
+    footer {
+      margin-top: 5rem;
+      color: #555;
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <h1>HÄLL.SE</h1>
+
+    <div class="status">
+      <span class="dot"></span>
+      All systems operational
+    </div>
+
+    <div class="big">
+      Hällen är kvar.
+    </div>
+
+    <p class="muted">
+      Kontinuerlig drift sedan ungefär 1,8 miljarder år tillbaka.
+      Inga planerade underhållsfönster.
+    </p>
+
+    <div class="uptime">
+      UPTIME&nbsp;&nbsp; 99.999999%
+      <br>
+      INCIDENTS&nbsp; 0
+      <br>
+      STATUS&nbsp;&nbsp;&nbsp; SOLID
+    </div>
+
+    <footer>
+      © Häll
+    </footer>
+  </main>
+</body>
+</html>
