@@ -3,100 +3,334 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>HÄLL.SE</title>
+  <title>HÄLL.SE — System Status</title>
+
   <style>
+    :root {
+      --bg: #0d0f10;
+      --panel: #141719;
+      --text: #eeeeea;
+      --muted: #858b8e;
+      --line: #272b2d;
+      --green: #55d978;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       min-height: 100vh;
-      display: grid;
-      place-items: center;
-      background: #111;
-      color: #eee;
-      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-family:
+        Inter, ui-sans-serif, system-ui, -apple-system,
+        BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
     main {
-      width: min(680px, 88vw);
+      width: min(760px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 12vh 0 8vh;
     }
 
     h1 {
-      font-size: clamp(3rem, 12vw, 7rem);
-      margin: 0 0 2rem;
-      letter-spacing: -0.06em;
+      margin: 0;
+      font-size: clamp(4rem, 15vw, 8rem);
+      line-height: .85;
+      letter-spacing: -0.075em;
+      font-weight: 800;
+      cursor: default;
+      user-select: none;
+    }
+
+    .subtitle {
+      margin-top: 22px;
+      color: var(--muted);
+      font-size: 0.95rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
     }
 
     .status {
       display: flex;
       align-items: center;
-      gap: 0.7rem;
-      font-size: 1.15rem;
-      margin-bottom: 3rem;
+      gap: 10px;
+      margin: 55px 0 38px;
+      font-size: 1.25rem;
     }
 
     .dot {
       width: 12px;
       height: 12px;
-      background: #5bd675;
+      flex: 0 0 auto;
       border-radius: 50%;
-      box-shadow: 0 0 14px #5bd675;
+      background: var(--green);
+      box-shadow: 0 0 16px rgba(85, 217, 120, .55);
     }
 
-    .big {
-      font-size: clamp(1.5rem, 4vw, 2.4rem);
-      line-height: 1.3;
-      margin-bottom: 2rem;
+    .statement {
+      margin: 0 0 50px;
+      max-width: 620px;
+      font-size: clamp(1.7rem, 5vw, 2.7rem);
+      line-height: 1.18;
+      letter-spacing: -.035em;
     }
 
-    .muted {
-      color: #888;
-      line-height: 1.7;
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      border-top: 1px solid var(--line);
+      border-left: 1px solid var(--line);
     }
 
-    .uptime {
-      margin-top: 3rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid #333;
-      font-family: monospace;
-      color: #aaa;
+    .item {
+      min-height: 110px;
+      padding: 20px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .label {
+      margin-bottom: 11px;
+      color: var(--muted);
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      font-size: .72rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .value {
+      font-size: 1.08rem;
+    }
+
+    .uptime-number {
+      font-variant-numeric: tabular-nums;
+    }
+
+    details {
+      margin-top: 42px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    summary {
+      padding: 18px 0;
+      color: var(--muted);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .details-content {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 10px 20px;
+      padding: 4px 0 24px;
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      font-size: .85rem;
+    }
+
+    .details-content div:nth-child(odd) {
+      color: var(--muted);
     }
 
     footer {
-      margin-top: 5rem;
-      color: #555;
-      font-size: 0.8rem;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      margin-top: 65px;
+      color: #555b5e;
+      font-size: .75rem;
+    }
+
+    #secret {
+      display: none;
+      position: fixed;
+      inset: 0;
+      place-items: center;
+      background: rgba(13,15,16,.96);
+      z-index: 10;
+      text-align: center;
+      padding: 20px;
+    }
+
+    #secret.visible {
+      display: grid;
+    }
+
+    #secret strong {
+      display: block;
+      font-size: clamp(2rem, 7vw, 5rem);
+      letter-spacing: -.05em;
+    }
+
+    #secret span {
+      display: block;
+      margin-top: 15px;
+      color: var(--muted);
+    }
+
+    @media (max-width: 600px) {
+      main {
+        padding-top: 9vh;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .details-content {
+        grid-template-columns: 1fr;
+      }
+
+      .details-content div:nth-child(even) {
+        margin-bottom: 10px;
+      }
+
+      footer {
+        flex-direction: column;
+      }
     }
   </style>
 </head>
 
 <body>
+
   <main>
-    <h1>HÄLL.SE</h1>
+
+    <h1 id="logo">HÄLL.SE</h1>
+    <div class="subtitle">Fennoscandian Infrastructure Services</div>
 
     <div class="status">
       <span class="dot"></span>
-      All systems operational
+      <span>All systems operational</span>
     </div>
 
-    <div class="big">
+    <p class="statement">
       Hällen är kvar.
-    </div>
-
-    <p class="muted">
-      Kontinuerlig drift sedan ungefär 1,8 miljarder år tillbaka.
-      Inga planerade underhållsfönster.
     </p>
 
-    <div class="uptime">
-      UPTIME&nbsp;&nbsp; 99.999999%
-      <br>
-      INCIDENTS&nbsp; 0
-      <br>
-      STATUS&nbsp;&nbsp;&nbsp; SOLID
+    <div class="grid">
+
+      <div class="item">
+        <div class="label">Status</div>
+        <div class="value">SOLID</div>
+      </div>
+
+      <div class="item">
+        <div class="label">Incidents</div>
+        <div class="value">0</div>
+      </div>
+
+      <div class="item">
+        <div class="label">Uptime</div>
+        <div class="value uptime-number" id="uptime">
+          1,800,000,000 years
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="label">Availability</div>
+        <div class="value">99.999999%</div>
+      </div>
+
+      <div class="item">
+        <div class="label">Hosting</div>
+        <div class="value">On-premise</div>
+      </div>
+
+      <div class="item">
+        <div class="label">Last major update</div>
+        <div class="value">Weichselian glaciation</div>
+      </div>
+
     </div>
 
+    <details>
+      <summary>System details</summary>
+
+      <div class="details-content">
+        <div>Platform</div>
+        <div>Fennoscandian Shield</div>
+
+        <div>Architecture</div>
+        <div>Monolithic</div>
+
+        <div>Deployment</div>
+        <div>Continuous</div>
+
+        <div>Vendor lock-in</div>
+        <div>None</div>
+
+        <div>Cloud dependency</div>
+        <div>Weather only</div>
+
+        <div>Maintenance</div>
+        <div>Not scheduled</div>
+
+        <div>Expected EOL</div>
+        <div>~5,000,000,000 years</div>
+      </div>
+    </details>
+
     <footer>
-      © Häll
+      <span>© Häll</span>
+      <span>No cookies. No tracking. No movement.</span>
     </footer>
+
   </main>
+
+  <div id="secret">
+    <div>
+      <strong>PLEASE DO NOT TAP THE HÄLL.</strong>
+      <span>Structural integrity remains nominal.</span>
+    </div>
+  </div>
+
+  <script>
+    // Geologically unnecessary live uptime counter.
+    const uptime = document.getElementById("uptime");
+    const years = 1800000000;
+
+    function updateUptime() {
+      const now = new Date();
+      const startOfYear = new Date(now.getFullYear(), 0, 1);
+      const nextYear = new Date(now.getFullYear() + 1, 0, 1);
+
+      const fraction =
+        (now - startOfYear) / (nextYear - startOfYear);
+
+      uptime.textContent =
+        (years + fraction).toLocaleString("en-US", {
+          minimumFractionDigits: 8,
+          maximumFractionDigits: 8
+        }) + " years";
+    }
+
+    updateUptime();
+    setInterval(updateUptime, 1000);
+
+    // Easter egg: five taps/clicks on HÄLL.SE.
+    let taps = 0;
+    let timer;
+
+    document.getElementById("logo").addEventListener("click", () => {
+      taps++;
+
+      clearTimeout(timer);
+      timer = setTimeout(() => taps = 0, 2500);
+
+      if (taps >= 5) {
+        document.getElementById("secret").classList.add("visible");
+        taps = 0;
+      }
+    });
+
+    document.getElementById("secret").addEventListener("click", () => {
+      document.getElementById("secret").classList.remove("visible");
+    });
+  </script>
+
 </body>
 </html>
