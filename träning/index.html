@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f172a">
+<title>Träningsplan</title>
+<style>
+  :root{
+    --bg:#f5f7fb;
+    --card:#ffffff;
+    --text:#0f172a;
+    --muted:#64748b;
+    --line:#e2e8f0;
+    --accent:#2563eb;
+    --accent-soft:#dbeafe;
+    --green:#15803d;
+    --green-soft:#dcfce7;
+    --amber:#b45309;
+    --amber-soft:#fef3c7;
+    --slate:#475569;
+    --shadow:0 8px 24px rgba(15,23,42,.06);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.45;
+  }
+  .wrap{
+    width:min(100%,760px);
+    margin:0 auto;
+    padding:20px 16px 56px;
+  }
+  header{
+    padding:8px 2px 18px;
+  }
+  .eyebrow{
+    text-transform:uppercase;
+    letter-spacing:.12em;
+    font-size:.76rem;
+    font-weight:800;
+    color:var(--accent);
+    margin-bottom:6px;
+  }
+  h1{
+    font-size:clamp(2rem,8vw,3.2rem);
+    line-height:1;
+    margin:0 0 8px;
+    letter-spacing:-.04em;
+  }
+  .sub{
+    color:var(--muted);
+    font-size:.98rem;
+  }
+  .focus{
+    margin:8px 0 22px;
+    padding:16px 18px;
+    border-radius:18px;
+    background:#0f172a;
+    color:white;
+    box-shadow:var(--shadow);
+  }
+  .focus strong{display:block;margin-bottom:4px}
+  .focus span{color:#cbd5e1}
+  h2{
+    font-size:1.25rem;
+    margin:28px 0 12px;
+    letter-spacing:-.02em;
+  }
+  .day{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:18px 18px 17px;
+    margin:12px 0;
+    box-shadow:var(--shadow);
+  }
+  .daytop{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    align-items:flex-start;
+    margin-bottom:10px;
+  }
+  .dow{
+    font-size:.82rem;
+    font-weight:800;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:.08em;
+  }
+  .date{
+    color:var(--muted);
+    font-size:.85rem;
+    margin-top:2px;
+  }
+  .session{
+    font-size:1.22rem;
+    font-weight:800;
+    letter-spacing:-.02em;
+    margin:4px 0 6px;
+  }
+  .reason{
+    color:#334155;
+    font-size:.95rem;
+  }
+  .badge{
+    flex:0 0 auto;
+    border-radius:999px;
+    padding:5px 9px;
+    font-size:.72rem;
+    font-weight:800;
+    white-space:nowrap;
+  }
+  .planned{background:var(--green-soft);color:var(--green)}
+  .prelim{background:var(--amber-soft);color:var(--amber)}
+  .open{background:#e2e8f0;color:var(--slate)}
+  .alert{
+    border-left:4px solid var(--amber);
+    background:#fffaf0;
+    padding:14px 16px;
+    border-radius:14px;
+    margin:16px 0 8px;
+    color:#7c2d12;
+  }
+  details{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:18px;
+    margin:10px 0;
+    overflow:hidden;
+    box-shadow:var(--shadow);
+  }
+  summary{
+    cursor:pointer;
+    list-style:none;
+    padding:16px 18px;
+    font-weight:800;
+  }
+  summary::-webkit-details-marker{display:none}
+  summary:after{
+    content:"＋";
+    float:right;
+    color:var(--muted);
+  }
+  details[open] summary:after{content:"−"}
+  .weekbody{
+    border-top:1px solid var(--line);
+    padding:8px 18px 14px;
+  }
+  .weekrow{
+    display:grid;
+    grid-template-columns:56px 1fr auto;
+    gap:10px;
+    padding:10px 0;
+    border-bottom:1px solid var(--line);
+    align-items:center;
+  }
+  .weekrow:last-child{border-bottom:0}
+  .mini-status{
+    font-size:.7rem;
+    font-weight:800;
+    color:var(--muted);
+  }
+  .rules{
+    background:var(--card);
+    border-radius:18px;
+    border:1px solid var(--line);
+    padding:8px 18px;
+    box-shadow:var(--shadow);
+  }
+  .rule{
+    padding:12px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .rule:last-child{border-bottom:0}
+  footer{
+    color:var(--muted);
+    font-size:.82rem;
+    padding-top:26px;
+  }
+  @media(min-width:650px){
+    .wrap{padding-top:34px}
+    .day{padding:20px 22px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Levande träningsplan</div>
+    <h1>Vecka 34</h1>
+    <div class="sub">17–23 augusti 2026 · senast uppdaterad 17 augusti</div>
+  </header>
+
+  <div class="focus">
+    <strong>Veckans princip</strong>
+    <span>Bygg en stabil rytm utan att stapla belastning. Pass som saknar tillräckligt underlag är markerade preliminära.</span>
+  </div>
+
+  <section>
+    <div class="day">
+      <div class="daytop">
+        <div>
+          <div class="dow">Måndag</div>
+          <div class="date">17 augusti</div>
+        </div>
+        <div class="badge planned">PLANERAT</div>
+      </div>
+      <div class="session">Simning kväll</div>
+      <div class="reason">Kontrollerat pass efter söndagens trail. Ingen ytterligare benbelastning behövs i dag.</div>
+    </div>
+
+    <div class="day">
+      <div class="daytop">
+        <div>
+          <div class="dow">Tisdag</div>
+          <div class="date">18 augusti</div>
+        </div>
+        <div class="badge prelim">PRELIMINÄRT</div>
+      </div>
+      <div class="session">Kort styrkepass</div>
+      <div class="reason">Sen hemkomst från jobbresa. Genomförs bara om resan och dagsformen medger det, och inte så tungt att nästa dags löpning störs.</div>
+    </div>
+
+    <div class="day">
+      <div class="daytop">
+        <div>
+          <div class="dow">Onsdag</div>
+          <div class="date">19 augusti</div>
+        </div>
+        <div class="badge prelim">PRELIMINÄRT</div>
+      </div>
+      <div class="session">Löpning · kvalitet</div>
+      <div class="reason">Första tänkta kvalitetspasset på land efter söndagens trail. Fastställs först när återhämtningen är känd.</div>
+    </div>
+
+    <div class="day">
+      <div class="daytop">
+        <div>
+          <div class="dow">Torsdag</div>
+          <div class="date">20 augusti</div>
+        </div>
+        <div class="badge prelim">PRELIMINÄRT</div>
+      </div>
+      <div class="session">Simning</div>
+      <div class="reason">Låg mekanisk belastning på benen. Exakt innehåll är ännu inte fastställt.</div>
+    </div>
+
+    <div class="day">
+      <div class="daytop">
+        <div>
+          <div class="dow">Fredag</div>
+          <div class="date">21 augusti</div>
+        </div>
+        <div class="badge open">ÖPPET</div>
+      </div>
+      <div class="session">Vila eller lätt aktivitet</div>
+      <div class="reason">Ingen träning läggs in enbart för att dagen är ledig. Beslut tas utifrån föregående dagar och helgens plan.</div>
+    </div>
+
+    <div class="day">
+      <div class="daytop">
+        <div>
+          <div class="dow">Lördag</div>
+          <div class="date">22 augusti</div>
+        </div>
+        <div class="badge prelim">PRELIMINÄRT</div>
+      </div>
+      <div class="session">MTB / XC</div>
+      <div class="reason">Teknik eller kvalitet beroende på hur veckan fallit ut. Exakt belastning är ännu inte fastställd.</div>
+    </div>
+
+    <div class="day">
+      <div class="daytop">
+        <div>
+          <div class="dow">Söndag</div>
+          <div class="date">23 augusti</div>
+        </div>
+        <div class="badge prelim">PRELIMINÄRT</div>
+      </div>
+      <div class="session">Trail / längre löpning</div>
+      <div class="reason">Måste vägas mot lördagens MTB och första enduroskolan följande dag.</div>
+    </div>
+
+    <div class="alert">
+      <strong>Belastningskontroll:</strong> Söndag 23/8 ligger direkt före första enduroskolan måndag 24/8. Söndagspasset ska därför inte automatiskt göras långt eller hårt.
+    </div>
+  </section>
+
+  <h2>Kommande tre veckor</h2>
+
+  <details>
+    <summary>Vecka 35 · 24–30 augusti</summary>
+    <div class="weekbody">
+      <div class="weekrow"><b>Mån</b><span>Enduroskola</span><span class="mini-status">FAST</span></div>
+      <div class="weekrow"><b>Tis</b><span>Återhämtning / simning</span><span class="mini-status">PREL.</span></div>
+      <div class="weekrow"><b>Ons</b><span>Löpning · kvalitet</span><span class="mini-status">PREL.</span></div>
+      <div class="weekrow"><b>Tors</b><span>Simning + ev. styrka</span><span class="mini-status">PREL.</span></div>
+      <div class="weekrow"><b>Fre</b><span>Lätt / vila</span><span class="mini-status">ÖPPET</span></div>
+      <div class="weekrow"><b>Lör</b><span>MTB / XC</span><span class="mini-status">PREL.</span></div>
+      <div class="weekrow"><b>Sön</b><span>Trail / längre löpning</span><span class="mini-status">PREL.</span></div>
+    </div>
+  </details>
+
+  <details>
+    <summary>Vecka 36 · 31 augusti–6 september</summary>
+    <div class="weekbody">
+      <div class="weekrow"><b>Mån</b><span>Enduroskola</span><span class="mini-status">FAST</span></div>
+      <div class="weekrow"><b>Tis</b><span>Återhämtning / simning</span><span class="mini-status">PREL.</span></div>
+      <div class="weekrow"><b>Ons</b><span>Löpning · kvalitet</span><span class="mini-status">PREL.</span></div>
+      <div class="weekrow"><b>Tors</b><span>Simning + ev. styrka</span><span class="mini-status">PREL.</span></div>
+      <div class="weekrow"><b>Fre</b><span>Lätt / vila</span><span class="mini-status">ÖPPET</span></div>
+      <div class="weekrow"><b>Lör</b><span>MTB / XC</span><span class="mini-status">PREL.</span></div>
+      <div class="weekrow"><b>Sön</b><span>Trail / längre löpning</span><span class="mini-status">PREL.</span></div>
+    </div>
+  </details>
+
+  <details>
+    <summary>Vecka 37 · 7–13 september</summary>
+    <div class="weekbody">
+      <div class="weekrow"><b>Mån</b><span>Enduroskola</span><span class="mini-status">FAST</span></div>
+      <div class="weekrow"><b>Tis</b><span>Återhämtning / simning</span><span class="mini-status">PREL.</span></div>
+      <div class="weekrow"><b>Ons</b><span>Löpning · kvalitet</span><span class="mini-status">PREL.</span></div>
+      <div class="weekrow"><b>Tors</b><span>Simning + ev. styrka</span><span class="mini-status">PREL.</span></div>
+      <div class="weekrow"><b>Fre</b><span>Lätt / vila</span><span class="mini-status">ÖPPET</span></div>
+      <div class="weekrow"><b>Lör</b><span>MTB / XC</span><span class="mini-status">PREL.</span></div>
+      <div class="weekrow"><b>Sön</b><span>Trail / längre löpning</span><span class="mini-status">PREL.</span></div>
+    </div>
+  </details>
+
+  <h2>Regler för ändringar</h2>
+  <div class="rules">
+    <div class="rule">Kontrollera alltid föregående och kommande 2–3 dagars belastning innan ett pass flyttas, läggs till eller görs hårdare.</div>
+    <div class="rule">Lägg inte till träning enbart för att en dag är ledig.</div>
+    <div class="rule">Om relevant återhämtnings- eller träningsdata saknas markeras beslutet som preliminärt.</div>
+    <div class="rule">Exakta zoner, farter, watt, pulser, volymer och progressioner anges först när det finns tillräckligt underlag.</div>
+    <div class="rule">Enduro ersätter annan belastning vid behov; det läggs inte automatiskt ovanpå en full träningsvecka.</div>
+  </div>
+
+  <footer>Träningsplan · levande arbetsversion</footer>
+</div>
+</body>
+</html>
