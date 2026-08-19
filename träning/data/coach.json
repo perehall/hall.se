@@ -4,35 +4,35 @@
       "activity_id": 19798624389,
       "activity_date": "2026-08-18",
       "activity_name": "Styrketräning på kvällen",
-      "generated_at_utc": "2026-08-19T08:01:40.409408+00:00",
+      "generated_at_utc": "2026-08-19T09:28:57.169070+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Senaste passet var ett nedskalad styrkepass (35–36 min) med låg medelpuls (≈87 bpm). Tidigare 2 dagar innehöll ett långt simpass (3.2 km) och en lång trailrun två dagar innan det. Kommande 2–3 dagar planerar du ett potentiellt hårt swimrun (Ons 2026-08-19) följt av konditionerad simning/vila (Tor) och vila/lätt (Fre).",
-        "load_interpretation": "Fakta visar måttlig ackumulerad belastning de senaste 3 dagarna: lång löpning (16 km trail, 5061 s) + långt simpass (3200 m) + nedskalad styrka. Det senaste styrkepasset är avsiktligt nedskalat inför onsdag; pulsvärden talar för låg intern belastning. Planerat swimrun samma dag kan ersätta löptröskel och utgör potentiellt högre belastning beroende på genomförande. Därför bör kommande dagars belastning kontrolleras mot faktisk genomförd onsdagsprestation innan ytterligare kvalitet läggs till.",
-        "confidence": "high",
+        "summary": "Senaste aktivitet är ett kvällsstyrkepass 2026-08-18 (36 min, snittpuls 87, max 119). De två föregående dagarna var simning 3 200 m (2026-08-17) och innan dess längre trailpass (2026-08-16). Kommande planerade dagar: swimrun (2026-08-19), simning eller vila (2026-08-20), vila (21), MTB teknik (22), trail lugnt (23).",
+        "load_interpretation": "Fakta: det finns tre genomförda pass de senaste tre dagarna: 2026-08-16 trail (långt), 2026-08-17 simning 3 200 m, 2026-08-18 styrketräning 35–36 min med låg snittpuls. Tolkning: styrkepasset var nedskalat och lågintensivt kardiovaskulärt (puls 87 i snitt); det ser inte ut att ha lagt hög ytterligare kardiovaskulär belastning ovanpå fredagens och lördagens längre pass, men onsdagens planerade swimrun kan vara betydande belastning jämfört med ursprunglig löptröskel.",
+        "confidence": "medium",
         "facts": [
-          "2026-08-16: TrailRun 14.64 km, 5061 s, snittpuls 139, max 158.",
-          "2026-08-17: Swim 3.2 km, 2786 s moving, snittpuls 127, max 154.",
-          "2026-08-18: Styrketräning 2145 s (≈35:45), snittpuls 87, max 119.",
-          "Plan 2026-08-19: Swimrun · Jogersö Extreme · 1 varv (kan ersätta löptröskel).",
-          "Plan 2026-08-20: Simning aerob/teknik eller vila beroende på onsdagens belastning."
+          "2026-08-16: Trail 14.6 km, 251 m+, moving_time 5061 s, snittpuls 139.2.",
+          "2026-08-17: Simning 3200 m, moving_time 2786 s, snittpuls 127.1.",
+          "2026-08-18: Styrketräning 2145 s (35:45), snittpuls 87.3, maxpuls 119.",
+          "Planerad 2026-08-19: Swimrun · Jogersö Extreme · 1 varv (ersätter löptröskel om genomförd).",
+          "Planerad 2026-08-20: Simning aerob/teknik eller vila; redan föreslagen att skalas ner tills onsdagens data finns."
         ],
         "interpretations": [
-          "Styrkepasset var avsiktligt lätt för att minimera interferens före möjligt högbelastande swimrun.",
-          "Om onsdagens swimrun genomförs hårt kan torsdagens simpass behöva vara vila eller mycket lätt för återhämtning.",
-          "Nuvarande mönster visar god kontinuitet men relativt hög volym senaste 7–10 dagarna (flera långa uthållighetspass)."
+          "Styrkepasset bedöms vara låg-kardiovaskulär och inte kräva extra återhämtning innan dagens swimrun, utifrån tillgängliga pulsdata.",
+          "Osäkerhet kring swimrunets verkliga intensitet/varaktighet: kan vara högre än planerad löptröskel och påverka torsdagens simning och helgens kvalitetspass.",
+          "Givet tidigare dagars volym är en konservativ hantering av kommande simpass önskvärd tills onsdagens faktiska belastning är känd."
         ],
         "unknowns": [
-          "Hur hårt/varaktigt swimrun på 2026-08-19 kommer att genomföras (intensitet, terräng, total tid).",
-          "Subjektiv återhämtning, sömn och eventuell muskeltrötthet efter styrkepasset.",
-          "Eventuella planer eller tävlingar efter 2026-08-23."
+          "Aktuell subjektiv återhämtning/fatigue och sömn.",
+          "Exakt varaktighet och intensitet för planerade swimrun (2026-08-19) om det genomförs.",
+          "Eventuella andra icke-loggade belastningar (arbete, transport, övrig fysisk aktivitet)."
         ]
       },
       "plan_action": {
         "action": "reduce",
         "target_date": "2026-08-20",
-        "reason": "Onsdagens swimrun kan vara högre belastning än planerad löptröskel; torsdagens simning ska styras av faktisk onsdagsbelastning och bör konservativt skalas ner.",
-        "recommendation": "Ersätt planerad 'Simning · aerob/teknik' 2026-08-20 med vila eller mycket lätt teknisk simning (kortare och lägre volym/effort) tills onsdagens faktiska data/behållning bekräftas.",
+        "reason": "Onsdagens swimrun kan vara högre belastning än planerad löptröskel; torsdagens simning bör konservativt skalas ner tills onsdagens faktiska belastning bekräftas.",
+        "recommendation": "Ersätt planerad 'Simning · aerob/teknik' 2026-08-20 med vila eller mycket lätt teknisk simning (kortare och lägre effort). Behåll övrig plan oförändrad. Vid inrapportering av onsdagens varaktighet/intensitet kan beslut revideras.",
         "requires_approval": false
       },
       "auto_apply": {
@@ -41,6 +41,6 @@
       }
     }
   ],
-  "last_trigger_hash": "aaa152af7fe1f7dbab642b7f567ed71736d99dce6acc4b49a862008bcd587ca9",
-  "last_run_utc": "2026-08-19T08:01:40.409416+00:00"
+  "last_trigger_hash": "af21e9c9b1b9a49e2f93f2842a02af9b07acdd02855e663c45bbb70666158fd0",
+  "last_run_utc": "2026-08-19T09:28:57.169088+00:00"
 }
