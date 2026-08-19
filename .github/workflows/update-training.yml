@@ -41,18 +41,24 @@ jobs:
           gh secret set STRAVA_REFRESH_TOKEN --repo "$GITHUB_REPOSITORY" < /tmp/strava_refresh_token
           rm -f /tmp/strava_refresh_token
 
+      - name: AI coach analysis
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_MODEL: gpt-5-mini
+        run: python "träning/scripts/coach.py"
+
       - name: Build live page
         run: python "träning/scripts/build.py"
 
-      - name: Commit synced data and live page
+      - name: Commit synced data, coach state and live page
         run: |
-          if git diff --quiet -- "träning/data/activities.json" "träning/index.html" "träning/index.manual-backup.html"; then
+          if git diff --quiet -- "träning/data/activities.json" "träning/data/coach.json" "träning/data/plan.json" "träning/index.html" "träning/index.manual-backup.html"; then
             echo "No changes."
             exit 0
           fi
           git config user.name "training-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add "träning/data/activities.json" "träning/index.html" "träning/index.manual-backup.html"
-          git commit -m "Auto-update training page"
+          git add "träning/data/activities.json" "träning/data/coach.json" "träning/data/plan.json" "träning/index.html" "träning/index.manual-backup.html"
+          git commit -m "Auto-update training page and AI coach"
           git pull --rebase origin main
           git push origin main
