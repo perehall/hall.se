@@ -4,33 +4,34 @@
       "activity_id": 19811963700,
       "activity_date": "2026-08-19",
       "activity_name": "SLK Swimrun Jogersö Extreme",
-      "generated_at_utc": "2026-08-19T19:36:17.581027+00:00",
+      "generated_at_utc": "2026-08-19T22:00:52.716968+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Onsdagens swimrun (Jogersö Extreme) genomfört: 6.94 km, 54:07–54:50 rörelsetid/elapsed, 100.7 m höjdmeter, snittpuls 143 bpm, max 173 bpm, 564 kcal. Föregående 2 dagarna: styrketräning 18/8 (≈36 min, låg puls) och simning 17/8 (3 200 m, 59:39, snittpuls 127). Kommande planerade 2–3 dagar inkluderar 20/8 simning (aerob/teknik eller vila), 21/8 vila, 22/8 MTB/XC teknik.",
-        "load_interpretation": "Tolkning: Onsdagspasset visar måttlig till hög kardiovaskulär belastning (snittpuls 143, max 173) och intermittent hög effort (maxpuls 173). Passet var längre/tyngre än den planerade löptröskeln enligt planens referens (referens angavs ~7 km · snittpuls ~134 · max 161). Detta är en tolkning eftersom ingen subjektiv återhämtning eller RPE finns i underlaget.",
+        "summary": "Aktuellt pass (SLK Swimrun Jogersö Extreme, 6.94 km, 54:07 rörelsetid, snittpuls 143, max 173, 100.7 m höjdökning, 564 kcal) följer en serie med tre tunga uthållighetspass på 16/16/8–23/8. Föregående två dagar innehöll styrketräning (18/8) och simning (17/8). Planerade kommande 2–3 dagar inkluderar simning 20/8 (auto-scalad till reducerat), vila 21/8 och MTB 22/8.",
+        "load_interpretation": "Tolkning: Onsdagspasset är en tävlingslik/tuff trail/swimruninsats med relativt hög hjärtfrekvens och måttlig vertikal belastning jämfört med föregående löppass. Givet tät följd av längre uthållighetspass senaste veckan tolkar jag detta som en ackumulerad närbelastning som motiverar konservativ nedskalning av nästa planerade simpass.",
         "confidence": "medium",
         "facts": [
-          "Onsdag 19/8: 6.94 km, moving_time 3 247 s, elevation gain 100.7 m, avgHR 143.4 bpm, maxHR 173 bpm, avg watts 202.7, weighted avg watts 317, calories 564.",
-          "17/8 simning: 3 200 m, moving_time 2 786 s, avgHR 127.1 bpm.",
-          "18/8 styrketräning: moving_time 2 145 s, avgHR 87.3 bpm.",
-          "Plan 20/8: Simning aerob/teknik eller vila; 21/8 vila; 22/8 MTB/XC teknik."
+          "Senaste aktivitet 19/08: TrailRun 6.94 km, moving_time 3247 s, elevation gain 100.7 m, avg HR 143.4, max HR 173, calories 564.",
+          "48–72 h före ingick: 18/08 styrketräning 35–36 min (HR avg 87), 17/08 simning 3 200 m (59:39, avg HR 127).",
+          "Planerade dagarna 20–22/08: 20/08 simning aerob/teknik (auto: reduce), 21/08 vila/lätt, 22/08 MTB teknik.",
+          "Coachens auto-beslut redan applicerat: 20/08 skalas ned p.g.a. högre faktisk belastning än planerad löptröskel."
         ],
         "interpretations": [
-          "Onsdagens swimrun troligen gav högre anaerob/topplastpåfrestning än en kontrollerad löptröskel (högre maxpuls och weighted average watts).",
-          "Givet simpasset och styrkan tidigare i veckan finns inga direkta varningssignaler för omedelbar vila, men belastningen kräver konservativ uppföljning innan planerad torsdagssimning normaliseras."
+          "Onsdagspassets snitt- och maxpuls indikerar insats över lugn distansnivå—kan ha haft korta hårda inslag eller tävlingspåverkan.",
+          "Tidigare simpass 17/8 var relativt långt; kombinationen med tävling kan minska återhämtningsreserven trots ett lätt styrkepass 18/8.",
+          "Konservativ skalning av 20/8 simning är rimlig utan subjektiva återhämtningsdata."
         ],
         "unknowns": [
-          "Subjektiv återhämtning/sömn efter onsdagspasset.",
-          "RPE eller detaljerad intensitetsfördelning under swimrun (t.ex. antal hårda intervaller eller simsträckor).",
-          "Muskeltrötthet lokalt (ben/axlar/rygg) efter swimrun."
+          "Subjektiv återhämtning (sömn, muskelömhet, RPE) saknas.",
+          "Detaljer om faktisk simningsteknik/intensitet planerat 20/8 saknas.",
+          "Eventuella skador eller lokal muskeltrötthet efter onsdagens swimrun saknas."
         ]
       },
       "plan_action": {
         "action": "reduce",
         "target_date": "2026-08-20",
-        "reason": "Konservativ skalning eftersom onsdagens faktiska belastning verkar vara högre än planerad löptröskel; brist på subjektiva data gör att vi inte kan säkert behålla full simning.",
-        "recommendation": "Ersätt 2026-08-20 'Simning · aerob/teknik' med vila eller mycket lätt teknisk simning (kortare session, fokus teknik, låg effort). Vid inrapportering av subjektiv återhämtning/RPE eller om du rapporterar att du känner dig fräsch kan beslut revideras.",
+        "reason": "Konservativ skalning eftersom onsdagens faktiska belastning verkar vara högre än planerad löptröskel och det saknas subjektiva återhämtningsdata.",
+        "recommendation": "Ersätt planerad 'Simning · aerob/teknik' 20/08 med vila eller mycket lätt tekniskt simpass (kortare session, låg volym, fokus teknik och rörlighet). Be användaren rapportera subjektiv återhämtning (sömn, RPE, lokal ömhet) innan ev. återgång till full simning eller MTB 22/08.",
         "requires_approval": false
       },
       "auto_apply": {
@@ -79,6 +80,6 @@
       }
     }
   ],
-  "last_trigger_hash": "5e01ddec61844f0fd090c388517c932e86e0b3e78dee54fa25b7fd0667d4f37e",
-  "last_run_utc": "2026-08-19T19:36:17.581039+00:00"
+  "last_trigger_hash": "4f6c100e33b2963422273a44e98fc62063962ca3e51bcb1c33aa1e296e95cfab",
+  "last_run_utc": "2026-08-19T22:00:52.716984+00:00"
 }
