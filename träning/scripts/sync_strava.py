@@ -5,6 +5,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 ACTIVITIES_FILE = ROOT / "data" / "activities.json"
+TOKEN_FILE = Path(os.environ.get("STRAVA_REFRESH_TOKEN_FILE", "/tmp/strava_refresh_token"))
 
 
 def post_form(url, payload):
@@ -29,6 +30,12 @@ tokens = post_form("https://www.strava.com/oauth/token", {
 
 access_token = tokens["access_token"]
 new_refresh_token = tokens["refresh_token"]
+
+# Persist the rotated token only on the ephemeral Actions runner.
+# The workflow writes this file directly into the GitHub repository secret
+# and then removes it. It is never committed or exposed as a workflow output.
+TOKEN_FILE.write_text(new_refresh_token, encoding="utf-8")
+os.chmod(TOKEN_FILE, 0o600)
 
 state = json.loads(ACTIVITIES_FILE.read_text(encoding="utf-8"))
 known = {int(a["id"]) for a in state.get("activities", [])}
@@ -71,10 +78,5 @@ if new_items:
 
 state["last_sync_utc"] = datetime.now(timezone.utc).isoformat()
 ACTIVITIES_FILE.write_text(json.dumps(state, ensure_ascii=False, indent=2), encoding="utf-8")
-
-if os.environ.get("GITHUB_OUTPUT"):
-    with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as f:
-        f.write(f"refresh_token={new_refresh_token}\n")
-        f.write(f"new_count={len(new_items)}\n")
 
 print(f"Synced {len(new_items)} new activities.")
