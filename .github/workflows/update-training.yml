@@ -7,10 +7,16 @@ on:
 
 permissions:
   contents: write
+  actions: read
+  pages: write
+  id-token: write
 
 jobs:
   update:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -53,12 +59,24 @@ jobs:
       - name: Commit synced data, coach state and live page
         run: |
           if git diff --quiet -- "träning/data/activities.json" "träning/data/coach.json" "träning/data/plan.json" "träning/index.html" "träning/index.manual-backup.html"; then
-            echo "No changes."
-            exit 0
+            echo "No repository changes."
+          else
+            git config user.name "training-bot"
+            git config user.email "actions@users.noreply.github.com"
+            git add "träning/data/activities.json" "träning/data/coach.json" "träning/data/plan.json" "träning/index.html" "träning/index.manual-backup.html"
+            git commit -m "Auto-update training page and AI coach"
+            git pull --rebase origin main
+            git push origin main
           fi
-          git config user.name "training-bot"
-          git config user.email "actions@users.noreply.github.com"
-          git add "träning/data/activities.json" "träning/data/coach.json" "träning/data/plan.json" "träning/index.html" "träning/index.manual-backup.html"
-          git commit -m "Auto-update training page and AI coach"
-          git pull --rebase origin main
-          git push origin main
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: "."
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
