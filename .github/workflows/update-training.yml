@@ -27,7 +27,7 @@ jobs:
         run: python "träning/scripts/sync_strava.py"
 
       - name: Persist rotated Strava refresh token
-        if: steps.strava.outputs.refresh_token != ''
+        if: ${{ steps.strava.outputs.refresh_token != '' && secrets.TRAINING_SECRET_PAT != '' }}
         env:
           GH_TOKEN: ${{ secrets.TRAINING_SECRET_PAT }}
           NEW_REFRESH_TOKEN: ${{ steps.strava.outputs.refresh_token }}
