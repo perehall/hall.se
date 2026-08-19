@@ -134,5 +134,5 @@ h1{{font-size:clamp(2rem,8vw,3.2rem);line-height:1;margin:0 0 8px;letter-spacing
 <footer>Automatiskt byggd från plan.json + activities.json. Strava-data används som fakta; automatiken ökar aldrig träningsbelastningen.</footer>
 </div></body></html>'''
 
-(ROOT / "index.generated.html").write_text(doc, encoding="utf-8")
-print(ROOT / "index.generated.html")
+(ROOT / "index.html").write_text(doc, encoding="utf-8")
+print(ROOT / "index.html")
