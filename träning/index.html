@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#0f172a">
 <title>Träningsplan</title>
 <style>
-:root{--bg:#f5f7fb;--card:#fff;--text:#0f172a;--muted:#64748b;--line:#e2e8f0;--accent:#2563eb;--green:#15803d;--green-soft:#dcfce7;--amber:#a16207;--amber-soft:#fef3c7;--shadow:0 8px 24px rgba(15,23,42,.06)}
+:root{--bg:#f5f7fb;--card:#fff;--text:#0f172a;--muted:#64748b;--line:#e2e8f0;--accent:#2563eb;--green:#15803d;--green-soft:#dcfce7;--amber:#a16207;--amber-soft:#fef3c7;--purple:#6d28d9;--purple-soft:#f3e8ff;--shadow:0 8px 24px rgba(15,23,42,.06)}
 *{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);line-height:1.45}
 .wrap{width:min(100%,760px);margin:auto;padding:20px 16px 56px}header{padding:8px 2px 18px}
 .eyebrow{text-transform:uppercase;letter-spacing:.12em;font-size:.76rem;font-weight:800;color:var(--accent);margin-bottom:6px}
@@ -16,12 +16,13 @@ h1{font-size:clamp(2rem,8vw,3.2rem);line-height:1;margin:0 0 8px;letter-spacing:
 .daytop{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:10px}.dow{font-size:.82rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}.date{color:var(--muted);font-size:.85rem}
 .session{font-size:1.2rem;font-weight:800;margin:4px 0 6px}.reason{color:#334155;font-size:.95rem}.badge{border-radius:999px;padding:5px 9px;font-size:.7rem;font-weight:800;white-space:nowrap}
 .fixed{background:var(--green-soft);color:var(--green)}.planned{background:#dbeafe;color:#1d4ed8}.conditional{background:var(--amber-soft);color:var(--amber)}.open{background:#e2e8f0;color:#475569}
-.pass{margin-top:14px;padding-top:14px;border-top:1px solid var(--line);display:grid;gap:7px}.pass-title{font-weight:800}.decision{margin-top:13px;padding:12px 13px;background:#f8fafc;border-radius:13px;border:1px solid var(--line)}.decision strong{display:block;margin-bottom:4px}
+.pass{margin-top:14px;padding-top:14px;border-top:1px solid var(--line);display:grid;gap:7px}.pass-title{font-weight:800}.decision{margin-top:13px;padding:12px 13px;background:#f8fafc;border-radius:13px;border:1px solid var(--line)}.decision strong{display:block;margin-bottom:4px}.coach-adjust{border-color:#ddd6fe;background:#faf5ff}
+.coach{margin-top:16px;padding:14px;border-radius:16px;background:var(--purple-soft);border:1px solid #ddd6fe}.coach-title{font-size:.75rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:var(--purple);margin-bottom:5px}.coach-summary{font-weight:800;margin-bottom:5px}.coach-load{color:#4c1d95;font-size:.92rem}.coach-details{margin-top:10px}.coach-details summary{cursor:pointer;font-weight:700}.coach-grid{display:grid;gap:8px;margin-top:8px;font-size:.88rem}.coach-grid ul{margin:4px 0 0;padding-left:18px}.coach-action{margin-top:10px;padding-top:10px;border-top:1px solid #ddd6fe;font-size:.9rem}.coach-action span{color:#4c1d95}.coach-action small{color:#6b21a8}
 .principles{display:grid;gap:10px}.principle{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px}footer{color:var(--muted);font-size:.82rem;padding-top:26px}
 </style>
 </head>
 <body><div class="wrap">
-<header><div class="eyebrow">Levande träningsplan</div><h1>Vecka 34</h1><div class="sub">2026-08-17–2026-08-23 · senast uppdaterad 19 augusti 2026 · 09:35</div></header>
+<header><div class="eyebrow">Levande träningsplan</div><h1>Vecka 34</h1><div class="sub">2026-08-17–2026-08-23 · senast uppdaterad 19 augusti 2026 · 10:01</div></header>
 <div class="hero"><h2>Stabilisera först. Bygg sedan.</h2><p>Ingen kvalitet genomförs bara för att den står i planen.</p></div>
 <h2 class="section">Aktuell vecka</h2><div class="day">
   <div class="daytop">
@@ -38,7 +39,19 @@ h1{font-size:clamp(2rem,8vw,3.2rem);line-height:1;margin:0 0 8px;letter-spacing:
   </div>
   <div class="session">Styrka · 35:45</div>
   <div class="reason">Medvetet nedskalat inför onsdagens eventuella swimrun/löpkvalitet.</div>
-  <div class="pass"><div class="pass-title">Automatiskt från Strava</div><div><strong>WeightTraining</strong> · 35:45 · snittpuls 87 · max 119</div></div>
+  <div class="pass"><div class="pass-title">Automatiskt från Strava</div><div><strong>WeightTraining</strong> · 35:45 · snittpuls 87 · max 119</div></div><div class="coach">
+  <div class="coach-title">AI-coach · bedömning</div>
+  <div class="coach-summary">Senaste passet var ett nedskalad styrkepass (35–36 min) med låg medelpuls (≈87 bpm). Tidigare 2 dagar innehöll ett långt simpass (3.2 km) och en lång trailrun två dagar innan det. Kommande 2–3 dagar planerar du ett potentiellt hårt swimrun (Ons 2026-08-19) följt av konditionerad simning/vila (Tor) och vila/lätt (Fre).</div>
+  <div class="coach-load">Fakta visar måttlig ackumulerad belastning de senaste 3 dagarna: lång löpning (16 km trail, 5061 s) + långt simpass (3200 m) + nedskalad styrka. Det senaste styrkepasset är avsiktligt nedskalat inför onsdag; pulsvärden talar för låg intern belastning. Planerat swimrun samma dag kan ersätta löptröskel och utgör potentiellt högre belastning beroende på genomförande. Därför bör kommande dagars belastning kontrolleras mot faktisk genomförd onsdagsprestation innan ytterligare kvalitet läggs till.</div>
+  <details class="coach-details"><summary>Fakta, tolkning och osäkerhet</summary>
+    <div class="coach-grid">
+      <div><strong>Fakta</strong><ul><li>2026-08-16: TrailRun 14.64 km, 5061 s, snittpuls 139, max 158.</li><li>2026-08-17: Swim 3.2 km, 2786 s moving, snittpuls 127, max 154.</li><li>2026-08-18: Styrketräning 2145 s (≈35:45), snittpuls 87, max 119.</li><li>Plan 2026-08-19: Swimrun · Jogersö Extreme · 1 varv (kan ersätta löptröskel).</li><li>Plan 2026-08-20: Simning aerob/teknik eller vila beroende på onsdagens belastning.</li></ul></div>
+      <div><strong>Tolkning</strong><ul><li>Styrkepasset var avsiktligt lätt för att minimera interferens före möjligt högbelastande swimrun.</li><li>Om onsdagens swimrun genomförs hårt kan torsdagens simpass behöva vara vila eller mycket lätt för återhämtning.</li><li>Nuvarande mönster visar god kontinuitet men relativt hög volym senaste 7–10 dagarna (flera långa uthållighetspass).</li></ul></div>
+      <div><strong>Osäkert/saknas</strong><ul><li>Hur hårt/varaktigt swimrun på 2026-08-19 kommer att genomföras (intensitet, terräng, total tid).</li><li>Subjektiv återhämtning, sömn och eventuell muskeltrötthet efter styrkepasset.</li><li>Eventuella planer eller tävlingar efter 2026-08-23.</li></ul></div>
+    </div>
+  </details>
+  <div class="coach-action"><strong>Skala ned</strong> · 2026-08-20<br>Onsdagens swimrun kan vara högre belastning än planerad löptröskel; torsdagens simning ska styras av faktisk onsdagsbelastning och bör konservativt skalas ner.<br><span>Ersätt planerad &#x27;Simning · aerob/teknik&#x27; 2026-08-20 med vila eller mycket lätt teknisk simning (kortare och lägre volym/effort) tills onsdagens faktiska data/behållning bekräftas.</span><br><small>Automatiskt applicerad konservativ ändring.</small></div>
+</div>
 </div><div class="day">
   <div class="daytop">
     <div><div class="dow">Onsdag</div><div class="date">2026-08-19</div></div>
@@ -54,7 +67,7 @@ h1{font-size:clamp(2rem,8vw,3.2rem);line-height:1;margin:0 0 8px;letter-spacing:
   </div>
   <div class="session">Simning · aerob/teknik eller vila</div>
   <div class="reason">Styrs av onsdagens faktiska belastning.</div>
-  
+  <div class="decision coach-adjust"><strong>Coachjustering</strong>Skala ned passet. Ersätt planerad &#x27;Simning · aerob/teknik&#x27; 2026-08-20 med vila eller mycket lätt teknisk simning (kortare och lägre volym/effort) tills onsdagens faktiska data/behållning bekräftas.</div>
 </div><div class="day">
   <div class="daytop">
     <div><div class="dow">Fredag</div><div class="date">2026-08-21</div></div>
@@ -81,5 +94,5 @@ h1{font-size:clamp(2rem,8vw,3.2rem);line-height:1;margin:0 0 8px;letter-spacing:
   
 </div>
 <h2 class="section">Styrkemall framåt</h2><div class="principles"><div class="principle">Liten dos explosivitet/plyometri när omkringliggande belastning tillåter.</div><div class="principle">Bulgarian split squat som huvudalternativ för unilateral benstyrka.</div><div class="principle">Marklyft eller RDL som normal höftdominant huvudövning.</div><div class="principle">Vad + soleus regelbundet.</div><div class="principle">Enarmsrodd + press som huvuddrag/press.</div><div class="principle">Välj två bålövningar; låt inte accessoarer tränga undan huvudstyrkan.</div></div>
-<footer>Automatiskt byggd från plan.json + activities.json. Strava-data används som fakta; automatiken ökar aldrig träningsbelastningen.</footer>
+<footer>Automatiskt byggd från plan.json + activities.json + coach.json. Strava-data används som fakta. AI-coachen får automatiskt endast behålla, minska eller ersätta belastning konservativt; belastningsökning kräver mänsklig bedömning.</footer>
 </div></body></html>

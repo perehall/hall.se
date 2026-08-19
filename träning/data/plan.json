@@ -35,7 +35,14 @@
       "label": "Torsdag",
       "status": "conditional",
       "session": "Simning · aerob/teknik eller vila",
-      "reason": "Styrs av onsdagens faktiska belastning."
+      "reason": "Styrs av onsdagens faktiska belastning.",
+      "original_session": "Simning · aerob/teknik eller vila",
+      "auto_coach": {
+        "action": "reduce",
+        "reason": "Onsdagens swimrun kan vara högre belastning än planerad löptröskel; torsdagens simning ska styras av faktisk onsdagsbelastning och bör konservativt skalas ner.",
+        "applied_at_utc": "2026-08-19T08:01:40.409166+00:00"
+      },
+      "coach_adjustment": "Skala ned passet. Ersätt planerad 'Simning · aerob/teknik' 2026-08-20 med vila eller mycket lätt teknisk simning (kortare och lägre volym/effort) tills onsdagens faktiska data/behållning bekräftas."
     },
     {
       "date": "2026-08-21",
