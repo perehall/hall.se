@@ -171,7 +171,7 @@ h1{{font-size:clamp(2rem,8vw,3.2rem);line-height:1;margin:0 0 8px;letter-spacing
 </style>
 </head>
 <body><div class="wrap">
-<header><div class="eyebrow">Levande träningsplan</div><h1>Vecka {plan["meta"]["week"]}</h1><div class="sub">{plan["meta"]["week_start"]}–{plan["meta"]["week_end"]} · senast uppdaterad {updated}</div></header>
+<header><div class="eyebrow">DEN LEVANDE TRÄNINGSPLANEN</div><h1>Vecka {plan["meta"]["week"]}</h1><div class="sub">{plan["meta"]["week_start"]}–{plan["meta"]["week_end"]} · senast uppdaterad {updated}</div></header>
 <div class="hero"><h2>{html.escape(plan["meta"]["title"])}</h2><p>{html.escape(plan["meta"]["principle"])}</p></div>
 <h2 class="section">Aktuell vecka</h2>{''.join(cards)}
 <h2 class="section">Styrkemall framåt</h2><div class="principles">{strength}</div>
