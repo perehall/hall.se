@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f172a">
+<title>Träningsplan</title>
+<style>
+:root{
+  --bg:#f5f7fb; --card:#fff; --text:#0f172a; --muted:#64748b; --line:#e2e8f0;
+  --accent:#2563eb; --accent-soft:#dbeafe; --green:#15803d; --green-soft:#dcfce7;
+  --amber:#a16207; --amber-soft:#fef3c7; --red:#b91c1c; --red-soft:#fee2e2;
+  --slate:#475569; --shadow:0 8px 24px rgba(15,23,42,.06);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.45;
+}
+.wrap{width:min(100%,760px);margin:auto;padding:20px 16px 56px}
+header{padding:8px 2px 18px}
+.eyebrow{text-transform:uppercase;letter-spacing:.12em;font-size:.76rem;font-weight:800;color:var(--accent);margin-bottom:6px}
+h1{font-size:clamp(2rem,8vw,3.2rem);line-height:1;margin:0 0 8px;letter-spacing:-.04em}
+.sub{color:var(--muted);font-size:.96rem}
+.hero{
+  background:#0f172a;color:white;border-radius:20px;padding:18px 20px;margin:8px 0 18px;box-shadow:var(--shadow)
+}
+.hero .label{font-size:.76rem;text-transform:uppercase;letter-spacing:.1em;color:#93c5fd;font-weight:800}
+.hero h2{font-size:1.35rem;margin:5px 0 5px;color:white}
+.hero p{margin:0;color:#cbd5e1}
+.context{
+  background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px 18px;margin:0 0 22px
+}
+.context strong{display:block;margin-bottom:6px}
+.context ul{margin:8px 0 0;padding-left:20px;color:#334155}
+.context li{margin:5px 0}
+h2.section{font-size:1.22rem;margin:28px 0 12px;letter-spacing:-.02em}
+.day{
+  background:var(--card);border:1px solid var(--line);border-radius:20px;
+  padding:18px;margin:12px 0;box-shadow:var(--shadow)
+}
+.daytop{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:10px}
+.dow{font-size:.82rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.date{color:var(--muted);font-size:.85rem;margin-top:2px}
+.session{font-size:1.2rem;font-weight:800;letter-spacing:-.02em;margin:4px 0 6px}
+.reason{color:#334155;font-size:.95rem}
+.badge{flex:0 0 auto;border-radius:999px;padding:5px 9px;font-size:.7rem;font-weight:800;white-space:nowrap}
+.fixed{background:var(--green-soft);color:var(--green)}
+.planned{background:var(--accent-soft);color:#1d4ed8}
+.conditional{background:var(--amber-soft);color:var(--amber)}
+.open{background:#e2e8f0;color:var(--slate)}
+.pass{
+  margin-top:14px;padding-top:14px;border-top:1px solid var(--line);display:grid;gap:7px
+}
+.pass-title{font-weight:800;margin-bottom:1px}
+.note{margin-top:11px;color:var(--muted);font-size:.9rem}
+.decision{
+  margin-top:13px;padding:12px 13px;background:#f8fafc;border-radius:13px;border:1px solid var(--line)
+}
+.decision strong{display:block;margin-bottom:4px}
+.alert{
+  border-left:4px solid var(--amber);background:#fffaf0;padding:14px 16px;border-radius:14px;
+  margin:16px 0 8px;color:#7c2d12
+}
+details{
+  background:var(--card);border:1px solid var(--line);border-radius:18px;margin:10px 0;
+  overflow:hidden;box-shadow:var(--shadow)
+}
+summary{cursor:pointer;list-style:none;padding:16px 18px;font-weight:800}
+summary::-webkit-details-marker{display:none}
+summary:after{content:"＋";float:right;color:var(--muted)}
+details[open] summary:after{content:"−"}
+.weekbody{border-top:1px solid var(--line);padding:8px 18px 14px}
+.weekrow{display:grid;grid-template-columns:48px 1fr auto;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);align-items:center}
+.weekrow:last-child{border-bottom:0}
+.mini-status{font-size:.68rem;font-weight:800;color:var(--muted)}
+.principles{display:grid;gap:10px}
+.principle{
+  background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px
+}
+.principle b{display:block;margin-bottom:3px}
+.log{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:6px 18px}
+.logrow{padding:11px 0;border-bottom:1px solid var(--line);font-size:.91rem}
+.logrow:last-child{border-bottom:0}
+footer{color:var(--muted);font-size:.82rem;padding-top:26px}
+@media(min-width:650px){.wrap{padding-top:34px}.day{padding:20px 22px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="eyebrow">Levande träningsplan</div>
+  <h1>Vecka 34</h1>
+  <div class="sub">17–23 augusti 2026 · senast uppdaterad 18 augusti 2026 · 21:21</div>
+</header>
+
+<div class="hero">
+  <div class="label">Veckans karaktär</div>
+  <h2>Stabilisera först. Bygg sedan.</h2>
+  <p>Ingen kvalitet genomförs bara för att den står i planen. Den här veckan används för att få tillbaka normal känsla och en stabil rytm inför åtta måndagar med enduroskola.</p>
+</div>
+
+<div class="context">
+  <strong>Varför veckan är försiktig</strong>
+  <ul>
+    <li>12/8: planerad tröskellöpning blev 5 km jogg på grund av mycket svag känsla och hög puls.</li>
+    <li>15/8: cirka 2 h lugn enduro.</li>
+    <li>16/8: trail på Jogersö, tre varv i stället för planerade fyra; bättre känsla men tungt i uppför och hög puls.</li>
+  </ul>
+</div>
+
+<h2 class="section">Aktuell vecka</h2>
+
+<div class="day">
+  <div class="daytop">
+    <div><div class="dow">Måndag</div><div class="date">17 augusti</div></div>
+    <div class="badge fixed">GENOMFÖRT</div>
+  </div>
+  <div class="session">Simning · 3 200 m · 59:39</div>
+  <div class="reason">Genomfört kontrollerat simpass efter söndagens trail. De snabbare intervallerna kördes med cirka 10 sekunder extra vila för att behålla kontroll och teknik.</div>
+  <div class="pass">
+    <div class="pass-title">Faktiskt genomfört</div>
+    <div><strong>400 m</strong> insim · 6:20</div>
+    <div><strong>3 × 400 m</strong> · 5:56 / 5:56 / 5:56 ≈ 1:29/100 m</div>
+    <div><strong>8 × 100 m</strong> · cirka 1:20–1:22/100 m · cirka 10 s extra vila mot ursprungsplanen</div>
+    <div><strong>4 × 50 m</strong> snabbare · cirka 36–37 s · extra vila för bibehållen fart och teknik</div>
+    <div><strong>300 m</strong> avsim · 4:40</div>
+  </div>
+  <div class="note">Tolkning: jämn aerob huvudserie med snabbare fartinslag. Den extra vilan sänkte seriernas täthet och gjorde dem mer fart-/teknikorienterade än tröskelbetonade. Det passar passets syfte väl.</div>
+</div>
+
+<div class="day">
+  <div class="daytop">
+    <div><div class="dow">Tisdag</div><div class="date">18 augusti</div></div>
+    <div class="badge fixed">GENOMFÖRT</div>
+  </div>
+  <div class="session">Styrka · 35:45</div>
+  <div class="reason">Medvetet nedskalat helkroppspass efter jobbresa och inför onsdagens eventuella löpkvalitet. Marklyft sparades och Bulgarian split squat-volymen reducerades.</div>
+  <div class="pass">
+    <div class="pass-title">Faktiskt genomfört</div>
+    <div><strong>Hopprep</strong> · 45 s</div>
+    <div><strong>Pallof press</strong> · 3 × 10/sida</div>
+    <div><strong>Kneeling straight-arm pulldown</strong> · 3 × 10</div>
+    <div><strong>Bulgarian split squat</strong> · 3 × 6/ben · 4 reps färre än normalt</div>
+    <div><strong>Atomic push-ups i TRX</strong> · 3 × 10</div>
+    <div><strong>Bent-over reverse fly</strong> · 3 × 10 · 8 kg kettlebell</div>
+    <div><strong>Enarms bänkrodd</strong> · 3 × 10/arm · cirka 13–14 kg, vikt ej slutverifierad</div>
+    <div><strong>Dead bug + reverse plank</strong> · 3 rundor · reverse plank 10 s</div>
+  </div>
+  <div class="note">TCX: 35:45 totalt, snittpuls 87, maxpuls 119. Pulsen visar låg kardiovaskulär belastning, men säger inte hur stor den lokala muskulära tröttheten blev. Marklyft utelämnades avsiktligt.</div>
+</div>
+<div class="day">
+  <div class="daytop">
+    <div><div class="dow">Onsdag</div><div class="date">19 augusti</div></div>
+    <div class="badge conditional">PRELIMINÄRT</div>
+  </div>
+  <div class="session">Swimrun · Jogersö Extreme · 1 varv</div>
+  <div class="reason">Om swimrun blir av ersätter det helt den planerade löpkvaliteten. Ingen extra tröskel läggs ovanpå samma dag.</div>
+  <div class="decision">
+    <strong>Referens från senaste passet</strong>
+    7,05 km totalt · 54:52 · snittpuls cirka 134 · maxpuls 161. Det används som belastningsankare, inte som måltempo.
+  </div>
+  <div class="decision">
+    <strong>Om passet blir kontrollerat</strong>
+    Kör ett varv med jämn ansträngning och utan att jaga tid. Låt terräng, övergångar och simning stå för kvaliteten.
+  </div>
+  <div class="decision">
+    <strong>Om passet blir hårt/race-likt</strong>
+    Behandlas som veckans tydliga huvudkvalitet. Torsdag hålls då aerob eller blir vila.
+  </div>
+  <div class="note">Princip: specificitet + koncentrerad kvalitet. Ett multisportpass med teknisk/kuperad löpning och simning ersätter separat löptröskel när totalbelastningen redan är relevant.</div>
+</div>
+<div class="day">
+  <div class="daytop">
+    <div><div class="dow">Torsdag</div><div class="date">20 augusti</div></div>
+    <div class="badge conditional">BEROR PÅ ONSDAG</div>
+  </div>
+  <div class="session">Simning · aerob/teknik eller vila</div>
+  <div class="reason">Om onsdagen blir Jogersö Extreme används torsdagen för återhämtning och låg mekanisk belastning, inte som nytt hårt pass.</div>
+  <div class="decision">
+    <strong>Efter kontrollerad swimrun</strong>
+    Förslag: lätt aerob/teknisk simning. Ingen tät tröskelserie.
+  </div>
+  <div class="decision">
+    <strong>Efter hård swimrun eller tydlig trötthet</strong>
+    Vila eller mycket lätt simning.
+  </div>
+</div>
+<div class="day">
+  <div class="daytop">
+    <div><div class="dow">Fredag</div><div class="date">21 augusti</div></div>
+    <div class="badge open">ÖPPET</div>
+  </div>
+  <div class="session">Vila eller mycket lätt</div>
+  <div class="reason">Absorbera veckans belastning och skapa marginal inför helgen. Ingen utfyllnadsträning.</div>
+</div>
+
+<div class="day">
+  <div class="daytop">
+    <div><div class="dow">Lördag</div><div class="date">22 augusti</div></div>
+    <div class="badge conditional">PRELIMINÄRT</div>
+  </div>
+  <div class="session">MTB/XC · teknik först</div>
+  <div class="reason">Prioritet är teknisk fart, linjeval, kurvor och accelerationer. Metabol kvalitet läggs bara till om veckan har absorberats väl.</div>
+  <div class="decision">
+    <strong>Grundversion</strong>
+    75–120 min stig med fokuserade tekniksektioner och full återhämtning mellan snabbare försök.
+  </div>
+  <div class="decision">
+    <strong>Om mycket fräsch</strong>
+    Några korta kontrollerade hårda inslag kan läggas in. Detta ska inte bli ett uttömmande VO₂-pass.
+  </div>
+</div>
+
+<div class="day">
+  <div class="daytop">
+    <div><div class="dow">Söndag</div><div class="date">23 augusti</div></div>
+    <div class="badge planned">PLANERAT LUGNT</div>
+  </div>
+  <div class="session">Trail · lugnt, inte långpass som mål i sig</div>
+  <div class="reason">Första enduroskolan kommer dagen efter. Söndagen används för lugn aerob löpning och dimensioneras även utifrån onsdagens swimrun och lördagens MTB.</div>
+  <div class="decision">
+    <strong>Förslag</strong>
+    60–90 min lugnt beroende på lördagens belastning och aktuell känsla. Ingen progressiv avslutning.
+  </div>
+</div>
+
+<div class="alert">
+  <strong>Ny huvudregel inför enduroskolan:</strong> söndagens löpning dimensioneras med måndagens enduro i åtanke. Enduroskolan räknas som en faktisk belastningsdag, inte som “bonusaktivitet”.
+</div>
+
+<h2 class="section">Vecka 35–37 · arbetsstruktur</h2>
+
+<details open>
+  <summary>Vecka 35 · 24–30 augusti</summary>
+  <div class="weekbody">
+    <div class="weekrow"><b>Mån</b><span>Enduroskola</span><span class="mini-status">FAST</span></div>
+    <div class="weekrow"><b>Tis</b><span>Simning aerob/teknik</span><span class="mini-status">PLAN</span></div>
+    <div class="weekrow"><b>Ons</b><span>Löpning · kontrollerad kvalitet</span><span class="mini-status">PREL.</span></div>
+    <div class="weekrow"><b>Tors</b><span>Simning + ev. styrka</span><span class="mini-status">PREL.</span></div>
+    <div class="weekrow"><b>Fre</b><span>Vila / lätt</span><span class="mini-status">ÖPPET</span></div>
+    <div class="weekrow"><b>Lör</b><span>MTB/XC · nyckelpass</span><span class="mini-status">PREL.</span></div>
+    <div class="weekrow"><b>Sön</b><span>Lugn trail, dos efter lördag + inför måndag</span><span class="mini-status">PREL.</span></div>
+  </div>
+</details>
+
+<details>
+  <summary>Vecka 36 · 31 augusti–6 september</summary>
+  <div class="weekbody">
+    <div class="weekrow"><b>Mån</b><span>Enduroskola</span><span class="mini-status">FAST</span></div>
+    <div class="weekrow"><b>Tis</b><span>Simning aerob/teknik</span><span class="mini-status">PLAN</span></div>
+    <div class="weekrow"><b>Ons</b><span>Löpning · kontrollerad kvalitet</span><span class="mini-status">PREL.</span></div>
+    <div class="weekrow"><b>Tors</b><span>Simning + ev. styrka</span><span class="mini-status">PREL.</span></div>
+    <div class="weekrow"><b>Fre</b><span>Vila / lätt</span><span class="mini-status">ÖPPET</span></div>
+    <div class="weekrow"><b>Lör</b><span>MTB/XC · teknik + kvalitet</span><span class="mini-status">PREL.</span></div>
+    <div class="weekrow"><b>Sön</b><span>Lugn–måttlig trail</span><span class="mini-status">PREL.</span></div>
+  </div>
+</details>
+
+<details>
+  <summary>Vecka 37 · 7–13 september</summary>
+  <div class="weekbody">
+    <div class="weekrow"><b>Mån</b><span>Enduroskola</span><span class="mini-status">FAST</span></div>
+    <div class="weekrow"><b>Tis</b><span>Simning aerob/teknik</span><span class="mini-status">PLAN</span></div>
+    <div class="weekrow"><b>Ons</b><span>Löpning · kvalitet</span><span class="mini-status">PREL.</span></div>
+    <div class="weekrow"><b>Tors</b><span>Simning + styrka</span><span class="mini-status">PREL.</span></div>
+    <div class="weekrow"><b>Fre</b><span>Vila / lätt</span><span class="mini-status">ÖPPET</span></div>
+    <div class="weekrow"><b>Lör</b><span>MTB/XC · nyckelpass</span><span class="mini-status">PREL.</span></div>
+    <div class="weekrow"><b>Sön</b><span>Trail efter belastningskontroll</span><span class="mini-status">PREL.</span></div>
+  </div>
+</details>
+
+
+<h2 class="section">Styrkemall framåt</h2>
+<div class="principles">
+  <div class="principle"><b>1. Explosivitet · liten dos</b>Hopprep, pogo hops eller annan enkel plyometri när omkringliggande löp-/endurobelastning tillåter det.</div>
+  <div class="principle"><b>2. Unilateral benstyrka</b>Bulgarian split squat är huvudalternativ. Belastning och progression styrs med faktisk vikt samt RIR/RPE, inte bara fasta repetitioner.</div>
+  <div class="principle"><b>3. Höftdominant styrka</b>Marklyft eller RDL ingår normalt. Kan strykas eller reduceras när nästa nyckelpass på land annars riskerar att störas.</div>
+  <div class="principle"><b>4. Vad + soleus</b>Rakbent och böjt knä-varianter prioriteras regelbundet för löp-/underbenskapacitet. Exakt dos fastställs först när belastningsnivån är känd.</div>
+  <div class="principle"><b>5. Drag + press</b>Enarmsrodd kombineras med exempelvis TRX atomic push-up eller annan press. Straight-arm pulldown och reverse fly är sekundära accessoarer, inte kärnan i passet.</div>
+  <div class="principle"><b>6. Bål · välj två</b>Pallof press, dead bug, reverse plank eller motsvarande. Undvik att låta många små bålövningar tränga undan tung benstyrka.</div>
+</div>
+<div class="alert">
+  <strong>Styrkeprincip:</strong> styrkan ska stödja löpning, MTB/XC, simning och enduro utan att sabotera nyckelpassen. Normalpasset är mer komplett än dagens nedskalade variant; dagens reduktion var avsiktlig.
+</div>
+
+<h2 class="section">Principgrund</h2>
+<div class="principles">
+  <div class="principle"><b>Seiler · intensitetsfördelning</b>Huvuddelen av uthållighetsarbetet hålls lätt; kvaliteten koncentreras till tydliga pass i stället för att varje dag bli medelhård.</div>
+  <div class="principle"><b>Friel · belastning och återhämtning</b>Planen är en färdriktning, inte ett kontrakt. Pass reduceras eller stryks när återhämtningen inte stödjer den planerade dosen.</div>
+  <div class="principle"><b>Bakken / norsk tröskeltradition</b>Tröskel ska vara kontrollerad, repeterbar och tillräckligt låg för att inte sabotera kontinuiteten. Ingen dubbeltröskel kopieras från elitmiljö.</div>
+  <div class="principle"><b>Almgren / Canova</b>Kontinuitet och stabila block prioriteras. Mer specificitet och större belastning byggs först när kroppen absorberar grundstrukturen.</div>
+  <div class="principle"><b>Olbrecht / Maglischo</b>Simningen används både som egen kapacitetsutveckling och som uthållighetsarbete med låg mekanisk belastning. Tekniken ska inte offras för fart.</div>
+</div>
+
+<h2 class="section">Ändringslogg</h2>
+<div class="log">
+  <div class="logrow"><strong>18/8 · 21:21:</strong> Preliminär swimrun på Jogersö Extreme lagts in onsdag. Om passet genomförs ersätter det löptröskeln helt. Senaste referenspasset: 7,05 km, 54:52, snittpuls cirka 134, maxpuls 161.</div>
+  <div class="logrow"><strong>18/8 · 21:06:</strong> Tisdagens styrkepass registrerat som genomfört. Marklyft sparades och Bulgarian split squat reducerades inför onsdagens löpbeslut. En mer relevant normal styrkemall har lagts in för kommande veckor.</div>
+  <div class="logrow"><strong>18/8 · 18:54:</strong> Måndagens simpass omklassificerat efter förtydligande om cirka 10 s extra vila på de snabbare intervallerna: aerob huvudserie med fartinslag, inte tätt tröskelarbete. Tisdagens styrka är fortsatt villkorad av resa och dagsform.</div>
+  <div class="logrow"><strong>17/8:</strong> Vecka 34 ändrad från normal byggvecka till stabiliseringsvecka efter samlad bedömning av 12/8, 15/8 och 16/8.</div>
+  <div class="logrow"><strong>17/8:</strong> Onsdagens löpkvalitet ändrad från planerad till villkorad beslutspunkt.</div>
+  <div class="logrow"><strong>17/8:</strong> Lördagens MTB ändrad från fysiologiskt kvalitetspass till teknikförst, med hårdare inslag endast vid god återhämtning.</div>
+  <div class="logrow"><strong>17/8:</strong> Söndagens långpassmål borttaget inför första enduroskolan 24/8.</div>
+</div>
+
+<footer>Träningsplan · levande arbetsversion · exakta belastningar fastställs först när underlaget räcker</footer>
+</div>
+</body>
+</html>
