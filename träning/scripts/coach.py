@@ -1,0 +1,207 @@
+#!/usr/bin/env python3
+import hashlib
+import json
+import os
+import urllib.request
+from datetime import datetime, timezone
+from pathlib import Path
+from zoneinfo import ZoneInfo
+
+ROOT = Path(__file__).resolve().parents[1]
+PLAN_FILE = ROOT / "data" / "plan.json"
+ACTIVITIES_FILE = ROOT / "data" / "activities.json"
+COACH_FILE = ROOT / "data" / "coach.json"
+PROMPT_FILE = ROOT / "coach_prompt.md"
+
+MODEL = os.environ.get("OPENAI_MODEL", "gpt-5-mini")
+API_KEY = os.environ.get("OPENAI_API_KEY", "").strip()
+
+SCHEMA = {
+    "type": "object",
+    "additionalProperties": False,
+    "properties": {
+        "assessment": {
+            "type": "object",
+            "additionalProperties": False,
+            "properties": {
+                "summary": {"type": "string"},
+                "load_interpretation": {"type": "string"},
+                "confidence": {"type": "string", "enum": ["low", "medium", "high"]},
+                "facts": {"type": "array", "items": {"type": "string"}},
+                "interpretations": {"type": "array", "items": {"type": "string"}},
+                "unknowns": {"type": "array", "items": {"type": "string"}}
+            },
+            "required": ["summary", "load_interpretation", "confidence", "facts", "interpretations", "unknowns"]
+        },
+        "plan_action": {
+            "type": "object",
+            "additionalProperties": False,
+            "properties": {
+                "action": {"type": "string", "enum": ["keep", "reduce", "rest", "review"]},
+                "target_date": {"type": "string"},
+                "reason": {"type": "string"},
+                "recommendation": {"type": "string"},
+                "requires_approval": {"type": "boolean"}
+            },
+            "required": ["action", "target_date", "reason", "recommendation", "requires_approval"]
+        }
+    },
+    "required": ["assessment", "plan_action"]
+}
+
+
+def load_json(path, fallback):
+    if not path.exists():
+        return fallback
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def stable_hash(plan, latest_activity, local_date):
+    payload = {
+        "plan": plan,
+        "latest_activity": latest_activity,
+        "local_date": local_date
+    }
+    raw = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()
+
+
+def extract_output_text(response):
+    if isinstance(response.get("output_text"), str):
+        return response["output_text"]
+    chunks = []
+    for item in response.get("output", []):
+        for part in item.get("content", []):
+            if part.get("type") in ("output_text", "text") and isinstance(part.get("text"), str):
+                chunks.append(part["text"])
+    if not chunks:
+        raise RuntimeError("OpenAI-svaret saknar output_text")
+    return "".join(chunks)
+
+
+def call_openai(system_prompt, input_data):
+    body = {
+        "model": MODEL,
+        "input": [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": json.dumps(input_data, ensure_ascii=False)}
+        ],
+        "text": {
+            "format": {
+                "type": "json_schema",
+                "name": "training_coach",
+                "strict": True,
+                "schema": SCHEMA
+            }
+        },
+        "max_output_tokens": 1800
+    }
+    req = urllib.request.Request(
+        "https://api.openai.com/v1/responses",
+        data=json.dumps(body).encode("utf-8"),
+        headers={
+            "Authorization": f"Bearer {API_KEY}",
+            "Content-Type": "application/json"
+        },
+        method="POST"
+    )
+    with urllib.request.urlopen(req, timeout=90) as r:
+        response = json.load(r)
+    return json.loads(extract_output_text(response))
+
+
+def apply_conservative_action(plan, action):
+    kind = action.get("action")
+    target = action.get("target_date") or ""
+    if kind not in ("reduce", "rest") or not target:
+        return False, "Ingen automatisk planändring."
+
+    day = next((d for d in plan.get("days", []) if d.get("date") == target), None)
+    if not day or day.get("status") == "completed":
+        return False, "Måldagen saknas eller är redan genomförd."
+
+    reason = action.get("reason", "")
+    if "original_session" not in day:
+        day["original_session"] = day.get("session", "")
+    day["auto_coach"] = {
+        "action": kind,
+        "reason": reason,
+        "applied_at_utc": datetime.now(timezone.utc).isoformat()
+    }
+
+    if kind == "rest":
+        day["session"] = "Vila eller mycket lätt"
+        day["status"] = "conditional"
+        day["reason"] = f"AI-coach: {reason}"
+    elif kind == "reduce":
+        if day.get("status") in ("planned", "preliminary"):
+            day["status"] = "conditional"
+        day["coach_adjustment"] = f"Skala ned passet. {action.get('recommendation', '')}".strip()
+
+    return True, f"Konservativ ändring applicerad på {target}: {kind}."
+
+
+plan = load_json(PLAN_FILE, {})
+activities_state = load_json(ACTIVITIES_FILE, {"activities": []})
+coach = load_json(COACH_FILE, {"analyses": [], "last_trigger_hash": None, "last_run_utc": None})
+activities = activities_state.get("activities", [])
+
+if not activities:
+    print("AI coach: inga aktiviteter att analysera.")
+    raise SystemExit(0)
+
+latest = max(activities, key=lambda a: a.get("start_date") or "")
+tz = ZoneInfo(plan.get("meta", {}).get("timezone", "Europe/Stockholm"))
+local_date = datetime.now(tz).date().isoformat()
+trigger_hash = stable_hash(plan, latest, local_date)
+
+if coach.get("last_trigger_hash") == trigger_hash:
+    print("AI coach: inget nytt underlag; hoppar över API-anrop.")
+    raise SystemExit(0)
+
+if not API_KEY:
+    print("AI coach: OPENAI_API_KEY saknas; hoppar över AI-analys.")
+    raise SystemExit(0)
+
+latest_date = (latest.get("start_date_local") or latest.get("start_date") or "")[:10]
+recent = sorted(activities, key=lambda a: a.get("start_date") or "", reverse=True)[:10]
+planned_dates = [d.get("date") for d in plan.get("days", [])]
+
+input_data = {
+    "today_local": local_date,
+    "latest_activity": latest,
+    "latest_activity_date": latest_date,
+    "recent_activities": recent,
+    "current_plan": plan,
+    "allowed_target_dates": planned_dates,
+    "instruction": "Analysera senaste passet mot faktisk närbelastning och aktuell plan. Kontrollera särskilt föregående och kommande 2–3 dagar. Föreslå endast konservativ automatisk ändring; allt som kan innebära ökad belastning ska vara review och kräva godkännande."
+}
+
+system_prompt = PROMPT_FILE.read_text(encoding="utf-8")
+result = call_openai(system_prompt, input_data)
+changed, apply_note = apply_conservative_action(plan, result["plan_action"])
+if changed:
+    PLAN_FILE.write_text(json.dumps(plan, ensure_ascii=False, indent=2), encoding="utf-8")
+
+entry = {
+    "activity_id": latest.get("id"),
+    "activity_date": latest_date,
+    "activity_name": latest.get("name"),
+    "generated_at_utc": datetime.now(timezone.utc).isoformat(),
+    "model": MODEL,
+    "assessment": result["assessment"],
+    "plan_action": result["plan_action"],
+    "auto_apply": {
+        "applied": changed,
+        "note": apply_note
+    }
+}
+
+analyses = [a for a in coach.get("analyses", []) if a.get("activity_id") != latest.get("id")]
+analyses.insert(0, entry)
+coach["analyses"] = analyses[:30]
+coach["last_run_utc"] = datetime.now(timezone.utc).isoformat()
+coach["last_trigger_hash"] = stable_hash(plan, latest, local_date)
+COACH_FILE.write_text(json.dumps(coach, ensure_ascii=False, indent=2), encoding="utf-8")
+
+print(f"AI coach: analyserade aktivitet {latest.get('id')} med {MODEL}. {apply_note}")
