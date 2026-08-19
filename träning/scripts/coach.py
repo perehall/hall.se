@@ -2,6 +2,8 @@
 import hashlib
 import json
 import os
+import time
+import urllib.error
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
@@ -67,35 +69,21 @@ def stable_hash(plan, latest_activity, local_date):
 
 
 def extract_output_text(response):
-    if isinstance(response.get("output_text"), str):
-        return response["output_text"]
     chunks = []
     for item in response.get("output", []):
+        if item.get("type") != "message":
+            continue
         for part in item.get("content", []):
-            if part.get("type") in ("output_text", "text") and isinstance(part.get("text"), str):
+            if part.get("type") == "refusal":
+                raise RuntimeError(f"OpenAI avböjde analysen: {part.get('refusal', 'okänd orsak')}")
+            if part.get("type") == "output_text" and isinstance(part.get("text"), str):
                 chunks.append(part["text"])
     if not chunks:
         raise RuntimeError("OpenAI-svaret saknar output_text")
     return "".join(chunks)
 
 
-def call_openai(system_prompt, input_data):
-    body = {
-        "model": MODEL,
-        "input": [
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": json.dumps(input_data, ensure_ascii=False)}
-        ],
-        "text": {
-            "format": {
-                "type": "json_schema",
-                "name": "training_coach",
-                "strict": True,
-                "schema": SCHEMA
-            }
-        },
-        "max_output_tokens": 1800
-    }
+def request_openai(body):
     req = urllib.request.Request(
         "https://api.openai.com/v1/responses",
         data=json.dumps(body).encode("utf-8"),
@@ -105,9 +93,66 @@ def call_openai(system_prompt, input_data):
         },
         method="POST"
     )
-    with urllib.request.urlopen(req, timeout=90) as r:
-        response = json.load(r)
-    return json.loads(extract_output_text(response))
+    with urllib.request.urlopen(req, timeout=120) as r:
+        return json.load(r)
+
+
+def call_openai(system_prompt, input_data):
+    token_budgets = [4000, 8000]
+    for attempt, max_tokens in enumerate(token_budgets, start=1):
+        body = {
+            "model": MODEL,
+            "input": [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": json.dumps(input_data, ensure_ascii=False)}
+            ],
+            "reasoning": {"effort": "minimal"},
+            "text": {
+                "verbosity": "low",
+                "format": {
+                    "type": "json_schema",
+                    "name": "training_coach",
+                    "strict": True,
+                    "schema": SCHEMA
+                }
+            },
+            "max_output_tokens": max_tokens,
+            "store": False
+        }
+
+        try:
+            response = request_openai(body)
+        except urllib.error.HTTPError as e:
+            details = e.read().decode("utf-8", errors="replace")
+            if e.code == 429 and attempt < len(token_budgets):
+                time.sleep(4 * attempt)
+                continue
+            raise RuntimeError(f"OpenAI HTTP {e.code}: {details[:1200]}") from e
+
+        status = response.get("status")
+        if status == "completed":
+            text = extract_output_text(response)
+            try:
+                return json.loads(text)
+            except json.JSONDecodeError as e:
+                raise RuntimeError(
+                    f"OpenAI markerade svaret completed men JSON kunde inte parsas: {e}"
+                ) from e
+
+        if status == "incomplete":
+            reason = (response.get("incomplete_details") or {}).get("reason")
+            if reason in ("max_output_tokens", "max_tokens") and attempt < len(token_budgets):
+                print(f"AI coach: svar avkortat vid {max_tokens} tokens; försöker igen med större budget.")
+                continue
+            raise RuntimeError(f"OpenAI-svaret blev incomplete: {reason or 'okänd orsak'}")
+
+        if status == "failed":
+            err = response.get("error") or {}
+            raise RuntimeError(f"OpenAI-svaret misslyckades: {err.get('message') or err}")
+
+        raise RuntimeError(f"Oväntad OpenAI-status: {status!r}")
+
+    raise RuntimeError("AI coach: kunde inte få ett komplett strukturerat svar.")
 
 
 def apply_conservative_action(plan, action):
