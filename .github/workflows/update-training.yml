@@ -46,4 +46,5 @@ jobs:
           git config user.email "actions@users.noreply.github.com"
           git add "träning/data/activities.json" "träning/index.generated.html"
           git commit -m "Auto-sync training data"
-          git push
+          git pull --rebase origin main
+          git push origin main
