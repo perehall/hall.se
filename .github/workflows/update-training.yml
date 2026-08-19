@@ -1,7 +1,9 @@
-name: Update training data (manual test)
+name: Update training data
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "17 */3 * * *"
 
 permissions:
   contents: write
@@ -18,6 +20,12 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Backup current live page once
+        run: |
+          if [ ! -f "träning/index.manual-backup.html" ]; then
+            cp "träning/index.html" "träning/index.manual-backup.html"
+          fi
+
       - name: Sync Strava
         env:
           STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
@@ -33,18 +41,18 @@ jobs:
           gh secret set STRAVA_REFRESH_TOKEN --repo "$GITHUB_REPOSITORY" < /tmp/strava_refresh_token
           rm -f /tmp/strava_refresh_token
 
-      - name: Build preview page
+      - name: Build live page
         run: python "träning/scripts/build.py"
 
-      - name: Commit synced data and preview
+      - name: Commit synced data and live page
         run: |
-          if git diff --quiet -- "träning/data/activities.json" "träning/index.generated.html"; then
+          if git diff --quiet -- "träning/data/activities.json" "träning/index.html" "träning/index.manual-backup.html"; then
             echo "No changes."
             exit 0
           fi
           git config user.name "training-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add "träning/data/activities.json" "träning/index.generated.html"
-          git commit -m "Auto-sync training data"
+          git add "träning/data/activities.json" "träning/index.html" "träning/index.manual-backup.html"
+          git commit -m "Auto-update training page"
           git pull --rebase origin main
           git push origin main
