@@ -25,45 +25,39 @@
     {
       "date": "2026-08-19",
       "label": "Onsdag",
-      "status": "preliminary",
-      "session": "Swimrun · Jogersö Extreme · 1 varv",
-      "reason": "Om passet blir av ersätter det planerad löptröskel helt.",
-      "reference": "Senaste referenspass: 7,05 km · 54:52 · snittpuls cirka 134 · maxpuls 161."
+      "status": "completed",
+      "session": "Swimrun · Jogersö Extreme · 6,94 km · 54:50",
+      "reason": "Relativt lugnt enligt egen rapport. Strava: snittpuls 143, maxpuls 173. Passet bedömdes som absorberat väl eftersom HRV förbättrades och Garmin träningsberedskap var hög följande dag."
     },
     {
       "date": "2026-08-20",
       "label": "Torsdag",
-      "status": "conditional",
-      "session": "Simning · aerob/teknik eller vila",
-      "reason": "Styrs av onsdagens faktiska belastning.",
+      "status": "completed",
+      "session": "Löpning · kontrollerad tröskel · 3 × 8 min",
+      "reason": "Genomfört med tydligt kontrollerad känsla. Garmin klassade passet som Tempo med aerob träningseffekt 3,9. Egen bedömning: cirka en ytterligare 8-minutersrepetition i reserv. Rätt dos för progression från tidigare 5 × 4 min utan att driva passet till utmattning.",
       "original_session": "Simning · aerob/teknik eller vila",
-      "auto_coach": {
-        "action": "reduce",
-        "reason": "Konservativ skalning eftersom onsdagens faktiska belastning verkar vara högre än planerad löptröskel och det saknas subjektiva återhämtningsdata.",
-        "applied_at_utc": "2026-08-19T22:00:52.716575+00:00"
-      },
-      "coach_adjustment": "Skala ned passet. Ersätt planerad 'Simning · aerob/teknik' 20/08 med vila eller mycket lätt tekniskt simpass (kortare session, låg volym, fokus teknik och rörlighet). Be användaren rapportera subjektiv återhämtning (sömn, RPE, lokal ömhet) innan ev. återgång till full simning eller MTB 22/08."
+      "coach_adjustment": "Planen ändrades efter faktisk återhämtning: förbättrad HRV, hög Garmin-träningsberedskap och relativt lugn swimrun dagen före talade för att ett kontrollerat löptröskelpass var rimligt. Strava-data för dagens pass fylls på automatiskt vid nästa synk."
     },
     {
       "date": "2026-08-21",
       "label": "Fredag",
       "status": "open",
       "session": "Vila eller mycket lätt",
-      "reason": "Ingen utfyllnadsträning."
+      "reason": "Ingen utfyllnadsträning efter två dagar i följd med swimrun och löptröskel."
     },
     {
       "date": "2026-08-22",
       "label": "Lördag",
       "status": "preliminary",
       "session": "MTB/XC · teknik först",
-      "reason": "Metabol kvalitet bara om onsdagens belastning absorberats väl."
+      "reason": "Teknik prioriteras. Metabol kvalitet endast om torsdagens tröskel är tydligt absorberad efter fredagen."
     },
     {
       "date": "2026-08-23",
       "label": "Söndag",
       "status": "preliminary",
       "session": "Trail · lugnt",
-      "reason": "Dimensioneras mot lördagens MTB och enduroskolan måndag."
+      "reason": "Dimensioneras mot lördagens MTB och måndagens enduroskola; ingen automatisk volymökning."
     }
   ],
   "strength_template": [
