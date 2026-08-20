@@ -4,35 +4,33 @@
       "activity_id": 19827029587,
       "activity_date": "2026-08-20",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-08-20T19:45:12.619984+00:00",
+      "generated_at_utc": "2026-08-20T22:02:08.886869+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Torsdagens kontrollerade tröskelpass (10,35 km, 50:48) genomfört som planerat. Det följdes av tre tidigare träningsdagar (sim 17/8, styrka 18/8, swimrun 19/8) inom 4 dygn. Kommande 2–3 dagar innehåller planerad återhämtningssimning (21/8) och tekniskt MTB (22/8).",
-        "load_interpretation": "Fakta: senaste 4 dagarna innehåller sim 3 200 m (17/8), styrketräning 2 145 s (18/8), swimrun 6,94 km 3 247 s (19/8) och löpning 10,35 km 3 048 s (20/8). Torsdagspasset: snittpuls 145,7, maxpuls 167, snitteffekt ~277 W, 63 m klättring. Kommande plan: fredag lågkostnadssim ~60 min; lördag MTB teknik; söndag lugn trail. Tolkning: den senaste veckan visar regelbunden mångsidig belastning med täta pass; torsdagens kvalitetspass bedöms av plan och användarens egen anteckning som kontrollerat och absorberat. Osäkerheter: ingen subjektiv återhämtningsdata i underlaget (sömn, RPE, lokal muskeltrötthet) för efter torsdagens pass; Garmin HRV/beredskap nämns i plan men inga numeriska värden i data.",
+        "summary": "Torsdagens kontrollerade tröskelpass genomfört som plan och verkar absorberat i närtid. Föregående swimrun och kommande simpass planerat gör att fredag bör hållas lågkostnad enligt plan.",
+        "load_interpretation": "Tre hårdare/medelintensiva löp- och trailpass de senaste fyra dagarna (16–20 aug) med måttliga pulstoppar; styrka och simning innan dess var lätta till måttliga. Inget i de senaste passen indikerar akut överbelastning som kräver vila.",
         "confidence": "medium",
         "facts": [
-          "17/8 sim 3 200 m, 59:39, snittpuls 127, kcal 536.",
-          "18/8 styrketräning 2 145 s, snittpuls 87, kcal 138.",
-          "19/8 swimrun 6,94 km, moving_time 3 247 s, snittpuls 143, max 173.",
-          "20/8 löpning 10,35 km, moving_time 3 048 s, snittpuls 145,7, max 167, snitteffekt 277 W, 63 m+.",
-          "Plan för 21/8: sim ~60 min lågkostnad; 22/8 MTB teknik; 23/8 lugn trail."
+          "2026-08-20: Run 10.35 km, 50:48, snittpuls 145.7, maxpuls 167, snitteffekt 277 W.",
+          "2026-08-19: Trail/Swimrun 6.94 km, 54:50, snittpuls 143.4, maxpuls 173.",
+          "2026-08-18: Styrketräning 35:45, låg snittpuls ~87.",
+          "Planerat 2026-08-21: Simning ~60 min (aerob/teknik) lågkostnad."
         ],
         "interpretations": [
-          "Torsdagens tröskelpass är sannolikt absorberat som planerat eftersom användaren rapporterat reservkapacitet och plananteckningen noterar förbättrad HRV och hög Garmin-beredskap (dock inga numeriska värden i underlaget).",
-          "Givet tät träning de senaste dagarna och planerad teknikbaserad MTB följande dag är en konservativ hållning mot lågkostnad fredag rimlig.",
-          "Brist på subjektiva återhämtningsdata betyder att osäkerhet kvarstår kring behov av extra vila eller skalning av fredagspasset."
+          "Det senaste tröskelpasset var kontrollerat med margin kvar för kvalitet enligt eget omdöme.",
+          "Den föreslagna simdagen kan genomföras i planerad lågkostnadsgest utan att kompromettera återhämtning."
         ],
         "unknowns": [
-          "Ingen aktuell subjektiv RPE efter torsdagens pass.",
-          "Inga faktiska HRV- eller Garmin-beredskapsvärden i datamängden.",
-          "Ingen sömndata eller lokal muskeltrötthet rapporterad efter torsdagens pass."
+          "Subjektiv återhämtning/muskeltrötthet efter torsdagens pass (ej uppgift).",
+          "Sömn och dagsform inför fredagens morgonpass.",
+          "Eventuella lokala löparmuskulära känningar efter maxpuls 167–173."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-08-21",
-        "reason": "Planen föreslår redan ett lågkostnadssimpass fredag och användarens egen notering samt tidigare HRV-anteckning indikerar att torsdagens pass absorberats. Utan subjektiva/sensoriska data finns ingen anledning att automatiskt reducera eller lägga till vila.",
-        "recommendation": "Behåll planerat lågkostnadssim 2026-08-21. Morgonkänsla: om tydligt sämre, kapa ett 600 m-block eller ersätt med vila (detta kräver inte coachgodkännande för en konservativ anpassning). Kontrollera subjektiv återhämtning (sömn, RPE, lokal trötthet) före lördagens MTB för ev. ytterligare justering.",
+        "reason": "Passet är avsett som lågkostnad och senaste passen är absorberade enligt data och planprinciper.",
+        "recommendation": "Behåll simpasset som beskrivet; om morgonkänslan är sämre kapa ett 600 m-block eller vila helt.",
         "requires_approval": false
       },
       "auto_apply": {
@@ -120,6 +118,6 @@
       }
     }
   ],
-  "last_trigger_hash": "581cef1ec41ccfe7aab960bf0fe515ab82c1c232bfbff11e66f6f78c88504057",
-  "last_run_utc": "2026-08-20T19:45:12.620012+00:00"
+  "last_trigger_hash": "7d6a696e12988351dc3b7f95aa6f7c010a7a106008db53dcd2fa1c251aa62fe3",
+  "last_run_utc": "2026-08-20T22:02:08.886897+00:00"
 }
