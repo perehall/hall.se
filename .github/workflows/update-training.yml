@@ -39,6 +39,7 @@ jobs:
         env:
           STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
           STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
+          STRAVA_REFRESH_TOKEN: ${{ secrets.STRAVA_REFRESH_TOKEN }}
           STRAVA_REFRESH_TOKEN_FILE: /tmp/strava_refresh_token
         run: python "träning/scripts/sync_strava.py"
 
@@ -71,7 +72,7 @@ jobs:
             "träning/index.html"
             "träning/index.manual-backup.html"
           )
-          if git diff --quiet -- "${TRACKED[@]}"; then
+          if [ -z "$(git status --porcelain -- "${TRACKED[@]}")" ]; then
             echo "No repository changes."
           else
             git config user.name "training-bot"
