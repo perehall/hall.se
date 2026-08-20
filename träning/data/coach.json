@@ -4,34 +4,35 @@
       "activity_id": 19827029587,
       "activity_date": "2026-08-20",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-08-20T18:26:50.199954+00:00",
+      "generated_at_utc": "2026-08-20T18:28:06.313233+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Dagens löppass (10.35 km, 50:48, snittpuls 145.7, max 167, 63 m höjd) följde två dagar med längre löp/trail och swimrun samt ett styrkepass tidigare i veckan. Passen rapporteras som kontrollerad tröskel (3×8 min) och bedömdes ha en repetition i reserv.",
-        "load_interpretation": "Fakta: tre konsekutiva dagar med träning (18–20 aug): 18 aug styrka 35 min (HR snitt 87), 19 aug swimrun 6.94 km 54:50 (HR snitt 143, max 173), 20 aug löp 10.35 km 50:48 (HR snitt 145.7, max 167). Kommande plan: fredag angivet vila/mycket lätt, lördag MTB teknik, söndag lugn trail. Tolkning: dagens kontrollerade tröskel verkar absorberad i den närmaste återhämtningsbilden och mot planen; ingen tydlig signal om överbelastning i HR-data eller planerade närliggande pass.",
+        "summary": "Torsdagens kontrollerade tröskelpass (10,35 km, 50:48, 63 m+, snittpuls 145,7, max 167, snitteffekt 277 W) följer planens avsikt att stabilisera och är genomfört med reservkapacitet kvar.",
+        "load_interpretation": "Fakta: tre hårdare dagar senaste fyra (17: sim 3 200 m; 18: styrka 35 min; 19: swimrun 6,94 km; 20: löpning 10,35 km med tröskelinslag). Kommande plan: fredag vila/mycket lätt, lördag MTB teknik, söndag lugn trail. Tolkning: dagens pass verkar vara absorberbart i kontexten av föregående swimrun och styrkepass eftersom subjektiva återhämtningsdata (sömn/HRV detaljer utöver nämnd förbättring) saknas i underlaget. Därför är fortsatt vila fredag rimlig innan lördagens tekniska MTB. ",
         "confidence": "medium",
         "facts": [
-          "2026-08-18 styrketräning 35:45, snittpuls 87.3.",
-          "2026-08-19 swimrun 6.94 km, 54:50, snittpuls 143.4, max 173.",
-          "2026-08-20 löpning 10.35 km, 50:48, snittpuls 145.7, max 167, 63 m höjd.",
-          "Planerat 2026-08-21 vila/mycket lätt; 2026-08-22 MTB teknik; 2026-08-23 lugn trail."
+          "2026-08-20: Löpning 10,35 km, 50:48, 63 m+, snittpuls 145.7, maxpuls 167, snitteffekt 277 W.",
+          "2026-08-19: Swimrun 6,94 km, 54:50, snittpuls 143.4, maxpuls 173.",
+          "2026-08-18: Styrketräning 35:45, snittpuls 87.3.",
+          "2026-08-17: Simning 3 200 m, 59:39.",
+          "Planerade kommande dagar: 2026-08-21 vila/mycket lätt; 2026-08-22 MTB/XC teknik; 2026-08-23 lugn trail."
         ],
         "interpretations": [
-          "Dagens löppass var kontrollerat och inte maximalinsats (egen bedömning: ~1 rep kvar).",
-          "Givet två föregående träningsdagar och planerad vila nästa dag är återhämtningstid möjlig utan omedelbar nedskalning.",
-          "Inga objektiva tecken i underlaget (t.ex. mycket hög puls, plötsligt stort volymsprång eller saknad återhämtningsdata) som kräver akut vila."
+          "Det finns en ackumulering av träning över flera dagar men inga objektiva tecken i underlaget på oförutsedd överbelastning efter torsdagens pass.",
+          "Behov av aktiv återhämtning fredag är motiverat som konservativ åtgärd för att säkra absorberbarhet inför tekniskt MTB på lördag.",
+          "Utan detaljerad subjektiv återhämtning (sömn, dagsform) eller lokal muskeltrötthet bör ändringar vara begränsade och konservativa."
         ],
         "unknowns": [
-          "Subjektiv återhämtning (sömn, muskelömhet, trötthetskänsla) dag till dag.",
-          "HRV- eller annan recovery-metrik för senaste 24–48 h bortsett från nämnd Garmin-anteckning tidigare vecka.",
-          "Detaljerad intensitetsfördelning (exakta pulszoner eller RPE) för dagens intervaller."
+          "Subjektiv återhämtning dag-för-dag (sömn, muskelömhet, trötthet).",
+          "Detaljerad HRV- eller träningsberedskapsdata för de senaste dagarna bortom den övergripande förbättring som nämns.",
+          "Exakt planerat innehåll/intensitet för lördagens MTB och söndagens trail (varaktighet/intensitet)."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-08-21",
-        "reason": "Planerad vila/mycket lätt dag ligger lämpligt efter tre dagars följd med träning och dagens kontrollerade tröskel verkar absorberad; bevarar kontinuitet och återhämtning.",
-        "recommendation": "Behåll plan: vila eller mycket lätt aktivitet 21 aug. Övervaka subjektiv återhämtning (sömn, lokal muskeltrötthet). Om du upplever ovanlig trötthet eller stelhet, välj vila istället för lätt rörelse.",
+        "reason": "Fredagens vila/mycket lätta session är konservativt lämplig efter två dagar i följd med swimrun och kontrollerad tröskel; skyddar absorberbarhet inför lördagens tekniska MTB.",
+        "recommendation": "Behåll planerad vila eller mycket lätt aktivitet fredag. Om du subjektivt känner dig mycket återhämtad kan du tidigt fredag göra max 20–30 min mycket lätt rörlighet/återhämtningspromenad, annars vila helt. Beakta att ev. ändring kräver review om du vill lägga in belastning.",
         "requires_approval": false
       },
       "auto_apply": {
@@ -119,6 +120,6 @@
       }
     }
   ],
-  "last_trigger_hash": "54b7d05b3374c273b1b9d3a68dfc7d3fab9164f3bbaddf1aba8f2d16c2eaecea",
-  "last_run_utc": "2026-08-20T18:26:50.199979+00:00"
+  "last_trigger_hash": "33ecb7019586d4da50227fb183c25c15a512037260d1b1e3be1c381addaa57ed",
+  "last_run_utc": "2026-08-20T18:28:06.313262+00:00"
 }
