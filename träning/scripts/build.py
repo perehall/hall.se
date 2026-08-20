@@ -175,8 +175,16 @@ h1{{font-size:clamp(2rem,8vw,3.2rem);line-height:1;margin:0 0 8px;letter-spacing
 <div class="hero"><h2>{html.escape(plan["meta"]["title"])}</h2><p>{html.escape(plan["meta"]["principle"])}</p></div>
 <h2 class="section">Aktuell vecka</h2>{''.join(cards)}
 <h2 class="section">Styrkemall framåt</h2><div class="principles">{strength}</div>
-<footer>Automatiskt byggd från plan.json + activities.json + coach.json. Strava-data används som fakta. AI-coachen får automatiskt endast behålla, minska eller ersätta belastning konservativt; belastningsökning kräver mänsklig bedömning. · <a href="/cdn-cgi/access/logout" style="color:inherit">Logga ut</a></footer>
-</div></body></html>'''
+<footer>Automatiskt byggd från plan.json + activities.json + coach.json. Strava-data används som fakta. AI-coachen får automatiskt endast behålla, minska eller ersätta belastning konservativt; belastningsökning kräver mänsklig bedömning. · <a href="/cdn-cgi/access/logout" style="color:inherit" onclick="window.location.replace(this.href); return false;">Logga ut</a></footer>
+</div>
+<script>
+window.addEventListener("pageshow", (event) => {{
+  if (event.persisted) {{
+    window.location.reload();
+  }}
+}});
+</script>
+</body></html>'''
 
 (ROOT / "index.html").write_text(doc, encoding="utf-8")
 print(ROOT / "index.html")
