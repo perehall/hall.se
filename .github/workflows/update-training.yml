@@ -39,7 +39,6 @@ jobs:
         env:
           STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
           STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
-          STRAVA_REFRESH_TOKEN: ${{ secrets.STRAVA_REFRESH_TOKEN }}
           STRAVA_REFRESH_TOKEN_FILE: /tmp/strava_refresh_token
         run: python "träning/scripts/sync_strava.py"
 
@@ -59,14 +58,25 @@ jobs:
       - name: Build live page
         run: python "träning/scripts/build.py"
 
+      - name: Finalize and validate dashboard
+        run: python "träning/scripts/finalize_dashboard.py"
+
       - name: Commit synced data, coach state and live page
         run: |
-          if git diff --quiet -- "träning/data/activities.json" "träning/data/coach.json" "träning/data/plan.json" "träning/index.html" "träning/index.manual-backup.html"; then
+          TRACKED=(
+            "träning/data/activities.json"
+            "träning/data/coach.json"
+            "träning/data/plan.json"
+            "träning/data/dashboard_summary.json"
+            "träning/index.html"
+            "träning/index.manual-backup.html"
+          )
+          if git diff --quiet -- "${TRACKED[@]}"; then
             echo "No repository changes."
           else
             git config user.name "training-bot"
             git config user.email "actions@users.noreply.github.com"
-            git add "träning/data/activities.json" "träning/data/coach.json" "träning/data/plan.json" "träning/index.html" "träning/index.manual-backup.html"
+            git add -- "${TRACKED[@]}"
             git commit -m "Auto-update training page and AI coach"
             git pull --rebase origin main
             git push origin main
