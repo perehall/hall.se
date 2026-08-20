@@ -101,8 +101,8 @@ def coach_html(c):
 
 cards = []
 for d in plan["days"]:
-    st = d.get("status", "open")
     raw = acts_by_date.get(d["date"], [])
+    st = "completed" if raw else d.get("status", "open")
     auto = ""
     if raw:
         lines = "".join(
