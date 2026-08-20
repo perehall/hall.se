@@ -35,11 +35,11 @@ def activity_duration_s(activity):
     return int(moving or 0)
 
 
-def fmt_compact_duration(seconds):
+def fmt_exact_duration(seconds):
     seconds = int(seconds or 0)
     hours, rem = divmod(seconds, 3600)
-    minutes = rem // 60
-    return f"{hours} h {minutes:02d} min" if hours else f"{minutes} min"
+    minutes, secs = divmod(rem, 60)
+    return f"{hours}:{minutes:02d}:{secs:02d}" if hours else f"{minutes}:{secs:02d}"
 
 
 def local_date(activity):
@@ -94,6 +94,7 @@ summary = {
     "week_start": week_start,
     "week_end": week_end,
     "duration_definition": "elapsed_time_s; moving_time_s endast som fallback",
+    "display_duration_format": "H:MM:SS eller M:SS utan avrundning",
     "pass_count": pass_count,
     "training_days": training_days,
     "session_time_s": total_seconds,
@@ -104,7 +105,7 @@ SUMMARY_FILE.write_text(json.dumps(summary, ensure_ascii=False, indent=2), encod
 
 metrics_html = f'''<div class="metrics">
     <div class="metric"><strong>{pass_count}</strong><span>pass</span></div>
-    <div class="metric"><strong>{fmt_compact_duration(total_seconds)}</strong><span>passtid</span></div>
+    <div class="metric"><strong>{fmt_exact_duration(total_seconds)}</strong><span>passtid</span></div>
     <div class="metric"><strong>{training_days}</strong><span>träningsdagar</span></div>
   </div>
   '''
@@ -120,7 +121,7 @@ for group, seconds in sorted(sport_seconds.items(), key=lambda item: item[1], re
     pct = round(seconds / total_seconds * 100) if total_seconds else 0
     sport_rows.append(
         f'''<div class="sport-row">
-  <div class="sport-head"><span>{html.escape(group)}</span><strong>{fmt_compact_duration(seconds)}</strong></div>
+  <div class="sport-head"><span>{html.escape(group)}</span><strong>{fmt_exact_duration(seconds)}</strong></div>
   <div class="sport-track"><div class="sport-fill" style="width:{pct}%"></div></div>
 </div>'''
     )
@@ -145,13 +146,13 @@ INDEX_FILE.write_text(page, encoding="utf-8")
 rendered = INDEX_FILE.read_text(encoding="utf-8")
 required = [
     f'<div class="metric"><strong>{pass_count}</strong><span>pass</span></div>',
-    f'<div class="metric"><strong>{fmt_compact_duration(total_seconds)}</strong><span>passtid</span></div>',
+    f'<div class="metric"><strong>{fmt_exact_duration(total_seconds)}</strong><span>passtid</span></div>',
     f'<div class="metric"><strong>{training_days}</strong><span>träningsdagar</span></div>',
     '<div class="dashboard-title">Grenfördelning · passtid</div>',
 ]
 for group, seconds in sport_seconds.items():
     required.append(
-        f'<div class="sport-head"><span>{html.escape(group)}</span><strong>{fmt_compact_duration(seconds)}</strong></div>'
+        f'<div class="sport-head"><span>{html.escape(group)}</span><strong>{fmt_exact_duration(seconds)}</strong></div>'
     )
 
 missing = [snippet for snippet in required if snippet not in rendered]
@@ -159,6 +160,6 @@ if missing:
     raise RuntimeError("Dashboardvalidering misslyckades; publicering stoppas: " + repr(missing))
 
 print(
-    f"Dashboard OK: {pass_count} pass, {fmt_compact_duration(total_seconds)} passtid, "
+    f"Dashboard OK: {pass_count} pass, {fmt_exact_duration(total_seconds)} passtid, "
     f"{training_days} träningsdagar."
 )
