@@ -11,7 +11,12 @@
 .wrap{width:min(100%,760px);margin:auto;padding:20px 16px 56px}header{padding:8px 2px 18px}
 .eyebrow{text-transform:uppercase;letter-spacing:.12em;font-size:.76rem;font-weight:800;color:var(--accent);margin-bottom:6px}
 h1{font-size:clamp(2rem,8vw,3.2rem);line-height:1;margin:0 0 8px;letter-spacing:-.04em}.sub{color:var(--muted);font-size:.96rem}
-.hero{background:#0f172a;color:#fff;border-radius:20px;padding:18px 20px;margin:8px 0 22px;box-shadow:var(--shadow)}.hero h2{margin:4px 0 5px}.hero p{margin:0;color:#cbd5e1}
+.hero{background:#0f172a;color:#fff;border-radius:20px;padding:18px 20px;margin:8px 0 18px;box-shadow:var(--shadow)}.hero h2{margin:4px 0 5px}.hero p{margin:0;color:#cbd5e1}
+.dashboard{display:grid;gap:12px;margin:0 0 24px}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.metric{background:#fff;border:1px solid var(--line);border-radius:16px;padding:13px 14px;box-shadow:var(--shadow)}.metric strong{display:block;font-size:1.22rem;line-height:1.15}.metric span{display:block;color:var(--muted);font-size:.78rem;margin-top:4px}
+.dashboard-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.dashboard-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:15px 16px;box-shadow:var(--shadow)}.dashboard-title{font-size:.78rem;font-weight:900;text-transform:uppercase;letter-spacing:.07em;color:#475569;margin-bottom:12px}.dashboard-empty{color:var(--muted);font-size:.88rem}
+.sport-row+.sport-row{margin-top:10px}.sport-head{display:flex;justify-content:space-between;gap:12px;font-size:.84rem}.sport-head strong{font-size:.8rem}.sport-track{height:7px;background:#e2e8f0;border-radius:999px;overflow:hidden;margin-top:5px}.sport-fill{height:100%;background:var(--accent);border-radius:999px}
+.week-status{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.week-day{text-align:center;border-radius:10px;padding:5px 2px}.week-day.today{background:#eff6ff}.week-day-label{font-size:.68rem;font-weight:800;color:var(--muted);margin-bottom:4px}.week-day-dot{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;margin:auto;font-size:.78rem;font-weight:900}.dashboard-legend{color:var(--muted);font-size:.7rem;margin-top:10px;line-height:1.5}
+.next-item{padding:10px 0}.next-item+.next-item{border-top:1px solid var(--line)}.next-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:3px}.next-coach{color:var(--purple);font-size:.82rem;margin-top:4px}
 .section{font-size:1.22rem;margin:28px 0 12px}.day{background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px;margin:12px 0;box-shadow:var(--shadow)}
 .daytop{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:10px}.dow{font-size:.82rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}.date{color:var(--muted);font-size:.85rem}
 .session{font-size:1.2rem;font-weight:800;margin:4px 0 6px}.reason{color:#334155;font-size:.95rem}.badge{border-radius:999px;padding:5px 9px;font-size:.7rem;font-weight:800;white-space:nowrap}
@@ -19,11 +24,76 @@ h1{font-size:clamp(2rem,8vw,3.2rem);line-height:1;margin:0 0 8px;letter-spacing:
 .pass{margin-top:14px;padding-top:14px;border-top:1px solid var(--line);display:grid;gap:7px}.pass-title{font-weight:800}.decision{margin-top:13px;padding:12px 13px;background:#f8fafc;border-radius:13px;border:1px solid var(--line)}.decision strong{display:block;margin-bottom:4px}.coach-adjust{border-color:#ddd6fe;background:#faf5ff}
 .coach{margin-top:16px;padding:14px;border-radius:16px;background:var(--purple-soft);border:1px solid #ddd6fe}.coach-title{font-size:.75rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:var(--purple);margin-bottom:5px}.coach-summary{font-weight:800;margin-bottom:5px}.coach-load{color:#4c1d95;font-size:.92rem}.coach-details{margin-top:10px}.coach-details summary{cursor:pointer;font-weight:700}.coach-grid{display:grid;gap:8px;margin-top:8px;font-size:.88rem}.coach-grid ul{margin:4px 0 0;padding-left:18px}.coach-action{margin-top:10px;padding-top:10px;border-top:1px solid #ddd6fe;font-size:.9rem}.coach-action span{color:#4c1d95}.coach-action small{color:#6b21a8}
 .principles{display:grid;gap:10px}.principle{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px}footer{color:var(--muted);font-size:.82rem;padding-top:26px}
+@media (max-width:620px){.dashboard-grid{grid-template-columns:1fr}.metrics{gap:7px}.metric{padding:12px 10px}.metric strong{font-size:1.05rem}}
 </style>
 </head>
 <body><div class="wrap">
-<header><div class="eyebrow">DEN LEVANDE TRÄNINGSPLANEN</div><h1>Vecka 34</h1><div class="sub">2026-08-17–2026-08-23 · senast uppdaterad 20 augusti 2026 · 14:07</div></header>
+<header><div class="eyebrow">DEN LEVANDE TRÄNINGSPLANEN</div><h1>Vecka 34</h1><div class="sub">2026-08-17–2026-08-23 · senast uppdaterad 20 augusti 2026 · 16:20</div></header>
 <div class="hero"><h2>Stabilisera först. Bygg sedan.</h2><p>Veckan är till för att skapa stabilitet: ta vara på genomförd träning, hålla kvalitetspassen kontrollerade och låta återhämtningen styra nästa steg. Det är så vi bygger långsiktigt mot målet att bli en stark, robust och mångsidig allroundatlet inom löpning, MTB/XC, simning och styrka.</p></div>
+<section class="dashboard" aria-label="Veckoöversikt">
+  <div class="metrics">
+    <div class="metric"><strong>3</strong><span>pass</span></div>
+    <div class="metric"><strong>2 h 16 min</strong><span>aktiv tid</span></div>
+    <div class="metric"><strong>3</strong><span>träningsdagar</span></div>
+  </div>
+  <div class="dashboard-grid">
+    <div class="dashboard-card">
+      <div class="dashboard-title">Grenfördelning · aktiv tid</div>
+      <div class="sport-row">
+  <div class="sport-head"><span>Löpning</span><strong>54 min</strong></div>
+  <div class="sport-track"><div class="sport-fill" style="width:40%"></div></div>
+</div><div class="sport-row">
+  <div class="sport-head"><span>Simning</span><strong>46 min</strong></div>
+  <div class="sport-track"><div class="sport-fill" style="width:34%"></div></div>
+</div><div class="sport-row">
+  <div class="sport-head"><span>Styrka</span><strong>35 min</strong></div>
+  <div class="sport-track"><div class="sport-fill" style="width:26%"></div></div>
+</div>
+    </div>
+    <div class="dashboard-card">
+      <div class="dashboard-title">Plan → utfall</div>
+      <div class="week-status"><div class="week-day">
+  <div class="week-day-label">Må</div>
+  <div class="week-day-dot fixed">✓</div>
+</div><div class="week-day">
+  <div class="week-day-label">Ti</div>
+  <div class="week-day-dot fixed">✓</div>
+</div><div class="week-day">
+  <div class="week-day-label">On</div>
+  <div class="week-day-dot fixed">✓</div>
+</div><div class="week-day today">
+  <div class="week-day-label">To</div>
+  <div class="week-day-dot conditional">◐</div>
+</div><div class="week-day">
+  <div class="week-day-label">Fr</div>
+  <div class="week-day-dot open">·</div>
+</div><div class="week-day">
+  <div class="week-day-label">Lö</div>
+  <div class="week-day-dot conditional">◐</div>
+</div><div class="week-day">
+  <div class="week-day-label">Sö</div>
+  <div class="week-day-dot conditional">◐</div>
+</div></div>
+      <div class="dashboard-legend">✓ genomfört · ● planerat · ◐ preliminärt/villkorat · · öppet</div>
+    </div>
+  </div>
+  <div class="dashboard-card">
+    <div class="dashboard-title">Nästa dagar</div>
+    <div class="next-item">
+  <div class="next-top"><strong>Torsdag</strong><span class="badge conditional">VILLKORAT</span></div>
+  <div>Simning · aerob/teknik eller vila</div>
+  <div class="next-coach">Coach: Skala ned passet.</div>
+</div><div class="next-item">
+  <div class="next-top"><strong>Fredag</strong><span class="badge open">ÖPPET</span></div>
+  <div>Vila eller mycket lätt</div>
+  
+</div><div class="next-item">
+  <div class="next-top"><strong>Lördag</strong><span class="badge conditional">PRELIMINÄRT</span></div>
+  <div>MTB/XC · teknik först</div>
+  
+</div>
+  </div>
+</section>
 <h2 class="section">Aktuell vecka</h2><div class="day">
   <div class="daytop">
     <div><div class="dow">Måndag</div><div class="date">2026-08-17</div></div>
@@ -55,7 +125,7 @@ h1{font-size:clamp(2rem,8vw,3.2rem);line-height:1;margin:0 0 8px;letter-spacing:
 </div><div class="day">
   <div class="daytop">
     <div><div class="dow">Onsdag</div><div class="date">2026-08-19</div></div>
-    <div class="badge conditional">PRELIMINÄRT</div>
+    <div class="badge fixed">GENOMFÖRT</div>
   </div>
   <div class="session">Swimrun · Jogersö Extreme · 1 varv</div>
   <div class="reason">Om passet blir av ersätter det planerad löptröskel helt.</div>
