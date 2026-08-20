@@ -4,35 +4,35 @@
       "activity_id": 19827029587,
       "activity_date": "2026-08-20",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-08-20T18:28:06.313233+00:00",
+      "generated_at_utc": "2026-08-20T19:45:12.619984+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Torsdagens kontrollerade tröskelpass (10,35 km, 50:48, 63 m+, snittpuls 145,7, max 167, snitteffekt 277 W) följer planens avsikt att stabilisera och är genomfört med reservkapacitet kvar.",
-        "load_interpretation": "Fakta: tre hårdare dagar senaste fyra (17: sim 3 200 m; 18: styrka 35 min; 19: swimrun 6,94 km; 20: löpning 10,35 km med tröskelinslag). Kommande plan: fredag vila/mycket lätt, lördag MTB teknik, söndag lugn trail. Tolkning: dagens pass verkar vara absorberbart i kontexten av föregående swimrun och styrkepass eftersom subjektiva återhämtningsdata (sömn/HRV detaljer utöver nämnd förbättring) saknas i underlaget. Därför är fortsatt vila fredag rimlig innan lördagens tekniska MTB. ",
+        "summary": "Torsdagens kontrollerade tröskelpass (10,35 km, 50:48) genomfört som planerat. Det följdes av tre tidigare träningsdagar (sim 17/8, styrka 18/8, swimrun 19/8) inom 4 dygn. Kommande 2–3 dagar innehåller planerad återhämtningssimning (21/8) och tekniskt MTB (22/8).",
+        "load_interpretation": "Fakta: senaste 4 dagarna innehåller sim 3 200 m (17/8), styrketräning 2 145 s (18/8), swimrun 6,94 km 3 247 s (19/8) och löpning 10,35 km 3 048 s (20/8). Torsdagspasset: snittpuls 145,7, maxpuls 167, snitteffekt ~277 W, 63 m klättring. Kommande plan: fredag lågkostnadssim ~60 min; lördag MTB teknik; söndag lugn trail. Tolkning: den senaste veckan visar regelbunden mångsidig belastning med täta pass; torsdagens kvalitetspass bedöms av plan och användarens egen anteckning som kontrollerat och absorberat. Osäkerheter: ingen subjektiv återhämtningsdata i underlaget (sömn, RPE, lokal muskeltrötthet) för efter torsdagens pass; Garmin HRV/beredskap nämns i plan men inga numeriska värden i data.",
         "confidence": "medium",
         "facts": [
-          "2026-08-20: Löpning 10,35 km, 50:48, 63 m+, snittpuls 145.7, maxpuls 167, snitteffekt 277 W.",
-          "2026-08-19: Swimrun 6,94 km, 54:50, snittpuls 143.4, maxpuls 173.",
-          "2026-08-18: Styrketräning 35:45, snittpuls 87.3.",
-          "2026-08-17: Simning 3 200 m, 59:39.",
-          "Planerade kommande dagar: 2026-08-21 vila/mycket lätt; 2026-08-22 MTB/XC teknik; 2026-08-23 lugn trail."
+          "17/8 sim 3 200 m, 59:39, snittpuls 127, kcal 536.",
+          "18/8 styrketräning 2 145 s, snittpuls 87, kcal 138.",
+          "19/8 swimrun 6,94 km, moving_time 3 247 s, snittpuls 143, max 173.",
+          "20/8 löpning 10,35 km, moving_time 3 048 s, snittpuls 145,7, max 167, snitteffekt 277 W, 63 m+.",
+          "Plan för 21/8: sim ~60 min lågkostnad; 22/8 MTB teknik; 23/8 lugn trail."
         ],
         "interpretations": [
-          "Det finns en ackumulering av träning över flera dagar men inga objektiva tecken i underlaget på oförutsedd överbelastning efter torsdagens pass.",
-          "Behov av aktiv återhämtning fredag är motiverat som konservativ åtgärd för att säkra absorberbarhet inför tekniskt MTB på lördag.",
-          "Utan detaljerad subjektiv återhämtning (sömn, dagsform) eller lokal muskeltrötthet bör ändringar vara begränsade och konservativa."
+          "Torsdagens tröskelpass är sannolikt absorberat som planerat eftersom användaren rapporterat reservkapacitet och plananteckningen noterar förbättrad HRV och hög Garmin-beredskap (dock inga numeriska värden i underlaget).",
+          "Givet tät träning de senaste dagarna och planerad teknikbaserad MTB följande dag är en konservativ hållning mot lågkostnad fredag rimlig.",
+          "Brist på subjektiva återhämtningsdata betyder att osäkerhet kvarstår kring behov av extra vila eller skalning av fredagspasset."
         ],
         "unknowns": [
-          "Subjektiv återhämtning dag-för-dag (sömn, muskelömhet, trötthet).",
-          "Detaljerad HRV- eller träningsberedskapsdata för de senaste dagarna bortom den övergripande förbättring som nämns.",
-          "Exakt planerat innehåll/intensitet för lördagens MTB och söndagens trail (varaktighet/intensitet)."
+          "Ingen aktuell subjektiv RPE efter torsdagens pass.",
+          "Inga faktiska HRV- eller Garmin-beredskapsvärden i datamängden.",
+          "Ingen sömndata eller lokal muskeltrötthet rapporterad efter torsdagens pass."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-08-21",
-        "reason": "Fredagens vila/mycket lätta session är konservativt lämplig efter två dagar i följd med swimrun och kontrollerad tröskel; skyddar absorberbarhet inför lördagens tekniska MTB.",
-        "recommendation": "Behåll planerad vila eller mycket lätt aktivitet fredag. Om du subjektivt känner dig mycket återhämtad kan du tidigt fredag göra max 20–30 min mycket lätt rörlighet/återhämtningspromenad, annars vila helt. Beakta att ev. ändring kräver review om du vill lägga in belastning.",
+        "reason": "Planen föreslår redan ett lågkostnadssimpass fredag och användarens egen notering samt tidigare HRV-anteckning indikerar att torsdagens pass absorberats. Utan subjektiva/sensoriska data finns ingen anledning att automatiskt reducera eller lägga till vila.",
+        "recommendation": "Behåll planerat lågkostnadssim 2026-08-21. Morgonkänsla: om tydligt sämre, kapa ett 600 m-block eller ersätt med vila (detta kräver inte coachgodkännande för en konservativ anpassning). Kontrollera subjektiv återhämtning (sömn, RPE, lokal trötthet) före lördagens MTB för ev. ytterligare justering.",
         "requires_approval": false
       },
       "auto_apply": {
@@ -120,6 +120,6 @@
       }
     }
   ],
-  "last_trigger_hash": "33ecb7019586d4da50227fb183c25c15a512037260d1b1e3be1c381addaa57ed",
-  "last_run_utc": "2026-08-20T18:28:06.313262+00:00"
+  "last_trigger_hash": "581cef1ec41ccfe7aab960bf0fe515ab82c1c232bfbff11e66f6f78c88504057",
+  "last_run_utc": "2026-08-20T19:45:12.620012+00:00"
 }
