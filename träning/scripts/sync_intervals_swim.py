@@ -4,6 +4,7 @@ import base64
 import json
 import os
 import sys
+from collections import Counter
 from datetime import datetime
 from pathlib import Path
 from urllib.error import HTTPError, URLError
@@ -12,11 +13,20 @@ from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parents[1]
 PLAN_FILE = ROOT / "data" / "plan.json"
-API_URL = "https://intervals.icu/api/v1/athlete/0/events/bulk?upsert=true"
+API_BASE = "https://intervals.icu/api/v1/athlete/0"
+API_URL = f"{API_BASE}/events/bulk?upsert=true"
+VALID_SWIM_INTENSITIES = {"warmup", "active", "cooldown"}
 
 
 def load_plan():
     return json.loads(PLAN_FILE.read_text(encoding="utf-8"))
+
+
+def duration_token(seconds):
+    seconds = int(seconds)
+    if seconds % 60 == 0:
+        return f"{seconds // 60}m"
+    return f"{seconds}s"
 
 
 def workout_distance(blocks):
@@ -37,11 +47,22 @@ def workout_distance(blocks):
                     raise RuntimeError("watch_workout: swim-step måste ha distance_m > 0")
                 if not str(step.get("text") or "").strip():
                     raise RuntimeError("watch_workout: swim-step måste ha text")
+                intensity = str(step.get("intensity") or "").strip().lower()
+                if intensity not in VALID_SWIM_INTENSITIES:
+                    raise RuntimeError(
+                        "watch_workout: swim-step måste ha intensity=warmup, active eller cooldown"
+                    )
                 block_distance += distance
             elif kind == "rest":
                 duration = int(step.get("duration_s") or 0)
                 if duration <= 0:
                     raise RuntimeError("watch_workout: rest-step måste ha duration_s > 0")
+            elif kind == "lap_rest":
+                duration = int(step.get("duration_s") or 0)
+                if duration <= 0:
+                    raise RuntimeError("watch_workout: lap_rest måste ha duration_s > 0")
+                if not str(step.get("text") or "").strip():
+                    raise RuntimeError("watch_workout: lap_rest måste ha text")
             else:
                 raise RuntimeError(f"watch_workout: okänd step-kind {kind!r}")
         total += repeat * block_distance
@@ -59,11 +80,34 @@ def render_description(blocks):
         lines = [heading]
         for step in block["steps"]:
             if step["kind"] == "swim":
-                lines.append(f'- {step["text"]} {int(step["distance_m"])}mtr')
+                intensity = str(step["intensity"]).strip().lower()
+                lines.append(
+                    f'- {step["text"]} {int(step["distance_m"])}mtr intensity={intensity}'
+                )
+            elif step["kind"] == "rest":
+                lines.append(f'- Vila {duration_token(step["duration_s"])} intensity=rest')
             else:
-                lines.append(f'- Vila {int(step["duration_s"])}s intensity=rest')
+                lines.append(
+                    f'- Press lap {step["text"]} {duration_token(step["duration_s"])} intensity=rest'
+                )
         sections.append("\n".join(lines))
     return "\n\n".join(sections)
+
+
+def semantic_expectations(blocks):
+    counts = Counter()
+    lap_rest_labels = []
+    for block in blocks:
+        for step in block["steps"]:
+            kind = step["kind"]
+            if kind == "swim":
+                counts[str(step["intensity"]).strip().lower()] += 1
+            elif kind == "rest":
+                counts["rest"] += 1
+            elif kind == "lap_rest":
+                counts["rest"] += 1
+                lap_rest_labels.append(str(step["text"]).strip())
+    return {"counts": dict(counts), "lap_rest_labels": lap_rest_labels}
 
 
 def eligible_workouts(plan):
@@ -112,6 +156,7 @@ def eligible_workouts(plan):
                 "planned_distance_m": declared,
                 "description": render_description(workout["blocks"]),
                 "external_id": external_id,
+                "semantic_expectations": semantic_expectations(workout["blocks"]),
             }
         )
     return result
@@ -131,6 +176,35 @@ def payload(workouts):
     ]
 
 
+def request_json(url, auth, *, method="GET", payload_data=None):
+    request = Request(
+        url,
+        data=payload_data,
+        method=method,
+        headers={
+            "Authorization": f"Basic {auth}",
+            "Content-Type": "application/json; charset=utf-8",
+            "Accept": "application/json",
+            "User-Agent": "hall-training-swim-sync/2.0",
+        },
+    )
+    try:
+        with urlopen(request, timeout=30) as response:
+            raw = response.read().decode("utf-8")
+            status = response.status
+    except HTTPError as exc:
+        raise RuntimeError(f"Intervals.icu HTTP {exc.code}") from exc
+    except URLError as exc:
+        raise RuntimeError(f"Intervals.icu kunde inte nås: {exc.reason}") from exc
+
+    if not 200 <= status < 300:
+        raise RuntimeError(f"Intervals.icu oväntad HTTP-status: {status}")
+    try:
+        return json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise RuntimeError("Intervals.icu returnerade inte giltig JSON") from exc
+
+
 def find_returned_event(data, workout):
     direct = [
         row for row in data
@@ -148,40 +222,62 @@ def find_returned_event(data, workout):
     return fallback[0] if len(fallback) == 1 else None
 
 
+def semantic_nodes(node):
+    if isinstance(node, dict):
+        if "intensity" in node or "text" in node:
+            yield node
+        for value in node.values():
+            yield from semantic_nodes(value)
+    elif isinstance(node, list):
+        for value in node:
+            yield from semantic_nodes(value)
+
+
+def verify_semantics(workout_doc, workout):
+    nodes = list(semantic_nodes(workout_doc))
+    parsed = Counter(
+        str(node.get("intensity") or "").strip().lower()
+        for node in nodes
+        if node.get("intensity") is not None
+    )
+    expected = workout["semantic_expectations"]["counts"]
+
+    for intensity, count in expected.items():
+        if intensity == "active":
+            actual = parsed["active"] + parsed["interval"]
+        else:
+            actual = parsed[intensity]
+        if actual < count:
+            raise RuntimeError(
+                f'Intervals.icu semantikfel för {workout["id"]}: '
+                f'{intensity} väntat minst {count}, fick {actual}'
+            )
+
+    for label in workout["semantic_expectations"]["lap_rest_labels"]:
+        label_lower = label.lower()
+        matched = any(
+            str(node.get("intensity") or "").strip().lower() == "rest"
+            and label_lower in str(node.get("text") or "").lower()
+            for node in nodes
+        )
+        if not matched:
+            raise RuntimeError(
+                f'Intervals.icu verifierade inte LAP-setvilan {label!r} för {workout["id"]}'
+            )
+
+
 def send(events, workouts):
     api_key = os.environ.get("INTERVALS_API_KEY", "").strip()
     if not api_key:
         raise RuntimeError("INTERVALS_API_KEY saknas")
 
     auth = base64.b64encode(f"API_KEY:{api_key}".encode("utf-8")).decode("ascii")
-    request = Request(
+    data = request_json(
         API_URL,
-        data=json.dumps(events, ensure_ascii=False).encode("utf-8"),
+        auth,
         method="POST",
-        headers={
-            "Authorization": f"Basic {auth}",
-            "Content-Type": "application/json; charset=utf-8",
-            "Accept": "application/json",
-            "User-Agent": "hall-training-swim-sync/1.0",
-        },
+        payload_data=json.dumps(events, ensure_ascii=False).encode("utf-8"),
     )
-
-    try:
-        with urlopen(request, timeout=30) as response:
-            raw = response.read().decode("utf-8")
-            status = response.status
-    except HTTPError as exc:
-        raise RuntimeError(f"Intervals.icu HTTP {exc.code}") from exc
-    except URLError as exc:
-        raise RuntimeError(f"Intervals.icu kunde inte nås: {exc.reason}") from exc
-
-    if not 200 <= status < 300:
-        raise RuntimeError(f"Intervals.icu oväntad HTTP-status: {status}")
-
-    try:
-        data = json.loads(raw)
-    except json.JSONDecodeError as exc:
-        raise RuntimeError("Intervals.icu returnerade inte giltig JSON") from exc
     if not isinstance(data, list):
         raise RuntimeError("Intervals.icu returnerade oväntat svarformat")
 
@@ -189,18 +285,29 @@ def send(events, workouts):
         event = find_returned_event(data, workout)
         if not event or event.get("category") != "WORKOUT" or not event.get("id"):
             raise RuntimeError(f'Intervals.icu verifierade inte {workout["id"]}')
-        workout_doc = event.get("workout_doc")
+
+        stored = request_json(f'{API_BASE}/events/{event["id"]}', auth)
+        if not isinstance(stored, dict) or stored.get("category") != "WORKOUT":
+            raise RuntimeError(f'Intervals.icu kunde inte läsa tillbaka {workout["id"]}')
+        workout_doc = stored.get("workout_doc")
         steps = workout_doc.get("steps") if isinstance(workout_doc, dict) else None
         if not isinstance(steps, list) or not steps:
             raise RuntimeError(f'Intervals.icu skapade inte strukturerade steg för {workout["id"]}')
+
         parsed_distance = workout_doc.get("distance")
         if isinstance(parsed_distance, (int, float)) and abs(parsed_distance - workout["planned_distance_m"]) > 1:
             raise RuntimeError(
-                f'Intervals.icu distansavvikelse för {workout["id"]}: {parsed_distance} mot {workout["planned_distance_m"]}'
+                f'Intervals.icu distansavvikelse för {workout["id"]}: '
+                f'{parsed_distance} mot {workout["planned_distance_m"]}'
             )
+        verify_semantics(workout_doc, workout)
+
+        expected = workout["semantic_expectations"]["counts"]
+        semantics = ",".join(f"{key}:{value}" for key, value in sorted(expected.items()))
         print(
             f'SYNC_OK workout={workout["id"]} date={workout["date"]} '
-            f'distance_m={workout["planned_distance_m"]} parsed_steps={len(steps)}'
+            f'distance_m={workout["planned_distance_m"]} parsed_steps={len(steps)} '
+            f'semantics={semantics} lap_rest={len(workout["semantic_expectations"]["lap_rest_labels"])}'
         )
 
 
