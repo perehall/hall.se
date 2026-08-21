@@ -15,8 +15,17 @@ API_URL = "https://intervals.icu/api/v1/athlete/0/events/bulk?upsert=true"
 
 def load_workout():
     workout = json.loads(FIXTURE.read_text(encoding="utf-8"))
-    required = ["date", "category", "type", "name", "external_id", "description"]
-    missing = [key for key in required if not workout.get(key)]
+    required = [
+        "date",
+        "category",
+        "type",
+        "name",
+        "external_id",
+        "description",
+        "planned_distance_m",
+        "calculated_set_distance_m",
+    ]
+    missing = [key for key in required if workout.get(key) is None or workout.get(key) == ""]
     if missing:
         raise RuntimeError(f"Intervals POC: saknade fält i fixture: {missing!r}")
     if workout["category"] != "WORKOUT":
@@ -24,6 +33,17 @@ def load_workout():
     if workout["type"] != "Swim":
         raise RuntimeError("Intervals POC: denna POC är avsiktligt låst till Swim")
     return workout
+
+
+def validate_workout(workout):
+    declared = int(workout["planned_distance_m"])
+    calculated = int(workout["calculated_set_distance_m"])
+    if declared != calculated:
+        raise RuntimeError(
+            "Intervals POC blockerad: deklarerad distans "
+            f"{declared} m men seten summerar till {calculated} m. "
+            "Lös träningsplanens distansskillnad innan workout skickas."
+        )
 
 
 def event_payload(workout):
@@ -40,6 +60,11 @@ def event_payload(workout):
 def safe_preview(payload, workout):
     print("Intervals.icu POC payload:")
     print(json.dumps([payload], ensure_ascii=False, indent=2))
+    print(
+        "\nDistanskontroll: "
+        f'deklarerat {workout.get("planned_distance_m")} m · '
+        f'setsumma {workout.get("calculated_set_distance_m")} m'
+    )
     notes = workout.get("normalization_notes") or []
     if notes:
         print("\nPOC-normalisering:")
@@ -119,6 +144,7 @@ def main():
     workout = load_workout()
     payload = event_payload(workout)
     safe_preview(payload, workout)
+    validate_workout(workout)
 
     if args.dry_run:
         print("\nDry-run: inget skickades till Intervals.icu.")
