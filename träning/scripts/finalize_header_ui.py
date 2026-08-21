@@ -5,14 +5,13 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 CURRENT = ROOT / "index.html"
 ARCHIVE_ROOT = ROOT / "vecka"
-CSS_MARKER = "/* week-header-layout-v4 */"
+CSS_MARKER = "/* week-header-layout-v5 */"
 CSS = """
-/* week-header-layout-v4 */
-.header-meta{display:flex;align-items:baseline;gap:10px 14px;flex-wrap:wrap;margin-bottom:6px}
-.header-meta .eyebrow{margin-bottom:0}
-.header-updated{color:#64748b;font-size:.76rem;font-weight:500;line-height:1.35}
+/* week-header-layout-v5 */
+.header-updated{margin-top:4px;color:#94a3b8;font-size:.74rem;font-weight:500;line-height:1.35}
+.header-status{margin-top:4px;color:#64748b;font-size:.76rem;font-weight:700;line-height:1.35}
 .week-period{font-weight:800;color:#334155;white-space:nowrap}
-@media (max-width:520px){.header-meta{display:block}.header-updated{margin-top:2px;font-size:.72rem}.week-period{font-size:.92rem}}
+@media (max-width:520px){.header-updated{font-size:.7rem}.header-status{font-size:.72rem}.week-period{font-size:.92rem}}
 """.strip()
 
 HEADER_RE = re.compile(
@@ -43,10 +42,10 @@ UPDATED_RE = re.compile(
 STATIC_META = {"preliminär plan"}
 
 
-def compact_meta(meta):
+def format_meta(meta):
     value = meta.strip()
     if value.lower() in STATIC_META:
-        return value
+        return "header-status", value.capitalize()
 
     match = UPDATED_RE.fullmatch(value)
     if not match:
@@ -55,7 +54,8 @@ def compact_meta(meta):
     month = MONTHS.get(month_name)
     if month is None:
         raise RuntimeError(f"Header UI: okänd svensk månad {month_name!r}")
-    return f'uppdaterad {int(match.group("day"))}/{month} {match.group("time")}'
+    text = f'Senast uppdaterad {int(match.group("day"))}/{month} {match.group("time")}'
+    return "header-updated", text
 
 
 def update_page(path):
@@ -63,29 +63,30 @@ def update_page(path):
 
     match = HEADER_RE.search(page)
     if not match:
+        # Already finalized pages are left untouched; build.py emits a fresh raw
+        # header for the current page on every pipeline run.
+        if CSS_MARKER in page:
+            return
         raise RuntimeError(f"Header UI: kunde inte tolka header i {path}")
 
     eyebrow = match.group("eyebrow")
     title = match.group("title")
     period = f'{match.group("period")} till {match.group("end")}'
-    meta = compact_meta(match.group("meta"))
+    meta_class, meta = format_meta(match.group("meta"))
 
     replacement = (
         '<header>'
-        '<div class="header-meta">'
         f'<div class="eyebrow">{eyebrow}</div>'
-        f'<div class="header-updated">{meta}</div>'
-        '</div>'
         f'<h1>{title}</h1>'
         f'<div class="sub"><strong class="week-period">{period}</strong></div>'
+        f'<div class="{meta_class}">{meta}</div>'
         '</header>'
     )
     page = page[:match.start()] + replacement + page[match.end():]
 
-    # build.py emits fresh HTML every run, but archived pages may carry an older
-    # header CSS marker. Keep only the current header rule set.
+    # Remove obsolete header layouts before adding the current rule set.
     page = re.sub(
-        r'/\* week-header-layout-v[23] \*/.*?(?=(?:/\*|</style>))',
+        r'/\* week-header-layout-v[234] \*/.*?(?=(?:/\*|</style>))',
         '',
         page,
         flags=re.S,
@@ -97,9 +98,9 @@ def update_page(path):
         page = page.replace("</style>", CSS + "\n</style>", 1)
 
     required = [
-        'class="header-meta"',
-        'class="header-updated"',
+        '<div class="eyebrow">',
         '<div class="sub"><strong class="week-period">',
+        f'class="{meta_class}"',
         " till ",
         meta,
         CSS_MARKER,
@@ -108,8 +109,8 @@ def update_page(path):
     if missing:
         raise RuntimeError(f"Header UI-validering misslyckades för {path}: {missing!r}")
 
-    if "senast uppdaterad" in page:
-        raise RuntimeError(f"Header UI: gammal lång uppdateringstext finns kvar i {path}")
+    if 'class="header-meta"' in page:
+        raise RuntimeError(f"Header UI: uppdateringstext ligger fortfarande bredvid eyebrow i {path}")
     if 'class="week-heading"' in page:
         raise RuntimeError(f"Header UI: perioden ligger fortfarande i H1 i {path}")
 
@@ -128,7 +129,7 @@ def main():
     for path in existing:
         update_page(path)
 
-    print(f"Header UI OK: period under veckorubriken och giltig header-meta på {len(existing)} sida/sidor.")
+    print(f"Header UI OK: metadata under veckoperioden på {len(existing)} sida/sidor.")
 
 
 if __name__ == "__main__":
