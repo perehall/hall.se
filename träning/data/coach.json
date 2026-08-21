@@ -4,33 +4,33 @@
       "activity_id": 19841136162,
       "activity_date": "2026-08-21",
       "activity_name": "Paddelsurfning på kvällen",
-      "generated_at_utc": "2026-08-21T19:34:05.662089+00:00",
+      "generated_at_utc": "2026-08-21T19:41:11.924008+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Fredagens simpass kan behållas som planerat men ska hållas lätt om dagskänslan är sämre.",
-        "load_interpretation": "Dagens SUP (≈72 min, låg puls) plus eftermiddagens 3 200 m sim och två tunga löp-/trailpass de senaste tre dagarna ger ackumulerad uthållighetsbelastning som bör absorberas.",
+        "summary": "Fredagens simpass + SUP räknas som absorberad lågintensiv belastning; plan kan behållas med konservativ lördagsteknik.",
+        "load_interpretation": "Senaste 48–72 h innehåller flera längre pass (sim 3,2 km, swimrun 6,94 km, löp 10,35 km) plus 1:12 SUP låg puls — total närbelastning är kumulativ men låg till måttlig intensitet nu.",
         "confidence": "medium",
         "facts": [
-          "Idag: StandUpPaddling 6 021 m, 4 323 s, snittpuls 89, kalorier 274.",
-          "Samma dag tidigare: Simning 3 200 m, 2 903 s, snittpuls 127, kalorier 555.",
-          "48–72 h innan: Kontrollerade tröskel- och trailpass (20–16 aug) med snittpuls ~144 och längre tider.",
-          "Planerat: Fredagens simpass är ett lågkostnadspass 3 200 m med fokus aerob/teknik."
+          "Idag: Simning 3 200 m (59:48), snittpuls 127,4; därefter SUP 6,02 km 1:12:40, snittpuls 89,7.",
+          "48–72 h: Onsdag swimrun 6,94 km; torsdag kontrollerad tröskel 10,35 km (snittpuls 145,7).",
+          "Planerat: Lördag MTB/XC 60–75 min teknik; söndag lugn trail 50–70 min.",
+          "Aktuell plan noterade att SUP räknas som lågintensiv belastning och att fredag skulle vara lågkostnad."
         ],
         "interpretations": [
-          "SUP-passet var kardiovaskulärt lätt och troligt lågmuskelmässigt belastande jämfört med löppassen.",
-          "Ackumulerad tid i vatten och upprepade längre pass de senaste två dagarna ökar total belastning mest genom tid och frekvens, inte hög puls idag."
+          "SUP ökar total passtid men bidrar marginellt till aerob belastning pga låg puls.",
+          "Föregående dagar innehöll ett tröskelpass och ett swimrun; återhämtningen bedömdes tidigare tillräcklig för kontrollerad progression."
         ],
         "unknowns": [
-          "Subjektiv dagsform/ömhet ikväll och sömnkvalitet saknas.",
-          "HRV eller annan återhämtningsmetrik för senare delar av kvällen saknas.",
-          "Eventuella lokala muskelskador efter gårdagens tröskel eller swimrun finns ej rapporterade."
+          "Subjektiv trötthet/sömn efter dagens dubbla pass.",
+          "Lokal ben- eller nacktrötthet från SUP/styrka ej rapporterad.",
+          "Eventuella kommande tidsbegränsningar eller tävlingar nästa vecka."
         ]
       },
       "plan_action": {
         "action": "keep",
-        "target_date": "2026-08-21",
-        "reason": "Passet är lågkostnadsdesignat och dagens SUP visade låg puls och låg intensitet.",
-        "recommendation": "Utför dagens simpass enligt plan; håll RPE 3–4 på 600-m-blocken och kapa ett 600-block eller pausa helt om du känner ovanlig trötthet eller lokal smärta. Prioritera god vätska och lätt nedvarvning efter simningen.",
+        "target_date": "2026-08-22",
+        "reason": "SUP var lågintensivt och passen de senaste dagarna bedömdes absorberade; teknik-MTB kan behållas konservativ.",
+        "recommendation": "Behåll planerad MTB-teknik 60–75 min; håll fokus på teknik och lågt tempo, avbryt eller skala ner om benen känns tunga. Behåll söndagens lugna trail som planerat.",
         "requires_approval": false
       },
       "auto_apply": {
@@ -194,6 +194,6 @@
       }
     }
   ],
-  "last_trigger_hash": "7ed4d9a5dfbbdca148de2a4c6e2f80bd893e397fcc7370865fa65f5b12c6e16a",
-  "last_run_utc": "2026-08-21T19:34:05.662112+00:00"
+  "last_trigger_hash": "73f6efa4d22abed721cf6122f2b2186fdaf07b0fc8c791595753ae127cbc6be0",
+  "last_run_utc": "2026-08-21T19:41:11.924036+00:00"
 }
