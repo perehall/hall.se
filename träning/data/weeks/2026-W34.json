@@ -4,7 +4,7 @@
   "week_start": "2026-08-17",
   "week_end": "2026-08-23",
   "created_at_utc": "2026-08-21T08:20:47.262526+00:00",
-  "updated_at_utc": "2026-08-21T14:27:36.774844+00:00",
+  "updated_at_utc": "2026-08-21T17:16:27.328027+00:00",
   "plan": {
     "meta": {
       "timezone": "Europe/Stockholm",
@@ -198,6 +198,24 @@
   },
   "activities": [
     {
+      "id": 19839384290,
+      "name": "Simning på eftermiddagen",
+      "sport_type": "Swim",
+      "start_date": "2026-08-21T15:37:17Z",
+      "start_date_local": "2026-08-21T17:37:17Z",
+      "distance_m": 3200.0,
+      "moving_time_s": 2903,
+      "elapsed_time_s": 3588,
+      "total_elevation_gain_m": 0,
+      "average_heartrate": 127.4,
+      "max_heartrate": 154.0,
+      "average_watts": null,
+      "weighted_average_watts": null,
+      "calories": 555.0,
+      "device_name": "Garmin Forerunner 970",
+      "source": "Strava API"
+    },
+    {
       "id": 19827029587,
       "name": "Löpning på kvällen",
       "sport_type": "Run",
@@ -271,6 +289,44 @@
     }
   ],
   "coach_analyses": [
+    {
+      "activity_id": 19839384290,
+      "activity_date": "2026-08-21",
+      "activity_name": "Simning på eftermiddagen",
+      "generated_at_utc": "2026-08-21T17:16:26.199780+00:00",
+      "model": "gpt-5-mini",
+      "assessment": {
+        "summary": "Behåll planen; simpasset var enligt plan och absorberbart.",
+        "load_interpretation": "Senaste simningen var lång (3 200 m, ~48 min rörlig tid) men låg i puls och följer planens lågkostnadsmål.",
+        "confidence": "high",
+        "facts": [
+          "Simning 2026-08-21: 3 200 m, moving_time 2 903 s, snittpuls 127, maxpuls 154, 555 kcal.",
+          "Tor–ons: torsdagens kontrollerade tröskel (10,35 km, snittpuls 145,7) genomförd dagen före.",
+          "Tidigare vecka innehåller flera längre löp- och MTB-pass; dagens simning var planerad som lågkostnad.",
+          "Planerat lördag MTB-teknik och söndag lugn trail beroende på absorbering."
+        ],
+        "interpretations": [
+          "Simningen var aerob/teknik och inte en kvalitetsbelastning som skulle kräva extra vila.",
+          "Närbelastningen från torsdagen och swimrunen bedöms absorberad baserat på puls och plananteckningar."
+        ],
+        "unknowns": [
+          "Subjektiv dagskänsla efter dagens simning (trött/utvilad).",
+          "Sömn och aktuell muskulär lokal trötthet.",
+          "Eventuella oväntade stressfaktorer resten av dagen."
+        ]
+      },
+      "plan_action": {
+        "action": "keep",
+        "target_date": "2026-08-21",
+        "reason": "Passet matchade planens lågkostnad och visar inga tecken på överbelastning.",
+        "recommendation": "Följ planerat simpass/avslappning som planerat; håll lördagen som teknik-MTB (60–75 min) bara om du känner dig pigg, annars gör ett kort tekniskt set eller vila.",
+        "requires_approval": false
+      },
+      "auto_apply": {
+        "applied": false,
+        "note": "Ingen automatisk planändring."
+      }
+    },
     {
       "activity_id": 19827029587,
       "activity_date": "2026-08-20",

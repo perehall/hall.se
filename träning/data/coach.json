@@ -1,6 +1,44 @@
 {
   "analyses": [
     {
+      "activity_id": 19839384290,
+      "activity_date": "2026-08-21",
+      "activity_name": "Simning på eftermiddagen",
+      "generated_at_utc": "2026-08-21T17:16:26.199780+00:00",
+      "model": "gpt-5-mini",
+      "assessment": {
+        "summary": "Behåll planen; simpasset var enligt plan och absorberbart.",
+        "load_interpretation": "Senaste simningen var lång (3 200 m, ~48 min rörlig tid) men låg i puls och följer planens lågkostnadsmål.",
+        "confidence": "high",
+        "facts": [
+          "Simning 2026-08-21: 3 200 m, moving_time 2 903 s, snittpuls 127, maxpuls 154, 555 kcal.",
+          "Tor–ons: torsdagens kontrollerade tröskel (10,35 km, snittpuls 145,7) genomförd dagen före.",
+          "Tidigare vecka innehåller flera längre löp- och MTB-pass; dagens simning var planerad som lågkostnad.",
+          "Planerat lördag MTB-teknik och söndag lugn trail beroende på absorbering."
+        ],
+        "interpretations": [
+          "Simningen var aerob/teknik och inte en kvalitetsbelastning som skulle kräva extra vila.",
+          "Närbelastningen från torsdagen och swimrunen bedöms absorberad baserat på puls och plananteckningar."
+        ],
+        "unknowns": [
+          "Subjektiv dagskänsla efter dagens simning (trött/utvilad).",
+          "Sömn och aktuell muskulär lokal trötthet.",
+          "Eventuella oväntade stressfaktorer resten av dagen."
+        ]
+      },
+      "plan_action": {
+        "action": "keep",
+        "target_date": "2026-08-21",
+        "reason": "Passet matchade planens lågkostnad och visar inga tecken på överbelastning.",
+        "recommendation": "Följ planerat simpass/avslappning som planerat; håll lördagen som teknik-MTB (60–75 min) bara om du känner dig pigg, annars gör ett kort tekniskt set eller vila.",
+        "requires_approval": false
+      },
+      "auto_apply": {
+        "applied": false,
+        "note": "Ingen automatisk planändring."
+      }
+    },
+    {
       "activity_id": 19827029587,
       "activity_date": "2026-08-20",
       "activity_name": "Löpning på kvällen",
@@ -118,6 +156,6 @@
       }
     }
   ],
-  "last_trigger_hash": "4b3a7ec1c8eff1d11d2a45c56aa13fb68ca4b41891feb124c261e2ed41bb52d7",
-  "last_run_utc": "2026-08-21T14:27:35.463968+00:00"
+  "last_trigger_hash": "eca7b1c362dbd2f17609d3fc80b306c76ab00f9dc0bfbb02e3f47803c015adc4",
+  "last_run_utc": "2026-08-21T17:16:26.199803+00:00"
 }
