@@ -72,6 +72,9 @@ jobs:
       - name: Apply dashboard UI labels
         run: python "träning/scripts/finalize_dashboard_ui.py"
 
+      - name: Apply training UX formatting
+        run: python "träning/scripts/finalize_training_ux.py"
+
       - name: Commit synced data, coach state and live page
         run: |
           TRACKED=(
