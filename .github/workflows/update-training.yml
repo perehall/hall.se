@@ -63,6 +63,12 @@ jobs:
           OPENAI_MODEL: gpt-5-mini
         run: python "träning/scripts/coach.py"
 
+      - name: Sync structured swim workouts to Intervals/Garmin
+        continue-on-error: true
+        env:
+          INTERVALS_API_KEY: ${{ secrets.INTERVALS_API_KEY }}
+        run: python "träning/scripts/sync_intervals_swim.py"
+
       - name: Build live page
         run: python "träning/scripts/build.py"
 
