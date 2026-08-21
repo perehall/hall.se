@@ -48,21 +48,28 @@ upcoming_days = [
 ][:3]
 
 next_marker = '<div class="next-item">'
-if page.count(next_marker) != len(upcoming_days):
+next_count = page.count(next_marker)
+if next_count != len(upcoming_days):
     raise RuntimeError(
         "Navigations-UI: antal Kommande dagar matchar inte planeringen "
-        f"({page.count(next_marker)} != {len(upcoming_days)})"
+        f"({next_count} != {len(upcoming_days)})"
     )
 
-for day in upcoming_days:
+# Split once and rebuild in sequence. Repeated str.replace(..., 1) cannot be used
+# here because the replacement itself still starts with the same next-item marker,
+# which would make every subsequent link land in the first row.
+parts = page.split(next_marker)
+rebuilt = [parts[0]]
+for day, tail in zip(upcoming_days, parts[1:]):
     date = day.get("date", "")
     label = day.get("label", date)
-    jump = (
-        f'<div class="next-item">'
+    rebuilt.append(
+        f'<div class="next-item" data-next-date="{html.escape(date)}">'
         f'<a class="next-jump" href="#dag-{html.escape(date)}" '
         f'aria-label="Visa detaljer för {html.escape(label)}"></a>'
     )
-    page = page.replace(next_marker, jump, 1)
+    rebuilt.append(tail)
+page = "".join(rebuilt)
 
 css_marker = "/* upcoming-day-links-v1 */"
 if css_marker not in page:
@@ -82,12 +89,21 @@ required = [css_marker]
 for day in expected_days:
     required.append(f'id="dag-{day.get("date", "")}"')
 for day in upcoming_days:
-    required.append(f'href="#dag-{day.get("date", "")}"')
+    date = day.get("date", "")
+    required.append(
+        f'<div class="next-item" data-next-date="{date}">'
+        f'<a class="next-jump" href="#dag-{date}"'
+    )
 
 missing = [snippet for snippet in required if snippet not in rendered]
 if missing:
     raise RuntimeError("Navigations-UI-validering misslyckades: " + repr(missing))
 
+if rendered.count('class="next-jump"') != len(upcoming_days):
+    raise RuntimeError(
+        "Navigations-UI-validering misslyckades: fel antal individuella hopplänkar"
+    )
+
 print(
-    f"Navigations-UI OK: {len(upcoming_days)} Kommande dagar länkar till sina detaljkort."
+    f"Navigations-UI OK: {len(upcoming_days)} Kommande dagar länkar individuellt till sina detaljkort."
 )
