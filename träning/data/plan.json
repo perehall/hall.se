@@ -13,7 +13,74 @@
       "label": "Måndag",
       "status": "completed",
       "session": "Simning · 3 200 m · 59:39",
-      "reason": "Kontrollerat simpass efter söndagens trail."
+      "reason": "Ursprunglig ordination från 17/8: cirka 60 min aerob/teknisk simning; 600 m lugn insim + 6 × 50 m lugn teknik + 3 × 400 m stadigt aerob med 15–20 s planerad vila + 8 × 100 m jämnt/avslappnat med 10–15 s planerad vila + 4 × 50 m något snabbare med bibehållen teknik + 300–500 m mycket lugnt. Huvudset RPE 4–5/10, kontrollerat och inte tröskel. Egen återkoppling efter passet: delar simmades något hårdare än avsett, men du kompenserade med längre vila. Exakt extra vila och exakt vilka meter som kortades går inte att fastställa från sparade data och anges därför inte. Strava visar totalt 3 200 m, 1:04:09 passtid, snittpuls 127,1 och maxpuls 154.",
+      "watch_workout": {
+        "sync_enabled": false,
+        "id": "swim-w34-mon-aerob-teknik-history",
+        "type": "Swim",
+        "name": "Aerob/teknik · ursprunglig ordination",
+        "blocks": [
+          {
+            "name": "Insim",
+            "steps": [
+              {
+                "kind": "swim",
+                "text": "Lugn insim",
+                "distance_m": 600,
+                "intensity": "warmup"
+              }
+            ]
+          },
+          {
+            "name": "Teknik",
+            "repeat": 6,
+            "steps": [
+              {
+                "kind": "swim",
+                "text": "Lugn teknik",
+                "distance_m": 50,
+                "intensity": "easy"
+              }
+            ]
+          },
+          {
+            "name": "Aerob",
+            "repeat": 3,
+            "steps": [
+              {
+                "kind": "swim",
+                "text": "Stadigt aerob · planerad vila 15–20 s",
+                "distance_m": 400,
+                "intensity": "active"
+              }
+            ]
+          },
+          {
+            "name": "Jämnt",
+            "repeat": 8,
+            "steps": [
+              {
+                "kind": "swim",
+                "text": "Jämnt/avslappnat · planerad vila 10–15 s",
+                "distance_m": 100,
+                "intensity": "active"
+              }
+            ]
+          },
+          {
+            "name": "Fart",
+            "repeat": 4,
+            "steps": [
+              {
+                "kind": "swim",
+                "text": "Något snabbare med bibehållen teknik",
+                "distance_m": 50,
+                "intensity": "active"
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "date": "2026-08-18",
