@@ -1,18 +1,20 @@
 {
-  "generated_at_utc": "2026-08-21T17:16:27.142647+00:00",
+  "generated_at_utc": "2026-08-21T19:34:06.672381+00:00",
   "week_start": "2026-08-17",
   "week_end": "2026-08-23",
   "duration_definition": "elapsed_time_s; moving_time_s endast som fallback",
   "display_duration_format": "H:MM:SS eller M:SS utan avrundning",
-  "pass_count": 5,
+  "pass_count": 6,
   "training_days": 5,
-  "session_time_s": 15920,
+  "session_time_s": 20280,
   "by_sport_s": {
     "Löpning": 6338,
     "Simning": 7437,
+    "StandUpPaddling": 4360,
     "Styrka": 2145
   },
   "activity_ids": [
+    19841136162,
     19839384290,
     19827029587,
     19811963700,
@@ -22,6 +24,7 @@
   "distance_definition": "summa distance_m per gren; visning i km med en decimal",
   "by_sport_distance_m": {
     "Löpning": 17287.5,
-    "Simning": 6400.0
+    "Simning": 6400.0,
+    "StandUpPaddling": 6021.0
   }
 }

@@ -1,6 +1,44 @@
 {
   "analyses": [
     {
+      "activity_id": 19841136162,
+      "activity_date": "2026-08-21",
+      "activity_name": "Paddelsurfning på kvällen",
+      "generated_at_utc": "2026-08-21T19:34:05.662089+00:00",
+      "model": "gpt-5-mini",
+      "assessment": {
+        "summary": "Fredagens simpass kan behållas som planerat men ska hållas lätt om dagskänslan är sämre.",
+        "load_interpretation": "Dagens SUP (≈72 min, låg puls) plus eftermiddagens 3 200 m sim och två tunga löp-/trailpass de senaste tre dagarna ger ackumulerad uthållighetsbelastning som bör absorberas.",
+        "confidence": "medium",
+        "facts": [
+          "Idag: StandUpPaddling 6 021 m, 4 323 s, snittpuls 89, kalorier 274.",
+          "Samma dag tidigare: Simning 3 200 m, 2 903 s, snittpuls 127, kalorier 555.",
+          "48–72 h innan: Kontrollerade tröskel- och trailpass (20–16 aug) med snittpuls ~144 och längre tider.",
+          "Planerat: Fredagens simpass är ett lågkostnadspass 3 200 m med fokus aerob/teknik."
+        ],
+        "interpretations": [
+          "SUP-passet var kardiovaskulärt lätt och troligt lågmuskelmässigt belastande jämfört med löppassen.",
+          "Ackumulerad tid i vatten och upprepade längre pass de senaste två dagarna ökar total belastning mest genom tid och frekvens, inte hög puls idag."
+        ],
+        "unknowns": [
+          "Subjektiv dagsform/ömhet ikväll och sömnkvalitet saknas.",
+          "HRV eller annan återhämtningsmetrik för senare delar av kvällen saknas.",
+          "Eventuella lokala muskelskador efter gårdagens tröskel eller swimrun finns ej rapporterade."
+        ]
+      },
+      "plan_action": {
+        "action": "keep",
+        "target_date": "2026-08-21",
+        "reason": "Passet är lågkostnadsdesignat och dagens SUP visade låg puls och låg intensitet.",
+        "recommendation": "Utför dagens simpass enligt plan; håll RPE 3–4 på 600-m-blocken och kapa ett 600-block eller pausa helt om du känner ovanlig trötthet eller lokal smärta. Prioritera god vätska och lätt nedvarvning efter simningen.",
+        "requires_approval": false
+      },
+      "auto_apply": {
+        "applied": false,
+        "note": "Ingen automatisk planändring."
+      }
+    },
+    {
       "activity_id": 19839384290,
       "activity_date": "2026-08-21",
       "activity_name": "Simning på eftermiddagen",
@@ -156,6 +194,6 @@
       }
     }
   ],
-  "last_trigger_hash": "eca7b1c362dbd2f17609d3fc80b306c76ab00f9dc0bfbb02e3f47803c015adc4",
-  "last_run_utc": "2026-08-21T17:16:26.199803+00:00"
+  "last_trigger_hash": "7ed4d9a5dfbbdca148de2a4c6e2f80bd893e397fcc7370865fa65f5b12c6e16a",
+  "last_run_utc": "2026-08-21T19:34:05.662112+00:00"
 }
