@@ -71,6 +71,7 @@ def eligible_workouts(plan):
     today = datetime.now(tz).date().isoformat()
     result = []
     seen_ids = set()
+    seen_external_ids = set()
 
     for day in plan.get("days", []):
         workout = day.get("watch_workout")
@@ -85,10 +86,15 @@ def eligible_workouts(plan):
             raise RuntimeError(f"watch_workout {day.get('date')}: saknade fält {missing}")
         if workout["type"] != "Swim":
             raise RuntimeError("watch_workout: produktionsexporten är låst till Swim")
+
         workout_id = str(workout["id"])
+        external_id = str(workout.get("external_id") or f"hall-training:{workout_id}")
         if workout_id in seen_ids:
             raise RuntimeError(f"watch_workout: duplicerat id {workout_id!r}")
+        if external_id in seen_external_ids:
+            raise RuntimeError(f"watch_workout: duplicerat external_id {external_id!r}")
         seen_ids.add(workout_id)
+        seen_external_ids.add(external_id)
 
         declared = int(workout["planned_distance_m"])
         calculated = workout_distance(workout["blocks"])
@@ -105,7 +111,7 @@ def eligible_workouts(plan):
                 "type": workout["type"],
                 "planned_distance_m": declared,
                 "description": render_description(workout["blocks"]),
-                "external_id": f"hall-training:{workout_id}",
+                "external_id": external_id,
             }
         )
     return result
@@ -123,6 +129,23 @@ def payload(workouts):
         }
         for w in workouts
     ]
+
+
+def find_returned_event(data, workout):
+    direct = [
+        row for row in data
+        if isinstance(row, dict) and row.get("external_id") == workout["external_id"]
+    ]
+    if len(direct) == 1:
+        return direct[0]
+
+    fallback = [
+        row for row in data
+        if isinstance(row, dict)
+        and row.get("name") == workout["name"]
+        and str(row.get("start_date_local") or "").startswith(workout["date"])
+    ]
+    return fallback[0] if len(fallback) == 1 else None
 
 
 def send(events, workouts):
@@ -162,9 +185,8 @@ def send(events, workouts):
     if not isinstance(data, list):
         raise RuntimeError("Intervals.icu returnerade oväntat svarformat")
 
-    returned = {row.get("external_id"): row for row in data if isinstance(row, dict)}
     for workout in workouts:
-        event = returned.get(workout["external_id"])
+        event = find_returned_event(data, workout)
         if not event or event.get("category") != "WORKOUT" or not event.get("id"):
             raise RuntimeError(f'Intervals.icu verifierade inte {workout["id"]}')
         workout_doc = event.get("workout_doc")
