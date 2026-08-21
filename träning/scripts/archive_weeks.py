@@ -23,6 +23,7 @@ BUILD_CHAIN = (
     "finalize_dashboard.py",
     "finalize_dashboard_ui.py",
     "finalize_yoda_ui.py",
+    "finalize_workout_history.py",
 )
 
 WEATHER_FOOTER = (
@@ -219,8 +220,6 @@ def make_historical(page, snapshot, ordered_keys, current_key):
     page = page.replace(WEATHER_FOOTER, "")
     page = page.replace("<title>Träningsplan</title>", f"<title>Träningsplan · vecka {week_number(key)}</title>", 1)
 
-    # The upcoming-days card is always the final dashboard card. Historical
-    # pages show a stable summary instead of time-dependent future content.
     title = '<div class="dashboard-title">Kommande dagar</div>'
     title_pos = page.find(title)
     if title_pos < 0:
@@ -232,7 +231,7 @@ def make_historical(page, snapshot, ordered_keys, current_key):
     summary_card = (
         '<div class="dashboard-card">\n'
         '    <div class="dashboard-title">Veckosummering</div>\n'
-        '    <div class="history-summary">Avslutad vecka · plan, utfall och Tränings-Yodas bedömningar är bevarade.</div>\n'
+        '    <div class="history-summary">Avslutad vecka · plan, utfall, passupplägg och Tränings-Yodas bedömningar är bevarade.</div>\n'
         '  </div>\n'
     )
     page = page[:card_start] + summary_card + page[section_end:]
@@ -323,19 +322,18 @@ def write_manifest(snapshots, current_key):
 
 
 def main():
+    WEEKS_DIR.mkdir(parents=True, exist_ok=True)
+    PAGES_DIR.mkdir(parents=True, exist_ok=True)
+
     plan = load_json(PLAN_FILE)
-    activities = load_json(ACTIVITIES_FILE, {"activities": []})
-    coach = load_json(COACH_FILE, {"analyses": []})
+    activities_state = load_json(ACTIVITIES_FILE, {"activities": []})
+    coach_state = load_json(COACH_FILE, {"analyses": []})
 
-    current_snapshot = snapshot_current_week(plan, activities, coach)
-    current_key = current_snapshot["week_key"]
+    current_snapshot = snapshot_current_week(plan, activities_state, coach_state)
     snapshots = load_snapshots()
+    current_key = current_snapshot["week_key"]
     ordered_keys = sorted(snapshots)
-    if current_key not in ordered_keys:
-        raise RuntimeError("Veckoarkiv: aktuell vecka saknas efter snapshot")
 
-    # Historical pages are rebuilt from their saved source data using today's
-    # build chain. The current week remains canonical at /träning/.
     for key in ordered_keys:
         if key == current_key:
             continue
@@ -344,10 +342,8 @@ def main():
     update_current_page(current_key, ordered_keys)
     write_manifest(snapshots, current_key)
 
-    historical_count = len([key for key in ordered_keys if key != current_key])
     print(
-        f"Veckoarkiv OK: {current_key} snapshot sparad, "
-        f"{historical_count} historisk(a) vecka/veckor byggda."
+        f"Veckoarkiv OK: {len(snapshots)} vecka/veckor, aktuell {current_key}."
     )
 
 
