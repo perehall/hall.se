@@ -1,0 +1,27 @@
+name: POC Intervals swim press-lap set rest
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "träning/data/intervals-swim-press-lap-poc-trigger.txt"
+
+permissions:
+  contents: read
+
+jobs:
+  poc:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Create and inspect press-lap swim set rest
+        env:
+          INTERVALS_API_KEY: ${{ secrets.INTERVALS_API_KEY }}
+        run: python "träning/scripts/poc_intervals_swim_press_lap.py"
