@@ -1,0 +1,32 @@
+name: POC Intervals.icu data coverage
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "träning/data/intervals-wellness-poc-trigger.txt"
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Probe 14 days of wellness coverage
+        env:
+          INTERVALS_API_KEY: ${{ secrets.INTERVALS_API_KEY }}
+        run: python "träning/scripts/probe_intervals_wellness.py" --days 14
+
+      - name: Compare 14 days of Intervals/Garmin activities with Strava import
+        env:
+          INTERVALS_API_KEY: ${{ secrets.INTERVALS_API_KEY }}
+        run: python "träning/scripts/probe_intervals_activities.py" --days 14
