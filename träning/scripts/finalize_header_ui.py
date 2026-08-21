@@ -5,14 +5,15 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 CURRENT = ROOT / "index.html"
 ARCHIVE_ROOT = ROOT / "vecka"
-CSS_MARKER = "/* week-header-layout-v2 */"
+CSS_MARKER = "/* week-header-layout-v3 */"
 CSS = """
-/* week-header-layout-v2 */
+/* week-header-layout-v3 */
 .header-meta{display:flex;align-items:baseline;gap:10px 14px;flex-wrap:wrap;margin-bottom:6px}
 .header-meta .eyebrow{margin-bottom:0}
 .header-updated{color:#64748b;font-size:.76rem;font-weight:500;line-height:1.35}
-.week-period{font-weight:800;color:#334155;white-space:nowrap}
-@media (max-width:520px){.header-meta{display:block}.header-updated{margin-top:2px;font-size:.72rem}.week-period{font-size:.92rem}}
+.week-heading{display:flex;align-items:baseline;gap:.28em;flex-wrap:wrap}
+.week-period{font:inherit;font-weight:inherit;letter-spacing:inherit;color:inherit}
+@media (max-width:520px){.header-meta{display:block}.header-updated{margin-top:2px;font-size:.72rem}}
 """.strip()
 
 HEADER_RE = re.compile(
@@ -41,11 +42,20 @@ def update_page(path):
         f'<div class="eyebrow">{eyebrow}</div>'
         f'<div class="header-updated">{meta}</div>'
         '</div>'
-        f'<h1>{title}</h1>'
-        f'<div class="sub"><strong class="week-period">{period}</strong></div>'
+        f'<h1 class="week-heading"><span>{title}</span><span aria-hidden="true">·</span>'
+        f'<span class="week-period">{period}</span></h1>'
         '</header>'
     )
     page = page[:match.start()] + replacement + page[match.end():]
+
+    # build.py emits fresh HTML every run, but archived pages may carry an older
+    # header CSS marker. Keep only the current header rule set.
+    page = re.sub(
+        r'/\* week-header-layout-v2 \*/.*?(?=(?:/\*|</style>))',
+        '',
+        page,
+        flags=re.S,
+    )
 
     if CSS_MARKER not in page:
         if "</style>" not in page:
@@ -55,6 +65,7 @@ def update_page(path):
     required = [
         'class="header-meta"',
         'class="header-updated"',
+        'class="week-heading"',
         'class="week-period"',
         " till ",
         CSS_MARKER,
@@ -62,6 +73,9 @@ def update_page(path):
     missing = [snippet for snippet in required if snippet not in page]
     if missing:
         raise RuntimeError(f"Header UI-validering misslyckades för {path}: {missing!r}")
+
+    if '<div class="sub"><strong class="week-period">' in page:
+        raise RuntimeError(f"Header UI: gammal separat periodrad finns kvar i {path}")
 
     path.write_text(page, encoding="utf-8")
 
@@ -78,7 +92,7 @@ def main():
     for path in existing:
         update_page(path)
 
-    print(f"Header UI OK: period och uppdateringsmetadata formaterade på {len(existing)} sida/sidor.")
+    print(f"Header UI OK: period infogad i veckorubriken på {len(existing)} sida/sidor.")
 
 
 if __name__ == "__main__":
