@@ -50,6 +50,9 @@ jobs:
           gh secret set STRAVA_REFRESH_TOKEN --repo "$GITHUB_REPOSITORY" < /tmp/strava_refresh_token
           rm -f /tmp/strava_refresh_token
 
+      - name: Sync weather
+        run: python "träning/scripts/sync_weather.py"
+
       - name: AI coach analysis
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -68,6 +71,7 @@ jobs:
             "träning/data/activities.json"
             "träning/data/coach.json"
             "träning/data/plan.json"
+            "träning/data/weather.json"
             "träning/data/dashboard_summary.json"
             "träning/index.html"
             "träning/index.manual-backup.html"
