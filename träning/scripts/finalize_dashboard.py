@@ -90,11 +90,65 @@ def replace_between(text, start_marker, end_marker, replacement):
     return text[:start] + replacement + text[end:]
 
 
+def weather_icon_svg(symbol):
+    if symbol is None:
+        return ""
+    try:
+        code = int(symbol)
+    except (TypeError, ValueError):
+        return ""
+
+    sun = (
+        '<circle cx="12" cy="12" r="3.5" fill="none" stroke="currentColor" stroke-width="1.8"/>'
+        '<path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M18.7 5.3l-1.4 1.4M6.7 17.3l-1.4 1.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>'
+    )
+    cloud = (
+        '<path d="M6.7 18h10.1a3.7 3.7 0 0 0 .3-7.4A5.3 5.3 0 0 0 7 9.8 4.1 4.1 0 0 0 6.7 18Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>'
+    )
+    partly_cloudy = (
+        '<circle cx="8" cy="8" r="2.8" fill="none" stroke="currentColor" stroke-width="1.6"/>'
+        '<path d="M8 3V1.8M8 13v-1.2M3 8H1.8M12.2 8H11M4.5 4.5l-.9-.9M11.5 4.5l.9-.9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>'
+        '<path d="M7.2 19h10a3.6 3.6 0 0 0 .2-7.2 5 5 0 0 0-9.5-.7A4 4 0 0 0 7.2 19Z" fill="white" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>'
+    )
+    rain = cloud + '<path d="M8.5 20.2l-.7 1.3M12.5 20.2l-.7 1.3M16.5 20.2l-.7 1.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>'
+    snow = cloud + '<path d="M9 20v2M8 21h2M14 20v2M13 21h2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>'
+    sleet = cloud + '<path d="M8.5 20.2l-.7 1.3M13 20v2M12 21h2M17 20.2l-.7 1.3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>'
+    thunder = cloud + '<path d="M13 18.7l-2 3.1h2l-1 2.2 3-3.7h-2l1-1.6" fill="currentColor"/>'
+    fog = '<path d="M4 8h16M2.5 12h15M6 16h15M3 20h12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>'
+
+    if code == 1:
+        body = sun
+    elif code in (2, 3, 4):
+        body = partly_cloudy
+    elif code in (5, 6):
+        body = cloud
+    elif code == 7:
+        body = fog
+    elif code in (8, 9, 10, 18, 19, 20):
+        body = rain
+    elif code in (11, 21):
+        body = thunder
+    elif code in (12, 13, 14, 22, 23, 24):
+        body = sleet
+    elif code in (15, 16, 17, 25, 26, 27):
+        body = snow
+    else:
+        body = cloud
+
+    return (
+        '<svg class="weather-icon" aria-hidden="true" viewBox="0 0 24 24" '
+        'style="width:18px;height:18px;vertical-align:-4px;margin-right:5px;color:#475569;overflow:visible">'
+        + body
+        + '</svg>'
+    )
+
+
 def weather_html(date, forecast, weather_status):
     location = (forecast.get("location") or {}).get("name") or "Oxelösund"
     parts = []
 
     symbol = forecast.get("symbol_code")
+    icon = weather_icon_svg(symbol)
     if symbol is not None:
         parts.append(WEATHER_SYMBOLS.get(int(symbol), f"Vädersymbol {int(symbol)}"))
 
@@ -124,7 +178,7 @@ def weather_html(date, forecast, weather_status):
     return (
         f'  <div class="next-weather" data-weather-date="{html.escape(date)}" '
         f'style="color:#475569;font-size:.82rem;margin-top:5px">'
-        f'<strong>Väder · {html.escape(location)}</strong> · {html.escape(detail)}</div>\n'
+        f'<strong>Väder · {html.escape(location)}</strong> · {icon}{html.escape(detail)}</div>\n'
     )
 
 
@@ -246,6 +300,8 @@ required = [
     '<div class="dashboard-title">Grenfördelning · passtid</div>',
     'standardplats Oxelösund om inget annat anges.',
 ]
+if weather_by_date:
+    required.append('class="weather-icon"')
 for group, seconds in sport_seconds.items():
     required.append(
         f'<div class="sport-head"><span>{html.escape(group)}</span><strong>{fmt_exact_duration(seconds)}</strong></div>'
