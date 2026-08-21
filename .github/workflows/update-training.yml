@@ -8,6 +8,10 @@ on:
     paths:
       - "träning/data/manual-sync-trigger.txt"
 
+concurrency:
+  group: training-pages
+  cancel-in-progress: false
+
 permissions:
   contents: write
   actions: read
