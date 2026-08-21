@@ -21,12 +21,13 @@ NAV_CSS = r'''
 @media (max-width:520px){.week-nav{grid-template-columns:1fr auto 1fr;padding:8px}.week-nav a{font-size:.75rem}.week-nav-center strong{font-size:.8rem}}
 '''
 
-PREVIEW_CSS_MARKER = "/* upcoming-week-preview-v2 */"
+PREVIEW_CSS_MARKER = "/* upcoming-week-preview-v3 */"
 PREVIEW_CSS = r'''
-/* upcoming-week-preview-v2 */
+/* upcoming-week-preview-v3 */
 .preview-metrics{grid-template-columns:repeat(4,1fr)}
 .preview-focus{color:#334155;font-size:.94rem;line-height:1.5}
 .preview-note{margin-top:8px;color:#64748b;font-size:.82rem}
+.swim-equipment-line{margin:6px 0 0;color:#475569;font-size:.82rem}.swim-equipment-line strong{color:#334155}
 @media (max-width:620px){.preview-metrics{grid-template-columns:repeat(2,1fr)}}
 '''
 
@@ -35,6 +36,18 @@ STATUS_UI = {
     "planned": ("planned", "PLANERAT"),
     "preliminary": ("conditional", "PRELIMINÄRT"),
     "open": ("open", "ÖPPET"),
+}
+
+EQUIPMENT_LABELS = {
+    "paddles": "paddlar",
+    "paddlar": "paddlar",
+    "pull_buoy": "dolme",
+    "dolme": "dolme",
+    "fins": "fenor",
+    "fenor": "fenor",
+    "snorkel": "snorkel",
+    "kickboard": "platta",
+    "platta": "platta",
 }
 
 
@@ -64,6 +77,37 @@ def add_css(style_text):
     if PREVIEW_CSS_MARKER not in style_text:
         style_text += "\n" + PREVIEW_CSS
     return style_text
+
+
+def fmt_equipment(value):
+    if value is None:
+        return "ej registrerat"
+    if value in ("none", "inga"):
+        return "inga"
+    if isinstance(value, str):
+        if value in ("tbd", "to_be_determined"):
+            return "fastställs med exakt pass"
+        return EQUIPMENT_LABELS.get(value, value)
+    if isinstance(value, list):
+        if not value:
+            return "inga"
+        return " + ".join(EQUIPMENT_LABELS.get(str(item), str(item)) for item in value)
+    raise RuntimeError(f"Kommande vecka: ogiltigt hjälpmedelsvärde {value!r}")
+
+
+def swim_equipment_html(day):
+    if not (day.get("session") or "").startswith("Simning"):
+        return ""
+    config = day.get("swim_equipment")
+    if not isinstance(config, dict) or "planned" not in config:
+        raise RuntimeError(
+            f"Kommande vecka: simpass {day.get('date')} saknar swim_equipment.planned"
+        )
+    return (
+        '<div class="swim-equipment-line"><strong>Hjälpmedel:</strong> '
+        + html.escape(fmt_equipment(config.get("planned")))
+        + '</div>'
+    )
 
 
 def previous_archive_key(current_key):
@@ -133,6 +177,7 @@ def render_preview(upcoming, current_key, upcoming_key):
             raise RuntimeError(f"Kommande vecka: okänd planstatus {planning_status!r}")
         counts[planning_status] += 1
         css_class, label = STATUS_UI[planning_status]
+        equipment = swim_equipment_html(day)
         cards.append(
             f'''<div class="day" id="dag-{html.escape(day["date"])}">
   <div class="daytop">
@@ -140,6 +185,7 @@ def render_preview(upcoming, current_key, upcoming_key):
     <div class="badge {css_class}">{label}</div>
   </div>
   <div class="session">{html.escape(day["session"])}</div>
+  {equipment}
   <div class="reason">{html.escape(day.get("reason", ""))}</div>
 </div>'''
         )
@@ -198,6 +244,8 @@ def render_preview(upcoming, current_key, upcoming_key):
     ]
     for day in days:
         required.append(f'id="dag-{day["date"]}"')
+        if (day.get("session") or "").startswith("Simning"):
+            required.append("Hjälpmedel:")
     missing = [item for item in required if item not in rendered]
     if missing:
         raise RuntimeError("Kommande vecka: previewvalidering misslyckades: " + repr(missing))
