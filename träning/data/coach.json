@@ -4,33 +4,33 @@
       "activity_id": 19827029587,
       "activity_date": "2026-08-20",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-08-21T08:31:00.021339+00:00",
+      "generated_at_utc": "2026-08-21T11:42:31.387536+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Bevara plan; passet var kontrollerat och absorberat, håll fredag lugn simning enligt plan.",
-        "load_interpretation": "Torsdagens 10,35 km tröskel var kontrollerad och följdes av förbättrad återhämtning, så aktuell närbelastning är hanterbar.",
+        "summary": "Behåll planen: torsdagens kontrollerade tröskel absorberad, fredag bör vara lågkostnad simning.",
+        "load_interpretation": "De senaste 4 dagarna innehåller tre löp-/trailpass och ett styrkepass; torsdagens tröskel lågintensiv till måttlig och bedöms inte överbelastande.",
         "confidence": "medium",
         "facts": [
-          "Torsdag: 10,35 km, 50:48, 63 m+, snittpuls 145,7, maxpuls 167, snitteffekt 277 W.",
-          "Onsdag: swimrun 6,94 km, 54:50, snittpuls 143, max 173; styrka måndag/tisdag genomförd.",
-          "Planerat fredag: teknik/aerob simning ~60 min (3 200 m) som lågkostnadspass.",
-          "Coachanteckning i planen rekommenderade att fredagen hålls lågkostnad efter tröskelpasset."
+          "Torsdag: 10,35 km tröskel, 50:48, snittpuls 145,7, maxpuls 167, snitteffekt 277 W.",
+          "Onsdag: Swimrun 6,94 km, 54:50, snittpuls 143, max 173; tisdag och tidigare styrkepass låg puls.",
+          "Tre föregående dagar med träning (sim, styrka, swimrun) och dagens tröskel innebär tät belastning över 4 dagar.",
+          "Planerat fredagspass är tekniskt/aerobt simpass ~3 200 m med instruktion att kapa om morgonkänsla är sämre."
         ],
         "interpretations": [
-          "Torsdagspasset verkar inte ha drivit till utmattning; ytterligare kapacitet i reserv enligt egen känsla.",
-          "Ett kontrollerat simpass fredag bör vara absorberbart utan att kompromettera helgens MTB/trail."
+          "Torsdagspasset genomfördes kontrollerat med reservkapacitet enligt egen rapport och pulsvärden.",
+          "Fredagens simpass är rätt typ och dos för återhämtning om utfört enligt plan; kapning av ett 600-mblock kan minskas vid trötthet."
         ],
         "unknowns": [
-          "Subjektiv trötthet i dag (morgonkänsla) saknas.",
-          "Sömnkvalitet och aktuell muskelömhet ej rapporterade.",
-          "Exakt intensitet under simningen tidigare i veckan (känsla/RPE) saknas."
+          "Subjektiv återhämtning/sömn för fredag morgon saknas.",
+          "HRV eller träningsberedskap för dagen efter passet finns inte i datan.",
+          "Eventuella muskelbesvär eller lokal trötthet efter torsdagens tröskel är okända."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-08-21",
-        "reason": "Fredagens lågkostnadssim är lämplig återhämtning efter kontrollerad tröskel och tidigare swimrun.",
-        "recommendation": "Gör planerat simpass som beskrivet: tekniska 50 m-block och 3×600 m aerob frisim; kapa ett 600-block eller vila helt endast om morgonkänslan är tydligt sämre.",
+        "reason": "Fredagens simpass är lågt belastande och avsett som återhämtande/tekniskt efter torsdagens tröskel.",
+        "recommendation": "Gör planerat simpass enligt struktur; om morgonkänslan är klart sämre kapa ett 600 m-block eller ersätt med 30–40 min mycket lugn simning. Ingen extra kvalitet i passet.",
         "requires_approval": false
       },
       "auto_apply": {
@@ -118,6 +118,6 @@
       }
     }
   ],
-  "last_trigger_hash": "dcb4475f0a44876af55dc868e25898b9f46e313bccc81c49b85a8b8549662555",
-  "last_run_utc": "2026-08-21T08:31:00.021368+00:00"
+  "last_trigger_hash": "ab20382a581a415a629d9662eb0f878f885160c48146817ec91b2c3a5b428042",
+  "last_run_utc": "2026-08-21T11:42:31.387572+00:00"
 }
