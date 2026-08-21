@@ -2,7 +2,6 @@
 import json
 from datetime import datetime, timezone
 from pathlib import Path
-from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 from zoneinfo import ZoneInfo
 
@@ -12,12 +11,12 @@ CONFIG_FILE = ROOT / "data" / "weather_config.json"
 WEATHER_FILE = ROOT / "data" / "weather.json"
 
 API_BASE = "https://opendata-download-metfcst.smhi.se/api/category/snow1g/version/1/geotype/point"
-PARAMETERS = [
-    "air_temperature",
-    "wind_speed",
-    "probability_of_precipitation",
+REQUIRED_DAILY_FIELDS = (
+    "temperature_min_c",
+    "temperature_max_c",
+    "wind_max_ms",
     "symbol_code",
-]
+)
 
 
 def load_json(path, fallback=None):
@@ -64,9 +63,10 @@ def smhi_value(data, name):
 def fetch_location(location):
     lon = location["longitude"]
     lat = location["latitude"]
-    query = urlencode({"parameters": ",".join(PARAMETERS)})
-    url = f"{API_BASE}/lon/{lon:.6f}/lat/{lat:.6f}/data.json?{query}"
-    request = Request(url, headers={"User-Agent": "hall.se-training-weather/1.0"})
+    # Request the complete point forecast. SMHI documents this endpoint as
+    # returning all parameters when no `parameters` query filter is supplied.
+    url = f"{API_BASE}/lon/{lon:.6f}/lat/{lat:.6f}/data.json"
+    request = Request(url, headers={"User-Agent": "hall.se-training-weather/1.1"})
     with urlopen(request, timeout=20) as response:
         if response.status != 200:
             raise RuntimeError(f"SMHI returned HTTP {response.status}")
@@ -128,6 +128,33 @@ def summarize_by_local_date(payload, tz):
     return summaries
 
 
+def validate_daily_forecasts(day_locations, daily):
+    missing_days = []
+    incomplete_days = {}
+    for date in day_locations:
+        forecast = daily.get(date)
+        if not forecast:
+            missing_days.append(date)
+            continue
+        missing = [field for field in REQUIRED_DAILY_FIELDS if forecast.get(field) is None]
+        if missing:
+            incomplete_days[date] = missing
+
+    if missing_days or incomplete_days:
+        details = []
+        if missing_days:
+            details.append("missing days: " + ", ".join(missing_days))
+        if incomplete_days:
+            details.append(
+                "incomplete days: "
+                + "; ".join(
+                    f"{date} ({', '.join(fields)})"
+                    for date, fields in sorted(incomplete_days.items())
+                )
+            )
+        raise RuntimeError("SMHI forecast validation failed: " + " | ".join(details))
+
+
 def stale_result(error):
     now = datetime.now(timezone.utc).isoformat()
     previous = load_json(WEATHER_FILE, {})
@@ -178,6 +205,10 @@ def main():
             "location": location,
             **summary,
         }
+
+    # Do not label a newly fetched forecast as OK unless the fields needed by
+    # the dashboard are actually present for every upcoming planned day.
+    validate_daily_forecasts(day_locations, daily)
 
     result = {
         "status": "ok",
