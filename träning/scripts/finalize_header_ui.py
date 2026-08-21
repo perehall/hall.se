@@ -40,12 +40,17 @@ UPDATED_RE = re.compile(
     r'(?:senast\s+)?uppdaterad\s+(?P<day>\d{1,2})\s+(?P<month>[a-zåäö]+)\s+\d{4}\s+·\s+(?P<time>\d{1,2}:\d{2})',
     re.I,
 )
+STATIC_META = {"preliminär plan"}
 
 
-def compact_updated(meta):
-    match = UPDATED_RE.fullmatch(meta.strip())
+def compact_meta(meta):
+    value = meta.strip()
+    if value.lower() in STATIC_META:
+        return value
+
+    match = UPDATED_RE.fullmatch(value)
     if not match:
-        raise RuntimeError(f"Header UI: kunde inte tolka uppdateringstid {meta!r}")
+        raise RuntimeError(f"Header UI: kunde inte tolka header-meta {meta!r}")
     month_name = match.group("month").lower()
     month = MONTHS.get(month_name)
     if month is None:
@@ -63,7 +68,7 @@ def update_page(path):
     eyebrow = match.group("eyebrow")
     title = match.group("title")
     period = f'{match.group("period")} till {match.group("end")}'
-    meta = compact_updated(match.group("meta"))
+    meta = compact_meta(match.group("meta"))
 
     replacement = (
         '<header>'
@@ -96,7 +101,7 @@ def update_page(path):
         'class="header-updated"',
         '<div class="sub"><strong class="week-period">',
         " till ",
-        "uppdaterad ",
+        meta,
         CSS_MARKER,
     ]
     missing = [snippet for snippet in required if snippet not in page]
@@ -123,7 +128,7 @@ def main():
     for path in existing:
         update_page(path)
 
-    print(f"Header UI OK: period under veckorubriken och kompakt uppdateringstid på {len(existing)} sida/sidor.")
+    print(f"Header UI OK: period under veckorubriken och giltig header-meta på {len(existing)} sida/sidor.")
 
 
 if __name__ == "__main__":
