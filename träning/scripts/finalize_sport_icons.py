@@ -34,10 +34,13 @@ SOLID_ICONS = {
         "0 0 640 512",
         "M312 32c-13.3 0-24 10.7-24 24s10.7 24 24 24h25.7l34.6 64H222.9l-27.4-38C191 99.7 183.7 96 176 96h-56c-13.3 0-24 10.7-24 24s10.7 24 24 24h43.7l22.1 30.7-26.6 53.1c-10-2.5-20.5-3.8-31.2-3.8C57.3 224 0 281.3 0 352s57.3 128 128 128c65.3 0 119.1-48.9 127-112h49c8.5 0 16.3-4.5 20.7-11.8l84.8-143.5 21.7 40.1C402.4 276.3 384 312 384 352c0 70.7 57.3 128 128 128s128-57.3 128-128-57.3-128-128-128c-13.5 0-26.5 2.1-38.7 6L375.4 48.8C369.8 38.4 359 32 347.2 32H312zM458.6 303.7l32.3 59.7c6.3 11.7 20.9 16 32.5 9.7s16-20.9 9.7-32.5l-32.3-59.7c3.6-.6 7.4-.9 11.2-.9 39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72c0-18.6 7-35.5 18.6-48.3zM133.2 368h65c-7.3 32.1-36 56-70.2 56-39.8 0-72-32.2-72-72s32.2-72 72-72c1.7 0 3.4.1 5.1.2l-24.2 48.5c-9 18.1 4.1 39.4 24.3 39.4zm33.7-48 50.7-101.3 72.9 101.2-.1.1H166.9zm90.6-128H366L317 274.8 257.4 192z",
     ),
+    "strength": (
+        "0 0 640 512",
+        "M96 64c0-17.7 14.3-32 32-32h32c17.7 0 32 14.3 32 32v160 64 160c0 17.7-14.3 32-32 32h-32c-17.7 0-32-14.3-32-32v-64H64c-17.7 0-32-14.3-32-32v-64c-17.7 0-32-14.3-32-32s14.3-32 32-32v-64c0-17.7 14.3-32 32-32h32V64zm448 0v64h32c17.7 0 32 14.3 32 32v64c17.7 0 32 14.3 32 32s-14.3 32-32 32v64c0 17.7-14.3 32-32 32h-32v64c0 17.7-14.3 32-32 32h-32c-17.7 0-32-14.3-32-32V288 224 64c0-17.7 14.3-32 32-32h32c17.7 0 32 14.3 32 32zM416 224v64H224v-64h192z",
+    ),
 }
 
 LINE_ICONS = {
-    "strength": '<path d="M3 9v6M6 7.5v9M18 7.5v9M21 9v6M6 12h12"/>',
     "activity": '<path d="M3 12h4l2-5 4 10 2-5h6"/>',
     "watch": (
         '<rect x="7" y="5" width="10" height="14" rx="2.2"/>'
@@ -180,8 +183,8 @@ css_marker = "/* sport-icons-v1 */"
 if css_marker not in page:
     css = r'''
 /* sport-icons-v1 */
-.sport-name,.next-session,.session-with-icon{display:inline-flex;align-items:center;gap:8px;min-width:0}.sport-icon{width:18px;height:18px;flex:0 0 auto;color:#64748b}.sport-icon.icon-swim{width:20px}.sport-icon.icon-bike{width:20px}.sport-name .sport-icon{height:18px}.next-session{font-weight:600}.session-with-icon{font-weight:800}.watch-sync{display:inline-flex;align-items:center;gap:4px;width:max-content;padding:3px 7px;border:1px solid #cbd5e1;border-radius:999px;background:#f8fafc;color:#475569;font-size:.68rem;font-weight:800;line-height:1.2;white-space:nowrap}.watch-sync .watch-icon{width:13px;height:13px;color:#475569}.swim-session-head{row-gap:6px}.next-item .sport-icon{position:relative;z-index:1}
-@media (max-width:520px){.sport-icon{width:17px;height:17px}.sport-icon.icon-swim,.sport-icon.icon-bike{width:19px}.watch-sync{font-size:.64rem;padding:3px 6px}}
+.sport-name,.next-session,.session-with-icon{display:inline-flex;align-items:center;gap:8px;min-width:0}.sport-icon{width:18px;height:18px;flex:0 0 auto;color:#64748b}.sport-icon.icon-swim{width:20px}.sport-icon.icon-bike{width:20px}.sport-icon.icon-strength{width:20px}.sport-name .sport-icon{height:18px}.next-session{font-weight:600}.session-with-icon{font-weight:800}.watch-sync{display:inline-flex;align-items:center;gap:4px;width:max-content;padding:3px 7px;border:1px solid #cbd5e1;border-radius:999px;background:#f8fafc;color:#475569;font-size:.68rem;font-weight:800;line-height:1.2;white-space:nowrap}.watch-sync .watch-icon{width:13px;height:13px;color:#475569}.swim-session-head{row-gap:6px}.next-item .sport-icon{position:relative;z-index:1}
+@media (max-width:520px){.sport-icon{width:17px;height:17px}.sport-icon.icon-swim,.sport-icon.icon-bike,.sport-icon.icon-strength{width:19px}.watch-sync{font-size:.64rem;padding:3px 6px}}
 '''
     if "</style>" not in page:
         raise RuntimeError("Sportikoner: kunde inte hitta </style>")
