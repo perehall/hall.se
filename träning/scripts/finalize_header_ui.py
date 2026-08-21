@@ -23,6 +23,36 @@ HEADER_RE = re.compile(
     r'\s*·\s*(?P<meta>.*?)</div></header>'
 )
 
+MONTHS = {
+    "januari": 1,
+    "februari": 2,
+    "mars": 3,
+    "april": 4,
+    "maj": 5,
+    "juni": 6,
+    "juli": 7,
+    "augusti": 8,
+    "september": 9,
+    "oktober": 10,
+    "november": 11,
+    "december": 12,
+}
+UPDATED_RE = re.compile(
+    r'(?:senast\s+)?uppdaterad\s+(?P<day>\d{1,2})\s+(?P<month>[a-zåäö]+)\s+\d{4}\s+·\s+(?P<time>\d{1,2}:\d{2})',
+    re.I,
+)
+
+
+def compact_updated(meta):
+    match = UPDATED_RE.fullmatch(meta.strip())
+    if not match:
+        raise RuntimeError(f"Header UI: kunde inte tolka uppdateringstid {meta!r}")
+    month_name = match.group("month").lower()
+    month = MONTHS.get(month_name)
+    if month is None:
+        raise RuntimeError(f"Header UI: okänd svensk månad {month_name!r}")
+    return f'uppdaterad {int(match.group("day"))}/{month} {match.group("time")}'
+
 
 def update_page(path):
     page = path.read_text(encoding="utf-8")
@@ -34,7 +64,7 @@ def update_page(path):
     eyebrow = match.group("eyebrow")
     title = match.group("title")
     period = f'{match.group("period")} till {match.group("end")}'
-    meta = match.group("meta")
+    meta = compact_updated(match.group("meta"))
 
     replacement = (
         '<header>'
@@ -68,12 +98,15 @@ def update_page(path):
         'class="week-heading"',
         'class="week-period"',
         " till ",
+        "uppdaterad ",
         CSS_MARKER,
     ]
     missing = [snippet for snippet in required if snippet not in page]
     if missing:
         raise RuntimeError(f"Header UI-validering misslyckades för {path}: {missing!r}")
 
+    if "senast uppdaterad" in page:
+        raise RuntimeError(f"Header UI: gammal lång uppdateringstext finns kvar i {path}")
     if '<div class="sub"><strong class="week-period">' in page:
         raise RuntimeError(f"Header UI: gammal separat periodrad finns kvar i {path}")
 
@@ -92,7 +125,7 @@ def main():
     for path in existing:
         update_page(path)
 
-    print(f"Header UI OK: period infogad i veckorubriken på {len(existing)} sida/sidor.")
+    print(f"Header UI OK: period infogad i veckorubriken och uppdateringstid komprimerad på {len(existing)} sida/sidor.")
 
 
 if __name__ == "__main__":
