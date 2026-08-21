@@ -4,7 +4,7 @@
   "week_start": "2026-08-17",
   "week_end": "2026-08-23",
   "created_at_utc": "2026-08-21T08:20:47.262526+00:00",
-  "updated_at_utc": "2026-08-21T19:53:56.428988+00:00",
+  "updated_at_utc": "2026-08-21T19:59:51.203679+00:00",
   "plan": {
     "meta": {
       "timezone": "Europe/Stockholm",
@@ -20,7 +20,74 @@
         "label": "Måndag",
         "status": "completed",
         "session": "Simning · 3 200 m · 59:39",
-        "reason": "Kontrollerat simpass efter söndagens trail."
+        "reason": "Ursprunglig ordination från 17/8: cirka 60 min aerob/teknisk simning; 600 m lugn insim + 6 × 50 m lugn teknik + 3 × 400 m stadigt aerob med 15–20 s planerad vila + 8 × 100 m jämnt/avslappnat med 10–15 s planerad vila + 4 × 50 m något snabbare med bibehållen teknik + 300–500 m mycket lugnt. Huvudset RPE 4–5/10, kontrollerat och inte tröskel. Egen återkoppling efter passet: delar simmades något hårdare än avsett, men du kompenserade med längre vila. Exakt extra vila och exakt vilka meter som kortades går inte att fastställa från sparade data och anges därför inte. Strava visar totalt 3 200 m, 1:04:09 passtid, snittpuls 127,1 och maxpuls 154.",
+        "watch_workout": {
+          "sync_enabled": false,
+          "id": "swim-w34-mon-aerob-teknik-history",
+          "type": "Swim",
+          "name": "Aerob/teknik · ursprunglig ordination",
+          "blocks": [
+            {
+              "name": "Insim",
+              "steps": [
+                {
+                  "kind": "swim",
+                  "text": "Lugn insim",
+                  "distance_m": 600,
+                  "intensity": "warmup"
+                }
+              ]
+            },
+            {
+              "name": "Teknik",
+              "repeat": 6,
+              "steps": [
+                {
+                  "kind": "swim",
+                  "text": "Lugn teknik",
+                  "distance_m": 50,
+                  "intensity": "easy"
+                }
+              ]
+            },
+            {
+              "name": "Aerob",
+              "repeat": 3,
+              "steps": [
+                {
+                  "kind": "swim",
+                  "text": "Stadigt aerob · planerad vila 15–20 s",
+                  "distance_m": 400,
+                  "intensity": "active"
+                }
+              ]
+            },
+            {
+              "name": "Jämnt",
+              "repeat": 8,
+              "steps": [
+                {
+                  "kind": "swim",
+                  "text": "Jämnt/avslappnat · planerad vila 10–15 s",
+                  "distance_m": 100,
+                  "intensity": "active"
+                }
+              ]
+            },
+            {
+              "name": "Fart",
+              "repeat": 4,
+              "steps": [
+                {
+                  "kind": "swim",
+                  "text": "Något snabbare med bibehållen teknik",
+                  "distance_m": 50,
+                  "intensity": "active"
+                }
+              ]
+            }
+          ]
+        }
       },
       {
         "date": "2026-08-18",
@@ -311,33 +378,33 @@
       "activity_id": 19841136162,
       "activity_date": "2026-08-21",
       "activity_name": "Paddelsurfning på kvällen",
-      "generated_at_utc": "2026-08-21T19:41:11.924008+00:00",
+      "generated_at_utc": "2026-08-21T19:59:50.893707+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Fredagens simpass + SUP räknas som absorberad lågintensiv belastning; plan kan behållas med konservativ lördagsteknik.",
-        "load_interpretation": "Senaste 48–72 h innehåller flera längre pass (sim 3,2 km, swimrun 6,94 km, löp 10,35 km) plus 1:12 SUP låg puls — total närbelastning är kumulativ men låg till måttlig intensitet nu.",
-        "confidence": "medium",
+        "summary": "SUP efter simning ger extra lågintensiv belastning; behåll plan men håll MTB-teknik som huvudfokus lördag.",
+        "load_interpretation": "SUP var lågintensiv men lång (1:12); tillsammans med sim 59 min ger ackumulerad varaktighet som påverkar lördagens kapacitet.",
+        "confidence": "high",
         "facts": [
-          "Idag: Simning 3 200 m (59:48), snittpuls 127,4; därefter SUP 6,02 km 1:12:40, snittpuls 89,7.",
-          "48–72 h: Onsdag swimrun 6,94 km; torsdag kontrollerad tröskel 10,35 km (snittpuls 145,7).",
-          "Planerat: Lördag MTB/XC 60–75 min teknik; söndag lugn trail 50–70 min.",
-          "Aktuell plan noterade att SUP räknas som lågintensiv belastning och att fredag skulle vara lågkostnad."
+          "Fredag: sim 3 200 m (59:48), snittpuls 127, max 154.",
+          "Fredag kväll: SUP 6,02 km, 1:12:40, snittpuls 89,7, max 108.",
+          "Torsdag: kontrollerat tröskelpass 10,35 km med snittpuls 145,7.",
+          "Planerade kommande: lördag MTB teknik 60–75 min, söndag lugn trail 50–70 min."
         ],
         "interpretations": [
-          "SUP ökar total passtid men bidrar marginellt till aerob belastning pga låg puls.",
-          "Föregående dagar innehöll ett tröskelpass och ett swimrun; återhämtningen bedömdes tidigare tillräcklig för kontrollerad progression."
+          "SUP räknas som lågintensiv men adderar total varaktighet och lite muskulär belastning i överkropp/rygg.",
+          "Givet tidigare dagar är återhämtningen tillräcklig för teknik-MTB men undvik hård metabol satsning."
         ],
         "unknowns": [
-          "Subjektiv trötthet/sömn efter dagens dubbla pass.",
-          "Lokal ben- eller nacktrötthet från SUP/styrka ej rapporterad.",
-          "Eventuella kommande tidsbegränsningar eller tävlingar nästa vecka."
+          "Subjektiv trötthet/sömn efter dagens dubbelpass.",
+          "Lokal ben- och axeltrötthet från swimrun och tidigare löpning.",
+          "Om du planerar hög intensitet på MTB (får ändra beslut)."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-08-22",
-        "reason": "SUP var lågintensivt och passen de senaste dagarna bedömdes absorberade; teknik-MTB kan behållas konservativ.",
-        "recommendation": "Behåll planerad MTB-teknik 60–75 min; håll fokus på teknik och lågt tempo, avbryt eller skala ner om benen känns tunga. Behåll söndagens lugna trail som planerat.",
+        "reason": "Sammanlagd fredag varhetstid kräver konservativ fortsättning men inte vila.",
+        "recommendation": "Behåll lördagens MTB som teknikpass 60–75 min; undvik intervaller eller tung stighuvud. Om du känner ovanlig trötthet, byt till mycket lugn åktur eller kortare teknikrunda (30–40 min).",
         "requires_approval": false
       },
       "auto_apply": {
