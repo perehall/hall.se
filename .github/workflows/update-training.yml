@@ -78,6 +78,9 @@ jobs:
       - name: Archive weekly history
         run: python "träning/scripts/archive_weeks.py"
 
+      - name: Emphasize week period
+        run: python "träning/scripts/finalize_header_ui.py"
+
       - name: Commit synced data, coach state and live page
         run: |
           TRACKED=(
