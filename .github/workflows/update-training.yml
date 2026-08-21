@@ -96,6 +96,9 @@ jobs:
       - name: Add sport icons and watch sync status
         run: python "träning/scripts/finalize_sport_icons.py"
 
+      - name: Preserve completed structured workout history
+        run: python "träning/scripts/finalize_workout_history.py"
+
       - name: Commit synced data, coach state and live page
         run: |
           TRACKED=(
