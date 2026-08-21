@@ -81,6 +81,9 @@ jobs:
       - name: Emphasize week period
         run: python "träning/scripts/finalize_header_ui.py"
 
+      - name: Link upcoming days to details
+        run: python "träning/scripts/finalize_navigation_ui.py"
+
       - name: Commit synced data, coach state and live page
         run: |
           TRACKED=(
