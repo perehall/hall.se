@@ -3,7 +3,7 @@ import base64
 import json
 import os
 import sys
-from datetime import datetime, timedelta
+from datetime import datetime
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 from zoneinfo import ZoneInfo
@@ -79,7 +79,7 @@ def semantic_hits(node, path="workout_doc"):
 
 
 def main():
-    date = (datetime.now(TZ).date() + timedelta(days=1)).isoformat()
+    date = datetime.now(TZ).date().isoformat()
     external_id = f"hall-swim-press-lap-poc:{date}"
     description = """Set 1 2x
 - Lugn 50mtr
