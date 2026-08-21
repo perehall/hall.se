@@ -1,0 +1,37 @@
+name: POC Intervals.icu swim workout
+
+on:
+  workflow_dispatch:
+    inputs:
+      send:
+        description: "Skicka workout till Intervals.icu (av = endast dry-run)"
+        required: false
+        default: false
+        type: boolean
+  push:
+    paths:
+      - "träning/data/intervals-poc-trigger.txt"
+
+permissions:
+  contents: read
+
+jobs:
+  poc:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Preview Intervals.icu payload
+        run: python "träning/scripts/push_intervals_poc.py" --dry-run
+
+      - name: Push structured workout to Intervals.icu
+        if: ${{ github.event_name == 'push' || inputs.send == true }}
+        env:
+          INTERVALS_API_KEY: ${{ secrets.INTERVALS_API_KEY }}
+        run: python "träning/scripts/push_intervals_poc.py"
