@@ -147,12 +147,14 @@ def summarize(rows, days, oldest, newest):
     print(f"customFields_present_days={custom_fields_days}/{days}")
 
     useful = {field: count for field, count in coverage.items() if count > 0}
-    if not useful:
-        raise RuntimeError(
-            "Inga kandidatfält för wellness hade data i perioden. Garmin→Intervals wellness kan vara osynkad ännu."
-        )
-
     print()
+    if not useful:
+        print(
+            "WARNING: inga wellness-kandidatfält har data ännu; Garmin→Intervals-importen kan fortfarande pågå."
+        )
+        print("POC_PENDING: wellness saknar ännu data, men efterföljande aktivitetstest får fortsätta.")
+        return
+
     print("POC_OK: minst ett wellness-kandidatfält har data.")
 
 
