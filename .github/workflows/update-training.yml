@@ -84,6 +84,9 @@ jobs:
       - name: Archive weekly history
         run: python "träning/scripts/archive_weeks.py"
 
+      - name: Build preliminary upcoming week
+        run: python "träning/scripts/build_upcoming_week.py"
+
       - name: Emphasize week period
         run: python "träning/scripts/finalize_header_ui.py"
 
@@ -99,6 +102,7 @@ jobs:
             "träning/data/activities.json"
             "träning/data/coach.json"
             "träning/data/plan.json"
+            "träning/data/upcoming_week.json"
             "träning/data/weather.json"
             "träning/data/dashboard_summary.json"
             "träning/data/weeks"
