@@ -19,39 +19,46 @@ activity_dates = {
     if len(activity.get("start_date_local") or "") >= 10
 }
 
+# Recognizable sport silhouettes from Font Awesome Free 6.7.2.
+# Icons: CC BY 4.0. Copyright 2024 Fonticons, Inc. https://fontawesome.com
+SOLID_ICONS = {
+    "run": (
+        "0 0 448 512",
+        "M320 48a48 48 0 1 0-96 0 48 48 0 1 0 96 0zM125.7 175.5c9.9-9.9 23.4-15.5 37.5-15.5 1.9 0 3.8.1 5.6.3L137.6 254c-9.3 28 1.7 58.8 26.8 74.5l86.2 53.9-25.4 88.8c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l28.7-100.4c5.9-20.6-2.6-42.6-20.7-53.9L238 299l30.9-82.4 5.1 12.3C289 264.7 323.9 288 362.7 288H384c17.7 0 32-14.3 32-32s-14.3-32-32-32h-21.3c-12.9 0-24.6-7.8-29.5-19.7l-6.3-15c-14.6-35.1-44.1-61.9-80.5-73.1l-48.7-15c-11.1-3.4-22.7-5.2-34.4-5.2-31 0-60.8 12.3-82.7 34.3l-23.2 23.1c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l23.1-23.1zM91.2 352H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h69.6c19 0 36.2-11.2 43.9-28.5l11.5-25.9-9.5-6c-17.5-10.9-30.5-26.8-37.9-44.9L91.2 352z",
+    ),
+    "swim": (
+        "0 0 576 512",
+        "M309.5 178.4 447.9 297.1c-1.6.9-3.2 2-4.8 3-18 12.4-40.1 20.3-59.2 20.3-19.6 0-40.8-7.7-59.2-20.3-22.1-15.5-51.6-15.5-73.7 0-17.1 11.8-38 20.3-59.2 20.3-10.1 0-21.1-2.2-31.9-6.2C163.1 193.2 262.2 96 384 96h64c17.7 0 32 14.3 32 32s-14.3 32-32 32h-64c-26.9 0-52.3 6.6-74.5 18.4zM160 160A64 64 0 1 1 32 160a64 64 0 1 1 128 0zM306.5 325.9C329 341.4 356.5 352 384 352c26.9 0 55.4-10.8 77.4-26.1 11.9-8.5 28.1-7.8 39.2 1.7 14.4 11.9 32.5 21 50.6 25.2 17.2 4 27.9 21.2 23.9 38.4s-21.2 27.9-38.4 23.9c-24.5-5.7-44.9-16.5-58.2-25C449.5 405.7 417 416 384 416c-31.9 0-60.6-9.9-80.4-18.9-5.8-2.7-11.1-5.3-15.6-7.7-4.5 2.4-9.7 5.1-15.6 7.7-19.8 9-48.5 18.9-80.4 18.9-33 0-65.5-10.3-94.5-25.8-13.4 8.4-33.7 19.3-58.2 25-17.2 4-34.4-6.7-38.4-23.9s6.7-34.4 23.9-38.4c18.1-4.2 36.2-13.3 50.6-25.2 11.1-9.4 27.3-10.1 39.2-1.7C136.7 341.2 165.1 352 192 352c27.5 0 55-10.6 77.5-26.1 11.1-7.9 25.9-7.9 37 0z",
+    ),
+    "bike": (
+        "0 0 640 512",
+        "M312 32c-13.3 0-24 10.7-24 24s10.7 24 24 24h25.7l34.6 64H222.9l-27.4-38C191 99.7 183.7 96 176 96h-56c-13.3 0-24 10.7-24 24s10.7 24 24 24h43.7l22.1 30.7-26.6 53.1c-10-2.5-20.5-3.8-31.2-3.8C57.3 224 0 281.3 0 352s57.3 128 128 128c65.3 0 119.1-48.9 127-112h49c8.5 0 16.3-4.5 20.7-11.8l84.8-143.5 21.7 40.1C402.4 276.3 384 312 384 352c0 70.7 57.3 128 128 128s128-57.3 128-128-57.3-128-128-128c-13.5 0-26.5 2.1-38.7 6L375.4 48.8C369.8 38.4 359 32 347.2 32H312zM458.6 303.7l32.3 59.7c6.3 11.7 20.9 16 32.5 9.7s16-20.9 9.7-32.5l-32.3-59.7c3.6-.6 7.4-.9 11.2-.9 39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72c0-18.6 7-35.5 18.6-48.3zM133.2 368h65c-7.3 32.1-36 56-70.2 56-39.8 0-72-32.2-72-72s32.2-72 72-72c1.7 0 3.4.1 5.1.2l-24.2 48.5c-9 18.1 4.1 39.4 24.3 39.4zm33.7-48 50.7-101.3 72.9 101.2-.1.1H166.9zm90.6-128H366L317 274.8 257.4 192z",
+    ),
+}
+
+LINE_ICONS = {
+    "strength": '<path d="M3 9v6M6 7.5v9M18 7.5v9M21 9v6M6 12h12"/>',
+    "activity": '<path d="M3 12h4l2-5 4 10 2-5h6"/>',
+    "watch": (
+        '<rect x="7" y="5" width="10" height="14" rx="2.2"/>'
+        '<path d="M9.5 5V2.5h5V5M9.5 19v2.5h5V19M12 9v3l2 1.5"/>'
+    ),
+}
+
 
 def icon(name, extra_class=""):
-    paths = {
-        "swim": (
-            '<circle cx="6.2" cy="6.8" r="1.7"/>'
-            '<path d="M7.8 9.2l3.3 1.4 2.6-2.4M10.9 10.6l-2.2 3.2"/>'
-            '<path d="M2.5 15.7c1.8-1.2 3.5-1.2 5.2 0s3.5 1.2 5.2 0 3.5-1.2 5.2 0 2.6 1.2 3.4.5"/>'
-            '<path d="M2.5 19c1.8-1.2 3.5-1.2 5.2 0s3.5 1.2 5.2 0 3.5-1.2 5.2 0 2.6 1.2 3.4.5"/>'
-        ),
-        "run": (
-            '<circle cx="8.2" cy="5.1" r="1.6"/>'
-            '<path d="M9.3 8.1l3 2.1 2.8-.8M10.8 9.2l-1.6 4.2-3.4 2.8M9.2 13.4l3.6 2.1 1.5 3.3M12.2 10.2l-1 3.2"/>'
-        ),
-        "bike": (
-            '<circle cx="5.5" cy="17" r="3.2"/><circle cx="18.5" cy="17" r="3.2"/>'
-            '<path d="M5.5 17l4-7h4l5 7M9.5 10l3 7H5.5M12.5 17h6M14 7.5h3"/>'
-        ),
-        "strength": (
-            '<path d="M3 9v6M6 7.5v9M18 7.5v9M21 9v6M6 12h12"/>'
-        ),
-        "activity": (
-            '<path d="M3 12h4l2-5 4 10 2-5h6"/>'
-        ),
-        "watch": (
-            '<rect x="7" y="5" width="10" height="14" rx="2.2"/>'
-            '<path d="M9.5 5V2.5h5V5M9.5 19v2.5h5V19M12 9v3l2 1.5"/>'
-        ),
-    }
-    body = paths.get(name, paths["activity"])
-    cls = "sport-icon" + (f" {extra_class}" if extra_class else "")
+    cls = "sport-icon icon-" + name + (f" {extra_class}" if extra_class else "")
+    if name in SOLID_ICONS:
+        view_box, path = SOLID_ICONS[name]
+        return (
+            f'<svg class="{cls}" aria-hidden="true" viewBox="{view_box}" '
+            'fill="currentColor" xmlns="http://www.w3.org/2000/svg">'
+            f'<path d="{path}"/></svg>'
+        )
+    body = LINE_ICONS.get(name, LINE_ICONS["activity"])
     return (
         f'<svg class="{cls}" aria-hidden="true" viewBox="0 0 24 24" '
-        'fill="none" stroke="currentColor" stroke-width="1.7" '
+        'fill="none" stroke="currentColor" stroke-width="1.8" '
         'stroke-linecap="round" stroke-linejoin="round">'
         f'{body}</svg>'
     )
@@ -77,7 +84,6 @@ def watch_chip():
     )
 
 
-# Grenfördelning: dekorera bara de faktiska sport-raderna.
 sport_pattern = re.compile(r'<div class="sport-head"><span>([^<]+)</span><strong>')
 
 
@@ -92,7 +98,6 @@ def sport_repl(match):
 
 page, sport_icon_count = sport_pattern.subn(sport_repl, page)
 
-# Kommande dagar: varje rad får ikon utifrån planerad gren.
 for day in plan.get("days", []):
     date = day.get("date", "")
     marker = f'<div class="next-item" data-next-date="{html.escape(date)}">'
@@ -140,7 +145,6 @@ for day in plan.get("days", []):
 
     page = page[:start] + segment + page[end:]
 
-# Detaljkort: klocksync visas endast medan passet verkligen är export-aktuellt.
 for day in plan.get("days", []):
     workout = day.get("watch_workout") or {}
     date = day.get("date", "")
@@ -176,8 +180,8 @@ css_marker = "/* sport-icons-v1 */"
 if css_marker not in page:
     css = r'''
 /* sport-icons-v1 */
-.sport-name,.next-session,.session-with-icon{display:inline-flex;align-items:center;gap:7px;min-width:0}.sport-icon{width:17px;height:17px;flex:0 0 auto;color:#64748b}.sport-name .sport-icon{width:16px;height:16px}.next-session{font-weight:600}.session-with-icon{font-weight:800}.watch-sync{display:inline-flex;align-items:center;gap:4px;width:max-content;padding:3px 7px;border:1px solid #cbd5e1;border-radius:999px;background:#f8fafc;color:#475569;font-size:.68rem;font-weight:800;line-height:1.2;white-space:nowrap}.watch-sync .watch-icon{width:13px;height:13px;color:#475569}.swim-session-head{row-gap:6px}.next-item .sport-icon{position:relative;z-index:1}
-@media (max-width:520px){.sport-icon{width:16px;height:16px}.watch-sync{font-size:.64rem;padding:3px 6px}}
+.sport-name,.next-session,.session-with-icon{display:inline-flex;align-items:center;gap:8px;min-width:0}.sport-icon{width:18px;height:18px;flex:0 0 auto;color:#64748b}.sport-icon.icon-swim{width:20px}.sport-icon.icon-bike{width:20px}.sport-name .sport-icon{height:18px}.next-session{font-weight:600}.session-with-icon{font-weight:800}.watch-sync{display:inline-flex;align-items:center;gap:4px;width:max-content;padding:3px 7px;border:1px solid #cbd5e1;border-radius:999px;background:#f8fafc;color:#475569;font-size:.68rem;font-weight:800;line-height:1.2;white-space:nowrap}.watch-sync .watch-icon{width:13px;height:13px;color:#475569}.swim-session-head{row-gap:6px}.next-item .sport-icon{position:relative;z-index:1}
+@media (max-width:520px){.sport-icon{width:17px;height:17px}.sport-icon.icon-swim,.sport-icon.icon-bike{width:19px}.watch-sync{font-size:.64rem;padding:3px 6px}}
 '''
     if "</style>" not in page:
         raise RuntimeError("Sportikoner: kunde inte hitta </style>")
