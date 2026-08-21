@@ -7,6 +7,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 PLAN_FILE = ROOT / "data" / "plan.json"
 ACTIVITIES_FILE = ROOT / "data" / "activities.json"
+WEATHER_FILE = ROOT / "data" / "weather.json"
 INDEX_FILE = ROOT / "index.html"
 SUMMARY_FILE = ROOT / "data" / "dashboard_summary.json"
 
@@ -21,13 +22,41 @@ SPORT_GROUPS = {
     "WeightTraining": "Styrka",
 }
 
+WEATHER_SYMBOLS = {
+    1: "Klart",
+    2: "Mest klart",
+    3: "Växlande molnighet",
+    4: "Halvklart",
+    5: "Molnigt",
+    6: "Mulet",
+    7: "Dimma",
+    8: "Lätta regnskurar",
+    9: "Regnskurar",
+    10: "Kraftiga regnskurar",
+    11: "Åska",
+    12: "Lätta snöblandade skurar",
+    13: "Snöblandade skurar",
+    14: "Kraftiga snöblandade skurar",
+    15: "Lätta snöbyar",
+    16: "Snöbyar",
+    17: "Kraftiga snöbyar",
+    18: "Lätt regn",
+    19: "Regn",
+    20: "Kraftigt regn",
+    21: "Åska",
+    22: "Lätt snöblandat regn",
+    23: "Snöblandat regn",
+    24: "Kraftigt snöblandat regn",
+    25: "Lätt snöfall",
+    26: "Snöfall",
+    27: "Kraftigt snöfall",
+}
+
 
 def activity_duration_s(activity):
-    """Canonical dashboard duration: full recorded session time.
-
-    Use elapsed_time so dashboard totals match the duration shown on the
-    activity/day cards. Fall back to moving_time only when elapsed is absent.
-    """
+    # Canonical dashboard duration: full recorded session time.
+    # Use elapsed_time so dashboard totals match the duration shown on the
+    # activity/day cards. Fall back to moving_time only when elapsed is absent.
     elapsed = activity.get("elapsed_time_s")
     if elapsed is not None and int(elapsed) >= 0:
         return int(elapsed)
@@ -40,6 +69,10 @@ def fmt_exact_duration(seconds):
     hours, rem = divmod(seconds, 3600)
     minutes, secs = divmod(rem, 60)
     return f"{hours}:{minutes:02d}:{secs:02d}" if hours else f"{minutes}:{secs:02d}"
+
+
+def fmt_decimal(value):
+    return f"{float(value):.1f}".replace(".", ",")
 
 
 def local_date(activity):
@@ -57,8 +90,47 @@ def replace_between(text, start_marker, end_marker, replacement):
     return text[:start] + replacement + text[end:]
 
 
+def weather_html(date, forecast, weather_status):
+    location = (forecast.get("location") or {}).get("name") or "Oxelösund"
+    parts = []
+
+    symbol = forecast.get("symbol_code")
+    if symbol is not None:
+        parts.append(WEATHER_SYMBOLS.get(int(symbol), f"Vädersymbol {int(symbol)}"))
+
+    temp_min = forecast.get("temperature_min_c")
+    temp_max = forecast.get("temperature_max_c")
+    if temp_min is not None and temp_max is not None:
+        if round(float(temp_min), 1) == round(float(temp_max), 1):
+            parts.append(f"{fmt_decimal(temp_min)} °C")
+        else:
+            parts.append(f"{fmt_decimal(temp_min)}–{fmt_decimal(temp_max)} °C")
+
+    precip = forecast.get("precip_probability_max_pct")
+    if precip is not None:
+        parts.append(f"nederbördsrisk max {int(round(float(precip)))} %")
+
+    wind = forecast.get("wind_max_ms")
+    if wind is not None:
+        parts.append(f"vind max {fmt_decimal(wind)} m/s")
+
+    if weather_status != "ok":
+        parts.append("äldre väderdata")
+
+    if not parts:
+        return ""
+
+    detail = " · ".join(parts)
+    return (
+        f'  <div class="next-weather" data-weather-date="{html.escape(date)}" '
+        f'style="color:#475569;font-size:.82rem;margin-top:5px">'
+        f'<strong>Väder · {html.escape(location)}</strong> · {html.escape(detail)}</div>\n'
+    )
+
+
 plan = json.loads(PLAN_FILE.read_text(encoding="utf-8"))
 state = json.loads(ACTIVITIES_FILE.read_text(encoding="utf-8"))
+weather = json.loads(WEATHER_FILE.read_text(encoding="utf-8")) if WEATHER_FILE.exists() else {}
 page = INDEX_FILE.read_text(encoding="utf-8")
 
 week_start = plan["meta"]["week_start"]
@@ -139,6 +211,29 @@ page = replace_between(
     sport_card,
 )
 
+weather_by_date = weather.get("daily", {})
+weather_status = weather.get("status", "unavailable")
+for day in plan.get("days", []):
+    date = day.get("date")
+    forecast = weather_by_date.get(date)
+    if not forecast:
+        continue
+    marker = f'data-weather-date="{date}"'
+    if marker in page:
+        continue
+    session_line = f'  <div>{html.escape(day.get("session", ""))}</div>\n'
+    forecast_html = weather_html(date, forecast, weather_status)
+    if forecast_html and session_line in page:
+        page = page.replace(session_line, session_line + forecast_html, 1)
+
+footer_weather = (
+    ' · Väderprognos: <a href="https://www.smhi.se/" target="_blank" rel="noopener" '
+    'style="color:inherit">SMHI</a> · standardplats Oxelösund om inget annat anges.'
+)
+logout_marker = ' · <a href="/cdn-cgi/access/logout"'
+if "standardplats Oxelösund om inget annat anges." not in page and logout_marker in page:
+    page = page.replace(logout_marker, footer_weather + logout_marker, 1)
+
 INDEX_FILE.write_text(page, encoding="utf-8")
 
 # Fail closed: never publish if the rendered dashboard cannot be proven to
@@ -149,6 +244,7 @@ required = [
     f'<div class="metric"><strong>{fmt_exact_duration(total_seconds)}</strong><span>passtid</span></div>',
     f'<div class="metric"><strong>{training_days}</strong><span>träningsdagar</span></div>',
     '<div class="dashboard-title">Grenfördelning · passtid</div>',
+    'standardplats Oxelösund om inget annat anges.',
 ]
 for group, seconds in sport_seconds.items():
     required.append(
