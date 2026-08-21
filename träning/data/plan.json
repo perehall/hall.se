@@ -43,7 +43,81 @@
       "label": "Fredag",
       "status": "planned",
       "session": "Simning · aerob/teknik · ca 60 min · cirka 3 200 m",
-      "reason": "Lågkostnadspass efter torsdagens löptröskel. Förslag: 400 m lugnt + 6 × 50 m teknik (10–15 s vila) + 3 × 600 m aerob frisim (30 s vila, RPE ca 3–4/10) + 6 × 50 m avslappnat med något högre frekvens (15 s vila) + 300 m mycket lugnt. Ingen tröskelserie eller hård paddelsimning. Syftet är aerob volym och teknik med låg återhämtningskostnad inför helgen. Om morgonkänslan är tydligt sämre: kapa ett 600-block eller vila."
+      "reason": "Lågkostnadspass efter torsdagens löptröskel. Förslag: 400 m lugnt + 6 × 50 m teknik (15 s vila) + 3 × 600 m aerob frisim (30 s vila, RPE ca 3–4/10) + 6 × 50 m avslappnat med något högre frekvens (15 s vila) + 400 m mycket lugnt. Ingen tröskelserie eller hård paddelsimning. Syftet är aerob volym och teknik med låg återhämtningskostnad inför helgen. Om morgonkänslan är tydligt sämre: kapa ett 600-block eller vila.",
+      "watch_workout": {
+        "sync_enabled": true,
+        "id": "swim-w34-fri-aerob-teknik-01",
+        "type": "Swim",
+        "name": "Aerob/teknik · 3 200 m",
+        "planned_distance_m": 3200,
+        "blocks": [
+          {
+            "name": "Uppvärmning",
+            "steps": [
+              {
+                "kind": "swim",
+                "text": "Lugnt",
+                "distance_m": 400
+              }
+            ]
+          },
+          {
+            "name": "Teknik",
+            "repeat": 6,
+            "steps": [
+              {
+                "kind": "swim",
+                "text": "Teknik",
+                "distance_m": 50
+              },
+              {
+                "kind": "rest",
+                "duration_s": 15
+              }
+            ]
+          },
+          {
+            "name": "Aerob",
+            "repeat": 3,
+            "steps": [
+              {
+                "kind": "swim",
+                "text": "Aerob frisim RPE 3-4/10",
+                "distance_m": 600
+              },
+              {
+                "kind": "rest",
+                "duration_s": 30
+              }
+            ]
+          },
+          {
+            "name": "Frekvens",
+            "repeat": 6,
+            "steps": [
+              {
+                "kind": "swim",
+                "text": "Avslappnat, något högre frekvens",
+                "distance_m": 50
+              },
+              {
+                "kind": "rest",
+                "duration_s": 15
+              }
+            ]
+          },
+          {
+            "name": "Nedvarvning",
+            "steps": [
+              {
+                "kind": "swim",
+                "text": "Mycket lugnt",
+                "distance_m": 400
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "date": "2026-08-22",
