@@ -75,6 +75,9 @@ jobs:
       - name: Refine Tränings-Yoda UX
         run: python "träning/scripts/finalize_yoda_ui.py"
 
+      - name: Archive weekly history
+        run: python "träning/scripts/archive_weeks.py"
+
       - name: Commit synced data, coach state and live page
         run: |
           TRACKED=(
@@ -83,6 +86,8 @@ jobs:
             "träning/data/plan.json"
             "träning/data/weather.json"
             "träning/data/dashboard_summary.json"
+            "träning/data/weeks"
+            "träning/vecka"
             "träning/index.html"
             "träning/index.manual-backup.html"
           )
