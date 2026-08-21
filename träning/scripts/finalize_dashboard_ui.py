@@ -23,6 +23,12 @@ SPORT_GROUPS = {
     "WeightTraining": "Styrka",
 }
 
+DOSE_PATTERN = re.compile(
+    r"\b\d+(?:[.,]\d+)?(?:\s*[–-]\s*\d+(?:[.,]\d+)?)?\s*(?:min|h|km|m)\b",
+    re.IGNORECASE,
+)
+CLOCK_DURATION_PATTERN = re.compile(r"\b\d{1,2}:\d{2}(?::\d{2})?\b")
+
 
 def local_date(activity):
     value = activity.get("start_date_local") or ""
@@ -42,6 +48,10 @@ def distance_m(activity):
 
 def fmt_km(meters):
     return f"{meters / 1000:.1f}".replace(".", ",")
+
+
+def has_explicit_dose(session):
+    return bool(DOSE_PATTERN.search(session) or CLOCK_DURATION_PATTERN.search(session))
 
 
 def split_swim_reason(reason):
@@ -138,6 +148,27 @@ page = INDEX_FILE.read_text(encoding="utf-8")
 summary = json.loads(SUMMARY_FILE.read_text(encoding="utf-8"))
 tz = ZoneInfo(plan.get("meta", {}).get("timezone", "Europe/Stockholm"))
 today = datetime.now(tz).date().isoformat()
+
+# Planned training should be usable even while preliminary. A future planned,
+# preliminary or conditional training session therefore needs an explicit dose
+# (time and/or distance). Pure rest days are exempt.
+missing_plan_dose = []
+for day in plan.get("days", []):
+    if day.get("date", "") < today:
+        continue
+    if day.get("status") not in {"planned", "preliminary", "conditional"}:
+        continue
+    session = (day.get("session") or "").strip()
+    if session.lower().startswith(("vila", "vilodag")):
+        continue
+    if not has_explicit_dose(session):
+        missing_plan_dose.append(f'{day.get("date", "?")} {session or "<tomt pass>"}')
+
+if missing_plan_dose:
+    raise RuntimeError(
+        "Planvalidering: kommande planerade/preliminära pass saknar dos (tid/distans): "
+        + "; ".join(missing_plan_dose)
+    )
 
 week_start = plan["meta"]["week_start"]
 week_end = plan["meta"]["week_end"]
@@ -262,5 +293,5 @@ if missing:
 
 print(
     "Dashboard UI OK: Kommande dagar, idag-markering, gren-distans, "
-    "simformat och Tränings-Yoda."
+    "simformat, passdos och Tränings-Yoda."
 )
