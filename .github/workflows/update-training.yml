@@ -132,7 +132,7 @@ jobs:
             git config user.email "actions@users.noreply.github.com"
             git add -- "${TRACKED[@]}"
             git commit -m "Auto-update training page and AI coach"
-            git pull --rebase origin main
+            git pull --rebase --autostash origin main
             git push origin main
           fi
 
@@ -214,6 +214,7 @@ jobs:
 
       - name: Persist deployment diagnostics
         if: always()
+        continue-on-error: true
         run: |
           if [ -f "träning/data/deployment_verification.json" ]; then
             git config user.name "training-bot"
@@ -221,24 +222,32 @@ jobs:
             git add "träning/data/deployment_verification.json"
             if ! git diff --cached --quiet; then
               git commit -m "Record training deployment diagnostics"
-              git pull --rebase origin main
+              git pull --rebase --autostash origin main
               git push origin main
             fi
           fi
 
-      - name: Fail only if Pages deployment failed
+      - name: Validate Pages deployment result
         if: always()
+        env:
+          DEPLOY_OUTCOME: ${{ steps.deployment.outcome }}
+          ACCESS_INTERCEPT: ${{ steps.verify_deploy.outcome }}
         run: |
-          python - <<'PY'
+          if [ "$DEPLOY_OUTCOME" != "success" ]; then
+            echo "GitHub Pages deployment step outcome: $DEPLOY_OUTCOME"
+            exit 1
+          fi
+          echo "GitHub Pages deployment step succeeded."
+          if [ -f "träning/data/deployment_verification.json" ]; then
+            python - <<'PY'
           import json
           from pathlib import Path
           data = json.loads(Path("träning/data/deployment_verification.json").read_text())
-          if data.get("deploy_pages_outcome") != "success":
-              raise SystemExit("GitHub Pages deployment step did not succeed")
           if data.get("cloudflare_access_intercepted_probe"):
-              print("Pages deploy succeeded; unauthenticated live probe was intercepted by Cloudflare Access as expected.")
+              print("Unauthenticated live probe intercepted by Cloudflare Access; this is not a Pages deployment failure.")
           elif data.get("verification_ok"):
-              print("Pages deploy and live marker verification succeeded.")
+              print("Live marker verification succeeded.")
           else:
-              print("Pages deploy succeeded; live probe was inconclusive.")
+              print("Live probe inconclusive, but Pages deployment itself succeeded.")
           PY
+          fi
