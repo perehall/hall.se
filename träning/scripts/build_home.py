@@ -2,40 +2,31 @@
 import html
 import json
 import re
-import shutil
-from datetime import date
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
 INDEX = ROOT / "index.html"
 GOAL = DATA / "goal.json"
-PLAN = DATA / "plan.json"
-UPCOMING = DATA / "upcoming_week.json"
-WEEK_DIR = ROOT / "vecka"
+GOAL_DIR = ROOT / "malbild"
+GOAL_PAGE = GOAL_DIR / "index.html"
 
 COLORS = {
-    "run": ("#22a06b", "#e7f7ef"),
-    "mtb": ("#8b5cf6", "#f1ebff"),
-    "swim": ("#4f86f7", "#eaf2ff"),
-    "strength": ("#f2a33b", "#fff2df"),
-    "enduro": ("#6577a8", "#eef2fb"),
+    "run": ("#22a06b", "#e7f7ef", "↗"),
+    "mtb": ("#8b5cf6", "#f1ebff", "◇"),
+    "swim": ("#4f86f7", "#eaf2ff", "≈"),
+    "strength": ("#f2a33b", "#fff2df", "＋"),
 }
-ICONS = {"run":"↗","mtb":"◇","swim":"≈","strength":"＋","enduro":"△"}
+
+LINK_CSS_MARKER = "/* goal-page-link-v1 */"
+LINK_CSS = r'''
+/* goal-page-link-v1 */
+.goal-page-link{display:flex;justify-content:flex-end;margin:-6px 0 16px}.goal-page-link a{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid #ddd6fe;border-radius:12px;background:#faf5ff;color:#5b21b6;text-decoration:none;font-size:.78rem;font-weight:900;box-shadow:0 5px 14px rgba(76,29,149,.05)}
+'''.strip()
 
 
 def load(path):
     return json.loads(path.read_text(encoding="utf-8"))
-
-
-def week_key(meta):
-    d = date.fromisoformat(meta["week_start"])
-    iso = d.isocalendar()
-    return f"{iso.year}-W{iso.week:02d}"
-
-
-def week_num(key):
-    return int(key.split("-W")[1])
 
 
 def esc(value):
@@ -44,48 +35,50 @@ def esc(value):
 
 def progress(level, color):
     level = max(0, min(5, int(level)))
-    return '<div class="progress">' + ''.join(
-        f'<span style="background:{color if i < level else "#e7ebf2"}"></span>' for i in range(5)
+    return '<div class="progress" aria-label="Kvalitativ utvecklingsstatus">' + ''.join(
+        f'<span style="background:{color if i < level else "#e7ebf2"}"></span>'
+        for i in range(5)
     ) + '</div>'
 
 
-def main():
-    goal = load(GOAL)
-    plan = load(PLAN)
-    upcoming = load(UPCOMING) if UPCOMING.exists() else {}
-    current_key = week_key(plan["meta"])
-    upcoming_key = upcoming.get("week_key") or ""
+def inject_goal_link():
+    page = INDEX.read_text(encoding="utf-8")
+    if LINK_CSS_MARKER not in page:
+        if "</style>" not in page:
+            raise RuntimeError("Målbildslänk: kunde inte hitta </style>")
+        page = page.replace("</style>", LINK_CSS + "\n</style>", 1)
 
-    # Preserve the fully finalized current-week page before index becomes the goal homepage.
-    current_dir = WEEK_DIR / current_key
-    current_dir.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(INDEX, current_dir / "index.html")
+    link = '<div class="goal-page-link"><a href="/träning/malbild/">Målbild 2027 <span>→</span></a></div>'
+    page = re.sub(r'<div class="goal-page-link">.*?</div>', '', page, flags=re.S)
 
-    # Fix the preliminary week's back navigation now that /träning/ is the goal homepage.
-    if upcoming_key:
-        preview = WEEK_DIR / upcoming_key / "index.html"
-        if preview.exists():
-            page = preview.read_text(encoding="utf-8")
-            page = re.sub(
-                rf'href="/träning/">← Vecka {week_num(current_key)}</a>',
-                f'href="/träning/vecka/{current_key}/">← Vecka {week_num(current_key)}</a>',
-                page,
-            )
-            preview.write_text(page, encoding="utf-8")
+    nav_match = re.search(r'(<nav class="week-nav"[^>]*>.*?</nav>)', page, flags=re.S)
+    if nav_match:
+        insert_at = nav_match.end()
+        page = page[:insert_at] + "\n" + link + page[insert_at:]
+    else:
+        header_end = page.find("</header>")
+        if header_end < 0:
+            raise RuntimeError("Målbildslänk: kunde inte hitta veckosidans header")
+        insert_at = header_end + len("</header>")
+        page = page[:insert_at] + "\n" + link + page[insert_at:]
 
+    INDEX.write_text(page, encoding="utf-8")
+
+
+def build_goal_page(goal):
     disciplines = []
     for item in goal.get("disciplines", []):
         key = item["key"]
-        color, soft = COLORS.get(key, ("#4f46e5", "#eef2ff"))
+        color, soft, icon = COLORS.get(key, ("#4f46e5", "#eef2ff", "•"))
         disciplines.append(f'''<div class="status-row">
-          <div class="sport-icon" style="background:{soft};color:{color}">{ICONS.get(key,"•")}</div>
+          <div class="sport-icon" style="background:{soft};color:{color}">{icon}</div>
           <div class="sport-name">{esc(item["label"])}</div>
-          {progress(item.get("level",0), color)}
+          {progress(item.get("level", 0), color)}
           <div class="status-note" style="color:{color}">{esc(item["status"])}</div>
         </div>''')
 
-    phases = []
     current_phase = int(goal.get("current_phase", 1))
+    phases = []
     for phase in goal.get("phases", []):
         number = int(phase["number"])
         cls = "phase active" if number == current_phase else "phase done" if number < current_phase else "phase"
@@ -93,31 +86,47 @@ def main():
         phases.append(f'''<div class="{cls}">{tag}<div class="phase-num">{number}</div>
           <strong>{esc(phase["name"])}</strong><span>{esc(phase["description"])}</span></div>''')
 
-    principles = ''.join(f'<div class="principle"><div class="picon">{i+1}</div><span>{esc(p)}</span></div>' for i,p in enumerate(goal.get("principles", [])))
-    steps = ''.join(f'<div class="next-row"><span class="step-dot">{i+1}</span><span>{esc(s)}</span><b>›</b></div>' for i,s in enumerate(goal.get("next_steps", [])))
-
-    current_url = f"/träning/vecka/{current_key}/"
-    upcoming_link = f'<a href="/träning/vecka/{upcoming_key}/">Nästa vecka <b>→</b></a>' if upcoming_key else ''
+    principles = ''.join(
+        f'<div class="principle"><div class="picon">{i+1}</div><span>{esc(text)}</span></div>'
+        for i, text in enumerate(goal.get("principles", []))
+    )
+    steps = ''.join(
+        f'<div class="next-row"><span class="step-dot">{i+1}</span><span>{esc(text)}</span></div>'
+        for i, text in enumerate(goal.get("next_steps", []))
+    )
 
     page = f'''<!doctype html><html lang="sv"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f5f7fb"><title>{esc(goal["title"])} · Adaptiv träningsplanering</title>
 <style>
-:root{{--bg:#f5f7fb;--card:#fff;--text:#0f172a;--muted:#64748b;--line:#e2e8f0;--accent:#4938ee;--shadow:0 10px 28px rgba(15,23,42,.06)}}*{{box-sizing:border-box}}body{{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);line-height:1.45}}.wrap{{width:min(100%,920px);margin:auto;padding:28px 18px 60px}}.eyebrow{{font-size:.78rem;font-weight:900;letter-spacing:.13em;text-transform:uppercase;color:var(--accent)}}h1{{font-size:clamp(3rem,9vw,5rem);line-height:.98;letter-spacing:-.055em;margin:20px 0 8px}}.sub{{color:var(--muted);font-weight:650;font-size:1rem}}.quicknav{{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:24px 0}}.quicknav a{{padding:14px 16px;border-radius:16px;background:#fff;border:1px solid var(--line);box-shadow:var(--shadow);text-decoration:none;color:#1e293b;font-weight:850;display:flex;justify-content:space-between}}.card{{background:#fff;border:1px solid var(--line);box-shadow:var(--shadow);border-radius:22px;padding:22px;margin:18px 0}}.title{{font-size:1.18rem;font-weight:900;margin-bottom:16px}}.goal{{display:grid;grid-template-columns:1.08fr .92fr;gap:24px;align-items:center}}.goal p{{font-size:1.02rem;color:#334155;margin:0}}.mountain{{min-height:240px;position:relative;overflow:hidden;border-radius:18px;background:linear-gradient(#fbfcff,#f0f4ff)}}.mountain svg{{position:absolute;inset:0;width:100%;height:100%}}.status-head{{display:flex;justify-content:space-between;align-items:center;gap:12px}}.pill{{padding:9px 13px;border-radius:13px;background:#e7f7ef;color:#198754;border:1px solid #a7dfc4;font-weight:900}}.status-row{{display:grid;grid-template-columns:48px minmax(145px,1fr) minmax(180px,1.25fr) 160px;gap:14px;align-items:center;padding:10px 0;border-top:1px solid #edf1f6}}.status-row:first-of-type{{border-top:0}}.sport-icon{{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-size:1.25rem;font-weight:900}}.sport-name{{font-weight:800}}.progress{{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}}.progress span{{height:8px;border-radius:99px}}.status-note{{font-weight:850;font-size:.9rem}}.phases{{display:grid;grid-template-columns:repeat(5,1fr);border:1px solid #edf1f6;border-radius:18px;overflow:visible;margin-top:34px}}.phase{{position:relative;min-height:170px;padding:24px 12px 16px;text-align:center;border-right:1px solid #edf1f6;background:#fff}}.phase:last-child{{border-right:0}}.phase.done{{background:#f2fbf6}}.phase.active{{background:#f1f5ff}}.phase-num{{width:40px;height:40px;margin:0 auto 14px;border:2px solid #d5dce8;border-radius:50%;display:grid;place-items:center;font-weight:900;background:#fff}}.phase.done .phase-num{{border-color:#22a06b;color:#168354}}.phase.active .phase-num{{background:#4f74ef;border-color:#4f74ef;color:#fff;box-shadow:0 8px 18px #d8e1ff}}.phase strong{{display:block;font-size:.92rem;margin-bottom:6px}}.phase span{{display:block;color:#475569;font-size:.82rem;line-height:1.3}}.you-are-here{{position:absolute;top:-25px;left:50%;transform:translateX(-50%);white-space:nowrap;background:#fff;color:#3765ec;border:1.5px solid #6c91f7;border-radius:8px;padding:3px 8px;font-size:.72rem;font-weight:900}}.principles{{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}}.principle{{min-height:128px;border:1px solid var(--line);border-radius:16px;padding:14px 10px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}}.picon{{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#f0edff;color:var(--accent);font-weight:900}}.principle span{{font-size:.78rem;font-weight:800;line-height:1.25}}.next-row{{display:grid;grid-template-columns:38px 1fr 20px;gap:12px;align-items:center;padding:14px 0;border-top:1px solid #edf1f6;font-weight:760}}.next-row:first-child{{border-top:0}}.step-dot{{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#eef2ff;color:#4f46e5;font-weight:900}}.next-row b{{font-size:1.35rem;color:#718096}}footer{{color:var(--muted);font-size:.8rem;padding-top:22px;text-align:center}}@media(max-width:700px){{.wrap{{padding:22px 14px 54px}}.goal{{grid-template-columns:1fr}}.mountain{{min-height:190px}}.status-row{{grid-template-columns:44px 1fr}}.status-row .progress,.status-row .status-note{{grid-column:2}}.phases{{grid-template-columns:1fr;margin-top:18px;overflow:hidden}}.phase{{min-height:auto;text-align:left;display:grid;grid-template-columns:46px 1fr;column-gap:12px;align-items:center;border-right:0;border-bottom:1px solid #edf1f6;padding:14px}}.phase-num{{grid-row:1/3;margin:0}}.phase strong{{margin:0}}.you-are-here{{position:static;transform:none;grid-column:2;width:max-content;margin-bottom:5px}}.principles{{grid-template-columns:1fr 1fr}}}}@media(max-width:430px){{.quicknav{{grid-template-columns:1fr}}.principles{{grid-template-columns:1fr 1fr}}}}
-</style></head><body><div class="wrap"><div class="eyebrow">ADAPTIV TRÄNINGSPLANERING</div><h1>{esc(goal["title"])}</h1><div class="sub">{esc(goal["subtitle"])}</div>
-<nav class="quicknav"><a href="{current_url}">Aktuell vecka <b>→</b></a>{upcoming_link}</nav>
-<section class="card goal"><div><div class="title">✦ Övergripande mål</div><p>{esc(goal["goal"])}</p></div><div class="mountain"><svg viewBox="0 0 500 280" preserveAspectRatio="none"><path d="M0 255 C70 210 100 225 145 175 C185 130 220 180 260 125 C315 50 345 115 390 55 C425 20 455 55 500 22 L500 280 L0 280Z" fill="#e9eefb"/><path d="M0 280 C80 240 115 245 165 205 C220 160 250 205 300 155 C345 115 390 120 500 70 L500 280Z" fill="#d8e2f8"/><path d="M165 232 C220 220 255 220 292 188 C330 154 322 126 356 116 C390 105 372 82 404 60 C422 48 430 36 441 28" fill="none" stroke="#4938ee" stroke-width="4" stroke-dasharray="9 8"/><circle cx="221" cy="217" r="6" fill="#4938ee"/><circle cx="293" cy="187" r="6" fill="#4938ee"/><circle cx="357" cy="115" r="6" fill="#4938ee"/><line x1="441" y1="28" x2="441" y2="55" stroke="#4938ee" stroke-width="3"/><path d="M441 28 L464 36 L441 44Z" fill="#4938ee"/></svg></div></section>
-<section class="card"><div class="status-head"><div class="title">Nuvarande läge</div><div class="pill">✓ {esc(goal["overall_status"])}</div></div>{''.join(disciplines)}</section>
+:root{{--bg:#f5f7fb;--card:#fff;--text:#0f172a;--muted:#64748b;--line:#e2e8f0;--accent:#4938ee;--shadow:0 10px 28px rgba(15,23,42,.06)}}*{{box-sizing:border-box}}body{{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);line-height:1.45}}.wrap{{width:min(100%,920px);margin:auto;padding:28px 18px 60px}}.top{{display:flex;justify-content:space-between;align-items:center;gap:14px}}.eyebrow{{font-size:.78rem;font-weight:900;letter-spacing:.13em;text-transform:uppercase;color:var(--accent)}}.back{{display:inline-flex;align-items:center;gap:7px;text-decoration:none;color:#475569;font-size:.8rem;font-weight:850}}h1{{font-size:clamp(3rem,9vw,5rem);line-height:.98;letter-spacing:-.055em;margin:20px 0 8px}}.sub{{color:var(--muted);font-weight:650;font-size:1rem}}.card{{background:#fff;border:1px solid var(--line);box-shadow:var(--shadow);border-radius:22px;padding:22px;margin:18px 0}}.title{{font-size:1.18rem;font-weight:900;margin-bottom:16px}}.goal{{display:grid;grid-template-columns:1.02fr .98fr;gap:20px;align-items:stretch}}.goal-copy{{padding:4px 0}}.goal p{{font-size:1.02rem;color:#334155;margin:0}}.mountain{{min-height:270px;position:relative;overflow:hidden;border-radius:18px;background:radial-gradient(circle at 82% 18%,rgba(99,102,241,.11),transparent 22%),linear-gradient(180deg,#fcfdff,#f4f6fd)}}.mountain svg{{position:absolute;inset:0;width:100%;height:100%}}.status-head{{display:flex;justify-content:space-between;align-items:center;gap:12px}}.pill{{padding:9px 13px;border-radius:13px;background:#e7f7ef;color:#198754;border:1px solid #a7dfc4;font-weight:900}}.qualitative{{color:#94a3b8;font-size:.72rem;margin:-7px 0 10px}}.status-row{{display:grid;grid-template-columns:48px minmax(145px,1fr) minmax(180px,1.25fr) 150px;gap:14px;align-items:center;padding:11px 0;border-top:1px solid #edf1f6}}.sport-icon{{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-size:1.25rem;font-weight:900}}.sport-name{{font-weight:800}}.progress{{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}}.progress span{{height:8px;border-radius:99px}}.status-note{{font-weight:850;font-size:.9rem}}.phases{{display:grid;grid-template-columns:repeat(5,1fr);border:1px solid #edf1f6;border-radius:18px;overflow:visible;margin-top:34px}}.phase{{position:relative;min-height:174px;padding:24px 12px 16px;text-align:center;border-right:1px solid #edf1f6;background:#fff}}.phase:last-child{{border-right:0}}.phase.done{{background:linear-gradient(180deg,#f1fbf5,#f8fcfa)}}.phase.active{{background:linear-gradient(180deg,#eef4ff,#f8faff)}}.phase-num{{width:40px;height:40px;margin:0 auto 14px;border:2px solid #d5dce8;border-radius:50%;display:grid;place-items:center;font-weight:900;background:#fff}}.phase.done .phase-num{{border-color:#22a06b;color:#168354}}.phase.active .phase-num{{background:#4f74ef;border-color:#4f74ef;color:#fff;box-shadow:0 8px 18px #d8e1ff}}.phase strong{{display:block;font-size:.92rem;margin-bottom:6px}}.phase span{{display:block;color:#475569;font-size:.82rem;line-height:1.3}}.you-are-here{{position:absolute;top:-25px;left:50%;transform:translateX(-50%);white-space:nowrap;background:#fff;color:#3765ec;border:1.5px solid #6c91f7;border-radius:8px;padding:3px 8px;font-size:.72rem;font-weight:900}}.principles{{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}}.principle{{min-height:124px;border:1px solid var(--line);border-radius:16px;padding:14px 10px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}}.picon{{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#f0edff;color:var(--accent);font-weight:900}}.principle span{{font-size:.78rem;font-weight:800;line-height:1.25}}.next-row{{display:grid;grid-template-columns:38px 1fr;gap:12px;align-items:center;padding:14px 0;border-top:1px solid #edf1f6;font-weight:760}}.next-row:first-child{{border-top:0}}.step-dot{{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#eef2ff;color:#4f46e5;font-weight:900}}footer{{color:var(--muted);font-size:.8rem;padding-top:22px;text-align:center}}@media(max-width:700px){{.wrap{{padding:22px 14px 54px}}.goal{{grid-template-columns:1fr}}.mountain{{min-height:220px}}.status-row{{grid-template-columns:44px 1fr}}.status-row .progress,.status-row .status-note{{grid-column:2}}.phases{{grid-template-columns:1fr;margin-top:18px;overflow:hidden}}.phase{{min-height:auto;text-align:left;display:grid;grid-template-columns:46px 1fr;column-gap:12px;align-items:center;border-right:0;border-bottom:1px solid #edf1f6;padding:14px}}.phase-num{{grid-row:1/3;margin:0}}.phase strong{{margin:0}}.you-are-here{{position:static;transform:none;grid-column:2;width:max-content;margin-bottom:5px}}.principles{{grid-template-columns:1fr 1fr}}}}@media(max-width:430px){{.principles{{grid-template-columns:1fr 1fr}}}}
+</style></head><body><div class="wrap"><div class="top"><div class="eyebrow">ADAPTIV TRÄNINGSPLANERING</div><a class="back" href="/träning/">← Veckoplan</a></div><h1>{esc(goal["title"])}</h1><div class="sub">{esc(goal["subtitle"])}</div>
+<section class="card goal"><div class="goal-copy"><div class="title">✦ Övergripande mål</div><p>{esc(goal["goal"])}</p></div><div class="mountain" aria-hidden="true"><svg viewBox="0 0 560 300" preserveAspectRatio="none">
+<defs><linearGradient id="ridge1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f0f3fb"/><stop offset="1" stop-color="#e6ebf8"/></linearGradient><linearGradient id="ridge2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e8edf9"/><stop offset="1" stop-color="#dbe4f7"/></linearGradient><linearGradient id="ridge3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#dfe7f7"/><stop offset="1" stop-color="#cedaf4"/></linearGradient></defs>
+<path d="M-20 250 C45 238 77 214 118 207 C153 201 174 162 204 158 C237 154 248 181 278 154 C308 128 329 104 353 111 C378 117 391 82 418 74 C448 65 456 82 482 54 C504 31 530 34 580 8 L580 320 L-20 320Z" fill="url(#ridge1)"/>
+<path d="M-20 274 C52 256 89 237 132 223 C170 211 188 189 220 190 C249 191 269 167 294 155 C320 143 336 163 362 142 C389 120 403 104 428 109 C456 114 474 89 502 80 C525 73 547 78 580 62 L580 320 L-20 320Z" fill="url(#ridge2)"/>
+<path d="M-20 300 C50 286 91 267 139 251 C180 237 205 225 239 222 C278 219 295 196 326 188 C360 179 381 186 408 168 C441 146 466 143 493 132 C522 120 546 121 580 109 L580 320 L-20 320Z" fill="url(#ridge3)"/>
+<path d="M112 263 C164 253 207 254 246 241 C289 226 312 210 329 192 C344 176 372 182 387 164 C404 143 392 126 372 121 C353 116 355 99 374 92 C396 84 405 72 421 58 C437 44 450 39 463 32" fill="none" stroke="#4738e7" stroke-width="4" stroke-linecap="round" stroke-dasharray="10 10"/>
+<circle cx="173" cy="251" r="6" fill="#4738e7"/><circle cx="270" cy="231" r="6" fill="#4738e7"/><circle cx="331" cy="191" r="6" fill="#4738e7"/><circle cx="386" cy="163" r="6" fill="#4738e7"/><circle cx="374" cy="92" r="6" fill="#4738e7"/><circle cx="463" cy="32" r="17" fill="#ecebff" opacity=".8"/><line x1="463" y1="23" x2="463" y2="51" stroke="#4738e7" stroke-width="3"/><path d="M463 23 L487 30 L463 38Z" fill="#4738e7"/>
+</svg></div></section>
+<section class="card"><div class="status-head"><div class="title">Nuvarande läge</div><div class="pill">✓ {esc(goal["overall_status"])}</div></div><div class="qualitative">Kvalitativ riktning – inte ett exakt prestationsindex.</div>{''.join(disciplines)}</section>
 <section class="card"><div class="title">Faser och periodisering</div><div class="phases">{''.join(phases)}</div></section>
 <section class="card"><div class="title">Vad som styr planen</div><div class="principles">{principles}</div></section>
 <section class="card"><div class="title">Nästa steg</div>{steps}</section>
-<footer>Målbilden är kvalitativ och uppdateras när faktisk träning motiverar det. · <a href="/cdn-cgi/access/logout" style="color:inherit">Logga ut</a></footer></div></body></html>'''
+<footer>Målbilden uppdateras när faktisk träning och riktning motiverar det. · <a href="/cdn-cgi/access/logout" style="color:inherit">Logga ut</a></footer></div></body></html>'''
 
-    INDEX.write_text(page, encoding="utf-8")
-    rendered = INDEX.read_text(encoding="utf-8")
-    required = [goal["title"], "Nuvarande läge", "Faser och periodisering", "Du är här", current_url]
-    missing = [x for x in required if x not in rendered]
+    GOAL_DIR.mkdir(parents=True, exist_ok=True)
+    GOAL_PAGE.write_text(page, encoding="utf-8")
+    rendered = GOAL_PAGE.read_text(encoding="utf-8")
+    required = [goal["title"], "Nuvarande läge", "Faser och periodisering", "Du är här", "← Veckoplan"]
+    missing = [item for item in required if item not in rendered]
     if missing:
-        raise RuntimeError("Huvudsida: validering misslyckades: " + repr(missing))
-    print(f"Huvudsida OK: {goal['title']} publicerad; aktuell vecka bevarad på {current_url}")
+        raise RuntimeError("Målbild: validering misslyckades: " + repr(missing))
+
+
+def main():
+    goal = load(GOAL)
+    build_goal_page(goal)
+    inject_goal_link()
+    print("Målbild OK: separat sida /träning/malbild/; veckoplanen kvar som huvudsida.")
 
 
 if __name__ == "__main__":
