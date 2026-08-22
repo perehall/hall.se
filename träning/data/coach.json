@@ -4,33 +4,33 @@
       "activity_id": 19841136162,
       "activity_date": "2026-08-21",
       "activity_name": "Paddelsurfning på kvällen",
-      "generated_at_utc": "2026-08-21T20:20:39.627153+00:00",
+      "generated_at_utc": "2026-08-22T03:11:37.807475+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "SUP var ett långt, lågintensivt bonuspass efter ett redan genomfört simpass; håll lördagens MTB-teknik lugn om inte subjektiv återhämtning visar något annat.",
-        "load_interpretation": "SUP ökar total varaktighet samma dag men visade låg pulsnivå och låg kardiovaskulär belastning.",
+        "summary": "SUP-passet är lågintensivt men ökar total belastning fredag; behåll lördagens MTB-teknik som planerat men håll det kort och tekniskt.",
+        "load_interpretation": "SUP var lågintensiv men lång; kombinerat med samma dags simning ger ökad ackumulerad tid som påverkar lördagens återhämtning.",
         "confidence": "high",
         "facts": [
-          "Fredag: Simning 3 200 m (59:48), snittpuls 127,4; därefter SUP 6,02 km (1:12:40), snittpuls 89,7.",
-          "Total passtid fredag ≈2:12:28; SUP registrerades som lågintensiv rekreation.",
-          "Torsdag innehöll ett kontrollerat löptröskelpass (10,35 km) två dagar tidigare.",
-          "Planen för lördag är MTB/XC 60–75 min med teknikfokus och rekommenderar låg metabol belastning om återhämtning tveksam."
+          "Fredag: sim 3 200 m (59:48) snittpuls 127,4; därefter SUP 6,02 km (1:12:40) snittpuls 89,7.",
+          "Torsdag: kontrollerat tröskelpass 10,35 km, snittpuls 145,7.",
+          "Inga subjektiva återhämtningsdata (sömn/DOMS) i underlaget.",
+          "Planerade kommande dagar: lördag MTB teknik 60–75 min; söndag lugn trail 50–70 min."
         ],
         "interpretations": [
-          "SUP bidrar mest tid men liten hjärtbelastning; sammanlagd fredag ger ökad ackumulerad volym men inte skarp intensitet.",
-          "Givet förbättrad återhämtning tidigare i veckan och låga pulsvärden på SUP är fortsatt teknikfokus rimligt."
+          "Fredagens totala passtid ~2:12 ökar akut tid men inte uppenbar högintensiv belastning.",
+          "Givet att SUP var mycket lugn är tekniskt MTB-pass acceptabelt om det hålls kort och utan hårda intervaller."
         ],
         "unknowns": [
-          "Subjektiv trötthet/sömn efter fredagens dubbelpass.",
-          "Muskelömhet i ben efter torsdags tröskelpass och tidigare trailpass.",
-          "Eventuell planerad hårdare MTB-teknik eller tävling lördag/söndag."
+          "Subjektiv återhämtning, sömn och lokal ben-trötthet saknas.",
+          "Eventuella planerade intensitetsönskemål för lördag saknas.",
+          "Skador eller ömhet efter tidigare pass ej rapporterade."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-08-22",
-        "reason": "SUP var lågintensiv; håll lördagens teknikpass som planerat och undvik extra belastning.",
-        "recommendation": "Behåll MTB/XC 60–75 min med teknikfokus; håll intensiteten mycket kontrollerad och undvik längre hårda intervaller. Avboka eller skala ner om du känner ovanlig trötthet eller lokal benmöra.",
+        "reason": "SUP var lågintensiv men ökade total tid; teknisk MTB är fortsatt lämpligt med konservativ inriktning.",
+        "recommendation": "Behåll MTB-teknik 60–75 min men håll fokus på teknik, korta varv och mycket lugn åkning; undvik intervaller eller hårda spurter. Om du känner ovanlig trötthet ersätt passet med 30–45 min mycket lugn rull eller vila.",
         "requires_approval": false
       },
       "auto_apply": {
@@ -194,6 +194,6 @@
       }
     }
   ],
-  "last_trigger_hash": "e421e3112991239cef417c03a7bdd86bd93b9dee99d35002fb9bafabbf769f00",
-  "last_run_utc": "2026-08-21T20:20:39.627181+00:00"
+  "last_trigger_hash": "0140e56d2e3ebc97d043bed065836ad1ea3c6ed6edc0cff5649752ba1c93456a",
+  "last_run_utc": "2026-08-22T03:11:37.807505+00:00"
 }

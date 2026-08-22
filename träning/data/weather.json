@@ -1,26 +1,14 @@
 {
-  "status": "stale",
+  "status": "ok",
   "source": "SMHI Open Data · SNOW1gv1",
-  "fetched_at_utc": "2026-08-21T20:20:29.449266+00:00",
-  "last_attempt_utc": "2026-08-21T21:58:53.146052+00:00",
+  "fetched_at_utc": "2026-08-22T03:11:30.803729+00:00",
+  "last_attempt_utc": "2026-08-22T03:11:30.803729+00:00",
   "default_location": {
     "name": "Oxelösund",
     "latitude": 58.666667,
     "longitude": 17.116667
   },
   "daily": {
-    "2026-08-21": {
-      "location": {
-        "name": "Oxelösund",
-        "latitude": 58.666667,
-        "longitude": 17.116667
-      },
-      "temperature_min_c": 15.2,
-      "temperature_max_c": 15.9,
-      "wind_max_ms": 2.4,
-      "precip_probability_max_pct": 0,
-      "symbol_code": 1
-    },
     "2026-08-22": {
       "location": {
         "name": "Oxelösund",
@@ -28,10 +16,10 @@
         "longitude": 17.116667
       },
       "temperature_min_c": 11.0,
-      "temperature_max_c": 20.4,
-      "wind_max_ms": 4.1,
-      "precip_probability_max_pct": 7,
-      "symbol_code": 4
+      "temperature_max_c": 19.8,
+      "wind_max_ms": 5.1,
+      "precip_probability_max_pct": 20,
+      "symbol_code": 6
     },
     "2026-08-23": {
       "location": {
@@ -39,10 +27,10 @@
         "latitude": 58.666667,
         "longitude": 17.116667
       },
-      "temperature_min_c": 13.8,
+      "temperature_min_c": 13.3,
       "temperature_max_c": 21.4,
-      "wind_max_ms": 4.5,
-      "precip_probability_max_pct": 23,
+      "wind_max_ms": 4.9,
+      "precip_probability_max_pct": 30,
       "symbol_code": 4
     }
   },
@@ -53,13 +41,12 @@
         "latitude": 58.666667,
         "longitude": 17.116667
       },
-      "created_time": "2026-08-21T20:04:26Z",
-      "reference_time": "2026-08-21T19:45:00Z",
+      "created_time": "2026-08-22T03:01:46Z",
+      "reference_time": "2026-08-22T02:45:00Z",
       "grid_coordinates": [
         17.110807,
         58.677278
       ]
     }
-  ],
-  "last_error": "SMHI forecast validation failed: missing days: 2026-08-21"
+  ]
 }
