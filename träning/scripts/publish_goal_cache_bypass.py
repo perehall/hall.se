@@ -67,8 +67,10 @@ def patch_route(page: str, path: Path) -> str:
         '<line x1="482" y1="83" x2="482" y2="114" stroke="#4938ee" stroke-width="3"/>'
         '<path d="M482 83 L507 92 L482 101Z" fill="#4938ee"/>'
     )
+    # The preceding layout finalizer may already have moved/recolored the flag.
+    # Match the semantic flag trio rather than a specific old geometry.
     flag_pattern = (
-        r'<circle cx="[^"]+" cy="[^"]+" r="[^"]+" fill="#eeecff" opacity="[^"]+"/>'
+        r'<circle cx="[^"]+" cy="[^"]+" r="[^"]+" fill="#[0-9a-fA-F]{6}" opacity="[^"]+"/>'
         r'<line x1="[^"]+" y1="[^"]+" x2="[^"]+" y2="[^"]+" '
         r'stroke="#4938ee" stroke-width="3"/>'
         r'<path d="M[^"]+Z" fill="#4938ee"/>'
