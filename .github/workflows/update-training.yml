@@ -99,10 +99,7 @@ jobs:
       - name: Preserve completed structured workout history
         run: python "träning/scripts/finalize_workout_history.py"
 
-      - name: Link week pages to goal homepage
-        run: python "träning/scripts/finalize_week_home_link.py"
-
-      - name: Publish current week and build goal homepage
+      - name: Build goal page and link from weekly plan
         run: python "träning/scripts/build_home.py"
 
       - name: Commit synced data, coach state and live page
@@ -112,10 +109,12 @@ jobs:
             "träning/data/coach.json"
             "träning/data/plan.json"
             "träning/data/upcoming_week.json"
+            "träning/data/goal.json"
             "träning/data/weather.json"
             "träning/data/dashboard_summary.json"
             "träning/data/weeks"
             "träning/vecka"
+            "träning/malbild"
             "träning/index.html"
             "träning/index.manual-backup.html"
           )
