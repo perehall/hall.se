@@ -4,31 +4,20 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 INDEX = ROOT / "index.html"
-GOAL_PAGES = [
-    ROOT / "malbild" / "index.html",
-    ROOT / "malbild-2027" / "index.html",
-]
+GOAL_PAGE = ROOT / "malbild" / "index.html"
 
 WEEK_CSS = r'''
-/* goal-link-layout-v1 */
+/* goal-link-layout-v2 */
 .goal-page-link{display:flex;justify-content:flex-end;margin:0 0 8px}.goal-page-link a{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid #ddd6fe;border-radius:12px;background:#faf5ff;color:#5b21b6;text-decoration:none;font-size:.78rem;font-weight:900;box-shadow:0 5px 14px rgba(76,29,149,.05)}
 '''.strip()
 
 GOAL_CSS = r'''
-/* goal-back-layout-v1 */
+/* goal-back-layout-v2 */
 .goal-back-row{display:flex;justify-content:flex-end;margin:12px 0 4px}.goal-back-row a{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid #e2e8f0;border-radius:12px;background:#fff;color:#475569;text-decoration:none;font-size:.78rem;font-weight:900;box-shadow:0 5px 14px rgba(15,23,42,.04)}
 '''.strip()
 
-OLD_TRAIL = "M104 250 C157 246 203 236 245 219 C286 202 310 186 328 166 C345 147 367 150 383 132 C400 113 389 96 372 90 C357 85 360 70 378 61 C401 50 425 42 470 28"
-NEW_TRAIL = "M104 250 C145 245 180 238 214 226 C248 214 278 199 306 184 C332 171 352 164 373 155 C394 146 413 140 430 133 C444 127 456 121 468 113"
 
-# build_home.py currently emits this flag. Keep this matcher aligned with the
-# generator until the mountain SVG is moved fully into one source component.
-OLD_FLAG = '<circle cx="470" cy="28" r="22" fill="#eeecff" opacity=".72"/><line x1="470" y1="18" x2="470" y2="49" stroke="#4938ee" stroke-width="3"/><path d="M470 18 L496 26 L470 35Z" fill="#4938ee"/>'
-NEW_FLAG = '<circle cx="468" cy="113" r="15" fill="#ecebff" opacity=".72"/><line x1="468" y1="86" x2="468" y2="113" stroke="#4938ee" stroke-width="3"/><path d="M468 86 L490 94 L468 101Z" fill="#4938ee"/>'
-
-
-def add_css(page, marker, css):
+def add_css(page: str, marker: str, css: str) -> str:
     if marker in page:
         return page
     if "</style>" not in page:
@@ -36,71 +25,62 @@ def add_css(page, marker, css):
     return page.replace("</style>", css + "\n</style>", 1)
 
 
-def patch_week():
+def patch_week() -> None:
     page = INDEX.read_text(encoding="utf-8")
     page = re.sub(r'<div class="goal-home-link">.*?</div>', '', page, flags=re.S)
     page = re.sub(r'<div class="goal-page-link">.*?</div>', '', page, flags=re.S)
-    page = add_css(page, "/* goal-link-layout-v1 */", WEEK_CSS)
-    link = '<div class="goal-page-link"><a href="/träning/malbild-2027/">Målbild 2027 <span>→</span></a></div>'
+    page = add_css(page, "/* goal-link-layout-v2 */", WEEK_CSS)
+
     nav = page.find('<nav class="week-nav"')
     if nav < 0:
         raise RuntimeError("Länklayout: veckonavigering saknas på huvudsidan")
+
+    link = '<div class="goal-page-link"><a href="/träning/malbild-2027/">Målbild 2027 <span>→</span></a></div>'
     page = page[:nav] + link + "\n" + page[nav:]
     INDEX.write_text(page, encoding="utf-8")
 
 
-def patch_goal_page(path):
-    if not path.exists():
-        return
-    page = path.read_text(encoding="utf-8")
+def patch_goal_page() -> None:
+    if not GOAL_PAGE.exists():
+        raise RuntimeError("Länklayout: canonical målbildssida saknas")
+
+    page = GOAL_PAGE.read_text(encoding="utf-8")
     page = re.sub(r'<a class="back" href="/träning/">← Veckoplan</a>', '', page)
     page = re.sub(r'<div class="goal-back-row">.*?</div>', '', page, flags=re.S)
-    page = add_css(page, "/* goal-back-layout-v1 */", GOAL_CSS)
-    link = '<div class="goal-back-row"><a href="/träning/">← Veckoplan</a></div>'
+    page = add_css(page, "/* goal-back-layout-v2 */", GOAL_CSS)
+
     card = page.find('<section class="card goal">')
     if card < 0:
-        raise RuntimeError(f"Länklayout: kortet Övergripande mål saknas i {path}")
+        raise RuntimeError("Länklayout: kortet Övergripande mål saknas")
+
+    link = '<div class="goal-back-row"><a href="/träning/">← Veckoplan</a></div>'
     page = page[:card] + link + "\n" + page[card:]
-
-    trail_count = page.count(OLD_TRAIL)
-    if trail_count == 2:
-        page = page.replace(OLD_TRAIL, NEW_TRAIL)
-    elif page.count(NEW_TRAIL) != 2:
-        raise RuntimeError(f"Målbild: förväntade två route-paths i {path}, hittade {trail_count}")
-
-    if OLD_FLAG in page:
-        page = page.replace(OLD_FLAG, NEW_FLAG, 1)
-    elif NEW_FLAG not in page:
-        raise RuntimeError(f"Målbild: flaggmarkering kunde inte identifieras i {path}")
-
-    path.write_text(page, encoding="utf-8")
+    GOAL_PAGE.write_text(page, encoding="utf-8")
 
 
-def main():
-    patch_week()
-    for path in GOAL_PAGES:
-        patch_goal_page(path)
-
+def validate() -> None:
     current = INDEX.read_text(encoding="utf-8")
+    if current.count('class="goal-page-link"') != 1:
+        raise RuntimeError("Länklayout: huvudsidan ska ha exakt en Målbild-länk")
+    if 'href="/träning/malbild-2027/"' not in current:
+        raise RuntimeError("Länklayout: Målbild-länken pekar inte på publicerad målbildsväg")
     if current.find('class="goal-page-link"') > current.find('<nav class="week-nav"'):
         raise RuntimeError("Länklayout: Målbild 2027 ligger inte ovanför veckonavigeringen")
 
-    checked = 0
-    for path in GOAL_PAGES:
-        if not path.exists():
-            continue
-        checked += 1
-        goal = path.read_text(encoding="utf-8")
-        if goal.find('class="goal-back-row"') > goal.find('<section class="card goal">'):
-            raise RuntimeError(f"Länklayout: Veckoplan-länken ligger inte ovanför Övergripande mål i {path}")
-        if goal.count(NEW_TRAIL) != 2:
-            raise RuntimeError(f"Målbild: nya bergsrutten saknas eller är duplicerad fel i {path}")
-        if NEW_FLAG not in goal:
-            raise RuntimeError(f"Målbild: nya flaggpositionen saknas i {path}")
+    goal = GOAL_PAGE.read_text(encoding="utf-8")
+    if goal.count('class="goal-back-row"') != 1:
+        raise RuntimeError("Länklayout: målbilden ska ha exakt en Veckoplan-länk")
+    if goal.find('class="goal-back-row"') > goal.find('<section class="card goal">'):
+        raise RuntimeError("Länklayout: Veckoplan-länken ligger inte ovanför Övergripande mål")
+    if goal.count('class="mountain-phase-point') != 5:
+        raise RuntimeError("Länklayout: canonical målbild saknar fem fasmarkörer")
 
-    if checked == 0:
-        raise RuntimeError("Målbild: ingen målbildssida hittades att validera")
-    print("Målbild OK: rutt följer bergsmassan och flaggan sitter på bergsryggen.")
+
+def main() -> None:
+    patch_week()
+    patch_goal_page()
+    validate()
+    print("Målbildslayout OK: länkar placerade utan att modifiera SVG eller interaktionslogik.")
 
 
 if __name__ == "__main__":
