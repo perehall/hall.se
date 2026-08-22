@@ -108,6 +108,9 @@ jobs:
       - name: Publish goal page on fresh path
         run: python "träning/scripts/publish_goal_cache_bypass.py"
 
+      - name: Preflight generated site contracts
+        run: python "träning/scripts/validate_site_contracts.py"
+
       - name: Commit synced data, coach state and live page
         run: |
           TRACKED=(
@@ -231,13 +234,18 @@ jobs:
         if: always()
         env:
           DEPLOY_OUTCOME: ${{ steps.deployment.outcome }}
-          ACCESS_INTERCEPT: ${{ steps.verify_deploy.outcome }}
         run: |
-          if [ "$DEPLOY_OUTCOME" != "success" ]; then
+          if [ "$DEPLOY_OUTCOME" = "success" ]; then
+            echo "GitHub Pages deployment step succeeded."
+          elif [ "$DEPLOY_OUTCOME" = "failure" ] || [ "$DEPLOY_OUTCOME" = "cancelled" ]; then
             echo "GitHub Pages deployment step outcome: $DEPLOY_OUTCOME"
             exit 1
+          else
+            echo "GitHub Pages deployment was not attempted because an earlier workflow step failed (outcome: $DEPLOY_OUTCOME)."
+            echo "Preserving the original failure as the single actionable error."
+            exit 0
           fi
-          echo "GitHub Pages deployment step succeeded."
+
           if [ -f "träning/data/deployment_verification.json" ]; then
             python - <<'PY'
           import json
