@@ -102,6 +102,9 @@ jobs:
       - name: Build goal page and link from weekly plan
         run: python "träning/scripts/build_home.py"
 
+      - name: Finalize goal link placement
+        run: python "träning/scripts/finalize_goal_link_layout.py"
+
       - name: Commit synced data, coach state and live page
         run: |
           TRACKED=(
