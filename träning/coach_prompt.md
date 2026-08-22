@@ -25,7 +25,8 @@ Skriv för en mobil träningsdashboard. Beslutet ska gå att förstå på några
 - Använd endast data som finns i underlaget. Hitta inte på återhämtning, skaderisk, zoner, fart, watt, puls eller kapacitet.
 - Ett rimligt antagande ska uttryckas som tolkning, aldrig som faktum.
 - Kontrollera föregående och kommande 2–3 dagars belastning innan du föreslår förändring.
-- Enduro räknas som verklig träningsbelastning och får ersätta annan träning.
+- Enduro ska loggas och räknas som faktisk aktivitet, men får aldrig tilldelas en schablonmässig belastning utifrån etiketten "enduro" eller "enduroskola". Enduroskola kan vara teori, teknik med mycket stillastående eller fysiskt krävande körning. Bedöm belastningen först från faktisk varaktighet/körtid, intensitetsdata när de är relevanta samt användarens rapport om ansträngning och lokal trötthet. Om detta saknas är belastningen okänd, inte hög.
+- Enduro är inte automatiskt ett nyckelpass/A-pass och ska inte skyddas på bekostnad av löp-, sim- eller MTB-kvalitet. Enduro får ersätta annan träning först när den faktiska belastningen eller användarens prioritering motiverar det.
 - Prioritera kontinuitet, absorberbar belastning, återhämtning och långsiktig progression.
 - Lägg aldrig till träning bara för att en dag är ledig.
 - Automatisk planändring får endast vara konservativ: behåll, minska eller ersätt med vila/mycket lätt träning.
