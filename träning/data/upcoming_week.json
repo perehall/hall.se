@@ -7,9 +7,9 @@
     "week": 35,
     "week_start": "2026-08-24",
     "week_end": "2026-08-30",
-    "title": "Bygg vidare – med enduro som riktig belastning.",
-    "principle": "Måndagens enduroskola räknas som veckans första belastningspass. Veckan får en kontrollerad löpkvalitet, en simkvalitet, styrka och MTB/XC utan att stapla onödig intensitet. Söndagen hålls öppen eftersom den ligger direkt före nästa enduromåndag.",
-    "preview_summary": "Måndag är fast enduroskola. Tisdag återhämtande simning, onsdag kontrollerad löptröskel, torsdag styrka, fredag simkvalitet och lördag MTB/XC. Söndag avgörs först när lördagens belastning och återhämtningen är kända."
+    "title": "Bygg vidare – låt faktisk belastning styra.",
+    "principle": "Enduroskolan är ett fast schemalagt pass men inte automatiskt ett hårt eller prioriterat träningspass. Måndagens faktiska innehåll avgör om den påverkar tisdag och onsdag. Veckan behåller löpkvalitet, simning, styrka och MTB/XC utan att schablonmässigt skydda enduron.",
+    "preview_summary": "Måndag är fast enduroskola, men belastningen bedöms först efteråt. Tisdag simning, onsdag kontrollerad löptröskel, torsdag styrka, fredag simkvalitet och lördag MTB/XC. Söndag styrs främst av lördagens och veckans faktiska belastning."
   },
   "days": [
     {
@@ -18,7 +18,7 @@
       "status": "planned",
       "planning_status": "fixed",
       "session": "Enduroskola",
-      "reason": "Fast återkommande pass. Enduro räknas som faktisk träningsbelastning och ingen annan träning läggs ovanpå."
+      "reason": "Fast i kalendern. Belastningen klassas inte i förväg: passet kan vara teori/teknik med låg fysisk kostnad eller mer krävande körning. Faktiskt innehåll och egen ansträngning avgör påverkan på resten av veckan."
     },
     {
       "date": "2026-08-25",
@@ -29,7 +29,7 @@
       "swim_equipment": {
         "planned": "to_be_determined"
       },
-      "reason": "Lågkostnadsdag efter enduro. Aerob volym och teknik utan tröskelarbete. Exakt serie och hjälpmedel bestäms efter måndagens faktiska belastning."
+      "reason": "Aerob/teknisk simning med låg mekanisk kostnad. Passet behöver inte reduceras enbart för att enduroskola genomfördes måndag; justering görs bara om måndagens faktiska belastning motiverar det."
     },
     {
       "date": "2026-08-26",
@@ -37,7 +37,7 @@
       "status": "preliminary",
       "planning_status": "preliminary",
       "session": "Löpning · kontrollerad tröskel · preliminärt 3 × 10 min / 90 s jogg",
-      "reason": "Progression från genomförda 3 × 8 min: längre total kontrollerad arbetstid utan att höja intensiteten. 3 × 10 körs bara om helgen, enduron och tisdagen är tydligt absorberade; annars upprepas 3 × 8."
+      "reason": "Progression från genomförda 3 × 8 min: längre total kontrollerad arbetstid utan att höja intensiteten. 3 × 10 körs om helgen, måndagens faktiska endurobelastning och tisdagen är absorberade; annars upprepas 3 × 8. Enduroetiketten i sig är inte skäl att skala ned."
     },
     {
       "date": "2026-08-27",
@@ -45,7 +45,7 @@
       "status": "preliminary",
       "planning_status": "preliminary",
       "session": "Styrka + core · kontrollerat helkroppspass",
-      "reason": "Bygger robusthet och löp-/cykelrelevant styrka utan failure. Volymen styrs av onsdagens löpkvalitet; plyometri endast om benen är fräscha."
+      "reason": "Bygger robusthet och löp-/cykelrelevant styrka utan failure. Volymen styrs främst av onsdagens löpkvalitet och faktisk lokal trötthet; plyometri endast om benen är fräscha."
     },
     {
       "date": "2026-08-28",
@@ -56,7 +56,7 @@
       "swim_equipment": {
         "planned": "to_be_determined"
       },
-      "reason": "Veckans simkvalitet. Tröskeln hålls kontrollerad enligt samma princip som löpningen; exakt serie, vilor och hjälpmedel sätts efter tisdagens simning och torsdagens styrka."
+      "reason": "Veckans simkvalitet. Tröskeln hålls kontrollerad; exakt serie, vilor och hjälpmedel sätts efter tisdagens simning och torsdagens styrka."
     },
     {
       "date": "2026-08-29",
@@ -64,7 +64,7 @@
       "status": "preliminary",
       "planning_status": "preliminary",
       "session": "MTB/XC · teknik först + kort kontrollerad fart",
-      "reason": "Teknik är huvudsyftet. Kortare kvalitetsrepetitioner kan läggas in om fredagens simning och veckans benbelastning är väl absorberade; annars ren teknik/lugn stig."
+      "reason": "Teknik är huvudsyftet. Kortare kvalitetsrepetitioner kan läggas in om fredagens simning och veckans faktiska benbelastning är väl absorberade; annars ren teknik/lugn stig."
     },
     {
       "date": "2026-08-30",
@@ -72,7 +72,7 @@
       "status": "open",
       "planning_status": "open",
       "session": "Öppet · lugn trail eller vila",
-      "reason": "Ingen utfyllnadsträning. Beslut tas efter lördagens MTB och med hänsyn till enduroskolan måndag 31/8. Om trail väljs ska den vara lugn och absorberbar."
+      "reason": "Ingen utfyllnadsträning. Beslut tas främst efter lördagens MTB och veckans faktiska belastning. Nästa enduroskola på måndagen är inte i sig skäl att hålla söndagen tom eller extra kort."
     }
   ],
   "strength_template": [
