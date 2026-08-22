@@ -5,12 +5,14 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 INDEX = ROOT / "index.html"
 PLAN = ROOT / "data" / "plan.json"
+ICONS = ROOT / "data" / "sport_icons.json"
 GOAL = ROOT / "malbild" / "index.html"
 GOAL_MIRROR = ROOT / "malbild-2027" / "index.html"
 
 VALID_STATUSES = {"completed", "planned", "preliminary", "conditional", "open"}
 VALID_MANUAL_STATUSES = {"completed"}
 VALID_CLASSIFICATIONS = {"training", "recreation"}
+REQUIRED_ICON_KEYS = {"run", "swim", "bike", "enduro", "strength"}
 
 
 def require(condition: bool, message: str) -> None:
@@ -19,8 +21,18 @@ def require(condition: bool, message: str) -> None:
 
 
 def main() -> None:
-    for path in (INDEX, PLAN, GOAL, GOAL_MIRROR):
+    for path in (INDEX, PLAN, ICONS, GOAL, GOAL_MIRROR):
         require(path.exists(), f"Preflight: fil saknas: {path}")
+
+    icon_data = json.loads(ICONS.read_text(encoding="utf-8"))
+    icons = icon_data.get("icons", {})
+    require(
+        REQUIRED_ICON_KEYS.issubset(icons),
+        f"Preflight: ikonregistret saknar {sorted(REQUIRED_ICON_KEYS - set(icons))}",
+    )
+    for key in REQUIRED_ICON_KEYS:
+        require(bool(icons[key].get("viewBox")), f"Preflight: {key}-ikon saknar viewBox")
+        require(bool(icons[key].get("path")), f"Preflight: {key}-ikon saknar path")
 
     plan = json.loads(PLAN.read_text(encoding="utf-8"))
     days = plan.get("days", [])
@@ -87,7 +99,7 @@ def main() -> None:
     require("phase-trail-sync-v1" not in canonical, "Preflight: gammal trail-sync-v1 finns kvar")
 
     print(
-        "Preflight OK: plan, manuella aktiviteter, navigation och "
+        "Preflight OK: plan, ikonregister, manuella aktiviteter, navigation och "
         "målbildens canonical/mirror-kontrakt är konsistenta."
     )
 
