@@ -21,7 +21,10 @@ GOAL_CSS = r'''
 
 OLD_TRAIL = "M104 250 C157 246 203 236 245 219 C286 202 310 186 328 166 C345 147 367 150 383 132 C400 113 389 96 372 90 C357 85 360 70 378 61 C401 50 425 42 470 28"
 NEW_TRAIL = "M104 250 C145 245 180 238 214 226 C248 214 278 199 306 184 C332 171 352 164 373 155 C394 146 413 140 430 133 C444 127 456 121 468 113"
-OLD_FLAG = '<circle cx="470" cy="28" r="17" fill="#ecebff" opacity=".82"/><line x1="470" y1="18" x2="470" y2="47" stroke="#4938ee" stroke-width="3"/><path d="M470 18 L493 26 L470 34Z" fill="#4938ee"/>'
+
+# build_home.py currently emits this flag. Keep this matcher aligned with the
+# generator until the mountain SVG is moved fully into one source component.
+OLD_FLAG = '<circle cx="470" cy="28" r="22" fill="#eeecff" opacity=".72"/><line x1="470" y1="18" x2="470" y2="49" stroke="#4938ee" stroke-width="3"/><path d="M470 18 L496 26 L470 35Z" fill="#4938ee"/>'
 NEW_FLAG = '<circle cx="468" cy="113" r="15" fill="#ecebff" opacity=".72"/><line x1="468" y1="86" x2="468" y2="113" stroke="#4938ee" stroke-width="3"/><path d="M468 86 L490 94 L468 101Z" fill="#4938ee"/>'
 
 
