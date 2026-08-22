@@ -34,6 +34,10 @@ SOLID_ICONS = {
         "0 0 640 512",
         "M312 32c-13.3 0-24 10.7-24 24s10.7 24 24 24h25.7l34.6 64H222.9l-27.4-38C191 99.7 183.7 96 176 96h-56c-13.3 0-24 10.7-24 24s10.7 24 24 24h43.7l22.1 30.7-26.6 53.1c-10-2.5-20.5-3.8-31.2-3.8C57.3 224 0 281.3 0 352s57.3 128 128 128c65.3 0 119.1-48.9 127-112h49c8.5 0 16.3-4.5 20.7-11.8l84.8-143.5 21.7 40.1C402.4 276.3 384 312 384 352c0 70.7 57.3 128 128 128s128-57.3 128-128-57.3-128-128-128c-13.5 0-26.5 2.1-38.7 6L375.4 48.8C369.8 38.4 359 32 347.2 32H312zM458.6 303.7l32.3 59.7c6.3 11.7 20.9 16 32.5 9.7s16-20.9 9.7-32.5l-32.3-59.7c3.6-.6 7.4-.9 11.2-.9 39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72c0-18.6 7-35.5 18.6-48.3zM133.2 368h65c-7.3 32.1-36 56-70.2 56-39.8 0-72-32.2-72-72s32.2-72 72-72c1.7 0 3.4.1 5.1.2l-24.2 48.5c-9 18.1 4.1 39.4 24.3 39.4zm33.7-48 50.7-101.3 72.9 101.2-.1.1H166.9zm90.6-128H366L317 274.8 257.4 192z",
     ),
+    "enduro": (
+        "0 0 640 512",
+        "M280 32c-13.3 0-24 10.7-24 24s10.7 24 24 24l57.7 0 16.4 30.3L256 192l-45.3-45.3c-12-12-28.3-18.7-45.3-18.7L64 128c-17.7 0-32 14.3-32 32l0 32 96 0c88.4 0 160 71.6 160 160c0 11-1.1 21.7-3.2 32l70.4 0c-2.1-10.3-3.2-21-3.2-32c0-52.2 25-98.6 63.7-127.8l15.4 28.6C402.4 276.3 384 312 384 352c0 70.7 57.3 128 128 128s128-57.3 128-128s-57.3-128-128-128c-13.5 0-26.5 2.1-38.7 6L418.2 128l61.8 0c17.7 0 32-14.3 32-32l0-32c0-17.7-14.3-32-32-32l-20.4 0c-7.5 0-14.7 2.6-20.5 7.4L391.7 78.9l-14-26c-7-12.9-20.5-21-35.2-21L280 32zM462.7 311.2l28.2 52.2c6.3 11.7 20.9 16 32.5 9.7s16-20.9 9.7-32.5l-28.2-52.2c2.3-.3 4.7-.4 7.1-.4c35.3 0 64 28.7 64 64s-28.7 64-64 64s-64-28.7-64-64c0-15.5 5.5-29.7 14.7-40.8zM187.3 376c-9.5 23.5-32.5 40-59.3 40c-35.3 0-64-28.7-64-64s28.7-64 64-64c26.9 0 49.9 16.5 59.3 40l66.4 0C242.5 268.8 190.5 224 128 224C57.3 224 0 281.3 0 352s57.3 128 128 128c62.5 0 114.5-44.8 125.8-104l-66.4 0zM128 384a32 32 0 1 0 0-64 32 32 0 1 0 0 64z",
+    ),
     "strength": (
         "0 0 640 512",
         "M96 64c0-17.7 14.3-32 32-32h32c17.7 0 32 14.3 32 32v160 64 160c0 17.7-14.3 32-32 32h-32c-17.7 0-32-14.3-32-32v-64H64c-17.7 0-32-14.3-32-32v-64c-17.7 0-32-14.3-32-32s14.3-32 32-32v-64c0-17.7 14.3-32 32-32h32V64zm448 0v64h32c17.7 0 32 14.3 32 32v64c17.7 0 32 14.3 32 32s-14.3 32-32 32v64c0 17.7-14.3 32-32 32h-32v64c0 17.7-14.3 32-32 32h-32c-17.7 0-32-14.3-32-32V288 224 64c0-17.7 14.3-32 32-32h32c17.7 0 32 14.3 32 32zM416 224v64H224v-64h192z",
@@ -46,6 +50,26 @@ LINE_ICONS = {
         '<rect x="7" y="5" width="10" height="14" rx="2.2"/>'
         '<path d="M9.5 5V2.5h5V5M9.5 19v2.5h5V19M12 9v3l2 1.5"/>'
     ),
+}
+
+SPORT_ICON_KEYS = {
+    "run": "run",
+    "running": "run",
+    "trail": "run",
+    "swim": "swim",
+    "swimming": "swim",
+    "mtb": "bike",
+    "xc": "bike",
+    "bike": "bike",
+    "cycling": "bike",
+    "enduro": "enduro",
+    "strength": "strength",
+    "swimrun": "run",
+}
+
+CLASSIFICATION_LABELS = {
+    "training": "TRÄNING",
+    "recreation": "REKREATION",
 }
 
 
@@ -71,7 +95,9 @@ def icon_for_text(value):
     text = (value or "").lower()
     if "sim" in text:
         return "swim"
-    if "mtb" in text or "cykel" in text or "bike" in text or "enduro" in text:
+    if "enduro" in text:
+        return "enduro"
+    if "mtb" in text or "cykel" in text or "bike" in text:
         return "bike"
     if "styrk" in text or "weight" in text:
         return "strength"
@@ -80,10 +106,51 @@ def icon_for_text(value):
     return "activity"
 
 
+def icon_for_sport(sport, fallback_text=""):
+    key = (sport or "").strip().lower()
+    if key:
+        return SPORT_ICON_KEYS.get(key, "activity")
+    return icon_for_text(fallback_text)
+
+
 def watch_chip():
     return (
         '<span class="watch-sync" title="Strukturerat simpass synkas automatiskt via Intervals.icu till Garmin">'
         f'{icon("watch", "watch-icon")}<span>Klocksync aktiv</span></span>'
+    )
+
+
+def day_segment(page_text, date):
+    marker = f'<div class="day" id="dag-{html.escape(date)}">'
+    start = page_text.find(marker)
+    if start < 0:
+        return -1, -1, ""
+    next_day = page_text.find('<div class="day" id="dag-', start + len(marker))
+    next_section = page_text.find('<h2 class="section">', start + len(marker))
+    candidates = [pos for pos in (next_day, next_section) if pos >= 0]
+    end = min(candidates) if candidates else len(page_text)
+    return start, end, page_text[start:end]
+
+
+def manual_activity_html(activity, index):
+    sport = icon_for_sport(activity.get("sport"), activity.get("session", ""))
+    classification = (activity.get("classification") or "").strip().lower()
+    classification_label = CLASSIFICATION_LABELS.get(
+        classification,
+        classification.upper() if classification else "AKTIVITET",
+    )
+    session = html.escape(activity.get("session", ""))
+    reason = html.escape(activity.get("reason", ""))
+    reason_html = f'<div class="manual-activity-reason">{reason}</div>' if reason else ""
+    return (
+        f'<div class="manual-activity" data-manual-activity-index="{index}" '
+        f'data-sport="{html.escape(activity.get("sport", ""))}" '
+        f'data-classification="{html.escape(classification)}">'
+        '<div class="manual-activity-head">'
+        f'{icon(sport)}<strong>{session}</strong>'
+        f'<span class="manual-activity-class">{html.escape(classification_label)}</span>'
+        '</div>'
+        f'{reason_html}</div>'
     )
 
 
@@ -101,6 +168,8 @@ def sport_repl(match):
 
 page, sport_icon_count = sport_pattern.subn(sport_repl, page)
 
+# Upcoming planned/open session: explicit plan.sport wins; text parsing only
+# remains as a compatibility fallback for older plan entries.
 for day in plan.get("days", []):
     date = day.get("date", "")
     marker = f'<div class="next-item" data-next-date="{html.escape(date)}">'
@@ -113,7 +182,7 @@ for day in plan.get("days", []):
     end = min(candidates) if candidates else len(page)
     segment = page[start:end]
 
-    sport = icon_for_text(day.get("session", ""))
+    sport = icon_for_sport(day.get("sport"), day.get("session", ""))
     if '<div class="swim-workout compact"><div class="swim-session-head"><strong>' in segment:
         segment = segment.replace(
             '<div class="swim-workout compact"><div class="swim-session-head"><strong>',
@@ -148,6 +217,36 @@ for day in plan.get("days", []):
 
     page = page[:start] + segment + page[end:]
 
+# Manual activities are factual logged context, distinct from the day's remaining
+# plan. This is how recreation such as enduro can be shown without pretending it
+# is the planned training session or inventing duration/distance.
+manual_activity_count = 0
+for day in plan.get("days", []):
+    activities = day.get("manual_activities") or []
+    if not activities:
+        continue
+    date = day.get("date", "")
+    start, end, segment = day_segment(page, date)
+    if start < 0:
+        raise RuntimeError(f"Sportikoner: detaljkort saknas för manuell aktivitet {date}")
+
+    reason_needle = f'<div class="reason">{html.escape(day.get("reason", ""))}</div>'
+    if reason_needle not in segment:
+        raise RuntimeError(f"Sportikoner: dagsmotivering saknas för manuell aktivitet {date}")
+
+    blocks = []
+    for index, activity in enumerate(activities, start=1):
+        marker = f'data-manual-activity-index="{index}"'
+        if marker in segment:
+            continue
+        blocks.append(manual_activity_html(activity, index))
+        manual_activity_count += 1
+
+    if blocks:
+        segment = segment.replace(reason_needle, reason_needle + "\n  " + "".join(blocks), 1)
+        page = page[:start] + segment + page[end:]
+
+# Watch-sync indicator on detailed structured swim cards.
 for day in plan.get("days", []):
     workout = day.get("watch_workout") or {}
     date = day.get("date", "")
@@ -158,15 +257,9 @@ for day in plan.get("days", []):
     )
     if not watch_active:
         continue
-    marker = f'<div class="day" id="dag-{html.escape(date)}">'
-    start = page.find(marker)
+    start, end, segment = day_segment(page, date)
     if start < 0:
         raise RuntimeError(f"Sportikoner: detaljkort saknas för klocksync {date}")
-    next_day = page.find('<div class="day" id="dag-', start + len(marker))
-    next_section = page.find('<h2 class="section">', start + len(marker))
-    candidates = [pos for pos in (next_day, next_section) if pos >= 0]
-    end = min(candidates) if candidates else len(page)
-    segment = page[start:end]
     if 'class="watch-sync"' not in segment:
         if 'class="swim-session-head"' not in segment:
             raise RuntimeError(f"Sportikoner: strukturerad simrubrik saknas för {date}")
@@ -179,12 +272,12 @@ for day in plan.get("days", []):
         )
         page = page[:start] + segment + page[end:]
 
-css_marker = "/* sport-icons-v1 */"
+css_marker = "/* sport-icons-v2 */"
 if css_marker not in page:
     css = r'''
-/* sport-icons-v1 */
-.sport-name,.next-session,.session-with-icon{display:inline-flex;align-items:center;gap:8px;min-width:0}.sport-icon{width:18px;height:18px;flex:0 0 auto;color:#64748b}.sport-icon.icon-swim{width:20px}.sport-icon.icon-bike{width:20px}.sport-icon.icon-strength{width:20px}.sport-name .sport-icon{height:18px}.next-session{font-weight:600}.session-with-icon{font-weight:800}.watch-sync{display:inline-flex;align-items:center;gap:4px;width:max-content;padding:3px 7px;border:1px solid #cbd5e1;border-radius:999px;background:#f8fafc;color:#475569;font-size:.68rem;font-weight:800;line-height:1.2;white-space:nowrap}.watch-sync .watch-icon{width:13px;height:13px;color:#475569}.swim-session-head{row-gap:6px}.next-item .sport-icon{position:relative;z-index:1}
-@media (max-width:520px){.sport-icon{width:17px;height:17px}.sport-icon.icon-swim,.sport-icon.icon-bike,.sport-icon.icon-strength{width:19px}.watch-sync{font-size:.64rem;padding:3px 6px}}
+/* sport-icons-v2 */
+.sport-name,.next-session,.session-with-icon{display:inline-flex;align-items:center;gap:8px;min-width:0}.sport-icon{width:18px;height:18px;flex:0 0 auto;color:#64748b}.sport-icon.icon-swim{width:20px}.sport-icon.icon-bike,.sport-icon.icon-enduro,.sport-icon.icon-strength{width:20px}.sport-name .sport-icon{height:18px}.next-session{font-weight:600}.session-with-icon{font-weight:800}.watch-sync{display:inline-flex;align-items:center;gap:4px;width:max-content;padding:3px 7px;border:1px solid #cbd5e1;border-radius:999px;background:#f8fafc;color:#475569;font-size:.68rem;font-weight:800;line-height:1.2;white-space:nowrap}.watch-sync .watch-icon{width:13px;height:13px;color:#475569}.swim-session-head{row-gap:6px}.next-item .sport-icon{position:relative;z-index:1}.manual-activity{margin:10px 0 2px;padding:11px 12px;border:1px solid #e2e8f0;border-radius:13px;background:#f8fafc}.manual-activity-head{display:flex;align-items:center;gap:8px;min-width:0}.manual-activity-head strong{font-size:.9rem;line-height:1.3}.manual-activity-head .icon-enduro{color:#64748b}.manual-activity-class{margin-left:auto;padding:3px 7px;border:1px solid #d8dee8;border-radius:999px;background:#fff;color:#64748b;font-size:.61rem;font-weight:900;letter-spacing:.06em}.manual-activity-reason{margin-top:6px;color:#64748b;font-size:.79rem;line-height:1.4}
+@media (max-width:520px){.sport-icon{width:17px;height:17px}.sport-icon.icon-swim,.sport-icon.icon-bike,.sport-icon.icon-enduro,.sport-icon.icon-strength{width:19px}.watch-sync{font-size:.64rem;padding:3px 6px}.manual-activity-head{align-items:flex-start;flex-wrap:wrap}.manual-activity-class{margin-left:0}}
 '''
     if "</style>" not in page:
         raise RuntimeError("Sportikoner: kunde inte hitta </style>")
@@ -209,6 +302,20 @@ for day in plan.get("days", []):
         if 'class="sport-icon' not in segment:
             raise RuntimeError(f"Sportikoner: Kommande dagar saknar ikon för {date}")
 
+expected_manual = sum(len(day.get("manual_activities") or []) for day in plan.get("days", []))
+if rendered.count('class="manual-activity"') != expected_manual:
+    raise RuntimeError(
+        "Sportikoner: antal renderade manuella aktiviteter matchar inte plan.json "
+        f"({rendered.count('class=\"manual-activity\"')} != {expected_manual})"
+    )
+for day in plan.get("days", []):
+    for activity in day.get("manual_activities") or []:
+        sport = icon_for_sport(activity.get("sport"), activity.get("session", ""))
+        if f'icon-{sport}' not in rendered:
+            raise RuntimeError(
+                f"Sportikoner: ikon saknas för manuell aktivitet {activity.get('session', '<utan namn>')}"
+            )
+
 watch_days = [
     day for day in plan.get("days", [])
     if (day.get("watch_workout") or {}).get("sync_enabled") is True
@@ -227,6 +334,7 @@ for day in watch_days:
         raise RuntimeError(f"Sportikoner: klocksync-indikator saknas för {date}")
 
 print(
-    f"Sportikoner OK: {sport_icon_count} grenrader dekorerade, "
+    f"Sportikoner OK: {sport_icon_count} grenrader, "
+    f"{expected_manual} manuella aktiviteter och "
     f"{len(watch_days)} aktiv(a) klocksync-indikator(er)."
 )
