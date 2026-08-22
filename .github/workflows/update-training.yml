@@ -144,33 +144,65 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
-      - name: Verify deployed goal page
+      - name: Check deployed goal page
+        id: verify_deploy
         env:
           PAGE_URL: ${{ steps.deployment.outputs.page_url }}
         run: |
-          set -euo pipefail
+          set -u
           target="${PAGE_URL%/}/träning/malbild/?verify=${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
-          echo "Checking deployed page: $target"
-          ok=0
+          code=""
+          has_component=false
+          has_phase2=false
+          ok=false
           for attempt in 1 2 3 4 5 6; do
-            echo "Attempt $attempt/6"
             code=$(curl -L -sS -o /tmp/deployed-goal.html -D /tmp/deployed-headers.txt -w '%{http_code}' --max-time 30 "$target" || true)
-            echo "HTTP $code"
-            if [ "$code" = "200" ] && grep -q 'mountain-phase-point' /tmp/deployed-goal.html && grep -q 'href="#fas-2"' /tmp/deployed-goal.html; then
-              echo "Deployment verification OK: interactive periodization is live."
-              ok=1
+            if grep -q 'mountain-phase-point' /tmp/deployed-goal.html 2>/dev/null; then has_component=true; else has_component=false; fi
+            if grep -q 'href="#fas-2"' /tmp/deployed-goal.html 2>/dev/null; then has_phase2=true; else has_phase2=false; fi
+            if [ "$code" = "200" ] && [ "$has_component" = "true" ] && [ "$has_phase2" = "true" ]; then
+              ok=true
               break
             fi
             sleep 10
           done
-          if [ "$ok" != "1" ]; then
-            echo "Deployment verification FAILED."
-            echo "--- response headers ---"
-            cat /tmp/deployed-headers.txt || true
-            echo "--- response markers ---"
-            grep -Eo 'Målbild 2027|mountain-phase-point|href="#fas-[0-9]+"|cf-access|Cloudflare' /tmp/deployed-goal.html | head -40 || true
-            echo "--- first 800 bytes ---"
-            head -c 800 /tmp/deployed-goal.html || true
-            echo
-            exit 1
+          python - <<PY
+          import json, os
+          from pathlib import Path
+          headers = Path('/tmp/deployed-headers.txt').read_text(errors='replace') if Path('/tmp/deployed-headers.txt').exists() else ''
+          html = Path('/tmp/deployed-goal.html').read_text(errors='replace') if Path('/tmp/deployed-goal.html').exists() else ''
+          data = {
+              'run_id': os.environ.get('GITHUB_RUN_ID'),
+              'run_attempt': os.environ.get('GITHUB_RUN_ATTEMPT'),
+              'page_url': os.environ.get('PAGE_URL'),
+              'target_url': ${target@Q},
+              'http_status': ${code@Q},
+              'interactive_component_found': ${has_component@Q} == 'true',
+              'phase_2_anchor_found': ${has_phase2@Q} == 'true',
+              'verification_ok': ${ok@Q} == 'true',
+              'response_headers': headers[:4000],
+              'response_preview': html[:1200],
+          }
+          Path('träning/data/deployment_verification.json').write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n')
+          PY
+          echo "ok=$ok" >> "$GITHUB_OUTPUT"
+
+      - name: Persist deployment verification
+        if: always()
+        run: |
+          if [ -f "träning/data/deployment_verification.json" ]; then
+            git config user.name "training-bot"
+            git config user.email "actions@users.noreply.github.com"
+            git add "träning/data/deployment_verification.json"
+            if ! git diff --cached --quiet; then
+              git commit -m "Record training deployment verification"
+              git pull --rebase origin main
+              git push origin main
+            fi
           fi
+
+      - name: Fail on stale deployment
+        if: steps.verify_deploy.outputs.ok != 'true'
+        run: |
+          echo "Published goal page did not contain the expected interactive periodization component."
+          cat "träning/data/deployment_verification.json" || true
+          exit 1
