@@ -1,281 +1,41 @@
-<!doctype html>
-<html lang="sv">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0f172a">
-<title>Träningsplan</title>
+<!doctype html><html lang="sv"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f5f7fb"><title>Målbild 2027 · Adaptiv träningsplanering</title>
 <style>
-:root{--bg:#f5f7fb;--card:#fff;--text:#0f172a;--muted:#64748b;--line:#e2e8f0;--accent:#2563eb;--green:#15803d;--green-soft:#dcfce7;--amber:#a16207;--amber-soft:#fef3c7;--purple:#6d28d9;--purple-soft:#f3e8ff;--shadow:0 8px 24px rgba(15,23,42,.06)}
-*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);line-height:1.45}
-.wrap{width:min(100%,760px);margin:auto;padding:20px 16px 56px}header{padding:8px 2px 18px}
-.eyebrow{text-transform:uppercase;letter-spacing:.12em;font-size:.76rem;font-weight:800;color:var(--accent);margin-bottom:6px}
-h1{font-size:clamp(2rem,8vw,3.2rem);line-height:1;margin:0 0 8px;letter-spacing:-.04em}.sub{color:var(--muted);font-size:.96rem}
-.hero{background:#0f172a;color:#fff;border-radius:20px;padding:18px 20px;margin:8px 0 18px;box-shadow:var(--shadow)}.hero h2{margin:4px 0 5px}.hero p{margin:0;color:#cbd5e1}
-.dashboard{display:grid;gap:12px;margin:0 0 24px}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.metric{background:#fff;border:1px solid var(--line);border-radius:16px;padding:13px 14px;box-shadow:var(--shadow)}.metric strong{display:block;font-size:1.22rem;line-height:1.15}.metric span{display:block;color:var(--muted);font-size:.78rem;margin-top:4px}
-.dashboard-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.dashboard-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:15px 16px;box-shadow:var(--shadow)}.dashboard-title{font-size:.78rem;font-weight:900;text-transform:uppercase;letter-spacing:.07em;color:#475569;margin-bottom:12px}.dashboard-empty{color:var(--muted);font-size:.88rem}
-.sport-row+.sport-row{margin-top:10px}.sport-head{display:flex;justify-content:space-between;gap:12px;font-size:.84rem}.sport-head strong{font-size:.8rem}.sport-track{height:7px;background:#e2e8f0;border-radius:999px;overflow:hidden;margin-top:5px}.sport-fill{height:100%;background:var(--accent);border-radius:999px}
-.week-status{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.week-day{text-align:center;border-radius:10px;padding:5px 2px}.week-day.today{background:#eff6ff}.week-day-label{font-size:.68rem;font-weight:800;color:var(--muted);margin-bottom:4px}.week-day-dot{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;margin:auto;font-size:.78rem;font-weight:900}.dashboard-legend{color:var(--muted);font-size:.7rem;margin-top:10px;line-height:1.5}
-.next-item{padding:10px 0}.next-item+.next-item{border-top:1px solid var(--line)}.next-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:3px}.next-coach{color:var(--purple);font-size:.82rem;margin-top:4px}
-.section{font-size:1.22rem;margin:28px 0 12px}.day{background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px;margin:12px 0;box-shadow:var(--shadow)}
-.daytop{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:10px}.dow{font-size:.82rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}.date{color:var(--muted);font-size:.85rem}
-.session{font-size:1.2rem;font-weight:800;margin:4px 0 6px}.reason{color:#334155;font-size:.95rem}.badge{border-radius:999px;padding:5px 9px;font-size:.7rem;font-weight:800;white-space:nowrap}
-.fixed{background:var(--green-soft);color:var(--green)}.planned{background:#dbeafe;color:#1d4ed8}.conditional{background:var(--amber-soft);color:var(--amber)}.open{background:#e2e8f0;color:#475569}
-.pass{margin-top:14px;padding-top:14px;border-top:1px solid var(--line);display:grid;gap:7px}.pass-title{font-weight:800}.decision{margin-top:13px;padding:12px 13px;background:#f8fafc;border-radius:13px;border:1px solid var(--line)}.decision strong{display:block;margin-bottom:4px}.coach-adjust{border-color:#ddd6fe;background:#faf5ff}
-.coach{margin-top:16px;padding:14px;border-radius:16px;background:var(--purple-soft);border:1px solid #ddd6fe}.coach-title{font-size:.75rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:var(--purple);margin-bottom:5px}.coach-summary{font-weight:800;margin-bottom:5px}.coach-load{color:#4c1d95;font-size:.92rem}.coach-details{margin-top:10px}.coach-details summary{cursor:pointer;font-weight:700}.coach-grid{display:grid;gap:8px;margin-top:8px;font-size:.88rem}.coach-grid ul{margin:4px 0 0;padding-left:18px}.coach-action{margin-top:10px;padding-top:10px;border-top:1px solid #ddd6fe;font-size:.9rem}.coach-action span{color:#4c1d95}.coach-action small{color:#6b21a8}
-.principles{display:grid;gap:10px}.principle{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px}footer{color:var(--muted);font-size:.82rem;padding-top:26px}
-@media (max-width:620px){.dashboard-grid{grid-template-columns:1fr}.metrics{gap:7px}.metric{padding:12px 10px}.metric strong{font-size:1.05rem}}
-
-/* training-ux-v1 */
-.today-pill{display:inline-block;margin-right:7px;padding:2px 7px;border-radius:999px;background:#0f172a;color:#fff;font-size:.62rem;letter-spacing:.08em;vertical-align:1px}
-.swim-workout{margin:8px 0 10px;padding:12px 13px;border:1px solid #bfdbfe;background:#f8fbff;border-radius:14px}.swim-workout.compact{margin:7px 0 3px;padding:10px 11px}.swim-session-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}.swim-session-head strong{font-size:1.02rem}.swim-meta{color:#64748b;font-size:.82rem;font-weight:700}.swim-set-list{display:grid;gap:5px;margin-top:9px}.swim-set-list.compact{gap:4px;margin-top:7px}.swim-set-row{display:grid;grid-template-columns:minmax(72px,max-content) 1fr;gap:10px;align-items:baseline;font-size:.91rem;line-height:1.35}.swim-set-list.compact .swim-set-row{font-size:.84rem}.swim-dose{font-weight:850;font-variant-numeric:tabular-nums;color:#1e3a8a}
-.coach{padding:16px;background:#f8f5ff}.coach-title{font-size:.78rem;margin-bottom:9px}.coach-summary{background:#fff;border:1px solid #ddd6fe;border-radius:12px;padding:11px 12px;margin:0;font-size:.96rem;line-height:1.5}.coach-load{margin-top:9px;padding:10px 12px;border-radius:12px;background:#f3e8ff;color:#4c1d95;font-size:.88rem;line-height:1.45}.coach-load:before{content:"Närbelastning";display:block;margin-bottom:3px;font-size:.68rem;font-weight:900;text-transform:uppercase;letter-spacing:.07em;color:#6d28d9}.coach-details{margin-top:9px;padding:9px 11px;border-radius:11px;background:#fff;border:1px solid #e9d5ff}.coach-details summary{font-size:.83rem;color:#5b21b6}.coach-grid{line-height:1.45}.coach-grid li+li{margin-top:5px}.coach-action{margin-top:9px;padding:11px 12px;border:1px solid #ddd6fe;border-radius:12px;background:#fff;line-height:1.45}.coach-action>strong{display:inline-block;margin-bottom:4px;color:#5b21b6}.coach-action span{display:block;margin-top:4px;color:#3b0764}.coach-action small{display:block;margin-top:5px;color:#7e22ce}
-@media (max-width:620px){.swim-set-row{grid-template-columns:minmax(66px,max-content) 1fr;gap:8px}.coach{padding:13px}}
-
-
-/* training-yoda-v2 */
-.coach.yoda-v2{padding:15px;background:#f8f5ff}.yoda-v2 .coach-title{margin-bottom:8px}.coach-decision{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap;margin-bottom:7px}.coach-decision>span:first-child{font-size:.66rem;font-weight:900;text-transform:uppercase;letter-spacing:.07em;color:#7c3aed}.coach-decision strong{font-size:.98rem;color:#3b0764}.coach-target{font-size:.76rem;color:#7c3aed}.yoda-v2 .coach-summary{margin:0 0 10px;padding:0;border:0;background:transparent;font-size:.91rem;font-weight:500;line-height:1.48;color:#334155}.coach-next{padding:10px 12px;border:1px solid #c4b5fd;border-radius:12px;background:#fff;font-size:.92rem;line-height:1.45;color:#312e81}.coach-next-label{display:block;margin-bottom:3px;font-size:.67rem;font-weight:900;text-transform:uppercase;letter-spacing:.07em;color:#6d28d9}.coach-why{margin-top:9px;border:1px solid #e9d5ff;border-radius:11px;background:#fff}.coach-why>summary{cursor:pointer;padding:9px 11px;font-size:.83rem;font-weight:800;color:#5b21b6}.coach-why-body{padding:0 11px 11px;display:grid;gap:9px}.coach-full-summary,.coach-reason{display:grid;gap:3px;font-size:.86rem;line-height:1.45;color:#475569}.coach-full-summary strong,.coach-reason strong{font-size:.67rem;text-transform:uppercase;letter-spacing:.06em;color:#6d28d9}.yoda-v2 .coach-load{margin:0;padding:9px 10px;background:#faf5ff;border-radius:10px;font-size:.84rem;line-height:1.45}.yoda-v2 .coach-load:before{content:"Närbelastning"}.yoda-v2 .coach-details{margin:0;padding:8px 10px;border-radius:10px;background:#fafafa}.yoda-v2 .coach-details summary{font-size:.8rem}.coach-apply{margin-top:7px;color:#7c3aed;font-size:.76rem}.coach-apply small{font-size:inherit}.yoda-v2 .coach-action{display:none}
-@media (max-width:620px){.coach.yoda-v2{padding:13px}.coach-next{padding:9px 10px}.coach-why-body{padding:0 9px 9px}}
-
-
-/* weekly-history-v1 */
-.week-nav{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;margin:-4px 0 16px;padding:9px 10px;border:1px solid #e2e8f0;border-radius:14px;background:#fff;box-shadow:0 6px 18px rgba(15,23,42,.04)}
-.week-nav a{color:#1d4ed8;text-decoration:none;font-size:.82rem;font-weight:800}.week-nav .next{text-align:right}.week-nav-center{text-align:center;line-height:1.15}.week-nav-center strong{display:block;font-size:.86rem}.week-nav-center span{display:block;margin-top:3px;color:#64748b;font-size:.59rem;font-weight:900;letter-spacing:.1em}.week-nav-spacer{display:block}.history-summary{color:#475569;font-size:.9rem;line-height:1.5}
-@media (max-width:520px){.week-nav{grid-template-columns:1fr auto 1fr;padding:8px}.week-nav a{font-size:.75rem}.week-nav-center strong{font-size:.8rem}}
-
-/* week-header-layout-v5 */
-.header-updated{margin-top:4px;color:#94a3b8;font-size:.74rem;font-weight:500;line-height:1.35}
-.header-status{margin-top:4px;color:#64748b;font-size:.76rem;font-weight:700;line-height:1.35}
-.week-period{font-weight:800;color:#334155;white-space:nowrap}
-@media (max-width:520px){.header-updated{font-size:.7rem}.header-status{font-size:.72rem}.week-period{font-size:.92rem}}
-
-/* upcoming-day-links-v1 */
-.next-item{position:relative;cursor:pointer;transition:background-color .15s ease}.next-item:hover{background:#f8fafc}.next-jump{position:absolute;inset:0;z-index:2;border-radius:10px}.next-jump:focus-visible{outline:2px solid var(--accent);outline-offset:2px}.day{scroll-margin-top:18px}
-@media (prefers-reduced-motion:reduce){.next-item{transition:none}}
-
-
-/* sport-icons-v1 */
-.sport-name,.next-session,.session-with-icon{display:inline-flex;align-items:center;gap:8px;min-width:0}.sport-icon{width:18px;height:18px;flex:0 0 auto;color:#64748b}.sport-icon.icon-swim{width:20px}.sport-icon.icon-bike{width:20px}.sport-icon.icon-strength{width:20px}.sport-name .sport-icon{height:18px}.next-session{font-weight:600}.session-with-icon{font-weight:800}.watch-sync{display:inline-flex;align-items:center;gap:4px;width:max-content;padding:3px 7px;border:1px solid #cbd5e1;border-radius:999px;background:#f8fafc;color:#475569;font-size:.68rem;font-weight:800;line-height:1.2;white-space:nowrap}.watch-sync .watch-icon{width:13px;height:13px;color:#475569}.swim-session-head{row-gap:6px}.next-item .sport-icon{position:relative;z-index:1}
-@media (max-width:520px){.sport-icon{width:17px;height:17px}.sport-icon.icon-swim,.sport-icon.icon-bike,.sport-icon.icon-strength{width:19px}.watch-sync{font-size:.64rem;padding:3px 6px}}
-
-/* workout-history-v2 */
-.workout-history{margin:13px 0 4px;padding:12px 13px;border:1px solid #bfdbfe;background:#f8fbff;border-radius:14px}.workout-history-label{margin-bottom:7px;color:#1d4ed8;font-size:.68rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em}.workout-history .swim-set-list{margin-top:9px}.workout-history-note{margin-top:8px;color:#64748b;font-size:.78rem}.workout-equipment{display:grid;gap:2px;margin-top:7px;color:#475569;font-size:.8rem}.workout-equipment strong{color:#334155}
-</style>
-</head>
-<body><div class="wrap">
-<header><div class="eyebrow">ADAPTIV TRÄNINGSPLANERING</div><h1>Vecka 34</h1><div class="sub"><strong class="week-period">2026-08-17 till 2026-08-23</strong></div><div class="header-updated">Senast uppdaterad 22/8 08:06</div></header>
-<nav class="week-nav" aria-label="Veckonavigering"><span class="week-nav-spacer"></span><div class="week-nav-center"><strong>Vecka 34</strong><span>AKTUELL</span></div><a class="next" href="/träning/vecka/2026-W35/">Vecka 35 →</a></nav>
-<div class="hero"><h2>Stabilisera först. Bygg sedan.</h2><p>Veckan är till för att skapa stabilitet: ta vara på genomförd träning, hålla kvalitetspassen kontrollerade och låta återhämtningen styra nästa steg. Det är så vi bygger långsiktigt mot målet att bli en stark, robust och mångsidig allroundatlet inom löpning, MTB/XC, simning och styrka.</p></div>
-<section class="dashboard" aria-label="Veckoöversikt">
-  <div class="metrics">
-    <div class="metric"><strong>6</strong><span>pass</span></div>
-    <div class="metric"><strong>5:38:00</strong><span>passtid</span></div>
-    <div class="metric"><strong>5</strong><span>träningsdagar</span></div>
-  </div>
-  <div class="dashboard-grid">
-    <div class="dashboard-card">
-      <div class="dashboard-title">Grenfördelning · passtid</div>
-      <div class="sport-row">
-  <div class="sport-head"><span class="sport-name"><svg class="sport-icon icon-swim" aria-hidden="true" viewBox="0 0 576 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M309.5 178.4 447.9 297.1c-1.6.9-3.2 2-4.8 3-18 12.4-40.1 20.3-59.2 20.3-19.6 0-40.8-7.7-59.2-20.3-22.1-15.5-51.6-15.5-73.7 0-17.1 11.8-38 20.3-59.2 20.3-10.1 0-21.1-2.2-31.9-6.2C163.1 193.2 262.2 96 384 96h64c17.7 0 32 14.3 32 32s-14.3 32-32 32h-64c-26.9 0-52.3 6.6-74.5 18.4zM160 160A64 64 0 1 1 32 160a64 64 0 1 1 128 0zM306.5 325.9C329 341.4 356.5 352 384 352c26.9 0 55.4-10.8 77.4-26.1 11.9-8.5 28.1-7.8 39.2 1.7 14.4 11.9 32.5 21 50.6 25.2 17.2 4 27.9 21.2 23.9 38.4s-21.2 27.9-38.4 23.9c-24.5-5.7-44.9-16.5-58.2-25C449.5 405.7 417 416 384 416c-31.9 0-60.6-9.9-80.4-18.9-5.8-2.7-11.1-5.3-15.6-7.7-4.5 2.4-9.7 5.1-15.6 7.7-19.8 9-48.5 18.9-80.4 18.9-33 0-65.5-10.3-94.5-25.8-13.4 8.4-33.7 19.3-58.2 25-17.2 4-34.4-6.7-38.4-23.9s6.7-34.4 23.9-38.4c18.1-4.2 36.2-13.3 50.6-25.2 11.1-9.4 27.3-10.1 39.2-1.7C136.7 341.2 165.1 352 192 352c27.5 0 55-10.6 77.5-26.1 11.1-7.9 25.9-7.9 37 0z"/></svg>Simning (6,4km)</span><strong>2:03:57</strong></div>
-  <div class="sport-track"><div class="sport-fill" style="width:37%"></div></div>
-</div><div class="sport-row">
-  <div class="sport-head"><span class="sport-name"><svg class="sport-icon icon-run" aria-hidden="true" viewBox="0 0 448 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M320 48a48 48 0 1 0-96 0 48 48 0 1 0 96 0zM125.7 175.5c9.9-9.9 23.4-15.5 37.5-15.5 1.9 0 3.8.1 5.6.3L137.6 254c-9.3 28 1.7 58.8 26.8 74.5l86.2 53.9-25.4 88.8c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l28.7-100.4c5.9-20.6-2.6-42.6-20.7-53.9L238 299l30.9-82.4 5.1 12.3C289 264.7 323.9 288 362.7 288H384c17.7 0 32-14.3 32-32s-14.3-32-32-32h-21.3c-12.9 0-24.6-7.8-29.5-19.7l-6.3-15c-14.6-35.1-44.1-61.9-80.5-73.1l-48.7-15c-11.1-3.4-22.7-5.2-34.4-5.2-31 0-60.8 12.3-82.7 34.3l-23.2 23.1c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l23.1-23.1zM91.2 352H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h69.6c19 0 36.2-11.2 43.9-28.5l11.5-25.9-9.5-6c-17.5-10.9-30.5-26.8-37.9-44.9L91.2 352z"/></svg>Löpning (17,3km)</span><strong>1:45:38</strong></div>
-  <div class="sport-track"><div class="sport-fill" style="width:31%"></div></div>
-</div><div class="sport-row">
-  <div class="sport-head"><span class="sport-name"><svg class="sport-icon icon-activity" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-5 4 10 2-5h6"/></svg>StandUpPaddling (6,0km)</span><strong>1:12:40</strong></div>
-  <div class="sport-track"><div class="sport-fill" style="width:21%"></div></div>
-</div><div class="sport-row">
-  <div class="sport-head"><span class="sport-name"><svg class="sport-icon icon-strength" aria-hidden="true" viewBox="0 0 640 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M96 64c0-17.7 14.3-32 32-32h32c17.7 0 32 14.3 32 32v160 64 160c0 17.7-14.3 32-32 32h-32c-17.7 0-32-14.3-32-32v-64H64c-17.7 0-32-14.3-32-32v-64c-17.7 0-32-14.3-32-32s14.3-32 32-32v-64c0-17.7 14.3-32 32-32h32V64zm448 0v64h32c17.7 0 32 14.3 32 32v64c17.7 0 32 14.3 32 32s-14.3 32-32 32v64c0 17.7-14.3 32-32 32h-32v64c0 17.7-14.3 32-32 32h-32c-17.7 0-32-14.3-32-32V288 224 64c0-17.7 14.3-32 32-32h32c17.7 0 32 14.3 32 32zM416 224v64H224v-64h192z"/></svg>Styrka</span><strong>35:45</strong></div>
-  <div class="sport-track"><div class="sport-fill" style="width:11%"></div></div>
-</div>
-    </div>
-    <div class="dashboard-card">
-      <div class="dashboard-title">Plan → utfall</div>
-      <div class="week-status"><div class="week-day">
-  <div class="week-day-label">Må</div>
-  <div class="week-day-dot fixed">✓</div>
-</div><div class="week-day">
-  <div class="week-day-label">Ti</div>
-  <div class="week-day-dot fixed">✓</div>
-</div><div class="week-day">
-  <div class="week-day-label">On</div>
-  <div class="week-day-dot fixed">✓</div>
-</div><div class="week-day">
-  <div class="week-day-label">To</div>
-  <div class="week-day-dot fixed">✓</div>
-</div><div class="week-day">
-  <div class="week-day-label">Fr</div>
-  <div class="week-day-dot fixed">✓</div>
-</div><div class="week-day today">
-  <div class="week-day-label">Lö</div>
-  <div class="week-day-dot conditional">◐</div>
-</div><div class="week-day">
-  <div class="week-day-label">Sö</div>
-  <div class="week-day-dot conditional">◐</div>
-</div></div>
-      <div class="dashboard-legend">✓ genomfört · ● planerat · ◐ preliminärt/villkorat · · öppet</div>
-    </div>
-  </div>
-  <div class="dashboard-card">
-    <div class="dashboard-title">Kommande dagar</div>
-    <div class="next-item" data-next-date="2026-08-22"><a class="next-jump" href="#dag-2026-08-22" aria-label="Visa detaljer för Lördag"></a>
-  <div class="next-top"><strong><span class="today-pill">IDAG</span>Lördag</strong><span class="badge conditional">PRELIMINÄRT</span></div>
-  <div class="next-session"><svg class="sport-icon icon-bike" aria-hidden="true" viewBox="0 0 640 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M312 32c-13.3 0-24 10.7-24 24s10.7 24 24 24h25.7l34.6 64H222.9l-27.4-38C191 99.7 183.7 96 176 96h-56c-13.3 0-24 10.7-24 24s10.7 24 24 24h43.7l22.1 30.7-26.6 53.1c-10-2.5-20.5-3.8-31.2-3.8C57.3 224 0 281.3 0 352s57.3 128 128 128c65.3 0 119.1-48.9 127-112h49c8.5 0 16.3-4.5 20.7-11.8l84.8-143.5 21.7 40.1C402.4 276.3 384 312 384 352c0 70.7 57.3 128 128 128s128-57.3 128-128-57.3-128-128-128c-13.5 0-26.5 2.1-38.7 6L375.4 48.8C369.8 38.4 359 32 347.2 32H312zM458.6 303.7l32.3 59.7c6.3 11.7 20.9 16 32.5 9.7s16-20.9 9.7-32.5l-32.3-59.7c3.6-.6 7.4-.9 11.2-.9 39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72c0-18.6 7-35.5 18.6-48.3zM133.2 368h65c-7.3 32.1-36 56-70.2 56-39.8 0-72-32.2-72-72s32.2-72 72-72c1.7 0 3.4.1 5.1.2l-24.2 48.5c-9 18.1 4.1 39.4 24.3 39.4zm33.7-48 50.7-101.3 72.9 101.2-.1.1H166.9zm90.6-128H366L317 274.8 257.4 192z"/></svg><span>MTB/XC · teknik först · ca 60–75 min</span></div>
-  <div class="next-weather" data-weather-date="2026-08-22" style="color:#475569;font-size:.82rem;margin-top:5px"><strong>Väder · Oxelösund</strong> · <svg class="weather-icon" aria-hidden="true" viewBox="0 0 24 24" style="width:18px;height:18px;vertical-align:-4px;margin-right:5px;color:#475569;overflow:visible"><circle cx="8" cy="8" r="2.8" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 3V1.8M8 13v-1.2M3 8H1.8M12.2 8H11M4.5 4.5l-.9-.9M11.5 4.5l.9-.9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M7.2 19h10a3.6 3.6 0 0 0 .2-7.2 5 5 0 0 0-9.5-.7A4 4 0 0 0 7.2 19Z" fill="white" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Halvklart · 13,4–19,3 °C · nederbördsrisk max 23 % · vind max 4,4 m/s</div>
-  
-</div><div class="next-item" data-next-date="2026-08-23"><a class="next-jump" href="#dag-2026-08-23" aria-label="Visa detaljer för Söndag"></a>
-  <div class="next-top"><strong>Söndag</strong><span class="badge conditional">PRELIMINÄRT</span></div>
-  <div class="next-session"><svg class="sport-icon icon-run" aria-hidden="true" viewBox="0 0 448 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M320 48a48 48 0 1 0-96 0 48 48 0 1 0 96 0zM125.7 175.5c9.9-9.9 23.4-15.5 37.5-15.5 1.9 0 3.8.1 5.6.3L137.6 254c-9.3 28 1.7 58.8 26.8 74.5l86.2 53.9-25.4 88.8c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l28.7-100.4c5.9-20.6-2.6-42.6-20.7-53.9L238 299l30.9-82.4 5.1 12.3C289 264.7 323.9 288 362.7 288H384c17.7 0 32-14.3 32-32s-14.3-32-32-32h-21.3c-12.9 0-24.6-7.8-29.5-19.7l-6.3-15c-14.6-35.1-44.1-61.9-80.5-73.1l-48.7-15c-11.1-3.4-22.7-5.2-34.4-5.2-31 0-60.8 12.3-82.7 34.3l-23.2 23.1c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l23.1-23.1zM91.2 352H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h69.6c19 0 36.2-11.2 43.9-28.5l11.5-25.9-9.5-6c-17.5-10.9-30.5-26.8-37.9-44.9L91.2 352z"/></svg><span>Trail · lugnt · ca 50–70 min</span></div>
-  <div class="next-weather" data-weather-date="2026-08-23" style="color:#475569;font-size:.82rem;margin-top:5px"><strong>Väder · Oxelösund</strong> · <svg class="weather-icon" aria-hidden="true" viewBox="0 0 24 24" style="width:18px;height:18px;vertical-align:-4px;margin-right:5px;color:#475569;overflow:visible"><circle cx="8" cy="8" r="2.8" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 3V1.8M8 13v-1.2M3 8H1.8M12.2 8H11M4.5 4.5l-.9-.9M11.5 4.5l.9-.9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M7.2 19h10a3.6 3.6 0 0 0 .2-7.2 5 5 0 0 0-9.5-.7A4 4 0 0 0 7.2 19Z" fill="white" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Halvklart · 13,3–21,5 °C · nederbördsrisk max 20 % · vind max 4,9 m/s</div>
-  
-</div>
-  </div>
-</section>
-<h2 class="section">Aktuell vecka</h2><div class="day" id="dag-2026-08-17">
-  <div class="daytop">
-    <div><div class="dow">Måndag</div><div class="date">2026-08-17</div></div>
-    <div class="badge fixed">GENOMFÖRT</div>
-  </div>
-  <div class="swim-workout"><div class="swim-session-head"><strong>Simning · 3 200 m</strong><span class="swim-meta">59:39</span></div></div>
-  <div class="reason">Ursprunglig ordination från 17/8: cirka 60 min aerob/teknisk simning; 600 m lugn insim + 6 × 50 m lugn teknik + 3 × 400 m stadigt aerob med 15–20 s planerad vila + 8 × 100 m jämnt/avslappnat med 10–15 s planerad vila + 4 × 50 m något snabbare med bibehållen teknik + 300–500 m mycket lugnt. Huvudset RPE 4–5/10, kontrollerat och inte tröskel. Egen återkoppling efter passet: delar simmades något hårdare än avsett, men du kompenserade med längre vila. Exakt extra vila och exakt vilka meter som kortades går inte att fastställa från sparade data och anges därför inte. Strava visar totalt 3 200 m, 1:04:09 passtid, snittpuls 127,1 och maxpuls 154.</div>
-  <div class="workout-history" data-workout-history="swim-w34-mon-aerob-teknik-history"><div class="workout-history-label">Genomfört simpass · passupplägg</div><div class="swim-session-head"><strong>Aerob/teknik · ursprunglig ordination</strong></div><div class="workout-equipment"><div><strong>Planerade hjälpmedel:</strong> inga</div><div><strong>Faktiskt använda:</strong> inga</div></div><div class="swim-set-list"><div class="swim-set-row"><span class="swim-dose">600 m</span><span>Lugn insim</span></div><div class="swim-set-row"><span class="swim-dose">6 × 50 m</span><span>Lugn teknik</span></div><div class="swim-set-row"><span class="swim-dose">3 × 400 m</span><span>Stadigt aerob · planerad vila 15–20 s</span></div><div class="swim-set-row"><span class="swim-dose">8 × 100 m</span><span>Jämnt/avslappnat · planerad vila 10–15 s</span></div><div class="swim-set-row"><span class="swim-dose">4 × 50 m</span><span>Något snabbare med bibehållen teknik</span></div></div></div><div class="pass"><div class="pass-title">Automatiskt från Strava</div><div><strong>Swim</strong> · 3,20 km · 1:04:09 · snittpuls 127 · max 154</div></div>
-</div><div class="day" id="dag-2026-08-18">
-  <div class="daytop">
-    <div><div class="dow">Tisdag</div><div class="date">2026-08-18</div></div>
-    <div class="badge fixed">GENOMFÖRT</div>
-  </div>
-  <div class="session">Styrka · 35:45</div>
-  <div class="reason">Medvetet nedskalat inför onsdagens eventuella swimrun/löpkvalitet.</div>
-  <div class="pass"><div class="pass-title">Automatiskt från Strava</div><div><strong>WeightTraining</strong> · 35:45 · snittpuls 87 · max 119</div></div><div class="coach yoda-v2">
-  <div class="coach-title">Tränings-Yoda (AI)</div>
-  <div class="coach-decision"><span>Beslut</span><strong>Skala ned</strong><span class="coach-target">2026-08-20</span></div>
-  <div class="coach-summary">Senaste aktivitet är ett kvällsstyrkepass 2026-08-18 (36 min, snittpuls 87, max 119).</div>
-  <div class="coach-next"><span class="coach-next-label">Nästa steg</span><div>Ersätt planerad &#x27;Simning · aerob/teknik&#x27; 2026-08-20 med vila eller mycket lätt teknisk simning (kortare och lägre effort). Behåll övrig plan oförändrad. Vid inrapportering av onsdagens varaktighet/intensitet kan beslut revideras.</div></div>
-  <details class="coach-why"><summary>Varför?</summary>
-    <div class="coach-why-body">
-      <div class="coach-full-summary"><strong>Bedömning</strong><span>Senaste aktivitet är ett kvällsstyrkepass 2026-08-18 (36 min, snittpuls 87, max 119). De två föregående dagarna var simning 3 200 m (2026-08-17) och innan dess längre trailpass (2026-08-16). Kommande planerade dagar: swimrun (2026-08-19), simning eller vila (2026-08-20), vila (21), MTB teknik (22), trail lugnt (23).</span></div>
-      <div class="coach-load">Fakta: det finns tre genomförda pass de senaste tre dagarna: 2026-08-16 trail (långt), 2026-08-17 simning 3 200 m, 2026-08-18 styrketräning 35–36 min med låg snittpuls. Tolkning: styrkepasset var nedskalat och lågintensivt kardiovaskulärt (puls 87 i snitt); det ser inte ut att ha lagt hög ytterligare kardiovaskulär belastning ovanpå fredagens och lördagens längre pass, men onsdagens planerade swimrun kan vara betydande belastning jämfört med ursprunglig löptröskel.</div>
-      <div class="coach-reason"><strong>Motivering</strong><span>Onsdagens swimrun kan vara högre belastning än planerad löptröskel; torsdagens simning bör konservativt skalas ner tills onsdagens faktiska belastning bekräftas.</span></div>
-      <details class="coach-details"><summary>Fakta, tolkning och osäkerhet</summary>
-    <div class="coach-grid">
-      <div><strong>Fakta</strong><ul><li>2026-08-16: Trail 14.6 km, 251 m+, moving_time 5061 s, snittpuls 139.2.</li><li>2026-08-17: Simning 3200 m, moving_time 2786 s, snittpuls 127.1.</li><li>2026-08-18: Styrketräning 2145 s (35:45), snittpuls 87.3, maxpuls 119.</li><li>Planerad 2026-08-19: Swimrun · Jogersö Extreme · 1 varv (ersätter löptröskel om genomförd).</li><li>Planerad 2026-08-20: Simning aerob/teknik eller vila; redan föreslagen att skalas ner tills onsdagens data finns.</li></ul></div>
-      <div><strong>Tolkning</strong><ul><li>Styrkepasset bedöms vara låg-kardiovaskulär och inte kräva extra återhämtning innan dagens swimrun, utifrån tillgängliga pulsdata.</li><li>Osäkerhet kring swimrunets verkliga intensitet/varaktighet: kan vara högre än planerad löptröskel och påverka torsdagens simning och helgens kvalitetspass.</li><li>Givet tidigare dagars volym är en konservativ hantering av kommande simpass önskvärd tills onsdagens faktiska belastning är känd.</li></ul></div>
-      <div><strong>Osäkert/saknas</strong><ul><li>Aktuell subjektiv återhämtning/fatigue och sömn.</li><li>Exakt varaktighet och intensitet för planerade swimrun (2026-08-19) om det genomförs.</li><li>Eventuella andra icke-loggade belastningar (arbete, transport, övrig fysisk aktivitet).</li></ul></div>
-    </div>
-      </details>
-    </div>
-  </details>
-  <div class="coach-apply"><small>Automatiskt applicerad konservativ ändring.</small></div>
-</div>
-</div><div class="day" id="dag-2026-08-19">
-  <div class="daytop">
-    <div><div class="dow">Onsdag</div><div class="date">2026-08-19</div></div>
-    <div class="badge fixed">GENOMFÖRT</div>
-  </div>
-  <div class="session">Swimrun · Jogersö Extreme · 6,94 km · 54:50</div>
-  <div class="reason">Relativt lugnt enligt egen rapport. Strava: snittpuls 143, maxpuls 173. Passet bedömdes som absorberat väl eftersom HRV förbättrades och Garmin träningsberedskap var hög följande dag.</div>
-  <div class="pass"><div class="pass-title">Automatiskt från Strava</div><div><strong>TrailRun</strong> · 6,94 km · 54:50 · snittpuls 143 · max 173</div></div><div class="coach yoda-v2">
-  <div class="coach-title">Tränings-Yoda (AI)</div>
-  <div class="coach-decision"><span>Beslut</span><strong>Skala ned</strong><span class="coach-target">2026-08-20</span></div>
-  <div class="coach-summary">Aktuellt pass (SLK Swimrun Jogersö Extreme, 6.94 km, 54:07 rörelsetid, snittpuls 143, max 173, 100.7 m höjdökning, 564 kcal) följer en serie med tre tunga…</div>
-  <div class="coach-next"><span class="coach-next-label">Nästa steg</span><div>Ersätt planerad &#x27;Simning · aerob/teknik&#x27; 20/08 med vila eller mycket lätt tekniskt simpass (kortare session, låg volym, fokus teknik och rörlighet). Be användaren rapportera subjektiv återhämtning (sömn, RPE, lokal ömhet) innan ev. återgång till full simning eller MTB 22/08.</div></div>
-  <details class="coach-why"><summary>Varför?</summary>
-    <div class="coach-why-body">
-      <div class="coach-full-summary"><strong>Bedömning</strong><span>Aktuellt pass (SLK Swimrun Jogersö Extreme, 6.94 km, 54:07 rörelsetid, snittpuls 143, max 173, 100.7 m höjdökning, 564 kcal) följer en serie med tre tunga uthållighetspass på 16/16/8–23/8. Föregående två dagar innehöll styrketräning (18/8) och simning (17/8). Planerade kommande 2–3 dagar inkluderar simning 20/8 (auto-scalad till reducerat), vila 21/8 och MTB 22/8.</span></div>
-      <div class="coach-load">Tolkning: Onsdagspasset är en tävlingslik/tuff trail/swimruninsats med relativt hög hjärtfrekvens och måttlig vertikal belastning jämfört med föregående löppass. Givet tät följd av längre uthållighetspass senaste veckan tolkar jag detta som en ackumulerad närbelastning som motiverar konservativ nedskalning av nästa planerade simpass.</div>
-      <div class="coach-reason"><strong>Motivering</strong><span>Konservativ skalning eftersom onsdagens faktiska belastning verkar vara högre än planerad löptröskel och det saknas subjektiva återhämtningsdata.</span></div>
-      <details class="coach-details"><summary>Fakta, tolkning och osäkerhet</summary>
-    <div class="coach-grid">
-      <div><strong>Fakta</strong><ul><li>Senaste aktivitet 19/08: TrailRun 6.94 km, moving_time 3247 s, elevation gain 100.7 m, avg HR 143.4, max HR 173, calories 564.</li><li>48–72 h före ingick: 18/08 styrketräning 35–36 min (HR avg 87), 17/08 simning 3 200 m (59:39, avg HR 127).</li><li>Planerade dagarna 20–22/08: 20/08 simning aerob/teknik (auto: reduce), 21/08 vila/lätt, 22/08 MTB teknik.</li><li>Coachens auto-beslut redan applicerat: 20/08 skalas ned p.g.a. högre faktisk belastning än planerad löptröskel.</li></ul></div>
-      <div><strong>Tolkning</strong><ul><li>Onsdagspassets snitt- och maxpuls indikerar insats över lugn distansnivå—kan ha haft korta hårda inslag eller tävlingspåverkan.</li><li>Tidigare simpass 17/8 var relativt långt; kombinationen med tävling kan minska återhämtningsreserven trots ett lätt styrkepass 18/8.</li><li>Konservativ skalning av 20/8 simning är rimlig utan subjektiva återhämtningsdata.</li></ul></div>
-      <div><strong>Osäkert/saknas</strong><ul><li>Subjektiv återhämtning (sömn, muskelömhet, RPE) saknas.</li><li>Detaljer om faktisk simningsteknik/intensitet planerat 20/8 saknas.</li><li>Eventuella skador eller lokal muskeltrötthet efter onsdagens swimrun saknas.</li></ul></div>
-    </div>
-      </details>
-    </div>
-  </details>
-  <div class="coach-apply"><small>Automatiskt applicerad konservativ ändring.</small></div>
-</div>
-</div><div class="day" id="dag-2026-08-20">
-  <div class="daytop">
-    <div><div class="dow">Torsdag</div><div class="date">2026-08-20</div></div>
-    <div class="badge fixed">GENOMFÖRT</div>
-  </div>
-  <div class="session">Löpning · kontrollerad tröskel · 3 × 8 min · totalt 10,35 km · 50:48</div>
-  <div class="reason">Strava: 10,35 km, 50:48, 63 m+, snittpuls 145,7, maxpuls 167, snitteffekt 277 W. Garmin klassade passet som Tempo med aerob träningseffekt 3,9. Egen känsla tydligt kontrollerad med cirka en ytterligare 8-minutersrepetition i reserv. Rätt dos för progression från tidigare 5 × 4 min utan att driva passet till utmattning.</div>
-  <div class="decision coach-adjust"><strong>Tränings-Yoda · justering</strong>Planen ändrades efter faktisk återhämtning: förbättrad HRV, hög Garmin-träningsberedskap och relativt lugn swimrun dagen före talade för ett kontrollerat löptröskelpass. Manuell Strava-synk efter passet bekräftade belastningen; AI-coachen rekommenderade att fredagen hålls lågkostnad.</div><div class="pass"><div class="pass-title">Automatiskt från Strava</div><div><strong>Run</strong> · 10,35 km · 50:48 · snittpuls 146 · max 167</div></div><div class="coach yoda-v2">
-  <div class="coach-title">Tränings-Yoda (AI)</div>
-  <div class="coach-decision"><span>Beslut</span><strong>Behåll planen</strong><span class="coach-target">2026-08-21</span></div>
-  <div class="coach-summary">Passet var en kontrollerad löptröskel som bör tillåtas följas av planerat lugnt simpass i morgon.</div>
-  <div class="coach-next"><span class="coach-next-label">Nästa steg</span><div>Behåll planerat simpass enligt struktur; håll intensiteten i de 600 m-blocken lätt (RPE 3–4) och kapa ett 600 m-block eller vila helt om du känner ovanlig trötthet eller lokal muskelstelhet före passet.</div></div>
-  <details class="coach-why"><summary>Varför?</summary>
-    <div class="coach-why-body">
-      <div class="coach-full-summary"><strong>Bedömning</strong><span>Passet var en kontrollerad löptröskel som bör tillåtas följas av planerat lugnt simpass i morgon.</span></div>
-      <div class="coach-load">Torsdagens tröskel (10,35 km, snittpuls 145, max 167) är den avgörande närbelastningen för beslutet.</div>
-      <div class="coach-reason"><strong>Motivering</strong><span>Simpasset är lågkostnadsorienterat och matchar behovet av aktiv återhämtning efter gårdagens tröskel.</span></div>
-      <details class="coach-details"><summary>Fakta, tolkning och osäkerhet</summary>
-    <div class="coach-grid">
-      <div><strong>Fakta</strong><ul><li>Torsdag: 10,35 km, 50:48, 63 m+, snittpuls 145,7, maxpuls 167, snitteffekt 277 W.</li><li>Onsdag: 6,94 km swimrun 54:50, snittpuls 143, maxpuls 173, bedömd absorberad.</li><li>Fredag planerad: simning ~3 200 m aerob/teknik, syfte låg återhämtningskostnad.</li><li>Inga subjektiva återhämtningsdata (sömn/HRV/dagskänsla) i underlaget för fredag.</li></ul></div>
-      <div><strong>Tolkning</strong><ul><li>Torsdagspasset var kontrollerat men innehöll tröskelbelastning som ger viss kardiovaskulär och muskulär stress.</li><li>Det planerade simpasset är designat för låg kostnad och kan fungera som aktiv återhämtning om dagskänslan är normal.</li></ul></div>
-      <div><strong>Osäkert/saknas</strong><ul><li>Subjektiv dagskänsla för fredag (trötthet/smärta).</li><li>Sömn och HRV senaste natt som kan påverka återhämtningskapacitet.</li><li>Eventuella planer/krav på hårdare MTB på lördag som skulle påverka fredag.</li></ul></div>
-    </div>
-      </details>
-    </div>
-  </details>
-  <div class="coach-apply"><small>Ingen automatisk ändring applicerad.</small></div>
-</div>
-</div><div class="day" id="dag-2026-08-21">
-  <div class="daytop">
-    <div><div class="dow">Fredag</div><div class="date">2026-08-21</div></div>
-    <div class="badge fixed">GENOMFÖRT</div>
-  </div>
-  <div class="swim-workout"><div class="swim-session-head"><strong>Simning · aerob/teknik</strong><span class="swim-meta">3 200 m + SUP · 6,02 km</span></div></div>
-  <div class="reason">Simpasset genomfört enligt lågkostnadsprincipen: Strava 3,20 km, 59:48 passtid, snittpuls 127,4 och maxpuls 154. Därefter bonuspass SUP, huvudsakligen rekreation enligt egen rapport: 6,02 km, 1:12:40 passtid, snittpuls 89,7 och maxpuls 108. SUP räknas som faktisk lågintensiv träningsbelastning; sammanlagd passtid fredag 2:12:28.</div>
-  <div class="workout-history" data-workout-history="swim-w34-fri-aerob-teknik-01"><div class="workout-history-label">Genomfört simpass · passupplägg</div><div class="swim-session-head"><strong>Aerob/teknik · 3 200 m</strong></div><div class="workout-equipment"><div><strong>Planerade hjälpmedel:</strong> inga</div><div><strong>Faktiskt använda:</strong> ej registrerat</div></div><div class="swim-set-list"><div class="swim-set-row"><span class="swim-dose">400 m</span><span>Lugnt</span></div><div class="swim-set-row"><span class="swim-dose">6 × 50 m</span><span>Teknik · 15 s vila</span></div><div class="swim-set-row"><span class="swim-dose">3 × 600 m</span><span>Aerob frisim RPE 3-4/10 · 30 s vila</span></div><div class="swim-set-row"><span class="swim-dose">6 × 50 m</span><span>Avslappnat, något högre frekvens · 15 s vila</span></div><div class="swim-set-row"><span class="swim-dose">400 m</span><span>Mycket lugnt</span></div></div><div class="workout-history-note">Setvila mellan huvudblock: LAP-styrd.</div></div><div class="pass"><div class="pass-title">Automatiskt från Strava</div><div><strong>StandUpPaddling</strong> · 6,02 km · 1:12:40 · snittpuls 90 · max 108</div><div><strong>Swim</strong> · 3,20 km · 59:48 · snittpuls 127 · max 154</div></div><div class="coach yoda-v2">
-  <div class="coach-title">Tränings-Yoda (AI)</div>
-  <div class="coach-decision"><span>Beslut</span><strong>Behåll planen</strong><span class="coach-target">2026-08-22</span></div>
-  <div class="coach-summary">SUP-passet räknas som lågintensiv komplettering; behåll lördagens MTB-teknik som planerat.</div>
-  <div class="coach-next"><span class="coach-next-label">Nästa steg</span><div>Behåll MTB/XC 60–75 min med teknikfokus; håll intensiteten låg till måttlig och prioritera teknik framför hårda intervaller. Avbryt eller korta passet om du känner ovan lokal trötthet i ben eller dåligt återhämtad.</div></div>
-  <details class="coach-why"><summary>Varför?</summary>
-    <div class="coach-why-body">
-      <div class="coach-full-summary"><strong>Bedömning</strong><span>SUP-passet räknas som lågintensiv komplettering; behåll lördagens MTB-teknik som planerat.</span></div>
-      <div class="coach-load">SUP var lång men låg puls och ger låg närbelastning jämfört med veckans kvaliteter.</div>
-      <div class="coach-reason"><strong>Motivering</strong><span>SUP var lågintensiv och fredagssimmen kontrollerad, så teknikpass kan genomföras konservativt.</span></div>
-      <details class="coach-details"><summary>Fakta, tolkning och osäkerhet</summary>
-    <div class="coach-grid">
-      <div><strong>Fakta</strong><ul><li>SUP 6,02 km, 1:12:40 passtid, snittpuls 89,7, maxpuls 108.</li><li>Samma dag: simning 3,2 km, 59:48, snittpuls 127,4.</li><li>Torsdag löptröskel var kontrollerad; veckan innehåller flera pass (löpning, swimrun, simning, MTB, styrka).</li><li>Planerat MTB/XC lördag 60–75 min teknikfokus.</li></ul></div>
-      <div><strong>Tolkning</strong><ul><li>Totala fredagstiden ~2:12 med huvudsakligen lågintensiv SUP; lokal muskeltrötthet i ben bedöms liten.</li><li>Ingen av dagens data tyder på akut behov av vila eller nedskalning inför teknikpasset.</li></ul></div>
-      <div><strong>Osäkert/saknas</strong><ul><li>Subjektiv återhämtning/sömn över natten.</li><li>Eventuell lokal benmatthet efter torsdagens tröskel trots låg SUP-puls.</li><li>Kommande dags väder/tekniska förhållanden som kan göra MTB mer krävande.</li></ul></div>
-    </div>
-      </details>
-    </div>
-  </details>
-  <div class="coach-apply"><small>Ingen automatisk ändring applicerad.</small></div>
-</div>
-</div><div class="day" id="dag-2026-08-22">
-  <div class="daytop">
-    <div><div class="dow">Lördag</div><div class="date">2026-08-22</div></div>
-    <div class="badge conditional">PRELIMINÄRT</div>
-  </div>
-  <div class="session">MTB/XC · teknik först · ca 60–75 min</div>
-  <div class="reason">Torsdagens löptröskel följdes av 59:48 simning och 1:12:40 mycket lugn SUP på fredagen. SUP-pulsen var låg men varaktigheten räknas. Behåll teknik som huvudsyfte; metabol kvalitet endast om benen och den allmänna återhämtningen är tydligt bra på lördagen.</div>
-  
-</div><div class="day" id="dag-2026-08-23">
-  <div class="daytop">
-    <div><div class="dow">Söndag</div><div class="date">2026-08-23</div></div>
-    <div class="badge conditional">PRELIMINÄRT</div>
-  </div>
-  <div class="session">Trail · lugnt · ca 50–70 min</div>
-  <div class="reason">Preliminärt 50–70 min lugnt. Dimensionera främst mot lördagens MTB och veckans faktiska belastning. Måndagens enduroskola begränsar inte söndagen i sig; först om faktisk endurobelastning brukar eller väntas bli betydande finns skäl att väga in den.</div>
-  
-</div>
-<h2 class="section">Styrkemall framåt</h2><div class="principles"><div class="principle">Liten dos explosivitet/plyometri när omkringliggande belastning tillåter.</div><div class="principle">Bulgarian split squat som huvudalternativ för unilateral benstyrka.</div><div class="principle">Marklyft eller RDL som normal höftdominant huvudövning.</div><div class="principle">Vad + soleus regelbundet.</div><div class="principle">Enarmsrodd + press som huvuddrag/press.</div><div class="principle">Välj två bålövningar; låt inte accessoarer tränga undan huvudstyrkan.</div></div>
-<footer>Automatiskt byggd från plan.json + activities.json + coach.json. Strava-data används som fakta. Tränings-Yoda (AI) får automatiskt endast behålla, minska eller ersätta belastning konservativt; belastningsökning kräver mänsklig bedömning. · Väderprognos: <a href="https://www.smhi.se/" target="_blank" rel="noopener" style="color:inherit">SMHI</a> · standardplats Oxelösund om inget annat anges. · <a href="/cdn-cgi/access/logout" style="color:inherit" onclick="window.location.replace(this.href); return false;">Logga ut</a></footer>
-</div>
-<script>
-window.addEventListener("pageshow", (event) => {
-  if (event.persisted) {
-    window.location.reload();
-  }
-});
-</script>
-</body></html>
+:root{--bg:#f5f7fb;--card:#fff;--text:#0f172a;--muted:#64748b;--line:#e2e8f0;--accent:#4938ee;--shadow:0 10px 28px rgba(15,23,42,.06)}*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);line-height:1.45}.wrap{width:min(100%,920px);margin:auto;padding:28px 18px 60px}.eyebrow{font-size:.78rem;font-weight:900;letter-spacing:.13em;text-transform:uppercase;color:var(--accent)}h1{font-size:clamp(3rem,9vw,5rem);line-height:.98;letter-spacing:-.055em;margin:20px 0 8px}.sub{color:var(--muted);font-weight:650;font-size:1rem}.quicknav{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:24px 0}.quicknav a{padding:14px 16px;border-radius:16px;background:#fff;border:1px solid var(--line);box-shadow:var(--shadow);text-decoration:none;color:#1e293b;font-weight:850;display:flex;justify-content:space-between}.card{background:#fff;border:1px solid var(--line);box-shadow:var(--shadow);border-radius:22px;padding:22px;margin:18px 0}.title{font-size:1.18rem;font-weight:900;margin-bottom:16px}.goal{display:grid;grid-template-columns:1.08fr .92fr;gap:24px;align-items:center}.goal p{font-size:1.02rem;color:#334155;margin:0}.mountain{min-height:240px;position:relative;overflow:hidden;border-radius:18px;background:linear-gradient(#fbfcff,#f0f4ff)}.mountain svg{position:absolute;inset:0;width:100%;height:100%}.status-head{display:flex;justify-content:space-between;align-items:center;gap:12px}.pill{padding:9px 13px;border-radius:13px;background:#e7f7ef;color:#198754;border:1px solid #a7dfc4;font-weight:900}.status-row{display:grid;grid-template-columns:48px minmax(145px,1fr) minmax(180px,1.25fr) 160px;gap:14px;align-items:center;padding:10px 0;border-top:1px solid #edf1f6}.status-row:first-of-type{border-top:0}.sport-icon{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-size:1.25rem;font-weight:900}.sport-name{font-weight:800}.progress{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}.progress span{height:8px;border-radius:99px}.status-note{font-weight:850;font-size:.9rem}.phases{display:grid;grid-template-columns:repeat(5,1fr);border:1px solid #edf1f6;border-radius:18px;overflow:visible;margin-top:34px}.phase{position:relative;min-height:170px;padding:24px 12px 16px;text-align:center;border-right:1px solid #edf1f6;background:#fff}.phase:last-child{border-right:0}.phase.done{background:#f2fbf6}.phase.active{background:#f1f5ff}.phase-num{width:40px;height:40px;margin:0 auto 14px;border:2px solid #d5dce8;border-radius:50%;display:grid;place-items:center;font-weight:900;background:#fff}.phase.done .phase-num{border-color:#22a06b;color:#168354}.phase.active .phase-num{background:#4f74ef;border-color:#4f74ef;color:#fff;box-shadow:0 8px 18px #d8e1ff}.phase strong{display:block;font-size:.92rem;margin-bottom:6px}.phase span{display:block;color:#475569;font-size:.82rem;line-height:1.3}.you-are-here{position:absolute;top:-25px;left:50%;transform:translateX(-50%);white-space:nowrap;background:#fff;color:#3765ec;border:1.5px solid #6c91f7;border-radius:8px;padding:3px 8px;font-size:.72rem;font-weight:900}.principles{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.principle{min-height:128px;border:1px solid var(--line);border-radius:16px;padding:14px 10px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}.picon{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#f0edff;color:var(--accent);font-weight:900}.principle span{font-size:.78rem;font-weight:800;line-height:1.25}.next-row{display:grid;grid-template-columns:38px 1fr 20px;gap:12px;align-items:center;padding:14px 0;border-top:1px solid #edf1f6;font-weight:760}.next-row:first-child{border-top:0}.step-dot{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#eef2ff;color:#4f46e5;font-weight:900}.next-row b{font-size:1.35rem;color:#718096}footer{color:var(--muted);font-size:.8rem;padding-top:22px;text-align:center}@media(max-width:700px){.wrap{padding:22px 14px 54px}.goal{grid-template-columns:1fr}.mountain{min-height:190px}.status-row{grid-template-columns:44px 1fr}.status-row .progress,.status-row .status-note{grid-column:2}.phases{grid-template-columns:1fr;margin-top:18px;overflow:hidden}.phase{min-height:auto;text-align:left;display:grid;grid-template-columns:46px 1fr;column-gap:12px;align-items:center;border-right:0;border-bottom:1px solid #edf1f6;padding:14px}.phase-num{grid-row:1/3;margin:0}.phase strong{margin:0}.you-are-here{position:static;transform:none;grid-column:2;width:max-content;margin-bottom:5px}.principles{grid-template-columns:1fr 1fr}}@media(max-width:430px){.quicknav{grid-template-columns:1fr}.principles{grid-template-columns:1fr 1fr}}
+</style></head><body><div class="wrap"><div class="eyebrow">ADAPTIV TRÄNINGSPLANERING</div><h1>Målbild 2027</h1><div class="sub">Långsiktig riktning · status och periodisering</div>
+<nav class="quicknav"><a href="/träning/vecka/2026-W34/">Aktuell vecka <b>→</b></a><a href="/träning/vecka/2026-W35/">Nästa vecka <b>→</b></a></nav>
+<section class="card goal"><div><div class="title">✦ Övergripande mål</div><p>Bygga en bred, hållbar allroundatlet med stark löpning, teknisk MTB/XC och bibehållen eller förbättrad simning. Relevant styrka, core, löpstyrka och plyometri. Flexibilitet att senare vässa mot trail/ultra, triathlon, swimrun eller cykling.</p></div><div class="mountain"><svg viewBox="0 0 500 280" preserveAspectRatio="none"><path d="M0 255 C70 210 100 225 145 175 C185 130 220 180 260 125 C315 50 345 115 390 55 C425 20 455 55 500 22 L500 280 L0 280Z" fill="#e9eefb"/><path d="M0 280 C80 240 115 245 165 205 C220 160 250 205 300 155 C345 115 390 120 500 70 L500 280Z" fill="#d8e2f8"/><path d="M165 232 C220 220 255 220 292 188 C330 154 322 126 356 116 C390 105 372 82 404 60 C422 48 430 36 441 28" fill="none" stroke="#4938ee" stroke-width="4" stroke-dasharray="9 8"/><circle cx="221" cy="217" r="6" fill="#4938ee"/><circle cx="293" cy="187" r="6" fill="#4938ee"/><circle cx="357" cy="115" r="6" fill="#4938ee"/><line x1="441" y1="28" x2="441" y2="55" stroke="#4938ee" stroke-width="3"/><path d="M441 28 L464 36 L441 44Z" fill="#4938ee"/></svg></div></section>
+<section class="card"><div class="status-head"><div class="title">Nuvarande läge</div><div class="pill">✓ På rätt väg</div></div><div class="status-row">
+          <div class="sport-icon" style="background:#e7f7ef;color:#22a06b">↗</div>
+          <div class="sport-name">Löpning</div>
+          <div class="progress"><span style="background:#22a06b"></span><span style="background:#22a06b"></span><span style="background:#22a06b"></span><span style="background:#e7ebf2"></span><span style="background:#e7ebf2"></span></div>
+          <div class="status-note" style="color:#22a06b">uppåtgående</div>
+        </div><div class="status-row">
+          <div class="sport-icon" style="background:#f1ebff;color:#8b5cf6">◇</div>
+          <div class="sport-name">MTB/XC</div>
+          <div class="progress"><span style="background:#8b5cf6"></span><span style="background:#8b5cf6"></span><span style="background:#8b5cf6"></span><span style="background:#e7ebf2"></span><span style="background:#e7ebf2"></span></div>
+          <div class="status-note" style="color:#8b5cf6">utvecklingsfokus</div>
+        </div><div class="status-row">
+          <div class="sport-icon" style="background:#eaf2ff;color:#4f86f7">≈</div>
+          <div class="sport-name">Simning</div>
+          <div class="progress"><span style="background:#4f86f7"></span><span style="background:#4f86f7"></span><span style="background:#4f86f7"></span><span style="background:#4f86f7"></span><span style="background:#e7ebf2"></span></div>
+          <div class="status-note" style="color:#4f86f7">stark grund</div>
+        </div><div class="status-row">
+          <div class="sport-icon" style="background:#fff2df;color:#f2a33b">＋</div>
+          <div class="sport-name">Styrka / core / plyo</div>
+          <div class="progress"><span style="background:#f2a33b"></span><span style="background:#f2a33b"></span><span style="background:#f2a33b"></span><span style="background:#e7ebf2"></span><span style="background:#e7ebf2"></span></div>
+          <div class="status-note" style="color:#f2a33b">byggs in</div>
+        </div><div class="status-row">
+          <div class="sport-icon" style="background:#eef2fb;color:#6577a8">△</div>
+          <div class="sport-name">Enduro</div>
+          <div class="progress"><span style="background:#6577a8"></span><span style="background:#6577a8"></span><span style="background:#e7ebf2"></span><span style="background:#e7ebf2"></span><span style="background:#e7ebf2"></span></div>
+          <div class="status-note" style="color:#6577a8">kompletterande teknik</div>
+        </div></section>
+<section class="card"><div class="title">Faser och periodisering</div><div class="phases"><div class="phase done"><div class="phase-num">1</div>
+          <strong>Stabilisering</strong><span>kontinuitet, absorberbar belastning</span></div><div class="phase active"><div class="you-are-here">Du är här</div><div class="phase-num">2</div>
+          <strong>Bygg 1</strong><span>bas i löpning, simning och styrka</span></div><div class="phase"><div class="phase-num">3</div>
+          <strong>Bygg 2</strong><span>mer specifik utveckling i löpning/MTB</span></div><div class="phase"><div class="phase-num">4</div>
+          <strong>Riktningsval</strong><span>håll flera dörrar öppna</span></div><div class="phase"><div class="phase-num">5</div>
+          <strong>Spetsning vid behov</strong><span>kan riktas mot lopp eller utmaning</span></div></div></section>
+<section class="card"><div class="title">Vad som styr planen</div><div class="principles"><div class="principle"><div class="picon">1</div><span>Kontinuitet före maxvolym</span></div><div class="principle"><div class="picon">2</div><span>Kontrollerad kvalitet</span></div><div class="principle"><div class="picon">3</div><span>Återhämtning styr progression</span></div><div class="principle"><div class="picon">4</div><span>Enduro värderas efter faktisk belastning</span></div><div class="principle"><div class="picon">5</div><span>Inte låst till ett enda lopp</span></div></div></section>
+<section class="card"><div class="title">Nästa steg</div><div class="next-row"><span class="step-dot">1</span><span>Bygg vidare på kontrollerad löptröskel</span><b>›</b></div><div class="next-row"><span class="step-dot">2</span><span>Håll simningen frekvent och teknisk</span><b>›</b></div><div class="next-row"><span class="step-dot">3</span><span>Utveckla MTB/XC med teknik först</span><b>›</b></div></section>
+<footer>Målbilden är kvalitativ och uppdateras när faktisk träning motiverar det. · <a href="/cdn-cgi/access/logout" style="color:inherit">Logga ut</a></footer></div></body></html>
