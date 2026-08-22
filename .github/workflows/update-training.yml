@@ -99,6 +99,9 @@ jobs:
       - name: Preserve completed structured workout history
         run: python "träning/scripts/finalize_workout_history.py"
 
+      - name: Link week pages to goal homepage
+        run: python "träning/scripts/finalize_week_home_link.py"
+
       - name: Publish current week and build goal homepage
         run: python "träning/scripts/build_home.py"
 
