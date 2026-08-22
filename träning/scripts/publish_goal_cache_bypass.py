@@ -9,6 +9,8 @@ SOURCE = ROOT / "malbild" / "index.html"
 TARGET_DIR = ROOT / "malbild-2027"
 TARGET = TARGET_DIR / "index.html"
 
+# This script is the only post-build owner of mountain geometry/interactions.
+# Layout/link finalizers must never rewrite the SVG.
 TRAIL_D = (
     "M104 250 "
     "C146 247 179 239 211 226 "
@@ -19,8 +21,6 @@ TRAIL_D = (
     "C456 118 469 119 482 113"
 )
 
-# Progress along the SVG path is the source of truth. Fallback x/y values are
-# only used before JS runs; JS immediately replaces them from getPointAtLength().
 PHASE_MARKERS = {
     1: (0.03, 20.0, 82.0),
     2: (0.28, 39.0, 72.0),
@@ -29,10 +29,10 @@ PHASE_MARKERS = {
     5: (0.97, 85.0, 38.0),
 }
 
-SCRIPT_MARKER = "<!-- phase-trail-sync-v1 -->"
+SCRIPT_MARKER = "<!-- phase-trail-sync-v2 -->"
 
 
-def patch_route(page: str, path: Path) -> str:
+def patch_route(page: str) -> str:
     white = (
         f'<path id="phase-trail-underlay" d="{TRAIL_D}" fill="none" '
         'stroke="#fff" stroke-width="8" stroke-linecap="round" opacity=".85"/>'
@@ -58,8 +58,7 @@ def patch_route(page: str, path: Path) -> str:
     )
     if n_white != 1 or n_purple != 1:
         raise RuntimeError(
-            f"Målbild: kunde inte identifiera båda stiglagren i {path} "
-            f"(vit={n_white}, lila={n_purple})"
+            f"Målbild: kunde inte identifiera exakt ett par stiglager (vit={n_white}, lila={n_purple})"
         )
 
     flag = (
@@ -67,8 +66,6 @@ def patch_route(page: str, path: Path) -> str:
         '<line x1="482" y1="83" x2="482" y2="114" stroke="#4938ee" stroke-width="3"/>'
         '<path d="M482 83 L507 92 L482 101Z" fill="#4938ee"/>'
     )
-    # The preceding layout finalizer may already have moved/recolored the flag.
-    # Match the semantic flag trio rather than a specific old geometry.
     flag_pattern = (
         r'<circle cx="[^"]+" cy="[^"]+" r="[^"]+" fill="#[0-9a-fA-F]{6}" opacity="[^"]+"/>'
         r'<line x1="[^"]+" y1="[^"]+" x2="[^"]+" y2="[^"]+" '
@@ -77,11 +74,11 @@ def patch_route(page: str, path: Path) -> str:
     )
     page, n_flag = re.subn(flag_pattern, flag, page, count=1)
     if n_flag != 1:
-        raise RuntimeError(f"Målbild: kunde inte identifiera flaggan i {path}")
+        raise RuntimeError("Målbild: kunde inte identifiera exakt en flaggmarkering")
     return page
 
 
-def patch_markers(page: str, path: Path) -> str:
+def patch_markers(page: str) -> str:
     for phase, (progress, x, y) in PHASE_MARKERS.items():
         pattern = re.compile(
             rf'(<a class="mountain-phase-point [^"]+" href="#fas-{phase}") '
@@ -93,11 +90,11 @@ def patch_markers(page: str, path: Path) -> str:
         )
         page, count = pattern.subn(replacement, page, count=1)
         if count != 1:
-            raise RuntimeError(f"Målbild: fasmarkör {phase} kunde inte bindas till stigen i {path}")
+            raise RuntimeError(f"Målbild: fasmarkör {phase} kunde inte bindas till stigen")
 
-    # Idempotent: replace an older copy of our own positioning script if present.
+    # Remove any older trail-sync block before inserting the current one.
     page = re.sub(
-        rf'{re.escape(SCRIPT_MARKER)}.*?{re.escape(SCRIPT_MARKER)}',
+        r'<!-- phase-trail-sync-v\d+ -->.*?<!-- phase-trail-sync-v\d+ -->',
         '',
         page,
         flags=re.S,
@@ -132,57 +129,59 @@ def patch_markers(page: str, path: Path) -> str:
 {SCRIPT_MARKER}'''
 
     if "</body>" not in page:
-        raise RuntimeError(f"Målbild: </body> saknas i {path}")
-    page = page.replace("</body>", sync_script + "\n</body>", 1)
-    return page
+        raise RuntimeError("Målbild: </body> saknas")
+    return page.replace("</body>", sync_script + "\n</body>", 1)
 
 
-def patch_goal_page(path: Path) -> None:
-    page = path.read_text(encoding="utf-8")
-    page = patch_route(page, path)
-    page = patch_markers(page, path)
-    path.write_text(page, encoding="utf-8")
-
-    rendered = path.read_text(encoding="utf-8")
+def validate_goal(page: str, label: str) -> None:
     required = [
         'id="phase-trail"',
+        'id="phase-trail-underlay"',
         TRAIL_D,
+        'data-progress="0.03"',
         'data-progress="0.28"',
+        'data-progress="0.52"',
+        'data-progress="0.76"',
         'data-progress="0.97"',
         "getPointAtLength",
         SCRIPT_MARKER,
+        'href="#fas-2"',
+        "Målbild 2027",
     ]
-    missing = [item for item in required if item not in rendered]
+    missing = [item for item in required if item not in page]
     if missing:
-        raise RuntimeError(f"Målbild: stig/plupp-validering misslyckades i {path}: {missing!r}")
-    if rendered.count('class="mountain-phase-point') != 5:
-        raise RuntimeError(f"Målbild: förväntade exakt fem fasmarkörer i {path}")
+        raise RuntimeError(f"Målbild: {label} saknar kontrakt: {missing!r}")
+    if page.count('class="mountain-phase-point') != 5:
+        raise RuntimeError(f"Målbild: {label} ska innehålla exakt fem fasmarkörer")
+    if page.count('id="phase-trail"') != 1 or page.count('id="phase-trail-underlay"') != 1:
+        raise RuntimeError(f"Målbild: {label} ska innehålla exakt ett stigpar")
+    if page.count(SCRIPT_MARKER) != 2:
+        raise RuntimeError(f"Målbild: {label} ska innehålla exakt ett trail-sync-block")
 
 
-def main():
+def main() -> None:
     if not SOURCE.exists():
-        raise RuntimeError("Cache-bypass: målbildssidan saknas")
+        raise RuntimeError("Målbild: canonical sida saknas")
 
-    # First finalize the canonical goal page, then publish exactly that page on
-    # the cache-bypass route so both URLs contain identical mountain geometry.
-    patch_goal_page(SOURCE)
+    # Transform canonical once. The cache-bypass route is a byte-identical mirror.
+    canonical = SOURCE.read_text(encoding="utf-8")
+    canonical = patch_route(canonical)
+    canonical = patch_markers(canonical)
+    validate_goal(canonical, "canonical")
+    SOURCE.write_text(canonical, encoding="utf-8")
 
     TARGET_DIR.mkdir(parents=True, exist_ok=True)
     shutil.copy2(SOURCE, TARGET)
-    patch_goal_page(TARGET)
+    mirrored = TARGET.read_text(encoding="utf-8")
+    validate_goal(mirrored, "cache-bypass")
+    if mirrored != canonical:
+        raise RuntimeError("Målbild: cache-bypass-sidan är inte identisk med canonical")
 
-    page = INDEX.read_text(encoding="utf-8")
-    page = page.replace('href="/träning/malbild/"', 'href="/träning/malbild-2027/"')
-    INDEX.write_text(page, encoding="utf-8")
+    index = INDEX.read_text(encoding="utf-8")
+    if 'href="/träning/malbild-2027/"' not in index:
+        raise RuntimeError("Målbild: huvudsidan länkar inte till publicerad målbildsväg")
 
-    rendered = TARGET.read_text(encoding="utf-8")
-    required = ["mountain-phase-point", 'href="#fas-2"', "Målbild 2027", 'id="phase-trail"']
-    missing = [item for item in required if item not in rendered]
-    if missing:
-        raise RuntimeError("Cache-bypass: målbilden saknar interaktiva markörer: " + repr(missing))
-    if 'href="/träning/malbild-2027/"' not in INDEX.read_text(encoding="utf-8"):
-        raise RuntimeError("Cache-bypass: huvudsidan länkar inte till nya målbildsvägen")
-    print("Målbild OK: kurvad bergsstig och fem fasmarkörer bundna direkt till SVG-pathen.")
+    print("Målbild OK: canonical transformeras en gång; /malbild-2027/ är en identisk spegling.")
 
 
 if __name__ == "__main__":
