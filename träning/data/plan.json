@@ -1,35 +1,273 @@
 {
-  "meta": {"timezone":"Europe/Stockholm","week":34,"week_start":"2026-08-17","week_end":"2026-08-23","title":"Stabilisera först. Bygg sedan.","principle":"Veckan är till för att skapa stabilitet: ta vara på genomförd träning, hålla kvalitetspassen kontrollerade och låta återhämtningen styra nästa steg. Det är så vi bygger långsiktigt mot målet att bli en stark, robust och mångsidig allroundatlet inom löpning, MTB/XC, simning och styrka."},
+  "meta": {
+    "timezone": "Europe/Stockholm",
+    "week": 34,
+    "week_start": "2026-08-17",
+    "week_end": "2026-08-23",
+    "title": "Stabilisera först. Bygg sedan.",
+    "principle": "Veckan är till för att skapa stabilitet: ta vara på genomförd träning, hålla kvalitetspassen kontrollerade och låta återhämtningen styra nästa steg. Det är så vi bygger långsiktigt mot målet att bli en stark, robust och mångsidig allroundatlet inom löpning, MTB/XC, simning och styrka."
+  },
   "days": [
     {
-      "date":"2026-08-17","label":"Måndag","status":"completed","session":"Simning · 3 200 m · 59:39","reason":"Ursprunglig ordination från 17/8: cirka 60 min aerob/teknisk simning; 600 m lugn insim + 6 × 50 m lugn teknik + 3 × 400 m stadigt aerob med 15–20 s planerad vila + 8 × 100 m jämnt/avslappnat med 10–15 s planerad vila + 4 × 50 m något snabbare med bibehållen teknik + 300–500 m mycket lugnt. Huvudset RPE 4–5/10, kontrollerat och inte tröskel. Egen återkoppling efter passet: delar simmades något hårdare än avsett, men du kompenserade med längre vila. Exakt extra vila och exakt vilka meter som kortades går inte att fastställa från sparade data och anges därför inte. Strava visar totalt 3 200 m, 1:04:09 passtid, snittpuls 127,1 och maxpuls 154.","actual_swim_equipment":[],
-      "watch_workout":{"sync_enabled":false,"id":"swim-w34-mon-aerob-teknik-history","type":"Swim","equipment":[],"name":"Aerob/teknik · ursprunglig ordination","blocks":[
-        {"name":"Insim","steps":[{"kind":"swim","text":"Lugn insim","distance_m":600,"intensity":"warmup"}]},
-        {"name":"Teknik","repeat":6,"steps":[{"kind":"swim","text":"Lugn teknik","distance_m":50,"intensity":"easy"}]},
-        {"name":"Aerob","repeat":3,"steps":[{"kind":"swim","text":"Stadigt aerob · planerad vila 15–20 s","distance_m":400,"intensity":"active"}]},
-        {"name":"Jämnt","repeat":8,"steps":[{"kind":"swim","text":"Jämnt/avslappnat · planerad vila 10–15 s","distance_m":100,"intensity":"active"}]},
-        {"name":"Fart","repeat":4,"steps":[{"kind":"swim","text":"Något snabbare med bibehållen teknik","distance_m":50,"intensity":"active"}]}
-      ]}
+      "date": "2026-08-17",
+      "label": "Måndag",
+      "status": "completed",
+      "session": "Simning · 3 200 m · 59:39",
+      "reason": "Ursprunglig ordination från 17/8: cirka 60 min aerob/teknisk simning; 600 m lugn insim + 6 × 50 m lugn teknik + 3 × 400 m stadigt aerob med 15–20 s planerad vila + 8 × 100 m jämnt/avslappnat med 10–15 s planerad vila + 4 × 50 m något snabbare med bibehållen teknik + 300–500 m mycket lugnt. Huvudset RPE 4–5/10, kontrollerat och inte tröskel. Egen återkoppling efter passet: delar simmades något hårdare än avsett, men du kompenserade med längre vila. Exakt extra vila och exakt vilka meter som kortades går inte att fastställa från sparade data och anges därför inte. Strava visar totalt 3 200 m, 1:04:09 passtid, snittpuls 127,1 och maxpuls 154.",
+      "actual_swim_equipment": [],
+      "watch_workout": {
+        "sync_enabled": false,
+        "id": "swim-w34-mon-aerob-teknik-history",
+        "type": "Swim",
+        "equipment": [],
+        "name": "Aerob/teknik · ursprunglig ordination",
+        "blocks": [
+          {
+            "name": "Insim",
+            "steps": [
+              {
+                "kind": "swim",
+                "text": "Lugn insim",
+                "distance_m": 600,
+                "intensity": "warmup"
+              }
+            ]
+          },
+          {
+            "name": "Teknik",
+            "repeat": 6,
+            "steps": [
+              {
+                "kind": "swim",
+                "text": "Lugn teknik",
+                "distance_m": 50,
+                "intensity": "easy"
+              }
+            ]
+          },
+          {
+            "name": "Aerob",
+            "repeat": 3,
+            "steps": [
+              {
+                "kind": "swim",
+                "text": "Stadigt aerob · planerad vila 15–20 s",
+                "distance_m": 400,
+                "intensity": "active"
+              }
+            ]
+          },
+          {
+            "name": "Jämnt",
+            "repeat": 8,
+            "steps": [
+              {
+                "kind": "swim",
+                "text": "Jämnt/avslappnat · planerad vila 10–15 s",
+                "distance_m": 100,
+                "intensity": "active"
+              }
+            ]
+          },
+          {
+            "name": "Fart",
+            "repeat": 4,
+            "steps": [
+              {
+                "kind": "swim",
+                "text": "Något snabbare med bibehållen teknik",
+                "distance_m": 50,
+                "intensity": "active"
+              }
+            ]
+          }
+        ]
+      }
     },
-    {"date":"2026-08-18","label":"Tisdag","status":"completed","session":"Styrka · 35:45","reason":"Medvetet nedskalat inför onsdagens eventuella swimrun/löpkvalitet."},
-    {"date":"2026-08-19","label":"Onsdag","status":"completed","session":"Swimrun · Jogersö Extreme · 6,94 km · 54:50","reason":"Relativt lugnt enligt egen rapport. Strava: snittpuls 143, maxpuls 173. Passet bedömdes som absorberat väl eftersom HRV förbättrades och Garmin träningsberedskap var hög följande dag."},
-    {"date":"2026-08-20","label":"Torsdag","status":"completed","session":"Löpning · kontrollerad tröskel · 3 × 8 min · totalt 10,35 km · 50:48","reason":"Strava: 10,35 km, 50:48, 63 m+, snittpuls 145,7, maxpuls 167, snitteffekt 277 W. Garmin klassade passet som Tempo med aerob träningseffekt 3,9. Egen känsla tydligt kontrollerad med cirka en ytterligare 8-minutersrepetition i reserv. Rätt dos för progression från tidigare 5 × 4 min utan att driva passet till utmattning.","original_session":"Simning · aerob/teknik eller vila","coach_adjustment":"Planen ändrades efter faktisk återhämtning: förbättrad HRV, hög Garmin-träningsberedskap och relativt lugn swimrun dagen före talade för ett kontrollerat löptröskelpass. Manuell Strava-synk efter passet bekräftade belastningen; AI-coachen rekommenderade att fredagen hålls lågkostnad."},
     {
-      "date":"2026-08-21","label":"Fredag","status":"completed","session":"Simning · aerob/teknik · 3 200 m + SUP · 6,02 km","reason":"Simpasset genomfört enligt lågkostnadsprincipen: Strava 3,20 km, 59:48 passtid, snittpuls 127,4 och maxpuls 154. Därefter bonuspass SUP, huvudsakligen rekreation enligt egen rapport: 6,02 km, 1:12:40 passtid, snittpuls 89,7 och maxpuls 108. SUP räknas som faktisk lågintensiv träningsbelastning; sammanlagd passtid fredag 2:12:28.","actual_swim_equipment":null,
-      "watch_workout":{"sync_enabled":true,"id":"swim-w34-fri-aerob-teknik-01","external_id":"hall-training-2026-08-21-swim-poc","type":"Swim","equipment":[],"name":"Aerob/teknik · 3 200 m","planned_distance_m":3200,"blocks":[
-        {"name":"Uppvärmning","steps":[{"kind":"swim","text":"Lugnt","distance_m":400,"intensity":"warmup"}]},
-        {"name":"Setvila","steps":[{"kind":"lap_rest","text":"Starta teknik","duration_s":60}]},
-        {"name":"Teknik","repeat":6,"steps":[{"kind":"swim","text":"Teknik","distance_m":50,"intensity":"active"},{"kind":"rest","duration_s":15}]},
-        {"name":"Setvila","steps":[{"kind":"lap_rest","text":"Starta aerob","duration_s":60}]},
-        {"name":"Aerob","repeat":3,"steps":[{"kind":"swim","text":"Aerob frisim RPE 3-4/10","distance_m":600,"intensity":"active"},{"kind":"rest","duration_s":30}]},
-        {"name":"Setvila","steps":[{"kind":"lap_rest","text":"Starta frekvens","duration_s":60}]},
-        {"name":"Frekvens","repeat":6,"steps":[{"kind":"swim","text":"Avslappnat, något högre frekvens","distance_m":50,"intensity":"active"},{"kind":"rest","duration_s":15}]},
-        {"name":"Setvila","steps":[{"kind":"lap_rest","text":"Starta nedvarvning","duration_s":60}]},
-        {"name":"Nedvarvning","steps":[{"kind":"swim","text":"Mycket lugnt","distance_m":400,"intensity":"cooldown"}]}
-      ]}
+      "date": "2026-08-18",
+      "label": "Tisdag",
+      "status": "completed",
+      "session": "Styrka · 35:45",
+      "reason": "Medvetet nedskalat inför onsdagens eventuella swimrun/löpkvalitet."
     },
-    {"date":"2026-08-22","label":"Lördag","status":"open","session":"MTB/XC ikväll · öppet","reason":"Genomfört tidigare idag: lätt enduro på Svansta, rapporterad som inte det minsta slitsam och därför registrerad som rekreation. MTB/XC ikväll är öppet och får styras av hur benen känns. Ingen tids- eller distansdos sätts utan underlag; om det blir av är teknik/stigkörning huvudsyftet."},
-    {"date":"2026-08-23","label":"Söndag","status":"preliminary","session":"Trail · lugnt · ca 50–70 min","reason":"Preliminärt lugn trail. Dimensionera främst mot om MTB faktiskt genomförs på lördagskvällen och vilken belastning det i så fall ger. Dagens lätta enduro på Svansta behöver inte i sig reducera söndagen."}
+    {
+      "date": "2026-08-19",
+      "label": "Onsdag",
+      "status": "completed",
+      "session": "Swimrun · Jogersö Extreme · 6,94 km · 54:50",
+      "reason": "Relativt lugnt enligt egen rapport. Strava: snittpuls 143, maxpuls 173. Passet bedömdes som absorberat väl eftersom HRV förbättrades och Garmin träningsberedskap var hög följande dag."
+    },
+    {
+      "date": "2026-08-20",
+      "label": "Torsdag",
+      "status": "completed",
+      "session": "Löpning · kontrollerad tröskel · 3 × 8 min · totalt 10,35 km · 50:48",
+      "reason": "Strava: 10,35 km, 50:48, 63 m+, snittpuls 145,7, maxpuls 167, snitteffekt 277 W. Garmin klassade passet som Tempo med aerob träningseffekt 3,9. Egen känsla tydligt kontrollerad med cirka en ytterligare 8-minutersrepetition i reserv. Rätt dos för progression från tidigare 5 × 4 min utan att driva passet till utmattning.",
+      "original_session": "Simning · aerob/teknik eller vila",
+      "coach_adjustment": "Planen ändrades efter faktisk återhämtning: förbättrad HRV, hög Garmin-träningsberedskap och relativt lugn swimrun dagen före talade för ett kontrollerat löptröskelpass. Manuell Strava-synk efter passet bekräftade belastningen; AI-coachen rekommenderade att fredagen hålls lågkostnad."
+    },
+    {
+      "date": "2026-08-21",
+      "label": "Fredag",
+      "status": "completed",
+      "session": "Simning · aerob/teknik · 3 200 m + SUP · 6,02 km",
+      "reason": "Simpasset genomfört enligt lågkostnadsprincipen: Strava 3,20 km, 59:48 passtid, snittpuls 127,4 och maxpuls 154. Därefter bonuspass SUP, huvudsakligen rekreation enligt egen rapport: 6,02 km, 1:12:40 passtid, snittpuls 89,7 och maxpuls 108. SUP räknas som faktisk lågintensiv träningsbelastning; sammanlagd passtid fredag 2:12:28.",
+      "actual_swim_equipment": null,
+      "watch_workout": {
+        "sync_enabled": true,
+        "id": "swim-w34-fri-aerob-teknik-01",
+        "external_id": "hall-training-2026-08-21-swim-poc",
+        "type": "Swim",
+        "equipment": [],
+        "name": "Aerob/teknik · 3 200 m",
+        "planned_distance_m": 3200,
+        "blocks": [
+          {
+            "name": "Uppvärmning",
+            "steps": [
+              {
+                "kind": "swim",
+                "text": "Lugnt",
+                "distance_m": 400,
+                "intensity": "warmup"
+              }
+            ]
+          },
+          {
+            "name": "Setvila",
+            "steps": [
+              {
+                "kind": "lap_rest",
+                "text": "Starta teknik",
+                "duration_s": 60
+              }
+            ]
+          },
+          {
+            "name": "Teknik",
+            "repeat": 6,
+            "steps": [
+              {
+                "kind": "swim",
+                "text": "Teknik",
+                "distance_m": 50,
+                "intensity": "active"
+              },
+              {
+                "kind": "rest",
+                "duration_s": 15
+              }
+            ]
+          },
+          {
+            "name": "Setvila",
+            "steps": [
+              {
+                "kind": "lap_rest",
+                "text": "Starta aerob",
+                "duration_s": 60
+              }
+            ]
+          },
+          {
+            "name": "Aerob",
+            "repeat": 3,
+            "steps": [
+              {
+                "kind": "swim",
+                "text": "Aerob frisim RPE 3-4/10",
+                "distance_m": 600,
+                "intensity": "active"
+              },
+              {
+                "kind": "rest",
+                "duration_s": 30
+              }
+            ]
+          },
+          {
+            "name": "Setvila",
+            "steps": [
+              {
+                "kind": "lap_rest",
+                "text": "Starta frekvens",
+                "duration_s": 60
+              }
+            ]
+          },
+          {
+            "name": "Frekvens",
+            "repeat": 6,
+            "steps": [
+              {
+                "kind": "swim",
+                "text": "Avslappnat, något högre frekvens",
+                "distance_m": 50,
+                "intensity": "active"
+              },
+              {
+                "kind": "rest",
+                "duration_s": 15
+              }
+            ]
+          },
+          {
+            "name": "Setvila",
+            "steps": [
+              {
+                "kind": "lap_rest",
+                "text": "Starta nedvarvning",
+                "duration_s": 60
+              }
+            ]
+          },
+          {
+            "name": "Nedvarvning",
+            "steps": [
+              {
+                "kind": "swim",
+                "text": "Mycket lugnt",
+                "distance_m": 400,
+                "intensity": "cooldown"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "date": "2026-08-22",
+      "label": "Lördag",
+      "status": "open",
+      "sport": "mtb",
+      "classification": "training",
+      "session": "MTB/XC ikväll · öppet",
+      "reason": "MTB/XC ikväll är öppet och får styras av hur benen känns. Ingen tids- eller distansdos sätts utan underlag; om det blir av är teknik/stigkörning huvudsyftet. Dagens redan genomförda enduro registreras separat som rekreation.",
+      "manual_activities": [
+        {
+          "status": "completed",
+          "sport": "enduro",
+          "classification": "recreation",
+          "session": "Enduro · Svansta · lätt",
+          "reason": "Egen rapport: inte det minsta slitsamt. Registreras som rekreation; ingen tid, distans eller intensitet läggs till utan data."
+        }
+      ]
+    },
+    {
+      "date": "2026-08-23",
+      "label": "Söndag",
+      "status": "preliminary",
+      "session": "Trail · lugnt · ca 50–70 min",
+      "reason": "Preliminärt lugn trail. Dimensionera främst mot om MTB faktiskt genomförs på lördagskvällen och vilken belastning det i så fall ger. Dagens lätta enduro på Svansta behöver inte i sig reducera söndagen."
+    }
   ],
-  "strength_template":["Liten dos explosivitet/plyometri när omkringliggande belastning tillåter.","Bulgarian split squat som huvudalternativ för unilateral benstyrka.","Marklyft eller RDL som normal höftdominant huvudövning.","Vad + soleus regelbundet.","Enarmsrodd + press som huvuddrag/press.","Välj två bålövningar; låt inte accessoarer tränga undan huvudstyrkan."]
+  "strength_template": [
+    "Liten dos explosivitet/plyometri när omkringliggande belastning tillåter.",
+    "Bulgarian split squat som huvudalternativ för unilateral benstyrka.",
+    "Marklyft eller RDL som normal höftdominant huvudövning.",
+    "Vad + soleus regelbundet.",
+    "Enarmsrodd + press som huvuddrag/press.",
+    "Välj två bålövningar; låt inte accessoarer tränga undan huvudstyrkan."
+  ]
 }
