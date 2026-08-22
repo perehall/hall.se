@@ -143,3 +143,34 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Verify deployed goal page
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          set -euo pipefail
+          target="${PAGE_URL%/}/träning/malbild/?verify=${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          echo "Checking deployed page: $target"
+          ok=0
+          for attempt in 1 2 3 4 5 6; do
+            echo "Attempt $attempt/6"
+            code=$(curl -L -sS -o /tmp/deployed-goal.html -D /tmp/deployed-headers.txt -w '%{http_code}' --max-time 30 "$target" || true)
+            echo "HTTP $code"
+            if [ "$code" = "200" ] && grep -q 'mountain-phase-point' /tmp/deployed-goal.html && grep -q 'href="#fas-2"' /tmp/deployed-goal.html; then
+              echo "Deployment verification OK: interactive periodization is live."
+              ok=1
+              break
+            fi
+            sleep 10
+          done
+          if [ "$ok" != "1" ]; then
+            echo "Deployment verification FAILED."
+            echo "--- response headers ---"
+            cat /tmp/deployed-headers.txt || true
+            echo "--- response markers ---"
+            grep -Eo 'Målbild 2027|mountain-phase-point|href="#fas-[0-9]+"|cf-access|Cloudflare' /tmp/deployed-goal.html | head -40 || true
+            echo "--- first 800 bytes ---"
+            head -c 800 /tmp/deployed-goal.html || true
+            echo
+            exit 1
+          fi
