@@ -1,6 +1,44 @@
 {
   "analyses": [
     {
+      "activity_id": 19852599244,
+      "activity_date": "2026-08-22",
+      "activity_name": "Enduro vid lunch",
+      "generated_at_utc": "2026-08-22T15:53:48.715795+00:00",
+      "model": "gpt-5-mini",
+      "assessment": {
+        "summary": "Enduropasset var långt men användbart som teknik/rekreation; påverkar planen måttligt idag.",
+        "load_interpretation": "Dagens enduro (≈6,6 h elapsed, 1 512 s körtid?—använder moving_time 1:05:40) ger måttlig kardiovaskulär belastning med 127 bpm snitt och 268 W snitteffekt.",
+        "confidence": "medium",
+        "facts": [
+          "Enduro: distance 23.9 km, moving_time 3 940 s (1h 5m 40s), elapsed 4 921 s, höjd 512 m, snittpuls 127, max 152, snitteffekt 267,9 W, kalorier 579.",
+          "48–72 h före: fredag sim 3 200 m + SUP 1h12m (lågintensiv), torsdag kontrollerad tröskel 10,35 km.",
+          "Planerad lördag kväll: MTB/XC öppen; söndag lätt trail preliminär.",
+          "Annan enduro tidigare i plan markerad som rekreation och bedömd icke-slitsam av dig."
+        ],
+        "interpretations": [
+          "Endurons varaktighet, snittpuls och effekt pekar mot verklig fysisk belastning men utan RPE eller lokal trötthetsrapport är total återhämtning osäker.",
+          "Tidigare dagar innehöll betydande volym (sim+SUP, tröskel, tidigare långpass), men inget tydligt tecken på ackumulerad överbelastning i data."
+        ],
+        "unknowns": [
+          "Subjektiv trötthet/benstatus efter enduro saknas.",
+          "Sömn/HRV eller annan återhämtningsdata för 24–48 h saknas.",
+          "Detaljer om kvällens planerade MTB/XC (varaktighet/intensitet) saknas."
+        ]
+      },
+      "plan_action": {
+        "action": "keep",
+        "target_date": "2026-08-22",
+        "reason": "Enduron bedöms absorberbar och tidigare plan anger att dagens MTB/XC styrs av känsla.",
+        "recommendation": "Behåll kvällens MTB/XC som planerat; start lugnt och avbryt eller skala ner om ben känns tunga eller RPE >6/10. Håll söndagens lugna trail som planerat om inga signaler på lokal trötthet uppstår.",
+        "requires_approval": false
+      },
+      "auto_apply": {
+        "applied": false,
+        "note": "Ingen automatisk planändring."
+      }
+    },
+    {
       "activity_id": 19841136162,
       "activity_date": "2026-08-21",
       "activity_name": "Paddelsurfning på kvällen",
@@ -193,6 +231,6 @@
       }
     }
   ],
-  "last_trigger_hash": "900bfb44fb2a50fbd0af94c894dcada70b1d63cefc239c172dee864d50504c7f",
-  "last_run_utc": "2026-08-22T13:53:59.996364+00:00"
+  "last_trigger_hash": "399ec16e55c01de2b9fe8434a84726aff1472c3b55cf1703c2ee0d0ed1c4754c",
+  "last_run_utc": "2026-08-22T15:53:48.715823+00:00"
 }

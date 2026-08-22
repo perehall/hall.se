@@ -4,7 +4,7 @@
   "week_start": "2026-08-17",
   "week_end": "2026-08-23",
   "created_at_utc": "2026-08-21T08:20:47.262526+00:00",
-  "updated_at_utc": "2026-08-22T13:54:00.341166+00:00",
+  "updated_at_utc": "2026-08-22T15:53:49.144516+00:00",
   "plan": {
     "meta": {
       "timezone": "Europe/Stockholm",
@@ -280,6 +280,24 @@
   },
   "activities": [
     {
+      "id": 19852599244,
+      "name": "Enduro vid lunch",
+      "sport_type": "MountainBikeRide",
+      "start_date": "2026-08-22T09:30:31Z",
+      "start_date_local": "2026-08-22T11:30:31Z",
+      "distance_m": 23887.9,
+      "moving_time_s": 3940,
+      "elapsed_time_s": 4921,
+      "total_elevation_gain_m": 512.4,
+      "average_heartrate": 127.0,
+      "max_heartrate": 152.0,
+      "average_watts": 267.9,
+      "weighted_average_watts": null,
+      "calories": 579.0,
+      "device_name": "Garmin Forerunner 970",
+      "source": "Strava API"
+    },
+    {
       "id": 19841136162,
       "name": "Paddelsurfning på kvällen",
       "sport_type": "StandUpPaddling",
@@ -389,6 +407,44 @@
     }
   ],
   "coach_analyses": [
+    {
+      "activity_id": 19852599244,
+      "activity_date": "2026-08-22",
+      "activity_name": "Enduro vid lunch",
+      "generated_at_utc": "2026-08-22T15:53:48.715795+00:00",
+      "model": "gpt-5-mini",
+      "assessment": {
+        "summary": "Enduropasset var långt men användbart som teknik/rekreation; påverkar planen måttligt idag.",
+        "load_interpretation": "Dagens enduro (≈6,6 h elapsed, 1 512 s körtid?—använder moving_time 1:05:40) ger måttlig kardiovaskulär belastning med 127 bpm snitt och 268 W snitteffekt.",
+        "confidence": "medium",
+        "facts": [
+          "Enduro: distance 23.9 km, moving_time 3 940 s (1h 5m 40s), elapsed 4 921 s, höjd 512 m, snittpuls 127, max 152, snitteffekt 267,9 W, kalorier 579.",
+          "48–72 h före: fredag sim 3 200 m + SUP 1h12m (lågintensiv), torsdag kontrollerad tröskel 10,35 km.",
+          "Planerad lördag kväll: MTB/XC öppen; söndag lätt trail preliminär.",
+          "Annan enduro tidigare i plan markerad som rekreation och bedömd icke-slitsam av dig."
+        ],
+        "interpretations": [
+          "Endurons varaktighet, snittpuls och effekt pekar mot verklig fysisk belastning men utan RPE eller lokal trötthetsrapport är total återhämtning osäker.",
+          "Tidigare dagar innehöll betydande volym (sim+SUP, tröskel, tidigare långpass), men inget tydligt tecken på ackumulerad överbelastning i data."
+        ],
+        "unknowns": [
+          "Subjektiv trötthet/benstatus efter enduro saknas.",
+          "Sömn/HRV eller annan återhämtningsdata för 24–48 h saknas.",
+          "Detaljer om kvällens planerade MTB/XC (varaktighet/intensitet) saknas."
+        ]
+      },
+      "plan_action": {
+        "action": "keep",
+        "target_date": "2026-08-22",
+        "reason": "Enduron bedöms absorberbar och tidigare plan anger att dagens MTB/XC styrs av känsla.",
+        "recommendation": "Behåll kvällens MTB/XC som planerat; start lugnt och avbryt eller skala ner om ben känns tunga eller RPE >6/10. Håll söndagens lugna trail som planerat om inga signaler på lokal trötthet uppstår.",
+        "requires_approval": false
+      },
+      "auto_apply": {
+        "applied": false,
+        "note": "Ingen automatisk planändring."
+      }
+    },
     {
       "activity_id": 19841136162,
       "activity_date": "2026-08-21",
