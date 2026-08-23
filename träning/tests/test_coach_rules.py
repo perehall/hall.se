@@ -96,14 +96,15 @@ class CoachRulesTests(unittest.TestCase):
         ]
         self.assertEqual(fulfilled_plan_dates(plan, activities), {"2026-08-19": 11})
 
-    def test_completed_past_fulfilled_and_open_dates_are_not_targets(self):
+    def test_completed_past_fulfilled_rest_and_open_dates_are_not_targets(self):
         plan = {
             "days": [
                 {"date": "2026-08-22", "status": "planned", "sport": "run", "session": "Löpning · lugnt"},
                 {"date": "2026-08-23", "status": "planned", "sport": "run", "session": "Trail · lugnt"},
                 {"date": "2026-08-24", "status": "completed", "sport": "enduro", "session": "Enduro"},
                 {"date": "2026-08-25", "status": "planned", "sport": "swim", "session": "Simning · lugnt"},
-                {"date": "2026-08-26", "status": "open", "sport": "open", "session": "Öppet · trail eller vila"},
+                {"date": "2026-08-26", "status": "planned", "sport": "rest", "session": "Vila"},
+                {"date": "2026-08-27", "status": "open", "sport": "open", "session": "Öppet · trail eller vila"},
             ]
         }
         activities = [
