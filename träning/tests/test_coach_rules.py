@@ -19,12 +19,13 @@ from coach_rules import (  # noqa: E402
 
 
 class CoachRulesTests(unittest.TestCase):
-    def test_run_fulfills_same_day_trail_plan(self):
+    def test_run_fulfills_same_day_trail_plan_via_explicit_sport(self):
         plan = {
             "days": [
                 {
                     "date": "2026-08-23",
                     "status": "preliminary",
+                    "sport": "run",
                     "session": "Trail · lugnt · ca 50–70 min",
                 }
             ]
@@ -40,12 +41,30 @@ class CoachRulesTests(unittest.TestCase):
         self.assertEqual(fulfilled_plan_dates(plan, activities), {"2026-08-23": 19862241646})
         self.assertEqual(allowed_target_dates(plan, activities, "2026-08-23"), [])
 
+    def test_session_wording_is_not_used_as_sport_source(self):
+        plan = {
+            "days": [
+                {
+                    "date": "2026-08-23",
+                    "status": "planned",
+                    "sport": "swim",
+                    "session": "Trail · den här texten får inte styra sportmatchningen",
+                }
+            ]
+        }
+        activities = [
+            {"id": 1, "sport_type": "Run", "start_date_local": "2026-08-23T10:00:00Z"}
+        ]
+        self.assertEqual(fulfilled_plan_dates(plan, activities), {})
+        self.assertEqual(allowed_target_dates(plan, activities, "2026-08-23"), ["2026-08-23"])
+
     def test_unrelated_activity_does_not_fulfill_plan(self):
         plan = {
             "days": [
                 {
                     "date": "2026-08-23",
                     "status": "planned",
+                    "sport": "swim",
                     "session": "Simning · aerob/teknik",
                 }
             ]
@@ -61,13 +80,31 @@ class CoachRulesTests(unittest.TestCase):
         self.assertEqual(fulfilled_plan_dates(plan, activities), {})
         self.assertEqual(allowed_target_dates(plan, activities, "2026-08-23"), ["2026-08-23"])
 
-    def test_completed_past_and_fulfilled_dates_are_not_targets(self):
+    def test_swimrun_can_be_fulfilled_by_run_family_source_activity(self):
         plan = {
             "days": [
-                {"date": "2026-08-22", "status": "planned", "session": "Löpning · lugnt"},
-                {"date": "2026-08-23", "status": "planned", "session": "Trail · lugnt"},
-                {"date": "2026-08-24", "status": "completed", "session": "Enduro"},
-                {"date": "2026-08-25", "status": "planned", "session": "Simning · lugnt"},
+                {
+                    "date": "2026-08-19",
+                    "status": "planned",
+                    "sport": "swimrun",
+                    "session": "Swimrun · klubbpass",
+                }
+            ]
+        }
+        activities = [
+            {"id": 11, "sport_type": "TrailRun", "start_date_local": "2026-08-19T18:00:00Z"}
+        ]
+        self.assertEqual(fulfilled_plan_dates(plan, activities), {"2026-08-19": 11})
+
+    def test_completed_past_fulfilled_rest_and_open_dates_are_not_targets(self):
+        plan = {
+            "days": [
+                {"date": "2026-08-22", "status": "planned", "sport": "run", "session": "Löpning · lugnt"},
+                {"date": "2026-08-23", "status": "planned", "sport": "run", "session": "Trail · lugnt"},
+                {"date": "2026-08-24", "status": "completed", "sport": "enduro", "session": "Enduro"},
+                {"date": "2026-08-25", "status": "planned", "sport": "swim", "session": "Simning · lugnt"},
+                {"date": "2026-08-26", "status": "planned", "sport": "rest", "session": "Vila"},
+                {"date": "2026-08-27", "status": "open", "sport": "open", "session": "Öppet · trail eller vila"},
             ]
         }
         activities = [
@@ -79,7 +116,7 @@ class CoachRulesTests(unittest.TestCase):
     def test_coach_view_marks_matching_day_completed_without_mutating_plan(self):
         plan = {
             "days": [
-                {"date": "2026-08-23", "status": "preliminary", "session": "Trail · lugnt"}
+                {"date": "2026-08-23", "status": "preliminary", "sport": "run", "session": "Trail · lugnt"}
             ]
         }
         activities = [

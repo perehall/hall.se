@@ -55,6 +55,12 @@ jobs:
       - name: Normalize activity semantics
         run: python "träning/scripts/normalize_activity_semantics.py"
 
+      - name: Migrate typed plan data
+        run: python "träning/scripts/migrate_training_data_v3.py"
+
+      - name: Validate normalized training data
+        run: python "träning/scripts/validate_training_data.py"
+
       - name: Persist rotated Strava refresh token
         env:
           GH_TOKEN: ${{ secrets.TRAINING_SECRET_PAT }}
@@ -70,6 +76,9 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_MODEL: gpt-5-mini
         run: python "träning/scripts/coach.py"
+
+      - name: Validate post-coach training data
+        run: python "träning/scripts/validate_training_data.py"
 
       - name: Sync structured swim workouts to Intervals/Garmin
         continue-on-error: true
@@ -124,6 +133,9 @@ jobs:
 
       - name: Preflight generated site contracts
         run: python "träning/scripts/validate_site_contracts.py"
+
+      - name: Final training data contract check
+        run: python "träning/scripts/validate_training_data.py"
 
       - name: Commit synced data, coach state and live page
         run: |

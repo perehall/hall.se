@@ -96,7 +96,7 @@ def fmt_equipment(value):
 
 
 def swim_equipment_html(day):
-    if not (day.get("session") or "").startswith("Simning"):
+    if day.get("sport") != "swim":
         return ""
     config = day.get("swim_equipment")
     if not isinstance(config, dict) or "planned" not in config:
@@ -244,7 +244,7 @@ def render_preview(upcoming, current_key, upcoming_key):
     ]
     for day in days:
         required.append(f'id="dag-{day["date"]}"')
-        if (day.get("session") or "").startswith("Simning"):
+        if day.get("sport") == "swim":
             required.append("Hjälpmedel:")
     missing = [item for item in required if item not in rendered]
     if missing:
