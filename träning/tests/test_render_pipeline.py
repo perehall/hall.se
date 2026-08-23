@@ -16,6 +16,7 @@ EXPECTED_PIPELINE = (
     "finalize_activity_labels.py",
     "finalize_yoda_ui.py",
     "archive_weeks.py",
+    "finalize_week_review_ui.py",
     "build_upcoming_week.py",
     "finalize_header_ui.py",
     "finalize_navigation_ui.py",
@@ -25,6 +26,8 @@ EXPECTED_PIPELINE = (
     "build_home.py",
     "finalize_goal_link_layout.py",
     "publish_goal_cache_bypass.py",
+    "check_week_reviews.py",
+    "check_week_review_ui.py",
     "validate_site_contracts.py",
     "validate_training_data.py",
 )
@@ -35,6 +38,8 @@ class RenderPipelineTests(unittest.TestCase):
         self.assertEqual(PIPELINE, EXPECTED_PIPELINE)
         self.assertEqual(len(PIPELINE), len(set(PIPELINE)))
         self.assertEqual(PIPELINE[-2:], ("validate_site_contracts.py", "validate_training_data.py"))
+        self.assertLess(PIPELINE.index("archive_weeks.py"), PIPELINE.index("finalize_week_review_ui.py"))
+        self.assertLess(PIPELINE.index("finalize_week_review_ui.py"), PIPELINE.index("check_week_review_ui.py"))
 
     def test_runner_executes_every_stage_in_canonical_order(self):
         calls = []
