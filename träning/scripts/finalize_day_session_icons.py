@@ -21,6 +21,7 @@ SPORT_ICON_KEYS = {
     "enduro": "enduro",
     "strength": "strength",
     "swimrun": "run",
+    "rest": None,
     "open": None,
 }
 
