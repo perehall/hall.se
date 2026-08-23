@@ -4,38 +4,38 @@
       "activity_id": 19852599244,
       "activity_date": "2026-08-22",
       "activity_name": "Enduro vid lunch",
-      "generated_at_utc": "2026-08-22T15:53:48.715795+00:00",
+      "generated_at_utc": "2026-08-23T03:32:50.773428+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Enduropasset var långt men användbart som teknik/rekreation; påverkar planen måttligt idag.",
-        "load_interpretation": "Dagens enduro (≈6,6 h elapsed, 1 512 s körtid?—använder moving_time 1:05:40) ger måttlig kardiovaskulär belastning med 127 bpm snitt och 268 W snitteffekt.",
+        "summary": "Enduropasset var längre än rekreation; påverkar kvällens MTB-planering och söndagens lugna trail.",
+        "load_interpretation": "3940 s körtid, 512 m klättring och snittpuls 127 visar måttlig kardiovaskulär och mekanisk belastning som kan påverka nästa 24–48 timmar.",
         "confidence": "medium",
         "facts": [
-          "Enduro: distance 23.9 km, moving_time 3 940 s (1h 5m 40s), elapsed 4 921 s, höjd 512 m, snittpuls 127, max 152, snitteffekt 267,9 W, kalorier 579.",
-          "48–72 h före: fredag sim 3 200 m + SUP 1h12m (lågintensiv), torsdag kontrollerad tröskel 10,35 km.",
-          "Planerad lördag kväll: MTB/XC öppen; söndag lätt trail preliminär.",
-          "Annan enduro tidigare i plan markerad som rekreation och bedömd icke-slitsam av dig."
+          "Enduro 22/8: 6h52 totaltid, 1h5 rörelsetid? (moving_time 3940 s ≈65,7 min) — registrerad moving_time 3940 s.",
+          "Total stigning 512,4 m och genomsnittseffekt 267,9 W rapporterade från klocka.",
+          "Fredag–lördag hade tidigare två simpass+SUP och löpning inom 72 timmar före enduro.",
+          "Planerat lugnt trailpass 23/8; MTB/XC kväll 22/8 anges öppet och får styras av benens känsla."
         ],
         "interpretations": [
-          "Endurons varaktighet, snittpuls och effekt pekar mot verklig fysisk belastning men utan RPE eller lokal trötthetsrapport är total återhämtning osäker.",
-          "Tidigare dagar innehöll betydande volym (sim+SUP, tröskel, tidigare långpass), men inget tydligt tecken på ackumulerad överbelastning i data."
+          "Enduron innehöll betydande teknisk/energikostnad givet effekt och höjd; det kan ge lokal muskeltrötthet i ben och överkropp trots att du rapporterat 'rekreation'.",
+          "Eftersom du har haft flera pass dagar före (sim, SUP, löp) är ackumulerad närbelastning måttlig och kan försämra kvalitet på ett planerat MTB-kvalitetspass samma kväll eller kräva lugn söndag."
         ],
         "unknowns": [
-          "Subjektiv trötthet/benstatus efter enduro saknas.",
-          "Sömn/HRV eller annan återhämtningsdata för 24–48 h saknas.",
-          "Detaljer om kvällens planerade MTB/XC (varaktighet/intensitet) saknas."
+          "Subjektiv återhämtning, lokal muskeltrötthet i ben och sömnkvalitet saknas.",
+          "Exakt hur ansträngande enduron var tekniskt (långa bär, gång, stillastående) vs kontinuerligt åkande.",
+          "Eventuellt kvällspass MTB/XC genomfördes inte (uppdatering saknas)."
         ]
       },
       "plan_action": {
-        "action": "keep",
-        "target_date": "2026-08-22",
-        "reason": "Enduron bedöms absorberbar och tidigare plan anger att dagens MTB/XC styrs av känsla.",
-        "recommendation": "Behåll kvällens MTB/XC som planerat; start lugnt och avbryt eller skala ner om ben känns tunga eller RPE >6/10. Håll söndagens lugna trail som planerat om inga signaler på lokal trötthet uppstår.",
+        "action": "reduce",
+        "target_date": "2026-08-23",
+        "reason": "Ackumulerad närbelastning och osäker lokal trötthet gör att planerat lugnt trail bör skalas ner.",
+        "recommendation": "Gör söndagens trail mycket lugnt: max 30–45 min låg intensitet eller ersätt med vila om benen känns tunga; undvik kvalitet eller backfokuserade inslag.",
         "requires_approval": false
       },
       "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
+        "applied": true,
+        "note": "Konservativ ändring applicerad på 2026-08-23: reduce."
       }
     },
     {
@@ -231,6 +231,6 @@
       }
     }
   ],
-  "last_trigger_hash": "399ec16e55c01de2b9fe8434a84726aff1472c3b55cf1703c2ee0d0ed1c4754c",
-  "last_run_utc": "2026-08-22T15:53:48.715823+00:00"
+  "last_trigger_hash": "4b0b1725fe40296cf2837277582b1339c021084c829b3048ea2fee1bcad7e0e7",
+  "last_run_utc": "2026-08-23T03:32:50.773445+00:00"
 }
