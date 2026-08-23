@@ -11,6 +11,7 @@ from zoneinfo import ZoneInfo
 
 from coach_rules import (
     allowed_target_dates,
+    canonical_facts,
     normalize_assessment_confidence,
     normalize_no_remaining_plan,
     plan_for_coach,
@@ -25,7 +26,7 @@ PROMPT_FILE = ROOT / "coach_prompt.md"
 
 MODEL = os.environ.get("OPENAI_MODEL", "gpt-5-mini")
 API_KEY = os.environ.get("OPENAI_API_KEY", "").strip()
-COACH_CONTRACT_VERSION = 2
+COACH_CONTRACT_VERSION = 3
 
 SCHEMA = {
     "type": "object",
@@ -244,6 +245,7 @@ input_data = {
 system_prompt = PROMPT_FILE.read_text(encoding="utf-8")
 result = call_openai(system_prompt, input_data)
 result["assessment"] = normalize_assessment_confidence(result["assessment"])
+result["assessment"]["facts"] = canonical_facts(latest, latest_date, fulfilled_dates)
 result["plan_action"] = normalize_no_remaining_plan(
     result["plan_action"],
     allowed_dates=allowed_dates,

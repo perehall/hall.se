@@ -8,6 +8,8 @@ sys.path.insert(0, str(SCRIPTS))
 
 from coach_rules import (  # noqa: E402
     allowed_target_dates,
+    canonical_activity_fact,
+    canonical_facts,
     fulfilled_plan_dates,
     normalize_assessment_confidence,
     normalize_no_remaining_plan,
@@ -145,6 +147,37 @@ class CoachRulesTests(unittest.TestCase):
     def test_high_confidence_stays_high_without_unknowns(self):
         assessment = {"confidence": "high", "unknowns": [], "summary": "x"}
         self.assertEqual(normalize_assessment_confidence(assessment)["confidence"], "high")
+
+    def test_canonical_activity_fact_uses_exact_source_duration(self):
+        activity = {
+            "sport_type": "Run",
+            "display_label": "Löpning · grus/asfalt",
+            "distance_m": 17158.0,
+            "elapsed_time_s": 5459,
+            "total_elevation_gain_m": 161.0,
+            "average_heartrate": 138.9,
+            "max_heartrate": 157.0,
+        }
+        self.assertEqual(
+            canonical_activity_fact(activity),
+            "Löpning · grus/asfalt: 17,16 km · 1:30:59 · 161 m+ · snittpuls 138,9 · maxpuls 157.",
+        )
+
+    def test_canonical_facts_include_user_report_and_fulfilled_plan(self):
+        activity = {
+            "sport_type": "Run",
+            "distance_m": 5000,
+            "elapsed_time_s": 1500,
+            "user_report": "Underlag: grus och asfalt; inte trail.",
+        }
+        facts = canonical_facts(
+            activity,
+            latest_date="2026-08-23",
+            fulfilled_dates={"2026-08-23": 1},
+        )
+        self.assertEqual(facts[0], "Run: 5,00 km · 25:00.")
+        self.assertEqual(facts[1], "Användarrapport: Underlag: grus och asfalt; inte trail.")
+        self.assertIn("Planstatus 2026-08-23", facts[2])
 
 
 if __name__ == "__main__":
