@@ -2,6 +2,8 @@
 import json
 from pathlib import Path
 
+from training_contracts import ACTIVITIES_SCHEMA_VERSION
+
 ROOT = Path(__file__).resolve().parents[1]
 ACTIVITIES = ROOT / "data" / "activities.json"
 OVERRIDES = ROOT / "data" / "activity_overrides.json"
@@ -11,14 +13,25 @@ def load(path: Path):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def write_state(state):
+    ACTIVITIES.write_text(
+        json.dumps(state, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+
 def main():
     if not ACTIVITIES.exists():
         raise RuntimeError("Aktivitetsnormalisering: activities.json saknas")
-    if not OVERRIDES.exists():
-        print("Aktivitetsnormalisering: inga overrides; lämnar Strava-data oförändrad.")
-        return
 
     state = load(ACTIVITIES)
+    state["schema_version"] = ACTIVITIES_SCHEMA_VERSION
+
+    if not OVERRIDES.exists():
+        write_state(state)
+        print("Aktivitetsnormalisering: inga overrides; schemaversion satt och Strava-data lämnad oförändrad.")
+        return
+
     config = load(OVERRIDES)
     overrides = config.get("overrides") or {}
     activities = state.get("activities") or []
@@ -67,12 +80,11 @@ def main():
         "overrides_applied": applied,
         "override_ids_present": sorted(seen),
     }
-    ACTIVITIES.write_text(
-        json.dumps(state, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
+    write_state(state)
 
     rendered = load(ACTIVITIES)
+    if rendered.get("schema_version") != ACTIVITIES_SCHEMA_VERSION:
+        raise RuntimeError("Aktivitetsnormalisering: schemaversion verifierades inte")
     by_id = {str(a.get("id")): a for a in rendered.get("activities", [])}
     for key in seen:
         override = overrides[key]
@@ -82,7 +94,7 @@ def main():
         if activity.get("classification") != override.get("classification"):
             raise RuntimeError(f"Aktivitetsnormalisering: classification verifierades inte för {key}")
 
-    print(f"Aktivitetsnormalisering OK: {applied} explicit override(s) applicerade.")
+    print(f"Aktivitetsnormalisering OK: schema v{ACTIVITIES_SCHEMA_VERSION}, {applied} explicit override(s) applicerade.")
 
 
 if __name__ == "__main__":
