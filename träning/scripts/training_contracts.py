@@ -9,7 +9,7 @@ MIN_COACH_CONTRACT_VERSION = 3
 VALID_DAY_STATUSES = {"completed", "planned", "preliminary", "conditional", "open"}
 VALID_PLANNING_STATUSES = {"fixed", "planned", "preliminary", "open"}
 VALID_CLASSIFICATIONS = {"training", "recreation"}
-VALID_PLAN_SPORTS = {"run", "swim", "bike", "strength", "enduro", "swimrun", "open"}
+VALID_PLAN_SPORTS = {"run", "swim", "bike", "strength", "enduro", "swimrun", "rest", "open"}
 VALID_WORKOUT_STEP_KINDS = {"swim", "rest", "lap_rest"}
 VALID_COACH_ACTIONS = {"keep", "reduce", "rest", "review"}
 VALID_CONFIDENCE = {"low", "medium", "high"}
@@ -26,9 +26,10 @@ ACTIVITY_FAMILY = {
     "Enduro": "enduro",
 }
 
-# Explicit plan sport -> activity families that may fulfill the day.
+# Explicit plan type -> activity families that may fulfill the day.
 # Swimrun is commonly exposed by the upstream activity source as a run-like
 # activity, so a run-family activity may fulfill an explicitly planned swimrun.
+# rest/open are intentional non-activity states and are never auto-fulfilled.
 PLAN_SPORT_ACTIVITY_FAMILIES = {
     "run": {"run"},
     "swim": {"swim"},
@@ -36,6 +37,7 @@ PLAN_SPORT_ACTIVITY_FAMILIES = {
     "strength": {"strength"},
     "enduro": {"enduro"},
     "swimrun": {"run", "swimrun"},
+    "rest": set(),
     "open": set(),
 }
 
