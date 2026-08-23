@@ -37,6 +37,7 @@ jobs:
 
       - name: Offline site-generation smoke test
         run: |
+          python "träning/scripts/normalize_activity_semantics.py"
           python "träning/scripts/build.py"
           python "träning/scripts/finalize_dashboard.py"
           python "träning/scripts/finalize_dashboard_ui.py"
