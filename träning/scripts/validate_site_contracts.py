@@ -28,6 +28,8 @@ SPORT_ICON_KEYS = {
     "enduro": "enduro",
     "strength": "strength",
     "swimrun": "run",
+    "rest": None,
+    "open": None,
 }
 
 
@@ -131,6 +133,8 @@ def main() -> None:
     for date, icon_key in explicit_sport_days:
         start = index.find(f'<div class="day" id="dag-{date}">')
         require(start >= 0, f"Preflight: dagkort saknas för {date}")
+        if icon_key is None:
+            continue
         end = index.find('<div class="day" id="dag-', start + 1)
         if end < 0:
             end = index.find('<h2 class="section">', start + 1)
