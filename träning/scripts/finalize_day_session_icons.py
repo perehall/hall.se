@@ -28,7 +28,7 @@ def icon(name: str, registry: dict) -> str:
     item = registry.get(name)
     if not item:
         raise RuntimeError(f"Dagikoner: ikon {name!r} saknas i registry")
-    view_box = item.get("view_box")
+    view_box = item.get("viewBox")
     path = item.get("path")
     if not view_box or not path:
         raise RuntimeError(f"Dagikoner: ikon {name!r} är ofullständig")
@@ -87,6 +87,8 @@ def main():
         end = rendered.find('<div class="day" id="dag-', start + 1)
         if end < 0:
             end = rendered.find('<h2 class="section">', start + 1)
+        if end < 0:
+            end = len(rendered)
         if f'icon-{icon_key}' not in rendered[start:end]:
             raise RuntimeError(f"Dagikoner: ikon verifierades inte för {date}")
 
