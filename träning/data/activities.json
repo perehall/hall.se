@@ -1,5 +1,5 @@
 {
-  "last_sync_utc": "2026-08-23T16:42:40.553078+00:00",
+  "last_sync_utc": "2026-08-23T17:03:17.825302+00:00",
   "activities": [
     {
       "id": 19862241646,
@@ -17,7 +17,12 @@
       "weighted_average_watts": 274,
       "calories": 955.0,
       "device_name": "Garmin Forerunner 970",
-      "source": "Strava API"
+      "source": "Strava API",
+      "source_sport_type": "Run",
+      "classification": "training",
+      "display_label": "Löpning · grus/asfalt",
+      "user_report": "Underlag: grus och asfalt; inte trail.",
+      "classification_reason": "Explicit användarrapport korrigerar underlaget till grus/asfalt. Aktiviteten är fortsatt vanlig löpning, inte TrailRun."
     },
     {
       "id": 19852599244,
@@ -352,9 +357,10 @@
   ],
   "activity_semantics": {
     "schema_version": 1,
-    "overrides_applied": 1,
+    "overrides_applied": 2,
     "override_ids_present": [
-      "19852599244"
+      "19852599244",
+      "19862241646"
     ]
   }
 }

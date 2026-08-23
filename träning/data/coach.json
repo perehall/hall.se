@@ -4,33 +4,33 @@
       "activity_id": 19862241646,
       "activity_date": "2026-08-23",
       "activity_name": "Löpning på morgonen",
-      "generated_at_utc": "2026-08-23T16:42:51.070092+00:00",
+      "generated_at_utc": "2026-08-23T17:03:25.747456+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Lugnt, långt löppass — behåll plan men avgör slutligt mot dagskänsla.",
-        "load_interpretation": "Senaste 48–72h visar flera längre pass men inga hårda intervall eller rapporterad lokal trötthet som kräver vila.",
-        "confidence": "medium",
+        "summary": "Löpningen var ett långt, kontrollerat gruspassets och räknas som genomfört för dagens plan.",
+        "load_interpretation": "Senaste tre dagars faktiska belastning visar flera längre låg–medelintensiva pass men inga hårda nyckelpass kvar att skydda.",
+        "confidence": "high",
         "facts": [
-          "Idag: löpning 17,16 km, 1:30:59 (5459 s), 161 m+, snittpuls 138, max 157, snitteffekt ~274 W.",
-          "Gårdagen: enduro 1:22 med 512 m+, klassad rekreation; användarrapport: 'lätt och inte det minsta slitsamt'.",
-          "48–72h före: sim 3 200 m + SUP och kontrollerad tröskel 10,35 km; ingen subjektiv trötthet rapporterad.",
-          "Plan för idag preliminärt: lugn trail 50–70 min, och inga planerade kvalitetskrävande pass kommande dagarna i underlaget."
+          "Dagens löpning: 17,16 km, 1:30:59 (5459 s), 161 m+, snittpuls 138,9, max 157.",
+          "Lördagens enduro klassad rekreation; användarrapport: 'lätt och inte slitsamt'.",
+          "Fredag: sim 3 200 m + SUP lågintensivt; torsdagen kontrollerad tröskel 10,35 km.",
+          "fulfilled_plan_dates inkluderar idag; inga återstående planpass att fylla igen för 23/8."
         ],
         "interpretations": [
-          "Dagens löppass var långt men pulser och användarrapporter tyder på kontrollerad ansträngning, inte maximal utmattning.",
-          "Samlad närbelastning senaste 3 dagar är absorberbar om dagskänsla är normal; osäkerhet kring kvällens fysiska arbete kvarstår."
+          "Samlad närbelastning är absorberad; dagens löp ersätter planerat lugnt trailmöjligt pass.",
+          "Enduro och SUP räknas inte som hård MTB/XC eller ersätter kvalitetspass."
         ],
         "unknowns": [
-          "Användarens aktuella subjektiva dagskänsla/smärta/trötthet.",
-          "Detaljerad intensitetsfördelning under dagens löppass (zoner/segment).",
-          "Eventuell fortsatt fysisk belastning från trädgårdsarbete som ej kvantifierats."
+          "Subjektiv dagskänsla efter dagens löpning (lokal trötthet) saknas.",
+          "Arbetsbelastning från tomtarbete är okvantifierad och kan påverka återhämtning.",
+          "Sömn/HRV efter loppet ej tillgängligt och kan ändra rekommendation."
         ]
       },
       "plan_action": {
         "action": "keep",
-        "target_date": "2026-08-23",
-        "reason": "Passet är kontrollerat och föregående dagar var antingen lågintensiva eller rekreativa.",
-        "recommendation": "Behåll dagens lugna trail 50–70 min som planerat; håll det prattempo och undvik tröskelinslag tills du bekräftar att du känner dig pigg. Justera till mycket lätt vila om du känner lokal trötthet eller ovanlig trötthet under dagen.",
+        "target_date": "",
+        "reason": "Dagens löpning fullföljer planens lugna trailpass och den senaste närbelastningen är absorberad.",
+        "recommendation": "Ingen ytterligare träning ordineras idag; dagens planerade pass är redan genomfört. Nästa planerade pass saknas i aktuellt underlag.",
         "requires_approval": false
       },
       "auto_apply": {
@@ -269,6 +269,6 @@
       }
     }
   ],
-  "last_trigger_hash": "7ecbf5d0c984ab0655539689db2933807af7cdb02056087ced22ced2b9d1401a",
-  "last_run_utc": "2026-08-23T16:42:51.070118+00:00"
+  "last_trigger_hash": "1a3cf2ebb50fb04b46ec48e956e123331e66905dc7baf2afd6e825a6d8d0474f",
+  "last_run_utc": "2026-08-23T17:03:25.747481+00:00"
 }
