@@ -300,7 +300,12 @@ required = [
     '<div class="dashboard-title">Grenfördelning · passtid</div>',
     'standardplats Oxelösund om inget annat anges.',
 ]
-if weather_by_date:
+if any(
+    f'data-weather-date="{date}"' in rendered
+    and isinstance(forecast, dict)
+    and forecast.get("symbol_code") is not None
+    for date, forecast in weather_by_date.items()
+):
     required.append('class="weather-icon"')
 for group, seconds in sport_seconds.items():
     required.append(
