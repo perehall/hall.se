@@ -11,6 +11,7 @@ from zoneinfo import ZoneInfo
 
 from coach_rules import (
     allowed_target_dates,
+    normalize_assessment_confidence,
     normalize_no_remaining_plan,
     plan_for_coach,
     validate_plan_action,
@@ -24,6 +25,7 @@ PROMPT_FILE = ROOT / "coach_prompt.md"
 
 MODEL = os.environ.get("OPENAI_MODEL", "gpt-5-mini")
 API_KEY = os.environ.get("OPENAI_API_KEY", "").strip()
+COACH_CONTRACT_VERSION = 2
 
 SCHEMA = {
     "type": "object",
@@ -67,6 +69,7 @@ def load_json(path, fallback):
 
 def stable_hash(plan, latest_activity, local_date):
     payload = {
+        "coach_contract_version": COACH_CONTRACT_VERSION,
         "plan": plan,
         "latest_activity": latest_activity,
         "local_date": local_date
@@ -240,6 +243,7 @@ input_data = {
 
 system_prompt = PROMPT_FILE.read_text(encoding="utf-8")
 result = call_openai(system_prompt, input_data)
+result["assessment"] = normalize_assessment_confidence(result["assessment"])
 result["plan_action"] = normalize_no_remaining_plan(
     result["plan_action"],
     allowed_dates=allowed_dates,
@@ -271,6 +275,7 @@ analyses.insert(0, entry)
 coach["analyses"] = analyses[:30]
 coach["last_run_utc"] = datetime.now(timezone.utc).isoformat()
 coach["last_trigger_hash"] = stable_hash(plan, latest, local_date)
+coach["contract_version"] = COACH_CONTRACT_VERSION
 COACH_FILE.write_text(json.dumps(coach, ensure_ascii=False, indent=2), encoding="utf-8")
 
 print(
