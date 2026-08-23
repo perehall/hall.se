@@ -4,32 +4,31 @@
       "activity_id": 19862241646,
       "activity_date": "2026-08-23",
       "activity_name": "Löpning på morgonen",
-      "generated_at_utc": "2026-08-23T17:13:17.239071+00:00",
+      "generated_at_utc": "2026-08-23T17:18:55.244048+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Passet är genomfört och räknas som ett lugnt grusrunpass som absorberas i veckoplanen.",
-        "load_interpretation": "Dagens löpning (17,16 km, 5459 s, snittpuls 138,9) plus senaste dagarnas aktiviteter ger näraidsbelastning väl fördelad och inga obesvarade högintensiva krav.",
+        "summary": "Dagens lugna grus/asfaltlöpning räknas som genomfört och absorberat; ingen ytterligare träning ordineras idag.",
+        "load_interpretation": "Senaste dagarna innehåller flera genomförda träningsdagar med varierad låg–måttlig belastning som talar för fortsatt återhämtning.",
         "confidence": "medium",
         "facts": [
-          "Dagens aktivitet: 17,16 km löpning på grus/asfalt, 1:31:39 passtid, 161 m höjdmeter, snittpuls 138,9, max 157.",
-          "Föregående 3 dagar: Enduro (rekreation, lätt), sim 3,2 km + SUP (lågintensivt), kontrollerad tröskel 10,35 km tidigare i veckan.",
-          "Användarrapport: dagens underlag grus/asfalt; enduron rapporterades lätt och rekreation.",
-          "fulfilled_plan_dates inkluderar idag; dagens planerade session anses genomförd."
+          "Löpning · grus/asfalt: 17,16 km · 1:30:59 · 161 m+ · snittpuls 138,9 · maxpuls 157.",
+          "Användarrapport: Underlag: grus och asfalt; inte trail.",
+          "Planstatus 2026-08-23: dagens planerade pass är genomfört i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Dagens löpning bedöms absorberad utan behov av extra återhämtning.",
-          "Ingen av de senaste aktiviteterna indikerar ackumulerad hög trötthet som kräver skalning av kommande plan."
+          "Dagens löppass uppfyller och avslutar planerad dag; belastningen är absorberad i veckans kontext.",
+          "Sammantaget talar mängden genomförda aktiviteter och användarrapporter för att inte lägga till mer träning idag."
         ],
         "unknowns": [
-          "Subjektiv dagskänsla/ lokal muskeltrötthet efter dagens löpning saknas.",
-          "Sömn och ytterligare icke-loggad fysisk aktivitet (tomtarbete) kan påverka återhämtning.",
-          "Eventuella planer för resten av samma dag saknas men allowed_target_dates är tom."
+          "Ingen subjektiv dagskänsla/återhämtningsrapport efter dagens pass.",
+          "Eventuell sömn eller arbete efter passen som kan påverka återhämtning.",
+          "Detaljer om exakt intensitetsfördelning i dagens löppass utöver puls/watts."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "",
-        "reason": "Dagens löpning uppfyller planens krav och är absorberad i veckans belastning.",
+        "reason": "allowed_target_dates är tom; inga nya ordinationer får göras idag.",
         "recommendation": "Ingen ytterligare träning ordineras idag; dagens planerade pass är redan genomfört. Nästa planerade pass saknas i aktuellt underlag.",
         "requires_approval": false
       },
@@ -269,7 +268,7 @@
       }
     }
   ],
-  "last_trigger_hash": "325458bdbaebec7dea5bc37136d7b28346bdbe7a449d66a1677e996413e4842f",
-  "last_run_utc": "2026-08-23T17:13:17.239099+00:00",
-  "contract_version": 2
+  "last_trigger_hash": "3fae2336d774b73ae2fa679e3da7fb2ae521b1a49c58ff379eb0da2f95df59a9",
+  "last_run_utc": "2026-08-23T17:18:55.244069+00:00",
+  "contract_version": 3
 }
