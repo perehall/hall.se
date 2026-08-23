@@ -1,18 +1,7 @@
 #!/usr/bin/env python3
 from copy import deepcopy
 
-
-ACTIVITY_FAMILY = {
-    "Run": "run",
-    "TrailRun": "run",
-    "VirtualRun": "run",
-    "Swim": "swim",
-    "MountainBikeRide": "bike",
-    "Ride": "bike",
-    "VirtualRide": "bike",
-    "WeightTraining": "strength",
-    "Enduro": "enduro",
-}
+from training_contracts import ACTIVITY_FAMILY, PLAN_SPORT_ACTIVITY_FAMILIES
 
 
 def activity_local_date(activity):
@@ -24,36 +13,28 @@ def activity_family(activity):
     return ACTIVITY_FAMILY.get(activity.get("sport_type") or "")
 
 
-def planned_family(day):
-    explicit = str(day.get("sport") or "").strip().lower()
-    session = str(day.get("session") or "").strip().lower()
-    text = f"{explicit} {session}"
+def planned_families(day):
+    """Return fulfillment families from explicit machine-readable plan sport."""
+    sport = str(day.get("sport") or "").strip().lower()
+    return set(PLAN_SPORT_ACTIVITY_FAMILIES.get(sport, set()))
 
-    if "swimrun" in text:
-        return "swimrun"
-    if "enduro" in text:
-        return "enduro"
-    if "simning" in text or "swim" in text:
-        return "swim"
-    if "styrka" in text or "strength" in text:
-        return "strength"
-    if "mtb" in text or "xc" in text or "cykel" in text or "bike" in text:
-        return "bike"
-    if "trail" in text or "löp" in text or "run" in text:
-        return "run"
-    return None
+
+def planned_family(day):
+    """Compatibility helper for single-family sports; never parses session text."""
+    families = planned_families(day)
+    return next(iter(families)) if len(families) == 1 else None
 
 
 def matching_activity(day, activities):
-    family = planned_family(day)
+    families = planned_families(day)
     date = day.get("date") or ""
-    if not family or not date:
+    if not families or not date:
         return None
 
     for activity in activities:
         if activity_local_date(activity) != date:
             continue
-        if activity_family(activity) == family:
+        if activity_family(activity) in families:
             return activity
     return None
 
@@ -75,6 +56,10 @@ def allowed_target_dates(plan, activities, today_local):
         if not date or date < today_local:
             continue
         if day.get("status") == "completed":
+            continue
+        # An explicitly open day is intentionally not an automatic coach target.
+        # It must not be turned into fill-up training merely because the day is free.
+        if day.get("sport") == "open":
             continue
         if date in fulfilled:
             continue
@@ -135,12 +120,7 @@ def normalize_no_remaining_plan(action, allowed_dates, latest_date, fulfilled_da
 
 
 def normalize_assessment_confidence(assessment):
-    """En icke-tom unknowns-lista är per prompt beslutspåverkande osäkerhet.
-
-    Då får confidence inte vara high. Vi ändrar aldrig medium/low uppåt och
-    låter high stå kvar när modellen inte själv anger några beslutspåverkande
-    okända faktorer.
-    """
+    """A non-empty unknowns list prevents high confidence."""
     normalized = deepcopy(assessment)
     unknowns = normalized.get("unknowns") or []
     if normalized.get("confidence") == "high" and unknowns:
@@ -199,7 +179,7 @@ def canonical_facts(latest_activity, latest_date, fulfilled_dates):
 
     user_report = str(latest_activity.get("user_report") or "").strip()
     if user_report:
-        facts.append(f"Användarrapport: {user_report.rstrip('.') }.")
+        facts.append(f"Användarrapport: {user_report.rstrip('.')}.")
 
     if latest_date in fulfilled_dates:
         facts.append(
