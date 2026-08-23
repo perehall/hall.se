@@ -9,6 +9,13 @@ from datetime import datetime, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+from coach_rules import (
+    allowed_target_dates,
+    normalize_no_remaining_plan,
+    plan_for_coach,
+    validate_plan_action,
+)
+
 ROOT = Path(__file__).resolve().parents[1]
 PLAN_FILE = ROOT / "data" / "plan.json"
 ACTIVITIES_FILE = ROOT / "data" / "activities.json"
@@ -210,20 +217,37 @@ if not API_KEY:
 
 latest_date = (latest.get("start_date_local") or latest.get("start_date") or "")[:10]
 recent = sorted(activities, key=lambda a: a.get("start_date") or "", reverse=True)[:10]
-planned_dates = [d.get("date") for d in plan.get("days", [])]
+coach_plan, fulfilled_dates = plan_for_coach(plan, activities)
+allowed_dates = allowed_target_dates(plan, activities, local_date)
 
 input_data = {
     "today_local": local_date,
     "latest_activity": latest,
     "latest_activity_date": latest_date,
     "recent_activities": recent,
-    "current_plan": plan,
-    "allowed_target_dates": planned_dates,
-    "instruction": "Analysera senaste passet mot faktisk närbelastning och aktuell plan. Kontrollera särskilt föregående och kommande 2–3 dagar. Föreslå endast konservativ automatisk ändring; allt som kan innebära ökad belastning ska vara review och kräva godkännande."
+    "current_plan": coach_plan,
+    "fulfilled_plan_dates": sorted(fulfilled_dates),
+    "allowed_target_dates": allowed_dates,
+    "instruction": (
+        "Analysera senaste passet mot faktisk närbelastning och aktuell plan. Kontrollera särskilt "
+        "föregående och kommande 2–3 dagar. Dagar i fulfilled_plan_dates är redan genomförda och "
+        "får aldrig ordineras igen. target_date får endast väljas ur allowed_target_dates. Om listan "
+        "är tom ska target_date vara tomt och ingen ytterligare träning ordineras idag. Föreslå endast "
+        "konservativ automatisk ändring; allt som kan innebära ökad belastning ska vara review och "
+        "kräva godkännande."
+    )
 }
 
 system_prompt = PROMPT_FILE.read_text(encoding="utf-8")
 result = call_openai(system_prompt, input_data)
+result["plan_action"] = normalize_no_remaining_plan(
+    result["plan_action"],
+    allowed_dates=allowed_dates,
+    latest_date=latest_date,
+    fulfilled_dates=fulfilled_dates,
+)
+validate_plan_action(result["plan_action"], allowed_dates)
+
 changed, apply_note = apply_conservative_action(plan, result["plan_action"])
 if changed:
     PLAN_FILE.write_text(json.dumps(plan, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -249,4 +273,7 @@ coach["last_run_utc"] = datetime.now(timezone.utc).isoformat()
 coach["last_trigger_hash"] = stable_hash(plan, latest, local_date)
 COACH_FILE.write_text(json.dumps(coach, ensure_ascii=False, indent=2), encoding="utf-8")
 
-print(f"AI coach: analyserade aktivitet {latest.get('id')} med {MODEL}. {apply_note}")
+print(
+    f"AI coach: analyserade aktivitet {latest.get('id')} med {MODEL}. "
+    f"Fulfilled={sorted(fulfilled_dates)} allowed_targets={allowed_dates}. {apply_note}"
+)
