@@ -37,7 +37,9 @@ jobs:
 
       - name: Offline site-generation smoke test
         run: |
+          python "träning/scripts/migrate_training_data_v3.py"
           python "träning/scripts/normalize_activity_semantics.py"
+          python "träning/scripts/validate_training_data.py"
           python "träning/scripts/build.py"
           python "träning/scripts/finalize_dashboard.py"
           python "träning/scripts/finalize_dashboard_ui.py"
@@ -54,6 +56,7 @@ jobs:
           python "träning/scripts/finalize_goal_link_layout.py"
           python "träning/scripts/publish_goal_cache_bypass.py"
           python "träning/scripts/validate_site_contracts.py"
+          python "träning/scripts/validate_training_data.py"
           grep -Fq '<strong>Löpning · grus/asfalt</strong>' "träning/index.html"
 
       - name: Diff hygiene
