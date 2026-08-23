@@ -1,82 +1,181 @@
 #!/usr/bin/env python3
-import json, os, urllib.parse, urllib.request
+import json
+import os
+import urllib.parse
+import urllib.request
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 ACTIVITIES_FILE = ROOT / "data" / "activities.json"
-TOKEN_FILE = Path(os.environ.get("STRAVA_REFRESH_TOKEN_FILE", "/tmp/strava_refresh_token"))
+DEFAULT_TOKEN_FILE = Path("/tmp/strava_refresh_token")
+TOKEN_URL = "https://www.strava.com/oauth/token"
+ACTIVITIES_URL = "https://www.strava.com/api/v3/athlete/activities"
+ACTIVITY_URL = "https://www.strava.com/api/v3/activities"
 
 
 def post_form(url, payload):
     data = urllib.parse.urlencode(payload).encode()
     req = urllib.request.Request(url, data=data, method="POST")
-    with urllib.request.urlopen(req, timeout=30) as r:
-        return json.load(r)
+    with urllib.request.urlopen(req, timeout=30) as response:
+        return json.load(response)
 
 
 def get_json(url, token):
     req = urllib.request.Request(url, headers={"Authorization": f"Bearer {token}"})
-    with urllib.request.urlopen(req, timeout=30) as r:
-        return json.load(r)
+    with urllib.request.urlopen(req, timeout=30) as response:
+        return json.load(response)
 
 
-tokens = post_form("https://www.strava.com/oauth/token", {
-    "client_id": os.environ["STRAVA_CLIENT_ID"],
-    "client_secret": os.environ["STRAVA_CLIENT_SECRET"],
-    "grant_type": "refresh_token",
-    "refresh_token": os.environ["STRAVA_REFRESH_TOKEN"],
-})
+def write_refresh_token(path, token):
+    token = str(token or "").strip()
+    if not token:
+        raise RuntimeError("Strava: roterad refresh token saknas")
+    path = Path(path)
+    path.write_text(token, encoding="utf-8")
+    os.chmod(path, 0o600)
 
-access_token = tokens["access_token"]
-new_refresh_token = tokens["refresh_token"]
 
-# Persist the rotated token only on the ephemeral Actions runner.
-# The workflow writes this file directly into the GitHub repository secret
-# and then removes it. It is never committed or exposed as a workflow output.
-TOKEN_FILE.write_text(new_refresh_token, encoding="utf-8")
-os.chmod(TOKEN_FILE, 0o600)
+def activity_from_detail(activity_id, detail):
+    if not isinstance(detail, dict):
+        raise RuntimeError(f"Strava: aktivitet {activity_id} gav oväntat detaljsvar")
+    returned_id = detail.get("id")
+    if returned_id is not None and int(returned_id) != int(activity_id):
+        raise RuntimeError(
+            f"Strava: detaljsvar id {returned_id!r} matchar inte begärt id {activity_id!r}"
+        )
+    sport_type = detail.get("sport_type") or detail.get("type")
+    if not sport_type:
+        raise RuntimeError(f"Strava: aktivitet {activity_id} saknar sport_type/type")
+    start_date = detail.get("start_date")
+    start_date_local = detail.get("start_date_local")
+    if not start_date or not start_date_local:
+        raise RuntimeError(f"Strava: aktivitet {activity_id} saknar startdatum")
 
-state = json.loads(ACTIVITIES_FILE.read_text(encoding="utf-8"))
-known = {int(a["id"]) for a in state.get("activities", [])}
-after = int((datetime.now(timezone.utc) - timedelta(days=14)).timestamp())
+    return {
+        "id": int(activity_id),
+        "name": detail.get("name"),
+        "sport_type": sport_type,
+        "start_date": start_date,
+        "start_date_local": start_date_local,
+        "distance_m": detail.get("distance"),
+        "moving_time_s": detail.get("moving_time"),
+        "elapsed_time_s": detail.get("elapsed_time"),
+        "total_elevation_gain_m": detail.get("total_elevation_gain"),
+        "average_heartrate": detail.get("average_heartrate"),
+        "max_heartrate": detail.get("max_heartrate"),
+        "average_watts": detail.get("average_watts"),
+        "weighted_average_watts": detail.get("weighted_average_watts"),
+        "calories": detail.get("calories"),
+        "device_name": detail.get("device_name"),
+        "source": "Strava API",
+    }
 
-url = f"https://www.strava.com/api/v3/athlete/activities?after={after}&page=1&per_page=100"
-summary = get_json(url, access_token)
 
-new_items = []
-for a in summary:
-    aid = int(a["id"])
-    if aid in known:
-        continue
-    d = get_json(f"https://www.strava.com/api/v3/activities/{aid}", access_token)
-    new_items.append({
-        "id": aid,
-        "name": d.get("name"),
-        "sport_type": d.get("sport_type") or d.get("type"),
-        "start_date": d.get("start_date"),
-        "start_date_local": d.get("start_date_local"),
-        "distance_m": d.get("distance"),
-        "moving_time_s": d.get("moving_time"),
-        "elapsed_time_s": d.get("elapsed_time"),
-        "total_elevation_gain_m": d.get("total_elevation_gain"),
-        "average_heartrate": d.get("average_heartrate"),
-        "max_heartrate": d.get("max_heartrate"),
-        "average_watts": d.get("average_watts"),
-        "weighted_average_watts": d.get("weighted_average_watts"),
-        "calories": d.get("calories"),
-        "device_name": d.get("device_name"),
-        "source": "Strava API"
-    })
+def merge_new_activities(state, summary, fetch_detail):
+    if not isinstance(state, dict):
+        raise RuntimeError("Strava: activities-state måste vara objekt")
+    if not isinstance(summary, list):
+        raise RuntimeError("Strava: aktivitetslistan hade oväntat format")
 
-if new_items:
-    state["activities"] = sorted(
-        state.get("activities", []) + new_items,
-        key=lambda x: x.get("start_date") or "",
-        reverse=True
+    existing = state.get("activities") or []
+    if not isinstance(existing, list):
+        raise RuntimeError("Strava: activities måste vara lista")
+
+    known = set()
+    for activity in existing:
+        activity_id = activity.get("id")
+        if activity_id is None:
+            raise RuntimeError("Strava: befintlig aktivitet saknar id")
+        key = int(activity_id)
+        if key in known:
+            raise RuntimeError(f"Strava: dubbelt befintligt aktivitets-id {key}")
+        known.add(key)
+
+    new_items = []
+    seen_summary = set()
+    for row in summary:
+        if not isinstance(row, dict) or row.get("id") is None:
+            raise RuntimeError("Strava: aktivitetsöversikt innehåller rad utan id")
+        activity_id = int(row["id"])
+        if activity_id in seen_summary:
+            continue
+        seen_summary.add(activity_id)
+        if activity_id in known:
+            # Existing records may contain user-normalized semantics. Never replace
+            # them with a fresh raw Strava representation during incremental sync.
+            continue
+        detail = fetch_detail(activity_id)
+        new_items.append(activity_from_detail(activity_id, detail))
+        known.add(activity_id)
+
+    if new_items:
+        state["activities"] = sorted(
+            existing + new_items,
+            key=lambda item: item.get("start_date") or "",
+            reverse=True,
+        )
+    else:
+        state["activities"] = existing
+    return new_items
+
+
+def exchange_tokens(env):
+    required = ["STRAVA_CLIENT_ID", "STRAVA_CLIENT_SECRET", "STRAVA_REFRESH_TOKEN"]
+    missing = [key for key in required if not str(env.get(key) or "").strip()]
+    if missing:
+        raise RuntimeError("Strava: miljövariabler saknas: " + ", ".join(missing))
+    tokens = post_form(
+        TOKEN_URL,
+        {
+            "client_id": env["STRAVA_CLIENT_ID"],
+            "client_secret": env["STRAVA_CLIENT_SECRET"],
+            "grant_type": "refresh_token",
+            "refresh_token": env["STRAVA_REFRESH_TOKEN"],
+        },
     )
+    if not isinstance(tokens, dict):
+        raise RuntimeError("Strava: token-svar hade oväntat format")
+    access_token = str(tokens.get("access_token") or "").strip()
+    refresh_token = str(tokens.get("refresh_token") or "").strip()
+    if not access_token or not refresh_token:
+        raise RuntimeError("Strava: token-svar saknar access_token eller refresh_token")
+    return access_token, refresh_token
 
-state["last_sync_utc"] = datetime.now(timezone.utc).isoformat()
-ACTIVITIES_FILE.write_text(json.dumps(state, ensure_ascii=False, indent=2), encoding="utf-8")
 
-print(f"Synced {len(new_items)} new activities.")
+def sync_state(state, access_token, *, now=None):
+    now = now or datetime.now(timezone.utc)
+    after = int((now - timedelta(days=14)).timestamp())
+    url = f"{ACTIVITIES_URL}?after={after}&page=1&per_page=100"
+    summary = get_json(url, access_token)
+
+    def fetch_detail(activity_id):
+        return get_json(f"{ACTIVITY_URL}/{activity_id}", access_token)
+
+    new_items = merge_new_activities(state, summary, fetch_detail)
+    state["last_sync_utc"] = now.isoformat()
+    return new_items
+
+
+def main():
+    token_file = Path(os.environ.get("STRAVA_REFRESH_TOKEN_FILE", str(DEFAULT_TOKEN_FILE)))
+    access_token, refresh_token = exchange_tokens(os.environ)
+
+    # Persist only on the ephemeral Actions runner. The workflow writes this file
+    # into the repository secret and then removes it; token contents are never logged.
+    write_refresh_token(token_file, refresh_token)
+
+    if not ACTIVITIES_FILE.exists():
+        raise RuntimeError("Strava: activities.json saknas")
+    state = json.loads(ACTIVITIES_FILE.read_text(encoding="utf-8"))
+    new_items = sync_state(state, access_token)
+    ACTIVITIES_FILE.write_text(
+        json.dumps(state, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    print(f"Synced {len(new_items)} new activities.")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
