@@ -86,56 +86,8 @@ jobs:
           INTERVALS_API_KEY: ${{ secrets.INTERVALS_API_KEY }}
         run: python "träning/scripts/sync_intervals_swim.py"
 
-      - name: Build live page
-        run: python "träning/scripts/build.py"
-
-      - name: Finalize and validate dashboard
-        run: python "träning/scripts/finalize_dashboard.py"
-
-      - name: Apply dashboard UI labels
-        run: python "träning/scripts/finalize_dashboard_ui.py"
-
-      - name: Apply normalized activity labels
-        run: python "träning/scripts/finalize_activity_labels.py"
-
-      - name: Refine Tränings-Yoda UX
-        run: python "träning/scripts/finalize_yoda_ui.py"
-
-      - name: Archive weekly history
-        run: python "träning/scripts/archive_weeks.py"
-
-      - name: Build preliminary upcoming week
-        run: python "träning/scripts/build_upcoming_week.py"
-
-      - name: Emphasize week period
-        run: python "träning/scripts/finalize_header_ui.py"
-
-      - name: Link upcoming days to details
-        run: python "träning/scripts/finalize_navigation_ui.py"
-
-      - name: Add sport icons and watch sync status
-        run: python "träning/scripts/finalize_sport_icons.py"
-
-      - name: Add explicit sport icons to day cards
-        run: python "träning/scripts/finalize_day_session_icons.py"
-
-      - name: Preserve completed structured workout history
-        run: python "träning/scripts/finalize_workout_history.py"
-
-      - name: Build goal page and link from weekly plan
-        run: python "träning/scripts/build_home.py"
-
-      - name: Finalize goal link placement
-        run: python "träning/scripts/finalize_goal_link_layout.py"
-
-      - name: Publish goal page on fresh path
-        run: python "träning/scripts/publish_goal_cache_bypass.py"
-
-      - name: Preflight generated site contracts
-        run: python "träning/scripts/validate_site_contracts.py"
-
-      - name: Final training data contract check
-        run: python "träning/scripts/validate_training_data.py"
+      - name: Render and validate training site
+        run: python "träning/scripts/render_training_site.py"
 
       - name: Commit synced data, coach state and live page
         run: |
