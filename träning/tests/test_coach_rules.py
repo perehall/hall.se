@@ -9,6 +9,7 @@ sys.path.insert(0, str(SCRIPTS))
 from coach_rules import (  # noqa: E402
     allowed_target_dates,
     fulfilled_plan_dates,
+    normalize_assessment_confidence,
     normalize_no_remaining_plan,
     plan_for_coach,
     validate_plan_action,
@@ -130,6 +131,20 @@ class CoachRulesTests(unittest.TestCase):
         self.assertEqual(normalized["target_date"], "")
         self.assertNotIn("trail 50", normalized["recommendation"].lower())
         self.assertIn("redan genomfört", normalized["recommendation"].lower())
+
+    def test_high_confidence_is_downgraded_when_unknowns_exist(self):
+        assessment = {
+            "confidence": "high",
+            "unknowns": ["Subjektiv återhämtning saknas."],
+            "summary": "x",
+        }
+        normalized = normalize_assessment_confidence(assessment)
+        self.assertEqual(normalized["confidence"], "medium")
+        self.assertEqual(assessment["confidence"], "high")
+
+    def test_high_confidence_stays_high_without_unknowns(self):
+        assessment = {"confidence": "high", "unknowns": [], "summary": "x"}
+        self.assertEqual(normalize_assessment_confidence(assessment)["confidence"], "high")
 
 
 if __name__ == "__main__":
