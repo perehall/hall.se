@@ -99,6 +99,9 @@ jobs:
       - name: Add sport icons and watch sync status
         run: python "träning/scripts/finalize_sport_icons.py"
 
+      - name: Add explicit sport icons to day cards
+        run: python "träning/scripts/finalize_day_session_icons.py"
+
       - name: Preserve completed structured workout history
         run: python "träning/scripts/finalize_workout_history.py"
 
