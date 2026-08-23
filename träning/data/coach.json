@@ -4,11 +4,11 @@
       "activity_id": 19862241646,
       "activity_date": "2026-08-23",
       "activity_name": "Löpning på morgonen",
-      "generated_at_utc": "2026-08-23T17:18:55.244048+00:00",
+      "generated_at_utc": "2026-08-23T18:11:27.836392+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Dagens lugna grus/asfaltlöpning räknas som genomfört och absorberat; ingen ytterligare träning ordineras idag.",
-        "load_interpretation": "Senaste dagarna innehåller flera genomförda träningsdagar med varierad låg–måttlig belastning som talar för fortsatt återhämtning.",
+        "summary": "Dagens lugna löppass innebär att veckans plan är genomförd och inga fler pass ordineras idag.",
+        "load_interpretation": "Senaste tre dagarnas faktiska belastning är flera genomförda pass (enduro rekreation, sim/SUP, kontrollerad tröskel och långpass).",
         "confidence": "medium",
         "facts": [
           "Löpning · grus/asfalt: 17,16 km · 1:30:59 · 161 m+ · snittpuls 138,9 · maxpuls 157.",
@@ -16,19 +16,19 @@
           "Planstatus 2026-08-23: dagens planerade pass är genomfört i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Dagens löppass uppfyller och avslutar planerad dag; belastningen är absorberad i veckans kontext.",
-          "Sammantaget talar mängden genomförda aktiviteter och användarrapporter för att inte lägga till mer träning idag."
+          "Veckans planmål är uppfyllda och den totala närbelastningen senaste 3–4 dagarna är absorberbar.",
+          "Enduron bedöms inte ha krävt extra återhämtning enligt användaren och datan."
         ],
         "unknowns": [
-          "Ingen subjektiv dagskänsla/återhämtningsrapport efter dagens pass.",
-          "Eventuell sömn eller arbete efter passen som kan påverka återhämtning.",
-          "Detaljer om exakt intensitetsfördelning i dagens löppass utöver puls/watts."
+          "Subjektiv dagskänsla/tidig lokal trötthet efter dagens pass saknas.",
+          "Exakt aktivitetstid/arbetsbelastning från tomtarbete är okvantifierad och kan påverka återhämtning.",
+          "Sömn och HRV för dagen finns inte i underlaget."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "",
-        "reason": "allowed_target_dates är tom; inga nya ordinationer får göras idag.",
+        "reason": "Veckan är redan uppfylld och inga allowed_target_dates finns för att lägga till eller ändra träning idag.",
         "recommendation": "Ingen ytterligare träning ordineras idag; dagens planerade pass är redan genomfört. Nästa planerade pass saknas i aktuellt underlag.",
         "requires_approval": false
       },
@@ -46,7 +46,7 @@
       "assessment": {
         "summary": "Enduropass bedöms som rekreationellt och påverkar inte planerade lugna trailpass i dag.",
         "load_interpretation": "Litet närbelastande enduropass (≈1h22), rapporterat lätt; inga högintensiva data som kräver nedskalning.",
-        "confidence": "high",
+        "confidence": "medium",
         "facts": [
           "Pass: Enduro 23,9 km, 1:22:01 passtid, 512 m+, snittpuls 127, max 152.",
           "Användarrapport: \"Lätt och inte det minsta slitsamt.\"",
@@ -84,7 +84,7 @@
       "assessment": {
         "summary": "SUP-passet var lågintensivt rekreation och påverkar inte behovet av vila före kvällens MTB/XC.",
         "load_interpretation": "SUP var långvarigt men låg puls; det ger minimal akut muskel- eller kardiell belastning.",
-        "confidence": "high",
+        "confidence": "medium",
         "facts": [
           "SUP: 6,02 km, 1:12:03 (moving_time 4323 s), snittpuls 89,7, max 108, 274 kcal.",
           "Samma dag simning 3 200 m, 59:48, snittpuls 127,4 — total passtid fredag ~2:12:28.",
@@ -121,7 +121,7 @@
       "assessment": {
         "summary": "Behåll planen; simpasset var enligt plan och absorberbart.",
         "load_interpretation": "Senaste simningen var lång (3 200 m, ~48 min rörlig tid) men låg i puls och följer planens lågkostnadsmål.",
-        "confidence": "high",
+        "confidence": "medium",
         "facts": [
           "Simning 2026-08-21: 3 200 m, moving_time 2 903 s, snittpuls 127, maxpuls 154, 555 kcal.",
           "Tor–ons: torsdagens kontrollerade tröskel (10,35 km, snittpuls 145,7) genomförd dagen före.",
@@ -159,7 +159,7 @@
       "assessment": {
         "summary": "Passet var en kontrollerad löptröskel som bör tillåtas följas av planerat lugnt simpass i morgon.",
         "load_interpretation": "Torsdagens tröskel (10,35 km, snittpuls 145, max 167) är den avgörande närbelastningen för beslutet.",
-        "confidence": "high",
+        "confidence": "medium",
         "facts": [
           "Torsdag: 10,35 km, 50:48, 63 m+, snittpuls 145,7, maxpuls 167, snitteffekt 277 W.",
           "Onsdag: 6,94 km swimrun 54:50, snittpuls 143, maxpuls 173, bedömd absorberad.",
@@ -268,7 +268,7 @@
       }
     }
   ],
-  "last_trigger_hash": "3fae2336d774b73ae2fa679e3da7fb2ae521b1a49c58ff379eb0da2f95df59a9",
-  "last_run_utc": "2026-08-23T17:18:55.244069+00:00",
+  "last_trigger_hash": "49f403195446f7f9eb6d9a227d9604c95960f22a0ca9797477c33decea557516",
+  "last_run_utc": "2026-08-23T18:11:27.836419+00:00",
   "contract_version": 3
 }

@@ -82,21 +82,24 @@
             ]
           }
         ]
-      }
+      },
+      "sport": "swim"
     },
     {
       "date": "2026-08-18",
       "label": "Tisdag",
       "status": "completed",
       "session": "Styrka · 35:45",
-      "reason": "Medvetet nedskalat inför onsdagens eventuella swimrun/löpkvalitet."
+      "reason": "Medvetet nedskalat inför onsdagens eventuella swimrun/löpkvalitet.",
+      "sport": "strength"
     },
     {
       "date": "2026-08-19",
       "label": "Onsdag",
       "status": "completed",
       "session": "Swimrun · Jogersö Extreme · 6,94 km · 54:50",
-      "reason": "Relativt lugnt enligt egen rapport. Strava: snittpuls 143, maxpuls 173. Passet bedömdes som absorberat väl eftersom HRV förbättrades och Garmin träningsberedskap var hög följande dag."
+      "reason": "Relativt lugnt enligt egen rapport. Strava: snittpuls 143, maxpuls 173. Passet bedömdes som absorberat väl eftersom HRV förbättrades och Garmin träningsberedskap var hög följande dag.",
+      "sport": "swimrun"
     },
     {
       "date": "2026-08-20",
@@ -105,7 +108,8 @@
       "session": "Löpning · kontrollerad tröskel · 3 × 8 min · totalt 10,35 km · 50:48",
       "reason": "Strava: 10,35 km, 50:48, 63 m+, snittpuls 145,7, maxpuls 167, snitteffekt 277 W. Garmin klassade passet som Tempo med aerob träningseffekt 3,9. Egen känsla tydligt kontrollerad med cirka en ytterligare 8-minutersrepetition i reserv. Rätt dos för progression från tidigare 5 × 4 min utan att driva passet till utmattning.",
       "original_session": "Simning · aerob/teknik eller vila",
-      "coach_adjustment": "Planen ändrades efter faktisk återhämtning: förbättrad HRV, hög Garmin-träningsberedskap och relativt lugn swimrun dagen före talade för ett kontrollerat löptröskelpass. Manuell Strava-synk efter passet bekräftade belastningen; AI-coachen rekommenderade att fredagen hålls lågkostnad."
+      "coach_adjustment": "Planen ändrades efter faktisk återhämtning: förbättrad HRV, hög Garmin-träningsberedskap och relativt lugn swimrun dagen före talade för ett kontrollerat löptröskelpass. Manuell Strava-synk efter passet bekräftade belastningen; AI-coachen rekommenderade att fredagen hålls lågkostnad.",
+      "sport": "run"
     },
     {
       "date": "2026-08-21",
@@ -234,7 +238,8 @@
             ]
           }
         ]
-      }
+      },
+      "sport": "swim"
     },
     {
       "date": "2026-08-22",
@@ -250,7 +255,8 @@
       "label": "Söndag",
       "status": "preliminary",
       "session": "Trail · lugnt · ca 50–70 min",
-      "reason": "Ingen MTB genomfördes på lördagen. Enduron var enligt egen rapport lätt rekreation och ska inte ensam reducera söndagens pass. Tomtarbete pågick till sent men belastningen är inte kvantifierad; dagens lugna trail ligger därför kvar preliminärt och får avgöras mot faktisk dagskänsla."
+      "reason": "Ingen MTB genomfördes på lördagen. Enduron var enligt egen rapport lätt rekreation och ska inte ensam reducera söndagens pass. Tomtarbete pågick till sent men belastningen är inte kvantifierad; dagens lugna trail ligger därför kvar preliminärt och får avgöras mot faktisk dagskänsla.",
+      "sport": "run"
     }
   ],
   "strength_template": [
@@ -260,5 +266,6 @@
     "Vad + soleus regelbundet.",
     "Enarmsrodd + press som huvuddrag/press.",
     "Välj två bålövningar; låt inte accessoarer tränga undan huvudstyrkan."
-  ]
+  ],
+  "schema_version": 3
 }
