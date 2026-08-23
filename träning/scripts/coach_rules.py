@@ -57,9 +57,8 @@ def allowed_target_dates(plan, activities, today_local):
             continue
         if day.get("status") == "completed":
             continue
-        # An explicitly open day is intentionally not an automatic coach target.
-        # It must not be turned into fill-up training merely because the day is free.
-        if day.get("sport") == "open":
+        # open/rest are intentional no-auto-prescription states.
+        if day.get("sport") in {"open", "rest"}:
             continue
         if date in fulfilled:
             continue
