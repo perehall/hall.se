@@ -132,3 +132,17 @@ def normalize_no_remaining_plan(action, allowed_dates, latest_date, fulfilled_da
         "Nästa planerade pass saknas i aktuellt underlag."
     )
     return normalized
+
+
+def normalize_assessment_confidence(assessment):
+    """En icke-tom unknowns-lista är per prompt beslutspåverkande osäkerhet.
+
+    Då får confidence inte vara high. Vi ändrar aldrig medium/low uppåt och
+    låter high stå kvar när modellen inte själv anger några beslutspåverkande
+    okända faktorer.
+    """
+    normalized = deepcopy(assessment)
+    unknowns = normalized.get("unknowns") or []
+    if normalized.get("confidence") == "high" and unknowns:
+        normalized["confidence"] = "medium"
+    return normalized
