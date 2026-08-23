@@ -33,6 +33,11 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Run deterministic regression tests
+        run: |
+          python -m compileall -q "träning/scripts" "träning/tests"
+          python -m unittest discover -s "träning/tests" -p "test_*.py" -v
+
       - name: Backup current live page once
         run: |
           if [ ! -f "träning/index.manual-backup.html" ]; then
