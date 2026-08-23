@@ -47,6 +47,9 @@ jobs:
           STRAVA_REFRESH_TOKEN_FILE: /tmp/strava_refresh_token
         run: python "träning/scripts/sync_strava.py"
 
+      - name: Normalize activity semantics
+        run: python "träning/scripts/normalize_activity_semantics.py"
+
       - name: Persist rotated Strava refresh token
         env:
           GH_TOKEN: ${{ secrets.TRAINING_SECRET_PAT }}
@@ -115,6 +118,7 @@ jobs:
         run: |
           TRACKED=(
             "träning/data/activities.json"
+            "träning/data/activity_overrides.json"
             "träning/data/coach.json"
             "träning/data/plan.json"
             "träning/data/upcoming_week.json"
