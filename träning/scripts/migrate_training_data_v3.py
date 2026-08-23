@@ -6,6 +6,7 @@ from training_contracts import PLAN_SCHEMA_VERSION, VALID_PLAN_SPORTS
 
 ROOT = Path(__file__).resolve().parents[1]
 PLAN_FILES = [ROOT / "data" / "plan.json", ROOT / "data" / "upcoming_week.json"]
+COACH_FILE = ROOT / "data" / "coach.json"
 
 # One-time reviewed migration. No sport is inferred from Swedish free text.
 # Unknown dates fail closed instead of being guessed.
@@ -27,7 +28,7 @@ SPORT_BY_DATE = {
 }
 
 
-def migrate(path):
+def migrate_plan(path):
     if not path.exists():
         return False
     document = json.loads(path.read_text(encoding="utf-8"))
@@ -59,8 +60,25 @@ def migrate(path):
     return True
 
 
+def migrate_coach_history():
+    if not COACH_FILE.exists():
+        return False
+    document = json.loads(COACH_FILE.read_text(encoding="utf-8"))
+    changed = False
+    for entry in document.get("analyses") or []:
+        assessment = entry.get("assessment") or {}
+        if assessment.get("confidence") == "high" and assessment.get("unknowns"):
+            assessment["confidence"] = "medium"
+            changed = True
+    if changed:
+        COACH_FILE.write_text(json.dumps(document, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return changed
+
+
 def main():
-    changed = [path.name for path in PLAN_FILES if migrate(path)]
+    changed = [path.name for path in PLAN_FILES if migrate_plan(path)]
+    if migrate_coach_history():
+        changed.append(COACH_FILE.name)
     if changed:
         print("Migration v3 OK: " + ", ".join(changed))
     else:
