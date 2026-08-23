@@ -5,6 +5,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 INDEX = ROOT / "index.html"
 PLAN = ROOT / "data" / "plan.json"
+ACTIVITIES = ROOT / "data" / "activities.json"
+OVERRIDES = ROOT / "data" / "activity_overrides.json"
 ICONS = ROOT / "data" / "sport_icons.json"
 GOAL = ROOT / "malbild" / "index.html"
 GOAL_MIRROR = ROOT / "malbild-2027" / "index.html"
@@ -13,6 +15,20 @@ VALID_STATUSES = {"completed", "planned", "preliminary", "conditional", "open"}
 VALID_MANUAL_STATUSES = {"completed"}
 VALID_CLASSIFICATIONS = {"training", "recreation"}
 REQUIRED_ICON_KEYS = {"run", "swim", "bike", "enduro", "strength"}
+SPORT_ICON_KEYS = {
+    "run": "run",
+    "running": "run",
+    "trail": "run",
+    "swim": "swim",
+    "swimming": "swim",
+    "mtb": "bike",
+    "xc": "bike",
+    "bike": "bike",
+    "cycling": "bike",
+    "enduro": "enduro",
+    "strength": "strength",
+    "swimrun": "run",
+}
 
 
 def require(condition: bool, message: str) -> None:
@@ -21,7 +37,7 @@ def require(condition: bool, message: str) -> None:
 
 
 def main() -> None:
-    for path in (INDEX, PLAN, ICONS, GOAL, GOAL_MIRROR):
+    for path in (INDEX, PLAN, ACTIVITIES, OVERRIDES, ICONS, GOAL, GOAL_MIRROR):
         require(path.exists(), f"Preflight: fil saknas: {path}")
 
     icon_data = json.loads(ICONS.read_text(encoding="utf-8"))
@@ -34,6 +50,31 @@ def main() -> None:
         require(bool(icons[key].get("viewBox")), f"Preflight: {key}-ikon saknar viewBox")
         require(bool(icons[key].get("path")), f"Preflight: {key}-ikon saknar path")
 
+    activities_state = json.loads(ACTIVITIES.read_text(encoding="utf-8"))
+    activities_by_id = {
+        str(activity.get("id")): activity
+        for activity in activities_state.get("activities", [])
+        if activity.get("id") is not None
+    }
+    override_data = json.loads(OVERRIDES.read_text(encoding="utf-8"))
+    overrides = override_data.get("overrides") or {}
+    for activity_id, override in overrides.items():
+        activity = activities_by_id.get(str(activity_id))
+        if not activity:
+            continue
+        require(
+            activity.get("sport_type") == override.get("sport"),
+            f"Preflight: aktivitet {activity_id} är inte normaliserad till {override.get('sport')!r}",
+        )
+        require(
+            activity.get("classification") == override.get("classification"),
+            f"Preflight: aktivitet {activity_id} har fel classification",
+        )
+        require(
+            activity.get("source_sport_type") == override.get("source_sport_type"),
+            f"Preflight: aktivitet {activity_id} saknar korrekt rå sporttyp",
+        )
+
     plan = json.loads(PLAN.read_text(encoding="utf-8"))
     days = plan.get("days", [])
     require(len(days) == 7, f"Preflight: aktuell vecka ska ha 7 dagar, fick {len(days)}")
@@ -41,6 +82,7 @@ def main() -> None:
     require(len(set(dates)) == len(dates), "Preflight: dubbla datum i plan.json")
 
     expected_manual = 0
+    explicit_sport_days = []
     for day in days:
         status = day.get("status")
         date = day.get("date")
@@ -48,7 +90,10 @@ def main() -> None:
         require(bool((day.get("session") or "").strip()), f"Preflight: tom session för {date}")
 
         if "sport" in day:
-            require(bool((day.get("sport") or "").strip()), f"Preflight: tom sport för {date}")
+            sport = (day.get("sport") or "").strip().lower()
+            require(bool(sport), f"Preflight: tom sport för {date}")
+            require(sport in SPORT_ICON_KEYS, f"Preflight: okänd explicit sport {sport!r} för {date}")
+            explicit_sport_days.append((date, SPORT_ICON_KEYS[sport]))
         if "classification" in day:
             require(
                 day.get("classification") in VALID_CLASSIFICATIONS,
@@ -82,9 +127,19 @@ def main() -> None:
         index.count('class="manual-activity"') == expected_manual,
         "Preflight: renderade manuella aktiviteter matchar inte plan.json",
     )
-    if expected_manual:
-        require('class="sport-icon icon-enduro' in index, "Preflight: enduroikonen saknas")
-        require('data-classification="recreation"' in index, "Preflight: rekreationsklassning saknas")
+
+    for date, icon_key in explicit_sport_days:
+        start = index.find(f'<div class="day" id="dag-{date}">')
+        require(start >= 0, f"Preflight: dagkort saknas för {date}")
+        end = index.find('<div class="day" id="dag-', start + 1)
+        if end < 0:
+            end = index.find('<h2 class="section">', start + 1)
+        if end < 0:
+            end = len(index)
+        require(
+            f'icon-{icon_key}' in index[start:end],
+            f"Preflight: explicit sportikon {icon_key!r} saknas för {date}",
+        )
 
     canonical = GOAL.read_text(encoding="utf-8")
     mirror = GOAL_MIRROR.read_text(encoding="utf-8")
@@ -99,7 +154,7 @@ def main() -> None:
     require("phase-trail-sync-v1" not in canonical, "Preflight: gammal trail-sync-v1 finns kvar")
 
     print(
-        "Preflight OK: plan, ikonregister, manuella aktiviteter, navigation och "
+        "Preflight OK: normaliserade aktiviteter, plan, ikoner, navigation och "
         "målbildens canonical/mirror-kontrakt är konsistenta."
     )
 
