@@ -80,6 +80,15 @@ jobs:
       - name: Validate post-coach training data
         run: python "träning/scripts/validate_training_data.py"
 
+      - name: Generate closed week review
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_MODEL: gpt-5-mini
+        run: python "träning/scripts/weekly_review.py"
+
+      - name: Validate week review contracts
+        run: python "träning/scripts/check_week_reviews.py"
+
       - name: Sync structured swim workouts to Intervals/Garmin
         continue-on-error: true
         env:
@@ -100,6 +109,7 @@ jobs:
             "träning/data/goal.json"
             "träning/data/weather.json"
             "träning/data/dashboard_summary.json"
+            "träning/data/week_reviews"
             "träning/data/weeks"
             "träning/vecka"
             "träning/malbild"
