@@ -15,6 +15,7 @@ PIPELINE = (
     "finalize_activity_labels.py",
     "finalize_yoda_ui.py",
     "archive_weeks.py",
+    "finalize_week_review_ui.py",
     "build_upcoming_week.py",
     "finalize_header_ui.py",
     "finalize_navigation_ui.py",
@@ -24,6 +25,8 @@ PIPELINE = (
     "build_home.py",
     "finalize_goal_link_layout.py",
     "publish_goal_cache_bypass.py",
+    "check_week_reviews.py",
+    "check_week_review_ui.py",
     "validate_site_contracts.py",
     "validate_training_data.py",
 )
