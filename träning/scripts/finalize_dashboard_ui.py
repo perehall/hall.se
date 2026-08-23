@@ -151,16 +151,16 @@ today = datetime.now(tz).date().isoformat()
 
 # Planned training should be usable even while preliminary. A future planned,
 # preliminary or conditional training session therefore needs an explicit dose
-# (time and/or distance). Pure rest days are exempt.
+# (time and/or distance). Explicit rest/open states are exempt.
 missing_plan_dose = []
 for day in plan.get("days", []):
     if day.get("date", "") < today:
         continue
     if day.get("status") not in {"planned", "preliminary", "conditional"}:
         continue
-    session = (day.get("session") or "").strip()
-    if session.lower().startswith(("vila", "vilodag")):
+    if day.get("sport") in {"rest", "open"}:
         continue
+    session = (day.get("session") or "").strip()
     if not has_explicit_dose(session):
         missing_plan_dose.append(f'{day.get("date", "?")} {session or "<tomt pass>"}')
 
@@ -215,10 +215,9 @@ for old, new in {
 
 # Present explicit swim sets using conventional set notation rather than prose.
 for day in plan.get("days", []):
-    session = day.get("session", "")
-    if not session.startswith("Simning"):
+    if day.get("sport") != "swim":
         continue
-
+    session = day.get("session", "")
     escaped_session = html.escape(session)
     compact_needle = f'<div>{escaped_session}</div>'
     if day.get("date", "") >= today and compact_needle in page:
@@ -282,7 +281,7 @@ for group, meters in distance_by_sport.items():
 if today_day and not today_has_activity:
     required.append('class="today-pill">IDAG</span>')
 if any(
-    day.get("session", "").startswith("Simning") and "Förslag:" in day.get("reason", "")
+    day.get("sport") == "swim" and "Förslag:" in day.get("reason", "")
     for day in plan.get("days", [])
 ):
     required.append('class="swim-set-list')
