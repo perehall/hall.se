@@ -1,10 +1,10 @@
 {
-  "last_sync_utc": "2026-08-23T03:32:44.237398+00:00",
+  "last_sync_utc": "2026-08-23T07:08:56.622878+00:00",
   "activities": [
     {
       "id": 19852599244,
       "name": "Enduro vid lunch",
-      "sport_type": "MountainBikeRide",
+      "sport_type": "Enduro",
       "start_date": "2026-08-22T09:30:31Z",
       "start_date_local": "2026-08-22T11:30:31Z",
       "distance_m": 23887.9,
@@ -17,7 +17,13 @@
       "weighted_average_watts": null,
       "calories": 579.0,
       "device_name": "Garmin Forerunner 970",
-      "source": "Strava API"
+      "source": "Strava API",
+      "source_sport_type": "MountainBikeRide",
+      "classification": "recreation",
+      "display_label": "Enduro",
+      "garmin_activity_type": "Motocross",
+      "user_report": "Lätt och inte det minsta slitsamt.",
+      "classification_reason": "Strava saknar enduro som aktivitetstyp och exponerar därför passet som MountainBikeRide. Garmin Connect klassar originalaktiviteten som Motocross."
     },
     {
       "id": 19841136162,
@@ -325,5 +331,12 @@
       "device_name": "Garmin Forerunner 970",
       "source": "Strava API"
     }
-  ]
+  ],
+  "activity_semantics": {
+    "schema_version": 1,
+    "overrides_applied": 1,
+    "override_ids_present": [
+      "19852599244"
+    ]
+  }
 }

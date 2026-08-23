@@ -4,38 +4,38 @@
       "activity_id": 19852599244,
       "activity_date": "2026-08-22",
       "activity_name": "Enduro vid lunch",
-      "generated_at_utc": "2026-08-23T03:32:50.773428+00:00",
+      "generated_at_utc": "2026-08-23T07:09:03.677347+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Enduropasset var längre än rekreation; påverkar kvällens MTB-planering och söndagens lugna trail.",
-        "load_interpretation": "3940 s körtid, 512 m klättring och snittpuls 127 visar måttlig kardiovaskulär och mekanisk belastning som kan påverka nästa 24–48 timmar.",
-        "confidence": "medium",
+        "summary": "Enduropass bedöms som rekreationellt och påverkar inte planerade lugna trailpass i dag.",
+        "load_interpretation": "Litet närbelastande enduropass (≈1h22), rapporterat lätt; inga högintensiva data som kräver nedskalning.",
+        "confidence": "high",
         "facts": [
-          "Enduro 22/8: 6h52 totaltid, 1h5 rörelsetid? (moving_time 3940 s ≈65,7 min) — registrerad moving_time 3940 s.",
-          "Total stigning 512,4 m och genomsnittseffekt 267,9 W rapporterade från klocka.",
-          "Fredag–lördag hade tidigare två simpass+SUP och löpning inom 72 timmar före enduro.",
-          "Planerat lugnt trailpass 23/8; MTB/XC kväll 22/8 anges öppet och får styras av benens känsla."
+          "Pass: Enduro 23,9 km, 1:22:01 passtid, 512 m+, snittpuls 127, max 152.",
+          "Användarrapport: \"Lätt och inte det minsta slitsamt.\"",
+          "Föregående 2 dagar: simning + SUP (sammanlagt ~2h12) och tidigare löpning/tröskel inom veckan.",
+          "Planerat för idag: lugn trail 50–70 min; lördagens enduro klassad som rekreation i planen."
         ],
         "interpretations": [
-          "Enduron innehöll betydande teknisk/energikostnad givet effekt och höjd; det kan ge lokal muskeltrötthet i ben och överkropp trots att du rapporterat 'rekreation'.",
-          "Eftersom du har haft flera pass dagar före (sim, SUP, löp) är ackumulerad närbelastning måttlig och kan försämra kvalitet på ett planerat MTB-kvalitetspass samma kväll eller kräva lugn söndag."
+          "Enduron bidrar marginellt till veckobelastningen och är absorberad som lågintensiv rekreation.",
+          "Ingen akut lokal trötthet rapporterad som skulle motivera vila i dag."
         ],
         "unknowns": [
-          "Subjektiv återhämtning, lokal muskeltrötthet i ben och sömnkvalitet saknas.",
-          "Exakt hur ansträngande enduron var tekniskt (långa bär, gång, stillastående) vs kontinuerligt åkande.",
-          "Eventuellt kvällspass MTB/XC genomfördes inte (uppdatering saknas)."
+          "Eventuell fysisk belastning från sen kvällsarbete på tomten som inte kvantifierats.",
+          "Subjektiv dagskänsla i dag (muskulär lokal trötthet) kan ändra beslutet.",
+          "Detaljer om teknisk körning (stopp/lyft) som påverkar lokal styrkebelastning saknas."
         ]
       },
       "plan_action": {
-        "action": "reduce",
+        "action": "keep",
         "target_date": "2026-08-23",
-        "reason": "Ackumulerad närbelastning och osäker lokal trötthet gör att planerat lugnt trail bör skalas ner.",
-        "recommendation": "Gör söndagens trail mycket lugnt: max 30–45 min låg intensitet eller ersätt med vila om benen känns tunga; undvik kvalitet eller backfokuserade inslag.",
+        "reason": "Enduron var lätt/rekreationell och tidigare pass veckans stabilitetsmål stöder kontinuitet.",
+        "recommendation": "Behåll dagens lugna trail 50–70 min som planerat; håll intensiteten låg och avboka eller gör passet kortare vid dagens trötthetsskala >4/10.",
         "requires_approval": false
       },
       "auto_apply": {
-        "applied": true,
-        "note": "Konservativ ändring applicerad på 2026-08-23: reduce."
+        "applied": false,
+        "note": "Ingen automatisk planändring."
       }
     },
     {
@@ -231,6 +231,6 @@
       }
     }
   ],
-  "last_trigger_hash": "4b0b1725fe40296cf2837277582b1339c021084c829b3048ea2fee1bcad7e0e7",
-  "last_run_utc": "2026-08-23T03:32:50.773445+00:00"
+  "last_trigger_hash": "023920c1452d80d94ecad65590338ae70497402cec80635fe049226b80152285",
+  "last_run_utc": "2026-08-23T07:09:03.677371+00:00"
 }

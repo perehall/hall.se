@@ -4,7 +4,7 @@
   "week_start": "2026-08-17",
   "week_end": "2026-08-23",
   "created_at_utc": "2026-08-21T08:20:47.262526+00:00",
-  "updated_at_utc": "2026-08-23T03:32:51.142557+00:00",
+  "updated_at_utc": "2026-08-23T07:09:03.997589+00:00",
   "plan": {
     "meta": {
       "timezone": "Europe/Stockholm",
@@ -246,34 +246,18 @@
       {
         "date": "2026-08-22",
         "label": "Lördag",
-        "status": "open",
-        "sport": "mtb",
-        "classification": "training",
-        "session": "MTB/XC ikväll · öppet",
-        "reason": "MTB/XC ikväll är öppet och får styras av hur benen känns. Ingen tids- eller distansdos sätts utan underlag; om det blir av är teknik/stigkörning huvudsyftet. Dagens redan genomförda enduro registreras separat som rekreation.",
-        "manual_activities": [
-          {
-            "status": "completed",
-            "sport": "enduro",
-            "classification": "recreation",
-            "session": "Enduro · Svansta · lätt",
-            "reason": "Egen rapport: inte det minsta slitsamt. Registreras som rekreation; ingen tid, distans eller intensitet läggs till utan data."
-          }
-        ]
+        "status": "completed",
+        "sport": "enduro",
+        "classification": "recreation",
+        "session": "Enduro · Svansta · 23,89 km · 1:22:01",
+        "reason": "Genomfört enduropass. Strava registrerade källaktiviteten som MountainBikeRide eftersom enduro saknas där; Garmin Connect klassar originalaktiviteten som Motocross. Strava-data: 23,89 km, 1:22:01 passtid, 512 m+, snittpuls 127 och maxpuls 152. Egen rapport: lätt och inte det minsta slitsamt, därför rekreation. Ingen MTB genomfördes på kvällen; resten av dagen bestod av arbete på tomten till sent, vars fysiska belastning inte är kvantifierad."
       },
       {
         "date": "2026-08-23",
         "label": "Söndag",
-        "status": "conditional",
+        "status": "preliminary",
         "session": "Trail · lugnt · ca 50–70 min",
-        "reason": "Preliminärt lugn trail. Dimensionera främst mot om MTB faktiskt genomförs på lördagskvällen och vilken belastning det i så fall ger. Dagens lätta enduro på Svansta behöver inte i sig reducera söndagen.",
-        "original_session": "Trail · lugnt · ca 50–70 min",
-        "auto_coach": {
-          "action": "reduce",
-          "reason": "Ackumulerad närbelastning och osäker lokal trötthet gör att planerat lugnt trail bör skalas ner.",
-          "applied_at_utc": "2026-08-23T03:32:50.772671+00:00"
-        },
-        "coach_adjustment": "Skala ned passet. Gör söndagens trail mycket lugnt: max 30–45 min låg intensitet eller ersätt med vila om benen känns tunga; undvik kvalitet eller backfokuserade inslag."
+        "reason": "Ingen MTB genomfördes på lördagen. Enduron var enligt egen rapport lätt rekreation och ska inte ensam reducera söndagens pass. Tomtarbete pågick till sent men belastningen är inte kvantifierad; dagens lugna trail ligger därför kvar preliminärt och får avgöras mot faktisk dagskänsla."
       }
     ],
     "strength_template": [
@@ -289,7 +273,7 @@
     {
       "id": 19852599244,
       "name": "Enduro vid lunch",
-      "sport_type": "MountainBikeRide",
+      "sport_type": "Enduro",
       "start_date": "2026-08-22T09:30:31Z",
       "start_date_local": "2026-08-22T11:30:31Z",
       "distance_m": 23887.9,
@@ -302,7 +286,13 @@
       "weighted_average_watts": null,
       "calories": 579.0,
       "device_name": "Garmin Forerunner 970",
-      "source": "Strava API"
+      "source": "Strava API",
+      "source_sport_type": "MountainBikeRide",
+      "classification": "recreation",
+      "display_label": "Enduro",
+      "garmin_activity_type": "Motocross",
+      "user_report": "Lätt och inte det minsta slitsamt.",
+      "classification_reason": "Strava saknar enduro som aktivitetstyp och exponerar därför passet som MountainBikeRide. Garmin Connect klassar originalaktiviteten som Motocross."
     },
     {
       "id": 19841136162,
@@ -418,38 +408,38 @@
       "activity_id": 19852599244,
       "activity_date": "2026-08-22",
       "activity_name": "Enduro vid lunch",
-      "generated_at_utc": "2026-08-23T03:32:50.773428+00:00",
+      "generated_at_utc": "2026-08-23T07:09:03.677347+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Enduropasset var längre än rekreation; påverkar kvällens MTB-planering och söndagens lugna trail.",
-        "load_interpretation": "3940 s körtid, 512 m klättring och snittpuls 127 visar måttlig kardiovaskulär och mekanisk belastning som kan påverka nästa 24–48 timmar.",
-        "confidence": "medium",
+        "summary": "Enduropass bedöms som rekreationellt och påverkar inte planerade lugna trailpass i dag.",
+        "load_interpretation": "Litet närbelastande enduropass (≈1h22), rapporterat lätt; inga högintensiva data som kräver nedskalning.",
+        "confidence": "high",
         "facts": [
-          "Enduro 22/8: 6h52 totaltid, 1h5 rörelsetid? (moving_time 3940 s ≈65,7 min) — registrerad moving_time 3940 s.",
-          "Total stigning 512,4 m och genomsnittseffekt 267,9 W rapporterade från klocka.",
-          "Fredag–lördag hade tidigare två simpass+SUP och löpning inom 72 timmar före enduro.",
-          "Planerat lugnt trailpass 23/8; MTB/XC kväll 22/8 anges öppet och får styras av benens känsla."
+          "Pass: Enduro 23,9 km, 1:22:01 passtid, 512 m+, snittpuls 127, max 152.",
+          "Användarrapport: \"Lätt och inte det minsta slitsamt.\"",
+          "Föregående 2 dagar: simning + SUP (sammanlagt ~2h12) och tidigare löpning/tröskel inom veckan.",
+          "Planerat för idag: lugn trail 50–70 min; lördagens enduro klassad som rekreation i planen."
         ],
         "interpretations": [
-          "Enduron innehöll betydande teknisk/energikostnad givet effekt och höjd; det kan ge lokal muskeltrötthet i ben och överkropp trots att du rapporterat 'rekreation'.",
-          "Eftersom du har haft flera pass dagar före (sim, SUP, löp) är ackumulerad närbelastning måttlig och kan försämra kvalitet på ett planerat MTB-kvalitetspass samma kväll eller kräva lugn söndag."
+          "Enduron bidrar marginellt till veckobelastningen och är absorberad som lågintensiv rekreation.",
+          "Ingen akut lokal trötthet rapporterad som skulle motivera vila i dag."
         ],
         "unknowns": [
-          "Subjektiv återhämtning, lokal muskeltrötthet i ben och sömnkvalitet saknas.",
-          "Exakt hur ansträngande enduron var tekniskt (långa bär, gång, stillastående) vs kontinuerligt åkande.",
-          "Eventuellt kvällspass MTB/XC genomfördes inte (uppdatering saknas)."
+          "Eventuell fysisk belastning från sen kvällsarbete på tomten som inte kvantifierats.",
+          "Subjektiv dagskänsla i dag (muskulär lokal trötthet) kan ändra beslutet.",
+          "Detaljer om teknisk körning (stopp/lyft) som påverkar lokal styrkebelastning saknas."
         ]
       },
       "plan_action": {
-        "action": "reduce",
+        "action": "keep",
         "target_date": "2026-08-23",
-        "reason": "Ackumulerad närbelastning och osäker lokal trötthet gör att planerat lugnt trail bör skalas ner.",
-        "recommendation": "Gör söndagens trail mycket lugnt: max 30–45 min låg intensitet eller ersätt med vila om benen känns tunga; undvik kvalitet eller backfokuserade inslag.",
+        "reason": "Enduron var lätt/rekreationell och tidigare pass veckans stabilitetsmål stöder kontinuitet.",
+        "recommendation": "Behåll dagens lugna trail 50–70 min som planerat; håll intensiteten låg och avboka eller gör passet kortare vid dagens trötthetsskala >4/10.",
         "requires_approval": false
       },
       "auto_apply": {
-        "applied": true,
-        "note": "Konservativ ändring applicerad på 2026-08-23: reduce."
+        "applied": false,
+        "note": "Ingen automatisk planändring."
       }
     },
     {
