@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { handleRequest } from "../src/worker.mjs";
+import { handleRequest, webhookPathTokenFromSecret } from "../src/worker.mjs";
 
 const env = {
   WEBHOOK_PATH_SECRET: "path-secret",
@@ -28,9 +28,21 @@ function event(overrides = {}) {
   };
 }
 
+async function webhookUrl(query = "") {
+  const token = await webhookPathTokenFromSecret(env.WEBHOOK_PATH_SECRET);
+  return `https://hooks.example/strava/${token}${query}`;
+}
+
+test("webhook path token is deterministic and URL-safe", async () => {
+  const first = await webhookPathTokenFromSecret(" path-secret ");
+  const second = await webhookPathTokenFromSecret("path-secret");
+  assert.equal(first, second);
+  assert.match(first, /^[0-9a-f]{32}$/);
+});
+
 test("Strava subscription verification echoes challenge", async () => {
   const request = new Request(
-    "https://hooks.example/strava/path-secret?hub.mode=subscribe&hub.challenge=abc&hub.verify_token=verify-secret",
+    await webhookUrl("?hub.mode=subscribe&hub.challenge=abc&hub.verify_token=verify-secret"),
   );
   const response = await handleRequest(request, env, async () => {
     throw new Error("GitHub must not be called during verification");
@@ -41,7 +53,7 @@ test("Strava subscription verification echoes challenge", async () => {
 
 test("wrong verification token is rejected", async () => {
   const request = new Request(
-    "https://hooks.example/strava/path-secret?hub.mode=subscribe&hub.challenge=abc&hub.verify_token=wrong",
+    await webhookUrl("?hub.mode=subscribe&hub.challenge=abc&hub.verify_token=wrong"),
   );
   const response = await handleRequest(request, env);
   assert.equal(response.status, 403);
@@ -56,7 +68,7 @@ test("valid activity event dispatches exact repository event", async () => {
     requestBody = JSON.parse(init.body);
     return new Response(null, { status: 204 });
   };
-  const request = new Request("https://hooks.example/strava/path-secret", {
+  const request = new Request(await webhookUrl(), {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify(event()),
@@ -70,7 +82,7 @@ test("valid activity event dispatches exact repository event", async () => {
 });
 
 test("owner and subscription are enforced", async () => {
-  const request = new Request("https://hooks.example/strava/path-secret", {
+  const request = new Request(await webhookUrl(), {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify(event({ owner_id: 999 })),
@@ -82,7 +94,7 @@ test("owner and subscription are enforced", async () => {
 });
 
 test("GitHub failure returns non-200 so Strava can retry", async () => {
-  const request = new Request("https://hooks.example/strava/path-secret", {
+  const request = new Request(await webhookUrl(), {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify(event()),
@@ -96,7 +108,7 @@ test("GitHub failure returns non-200 so Strava can retry", async () => {
 });
 
 test("athlete events are acknowledged without dispatch", async () => {
-  const request = new Request("https://hooks.example/strava/path-secret", {
+  const request = new Request(await webhookUrl(), {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify(event({ object_type: "athlete" })),
