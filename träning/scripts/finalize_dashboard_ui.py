@@ -151,7 +151,7 @@ today = datetime.now(tz).date().isoformat()
 
 # Planned training should be usable even while preliminary. A future planned,
 # preliminary or conditional training session therefore needs an explicit dose
-# (time and/or distance). Explicit rest/open states are exempt.
+# (time and/or distance). Explicit rest/open states and recreation are exempt.
 missing_plan_dose = []
 for day in plan.get("days", []):
     if day.get("date", "") < today:
@@ -159,6 +159,8 @@ for day in plan.get("days", []):
     if day.get("status") not in {"planned", "preliminary", "conditional"}:
         continue
     if day.get("sport") in {"rest", "open"}:
+        continue
+    if day.get("classification") == "recreation":
         continue
     session = (day.get("session") or "").strip()
     if not has_explicit_dose(session):
@@ -203,7 +205,6 @@ for group, meters in distance_by_sport.items():
     elif labelled not in page:
         raise RuntimeError(f"Dashboard UI: grenrad saknas för {group}")
 
-# Visible product name only; the JSON schema and coach.py contract stay unchanged.
 for old, new in {
     "AI-coach · bedömning": "Tränings-Yoda (AI)",
     "Coachjustering": "Tränings-Yoda · justering",
@@ -213,7 +214,6 @@ for old, new in {
 }.items():
     page = page.replace(old, new)
 
-# Present explicit swim sets using conventional set notation rather than prose.
 for day in plan.get("days", []):
     if day.get("sport") != "swim":
         continue
@@ -231,7 +231,6 @@ for day in plan.get("days", []):
     if full_needle in page:
         page = page.replace(full_needle, render_swim_day(day), 1)
 
-# Make it immediately obvious which upcoming card is today.
 today_day = next((d for d in plan.get("days", []) if d.get("date") == today), None)
 today_has_activity = any(local_date(activity) == today for activity in week_activities)
 if today_day and not today_has_activity:
