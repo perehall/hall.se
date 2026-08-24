@@ -12,7 +12,9 @@ from zoneinfo import ZoneInfo
 from coach_rules import (
     allowed_target_dates,
     canonical_facts,
+    decision_ready_target_dates,
     normalize_assessment_confidence,
+    normalize_deferred_future_action,
     normalize_no_remaining_plan,
     plan_for_coach,
     validate_plan_action,
@@ -25,7 +27,7 @@ COACH_FILE = ROOT / "data" / "coach.json"
 PROMPT_FILE = ROOT / "coach_prompt.md"
 
 MODEL = os.environ.get("OPENAI_MODEL", "gpt-5-mini")
-COACH_CONTRACT_VERSION = 3
+COACH_CONTRACT_VERSION = 4
 
 SCHEMA = {
     "type": "object",
@@ -247,7 +249,9 @@ def main():
     latest_date = (latest.get("start_date_local") or latest.get("start_date") or "")[:10]
     recent = sorted(activities, key=lambda activity: activity.get("start_date") or "", reverse=True)[:10]
     coach_plan, fulfilled_dates = plan_for_coach(plan, activities)
-    allowed_dates = allowed_target_dates(plan, activities, local_date)
+    candidate_dates = allowed_target_dates(plan, activities, local_date)
+    ready_dates = decision_ready_target_dates(plan, activities, local_date)
+    deferred_dates = [date for date in candidate_dates if date not in ready_dates]
 
     input_data = {
         "today_local": local_date,
@@ -256,14 +260,16 @@ def main():
         "recent_activities": recent,
         "current_plan": coach_plan,
         "fulfilled_plan_dates": sorted(fulfilled_dates),
-        "allowed_target_dates": allowed_dates,
+        "allowed_target_dates": ready_dates,
+        "deferred_target_dates": deferred_dates,
         "instruction": (
             "Analysera senaste passet mot faktisk närbelastning och aktuell plan. Kontrollera särskilt "
             "föregående och kommande 2–3 dagar. Dagar i fulfilled_plan_dates är redan genomförda och "
-            "får aldrig ordineras igen. target_date får endast väljas ur allowed_target_dates. Om listan "
-            "är tom ska target_date vara tomt och ingen ytterligare träning ordineras idag. Föreslå endast "
-            "konservativ automatisk ändring; allt som kan innebära ökad belastning ska vara review och "
-            "kräva godkännande."
+            "får aldrig ordineras igen. target_date får endast väljas ur allowed_target_dates. Datum i "
+            "deferred_target_dates ligger längre fram men är inte beslutsmogna eftersom mellanliggande "
+            "dagars faktiska utfall ännu saknas; skriv inte om dem nu. Om allowed_target_dates är tom ska "
+            "target_date vara tomt och ingen automatisk framtidsändring göras. Föreslå endast konservativ "
+            "automatisk ändring; allt som kan innebära ökad belastning ska vara review och kräva godkännande."
         ),
     }
 
@@ -271,13 +277,18 @@ def main():
     result = call_openai(system_prompt, input_data)
     result["assessment"] = normalize_assessment_confidence(result["assessment"])
     result["assessment"]["facts"] = canonical_facts(latest, latest_date, fulfilled_dates)
+    result["plan_action"] = normalize_deferred_future_action(
+        result["plan_action"],
+        candidate_dates=candidate_dates,
+        ready_dates=ready_dates,
+    )
     result["plan_action"] = normalize_no_remaining_plan(
         result["plan_action"],
-        allowed_dates=allowed_dates,
+        allowed_dates=ready_dates,
         latest_date=latest_date,
         fulfilled_dates=fulfilled_dates,
     )
-    validate_plan_action(result["plan_action"], allowed_dates)
+    validate_plan_action(result["plan_action"], ready_dates)
 
     changed, apply_note = apply_conservative_action(plan, result["plan_action"])
     if changed:
@@ -308,7 +319,7 @@ def main():
 
     print(
         f"AI coach: analyserade aktivitet {latest.get('id')} med {MODEL}. "
-        f"Fulfilled={sorted(fulfilled_dates)} allowed_targets={allowed_dates}. {apply_note}"
+        f"Fulfilled={sorted(fulfilled_dates)} ready_targets={ready_dates} deferred={deferred_dates}. {apply_note}"
     )
     return 0
 
