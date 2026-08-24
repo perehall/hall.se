@@ -4,6 +4,10 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "17 */3 * * *"
+    # Veckorullning 00:05 Europe/Stockholm. Två UTC-tider täcker CET/CEST;
+    # rollover_week.py använder lokal kalendervecka och är idempotent.
+    - cron: "5 22 * * 0"
+    - cron: "5 23 * * 0"
   push:
     paths:
       - "träning/data/manual-sync-trigger.txt"
