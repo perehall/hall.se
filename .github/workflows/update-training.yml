@@ -61,6 +61,12 @@ jobs:
       - name: Validate normalized training data
         run: python "träning/scripts/validate_training_data.py"
 
+      - name: Roll over calendar week
+        run: python "träning/scripts/rollover_week.py"
+
+      - name: Validate rolled-over training data
+        run: python "träning/scripts/validate_training_data.py"
+
       - name: Persist rotated Strava refresh token
         env:
           GH_TOKEN: ${{ secrets.TRAINING_SECRET_PAT }}
