@@ -17,9 +17,18 @@ function configured(value) {
   return typeof value === "string" && value.trim().length > 0;
 }
 
-function expectedWebhookPath(env) {
-  if (!configured(env.WEBHOOK_PATH_SECRET)) return null;
-  return `/strava/${env.WEBHOOK_PATH_SECRET.trim()}`;
+export async function webhookPathTokenFromSecret(secret) {
+  if (!configured(secret)) return null;
+  const bytes = new TextEncoder().encode(secret.trim());
+  const digest = await crypto.subtle.digest("SHA-256", bytes);
+  return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0"))
+    .join("")
+    .slice(0, 32);
+}
+
+async function expectedWebhookPath(env) {
+  const token = await webhookPathTokenFromSecret(env.WEBHOOK_PATH_SECRET);
+  return token ? `/strava/${token}` : null;
 }
 
 function integerString(value) {
@@ -128,7 +137,7 @@ export async function handleRequest(request, env, fetchImpl = fetch) {
     });
   }
 
-  const webhookPath = expectedWebhookPath(env);
+  const webhookPath = await expectedWebhookPath(env);
   if (!webhookPath) return jsonResponse({ error: "webhook_path_not_configured" }, 503);
   if (url.pathname !== webhookPath) return jsonResponse({ error: "not_found" }, 404);
 
