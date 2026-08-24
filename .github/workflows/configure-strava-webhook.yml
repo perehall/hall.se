@@ -1,0 +1,93 @@
+name: Configure Strava webhook subscription
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "Subscription action"
+        required: true
+        type: choice
+        options:
+          - list
+          - create
+          - delete
+      callback_url:
+        description: "Public Cloudflare Worker callback URL (required for create)"
+        required: false
+        type: string
+      subscription_id:
+        description: "Subscription ID (required for delete)"
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  configure:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate inputs
+        env:
+          ACTION: ${{ inputs.action }}
+          CALLBACK_URL: ${{ inputs.callback_url }}
+          SUBSCRIPTION_ID: ${{ inputs.subscription_id }}
+          VERIFY_TOKEN: ${{ secrets.STRAVA_WEBHOOK_VERIFY_TOKEN }}
+        run: |
+          set -euo pipefail
+          test -n "$VERIFY_TOKEN" || { echo "STRAVA_WEBHOOK_VERIFY_TOKEN saknas"; exit 1; }
+          if [ "$ACTION" = "create" ]; then
+            test -n "$CALLBACK_URL" || { echo "callback_url krävs för create"; exit 1; }
+            case "$CALLBACK_URL" in
+              https://*) ;;
+              *) echo "callback_url måste använda https"; exit 1 ;;
+            esac
+          fi
+          if [ "$ACTION" = "delete" ]; then
+            case "$SUBSCRIPTION_ID" in
+              ''|*[!0-9]*) echo "subscription_id måste vara ett heltal för delete"; exit 1 ;;
+            esac
+          fi
+
+      - name: List subscription
+        if: inputs.action == 'list'
+        env:
+          CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
+        run: |
+          set -euo pipefail
+          curl --fail-with-body --silent --show-error --get \
+            https://www.strava.com/api/v3/push_subscriptions \
+            --data-urlencode "client_id=$CLIENT_ID" \
+            --data-urlencode "client_secret=$CLIENT_SECRET"
+          echo
+
+      - name: Create subscription
+        if: inputs.action == 'create'
+        env:
+          CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
+          CALLBACK_URL: ${{ inputs.callback_url }}
+          VERIFY_TOKEN: ${{ secrets.STRAVA_WEBHOOK_VERIFY_TOKEN }}
+        run: |
+          set -euo pipefail
+          response=$(curl --fail-with-body --silent --show-error -X POST \
+            https://www.strava.com/api/v3/push_subscriptions \
+            -F "client_id=$CLIENT_ID" \
+            -F "client_secret=$CLIENT_SECRET" \
+            -F "callback_url=$CALLBACK_URL" \
+            -F "verify_token=$VERIFY_TOKEN")
+          echo "$response"
+          python -c 'import json,sys; data=json.load(sys.stdin); assert isinstance(data.get("id"), int), "Strava-svaret saknar subscription id"' <<< "$response"
+
+      - name: Delete subscription
+        if: inputs.action == 'delete'
+        env:
+          CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
+          SUBSCRIPTION_ID: ${{ inputs.subscription_id }}
+        run: |
+          set -euo pipefail
+          curl --fail-with-body --silent --show-error -X DELETE \
+            "https://www.strava.com/api/v3/push_subscriptions/$SUBSCRIPTION_ID?client_id=$CLIENT_ID&client_secret=$CLIENT_SECRET"
+          echo "Subscription $SUBSCRIPTION_ID deleted."
