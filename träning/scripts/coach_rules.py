@@ -14,9 +14,16 @@ def activity_family(activity):
 
 
 def planned_families(day):
-    """Return fulfillment families from explicit machine-readable plan sport."""
-    sport = str(day.get("sport") or "").strip().lower()
-    return set(PLAN_SPORT_ACTIVITY_FAMILIES.get(sport, set()))
+    """Return fulfillment families from explicit machine-readable plan sports."""
+    sports = [str(day.get("sport") or "").strip().lower()]
+    alternatives = day.get("alternative_sports") or []
+    if isinstance(alternatives, list):
+        sports.extend(str(item or "").strip().lower() for item in alternatives)
+
+    families = set()
+    for sport in sports:
+        families.update(PLAN_SPORT_ACTIVITY_FAMILIES.get(sport, set()))
+    return families
 
 
 def planned_family(day):
@@ -56,6 +63,11 @@ def allowed_target_dates(plan, activities, today_local):
         if not date or date < today_local:
             continue
         if day.get("status") in {"completed", "open"}:
+            continue
+        # A user-confirmed current plan may be locked until its planned activity
+        # has actually happened. This prevents stale prior activity from rewriting
+        # a decision the user has just made for today.
+        if day.get("manual_lock") is True:
             continue
         # Rest/open and recreation are intentional no-auto-prescription states.
         if day.get("sport") in {"open", "rest"}:
