@@ -68,6 +68,44 @@ def upcoming_w35():
     }
 
 
+def add_structured_swim(upcoming):
+    upcoming = {**upcoming, "days": [dict(day) for day in upcoming["days"]]}
+    upcoming["days"][1] = {
+        "date": "2026-08-25",
+        "label": "Tisdag",
+        "status": "preliminary",
+        "planning_status": "preliminary",
+        "sport": "swim",
+        "session": "Simning · aerob/teknik · 3 200 m",
+        "reason": "Preliminärt simpass.",
+        "development_focus": "Tidigt grepp.",
+        "swim_equipment": {"planned": "none"},
+        "watch_workout": {
+            "sync_enabled": False,
+            "id": "swim-w35-test",
+            "type": "Swim",
+            "equipment": [],
+            "name": "Aerob 3200",
+            "planned_distance_m": 3200,
+            "blocks": [
+                {
+                    "name": "Aerob",
+                    "repeat": 8,
+                    "steps": [
+                        {
+                            "kind": "swim",
+                            "text": "Jämnt",
+                            "distance_m": 400,
+                            "intensity": "active",
+                        }
+                    ],
+                }
+            ],
+        },
+    }
+    return upcoming
+
+
 class WeeklyRolloverTests(unittest.TestCase):
     def test_monday_promotes_upcoming_and_builds_next_week(self):
         result = rollover_documents(plan_w34(), upcoming_w35(), date(2026, 8, 24))
@@ -93,7 +131,7 @@ class WeeklyRolloverTests(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             rollover_documents(plan_w34(), upcoming, date(2026, 8, 24))
 
-    def test_future_week_contains_no_invented_training_dose(self):
+    def test_future_week_contains_no_invented_training_dose_without_established_session(self):
         promoted, _ = rollover_documents(plan_w34(), upcoming_w35(), date(2026, 8, 24))
         future = build_open_next_week(promoted)
         for day in future["days"]:
@@ -101,6 +139,25 @@ class WeeklyRolloverTests(unittest.TestCase):
             self.assertNotIn("duration", day)
             self.assertNotIn("distance", day)
             self.assertIn("Ingen träningsdos", day["reason"])
+
+    def test_structured_swim_is_carried_forward_without_volume_increase(self):
+        upcoming = add_structured_swim(upcoming_w35())
+        promoted, future = rollover_documents(plan_w34(), upcoming, date(2026, 8, 24))
+        source = promoted["days"][1]
+        target = future["days"][1]
+
+        self.assertEqual(source["sport"], "swim")
+        self.assertEqual(target["sport"], "swim")
+        self.assertEqual(target["status"], "preliminary")
+        self.assertEqual(target["planning_status"], "preliminary")
+        self.assertEqual(target["date"], "2026-09-01")
+        self.assertEqual(target["watch_workout"]["planned_distance_m"], 3200)
+        self.assertEqual(target["watch_workout"]["blocks"], source["watch_workout"]["blocks"])
+        self.assertFalse(target["watch_workout"]["sync_enabled"])
+        self.assertNotEqual(target["watch_workout"]["id"], source["watch_workout"]["id"])
+        self.assertNotIn("external_id", target["watch_workout"])
+        self.assertTrue(target["development_focus"])
+        self.assertIn("ökar inte automatiskt", target["reason"])
 
 
 if __name__ == "__main__":
