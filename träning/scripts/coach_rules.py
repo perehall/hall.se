@@ -68,6 +68,68 @@ def allowed_target_dates(plan, activities, today_local):
     return allowed
 
 
+def unresolved_intervening_dates(plan, activities, today_local, target_date):
+    """Return dates whose unknown outcome must be known before changing target_date.
+
+    A coach action may only auto-edit a later session when every calendar day from
+    today up to (but not including) the target is already fulfilled/completed or
+    explicitly planned as rest. This prevents stale activity data from rewriting a
+    session across still-unknown intervening load.
+    """
+    fulfilled = fulfilled_plan_dates(plan, activities)
+    unresolved = []
+    for day in plan.get("days", []):
+        date = day.get("date") or ""
+        if not date or date < today_local or date >= target_date:
+            continue
+        if day.get("status") == "completed" or date in fulfilled:
+            continue
+        if day.get("sport") == "rest":
+            continue
+        unresolved.append(date)
+    return unresolved
+
+
+def decision_ready_target_dates(plan, activities, today_local):
+    """Only targets with no unresolved intervening day are safe to change now."""
+    candidates = allowed_target_dates(plan, activities, today_local)
+    return [
+        target
+        for target in candidates
+        if not unresolved_intervening_dates(plan, activities, today_local, target)
+    ]
+
+
+def normalize_deferred_future_action(action, candidate_dates, ready_dates):
+    """Defer model advice that tries to decide a not-yet-decision-ready session."""
+    normalized = dict(action)
+    target = str(normalized.get("target_date") or "").strip()
+    candidates = set(candidate_dates)
+    ready = set(ready_dates)
+
+    deferred = target in candidates and target not in ready
+    blocked_change_without_target = (
+        normalized.get("action") in {"reduce", "rest"}
+        and not target
+        and bool(candidates)
+        and not ready
+    )
+    if not deferred and not blocked_change_without_target:
+        return normalized
+
+    normalized["action"] = "review"
+    normalized["target_date"] = ""
+    normalized["reason"] = (
+        "Beslutet skjuts upp eftersom mellanliggande planerade dagar ännu inte har ett känt utfall."
+    )
+    normalized["recommendation"] = (
+        "Ändra inte ett senare pass ännu. Bedöm det på nytt när de mellanliggande dagarnas faktiska "
+        "belastning och återhämtning finns i underlaget."
+    )
+    normalized["requires_approval"] = False
+    return normalized
+
+
 def plan_for_coach(plan, activities):
     result = deepcopy(plan)
     fulfilled = fulfilled_plan_dates(result, activities)
