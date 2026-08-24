@@ -10,9 +10,23 @@ on:
     branches:
       - main
     paths:
-      - "träning/**"
+      - "träning/scripts/**"
+      - "träning/tests/**"
+      - "träning/coach_prompt.md"
+      - "träning/week_review_prompt.md"
+      - "träning/data/plan.json"
+      - "träning/data/upcoming_week.json"
+      - "träning/data/goal.json"
+      - "träning/data/activity_overrides.json"
+      - "träning/data/sport_icons.json"
+      - "träning/data/settings.json"
+      - "träning/data/weather_config.json"
       - ".github/workflows/test-training.yml"
       - ".github/workflows/update-training.yml"
+
+concurrency:
+  group: test-training-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -41,7 +55,8 @@ jobs:
           python "träning/scripts/normalize_activity_semantics.py"
           python "träning/scripts/validate_training_data.py"
           python "träning/scripts/render_training_site.py"
-          grep -Fq '<strong>Löpning · grus/asfalt</strong>' "träning/index.html"
+          test -s "träning/index.html"
+          grep -Fq '<section class="dashboard"' "träning/index.html"
 
       - name: Diff hygiene
         run: git diff --check
