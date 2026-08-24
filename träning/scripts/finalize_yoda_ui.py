@@ -71,8 +71,17 @@ def render_coach(match):
 
 
 page, replacements = coach_pattern.subn(render_coach, page)
-if replacements == 0 and 'class="coach yoda-v2"' not in page:
-    raise RuntimeError("Tränings-Yoda UX: kunde inte hitta något coachblock att formatera")
+has_v2 = 'class="coach yoda-v2"' in page
+has_unformatted_coach = 'class="coach"' in page
+
+if replacements == 0 and not has_v2:
+    if has_unformatted_coach:
+        raise RuntimeError("Tränings-Yoda UX: coachblock finns men matchar inte UI-kontraktet")
+    # A new active week can legitimately have no activity/coach analysis yet.
+    # Do not invent a coach block merely to satisfy the renderer.
+    INDEX_FILE.write_text(page, encoding="utf-8")
+    print("Tränings-Yoda UX OK: 0 coachblock; ingen coachanalys finns för den aktiva veckan ännu.")
+    raise SystemExit(0)
 
 css_marker = "/* training-yoda-v2 */"
 if css_marker not in page:
