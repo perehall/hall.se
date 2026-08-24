@@ -1,0 +1,377 @@
+{
+  "schema_version": 1,
+  "contract_version": 1,
+  "week_key": "2026-W34",
+  "week_start": "2026-08-17",
+  "week_end": "2026-08-23",
+  "source_hash": "f726e7a1b8977fdb8c31f41411d3c8c0b6ca47ff26da8c337d0658afa6e255c1",
+  "generated_at_utc": "2026-08-24T03:37:11.562649+00:00",
+  "model": "gpt-5-mini",
+  "facts": {
+    "week_key": "2026-W34",
+    "week_start": "2026-08-17",
+    "week_end": "2026-08-23",
+    "activity_count": 8,
+    "training_activity_count": 7,
+    "recreation_activity_count": 1,
+    "active_days": 7,
+    "total_activity_time_s": 30660,
+    "training_time_s": 25739,
+    "recreation_time_s": 4921,
+    "by_sport": [
+      {
+        "label": "Swim",
+        "activity_count": 2,
+        "time_s": 7437
+      },
+      {
+        "label": "Löpning · grus/asfalt",
+        "activity_count": 1,
+        "time_s": 5459
+      },
+      {
+        "label": "Enduro",
+        "activity_count": 1,
+        "time_s": 4921
+      },
+      {
+        "label": "StandUpPaddling",
+        "activity_count": 1,
+        "time_s": 4360
+      },
+      {
+        "label": "TrailRun",
+        "activity_count": 1,
+        "time_s": 3290
+      },
+      {
+        "label": "Run",
+        "activity_count": 1,
+        "time_s": 3048
+      },
+      {
+        "label": "WeightTraining",
+        "activity_count": 1,
+        "time_s": 2145
+      }
+    ],
+    "activities": [
+      {
+        "id": 19783232279,
+        "date": "2026-08-17",
+        "label": "Swim",
+        "sport_type": "Swim",
+        "classification": "training",
+        "distance_m": 3200.0,
+        "elapsed_time_s": 3849,
+        "moving_time_s": 2786,
+        "total_elevation_gain_m": 0,
+        "average_heartrate": 127.1,
+        "max_heartrate": 154.0,
+        "user_report": null,
+        "source_sport_type": null,
+        "garmin_activity_type": null
+      },
+      {
+        "id": 19798624389,
+        "date": "2026-08-18",
+        "label": "WeightTraining",
+        "sport_type": "WeightTraining",
+        "classification": "training",
+        "distance_m": 0.0,
+        "elapsed_time_s": 2145,
+        "moving_time_s": 2145,
+        "total_elevation_gain_m": 0,
+        "average_heartrate": 87.3,
+        "max_heartrate": 119.0,
+        "user_report": null,
+        "source_sport_type": null,
+        "garmin_activity_type": null
+      },
+      {
+        "id": 19811963700,
+        "date": "2026-08-19",
+        "label": "TrailRun",
+        "sport_type": "TrailRun",
+        "classification": "training",
+        "distance_m": 6939.6,
+        "elapsed_time_s": 3290,
+        "moving_time_s": 3247,
+        "total_elevation_gain_m": 100.7,
+        "average_heartrate": 143.4,
+        "max_heartrate": 173.0,
+        "user_report": null,
+        "source_sport_type": null,
+        "garmin_activity_type": null
+      },
+      {
+        "id": 19827029587,
+        "date": "2026-08-20",
+        "label": "Run",
+        "sport_type": "Run",
+        "classification": "training",
+        "distance_m": 10347.9,
+        "elapsed_time_s": 3048,
+        "moving_time_s": 3048,
+        "total_elevation_gain_m": 63.0,
+        "average_heartrate": 145.7,
+        "max_heartrate": 167.0,
+        "user_report": null,
+        "source_sport_type": null,
+        "garmin_activity_type": null
+      },
+      {
+        "id": 19839384290,
+        "date": "2026-08-21",
+        "label": "Swim",
+        "sport_type": "Swim",
+        "classification": "training",
+        "distance_m": 3200.0,
+        "elapsed_time_s": 3588,
+        "moving_time_s": 2903,
+        "total_elevation_gain_m": 0,
+        "average_heartrate": 127.4,
+        "max_heartrate": 154.0,
+        "user_report": null,
+        "source_sport_type": null,
+        "garmin_activity_type": null
+      },
+      {
+        "id": 19841136162,
+        "date": "2026-08-21",
+        "label": "StandUpPaddling",
+        "sport_type": "StandUpPaddling",
+        "classification": "training",
+        "distance_m": 6021.0,
+        "elapsed_time_s": 4360,
+        "moving_time_s": 4323,
+        "total_elevation_gain_m": 42.8,
+        "average_heartrate": 89.7,
+        "max_heartrate": 108.0,
+        "user_report": null,
+        "source_sport_type": null,
+        "garmin_activity_type": null
+      },
+      {
+        "id": 19852599244,
+        "date": "2026-08-22",
+        "label": "Enduro",
+        "sport_type": "Enduro",
+        "classification": "recreation",
+        "distance_m": 23887.9,
+        "elapsed_time_s": 4921,
+        "moving_time_s": 3940,
+        "total_elevation_gain_m": 512.4,
+        "average_heartrate": 127.0,
+        "max_heartrate": 152.0,
+        "user_report": "Lätt och inte det minsta slitsamt.",
+        "source_sport_type": "MountainBikeRide",
+        "garmin_activity_type": "Motocross"
+      },
+      {
+        "id": 19862241646,
+        "date": "2026-08-23",
+        "label": "Löpning · grus/asfalt",
+        "sport_type": "Run",
+        "classification": "training",
+        "distance_m": 17158.0,
+        "elapsed_time_s": 5459,
+        "moving_time_s": 5459,
+        "total_elevation_gain_m": 161.0,
+        "average_heartrate": 138.9,
+        "max_heartrate": 157.0,
+        "user_report": "Underlag: grus och asfalt; inte trail.",
+        "source_sport_type": "Run",
+        "garmin_activity_type": null
+      }
+    ],
+    "plan_outcomes": [
+      {
+        "date": "2026-08-17",
+        "label": "Måndag",
+        "planned_sport": "swim",
+        "recorded_session": "Simning · 3 200 m · 59:39",
+        "original_session": null,
+        "status": "completed",
+        "outcome": "fulfilled",
+        "actual_activity_ids": [
+          19783232279
+        ],
+        "actual_labels": [
+          "Swim"
+        ],
+        "matching_activity_ids": [
+          19783232279
+        ],
+        "context": {
+          "reason": "Ursprunglig ordination från 17/8: cirka 60 min aerob/teknisk simning; 600 m lugn insim + 6 × 50 m lugn teknik + 3 × 400 m stadigt aerob med 15–20 s planerad vila + 8 × 100 m jämnt/avslappnat med 10–15 s planerad vila + 4 × 50 m något snabbare med bibehållen teknik + 300–500 m mycket lugnt. Huvudset RPE 4–5/10, kontrollerat och inte tröskel. Egen återkoppling efter passet: delar simmades något hårdare än avsett, men du kompenserade med längre vila. Exakt extra vila och exakt vilka meter som kortades går inte att fastställa från sparade data och anges därför inte. Strava visar totalt 3 200 m, 1:04:09 passtid, snittpuls 127,1 och maxpuls 154.",
+          "coach_adjustment": null
+        }
+      },
+      {
+        "date": "2026-08-18",
+        "label": "Tisdag",
+        "planned_sport": "strength",
+        "recorded_session": "Styrka · 35:45",
+        "original_session": null,
+        "status": "completed",
+        "outcome": "fulfilled",
+        "actual_activity_ids": [
+          19798624389
+        ],
+        "actual_labels": [
+          "WeightTraining"
+        ],
+        "matching_activity_ids": [
+          19798624389
+        ],
+        "context": {
+          "reason": "Medvetet nedskalat inför onsdagens eventuella swimrun/löpkvalitet.",
+          "coach_adjustment": null
+        }
+      },
+      {
+        "date": "2026-08-19",
+        "label": "Onsdag",
+        "planned_sport": "swimrun",
+        "recorded_session": "Swimrun · Jogersö Extreme · 6,94 km · 54:50",
+        "original_session": null,
+        "status": "completed",
+        "outcome": "fulfilled",
+        "actual_activity_ids": [
+          19811963700
+        ],
+        "actual_labels": [
+          "TrailRun"
+        ],
+        "matching_activity_ids": [
+          19811963700
+        ],
+        "context": {
+          "reason": "Relativt lugnt enligt egen rapport. Strava: snittpuls 143, maxpuls 173. Passet bedömdes som absorberat väl eftersom HRV förbättrades och Garmin träningsberedskap var hög följande dag.",
+          "coach_adjustment": null
+        }
+      },
+      {
+        "date": "2026-08-20",
+        "label": "Torsdag",
+        "planned_sport": "run",
+        "recorded_session": "Löpning · kontrollerad tröskel · 3 × 8 min · totalt 10,35 km · 50:48",
+        "original_session": "Simning · aerob/teknik eller vila",
+        "status": "completed",
+        "outcome": "fulfilled",
+        "actual_activity_ids": [
+          19827029587
+        ],
+        "actual_labels": [
+          "Run"
+        ],
+        "matching_activity_ids": [
+          19827029587
+        ],
+        "context": {
+          "reason": "Strava: 10,35 km, 50:48, 63 m+, snittpuls 145,7, maxpuls 167, snitteffekt 277 W. Garmin klassade passet som Tempo med aerob träningseffekt 3,9. Egen känsla tydligt kontrollerad med cirka en ytterligare 8-minutersrepetition i reserv. Rätt dos för progression från tidigare 5 × 4 min utan att driva passet till utmattning.",
+          "coach_adjustment": "Planen ändrades efter faktisk återhämtning: förbättrad HRV, hög Garmin-träningsberedskap och relativt lugn swimrun dagen före talade för ett kontrollerat löptröskelpass. Manuell Strava-synk efter passet bekräftade belastningen; AI-coachen rekommenderade att fredagen hålls lågkostnad."
+        }
+      },
+      {
+        "date": "2026-08-21",
+        "label": "Fredag",
+        "planned_sport": "swim",
+        "recorded_session": "Simning · aerob/teknik · 3 200 m + SUP · 6,02 km",
+        "original_session": null,
+        "status": "completed",
+        "outcome": "fulfilled",
+        "actual_activity_ids": [
+          19839384290,
+          19841136162
+        ],
+        "actual_labels": [
+          "Swim",
+          "StandUpPaddling"
+        ],
+        "matching_activity_ids": [
+          19839384290
+        ],
+        "context": {
+          "reason": "Simpasset genomfört enligt lågkostnadsprincipen: Strava 3,20 km, 59:48 passtid, snittpuls 127,4 och maxpuls 154. Därefter bonuspass SUP, huvudsakligen rekreation enligt egen rapport: 6,02 km, 1:12:40 passtid, snittpuls 89,7 och maxpuls 108. SUP räknas som faktisk lågintensiv träningsbelastning; sammanlagd passtid fredag 2:12:28.",
+          "coach_adjustment": null
+        }
+      },
+      {
+        "date": "2026-08-22",
+        "label": "Lördag",
+        "planned_sport": "enduro",
+        "recorded_session": "Enduro · Svansta · 23,89 km · 1:22:01",
+        "original_session": null,
+        "status": "completed",
+        "outcome": "fulfilled",
+        "actual_activity_ids": [
+          19852599244
+        ],
+        "actual_labels": [
+          "Enduro"
+        ],
+        "matching_activity_ids": [
+          19852599244
+        ],
+        "context": {
+          "reason": "Genomfört enduropass. Strava registrerade källaktiviteten som MountainBikeRide eftersom enduro saknas där; Garmin Connect klassar originalaktiviteten som Motocross. Strava-data: 23,89 km, 1:22:01 passtid, 512 m+, snittpuls 127 och maxpuls 152. Egen rapport: lätt och inte det minsta slitsamt, därför rekreation. Ingen MTB genomfördes på kvällen; resten av dagen bestod av arbete på tomten till sent, vars fysiska belastning inte är kvantifierad.",
+          "coach_adjustment": null
+        }
+      },
+      {
+        "date": "2026-08-23",
+        "label": "Söndag",
+        "planned_sport": "run",
+        "recorded_session": "Trail · lugnt · ca 50–70 min",
+        "original_session": null,
+        "status": "preliminary",
+        "outcome": "fulfilled",
+        "actual_activity_ids": [
+          19862241646
+        ],
+        "actual_labels": [
+          "Löpning · grus/asfalt"
+        ],
+        "matching_activity_ids": [
+          19862241646
+        ],
+        "context": {
+          "reason": "Ingen MTB genomfördes på lördagen. Enduron var enligt egen rapport lätt rekreation och ska inte ensam reducera söndagens pass. Tomtarbete pågick till sent men belastningen är inte kvantifierad; dagens lugna trail ligger därför kvar preliminärt och får avgöras mot faktisk dagskänsla.",
+          "coach_adjustment": null
+        }
+      }
+    ],
+    "outcome_counts": {
+      "fulfilled": 7
+    },
+    "plan_meta": {
+      "title": "Stabilisera först. Bygg sedan.",
+      "principle": "Veckan är till för att skapa stabilitet: ta vara på genomförd träning, hålla kvalitetspassen kontrollerade och låta återhämtningen styra nästa steg. Det är så vi bygger långsiktigt mot målet att bli en stark, robust och mångsidig allroundatlet inom löpning, MTB/XC, simning och styrka."
+    }
+  },
+  "assessment": {
+    "summary": "Veckan innehöll mångsidig, kontrollerad träning med fokus på simning, löpning och lågintensiv återhämtning; alla planerade träningstillfällen genomfördes enligt faktalagret.",
+    "worked": [
+      "Konsekvent genomförda simpass (två 3 200 m) med jämn puls och avsedd låg/aerob inriktning.",
+      "Kontrollerade löppass: både ett tröskelliknande tempointervallpass (10,35 km) och ett längre lugnt löppass (17,16 km) genomfördes som planerat.",
+      "Styrketräning skalerades ned med avsikt inför kvalitetspass och fullföljdes utan avvikelser.",
+      "SUP och traillöpning gav extra lågintensiv volym utan att störa huvudpassen."
+    ],
+    "not_as_planned": [
+      "Enduro registrerades som rekreation enligt faktalagret och räknas inte som belastande träningspass trots distans och höjdmeter.",
+      "Tomtarbete efter enduro påverkade söndagens status och gör söndagens lugna trailpass preliminärt eftersom arbetets belastning inte är kvantifierad.",
+      "Detaljer om kompensation/extra vila inom måndagens simpass saknas i datalagret och kan inte preciseras.",
+      "Inga användarrapporter för flera pass (utom enduro och söndagens underlag) begränsar tolkning av subjektiv belastning."
+    ],
+    "load_continuity": "Veckan visar kontinuerlig daglig aktivitet med flera återkommande låg- till medelintensiva pass (särskilt simning och löpning) och ingen enda ofullbordad planerad träning; belastningen framstår som absorberad över veckan med successiv progression i löpningen.",
+    "key_lesson": "Mångsidig, återhämtningsstyrd genomförandeprofil fungerar—kontrollerade kvalitetspass kunde genomföras utan uppenbar ackumulering av oförutsedd trötthet i faktalagret.",
+    "next_week_implication": "Fortsätt planera efter återhämtningssignaler och bevara den nuvarande balansen mellan kontrollerade kvalitetspass och lågintensiv volym; undvik att behandla rekreationsklassade aktiviteter som formell belastning i doseringen.",
+    "uncertainties": [
+      "Belastningen från kvällsarbete/’tomtarbete’ efter enduro är okvantifierad och påverkar bedömningen av återhämtning.",
+      "Ingen subjektiv återkoppling finns för majoriteten av passen (utom enduro och söndag), vilket begränsar tolkning av upplevd ansträngning.",
+      "Detaljer om exakta vilaintervaller och meter som ändrades i måndagens simpass saknas i datalagret."
+    ]
+  }
+}
