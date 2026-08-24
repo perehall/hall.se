@@ -55,10 +55,12 @@ def allowed_target_dates(plan, activities, today_local):
         date = day.get("date") or ""
         if not date or date < today_local:
             continue
-        if day.get("status") == "completed":
+        if day.get("status") in {"completed", "open"}:
             continue
-        # open/rest are intentional no-auto-prescription states.
+        # Rest/open and recreation are intentional no-auto-prescription states.
         if day.get("sport") in {"open", "rest"}:
+            continue
+        if day.get("classification") == "recreation":
             continue
         if date in fulfilled:
             continue
