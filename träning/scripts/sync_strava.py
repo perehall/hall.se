@@ -52,6 +52,7 @@ def activity_from_detail(activity_id, detail):
     if not start_date or not start_date_local:
         raise RuntimeError(f"Strava: aktivitet {activity_id} saknar startdatum")
 
+    gear = detail.get("gear") if isinstance(detail.get("gear"), dict) else {}
     return {
         "id": int(activity_id),
         "name": detail.get("name"),
@@ -68,6 +69,8 @@ def activity_from_detail(activity_id, detail):
         "weighted_average_watts": detail.get("weighted_average_watts"),
         "calories": detail.get("calories"),
         "device_name": detail.get("device_name"),
+        "gear_id": detail.get("gear_id"),
+        "gear_name": gear.get("name"),
         "source": "Strava API",
     }
 
