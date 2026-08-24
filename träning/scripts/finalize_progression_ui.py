@@ -37,8 +37,7 @@ def split_swim_reason(reason):
 
 def normalize_swim_set(text):
     text = text.strip().rstrip(".")
-    text = re.sub(r"\s*×\s*", "×", text)
-    return text
+    return re.sub(r"\s*×\s*", "×", text)
 
 
 def swim_set_html(sets):
@@ -61,6 +60,55 @@ def swim_set_html(sets):
                 '</div>'
             )
     return f'<div class="swim-set-list">{"".join(rows)}</div>'
+
+
+def workout_set_html(day):
+    workout = day.get("watch_workout")
+    if not isinstance(workout, dict):
+        return ""
+    rows = []
+    for block in workout.get("blocks") or []:
+        repeat = int(block.get("repeat", 1))
+        steps = block.get("steps") or []
+        rest_s = next(
+            (int(step.get("duration_s")) for step in steps if step.get("kind") == "rest"),
+            None,
+        )
+        lap_rest = next(
+            (
+                (str(step.get("text") or "Setvila").strip(), int(step.get("duration_s")))
+                for step in steps
+                if step.get("kind") == "lap_rest"
+            ),
+            None,
+        )
+        for step in steps:
+            if step.get("kind") != "swim":
+                continue
+            distance = int(step.get("distance_m") or 0)
+            if distance <= 0:
+                raise RuntimeError(
+                    f"Progressions-UI: ogiltig swim-distance i {day.get('date')}"
+                )
+            dose = f"{repeat}×{distance} m" if repeat > 1 else f"{distance} m"
+            description = str(step.get("text") or block.get("name") or "Simning").strip()
+            if rest_s:
+                description += f" · vila {rest_s} s"
+            rows.append(
+                '<div class="swim-set-row">'
+                f'<span class="swim-dose">{html.escape(dose)}</span>'
+                f'<span>{html.escape(description)}</span>'
+                '</div>'
+            )
+        if lap_rest and not any(step.get("kind") == "swim" for step in steps):
+            label, seconds = lap_rest
+            rows.append(
+                '<div class="swim-set-row">'
+                '<span class="swim-dose">Setvila</span>'
+                f'<span>{html.escape(label)} · {seconds} s</span>'
+                '</div>'
+            )
+    return f'<div class="swim-set-list">{"".join(rows)}</div>' if rows else ""
 
 
 def add_css(page):
@@ -112,14 +160,16 @@ def inject_focus(page, day):
 def render_preview_swim(page, day):
     if day.get("sport") != "swim":
         return page
-    prefix, sets, suffix = split_swim_reason(str(day.get("reason") or ""))
-    if not sets:
+    reason = str(day.get("reason") or "")
+    prefix, sets, suffix = split_swim_reason(reason)
+    sets_html = swim_set_html(sets) if sets else workout_set_html(day)
+    if not sets_html:
         raise RuntimeError(
-            f"Progressions-UI: preliminärt simpass {day.get('date')} saknar utskrivet Förslag-set"
+            f"Progressions-UI: preliminärt simpass {day.get('date')} saknar strukturerat set"
         )
     start, end = card_bounds(page, day["date"])
     segment = page[start:end]
-    escaped_reason = html.escape(str(day.get("reason") or ""))
+    escaped_reason = html.escape(reason)
     needle = f'<div class="reason">{escaped_reason}</div>'
     if needle not in segment:
         if 'class="swim-set-list"' in segment:
@@ -130,7 +180,7 @@ def render_preview_swim(page, day):
     parts = []
     if prefix:
         parts.append(f'<div class="reason">{html.escape(prefix)}</div>')
-    parts.append(swim_set_html(sets))
+    parts.append(sets_html)
     if suffix:
         parts.append(f'<div class="reason">{html.escape(suffix)}</div>')
     segment = segment.replace(needle, "".join(parts), 1)
