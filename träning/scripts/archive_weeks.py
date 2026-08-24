@@ -17,6 +17,7 @@ PLAN_FILE = DATA_DIR / "plan.json"
 ACTIVITIES_FILE = DATA_DIR / "activities.json"
 COACH_FILE = DATA_DIR / "coach.json"
 MANIFEST_FILE = WEEKS_DIR / "index.json"
+CURRENT_URL = "/träning/"
 
 BUILD_CHAIN = (
     "build.py",
@@ -126,19 +127,23 @@ def archive_url(key):
     return f"/träning/vecka/{key}/"
 
 
+def public_week_url(key, current_key):
+    return CURRENT_URL if key == current_key else archive_url(key)
+
+
 def nav_html(key, ordered_keys, current_key, is_current):
     index = ordered_keys.index(key)
     previous_key = ordered_keys[index - 1] if index > 0 else None
     next_key = ordered_keys[index + 1] if index + 1 < len(ordered_keys) else None
-    previous = f'<a class="prev" href="{archive_url(previous_key)}">← Vecka {week_number(previous_key)}</a>' if previous_key else '<span class="week-nav-spacer"></span>'
+    previous = f'<a class="prev" href="{public_week_url(previous_key, current_key)}">← Vecka {week_number(previous_key)}</a>' if previous_key else '<span class="week-nav-spacer"></span>'
     if is_current:
         next_link = '<span class="week-nav-spacer"></span>'
         state = "AKTUELL"
     else:
         if next_key:
-            next_link = f'<a class="next" href="{archive_url(next_key)}">Vecka {week_number(next_key)} →</a>'
+            next_link = f'<a class="next" href="{public_week_url(next_key, current_key)}">Vecka {week_number(next_key)} →</a>'
         else:
-            next_link = f'<a class="next" href="{archive_url(current_key)}">Aktuell vecka →</a>'
+            next_link = f'<a class="next" href="{CURRENT_URL}">Aktuell vecka →</a>'
         state = "HISTORIK"
     return '<nav class="week-nav" aria-label="Veckohistorik">' + previous + f'<div class="week-nav-center"><strong>Vecka {week_number(key)}</strong><span>{state}</span></div>' + next_link + '</nav>'
 
@@ -219,6 +224,14 @@ def build_snapshot_page(snapshot, ordered_keys, current_key):
     (output_dir / "index.html").write_text(page, encoding="utf-8")
 
 
+def remove_duplicate_current_page(current_key):
+    current_dir = PAGES_DIR / current_key
+    if current_dir.exists():
+        if not current_dir.is_dir():
+            raise RuntimeError(f"Veckoarkiv: förväntade katalog för {current_key}, fick fil")
+        shutil.rmtree(current_dir)
+
+
 def update_current_page(current_key, ordered_keys):
     index_file = ROOT / "index.html"
     page = index_file.read_text(encoding="utf-8")
@@ -239,7 +252,7 @@ def write_manifest(snapshots, current_key):
             "title": plan_meta.get("title"),
             "updated_at_utc": snapshot.get("updated_at_utc"),
             "is_current": key == current_key,
-            "url": archive_url(key),
+            "url": public_week_url(key, current_key),
         })
     write_json(MANIFEST_FILE, {"schema_version": 2, "current_week_key": current_key, "weeks": records})
 
@@ -254,13 +267,14 @@ def main():
     snapshots = load_snapshots()
     current_key = current_snapshot["week_key"]
     ordered_keys = sorted(snapshots)
+    remove_duplicate_current_page(current_key)
     for key in ordered_keys:
         if key == current_key:
             continue
         build_snapshot_page(snapshots[key], ordered_keys, current_key)
     update_current_page(current_key, ordered_keys)
     write_manifest(snapshots, current_key)
-    print(f"Veckoarkiv OK: {len(snapshots)} vecka/veckor, aktuell {current_key} via {archive_url(current_key)}.")
+    print(f"Veckoarkiv OK: {len(snapshots)} vecka/veckor, aktuell {current_key} endast via {CURRENT_URL}.")
 
 
 if __name__ == "__main__":
