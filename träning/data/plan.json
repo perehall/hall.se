@@ -5,241 +5,75 @@
     "week": 35,
     "week_start": "2026-08-24",
     "week_end": "2026-08-30",
-    "title": "Bygg vidare – låt faktisk belastning styra.",
-    "principle": "Enduroskolan är ett fast schemalagt pass men inte automatiskt ett hårt eller prioriterat träningspass. Måndagens faktiska innehåll avgör om den påverkar tisdag och onsdag. Veckan behåller löpkvalitet, simning, styrka och MTB/XC utan att schablonmässigt skydda enduron."
+    "title": "Löpningen prioriteras – två kvalitetspass, faktisk belastning styr.",
+    "principle": "Veckans avsikt är två kontrollerade löpkvalitetspass plus löpdistans, med MTB/XC, simning/swimrun, styrka och enduro runt dem. Basplanen ska inte vattnas ur i förväg; justeringar görs först när faktisk belastning, återhämtning eller lokal trötthet ger skäl."
   },
   "days": [
     {
       "date": "2026-08-24",
       "label": "Måndag",
       "status": "planned",
-      "session": "Enduroskola",
-      "reason": "Fast i kalendern. Belastningen klassas inte i förväg: passet kan vara teori/teknik med låg fysisk kostnad eller mer krävande körning. Faktiskt innehåll och egen ansträngning avgör påverkan på resten av veckan.",
-      "development_focus": "Blick långt fram och välj linje tidigt; håll körningen avspänd. Teknik, inte fysisk belastning, är dagens utvecklingspunkt.",
-      "sport": "enduro",
-      "classification": "recreation"
+      "session": "Enduroskola + styrka · styrkan efter enduron",
+      "reason": "Enduron är kvällens första pass och styrkan läggs direkt efter. Styrkan hålls kontrollerad utan failure; den samlade faktiska belastningen från båda passen avgör om tisdagens löpkvalitet behöver justeras.",
+      "development_focus": "Enduro: avslappnad teknik och tidiga linjeval. Styrka: ren rörelsekvalitet och lämna marginal i benen inför tisdagens löpning.",
+      "sport": "strength"
     },
     {
       "date": "2026-08-25",
       "label": "Tisdag",
       "status": "planned",
-      "session": "Simning · aerob/teknik · 3 200 m · ca 60 min",
-      "swim_equipment": {
-        "planned": "none"
-      },
-      "reason": "Aerob/teknisk simning med låg mekanisk kostnad efter söndagens 90-minuterslöpning och före onsdagens villkorade tröskel. Förslag: 400 m lugn insim + 6×50 m catch-fokus @ 15 s vila + 3×600 m stadigt aerob @ 30 s vila + 6×50 m avslappnat något högre frekvens @ 15 s vila + 400 m mycket lugnt. Totalt 3 200 m; samma totaldistans som de två senast registrerade simningarna, alltså ingen automatisk volymökning.",
-      "development_focus": "Sätt handen framför axeln och få ett tidigt grepp om vattnet utan att pressa handen nedåt; håll huvudet stilla genom draget.",
-      "watch_workout": {
-        "sync_enabled": true,
-        "id": "swim-w35-tue-aerob-catch-01",
-        "external_id": "hall-training-2026-08-25-swim-aerob-catch",
-        "type": "Swim",
-        "equipment": [],
-        "name": "Aerob/teknik · catch · 3 200 m",
-        "planned_distance_m": 3200,
-        "blocks": [
-          {
-            "name": "Insim",
-            "steps": [
-              {
-                "kind": "swim",
-                "text": "Lugn insim",
-                "distance_m": 400,
-                "intensity": "warmup"
-              }
-            ]
-          },
-          {
-            "name": "Catch-teknik",
-            "repeat": 6,
-            "steps": [
-              {
-                "kind": "swim",
-                "text": "Catch-fokus, lugnt och precist",
-                "distance_m": 50,
-                "intensity": "active"
-              },
-              {
-                "kind": "rest",
-                "duration_s": 15
-              }
-            ]
-          },
-          {
-            "name": "Aerob",
-            "repeat": 3,
-            "steps": [
-              {
-                "kind": "swim",
-                "text": "Stadigt aerob, bibehåll catch och kroppslinje",
-                "distance_m": 600,
-                "intensity": "active"
-              },
-              {
-                "kind": "rest",
-                "duration_s": 30
-              }
-            ]
-          },
-          {
-            "name": "Frekvens",
-            "repeat": 6,
-            "steps": [
-              {
-                "kind": "swim",
-                "text": "Avslappnat, något högre frekvens utan kortare drag",
-                "distance_m": 50,
-                "intensity": "active"
-              },
-              {
-                "kind": "rest",
-                "duration_s": 15
-              }
-            ]
-          },
-          {
-            "name": "Nedvarvning",
-            "steps": [
-              {
-                "kind": "swim",
-                "text": "Mycket lugnt",
-                "distance_m": 400,
-                "intensity": "cooldown"
-              }
-            ]
-          }
-        ]
-      },
-      "sport": "swim"
+      "session": "Löpning · kvalitet · kontrollerad tröskel · 3 × 10 min / 90 s jogg",
+      "reason": "Progression från genomförda 3 × 8 min genom längre kontrollerad arbetstid utan avsikt att höja intensiteten. Detta är veckans första prioriterade löpkvalitetspass; eventuell nedskalning ska bygga på måndagens faktiska utfall, inte på att enduro står i kalendern.",
+      "development_focus": "Jämn ansträngning genom alla tre repetitionerna; ingen fartjakt i slutet.",
+      "sport": "run"
     },
     {
       "date": "2026-08-26",
       "label": "Onsdag",
-      "status": "conditional",
-      "session": "Löpning · kontrollerad tröskel · preliminärt 3 × 10 min / 90 s jogg",
-      "reason": "Progression från genomförda 3 × 8 min: längre total kontrollerad arbetstid utan att höja intensiteten. 3 × 10 körs om helgen, måndagens faktiska endurobelastning och tisdagen är absorberade; annars upprepas 3 × 8. Enduroetiketten i sig är inte skäl att skala ned.",
-      "development_focus": "Pendla armarna bakåt med låga axlar och håll rytmen jämn när arbetstiden blir längre; ingen fartjakt i slutet av repetitionerna.",
-      "sport": "run"
+      "status": "planned",
+      "session": "Simning alt. swimrun · aerob/teknik · omkring 60 min",
+      "reason": "Aerob multisportdag mellan löpkvalitetspassen. Simning är förstahandsvalet för låg mekanisk belastning; swimrun är ett likvärdigt planalternativ och bedöms efter den faktiska intensiteten om det väljs.",
+      "development_focus": "Simning: tidigt grepp och lugn kroppslinje. Swimrun: håll löpningen avspänd och undvik att göra dagen till ett oplanerat tröskelpass.",
+      "sport": "swim",
+      "alternative_sports": [
+        "swimrun"
+      ]
     },
     {
       "date": "2026-08-27",
       "label": "Torsdag",
-      "status": "open",
-      "session": "Styrka + core · kontrollerat helkroppspass",
-      "reason": "Bygger robusthet och löp-/cykelrelevant styrka utan failure. Volymen styrs främst av onsdagens löpkvalitet och faktisk lokal trötthet; plyometri endast om benen är fräscha. Ingen träningsdos var fastställd när veckan blev aktiv; passet är därför öppet tills faktisk belastning och återhämtning ger underlag.",
-      "development_focus": "Håll bäckenet stabilt och knät över foten i unilateral benstyrka; samma rörelsekvalitet på sista repetitionen som på den första.",
-      "sport": "strength",
-      "rollover_status_from": "preliminary"
+      "status": "planned",
+      "session": "MTB/XC · teknik + aerob stig",
+      "reason": "MTB-specifik utveckling utan att på förhand ta bort fredagens löpkvalitet. Teknik och flyt prioriteras; faktisk fysiologisk och lokal benbelastning avgör om fredagens dos behöver justeras.",
+      "development_focus": "Blick genom kurvan, bromsa klart före svängen och prioritera linje/flyt framför att jaga segmentfart.",
+      "sport": "bike"
     },
     {
       "date": "2026-08-28",
       "label": "Fredag",
-      "status": "preliminary",
-      "session": "Simning · kontrollerad kvalitet · 3 200 m · ca 60 min",
-      "swim_equipment": {
-        "planned": "none"
-      },
-      "reason": "Kontrollerad simkvalitet placerad efter onsdagens löpkvalitet och torsdagens styrka; slutlig intensitet avgörs efter de faktiska utfallen. Förslag: 400 m lugn insim + 6×50 m teknik/catch @ 15 s vila + 4×400 m kontrollerat jämnt @ 30 s vila + 6×100 m bibehållen teknik med något högre frekvens @ 20 s vila + 300 m lugn nedvarvning. Totalt 3 200 m; progressionen är bättre teknik under kvalitet, inte större totalvolym.",
-      "development_focus": "Behåll samma catch och kroppslinje när frekvensen stiger; öka rytmen utan att börja slira bakåt i greppet eller korta draget.",
-      "watch_workout": {
-        "sync_enabled": false,
-        "id": "swim-w35-fri-controlled-quality-01",
-        "type": "Swim",
-        "equipment": [],
-        "name": "Kontrollerad kvalitet · teknik under fart · 3 200 m",
-        "planned_distance_m": 3200,
-        "blocks": [
-          {
-            "name": "Insim",
-            "steps": [
-              {
-                "kind": "swim",
-                "text": "Lugn insim",
-                "distance_m": 400,
-                "intensity": "warmup"
-              }
-            ]
-          },
-          {
-            "name": "Teknik",
-            "repeat": 6,
-            "steps": [
-              {
-                "kind": "swim",
-                "text": "Catch och kroppslinje",
-                "distance_m": 50,
-                "intensity": "active"
-              },
-              {
-                "kind": "rest",
-                "duration_s": 15
-              }
-            ]
-          },
-          {
-            "name": "Kontrollerad kvalitet",
-            "repeat": 4,
-            "steps": [
-              {
-                "kind": "swim",
-                "text": "Kontrollerat jämnt, samma teknik från första till sista",
-                "distance_m": 400,
-                "intensity": "active"
-              },
-              {
-                "kind": "rest",
-                "duration_s": 30
-              }
-            ]
-          },
-          {
-            "name": "Frekvens med teknik",
-            "repeat": 6,
-            "steps": [
-              {
-                "kind": "swim",
-                "text": "Något högre frekvens med bibehållet grepp",
-                "distance_m": 100,
-                "intensity": "active"
-              },
-              {
-                "kind": "rest",
-                "duration_s": 20
-              }
-            ]
-          },
-          {
-            "name": "Nedvarvning",
-            "steps": [
-              {
-                "kind": "swim",
-                "text": "Lugnt",
-                "distance_m": 300,
-                "intensity": "cooldown"
-              }
-            ]
-          }
-        ]
-      },
-      "sport": "swim"
+      "status": "planned",
+      "session": "Löpning · kvalitet · kontrollerad tröskel · preliminärt 3 × 8 min / 90 s jogg",
+      "reason": "Veckans andra prioriterade löpkvalitetspass, placerat tre dygn efter tisdagen. Basdosen är 3 × 8 min; den kan behållas eller skalas ned utifrån tisdag–torsdagens faktiska belastning men ska inte tas bort i förväg.",
+      "development_focus": "Samma kontrollerade ansträngning som på tisdagen; avsluta med känslan att ytterligare arbete hade varit möjligt.",
+      "sport": "run"
     },
     {
       "date": "2026-08-29",
       "label": "Lördag",
-      "status": "open",
-      "session": "MTB/XC · teknik först + kort kontrollerad fart",
-      "reason": "Teknik är huvudsyftet. Kortare kvalitetsrepetitioner kan läggas in om fredagens simning och veckans faktiska benbelastning är väl absorberade; annars ren teknik/lugn stig. Ingen träningsdos var fastställd när veckan blev aktiv; passet är därför öppet tills faktisk belastning och återhämtning ger underlag.",
-      "development_focus": "Blicken genom kurvan och bromsa klart före svängen så däcken får grepp när du styr; prioritera linje och flyt framför fart.",
-      "sport": "bike",
-      "rollover_status_from": "preliminary"
+      "status": "planned",
+      "session": "MTB/XC · distans · huvudsakligen lugnt",
+      "reason": "Bygger cykelspecifik uthållighet och teknisk tid på cykeln. Distansens exakta omfattning bestäms när fredagens löpkvalitet och veckans samlade faktiska belastning är kända.",
+      "development_focus": "Ekonomisk körning och stabil teknik när tiden på cykeln ökar; undvik att varje backe blir ett hårt intervall.",
+      "sport": "bike"
     },
     {
       "date": "2026-08-30",
       "label": "Söndag",
-      "status": "open",
-      "session": "Öppet · lugn trail eller vila",
-      "reason": "Ingen utfyllnadsträning. Beslut tas främst efter lördagens MTB och veckans faktiska belastning. Nästa enduroskola på måndagen är inte i sig skäl att hålla söndagen tom eller extra kort.",
-      "sport": "open"
+      "status": "planned",
+      "session": "Löpning · distans · lugnt",
+      "reason": "Tredje löpstimulus för veckan och viktig för löputvecklingen. Exakt omfattning bestäms efter lördagens MTB och veckans faktiska belastning; grundavsikten är lugn distans, inte ytterligare kvalitet.",
+      "development_focus": "Avslappnad rytm och jämn ansträngning; låt distansen bygga tålighet utan att driva intensiteten.",
+      "sport": "run"
     }
   ],
   "strength_template": [
