@@ -11,10 +11,6 @@ on:
           - list
           - create
           - delete
-      callback_url:
-        description: "Public Cloudflare Worker callback URL (required for create)"
-        required: false
-        type: string
       subscription_id:
         description: "Subscription ID (required for delete)"
         required: false
@@ -26,28 +22,61 @@ permissions:
 jobs:
   configure:
     runs-on: ubuntu-latest
+    env:
+      CALLBACK_ORIGIN: https://hall-se.per-e-hall.workers.dev
     steps:
-      - name: Validate inputs
+      - name: Validate inputs and secrets
         env:
           ACTION: ${{ inputs.action }}
-          CALLBACK_URL: ${{ inputs.callback_url }}
           SUBSCRIPTION_ID: ${{ inputs.subscription_id }}
           VERIFY_TOKEN: ${{ secrets.STRAVA_WEBHOOK_VERIFY_TOKEN }}
+          PATH_SECRET: ${{ secrets.STRAVA_WEBHOOK_PATH_SECRET }}
+          CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
         run: |
           set -euo pipefail
+          test -n "$CLIENT_ID" || { echo "STRAVA_CLIENT_ID saknas"; exit 1; }
+          test -n "$CLIENT_SECRET" || { echo "STRAVA_CLIENT_SECRET saknas"; exit 1; }
           test -n "$VERIFY_TOKEN" || { echo "STRAVA_WEBHOOK_VERIFY_TOKEN saknas"; exit 1; }
-          if [ "$ACTION" = "create" ]; then
-            test -n "$CALLBACK_URL" || { echo "callback_url krävs för create"; exit 1; }
-            case "$CALLBACK_URL" in
-              https://*) ;;
-              *) echo "callback_url måste använda https"; exit 1 ;;
-            esac
-          fi
+          test -n "$PATH_SECRET" || { echo "STRAVA_WEBHOOK_PATH_SECRET saknas"; exit 1; }
           if [ "$ACTION" = "delete" ]; then
             case "$SUBSCRIPTION_ID" in
               ''|*[!0-9]*) echo "subscription_id måste vara ett heltal för delete"; exit 1 ;;
             esac
           fi
+
+      - name: Verify callback challenge
+        if: inputs.action == 'create'
+        env:
+          VERIFY_TOKEN: ${{ secrets.STRAVA_WEBHOOK_VERIFY_TOKEN }}
+          PATH_SECRET: ${{ secrets.STRAVA_WEBHOOK_PATH_SECRET }}
+        run: |
+          set -euo pipefail
+          callback_url="${CALLBACK_ORIGIN}/strava/${PATH_SECRET}"
+          challenge="hall-preflight-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          body_file=$(mktemp)
+          status=$(curl --silent --show-error \
+            --output "$body_file" \
+            --write-out '%{http_code}' \
+            --get "$callback_url" \
+            --data-urlencode "hub.mode=subscribe" \
+            --data-urlencode "hub.challenge=$challenge" \
+            --data-urlencode "hub.verify_token=$VERIFY_TOKEN")
+          echo "Callback preflight HTTP $status"
+          if [ "$status" != "200" ]; then
+            echo "Callback preflight failed. Response:"
+            cat "$body_file"
+            exit 1
+          fi
+          python - "$challenge" "$body_file" <<'PY'
+          import json, sys
+          challenge, path = sys.argv[1], sys.argv[2]
+          with open(path, encoding="utf-8") as fh:
+              data = json.load(fh)
+          if data != {"hub.challenge": challenge}:
+              raise SystemExit(f"Ogiltigt challenge-svar: {data!r}")
+          print("Callback challenge OK.")
+          PY
 
       - name: List subscription
         if: inputs.action == 'list'
@@ -67,18 +96,44 @@ jobs:
         env:
           CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
           CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
-          CALLBACK_URL: ${{ inputs.callback_url }}
           VERIFY_TOKEN: ${{ secrets.STRAVA_WEBHOOK_VERIFY_TOKEN }}
+          PATH_SECRET: ${{ secrets.STRAVA_WEBHOOK_PATH_SECRET }}
         run: |
           set -euo pipefail
-          response=$(curl --fail-with-body --silent --show-error -X POST \
-            https://www.strava.com/api/v3/push_subscriptions \
+          callback_url="${CALLBACK_ORIGIN}/strava/${PATH_SECRET}"
+          body_file=$(mktemp)
+          status=$(curl --silent --show-error \
+            --output "$body_file" \
+            --write-out '%{http_code}' \
+            -X POST https://www.strava.com/api/v3/push_subscriptions \
             -F "client_id=$CLIENT_ID" \
             -F "client_secret=$CLIENT_SECRET" \
-            -F "callback_url=$CALLBACK_URL" \
+            -F "callback_url=$callback_url" \
             -F "verify_token=$VERIFY_TOKEN")
-          echo "$response"
-          python -c 'import json,sys; data=json.load(sys.stdin); assert isinstance(data.get("id"), int), "Strava-svaret saknar subscription id"' <<< "$response"
+          echo "Strava create HTTP $status"
+          if [ "$status" != "201" ] && [ "$status" != "200" ]; then
+            echo "Strava create failed. Response:"
+            cat "$body_file"
+            exit 1
+          fi
+          subscription_id=$(python - "$body_file" <<'PY'
+          import json, sys
+          with open(sys.argv[1], encoding="utf-8") as fh:
+              data = json.load(fh)
+          value = data.get("id")
+          if not isinstance(value, int):
+              raise SystemExit(f"Strava-svaret saknar subscription id: {data!r}")
+          print(value)
+          PY
+          )
+          echo "Subscription created: $subscription_id"
+          {
+            echo "## Strava webhook subscription"
+            echo
+            echo "Subscription ID: **$subscription_id**"
+            echo
+            echo "Lägg detta ID som Cloudflare Worker-secret \`STRAVA_SUBSCRIPTION_ID\`."
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Delete subscription
         if: inputs.action == 'delete'
