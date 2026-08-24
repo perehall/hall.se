@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f172a">
+<title>Träningsplan · vecka 36 · preliminär</title>
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--text:#0f172a;--muted:#64748b;--line:#e2e8f0;--accent:#2563eb;--green:#15803d;--green-soft:#dcfce7;--amber:#a16207;--amber-soft:#fef3c7;--purple:#6d28d9;--purple-soft:#f3e8ff;--shadow:0 8px 24px rgba(15,23,42,.06)}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);line-height:1.45}
+.wrap{width:min(100%,760px);margin:auto;padding:20px 16px 56px}header{padding:8px 2px 18px}
+.eyebrow{text-transform:uppercase;letter-spacing:.12em;font-size:.76rem;font-weight:800;color:var(--accent);margin-bottom:6px}
+h1{font-size:clamp(2rem,8vw,3.2rem);line-height:1;margin:0 0 8px;letter-spacing:-.04em}.sub{color:var(--muted);font-size:.96rem}
+.hero{background:#0f172a;color:#fff;border-radius:20px;padding:18px 20px;margin:8px 0 18px;box-shadow:var(--shadow)}.hero h2{margin:4px 0 5px}.hero p{margin:0;color:#cbd5e1}
+.dashboard{display:grid;gap:12px;margin:0 0 24px}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.metric{background:#fff;border:1px solid var(--line);border-radius:16px;padding:13px 14px;box-shadow:var(--shadow)}.metric strong{display:block;font-size:1.22rem;line-height:1.15}.metric span{display:block;color:var(--muted);font-size:.78rem;margin-top:4px}
+.dashboard-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.dashboard-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:15px 16px;box-shadow:var(--shadow)}.dashboard-title{font-size:.78rem;font-weight:900;text-transform:uppercase;letter-spacing:.07em;color:#475569;margin-bottom:12px}.dashboard-empty{color:var(--muted);font-size:.88rem}
+.sport-row+.sport-row{margin-top:10px}.sport-head{display:flex;justify-content:space-between;gap:12px;font-size:.84rem}.sport-head strong{font-size:.8rem}.sport-track{height:7px;background:#e2e8f0;border-radius:999px;overflow:hidden;margin-top:5px}.sport-fill{height:100%;background:var(--accent);border-radius:999px}
+.week-status{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.week-day{text-align:center;border-radius:10px;padding:5px 2px}.week-day.today{background:#eff6ff}.week-day-label{font-size:.68rem;font-weight:800;color:var(--muted);margin-bottom:4px}.week-day-dot{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;margin:auto;font-size:.78rem;font-weight:900}.dashboard-legend{color:var(--muted);font-size:.7rem;margin-top:10px;line-height:1.5}
+.next-item{padding:10px 0}.next-item+.next-item{border-top:1px solid var(--line)}.next-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:3px}.next-coach{color:var(--purple);font-size:.82rem;margin-top:4px}
+.section{font-size:1.22rem;margin:28px 0 12px}.day{background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px;margin:12px 0;box-shadow:var(--shadow)}
+.daytop{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:10px}.dow{font-size:.82rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}.date{color:var(--muted);font-size:.85rem}
+.session{font-size:1.2rem;font-weight:800;margin:4px 0 6px}.reason{color:#334155;font-size:.95rem}.badge{border-radius:999px;padding:5px 9px;font-size:.7rem;font-weight:800;white-space:nowrap}
+.fixed{background:var(--green-soft);color:var(--green)}.planned{background:#dbeafe;color:#1d4ed8}.conditional{background:var(--amber-soft);color:var(--amber)}.open{background:#e2e8f0;color:#475569}
+.pass{margin-top:14px;padding-top:14px;border-top:1px solid var(--line);display:grid;gap:7px}.pass-title{font-weight:800}.decision{margin-top:13px;padding:12px 13px;background:#f8fafc;border-radius:13px;border:1px solid var(--line)}.decision strong{display:block;margin-bottom:4px}.coach-adjust{border-color:#ddd6fe;background:#faf5ff}
+.coach{margin-top:16px;padding:14px;border-radius:16px;background:var(--purple-soft);border:1px solid #ddd6fe}.coach-title{font-size:.75rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:var(--purple);margin-bottom:5px}.coach-summary{font-weight:800;margin-bottom:5px}.coach-load{color:#4c1d95;font-size:.92rem}.coach-details{margin-top:10px}.coach-details summary{cursor:pointer;font-weight:700}.coach-grid{display:grid;gap:8px;margin-top:8px;font-size:.88rem}.coach-grid ul{margin:4px 0 0;padding-left:18px}.coach-action{margin-top:10px;padding-top:10px;border-top:1px solid #ddd6fe;font-size:.9rem}.coach-action span{color:#4c1d95}.coach-action small{color:#6b21a8}
+.principles{display:grid;gap:10px}.principle{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px}footer{color:var(--muted);font-size:.82rem;padding-top:26px}
+@media (max-width:620px){.dashboard-grid{grid-template-columns:1fr}.metrics{gap:7px}.metric{padding:12px 10px}.metric strong{font-size:1.05rem}}
+
+/* training-ux-v1 */
+.today-pill{display:inline-block;margin-right:7px;padding:2px 7px;border-radius:999px;background:#0f172a;color:#fff;font-size:.62rem;letter-spacing:.08em;vertical-align:1px}
+.swim-workout{margin:8px 0 10px;padding:12px 13px;border:1px solid #bfdbfe;background:#f8fbff;border-radius:14px}.swim-workout.compact{margin:7px 0 3px;padding:10px 11px}.swim-session-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}.swim-session-head strong{font-size:1.02rem}.swim-meta{color:#64748b;font-size:.82rem;font-weight:700}.swim-set-list{display:grid;gap:5px;margin-top:9px}.swim-set-list.compact{gap:4px;margin-top:7px}.swim-set-row{display:grid;grid-template-columns:minmax(72px,max-content) 1fr;gap:10px;align-items:baseline;font-size:.91rem;line-height:1.35}.swim-set-list.compact .swim-set-row{font-size:.84rem}.swim-dose{font-weight:850;font-variant-numeric:tabular-nums;color:#1e3a8a}
+.coach{padding:16px;background:#f8f5ff}.coach-title{font-size:.78rem;margin-bottom:9px}.coach-summary{background:#fff;border:1px solid #ddd6fe;border-radius:12px;padding:11px 12px;margin:0;font-size:.96rem;line-height:1.5}.coach-load{margin-top:9px;padding:10px 12px;border-radius:12px;background:#f3e8ff;color:#4c1d95;font-size:.88rem;line-height:1.45}.coach-load:before{content:"Närbelastning";display:block;margin-bottom:3px;font-size:.68rem;font-weight:900;text-transform:uppercase;letter-spacing:.07em;color:#6d28d9}.coach-details{margin-top:9px;padding:9px 11px;border-radius:11px;background:#fff;border:1px solid #e9d5ff}.coach-details summary{font-size:.83rem;color:#5b21b6}.coach-grid{line-height:1.45}.coach-grid li+li{margin-top:5px}.coach-action{margin-top:9px;padding:11px 12px;border:1px solid #ddd6fe;border-radius:12px;background:#fff;line-height:1.45}.coach-action>strong{display:inline-block;margin-bottom:4px;color:#5b21b6}.coach-action span{display:block;margin-top:4px;color:#3b0764}.coach-action small{display:block;margin-top:5px;color:#7e22ce}
+@media (max-width:620px){.swim-set-row{grid-template-columns:minmax(66px,max-content) 1fr;gap:8px}.coach{padding:13px}}
+
+
+/* weekly-history-v1 */
+.week-nav{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;margin:-4px 0 16px;padding:9px 10px;border:1px solid #e2e8f0;border-radius:14px;background:#fff;box-shadow:0 6px 18px rgba(15,23,42,.04)}
+.week-nav a{color:#1d4ed8;text-decoration:none;font-size:.82rem;font-weight:800}.week-nav .next{text-align:right}.week-nav-center{text-align:center;line-height:1.15}.week-nav-center strong{display:block;font-size:.86rem}.week-nav-center span{display:block;margin-top:3px;color:#64748b;font-size:.59rem;font-weight:900;letter-spacing:.1em}.week-nav-spacer{display:block}.history-summary{color:#475569;font-size:.9rem;line-height:1.5}
+@media (max-width:520px){.week-nav{grid-template-columns:1fr auto 1fr;padding:8px}.week-nav a{font-size:.75rem}.week-nav-center strong{font-size:.8rem}}
+
+
+
+/* upcoming-week-preview-v3 */
+.preview-metrics{grid-template-columns:repeat(4,1fr)}
+.preview-focus{color:#334155;font-size:.94rem;line-height:1.5}
+.preview-note{margin-top:8px;color:#64748b;font-size:.82rem}
+.swim-equipment-line{margin:6px 0 0;color:#475569;font-size:.82rem}.swim-equipment-line strong{color:#334155}
+@media (max-width:620px){.preview-metrics{grid-template-columns:repeat(2,1fr)}}
+/* week-header-layout-v5 */
+.header-updated{margin-top:4px;color:#94a3b8;font-size:.74rem;font-weight:500;line-height:1.35}
+.header-status{margin-top:4px;color:#64748b;font-size:.76rem;font-weight:700;line-height:1.35}
+.week-period{font-weight:800;color:#334155;white-space:nowrap}
+@media (max-width:520px){.header-updated{font-size:.7rem}.header-status{font-size:.72rem}.week-period{font-size:.92rem}}
+</style>
+</head>
+<body><div class="wrap">
+<header><div class="eyebrow">ADAPTIV TRÄNINGSPLANERING</div><h1>Vecka 36</h1><div class="sub"><strong class="week-period">2026-08-31 till 2026-09-06</strong></div><div class="header-status">Preliminär plan</div></header>
+<nav class="week-nav" aria-label="Veckonavigering"><a class="prev" href="/träning/">← Vecka 35</a><div class="week-nav-center"><strong>Vecka 36</strong><span>PRELIMINÄR</span></div><span class="week-nav-spacer"></span></nav>
+<div class="hero"><h2>Preliminär framtidsvecka</h2><p>Veckan hålls öppen tills faktisk belastning och återhämtning ger tillräckligt underlag. Kontinuitet och absorberbar belastning prioriteras framför att fylla kalendern.</p></div>
+<section class="dashboard" aria-label="Planöversikt nästa vecka">
+  <div class="metrics preview-metrics">
+    <div class="metric"><strong>0</strong><span>fast</span></div>
+    <div class="metric"><strong>0</strong><span>planerat</span></div>
+    <div class="metric"><strong>0</strong><span>preliminärt</span></div>
+    <div class="metric"><strong>7</strong><span>öppet</span></div>
+  </div>
+  <div class="dashboard-card">
+    <div class="dashboard-title">Veckans fokus</div>
+    <div class="preview-focus">Översiktsvecka utan påhittad dos. Exakta pass sätts successivt när aktuell veckas utfall och återhämtning är kända.</div>
+    <div class="preview-note">Preliminär plan: detaljer och belastning ändras när faktisk träning och återhämtning från föregående dagar är kända.</div>
+  </div>
+</section>
+<h2 class="section">Preliminär vecka</h2><div class="day" id="dag-2026-08-31">
+  <div class="daytop">
+    <div><div class="dow">Måndag</div><div class="date">2026-08-31</div></div>
+    <div class="badge open">ÖPPET</div>
+  </div>
+  <div class="session">Öppet · planeras när underlag finns</div>
+  
+  <div class="reason">Ingen träningsdos sätts ännu. Passet planeras utifrån faktisk belastning, återhämtning och de närmast föregående 2–3 dagarna.</div>
+</div><div class="day" id="dag-2026-09-01">
+  <div class="daytop">
+    <div><div class="dow">Tisdag</div><div class="date">2026-09-01</div></div>
+    <div class="badge open">ÖPPET</div>
+  </div>
+  <div class="session">Öppet · planeras när underlag finns</div>
+  
+  <div class="reason">Ingen träningsdos sätts ännu. Passet planeras utifrån faktisk belastning, återhämtning och de närmast föregående 2–3 dagarna.</div>
+</div><div class="day" id="dag-2026-09-02">
+  <div class="daytop">
+    <div><div class="dow">Onsdag</div><div class="date">2026-09-02</div></div>
+    <div class="badge open">ÖPPET</div>
+  </div>
+  <div class="session">Öppet · planeras när underlag finns</div>
+  
+  <div class="reason">Ingen träningsdos sätts ännu. Passet planeras utifrån faktisk belastning, återhämtning och de närmast föregående 2–3 dagarna.</div>
+</div><div class="day" id="dag-2026-09-03">
+  <div class="daytop">
+    <div><div class="dow">Torsdag</div><div class="date">2026-09-03</div></div>
+    <div class="badge open">ÖPPET</div>
+  </div>
+  <div class="session">Öppet · planeras när underlag finns</div>
+  
+  <div class="reason">Ingen träningsdos sätts ännu. Passet planeras utifrån faktisk belastning, återhämtning och de närmast föregående 2–3 dagarna.</div>
+</div><div class="day" id="dag-2026-09-04">
+  <div class="daytop">
+    <div><div class="dow">Fredag</div><div class="date">2026-09-04</div></div>
+    <div class="badge open">ÖPPET</div>
+  </div>
+  <div class="session">Öppet · planeras när underlag finns</div>
+  
+  <div class="reason">Ingen träningsdos sätts ännu. Passet planeras utifrån faktisk belastning, återhämtning och de närmast föregående 2–3 dagarna.</div>
+</div><div class="day" id="dag-2026-09-05">
+  <div class="daytop">
+    <div><div class="dow">Lördag</div><div class="date">2026-09-05</div></div>
+    <div class="badge open">ÖPPET</div>
+  </div>
+  <div class="session">Öppet · planeras när underlag finns</div>
+  
+  <div class="reason">Ingen träningsdos sätts ännu. Passet planeras utifrån faktisk belastning, återhämtning och de närmast föregående 2–3 dagarna.</div>
+</div><div class="day" id="dag-2026-09-06">
+  <div class="daytop">
+    <div><div class="dow">Söndag</div><div class="date">2026-09-06</div></div>
+    <div class="badge open">ÖPPET</div>
+  </div>
+  <div class="session">Öppet · planeras när underlag finns</div>
+  
+  <div class="reason">Ingen träningsdos sätts ännu. Passet planeras utifrån faktisk belastning, återhämtning och de närmast föregående 2–3 dagarna.</div>
+</div>
+<h2 class="section">Styrkemall framåt</h2><div class="principles"><div class="principle">Liten dos explosivitet/plyometri när omkringliggande belastning tillåter.</div><div class="principle">Bulgarian split squat som huvudalternativ för unilateral benstyrka.</div><div class="principle">Marklyft eller RDL som normal höftdominant huvudövning.</div><div class="principle">Vad + soleus regelbundet.</div><div class="principle">Enarmsrodd + press som huvuddrag/press.</div><div class="principle">Välj två bålövningar; låt inte accessoarer tränga undan huvudstyrkan.</div></div>
+<footer>Preliminär framtidsplan. Faktisk belastning och återhämtning styr kommande justeringar. · <a href="/cdn-cgi/access/logout" style="color:inherit">Logga ut</a></footer>
+</div></body></html>

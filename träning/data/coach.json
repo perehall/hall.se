@@ -4,37 +4,36 @@
       "activity_id": 19862241646,
       "activity_date": "2026-08-23",
       "activity_name": "Löpning på morgonen",
-      "generated_at_utc": "2026-08-24T03:37:02.900725+00:00",
+      "generated_at_utc": "2026-08-24T06:32:25.371838+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Lugnt långt löppass på grus/asfalt; absorberat i veckans planering och kräver ingen ökning.",
-        "load_interpretation": "Senaste 3 dagars närbelastning är låg–moderat och inte kontradiktorisk med dagens pass.",
+        "summary": "Långdistanslöpning ~17 km på grus/asfalt; måndagens enduro var lätt enligt användaren.",
+        "load_interpretation": "Senaste två dagars faktiska belastning är måttlig–hög löpning + lätt enduro och två simpass; löpningen är nyckelpåverkande.",
         "confidence": "medium",
         "facts": [
           "Löpning · grus/asfalt: 17,16 km · 1:30:59 · 161 m+ · snittpuls 138,9 · maxpuls 157.",
-          "Användarrapport: Underlag: grus och asfalt; inte trail.",
-          "Planstatus 2026-08-23: dagens planerade pass är genomfört i coachens beslutsunderlag."
+          "Användarrapport: Underlag: grus och asfalt; inte trail."
         ],
         "interpretations": [
-          "Passet är en absorberbar långdistans/uthållighetssession snarare än högintensivt kvalitetspass.",
-          "Inget i data tyder på överbelastning eller behov av akuta återhämtningsåtgärder."
+          "Enduron bidrog sannolikt lite eller inget till bentrötthet enligt användarrapport; den påverkar därför inte nödvändigtvis onsdagens kvalitet.",
+          "17 km löpning med höga pulsvärden och 1.5 h rörelse ökar behovet av att beakta återhämtning inför kontrollerad tröskel."
         ],
         "unknowns": [
-          "Subjektiv dagskänsla och lokal muskeltrötthet för dagen efter okända.",
-          "Eventuella sömn- eller stressfaktorer som påverkar återhämtning saknas.",
-          "Tomtarbetets fysiska påverkan är ej kvantifierad och kan ändra återhämtningsbehov."
+          "Subjektiv återhämtning/sömn efter 23/08.",
+          "Eventuell lokal ben-/gångtrötthet specifikt inför onsdag.",
+          "Detaljerad intensitetsfördelning under 17 km (progression/serier)."
         ]
       },
       "plan_action": {
-        "action": "keep",
-        "target_date": "",
-        "reason": "Passet är absorberat i den genomförda veckoplanen och inga target-datum är tillgängliga för ändring.",
-        "recommendation": "Ingen ytterligare träning ordineras idag; dagens planerade pass är redan genomfört. Nästa planerade pass saknas i aktuellt underlag.",
+        "action": "reduce",
+        "target_date": "2026-08-26",
+        "reason": "Senaste löppasset var långt och kräver konservativ justering inför planerat tröskelpass.",
+        "recommendation": "Skala ner onsdagens löpkvalitet till 3 × 8 min / 90 s jogg istället för 3 × 10; håll intensiteten oförändrad. Behåll tisdagens simning som planerad eller gör den extra lugn om du känner kvarvarande bentrötthet.",
         "requires_approval": false
       },
       "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
+        "applied": true,
+        "note": "Konservativ ändring applicerad på 2026-08-26: reduce."
       }
     },
     {
@@ -268,7 +267,7 @@
       }
     }
   ],
-  "last_trigger_hash": "cd9c216796abf829d7cce1cf50bb94b951bb9ee6243dfe3c8244e2268e51c1a6",
-  "last_run_utc": "2026-08-24T03:37:02.900725+00:00",
+  "last_trigger_hash": "607556b5de1be8d62149349c7c76f634442c3f3e0326fb7aee1f6ae991d296be",
+  "last_run_utc": "2026-08-24T06:32:25.371838+00:00",
   "contract_version": 3
 }
