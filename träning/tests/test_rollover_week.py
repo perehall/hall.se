@@ -157,7 +157,7 @@ class WeeklyRolloverTests(unittest.TestCase):
         self.assertNotEqual(target["watch_workout"]["id"], source["watch_workout"]["id"])
         self.assertNotIn("external_id", target["watch_workout"])
         self.assertTrue(target["development_focus"])
-        self.assertIn("ökar inte automatiskt", target["reason"])
+        self.assertIn("ökas inte automatiskt", target["reason"])
 
 
 if __name__ == "__main__":
