@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import json
+import re
 from copy import deepcopy
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
@@ -23,6 +24,12 @@ WEEKDAY_LABELS = (
     "Söndag",
 )
 
+DOSE_PATTERN = re.compile(
+    r"\b\d+(?:[.,]\d+)?(?:\s*[–-]\s*\d+(?:[.,]\d+)?)?\s*(?:min|h|km|m)\b",
+    re.IGNORECASE,
+)
+CLOCK_DURATION_PATTERN = re.compile(r"\b\d{1,2}:\d{2}(?::\d{2})?\b")
+
 
 def load_json(path, fallback=None):
     if not path.exists():
@@ -43,6 +50,11 @@ def activity_local_date(activity):
 def week_key(start):
     iso = start.isocalendar()
     return f"{iso.year}-W{iso.week:02d}"
+
+
+def has_explicit_dose(session):
+    session = str(session or "")
+    return bool(DOSE_PATTERN.search(session) or CLOCK_DURATION_PATTERN.search(session))
 
 
 def validate_week_bounds(meta, context):
@@ -95,14 +107,40 @@ def promote_upcoming(upcoming):
     promoted.pop("week_key", None)
     meta = promoted.get("meta") or {}
     meta.pop("preview_summary", None)
+
     for day in promoted.get("days") or []:
         day.pop("planning_status", None)
+
+        # Enduro is a recreation classification in this training model. It may
+        # be fixed in the calendar without inventing a training dose.
+        if day.get("sport") == "enduro" and "classification" not in day:
+            day["classification"] = "recreation"
+
+        status = day.get("status")
+        sport = day.get("sport")
+        classification = day.get("classification")
+        session = day.get("session") or ""
+        if (
+            status in {"planned", "preliminary", "conditional"}
+            and sport not in {"rest", "open"}
+            and classification != "recreation"
+            and not has_explicit_dose(session)
+        ):
+            day["status"] = "open"
+            day["rollover_status_from"] = status
+            note = (
+                "Ingen träningsdos var fastställd när veckan blev aktiv; passet är därför öppet "
+                "tills faktisk belastning och återhämtning ger underlag."
+            )
+            reason = str(day.get("reason") or "").strip()
+            day["reason"] = f"{reason} {note}".strip()
+
     return promoted
 
 
 def build_open_next_week(promoted):
     meta = promoted.get("meta") or {}
-    current_start, current_end = validate_week_bounds(meta, "promoverad plan")
+    _, current_end = validate_week_bounds(meta, "promoverad plan")
     next_start = current_end + timedelta(days=1)
     next_end = next_start + timedelta(days=6)
     next_iso = next_start.isocalendar()
@@ -153,7 +191,7 @@ def build_open_next_week(promoted):
 def rollover_documents(plan, upcoming, today):
     plan_meta = plan.get("meta") or {}
     upcoming_meta = upcoming.get("meta") or {}
-    current_start, current_end = validate_week_bounds(plan_meta, "aktiv plan")
+    _, current_end = validate_week_bounds(plan_meta, "aktiv plan")
     upcoming_start, upcoming_end = validate_week_bounds(upcoming_meta, "kommande plan")
 
     if today <= current_end:
