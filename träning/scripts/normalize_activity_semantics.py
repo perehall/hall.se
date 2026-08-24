@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import json
+import re
 from pathlib import Path
 
 from training_contracts import ACTIVITIES_SCHEMA_VERSION
@@ -7,6 +8,10 @@ from training_contracts import ACTIVITIES_SCHEMA_VERSION
 ROOT = Path(__file__).resolve().parents[1]
 ACTIVITIES = ROOT / "data" / "activities.json"
 OVERRIDES = ROOT / "data" / "activity_overrides.json"
+
+ENDURO_NAME_RE = re.compile(r"\b(?:enduro|motocross)\b", re.IGNORECASE)
+MTB_NAME_RE = re.compile(r"\b(?:mtb|xc|mountain\s*bike|cykel)\b", re.IGNORECASE)
+ENDURO_NAME_RULE = "mountainbike-explicit-enduro-name-v1"
 
 
 def load(path: Path):
@@ -20,72 +25,123 @@ def write_state(state):
     )
 
 
+def raw_sport(activity):
+    return activity.get("source_sport_type") or activity.get("sport_type") or ""
+
+
+def auto_enduro_candidate(activity):
+    """Return True only for a strong, explicit Enduro/Motocross name signal.
+
+    Strava exposes Garmin motocross/enduro recordings as MountainBikeRide in
+    this dataset. A name that explicitly says Enduro or Motocross is therefore
+    a strong user/source signal. Explicit MTB/XC/bike wording blocks automatic
+    reclassification because MTB enduro is a legitimate cycling discipline.
+    """
+    if raw_sport(activity) != "MountainBikeRide":
+        return False
+    name = str(activity.get("name") or "").strip()
+    if not name or not ENDURO_NAME_RE.search(name):
+        return False
+    if MTB_NAME_RE.search(name):
+        return False
+    return True
+
+
+def apply_auto_semantics(activity):
+    if not auto_enduro_candidate(activity):
+        return False
+
+    original = raw_sport(activity)
+    activity["source_sport_type"] = original
+    activity["sport_type"] = "Enduro"
+    activity["display_label"] = "Enduro"
+    activity["sport_normalization"] = {
+        "rule": ENDURO_NAME_RULE,
+        "evidence": ["source_sport_type=MountainBikeRide", "explicit Enduro/Motocross activity name"],
+    }
+    return True
+
+
+def apply_override(activity, override, key):
+    original = raw_sport(activity)
+    expected_raw = override.get("source_sport_type") or ""
+    if expected_raw and original != expected_raw:
+        raise RuntimeError(
+            f"Aktivitetsnormalisering: aktivitet {key} har rå sport {original!r}, "
+            f"men override förväntar {expected_raw!r}"
+        )
+
+    effective_sport = (override.get("sport") or "").strip()
+    classification = (override.get("classification") or "").strip()
+    if not effective_sport:
+        raise RuntimeError(f"Aktivitetsnormalisering: override {key} saknar sport")
+    if classification not in {"training", "recreation"}:
+        raise RuntimeError(
+            f"Aktivitetsnormalisering: override {key} har ogiltig classification {classification!r}"
+        )
+
+    activity["source_sport_type"] = original
+    activity["sport_type"] = effective_sport
+    activity["classification"] = classification
+    activity["display_label"] = override.get("display_label") or effective_sport
+    activity.pop("sport_normalization", None)
+    if override.get("garmin_activity_type"):
+        activity["garmin_activity_type"] = override["garmin_activity_type"]
+    if override.get("user_report"):
+        activity["user_report"] = override["user_report"]
+    if override.get("reason"):
+        activity["classification_reason"] = override["reason"]
+
+
+def apply_semantics(state, config=None):
+    if not isinstance(state, dict):
+        raise RuntimeError("Aktivitetsnormalisering: state måste vara objekt")
+    state["schema_version"] = ACTIVITIES_SCHEMA_VERSION
+    config = config or {"schema_version": 1, "overrides": {}}
+    overrides = config.get("overrides") or {}
+    activities = state.get("activities") or []
+    if not isinstance(activities, list):
+        raise RuntimeError("Aktivitetsnormalisering: activities måste vara lista")
+
+    override_applied = 0
+    auto_applied = 0
+    seen = set()
+
+    for activity in activities:
+        activity_id = activity.get("id")
+        key = str(activity_id) if activity_id is not None else ""
+        override = overrides.get(key)
+        if override:
+            seen.add(key)
+            apply_override(activity, override, key)
+            override_applied += 1
+            continue
+        if apply_auto_semantics(activity):
+            auto_applied += 1
+
+    state["activity_semantics"] = {
+        "schema_version": config.get("schema_version", 1),
+        "overrides_applied": override_applied,
+        "auto_rules_applied": auto_applied,
+        "override_ids_present": sorted(seen),
+    }
+    return override_applied, auto_applied, seen
+
+
 def main():
     if not ACTIVITIES.exists():
         raise RuntimeError("Aktivitetsnormalisering: activities.json saknas")
 
     state = load(ACTIVITIES)
-    state["schema_version"] = ACTIVITIES_SCHEMA_VERSION
-
-    if not OVERRIDES.exists():
-        write_state(state)
-        print("Aktivitetsnormalisering: inga overrides; schemaversion satt och Strava-data lämnad oförändrad.")
-        return
-
-    config = load(OVERRIDES)
-    overrides = config.get("overrides") or {}
-    activities = state.get("activities") or []
-
-    applied = 0
-    seen = set()
-    for activity in activities:
-        activity_id = activity.get("id")
-        key = str(activity_id) if activity_id is not None else ""
-        override = overrides.get(key)
-        if not override:
-            continue
-
-        seen.add(key)
-        raw_sport = activity.get("source_sport_type") or activity.get("sport_type") or ""
-        expected_raw = override.get("source_sport_type") or ""
-        if expected_raw and raw_sport != expected_raw:
-            raise RuntimeError(
-                f"Aktivitetsnormalisering: aktivitet {key} har rå sport {raw_sport!r}, "
-                f"men override förväntar {expected_raw!r}"
-            )
-
-        effective_sport = (override.get("sport") or "").strip()
-        classification = (override.get("classification") or "").strip()
-        if not effective_sport:
-            raise RuntimeError(f"Aktivitetsnormalisering: override {key} saknar sport")
-        if classification not in {"training", "recreation"}:
-            raise RuntimeError(
-                f"Aktivitetsnormalisering: override {key} har ogiltig classification {classification!r}"
-            )
-
-        activity["source_sport_type"] = raw_sport
-        activity["sport_type"] = effective_sport
-        activity["classification"] = classification
-        activity["display_label"] = override.get("display_label") or effective_sport
-        if override.get("garmin_activity_type"):
-            activity["garmin_activity_type"] = override["garmin_activity_type"]
-        if override.get("user_report"):
-            activity["user_report"] = override["user_report"]
-        if override.get("reason"):
-            activity["classification_reason"] = override["reason"]
-        applied += 1
-
-    state["activity_semantics"] = {
-        "schema_version": config.get("schema_version", 1),
-        "overrides_applied": applied,
-        "override_ids_present": sorted(seen),
-    }
+    config = load(OVERRIDES) if OVERRIDES.exists() else {"schema_version": 1, "overrides": {}}
+    applied, auto_applied, seen = apply_semantics(state, config)
     write_state(state)
 
     rendered = load(ACTIVITIES)
     if rendered.get("schema_version") != ACTIVITIES_SCHEMA_VERSION:
         raise RuntimeError("Aktivitetsnormalisering: schemaversion verifierades inte")
     by_id = {str(a.get("id")): a for a in rendered.get("activities", [])}
+    overrides = config.get("overrides") or {}
     for key in seen:
         override = overrides[key]
         activity = by_id[key]
@@ -94,7 +150,10 @@ def main():
         if activity.get("classification") != override.get("classification"):
             raise RuntimeError(f"Aktivitetsnormalisering: classification verifierades inte för {key}")
 
-    print(f"Aktivitetsnormalisering OK: schema v{ACTIVITIES_SCHEMA_VERSION}, {applied} explicit override(s) applicerade.")
+    print(
+        f"Aktivitetsnormalisering OK: schema v{ACTIVITIES_SCHEMA_VERSION}, "
+        f"{applied} explicit override(s), {auto_applied} auto-regel(er) applicerade."
+    )
 
 
 if __name__ == "__main__":

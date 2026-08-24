@@ -33,6 +33,8 @@ class StravaSyncTests(unittest.TestCase):
             "weighted_average_watts": 276,
             "calories": 750.0,
             "device_name": "Garmin Forerunner 970",
+            "gear_id": "b12345",
+            "gear": {"id": "b12345", "name": "Merida One-Twenty"},
         }
 
     def test_detail_mapping_is_exact_and_source_is_explicit(self):
@@ -42,6 +44,8 @@ class StravaSyncTests(unittest.TestCase):
         self.assertEqual(mapped["distance_m"], 12345.6)
         self.assertEqual(mapped["elapsed_time_s"], 3660)
         self.assertEqual(mapped["device_name"], "Garmin Forerunner 970")
+        self.assertEqual(mapped["gear_id"], "b12345")
+        self.assertEqual(mapped["gear_name"], "Merida One-Twenty")
         self.assertEqual(mapped["source"], "Strava API")
 
     def test_mismatched_detail_id_fails_closed(self):
