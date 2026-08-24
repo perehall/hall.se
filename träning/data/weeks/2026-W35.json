@@ -4,7 +4,7 @@
   "week_start": "2026-08-24",
   "week_end": "2026-08-30",
   "created_at_utc": "2026-08-24T06:32:25.878995+00:00",
-  "updated_at_utc": "2026-08-24T20:49:18.784175+00:00",
+  "updated_at_utc": "2026-08-24T22:01:45.452209+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -156,36 +156,36 @@
       "activity_id": 19883021281,
       "activity_date": "2026-08-24",
       "activity_name": "Styrketräning på natten",
-      "generated_at_utc": "2026-08-24T19:32:34.872406+00:00",
+      "generated_at_utc": "2026-08-24T22:01:44.909901+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Styrkepasset var långt men lågintensivt; påverkar tisdagens löpkvalitet måttligt.",
-        "load_interpretation": "Sen kvälls­styrka efter en längre enduro ger ackumulerad lokal och central belastning som kan påverka löpkvaliteten på tisdag.",
+        "summary": "Styrkepasset efter kvällens enduro ger ackumulerad närbelastning; tisdagens löpkvalitet bör reduceras enligt tidigare villkor.",
+        "load_interpretation": "Enduro + efterföljande styrka samma dag ökade samlad lokal och kardiovaskulär belastning inför tisdag.",
         "confidence": "medium",
         "facts": [
           "WeightTraining: 29:05 · snittpuls 84 · maxpuls 108.",
           "Planstatus 2026-08-24: dagens planerade pass är genomfört i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Styrkepasset innehöll ingen hög hjärtbelastning men kan bidra till lokal bentrötthet efter enduron.",
-          "Total faktisk belastning idag är betydande p.g.a. enduro + efterföljande styrka, vilket minskar marginalen inför tisdagens löpning."
+          "Kombinationen av långt enduropass och efterföljande styrka minskar marginalen för ett planerat tröskelpass nästa dag.",
+          "Auto_coach har redan föreslagit nedskalning till 3×8 min; dagens data stödjer den konservativa justeringen."
         ],
         "unknowns": [
-          "Subjektivt dagskänsla/bentrötthet efter dagens dubbelpass saknas.",
-          "Detaljer om styrkepassets belastningsval (maximal ansträngning, sets/reps) saknas.",
-          "Sömn och återhämtningstimmar mellan nu och tisdag okända."
+          "Subjektiv dagskänsla, sömn och lokal bentrötthet inför tisdag morgon.",
+          "Detaljer om styrkepassets belastningsnivå (set/reps/failure) saknas.",
+          "Eventuella återstående planerade aktiviteter före tisdag morgon (inga noterade)."
         ]
       },
       "plan_action": {
-        "action": "reduce",
+        "action": "keep",
         "target_date": "2026-08-25",
-        "reason": "Ackumulerad belastning idag minskar säker marginal för planerad löpkvalitet.",
-        "recommendation": "Skala ner tisdagens kvalitet till 3×8 min/90 s jogg med samma intensitetsmål; behåll fokus på jämn ansträngning. Om subjektiv dagskänsla tisdag morgon är god kan ursprunglig 3×10 min återställas efter bedömning.",
+        "reason": "Tidigare auto-beslut att skala ner bygger på dagens faktiska dubbla pass och är redan konservativt formulerat.",
+        "recommendation": "Behåll den villkorade nedskalningen till 3×8 min/90 s jogg för tisdag; om subjektiv dagskänsla tisdag morgon är klart god kan ursprungliga 3×10 min återställas efter bedömning.",
         "requires_approval": false
       },
       "auto_apply": {
-        "applied": true,
-        "note": "Konservativ ändring applicerad på 2026-08-25: reduce."
+        "applied": false,
+        "note": "Ingen automatisk planändring."
       }
     },
     {
