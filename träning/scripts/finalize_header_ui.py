@@ -39,6 +39,10 @@ UPDATED_RE = re.compile(
     r'(?:senast\s+)?uppdaterad\s+(?P<day>\d{1,2})\s+(?P<month>[a-zåäö]+)\s+\d{4}\s+·\s+(?P<time>\d{1,2}:\d{2})',
     re.I,
 )
+HISTORY_RE = re.compile(
+    r'historik\s*·\s*data sparad\s+(?P<date>\d{4}-\d{2}-\d{2})\s+(?P<time>\d{1,2}:\d{2})',
+    re.I,
+)
 STATIC_META = {"preliminär plan"}
 
 
@@ -46,6 +50,10 @@ def format_meta(meta):
     value = meta.strip()
     if value.lower() in STATIC_META:
         return "header-status", value.capitalize()
+
+    history = HISTORY_RE.fullmatch(value)
+    if history:
+        return "header-status", f'Historik · data sparad {history.group("date")} {history.group("time")}'
 
     match = UPDATED_RE.fullmatch(value)
     if not match:
