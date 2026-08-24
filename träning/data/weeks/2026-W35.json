@@ -4,7 +4,7 @@
   "week_start": "2026-08-24",
   "week_end": "2026-08-30",
   "created_at_utc": "2026-08-24T06:32:25.878995+00:00",
-  "updated_at_utc": "2026-08-24T07:01:26.321416+00:00",
+  "updated_at_utc": "2026-08-24T07:23:27.047993+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -22,6 +22,7 @@
         "status": "planned",
         "session": "Enduroskola",
         "reason": "Fast i kalendern. Belastningen klassas inte i förväg: passet kan vara teori/teknik med låg fysisk kostnad eller mer krävande körning. Faktiskt innehåll och egen ansträngning avgör påverkan på resten av veckan.",
+        "development_focus": "Blick långt fram och välj linje tidigt; håll körningen avspänd. Teknik, inte fysisk belastning, är dagens utvecklingspunkt.",
         "sport": "enduro",
         "classification": "recreation"
       },
@@ -29,11 +30,93 @@
         "date": "2026-08-25",
         "label": "Tisdag",
         "status": "planned",
-        "session": "Simning · aerob/teknik · ca 60 min",
+        "session": "Simning · aerob/teknik · 3 200 m · ca 60 min",
         "swim_equipment": {
-          "planned": "to_be_determined"
+          "planned": "none"
         },
-        "reason": "Aerob/teknisk simning med låg mekanisk kostnad. Passet behöver inte reduceras enbart för att enduroskola genomfördes måndag; justering görs bara om måndagens faktiska belastning motiverar det.",
+        "reason": "Aerob/teknisk simning med låg mekanisk kostnad efter söndagens 90-minuterslöpning och före onsdagens villkorade tröskel. Förslag: 400 m lugn insim + 6×50 m catch-fokus @ 15 s vila + 3×600 m stadigt aerob @ 30 s vila + 6×50 m avslappnat något högre frekvens @ 15 s vila + 400 m mycket lugnt. Totalt 3 200 m; samma totaldistans som de två senast registrerade simningarna, alltså ingen automatisk volymökning.",
+        "development_focus": "Sätt handen framför axeln och få ett tidigt grepp om vattnet utan att pressa handen nedåt; håll huvudet stilla genom draget.",
+        "watch_workout": {
+          "sync_enabled": true,
+          "id": "swim-w35-tue-aerob-catch-01",
+          "external_id": "hall-training-2026-08-25-swim-aerob-catch",
+          "type": "Swim",
+          "equipment": [],
+          "name": "Aerob/teknik · catch · 3 200 m",
+          "planned_distance_m": 3200,
+          "blocks": [
+            {
+              "name": "Insim",
+              "steps": [
+                {
+                  "kind": "swim",
+                  "text": "Lugn insim",
+                  "distance_m": 400,
+                  "intensity": "warmup"
+                }
+              ]
+            },
+            {
+              "name": "Catch-teknik",
+              "repeat": 6,
+              "steps": [
+                {
+                  "kind": "swim",
+                  "text": "Catch-fokus, lugnt och precist",
+                  "distance_m": 50,
+                  "intensity": "active"
+                },
+                {
+                  "kind": "rest",
+                  "duration_s": 15
+                }
+              ]
+            },
+            {
+              "name": "Aerob",
+              "repeat": 3,
+              "steps": [
+                {
+                  "kind": "swim",
+                  "text": "Stadigt aerob, bibehåll catch och kroppslinje",
+                  "distance_m": 600,
+                  "intensity": "active"
+                },
+                {
+                  "kind": "rest",
+                  "duration_s": 30
+                }
+              ]
+            },
+            {
+              "name": "Frekvens",
+              "repeat": 6,
+              "steps": [
+                {
+                  "kind": "swim",
+                  "text": "Avslappnat, något högre frekvens utan kortare drag",
+                  "distance_m": 50,
+                  "intensity": "active"
+                },
+                {
+                  "kind": "rest",
+                  "duration_s": 15
+                }
+              ]
+            },
+            {
+              "name": "Nedvarvning",
+              "steps": [
+                {
+                  "kind": "swim",
+                  "text": "Mycket lugnt",
+                  "distance_m": 400,
+                  "intensity": "cooldown"
+                }
+              ]
+            }
+          ]
+        },
         "sport": "swim"
       },
       {
@@ -42,6 +125,7 @@
         "status": "conditional",
         "session": "Löpning · kontrollerad tröskel · preliminärt 3 × 10 min / 90 s jogg",
         "reason": "Progression från genomförda 3 × 8 min: längre total kontrollerad arbetstid utan att höja intensiteten. 3 × 10 körs om helgen, måndagens faktiska endurobelastning och tisdagen är absorberade; annars upprepas 3 × 8. Enduroetiketten i sig är inte skäl att skala ned.",
+        "development_focus": "Pendla armarna bakåt med låga axlar och håll rytmen jämn när arbetstiden blir längre; ingen fartjakt i slutet av repetitionerna.",
         "sport": "run"
       },
       {
@@ -50,6 +134,7 @@
         "status": "open",
         "session": "Styrka + core · kontrollerat helkroppspass",
         "reason": "Bygger robusthet och löp-/cykelrelevant styrka utan failure. Volymen styrs främst av onsdagens löpkvalitet och faktisk lokal trötthet; plyometri endast om benen är fräscha. Ingen träningsdos var fastställd när veckan blev aktiv; passet är därför öppet tills faktisk belastning och återhämtning ger underlag.",
+        "development_focus": "Håll bäckenet stabilt och knät över foten i unilateral benstyrka; samma rörelsekvalitet på sista repetitionen som på den första.",
         "sport": "strength",
         "rollover_status_from": "preliminary"
       },
@@ -57,11 +142,92 @@
         "date": "2026-08-28",
         "label": "Fredag",
         "status": "preliminary",
-        "session": "Simning · kontrollerad kvalitet · ca 60 min",
+        "session": "Simning · kontrollerad kvalitet · 3 200 m · ca 60 min",
         "swim_equipment": {
-          "planned": "to_be_determined"
+          "planned": "none"
         },
-        "reason": "Veckans simkvalitet. Tröskeln hålls kontrollerad; exakt serie, vilor och hjälpmedel sätts efter tisdagens simning och torsdagens styrka.",
+        "reason": "Kontrollerad simkvalitet placerad efter onsdagens löpkvalitet och torsdagens styrka; slutlig intensitet avgörs efter de faktiska utfallen. Förslag: 400 m lugn insim + 6×50 m teknik/catch @ 15 s vila + 4×400 m kontrollerat jämnt @ 30 s vila + 6×100 m bibehållen teknik med något högre frekvens @ 20 s vila + 300 m lugn nedvarvning. Totalt 3 200 m; progressionen är bättre teknik under kvalitet, inte större totalvolym.",
+        "development_focus": "Behåll samma catch och kroppslinje när frekvensen stiger; öka rytmen utan att börja slira bakåt i greppet eller korta draget.",
+        "watch_workout": {
+          "sync_enabled": false,
+          "id": "swim-w35-fri-controlled-quality-01",
+          "type": "Swim",
+          "equipment": [],
+          "name": "Kontrollerad kvalitet · teknik under fart · 3 200 m",
+          "planned_distance_m": 3200,
+          "blocks": [
+            {
+              "name": "Insim",
+              "steps": [
+                {
+                  "kind": "swim",
+                  "text": "Lugn insim",
+                  "distance_m": 400,
+                  "intensity": "warmup"
+                }
+              ]
+            },
+            {
+              "name": "Teknik",
+              "repeat": 6,
+              "steps": [
+                {
+                  "kind": "swim",
+                  "text": "Catch och kroppslinje",
+                  "distance_m": 50,
+                  "intensity": "active"
+                },
+                {
+                  "kind": "rest",
+                  "duration_s": 15
+                }
+              ]
+            },
+            {
+              "name": "Kontrollerad kvalitet",
+              "repeat": 4,
+              "steps": [
+                {
+                  "kind": "swim",
+                  "text": "Kontrollerat jämnt, samma teknik från första till sista",
+                  "distance_m": 400,
+                  "intensity": "active"
+                },
+                {
+                  "kind": "rest",
+                  "duration_s": 30
+                }
+              ]
+            },
+            {
+              "name": "Frekvens med teknik",
+              "repeat": 6,
+              "steps": [
+                {
+                  "kind": "swim",
+                  "text": "Något högre frekvens med bibehållet grepp",
+                  "distance_m": 100,
+                  "intensity": "active"
+                },
+                {
+                  "kind": "rest",
+                  "duration_s": 20
+                }
+              ]
+            },
+            {
+              "name": "Nedvarvning",
+              "steps": [
+                {
+                  "kind": "swim",
+                  "text": "Lugnt",
+                  "distance_m": 300,
+                  "intensity": "cooldown"
+                }
+              ]
+            }
+          ]
+        },
         "sport": "swim"
       },
       {
@@ -70,6 +236,7 @@
         "status": "open",
         "session": "MTB/XC · teknik först + kort kontrollerad fart",
         "reason": "Teknik är huvudsyftet. Kortare kvalitetsrepetitioner kan läggas in om fredagens simning och veckans faktiska benbelastning är väl absorberade; annars ren teknik/lugn stig. Ingen träningsdos var fastställd när veckan blev aktiv; passet är därför öppet tills faktisk belastning och återhämtning ger underlag.",
+        "development_focus": "Blicken genom kurvan och bromsa klart före svängen så däcken får grepp när du styr; prioritera linje och flyt framför fart.",
         "sport": "bike",
         "rollover_status_from": "preliminary"
       },
