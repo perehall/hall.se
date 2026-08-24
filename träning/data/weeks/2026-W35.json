@@ -4,7 +4,7 @@
   "week_start": "2026-08-24",
   "week_end": "2026-08-30",
   "created_at_utc": "2026-08-24T06:32:25.878995+00:00",
-  "updated_at_utc": "2026-08-24T18:52:36.238288+00:00",
+  "updated_at_utc": "2026-08-24T19:32:35.261880+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -30,11 +30,18 @@
       {
         "date": "2026-08-25",
         "label": "Tisdag",
-        "status": "planned",
+        "status": "conditional",
         "session": "Löpning · kvalitet · kontrollerad tröskel · 3 × 10 min / 90 s jogg",
         "reason": "Progression från genomförda 3 × 8 min genom längre kontrollerad arbetstid utan avsikt att höja intensiteten. Detta är veckans första prioriterade löpkvalitetspass; eventuell nedskalning ska bygga på måndagens faktiska utfall, inte på att enduro står i kalendern.",
         "development_focus": "Jämn ansträngning genom alla tre repetitionerna; ingen fartjakt i slutet.",
-        "sport": "run"
+        "sport": "run",
+        "original_session": "Löpning · kvalitet · kontrollerad tröskel · 3 × 10 min / 90 s jogg",
+        "auto_coach": {
+          "action": "reduce",
+          "reason": "Ackumulerad belastning idag minskar säker marginal för planerad löpkvalitet.",
+          "applied_at_utc": "2026-08-24T19:32:34.872032+00:00"
+        },
+        "coach_adjustment": "Skala ned passet. Skala ner tisdagens kvalitet till 3×8 min/90 s jogg med samma intensitetsmål; behåll fokus på jämn ansträngning. Om subjektiv dagskänsla tisdag morgon är god kan ursprunglig 3×10 min återställas efter bedömning."
       },
       {
         "date": "2026-08-26",
@@ -99,6 +106,24 @@
   },
   "activities": [
     {
+      "id": 19883021281,
+      "name": "Styrketräning på natten",
+      "sport_type": "WeightTraining",
+      "start_date": "2026-08-24T19:01:22Z",
+      "start_date_local": "2026-08-24T21:01:22Z",
+      "distance_m": 0.0,
+      "moving_time_s": 1745,
+      "elapsed_time_s": 1745,
+      "total_elevation_gain_m": 0,
+      "average_heartrate": 84.0,
+      "max_heartrate": 108.0,
+      "average_watts": null,
+      "weighted_average_watts": null,
+      "calories": 104.0,
+      "device_name": "Garmin Forerunner 970",
+      "source": "Strava API"
+    },
+    {
       "id": 19882521682,
       "name": "Enduro på kvällen",
       "sport_type": "MountainBikeRide",
@@ -118,6 +143,42 @@
     }
   ],
   "coach_analyses": [
+    {
+      "activity_id": 19883021281,
+      "activity_date": "2026-08-24",
+      "activity_name": "Styrketräning på natten",
+      "generated_at_utc": "2026-08-24T19:32:34.872406+00:00",
+      "model": "gpt-5-mini",
+      "assessment": {
+        "summary": "Styrkepasset var långt men lågintensivt; påverkar tisdagens löpkvalitet måttligt.",
+        "load_interpretation": "Sen kvälls­styrka efter en längre enduro ger ackumulerad lokal och central belastning som kan påverka löpkvaliteten på tisdag.",
+        "confidence": "medium",
+        "facts": [
+          "WeightTraining: 29:05 · snittpuls 84 · maxpuls 108.",
+          "Planstatus 2026-08-24: dagens planerade pass är genomfört i coachens beslutsunderlag."
+        ],
+        "interpretations": [
+          "Styrkepasset innehöll ingen hög hjärtbelastning men kan bidra till lokal bentrötthet efter enduron.",
+          "Total faktisk belastning idag är betydande p.g.a. enduro + efterföljande styrka, vilket minskar marginalen inför tisdagens löpning."
+        ],
+        "unknowns": [
+          "Subjektivt dagskänsla/bentrötthet efter dagens dubbelpass saknas.",
+          "Detaljer om styrkepassets belastningsval (maximal ansträngning, sets/reps) saknas.",
+          "Sömn och återhämtningstimmar mellan nu och tisdag okända."
+        ]
+      },
+      "plan_action": {
+        "action": "reduce",
+        "target_date": "2026-08-25",
+        "reason": "Ackumulerad belastning idag minskar säker marginal för planerad löpkvalitet.",
+        "recommendation": "Skala ner tisdagens kvalitet till 3×8 min/90 s jogg med samma intensitetsmål; behåll fokus på jämn ansträngning. Om subjektiv dagskänsla tisdag morgon är god kan ursprunglig 3×10 min återställas efter bedömning.",
+        "requires_approval": false
+      },
+      "auto_apply": {
+        "applied": true,
+        "note": "Konservativ ändring applicerad på 2026-08-25: reduce."
+      }
+    },
     {
       "activity_id": 19882521682,
       "activity_date": "2026-08-24",

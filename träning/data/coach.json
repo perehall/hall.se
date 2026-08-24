@@ -1,6 +1,42 @@
 {
   "analyses": [
     {
+      "activity_id": 19883021281,
+      "activity_date": "2026-08-24",
+      "activity_name": "Styrketräning på natten",
+      "generated_at_utc": "2026-08-24T19:32:34.872406+00:00",
+      "model": "gpt-5-mini",
+      "assessment": {
+        "summary": "Styrkepasset var långt men lågintensivt; påverkar tisdagens löpkvalitet måttligt.",
+        "load_interpretation": "Sen kvälls­styrka efter en längre enduro ger ackumulerad lokal och central belastning som kan påverka löpkvaliteten på tisdag.",
+        "confidence": "medium",
+        "facts": [
+          "WeightTraining: 29:05 · snittpuls 84 · maxpuls 108.",
+          "Planstatus 2026-08-24: dagens planerade pass är genomfört i coachens beslutsunderlag."
+        ],
+        "interpretations": [
+          "Styrkepasset innehöll ingen hög hjärtbelastning men kan bidra till lokal bentrötthet efter enduron.",
+          "Total faktisk belastning idag är betydande p.g.a. enduro + efterföljande styrka, vilket minskar marginalen inför tisdagens löpning."
+        ],
+        "unknowns": [
+          "Subjektivt dagskänsla/bentrötthet efter dagens dubbelpass saknas.",
+          "Detaljer om styrkepassets belastningsval (maximal ansträngning, sets/reps) saknas.",
+          "Sömn och återhämtningstimmar mellan nu och tisdag okända."
+        ]
+      },
+      "plan_action": {
+        "action": "reduce",
+        "target_date": "2026-08-25",
+        "reason": "Ackumulerad belastning idag minskar säker marginal för planerad löpkvalitet.",
+        "recommendation": "Skala ner tisdagens kvalitet till 3×8 min/90 s jogg med samma intensitetsmål; behåll fokus på jämn ansträngning. Om subjektiv dagskänsla tisdag morgon är god kan ursprunglig 3×10 min återställas efter bedömning.",
+        "requires_approval": false
+      },
+      "auto_apply": {
+        "applied": true,
+        "note": "Konservativ ändring applicerad på 2026-08-25: reduce."
+      }
+    },
+    {
       "activity_id": 19882521682,
       "activity_date": "2026-08-24",
       "activity_name": "Enduro på kvällen",
@@ -302,7 +338,7 @@
       }
     }
   ],
-  "last_trigger_hash": "510207ef8abffae522097de9532e2dda99a5579dda3418c6bb88b958b1da3310",
-  "last_run_utc": "2026-08-24T18:52:35.845281+00:00",
+  "last_trigger_hash": "a1b27f7b89cadf2b4adbae815462835d8a891a0cdac7cba43cb0e2c4df37be2b",
+  "last_run_utc": "2026-08-24T19:32:34.872406+00:00",
   "contract_version": 4
 }
