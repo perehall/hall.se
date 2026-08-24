@@ -4,7 +4,7 @@
   "week_start": "2026-08-24",
   "week_end": "2026-08-30",
   "created_at_utc": "2026-08-24T06:32:25.878995+00:00",
-  "updated_at_utc": "2026-08-24T13:50:07.464881+00:00",
+  "updated_at_utc": "2026-08-24T13:53:36.827446+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -19,19 +19,13 @@
       {
         "date": "2026-08-24",
         "label": "Måndag",
-        "status": "conditional",
+        "status": "planned",
         "session": "Enduroskola + styrka · styrkan efter enduron",
         "reason": "Enduron är kvällens första pass och styrkan läggs direkt efter. Styrkan hålls kontrollerad utan failure; den samlade faktiska belastningen från båda passen avgör om tisdagens löpkvalitet behöver justeras.",
         "development_focus": "Enduro: avslappnad teknik och tidiga linjeval. Styrka: ren rörelsekvalitet och lämna marginal i benen inför tisdagens löpning.",
         "sport": "strength",
         "dose_open": true,
-        "original_session": "Enduroskola + styrka · styrkan efter enduron",
-        "auto_coach": {
-          "action": "reduce",
-          "reason": "Dagens långa löpning plus föregående lätt enduro ger ackumulerad aerob belastning som motiverar att skydda tisdagens kvalitet.",
-          "applied_at_utc": "2026-08-24T13:50:06.960606+00:00"
-        },
-        "coach_adjustment": "Skala ned passet. Skala ner kvällens planerade enduroskola+styrka till mycket lätt teknikenduro eller avboka styrkedelen; håll styrka kort och utan failure (under 20 min, låg belastning). Fortsätt med planerad tisdagskvalitet om morgontillstånd är normalt."
+        "manual_lock": true
       },
       {
         "date": "2026-08-25",

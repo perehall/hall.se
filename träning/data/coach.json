@@ -4,36 +4,36 @@
       "activity_id": 19862241646,
       "activity_date": "2026-08-23",
       "activity_name": "Löpning på morgonen",
-      "generated_at_utc": "2026-08-24T13:50:06.961176+00:00",
+      "generated_at_utc": "2026-08-24T13:53:36.353970+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Lång lugn/steady löpning 17.2 km på grus/asfalt; påverkar tisdagens kvalitet marginellt.",
-        "load_interpretation": "Dagens löpning ger betydande kardiovaskulär belastning och kompletterar senaste dagarnas arbete.",
+        "summary": "Långt, aerobt löppass (17.2 km) på grus/asfalt—stor del av veckans löpvolym uppnådd; påverkar tisdagens kvalitet.",
+        "load_interpretation": "Dagens löppass lägger en betydande löpbelastning inför tisdagens tröskelpass.",
         "confidence": "medium",
         "facts": [
           "Löpning · grus/asfalt: 17,16 km · 1:30:59 · 161 m+ · snittpuls 138,9 · maxpuls 157.",
           "Användarrapport: Underlag: grus och asfalt; inte trail."
         ],
         "interpretations": [
-          "Dagens varaktighet och puls tyder på en hög aerob belastning som kan minska kapacitet för hård tröskel nästa dag.",
-          "Enduron bedöms inte som tung eftersom användaren rapporterade det lätt; det ger dock additiv belastning i veckan."
+          "Passet var långvarigt och aerobt snarare än kort högintensivt; det ger både perifer och central trötthet relevant för löpning.",
+          "Eftersom enduron rapporterades lätt är den totala föregående belastningen måttlig men två dagars löpning nära inpå kräver konservativ hantering."
         ],
         "unknowns": [
-          "Subjektiv återhämtning/sömn efter dagens pass.",
-          "Detaljerad lokal bentrötthet före tisdagens kvalitet.",
-          "Eventuella senare träningspass idag (planerad enduro+styrka på 24:e) och deras faktiska belastning."
+          "Subjektiv dagskänsla/benstatus efter passet saknas.",
+          "Sömn och återhämtning över natt saknas.",
+          "Detaljerad intensitetsprofil (intervallinnehåll) under löppasset saknas."
         ]
       },
       "plan_action": {
-        "action": "reduce",
-        "target_date": "2026-08-24",
-        "reason": "Dagens långa löpning plus föregående lätt enduro ger ackumulerad aerob belastning som motiverar att skydda tisdagens kvalitet.",
-        "recommendation": "Skala ner kvällens planerade enduroskola+styrka till mycket lätt teknikenduro eller avboka styrkedelen; håll styrka kort och utan failure (under 20 min, låg belastning). Fortsätt med planerad tisdagskvalitet om morgontillstånd är normalt.",
+        "action": "keep",
+        "target_date": "",
+        "reason": "Basplanen behålls; dagens pass var lång aerobt och enduron var lätt, så tisdagens kvalitet står kvar.",
+        "recommendation": "Behåll tisdagens 3×10 min tröskel enligt plan; värm noggrant och skala första intervallen om benen känns tunga. Utvärdera subjektiv återhämtning före start.",
         "requires_approval": false
       },
       "auto_apply": {
-        "applied": true,
-        "note": "Konservativ ändring applicerad på 2026-08-24: reduce."
+        "applied": false,
+        "note": "Ingen automatisk planändring."
       }
     },
     {
@@ -267,7 +267,7 @@
       }
     }
   ],
-  "last_trigger_hash": "f8577c074a62e1b039ea4c5243f2ac3dbe5e48b67c7efbcb323f3edce16e529e",
-  "last_run_utc": "2026-08-24T13:50:06.961176+00:00",
+  "last_trigger_hash": "ab33d4a06dfcb9c759190c34d3699fd99f281a52f3a520194231691b4dadbd69",
+  "last_run_utc": "2026-08-24T13:53:36.353970+00:00",
   "contract_version": 4
 }
