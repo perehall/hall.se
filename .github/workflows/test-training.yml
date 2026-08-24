@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - "träning/**"
+      - "infra/strava-webhook/**"
       - ".github/workflows/test-training.yml"
       - ".github/workflows/update-training.yml"
   push:
@@ -21,6 +22,7 @@ on:
       - "träning/data/sport_icons.json"
       - "träning/data/settings.json"
       - "träning/data/weather_config.json"
+      - "infra/strava-webhook/**"
       - ".github/workflows/test-training.yml"
       - ".github/workflows/update-training.yml"
 
@@ -48,6 +50,11 @@ jobs:
 
       - name: Unit and regression tests
         run: python -m unittest discover -s "träning/tests" -p "test_*.py" -v
+
+      - name: Test Strava webhook worker
+        run: |
+          node --check "infra/strava-webhook/src/worker.mjs"
+          node --test "infra/strava-webhook/test/worker.test.mjs"
 
       - name: Offline site-generation smoke test
         run: |
