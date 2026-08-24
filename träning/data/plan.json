@@ -12,12 +12,19 @@
     {
       "date": "2026-08-24",
       "label": "Måndag",
-      "status": "planned",
+      "status": "conditional",
       "session": "Enduroskola + styrka · styrkan efter enduron",
       "reason": "Enduron är kvällens första pass och styrkan läggs direkt efter. Styrkan hålls kontrollerad utan failure; den samlade faktiska belastningen från båda passen avgör om tisdagens löpkvalitet behöver justeras.",
       "development_focus": "Enduro: avslappnad teknik och tidiga linjeval. Styrka: ren rörelsekvalitet och lämna marginal i benen inför tisdagens löpning.",
       "sport": "strength",
-      "dose_open": true
+      "dose_open": true,
+      "original_session": "Enduroskola + styrka · styrkan efter enduron",
+      "auto_coach": {
+        "action": "reduce",
+        "reason": "Dagens långa löpning plus föregående lätt enduro ger ackumulerad aerob belastning som motiverar att skydda tisdagens kvalitet.",
+        "applied_at_utc": "2026-08-24T13:50:06.960606+00:00"
+      },
+      "coach_adjustment": "Skala ned passet. Skala ner kvällens planerade enduroskola+styrka till mycket lätt teknikenduro eller avboka styrkedelen; håll styrka kort och utan failure (under 20 min, låg belastning). Fortsätt med planerad tisdagskvalitet om morgontillstånd är normalt."
     },
     {
       "date": "2026-08-25",
