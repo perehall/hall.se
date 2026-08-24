@@ -30,6 +30,7 @@ PHASE_MARKERS = {
 }
 
 SCRIPT_MARKER = "<!-- phase-trail-sync-v2 -->"
+TOOLTIP_STACKING_MARKER = "/* goal-tooltip-stacking-v1 */"
 
 
 def patch_route(page: str) -> str:
@@ -133,6 +134,28 @@ def patch_markers(page: str) -> str:
     return page.replace("</body>", sync_script + "\n</body>", 1)
 
 
+def patch_tooltip_stacking(page: str) -> str:
+    # Each phase marker is its own stacking context. Raising only the tooltip cannot
+    # escape that parent context, so later sibling markers can otherwise paint over it.
+    # Raise the entire active marker while hovering/focusing instead.
+    page = re.sub(
+        r'<style>\s*/\* goal-tooltip-stacking-v\d+ \*/.*?'
+        r'/\* goal-tooltip-stacking-v\d+ \*/\s*</style>\s*',
+        '',
+        page,
+        flags=re.S,
+    )
+    css = f'''<style>
+{TOOLTIP_STACKING_MARKER}
+.mountain-phase-point:hover,.mountain-phase-point:focus-visible{{z-index:40}}
+.mountain-tooltip{{z-index:2}}
+{TOOLTIP_STACKING_MARKER}
+</style>'''
+    if "</head>" not in page:
+        raise RuntimeError("Målbild: </head> saknas")
+    return page.replace("</head>", css + "\n</head>", 1)
+
+
 def validate_goal(page: str, label: str) -> None:
     required = [
         'id="phase-trail"',
@@ -145,6 +168,8 @@ def validate_goal(page: str, label: str) -> None:
         'data-progress="0.97"',
         "getPointAtLength",
         SCRIPT_MARKER,
+        TOOLTIP_STACKING_MARKER,
+        '.mountain-phase-point:hover,.mountain-phase-point:focus-visible{z-index:40}',
         'href="#fas-2"',
         "Målbild 2027",
     ]
@@ -157,6 +182,8 @@ def validate_goal(page: str, label: str) -> None:
         raise RuntimeError(f"Målbild: {label} ska innehålla exakt ett stigpar")
     if page.count(SCRIPT_MARKER) != 2:
         raise RuntimeError(f"Målbild: {label} ska innehålla exakt ett trail-sync-block")
+    if page.count(TOOLTIP_STACKING_MARKER) != 2:
+        raise RuntimeError(f"Målbild: {label} ska innehålla exakt ett tooltip-stacking-block")
 
 
 def main() -> None:
@@ -167,6 +194,7 @@ def main() -> None:
     canonical = SOURCE.read_text(encoding="utf-8")
     canonical = patch_route(canonical)
     canonical = patch_markers(canonical)
+    canonical = patch_tooltip_stacking(canonical)
     validate_goal(canonical, "canonical")
     SOURCE.write_text(canonical, encoding="utf-8")
 
