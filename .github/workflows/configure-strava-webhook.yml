@@ -45,6 +45,40 @@ jobs:
             esac
           fi
 
+      - name: Verify Worker runtime secret bindings
+        if: inputs.action == 'create'
+        env:
+          VERIFY_TOKEN: ${{ secrets.STRAVA_WEBHOOK_VERIFY_TOKEN }}
+          PATH_SECRET: ${{ secrets.STRAVA_WEBHOOK_PATH_SECRET }}
+        run: |
+          set -euo pipefail
+          health_file=$(mktemp)
+          status=$(curl --silent --show-error \
+            --output "$health_file" \
+            --write-out '%{http_code}' \
+            "$CALLBACK_ORIGIN/healthz")
+          echo "Worker health HTTP $status"
+          if [ "$status" != "200" ]; then
+            echo "Worker health check failed. Response:"
+            cat "$health_file"
+            exit 1
+          fi
+          expected_path_fp=$(python -c 'import hashlib,os; print(hashlib.sha256(os.environ["PATH_SECRET"].strip().encode()).hexdigest()[:12])')
+          expected_verify_fp=$(python -c 'import hashlib,os; print(hashlib.sha256(os.environ["VERIFY_TOKEN"].strip().encode()).hexdigest()[:12])')
+          python - "$health_file" "$expected_path_fp" "$expected_verify_fp" <<'PY'
+          import json, sys
+          path, expected_path, expected_verify = sys.argv[1:]
+          with open(path, encoding="utf-8") as fh:
+              data = json.load(fh)
+          if data.get("webhook_path_fingerprint") is None or data.get("verify_token_fingerprint") is None:
+              raise SystemExit("Worker-versionen saknar fingerprint-diagnostik; invänta/Verifiera senaste Cloudflare-deploy.")
+          if data.get("webhook_path_fingerprint") != expected_path:
+              raise SystemExit("WEBHOOK_PATH_SECRET matchar inte mellan GitHub och Cloudflare Runtime.")
+          if data.get("verify_token_fingerprint") != expected_verify:
+              raise SystemExit("STRAVA_VERIFY_TOKEN matchar inte STRAVA_WEBHOOK_VERIFY_TOKEN i GitHub.")
+          print("Worker runtime secrets match GitHub.")
+          PY
+
       - name: Verify callback challenge
         if: inputs.action == 'create'
         env:
