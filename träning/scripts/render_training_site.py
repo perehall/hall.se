@@ -19,6 +19,7 @@ PIPELINE = (
     "build_upcoming_week.py",
     "finalize_header_ui.py",
     "finalize_navigation_ui.py",
+    "finalize_progression_ui.py",
     "finalize_sport_icons.py",
     "finalize_day_session_icons.py",
     "finalize_workout_history.py",
