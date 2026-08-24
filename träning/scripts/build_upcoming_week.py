@@ -171,10 +171,12 @@ def render_preview(upcoming, current_key, upcoming_key):
     days = upcoming.get("days", [])
     counts = {"fixed": 0, "planned": 0, "preliminary": 0, "open": 0}
     cards = []
+    used_statuses = set()
     for day in days:
         planning_status = day.get("planning_status") or day.get("status") or "open"
         if planning_status not in STATUS_UI:
             raise RuntimeError(f"Kommande vecka: okänd planstatus {planning_status!r}")
+        used_statuses.add(planning_status)
         counts[planning_status] += 1
         css_class, label = STATUS_UI[planning_status]
         equipment = swim_equipment_html(day)
@@ -239,9 +241,9 @@ def render_preview(upcoming, current_key, upcoming_key):
         f"Vecka {week_number(upcoming_key)}",
         "PRELIMINÄR",
         "Veckans fokus",
-        "FAST",
         f'href="/träning/">← Vecka {week_number(current_key)}</a>',
     ]
+    required.extend(STATUS_UI[status][1] for status in sorted(used_statuses))
     for day in days:
         required.append(f'id="dag-{day["date"]}"')
         if day.get("sport") == "swim":
