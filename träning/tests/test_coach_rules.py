@@ -10,10 +10,13 @@ from coach_rules import (  # noqa: E402
     allowed_target_dates,
     canonical_activity_fact,
     canonical_facts,
+    decision_ready_target_dates,
     fulfilled_plan_dates,
     normalize_assessment_confidence,
+    normalize_deferred_future_action,
     normalize_no_remaining_plan,
     plan_for_coach,
+    unresolved_intervening_dates,
     validate_plan_action,
 )
 
@@ -112,6 +115,103 @@ class CoachRulesTests(unittest.TestCase):
         ]
 
         self.assertEqual(allowed_target_dates(plan, activities, "2026-08-23"), ["2026-08-25"])
+
+    def test_future_target_is_deferred_until_intervening_days_are_known(self):
+        plan = {
+            "days": [
+                {
+                    "date": "2026-08-24",
+                    "status": "planned",
+                    "sport": "enduro",
+                    "classification": "recreation",
+                    "session": "Enduroskola",
+                },
+                {
+                    "date": "2026-08-25",
+                    "status": "planned",
+                    "sport": "swim",
+                    "session": "Simning · aerob/teknik",
+                },
+                {
+                    "date": "2026-08-26",
+                    "status": "conditional",
+                    "sport": "run",
+                    "session": "Löpning · kontrollerad tröskel · 3 × 10 min",
+                },
+            ]
+        }
+        activities = []
+
+        self.assertEqual(
+            unresolved_intervening_dates(plan, activities, "2026-08-24", "2026-08-26"),
+            ["2026-08-24", "2026-08-25"],
+        )
+        self.assertEqual(
+            allowed_target_dates(plan, activities, "2026-08-24"),
+            ["2026-08-25", "2026-08-26"],
+        )
+        self.assertEqual(decision_ready_target_dates(plan, activities, "2026-08-24"), [])
+
+    def test_tomorrows_target_becomes_ready_after_today_is_fulfilled(self):
+        plan = {
+            "days": [
+                {
+                    "date": "2026-08-24",
+                    "status": "planned",
+                    "sport": "enduro",
+                    "classification": "recreation",
+                    "session": "Enduroskola",
+                },
+                {
+                    "date": "2026-08-25",
+                    "status": "planned",
+                    "sport": "swim",
+                    "session": "Simning · aerob/teknik",
+                },
+                {
+                    "date": "2026-08-26",
+                    "status": "conditional",
+                    "sport": "run",
+                    "session": "Löpning · kontrollerad tröskel",
+                },
+            ]
+        }
+        activities = [
+            {"id": 20, "sport_type": "Enduro", "start_date_local": "2026-08-24T18:00:00+02:00"}
+        ]
+
+        self.assertEqual(decision_ready_target_dates(plan, activities, "2026-08-24"), ["2026-08-25"])
+
+    def test_wednesday_becomes_ready_after_tuesday_is_fulfilled(self):
+        plan = {
+            "days": [
+                {"date": "2026-08-24", "status": "completed", "sport": "enduro", "session": "Enduro"},
+                {"date": "2026-08-25", "status": "planned", "sport": "swim", "session": "Simning"},
+                {"date": "2026-08-26", "status": "conditional", "sport": "run", "session": "Tröskel"},
+            ]
+        }
+        activities = [
+            {"id": 21, "sport_type": "Swim", "start_date_local": "2026-08-25T07:00:00+02:00"}
+        ]
+
+        self.assertEqual(decision_ready_target_dates(plan, activities, "2026-08-25"), ["2026-08-26"])
+
+    def test_model_reduce_on_deferred_target_is_normalized_to_review(self):
+        action = {
+            "action": "reduce",
+            "target_date": "2026-08-26",
+            "reason": "x",
+            "recommendation": "Skala ner.",
+            "requires_approval": False,
+        }
+        normalized = normalize_deferred_future_action(
+            action,
+            candidate_dates=["2026-08-25", "2026-08-26"],
+            ready_dates=[],
+        )
+        self.assertEqual(normalized["action"], "review")
+        self.assertEqual(normalized["target_date"], "")
+        self.assertIn("Ändra inte", normalized["recommendation"])
 
     def test_coach_view_marks_matching_day_completed_without_mutating_plan(self):
         plan = {
