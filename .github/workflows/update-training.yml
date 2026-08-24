@@ -2,7 +2,11 @@ name: Update training data
 
 on:
   workflow_dispatch:
+  repository_dispatch:
+    types:
+      - strava-activity-event
   schedule:
+    # Safety reconcile behålls tills Strava-webhooken är verifierad end-to-end.
     - cron: "17 */3 * * *"
     # Veckorullning 00:05 Europe/Stockholm. Två UTC-tider täcker CET/CEST;
     # rollover_week.py använder lokal kalendervecka och är idempotent.
@@ -48,7 +52,22 @@ jobs:
             cp "träning/index.html" "träning/index.manual-backup.html"
           fi
 
-      - name: Sync Strava
+      - name: Sync Strava webhook event
+        if: github.event_name == 'repository_dispatch'
+        env:
+          STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
+          STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
+          STRAVA_REFRESH_TOKEN: ${{ secrets.STRAVA_REFRESH_TOKEN }}
+          STRAVA_REFRESH_TOKEN_FILE: /tmp/strava_refresh_token
+          STRAVA_WEBHOOK_OBJECT_TYPE: ${{ github.event.client_payload.object_type }}
+          STRAVA_WEBHOOK_OBJECT_ID: ${{ github.event.client_payload.object_id }}
+          STRAVA_WEBHOOK_ASPECT_TYPE: ${{ github.event.client_payload.aspect_type }}
+          STRAVA_WEBHOOK_EVENT_TIME: ${{ github.event.client_payload.event_time }}
+          STRAVA_WEBHOOK_EVENT_KEY: ${{ github.event.client_payload.event_key }}
+        run: python "träning/scripts/sync_strava_event.py"
+
+      - name: Sync Strava safety reconcile
+        if: github.event_name != 'repository_dispatch'
         env:
           STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
           STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
