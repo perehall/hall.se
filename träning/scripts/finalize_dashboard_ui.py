@@ -151,7 +151,9 @@ today = datetime.now(tz).date().isoformat()
 
 # Planned training should be usable even while preliminary. A future planned,
 # preliminary or conditional training session therefore needs an explicit dose
-# (time and/or distance). Explicit rest/open states and recreation are exempt.
+# (time and/or distance), unless the plan explicitly marks the dose as open so
+# it can be set later from actual surrounding load without inventing a number.
+# Explicit rest/open states and recreation are also exempt.
 missing_plan_dose = []
 for day in plan.get("days", []):
     if day.get("date", "") < today:
@@ -161,6 +163,8 @@ for day in plan.get("days", []):
     if day.get("sport") in {"rest", "open"}:
         continue
     if day.get("classification") == "recreation":
+        continue
+    if day.get("dose_open") is True:
         continue
     session = (day.get("session") or "").strip()
     if not has_explicit_dose(session):
