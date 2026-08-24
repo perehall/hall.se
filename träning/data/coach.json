@@ -4,36 +4,36 @@
       "activity_id": 19862241646,
       "activity_date": "2026-08-23",
       "activity_name": "Löpning på morgonen",
-      "generated_at_utc": "2026-08-24T06:32:25.371838+00:00",
+      "generated_at_utc": "2026-08-24T06:56:11.429016+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Långdistanslöpning ~17 km på grus/asfalt; måndagens enduro var lätt enligt användaren.",
-        "load_interpretation": "Senaste två dagars faktiska belastning är måttlig–hög löpning + lätt enduro och två simpass; löpningen är nyckelpåverkande.",
+        "summary": "Långdistanslöpning ~1h30 på grus/asfalt — absorberbar aerob belastning som följer planens löpprogram.",
+        "load_interpretation": "De senaste tre dagarna visar måttlig till hög total volym men inga subjektiva trötthetsdata.",
         "confidence": "medium",
         "facts": [
           "Löpning · grus/asfalt: 17,16 km · 1:30:59 · 161 m+ · snittpuls 138,9 · maxpuls 157.",
           "Användarrapport: Underlag: grus och asfalt; inte trail."
         ],
         "interpretations": [
-          "Enduron bidrog sannolikt lite eller inget till bentrötthet enligt användarrapport; den påverkar därför inte nödvändigtvis onsdagens kvalitet.",
-          "17 km löpning med höga pulsvärden och 1.5 h rörelse ökar behovet av att beakta återhämtning inför kontrollerad tröskel."
+          "Dagens löppass är konsekvent med planens löpvolym och ger ingen tydlig anledning att skydda efterföljande kvalitetspass.",
+          "Enduron 22/8 rapporterades som lätt och torde inte öka ackumulerad trötthet signifikant."
         ],
         "unknowns": [
-          "Subjektiv återhämtning/sömn efter 23/08.",
-          "Eventuell lokal ben-/gångtrötthet specifikt inför onsdag.",
-          "Detaljerad intensitetsfördelning under 17 km (progression/serier)."
+          "Subjektiv dagskänsla, sömn och lokal muskeltrötthet saknas.",
+          "Exakt fysisk belastning av framtida måndagens enduroskola (24/8) är okänd och kan påverka tisdag/onsdag.",
+          "Detaljerad intensitetsfördelning under 23/8-löpningen (zoner eller intervaller) saknas."
         ]
       },
       "plan_action": {
-        "action": "reduce",
-        "target_date": "2026-08-26",
-        "reason": "Senaste löppasset var långt och kräver konservativ justering inför planerat tröskelpass.",
-        "recommendation": "Skala ner onsdagens löpkvalitet till 3 × 8 min / 90 s jogg istället för 3 × 10; håll intensiteten oförändrad. Behåll tisdagens simning som planerad eller gör den extra lugn om du känner kvarvarande bentrötthet.",
+        "action": "keep",
+        "target_date": "",
+        "reason": "Genomfört löppass ligger inom planens löpvolym och tidigare enduro rapporterades lätt.",
+        "recommendation": "Behåll schemalagd plan; genomför tisdagens simning enligt plan och bedöm onsdagens löpkvalitet först efter måndagens enduroskola och tisdags simpass.",
         "requires_approval": false
       },
       "auto_apply": {
-        "applied": true,
-        "note": "Konservativ ändring applicerad på 2026-08-26: reduce."
+        "applied": false,
+        "note": "Ingen automatisk planändring."
       }
     },
     {
@@ -267,7 +267,7 @@
       }
     }
   ],
-  "last_trigger_hash": "607556b5de1be8d62149349c7c76f634442c3f3e0326fb7aee1f6ae991d296be",
-  "last_run_utc": "2026-08-24T06:32:25.371838+00:00",
-  "contract_version": 3
+  "last_trigger_hash": "152d32034e3a2d43b3c8e2cd8c02ef02256f63f35486a59b3a0837fb5bb3a0d4",
+  "last_run_utc": "2026-08-24T06:56:11.429016+00:00",
+  "contract_version": 4
 }
