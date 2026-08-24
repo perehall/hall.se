@@ -4,7 +4,7 @@
   "week_start": "2026-08-24",
   "week_end": "2026-08-30",
   "created_at_utc": "2026-08-24T06:32:25.878995+00:00",
-  "updated_at_utc": "2026-08-24T17:07:45.540500+00:00",
+  "updated_at_utc": "2026-08-24T18:51:54.749708+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -97,6 +97,61 @@
       "Välj två bålövningar; låt inte accessoarer tränga undan huvudstyrkan."
     ]
   },
-  "activities": [],
-  "coach_analyses": []
+  "activities": [
+    {
+      "id": 19882521682,
+      "name": "Cykeltur på kvällen",
+      "sport_type": "Ride",
+      "start_date": "2026-08-24T16:05:29Z",
+      "start_date_local": "2026-08-24T18:05:29Z",
+      "distance_m": 27175.2,
+      "moving_time_s": 4730,
+      "elapsed_time_s": 5841,
+      "total_elevation_gain_m": 515.2,
+      "average_heartrate": 118.7,
+      "max_heartrate": 160.0,
+      "average_watts": 157.2,
+      "weighted_average_watts": null,
+      "calories": 628.0,
+      "device_name": "Garmin Forerunner 970",
+      "source": "Strava API"
+    }
+  ],
+  "coach_analyses": [
+    {
+      "activity_id": 19882521682,
+      "activity_date": "2026-08-24",
+      "activity_name": "Cykeltur på kvällen",
+      "generated_at_utc": "2026-08-24T18:51:54.201425+00:00",
+      "model": "gpt-5-mini",
+      "assessment": {
+        "summary": "Kvällens cykeltur (27 km, 5,2 h inkl. vila, 515 m höjd) kompletterar veckans aerob belastning och lämnar tisdagens löpkvalitet möjlig att genomföra enligt plan.",
+        "load_interpretation": "Senaste tre dagars faktiska arbete är måttligt tätt men användarrapport från enduro visar låg lokal slitage; cykelturen var aerob/måttlig.",
+        "confidence": "medium",
+        "facts": [
+          "Ride: 27,18 km · 1:37:21 · 515,2 m+ · snittpuls 118,7 · maxpuls 160."
+        ],
+        "interpretations": [
+          "Cykelturen var huvudsakligen aerob och inte uttalat slitande för benen givet låg medelpuls och användarrapport för enduro.",
+          "Veckans planerade tisdagskvalitet (2026-08-25) kan behållas men kräver bekräftelse av återhämtning morgonen efter."
+        ],
+        "unknowns": [
+          "Subjektiv återhämtning/sömnkvalitet efter dagens pass.",
+          "Exakt lokal bentrötthet efter styrkan som planerats på samma kväll (styrkepasset inte rapporterat som genomfört).",
+          "Eventuella högintensiva inslag under cykelturen som inte framgår av snittvärden."
+        ]
+      },
+      "plan_action": {
+        "action": "keep",
+        "target_date": "",
+        "reason": "Dagens faktiska arbete är inte tillräckligt tungt för att automatiskt skala ner tisdagens löpkvalitet.",
+        "recommendation": "Behåll planen; genomför tisdagens kontrollerade tröskel 3×10 min som ordinerat. Kontrollera subjektiv dagskänsla och benstatus morgonen 2026-08-25 och rapportera om trötta ben så tas en nedskalning ställning till då.",
+        "requires_approval": false
+      },
+      "auto_apply": {
+        "applied": false,
+        "note": "Ingen automatisk planändring."
+      }
+    }
+  ]
 }

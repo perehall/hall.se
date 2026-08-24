@@ -1,6 +1,41 @@
 {
   "analyses": [
     {
+      "activity_id": 19882521682,
+      "activity_date": "2026-08-24",
+      "activity_name": "Cykeltur på kvällen",
+      "generated_at_utc": "2026-08-24T18:51:54.201425+00:00",
+      "model": "gpt-5-mini",
+      "assessment": {
+        "summary": "Kvällens cykeltur (27 km, 5,2 h inkl. vila, 515 m höjd) kompletterar veckans aerob belastning och lämnar tisdagens löpkvalitet möjlig att genomföra enligt plan.",
+        "load_interpretation": "Senaste tre dagars faktiska arbete är måttligt tätt men användarrapport från enduro visar låg lokal slitage; cykelturen var aerob/måttlig.",
+        "confidence": "medium",
+        "facts": [
+          "Ride: 27,18 km · 1:37:21 · 515,2 m+ · snittpuls 118,7 · maxpuls 160."
+        ],
+        "interpretations": [
+          "Cykelturen var huvudsakligen aerob och inte uttalat slitande för benen givet låg medelpuls och användarrapport för enduro.",
+          "Veckans planerade tisdagskvalitet (2026-08-25) kan behållas men kräver bekräftelse av återhämtning morgonen efter."
+        ],
+        "unknowns": [
+          "Subjektiv återhämtning/sömnkvalitet efter dagens pass.",
+          "Exakt lokal bentrötthet efter styrkan som planerats på samma kväll (styrkepasset inte rapporterat som genomfört).",
+          "Eventuella högintensiva inslag under cykelturen som inte framgår av snittvärden."
+        ]
+      },
+      "plan_action": {
+        "action": "keep",
+        "target_date": "",
+        "reason": "Dagens faktiska arbete är inte tillräckligt tungt för att automatiskt skala ner tisdagens löpkvalitet.",
+        "recommendation": "Behåll planen; genomför tisdagens kontrollerade tröskel 3×10 min som ordinerat. Kontrollera subjektiv dagskänsla och benstatus morgonen 2026-08-25 och rapportera om trötta ben så tas en nedskalning ställning till då.",
+        "requires_approval": false
+      },
+      "auto_apply": {
+        "applied": false,
+        "note": "Ingen automatisk planändring."
+      }
+    },
+    {
       "activity_id": 19862241646,
       "activity_date": "2026-08-23",
       "activity_name": "Löpning på morgonen",
@@ -267,7 +302,7 @@
       }
     }
   ],
-  "last_trigger_hash": "ab33d4a06dfcb9c759190c34d3699fd99f281a52f3a520194231691b4dadbd69",
-  "last_run_utc": "2026-08-24T13:53:36.353970+00:00",
+  "last_trigger_hash": "6ac16c283dfa7f6a9e79bd116ef72d70a33e631d92ee80422bf8a0f7cb0e3e3a",
+  "last_run_utc": "2026-08-24T18:51:54.201425+00:00",
   "contract_version": 4
 }
