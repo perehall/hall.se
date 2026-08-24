@@ -24,6 +24,13 @@ WEEKDAY_LABELS = (
     "Söndag",
 )
 
+SWIM_FOCUS_CYCLE = (
+    "Sätt handen rent framför axeln och etablera greppet tidigt utan att pressa handen nedåt; håll huvudet stilla.",
+    "Rotera runt en stabil kroppslinje: låt höft och axel följa med utan att huvudet vandrar eller benen börjar slingra.",
+    "Låt återföringen vara avslappnad och isättningen ren; behåll ett tidigt grepp när handen går i vattnet.",
+    "Öka frekvensen utan att korta draget eller tappa greppet bakåt; rytm får inte ersätta vattenkänsla.",
+)
+
 DOSE_PATTERN = re.compile(
     r"\b\d+(?:[.,]\d+)?(?:\s*[–-]\s*\d+(?:[.,]\d+)?)?\s*(?:min|h|km|m)\b",
     re.IGNORECASE,
@@ -138,6 +145,72 @@ def promote_upcoming(upcoming):
     return promoted
 
 
+def _clean_preview_swim(source, target_date, target_label, next_key, focus_index):
+    workout = deepcopy(source.get("watch_workout") or {})
+    if not workout or workout.get("planned_distance_m") is None or not workout.get("blocks"):
+        raise RuntimeError(
+            f"Veckoskifte: simpass {source.get('date')} saknar strukturerat watch_workout; "
+            "kan inte skapa ett gissningsfritt preliminärt simpass."
+        )
+    equipment = deepcopy(source.get("swim_equipment") or {})
+    if "planned" not in equipment:
+        raise RuntimeError(
+            f"Veckoskifte: simpass {source.get('date')} saknar swim_equipment.planned"
+        )
+
+    copied = deepcopy(source)
+    copied["date"] = target_date.isoformat()
+    copied["label"] = target_label
+    copied["status"] = "preliminary"
+    copied["planning_status"] = "preliminary"
+    copied["sport"] = "swim"
+    copied["swim_equipment"] = equipment
+    copied["development_focus"] = SWIM_FOCUS_CYCLE[focus_index % len(SWIM_FOCUS_CYCLE)]
+    copied["reason"] = (
+        "Preliminär simstruktur förs vidare från föregående veckas etablerade simdos för kontinuitet. "
+        "Totaldosen ökas inte automatiskt; slutlig dos och intensitet omprövas mot faktisk belastning "
+        "och återhämtning från de närmast föregående 2–3 dagarna."
+    )
+
+    for field in (
+        "actual_swim_equipment",
+        "coach_adjustment",
+        "auto_coach",
+        "original_session",
+        "rollover_status_from",
+        "reference",
+    ):
+        copied.pop(field, None)
+
+    workout["sync_enabled"] = False
+    workout.pop("external_id", None)
+    workout["id"] = f"swim-{next_key.lower()}-{target_date.isoformat()}-preview"
+    copied["watch_workout"] = workout
+    return copied
+
+
+def seed_preliminary_swims(promoted, future):
+    current_start, _ = validate_week_bounds(promoted.get("meta") or {}, "promoverad plan")
+    next_start, _ = validate_week_bounds(future.get("meta") or {}, "framtidsplan")
+    next_key = future["week_key"]
+    swim_days = [day for day in promoted.get("days") or [] if day.get("sport") == "swim"]
+
+    for ordinal, source in enumerate(swim_days):
+        source_date = date.fromisoformat(source["date"])
+        offset = (source_date - current_start).days
+        if not 0 <= offset <= 6:
+            raise RuntimeError("Veckoskifte: simpass ligger utanför promoverad vecka")
+        target_date = next_start + timedelta(days=offset)
+        future["days"][offset] = _clean_preview_swim(
+            source,
+            target_date,
+            WEEKDAY_LABELS[offset],
+            next_key,
+            focus_index=next_start.isocalendar().week + ordinal,
+        )
+    return future
+
+
 def build_open_next_week(promoted):
     meta = promoted.get("meta") or {}
     _, current_end = validate_week_bounds(meta, "promoverad plan")
@@ -164,7 +237,7 @@ def build_open_next_week(promoted):
             }
         )
 
-    return {
+    future = {
         "schema_version": int(promoted.get("schema_version") or 3),
         "state": "preliminary",
         "week_key": week_key(next_start),
@@ -176,16 +249,17 @@ def build_open_next_week(promoted):
             "title": "Preliminär framtidsvecka",
             "principle": (
                 "Veckan hålls öppen tills faktisk belastning och återhämtning ger tillräckligt underlag. "
-                "Kontinuitet och absorberbar belastning prioriteras framför att fylla kalendern."
+                "Etablerade simpass förs preliminärt vidare utan automatisk volymökning; övriga dagar fylls inte ut."
             ),
             "preview_summary": (
-                "Översiktsvecka utan påhittad dos. Exakta pass sätts successivt när aktuell veckas "
-                "utfall och återhämtning är kända."
+                "Översiktsvecka utan påhittad belastningsökning. Etablerade simpass skrivs ut preliminärt "
+                "med tekniskt utvecklingsfokus; övriga pass sätts när aktuell veckas utfall är känt."
             ),
         },
         "days": days,
         "strength_template": deepcopy(promoted.get("strength_template") or []),
     }
+    return seed_preliminary_swims(promoted, future)
 
 
 def rollover_documents(plan, upcoming, today):
