@@ -1,5 +1,5 @@
 {
-  "last_sync_utc": "2026-08-24T19:48:19.408269+00:00",
+  "last_sync_utc": "2026-08-24T20:49:15.600206+00:00",
   "activities": [
     {
       "id": 19883021281,
@@ -22,7 +22,7 @@
     {
       "id": 19882521682,
       "name": "Enduro på kvällen",
-      "sport_type": "MountainBikeRide",
+      "sport_type": "Enduro",
       "start_date": "2026-08-24T16:05:29Z",
       "start_date_local": "2026-08-24T18:05:29Z",
       "distance_m": 27175.2,
@@ -35,7 +35,16 @@
       "weighted_average_watts": null,
       "calories": 628.0,
       "device_name": "Garmin Forerunner 970",
-      "source": "Strava API"
+      "source": "Strava API",
+      "source_sport_type": "MountainBikeRide",
+      "display_label": "Enduro",
+      "sport_normalization": {
+        "rule": "mountainbike-explicit-enduro-name-v1",
+        "evidence": [
+          "source_sport_type=MountainBikeRide",
+          "explicit Enduro/Motocross activity name"
+        ]
+      }
     },
     {
       "id": 19862241646,
@@ -394,6 +403,7 @@
   "activity_semantics": {
     "schema_version": 1,
     "overrides_applied": 2,
+    "auto_rules_applied": 1,
     "override_ids_present": [
       "19852599244",
       "19862241646"

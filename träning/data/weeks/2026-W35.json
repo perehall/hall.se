@@ -4,7 +4,7 @@
   "week_start": "2026-08-24",
   "week_end": "2026-08-30",
   "created_at_utc": "2026-08-24T06:32:25.878995+00:00",
-  "updated_at_utc": "2026-08-24T19:48:22.846645+00:00",
+  "updated_at_utc": "2026-08-24T20:49:18.784175+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -126,7 +126,7 @@
     {
       "id": 19882521682,
       "name": "Enduro på kvällen",
-      "sport_type": "MountainBikeRide",
+      "sport_type": "Enduro",
       "start_date": "2026-08-24T16:05:29Z",
       "start_date_local": "2026-08-24T18:05:29Z",
       "distance_m": 27175.2,
@@ -139,7 +139,16 @@
       "weighted_average_watts": null,
       "calories": 628.0,
       "device_name": "Garmin Forerunner 970",
-      "source": "Strava API"
+      "source": "Strava API",
+      "source_sport_type": "MountainBikeRide",
+      "display_label": "Enduro",
+      "sport_normalization": {
+        "rule": "mountainbike-explicit-enduro-name-v1",
+        "evidence": [
+          "source_sport_type=MountainBikeRide",
+          "explicit Enduro/Motocross activity name"
+        ]
+      }
     }
   ],
   "coach_analyses": [
