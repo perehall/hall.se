@@ -3,31 +3,31 @@
     {
       "activity_id": 19882521682,
       "activity_date": "2026-08-24",
-      "activity_name": "Cykeltur på kvällen",
-      "generated_at_utc": "2026-08-24T18:51:54.201425+00:00",
+      "activity_name": "Enduro på kvällen",
+      "generated_at_utc": "2026-08-24T18:52:35.845281+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Kvällens cykeltur (27 km, 5,2 h inkl. vila, 515 m höjd) kompletterar veckans aerob belastning och lämnar tisdagens löpkvalitet möjlig att genomföra enligt plan.",
-        "load_interpretation": "Senaste tre dagars faktiska arbete är måttligt tätt men användarrapport från enduro visar låg lokal slitage; cykelturen var aerob/måttlig.",
+        "summary": "Kvällens långenduro var måttligt belastande och lämnar planen oförändrad för nu.",
+        "load_interpretation": "Enduron + tidigare helgdagsaktivitet ger måttlig närbelastning mot tisdagens löpkvalitet.",
         "confidence": "medium",
         "facts": [
-          "Ride: 27,18 km · 1:37:21 · 515,2 m+ · snittpuls 118,7 · maxpuls 160."
+          "MountainBikeRide: 27,18 km · 1:37:21 · 515,2 m+ · snittpuls 118,7 · maxpuls 160."
         ],
         "interpretations": [
-          "Cykelturen var huvudsakligen aerob och inte uttalat slitande för benen givet låg medelpuls och användarrapport för enduro.",
-          "Veckans planerade tisdagskvalitet (2026-08-25) kan behållas men kräver bekräftelse av återhämtning morgonen efter."
+          "Aktuellt enduropass ser inte ut att vara kraftigt nedbrytande utifrån varaktighet, puls och användarrapporter.",
+          "Styrkepasset status i dag antogs planerad men saknas som utfört i data; om styrka gjordes kan bentrötthet öka, annars är påverkan måttlig."
         ],
         "unknowns": [
-          "Subjektiv återhämtning/sömnkvalitet efter dagens pass.",
-          "Exakt lokal bentrötthet efter styrkan som planerats på samma kväll (styrkepasset inte rapporterat som genomfört).",
-          "Eventuella högintensiva inslag under cykelturen som inte framgår av snittvärden."
+          "Om styrketräningen verkligen genomfördes efter enduron och dess intensitet/volym.",
+          "Subjektiv återhämtning, sömn och lokal bentrötthet efter kvällens pass.",
+          "Exakt intensitet i styrkepasset (om utfört) och eventuella muskulära störningar."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "",
-        "reason": "Dagens faktiska arbete är inte tillräckligt tungt för att automatiskt skala ner tisdagens löpkvalitet.",
-        "recommendation": "Behåll planen; genomför tisdagens kontrollerade tröskel 3×10 min som ordinerat. Kontrollera subjektiv dagskänsla och benstatus morgonen 2026-08-25 och rapportera om trötta ben så tas en nedskalning ställning till då.",
+        "reason": "Underlaget visar inte hög belastning som motiverar nedskalning; inga tillåtna target_dates finns.",
+        "recommendation": "Behåll planerad tisdagsträning som planerat; utvärdera själv återhämtning och benkänsla morgon 25/8 och meddela om styrka utfördes efter enduron.",
         "requires_approval": false
       },
       "auto_apply": {
@@ -302,7 +302,7 @@
       }
     }
   ],
-  "last_trigger_hash": "6ac16c283dfa7f6a9e79bd116ef72d70a33e631d92ee80422bf8a0f7cb0e3e3a",
-  "last_run_utc": "2026-08-24T18:51:54.201425+00:00",
+  "last_trigger_hash": "510207ef8abffae522097de9532e2dda99a5579dda3418c6bb88b958b1da3310",
+  "last_run_utc": "2026-08-24T18:52:35.845281+00:00",
   "contract_version": 4
 }
