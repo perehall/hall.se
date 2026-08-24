@@ -52,7 +52,8 @@ jobs:
           PATH_SECRET: ${{ secrets.STRAVA_WEBHOOK_PATH_SECRET }}
         run: |
           set -euo pipefail
-          callback_url="${CALLBACK_ORIGIN}/strava/${PATH_SECRET}"
+          path_token=$(python -c 'import hashlib,os; print(hashlib.sha256(os.environ["PATH_SECRET"].strip().encode()).hexdigest()[:32])')
+          callback_url="${CALLBACK_ORIGIN}/strava/${path_token}"
           challenge="hall-preflight-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
           body_file=$(mktemp)
           status=$(curl --silent --show-error \
@@ -100,7 +101,8 @@ jobs:
           PATH_SECRET: ${{ secrets.STRAVA_WEBHOOK_PATH_SECRET }}
         run: |
           set -euo pipefail
-          callback_url="${CALLBACK_ORIGIN}/strava/${PATH_SECRET}"
+          path_token=$(python -c 'import hashlib,os; print(hashlib.sha256(os.environ["PATH_SECRET"].strip().encode()).hexdigest()[:32])')
+          callback_url="${CALLBACK_ORIGIN}/strava/${path_token}"
           body_file=$(mktemp)
           status=$(curl --silent --show-error \
             --output "$body_file" \
