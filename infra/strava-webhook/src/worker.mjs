@@ -17,13 +17,20 @@ function configured(value) {
   return typeof value === "string" && value.trim().length > 0;
 }
 
+async function sha256Hex(value) {
+  const bytes = new TextEncoder().encode(value);
+  const digest = await crypto.subtle.digest("SHA-256", bytes);
+  return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("");
+}
+
 export async function webhookPathTokenFromSecret(secret) {
   if (!configured(secret)) return null;
-  const bytes = new TextEncoder().encode(secret.trim());
-  const digest = await crypto.subtle.digest("SHA-256", bytes);
-  return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0"))
-    .join("")
-    .slice(0, 32);
+  return (await sha256Hex(secret.trim())).slice(0, 32);
+}
+
+async function secretFingerprint(secret) {
+  if (!configured(secret)) return null;
+  return (await sha256Hex(secret.trim())).slice(0, 12);
 }
 
 async function expectedWebhookPath(env) {
@@ -134,6 +141,8 @@ export async function handleRequest(request, env, fetchImpl = fetch) {
       owner_configured: configured(env.STRAVA_OWNER_ID),
       subscription_configured: configured(env.STRAVA_SUBSCRIPTION_ID),
       github_dispatch_configured: configured(env.GITHUB_DISPATCH_TOKEN),
+      webhook_path_fingerprint: await secretFingerprint(env.WEBHOOK_PATH_SECRET),
+      verify_token_fingerprint: await secretFingerprint(env.STRAVA_VERIFY_TOKEN),
     });
   }
 
