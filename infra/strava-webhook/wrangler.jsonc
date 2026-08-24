@@ -1,0 +1,9 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "hall-training-strava-webhook",
+  "main": "src/worker.mjs",
+  "compatibility_date": "2026-08-24",
+  "observability": {
+    "enabled": true
+  }
+}
