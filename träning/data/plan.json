@@ -5,8 +5,8 @@
     "week": 35,
     "week_start": "2026-08-24",
     "week_end": "2026-08-30",
-    "title": "Löpningen prioriteras – två kvalitetspass, faktisk belastning styr.",
-    "principle": "Veckans avsikt är två kontrollerade löpkvalitetspass plus löpdistans, med MTB/XC, simning/swimrun, styrka och enduro runt dem. Basplanen ska inte vattnas ur i förväg; justeringar görs först när faktisk belastning, återhämtning eller lokal trötthet ger skäl."
+    "title": "Löpningen prioriteras – tröskel + backkvalitet + distans.",
+    "principle": "Löpningen får tre tydliga stimuli: ett kontrollerat tröskelpass, ett separat backkvalitetspass och lugn distans. Backkvaliteten testas som andra löpkvalitet i ett fyra veckor långt block och utvärderas därefter mot faktisk fart, känsla, återhämtning och kontinuitet. Exakt dos justeras efter närbelastningen och låses inte i förväg."
   },
   "days": [
     {
@@ -53,7 +53,7 @@
       "label": "Torsdag",
       "status": "planned",
       "session": "MTB/XC · teknik + aerob stig",
-      "reason": "MTB-specifik utveckling utan att på förhand ta bort fredagens löpkvalitet. Teknik och flyt prioriteras; faktisk fysiologisk och lokal benbelastning avgör om fredagens dos behöver justeras.",
+      "reason": "MTB-specifik utveckling utan att på förhand ta bort fredagens löpkvalitet. Teknik och flyt prioriteras; faktisk fysiologisk och lokal benbelastning avgör fredagens backdos.",
       "development_focus": "Blick genom kurvan, bromsa klart före svängen och prioritera linje/flyt framför att jaga segmentfart.",
       "sport": "bike",
       "dose_open": true
@@ -62,17 +62,20 @@
       "date": "2026-08-28",
       "label": "Fredag",
       "status": "planned",
-      "session": "Löpning · kvalitet · kontrollerad tröskel · preliminärt 3 × 8 min / 90 s jogg",
-      "reason": "Veckans andra prioriterade löpkvalitetspass, placerat tre dygn efter tisdagen. Basdosen är 3 × 8 min; den kan behållas eller skalas ned utifrån tisdag–torsdagens faktiska belastning men ska inte tas bort i förväg.",
-      "development_focus": "Samma kontrollerade ansträngning som på tisdagen; avsluta med känslan att ytterligare arbete hade varit möjligt.",
-      "sport": "run"
+      "session": "Löpning · backkvalitet · 150 m-backe · kontrollerad, dos öppen",
+      "reason": "Första passet i ett fyra veckor långt testblock där veckans andra löpkvalitet byts från ytterligare tröskel till backkvalitet. Syftet är ett kompletterande kraft-, teknik- och löpstyrkestimulus; exakt antal repetitioner bestäms efter tisdag–torsdagens faktiska belastning.",
+      "development_focus": "Spring kraftfullt men kontrollerat med stabil hållning, aktiv höft och bibehållen teknik hela vägen upp; ingen maximal sprint och ingen jakt på syra.",
+      "sport": "run",
+      "dose_open": true,
+      "block": "hill-quality-4w",
+      "block_week": 1
     },
     {
       "date": "2026-08-29",
       "label": "Lördag",
       "status": "planned",
       "session": "MTB/XC · distans · huvudsakligen lugnt",
-      "reason": "Bygger cykelspecifik uthållighet och teknisk tid på cykeln. Distansens exakta omfattning bestäms när fredagens löpkvalitet och veckans samlade faktiska belastning är kända.",
+      "reason": "Bygger cykelspecifik uthållighet och teknisk tid på cykeln. Distansens exakta omfattning bestäms när fredagens backkvalitet och veckans samlade faktiska belastning är kända.",
       "development_focus": "Ekonomisk körning och stabil teknik när tiden på cykeln ökar; undvik att varje backe blir ett hårt intervall.",
       "sport": "bike",
       "dose_open": true
