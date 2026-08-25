@@ -1,5 +1,5 @@
 {
-  "last_sync_utc": "2026-08-25T19:49:05.506996+00:00",
+  "last_sync_utc": "2026-08-25T20:52:54.203759+00:00",
   "activities": [
     {
       "id": 19897382163,
@@ -19,7 +19,12 @@
       "device_name": "Garmin Forerunner 970",
       "gear_id": "g32837896",
       "gear_name": "Saucony Triumph 23",
-      "source": "Strava API"
+      "source": "Strava API",
+      "source_sport_type": "Run",
+      "classification": "training",
+      "display_label": "Run",
+      "user_report": "3×8 min tröskel. Motsvarande känsla som föregående vecka, lite sämre tempo och ingen känsla av att vara starkare.",
+      "classification_reason": "Explicit användarrapport beskriver passets faktiska struktur och upplevda utfall och ska användas i fortsatt löpplanering."
     },
     {
       "id": 19883021281,
@@ -422,11 +427,12 @@
   ],
   "activity_semantics": {
     "schema_version": 1,
-    "overrides_applied": 2,
+    "overrides_applied": 3,
     "auto_rules_applied": 1,
     "override_ids_present": [
       "19852599244",
-      "19862241646"
+      "19862241646",
+      "19897382163"
     ]
   },
   "schema_version": 2,
