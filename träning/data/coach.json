@@ -4,31 +4,31 @@
       "activity_id": 19897382163,
       "activity_date": "2026-08-25",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-08-25T18:28:59.333921+00:00",
+      "generated_at_utc": "2026-08-25T18:39:27.459509+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Tisdagskvaliteten är redan genomförd; ingen återstående ordination krävs.",
-        "load_interpretation": "Dagens löppass fullföljde den nedskalade kvaliteten och utgör huvudbelastning inför onsdagens simning.",
+        "summary": "Tisdagens kvalitetspass kan behållas som nedskalad 3×8 min enligt coachjustering.",
+        "load_interpretation": "Måndag kvälls‑enduro + styrka och dagens 10 km löpning ger ackumulerad närbelastning som motiverar reducering.",
         "confidence": "medium",
         "facts": [
           "Run: 10,34 km · 51:34 · 75 m+ · snittpuls 144,8 · maxpuls 165.",
           "Planstatus 2026-08-25: dagens planerade pass är genomfört i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Det utförda löppasset motsvarar coachens tidigare nedskalning av kvalitet (3×8 min) och räknas som veckans första prioriterade kvalitet.",
-          "Sammantaget är närbelastningen tillräcklig för att behålla planerad lätt aerob simning onsdag utan ytterligare nedskalning."
+          "Dagens aktivitet matchar det redan villkorade, nedskalade tisdagskvalitetspasset (3×8 min) och fyller veckans första kvalitet.",
+          "Energinivå och pulsnivå indikerar kontrollerad arbete utan extrem överbelastning men samlad varaktighet kräver konservativ fortsättning."
         ],
         "unknowns": [
-          "Subjektiv dagskänsla/bentrötthet för onsdag morgon saknas.",
-          "Detaljer om intensiteten i löppasset kontra exakt 3×8 struktur saknas.",
-          "Sömn och återhämtning natt till onsdag okänt."
+          "Subjektiv dagskänsla och lokal muskeltrötthet inför onsdag saknas.",
+          "Detaljerad intensitetsprofil för dagens löppass (zonfördelning) saknas.",
+          "Sömn och återhämtning natt efter dagens pass saknas."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-08-26",
-        "reason": "Genomfört löppass och föregående dagars belastning gör simning till en lämplig recoverydag.",
-        "recommendation": "Gör planerad simning eller swimrun ~60 min i lugnt aerob tempo; prioritera teknik och låg mekanisk belastning.",
+        "reason": "Tisdagens genomförda pass uppfyller den villkorade, nedskalade kvaliteten och veckans plan kräver konservativ kontinuitet.",
+        "recommendation": "Behåll onsdagens simning (~60 min aerob/teknik) enligt plan; välj simning framför swimrun för lägre mekanisk belastning.",
         "requires_approval": false
       },
       "auto_apply": {
@@ -374,7 +374,7 @@
       }
     }
   ],
-  "last_trigger_hash": "7a8a94b59423e9d25dc8e60697626072815b6fa4164d254a5d27d031d8504166",
-  "last_run_utc": "2026-08-25T18:28:59.333921+00:00",
+  "last_trigger_hash": "057db0ce3e12a8ec75d785b478d3a0fb04101d1d0b4eac6b825c857d7cea6a84",
+  "last_run_utc": "2026-08-25T18:39:27.459509+00:00",
   "contract_version": 4
 }
