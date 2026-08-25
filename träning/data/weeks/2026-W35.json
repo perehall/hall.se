@@ -4,7 +4,7 @@
   "week_start": "2026-08-24",
   "week_end": "2026-08-30",
   "created_at_utc": "2026-08-24T06:32:25.878995+00:00",
-  "updated_at_utc": "2026-08-25T17:08:11.037774+00:00",
+  "updated_at_utc": "2026-08-25T18:28:59.857456+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -106,6 +106,26 @@
   },
   "activities": [
     {
+      "id": 19897382163,
+      "name": "Löpning på kvällen",
+      "sport_type": "Run",
+      "start_date": "2026-08-25T17:34:18Z",
+      "start_date_local": "2026-08-25T19:34:18Z",
+      "distance_m": 10343.1,
+      "moving_time_s": 3093,
+      "elapsed_time_s": 3094,
+      "total_elevation_gain_m": 75.0,
+      "average_heartrate": 144.8,
+      "max_heartrate": 165.0,
+      "average_watts": 276.1,
+      "weighted_average_watts": 278,
+      "calories": 575.0,
+      "device_name": "Garmin Forerunner 970",
+      "gear_id": null,
+      "gear_name": null,
+      "source": "Strava API"
+    },
+    {
       "id": 19883021281,
       "name": "Styrketräning på natten",
       "sport_type": "WeightTraining",
@@ -152,6 +172,42 @@
     }
   ],
   "coach_analyses": [
+    {
+      "activity_id": 19897382163,
+      "activity_date": "2026-08-25",
+      "activity_name": "Löpning på kvällen",
+      "generated_at_utc": "2026-08-25T18:28:59.333921+00:00",
+      "model": "gpt-5-mini",
+      "assessment": {
+        "summary": "Tisdagskvaliteten är redan genomförd; ingen återstående ordination krävs.",
+        "load_interpretation": "Dagens löppass fullföljde den nedskalade kvaliteten och utgör huvudbelastning inför onsdagens simning.",
+        "confidence": "medium",
+        "facts": [
+          "Run: 10,34 km · 51:34 · 75 m+ · snittpuls 144,8 · maxpuls 165.",
+          "Planstatus 2026-08-25: dagens planerade pass är genomfört i coachens beslutsunderlag."
+        ],
+        "interpretations": [
+          "Det utförda löppasset motsvarar coachens tidigare nedskalning av kvalitet (3×8 min) och räknas som veckans första prioriterade kvalitet.",
+          "Sammantaget är närbelastningen tillräcklig för att behålla planerad lätt aerob simning onsdag utan ytterligare nedskalning."
+        ],
+        "unknowns": [
+          "Subjektiv dagskänsla/bentrötthet för onsdag morgon saknas.",
+          "Detaljer om intensiteten i löppasset kontra exakt 3×8 struktur saknas.",
+          "Sömn och återhämtning natt till onsdag okänt."
+        ]
+      },
+      "plan_action": {
+        "action": "keep",
+        "target_date": "2026-08-26",
+        "reason": "Genomfört löppass och föregående dagars belastning gör simning till en lämplig recoverydag.",
+        "recommendation": "Gör planerad simning eller swimrun ~60 min i lugnt aerob tempo; prioritera teknik och låg mekanisk belastning.",
+        "requires_approval": false
+      },
+      "auto_apply": {
+        "applied": false,
+        "note": "Ingen automatisk planändring."
+      }
+    },
     {
       "activity_id": 19883021281,
       "activity_date": "2026-08-24",
