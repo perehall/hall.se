@@ -1,10 +1,10 @@
 {
-  "last_sync_utc": "2026-08-26T17:53:13.478738+00:00",
+  "last_sync_utc": "2026-08-26T20:22:33.154371+00:00",
   "activities": [
     {
       "id": 19911120461,
       "name": "SLK Swimrun Jogersö Extreme",
-      "sport_type": "TrailRun",
+      "sport_type": "Swimrun",
       "start_date": "2026-08-26T16:08:36Z",
       "start_date_local": "2026-08-26T18:08:36Z",
       "distance_m": 6804.5,
@@ -19,7 +19,12 @@
       "device_name": "Garmin Forerunner 970",
       "gear_id": null,
       "gear_name": null,
-      "source": "Strava API"
+      "source": "Strava API",
+      "source_sport_type": "TrailRun",
+      "classification": "training",
+      "display_label": "Swimrun · Jogersö Extreme",
+      "user_report": "Ett varv på Jogersö Extreme. Pulsmätningen tappades under cirka 2 km där ansträngningen gick rätt hårt; registrerad Z1 på den delen är felaktig och faktisk intensitet bedöms av användaren som minst Z3.",
+      "classification_reason": "Aktivitetsnamnet identifierar passet som swimrun. Användarrapporten anger dessutom ett tydligt pulsbortfall, så registrerad pulszonsfördelning och snittpuls ska inte användas som fullgod intensitetsbeskrivning för passet."
     },
     {
       "id": 19897382163,
@@ -195,7 +200,7 @@
     {
       "id": 19811963700,
       "name": "SLK Swimrun Jogersö Extreme",
-      "sport_type": "TrailRun",
+      "sport_type": "Swimrun",
       "start_date": "2026-08-19T16:07:43Z",
       "start_date_local": "2026-08-19T18:07:43Z",
       "distance_m": 6939.6,
@@ -208,7 +213,16 @@
       "weighted_average_watts": 317,
       "calories": 564.0,
       "device_name": "Garmin Forerunner 970",
-      "source": "Strava API"
+      "source": "Strava API",
+      "source_sport_type": "TrailRun",
+      "display_label": "Swimrun",
+      "sport_normalization": {
+        "rule": "trailrun-explicit-swimrun-name-v1",
+        "evidence": [
+          "source_sport_type=TrailRun",
+          "explicit Swimrun activity name"
+        ]
+      }
     },
     {
       "id": 19798624389,
@@ -357,7 +371,7 @@
     {
       "id": 19652667197,
       "name": "Ångaloppet 2026, lag Femöre Swimrun",
-      "sport_type": "TrailRun",
+      "sport_type": "Swimrun",
       "start_date": "2026-08-08T08:00:39Z",
       "start_date_local": "2026-08-08T10:00:39Z",
       "distance_m": 23502.9,
@@ -370,7 +384,16 @@
       "weighted_average_watts": 343,
       "calories": 1648.0,
       "device_name": "Garmin Forerunner 970",
-      "source": "Strava API"
+      "source": "Strava API",
+      "source_sport_type": "TrailRun",
+      "display_label": "Swimrun",
+      "sport_normalization": {
+        "rule": "trailrun-explicit-swimrun-name-v1",
+        "evidence": [
+          "source_sport_type=TrailRun",
+          "explicit Swimrun activity name"
+        ]
+      }
     },
     {
       "id": 19637678466,
@@ -429,7 +452,7 @@
     {
       "id": 19615250168,
       "name": "SLK Swimrun - Jogersö Extreme",
-      "sport_type": "TrailRun",
+      "sport_type": "Swimrun",
       "start_date": "2026-08-05T16:01:13Z",
       "start_date_local": "2026-08-05T18:01:13Z",
       "distance_m": 7044.8,
@@ -442,17 +465,33 @@
       "weighted_average_watts": 337,
       "calories": 539.0,
       "device_name": "Garmin Forerunner 970",
-      "source": "Strava API"
+      "source": "Strava API",
+      "source_sport_type": "TrailRun",
+      "display_label": "Swimrun",
+      "sport_normalization": {
+        "rule": "trailrun-explicit-swimrun-name-v1",
+        "evidence": [
+          "source_sport_type=TrailRun",
+          "explicit Swimrun activity name"
+        ]
+      }
     }
   ],
   "activity_semantics": {
     "schema_version": 1,
-    "overrides_applied": 3,
-    "auto_rules_applied": 1,
+    "overrides_applied": 4,
+    "auto_rules_applied": 4,
     "override_ids_present": [
       "19852599244",
       "19862241646",
-      "19897382163"
+      "19897382163",
+      "19911120461"
+    ],
+    "changed_ids": [
+      "19615250168",
+      "19652667197",
+      "19811963700",
+      "19911120461"
     ]
   },
   "schema_version": 2,

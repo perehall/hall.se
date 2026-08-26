@@ -4,8 +4,8 @@
   "week_key": "2026-W34",
   "week_start": "2026-08-17",
   "week_end": "2026-08-23",
-  "source_hash": "f726e7a1b8977fdb8c31f41411d3c8c0b6ca47ff26da8c337d0658afa6e255c1",
-  "generated_at_utc": "2026-08-24T03:37:11.562649+00:00",
+  "source_hash": "2bd34ad3c577946a6c9ffceeb524c4831687e26bb4471192d65b87eea1577669",
+  "generated_at_utc": "2026-08-26T20:22:53.908420+00:00",
   "model": "gpt-5-mini",
   "facts": {
     "week_key": "2026-W34",
@@ -40,7 +40,7 @@
         "time_s": 4360
       },
       {
-        "label": "TrailRun",
+        "label": "Swimrun",
         "activity_count": 1,
         "time_s": 3290
       },
@@ -91,8 +91,8 @@
       {
         "id": 19811963700,
         "date": "2026-08-19",
-        "label": "TrailRun",
-        "sport_type": "TrailRun",
+        "label": "Swimrun",
+        "sport_type": "Swimrun",
         "classification": "training",
         "distance_m": 6939.6,
         "elapsed_time_s": 3290,
@@ -101,7 +101,7 @@
         "average_heartrate": 143.4,
         "max_heartrate": 173.0,
         "user_report": null,
-        "source_sport_type": null,
+        "source_sport_type": "TrailRun",
         "garmin_activity_type": null
       },
       {
@@ -242,7 +242,7 @@
           19811963700
         ],
         "actual_labels": [
-          "TrailRun"
+          "Swimrun"
         ],
         "matching_activity_ids": [
           19811963700
@@ -352,26 +352,26 @@
     }
   },
   "assessment": {
-    "summary": "Veckan innehöll mångsidig, kontrollerad träning med fokus på simning, löpning och lågintensiv återhämtning; alla planerade träningstillfällen genomfördes enligt faktalagret.",
+    "summary": "Veckan innehöll målinriktade, genomförda träningspass i simning, löpning, swimrun och styrka samt lågintensiva kompletteringar; enduro registrerades som rekreation.",
     "worked": [
-      "Konsekvent genomförda simpass (två 3 200 m) med jämn puls och avsedd låg/aerob inriktning.",
-      "Kontrollerade löppass: både ett tröskelliknande tempointervallpass (10,35 km) och ett längre lugnt löppass (17,16 km) genomfördes som planerat.",
-      "Styrketräning skalerades ned med avsikt inför kvalitetspass och fullföljdes utan avvikelser.",
-      "SUP och traillöpning gav extra lågintensiv volym utan att störa huvudpassen."
+      "Kontrollerade kvalitetspass genomförda: simpass enligt ordination (2×3 200 m) och ett kontrollerat löptröskelpass genomfört som planerat.",
+      "Swimrun-eventet genomfördes och bedömdes absorberat med förbättrad HRV nästa dag.",
+      "Styrkepasset genomfördes nedskalat inför belastande dagar, vilket följde planens avsikt.",
+      "Fredagens sim + SUP gav lågintensiv återhämtande volym utan att öka högintensiv belastning."
     ],
     "not_as_planned": [
-      "Enduro registrerades som rekreation enligt faktalagret och räknas inte som belastande träningspass trots distans och höjdmeter.",
-      "Tomtarbete efter enduro påverkade söndagens status och gör söndagens lugna trailpass preliminärt eftersom arbetets belastning inte är kvantifierad.",
-      "Detaljer om kompensation/extra vila inom måndagens simpass saknas i datalagret och kan inte preciseras.",
-      "Inga användarrapporter för flera pass (utom enduro och söndagens underlag) begränsar tolkning av subjektiv belastning."
+      "Enduro registrerades men klassificerades som recreation och räknas inte som träning trots puls och höjdmeter; därför påverkar det inte träningsbelastningen.",
+      "Lördagsdagens tomtarbete noterades men är ej kvantifierat och kan ha bidragit till daglig belastning utan möjlighet till exakt bedömning.",
+      "Söndagens löppass var preliminärt kvar i planen p.g.a. osäkerhet kring återhämtning efter icke-kvantifierat arbete; utfallet är dokumenterat men bedöms med reservation.",
+      "Exakta ändringar i insim/vila och meter för måndagens simpass kunde inte fastställas från data och påverkar därför detaljbedömning av passintensitet."
     ],
-    "load_continuity": "Veckan visar kontinuerlig daglig aktivitet med flera återkommande låg- till medelintensiva pass (särskilt simning och löpning) och ingen enda ofullbordad planerad träning; belastningen framstår som absorberad över veckan med successiv progression i löpningen.",
-    "key_lesson": "Mångsidig, återhämtningsstyrd genomförandeprofil fungerar—kontrollerade kvalitetspass kunde genomföras utan uppenbar ackumulering av oförutsedd trötthet i faktalagret.",
-    "next_week_implication": "Fortsätt planera efter återhämtningssignaler och bevara den nuvarande balansen mellan kontrollerade kvalitetspass och lågintensiv volym; undvik att behandla rekreationsklassade aktiviteter som formell belastning i doseringen.",
+    "load_continuity": "Träningen visar god kontinuitet med dagliga aktiviteter och variation mellan kvalitetspass (sim, löpning, swimrun) och lågintensiva återhämtningspass; icke-kvantifierad fysisk aktivitet (tomtarbete) och rekreationsenduro skapar viss osäkerhet kring faktisk närbelastning.",
+    "key_lesson": "Planens princip om kontrollerad kvalitet och återhämtning hölls i praktiken, vilket möjliggjorde progression utan uppenbar överbelastning.",
+    "next_week_implication": "Fortsätt prioritera kontrollerade kvalitetspass och låga kostnadspass för återhämtning, och justera eventuell extra daglig fysisk aktivitet (arbete) i planeringen när den kvantifieras eller rapporteras.",
     "uncertainties": [
-      "Belastningen från kvällsarbete/’tomtarbete’ efter enduro är okvantifierad och påverkar bedömningen av återhämtning.",
-      "Ingen subjektiv återkoppling finns för majoriteten av passen (utom enduro och söndag), vilket begränsar tolkning av upplevd ansträngning.",
-      "Detaljer om exakta vilaintervaller och meter som ändrades i måndagens simpass saknas i datalagret."
+      "Omfattningen och intensiteten av tomtarbetet som påverkade lördagen är okänd.",
+      "Exakta vila-/intensitetsavvikelser i måndagens simpass kan inte fastställas från data.",
+      "Rekreationsenduron ger puls- och höjdmeterdata men ska per regel inte räknas som träning; dess återhämtningspåverkan är därför osäker."
     ]
   }
 }
