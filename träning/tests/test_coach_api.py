@@ -15,6 +15,8 @@ from coach import (  # noqa: E402
     build_openai_body,
     call_openai,
     extract_output_text,
+    scrub_private_wellness_output,
+    stable_hash,
 )
 
 
@@ -158,6 +160,42 @@ class CoachApiTests(unittest.TestCase):
         self.assertEqual(day["status"], "conditional")
         self.assertEqual(day["original_session"], "Löpning · lugnt · 45 min")
         self.assertEqual(day["auto_coach"]["applied_at_utc"], "2026-08-23T18:00:00+00:00")
+
+    def test_wellness_change_invalidates_coach_but_timestamp_change_does_not(self):
+        plan = {"days": []}
+        latest = {"id": 1}
+        strategy = {"schema_version": 1}
+        wellness = {
+            "schema_version": 1,
+            "source": "Garmin via Intervals.icu",
+            "privacy": "ephemeral_private",
+            "generated_at_utc": "2026-08-26T06:00:00+00:00",
+            "window": {"oldest": "2026-07-30", "newest": "2026-08-26"},
+            "latest_date": "2026-08-26",
+            "coverage": {},
+            "daily": [{"date": "2026-08-26", "hrv": 50}],
+        }
+        first = stable_hash(plan, latest, "2026-08-26", strategy, wellness)
+
+        timestamp_only = dict(wellness)
+        timestamp_only["generated_at_utc"] = "2026-08-26T09:00:00+00:00"
+        self.assertEqual(first, stable_hash(plan, latest, "2026-08-26", strategy, timestamp_only))
+
+        changed = dict(wellness)
+        changed["daily"] = [{"date": "2026-08-26", "hrv": 51}]
+        self.assertNotEqual(first, stable_hash(plan, latest, "2026-08-26", strategy, changed))
+
+    def test_private_wellness_terms_are_scrubbed_before_persistence(self):
+        result = valid_result()
+        result["assessment"]["summary"] = "Garmin HRV 48 och sömnscore 71 talar för försiktighet."
+        result["plan_action"]["reason"] = "Vilopuls 52 via Intervals.icu avviker."
+        scrubbed = scrub_private_wellness_output(result)
+        text = json.dumps(scrubbed, ensure_ascii=False).lower()
+        self.assertNotIn("garmin", text)
+        self.assertNotIn("hrv", text)
+        self.assertNotIn("vilopuls", text)
+        self.assertNotIn("intervals.icu", text)
+        self.assertIn("återhämtningsunderlaget", text)
 
 
 if __name__ == "__main__":
