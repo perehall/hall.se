@@ -31,19 +31,31 @@ class TrainingBrainTests(unittest.TestCase):
             validate_training_strategy(strategy)
 
     def test_today_uses_matching_actual_activity_as_completed(self):
+        plan = {
+            "days": [
+                {
+                    "date": "2026-08-26",
+                    "status": "planned",
+                    "session": "Swimrun · klubbpass",
+                    "sport": "swimrun",
+                    "priority_role": "flex",
+                    "stimuli": ["swimrun_aerobic"],
+                }
+            ]
+        }
         activities = [
             {
                 "id": 1,
-                "sport_type": "Swim",
-                "display_label": "Simning",
+                "sport_type": "Swimrun",
+                "display_label": "Swimrun · test",
                 "start_date_local": "2026-08-26T07:00:00",
             }
         ]
-        brief = resolve_today(self.plan, activities, self.strategy, date(2026, 8, 26))
+        brief = resolve_today(plan, activities, self.strategy, date(2026, 8, 26))
         self.assertTrue(brief["fulfilled"])
         self.assertEqual(brief["status"], "GENOMFÖRT")
-        self.assertIn("Simning", brief["why"])
-        self.assertIn("Sim aerob kapacitet", brief["stimuli"])
+        self.assertIn("Swimrun", brief["why"])
+        self.assertIn("Swimrun aerob tålighet", brief["stimuli"])
 
     def test_explicit_next_decision_wins_inside_72_hour_horizon(self):
         decision = resolve_next_decision(self.plan, [], self.strategy, date(2026, 8, 26))
