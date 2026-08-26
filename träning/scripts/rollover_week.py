@@ -24,6 +24,11 @@ WEEKDAY_LABELS = (
     "Söndag",
 )
 
+# Fast användaråtagande: åtta måndagar med enduroskola från 2026-08-24.
+# Detta är träningsbelastning, inte en fri/öppen dag och inte automatiskt rekreation.
+ENDURO_SCHOOL_START = date(2026, 8, 24)
+ENDURO_SCHOOL_OCCURRENCES = 8
+
 SWIM_FOCUS_CYCLE = (
     "Sätt handen rent framför axeln och etablera greppet tidigt utan att pressa handen nedåt; håll huvudet stilla.",
     "Rotera runt en stabil kroppslinje: låt höft och axel följa med utan att huvudet vandrar eller benen börjar slingra.",
@@ -62,6 +67,45 @@ def week_key(start):
 def has_explicit_dose(session):
     session = str(session or "")
     return bool(DOSE_PATTERN.search(session) or CLOCK_DURATION_PATTERN.search(session))
+
+
+def is_enduro_school_date(day_date):
+    if isinstance(day_date, str):
+        day_date = date.fromisoformat(day_date)
+    delta = (day_date - ENDURO_SCHOOL_START).days
+    if delta < 0 or delta % 7 != 0:
+        return False
+    occurrence = delta // 7
+    return occurrence < ENDURO_SCHOOL_OCCURRENCES
+
+
+def fixed_enduro_school_day(day_date, label="Måndag"):
+    if isinstance(day_date, str):
+        day_date = date.fromisoformat(day_date)
+    return {
+        "date": day_date.isoformat(),
+        "label": label,
+        "status": "planned",
+        "planning_status": "fixed",
+        "session": "Enduroskola · fast tillfälle",
+        "reason": (
+            "Fast återkommande enduroskola, totalt åtta måndagar från 24/8. "
+            "Enduron räknas som faktisk träningsbelastning; övrig träning runt dagen anpassas efter utfallet."
+        ),
+        "development_focus": "Teknisk kvalitet och avslappnad körning; faktisk belastning styr efterföljande pass.",
+        "sport": "enduro",
+        "classification": "training",
+        "dose_open": True,
+        "manual_lock": True,
+    }
+
+
+def seed_fixed_commitments(week_document):
+    for index, day in enumerate(week_document.get("days") or []):
+        day_date = date.fromisoformat(day["date"])
+        if is_enduro_school_date(day_date):
+            week_document["days"][index] = fixed_enduro_school_day(day_date, day.get("label") or "Måndag")
+    return week_document
 
 
 def validate_week_bounds(meta, context):
@@ -118,11 +162,6 @@ def promote_upcoming(upcoming):
     for day in promoted.get("days") or []:
         day.pop("planning_status", None)
 
-        # Enduro is a recreation classification in this training model. It may
-        # be fixed in the calendar without inventing a training dose.
-        if day.get("sport") == "enduro" and "classification" not in day:
-            day["classification"] = "recreation"
-
         status = day.get("status")
         sport = day.get("sport")
         classification = day.get("classification")
@@ -131,6 +170,7 @@ def promote_upcoming(upcoming):
             status in {"planned", "preliminary", "conditional"}
             and sport not in {"rest", "open"}
             and classification != "recreation"
+            and day.get("dose_open") is not True
             and not has_explicit_dose(session)
         ):
             day["status"] = "open"
@@ -142,7 +182,7 @@ def promote_upcoming(upcoming):
             reason = str(day.get("reason") or "").strip()
             day["reason"] = f"{reason} {note}".strip()
 
-    return promoted
+    return seed_fixed_commitments(promoted)
 
 
 def _clean_preview_swim(source, target_date, target_label, next_key, focus_index):
@@ -249,17 +289,18 @@ def build_open_next_week(promoted):
             "title": "Preliminär framtidsvecka",
             "principle": (
                 "Veckan hålls öppen tills faktisk belastning och återhämtning ger tillräckligt underlag. "
-                "Etablerade simpass förs preliminärt vidare utan automatisk volymökning; övriga dagar fylls inte ut."
+                "Fasta åtaganden som enduroskolan ligger kvar; etablerade simpass förs preliminärt vidare utan automatisk volymökning."
             ),
             "preview_summary": (
-                "Översiktsvecka utan påhittad belastningsökning. Etablerade simpass skrivs ut preliminärt "
-                "med tekniskt utvecklingsfokus; övriga pass sätts när aktuell veckas utfall är känt."
+                "Översiktsvecka utan påhittad belastningsökning. Fasta åtaganden bevaras och etablerade simpass "
+                "skrivs ut preliminärt; övriga pass sätts när aktuell veckas utfall är känt."
             ),
         },
         "days": days,
         "strength_template": deepcopy(promoted.get("strength_template") or []),
     }
-    return seed_preliminary_swims(promoted, future)
+    future = seed_preliminary_swims(promoted, future)
+    return seed_fixed_commitments(future)
 
 
 def rollover_documents(plan, upcoming, today):
