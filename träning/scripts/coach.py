@@ -2,6 +2,7 @@
 import hashlib
 import json
 import os
+import re
 import time
 import urllib.error
 import urllib.request
@@ -20,6 +21,7 @@ from coach_rules import (
     validate_plan_action,
 )
 from strategy_contracts import validate_training_strategy
+from wellness_context import signature_payload, validate_context
 
 ROOT = Path(__file__).resolve().parents[1]
 PLAN_FILE = ROOT / "data" / "plan.json"
@@ -27,9 +29,17 @@ ACTIVITIES_FILE = ROOT / "data" / "activities.json"
 COACH_FILE = ROOT / "data" / "coach.json"
 STRATEGY_FILE = ROOT / "data" / "training_strategy.json"
 PROMPT_FILE = ROOT / "coach_prompt.md"
+WELLNESS_CONTEXT_FILE = Path(
+    os.environ.get("WELLNESS_CONTEXT_FILE", "/tmp/training_wellness_context.json")
+)
 
 MODEL = os.environ.get("OPENAI_MODEL", "gpt-5-mini")
-COACH_CONTRACT_VERSION = 5
+COACH_CONTRACT_VERSION = 6
+PRIVATE_WELLNESS_PATTERN = re.compile(
+    r"\b(?:hrv|vilopuls|restinghr|sömn(?:poäng|score)?|sleep(?:secs|score|quality)?|garmin|intervals\.icu)\b"
+    r"(?:\s*[:=]?\s*[-+]?\d+(?:[.,]\d+)?)?",
+    re.IGNORECASE,
+)
 
 SCHEMA = {
     "type": "object",
@@ -78,16 +88,37 @@ def load_json(path, fallback):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def stable_hash(plan, latest_activity, local_date, strategy=None):
+def load_private_wellness_context(path=None):
+    path = path or WELLNESS_CONTEXT_FILE
+    if not path.exists():
+        return {}
+    context = json.loads(path.read_text(encoding="utf-8"))
+    validate_context(context)
+    return context
+
+
+def stable_hash(plan, latest_activity, local_date, strategy=None, wellness_context=None):
     payload = {
         "coach_contract_version": COACH_CONTRACT_VERSION,
         "plan": plan,
         "latest_activity": latest_activity,
         "local_date": local_date,
         "strategy": strategy or {},
+        "private_wellness": signature_payload(wellness_context or {}),
     }
     raw = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()
+
+
+def scrub_private_wellness_output(value):
+    """Prevent private wellness source names/metrics from being persisted in public coach state."""
+    if isinstance(value, str):
+        return PRIVATE_WELLNESS_PATTERN.sub("återhämtningsunderlaget", value)
+    if isinstance(value, list):
+        return [scrub_private_wellness_output(item) for item in value]
+    if isinstance(value, dict):
+        return {key: scrub_private_wellness_output(item) for key, item in value.items()}
+    return value
 
 
 def extract_output_text(response):
@@ -232,6 +263,7 @@ def main():
     coach = load_json(COACH_FILE, {"analyses": [], "last_trigger_hash": None, "last_run_utc": None})
     strategy = load_json(STRATEGY_FILE, {})
     validate_training_strategy(strategy)
+    wellness_context = load_private_wellness_context()
     activities = activities_state.get("activities", [])
 
     if not activities:
@@ -241,7 +273,7 @@ def main():
     latest = max(activities, key=lambda activity: activity.get("start_date") or "")
     tz = ZoneInfo(plan.get("meta", {}).get("timezone", "Europe/Stockholm"))
     local_date = datetime.now(tz).date().isoformat()
-    trigger_hash = stable_hash(plan, latest, local_date, strategy)
+    trigger_hash = stable_hash(plan, latest, local_date, strategy, wellness_context)
 
     if coach.get("last_trigger_hash") == trigger_hash:
         print("AI coach: inget nytt underlag; hoppar över API-anrop.")
@@ -265,11 +297,15 @@ def main():
         "recent_activities": recent,
         "current_plan": coach_plan,
         "current_strategy": strategy,
+        "private_wellness_context": wellness_context,
         "fulfilled_plan_dates": sorted(fulfilled_dates),
         "allowed_target_dates": ready_dates,
         "deferred_target_dates": deferred_dates,
         "instruction": (
             "Analysera senaste passet mot faktisk närbelastning, aktuell plan och current_strategy. "
+            "private_wellness_context är ett privat, tillfälligt faktalager från Garmin via Intervals.icu. "
+            "Använd det endast för att kalibrera återhämtningsbedömning mot individens egen trend; det får aldrig "
+            "motivera ökad belastning och dess råvärden eller käll-/fältnamn får inte återges i synlig output. "
             "Skydda det aktuella blockets prioriterade stimuli när det går utan att ignorera faktisk belastning. "
             "Kontrollera särskilt föregående och kommande 2–3 dagar. Dagar i fulfilled_plan_dates är redan "
             "genomförda och får aldrig ordineras igen. target_date får endast väljas ur allowed_target_dates. "
@@ -282,6 +318,8 @@ def main():
 
     system_prompt = PROMPT_FILE.read_text(encoding="utf-8")
     result = call_openai(system_prompt, input_data)
+    if wellness_context.get("daily"):
+        result = scrub_private_wellness_output(result)
     result["assessment"] = normalize_assessment_confidence(result["assessment"])
     result["assessment"]["facts"] = canonical_facts(latest, latest_date, fulfilled_dates)
     result["plan_action"] = normalize_deferred_future_action(
@@ -320,12 +358,13 @@ def main():
     analyses.insert(0, entry)
     coach["analyses"] = analyses[:30]
     coach["last_run_utc"] = now_utc
-    coach["last_trigger_hash"] = stable_hash(plan, latest, local_date, strategy)
+    coach["last_trigger_hash"] = stable_hash(plan, latest, local_date, strategy, wellness_context)
     coach["contract_version"] = COACH_CONTRACT_VERSION
     COACH_FILE.write_text(json.dumps(coach, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
+    wellness_note = "med privat wellness-kontext" if wellness_context.get("daily") else "utan wellness-kontext"
     print(
-        f"AI coach: analyserade aktivitet {latest.get('id')} med {MODEL}. "
+        f"AI coach: analyserade aktivitet {latest.get('id')} med {MODEL} {wellness_note}. "
         f"Fulfilled={sorted(fulfilled_dates)} ready_targets={ready_dates} deferred={deferred_dates}. {apply_note}"
     )
     return 0
