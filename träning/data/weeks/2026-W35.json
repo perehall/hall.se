@@ -4,7 +4,7 @@
   "week_start": "2026-08-24",
   "week_end": "2026-08-30",
   "created_at_utc": "2026-08-24T06:32:25.878995+00:00",
-  "updated_at_utc": "2026-08-26T17:23:04.042278+00:00",
+  "updated_at_utc": "2026-08-26T17:53:27.573446+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -87,10 +87,10 @@
         "original_session": "MTB/XC · teknik + aerob stig",
         "auto_coach": {
           "action": "reduce",
-          "reason": "Onsdagens trail ökade löpbelastningen inför fredagens backpass; skydda blockstimuli genom att hålla MTB lätt.",
-          "applied_at_utc": "2026-08-26T17:23:03.499828+00:00"
+          "reason": "Samlade löppassen 23–26 aug ökar belastningen inför fredagens backpass.",
+          "applied_at_utc": "2026-08-26T17:53:27.079455+00:00"
         },
-        "coach_adjustment": "Skala ned passet. Gör torsdagens MTB som tekniskt, lugnt pass utan upprepade hårda stigningar; undvik att göra det till ett bennedbrytande intervallpass."
+        "coach_adjustment": "Skala ned passet. Skala ner torsdagens MTB till teknisk, lugn tur utan upprepade hårda stigningar; håll fredagens backpass konservativt—begränsa antal repetitioner och behåll fokus på teknik och kontrollerad kraft."
       },
       {
         "date": "2026-08-28",
@@ -151,17 +151,17 @@
   "activities": [
     {
       "id": 19911120461,
-      "name": "Terränglöpning på kvällen",
+      "name": "SLK Swimrun Jogersö Extreme",
       "sport_type": "TrailRun",
       "start_date": "2026-08-26T16:08:36Z",
       "start_date_local": "2026-08-26T18:08:36Z",
       "distance_m": 6804.5,
       "moving_time_s": 3053,
       "elapsed_time_s": 3385,
-      "total_elevation_gain_m": 210.0,
+      "total_elevation_gain_m": 102.2,
       "average_heartrate": 131.9,
       "max_heartrate": 164.0,
-      "average_watts": 194.0,
+      "average_watts": 196.8,
       "weighted_average_watts": 258,
       "calories": 504.0,
       "device_name": "Garmin Forerunner 970",
@@ -244,32 +244,32 @@
     {
       "activity_id": 19911120461,
       "activity_date": "2026-08-26",
-      "activity_name": "Terränglöpning på kvällen",
-      "generated_at_utc": "2026-08-26T17:23:03.500239+00:00",
+      "activity_name": "SLK Swimrun Jogersö Extreme",
+      "generated_at_utc": "2026-08-26T17:53:27.079910+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Onsdagens simpass ersattes av ett trailpass som ökar närbelastningen inför torsdag–fredag.",
-        "load_interpretation": "Senaste tre dagarna visar tätt löp- och enduroinnehåll som minskar marginalen för kommande kvalitet.",
+        "summary": "Onsdagens swimrun blev ett extra löppass med måttlig till hög ansträngning vilket ökar veckans närbelastning inför fredag.",
+        "load_interpretation": "Dagens trailrun ökar den samlade löpbelastningen som påverkar beslut om fredagens backkvalitet.",
         "confidence": "medium",
         "facts": [
-          "TrailRun: 6,80 km · 56:25 · 210 m+ · snittpuls 131,9 · maxpuls 164.",
+          "TrailRun: 6,80 km · 56:25 · 102,2 m+ · snittpuls 131,9 · maxpuls 164.",
           "Planstatus 2026-08-26: dagens planerade pass är genomfört i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Onsdagens trail gav mer löpbelastning än planerat och ackumulerar med tisdagens kvalitet.",
-          "Torsdagens MTB kommer avgöra om fredagens backpass behöver skalas; marginalen är mindre än om simning genomförts."
+          "Veckans andra löpkvalitet (fredag) riskerar att bli för tung om dosen inte justeras efter dagens löpning.",
+          "Torsdagens skalade MTB bör förbli lugn för att skydda backkvaliteten och återhämtning."
         ],
         "unknowns": [
-          "Subjektiv dagskänsla och lokal bentrötthet inför torsdag är okänd.",
-          "Exakt intensitet/teknisk belastning från torsdagens MTB (när den är gjord).",
-          "Detaljer om hur hårt trailpasset upplevdes i benen efteråt."
+          "Subjektiv dagskänsla och lokal bentrötthet efter dagens swimrun.",
+          "Exakt intensitet i dagens swimrun i jämförelse med plan (simning vs. löpning under passet).",
+          "Eventuella planerade arbets- eller resefaktorer innan fredag."
         ]
       },
       "plan_action": {
         "action": "reduce",
         "target_date": "2026-08-27",
-        "reason": "Onsdagens trail ökade löpbelastningen inför fredagens backpass; skydda blockstimuli genom att hålla MTB lätt.",
-        "recommendation": "Gör torsdagens MTB som tekniskt, lugnt pass utan upprepade hårda stigningar; undvik att göra det till ett bennedbrytande intervallpass.",
+        "reason": "Samlade löppassen 23–26 aug ökar belastningen inför fredagens backpass.",
+        "recommendation": "Skala ner torsdagens MTB till teknisk, lugn tur utan upprepade hårda stigningar; håll fredagens backpass konservativt—begränsa antal repetitioner och behåll fokus på teknik och kontrollerad kraft.",
         "requires_approval": false
       },
       "auto_apply": {
