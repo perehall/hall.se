@@ -4,7 +4,7 @@
   "week_start": "2026-08-24",
   "week_end": "2026-08-30",
   "created_at_utc": "2026-08-24T06:32:25.878995+00:00",
-  "updated_at_utc": "2026-08-26T08:24:36.990339+00:00",
+  "updated_at_utc": "2026-08-26T11:50:09.848061+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -25,7 +25,13 @@
         "development_focus": "Enduro: avslappnad teknik och tidiga linjeval. Styrka: ren rörelsekvalitet och lämna marginal i benen inför tisdagens löpning.",
         "sport": "strength",
         "dose_open": true,
-        "manual_lock": true
+        "manual_lock": true,
+        "priority_role": "anchor",
+        "stimuli": [
+          "enduro_technical",
+          "strength_unilateral",
+          "strength_core"
+        ]
       },
       {
         "date": "2026-08-25",
@@ -41,7 +47,11 @@
           "reason": "Ackumulerad belastning idag minskar säker marginal för planerad löpkvalitet.",
           "applied_at_utc": "2026-08-24T19:32:34.872032+00:00"
         },
-        "coach_adjustment": "Skala ned passet. Skala ner tisdagens kvalitet till 3×8 min/90 s jogg med samma intensitetsmål; behåll fokus på jämn ansträngning. Om subjektiv dagskänsla tisdag morgon är god kan ursprunglig 3×10 min återställas efter bedömning."
+        "coach_adjustment": "Skala ned passet. Skala ner tisdagens kvalitet till 3×8 min/90 s jogg med samma intensitetsmål; behåll fokus på jämn ansträngning. Om subjektiv dagskänsla tisdag morgon är god kan ursprunglig 3×10 min återställas efter bedömning.",
+        "priority_role": "anchor",
+        "stimuli": [
+          "run_threshold"
+        ]
       },
       {
         "date": "2026-08-26",
@@ -53,6 +63,11 @@
         "sport": "swim",
         "alternative_sports": [
           "swimrun"
+        ],
+        "priority_role": "flex",
+        "stimuli": [
+          "swim_aerobic",
+          "swim_technique"
         ]
       },
       {
@@ -63,7 +78,12 @@
         "reason": "MTB-specifik utveckling utan att på förhand ta bort fredagens löpkvalitet. Teknik och flyt prioriteras; faktisk fysiologisk och lokal benbelastning avgör fredagens backdos.",
         "development_focus": "Blick genom kurvan, bromsa klart före svängen och prioritera linje/flyt framför att jaga segmentfart.",
         "sport": "bike",
-        "dose_open": true
+        "dose_open": true,
+        "priority_role": "flex",
+        "stimuli": [
+          "mtb_technical",
+          "mtb_aerobic"
+        ]
       },
       {
         "date": "2026-08-28",
@@ -74,8 +94,13 @@
         "development_focus": "Spring kraftfullt men kontrollerat med stabil hållning, aktiv höft och bibehållen teknik hela vägen upp; ingen maximal sprint och ingen jakt på syra.",
         "sport": "run",
         "dose_open": true,
-        "block": "hill-quality-4w",
-        "block_week": 1
+        "block": "run-threshold-hill-4w",
+        "block_week": 1,
+        "priority_role": "anchor",
+        "stimuli": [
+          "run_hill_quality"
+        ],
+        "decision_note": "Backdosen fastställs först efter torsdagens faktiska MTB-belastning; passets roll som veckans andra löpkvalitet ligger fast om belastningen kan absorberas."
       },
       {
         "date": "2026-08-29",
@@ -85,7 +110,12 @@
         "reason": "Bygger cykelspecifik uthållighet och teknisk tid på cykeln. Distansens exakta omfattning bestäms när fredagens backkvalitet och veckans samlade faktiska belastning är kända.",
         "development_focus": "Ekonomisk körning och stabil teknik när tiden på cykeln ökar; undvik att varje backe blir ett hårt intervall.",
         "sport": "bike",
-        "dose_open": true
+        "dose_open": true,
+        "priority_role": "flex",
+        "stimuli": [
+          "mtb_aerobic",
+          "mtb_technical"
+        ]
       },
       {
         "date": "2026-08-30",
@@ -95,7 +125,11 @@
         "reason": "Tredje löpstimulus för veckan och viktig för löputvecklingen. Exakt omfattning bestäms efter lördagens MTB och veckans faktiska belastning; grundavsikten är lugn distans, inte ytterligare kvalitet.",
         "development_focus": "Avslappnad rytm och jämn ansträngning; låt distansen bygga tålighet utan att driva intensiteten.",
         "sport": "run",
-        "dose_open": true
+        "dose_open": true,
+        "priority_role": "flex",
+        "stimuli": [
+          "run_easy_distance"
+        ]
       }
     ],
     "strength_template": [
@@ -184,11 +218,11 @@
       "activity_id": 19897382163,
       "activity_date": "2026-08-25",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-08-26T03:38:36.024657+00:00",
+      "generated_at_utc": "2026-08-26T11:50:09.208586+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Tisdagens tröskel nedskalad enligt plan; påverkar onsdagens simdag marginellt men ej nödvändigt att vila.",
-        "load_interpretation": "Två dagars större aktivitet (måndag enduro+styrka, tisdag tröskel 3×8) ger hög närbelastning de senaste 48 timmarna.",
+        "summary": "Tröskelpasset genomfördes men skalades enligt plan till 3×8 min; upplevd sämre fart talar för konservativ återhämtning före nästa kvalitet.",
+        "load_interpretation": "Dagens löppass var en nedskalad tröskel (3×8 min) efter måndagens enduro+styrka; detta påverkar beslutet för onsdagens simning.",
         "confidence": "medium",
         "facts": [
           "Run: 10,34 km · 51:34 · 75 m+ · snittpuls 144,8 · maxpuls 165.",
@@ -196,20 +230,20 @@
           "Planstatus 2026-08-25: dagens planerade pass är genomfört i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Genomfört tisdagspass matchar coachens redan applicerade nedskalning till 3×8 min.",
-          "Samlad belastning må–tis är tillräcklig för att hålla onsdag som aerob/teknisk simning, inte kräva extra vila."
+          "Den nedskalade kvaliteten följde coachens rekommendation och var rimlig givet måndagens belastning.",
+          "Onsdagens simning är lämplig som lågmekanisk återhämtningsdag om intensiteten hålls lugn."
         ],
         "unknowns": [
-          "Subjektiv dagskänsla och sömn inför onsdag saknas och kan påverka behov av vila.",
-          "Detaljerad lokal bentrötthet efter styrka/enduro finns ej specificerad.",
-          "Intensiteten under måndagens enduro (rapport varierande) har osäker inverkan på neuromuskulär återhämtning."
+          "Subjektiv dagskänsla för onsdag morgon (kan återställa om mycket bra).",
+          "Eventuell planerad swimrun istället för poolsim och dess faktiska intensitet.",
+          "Detaljerad lokal bentrötthet efter gårdagens tröskel trots normal wellness-trend."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-08-26",
-        "reason": "Samlad närbelastning stödjer att simning som aerob återhämtningsdag är lämplig.",
-        "recommendation": "Behåll planerad simning (~60 min) som lugn aerob/teknik; håll intensiteten låg och undvik att göra passet till ett tröskelpass. Om du känner lokal bentrötthet eller dålig dagskänsla: byt till vila eller mycket lätt rörlighet.",
+        "reason": "Simning är lågmekanisk och hjälper återhämtning mellan kvalitetspassen utan att störa blockets stimuli.",
+        "recommendation": "Behåll onsdagens simning ~60 min; håll intensiteten lugn och fokusera teknik. Välj swimrun endast om du kan hålla löpningen mycket lätt.",
         "requires_approval": false
       },
       "auto_apply": {
