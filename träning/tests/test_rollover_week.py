@@ -7,7 +7,11 @@ from pathlib import Path
 SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
-from rollover_week import build_open_next_week, rollover_documents  # noqa: E402
+from rollover_week import (  # noqa: E402
+    build_open_next_week,
+    is_enduro_school_date,
+    rollover_documents,
+)
 
 
 def plan_w34():
@@ -48,6 +52,11 @@ def upcoming_w35():
                 "sport": "enduro" if i == 0 else "open",
                 "session": "Enduroskola" if i == 0 else "Öppet",
                 "reason": "R",
+                **(
+                    {"classification": "training", "dose_open": True}
+                    if i == 0
+                    else {}
+                ),
             }
         )
     return {
@@ -115,11 +124,25 @@ class WeeklyRolloverTests(unittest.TestCase):
         self.assertNotIn("state", promoted)
         self.assertNotIn("week_key", promoted)
         self.assertNotIn("planning_status", promoted["days"][0])
+        self.assertEqual(promoted["days"][0]["sport"], "enduro")
+        self.assertEqual(promoted["days"][0]["classification"], "training")
+        self.assertTrue(promoted["days"][0]["dose_open"])
         self.assertEqual(future["week_key"], "2026-W36")
         self.assertEqual(future["meta"]["week_start"], "2026-08-31")
         self.assertEqual(future["meta"]["week_end"], "2026-09-06")
-        self.assertTrue(all(day["status"] == "open" for day in future["days"]))
-        self.assertTrue(all(day["sport"] == "open" for day in future["days"]))
+        self.assertEqual(future["days"][0]["sport"], "enduro")
+        self.assertEqual(future["days"][0]["planning_status"], "fixed")
+        self.assertEqual(future["days"][0]["classification"], "training")
+        self.assertTrue(future["days"][0]["dose_open"])
+        self.assertTrue(all(day["status"] == "open" for day in future["days"][1:]))
+        self.assertTrue(all(day["sport"] == "open" for day in future["days"][1:]))
+
+    def test_enduro_school_has_exactly_eight_mondays(self):
+        self.assertTrue(is_enduro_school_date("2026-08-24"))
+        self.assertTrue(is_enduro_school_date("2026-08-31"))
+        self.assertTrue(is_enduro_school_date("2026-10-12"))
+        self.assertFalse(is_enduro_school_date("2026-10-19"))
+        self.assertFalse(is_enduro_school_date("2026-08-25"))
 
     def test_sunday_does_not_roll_early(self):
         self.assertIsNone(rollover_documents(plan_w34(), upcoming_w35(), date(2026, 8, 23)))
@@ -134,7 +157,10 @@ class WeeklyRolloverTests(unittest.TestCase):
     def test_future_week_contains_no_invented_training_dose_without_established_session(self):
         promoted, _ = rollover_documents(plan_w34(), upcoming_w35(), date(2026, 8, 24))
         future = build_open_next_week(promoted)
-        for day in future["days"]:
+        enduro = future["days"][0]
+        self.assertEqual(enduro["sport"], "enduro")
+        self.assertTrue(enduro["dose_open"])
+        for day in future["days"][1:]:
             self.assertEqual(day["planning_status"], "open")
             self.assertNotIn("duration", day)
             self.assertNotIn("distance", day)
