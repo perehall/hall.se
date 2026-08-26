@@ -1,7 +1,19 @@
 #!/usr/bin/env python3
 from copy import deepcopy
+from datetime import date
 
 from training_contracts import ACTIVITY_FAMILY, PLAN_SPORT_ACTIVITY_FAMILIES
+
+
+WEEKDAY_ALIASES = {
+    0: ("måndag", "monday"),
+    1: ("tisdag", "tuesday"),
+    2: ("onsdag", "wednesday"),
+    3: ("torsdag", "thursday"),
+    4: ("fredag", "friday"),
+    5: ("lördag", "saturday"),
+    6: ("söndag", "sunday"),
+}
 
 
 def activity_local_date(activity):
@@ -34,12 +46,12 @@ def planned_family(day):
 
 def matching_activity(day, activities):
     families = planned_families(day)
-    date = day.get("date") or ""
-    if not families or not date:
+    date_value = day.get("date") or ""
+    if not families or not date_value:
         return None
 
     for activity in activities:
-        if activity_local_date(activity) != date:
+        if activity_local_date(activity) != date_value:
             continue
         if activity_family(activity) in families:
             return activity
@@ -59,8 +71,8 @@ def allowed_target_dates(plan, activities, today_local):
     fulfilled = fulfilled_plan_dates(plan, activities)
     allowed = []
     for day in plan.get("days", []):
-        date = day.get("date") or ""
-        if not date or date < today_local:
+        date_value = day.get("date") or ""
+        if not date_value or date_value < today_local:
             continue
         if day.get("status") in {"completed", "open"}:
             continue
@@ -74,9 +86,9 @@ def allowed_target_dates(plan, activities, today_local):
             continue
         if day.get("classification") == "recreation":
             continue
-        if date in fulfilled:
+        if date_value in fulfilled:
             continue
-        allowed.append(date)
+        allowed.append(date_value)
     return allowed
 
 
@@ -91,14 +103,14 @@ def unresolved_intervening_dates(plan, activities, today_local, target_date):
     fulfilled = fulfilled_plan_dates(plan, activities)
     unresolved = []
     for day in plan.get("days", []):
-        date = day.get("date") or ""
-        if not date or date < today_local or date >= target_date:
+        date_value = day.get("date") or ""
+        if not date_value or date_value < today_local or date_value >= target_date:
             continue
-        if day.get("status") == "completed" or date in fulfilled:
+        if day.get("status") == "completed" or date_value in fulfilled:
             continue
         if day.get("sport") == "rest":
             continue
-        unresolved.append(date)
+        unresolved.append(date_value)
     return unresolved
 
 
@@ -112,12 +124,49 @@ def decision_ready_target_dates(plan, activities, today_local):
     ]
 
 
+def _explicit_weekday_references(text):
+    lowered = str(text or "").lower()
+    return {
+        weekday
+        for weekday, aliases in WEEKDAY_ALIASES.items()
+        if any(alias in lowered for alias in aliases)
+    }
+
+
 def normalize_deferred_future_action(action, candidate_dates, ready_dates):
-    """Defer model advice that tries to decide a not-yet-decision-ready session."""
+    """Defer model advice that is not safe to apply to the selected target day."""
     normalized = dict(action)
     target = str(normalized.get("target_date") or "").strip()
     candidates = set(candidate_dates)
     ready = set(ready_dates)
+
+    # Fail closed when the recommendation explicitly talks about another weekday
+    # than target_date. This catches structurally valid but semantically crossed
+    # responses such as target_date=Wednesday with "reduce Friday's hill session".
+    # Mentioning surrounding days is fine as long as the actual target weekday is
+    # also explicit in the recommendation.
+    if normalized.get("action") in {"reduce", "rest"} and target:
+        try:
+            target_weekday = date.fromisoformat(target).weekday()
+        except ValueError:
+            target_weekday = None
+        recommendation_weekdays = _explicit_weekday_references(normalized.get("recommendation"))
+        if (
+            target_weekday is not None
+            and recommendation_weekdays
+            and target_weekday not in recommendation_weekdays
+        ):
+            normalized["action"] = "review"
+            normalized["target_date"] = ""
+            normalized["reason"] = (
+                "AI-rådet hänvisar uttryckligen till en annan veckodag än target_date; "
+                "ingen automatisk planändring görs."
+            )
+            normalized["recommendation"] = (
+                "Ändra inte planen utifrån detta råd. Bedöm rätt målpass först när det är beslutsmoget."
+            )
+            normalized["requires_approval"] = False
+            return normalized
 
     deferred = target in candidates and target not in ready
     blocked_change_without_target = (
