@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import json
+import re
 from datetime import date
 from pathlib import Path
 
@@ -34,11 +35,23 @@ SPORT_ICON_KEYS = {
     "rest": None,
     "open": None,
 }
+DAY_CARD_RE = re.compile(r'<div class="day(?: [^"]*)?" id="dag-(?P<date>\d{4}-\d{2}-\d{2})">')
 
 
 def require(condition: bool, message: str) -> None:
     if not condition:
         raise RuntimeError(message)
+
+
+def rendered_day_ranges(index: str):
+    matches = list(DAY_CARD_RE.finditer(index))
+    return {
+        match.group("date"): (
+            match.start(),
+            matches[pos + 1].start() if pos + 1 < len(matches) else len(index),
+        )
+        for pos, match in enumerate(matches)
+    }
 
 
 def main() -> None:
@@ -166,16 +179,12 @@ def main() -> None:
         "Preflight: renderade manuella aktiviteter matchar inte plan.json",
     )
 
+    day_ranges = rendered_day_ranges(index)
     for day_date, icon_key in explicit_sport_days:
-        start = index.find(f'<div class="day" id="dag-{day_date}">')
-        require(start >= 0, f"Preflight: dagkort saknas för {day_date}")
+        require(day_date in day_ranges, f"Preflight: dagkort saknas för {day_date}")
         if icon_key is None:
             continue
-        end = index.find('<div class="day" id="dag-', start + 1)
-        if end < 0:
-            end = index.find('<h2 class="section">', start + 1)
-        if end < 0:
-            end = len(index)
+        start, end = day_ranges[day_date]
         require(
             f'icon-{icon_key}' in index[start:end],
             f"Preflight: explicit sportikon {icon_key!r} saknas för {day_date}",
