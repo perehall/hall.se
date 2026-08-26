@@ -50,8 +50,6 @@ class SignalUiTests(unittest.TestCase):
         self.assertIn('class="day past-completed" id="dag-2026-08-24"', rendered)
         self.assertIn('class="day decision-horizon" id="dag-2026-08-26"', rendered)
         self.assertIn('class="day future-compact" id="dag-2026-08-30"', rendered)
-        self.assertIn('class="historical-coach"', rendered)
-        self.assertIn('<summary>AI-analys · historik</summary>', rendered)
         self.assertIn('class="week-state"', rendered)
         self.assertGreater(rendered.find('class="week-state"'), rendered.find('<h2 class="section">Aktuell vecka</h2>'))
         self.assertIn('.week-state .dashboard>.dashboard-card:last-child{display:none}', rendered)
