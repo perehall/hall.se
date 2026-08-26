@@ -7,9 +7,9 @@
     "week": 36,
     "week_start": "2026-08-31",
     "week_end": "2026-09-06",
-    "title": "Preliminär framtidsvecka",
-    "principle": "Veckan hålls öppen tills faktisk belastning och återhämtning ger tillräckligt underlag. Fasta åtaganden som enduroskolan ligger kvar; simningen behåller två preliminära pass med oförändrad basdos och teknisk progression.",
-    "preview_summary": "Måndagens enduroskola är fast och räknas som faktisk träningsbelastning. Två preliminära simpass ligger kvar med oförändrad basdos; övriga dagar fylls inte ut utan underlag."
+    "title": "Löpblock vecka 2 · behåll strukturen, lås inte dosen för tidigt",
+    "principle": "Veckan fortsätter fyraveckorsblocket med kontrollerad löptröskel, separat backkvalitet och lugn löpdistans. Måndagens enduroskola ligger fast. Simning och MTB stödjer helheten utan att tränga undan de prioriterade löpstimulansen. Exakta doser beslutas först när faktisk närbelastning är känd.",
+    "preview_summary": "Löpning är fortsatt första utvecklingsprioritet. Tröskel, backkvalitet och lugn distans finns med som blockstimuli; enduroskolan är fast, MTB utvecklas parallellt och simningen hålls vid liv med låg mekanisk kostnad. Lördagens möjliga swimrun-KM är ännu inte ett fast träningsåtagande."
   },
   "days": [
     {
@@ -23,22 +23,42 @@
       "sport": "enduro",
       "classification": "training",
       "dose_open": true,
-      "manual_lock": true
+      "manual_lock": true,
+      "priority_role": "anchor",
+      "stimuli": [
+        "enduro_technical"
+      ]
     },
     {
       "date": "2026-09-01",
       "label": "Tisdag",
       "status": "preliminary",
       "planning_status": "preliminary",
+      "session": "Löpning · kontrollerad tröskel · dos öppen",
+      "reason": "Veckans första prioriterade löpstimulus och fortsatt del av fyraveckorsblocket. Den exakta arbetsdosen bestäms först efter måndagens faktiska endurobelastning och utifrån hur föregående tröskelpass absorberats.",
+      "development_focus": "Jämn, kontrollerad kvalitet utan fartjakt; progression ska komma genom absorberbar träning, inte genom att pressa ett enskilt pass.",
+      "sport": "run",
+      "dose_open": true,
+      "priority_role": "anchor",
+      "stimuli": [
+        "run_threshold"
+      ],
+      "decision_note": "Tröskeldosen fastställs efter måndagens faktiska endurobelastning; stimulus ligger kvar om närbelastningen tillåter kvalitet."
+    },
+    {
+      "date": "2026-09-02",
+      "label": "Onsdag",
+      "status": "preliminary",
+      "planning_status": "preliminary",
       "session": "Simning · aerob/teknik · preliminärt 3 200 m · ca 60 min",
       "swim_equipment": {
         "planned": "none"
       },
-      "reason": "Preliminär fortsättning på den etablerade aeroba/tekniska simningen. Basdosen hålls på 3 200 m i stället för att ökas innan W35:s faktiska simning och närbelastning är kända. Förslag: 400 m lugn insim + 6×50 m kroppslinje/rotation @ 15 s vila + 4×500 m stadigt aerob @ 30 s vila + 6×50 m avslappnad frekvens med bibehållen linje @ 15 s vila + 200 m mycket lugnt. Slutlig dos och intensitet omprövas mot de faktiska 2–3 föregående dagarna.",
+      "reason": "Simningen används mellan löpkvalitetspassen för att bibehålla och långsamt utveckla simkapacitet med liten mekanisk kostnad för benen. Basdosen höjs inte automatiskt.",
       "development_focus": "Rotera runt en stabil kroppslinje: låt höft och axel följa med utan att huvudet vandrar eller benen börjar slingra.",
       "watch_workout": {
         "sync_enabled": false,
-        "id": "swim-w36-tue-aerob-rotation-01",
+        "id": "swim-w36-wed-aerob-rotation-01",
         "type": "Swim",
         "equipment": [],
         "name": "Aerob/teknik · kroppslinje och rotation · 3 200 m",
@@ -116,136 +136,70 @@
           }
         ]
       },
-      "sport": "swim"
-    },
-    {
-      "date": "2026-09-02",
-      "label": "Onsdag",
-      "status": "open",
-      "planning_status": "open",
-      "session": "Öppet · planeras när underlag finns",
-      "reason": "Ingen träningsdos sätts ännu. Passet planeras utifrån faktisk belastning, återhämtning och de närmast föregående 2–3 dagarna.",
-      "sport": "open"
+      "sport": "swim",
+      "priority_role": "flex",
+      "stimuli": [
+        "swim_aerobic",
+        "swim_technique"
+      ]
     },
     {
       "date": "2026-09-03",
       "label": "Torsdag",
-      "status": "open",
-      "planning_status": "open",
-      "session": "Öppet · planeras när underlag finns",
-      "reason": "Ingen träningsdos sätts ännu. Passet planeras utifrån faktisk belastning, återhämtning och de närmast föregående 2–3 dagarna.",
-      "sport": "open"
+      "status": "preliminary",
+      "planning_status": "preliminary",
+      "session": "MTB/XC · teknik + aerob stig · dos öppen",
+      "reason": "MTB/XC är fortsatt utvecklingsprioritet men passets omfattning ska inte göra fredagens löpkvalitet mekaniskt omöjlig. Teknik och flyt är förstahandsmål; faktisk belastning avgör nästa beslut.",
+      "development_focus": "Blick, linjeval, bromspunkter och flyt före segmentjakt.",
+      "sport": "bike",
+      "dose_open": true,
+      "priority_role": "flex",
+      "stimuli": [
+        "mtb_technical",
+        "mtb_aerobic"
+      ]
     },
     {
       "date": "2026-09-04",
       "label": "Fredag",
       "status": "preliminary",
       "planning_status": "preliminary",
-      "session": "Simning · kontrollerad kvalitet · preliminärt 3 200 m · ca 60 min",
-      "swim_equipment": {
-        "planned": "none"
-      },
-      "reason": "Preliminärt kvalitetspass med samma totaldistans som den etablerade basdosen. Kvaliteten utvecklas genom att tekniken ska bestå när arbetet blir mer sammanhängande; ingen automatisk volymökning görs innan W35 är genomförd. Förslag: 400 m lugn insim + 6×50 m ren isättning/catch @ 15 s vila + 3×500 m kontrollerat sammanhängande @ 30 s vila + 6×100 m något högre frekvens med bibehållen teknik @ 20 s vila + 400 m lugn nedvarvning. Slutlig dos och intensitet omprövas mot faktisk närbelastning.",
-      "development_focus": "Låt återföringen vara avslappnad och sätt i handen rent framför axeln; behåll sedan samma tidiga grepp när rytmen ökar.",
-      "watch_workout": {
-        "sync_enabled": false,
-        "id": "swim-w36-fri-quality-entry-01",
-        "type": "Swim",
-        "equipment": [],
-        "name": "Kontrollerad kvalitet · isättning och catch · 3 200 m",
-        "planned_distance_m": 3200,
-        "blocks": [
-          {
-            "name": "Insim",
-            "steps": [
-              {
-                "kind": "swim",
-                "text": "Lugn insim",
-                "distance_m": 400,
-                "intensity": "warmup"
-              }
-            ]
-          },
-          {
-            "name": "Isättning och catch",
-            "repeat": 6,
-            "steps": [
-              {
-                "kind": "swim",
-                "text": "Ren isättning framför axeln och tidigt grepp",
-                "distance_m": 50,
-                "intensity": "active"
-              },
-              {
-                "kind": "rest",
-                "duration_s": 15
-              }
-            ]
-          },
-          {
-            "name": "Kontrollerad kvalitet",
-            "repeat": 3,
-            "steps": [
-              {
-                "kind": "swim",
-                "text": "Kontrollerat sammanhängande, bibehåll teknik",
-                "distance_m": 500,
-                "intensity": "active"
-              },
-              {
-                "kind": "rest",
-                "duration_s": 30
-              }
-            ]
-          },
-          {
-            "name": "Frekvens med teknik",
-            "repeat": 6,
-            "steps": [
-              {
-                "kind": "swim",
-                "text": "Något högre frekvens, ren isättning och bibehållet grepp",
-                "distance_m": 100,
-                "intensity": "active"
-              },
-              {
-                "kind": "rest",
-                "duration_s": 20
-              }
-            ]
-          },
-          {
-            "name": "Nedvarvning",
-            "steps": [
-              {
-                "kind": "swim",
-                "text": "Lugnt",
-                "distance_m": 400,
-                "intensity": "cooldown"
-              }
-            ]
-          }
-        ]
-      },
-      "sport": "swim"
+      "session": "Löpning · backkvalitet · preliminär placering · dos öppen",
+      "reason": "Veckans andra prioriterade löpkvalitet och blockets kompletterande kraft-/löpekonomistimulus. Placering och dos hålls preliminära eftersom torsdagens MTB-belastning och eventuell medverkan i swimrun-KM på lördagen ännu inte är kända.",
+      "development_focus": "Kraftfull men kontrollerad löpning med bibehållen mekanik; ingen maximal sprint eller syrajakt.",
+      "sport": "run",
+      "dose_open": true,
+      "priority_role": "anchor",
+      "stimuli": [
+        "run_hill_quality"
+      ],
+      "block": "run-threshold-hill-4w",
+      "block_week": 2,
+      "decision_note": "Backpassets placering och dos beslutas först när torsdagens faktiska belastning och lördagens swimrun-KM-intention är kända."
     },
     {
       "date": "2026-09-05",
       "label": "Lördag",
       "status": "open",
       "planning_status": "open",
-      "session": "Öppet · planeras när underlag finns",
-      "reason": "Ingen träningsdos sätts ännu. Passet planeras utifrån faktisk belastning, återhämtning och de närmast föregående 2–3 dagarna.",
+      "session": "Öppet · möjlig swimrun-KM",
+      "reason": "Swimrun-KM finns som möjlig aktivitet men deltagande är inte fastställt i träningsplanen. Ingen ytterligare träningsdos läggs in innan detta och fredagens närbelastning är kända.",
       "sport": "open"
     },
     {
       "date": "2026-09-06",
       "label": "Söndag",
-      "status": "open",
-      "planning_status": "open",
-      "session": "Öppet · planeras när underlag finns",
-      "reason": "Ingen träningsdos sätts ännu. Passet planeras utifrån faktisk belastning, återhämtning och de närmast föregående 2–3 dagarna.",
-      "sport": "open"
+      "status": "preliminary",
+      "planning_status": "preliminary",
+      "session": "Löpning · lugn distans · dos öppen",
+      "reason": "Blockets tredje löpstimulus är lugn distans/tålighet. Exakt omfattning och om passet ska ligga kvar på söndagen avgörs efter fredag–lördagens faktiska utfall.",
+      "development_focus": "Avslappnad rytm och jämn ansträngning; inget tredje kvalitetspass.",
+      "sport": "run",
+      "dose_open": true,
+      "priority_role": "flex",
+      "stimuli": [
+        "run_easy_distance"
+      ]
     }
   ],
   "strength_template": [
