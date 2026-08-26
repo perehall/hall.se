@@ -4,7 +4,7 @@
   "week_start": "2026-08-24",
   "week_end": "2026-08-30",
   "created_at_utc": "2026-08-24T06:32:25.878995+00:00",
-  "updated_at_utc": "2026-08-26T11:54:05.257732+00:00",
+  "updated_at_utc": "2026-08-26T11:56:32.502908+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -218,11 +218,11 @@
       "activity_id": 19897382163,
       "activity_date": "2026-08-25",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-08-26T11:50:09.208586+00:00",
+      "generated_at_utc": "2026-08-26T11:56:32.001142+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Tröskelpasset genomfördes men skalades enligt plan till 3×8 min; upplevd sämre fart talar för konservativ återhämtning före nästa kvalitet.",
-        "load_interpretation": "Dagens löppass var en nedskalad tröskel (3×8 min) efter måndagens enduro+styrka; detta påverkar beslutet för onsdagens simning.",
+        "summary": "Tröskelpass genomfört men nedskalat enligt coachens anvisning (3×8 min), känsla något sämre än föregående vecka.",
+        "load_interpretation": "Dagens löpkvalitet låg under ursprungligt mål pga skala‑ner; måndagens enduro+styrka bidrog till ackumulerad belastning.",
         "confidence": "medium",
         "facts": [
           "Run: 10,34 km · 51:34 · 75 m+ · snittpuls 144,8 · maxpuls 165.",
@@ -230,20 +230,20 @@
           "Planstatus 2026-08-25: dagens planerade pass är genomfört i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Den nedskalade kvaliteten följde coachens rekommendation och var rimlig givet måndagens belastning.",
-          "Onsdagens simning är lämplig som lågmekanisk återhämtningsdag om intensiteten hålls lugn."
+          "Nedskalningen var lämplig; subjektiv känsla och tempo något sämre innebär inte behov av ytterligare vila.",
+          "Blockets skyddade stimulus run_threshold är uppfyllt konservativt för veckan."
         ],
         "unknowns": [
-          "Subjektiv dagskänsla för onsdag morgon (kan återställa om mycket bra).",
-          "Eventuell planerad swimrun istället för poolsim och dess faktiska intensitet.",
-          "Detaljerad lokal bentrötthet efter gårdagens tröskel trots normal wellness-trend."
+          "Exakt lokal bentrötthet före/frånvaro av muskelsmärta kan ändra fredagens backdos.",
+          "Om användaren rapporterar oförändrad eller förbättrad dagskänsla imorgon kan ursprunglig 3×10 övervägas för framtida pass.",
+          "Eventuell högintensiv belastning under enduron (svår att kvantifiera) kan påverka absorberbarheten."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-08-26",
-        "reason": "Simning är lågmekanisk och hjälper återhämtning mellan kvalitetspassen utan att störa blockets stimuli.",
-        "recommendation": "Behåll onsdagens simning ~60 min; håll intensiteten lugn och fokusera teknik. Välj swimrun endast om du kan hålla löpningen mycket lätt.",
+        "reason": "Dagens kvalitet uppfyllde blockets tröskelstimulus konservativt och återhämtningsunderlaget stödjer fortsatt plan.",
+        "recommendation": "Behåll planerad simning (alternativ swimrun) idag som lugn aerob/teknik; håll intensiteten kontrollerad och undvik hårda löpinslag. Vid morgondagens känsla bra: fortsätt enligt plan; vid onormal trötthet: vila eller mycket lätt simning.",
         "requires_approval": false
       },
       "auto_apply": {
