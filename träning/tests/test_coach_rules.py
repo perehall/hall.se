@@ -213,6 +213,42 @@ class CoachRulesTests(unittest.TestCase):
         self.assertEqual(normalized["target_date"], "")
         self.assertIn("Ändra inte", normalized["recommendation"])
 
+    def test_cross_day_recommendation_cannot_auto_edit_wrong_target(self):
+        action = {
+            "action": "reduce",
+            "target_date": "2026-08-26",
+            "reason": "Veckans närbelastning påverkar kommande kvalitet.",
+            "recommendation": (
+                "Håll fredagspasset som backkvalitet men gör dosen konservativ. "
+                "Justera slutlig dos först efter torsdagens MTB."
+            ),
+            "requires_approval": False,
+        }
+        normalized = normalize_deferred_future_action(
+            action,
+            candidate_dates=["2026-08-26", "2026-08-27", "2026-08-28"],
+            ready_dates=["2026-08-26"],
+        )
+        self.assertEqual(normalized["action"], "review")
+        self.assertEqual(normalized["target_date"], "")
+        self.assertIn("annan veckodag", normalized["reason"])
+
+    def test_target_day_may_reference_surrounding_day_when_target_is_explicit(self):
+        action = {
+            "action": "reduce",
+            "target_date": "2026-08-28",
+            "reason": "x",
+            "recommendation": "Efter torsdagens MTB: skala ner fredagens backpass om benen är tunga.",
+            "requires_approval": False,
+        }
+        normalized = normalize_deferred_future_action(
+            action,
+            candidate_dates=["2026-08-28"],
+            ready_dates=["2026-08-28"],
+        )
+        self.assertEqual(normalized["action"], "reduce")
+        self.assertEqual(normalized["target_date"], "2026-08-28")
+
     def test_coach_view_marks_matching_day_completed_without_mutating_plan(self):
         plan = {
             "days": [
