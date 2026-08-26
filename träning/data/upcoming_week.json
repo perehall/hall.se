@@ -8,18 +8,22 @@
     "week_start": "2026-08-31",
     "week_end": "2026-09-06",
     "title": "Preliminär framtidsvecka",
-    "principle": "Veckan hålls öppen tills faktisk belastning och återhämtning ger tillräckligt underlag. Simningen behåller två preliminära pass med oförändrad basdos och teknisk progression; övriga pass fylls inte ut utan underlag.",
-    "preview_summary": "Två preliminära simpass är utskrivna eftersom två simpass per vecka redan är etablerat i aktuell struktur. Totaldosen höjs inte automatiskt; teknik och utförande driver progressionen tills W35 ger nytt faktiskt underlag."
+    "principle": "Veckan hålls öppen tills faktisk belastning och återhämtning ger tillräckligt underlag. Fasta åtaganden som enduroskolan ligger kvar; simningen behåller två preliminära pass med oförändrad basdos och teknisk progression.",
+    "preview_summary": "Måndagens enduroskola är fast och räknas som faktisk träningsbelastning. Två preliminära simpass ligger kvar med oförändrad basdos; övriga dagar fylls inte ut utan underlag."
   },
   "days": [
     {
       "date": "2026-08-31",
       "label": "Måndag",
-      "status": "open",
-      "planning_status": "open",
-      "session": "Öppet · planeras när underlag finns",
-      "reason": "Ingen träningsdos sätts ännu. Passet planeras utifrån faktisk belastning, återhämtning och de närmast föregående 2–3 dagarna.",
-      "sport": "open"
+      "status": "planned",
+      "planning_status": "fixed",
+      "session": "Enduroskola · fast tillfälle",
+      "reason": "Fast återkommande enduroskola, totalt åtta måndagar från 24/8. Enduron räknas som faktisk träningsbelastning; övrig träning runt dagen anpassas efter utfallet.",
+      "development_focus": "Teknisk kvalitet och avslappnad körning; faktisk belastning styr efterföljande pass.",
+      "sport": "enduro",
+      "classification": "training",
+      "dose_open": true,
+      "manual_lock": true
     },
     {
       "date": "2026-09-01",
