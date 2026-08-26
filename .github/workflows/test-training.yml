@@ -67,10 +67,12 @@ jobs:
           grep -Fq '<section class="dashboard"' "träning/index.html"
           grep -Fq '<section class="training-brain"' "träning/index.html"
           grep -Fq 'Nästa beslut' "träning/index.html"
-          grep -Fq 'Aktuellt block' "träning/index.html"
+          grep -Fq 'week-focus-block-meta' "träning/index.html"
+          grep -Fq '<summary>Veckoläge</summary>' "träning/index.html"
           grep -Fq 'Garmin via Intervals.icu används som privat återhämtningskontext' "träning/index.html"
           grep -Fq 'Väderprognos:' "träning/index.html"
           grep -Fq '>SMHI</a>' "träning/index.html"
+          ! grep -Fq 'Prioritering just nu:' "träning/index.html"
 
       - name: Diff hygiene
         run: git diff --check
