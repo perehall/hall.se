@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - "träning/data/manual-sync-trigger.txt"
+      - "träning/data/deployment_verification.json"
 
 permissions:
   contents: read
@@ -29,6 +32,22 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
+      - name: Run deterministic regression tests
+        run: |
+          python -m compileall -q "träning/scripts" "träning/tests"
+          python -m unittest discover -s "träning/tests" -p "test_*.py" -v
+
+      - name: Test Strava webhook worker
+        run: |
+          node --check "infra/strava-webhook/src/worker.mjs"
+          node --test "infra/strava-webhook/test/worker.test.mjs"
+
+      - name: Normalize training data for render
+        run: |
+          python "träning/scripts/migrate_training_data_v3.py"
+          python "träning/scripts/normalize_activity_semantics.py"
+          python "träning/scripts/validate_training_data.py"
 
       - name: Render and validate training site
         run: python "träning/scripts/render_training_site.py"
