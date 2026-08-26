@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import unittest
+from datetime import date
 from pathlib import Path
 
 SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
@@ -14,30 +15,46 @@ class SignalUiTests(unittest.TestCase):
         text = "Gör det lugnt. Detta är en mycket längre förklaring som inte behöver ligga i huvudvyn."
         self.assertEqual(compact_text(text, 25), "Gör det lugnt.")
 
-    def test_strength_moves_to_bottom_sheet_and_reasons_collapse(self):
+    def test_signal_hierarchy_moves_stats_down_and_compacts_week(self):
         page = '''<html><style></style><body>
-<section class="training-brain">
-<div class="brain-why"><strong>Varför:</strong> Låg mekanisk belastning.</div>
-<div class="brain-note">Beslutet väntar på torsdagens faktiska belastning innan fredagens dos låses.</div>
-<div class="brain-hypothesis">En längre blockidé som ska finnas kvar men inte dominera huvudvyn.</div>
-<div class="brain-meta">Utvärdering: 2026-09-21 · skyddade stimuli: run_threshold · run_hill_quality</div>
-</section>
-<div class="day"><div class="reason">Det här är passets längre motivering.</div>
-<div class="development-focus"><strong>Utvecklingsfokus</strong><span>Jämn teknik och kontroll.</span></div></div>
-<div class="coach yoda-v2"><div class="coach-summary">Sammanfattning.</div><div class="coach-next"><span class="coach-next-label">Nästa steg</span><div>Behåll dagens simning lugn och teknisk. Den andra meningen är onödigt lång och ska inte ta huvudytan.</div></div><div class="coach-apply">Ingen automatisk ändring.</div></div>
+<div class="hero week-focus-card"><h2 class="week-focus-title"><strong>Veckofokus:</strong> Test</h2><details class="week-focus-details"><summary>Planidé</summary><p>Plan.</p></details></div>
+<section class="training-brain"><div class="brain-why"><strong>Varför:</strong> Låg mekanisk belastning.</div><div class="brain-note">Beslutet väntar på torsdagens faktiska belastning innan fredagens dos låses.</div></section>
+<section class="dashboard" aria-label="Veckoöversikt"><div class="metrics"></div><div class="dashboard-grid"></div><div class="dashboard-card"><div class="dashboard-title">Nästa dagar</div></div></section>
+<h2 class="section">Aktuell vecka</h2>
+<div class="day" id="dag-2026-08-24"><div class="daytop"></div><div class="session">Enduro</div><div class="reason">Motivering.</div><div class="pass"><div class="pass-title">Automatiskt från Strava</div><div>Data</div></div><div class="coach yoda-v2"><div class="coach-next"><span class="coach-next-label">Nästa steg</span><div>Gammalt råd.</div></div></div><div class="development-focus"><strong>Utvecklingsfokus</strong><span>Fokus.</span></div></div>
+<div class="day" id="dag-2026-08-26"><div class="daytop"></div><div class="session">Simning</div><div class="reason">Motivering.</div><div class="development-focus"><strong>Utvecklingsfokus</strong><span>Fokus.</span></div></div>
+<div class="day" id="dag-2026-08-30"><div class="daytop"></div><div class="session">Distans</div><div class="reason">Motivering.</div><div class="development-focus"><strong>Utvecklingsfokus</strong><span>Fokus.</span></div></div>
 <h2 class="section">Styrkemall framåt</h2><div class="principles"><div class="principle">Bulgarian split squat.</div></div>
 <footer>Footer</footer></body></html>'''
-        rendered = apply_signal_ui(page, ["Bulgarian split squat.", "Vad + soleus."])
+        plan = {
+            "days": [
+                {"date": "2026-08-24", "sport": "enduro", "session": "Enduro"},
+                {"date": "2026-08-26", "sport": "swim", "session": "Simning"},
+                {"date": "2026-08-30", "sport": "run", "session": "Distans"},
+            ]
+        }
+        activities = [{"sport_type": "Ride", "display_label": "Enduro", "start_date_local": "2026-08-24T18:00:00", "semantic_sport": "enduro"}]
+        rendered = apply_signal_ui(
+            page,
+            ["Bulgarian split squat.", "Vad + soleus."],
+            plan=plan,
+            activities=activities,
+            today=date(2026, 8, 26),
+        )
         self.assertIn('class="reference-chip"', rendered)
         self.assertIn('id="strengthSheet"', rendered)
         self.assertNotIn("Styrkemall framåt", rendered)
         self.assertIn('class="day-why"', rendered)
-        self.assertIn('<summary>Varför?</summary>', rendered)
         self.assertIn('<strong>Fokus</strong>', rendered)
         self.assertIn('class="brain-why-details"', rendered)
-        self.assertIn('class="brain-block-why"', rendered)
-        self.assertNotIn("skyddade stimuli:", rendered)
-        self.assertIn('.yoda-v2 .coach-summary,.yoda-v2 .coach-apply{display:none}', rendered)
+        self.assertIn('class="day past-completed" id="dag-2026-08-24"', rendered)
+        self.assertIn('class="day decision-horizon" id="dag-2026-08-26"', rendered)
+        self.assertIn('class="day future-compact" id="dag-2026-08-30"', rendered)
+        self.assertIn('class="historical-coach"', rendered)
+        self.assertIn('<summary>AI-analys · historik</summary>', rendered)
+        self.assertIn('class="week-state"', rendered)
+        self.assertGreater(rendered.find('class="week-state"'), rendered.find('<h2 class="section">Aktuell vecka</h2>'))
+        self.assertIn('.week-state .dashboard>.dashboard-card:last-child{display:none}', rendered)
 
 
 if __name__ == "__main__":
