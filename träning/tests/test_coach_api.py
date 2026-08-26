@@ -187,7 +187,7 @@ class CoachApiTests(unittest.TestCase):
 
     def test_private_wellness_terms_are_scrubbed_before_persistence(self):
         result = valid_result()
-        result["assessment"]["summary"] = "Garmin HRV 48 och sömnscore 71 talar för försiktighet."
+        result["assessment"]["summary"] = "Garmin HRV 48 och sömnscore 71 visar en normal wellness-trend."
         result["plan_action"]["reason"] = "Vilopuls 52 via Intervals.icu avviker."
         scrubbed = scrub_private_wellness_output(result)
         text = json.dumps(scrubbed, ensure_ascii=False).lower()
@@ -195,6 +195,7 @@ class CoachApiTests(unittest.TestCase):
         self.assertNotIn("hrv", text)
         self.assertNotIn("vilopuls", text)
         self.assertNotIn("intervals.icu", text)
+        self.assertNotIn("wellness", text)
         self.assertIn("återhämtningsunderlaget", text)
 
 
