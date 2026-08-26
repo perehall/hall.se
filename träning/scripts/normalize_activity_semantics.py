@@ -8,12 +8,20 @@ from training_contracts import ACTIVITIES_SCHEMA_VERSION
 ROOT = Path(__file__).resolve().parents[1]
 ACTIVITIES = ROOT / "data" / "activities.json"
 OVERRIDES = ROOT / "data" / "activity_overrides.json"
+COACH = ROOT / "data" / "coach.json"
 
 ENDURO_NAME_RE = re.compile(r"\b(?:enduro|motocross)\b", re.IGNORECASE)
 MTB_NAME_RE = re.compile(r"\b(?:mtb|xc|mountain\s*bike|cykel)\b", re.IGNORECASE)
 SWIMRUN_NAME_RE = re.compile(r"\bswim\s*-?\s*run\b|\bswimrun\b", re.IGNORECASE)
 ENDURO_NAME_RULE = "mountainbike-explicit-enduro-name-v1"
 SWIMRUN_NAME_RULE = "trailrun-explicit-swimrun-name-v1"
+COACH_SEMANTIC_FIELDS = (
+    "sport_type",
+    "display_label",
+    "classification",
+    "source_sport_type",
+    "user_report",
+)
 
 
 def load(path: Path):
@@ -29,6 +37,10 @@ def write_state(state):
 
 def raw_sport(activity):
     return activity.get("source_sport_type") or activity.get("sport_type") or ""
+
+
+def coach_semantic_fingerprint(activity):
+    return tuple(activity.get(field) for field in COACH_SEMANTIC_FIELDS)
 
 
 def auto_enduro_candidate(activity):
@@ -119,6 +131,23 @@ def apply_override(activity, override, key):
         activity["classification_reason"] = override["reason"]
 
 
+def invalidate_coach_analyses(path: Path, changed_ids):
+    changed = {str(value) for value in changed_ids if str(value)}
+    if not changed or not path.exists():
+        return 0
+
+    coach = load(path)
+    analyses = coach.get("analyses") or []
+    kept = [entry for entry in analyses if str(entry.get("activity_id")) not in changed]
+    removed = len(analyses) - len(kept)
+    if removed:
+        coach["analyses"] = kept
+    if removed or coach.get("last_trigger_hash") is not None:
+        coach["last_trigger_hash"] = None
+        path.write_text(json.dumps(coach, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return removed
+
+
 def apply_semantics(state, config=None):
     if not isinstance(state, dict):
         raise RuntimeError("Aktivitetsnormalisering: state måste vara objekt")
@@ -132,24 +161,29 @@ def apply_semantics(state, config=None):
     override_applied = 0
     auto_applied = 0
     seen = set()
+    changed_ids = set()
 
     for activity in activities:
         activity_id = activity.get("id")
         key = str(activity_id) if activity_id is not None else ""
+        before = coach_semantic_fingerprint(activity)
         override = overrides.get(key)
         if override:
             seen.add(key)
             apply_override(activity, override, key)
             override_applied += 1
-            continue
-        if apply_auto_semantics(activity):
+        elif apply_auto_semantics(activity):
             auto_applied += 1
+        after = coach_semantic_fingerprint(activity)
+        if key and before != after:
+            changed_ids.add(key)
 
     state["activity_semantics"] = {
         "schema_version": config.get("schema_version", 1),
         "overrides_applied": override_applied,
         "auto_rules_applied": auto_applied,
         "override_ids_present": sorted(seen),
+        "changed_ids": sorted(changed_ids),
     }
     return override_applied, auto_applied, seen
 
@@ -161,7 +195,9 @@ def main():
     state = load(ACTIVITIES)
     config = load(OVERRIDES) if OVERRIDES.exists() else {"schema_version": 1, "overrides": {}}
     applied, auto_applied, seen = apply_semantics(state, config)
+    changed_ids = state.get("activity_semantics", {}).get("changed_ids") or []
     write_state(state)
+    invalidated = invalidate_coach_analyses(COACH, changed_ids)
 
     rendered = load(ACTIVITIES)
     if rendered.get("schema_version") != ACTIVITIES_SCHEMA_VERSION:
@@ -178,7 +214,8 @@ def main():
 
     print(
         f"Aktivitetsnormalisering OK: schema v{ACTIVITIES_SCHEMA_VERSION}, "
-        f"{applied} explicit override(s), {auto_applied} auto-regel(er) applicerade."
+        f"{applied} explicit override(s), {auto_applied} auto-regel(er) applicerade, "
+        f"{invalidated} stale coach-analys(er) invaliderade."
     )
 
 

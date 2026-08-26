@@ -19,6 +19,7 @@ ACTIVITY_FAMILY = {
     "TrailRun": "run",
     "VirtualRun": "run",
     "Swim": "swim",
+    "Swimrun": "swimrun",
     "MountainBikeRide": "bike",
     "Ride": "bike",
     "VirtualRide": "bike",
@@ -28,7 +29,8 @@ ACTIVITY_FAMILY = {
 
 # Explicit plan type -> activity families that may fulfill the day.
 # Swimrun is commonly exposed by the upstream activity source as a run-like
-# activity, so a run-family activity may fulfill an explicitly planned swimrun.
+# activity, so either the raw run-family source activity or a normalized
+# Swimrun activity may fulfill an explicitly planned swimrun.
 # rest/open are intentional non-activity states and are never auto-fulfilled.
 PLAN_SPORT_ACTIVITY_FAMILIES = {
     "run": {"run"},

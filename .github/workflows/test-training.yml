@@ -6,25 +6,7 @@ on:
       - "träning/**"
       - "infra/strava-webhook/**"
       - ".github/workflows/test-training.yml"
-      - ".github/workflows/update-training.yml"
-  push:
-    branches:
-      - main
-    paths:
-      - "träning/scripts/**"
-      - "träning/tests/**"
-      - "träning/coach_prompt.md"
-      - "träning/week_review_prompt.md"
-      - "träning/data/plan.json"
-      - "träning/data/upcoming_week.json"
-      - "träning/data/goal.json"
-      - "träning/data/training_strategy.json"
-      - "träning/data/activity_overrides.json"
-      - "träning/data/sport_icons.json"
-      - "träning/data/settings.json"
-      - "träning/data/weather_config.json"
-      - "infra/strava-webhook/**"
-      - ".github/workflows/test-training.yml"
+      - ".github/workflows/deploy-pages.yml"
       - ".github/workflows/update-training.yml"
 
 concurrency:
