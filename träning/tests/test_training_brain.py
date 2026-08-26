@@ -39,7 +39,7 @@ class TrainingBrainTests(unittest.TestCase):
                     "session": "Swimrun · klubbpass",
                     "sport": "swimrun",
                     "priority_role": "flex",
-                    "stimuli": ["swimrun_aerobic"],
+                    "stimuli": ["swim_aerobic"],
                 }
             ]
         }
@@ -55,7 +55,7 @@ class TrainingBrainTests(unittest.TestCase):
         self.assertTrue(brief["fulfilled"])
         self.assertEqual(brief["status"], "GENOMFÖRT")
         self.assertIn("Swimrun", brief["why"])
-        self.assertIn("Swimrun aerob tålighet", brief["stimuli"])
+        self.assertIn("Sim aerob kapacitet", brief["stimuli"])
 
     def test_explicit_next_decision_wins_inside_72_hour_horizon(self):
         decision = resolve_next_decision(self.plan, [], self.strategy, date(2026, 8, 26))
