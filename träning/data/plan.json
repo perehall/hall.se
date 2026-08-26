@@ -66,7 +66,7 @@
     {
       "date": "2026-08-27",
       "label": "Torsdag",
-      "status": "planned",
+      "status": "conditional",
       "session": "MTB/XC · teknik + aerob stig",
       "reason": "MTB-specifik utveckling utan att på förhand ta bort fredagens löpkvalitet. Teknik och flyt prioriteras; faktisk fysiologisk och lokal benbelastning avgör fredagens backdos.",
       "development_focus": "Blick genom kurvan, bromsa klart före svängen och prioritera linje/flyt framför att jaga segmentfart.",
@@ -76,7 +76,14 @@
       "stimuli": [
         "mtb_technical",
         "mtb_aerobic"
-      ]
+      ],
+      "original_session": "MTB/XC · teknik + aerob stig",
+      "auto_coach": {
+        "action": "reduce",
+        "reason": "Onsdagens trail ökade löpbelastningen inför fredagens backpass; skydda blockstimuli genom att hålla MTB lätt.",
+        "applied_at_utc": "2026-08-26T17:23:03.499828+00:00"
+      },
+      "coach_adjustment": "Skala ned passet. Gör torsdagens MTB som tekniskt, lugnt pass utan upprepade hårda stigningar; undvik att göra det till ett bennedbrytande intervallpass."
     },
     {
       "date": "2026-08-28",
