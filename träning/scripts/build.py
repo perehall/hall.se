@@ -302,7 +302,7 @@ h1{{font-size:clamp(2rem,8vw,3.2rem);line-height:1;margin:0 0 8px;letter-spacing
 {dashboard}
 <h2 class="section">Aktuell vecka</h2>{''.join(cards)}
 <h2 class="section">Styrkemall framåt</h2><div class="principles">{strength}</div>
-<footer>Automatiskt byggd från plan.json + activities.json + coach.json. Strava-data används som fakta. AI-coachen får automatiskt endast behålla, minska eller ersätta belastning konservativt; belastningsökning kräver mänsklig bedömning. · <a href="/cdn-cgi/access/logout" style="color:inherit" onclick="window.location.replace(this.href); return false;">Logga ut</a></footer>
+<footer>Automatiskt byggd från plan.json + activities.json + coach.json. Faktakällor: Strava för genomförd träning. Garmin via Intervals.icu används som privat återhämtningskontext; wellnessvärden publiceras inte. AI-coachen får automatiskt endast behålla, minska eller ersätta belastning konservativt; belastningsökning kräver mänsklig bedömning. · <a href="/cdn-cgi/access/logout" style="color:inherit" onclick="window.location.replace(this.href); return false;">Logga ut</a></footer>
 </div>
 <script>
 window.addEventListener("pageshow", (event) => {{
