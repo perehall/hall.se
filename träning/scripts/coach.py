@@ -19,15 +19,17 @@ from coach_rules import (
     plan_for_coach,
     validate_plan_action,
 )
+from strategy_contracts import validate_training_strategy
 
 ROOT = Path(__file__).resolve().parents[1]
 PLAN_FILE = ROOT / "data" / "plan.json"
 ACTIVITIES_FILE = ROOT / "data" / "activities.json"
 COACH_FILE = ROOT / "data" / "coach.json"
+STRATEGY_FILE = ROOT / "data" / "training_strategy.json"
 PROMPT_FILE = ROOT / "coach_prompt.md"
 
 MODEL = os.environ.get("OPENAI_MODEL", "gpt-5-mini")
-COACH_CONTRACT_VERSION = 4
+COACH_CONTRACT_VERSION = 5
 
 SCHEMA = {
     "type": "object",
@@ -76,12 +78,13 @@ def load_json(path, fallback):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def stable_hash(plan, latest_activity, local_date):
+def stable_hash(plan, latest_activity, local_date, strategy=None):
     payload = {
         "coach_contract_version": COACH_CONTRACT_VERSION,
         "plan": plan,
         "latest_activity": latest_activity,
         "local_date": local_date,
+        "strategy": strategy or {},
     }
     raw = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()
@@ -227,6 +230,8 @@ def main():
     plan = load_json(PLAN_FILE, {})
     activities_state = load_json(ACTIVITIES_FILE, {"activities": []})
     coach = load_json(COACH_FILE, {"analyses": [], "last_trigger_hash": None, "last_run_utc": None})
+    strategy = load_json(STRATEGY_FILE, {})
+    validate_training_strategy(strategy)
     activities = activities_state.get("activities", [])
 
     if not activities:
@@ -236,7 +241,7 @@ def main():
     latest = max(activities, key=lambda activity: activity.get("start_date") or "")
     tz = ZoneInfo(plan.get("meta", {}).get("timezone", "Europe/Stockholm"))
     local_date = datetime.now(tz).date().isoformat()
-    trigger_hash = stable_hash(plan, latest, local_date)
+    trigger_hash = stable_hash(plan, latest, local_date, strategy)
 
     if coach.get("last_trigger_hash") == trigger_hash:
         print("AI coach: inget nytt underlag; hoppar över API-anrop.")
@@ -259,14 +264,16 @@ def main():
         "latest_activity_date": latest_date,
         "recent_activities": recent,
         "current_plan": coach_plan,
+        "current_strategy": strategy,
         "fulfilled_plan_dates": sorted(fulfilled_dates),
         "allowed_target_dates": ready_dates,
         "deferred_target_dates": deferred_dates,
         "instruction": (
-            "Analysera senaste passet mot faktisk närbelastning och aktuell plan. Kontrollera särskilt "
-            "föregående och kommande 2–3 dagar. Dagar i fulfilled_plan_dates är redan genomförda och "
-            "får aldrig ordineras igen. target_date får endast väljas ur allowed_target_dates. Datum i "
-            "deferred_target_dates ligger längre fram men är inte beslutsmogna eftersom mellanliggande "
+            "Analysera senaste passet mot faktisk närbelastning, aktuell plan och current_strategy. "
+            "Skydda det aktuella blockets prioriterade stimuli när det går utan att ignorera faktisk belastning. "
+            "Kontrollera särskilt föregående och kommande 2–3 dagar. Dagar i fulfilled_plan_dates är redan "
+            "genomförda och får aldrig ordineras igen. target_date får endast väljas ur allowed_target_dates. "
+            "Datum i deferred_target_dates ligger längre fram men är inte beslutsmogna eftersom mellanliggande "
             "dagars faktiska utfall ännu saknas; skriv inte om dem nu. Om allowed_target_dates är tom ska "
             "target_date vara tomt och ingen automatisk framtidsändring göras. Föreslå endast konservativ "
             "automatisk ändring; allt som kan innebära ökad belastning ska vara review och kräva godkännande."
@@ -313,7 +320,7 @@ def main():
     analyses.insert(0, entry)
     coach["analyses"] = analyses[:30]
     coach["last_run_utc"] = now_utc
-    coach["last_trigger_hash"] = stable_hash(plan, latest, local_date)
+    coach["last_trigger_hash"] = stable_hash(plan, latest, local_date, strategy)
     coach["contract_version"] = COACH_CONTRACT_VERSION
     COACH_FILE.write_text(json.dumps(coach, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
