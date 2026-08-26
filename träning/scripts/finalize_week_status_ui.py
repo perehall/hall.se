@@ -8,17 +8,17 @@ INDEX_FILE = ROOT / "index.html"
 CSS_MARKER = "/* week-status-ui-v2 */"
 CSS = r'''
 /* week-status-ui-v2 */
-.week-status{margin:8px 0 16px}
-.week-status>summary{cursor:pointer;list-style:none;color:#334155;font-size:.84rem;font-weight:850;padding:7px 0;line-height:1.35}
-.week-status>summary::-webkit-details-marker{display:none}
-.week-status>summary:after{content:" +"}
-.week-status[open]>summary:after{content:" −"}
+.week-status-expander{margin:8px 0 16px}
+.week-status-expander>summary{cursor:pointer;list-style:none;color:#334155;font-size:.84rem;font-weight:850;padding:7px 0;line-height:1.35}
+.week-status-expander>summary::-webkit-details-marker{display:none}
+.week-status-expander>summary:after{content:" +"}
+.week-status-expander[open]>summary:after{content:" −"}
 .week-status-body{margin-top:8px}
-.week-status .dashboard{margin:0}
-.week-status .dashboard>.dashboard-card:last-child{display:none}
-.week-status .metrics{margin-bottom:12px}
-.week-status .dashboard-grid{grid-template-columns:1fr 1fr}
-@media (max-width:620px){.week-status .dashboard-grid{grid-template-columns:1fr}}
+.week-status-expander .dashboard{margin:0}
+.week-status-expander .dashboard>.dashboard-card:last-child{display:none}
+.week-status-expander .metrics{margin-bottom:12px}
+.week-status-expander .dashboard-grid{grid-template-columns:1fr 1fr}
+@media (max-width:620px){.week-status-expander .dashboard-grid{grid-template-columns:1fr}}
 '''
 
 
@@ -45,14 +45,13 @@ def extract_summary(dashboard):
 
     pass_count = int(metrics["pass"])
     day_count = int(metrics["träningsdagar"])
-    pass_word = "pass"
     day_word = "dag" if day_count == 1 else "dagar"
     duration = compact_duration(metrics["passtid"])
-    return f"Veckostatus · {pass_count} {pass_word} · {duration} · {day_count} {day_word}"
+    return f"Veckostatus · {pass_count} pass · {duration} · {day_count} {day_word}"
 
 
 def promote_week_status(page):
-    if 'class="week-status"' in page:
+    if 'class="week-status-expander"' in page:
         return page
 
     pattern = re.compile(
@@ -74,7 +73,7 @@ def promote_week_status(page):
         raise RuntimeError("Veckostatus-UI: rubriken Aktuell vecka saknas")
 
     overview = (
-        f'{heading}\n<details class="week-status"><summary>{summary}</summary>'
+        f'{heading}\n<details class="week-status-expander"><summary>{summary}</summary>'
         f'<div class="week-status-body">{dashboard}</div></details>'
     )
     page = page.replace(heading, overview, 1)
@@ -95,16 +94,16 @@ def main():
 
     verify = INDEX_FILE.read_text(encoding="utf-8")
     heading_pos = verify.find('<h2 class="section">Aktuell vecka</h2>')
-    status_pos = verify.find('class="week-status"')
+    status_pos = verify.find('class="week-status-expander"')
     day_pos = verify.find('<div class="day', status_pos)
 
     required = [
         CSS_MARKER,
-        'class="week-status"',
+        'class="week-status-expander"',
         '<summary>Veckostatus · ',
         '<section class="dashboard" aria-label="Veckoöversikt">',
-        '.week-status .dashboard>.dashboard-card:last-child{display:none}',
-        '.week-status>summary:after{content:" +"}',
+        '.week-status-expander .dashboard>.dashboard-card:last-child{display:none}',
+        '.week-status-expander>summary:after{content:" +"}',
     ]
     missing = [marker for marker in required if marker not in verify]
     if missing:
