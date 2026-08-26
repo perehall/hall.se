@@ -100,11 +100,23 @@ jobs:
       - name: Sync weather
         run: python "träning/scripts/sync_weather.py"
 
+      - name: Load private Garmin wellness context
+        continue-on-error: true
+        env:
+          INTERVALS_API_KEY: ${{ secrets.INTERVALS_API_KEY }}
+          WELLNESS_CONTEXT_FILE: /tmp/training_wellness_context.json
+        run: python "träning/scripts/wellness_context.py" --days 28
+
       - name: AI coach analysis
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_MODEL: gpt-5-mini
+          WELLNESS_CONTEXT_FILE: /tmp/training_wellness_context.json
         run: python "träning/scripts/coach.py"
+
+      - name: Remove private wellness context
+        if: always()
+        run: rm -f /tmp/training_wellness_context.json
 
       - name: Validate post-coach training data
         run: python "träning/scripts/validate_training_data.py"
