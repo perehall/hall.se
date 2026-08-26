@@ -123,7 +123,7 @@ class WeeklyRolloverTests(unittest.TestCase):
         self.assertEqual(promoted["meta"]["week"], 35)
         self.assertNotIn("state", promoted)
         self.assertNotIn("week_key", promoted)
-        self.assertNotIn("planning_status", promoted["days"][0])
+        self.assertEqual(promoted["days"][0]["planning_status"], "fixed")
         self.assertEqual(promoted["days"][0]["sport"], "enduro")
         self.assertEqual(promoted["days"][0]["classification"], "training")
         self.assertTrue(promoted["days"][0]["dose_open"])
