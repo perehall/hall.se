@@ -54,6 +54,19 @@ class RenderPipelineTests(unittest.TestCase):
         self.assertTrue(all(check is True for _, check, _ in calls))
         self.assertTrue(all(cwd == REPO_ROOT for _, _, cwd in calls))
 
+    def test_pages_deploy_builds_and_validates_before_upload(self):
+        workflow = (REPO_ROOT / ".github" / "workflows" / "deploy-pages.yml").read_text(
+            encoding="utf-8"
+        )
+        render = 'python "träning/scripts/render_training_site.py"'
+        upload = "uses: actions/upload-pages-artifact@v4"
+        deploy = "uses: actions/deploy-pages@v4"
+        self.assertIn(render, workflow)
+        self.assertIn(upload, workflow)
+        self.assertIn(deploy, workflow)
+        self.assertLess(workflow.index(render), workflow.index(upload))
+        self.assertLess(workflow.index(upload), workflow.index(deploy))
+
 
 if __name__ == "__main__":
     unittest.main()
