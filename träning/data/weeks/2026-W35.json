@@ -4,7 +4,7 @@
   "week_start": "2026-08-24",
   "week_end": "2026-08-30",
   "created_at_utc": "2026-08-24T06:32:25.878995+00:00",
-  "updated_at_utc": "2026-08-26T11:56:32.502908+00:00",
+  "updated_at_utc": "2026-08-26T14:29:59.443009+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -56,7 +56,7 @@
       {
         "date": "2026-08-26",
         "label": "Onsdag",
-        "status": "planned",
+        "status": "conditional",
         "session": "Simning alt. swimrun · aerob/teknik · omkring 60 min",
         "reason": "Aerob multisportdag mellan löpkvalitetspassen. Simning är förstahandsvalet för låg mekanisk belastning; swimrun är ett likvärdigt planalternativ och bedöms efter den faktiska intensiteten om det väljs.",
         "development_focus": "Simning: tidigt grepp och lugn kroppslinje. Swimrun: håll löpningen avspänd och undvik att göra dagen till ett oplanerat tröskelpass.",
@@ -68,7 +68,14 @@
         "stimuli": [
           "swim_aerobic",
           "swim_technique"
-        ]
+        ],
+        "original_session": "Simning alt. swimrun · aerob/teknik · omkring 60 min",
+        "auto_coach": {
+          "action": "reduce",
+          "reason": "Veckans ackumulerade närbelastning minskar säker marginal för full backdos på fredag.",
+          "applied_at_utc": "2026-08-26T14:29:58.934498+00:00"
+        },
+        "coach_adjustment": "Skala ned passet. Håll fredagspasset som backkvalitet men gör dosen konservativ: planera för färre upprepningar eller kortare backe än ursprungligt tänkt och utvärdera fredag morgon; prioritera teknisk kvalitet framför volym. Justera slutlig dos först efter torsdagens MTB och morgonrapport fredag."
       },
       {
         "date": "2026-08-27",
@@ -218,11 +225,11 @@
       "activity_id": 19897382163,
       "activity_date": "2026-08-25",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-08-26T11:56:32.001142+00:00",
+      "generated_at_utc": "2026-08-26T14:29:58.934952+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Tröskelpass genomfört men nedskalat enligt coachens anvisning (3×8 min), känsla något sämre än föregående vecka.",
-        "load_interpretation": "Dagens löpkvalitet låg under ursprungligt mål pga skala‑ner; måndagens enduro+styrka bidrog till ackumulerad belastning.",
+        "summary": "Tisdagens tröskel genomförd som 3×8 min, något långsammare än förra veckan och utan känsla av förbättring; påverkar fredagens backpassdos.",
+        "load_interpretation": "Två löpkvaliteter inom 5 dagar plus måndagens enduro+styrka ökar närbelastningen som påverkar dosen för fredag.",
         "confidence": "medium",
         "facts": [
           "Run: 10,34 km · 51:34 · 75 m+ · snittpuls 144,8 · maxpuls 165.",
@@ -230,25 +237,25 @@
           "Planstatus 2026-08-25: dagens planerade pass är genomfört i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Nedskalningen var lämplig; subjektiv känsla och tempo något sämre innebär inte behov av ytterligare vila.",
-          "Blockets skyddade stimulus run_threshold är uppfyllt konservativt för veckan."
+          "Tisdagens kvalitet var redan nedskalat enligt plan och genomförd variant ger inget skäl att ytterligare öka intensitet.",
+          "Fredagens backkvalitet bör bestämmas konservativt efter att ta hänsyn till måndagsbelastning och dagens upplevda utförande; dosen bör därför hållas öppen eller lätt reducerad."
         ],
         "unknowns": [
-          "Exakt lokal bentrötthet före/frånvaro av muskelsmärta kan ändra fredagens backdos.",
-          "Om användaren rapporterar oförändrad eller förbättrad dagskänsla imorgon kan ursprunglig 3×10 övervägas för framtida pass.",
-          "Eventuell högintensiv belastning under enduron (svår att kvantifiera) kan påverka absorberbarheten."
+          "Subjektiv dagskänsla inför fredag (morgonrapport) kan ändra dosen.",
+          "Detaljer om eventuell lokal bentrötthet eller löpstyvhet saknas.",
+          "Exakt planerat antal backrepetitioner för fredag var fortfarande öppen i planen."
         ]
       },
       "plan_action": {
-        "action": "keep",
+        "action": "reduce",
         "target_date": "2026-08-26",
-        "reason": "Dagens kvalitet uppfyllde blockets tröskelstimulus konservativt och återhämtningsunderlaget stödjer fortsatt plan.",
-        "recommendation": "Behåll planerad simning (alternativ swimrun) idag som lugn aerob/teknik; håll intensiteten kontrollerad och undvik hårda löpinslag. Vid morgondagens känsla bra: fortsätt enligt plan; vid onormal trötthet: vila eller mycket lätt simning.",
+        "reason": "Veckans ackumulerade närbelastning minskar säker marginal för full backdos på fredag.",
+        "recommendation": "Håll fredagspasset som backkvalitet men gör dosen konservativ: planera för färre upprepningar eller kortare backe än ursprungligt tänkt och utvärdera fredag morgon; prioritera teknisk kvalitet framför volym. Justera slutlig dos först efter torsdagens MTB och morgonrapport fredag.",
         "requires_approval": false
       },
       "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
+        "applied": true,
+        "note": "Konservativ ändring applicerad på 2026-08-26: reduce."
       }
     },
     {
