@@ -22,6 +22,24 @@ SPORT_GROUPS = {
     "WeightTraining": "Styrka",
 }
 
+OUTDOOR_PLAN_SPORTS = {"run", "bike", "enduro", "swimrun"}
+OUTDOOR_SESSION_TOKENS = (
+    "enduro",
+    "swimrun",
+    "öppet vatten",
+    "open water",
+    "havssim",
+    "sjösim",
+)
+INDOOR_SESSION_TOKENS = (
+    "inomhus",
+    "löpband",
+    "treadmill",
+    "zwift",
+    "trainer",
+    "spinning",
+)
+
 WEATHER_SYMBOLS = {
     1: "Klart",
     2: "Mest klart",
@@ -78,6 +96,17 @@ def fmt_decimal(value):
 def local_date(activity):
     value = activity.get("start_date_local") or ""
     return value[:10] if len(value) >= 10 else ""
+
+
+def day_is_outdoor(day):
+    sport = str(day.get("sport") or "").strip().lower()
+    session = str(day.get("session") or "").strip().lower()
+
+    if any(token in session for token in INDOOR_SESSION_TOKENS):
+        return False
+    if sport in OUTDOOR_PLAN_SPORTS:
+        return True
+    return any(token in session for token in OUTDOOR_SESSION_TOKENS)
 
 
 def replace_between(text, start_marker, end_marker, replacement):
@@ -143,7 +172,7 @@ def weather_icon_svg(symbol):
     )
 
 
-def weather_html(date, forecast, weather_status):
+def weather_html(date, forecast, weather_status, scope):
     location = (forecast.get("location") or {}).get("name") or "Oxelösund"
     parts = []
 
@@ -177,6 +206,7 @@ def weather_html(date, forecast, weather_status):
     detail = " · ".join(parts)
     return (
         f'  <div class="next-weather" data-weather-date="{html.escape(date)}" '
+        f'data-weather-scope="{html.escape(scope)}" '
         f'style="color:#475569;font-size:.82rem;margin-top:5px">'
         f'<strong>Väder · {html.escape(location)}</strong> · {icon}{html.escape(detail)}</div>\n'
     )
@@ -267,18 +297,36 @@ page = replace_between(
 
 weather_by_date = weather.get("daily", {})
 weather_status = weather.get("status", "unavailable")
+outdoor_weather_days = []
 for day in plan.get("days", []):
     date = day.get("date")
     forecast = weather_by_date.get(date)
-    if not forecast:
+    if not forecast or not day_is_outdoor(day):
         continue
-    marker = f'data-weather-date="{date}"'
-    if marker in page:
-        continue
-    session_line = f'  <div>{html.escape(day.get("session", ""))}</div>\n'
-    forecast_html = weather_html(date, forecast, weather_status)
-    if forecast_html and session_line in page:
-        page = page.replace(session_line, session_line + forecast_html, 1)
+
+    outdoor_weather_days.append(date)
+    session = html.escape(day.get("session", ""))
+
+    # Compact "Kommande dagar" row.
+    next_marker = f'data-weather-date="{date}" data-weather-scope="next"'
+    next_session_line = f'  <div>{session}</div>\n'
+    if next_marker not in page and next_session_line in page:
+        page = page.replace(
+            next_session_line,
+            next_session_line + weather_html(date, forecast, weather_status, "next"),
+            1,
+        )
+
+    # Full day card. This is the canonical weather placement and must exist
+    # for every outdoor plan day for which SMHI has a forecast.
+    day_marker = f'data-weather-date="{date}" data-weather-scope="day"'
+    day_session_line = f'  <div class="session">{session}</div>\n'
+    if day_marker not in page and day_session_line in page:
+        page = page.replace(
+            day_session_line,
+            day_session_line + weather_html(date, forecast, weather_status, "day"),
+            1,
+        )
 
 footer_weather = (
     ' · Väderprognos: <a href="https://www.smhi.se/" target="_blank" rel="noopener" '
@@ -300,12 +348,9 @@ required = [
     '<div class="dashboard-title">Grenfördelning · passtid</div>',
     'standardplats Oxelösund om inget annat anges.',
 ]
-if any(
-    f'data-weather-date="{date}"' in rendered
-    and isinstance(forecast, dict)
-    and forecast.get("symbol_code") is not None
-    for date, forecast in weather_by_date.items()
-):
+for date in outdoor_weather_days:
+    required.append(f'data-weather-date="{date}" data-weather-scope="day"')
+if outdoor_weather_days:
     required.append('class="weather-icon"')
 for group, seconds in sport_seconds.items():
     required.append(
