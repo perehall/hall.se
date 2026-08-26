@@ -18,6 +18,7 @@ on:
       - "träning/data/plan.json"
       - "träning/data/upcoming_week.json"
       - "träning/data/goal.json"
+      - "träning/data/training_strategy.json"
       - "träning/data/activity_overrides.json"
       - "träning/data/sport_icons.json"
       - "träning/data/settings.json"
@@ -64,6 +65,9 @@ jobs:
           python "träning/scripts/render_training_site.py"
           test -s "träning/index.html"
           grep -Fq '<section class="dashboard"' "träning/index.html"
+          grep -Fq '<section class="training-brain"' "träning/index.html"
+          grep -Fq 'Nästa beslut' "träning/index.html"
+          grep -Fq 'Aktuellt block' "träning/index.html"
 
       - name: Diff hygiene
         run: git diff --check

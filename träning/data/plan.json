@@ -18,7 +18,13 @@
       "development_focus": "Enduro: avslappnad teknik och tidiga linjeval. Styrka: ren rörelsekvalitet och lämna marginal i benen inför tisdagens löpning.",
       "sport": "strength",
       "dose_open": true,
-      "manual_lock": true
+      "manual_lock": true,
+      "priority_role": "anchor",
+      "stimuli": [
+        "enduro_technical",
+        "strength_unilateral",
+        "strength_core"
+      ]
     },
     {
       "date": "2026-08-25",
@@ -34,7 +40,11 @@
         "reason": "Ackumulerad belastning idag minskar säker marginal för planerad löpkvalitet.",
         "applied_at_utc": "2026-08-24T19:32:34.872032+00:00"
       },
-      "coach_adjustment": "Skala ned passet. Skala ner tisdagens kvalitet till 3×8 min/90 s jogg med samma intensitetsmål; behåll fokus på jämn ansträngning. Om subjektiv dagskänsla tisdag morgon är god kan ursprunglig 3×10 min återställas efter bedömning."
+      "coach_adjustment": "Skala ned passet. Skala ner tisdagens kvalitet till 3×8 min/90 s jogg med samma intensitetsmål; behåll fokus på jämn ansträngning. Om subjektiv dagskänsla tisdag morgon är god kan ursprunglig 3×10 min återställas efter bedömning.",
+      "priority_role": "anchor",
+      "stimuli": [
+        "run_threshold"
+      ]
     },
     {
       "date": "2026-08-26",
@@ -46,6 +56,11 @@
       "sport": "swim",
       "alternative_sports": [
         "swimrun"
+      ],
+      "priority_role": "flex",
+      "stimuli": [
+        "swim_aerobic",
+        "swim_technique"
       ]
     },
     {
@@ -56,7 +71,12 @@
       "reason": "MTB-specifik utveckling utan att på förhand ta bort fredagens löpkvalitet. Teknik och flyt prioriteras; faktisk fysiologisk och lokal benbelastning avgör fredagens backdos.",
       "development_focus": "Blick genom kurvan, bromsa klart före svängen och prioritera linje/flyt framför att jaga segmentfart.",
       "sport": "bike",
-      "dose_open": true
+      "dose_open": true,
+      "priority_role": "flex",
+      "stimuli": [
+        "mtb_technical",
+        "mtb_aerobic"
+      ]
     },
     {
       "date": "2026-08-28",
@@ -67,8 +87,13 @@
       "development_focus": "Spring kraftfullt men kontrollerat med stabil hållning, aktiv höft och bibehållen teknik hela vägen upp; ingen maximal sprint och ingen jakt på syra.",
       "sport": "run",
       "dose_open": true,
-      "block": "hill-quality-4w",
-      "block_week": 1
+      "block": "run-threshold-hill-4w",
+      "block_week": 1,
+      "priority_role": "anchor",
+      "stimuli": [
+        "run_hill_quality"
+      ],
+      "decision_note": "Backdosen fastställs först efter torsdagens faktiska MTB-belastning; passets roll som veckans andra löpkvalitet ligger fast om belastningen kan absorberas."
     },
     {
       "date": "2026-08-29",
@@ -78,7 +103,12 @@
       "reason": "Bygger cykelspecifik uthållighet och teknisk tid på cykeln. Distansens exakta omfattning bestäms när fredagens backkvalitet och veckans samlade faktiska belastning är kända.",
       "development_focus": "Ekonomisk körning och stabil teknik när tiden på cykeln ökar; undvik att varje backe blir ett hårt intervall.",
       "sport": "bike",
-      "dose_open": true
+      "dose_open": true,
+      "priority_role": "flex",
+      "stimuli": [
+        "mtb_aerobic",
+        "mtb_technical"
+      ]
     },
     {
       "date": "2026-08-30",
@@ -88,7 +118,11 @@
       "reason": "Tredje löpstimulus för veckan och viktig för löputvecklingen. Exakt omfattning bestäms efter lördagens MTB och veckans faktiska belastning; grundavsikten är lugn distans, inte ytterligare kvalitet.",
       "development_focus": "Avslappnad rytm och jämn ansträngning; låt distansen bygga tålighet utan att driva intensiteten.",
       "sport": "run",
-      "dose_open": true
+      "dose_open": true,
+      "priority_role": "flex",
+      "stimuli": [
+        "run_easy_distance"
+      ]
     }
   ],
   "strength_template": [

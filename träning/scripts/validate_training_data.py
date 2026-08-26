@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 
 from coach_rules import activity_local_date, canonical_activity_fact
+from strategy_contracts import StrategyContractError, validate_training_strategy
 from training_contracts import (
     ContractError,
     require,
@@ -16,6 +17,7 @@ PLAN_FILE = ROOT / "data" / "plan.json"
 UPCOMING_FILE = ROOT / "data" / "upcoming_week.json"
 ACTIVITIES_FILE = ROOT / "data" / "activities.json"
 COACH_FILE = ROOT / "data" / "coach.json"
+STRATEGY_FILE = ROOT / "data" / "training_strategy.json"
 
 
 def load(path):
@@ -29,10 +31,15 @@ def main():
     upcoming = load(UPCOMING_FILE)
     activities_state = load(ACTIVITIES_FILE)
     coach = load(COACH_FILE)
+    strategy = load(STRATEGY_FILE)
 
     validate_plan_document(plan)
     validate_plan_document(upcoming, upcoming=True)
     validate_activities_document(activities_state)
+    try:
+        validate_training_strategy(strategy)
+    except StrategyContractError as exc:
+        raise ContractError(str(exc)) from exc
 
     activities = activities_state.get("activities") or []
     by_id = {str(activity.get("id")): activity for activity in activities if activity.get("id") is not None}
@@ -55,7 +62,7 @@ def main():
         )
 
     print(
-        "Datakontrakt OK: plan v3, kommande vecka v3, aktiviteter v2 och coach-state är konsistenta."
+        "Datakontrakt OK: plan v3, kommande vecka v3, aktiviteter v2, strategi v1 och coach-state är konsistenta."
     )
 
 
