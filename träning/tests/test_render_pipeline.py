@@ -25,6 +25,7 @@ EXPECTED_PIPELINE = (
     "finalize_sport_icons.py",
     "finalize_day_session_icons.py",
     "finalize_workout_history.py",
+    "finalize_signal_ui.py",
     "build_home.py",
     "finalize_goal_link_layout.py",
     "publish_goal_cache_bypass.py",
@@ -45,6 +46,8 @@ class RenderPipelineTests(unittest.TestCase):
         self.assertLess(PIPELINE.index("finalize_week_review_ui.py"), PIPELINE.index("check_week_review_ui.py"))
         self.assertLess(PIPELINE.index("finalize_navigation_ui.py"), PIPELINE.index("finalize_training_brain_ui.py"))
         self.assertLess(PIPELINE.index("finalize_training_brain_ui.py"), PIPELINE.index("finalize_progression_ui.py"))
+        self.assertLess(PIPELINE.index("finalize_workout_history.py"), PIPELINE.index("finalize_signal_ui.py"))
+        self.assertLess(PIPELINE.index("finalize_signal_ui.py"), PIPELINE.index("build_home.py"))
         self.assertLess(PIPELINE.index("publish_goal_cache_bypass.py"), PIPELINE.index("finalize_generated_whitespace.py"))
         self.assertLess(PIPELINE.index("finalize_generated_whitespace.py"), PIPELINE.index("validate_site_contracts.py"))
 
