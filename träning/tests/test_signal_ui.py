@@ -21,19 +21,19 @@ class SignalUiTests(unittest.TestCase):
 <section class="training-brain"><div class="brain-why"><strong>Varför:</strong> Låg mekanisk belastning.</div><div class="brain-note">Beslutet väntar på torsdagens faktiska belastning innan fredagens dos låses.</div></section>
 <section class="dashboard" aria-label="Veckoöversikt"><div class="metrics"></div><div class="dashboard-grid"></div><div class="dashboard-card"><div class="dashboard-title">Nästa dagar</div></div></section>
 <h2 class="section">Aktuell vecka</h2>
-<div class="day" id="dag-2026-08-24"><div class="daytop"></div><div class="session">Enduro</div><div class="reason">Motivering.</div><div class="pass"><div class="pass-title">Automatiskt från Strava</div><div>Data</div></div><div class="coach yoda-v2"><div class="coach-next"><span class="coach-next-label">Nästa steg</span><div>Gammalt råd.</div></div></div><div class="development-focus"><strong>Utvecklingsfokus</strong><span>Fokus.</span></div></div>
+<div class="day" id="dag-2026-08-24"><div class="daytop"></div><div class="session">Löpning</div><div class="reason">Motivering.</div><div class="pass"><div class="pass-title">Automatiskt från Strava</div><div>Data</div></div><div class="coach yoda-v2"><div class="coach-next"><span class="coach-next-label">Nästa steg</span><div>Gammalt råd.</div></div></div><div class="development-focus"><strong>Utvecklingsfokus</strong><span>Fokus.</span></div></div>
 <div class="day" id="dag-2026-08-26"><div class="daytop"></div><div class="session">Simning</div><div class="reason">Motivering.</div><div class="development-focus"><strong>Utvecklingsfokus</strong><span>Fokus.</span></div></div>
 <div class="day" id="dag-2026-08-30"><div class="daytop"></div><div class="session">Distans</div><div class="reason">Motivering.</div><div class="development-focus"><strong>Utvecklingsfokus</strong><span>Fokus.</span></div></div>
 <h2 class="section">Styrkemall framåt</h2><div class="principles"><div class="principle">Bulgarian split squat.</div></div>
 <footer>Footer</footer></body></html>'''
         plan = {
             "days": [
-                {"date": "2026-08-24", "sport": "enduro", "session": "Enduro"},
+                {"date": "2026-08-24", "sport": "run", "session": "Löpning"},
                 {"date": "2026-08-26", "sport": "swim", "session": "Simning"},
                 {"date": "2026-08-30", "sport": "run", "session": "Distans"},
             ]
         }
-        activities = [{"sport_type": "Ride", "display_label": "Enduro", "start_date_local": "2026-08-24T18:00:00", "semantic_sport": "enduro"}]
+        activities = [{"sport_type": "Run", "display_label": "Löpning", "start_date_local": "2026-08-24T18:00:00"}]
         rendered = apply_signal_ui(
             page,
             ["Bulgarian split squat.", "Vad + soleus."],
