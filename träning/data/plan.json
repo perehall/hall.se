@@ -49,26 +49,25 @@
     {
       "date": "2026-08-26",
       "label": "Onsdag",
-      "status": "planned",
-      "session": "Simning alt. swimrun · aerob/teknik · omkring 60 min",
-      "reason": "Aerob multisportdag mellan löpkvalitetspassen. Simning är förstahandsvalet för låg mekanisk belastning; swimrun är ett likvärdigt planalternativ och bedöms efter den faktiska intensiteten om det väljs.",
-      "development_focus": "Simning: tidigt grepp och lugn kroppslinje. Swimrun: håll löpningen avspänd och undvik att göra dagen till ett oplanerat tröskelpass.",
-      "sport": "swim",
-      "alternative_sports": [
-        "swimrun"
-      ],
+      "status": "completed",
+      "session": "Swimrun · Jogersö Extreme · 1 varv · 6,80 km · 56:25",
+      "reason": "Genomfört swimrunpass. Registrerad snittpuls 131,9 ska inte tolkas som en fullgod intensitetsbeskrivning eftersom pulsen föll bort under cirka 2 km där ansträngningen enligt egen rapport var minst Z3 trots att datan ser ut som Z1.",
+      "development_focus": "Faktisk belastning väger tyngre än felaktig pulszonsfördelning; passet behandlas som mer än en ren aerob återhämtningsdag inför torsdag och fredag.",
+      "sport": "swimrun",
+      "activity_id": 19911120461,
       "priority_role": "flex",
       "stimuli": [
-        "swim_aerobic",
-        "swim_technique"
-      ]
+        "swimrun_aerobic",
+        "run_moderate_hard"
+      ],
+      "data_quality_note": "Pulsbortfall under cirka 2 km. Registrerad Z1 på den delen är felaktig; faktisk intensitet bedöms av användaren som minst Z3."
     },
     {
       "date": "2026-08-27",
       "label": "Torsdag",
       "status": "conditional",
       "session": "MTB/XC · teknik + aerob stig",
-      "reason": "MTB-specifik utveckling utan att på förhand ta bort fredagens löpkvalitet. Teknik och flyt prioriteras; faktisk fysiologisk och lokal benbelastning avgör fredagens backdos.",
+      "reason": "Onsdagens swimrun blev inte enbart aerob och pulsdatan underskattar belastningen under cirka 2 km. MTB hålls därför teknisk och lugn utan upprepade hårda stigningar; fredagens backdos avgörs efter faktisk återhämtning.",
       "development_focus": "Blick genom kurvan, bromsa klart före svängen och prioritera linje/flyt framför att jaga segmentfart.",
       "sport": "bike",
       "dose_open": true,
@@ -83,7 +82,8 @@
         "reason": "Samlade löppassen 23–26 aug ökar belastningen inför fredagens backpass.",
         "applied_at_utc": "2026-08-26T17:53:27.079455+00:00"
       },
-      "coach_adjustment": "Skala ned passet. Skala ner torsdagens MTB till teknisk, lugn tur utan upprepade hårda stigningar; håll fredagens backpass konservativt—begränsa antal repetitioner och behåll fokus på teknik och kontrollerad kraft."
+      "coach_adjustment": "Skala ned passet. Skala ner torsdagens MTB till teknisk, lugn tur utan upprepade hårda stigningar; håll fredagens backpass konservativt—begränsa antal repetitioner och behåll fokus på teknik och kontrollerad kraft.",
+      "manual_note": "Onsdagens pass är korrigerat till swimrun, inte vanlig löpning. Pulsen tappades under cirka 2 km med faktisk intensitet minst Z3 enligt användarrapport."
     },
     {
       "date": "2026-08-28",
@@ -100,7 +100,7 @@
       "stimuli": [
         "run_hill_quality"
       ],
-      "decision_note": "Backdosen fastställs först efter torsdagens faktiska MTB-belastning; passets roll som veckans andra löpkvalitet ligger fast om belastningen kan absorberas."
+      "decision_note": "Backdosen fastställs först efter torsdagens faktiska MTB-belastning och återhämtningen från onsdagens swimrun; passets roll som veckans andra löpkvalitet ligger fast endast om belastningen kan absorberas."
     },
     {
       "date": "2026-08-29",
