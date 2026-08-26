@@ -11,7 +11,7 @@ from rollover_week import promote_upcoming  # noqa: E402
 
 
 class WeekTransitionSemanticsTests(unittest.TestCase):
-    def test_undosed_training_becomes_open_but_recreation_stays_planned(self):
+    def test_undosed_training_becomes_open_but_fixed_enduro_school_stays_planned(self):
         upcoming = {
             "state": "preliminary",
             "week_key": "2026-W35",
@@ -31,8 +31,10 @@ class WeekTransitionSemanticsTests(unittest.TestCase):
                     "status": "planned",
                     "planning_status": "fixed",
                     "sport": "enduro",
+                    "classification": "training",
+                    "dose_open": True,
                     "session": "Enduroskola",
-                    "reason": "Fast kalenderaktivitet.",
+                    "reason": "Fast kalenderaktivitet och faktisk träningsbelastning.",
                 },
                 {
                     "date": "2026-08-25",
@@ -47,7 +49,8 @@ class WeekTransitionSemanticsTests(unittest.TestCase):
         }
         promoted = promote_upcoming(upcoming)
         self.assertEqual(promoted["days"][0]["status"], "planned")
-        self.assertEqual(promoted["days"][0]["classification"], "recreation")
+        self.assertEqual(promoted["days"][0]["classification"], "training")
+        self.assertTrue(promoted["days"][0]["dose_open"])
         self.assertEqual(promoted["days"][1]["status"], "open")
         self.assertEqual(promoted["days"][1]["rollover_status_from"], "preliminary")
 
