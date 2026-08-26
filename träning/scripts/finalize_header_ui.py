@@ -6,11 +6,14 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 CURRENT = ROOT / "index.html"
 ARCHIVE_ROOT = ROOT / "vecka"
-CSS_MARKER = "/* week-header-layout-v6 */"
+CSS_MARKER = "/* week-header-layout-v7 */"
 CSS = """
-/* week-header-layout-v6 */
-.week-heading-row{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}.week-heading-row h1{flex:0 0 auto;margin-bottom:0}.week-focus{min-width:0;color:#334155;font-size:.92rem;font-weight:650;line-height:1.35}.week-focus strong{font-weight:900;color:#0f172a}.header-updated{margin-top:4px;color:#94a3b8;font-size:.74rem;font-weight:500;line-height:1.35}.header-status{margin-top:4px;color:#64748b;font-size:.76rem;font-weight:700;line-height:1.35}.week-period{font-weight:800;color:#334155;white-space:nowrap}.hero.focus-moved h2{display:none}
-@media (max-width:620px){.week-heading-row{display:grid;gap:5px}.week-heading-row h1{margin-bottom:0}.week-focus{font-size:.86rem}.header-updated{font-size:.7rem}.header-status{font-size:.72rem}.week-period{font-size:.92rem}}
+/* week-header-layout-v7 */
+.header-updated{margin-top:4px;color:#94a3b8;font-size:.74rem;font-weight:500;line-height:1.35}
+.header-status{margin-top:4px;color:#64748b;font-size:.76rem;font-weight:700;line-height:1.35}
+.week-period{font-weight:800;color:#334155;white-space:nowrap}
+.hero.week-focus-card{padding:17px 20px}.week-focus-title{margin:0!important;font-size:1.08rem;line-height:1.35;letter-spacing:-.01em}.week-focus-title strong{font-weight:900}.week-focus-details{margin-top:8px}.week-focus-details>summary{cursor:pointer;list-style:none;color:#94a3b8;font-size:.76rem;font-weight:800}.week-focus-details>summary::-webkit-details-marker{display:none}.week-focus-details>summary:after{content:" +"}.week-focus-details[open]>summary:after{content:" −"}.week-focus-details p{margin:8px 0 0!important;color:#cbd5e1!important;font-size:.9rem;line-height:1.5}
+@media (max-width:520px){.header-updated{font-size:.7rem}.header-status{font-size:.72rem}.week-period{font-size:.92rem}.hero.week-focus-card{padding:15px 17px}.week-focus-title{font-size:1rem}.week-focus-details p{font-size:.86rem}}
 """.strip()
 
 HEADER_RE = re.compile(
@@ -47,6 +50,7 @@ HISTORY_RE = re.compile(
     re.I,
 )
 STATIC_META = {"preliminär plan"}
+OLD_HEADER_MARKER_RE = re.compile(r'/\* week-header-layout-v[2-6] \*/')
 
 
 def format_meta(meta):
@@ -74,9 +78,12 @@ def extract_focus(page):
     if not match:
         raise RuntimeError("Header UI: veckofokus saknas i hero")
     focus = html.unescape(re.sub(r"\s+", " ", match.group("focus"))).strip()
+    principle = html.unescape(re.sub(r"\s+", " ", match.group("principle"))).strip()
     if not focus:
         raise RuntimeError("Header UI: tomt veckofokus")
-    return focus, match
+    if not principle:
+        raise RuntimeError("Header UI: tom planidé")
+    return focus, principle, match
 
 
 def update_page(path):
@@ -84,13 +91,13 @@ def update_page(path):
 
     match = HEADER_RE.search(page)
     if not match:
-        # Already finalized pages are left untouched; build.py emits a fresh raw
-        # header for the current page on every pipeline run.
-        if CSS_MARKER in page:
+        # Historical snapshots already finalized by an older layout remain stable.
+        # build.py emits a fresh raw header for the active page on every render.
+        if CSS_MARKER in page or OLD_HEADER_MARKER_RE.search(page):
             return
         raise RuntimeError(f"Header UI: kunde inte tolka header i {path}")
 
-    focus, hero_match = extract_focus(page)
+    focus, principle, _ = extract_focus(page)
     eyebrow = match.group("eyebrow")
     title = match.group("title")
     period = f'{match.group("period")} till {match.group("end")}'
@@ -99,29 +106,30 @@ def update_page(path):
     replacement = (
         '<header>'
         f'<div class="eyebrow">{eyebrow}</div>'
-        '<div class="week-heading-row">'
         f'<h1>{title}</h1>'
-        f'<div class="week-focus"><strong>Veckofokus:</strong> {html.escape(focus)}</div>'
-        '</div>'
         f'<div class="sub"><strong class="week-period">{period}</strong></div>'
         f'<div class="{meta_class}">{meta}</div>'
         '</header>'
     )
     page = page[:match.start()] + replacement + page[match.end():]
 
-    # The focus now belongs to the heading row; keep the longer weekly principle
-    # in the hero without repeating the title.
     hero_match = HERO_RE.search(page)
     if not hero_match:
         raise RuntimeError(f"Header UI: hero försvann efter headerbyte i {path}")
-    extra = hero_match.group("class_extra") or ""
-    classes = (extra + " focus-moved").strip()
-    hero_replacement = f'<div class="hero {classes}"><p>{hero_match.group("principle")}</p></div>'
+    hero_replacement = (
+        '<div class="hero week-focus-card">'
+        f'<h2 class="week-focus-title"><strong>Veckofokus:</strong> {html.escape(focus)}</h2>'
+        '<details class="week-focus-details">'
+        '<summary>Planidé</summary>'
+        f'<p>{html.escape(principle)}</p>'
+        '</details>'
+        '</div>'
+    )
     page = page[:hero_match.start()] + hero_replacement + page[hero_match.end():]
 
-    # Remove obsolete header layouts before adding the current rule set.
+    # Remove obsolete current-page header layouts before adding the current rule set.
     page = re.sub(
-        r'/\* week-header-layout-v[2345] \*/.*?(?=(?:/\*|</style>))',
+        r'/\* week-header-layout-v[23456] \*/.*?(?=(?:/\*|</style>))',
         '',
         page,
         flags=re.S,
@@ -134,22 +142,26 @@ def update_page(path):
 
     required = [
         '<div class="eyebrow">',
-        '<div class="week-heading-row">',
-        '<div class="week-focus"><strong>Veckofokus:</strong>',
-        html.escape(focus),
+        '<h1>',
         '<div class="sub"><strong class="week-period">',
         f'class="{meta_class}"',
+        '<div class="hero week-focus-card">',
+        '<strong>Veckofokus:</strong>',
+        html.escape(focus),
+        '<summary>Planidé</summary>',
+        html.escape(principle),
         " till ",
         meta,
         CSS_MARKER,
-        'focus-moved',
     ]
     missing = [snippet for snippet in required if snippet not in page]
     if missing:
         raise RuntimeError(f"Header UI-validering misslyckades för {path}: {missing!r}")
 
-    if '<div class="hero"><h2>' in page or '<div class="hero focus-moved"><h2>' in page:
-        raise RuntimeError(f"Header UI: veckofokus dupliceras fortfarande i hero i {path}")
+    if 'class="week-focus"' in page or 'class="week-heading-row"' in page:
+        raise RuntimeError(f"Header UI: veckofokus ligger fortfarande i rubrikraden i {path}")
+    if '<details class="week-focus-details" open' in page:
+        raise RuntimeError(f"Header UI: planidén är inte stängd som standard i {path}")
     if 'class="header-meta"' in page:
         raise RuntimeError(f"Header UI: uppdateringstext ligger fortfarande bredvid eyebrow i {path}")
     if 'class="week-heading"' in page:
@@ -170,7 +182,7 @@ def main():
     for path in existing:
         update_page(path)
 
-    print(f"Header UI OK: veckofokus i rubrikraden på {len(existing)} sida/sidor.")
+    print(f"Header UI OK: veckofokus i hero och planidé infälld på aktiv sida.")
 
 
 if __name__ == "__main__":
