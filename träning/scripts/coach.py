@@ -36,7 +36,7 @@ WELLNESS_CONTEXT_FILE = Path(
 MODEL = os.environ.get("OPENAI_MODEL", "gpt-5-mini")
 COACH_CONTRACT_VERSION = 6
 PRIVATE_WELLNESS_PATTERN = re.compile(
-    r"\b(?:hrv|vilopuls|restinghr|sömn(?:poäng|score)?|sleep(?:secs|score|quality)?|garmin|intervals\.icu)\b"
+    r"\b(?:hrv|vilopuls|restinghr|sömn(?:poäng|score)?|sleep(?:secs|score|quality)?|wellness|garmin|intervals\.icu)\b"
     r"(?:\s*[:=]?\s*[-+]?\d+(?:[.,]\d+)?)?",
     re.IGNORECASE,
 )
@@ -362,7 +362,7 @@ def main():
     coach["contract_version"] = COACH_CONTRACT_VERSION
     COACH_FILE.write_text(json.dumps(coach, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
-    wellness_note = "med privat wellness-kontext" if wellness_context.get("daily") else "utan wellness-kontext"
+    wellness_note = "med privat återhämtningskontext" if wellness_context.get("daily") else "utan återhämtningskontext"
     print(
         f"AI coach: analyserade aktivitet {latest.get('id')} med {MODEL} {wellness_note}. "
         f"Fulfilled={sorted(fulfilled_dates)} ready_targets={ready_dates} deferred={deferred_dates}. {apply_note}"
