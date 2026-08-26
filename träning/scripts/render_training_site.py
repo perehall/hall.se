@@ -25,6 +25,7 @@ PIPELINE = (
     "finalize_day_session_icons.py",
     "finalize_workout_history.py",
     "finalize_signal_ui.py",
+    "finalize_historical_coach_ui.py",
     "build_home.py",
     "finalize_goal_link_layout.py",
     "publish_goal_cache_bypass.py",
