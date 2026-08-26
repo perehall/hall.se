@@ -11,7 +11,9 @@ OVERRIDES = ROOT / "data" / "activity_overrides.json"
 
 ENDURO_NAME_RE = re.compile(r"\b(?:enduro|motocross)\b", re.IGNORECASE)
 MTB_NAME_RE = re.compile(r"\b(?:mtb|xc|mountain\s*bike|cykel)\b", re.IGNORECASE)
+SWIMRUN_NAME_RE = re.compile(r"\bswim\s*-?\s*run\b|\bswimrun\b", re.IGNORECASE)
 ENDURO_NAME_RULE = "mountainbike-explicit-enduro-name-v1"
+SWIMRUN_NAME_RULE = "trailrun-explicit-swimrun-name-v1"
 
 
 def load(path: Path):
@@ -47,19 +49,43 @@ def auto_enduro_candidate(activity):
     return True
 
 
-def apply_auto_semantics(activity):
-    if not auto_enduro_candidate(activity):
-        return False
+def auto_swimrun_candidate(activity):
+    """Return True when a Strava TrailRun explicitly identifies itself as swimrun.
 
-    original = raw_sport(activity)
-    activity["source_sport_type"] = original
-    activity["sport_type"] = "Enduro"
-    activity["display_label"] = "Enduro"
-    activity["sport_normalization"] = {
-        "rule": ENDURO_NAME_RULE,
-        "evidence": ["source_sport_type=MountainBikeRide", "explicit Enduro/Motocross activity name"],
-    }
-    return True
+    Garmin/Strava commonly expose multisport swimrun recordings as TrailRun in
+    this dataset. The explicit activity name is therefore the strongest
+    available semantic signal once the user has named the activity in Strava.
+    """
+    if raw_sport(activity) != "TrailRun":
+        return False
+    name = str(activity.get("name") or "").strip()
+    return bool(name and SWIMRUN_NAME_RE.search(name))
+
+
+def apply_auto_semantics(activity):
+    if auto_enduro_candidate(activity):
+        original = raw_sport(activity)
+        activity["source_sport_type"] = original
+        activity["sport_type"] = "Enduro"
+        activity["display_label"] = "Enduro"
+        activity["sport_normalization"] = {
+            "rule": ENDURO_NAME_RULE,
+            "evidence": ["source_sport_type=MountainBikeRide", "explicit Enduro/Motocross activity name"],
+        }
+        return True
+
+    if auto_swimrun_candidate(activity):
+        original = raw_sport(activity)
+        activity["source_sport_type"] = original
+        activity["sport_type"] = "Swimrun"
+        activity["display_label"] = "Swimrun"
+        activity["sport_normalization"] = {
+            "rule": SWIMRUN_NAME_RULE,
+            "evidence": ["source_sport_type=TrailRun", "explicit Swimrun activity name"],
+        }
+        return True
+
+    return False
 
 
 def apply_override(activity, override, key):
