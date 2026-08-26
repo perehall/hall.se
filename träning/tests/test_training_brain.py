@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS = ROOT / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
-from finalize_training_brain_ui import SECTION_START, apply_ui  # noqa: E402
+from finalize_training_brain_ui import SECTION_START, apply_ui, decorate_focus_card, render_section  # noqa: E402
 from strategy_contracts import StrategyContractError, validate_training_strategy  # noqa: E402
 from training_brain import resolve_block, resolve_next_decision, resolve_today  # noqa: E402
 
@@ -56,12 +56,29 @@ class TrainingBrainTests(unittest.TestCase):
         self.assertEqual(block["evaluation_date"], "2026-09-21")
         self.assertIn("Kontrollerad löptröskel", block["protected_stimuli"])
 
+    def test_primary_ui_contains_only_today_and_next_decision(self):
+        section = render_section(self.plan, {"activities": []}, self.strategy, date(2026, 8, 26))
+        self.assertIn("Idag ·", section)
+        self.assertIn("Nästa beslut", section)
+        self.assertNotIn("Aktuellt block", section)
+        self.assertNotIn("Prioritering just nu", section)
+        self.assertNotIn("brain-tags", section)
+
+    def test_block_context_moves_into_week_focus(self):
+        page = '<div class="hero week-focus-card"><h2>Veckofokus</h2><details class="week-focus-details"><summary>Planidé</summary><p>Veckoplan.</p></details></div>'
+        block = resolve_block(self.strategy, date(2026, 8, 26))
+        rendered = decorate_focus_card(page, block)
+        self.assertIn('class="week-focus-block-meta"', rendered)
+        self.assertIn("vecka 1 av 4", rendered)
+        self.assertIn("utvärdering 21/9", rendered)
+        self.assertIn("Blockhypotes:", rendered)
+
     def test_ui_insertion_is_idempotent(self):
         page = "<html><style></style><body><section class=\"dashboard\"></section></body></html>"
         once = apply_ui(page, f"{SECTION_START}<section>brain</section><!-- training-brain-v1:end -->")
         twice = apply_ui(once, f"{SECTION_START}<section>brain2</section><!-- training-brain-v1:end -->")
         self.assertEqual(twice.count(SECTION_START), 1)
-        self.assertEqual(twice.count("/* training-brain-v1 */"), 1)
+        self.assertEqual(twice.count("/* training-brain-v2 */"), 1)
         self.assertIn("brain2", twice)
         self.assertNotIn(">brain<", twice)
 
