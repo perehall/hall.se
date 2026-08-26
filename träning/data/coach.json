@@ -4,11 +4,11 @@
       "activity_id": 19897382163,
       "activity_date": "2026-08-25",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-08-26T14:29:58.934952+00:00",
+      "generated_at_utc": "2026-08-26T14:48:04.184409+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Tisdagens tröskel genomförd som 3×8 min, något långsammare än förra veckan och utan känsla av förbättring; påverkar fredagens backpassdos.",
-        "load_interpretation": "Två löpkvaliteter inom 5 dagar plus måndagens enduro+styrka ökar närbelastningen som påverkar dosen för fredag.",
+        "summary": "Genomfört tröskelpass skalat enligt coachens ändring; påverkar nästa planade simdag måttligt.",
+        "load_interpretation": "Två hårda löppass (23/8 och 25/8) plus enduro och styrka ger samlad närbelastning som motiverade nedskalning idag.",
         "confidence": "medium",
         "facts": [
           "Run: 10,34 km · 51:34 · 75 m+ · snittpuls 144,8 · maxpuls 165.",
@@ -16,25 +16,25 @@
           "Planstatus 2026-08-25: dagens planerade pass är genomfört i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Tisdagens kvalitet var redan nedskalat enligt plan och genomförd variant ger inget skäl att ytterligare öka intensitet.",
-          "Fredagens backkvalitet bör bestämmas konservativt efter att ta hänsyn till måndagsbelastning och dagens upplevda utförande; dosen bör därför hållas öppen eller lätt reducerad."
+          "Genomfört pass motsvarar coachens redan applicerade reduktion (3×8 min) och behöver inte ytterligare skalas.",
+          "Planerad simdag 26/8 är lämplig som lågmekanisk aerob dag om användaren känner sig ok."
         ],
         "unknowns": [
-          "Subjektiv dagskänsla inför fredag (morgonrapport) kan ändra dosen.",
-          "Detaljer om eventuell lokal bentrötthet eller löpstyvhet saknas.",
-          "Exakt planerat antal backrepetitioner för fredag var fortfarande öppen i planen."
+          "Subjektiv dagskänsla i dag (26/8) kan påverka om sim eller helt vilodag är bäst.",
+          "Exakt lokal bentrötthet före fredagens backpass okänt utan morgonrapport.",
+          "Detaljerad intensitetsprofil för enduropassen saknar standardiserad belastningsvärdering."
         ]
       },
       "plan_action": {
-        "action": "reduce",
+        "action": "keep",
         "target_date": "2026-08-26",
-        "reason": "Veckans ackumulerade närbelastning minskar säker marginal för full backdos på fredag.",
-        "recommendation": "Håll fredagspasset som backkvalitet men gör dosen konservativ: planera för färre upprepningar eller kortare backe än ursprungligt tänkt och utvärdera fredag morgon; prioritera teknisk kvalitet framför volym. Justera slutlig dos först efter torsdagens MTB och morgonrapport fredag.",
+        "reason": "Dagens simdag är lågmekanisk och blockets löpstimuli skyddas utan att öka belastningen.",
+        "recommendation": "Behåll simning (~60 min lugn teknik/aerob) som planerat; välj swimrun endast om löpningen hålls mycket lätt och kontrollerad. Skicka morgonrapport om lokal bentrötthet innan torsdagens MTB.",
         "requires_approval": false
       },
       "auto_apply": {
-        "applied": true,
-        "note": "Konservativ ändring applicerad på 2026-08-26: reduce."
+        "applied": false,
+        "note": "Ingen automatisk planändring."
       }
     },
     {
@@ -375,7 +375,7 @@
       }
     }
   ],
-  "last_trigger_hash": "354569c54ee2fc4801f0d542a5c6955c156e801bce883750baac67a3e0132756",
-  "last_run_utc": "2026-08-26T14:29:58.934952+00:00",
+  "last_trigger_hash": "5c89ec53e254154b3f82a3795716a0e3ebc2abca7d12c5236a4d39fa69530422",
+  "last_run_utc": "2026-08-26T14:48:04.184409+00:00",
   "contract_version": 6
 }
