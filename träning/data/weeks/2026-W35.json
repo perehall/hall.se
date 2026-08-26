@@ -4,7 +4,7 @@
   "week_start": "2026-08-24",
   "week_end": "2026-08-30",
   "created_at_utc": "2026-08-24T06:32:25.878995+00:00",
-  "updated_at_utc": "2026-08-25T21:59:25.388956+00:00",
+  "updated_at_utc": "2026-08-26T03:38:36.354230+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -184,11 +184,11 @@
       "activity_id": 19897382163,
       "activity_date": "2026-08-25",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-08-25T20:53:04.306845+00:00",
+      "generated_at_utc": "2026-08-26T03:38:36.024657+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Tisdagens tröskel (3×8 min enligt faktisk genomförande) fullföljd; påverkar onsdagens simpass-bedömning.",
-        "load_interpretation": "Dagens tröskelpass följt av två föregående dagar med enduro+styrka ger måttlig närbelastning som minskar säker marginal för tung löpträning nästa dag.",
+        "summary": "Tisdagens tröskel nedskalad enligt plan; påverkar onsdagens simdag marginellt men ej nödvändigt att vila.",
+        "load_interpretation": "Två dagars större aktivitet (måndag enduro+styrka, tisdag tröskel 3×8) ger hög närbelastning de senaste 48 timmarna.",
         "confidence": "medium",
         "facts": [
           "Run: 10,34 km · 51:34 · 75 m+ · snittpuls 144,8 · maxpuls 165.",
@@ -196,20 +196,20 @@
           "Planstatus 2026-08-25: dagens planerade pass är genomfört i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Dagens kvalitet skalades enligt plannedskalning och är redan erhållen som 3×8 min.",
-          "Sannolik extra lokal trötthet i benen efter måndagens enduro+styrka kan göra onsdagens sim förstaval för återhämtning framför intensivt swimrun."
+          "Genomfört tisdagspass matchar coachens redan applicerade nedskalning till 3×8 min.",
+          "Samlad belastning må–tis är tillräcklig för att hålla onsdag som aerob/teknisk simning, inte kräva extra vila."
         ],
         "unknowns": [
-          "Subjektiv dagskänsla och sömn inför onsdag saknas och kan ändra beslut.",
-          "Exakt intensitet/bentrötthet efter dagens pass utöver användarrapport saknas.",
-          "Eventuell planändring från användaren eller transport/tidsbegränsningar för onsdag saknas."
+          "Subjektiv dagskänsla och sömn inför onsdag saknas och kan påverka behov av vila.",
+          "Detaljerad lokal bentrötthet efter styrka/enduro finns ej specificerad.",
+          "Intensiteten under måndagens enduro (rapport varierande) har osäker inverkan på neuromuskulär återhämtning."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-08-26",
-        "reason": "Onsdagens simpass är lämpligt som återhämtningsdag efter ackumulerad närbelastning och planens multisportmål.",
-        "recommendation": "Behåll plan: gör simning (eller lugn swimrun) cirka 60 min med fokus teknik och låg belastning; undvik att göra det till ett tröskelpass.",
+        "reason": "Samlad närbelastning stödjer att simning som aerob återhämtningsdag är lämplig.",
+        "recommendation": "Behåll planerad simning (~60 min) som lugn aerob/teknik; håll intensiteten låg och undvik att göra passet till ett tröskelpass. Om du känner lokal bentrötthet eller dålig dagskänsla: byt till vila eller mycket lätt rörlighet.",
         "requires_approval": false
       },
       "auto_apply": {
