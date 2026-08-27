@@ -2,7 +2,7 @@
 from datetime import date
 
 
-STRATEGY_SCHEMA_VERSION = 2
+STRATEGY_SCHEMA_VERSION = 3
 VALID_PRIORITY_MODES = {"develop", "maintain_develop", "develop_cautiously", "supporting"}
 VALID_READINESS_STATES = {"keep_option_open", "active_focus", "deprioritized"}
 VALID_DEFAULT_ACTIONS = {"keep", "review"}
@@ -40,14 +40,15 @@ def validate_training_strategy(document):
     hierarchy = document.get("planning_hierarchy")
     require(isinstance(hierarchy, dict), "strategi.planning_hierarchy saknas")
     require(
-        hierarchy.get("order") == ["north_star", "development_block", "week", "near_term"],
-        "strategi.planning_hierarchy.order måste vara north_star → development_block → week → near_term",
+        hierarchy.get("order") == ["north_star", "mesocycle", "week", "near_term", "session"],
+        "strategi.planning_hierarchy.order måste vara north_star → mesocycle → week → near_term → session",
     )
     for field in (
         "north_star_role",
-        "development_block_role",
+        "mesocycle_role",
         "week_role",
         "near_term_role",
+        "session_role",
         "adaptation_rule",
     ):
         nonempty_string(hierarchy.get(field), f"strategi.planning_hierarchy.{field}")
@@ -86,24 +87,85 @@ def validate_training_strategy(document):
         priority = item.get("priority")
         require(isinstance(priority, int) and priority > 0, f"{context}.priority måste vara positivt heltal")
 
-    block = document.get("current_block")
-    require(isinstance(block, dict), "strategi.current_block saknas")
-    nonempty_string(block.get("id"), "strategi.current_block.id")
-    nonempty_string(block.get("title"), "strategi.current_block.title")
-    start = iso_date(block.get("start_date"), "strategi.current_block.start_date")
-    end = iso_date(block.get("end_date"), "strategi.current_block.end_date")
-    evaluation = iso_date(block.get("evaluation_date"), "strategi.current_block.evaluation_date")
-    require(start <= end < evaluation, "strategi.current_block: datumordning måste vara start <= end < evaluation")
-    nonempty_string(block.get("hypothesis"), "strategi.current_block.hypothesis")
-    protected = block.get("protected_stimuli")
-    require(isinstance(protected, list) and protected, "strategi.current_block.protected_stimuli saknas")
-    require(len(set(protected)) == len(protected), "strategi.current_block.protected_stimuli innehåller dubbletter")
+    mesocycle = document.get("current_mesocycle")
+    require(isinstance(mesocycle, dict), "strategi.current_mesocycle saknas")
+    nonempty_string(mesocycle.get("id"), "strategi.current_mesocycle.id")
+    nonempty_string(mesocycle.get("title"), "strategi.current_mesocycle.title")
+    start = iso_date(mesocycle.get("start_date"), "strategi.current_mesocycle.start_date")
+    end = iso_date(mesocycle.get("end_date"), "strategi.current_mesocycle.end_date")
+    evaluation = iso_date(mesocycle.get("evaluation_date"), "strategi.current_mesocycle.evaluation_date")
+    require(start <= end < evaluation, "strategi.current_mesocycle: datumordning måste vara start <= end < evaluation")
+    nonempty_string(mesocycle.get("goal_contribution"), "strategi.current_mesocycle.goal_contribution")
+    nonempty_string(mesocycle.get("hypothesis"), "strategi.current_mesocycle.hypothesis")
+
+    protected = mesocycle.get("protected_stimuli")
+    require(isinstance(protected, list) and protected, "strategi.current_mesocycle.protected_stimuli saknas")
+    require(len(set(protected)) == len(protected), "strategi.current_mesocycle.protected_stimuli innehåller dubbletter")
     for key in protected:
-        require(key in capability_keys, f"strategi.current_block: okänt protected stimulus {key!r}")
-    for field in ("success_signals", "guardrails"):
-        values = block.get(field)
-        require(isinstance(values, list) and values, f"strategi.current_block.{field} saknas")
-        require(all(isinstance(value, str) and value.strip() for value in values), f"strategi.current_block.{field} innehåller ogiltig text")
+        require(key in capability_keys, f"strategi.current_mesocycle: okänt protected stimulus {key!r}")
+
+    supporting = mesocycle.get("supporting_stimuli")
+    require(isinstance(supporting, list), "strategi.current_mesocycle.supporting_stimuli måste vara lista")
+    require(len(set(supporting)) == len(supporting), "strategi.current_mesocycle.supporting_stimuli innehåller dubbletter")
+    for key in supporting:
+        require(key in capability_keys, f"strategi.current_mesocycle: okänt supporting stimulus {key!r}")
+
+    weekly_template = mesocycle.get("weekly_template")
+    require(isinstance(weekly_template, list) and weekly_template, "strategi.current_mesocycle.weekly_template saknas")
+    template_slots = set()
+    template_weekdays = set()
+    template_stimuli = set()
+    for index, item in enumerate(weekly_template):
+        context = f"strategi.current_mesocycle.weekly_template[{index}]"
+        require(isinstance(item, dict), f"{context}: måste vara objekt")
+        slot = item.get("slot")
+        nonempty_string(slot, f"{context}.slot")
+        require(slot not in template_slots, f"{context}: dubblerad slot {slot!r}")
+        template_slots.add(slot)
+        weekday = item.get("preferred_weekday")
+        require(isinstance(weekday, int) and 1 <= weekday <= 7, f"{context}.preferred_weekday måste vara 1–7")
+        require(weekday not in template_weekdays, f"{context}: flera mesocykelplatser på veckodag {weekday}")
+        template_weekdays.add(weekday)
+        nonempty_string(item.get("sport"), f"{context}.sport")
+        require(item.get("priority_role") in {"anchor", "flex", "optional"}, f"{context}.priority_role ogiltig")
+        stimuli = item.get("stimuli")
+        require(isinstance(stimuli, list) and stimuli, f"{context}.stimuli saknas")
+        for key in stimuli:
+            require(key in capability_keys, f"{context}: okänt stimulus {key!r}")
+            template_stimuli.add(key)
+        for field in ("session", "reason", "development_focus"):
+            nonempty_string(item.get(field), f"{context}.{field}")
+
+    missing_protected = [key for key in protected if key not in template_stimuli]
+    require(
+        not missing_protected,
+        f"strategi.current_mesocycle.weekly_template saknar protected stimuli {missing_protected!r}",
+    )
+
+    progression = mesocycle.get("progression_policy")
+    require(isinstance(progression, dict), "strategi.current_mesocycle.progression_policy saknas")
+    for field in (
+        "automatic_load_increase",
+        "keep_intensity_controlled",
+        "dose_decided_near_term",
+        "preserve_stimulus_before_preserving_exact_session",
+        "missed_protected_stimulus_requires_review",
+    ):
+        require(isinstance(progression.get(field), bool), f"strategi.current_mesocycle.progression_policy.{field} måste vara bool")
+    require(progression.get("automatic_load_increase") is False, "strategi: automatisk belastningsökning får inte vara aktiverad")
+    require(progression.get("dose_decided_near_term") is True, "strategi: mesocykeldos måste beslutas i närtid")
+    require(
+        progression.get("preserve_stimulus_before_preserving_exact_session") is True,
+        "strategi: stimulus ska prioriteras före exakt passform",
+    )
+
+    for field in ("success_signals", "guardrails", "review_questions"):
+        values = mesocycle.get(field)
+        require(isinstance(values, list) and values, f"strategi.current_mesocycle.{field} saknas")
+        require(
+            all(isinstance(value, str) and value.strip() for value in values),
+            f"strategi.current_mesocycle.{field} innehåller ogiltig text",
+        )
 
     readiness = document.get("strategic_readiness")
     require(isinstance(readiness, list) and readiness, "strategi.strategic_readiness saknas")
@@ -127,7 +189,7 @@ def validate_training_strategy(document):
         "free_day_is_not_training_reason",
         "defer_open_dose_until_near_load_known",
         "prioritize_continuity_over_max_content",
-        "protect_block_stimuli_before_optional_training",
+        "protect_mesocycle_stimuli_before_optional_training",
         "long_term_goal_is_primary",
         "near_term_changes_must_serve_long_term_direction",
     ):
