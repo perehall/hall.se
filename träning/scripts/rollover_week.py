@@ -305,7 +305,7 @@ def build_mesocycle_next_week(promoted, strategy):
         for slot in mesocycle["weekly_template"]:
             offset = int(slot["preferred_weekday"]) - 1
             day_date = next_start + timedelta(days=offset)
-            days[offset] = {
+            planned_day = {
                 "date": day_date.isoformat(),
                 "label": WEEKDAY_LABELS[offset],
                 "status": "preliminary",
@@ -321,6 +321,9 @@ def build_mesocycle_next_week(promoted, strategy):
                 "mesocycle_week": mesocycle_week,
                 "mesocycle_slot": slot["slot"],
             }
+            if slot["sport"] == "swim":
+                planned_day["swim_equipment"] = {"planned": "tbd"}
+            days[offset] = planned_day
 
         title = f'{mesocycle["title"]} · vecka {mesocycle_week} av {total_weeks}'
         principle = (
