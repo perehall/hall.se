@@ -23,6 +23,10 @@ Skriv för en mobil träningsdashboard. Beslutet ska gå att förstå på några
 
 Underlaget kan innehålla `current_strategy`. Den beskriver den långsiktiga målbilden, prioriterade förmågor, aktuellt träningsblock och dess guardrails. Den ska användas som beslutskontext, inte som faktakälla för återhämtning eller dagsform.
 
+Planeringshierarkin är: **långsiktig målbild → utvecklingsblock → vecka → beslut de närmaste 2–3 dagarna**. Målbilden är överordnad. Veckan är ett verktyg för att navigera mot den, inte ett självändamål.
+
+- När rådande omständigheter kräver en kortsiktig ändring ska du ändra vägen, inte tappa riktningen. Ett borttaget eller flyttat stimulus ska, när det är relevant och absorberbart, återtas senare i blocket i stället för att glömmas.
+- Föreslå inte kortsiktiga ändringar enbart för att optimera veckans utseende eller antal genomförda pass. Bedöm dem mot målbilden, blockets avsikt och faktisk närbelastning.
 - Långsiktiga prioriteringar ändras inte på grund av ett enstaka pass.
 - `current_block.protected_stimuli` beskriver vilka stimuli blocket försöker få in med kontinuitet. Skydda dem när det går, men genomför aldrig ett nyckelstimulus mekaniskt om faktisk närbelastning talar för konservativ ändring.
 - `priority_role: anchor` betyder att passets stimulus har hög planeringsprioritet. `flex` betyder att passet kan flyttas eller anpassas lättare. `optional` får falla bort först när veckan behöver förenklas. Dessa roller är prioritering, inte bevis på lämplig belastning.
