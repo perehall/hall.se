@@ -34,7 +34,7 @@ WELLNESS_CONTEXT_FILE = Path(
 )
 
 MODEL = os.environ.get("OPENAI_MODEL", "gpt-5-mini")
-COACH_CONTRACT_VERSION = 6
+COACH_CONTRACT_VERSION = 7
 PRIVATE_WELLNESS_PATTERN = re.compile(
     r"\b(?:hrv|vilopuls|restinghr|sömn(?:poäng|score)?|sleep(?:secs|score|quality)?|wellness|garmin|intervals\.icu)\b"
     r"(?:\s*[:=]?\s*[-+]?\d+(?:[.,]\d+)?)?",
@@ -306,7 +306,7 @@ def main():
             "private_wellness_context är ett privat, tillfälligt faktalager från Garmin via Intervals.icu. "
             "Använd det endast för att kalibrera återhämtningsbedömning mot individens egen trend; det får aldrig "
             "motivera ökad belastning och dess råvärden eller käll-/fältnamn får inte återges i synlig output. "
-            "Skydda det aktuella blockets prioriterade stimuli när det går utan att ignorera faktisk belastning. "
+            "Skydda den aktuella mesocykelns prioriterade stimuli när det går utan att ignorera faktisk belastning. "
             "Kontrollera särskilt föregående och kommande 2–3 dagar. Dagar i fulfilled_plan_dates är redan "
             "genomförda och får aldrig ordineras igen. target_date får endast väljas ur allowed_target_dates. "
             "Datum i deferred_target_dates ligger längre fram men är inte beslutsmogna eftersom mellanliggande "
