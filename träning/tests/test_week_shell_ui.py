@@ -27,8 +27,8 @@ class WeekShellUiTests(unittest.TestCase):
         self.assertIn('onclick="openStrengthWindow()"', rendered)
         self.assertIn('onclick="openTrainingSystemInfo()"', rendered)
         self.assertIn('id="trainingSystemSheet"', rendered)
-        self.assertIn("Målbilden anger vart. Mesocykeln driver utvecklingen.", rendered)
-        self.assertIn("<strong>Mesocykel:</strong> systemets planeringsmotor.", rendered)
+        self.assertIn("Målbilden anger vart. Mesocykeln väljer utvecklingsväg. Mikrocykeln organiserar arbetet.", rendered)
+        self.assertIn("<strong>Mikrocykel:</strong> den korta operativa träningscykeln.", rendered)
         self.assertNotIn("Styrkemall framåt", rendered)
 
     def test_goal_page_uses_same_shell(self):
@@ -40,7 +40,7 @@ class WeekShellUiTests(unittest.TestCase):
         self.assertIn(".goal-page .card{border-radius:20px", rendered)
         self.assertIn(".goal-page .goal{grid-template-columns:1fr", rendered)
         self.assertIn('id="trainingSystemSheet"', rendered)
-        self.assertIn("Mesocykeln driver utvecklingen", rendered)
+        self.assertIn("Mikrocykeln organiserar arbetet", rendered)
 
     def test_shell_is_idempotent(self):
         page = """<html><head><style></style></head><body><div class="wrap"><footer>Footer</footer></div></body></html>"""
