@@ -384,15 +384,17 @@ def build_mesocycle_next_week(promoted, strategy):
 
     if inside_mesocycle:
         future = seed_preliminary_swims(promoted, future)
-        for day in future["days"]:
-            if day.get("sport") not in {"open", "rest"}:
-                day["mesocycle_id"] = mesocycle["id"]
-                day["microcycle_id"] = f'{mesocycle["id"]}:mc{microcycle_index}'
-                day["microcycle_index"] = microcycle_index
 
     future = seed_fixed_commitments(future)
 
     if inside_mesocycle:
+        for offset, day in enumerate(future["days"]):
+            if day.get("sport") not in {"open", "rest"}:
+                day["mesocycle_id"] = mesocycle["id"]
+                day["microcycle_id"] = f'{mesocycle["id"]}:mc{microcycle_index}'
+                day["microcycle_index"] = microcycle_index
+                day["microcycle_day"] = offset + 1
+
         actual_stimuli = {
             stimulus
             for day in future["days"]
