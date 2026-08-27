@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   schedule:
     # 00:05 Europe/Stockholm. GitHub cron is UTC, so both CET/CEST slots
-    # are scheduled; the guard below runs only the slot matching the current offset.
+    # are scheduled; the guard below uses only the slot matching the current offset.
     - cron: "5 22 * * *"
     - cron: "5 23 * * *"
 
@@ -14,16 +14,10 @@ concurrency:
 
 permissions:
   contents: write
-  actions: read
-  pages: write
-  id-token: write
 
 jobs:
   refresh:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -62,52 +56,30 @@ jobs:
           )
           PY
 
-      - name: Run deterministic regression tests
+      - name: Advance day rollover trigger
         if: steps.midnight.outputs.run == 'true'
         run: |
-          python -m compileall -q "träning/scripts" "träning/tests"
-          python -m unittest discover -s "träning/tests" -p "test_*.py" -v
+          python - <<'PY'
+          from datetime import datetime
+          from pathlib import Path
+          from zoneinfo import ZoneInfo
 
-      - name: Render current training day
-        if: steps.midnight.outputs.run == 'true'
-        run: python "träning/scripts/render_training_site.py"
-
-      - name: Commit rendered day rollover
-        if: steps.midnight.outputs.run == 'true'
-        run: |
-          TRACKED=(
-            "träning/data/dashboard_summary.json"
-            "träning/data/upcoming_week.json"
-            "träning/data/weeks"
-            "träning/vecka"
-            "träning/malbild"
-            "träning/malbild-2027"
-            "träning/index.html"
+          today = datetime.now(ZoneInfo("Europe/Stockholm")).date().isoformat()
+          Path("träning/data/day-rollover-trigger.txt").write_text(
+              f"{today} Europe/Stockholm\n",
+              encoding="utf-8",
           )
-          if [ -z "$(git status --porcelain -- "${TRACKED[@]}")" ]; then
-            echo "No repository changes."
-          else
-            git config user.name "training-bot"
-            git config user.email "actions@users.noreply.github.com"
-            git add -- "${TRACKED[@]}"
-            git commit -m "Refresh training day after midnight"
-            git pull --rebase --autostash origin main
-            git push origin main
+          print(f"Day rollover trigger: {today}")
+          PY
+
+          if git diff --quiet -- "träning/data/day-rollover-trigger.txt"; then
+            echo "Day already refreshed."
+            exit 0
           fi
 
-      - name: Configure GitHub Pages
-        id: configure_pages
-        if: steps.midnight.outputs.run == 'true'
-        uses: actions/configure-pages@v5
-
-      - name: Upload GitHub Pages artifact
-        id: upload_pages
-        if: steps.midnight.outputs.run == 'true'
-        uses: actions/upload-pages-artifact@v4
-        with:
-          path: "."
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        if: steps.midnight.outputs.run == 'true'
-        uses: actions/deploy-pages@v4
+          git config user.name "training-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add "träning/data/day-rollover-trigger.txt"
+          git commit -m "Advance training day rollover"
+          git pull --rebase --autostash origin main
+          git push origin main
