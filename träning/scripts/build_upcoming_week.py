@@ -5,6 +5,8 @@ import re
 from datetime import date, timedelta
 from pathlib import Path
 
+from finalize_signal_ui import strength_sheet
+
 ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "data"
 CURRENT_PLAN_FILE = DATA_DIR / "plan.json"
@@ -28,7 +30,9 @@ PREVIEW_CSS = r'''
 .preview-focus{color:#334155;font-size:.94rem;line-height:1.5}
 .preview-note{margin-top:8px;color:#64748b;font-size:.82rem}
 .swim-equipment-line{margin:6px 0 0;color:#475569;font-size:.82rem}.swim-equipment-line strong{color:#334155}
-@media (max-width:620px){.preview-metrics{grid-template-columns:repeat(2,1fr)}}
+.reference-tools{display:flex;justify-content:flex-start;margin:12px 0 8px}.reference-chip{appearance:none;border:1px solid #cbd5e1;background:#fff;color:#334155;border-radius:999px;padding:9px 13px;font:inherit;font-size:.82rem;font-weight:800;cursor:pointer;box-shadow:0 3px 10px rgba(15,23,42,.04)}
+.strength-window{position:fixed;inset:auto;width:min(520px,calc(100vw - 32px));max-height:calc(100vh - 32px);left:50%;top:50%;transform:translate(-50%,-50%);margin:0;border:1px solid #e2e8f0;border-radius:18px;padding:0;background:#fff;color:#0f172a;box-shadow:0 24px 70px rgba(15,23,42,.28);overflow:auto}.strength-window::backdrop{background:rgba(15,23,42,.38)}.sheet-inner{padding:0 18px 18px}.sheet-head{position:sticky;top:0;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 -18px 8px;padding:14px 18px 10px;background:#fff;border-bottom:1px solid #f1f5f9;cursor:move;touch-action:none;user-select:none}.sheet-head h2{font-size:1.1rem;margin:0}.sheet-close{appearance:none;border:0;background:#f1f5f9;color:#334155;border-radius:999px;padding:7px 10px;font:inherit;font-size:.78rem;font-weight:800;cursor:pointer}.sheet-note{margin:0 0 10px;color:#64748b;font-size:.8rem}.strength-list{margin:0;padding:0;list-style:none;display:grid;gap:0}.strength-list li{padding:10px 0;border-top:1px solid #e2e8f0;font-size:.9rem;line-height:1.38}.strength-list li:first-child{border-top:0}
+@media (max-width:620px){.preview-metrics{grid-template-columns:repeat(2,1fr)}.reference-tools{margin-top:10px}.strength-window{width:min(100% - 16px,720px);max-height:min(78vh,680px);left:50%!important;top:auto!important;bottom:0;transform:translateX(-50%)!important;border:0;border-radius:22px 22px 0 0}.sheet-inner{padding:0 18px calc(20px + env(safe-area-inset-bottom))}.sheet-head{cursor:default;touch-action:auto}}
 '''
 
 STATUS_UI = {
@@ -192,10 +196,7 @@ def render_preview(upcoming, current_key, upcoming_key):
 </div>'''
         )
 
-    strength = "".join(
-        f'<div class="principle">{html.escape(item)}</div>'
-        for item in upcoming.get("strength_template", [])
-    )
+    strength_reference = strength_sheet(upcoming.get("strength_template", []))
 
     summary = html.escape(meta.get("preview_summary", ""))
     dashboard = f'''<section class="dashboard" aria-label="Planöversikt nästa vecka">
@@ -227,7 +228,7 @@ def render_preview(upcoming, current_key, upcoming_key):
 <div class="hero"><h2>{html.escape(meta["title"])}</h2><p>{html.escape(meta["principle"])}</p></div>
 {dashboard}
 <h2 class="section">Preliminär vecka</h2>{''.join(cards)}
-<h2 class="section">Styrkemall framåt</h2><div class="principles">{strength}</div>
+{strength_reference}
 <footer>Preliminär framtidsplan. Faktisk belastning och återhämtning styr kommande justeringar. · <a href="/cdn-cgi/access/logout" style="color:inherit">Logga ut</a></footer>
 </div></body></html>'''
 
@@ -248,9 +249,17 @@ def render_preview(upcoming, current_key, upcoming_key):
         required.append(f'id="dag-{day["date"]}"')
         if day.get("sport") == "swim":
             required.append("Hjälpmedel:")
+    required.extend([
+        'class="reference-chip"',
+        'id="strengthSheet"',
+        'class="strength-window"',
+        'function openStrengthWindow()',
+    ])
     missing = [item for item in required if item not in rendered]
     if missing:
         raise RuntimeError("Kommande vecka: previewvalidering misslyckades: " + repr(missing))
+    if "Styrkemall framåt" in rendered:
+        raise RuntimeError("Kommande vecka: styrkemallen exponeras fortfarande som öppet block")
 
 
 def main():
