@@ -2,7 +2,7 @@
 from datetime import date
 
 
-STRATEGY_SCHEMA_VERSION = 1
+STRATEGY_SCHEMA_VERSION = 2
 VALID_PRIORITY_MODES = {"develop", "maintain_develop", "develop_cautiously", "supporting"}
 VALID_READINESS_STATES = {"keep_option_open", "active_focus", "deprioritized"}
 VALID_DEFAULT_ACTIONS = {"keep", "review"}
@@ -36,6 +36,21 @@ def validate_training_strategy(document):
         f"strategi: schema_version måste vara {STRATEGY_SCHEMA_VERSION}",
     )
     nonempty_string(document.get("north_star"), "strategi.north_star")
+
+    hierarchy = document.get("planning_hierarchy")
+    require(isinstance(hierarchy, dict), "strategi.planning_hierarchy saknas")
+    require(
+        hierarchy.get("order") == ["north_star", "development_block", "week", "near_term"],
+        "strategi.planning_hierarchy.order måste vara north_star → development_block → week → near_term",
+    )
+    for field in (
+        "north_star_role",
+        "development_block_role",
+        "week_role",
+        "near_term_role",
+        "adaptation_rule",
+    ):
+        nonempty_string(hierarchy.get(field), f"strategi.planning_hierarchy.{field}")
 
     priorities = document.get("current_priorities")
     require(isinstance(priorities, list) and priorities, "strategi.current_priorities saknas")
@@ -113,6 +128,13 @@ def validate_training_strategy(document):
         "defer_open_dose_until_near_load_known",
         "prioritize_continuity_over_max_content",
         "protect_block_stimuli_before_optional_training",
+        "long_term_goal_is_primary",
+        "near_term_changes_must_serve_long_term_direction",
     ):
         require(isinstance(policy.get(field), bool), f"strategi.decision_policy.{field} måste vara bool")
+    require(policy.get("long_term_goal_is_primary") is True, "strategi: långsiktig målbild måste vara överordnad")
+    require(
+        policy.get("near_term_changes_must_serve_long_term_direction") is True,
+        "strategi: närtidsändringar måste tjäna den långsiktiga riktningen",
+    )
     return True
