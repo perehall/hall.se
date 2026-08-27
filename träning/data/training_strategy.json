@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "north_star": "Bygg en bred, vältränad allroundatlet med tydlig utveckling i löpning och teknisk MTB/XC, bibehållen eller förbättrad simning samt relevant styrka, core, löpstyrka och plyometri. Träningen ska hålla dörren öppen för senare spetsning mot trail/ultra, cykellopp, swimrun eller triathlon utan att låsas mot ett enda lopp.",
   "current_priorities": [
     {
@@ -32,17 +32,72 @@
     }
   ],
   "capability_portfolio": [
-    {"key": "run_threshold", "label": "Kontrollerad löptröskel", "mode": "develop", "priority": 1},
-    {"key": "run_hill_quality", "label": "Backstyrka / löpekonomi", "mode": "develop", "priority": 1},
-    {"key": "run_easy_distance", "label": "Lugn löpdistans / tålighet", "mode": "develop", "priority": 1},
-    {"key": "mtb_technical", "label": "MTB teknisk fart", "mode": "develop", "priority": 2},
-    {"key": "mtb_aerobic", "label": "MTB/XC aerob kapacitet", "mode": "develop", "priority": 2},
-    {"key": "strength_unilateral", "label": "Unilateral benstyrka", "mode": "develop", "priority": 3},
-    {"key": "strength_core", "label": "Core", "mode": "maintain_develop", "priority": 3},
-    {"key": "plyometric", "label": "Plyometrisk exponering", "mode": "develop_cautiously", "priority": 3},
-    {"key": "swim_aerobic", "label": "Sim aerob kapacitet", "mode": "maintain_develop", "priority": 4},
-    {"key": "swim_technique", "label": "Simteknik", "mode": "maintain_develop", "priority": 4},
-    {"key": "enduro_technical", "label": "Enduroteknik", "mode": "supporting", "priority": 5}
+    {
+      "key": "run_threshold",
+      "label": "Kontrollerad löptröskel",
+      "mode": "develop",
+      "priority": 1
+    },
+    {
+      "key": "run_hill_quality",
+      "label": "Backstyrka / löpekonomi",
+      "mode": "develop",
+      "priority": 1
+    },
+    {
+      "key": "run_easy_distance",
+      "label": "Lugn löpdistans / tålighet",
+      "mode": "develop",
+      "priority": 1
+    },
+    {
+      "key": "mtb_technical",
+      "label": "MTB teknisk fart",
+      "mode": "develop",
+      "priority": 2
+    },
+    {
+      "key": "mtb_aerobic",
+      "label": "MTB/XC aerob kapacitet",
+      "mode": "develop",
+      "priority": 2
+    },
+    {
+      "key": "strength_unilateral",
+      "label": "Unilateral benstyrka",
+      "mode": "develop",
+      "priority": 3
+    },
+    {
+      "key": "strength_core",
+      "label": "Core",
+      "mode": "maintain_develop",
+      "priority": 3
+    },
+    {
+      "key": "plyometric",
+      "label": "Plyometrisk exponering",
+      "mode": "develop_cautiously",
+      "priority": 3
+    },
+    {
+      "key": "swim_aerobic",
+      "label": "Sim aerob kapacitet",
+      "mode": "maintain_develop",
+      "priority": 4
+    },
+    {
+      "key": "swim_technique",
+      "label": "Simteknik",
+      "mode": "maintain_develop",
+      "priority": 4
+    },
+    {
+      "key": "enduro_technical",
+      "label": "Enduroteknik",
+      "mode": "supporting",
+      "priority": 5
+    }
   ],
   "current_block": {
     "id": "run-threshold-hill-4w",
@@ -72,10 +127,26 @@
     ]
   },
   "strategic_readiness": [
-    {"key": "trail_ultra", "label": "Trail / ultra", "state": "keep_option_open"},
-    {"key": "bike_race", "label": "Cykellopp", "state": "keep_option_open"},
-    {"key": "swimrun", "label": "Swimrun", "state": "keep_option_open"},
-    {"key": "triathlon", "label": "Triathlon", "state": "keep_option_open"}
+    {
+      "key": "trail_ultra",
+      "label": "Trail / ultra",
+      "state": "keep_option_open"
+    },
+    {
+      "key": "bike_race",
+      "label": "Cykellopp",
+      "state": "keep_option_open"
+    },
+    {
+      "key": "swimrun",
+      "label": "Swimrun",
+      "state": "keep_option_open"
+    },
+    {
+      "key": "triathlon",
+      "label": "Triathlon",
+      "state": "keep_option_open"
+    }
   ],
   "decision_policy": {
     "horizon_days": 3,
@@ -83,6 +154,21 @@
     "free_day_is_not_training_reason": true,
     "defer_open_dose_until_near_load_known": true,
     "prioritize_continuity_over_max_content": true,
-    "protect_block_stimuli_before_optional_training": true
+    "protect_block_stimuli_before_optional_training": true,
+    "long_term_goal_is_primary": true,
+    "near_term_changes_must_serve_long_term_direction": true
+  },
+  "planning_hierarchy": {
+    "order": [
+      "north_star",
+      "development_block",
+      "week",
+      "near_term"
+    ],
+    "north_star_role": "Den långsiktiga målbilden är överordnad och anger vilka förmågor träningen ska utveckla över tid.",
+    "development_block_role": "Aktuellt block väljer en avgränsad utvecklingsväg som ska vara förenlig med målbilden och kunna utvärderas.",
+    "week_role": "Veckan omsätter blockets avsikt till en absorberbar struktur utan att bli ett mål i sig.",
+    "near_term_role": "Beslut de närmaste 2–3 dagarna anpassar vägen efter faktisk belastning, återhämtning och övriga rådande omständigheter.",
+    "adaptation_rule": "När närtidens omständigheter kräver ändring ska vägen justeras, men den långsiktiga riktningen och relevanta utvecklingsstimuli ska bevaras eller återtas när det är rimligt."
   }
 }
