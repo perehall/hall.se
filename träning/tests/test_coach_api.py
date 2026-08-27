@@ -17,6 +17,7 @@ from coach import (  # noqa: E402
     extract_output_text,
     scrub_private_wellness_output,
     stable_hash,
+    validate_dose_option_action,
 )
 
 
@@ -35,6 +36,7 @@ def valid_result():
             "target_date": "",
             "reason": "Ingen ändring.",
             "recommendation": "Behåll planen.",
+            "dose_option_id": "",
             "requires_approval": False,
         },
     }
@@ -197,6 +199,84 @@ class CoachApiTests(unittest.TestCase):
         self.assertNotIn("intervals.icu", text)
         self.assertNotIn("wellness", text)
         self.assertIn("återhämtningsunderlaget", text)
+
+
+    def test_keep_can_resolve_open_same_day_dose_from_approved_option(self):
+        plan = {
+            "days": [
+                {
+                    "date": "2026-08-27",
+                    "status": "planned",
+                    "sport": "bike",
+                    "session": "MTB/XC · teknik + aerob stig · dos öppen",
+                    "dose_open": True,
+                    "dose_options": [
+                        {
+                            "id": "mtb-45",
+                            "kind": "duration_minutes",
+                            "value": 45,
+                            "session": "MTB/XC · 45 min · teknik + lugn aerob stig",
+                        },
+                        {
+                            "id": "mtb-60",
+                            "kind": "duration_minutes",
+                            "value": 60,
+                            "session": "MTB/XC · 60 min · teknik + lugn aerob stig",
+                        },
+                    ],
+                }
+            ]
+        }
+        action = {
+            "action": "keep",
+            "target_date": "2026-08-27",
+            "reason": "Närbelastningen medger normal konservativ stöddos.",
+            "recommendation": "Kör 60 min lugnt och tekniskt.",
+            "dose_option_id": "mtb-60",
+            "requires_approval": False,
+        }
+        self.assertTrue(validate_dose_option_action(plan, action, "2026-08-27"))
+        changed, _ = apply_conservative_action(
+            plan,
+            action,
+            now_utc="2026-08-27T16:00:00+00:00",
+        )
+        day = plan["days"][0]
+        self.assertTrue(changed)
+        self.assertFalse(day["dose_open"])
+        self.assertEqual(day["session"], "MTB/XC · 60 min · teknik + lugn aerob stig")
+        self.assertEqual(day["dose_resolution"]["option_id"], "mtb-60")
+
+    def test_same_day_keep_must_choose_approved_dose_when_options_exist(self):
+        plan = {
+            "days": [
+                {
+                    "date": "2026-08-27",
+                    "status": "planned",
+                    "sport": "bike",
+                    "session": "MTB/XC · dos öppen",
+                    "dose_open": True,
+                    "dose_options": [
+                        {
+                            "id": "mtb-45",
+                            "kind": "duration_minutes",
+                            "value": 45,
+                            "session": "MTB/XC · 45 min",
+                        }
+                    ],
+                }
+            ]
+        }
+        action = {
+            "action": "keep",
+            "target_date": "2026-08-27",
+            "reason": "x",
+            "recommendation": "Behåll.",
+            "dose_option_id": "",
+            "requires_approval": False,
+        }
+        with self.assertRaises(RuntimeError):
+            validate_dose_option_action(plan, action, "2026-08-27")
 
 
 if __name__ == "__main__":
