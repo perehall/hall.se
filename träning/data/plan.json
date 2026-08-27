@@ -6,11 +6,14 @@
     "week_start": "2026-08-24",
     "week_end": "2026-08-30",
     "title": "Löpningen prioriteras – tröskel + backkvalitet + distans.",
-    "principle": "Löpningen får tre tydliga stimuli: ett kontrollerat tröskelpass, ett separat backkvalitetspass och lugn distans. Backkvaliteten testas som andra löpkvalitet i ett fyra veckor långt block och utvärderas därefter mot faktisk fart, känsla, återhämtning och kontinuitet. Exakt dos justeras efter närbelastningen och låses inte i förväg.",
+    "principle": "Löpningen får tre tydliga stimuli: ett kontrollerat tröskelpass, ett separat backkvalitetspass och lugn distans. Backkvaliteten testas som andra löpkvalitet i ett fyra veckor lång mesocykel och utvärderas därefter mot faktisk fart, känsla, återhämtning och kontinuitet. Exakt dos justeras efter närbelastningen och låses inte i förväg.",
     "mesocycle_id": "run-threshold-hill-4w",
-    "mesocycle_week": 1,
-    "mesocycle_total_weeks": 4,
-    "requires_mesocycle_review": false
+    "requires_mesocycle_review": false,
+    "microcycle_id": "run-threshold-hill-4w:mc1",
+    "microcycle_index": 1,
+    "microcycle_total": 4,
+    "microcycle_length_days": 7,
+    "calendar_week_is_presentation": true
   },
   "days": [
     {
@@ -30,7 +33,9 @@
         "strength_core"
       ],
       "mesocycle_id": "run-threshold-hill-4w",
-      "mesocycle_week": 1
+      "microcycle_id": "run-threshold-hill-4w:mc1",
+      "microcycle_index": 1,
+      "microcycle_day": 1
     },
     {
       "date": "2026-08-25",
@@ -52,7 +57,9 @@
         "run_threshold"
       ],
       "mesocycle_id": "run-threshold-hill-4w",
-      "mesocycle_week": 1
+      "microcycle_id": "run-threshold-hill-4w:mc1",
+      "microcycle_index": 1,
+      "microcycle_day": 2
     },
     {
       "date": "2026-08-26",
@@ -93,7 +100,9 @@
       "coach_adjustment": "Skala ned passet. Gör dagens MTB/XC teknisk och lugn utan upprepade hårda stigningar; undvik backintervaller eller fartjakt. Bedöm subjektiv känsla och återställ först om torsdag morgon visar god återhämtning.",
       "manual_note": "Onsdagens pass är korrigerat till swimrun, inte vanlig löpning. Pulsen tappades under cirka 2 km med faktisk intensitet minst Z3 enligt användarrapport.",
       "mesocycle_id": "run-threshold-hill-4w",
-      "mesocycle_week": 1
+      "microcycle_id": "run-threshold-hill-4w:mc1",
+      "microcycle_index": 1,
+      "microcycle_day": 4
     },
     {
       "date": "2026-08-28",
@@ -110,7 +119,9 @@
       ],
       "decision_note": "Backdosen fastställs först efter torsdagens faktiska MTB-belastning och återhämtningen från onsdagens swimrun; passets roll som veckans andra löpkvalitet ligger fast endast om belastningen kan absorberas.",
       "mesocycle_id": "run-threshold-hill-4w",
-      "mesocycle_week": 1
+      "microcycle_id": "run-threshold-hill-4w:mc1",
+      "microcycle_index": 1,
+      "microcycle_day": 5
     },
     {
       "date": "2026-08-29",
@@ -127,7 +138,9 @@
         "mtb_technical"
       ],
       "mesocycle_id": "run-threshold-hill-4w",
-      "mesocycle_week": 1
+      "microcycle_id": "run-threshold-hill-4w:mc1",
+      "microcycle_index": 1,
+      "microcycle_day": 6
     },
     {
       "date": "2026-08-30",
@@ -143,7 +156,9 @@
         "run_easy_distance"
       ],
       "mesocycle_id": "run-threshold-hill-4w",
-      "mesocycle_week": 1
+      "microcycle_id": "run-threshold-hill-4w:mc1",
+      "microcycle_index": 1,
+      "microcycle_day": 7
     }
   ],
   "strength_template": [
