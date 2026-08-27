@@ -235,24 +235,28 @@ def _clean_preview_swim(source, target_date, target_label, next_key, focus_index
 
 
 def seed_preliminary_swims(promoted, future):
-    current_start, _ = validate_week_bounds(promoted.get("meta") or {}, "promoverad plan")
     next_start, _ = validate_week_bounds(future.get("meta") or {}, "framtidsplan")
     next_key = future["week_key"]
-    swim_days = [day for day in promoted.get("days") or [] if day.get("sport") == "swim"]
+    sources = [day for day in promoted.get("days") or [] if day.get("sport") == "swim"]
+    targets = [
+        (index, day)
+        for index, day in enumerate(future.get("days") or [])
+        if day.get("sport") == "swim"
+    ]
 
-    for ordinal, source in enumerate(swim_days):
-        source_date = date.fromisoformat(source["date"])
-        offset = (source_date - current_start).days
-        if not 0 <= offset <= 6:
-            raise RuntimeError("Veckoskifte: simpass ligger utanför promoverad vecka")
-        target_date = next_start + timedelta(days=offset)
-        future["days"][offset] = _clean_preview_swim(
+    for ordinal, ((target_index, target), source) in enumerate(zip(targets, sources)):
+        target_date = date.fromisoformat(target["date"])
+        copied = _clean_preview_swim(
             source,
             target_date,
-            WEEKDAY_LABELS[offset],
+            target.get("label") or WEEKDAY_LABELS[target_index],
             next_key,
             focus_index=next_start.isocalendar().week + ordinal,
         )
+        copied["priority_role"] = target.get("priority_role") or copied.get("priority_role") or "flex"
+        copied["stimuli"] = deepcopy(target.get("stimuli") or copied.get("stimuli") or [])
+        copied["mesocycle_slot"] = target.get("mesocycle_slot")
+        future["days"][target_index] = copied
     return future
 
 
