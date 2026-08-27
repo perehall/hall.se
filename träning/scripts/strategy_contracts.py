@@ -37,6 +37,16 @@ def validate_training_strategy(document):
     )
     nonempty_string(document.get("north_star"), "strategi.north_star")
 
+    goal_contract = document.get("goal_contract")
+    require(isinstance(goal_contract, dict), "strategi.goal_contract saknas")
+    require(goal_contract.get("source_file") == "data/goal.json", "strategi.goal_contract.source_file måste vara data/goal.json")
+    require(goal_contract.get("source_schema_version") == 2, "strategi.goal_contract.source_schema_version måste vara 2")
+    goal_hash = goal_contract.get("goal_hash")
+    nonempty_string(goal_hash, "strategi.goal_contract.goal_hash")
+    require(len(goal_hash) == 64, "strategi.goal_contract.goal_hash måste vara sha256")
+    require(goal_contract.get("goal_change_requires_mesocycle_review") is True, "strategi: måländring måste kräva mesocykelomprövning")
+    nonempty_string(goal_contract.get("principle"), "strategi.goal_contract.principle")
+
     hierarchy = document.get("planning_hierarchy")
     require(isinstance(hierarchy, dict), "strategi.planning_hierarchy saknas")
     require(
@@ -97,6 +107,7 @@ def validate_training_strategy(document):
     evaluation = iso_date(mesocycle.get("evaluation_date"), "strategi.current_mesocycle.evaluation_date")
     require(start <= end < evaluation, "strategi.current_mesocycle: datumordning måste vara start <= end < evaluation")
     nonempty_string(mesocycle.get("goal_contribution"), "strategi.current_mesocycle.goal_contribution")
+    require(mesocycle.get("goal_basis_hash") == goal_hash, "strategi.current_mesocycle.goal_basis_hash måste matcha aktuell målbild")
     nonempty_string(mesocycle.get("hypothesis"), "strategi.current_mesocycle.hypothesis")
 
     protected = mesocycle.get("protected_stimuli")
