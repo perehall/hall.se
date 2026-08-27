@@ -6,6 +6,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 INDEX_FILE = ROOT / "index.html"
 WEEK_DIR = ROOT / "vecka"
+GOAL_PAGE = ROOT / "malbild" / "index.html"
+GOAL_PUBLIC_PAGE = ROOT / "malbild-2027" / "index.html"
 
 CSS_MARKER = "/* week-shell-v1 */"
 SYSTEM_DIALOG_ID = "trainingSystemSheet"
@@ -45,6 +47,12 @@ h1{font-size:clamp(2rem,8vw,3.2rem);line-height:1;margin:0 0 8px;letter-spacing:
 .system-list li{padding:9px 0;border-top:1px solid #e2e8f0;color:#475569;font-size:.86rem;line-height:1.42}
 .system-list li:first-child{border-top:0}
 .system-list strong{color:#0f172a}
+.goal-page .card{border-radius:20px;padding:17px;margin:12px 0}
+.goal-page .goal{grid-template-columns:1fr;gap:16px}
+.goal-page .goal p{font-size:.95rem;line-height:1.48}
+.goal-page .title{font-size:1.08rem;line-height:1.3;margin-bottom:12px}
+.goal-page .goal-back-row{margin:0 0 12px}
+.goal-page .mountain{min-height:290px}
 @media (max-width:620px){
   .wrap{width:100%!important;max-width:720px;padding:20px 13px 56px}
   .day{border-radius:17px;padding:15px}
@@ -63,12 +71,13 @@ SYSTEM_DIALOG = f'''
       <h2 id="trainingSystemTitle">Om träningssystemet</h2>
       <button class="system-close" type="button" onclick="document.getElementById('{SYSTEM_DIALOG_ID}').close()">Stäng</button>
     </div>
-    <p class="system-lead">En adaptiv veckoplan som kopplar planerad träning till faktiskt utfall och återhämtning.</p>
+    <p class="system-lead">Ett adaptivt träningssystem där den långsiktiga målbilden styr riktningen och närtidens förutsättningar styr vägen dit.</p>
     <ul class="system-list">
-      <li><strong>Plan:</strong> aktuell vecka är tydligast, nästa vecka preliminär och avslutade veckor sparas som historik.</li>
+      <li><strong>Riktning:</strong> målbilden är överordnad. Träningsblock, veckor och enskilda pass ska utveckla de förmågor som för systemet mot det långsiktiga målet.</li>
+      <li><strong>Navigering:</strong> aktuell belastning, återhämtning, genomförd träning och andra faktiska omständigheter avgör det närmaste rimliga steget. Vägen får ändras utan att riktningen tappas.</li>
+      <li><strong>Horisont:</strong> målbild → utvecklingsblock → vecka → beslut de närmaste 2–3 dagarna. Nästa vecka är preliminär och avslutade veckor sparas som historik.</li>
       <li><strong>Data:</strong> Strava används för genomförd träning, Garmin via Intervals.icu som privat återhämtningskontext och SMHI för väder.</li>
-      <li><strong>Anpassning:</strong> efter pass och regelbunden synk vägs närbelastningen in. AI-coachen kan konservativt behålla, minska eller ersätta belastning.</li>
-      <li><strong>Princip:</strong> kontinuitet, absorberbar belastning och långsiktig progression går före maximal träningsmängd.</li>
+      <li><strong>Princip:</strong> kontinuitet, absorberbar belastning och långsiktig progression går före att maximera en enskild vecka.</li>
     </ul>
   </div>
 </dialog>
@@ -147,6 +156,11 @@ def add_shell_css(page):
 
 
 def apply_week_shell(page):
+    is_goal_page = 'class="card goal"' in page
+    if is_goal_page and '<body class="goal-page">' not in page:
+        page, count = re.subn(r'<body(?: class="[^"]*")?>', '<body class="goal-page">', page, count=1)
+        if count != 1:
+            raise RuntimeError("Veckoskal: målbildssidan saknar body")
     page = normalize_legacy_strength(page)
     page = add_system_info(page)
     page = add_shell_css(page)
@@ -157,7 +171,12 @@ def page_paths():
     paths = [INDEX_FILE]
     if WEEK_DIR.exists():
         paths.extend(sorted(WEEK_DIR.glob("*/index.html")))
-    return [path for path in paths if path.exists()]
+    paths.extend([GOAL_PAGE, GOAL_PUBLIC_PAGE])
+    unique = []
+    for path in paths:
+        if path.exists() and path not in unique:
+            unique.append(path)
+    return unique
 
 
 def main():
@@ -175,15 +194,20 @@ def main():
             "width:min(100%,720px)!important",
             'onclick="openTrainingSystemInfo()"',
             f'id="{SYSTEM_DIALOG_ID}"',
-            "En adaptiv veckoplan",
+            "målbilden är överordnad",
         ]
         missing = [marker for marker in required if marker not in verify]
         if missing:
             raise RuntimeError(f"Veckoskal {path}: saknar {missing!r}")
         if "Styrkemall framåt" in verify:
             raise RuntimeError(f"Veckoskal {path}: öppen styrkemall finns kvar")
+        if path in (GOAL_PAGE, GOAL_PUBLIC_PAGE):
+            goal_required = ['class="goal-page"', ".goal-page .card{", ".goal-page .goal{grid-template-columns:1fr"]
+            goal_missing = [marker for marker in goal_required if marker not in verify]
+            if goal_missing:
+                raise RuntimeError(f"Veckoskal {path}: målbilden saknar gemensamt UI-skal {goal_missing!r}")
 
-    print(f"Veckoskal OK: {len(paths)} sidor delar bredd, typografi och systeminfo.")
+    print(f"Gemensamt träningsskal OK: {len(paths)} sidor delar bredd, typografi och systeminfo.")
 
 
 if __name__ == "__main__":
