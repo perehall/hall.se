@@ -7,7 +7,7 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from strategy_contracts import validate_training_strategy
-from training_brain import resolve_block, resolve_next_decision, resolve_today
+from training_brain import resolve_mesocycle, resolve_next_decision, resolve_today
 
 ROOT = Path(__file__).resolve().parents[1]
 INDEX_FILE = ROOT / "index.html"
@@ -20,8 +20,8 @@ SECTION_START = "<!-- training-brain-v1:start -->"
 SECTION_END = "<!-- training-brain-v1:end -->"
 CSS = r'''
 /* training-brain-v2 */
-.training-brain{margin:0 0 18px}.brain-today{background:#fff;border:1px solid #bfdbfe;border-radius:20px;padding:17px 18px;box-shadow:var(--shadow)}.brain-kicker{font-size:.69rem;font-weight:900;letter-spacing:.09em;text-transform:uppercase;color:#1d4ed8;margin-bottom:6px}.brain-headline{font-size:1.28rem;font-weight:850;line-height:1.25;letter-spacing:-.015em}.brain-role{display:inline-block;margin-top:9px;padding:4px 8px;border-radius:999px;background:#e2e8f0;color:#334155;font-size:.68rem;font-weight:800}.brain-why{margin-top:8px;color:#334155;font-size:.88rem;line-height:1.43}.brain-next{margin-top:14px;padding-top:13px;border-top:1px solid #dbeafe}.brain-next-label{font-size:.68rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:#64748b;margin-bottom:5px}.brain-next strong{display:block;font-size:.98rem;line-height:1.35}.brain-note{margin-top:5px;color:#475569;font-size:.84rem;line-height:1.42}.week-focus-block-meta{margin-top:9px;color:#94a3b8;font-size:.74rem;font-weight:750;line-height:1.35}.week-focus-block-idea{margin-top:8px!important;padding-top:8px;border-top:1px solid rgba(148,163,184,.22)}.week-focus-block-idea strong{color:#fff}
-@media (max-width:620px){.brain-today{padding:15px}.brain-headline{font-size:1.16rem}.week-focus-block-meta{font-size:.7rem}}
+.training-brain{margin:0 0 18px}.brain-today{background:#fff;border:1px solid #bfdbfe;border-radius:20px;padding:17px 18px;box-shadow:var(--shadow)}.brain-kicker{font-size:.69rem;font-weight:900;letter-spacing:.09em;text-transform:uppercase;color:#1d4ed8;margin-bottom:6px}.brain-headline{font-size:1.28rem;font-weight:850;line-height:1.25;letter-spacing:-.015em}.brain-role{display:inline-block;margin-top:9px;padding:4px 8px;border-radius:999px;background:#e2e8f0;color:#334155;font-size:.68rem;font-weight:800}.brain-why{margin-top:8px;color:#334155;font-size:.88rem;line-height:1.43}.brain-next{margin-top:14px;padding-top:13px;border-top:1px solid #dbeafe}.brain-next-label{font-size:.68rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:#64748b;margin-bottom:5px}.brain-next strong{display:block;font-size:.98rem;line-height:1.35}.brain-note{margin-top:5px;color:#475569;font-size:.84rem;line-height:1.42}.week-focus-mesocycle-meta{margin-top:9px;color:#94a3b8;font-size:.74rem;font-weight:750;line-height:1.35}.week-focus-mesocycle-idea{margin-top:8px!important;padding-top:8px;border-top:1px solid rgba(148,163,184,.22)}.week-focus-mesocycle-idea strong{color:#fff}
+@media (max-width:620px){.brain-today{padding:15px}.brain-headline{font-size:1.16rem}.week-focus-mesocycle-meta{font-size:.7rem}}
 '''
 
 
@@ -65,31 +65,31 @@ def render_section(plan, activities_state, strategy, today_date):
 {SECTION_END}'''
 
 
-def decorate_focus_card(page, block):
+def decorate_focus_card(page, mesocycle):
     marker = '<details class="week-focus-details">'
     if marker not in page:
         raise RuntimeError("Träningshjärna: Veckofokus-rutan saknas")
-    if 'class="week-focus-block-meta"' in page:
+    if 'class="week-focus-mesocycle-meta"' in page:
         return page
 
     meta = (
-        f'{html.escape(block.get("title") or "Aktuellt block")} · '
-        f'{html.escape(block.get("state") or "")} · '
-        f'utvärdering {html.escape(compact_date(block.get("evaluation_date")))}'
+        f'{html.escape(mesocycle.get("title") or "Aktuell mesocykel")} · '
+        f'{html.escape(mesocycle.get("state") or "")} · '
+        f'utvärdering {html.escape(compact_date(mesocycle.get("evaluation_date")))}'
     )
     page = page.replace(
         marker,
-        f'<div class="week-focus-block-meta">{meta}</div>' + marker,
+        f'<div class="week-focus-mesocycle-meta">{meta}</div>' + marker,
         1,
     )
 
-    hypothesis = (block.get("hypothesis") or "").strip()
+    hypothesis = (mesocycle.get("hypothesis") or "").strip()
     if hypothesis:
         close_marker = '</details></div>'
         if close_marker not in page:
             raise RuntimeError("Träningshjärna: kunde inte hitta slutet på Veckofokus-rutan")
         extra = (
-            f'<p class="week-focus-block-idea"><strong>Blockhypotes:</strong> '
+            f'<p class="week-focus-mesocycle-idea"><strong>Mesocykelhypotes:</strong> '
             f'{html.escape(hypothesis)}</p>'
         )
         page = page.replace(close_marker, extra + close_marker, 1)
@@ -123,20 +123,20 @@ def main():
     today = datetime.now(ZoneInfo(timezone_name)).date()
     page = INDEX_FILE.read_text(encoding="utf-8")
     section = render_section(plan, activities, strategy, today)
-    block = resolve_block(strategy, today)
-    rendered = decorate_focus_card(apply_ui(page, section), block)
+    mesocycle = resolve_mesocycle(strategy, today)
+    rendered = decorate_focus_card(apply_ui(page, section), mesocycle)
     INDEX_FILE.write_text(rendered, encoding="utf-8")
 
     verify = INDEX_FILE.read_text(encoding="utf-8")
-    required = [SECTION_START, "Idag ·", "Nästa beslut", "week-focus-block-meta", "Blockhypotes:", CSS_MARKER]
+    required = [SECTION_START, "Idag ·", "Nästa beslut", "week-focus-mesocycle-meta", "Mesocykelhypotes:", CSS_MARKER]
     missing = [marker for marker in required if marker not in verify]
     if missing:
         raise RuntimeError(f"Träningshjärna: renderad sida saknar {missing!r}")
-    forbidden = ["Aktuellt block ·", "Prioritering just nu:", "brain-tags"]
+    forbidden = ["Aktuellt block ·", "Blockhypotes:", "Prioritering just nu:", "brain-tags"]
     leaked = [marker for marker in forbidden if marker in verify]
     if leaked:
         raise RuntimeError(f"Träningshjärna: redundant information kvar i normalvyn: {leaked!r}")
-    print("Träningshjärna OK: Veckofokus bär blockstatus; Idag och Nästa beslut är primärvyn.")
+    print("Träningshjärna OK: Veckofokus visar mesocykeln; Idag och Nästa beslut navigerar i närtid.")
 
 
 if __name__ == "__main__":
