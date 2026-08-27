@@ -4,7 +4,7 @@
   "week_start": "2026-08-24",
   "week_end": "2026-08-30",
   "created_at_utc": "2026-08-24T06:32:25.878995+00:00",
-  "updated_at_utc": "2026-08-27T13:22:06.757455+00:00",
+  "updated_at_utc": "2026-08-27T18:10:45.324556+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -87,12 +87,12 @@
       {
         "date": "2026-08-27",
         "label": "Torsdag",
-        "status": "conditional",
-        "session": "MTB/XC · teknik + aerob stig",
-        "reason": "Onsdagens swimrun blev inte enbart aerob och pulsdatan underskattar belastningen under cirka 2 km. MTB hålls därför teknisk och lugn utan upprepade hårda stigningar; fredagens backdos avgörs efter faktisk återhämtning.",
+        "status": "planned",
+        "session": "MTB/XC · 60 min · teknik + lugn aerob stig",
+        "reason": "60 min ger ett konkret men begränsat MTB/XC-stimulus idag. Onsdagens swimrun var mer än ren aerob belastning och fredagens backkvalitet är fortsatt prioriterad, därför hålls dagens pass tekniskt och lugnt utan upprepade hårda stigningar.",
         "development_focus": "Blick genom kurvan, bromsa klart före svängen och prioritera linje/flyt framför att jaga segmentfart.",
         "sport": "bike",
-        "dose_open": true,
+        "dose_open": false,
         "priority_role": "flex",
         "stimuli": [
           "mtb_technical",
@@ -104,12 +104,33 @@
           "reason": "Onsdagens faktiska intensitet ökar veckobelastningen; säkra absorption innan ny kvalitet.",
           "applied_at_utc": "2026-08-27T07:59:46.587327+00:00"
         },
-        "coach_adjustment": "Skala ned passet. Gör dagens MTB/XC teknisk och lugn utan upprepade hårda stigningar; undvik backintervaller eller fartjakt. Bedöm subjektiv känsla och återställ först om torsdag morgon visar god återhämtning.",
+        "coach_adjustment": "60 min totalt. Teknik + lugn aerob stig; inga backintervaller, ingen segmentjakt och inga upprepade hårda stigningar.",
         "manual_note": "Onsdagens pass är korrigerat till swimrun, inte vanlig löpning. Pulsen tappades under cirka 2 km med faktisk intensitet minst Z3 enligt användarrapport.",
         "mesocycle_id": "run-threshold-hill-4w",
         "microcycle_id": "run-threshold-hill-4w:mc1",
         "microcycle_index": 1,
-        "microcycle_day": 4
+        "microcycle_day": 4,
+        "dose_resolution": {
+          "state": "resolved",
+          "kind": "duration_minutes",
+          "value": 60,
+          "source": "near_term_decision",
+          "basis": "Måndag enduro + styrka, tisdag 3×8 min tröskel och onsdag 6,8 km swimrun med rapporterad belastning över ren aerob nivå; fredagens backkvalitet är fortsatt prioriterat stimulus."
+        },
+        "dose_options": [
+          {
+            "id": "mtb-support-45",
+            "kind": "duration_minutes",
+            "value": 45,
+            "session": "MTB/XC · 45 min · teknik + lugn aerob stig"
+          },
+          {
+            "id": "mtb-support-60",
+            "kind": "duration_minutes",
+            "value": 60,
+            "session": "MTB/XC · 60 min · teknik + lugn aerob stig"
+          }
+        ]
       },
       {
         "date": "2026-08-28",
@@ -178,6 +199,26 @@
     ]
   },
   "activities": [
+    {
+      "id": 19926277295,
+      "name": "Evening Mountain Bike Ride",
+      "sport_type": "MountainBikeRide",
+      "start_date": "2026-08-27T16:54:38Z",
+      "start_date_local": "2026-08-27T18:54:38Z",
+      "distance_m": 18132.6,
+      "moving_time_s": 4248,
+      "elapsed_time_s": 4248,
+      "total_elevation_gain_m": 210.0,
+      "average_heartrate": 128.3,
+      "max_heartrate": 147.0,
+      "average_watts": 134.0,
+      "weighted_average_watts": null,
+      "calories": 803.0,
+      "device_name": "Garmin Forerunner 970",
+      "gear_id": "b18453520",
+      "gear_name": "Merida One Twenty 3000",
+      "source": "Strava API"
+    },
     {
       "id": 19911120461,
       "name": "SLK Swimrun Jogersö Extreme",
@@ -275,6 +316,43 @@
     }
   ],
   "coach_analyses": [
+    {
+      "activity_id": 19926277295,
+      "activity_date": "2026-08-27",
+      "activity_name": "Evening Mountain Bike Ride",
+      "generated_at_utc": "2026-08-27T18:10:44.809180+00:00",
+      "model": "gpt-5-mini",
+      "assessment": {
+        "summary": "Dagens MTB-pass var tekniskt och lugnt; veckans närbelastning är hög men absorberbar inför fredagens backkvalitet.",
+        "load_interpretation": "De senaste tre dagarna (löptröskel, swimrun med högre intensitet, MTB 60 min lugn) ger samlad belastning som kräver försiktighet inför backpasset.",
+        "confidence": "medium",
+        "facts": [
+          "MountainBikeRide: 18,13 km · 1:10:48 · 210 m+ · snittpuls 128,3 · maxpuls 147.",
+          "Planstatus 2026-08-27: dagens planerade pass är genomfört i coachens beslutsunderlag."
+        ],
+        "interpretations": [
+          "Veckans andra löpkvalitet (backar) är viktig för mesocykeln men bör inte lägga till risk för överbelastning efter swimrun+MTB.",
+          "Privat återhämtningsdata visar inga varningsmönster som pekar på akut behov av vila och stödjer konservativ genomförbarhet."
+        ],
+        "unknowns": [
+          "Subjektiv dagskänsla inför fredag morgon.",
+          "Exakt planerad dos för dagens MTB (använt 60 min) påverkade trötthet lokalt i benen?",
+          "Eventuella lokala muskelsmärtor eller skador efter onsdagens swimrun eller torsdagens MTB."
+        ]
+      },
+      "plan_action": {
+        "action": "keep",
+        "target_date": "2026-08-28",
+        "reason": "Belastningen är relativt hög men inom absorberbar gräns; backkvaliteten är mesocykelns skyddade stimulus.",
+        "recommendation": "Behåll backpasset som planerat; välj konservativ dos på backrepetitionerna: prioritera teknik och kontrollerad kraft, avsluta vid tydlig försämring i mekanik. Nästa pass (lördag MTB distans) bestäms efter hur du återhämtar dig efter fredagens pass.",
+        "dose_option_id": "",
+        "requires_approval": false
+      },
+      "auto_apply": {
+        "applied": false,
+        "note": "Ingen automatisk planändring."
+      }
+    },
     {
       "activity_id": 19911120461,
       "activity_date": "2026-08-26",
