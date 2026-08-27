@@ -27,8 +27,20 @@ class WeekShellUiTests(unittest.TestCase):
         self.assertIn('onclick="openStrengthWindow()"', rendered)
         self.assertIn('onclick="openTrainingSystemInfo()"', rendered)
         self.assertIn('id="trainingSystemSheet"', rendered)
-        self.assertIn("En adaptiv veckoplan", rendered)
+        self.assertIn("målbilden är överordnad", rendered)
+        self.assertIn("målbild → utvecklingsblock → vecka → beslut de närmaste 2–3 dagarna", rendered)
         self.assertNotIn("Styrkemall framåt", rendered)
+
+    def test_goal_page_uses_same_shell(self):
+        page = """<!doctype html><html><head><style>.wrap{width:min(100%,920px)}h1{font-size:5rem}.card{padding:22px}</style></head>
+<body><div class="wrap"><h1>Målbild 2027</h1><section class="card goal"><div class="goal-copy"><div class="title">Övergripande mål</div><p>Mål.</p></div><div class="mountain"></div></section><footer>Footer</footer></div></body></html>"""
+        rendered = apply_week_shell(page)
+        self.assertIn('<body class="goal-page">', rendered)
+        self.assertIn("width:min(100%,720px)!important", rendered)
+        self.assertIn(".goal-page .card{border-radius:20px", rendered)
+        self.assertIn(".goal-page .goal{grid-template-columns:1fr", rendered)
+        self.assertIn('id="trainingSystemSheet"', rendered)
+        self.assertIn("den långsiktiga målbilden styr riktningen", rendered)
 
     def test_shell_is_idempotent(self):
         page = """<html><head><style></style></head><body><div class="wrap"><footer>Footer</footer></div></body></html>"""
