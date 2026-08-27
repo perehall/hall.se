@@ -1,6 +1,13 @@
 {
   "schema_version": 4,
   "north_star": "Bygga en bred, hållbar allroundatlet med stark löpning, teknisk MTB/XC och bibehållen eller förbättrad simning. Relevant styrka, core, löpstyrka och plyometri. Flexibilitet att senare vässa mot trail/ultra, triathlon, swimrun eller cykling.",
+  "goal_contract": {
+    "source_file": "data/goal.json",
+    "source_schema_version": 2,
+    "goal_hash": "1162c643157c11ee354e73acb1cf94254611e8e8a7fd64d2c11d5140ef954569",
+    "goal_change_requires_mesocycle_review": true,
+    "principle": "Målbilden är kanonisk. Om den ändras måste aktuell mesocykel omprövas innan systemet fortsätter."
+  },
   "current_priorities": [
     {
       "key": "run",
@@ -153,6 +160,7 @@
     "start_date": "2026-08-24",
     "end_date": "2026-09-20",
     "evaluation_date": "2026-09-21",
+    "goal_basis_hash": "1162c643157c11ee354e73acb1cf94254611e8e8a7fd64d2c11d5140ef954569",
     "goal_contribution": "Flytta den prioriterade löpförmågan framåt genom kontrollerad tröskel, löpekonomi/backstyrka och lugn tålighet, samtidigt som MTB/XC och simning hålls aktiva utan att tränga undan löputvecklingen.",
     "hypothesis": "En differentierad löpkvalitet med ett kontrollerat tröskelstimulus och ett separat backstimulus kan ge bättre kompletterande utveckling och bättre plats för MTB/enduro än två snarlika tröskelpass per vecka.",
     "protected_stimuli": [
