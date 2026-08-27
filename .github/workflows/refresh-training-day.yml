@@ -1,0 +1,113 @@
+name: Refresh training day
+
+on:
+  workflow_dispatch:
+  schedule:
+    # 00:05 Europe/Stockholm. GitHub cron is UTC, so both CET/CEST slots
+    # are scheduled; the guard below runs only the slot matching the current offset.
+    - cron: "5 22 * * *"
+    - cron: "5 23 * * *"
+
+concurrency:
+  group: training-pages
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  actions: read
+  pages: write
+  id-token: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Select Stockholm midnight slot
+        id: midnight
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_SCHEDULE: ${{ github.event.schedule }}
+        run: |
+          python - <<'PY'
+          import os
+          from datetime import datetime
+          from zoneinfo import ZoneInfo
+
+          now = datetime.now(ZoneInfo("Europe/Stockholm"))
+          offset_hours = int(now.utcoffset().total_seconds() // 3600)
+          expected_schedule = "5 22 * * *" if offset_hours == 2 else "5 23 * * *"
+          should_run = (
+              os.environ.get("EVENT_NAME") == "workflow_dispatch"
+              or os.environ.get("EVENT_SCHEDULE") == expected_schedule
+          )
+
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as fh:
+              fh.write(f"run={'true' if should_run else 'false'}\n")
+
+          print(
+              f"Stockholm={now.isoformat()} offset={offset_hours:+d} "
+              f"schedule={os.environ.get('EVENT_SCHEDULE', '')!r} "
+              f"expected={expected_schedule!r} run={should_run}"
+          )
+          PY
+
+      - name: Run deterministic regression tests
+        if: steps.midnight.outputs.run == 'true'
+        run: |
+          python -m compileall -q "träning/scripts" "träning/tests"
+          python -m unittest discover -s "träning/tests" -p "test_*.py" -v
+
+      - name: Render current training day
+        if: steps.midnight.outputs.run == 'true'
+        run: python "träning/scripts/render_training_site.py"
+
+      - name: Commit rendered day rollover
+        if: steps.midnight.outputs.run == 'true'
+        run: |
+          TRACKED=(
+            "träning/data/dashboard_summary.json"
+            "träning/data/upcoming_week.json"
+            "träning/data/weeks"
+            "träning/vecka"
+            "träning/malbild"
+            "träning/malbild-2027"
+            "träning/index.html"
+          )
+          if [ -z "$(git status --porcelain -- "${TRACKED[@]}")" ]; then
+            echo "No repository changes."
+          else
+            git config user.name "training-bot"
+            git config user.email "actions@users.noreply.github.com"
+            git add -- "${TRACKED[@]}"
+            git commit -m "Refresh training day after midnight"
+            git pull --rebase --autostash origin main
+            git push origin main
+          fi
+
+      - name: Configure GitHub Pages
+        id: configure_pages
+        if: steps.midnight.outputs.run == 'true'
+        uses: actions/configure-pages@v5
+
+      - name: Upload GitHub Pages artifact
+        id: upload_pages
+        if: steps.midnight.outputs.run == 'true'
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: "."
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        if: steps.midnight.outputs.run == 'true'
+        uses: actions/deploy-pages@v4
