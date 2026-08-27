@@ -1,5 +1,5 @@
 {
-  "last_sync_utc": "2026-08-27T13:18:51.693467+00:00",
+  "last_sync_utc": "2026-08-27T13:21:58.074902+00:00",
   "activities": [
     {
       "id": 19911120461,
@@ -524,12 +524,41 @@
       "gear_id": "g11972593",
       "gear_name": "Saucony shift 2",
       "source": "Strava API"
+    },
+    {
+      "id": 15212074050,
+      "name": "SLK Swimrun Jogersö Extreme",
+      "sport_type": "Swimrun",
+      "start_date": "2025-07-23T16:07:17Z",
+      "start_date_local": "2025-07-23T18:07:17Z",
+      "distance_m": 6784.4,
+      "moving_time_s": 3960,
+      "elapsed_time_s": 4077,
+      "total_elevation_gain_m": 283.0,
+      "average_heartrate": 134.1,
+      "max_heartrate": 155.0,
+      "average_watts": 291.9,
+      "weighted_average_watts": 374,
+      "calories": 712.0,
+      "device_name": "Garmin Forerunner 965",
+      "gear_id": null,
+      "gear_name": null,
+      "source": "Strava API",
+      "source_sport_type": "TrailRun",
+      "display_label": "Swimrun",
+      "sport_normalization": {
+        "rule": "trailrun-explicit-swimrun-name-v1",
+        "evidence": [
+          "source_sport_type=TrailRun",
+          "explicit Swimrun activity name"
+        ]
+      }
     }
   ],
   "activity_semantics": {
     "schema_version": 1,
     "overrides_applied": 4,
-    "auto_rules_applied": 5,
+    "auto_rules_applied": 6,
     "override_ids_present": [
       "19852599244",
       "19862241646",
@@ -537,15 +566,15 @@
       "19911120461"
     ],
     "changed_ids": [
-      "19051548390"
+      "15212074050"
     ]
   },
   "schema_version": 2,
   "last_webhook_event": {
-    "event_key": "368165:activity:19051548390:update:1787836717",
-    "object_id": 19051548390,
+    "event_key": "368165:activity:15212074050:update:1787836905",
+    "object_id": 15212074050,
     "aspect_type": "update",
-    "event_time": 1787836717,
-    "processed_at_utc": "2026-08-27T13:18:51.693467+00:00"
+    "event_time": 1787836905,
+    "processed_at_utc": "2026-08-27T13:21:58.074902+00:00"
   }
 }

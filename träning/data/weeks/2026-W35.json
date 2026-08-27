@@ -4,7 +4,7 @@
   "week_start": "2026-08-24",
   "week_end": "2026-08-30",
   "created_at_utc": "2026-08-24T06:32:25.878995+00:00",
-  "updated_at_utc": "2026-08-27T13:19:03.408313+00:00",
+  "updated_at_utc": "2026-08-27T13:22:06.757455+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -279,11 +279,11 @@
       "activity_id": 19911120461,
       "activity_date": "2026-08-26",
       "activity_name": "SLK Swimrun Jogersö Extreme",
-      "generated_at_utc": "2026-08-27T13:19:02.885809+00:00",
+      "generated_at_utc": "2026-08-27T13:22:06.233402+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Onsdagens swimrun var mer krävande än pulsdatan visar och ökar veckobelastningen; dagens MTB hålls därför teknisk och lugn.",
-        "load_interpretation": "Senaste swimrun innehöll minst korta Z3-inslag och adderar moderat hård belastning före dagens MTB.",
+        "summary": "Onsdagens swimrun var mer belastande än pulsdatan visar och ökar veckobelastningen; torsdags-MTB bör hållas teknisk och lugn.",
+        "load_interpretation": "Det närbelastande swimrunpasset innehöll åtminstone en period motsvarande minst Z3 och höjer behovet av absorbering före ny kvalitet.",
         "confidence": "medium",
         "facts": [
           "Swimrun · Jogersö Extreme: 6,80 km · 56:25 · 102,2 m+ · snittpuls 131,9 · maxpuls 164.",
@@ -291,20 +291,20 @@
           "Planstatus 2026-08-26: dagens planerade pass är genomfört i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Onsdagens faktiska intensitet minskar säker marginal för repetitiva hårda stigningar under dagens MTB.",
-          "MTB bör bevara teknisk stimulus utan att kompromettera absorberbarhet inför fredagarnas backkvalitet."
+          "Samlad belastning mån–ons ökar risken att lägga ny hård kvalitet utan extra absorption.",
+          "Dagens MTB bör inte innehålla backintervaller eller upprepad krafttoppar för att bevara möjlighet till fredagets backkvalitet."
         ],
         "unknowns": [
-          "Exakt subjektiv dagskänsla imorgon morgon kan ändra om återställning till vanlig MTB är möjlig.",
-          "Detaljer om intensiteten under de två km med pulsbortfall (exakt varaktighet och ansträngningsgrad).",
-          "Eventuella lokala bentrötthet eller muskelömhet som användaren inte rapporterat."
+          "Subjektiv dagskänsla torsdag morgon (kan motivera återställning).",
+          "Exakt intensitet under swimrunens pulsbortfall strax över Z3 (påverkar hur mycket MTB ska skalas).",
+          "Eventuella lokalben- eller muskeltrötthet efter swimrun som användaren inte rapporterat."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-08-27",
-        "reason": "Planen för dagens MTB är redan konservativt skalad ned efter swimrun och passar mesocykelns stimuli.",
-        "recommendation": "Behåll dagens justering: kör MTB/XC teknisk och lugn utan upprepade hårda stigningar; prioritera linje, flyt och teknik framför fart. Bedöm subjektiv känsla och återställ eventuellt om morgondagens känsla är tydligt god.",
+        "reason": "Planen redan villkorat skalat ned MTB för att säkra absorption efter swimrun.",
+        "recommendation": "Behåll dagens ordination: MTB/XC teknik + aerob stig, håll det tekniskt och lugnt; undvik upprepade hårda stigningar eller fartjakt. Bedöm subjektiv känsla torsdag morgon och återställ endast om känslan är klart pigg.",
         "requires_approval": false
       },
       "auto_apply": {
