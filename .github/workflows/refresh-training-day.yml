@@ -72,7 +72,7 @@ jobs:
           print(f"Day rollover trigger: {today}")
           PY
 
-          if git diff --quiet -- "träning/data/day-rollover-trigger.txt"; then
+          if [ -z "$(git status --porcelain -- "träning/data/day-rollover-trigger.txt")" ]; then
             echo "Day already refreshed."
             exit 0
           fi
