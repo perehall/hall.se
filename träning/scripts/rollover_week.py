@@ -341,6 +341,8 @@ def build_mesocycle_next_week(promoted, strategy):
                 "microcycle_day": int(slot["day_index"]),
                 "microcycle_slot": slot["slot"],
             }
+            if slot.get("dose_options"):
+                planned_day["dose_options"] = deepcopy(slot["dose_options"])
             if slot["sport"] == "swim":
                 planned_day["swim_equipment"] = {"planned": "tbd"}
             days[offset] = planned_day
