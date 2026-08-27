@@ -37,6 +37,7 @@ class TrainingBrainTests(unittest.TestCase):
             ["north_star", "mesocycle", "microcycle", "near_term", "session"],
         )
         self.assertTrue(self.strategy["decision_policy"]["long_term_goal_is_primary"])
+        self.assertTrue(self.strategy["decision_policy"]["same_day_open_dose_must_resolve_or_review"])
         self.assertTrue(
             self.strategy["decision_policy"]["near_term_changes_must_serve_long_term_direction"]
         )
