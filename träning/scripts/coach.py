@@ -225,6 +225,13 @@ def call_openai(system_prompt, input_data, *, request_fn=None, sleep_fn=None, mo
     raise RuntimeError("AI coach: kunde inte få ett komplett strukturerat svar.")
 
 
+def normalize_dose_option_field(action):
+    normalized = dict(action)
+    if normalized.get("action") not in {"keep", "reduce"} or not str(normalized.get("target_date") or "").strip():
+        normalized["dose_option_id"] = ""
+    return normalized
+
+
 def validate_dose_option_action(plan, action, today_local):
     option_id = str(action.get("dose_option_id") or "").strip()
     target = str(action.get("target_date") or "").strip()
@@ -416,6 +423,7 @@ def main():
         latest_date=latest_date,
         fulfilled_dates=fulfilled_dates,
     )
+    result["plan_action"] = normalize_dose_option_field(result["plan_action"])
     validate_plan_action(result["plan_action"], ready_dates)
     validate_dose_option_action(plan, result["plan_action"], local_date)
 
