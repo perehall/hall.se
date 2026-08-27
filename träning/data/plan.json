@@ -80,12 +80,12 @@
     {
       "date": "2026-08-27",
       "label": "Torsdag",
-      "status": "conditional",
-      "session": "MTB/XC · teknik + aerob stig",
-      "reason": "Onsdagens swimrun blev inte enbart aerob och pulsdatan underskattar belastningen under cirka 2 km. MTB hålls därför teknisk och lugn utan upprepade hårda stigningar; fredagens backdos avgörs efter faktisk återhämtning.",
+      "status": "planned",
+      "session": "MTB/XC · 60 min · teknik + lugn aerob stig",
+      "reason": "60 min ger ett konkret men begränsat MTB/XC-stimulus idag. Onsdagens swimrun var mer än ren aerob belastning och fredagens backkvalitet är fortsatt prioriterad, därför hålls dagens pass tekniskt och lugnt utan upprepade hårda stigningar.",
       "development_focus": "Blick genom kurvan, bromsa klart före svängen och prioritera linje/flyt framför att jaga segmentfart.",
       "sport": "bike",
-      "dose_open": true,
+      "dose_open": false,
       "priority_role": "flex",
       "stimuli": [
         "mtb_technical",
@@ -97,12 +97,33 @@
         "reason": "Onsdagens faktiska intensitet ökar veckobelastningen; säkra absorption innan ny kvalitet.",
         "applied_at_utc": "2026-08-27T07:59:46.587327+00:00"
       },
-      "coach_adjustment": "Skala ned passet. Gör dagens MTB/XC teknisk och lugn utan upprepade hårda stigningar; undvik backintervaller eller fartjakt. Bedöm subjektiv känsla och återställ först om torsdag morgon visar god återhämtning.",
+      "coach_adjustment": "60 min totalt. Teknik + lugn aerob stig; inga backintervaller, ingen segmentjakt och inga upprepade hårda stigningar.",
       "manual_note": "Onsdagens pass är korrigerat till swimrun, inte vanlig löpning. Pulsen tappades under cirka 2 km med faktisk intensitet minst Z3 enligt användarrapport.",
       "mesocycle_id": "run-threshold-hill-4w",
       "microcycle_id": "run-threshold-hill-4w:mc1",
       "microcycle_index": 1,
-      "microcycle_day": 4
+      "microcycle_day": 4,
+      "dose_resolution": {
+        "state": "resolved",
+        "kind": "duration_minutes",
+        "value": 60,
+        "source": "near_term_decision",
+        "basis": "Måndag enduro + styrka, tisdag 3×8 min tröskel och onsdag 6,8 km swimrun med rapporterad belastning över ren aerob nivå; fredagens backkvalitet är fortsatt prioriterat stimulus."
+      },
+      "dose_options": [
+        {
+          "id": "mtb-support-45",
+          "kind": "duration_minutes",
+          "value": 45,
+          "session": "MTB/XC · 45 min · teknik + lugn aerob stig"
+        },
+        {
+          "id": "mtb-support-60",
+          "kind": "duration_minutes",
+          "value": 60,
+          "session": "MTB/XC · 60 min · teknik + lugn aerob stig"
+        }
+      ]
     },
     {
       "date": "2026-08-28",
