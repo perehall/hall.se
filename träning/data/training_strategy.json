@@ -136,7 +136,8 @@
     "prioritize_continuity_over_max_content": true,
     "long_term_goal_is_primary": true,
     "near_term_changes_must_serve_long_term_direction": true,
-    "protect_mesocycle_stimuli_before_optional_training": true
+    "protect_mesocycle_stimuli_before_optional_training": true,
+    "same_day_open_dose_must_resolve_or_review": true
   },
   "planning_hierarchy": {
     "order": [
@@ -248,7 +249,23 @@
         "session": "MTB/XC · teknik + aerob stig · dos öppen",
         "reason": "Utvecklar teknisk MTB/XC och aerob cykelkapacitet som stöd för målbilden, men omfattningen styrs så att mesocykelns nästa löpstimulus kan absorberas.",
         "development_focus": "Blick, linjeval, bromspunkter och flyt före segmentjakt.",
-        "day_index": 4
+        "day_index": 4,
+        "dose_options": [
+          {
+            "id": "mtb-support-45",
+            "kind": "duration_minutes",
+            "value": 45,
+            "session": "MTB/XC · 45 min · teknik + lugn aerob stig",
+            "intent": "Kort stödpass när närbelastningen talar för extra marginal inför nästa prioriterade löpstimulus."
+          },
+          {
+            "id": "mtb-support-60",
+            "kind": "duration_minutes",
+            "value": 60,
+            "session": "MTB/XC · 60 min · teknik + lugn aerob stig",
+            "intent": "Normal konservativ stöddos när teknisk MTB/XC ska bibehållas utan att konkurrera med nästa prioriterade löpstimulus."
+          }
+        ]
       },
       {
         "slot": "run_hill_quality",
