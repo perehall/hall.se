@@ -50,6 +50,8 @@ jobs:
           grep -Fq '<section class="training-brain"' "träning/index.html"
           grep -Fq 'Nästa beslut' "träning/index.html"
           grep -Fq 'week-focus-mesocycle-meta' "träning/index.html"
+          grep -Fq 'mikrocykel' "träning/index.html"
+          grep -Fq 'Kalendervecka:' "träning/index.html"
           grep -Fq 'class="week-status-expander"' "träning/index.html"
           grep -Fq '<summary>Veckostatus · ' "träning/index.html"
           grep -Fq 'Garmin via Intervals.icu används som privat återhämtningskontext' "träning/index.html"
