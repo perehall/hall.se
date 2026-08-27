@@ -195,7 +195,7 @@ def main():
             "width:min(100%,720px)!important",
             'onclick="openTrainingSystemInfo()"',
             f'id="{SYSTEM_DIALOG_ID}"',
-            "Mesocykeln:",
+            "<strong>Mesocykel:</strong>",
         ]
         missing = [marker for marker in required if marker not in verify]
         if missing:
