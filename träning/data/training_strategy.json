@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "north_star": "Bygg en bred, vältränad allroundatlet med tydlig utveckling i löpning och teknisk MTB/XC, bibehållen eller förbättrad simning samt relevant styrka, core, löpstyrka och plyometri. Träningen ska hålla dörren öppen för senare spetsning mot trail/ultra, cykellopp, swimrun eller triathlon utan att låsas mot ett enda lopp.",
   "current_priorities": [
     {
@@ -135,16 +135,17 @@
     "order": [
       "north_star",
       "mesocycle",
-      "week",
+      "microcycle",
       "near_term",
       "session"
     ],
     "north_star_role": "Den långsiktiga målbilden är överordnad och anger vilken atlet och vilka förmågor träningen ska utveckla över tid.",
-    "mesocycle_role": "Mesocykeln väljer ett avgränsat utvecklingsfokus som för målbilden framåt under flera veckor och anger vilka stimuli som ska skyddas, stödjas och utvärderas.",
-    "week_role": "Veckan är en preliminär realisering av mesocykeln. Den ska skapa plats för rätt stimuli men är aldrig ett mål i sig.",
-    "near_term_role": "Beslut de närmaste 2–3 dagarna navigerar runt faktisk belastning, återhämtning, fasta åtaganden och andra rådande omständigheter.",
-    "session_role": "Det enskilda passet är minsta verkställande enhet och ska ha en tydlig roll i mesocykeln eller vara uttryckligen stödjande/rekreativt.",
-    "adaptation_rule": "När närtidens omständigheter kräver ändring ska vägen justeras, men mesocykelns relevanta utvecklingsstimuli ska bevaras, flyttas eller återtas när det är absorberbart och fortfarande tjänar målbilden."
+    "mesocycle_role": "Mesocykeln väljer ett avgränsat flerveckors utvecklingsfokus som för målbilden framåt och anger vilka stimuli som ska skyddas, stödjas och utvärderas.",
+    "microcycle_role": "Mikrocykeln är den korta operativa träningscykeln. Den organiserar mesocykelns stimuli till en absorberbar följd av pass och öppna beslut utifrån den aktuella situationen.",
+    "near_term_role": "Beslut de närmaste 2–3 dagarna justerar mikrocykeln efter faktisk belastning, återhämtning, fasta åtaganden och andra rådande omständigheter.",
+    "session_role": "Det enskilda passet verkställer ett definierat stimulus eller en uttryckligen stödjande/rekreativ roll inom mikrocykeln.",
+    "calendar_role": "Kalenderveckan är ett presentations- och navigeringslager. I nuvarande implementation är mikrocykeln sju dagar och visas måndag–söndag, men veckan är inte en egen planeringsnivå.",
+    "adaptation_rule": "När målbilden ändras ska mesocykeln omprövas. När närtidens omständigheter ändras ska mikrocykeln och enskilda pass justeras, medan relevanta utvecklingsstimuli bevaras, flyttas eller återtas när det är absorberbart och fortfarande tjänar målbilden."
   },
   "current_mesocycle": {
     "id": "run-threshold-hill-4w",
@@ -169,76 +170,13 @@
       "plyometric",
       "enduro_technical"
     ],
-    "weekly_template": [
-      {
-        "slot": "run_threshold",
-        "preferred_weekday": 2,
-        "sport": "run",
-        "priority_role": "anchor",
-        "stimuli": [
-          "run_threshold"
-        ],
-        "session": "Löpning · kontrollerad tröskel · dos öppen",
-        "reason": "Mesocykelns första prioriterade löpstimulus. Exakt dos bestäms först när de närmast föregående dagarnas faktiska belastning och återhämtning är kända.",
-        "development_focus": "Jämn, kontrollerad kvalitet utan fartjakt; progression ska komma genom absorberbar träning."
-      },
-      {
-        "slot": "swim_support",
-        "preferred_weekday": 3,
-        "sport": "swim",
-        "priority_role": "flex",
-        "stimuli": [
-          "swim_aerobic",
-          "swim_technique"
-        ],
-        "session": "Simning · aerob/teknik · dos öppen",
-        "reason": "Stödjer målbildens simkapacitet med liten mekanisk kostnad för benen och ska inte tränga undan mesocykelns prioriterade löpstimuli.",
-        "development_focus": "Teknisk kvalitet och stabil aerob simning."
-      },
-      {
-        "slot": "mtb_support",
-        "preferred_weekday": 4,
-        "sport": "bike",
-        "priority_role": "flex",
-        "stimuli": [
-          "mtb_technical",
-          "mtb_aerobic"
-        ],
-        "session": "MTB/XC · teknik + aerob stig · dos öppen",
-        "reason": "Utvecklar teknisk MTB/XC och aerob cykelkapacitet som stöd för målbilden, men omfattningen styrs så att mesocykelns nästa löpstimulus kan absorberas.",
-        "development_focus": "Blick, linjeval, bromspunkter och flyt före segmentjakt."
-      },
-      {
-        "slot": "run_hill_quality",
-        "preferred_weekday": 5,
-        "sport": "run",
-        "priority_role": "anchor",
-        "stimuli": [
-          "run_hill_quality"
-        ],
-        "session": "Löpning · backkvalitet · dos öppen",
-        "reason": "Mesocykelns andra prioriterade löpkvalitet: kraft, löpekonomi och mekanisk kvalitet. Dosen låses först när närbelastningen är känd.",
-        "development_focus": "Kraftfull men kontrollerad löpning med bibehållen mekanik; ingen maximal sprint eller syrajakt."
-      },
-      {
-        "slot": "run_easy_distance",
-        "preferred_weekday": 7,
-        "sport": "run",
-        "priority_role": "flex",
-        "stimuli": [
-          "run_easy_distance"
-        ],
-        "session": "Löpning · lugn distans · dos öppen",
-        "reason": "Mesocykelns tredje löpstimulus bygger tålighet och kontinuitet utan att bli ytterligare kvalitet.",
-        "development_focus": "Avslappnad rytm och jämn ansträngning."
-      }
-    ],
     "progression_policy": {
       "automatic_load_increase": false,
       "keep_intensity_controlled": true,
       "dose_decided_near_term": true,
       "preserve_stimulus_before_preserving_exact_session": true,
-      "missed_protected_stimulus_requires_review": true
+      "missed_protected_stimulus_requires_review": true,
+      "microcycle_may_reorganize_sessions": true
     },
     "success_signals": [
       "Kontrollerad kvalitet kan genomföras med stabil känsla och teknik över blocket.",
@@ -259,6 +197,75 @@
       "Talar jämförbara pass för förbättrad kontroll, fart eller löpekonomi utan att kostnaden i återhämtning ökat oproportionerligt?",
       "Har MTB/XC, simning och relevant styrka kunnat stödja målbilden utan att återkommande tränga undan mesocykelns prioriterade stimuli?",
       "Ska nästa mesocykel fortsätta samma riktning, modifiera fokus eller byta utvecklingsområde utifrån faktisk respons?"
+    ],
+    "microcycle_structure": {
+      "length_days": 7,
+      "calendar_alignment": "monday_sunday",
+      "rationale": "Nuvarande mikrocykel är sju dagar och visas som kalendervecka för enkel navigering. Planeringslogiken utgår från mikrocykeldag och stimulus, inte från kalenderveckan som mål."
+    },
+    "microcycle_template": [
+      {
+        "slot": "run_threshold",
+        "sport": "run",
+        "priority_role": "anchor",
+        "stimuli": [
+          "run_threshold"
+        ],
+        "session": "Löpning · kontrollerad tröskel · dos öppen",
+        "reason": "Mesocykelns första prioriterade löpstimulus. Exakt dos bestäms först när de närmast föregående dagarnas faktiska belastning och återhämtning är kända.",
+        "development_focus": "Jämn, kontrollerad kvalitet utan fartjakt; progression ska komma genom absorberbar träning.",
+        "day_index": 2
+      },
+      {
+        "slot": "swim_support",
+        "sport": "swim",
+        "priority_role": "flex",
+        "stimuli": [
+          "swim_aerobic",
+          "swim_technique"
+        ],
+        "session": "Simning · aerob/teknik · dos öppen",
+        "reason": "Stödjer målbildens simkapacitet med liten mekanisk kostnad för benen och ska inte tränga undan mesocykelns prioriterade löpstimuli.",
+        "development_focus": "Teknisk kvalitet och stabil aerob simning.",
+        "day_index": 3
+      },
+      {
+        "slot": "mtb_support",
+        "sport": "bike",
+        "priority_role": "flex",
+        "stimuli": [
+          "mtb_technical",
+          "mtb_aerobic"
+        ],
+        "session": "MTB/XC · teknik + aerob stig · dos öppen",
+        "reason": "Utvecklar teknisk MTB/XC och aerob cykelkapacitet som stöd för målbilden, men omfattningen styrs så att mesocykelns nästa löpstimulus kan absorberas.",
+        "development_focus": "Blick, linjeval, bromspunkter och flyt före segmentjakt.",
+        "day_index": 4
+      },
+      {
+        "slot": "run_hill_quality",
+        "sport": "run",
+        "priority_role": "anchor",
+        "stimuli": [
+          "run_hill_quality"
+        ],
+        "session": "Löpning · backkvalitet · dos öppen",
+        "reason": "Mesocykelns andra prioriterade löpkvalitet: kraft, löpekonomi och mekanisk kvalitet. Dosen låses först när närbelastningen är känd.",
+        "development_focus": "Kraftfull men kontrollerad löpning med bibehållen mekanik; ingen maximal sprint eller syrajakt.",
+        "day_index": 5
+      },
+      {
+        "slot": "run_easy_distance",
+        "sport": "run",
+        "priority_role": "flex",
+        "stimuli": [
+          "run_easy_distance"
+        ],
+        "session": "Löpning · lugn distans · dos öppen",
+        "reason": "Mesocykelns tredje löpstimulus bygger tålighet och kontinuitet utan att bli ytterligare kvalitet.",
+        "development_focus": "Avslappnad rytm och jämn ansträngning.",
+        "day_index": 7
+      }
     ]
   }
 }
