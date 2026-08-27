@@ -50,7 +50,9 @@ h1{font-size:clamp(2rem,8vw,3.2rem);line-height:1;margin:0 0 8px;letter-spacing:
 .preview-focus{color:#334155;font-size:.94rem;line-height:1.5}
 .preview-note{margin-top:8px;color:#64748b;font-size:.82rem}
 .swim-equipment-line{margin:6px 0 0;color:#475569;font-size:.82rem}.swim-equipment-line strong{color:#334155}
-@media (max-width:620px){.preview-metrics{grid-template-columns:repeat(2,1fr)}}
+.reference-tools{display:flex;justify-content:flex-start;margin:12px 0 8px}.reference-chip{appearance:none;border:1px solid #cbd5e1;background:#fff;color:#334155;border-radius:999px;padding:9px 13px;font:inherit;font-size:.82rem;font-weight:800;cursor:pointer;box-shadow:0 3px 10px rgba(15,23,42,.04)}
+.strength-window{position:fixed;inset:auto;width:min(520px,calc(100vw - 32px));max-height:calc(100vh - 32px);left:50%;top:50%;transform:translate(-50%,-50%);margin:0;border:1px solid #e2e8f0;border-radius:18px;padding:0;background:#fff;color:#0f172a;box-shadow:0 24px 70px rgba(15,23,42,.28);overflow:auto}.strength-window::backdrop{background:rgba(15,23,42,.38)}.sheet-inner{padding:0 18px 18px}.sheet-head{position:sticky;top:0;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 -18px 8px;padding:14px 18px 10px;background:#fff;border-bottom:1px solid #f1f5f9;cursor:move;touch-action:none;user-select:none}.sheet-head h2{font-size:1.1rem;margin:0}.sheet-close{appearance:none;border:0;background:#f1f5f9;color:#334155;border-radius:999px;padding:7px 10px;font:inherit;font-size:.78rem;font-weight:800;cursor:pointer}.sheet-note{margin:0 0 10px;color:#64748b;font-size:.8rem}.strength-list{margin:0;padding:0;list-style:none;display:grid;gap:0}.strength-list li{padding:10px 0;border-top:1px solid #e2e8f0;font-size:.9rem;line-height:1.38}.strength-list li:first-child{border-top:0}
+@media (max-width:620px){.preview-metrics{grid-template-columns:repeat(2,1fr)}.reference-tools{margin-top:10px}.strength-window{width:min(100% - 16px,720px);max-height:min(78vh,680px);left:50%!important;top:auto!important;bottom:0;transform:translateX(-50%)!important;border:0;border-radius:22px 22px 0 0}.sheet-inner{padding:0 18px calc(20px + env(safe-area-inset-bottom))}.sheet-head{cursor:default;touch-action:auto}}
 /* week-header-layout-v7 */
 .header-updated{margin-top:4px;color:#94a3b8;font-size:.74rem;font-weight:500;line-height:1.35}
 .header-status{margin-top:4px;color:#64748b;font-size:.76rem;font-weight:700;line-height:1.35}
@@ -135,7 +137,70 @@ h1{font-size:clamp(2rem,8vw,3.2rem);line-height:1;margin:0 0 8px;letter-spacing:
   <div class="session">Löpning · lugn distans · dos öppen</div>
 
   <div class="reason">Blockets tredje löpstimulus är lugn distans/tålighet. Exakt omfattning och om passet ska ligga kvar på söndagen avgörs efter fredag–lördagens faktiska utfall.</div>
-<div class="development-focus"><strong>Utvecklingsfokus</strong><span>Avslappnad rytm och jämn ansträngning; inget tredje kvalitetspass.</span></div></div>
-<h2 class="section">Styrkemall framåt</h2><div class="principles"><div class="principle">Liten dos explosivitet/plyometri när omkringliggande belastning tillåter.</div><div class="principle">Bulgarian split squat som huvudalternativ för unilateral benstyrka.</div><div class="principle">Marklyft eller RDL som normal höftdominant huvudövning.</div><div class="principle">Vad + soleus regelbundet.</div><div class="principle">Enarmsrodd + press som huvuddrag/press.</div><div class="principle">Välj två bålövningar; låt inte accessoarer tränga undan huvudstyrkan.</div></div>
+</div>
+<div class="reference-tools">
+  <button class="reference-chip" type="button" onclick="openStrengthWindow()">Styrkemall</button>
+</div>
+<dialog id="strengthSheet" class="strength-window" aria-labelledby="strengthWindowTitle">
+  <div class="sheet-inner">
+    <div class="sheet-head" id="strengthDragHandle"><h2 id="strengthWindowTitle">Styrkemall</h2><button class="sheet-close" type="button" onclick="document.getElementById('strengthSheet').close()">Stäng</button></div>
+    <p class="sheet-note">Referens. Aktuellt styrkebeslut styrs av veckoplanen.</p>
+    <ul class="strength-list"><li>Liten dos explosivitet/plyometri när omkringliggande belastning tillåter.</li><li>Bulgarian split squat som huvudalternativ för unilateral benstyrka.</li><li>Marklyft eller RDL som normal höftdominant huvudövning.</li><li>Vad + soleus regelbundet.</li><li>Enarmsrodd + press som huvuddrag/press.</li><li>Välj två bålövningar; låt inte accessoarer tränga undan huvudstyrkan.</li></ul>
+  <div class="development-focus"><strong>Utvecklingsfokus</strong><span>Avslappnad rytm och jämn ansträngning; inget tredje kvalitetspass.</span></div></div>
+</dialog>
+<script>
+function openStrengthWindow() {
+  const dialog = document.getElementById('strengthSheet');
+  dialog.style.left = '50%';
+  dialog.style.top = '50%';
+  dialog.style.transform = 'translate(-50%,-50%)';
+  dialog.showModal();
+}
+(function() {
+  const dialog = document.getElementById('strengthSheet');
+  const handle = document.getElementById('strengthDragHandle');
+  let dragging = false;
+  let offsetX = 0;
+  let offsetY = 0;
+  function desktop() { return window.matchMedia('(min-width: 621px)').matches; }
+  function clamp(value, min, max) { return Math.min(Math.max(value, min), max); }
+  handle.addEventListener('pointerdown', (event) => {
+    if (!desktop() || event.target.closest('button')) return;
+    const rect = dialog.getBoundingClientRect();
+    dialog.style.transform = 'none';
+    dialog.style.left = rect.left + 'px';
+    dialog.style.top = rect.top + 'px';
+    offsetX = event.clientX - rect.left;
+    offsetY = event.clientY - rect.top;
+    dragging = true;
+    handle.setPointerCapture(event.pointerId);
+  });
+  handle.addEventListener('pointermove', (event) => {
+    if (!dragging || !desktop()) return;
+    const rect = dialog.getBoundingClientRect();
+    const margin = 8;
+    const maxLeft = Math.max(margin, window.innerWidth - rect.width - margin);
+    const maxTop = Math.max(margin, window.innerHeight - rect.height - margin);
+    dialog.style.left = clamp(event.clientX - offsetX, margin, maxLeft) + 'px';
+    dialog.style.top = clamp(event.clientY - offsetY, margin, maxTop) + 'px';
+  });
+  function stopDrag(event) {
+    if (!dragging) return;
+    dragging = false;
+    if (event.pointerId !== undefined && handle.hasPointerCapture(event.pointerId)) handle.releasePointerCapture(event.pointerId);
+  }
+  handle.addEventListener('pointerup', stopDrag);
+  handle.addEventListener('pointercancel', stopDrag);
+  window.addEventListener('resize', () => {
+    if (!dialog.open || !desktop()) return;
+    const rect = dialog.getBoundingClientRect();
+    const margin = 8;
+    dialog.style.transform = 'none';
+    dialog.style.left = clamp(rect.left, margin, Math.max(margin, window.innerWidth - rect.width - margin)) + 'px';
+    dialog.style.top = clamp(rect.top, margin, Math.max(margin, window.innerHeight - rect.height - margin)) + 'px';
+  });
+})();
+</script>
+
 <footer>Preliminär framtidsplan. Faktisk belastning och återhämtning styr kommande justeringar. · <a href="/cdn-cgi/access/logout" style="color:inherit">Logga ut</a></footer>
 </div></body></html>
