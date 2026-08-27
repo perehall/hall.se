@@ -32,6 +32,7 @@ EXPECTED_PIPELINE = (
     "finalize_goal_link_layout.py",
     "publish_goal_cache_bypass.py",
     "finalize_generated_whitespace.py",
+    "finalize_week_shell_ui.py",
     "check_week_reviews.py",
     "check_week_review_ui.py",
     "validate_site_contracts.py",
@@ -53,7 +54,8 @@ class RenderPipelineTests(unittest.TestCase):
         self.assertLess(PIPELINE.index("finalize_historical_coach_ui.py"), PIPELINE.index("finalize_week_status_ui.py"))
         self.assertLess(PIPELINE.index("finalize_week_status_ui.py"), PIPELINE.index("build_home.py"))
         self.assertLess(PIPELINE.index("publish_goal_cache_bypass.py"), PIPELINE.index("finalize_generated_whitespace.py"))
-        self.assertLess(PIPELINE.index("finalize_generated_whitespace.py"), PIPELINE.index("validate_site_contracts.py"))
+        self.assertLess(PIPELINE.index("finalize_generated_whitespace.py"), PIPELINE.index("finalize_week_shell_ui.py"))
+        self.assertLess(PIPELINE.index("finalize_week_shell_ui.py"), PIPELINE.index("validate_site_contracts.py"))
 
     def test_runner_executes_every_stage_in_canonical_order(self):
         calls = []
