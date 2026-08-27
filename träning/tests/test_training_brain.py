@@ -37,6 +37,7 @@ class TrainingBrainTests(unittest.TestCase):
             ["north_star", "mesocycle", "microcycle", "near_term", "session"],
         )
         self.assertTrue(self.strategy["decision_policy"]["long_term_goal_is_primary"])
+        self.assertTrue(self.strategy["decision_policy"]["same_day_open_dose_must_resolve_or_review"])
         self.assertTrue(
             self.strategy["decision_policy"]["near_term_changes_must_serve_long_term_direction"]
         )
@@ -82,6 +83,43 @@ class TrainingBrainTests(unittest.TestCase):
         self.assertEqual(brief["status"], "GENOMFÖRT")
         self.assertIn("Swimrun", brief["why"])
         self.assertIn("Sim aerob kapacitet", brief["stimuli"])
+
+
+    def test_same_day_open_dose_is_explicitly_flagged(self):
+        plan = {
+            "days": [
+                {
+                    "date": "2026-08-27",
+                    "status": "planned",
+                    "session": "MTB/XC · teknik + aerob stig · dos öppen",
+                    "sport": "bike",
+                    "dose_open": True,
+                    "priority_role": "flex",
+                    "stimuli": ["mtb_technical", "mtb_aerobic"],
+                }
+            ]
+        }
+        brief = resolve_today(plan, [], self.strategy, date(2026, 8, 27))
+        self.assertEqual(brief["status"], "DOSBESLUT KRÄVS")
+        self.assertIn("dosen är fortfarande öppen", brief["why"])
+
+    def test_resolved_same_day_dose_is_shown_as_normal_plan(self):
+        plan = {
+            "days": [
+                {
+                    "date": "2026-08-27",
+                    "status": "planned",
+                    "session": "MTB/XC · 60 min · teknik + lugn aerob stig",
+                    "sport": "bike",
+                    "dose_open": False,
+                    "priority_role": "flex",
+                    "stimuli": ["mtb_technical", "mtb_aerobic"],
+                }
+            ]
+        }
+        brief = resolve_today(plan, [], self.strategy, date(2026, 8, 27))
+        self.assertEqual(brief["status"], "PLANERAT")
+        self.assertIn("60 min", brief["headline"])
 
     def test_explicit_next_decision_wins_inside_72_hour_horizon(self):
         decision = resolve_next_decision(self.plan, [], self.strategy, date(2026, 8, 26))

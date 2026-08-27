@@ -155,6 +155,22 @@ def validate_training_strategy(document):
             template_stimuli.add(key)
         for field in ("session", "reason", "development_focus"):
             nonempty_string(item.get(field), f"{context}.{field}")
+        dose_options = item.get("dose_options")
+        if dose_options is not None:
+            require(isinstance(dose_options, list) and dose_options, f"{context}.dose_options måste vara icke-tom lista")
+            option_ids = set()
+            for option_index, option in enumerate(dose_options):
+                option_context = f"{context}.dose_options[{option_index}]"
+                require(isinstance(option, dict), f"{option_context}: måste vara objekt")
+                option_id = option.get("id")
+                nonempty_string(option_id, f"{option_context}.id")
+                require(option_id not in option_ids, f"{option_context}: dubblerat id {option_id!r}")
+                option_ids.add(option_id)
+                require(option.get("kind") in {"duration_minutes", "distance_km", "structured"}, f"{option_context}.kind ogiltig")
+                value = option.get("value")
+                require(isinstance(value, (int, float)) and value > 0, f"{option_context}.value måste vara positivt tal")
+                nonempty_string(option.get("session"), f"{option_context}.session")
+                nonempty_string(option.get("intent"), f"{option_context}.intent")
 
     missing_protected = [key for key in protected if key not in template_stimuli]
     require(
@@ -217,11 +233,16 @@ def validate_training_strategy(document):
         "protect_mesocycle_stimuli_before_optional_training",
         "long_term_goal_is_primary",
         "near_term_changes_must_serve_long_term_direction",
+        "same_day_open_dose_must_resolve_or_review",
     ):
         require(isinstance(policy.get(field), bool), f"strategi.decision_policy.{field} måste vara bool")
     require(policy.get("long_term_goal_is_primary") is True, "strategi: långsiktig målbild måste vara överordnad")
     require(
         policy.get("near_term_changes_must_serve_long_term_direction") is True,
         "strategi: närtidsändringar måste tjäna den långsiktiga riktningen",
+    )
+    require(
+        policy.get("same_day_open_dose_must_resolve_or_review") is True,
+        "strategi: dagens öppna dos måste lösas eller markeras för review",
     )
     return True

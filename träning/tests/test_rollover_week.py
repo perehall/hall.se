@@ -149,6 +149,7 @@ class WeeklyRolloverTests(unittest.TestCase):
         self.assertEqual(future["days"][2]["sport"], "swim")
         self.assertEqual(future["days"][2]["swim_equipment"]["planned"], "tbd")
         self.assertEqual(future["days"][3]["sport"], "bike")
+        self.assertEqual([item["value"] for item in future["days"][3]["dose_options"]], [45, 60])
         self.assertEqual(future["days"][4]["stimuli"], ["run_hill_quality"])
         self.assertEqual(future["days"][5]["sport"], "open")
         self.assertEqual(future["days"][6]["stimuli"], ["run_easy_distance"])

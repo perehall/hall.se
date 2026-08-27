@@ -69,6 +69,14 @@ def resolve_today(plan, activities, strategy, today):
         why = "Registrerat idag: " + " + ".join(unique_labels) + "."
     else:
         why = day.get("reason") or "Ingen motivering registrerad."
+        same_day_rule = (strategy.get("decision_policy") or {}).get("same_day_open_dose_must_resolve_or_review") is True
+        if same_day_rule and day.get("dose_open") is True:
+            status = "DOSBESLUT KRÄVS"
+            why = (
+                why
+                + " Dagens stimulus är känt men dosen är fortfarande öppen; systemet måste lösa dosen "
+                  "eller uttryckligen markera att underlaget inte räcker."
+            )
 
     return {
         "date": today_text,

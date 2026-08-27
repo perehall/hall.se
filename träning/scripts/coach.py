@@ -34,7 +34,7 @@ WELLNESS_CONTEXT_FILE = Path(
 )
 
 MODEL = os.environ.get("OPENAI_MODEL", "gpt-5-mini")
-COACH_CONTRACT_VERSION = 8
+COACH_CONTRACT_VERSION = 9
 PRIVATE_WELLNESS_PATTERN = re.compile(
     r"\b(?:hrv|vilopuls|restinghr|sömn(?:poäng|score)?|sleep(?:secs|score|quality)?|wellness|garmin|intervals\.icu)\b"
     r"(?:\s*[:=]?\s*[-+]?\d+(?:[.,]\d+)?)?",
@@ -73,9 +73,10 @@ SCHEMA = {
                 "target_date": {"type": "string"},
                 "reason": {"type": "string"},
                 "recommendation": {"type": "string"},
+                "dose_option_id": {"type": "string"},
                 "requires_approval": {"type": "boolean"},
             },
-            "required": ["action", "target_date", "reason", "recommendation", "requires_approval"],
+            "required": ["action", "target_date", "reason", "recommendation", "dose_option_id", "requires_approval"],
         },
     },
     "required": ["assessment", "plan_action"],
@@ -224,20 +225,102 @@ def call_openai(system_prompt, input_data, *, request_fn=None, sleep_fn=None, mo
     raise RuntimeError("AI coach: kunde inte få ett komplett strukturerat svar.")
 
 
+def normalize_dose_option_field(action):
+    normalized = dict(action)
+    if normalized.get("action") not in {"keep", "reduce"} or not str(normalized.get("target_date") or "").strip():
+        normalized["dose_option_id"] = ""
+    return normalized
+
+
+def validate_dose_option_action(plan, action, today_local):
+    option_id = str(action.get("dose_option_id") or "").strip()
+    target = str(action.get("target_date") or "").strip()
+    kind = action.get("action")
+    day = next((d for d in plan.get("days", []) if d.get("date") == target), None) if target else None
+
+    if option_id:
+        if not day:
+            raise RuntimeError("AI coach: dose_option_id kräver en giltig target_date")
+        if day.get("dose_open") is not True:
+            raise RuntimeError("AI coach: dose_option_id får bara användas när måldagens dos är öppen")
+        if kind not in {"keep", "reduce"}:
+            raise RuntimeError("AI coach: dose_option_id får bara kombineras med keep eller reduce")
+        options = day.get("dose_options") or []
+        if not any(option.get("id") == option_id for option in options):
+            raise RuntimeError(
+                f"AI coach: okänt dose_option_id {option_id!r} för {target}; "
+                f"tillåtna är {[option.get('id') for option in options]!r}"
+            )
+
+    if (
+        day
+        and target == today_local
+        and day.get("dose_open") is True
+        and kind in {"keep", "reduce"}
+        and (day.get("dose_options") or [])
+        and not option_id
+    ):
+        raise RuntimeError(
+            "AI coach: dagens öppna dos har förhandsgodkända dose_options; "
+            "keep/reduce måste välja ett alternativ eller använda review."
+        )
+    return True
+
+
 def apply_conservative_action(plan, action, *, now_utc=None):
     kind = action.get("action")
     target = action.get("target_date") or ""
-    if kind not in ("reduce", "rest") or not target:
+    option_id = str(action.get("dose_option_id") or "").strip()
+    if not target:
         return False, "Ingen automatisk planändring."
 
     day = next((d for d in plan.get("days", []) if d.get("date") == target), None)
     if not day or day.get("status") == "completed":
         return False, "Måldagen saknas eller är redan genomförd."
 
+    if kind not in ("keep", "reduce", "rest"):
+        return False, "Ingen automatisk planändring."
+
     reason = action.get("reason", "")
+    applied_at = now_utc or datetime.now(timezone.utc).isoformat()
+    changed = False
+
+    if option_id:
+        option = next(
+            (item for item in (day.get("dose_options") or []) if item.get("id") == option_id),
+            None,
+        )
+        if option is None:
+            raise RuntimeError(f"AI coach: okänt dose_option_id {option_id!r} för {target}")
+        if day.get("dose_open") is not True:
+            raise RuntimeError("AI coach: försökte lösa en dos som inte längre är öppen")
+        if "original_session" not in day:
+            day["original_session"] = day.get("session", "")
+        day["session"] = option["session"]
+        day["dose_open"] = False
+        day["dose_resolution"] = {
+            "state": "resolved",
+            "kind": option.get("kind"),
+            "value": option.get("value"),
+            "source": "near_term_ai",
+            "option_id": option_id,
+            "basis": reason,
+            "applied_at_utc": applied_at,
+        }
+        changed = True
+
+    if kind == "keep":
+        if changed:
+            day["auto_coach"] = {
+                "action": kind,
+                "reason": reason,
+                "applied_at_utc": applied_at,
+            }
+            return True, f"Dagens dos löstes konservativt på {target}: {option_id}."
+        return False, "Ingen automatisk planändring."
+
     if "original_session" not in day:
         day["original_session"] = day.get("session", "")
-    applied_at = now_utc or datetime.now(timezone.utc).isoformat()
     day["auto_coach"] = {
         "action": kind,
         "reason": reason,
@@ -248,13 +331,17 @@ def apply_conservative_action(plan, action, *, now_utc=None):
         day["session"] = "Vila eller mycket lätt"
         day["sport"] = "rest"
         day["status"] = "conditional"
+        day["dose_open"] = False
         day["reason"] = f"AI-coach: {reason}"
+        changed = True
     elif kind == "reduce":
         if day.get("status") in ("planned", "preliminary"):
             day["status"] = "conditional"
         day["coach_adjustment"] = f"Skala ned passet. {action.get('recommendation', '')}".strip()
+        changed = True
 
-    return True, f"Konservativ ändring applicerad på {target}: {kind}."
+    return changed, f"Konservativ ändring applicerad på {target}: {kind}."
+
 
 
 def main():
@@ -312,7 +399,10 @@ def main():
             "Datum i deferred_target_dates ligger längre fram men är inte beslutsmogna eftersom mellanliggande "
             "dagars faktiska utfall ännu saknas; skriv inte om dem nu. Om allowed_target_dates är tom ska "
             "target_date vara tomt och ingen automatisk framtidsändring göras. Föreslå endast konservativ "
-            "automatisk ändring; allt som kan innebära ökad belastning ska vara review och kräva godkännande."
+            "automatisk ändring; allt som kan innebära ökad belastning ska vara review och kräva godkännande. "
+            "Om dagens pass har dose_open=true och dose_options ska en keep/reduce-åtgärd välja exakt ett "
+            "dose_option_id från dagens alternativ. Hitta aldrig på en egen dos utanför dessa alternativ. "
+            "Om underlaget inte räcker för att välja ska action vara review och dose_option_id vara tomt."
         ),
     }
 
@@ -333,7 +423,9 @@ def main():
         latest_date=latest_date,
         fulfilled_dates=fulfilled_dates,
     )
+    result["plan_action"] = normalize_dose_option_field(result["plan_action"])
     validate_plan_action(result["plan_action"], ready_dates)
+    validate_dose_option_action(plan, result["plan_action"], local_date)
 
     changed, apply_note = apply_conservative_action(plan, result["plan_action"])
     if changed:

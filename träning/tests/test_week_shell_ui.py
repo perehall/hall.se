@@ -29,6 +29,7 @@ class WeekShellUiTests(unittest.TestCase):
         self.assertIn('id="trainingSystemSheet"', rendered)
         self.assertIn("Målbilden anger vart. Mesocykeln väljer utvecklingsväg. Mikrocykeln organiserar arbetet.", rendered)
         self.assertIn("<strong>Mikrocykel:</strong> den korta operativa träningscykeln.", rendered)
+        self.assertIn("dagens pass ska stimuluset normalt översättas till konkret duration", rendered)
         self.assertNotIn("Styrkemall framåt", rendered)
 
     def test_goal_page_uses_same_shell(self):
