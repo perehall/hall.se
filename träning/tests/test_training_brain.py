@@ -30,6 +30,22 @@ class TrainingBrainTests(unittest.TestCase):
         with self.assertRaises(StrategyContractError):
             validate_training_strategy(strategy)
 
+    def test_long_term_goal_is_primary_contract(self):
+        hierarchy = self.strategy["planning_hierarchy"]
+        self.assertEqual(
+            hierarchy["order"],
+            ["north_star", "development_block", "week", "near_term"],
+        )
+        self.assertTrue(self.strategy["decision_policy"]["long_term_goal_is_primary"])
+        self.assertTrue(
+            self.strategy["decision_policy"]["near_term_changes_must_serve_long_term_direction"]
+        )
+
+        broken = deepcopy(self.strategy)
+        broken["decision_policy"]["long_term_goal_is_primary"] = False
+        with self.assertRaises(StrategyContractError):
+            validate_training_strategy(broken)
+
     def test_today_uses_matching_actual_activity_as_completed(self):
         plan = {
             "days": [
