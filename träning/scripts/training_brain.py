@@ -131,7 +131,7 @@ def resolve_next_decision(plan, activities, strategy, today):
             "date": day_date.isoformat(),
             "label": day.get("label") or day_date.isoformat(),
             "headline": day.get("session") or "Kommande nyckelpass",
-            "note": "Nästa prioriterade stimulus i det aktuella blocket.",
+            "note": "Nästa prioriterade stimulus i den aktuella mesocykeln.",
         }
 
     if future:
@@ -150,11 +150,11 @@ def resolve_next_decision(plan, activities, strategy, today):
     }
 
 
-def resolve_block(strategy, today):
+def resolve_mesocycle(strategy, today):
     today_date = today if isinstance(today, date) else date.fromisoformat(str(today))
-    block = strategy.get("current_block") or {}
-    start = date.fromisoformat(block["start_date"])
-    end = date.fromisoformat(block["end_date"])
+    mesocycle = strategy.get("current_mesocycle") or {}
+    start = date.fromisoformat(mesocycle["start_date"])
+    end = date.fromisoformat(mesocycle["end_date"])
     total_weeks = max(1, math.ceil(((end - start).days + 1) / 7))
     if today_date < start:
         week = 0
@@ -166,14 +166,20 @@ def resolve_block(strategy, today):
         week = min(total_weeks, ((today_date - start).days // 7) + 1)
         state = f"vecka {week} av {total_weeks}"
     return {
-        "title": block.get("title") or "Aktuellt block",
+        "id": mesocycle.get("id") or "",
+        "title": mesocycle.get("title") or "Aktuell mesocykel",
         "state": state,
-        "hypothesis": block.get("hypothesis") or "",
-        "evaluation_date": block.get("evaluation_date") or "",
-        "protected_stimuli": [capability_labels(strategy).get(key, key) for key in block.get("protected_stimuli") or []],
+        "goal_contribution": mesocycle.get("goal_contribution") or "",
+        "hypothesis": mesocycle.get("hypothesis") or "",
+        "evaluation_date": mesocycle.get("evaluation_date") or "",
+        "protected_stimuli": [capability_labels(strategy).get(key, key) for key in mesocycle.get("protected_stimuli") or []],
     }
 
 
 def resolve_priority_line(strategy):
     ordered = sorted(strategy.get("current_priorities") or [], key=lambda item: item.get("priority", 999))
     return [item.get("label") for item in ordered if item.get("label")]
+
+
+# Compatibility alias for archived callers; new code should use resolve_mesocycle.
+resolve_block = resolve_mesocycle
