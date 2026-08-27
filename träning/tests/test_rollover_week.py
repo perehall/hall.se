@@ -2,7 +2,7 @@
 import json
 import sys
 import unittest
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -183,7 +183,7 @@ class WeeklyRolloverTests(unittest.TestCase):
 
     def test_structured_swim_is_carried_forward_without_volume_increase(self):
         upcoming = add_structured_swim(upcoming_w35())
-        promoted, future = rollover_documents(plan_w34(), upcoming, date(2026, 8, 24))
+        promoted, future = rollover_documents(plan_w34(), upcoming, date(2026, 8, 24), STRATEGY)
         source = promoted["days"][1]
         target = future["days"][2]
         self.assertEqual(future["days"][1]["stimuli"], ["run_threshold"])
@@ -215,7 +215,7 @@ class WeeklyRolloverTests(unittest.TestCase):
             },
             "days": [
                 {
-                    "date": (date(2026, 9, 14) + __import__("datetime").timedelta(days=i)).isoformat(),
+                    "date": (date(2026, 9, 14) + timedelta(days=i)).isoformat(),
                     "label": "Dag",
                     "status": "open",
                     "sport": "open",
