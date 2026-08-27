@@ -9,7 +9,11 @@
     "week_end": "2026-09-06",
     "title": "Löpblock vecka 2 · behåll strukturen, lås inte dosen för tidigt",
     "principle": "Veckan fortsätter fyraveckorsblocket med kontrollerad löptröskel, separat backkvalitet och lugn löpdistans. Måndagens enduroskola ligger fast. Simning och MTB stödjer helheten utan att tränga undan de prioriterade löpstimulansen. Exakta doser beslutas först när faktisk närbelastning är känd.",
-    "preview_summary": "Löpning är fortsatt första utvecklingsprioritet. Tröskel, backkvalitet och lugn distans finns med som blockstimuli; enduroskolan är fast, MTB utvecklas parallellt och simningen hålls vid liv med låg mekanisk kostnad. Lördagens möjliga swimrun-KM är ännu inte ett fast träningsåtagande."
+    "preview_summary": "Löpning är fortsatt första utvecklingsprioritet. Tröskel, backkvalitet och lugn distans finns med som blockstimuli; enduroskolan är fast, MTB utvecklas parallellt och simningen hålls vid liv med låg mekanisk kostnad. Lördagens möjliga swimrun-KM är ännu inte ett fast träningsåtagande.",
+    "mesocycle_id": "run-threshold-hill-4w",
+    "mesocycle_week": 2,
+    "mesocycle_total_weeks": 4,
+    "requires_mesocycle_review": false
   },
   "days": [
     {
@@ -27,7 +31,9 @@
       "priority_role": "anchor",
       "stimuli": [
         "enduro_technical"
-      ]
+      ],
+      "mesocycle_id": "run-threshold-hill-4w",
+      "mesocycle_week": 2
     },
     {
       "date": "2026-09-01",
@@ -43,7 +49,9 @@
       "stimuli": [
         "run_threshold"
       ],
-      "decision_note": "Tröskeldosen fastställs efter måndagens faktiska endurobelastning; stimulus ligger kvar om närbelastningen tillåter kvalitet."
+      "decision_note": "Tröskeldosen fastställs efter måndagens faktiska endurobelastning; stimulus ligger kvar om närbelastningen tillåter kvalitet.",
+      "mesocycle_id": "run-threshold-hill-4w",
+      "mesocycle_week": 2
     },
     {
       "date": "2026-09-02",
@@ -141,7 +149,9 @@
       "stimuli": [
         "swim_aerobic",
         "swim_technique"
-      ]
+      ],
+      "mesocycle_id": "run-threshold-hill-4w",
+      "mesocycle_week": 2
     },
     {
       "date": "2026-09-03",
@@ -157,7 +167,9 @@
       "stimuli": [
         "mtb_technical",
         "mtb_aerobic"
-      ]
+      ],
+      "mesocycle_id": "run-threshold-hill-4w",
+      "mesocycle_week": 2
     },
     {
       "date": "2026-09-04",
@@ -173,9 +185,9 @@
       "stimuli": [
         "run_hill_quality"
       ],
-      "block": "run-threshold-hill-4w",
-      "block_week": 2,
-      "decision_note": "Backpassets placering och dos beslutas först när torsdagens faktiska belastning och lördagens swimrun-KM-intention är kända."
+      "decision_note": "Backpassets placering och dos beslutas först när torsdagens faktiska belastning och lördagens swimrun-KM-intention är kända.",
+      "mesocycle_id": "run-threshold-hill-4w",
+      "mesocycle_week": 2
     },
     {
       "date": "2026-09-05",
@@ -199,7 +211,9 @@
       "priority_role": "flex",
       "stimuli": [
         "run_easy_distance"
-      ]
+      ],
+      "mesocycle_id": "run-threshold-hill-4w",
+      "mesocycle_week": 2
     }
   ],
   "strength_template": [
