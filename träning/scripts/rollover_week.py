@@ -109,7 +109,16 @@ def seed_fixed_commitments(week_document):
     for index, day in enumerate(week_document.get("days") or []):
         day_date = date.fromisoformat(day["date"])
         if is_enduro_school_date(day_date):
-            week_document["days"][index] = fixed_enduro_school_day(day_date, day.get("label") or "Måndag")
+            fixed = fixed_enduro_school_day(day_date, day.get("label") or "Måndag")
+            for field in (
+                "mesocycle_id",
+                "microcycle_id",
+                "microcycle_index",
+                "microcycle_day",
+            ):
+                if day.get(field) is not None:
+                    fixed[field] = day[field]
+            week_document["days"][index] = fixed
     return week_document
 
 
