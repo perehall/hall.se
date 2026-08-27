@@ -4,7 +4,7 @@
   "week_start": "2026-08-24",
   "week_end": "2026-08-30",
   "created_at_utc": "2026-08-24T06:32:25.878995+00:00",
-  "updated_at_utc": "2026-08-27T07:59:47.107779+00:00",
+  "updated_at_utc": "2026-08-27T13:19:03.408313+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -13,7 +13,14 @@
       "week_start": "2026-08-24",
       "week_end": "2026-08-30",
       "title": "Löpningen prioriteras – tröskel + backkvalitet + distans.",
-      "principle": "Löpningen får tre tydliga stimuli: ett kontrollerat tröskelpass, ett separat backkvalitetspass och lugn distans. Backkvaliteten testas som andra löpkvalitet i ett fyra veckor långt block och utvärderas därefter mot faktisk fart, känsla, återhämtning och kontinuitet. Exakt dos justeras efter närbelastningen och låses inte i förväg."
+      "principle": "Löpningen får tre tydliga stimuli: ett kontrollerat tröskelpass, ett separat backkvalitetspass och lugn distans. Backkvaliteten testas som andra löpkvalitet i ett fyra veckor lång mesocykel och utvärderas därefter mot faktisk fart, känsla, återhämtning och kontinuitet. Exakt dos justeras efter närbelastningen och låses inte i förväg.",
+      "mesocycle_id": "run-threshold-hill-4w",
+      "requires_mesocycle_review": false,
+      "microcycle_id": "run-threshold-hill-4w:mc1",
+      "microcycle_index": 1,
+      "microcycle_total": 4,
+      "microcycle_length_days": 7,
+      "calendar_week_is_presentation": true
     },
     "days": [
       {
@@ -31,7 +38,11 @@
           "enduro_technical",
           "strength_unilateral",
           "strength_core"
-        ]
+        ],
+        "mesocycle_id": "run-threshold-hill-4w",
+        "microcycle_id": "run-threshold-hill-4w:mc1",
+        "microcycle_index": 1,
+        "microcycle_day": 1
       },
       {
         "date": "2026-08-25",
@@ -51,7 +62,11 @@
         "priority_role": "anchor",
         "stimuli": [
           "run_threshold"
-        ]
+        ],
+        "mesocycle_id": "run-threshold-hill-4w",
+        "microcycle_id": "run-threshold-hill-4w:mc1",
+        "microcycle_index": 1,
+        "microcycle_day": 2
       },
       {
         "date": "2026-08-26",
@@ -90,7 +105,11 @@
           "applied_at_utc": "2026-08-27T07:59:46.587327+00:00"
         },
         "coach_adjustment": "Skala ned passet. Gör dagens MTB/XC teknisk och lugn utan upprepade hårda stigningar; undvik backintervaller eller fartjakt. Bedöm subjektiv känsla och återställ först om torsdag morgon visar god återhämtning.",
-        "manual_note": "Onsdagens pass är korrigerat till swimrun, inte vanlig löpning. Pulsen tappades under cirka 2 km med faktisk intensitet minst Z3 enligt användarrapport."
+        "manual_note": "Onsdagens pass är korrigerat till swimrun, inte vanlig löpning. Pulsen tappades under cirka 2 km med faktisk intensitet minst Z3 enligt användarrapport.",
+        "mesocycle_id": "run-threshold-hill-4w",
+        "microcycle_id": "run-threshold-hill-4w:mc1",
+        "microcycle_index": 1,
+        "microcycle_day": 4
       },
       {
         "date": "2026-08-28",
@@ -101,13 +120,15 @@
         "development_focus": "Spring kraftfullt men kontrollerat med stabil hållning, aktiv höft och bibehållen teknik hela vägen upp; ingen maximal sprint och ingen jakt på syra.",
         "sport": "run",
         "dose_open": true,
-        "block": "run-threshold-hill-4w",
-        "block_week": 1,
         "priority_role": "anchor",
         "stimuli": [
           "run_hill_quality"
         ],
-        "decision_note": "Backdosen fastställs först efter torsdagens faktiska MTB-belastning och återhämtningen från onsdagens swimrun; passets roll som veckans andra löpkvalitet ligger fast endast om belastningen kan absorberas."
+        "decision_note": "Backdosen fastställs först efter torsdagens faktiska MTB-belastning och återhämtningen från onsdagens swimrun; passets roll som veckans andra löpkvalitet ligger fast endast om belastningen kan absorberas.",
+        "mesocycle_id": "run-threshold-hill-4w",
+        "microcycle_id": "run-threshold-hill-4w:mc1",
+        "microcycle_index": 1,
+        "microcycle_day": 5
       },
       {
         "date": "2026-08-29",
@@ -122,7 +143,11 @@
         "stimuli": [
           "mtb_aerobic",
           "mtb_technical"
-        ]
+        ],
+        "mesocycle_id": "run-threshold-hill-4w",
+        "microcycle_id": "run-threshold-hill-4w:mc1",
+        "microcycle_index": 1,
+        "microcycle_day": 6
       },
       {
         "date": "2026-08-30",
@@ -136,7 +161,11 @@
         "priority_role": "flex",
         "stimuli": [
           "run_easy_distance"
-        ]
+        ],
+        "mesocycle_id": "run-threshold-hill-4w",
+        "microcycle_id": "run-threshold-hill-4w:mc1",
+        "microcycle_index": 1,
+        "microcycle_day": 7
       }
     ],
     "strength_template": [
@@ -250,11 +279,11 @@
       "activity_id": 19911120461,
       "activity_date": "2026-08-26",
       "activity_name": "SLK Swimrun Jogersö Extreme",
-      "generated_at_utc": "2026-08-27T07:59:46.587811+00:00",
+      "generated_at_utc": "2026-08-27T13:19:02.885809+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Onsdagens swimrun var tuffare än pulsdatan visar och räknas som ett hårdare aerob/måttligt hårt pass som påverkar torsdag–fredag.",
-        "load_interpretation": "Senaste 48–72h innehåller flera längre ansträngande pass (run, enduro, swimrun) vilket minskar marginalen för ny kvalitet.",
+        "summary": "Onsdagens swimrun var mer krävande än pulsdatan visar och ökar veckobelastningen; dagens MTB hålls därför teknisk och lugn.",
+        "load_interpretation": "Senaste swimrun innehöll minst korta Z3-inslag och adderar moderat hård belastning före dagens MTB.",
         "confidence": "medium",
         "facts": [
           "Swimrun · Jogersö Extreme: 6,80 km · 56:25 · 102,2 m+ · snittpuls 131,9 · maxpuls 164.",
@@ -262,25 +291,25 @@
           "Planstatus 2026-08-26: dagens planerade pass är genomfört i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Swimrunpasset adderar verklig belastning som kräver att torsdag hålls teknisk och lugn.",
-          "Fredagens backkvalitet måste doseras konservativt baserat på torsdagens faktiska utfall."
+          "Onsdagens faktiska intensitet minskar säker marginal för repetitiva hårda stigningar under dagens MTB.",
+          "MTB bör bevara teknisk stimulus utan att kompromettera absorberbarhet inför fredagarnas backkvalitet."
         ],
         "unknowns": [
-          "Exakt subjektiv dagskänsla torsdag morgon kan ändra om MTB kan återställas eller inte.",
-          "Detaljer om lokal muskeltrötthet i benen efter swimrun saknas.",
-          "Hur hårda stigningar användaren planerar torsdag påverkar fredagssessionens dos."
+          "Exakt subjektiv dagskänsla imorgon morgon kan ändra om återställning till vanlig MTB är möjlig.",
+          "Detaljer om intensiteten under de två km med pulsbortfall (exakt varaktighet och ansträngningsgrad).",
+          "Eventuella lokala bentrötthet eller muskelömhet som användaren inte rapporterat."
         ]
       },
       "plan_action": {
-        "action": "reduce",
+        "action": "keep",
         "target_date": "2026-08-27",
-        "reason": "Onsdagens faktiska intensitet ökar veckobelastningen; säkra absorption innan ny kvalitet.",
-        "recommendation": "Gör dagens MTB/XC teknisk och lugn utan upprepade hårda stigningar; undvik backintervaller eller fartjakt. Bedöm subjektiv känsla och återställ först om torsdag morgon visar god återhämtning.",
+        "reason": "Planen för dagens MTB är redan konservativt skalad ned efter swimrun och passar mesocykelns stimuli.",
+        "recommendation": "Behåll dagens justering: kör MTB/XC teknisk och lugn utan upprepade hårda stigningar; prioritera linje, flyt och teknik framför fart. Bedöm subjektiv känsla och återställ eventuellt om morgondagens känsla är tydligt god.",
         "requires_approval": false
       },
       "auto_apply": {
-        "applied": true,
-        "note": "Konservativ ändring applicerad på 2026-08-27: reduce."
+        "applied": false,
+        "note": "Ingen automatisk planändring."
       }
     },
     {

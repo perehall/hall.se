@@ -56,6 +56,57 @@ h1{font-size:clamp(2rem,8vw,3.2rem);line-height:1;margin:0 0 8px;letter-spacing:
 .week-period{font-weight:800;color:#334155;white-space:nowrap}
 .hero.week-focus-card{padding:17px 20px}.week-focus-title{margin:0!important;font-size:1.08rem;line-height:1.35;letter-spacing:-.01em}.week-focus-title strong{font-weight:900}.week-focus-details{margin-top:8px}.week-focus-details>summary{cursor:pointer;list-style:none;color:#94a3b8;font-size:.76rem;font-weight:800}.week-focus-details>summary::-webkit-details-marker{display:none}.week-focus-details>summary:after{content:" +"}.week-focus-details[open]>summary:after{content:" −"}.week-focus-details p{margin:8px 0 0!important;color:#cbd5e1!important;font-size:.9rem;line-height:1.5}
 @media (max-width:520px){.header-updated{font-size:.7rem}.header-status{font-size:.72rem}.week-period{font-size:.92rem}.hero.week-focus-card{padding:15px 17px}.week-focus-title{font-size:1rem}.week-focus-details p{font-size:.86rem}}
+
+/* week-shell-v1 */
+html{scrollbar-gutter:stable}
+body{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.42}
+.wrap{width:min(100%,720px)!important;max-width:720px;margin:0 auto;padding:20px 16px 56px}
+header{padding:8px 2px 18px}
+.eyebrow{font-size:.76rem;line-height:1.2}
+h1{font-size:clamp(2rem,8vw,3.2rem);line-height:1;margin:0 0 8px;letter-spacing:-.04em}
+.sub{font-size:.96rem;line-height:1.4}
+.hero{border-radius:20px;padding:18px 20px;margin:8px 0 18px}
+.hero h2{font-size:1.08rem;line-height:1.35}
+.section{font-size:1.22rem;line-height:1.3;margin:28px 0 12px}
+.day{border-radius:20px;padding:16px 17px;margin:12px 0}
+.daytop{margin-bottom:10px}
+.dow{font-size:.82rem;line-height:1.25}
+.date{font-size:.85rem;line-height:1.3}
+.session{font-size:1.2rem;line-height:1.28;margin:4px 0 6px}
+.reason{font-size:.9rem;line-height:1.48}
+.week-nav{grid-template-columns:1fr auto 1fr;gap:10px;margin:-4px 0 16px;padding:9px 10px;border-radius:14px}
+.week-nav a{font-size:.82rem;line-height:1.25}
+.week-nav-center strong{font-size:.86rem;line-height:1.15}
+.week-nav-center span{font-size:.59rem;line-height:1.15}
+.reference-tools{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-start;margin:12px 0 8px}
+.reference-chip{appearance:none;border:1px solid #cbd5e1;background:#fff;color:#334155;border-radius:999px;padding:9px 13px;font:inherit;font-size:.82rem;font-weight:800;line-height:1.2;cursor:pointer;box-shadow:0 3px 10px rgba(15,23,42,.04)}
+.system-window{position:fixed;inset:auto;width:min(520px,calc(100vw - 32px));max-height:calc(100vh - 32px);left:50%;top:50%;transform:translate(-50%,-50%);margin:0;border:1px solid #e2e8f0;border-radius:18px;padding:0;background:#fff;color:#0f172a;box-shadow:0 24px 70px rgba(15,23,42,.28);overflow:auto}
+.system-window::backdrop{background:rgba(15,23,42,.38)}
+.system-inner{padding:0 18px 18px}
+.system-head{position:sticky;top:0;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 -18px 8px;padding:14px 18px 10px;background:#fff;border-bottom:1px solid #f1f5f9}
+.system-head h2{font-size:1.1rem;line-height:1.25;margin:0}
+.system-close{appearance:none;border:0;background:#f1f5f9;color:#334155;border-radius:999px;padding:7px 10px;font:inherit;font-size:.78rem;font-weight:800;cursor:pointer}
+.system-lead{margin:10px 0 8px;color:#334155;font-size:.92rem;line-height:1.45}
+.system-list{margin:0;padding:0;list-style:none}
+.system-list li{padding:9px 0;border-top:1px solid #e2e8f0;color:#475569;font-size:.86rem;line-height:1.42}
+.system-list li:first-child{border-top:0}
+.system-list strong{color:#0f172a}
+.goal-page .card{border-radius:20px;padding:17px;margin:12px 0}
+.goal-page .goal{grid-template-columns:1fr;gap:16px}
+.goal-page .goal p{font-size:.95rem;line-height:1.48}
+.goal-page .title{font-size:1.08rem;line-height:1.3;margin-bottom:12px}
+.goal-page .goal-back-row{margin:0 0 12px}
+.goal-page .mountain{min-height:290px}
+@media (max-width:620px){
+  .wrap{width:100%!important;max-width:720px;padding:20px 13px 56px}
+  .day{border-radius:17px;padding:15px}
+  .week-nav{padding:8px}
+  .week-nav a{font-size:.75rem}
+  .week-nav-center strong{font-size:.8rem}
+  .system-window{width:min(100% - 16px,720px);max-height:min(78vh,680px);left:50%!important;top:auto!important;bottom:0;transform:translateX(-50%)!important;border:0;border-radius:22px 22px 0 0}
+  .system-inner{padding:0 18px calc(20px + env(safe-area-inset-bottom))}
+}
+
 </style>
 </head>
 <body><div class="wrap">
@@ -317,7 +368,48 @@ h1{font-size:clamp(2rem,8vw,3.2rem);line-height:1;margin:0 0 8px;letter-spacing:
   <div class="coach-apply"><small>Ingen automatisk ändring applicerad.</small></div>
 </div>
 </div>
-<h2 class="section">Styrkemall framåt</h2><div class="principles"><div class="principle">Liten dos explosivitet/plyometri när omkringliggande belastning tillåter.</div><div class="principle">Bulgarian split squat som huvudalternativ för unilateral benstyrka.</div><div class="principle">Marklyft eller RDL som normal höftdominant huvudövning.</div><div class="principle">Vad + soleus regelbundet.</div><div class="principle">Enarmsrodd + press som huvuddrag/press.</div><div class="principle">Välj två bålövningar; låt inte accessoarer tränga undan huvudstyrkan.</div></div>
+<div class="reference-tools">
+  <button class="reference-chip" type="button" onclick="openStrengthWindow()">Styrkemall</button>
+  <button class="reference-chip" type="button" onclick="openTrainingSystemInfo()">Om systemet</button>
+</div>
+<dialog id="strengthSheet" class="system-window strength-window" aria-labelledby="strengthWindowTitle">
+  <div class="system-inner sheet-inner">
+    <div class="system-head sheet-head"><h2 id="strengthWindowTitle">Styrkemall</h2><button class="system-close sheet-close" type="button" onclick="document.getElementById('strengthSheet').close()">Stäng</button></div>
+    <p class="system-lead sheet-note">Referens. Aktuellt styrkebeslut styrs av mesocykeln, mikrocykelns ordning och faktisk närbelastning.</p>
+    <ul class="system-list strength-list"><li>Liten dos explosivitet/plyometri när omkringliggande belastning tillåter.</li><li>Bulgarian split squat som huvudalternativ för unilateral benstyrka.</li><li>Marklyft eller RDL som normal höftdominant huvudövning.</li><li>Vad + soleus regelbundet.</li><li>Enarmsrodd + press som huvuddrag/press.</li><li>Välj två bålövningar; låt inte accessoarer tränga undan huvudstyrkan.</li></ul>
+  </div>
+</dialog>
+<script>
+function openStrengthWindow() {
+  document.getElementById('strengthSheet').showModal();
+}
+</script>
+
+<dialog id="trainingSystemSheet" class="system-window" aria-labelledby="trainingSystemTitle">
+  <div class="system-inner">
+    <div class="system-head">
+      <h2 id="trainingSystemTitle">Om träningssystemet</h2>
+      <button class="system-close" type="button" onclick="document.getElementById('trainingSystemSheet').close()">Stäng</button>
+    </div>
+    <p class="system-lead"><strong>Målbilden anger vart. Mesocykeln väljer utvecklingsväg. Mikrocykeln organiserar arbetet. Varje pass ska tjäna kedjan.</strong></p>
+    <ul class="system-list">
+      <li><strong>Målbild:</strong> den långsiktiga riktningen är överordnad. Om målbilden ändras ska mesocykeln, mikrocyklerna och passen omprövas nedåt i kedjan.</li>
+      <li><strong>Mesocykel:</strong> flerveckors planeringsmotor. Den väljer utvecklingsfokus, skyddade stimuli, stödjande träning, progressionsregler och vad som ska utvärderas.</li>
+      <li><strong>Mikrocykel:</strong> den korta operativa träningscykeln. Den organiserar mesocykelns stimuli till en absorberbar följd av pass, vila och öppna beslut. I nuläget är den sju dagar.</li>
+      <li><strong>Kalendervecka:</strong> endast presentations- och navigeringslager. Mikrocykeln visas måndag–söndag för enkelhet, men veckan är inte ett träningsmål eller en egen planeringsnivå.</li>
+      <li><strong>Navigering 2–3 dagar:</strong> genomförd träning, återhämtning, fasta åtaganden och andra faktiska omständigheter kan omorganisera mikrocykeln. Vägen ändras — inte riktningen.</li>
+      <li><strong>Pass:</strong> det enskilda passet verkställer ett tydligt stimulus eller en stödjande roll. Om passet ändras skyddas i första hand stimuluset, inte exakt passform eller veckodag.</li>
+      <li><strong>Återkoppling:</strong> faktisk respons går tillbaka uppåt. Mikrocykeln justeras löpande och mesocykeln utvärderas mot målbilden.</li>
+      <li><strong>Data:</strong> Strava ger genomförd träning, Garmin via Intervals.icu privat återhämtningskontext och SMHI väder.</li>
+    </ul>
+  </div>
+</dialog>
+<script>
+function openTrainingSystemInfo() {
+  document.getElementById('trainingSystemSheet').showModal();
+}
+</script>
+
 <footer>Automatiskt byggd från plan.json + activities.json + coach.json. Faktakällor: Strava för genomförd träning. Garmin via Intervals.icu används som privat återhämtningskontext; wellnessvärden publiceras inte. Tränings-Yoda (AI) får automatiskt endast behålla, minska eller ersätta belastning konservativt; belastningsökning kräver mänsklig bedömning. · <a href="/cdn-cgi/access/logout" style="color:inherit" onclick="window.location.replace(this.href); return false;">Logga ut</a></footer>
 </div>
 <script>
