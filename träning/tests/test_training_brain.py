@@ -34,12 +34,16 @@ class TrainingBrainTests(unittest.TestCase):
         hierarchy = self.strategy["planning_hierarchy"]
         self.assertEqual(
             hierarchy["order"],
-            ["north_star", "mesocycle", "week", "near_term", "session"],
+            ["north_star", "mesocycle", "microcycle", "near_term", "session"],
         )
         self.assertTrue(self.strategy["decision_policy"]["long_term_goal_is_primary"])
         self.assertTrue(
             self.strategy["decision_policy"]["near_term_changes_must_serve_long_term_direction"]
         )
+        self.assertIn("Kalenderveckan är ett presentations- och navigeringslager", hierarchy["calendar_role"])
+        self.assertEqual(self.strategy["current_mesocycle"]["microcycle_structure"]["length_days"], 7)
+        self.assertIn("microcycle_template", self.strategy["current_mesocycle"])
+        self.assertNotIn("weekly_template", self.strategy["current_mesocycle"])
 
         broken = deepcopy(self.strategy)
         broken["decision_policy"]["long_term_goal_is_primary"] = False
@@ -78,9 +82,9 @@ class TrainingBrainTests(unittest.TestCase):
         self.assertEqual(decision["date"], "2026-08-28")
         self.assertIn("Backdosen", decision["note"])
 
-    def test_current_mesocycle_reports_week_one(self):
+    def test_current_mesocycle_reports_microcycle_one(self):
         mesocycle = resolve_mesocycle(self.strategy, date(2026, 8, 26))
-        self.assertEqual(mesocycle["state"], "vecka 1 av 4")
+        self.assertEqual(mesocycle["state"], "mikrocykel 1 av 4")
         self.assertEqual(mesocycle["evaluation_date"], "2026-09-21")
         self.assertIn("Kontrollerad löptröskel", mesocycle["protected_stimuli"])
 
@@ -97,7 +101,7 @@ class TrainingBrainTests(unittest.TestCase):
         mesocycle = resolve_mesocycle(self.strategy, date(2026, 8, 26))
         rendered = decorate_focus_card(page, mesocycle)
         self.assertIn('class="week-focus-mesocycle-meta"', rendered)
-        self.assertIn("vecka 1 av 4", rendered)
+        self.assertIn("mikrocykel 1 av 4", rendered)
         self.assertIn("utvärdering 21/9", rendered)
         self.assertIn("Mesocykelhypotes:", rendered)
 
