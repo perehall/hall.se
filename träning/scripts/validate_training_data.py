@@ -62,7 +62,7 @@ def main():
         )
 
     print(
-        "Datakontrakt OK: plan v3, kommande vecka v3, aktiviteter v2, strategi v3 och coach-state är konsistenta."
+        "Datakontrakt OK: plan v3, kommande vecka v3, aktiviteter v2, strategi v4 och coach-state är konsistenta."
     )
 
 
