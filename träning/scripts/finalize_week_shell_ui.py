@@ -71,13 +71,14 @@ SYSTEM_DIALOG = f'''
       <h2 id="trainingSystemTitle">Om träningssystemet</h2>
       <button class="system-close" type="button" onclick="document.getElementById('{SYSTEM_DIALOG_ID}').close()">Stäng</button>
     </div>
-    <p class="system-lead">Ett adaptivt träningssystem där den långsiktiga målbilden styr riktningen och närtidens förutsättningar styr vägen dit.</p>
+    <p class="system-lead"><strong>Målbilden anger vart. Mesocykeln driver utvecklingen. Närtidens data styr vägen dit.</strong></p>
     <ul class="system-list">
-      <li><strong>Riktning:</strong> målbilden är överordnad. Träningsblock, veckor och enskilda pass ska utveckla de förmågor som för systemet mot det långsiktiga målet.</li>
-      <li><strong>Navigering:</strong> aktuell belastning, återhämtning, genomförd träning och andra faktiska omständigheter avgör det närmaste rimliga steget. Vägen får ändras utan att riktningen tappas.</li>
-      <li><strong>Horisont:</strong> målbild → utvecklingsblock → vecka → beslut de närmaste 2–3 dagarna. Nästa vecka är preliminär och avslutade veckor sparas som historik.</li>
-      <li><strong>Data:</strong> Strava används för genomförd träning, Garmin via Intervals.icu som privat återhämtningskontext och SMHI för väder.</li>
-      <li><strong>Princip:</strong> kontinuitet, absorberbar belastning och långsiktig progression går före att maximera en enskild vecka.</li>
+      <li><strong>Målbild:</strong> den långsiktiga riktningen är överordnad. Systemet ska utveckla rätt förmågor över tid, inte optimera enskilda veckor.</li>
+      <li><strong>Mesocykel:</strong> systemets planeringsmotor. Den väljer ett flerveckors utvecklingsfokus, skyddade stimuli, stödjande träning, progressionsregler och vad som ska utvärderas.</li>
+      <li><strong>Vecka:</strong> en preliminär realisering av mesocykeln. Rätt stimuli får plats, men exakt dos och ibland placering hålls öppna tills närbelastningen är känd.</li>
+      <li><strong>Navigering 2–3 dagar:</strong> genomförd träning, återhämtning, fasta åtaganden och andra faktiska omständigheter kan flytta eller minska pass. Vägen ändras — inte riktningen.</li>
+      <li><strong>Återkoppling:</strong> mesocykeln utvärderas mot faktisk respons och målbilden. Först därefter fortsätter, modifierar eller byter systemet mesocykel.</li>
+      <li><strong>Data:</strong> Strava ger genomförd träning, Garmin via Intervals.icu privat återhämtningskontext och SMHI väder.</li>
     </ul>
   </div>
 </dialog>
@@ -97,7 +98,7 @@ def strength_reference(items):
 <dialog id="strengthSheet" class="system-window strength-window" aria-labelledby="strengthWindowTitle">
   <div class="system-inner sheet-inner">
     <div class="system-head sheet-head"><h2 id="strengthWindowTitle">Styrkemall</h2><button class="system-close sheet-close" type="button" onclick="document.getElementById('strengthSheet').close()">Stäng</button></div>
-    <p class="system-lead sheet-note">Referens. Aktuellt styrkebeslut styrs av veckoplanen.</p>
+    <p class="system-lead sheet-note">Referens. Aktuellt styrkebeslut styrs av mesocykeln och veckans faktiska närbelastning.</p>
     <ul class="system-list strength-list">{lis}</ul>
   </div>
 </dialog>
@@ -194,7 +195,7 @@ def main():
             "width:min(100%,720px)!important",
             'onclick="openTrainingSystemInfo()"',
             f'id="{SYSTEM_DIALOG_ID}"',
-            "målbilden är överordnad",
+            "Mesocykeln:",
         ]
         missing = [marker for marker in required if marker not in verify]
         if missing:
