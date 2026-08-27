@@ -50,6 +50,12 @@ class TrainingBrainTests(unittest.TestCase):
         with self.assertRaises(StrategyContractError):
             validate_training_strategy(broken)
 
+
+        stale_goal = deepcopy(self.strategy)
+        stale_goal["current_mesocycle"]["goal_basis_hash"] = "0" * 64
+        with self.assertRaises(StrategyContractError):
+            validate_training_strategy(stale_goal)
+
     def test_today_uses_matching_actual_activity_as_completed(self):
         plan = {
             "days": [
