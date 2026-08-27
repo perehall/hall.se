@@ -83,6 +83,43 @@ class TrainingBrainTests(unittest.TestCase):
         self.assertIn("Swimrun", brief["why"])
         self.assertIn("Sim aerob kapacitet", brief["stimuli"])
 
+
+    def test_same_day_open_dose_is_explicitly_flagged(self):
+        plan = {
+            "days": [
+                {
+                    "date": "2026-08-27",
+                    "status": "planned",
+                    "session": "MTB/XC · teknik + aerob stig · dos öppen",
+                    "sport": "bike",
+                    "dose_open": True,
+                    "priority_role": "flex",
+                    "stimuli": ["mtb_technical", "mtb_aerobic"],
+                }
+            ]
+        }
+        brief = resolve_today(plan, [], self.strategy, date(2026, 8, 27))
+        self.assertEqual(brief["status"], "DOSBESLUT KRÄVS")
+        self.assertIn("dosen är fortfarande öppen", brief["why"])
+
+    def test_resolved_same_day_dose_is_shown_as_normal_plan(self):
+        plan = {
+            "days": [
+                {
+                    "date": "2026-08-27",
+                    "status": "planned",
+                    "session": "MTB/XC · 60 min · teknik + lugn aerob stig",
+                    "sport": "bike",
+                    "dose_open": False,
+                    "priority_role": "flex",
+                    "stimuli": ["mtb_technical", "mtb_aerobic"],
+                }
+            ]
+        }
+        brief = resolve_today(plan, [], self.strategy, date(2026, 8, 27))
+        self.assertEqual(brief["status"], "PLANERAT")
+        self.assertIn("60 min", brief["headline"])
+
     def test_explicit_next_decision_wins_inside_72_hour_horizon(self):
         decision = resolve_next_decision(self.plan, [], self.strategy, date(2026, 8, 26))
         self.assertEqual(decision["date"], "2026-08-28")
