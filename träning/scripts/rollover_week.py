@@ -109,7 +109,16 @@ def seed_fixed_commitments(week_document):
     for index, day in enumerate(week_document.get("days") or []):
         day_date = date.fromisoformat(day["date"])
         if is_enduro_school_date(day_date):
-            week_document["days"][index] = fixed_enduro_school_day(day_date, day.get("label") or "Måndag")
+            fixed = fixed_enduro_school_day(day_date, day.get("label") or "Måndag")
+            for field in (
+                "mesocycle_id",
+                "microcycle_id",
+                "microcycle_index",
+                "microcycle_day",
+            ):
+                if day.get(field) is not None:
+                    fixed[field] = day[field]
+            week_document["days"][index] = fixed
     return week_document
 
 
@@ -255,19 +264,23 @@ def seed_preliminary_swims(promoted, future):
         )
         copied["priority_role"] = target.get("priority_role") or copied.get("priority_role") or "flex"
         copied["stimuli"] = deepcopy(target.get("stimuli") or copied.get("stimuli") or [])
-        copied["mesocycle_slot"] = target.get("mesocycle_slot")
+        copied["mesocycle_id"] = target.get("mesocycle_id")
+        copied["microcycle_id"] = target.get("microcycle_id")
+        copied["microcycle_index"] = target.get("microcycle_index")
+        copied["microcycle_slot"] = target.get("microcycle_slot")
         future["days"][target_index] = copied
     return future
 
 
-def mesocycle_week_state(mesocycle, week_start):
+def mesocycle_microcycle_state(mesocycle, cycle_start):
     start = date.fromisoformat(mesocycle["start_date"])
     end = date.fromisoformat(mesocycle["end_date"])
-    total_weeks = max(1, ((end - start).days + 1 + 6) // 7)
-    if not (start <= week_start <= end):
-        return None, total_weeks
-    week = ((week_start - start).days // 7) + 1
-    return week, total_weeks
+    length_days = int((mesocycle.get("microcycle_structure") or {}).get("length_days") or 7)
+    total_microcycles = max(1, ((end - start).days + 1 + length_days - 1) // length_days)
+    if not (start <= cycle_start <= end):
+        return None, total_microcycles
+    index = ((cycle_start - start).days // length_days) + 1
+    return index, total_microcycles
 
 
 def build_mesocycle_next_week(promoted, strategy):
@@ -279,7 +292,8 @@ def build_mesocycle_next_week(promoted, strategy):
     next_iso = next_start.isocalendar()
     timezone_name = meta.get("timezone") or "Europe/Stockholm"
     mesocycle = strategy["current_mesocycle"]
-    mesocycle_week, total_weeks = mesocycle_week_state(mesocycle, next_start)
+    microcycle_index, total_microcycles = mesocycle_microcycle_state(mesocycle, next_start)
+    microcycle_length = int(mesocycle["microcycle_structure"]["length_days"])
 
     days = []
     for offset, label in enumerate(WEEKDAY_LABELS):
@@ -300,14 +314,14 @@ def build_mesocycle_next_week(promoted, strategy):
         )
 
     inside_mesocycle = (
-        mesocycle_week is not None
+        microcycle_index is not None
         and date.fromisoformat(mesocycle["start_date"]) <= next_start
         and next_end <= date.fromisoformat(mesocycle["end_date"])
     )
 
     if inside_mesocycle:
-        for slot in mesocycle["weekly_template"]:
-            offset = int(slot["preferred_weekday"]) - 1
+        for slot in mesocycle["microcycle_template"]:
+            offset = int(slot["day_index"]) - 1
             day_date = next_start + timedelta(days=offset)
             planned_day = {
                 "date": day_date.isoformat(),
@@ -322,21 +336,23 @@ def build_mesocycle_next_week(promoted, strategy):
                 "priority_role": slot["priority_role"],
                 "stimuli": deepcopy(slot["stimuli"]),
                 "mesocycle_id": mesocycle["id"],
-                "mesocycle_week": mesocycle_week,
-                "mesocycle_slot": slot["slot"],
+                "microcycle_id": f'{mesocycle["id"]}:mc{microcycle_index}',
+                "microcycle_index": microcycle_index,
+                "microcycle_day": int(slot["day_index"]),
+                "microcycle_slot": slot["slot"],
             }
             if slot["sport"] == "swim":
                 planned_day["swim_equipment"] = {"planned": "tbd"}
             days[offset] = planned_day
 
-        title = f'{mesocycle["title"]} · vecka {mesocycle_week} av {total_weeks}'
+        title = f'{mesocycle["title"]} · mikrocykel {microcycle_index} av {total_microcycles}'
         principle = (
             mesocycle["goal_contribution"]
-            + " Veckan är preliminär: mesocykelns stimuli skyddas, medan exakt dos och vid behov placering "
-              "avgörs först när närbelastningen är känd."
+            + " Mikrocykeln är preliminär: mesocykelns stimuli organiseras till en absorberbar följd, medan exakt dos "
+              "och vid behov passplacering avgörs först när närbelastningen är känd. Kalenderveckan är bara visningen."
         )
         preview_summary = (
-            f'Mesocykel vecka {mesocycle_week} av {total_weeks}. '
+            f'Mikrocykel {microcycle_index} av {total_microcycles} i aktuell mesocykel. '
             "Skyddade stimuli: "
             + ", ".join(mesocycle["protected_stimuli"])
             + ". Doser är öppna och får inte ökas automatiskt."
@@ -348,7 +364,7 @@ def build_mesocycle_next_week(promoted, strategy):
             "Fasta åtaganden kan ligga kvar, men nästa mesocykel ska väljas först efter utvärdering mot målbilden och faktisk respons."
         )
         preview_summary = (
-            "Övergångsvecka. Systemet väntar på mesocykelutvärdering innan nya utvecklingsstimuli planeras."
+            "Övergångsperiod. Systemet väntar på mesocykelutvärdering innan en ny mikrocykel med utvecklingsstimuli planeras."
         )
 
     future = {
@@ -364,8 +380,11 @@ def build_mesocycle_next_week(promoted, strategy):
             "principle": principle,
             "preview_summary": preview_summary,
             "mesocycle_id": mesocycle["id"] if inside_mesocycle else "",
-            "mesocycle_week": mesocycle_week if inside_mesocycle else None,
-            "mesocycle_total_weeks": total_weeks,
+            "microcycle_id": f'{mesocycle["id"]}:mc{microcycle_index}' if inside_mesocycle else "",
+            "microcycle_index": microcycle_index if inside_mesocycle else None,
+            "microcycle_total": total_microcycles,
+            "microcycle_length_days": microcycle_length,
+            "calendar_week_is_presentation": True,
             "requires_mesocycle_review": not inside_mesocycle,
         },
         "days": days,
@@ -374,14 +393,17 @@ def build_mesocycle_next_week(promoted, strategy):
 
     if inside_mesocycle:
         future = seed_preliminary_swims(promoted, future)
-        for day in future["days"]:
-            if day.get("sport") not in {"open", "rest"}:
-                day["mesocycle_id"] = mesocycle["id"]
-                day["mesocycle_week"] = mesocycle_week
 
     future = seed_fixed_commitments(future)
 
     if inside_mesocycle:
+        for offset, day in enumerate(future["days"]):
+            if day.get("sport") not in {"open", "rest"}:
+                day["mesocycle_id"] = mesocycle["id"]
+                day["microcycle_id"] = f'{mesocycle["id"]}:mc{microcycle_index}'
+                day["microcycle_index"] = microcycle_index
+                day["microcycle_day"] = offset + 1
+
         actual_stimuli = {
             stimulus
             for day in future["days"]
@@ -403,10 +425,10 @@ def build_mesocycle_next_week(promoted, strategy):
     return future
 
 
-# Legacy name kept for older callers; mesocycle strategy is now required.
+# Kalenderveckan är publiceringsformatet; innehållet byggs som nästa mikrocykel.
 def build_open_next_week(promoted, strategy=None):
     if strategy is None:
-        raise RuntimeError("Veckoskifte: training_strategy krävs för att bygga nästa vecka")
+        raise RuntimeError("Veckoskifte: training_strategy krävs för att bygga nästa mikrocykel")
     return build_mesocycle_next_week(promoted, strategy)
 
 

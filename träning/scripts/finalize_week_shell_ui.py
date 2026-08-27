@@ -71,13 +71,15 @@ SYSTEM_DIALOG = f'''
       <h2 id="trainingSystemTitle">Om träningssystemet</h2>
       <button class="system-close" type="button" onclick="document.getElementById('{SYSTEM_DIALOG_ID}').close()">Stäng</button>
     </div>
-    <p class="system-lead"><strong>Målbilden anger vart. Mesocykeln driver utvecklingen. Närtidens data styr vägen dit.</strong></p>
+    <p class="system-lead"><strong>Målbilden anger vart. Mesocykeln väljer utvecklingsväg. Mikrocykeln organiserar arbetet. Varje pass ska tjäna kedjan.</strong></p>
     <ul class="system-list">
-      <li><strong>Målbild:</strong> den långsiktiga riktningen är överordnad. Systemet ska utveckla rätt förmågor över tid, inte optimera enskilda veckor.</li>
-      <li><strong>Mesocykel:</strong> systemets planeringsmotor. Den väljer ett flerveckors utvecklingsfokus, skyddade stimuli, stödjande träning, progressionsregler och vad som ska utvärderas.</li>
-      <li><strong>Vecka:</strong> en preliminär realisering av mesocykeln. Rätt stimuli får plats, men exakt dos och ibland placering hålls öppna tills närbelastningen är känd.</li>
-      <li><strong>Navigering 2–3 dagar:</strong> genomförd träning, återhämtning, fasta åtaganden och andra faktiska omständigheter kan flytta eller minska pass. Vägen ändras — inte riktningen.</li>
-      <li><strong>Återkoppling:</strong> mesocykeln utvärderas mot faktisk respons och målbilden. Först därefter fortsätter, modifierar eller byter systemet mesocykel.</li>
+      <li><strong>Målbild:</strong> den långsiktiga riktningen är överordnad. Om målbilden ändras ska mesocykeln, mikrocyklerna och passen omprövas nedåt i kedjan.</li>
+      <li><strong>Mesocykel:</strong> flerveckors planeringsmotor. Den väljer utvecklingsfokus, skyddade stimuli, stödjande träning, progressionsregler och vad som ska utvärderas.</li>
+      <li><strong>Mikrocykel:</strong> den korta operativa träningscykeln. Den organiserar mesocykelns stimuli till en absorberbar följd av pass, vila och öppna beslut. I nuläget är den sju dagar.</li>
+      <li><strong>Kalendervecka:</strong> endast presentations- och navigeringslager. Mikrocykeln visas måndag–söndag för enkelhet, men veckan är inte ett träningsmål eller en egen planeringsnivå.</li>
+      <li><strong>Navigering 2–3 dagar:</strong> genomförd träning, återhämtning, fasta åtaganden och andra faktiska omständigheter kan omorganisera mikrocykeln. Vägen ändras — inte riktningen.</li>
+      <li><strong>Pass:</strong> det enskilda passet verkställer ett tydligt stimulus eller en stödjande roll. Om passet ändras skyddas i första hand stimuluset, inte exakt passform eller veckodag.</li>
+      <li><strong>Återkoppling:</strong> faktisk respons går tillbaka uppåt. Mikrocykeln justeras löpande och mesocykeln utvärderas mot målbilden.</li>
       <li><strong>Data:</strong> Strava ger genomförd träning, Garmin via Intervals.icu privat återhämtningskontext och SMHI väder.</li>
     </ul>
   </div>
@@ -98,7 +100,7 @@ def strength_reference(items):
 <dialog id="strengthSheet" class="system-window strength-window" aria-labelledby="strengthWindowTitle">
   <div class="system-inner sheet-inner">
     <div class="system-head sheet-head"><h2 id="strengthWindowTitle">Styrkemall</h2><button class="system-close sheet-close" type="button" onclick="document.getElementById('strengthSheet').close()">Stäng</button></div>
-    <p class="system-lead sheet-note">Referens. Aktuellt styrkebeslut styrs av mesocykeln och veckans faktiska närbelastning.</p>
+    <p class="system-lead sheet-note">Referens. Aktuellt styrkebeslut styrs av mesocykeln, mikrocykelns ordning och faktisk närbelastning.</p>
     <ul class="system-list strength-list">{lis}</ul>
   </div>
 </dialog>
@@ -195,7 +197,7 @@ def main():
             "width:min(100%,720px)!important",
             'onclick="openTrainingSystemInfo()"',
             f'id="{SYSTEM_DIALOG_ID}"',
-            "<strong>Mesocykel:</strong>",
+            "<strong>Mikrocykel:</strong>",
         ]
         missing = [marker for marker in required if marker not in verify]
         if missing:

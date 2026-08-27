@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import hashlib
 import json
 from pathlib import Path
 
@@ -18,6 +19,7 @@ UPCOMING_FILE = ROOT / "data" / "upcoming_week.json"
 ACTIVITIES_FILE = ROOT / "data" / "activities.json"
 COACH_FILE = ROOT / "data" / "coach.json"
 STRATEGY_FILE = ROOT / "data" / "training_strategy.json"
+GOAL_FILE = ROOT / "data" / "goal.json"
 
 
 def load(path):
@@ -32,6 +34,7 @@ def main():
     activities_state = load(ACTIVITIES_FILE)
     coach = load(COACH_FILE)
     strategy = load(STRATEGY_FILE)
+    goal = load(GOAL_FILE)
 
     validate_plan_document(plan)
     validate_plan_document(upcoming, upcoming=True)
@@ -40,6 +43,23 @@ def main():
         validate_training_strategy(strategy)
     except StrategyContractError as exc:
         raise ContractError(str(exc)) from exc
+
+    require(goal.get("schema_version") == 2, "målbild: schema_version måste vara 2")
+    canonical_goal = str(goal.get("goal") or "").strip()
+    require(bool(canonical_goal), "målbild: goal saknas")
+    require(
+        strategy.get("north_star") == canonical_goal,
+        "strategi: north_star avviker från kanonisk målbild; mesocykeln måste omprövas",
+    )
+    goal_hash = hashlib.sha256(canonical_goal.encode("utf-8")).hexdigest()
+    require(
+        (strategy.get("goal_contract") or {}).get("goal_hash") == goal_hash,
+        "strategi: målbilden har ändrats; goal_contract och mesocykel måste omprövas",
+    )
+    require(
+        (strategy.get("current_mesocycle") or {}).get("goal_basis_hash") == goal_hash,
+        "strategi: aktuell mesocykel bygger inte på nuvarande målbild",
+    )
 
     activities = activities_state.get("activities") or []
     by_id = {str(activity.get("id")): activity for activity in activities if activity.get("id") is not None}
@@ -62,7 +82,7 @@ def main():
         )
 
     print(
-        "Datakontrakt OK: plan v3, kommande vecka v3, aktiviteter v2, strategi v3 och coach-state är konsistenta."
+        "Datakontrakt OK: plan v3, kommande vecka v3, aktiviteter v2, strategi v4 och coach-state är konsistenta."
     )
 
 

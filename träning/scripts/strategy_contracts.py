@@ -2,7 +2,7 @@
 from datetime import date
 
 
-STRATEGY_SCHEMA_VERSION = 3
+STRATEGY_SCHEMA_VERSION = 4
 VALID_PRIORITY_MODES = {"develop", "maintain_develop", "develop_cautiously", "supporting"}
 VALID_READINESS_STATES = {"keep_option_open", "active_focus", "deprioritized"}
 VALID_DEFAULT_ACTIONS = {"keep", "review"}
@@ -37,18 +37,29 @@ def validate_training_strategy(document):
     )
     nonempty_string(document.get("north_star"), "strategi.north_star")
 
+    goal_contract = document.get("goal_contract")
+    require(isinstance(goal_contract, dict), "strategi.goal_contract saknas")
+    require(goal_contract.get("source_file") == "data/goal.json", "strategi.goal_contract.source_file måste vara data/goal.json")
+    require(goal_contract.get("source_schema_version") == 2, "strategi.goal_contract.source_schema_version måste vara 2")
+    goal_hash = goal_contract.get("goal_hash")
+    nonempty_string(goal_hash, "strategi.goal_contract.goal_hash")
+    require(len(goal_hash) == 64, "strategi.goal_contract.goal_hash måste vara sha256")
+    require(goal_contract.get("goal_change_requires_mesocycle_review") is True, "strategi: måländring måste kräva mesocykelomprövning")
+    nonempty_string(goal_contract.get("principle"), "strategi.goal_contract.principle")
+
     hierarchy = document.get("planning_hierarchy")
     require(isinstance(hierarchy, dict), "strategi.planning_hierarchy saknas")
     require(
-        hierarchy.get("order") == ["north_star", "mesocycle", "week", "near_term", "session"],
-        "strategi.planning_hierarchy.order måste vara north_star → mesocycle → week → near_term → session",
+        hierarchy.get("order") == ["north_star", "mesocycle", "microcycle", "near_term", "session"],
+        "strategi.planning_hierarchy.order måste vara north_star → mesocycle → microcycle → near_term → session",
     )
     for field in (
         "north_star_role",
         "mesocycle_role",
-        "week_role",
+        "microcycle_role",
         "near_term_role",
         "session_role",
+        "calendar_role",
         "adaptation_rule",
     ):
         nonempty_string(hierarchy.get(field), f"strategi.planning_hierarchy.{field}")
@@ -96,6 +107,7 @@ def validate_training_strategy(document):
     evaluation = iso_date(mesocycle.get("evaluation_date"), "strategi.current_mesocycle.evaluation_date")
     require(start <= end < evaluation, "strategi.current_mesocycle: datumordning måste vara start <= end < evaluation")
     nonempty_string(mesocycle.get("goal_contribution"), "strategi.current_mesocycle.goal_contribution")
+    require(mesocycle.get("goal_basis_hash") == goal_hash, "strategi.current_mesocycle.goal_basis_hash måste matcha aktuell målbild")
     nonempty_string(mesocycle.get("hypothesis"), "strategi.current_mesocycle.hypothesis")
 
     protected = mesocycle.get("protected_stimuli")
@@ -110,22 +122,30 @@ def validate_training_strategy(document):
     for key in supporting:
         require(key in capability_keys, f"strategi.current_mesocycle: okänt supporting stimulus {key!r}")
 
-    weekly_template = mesocycle.get("weekly_template")
-    require(isinstance(weekly_template, list) and weekly_template, "strategi.current_mesocycle.weekly_template saknas")
+    structure = mesocycle.get("microcycle_structure")
+    require(isinstance(structure, dict), "strategi.current_mesocycle.microcycle_structure saknas")
+    length_days = structure.get("length_days")
+    require(isinstance(length_days, int) and 1 <= length_days <= 14, "strategi.current_mesocycle.microcycle_structure.length_days måste vara 1–14")
+    require(length_days == 7, "strategi: nuvarande kalenderpresentation kräver sjudagars mikrocykel")
+    require(structure.get("calendar_alignment") == "monday_sunday", "strategi: nuvarande mikrocykel måste vara monday_sunday")
+    nonempty_string(structure.get("rationale"), "strategi.current_mesocycle.microcycle_structure.rationale")
+
+    microcycle_template = mesocycle.get("microcycle_template")
+    require(isinstance(microcycle_template, list) and microcycle_template, "strategi.current_mesocycle.microcycle_template saknas")
     template_slots = set()
-    template_weekdays = set()
+    template_days = set()
     template_stimuli = set()
-    for index, item in enumerate(weekly_template):
-        context = f"strategi.current_mesocycle.weekly_template[{index}]"
+    for index, item in enumerate(microcycle_template):
+        context = f"strategi.current_mesocycle.microcycle_template[{index}]"
         require(isinstance(item, dict), f"{context}: måste vara objekt")
         slot = item.get("slot")
         nonempty_string(slot, f"{context}.slot")
         require(slot not in template_slots, f"{context}: dubblerad slot {slot!r}")
         template_slots.add(slot)
-        weekday = item.get("preferred_weekday")
-        require(isinstance(weekday, int) and 1 <= weekday <= 7, f"{context}.preferred_weekday måste vara 1–7")
-        require(weekday not in template_weekdays, f"{context}: flera mesocykelplatser på veckodag {weekday}")
-        template_weekdays.add(weekday)
+        day_index = item.get("day_index")
+        require(isinstance(day_index, int) and 1 <= day_index <= length_days, f"{context}.day_index måste ligga inom mikrocykeln")
+        require(day_index not in template_days, f"{context}: flera mesocykelplatser på mikrocykeldag {day_index}")
+        template_days.add(day_index)
         nonempty_string(item.get("sport"), f"{context}.sport")
         require(item.get("priority_role") in {"anchor", "flex", "optional"}, f"{context}.priority_role ogiltig")
         stimuli = item.get("stimuli")
@@ -139,7 +159,7 @@ def validate_training_strategy(document):
     missing_protected = [key for key in protected if key not in template_stimuli]
     require(
         not missing_protected,
-        f"strategi.current_mesocycle.weekly_template saknar protected stimuli {missing_protected!r}",
+        f"strategi.current_mesocycle.microcycle_template saknar protected stimuli {missing_protected!r}",
     )
 
     progression = mesocycle.get("progression_policy")
@@ -150,6 +170,7 @@ def validate_training_strategy(document):
         "dose_decided_near_term",
         "preserve_stimulus_before_preserving_exact_session",
         "missed_protected_stimulus_requires_review",
+        "microcycle_may_reorganize_sessions",
     ):
         require(isinstance(progression.get(field), bool), f"strategi.current_mesocycle.progression_policy.{field} måste vara bool")
     require(progression.get("automatic_load_increase") is False, "strategi: automatisk belastningsökning får inte vara aktiverad")
@@ -157,6 +178,10 @@ def validate_training_strategy(document):
     require(
         progression.get("preserve_stimulus_before_preserving_exact_session") is True,
         "strategi: stimulus ska prioriteras före exakt passform",
+    )
+    require(
+        progression.get("microcycle_may_reorganize_sessions") is True,
+        "strategi: mikrocykeln måste kunna omorganisera pass när närbelastningen kräver det",
     )
 
     for field in ("success_signals", "guardrails", "review_questions"):

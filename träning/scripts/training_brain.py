@@ -155,20 +155,23 @@ def resolve_mesocycle(strategy, today):
     mesocycle = strategy.get("current_mesocycle") or {}
     start = date.fromisoformat(mesocycle["start_date"])
     end = date.fromisoformat(mesocycle["end_date"])
-    total_weeks = max(1, math.ceil(((end - start).days + 1) / 7))
+    length_days = int((mesocycle.get("microcycle_structure") or {}).get("length_days") or 7)
+    total_microcycles = max(1, math.ceil(((end - start).days + 1) / length_days))
     if today_date < start:
-        week = 0
+        microcycle_index = 0
         state = "startar snart"
     elif today_date > end:
-        week = total_weeks
-        state = "avslutat · väntar utvärdering"
+        microcycle_index = total_microcycles
+        state = "avslutad · väntar utvärdering"
     else:
-        week = min(total_weeks, ((today_date - start).days // 7) + 1)
-        state = f"vecka {week} av {total_weeks}"
+        microcycle_index = min(total_microcycles, ((today_date - start).days // length_days) + 1)
+        state = f"mikrocykel {microcycle_index} av {total_microcycles}"
     return {
         "id": mesocycle.get("id") or "",
         "title": mesocycle.get("title") or "Aktuell mesocykel",
         "state": state,
+        "microcycle_index": microcycle_index,
+        "microcycle_total": total_microcycles,
         "goal_contribution": mesocycle.get("goal_contribution") or "",
         "hypothesis": mesocycle.get("hypothesis") or "",
         "evaluation_date": mesocycle.get("evaluation_date") or "",

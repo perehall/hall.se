@@ -136,7 +136,7 @@ def main():
     leaked = [marker for marker in forbidden if marker in verify]
     if leaked:
         raise RuntimeError(f"Träningshjärna: redundant information kvar i normalvyn: {leaked!r}")
-    print("Träningshjärna OK: Veckofokus visar mesocykeln; Idag och Nästa beslut navigerar i närtid.")
+    print("Träningshjärna OK: Veckofokus visar mesocykel + mikrocykel; Idag och Nästa beslut navigerar i närtid.")
 
 
 if __name__ == "__main__":
