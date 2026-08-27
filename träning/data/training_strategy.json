@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "north_star": "Bygg en bred, vältränad allroundatlet med tydlig utveckling i löpning och teknisk MTB/XC, bibehållen eller förbättrad simning samt relevant styrka, core, löpstyrka och plyometri. Träningen ska hålla dörren öppen för senare spetsning mot trail/ultra, cykellopp, swimrun eller triathlon utan att låsas mot ett enda lopp.",
   "current_priorities": [
     {
@@ -99,33 +99,6 @@
       "priority": 5
     }
   ],
-  "current_block": {
-    "id": "run-threshold-hill-4w",
-    "title": "Löpblock · tröskel + backkvalitet",
-    "start_date": "2026-08-24",
-    "end_date": "2026-09-20",
-    "evaluation_date": "2026-09-21",
-    "hypothesis": "En differentierad löpkvalitet med ett kontrollerat tröskelstimulus och ett separat backstimulus kan ge bättre kompletterande utveckling och bättre plats för MTB/enduro än två snarlika tröskelpass per vecka.",
-    "protected_stimuli": [
-      "run_threshold",
-      "run_hill_quality",
-      "run_easy_distance"
-    ],
-    "success_signals": [
-      "Kontrollerad kvalitet kan genomföras med stabil känsla och teknik över blocket.",
-      "Tröskelpassen visar bibehållen eller förbättrad fart/kontroll vid jämförbar ansträngning när passen är jämförbara.",
-      "Backpassen kan genomföras med bibehållen mekanisk kvalitet utan onödig syrajakt.",
-      "Lugn distans och övrig träning absorberas utan att nyckelpassen återkommande behöver offras.",
-      "Kontinuiteten är bättre eller minst lika god som med två snarlika tröskelpass."
-    ],
-    "guardrails": [
-      "Ingen extra kvalitet läggs till ovanpå tröskel + backkvalitet.",
-      "Exakt dos för backpass bestäms först när de föregående 2–3 dagarnas faktiska belastning är känd.",
-      "Enduro räknas som faktisk belastning men får ingen schablonmässig belastningsnivå.",
-      "En ledig dag är inte i sig skäl att lägga till träning.",
-      "Privat återhämtningsdata används endast som konservativ beslutskontext och får aldrig ensam motivera ökad träningsbelastning."
-    ]
-  },
   "strategic_readiness": [
     {
       "key": "trail_ultra",
@@ -154,21 +127,138 @@
     "free_day_is_not_training_reason": true,
     "defer_open_dose_until_near_load_known": true,
     "prioritize_continuity_over_max_content": true,
-    "protect_block_stimuli_before_optional_training": true,
     "long_term_goal_is_primary": true,
-    "near_term_changes_must_serve_long_term_direction": true
+    "near_term_changes_must_serve_long_term_direction": true,
+    "protect_mesocycle_stimuli_before_optional_training": true
   },
   "planning_hierarchy": {
     "order": [
       "north_star",
-      "development_block",
+      "mesocycle",
       "week",
-      "near_term"
+      "near_term",
+      "session"
     ],
-    "north_star_role": "Den långsiktiga målbilden är överordnad och anger vilka förmågor träningen ska utveckla över tid.",
-    "development_block_role": "Aktuellt block väljer en avgränsad utvecklingsväg som ska vara förenlig med målbilden och kunna utvärderas.",
-    "week_role": "Veckan omsätter blockets avsikt till en absorberbar struktur utan att bli ett mål i sig.",
-    "near_term_role": "Beslut de närmaste 2–3 dagarna anpassar vägen efter faktisk belastning, återhämtning och övriga rådande omständigheter.",
-    "adaptation_rule": "När närtidens omständigheter kräver ändring ska vägen justeras, men den långsiktiga riktningen och relevanta utvecklingsstimuli ska bevaras eller återtas när det är rimligt."
+    "north_star_role": "Den långsiktiga målbilden är överordnad och anger vilken atlet och vilka förmågor träningen ska utveckla över tid.",
+    "mesocycle_role": "Mesocykeln väljer ett avgränsat utvecklingsfokus som för målbilden framåt under flera veckor och anger vilka stimuli som ska skyddas, stödjas och utvärderas.",
+    "week_role": "Veckan är en preliminär realisering av mesocykeln. Den ska skapa plats för rätt stimuli men är aldrig ett mål i sig.",
+    "near_term_role": "Beslut de närmaste 2–3 dagarna navigerar runt faktisk belastning, återhämtning, fasta åtaganden och andra rådande omständigheter.",
+    "session_role": "Det enskilda passet är minsta verkställande enhet och ska ha en tydlig roll i mesocykeln eller vara uttryckligen stödjande/rekreativt.",
+    "adaptation_rule": "När närtidens omständigheter kräver ändring ska vägen justeras, men mesocykelns relevanta utvecklingsstimuli ska bevaras, flyttas eller återtas när det är absorberbart och fortfarande tjänar målbilden."
+  },
+  "current_mesocycle": {
+    "id": "run-threshold-hill-4w",
+    "title": "Mesocykel · löptröskel + backkvalitet",
+    "start_date": "2026-08-24",
+    "end_date": "2026-09-20",
+    "evaluation_date": "2026-09-21",
+    "goal_contribution": "Flytta den prioriterade löpförmågan framåt genom kontrollerad tröskel, löpekonomi/backstyrka och lugn tålighet, samtidigt som MTB/XC och simning hålls aktiva utan att tränga undan löputvecklingen.",
+    "hypothesis": "En differentierad löpkvalitet med ett kontrollerat tröskelstimulus och ett separat backstimulus kan ge bättre kompletterande utveckling och bättre plats för MTB/enduro än två snarlika tröskelpass per vecka.",
+    "protected_stimuli": [
+      "run_threshold",
+      "run_hill_quality",
+      "run_easy_distance"
+    ],
+    "supporting_stimuli": [
+      "mtb_technical",
+      "mtb_aerobic",
+      "swim_aerobic",
+      "swim_technique",
+      "strength_unilateral",
+      "strength_core",
+      "plyometric",
+      "enduro_technical"
+    ],
+    "weekly_template": [
+      {
+        "slot": "run_threshold",
+        "preferred_weekday": 2,
+        "sport": "run",
+        "priority_role": "anchor",
+        "stimuli": [
+          "run_threshold"
+        ],
+        "session": "Löpning · kontrollerad tröskel · dos öppen",
+        "reason": "Mesocykelns första prioriterade löpstimulus. Exakt dos bestäms först när de närmast föregående dagarnas faktiska belastning och återhämtning är kända.",
+        "development_focus": "Jämn, kontrollerad kvalitet utan fartjakt; progression ska komma genom absorberbar träning."
+      },
+      {
+        "slot": "swim_support",
+        "preferred_weekday": 3,
+        "sport": "swim",
+        "priority_role": "flex",
+        "stimuli": [
+          "swim_aerobic",
+          "swim_technique"
+        ],
+        "session": "Simning · aerob/teknik · dos öppen",
+        "reason": "Stödjer målbildens simkapacitet med liten mekanisk kostnad för benen och ska inte tränga undan mesocykelns prioriterade löpstimuli.",
+        "development_focus": "Teknisk kvalitet och stabil aerob simning."
+      },
+      {
+        "slot": "mtb_support",
+        "preferred_weekday": 4,
+        "sport": "bike",
+        "priority_role": "flex",
+        "stimuli": [
+          "mtb_technical",
+          "mtb_aerobic"
+        ],
+        "session": "MTB/XC · teknik + aerob stig · dos öppen",
+        "reason": "Utvecklar teknisk MTB/XC och aerob cykelkapacitet som stöd för målbilden, men omfattningen styrs så att mesocykelns nästa löpstimulus kan absorberas.",
+        "development_focus": "Blick, linjeval, bromspunkter och flyt före segmentjakt."
+      },
+      {
+        "slot": "run_hill_quality",
+        "preferred_weekday": 5,
+        "sport": "run",
+        "priority_role": "anchor",
+        "stimuli": [
+          "run_hill_quality"
+        ],
+        "session": "Löpning · backkvalitet · dos öppen",
+        "reason": "Mesocykelns andra prioriterade löpkvalitet: kraft, löpekonomi och mekanisk kvalitet. Dosen låses först när närbelastningen är känd.",
+        "development_focus": "Kraftfull men kontrollerad löpning med bibehållen mekanik; ingen maximal sprint eller syrajakt."
+      },
+      {
+        "slot": "run_easy_distance",
+        "preferred_weekday": 7,
+        "sport": "run",
+        "priority_role": "flex",
+        "stimuli": [
+          "run_easy_distance"
+        ],
+        "session": "Löpning · lugn distans · dos öppen",
+        "reason": "Mesocykelns tredje löpstimulus bygger tålighet och kontinuitet utan att bli ytterligare kvalitet.",
+        "development_focus": "Avslappnad rytm och jämn ansträngning."
+      }
+    ],
+    "progression_policy": {
+      "automatic_load_increase": false,
+      "keep_intensity_controlled": true,
+      "dose_decided_near_term": true,
+      "preserve_stimulus_before_preserving_exact_session": true,
+      "missed_protected_stimulus_requires_review": true
+    },
+    "success_signals": [
+      "Kontrollerad kvalitet kan genomföras med stabil känsla och teknik över blocket.",
+      "Tröskelpassen visar bibehållen eller förbättrad fart/kontroll vid jämförbar ansträngning när passen är jämförbara.",
+      "Backpassen kan genomföras med bibehållen mekanisk kvalitet utan onödig syrajakt.",
+      "Lugn distans och övrig träning absorberas utan att nyckelpassen återkommande behöver offras.",
+      "Kontinuiteten är bättre eller minst lika god som med två snarlika tröskelpass."
+    ],
+    "guardrails": [
+      "Ingen extra kvalitet läggs till ovanpå tröskel + backkvalitet.",
+      "Exakt dos för backpass bestäms först när de föregående 2–3 dagarnas faktiska belastning är känd.",
+      "Enduro räknas som faktisk belastning men får ingen schablonmässig belastningsnivå.",
+      "En ledig dag är inte i sig skäl att lägga till träning.",
+      "Privat återhämtningsdata används endast som konservativ beslutskontext och får aldrig ensam motivera ökad träningsbelastning."
+    ],
+    "review_questions": [
+      "Har de skyddade löpstimulansen kunnat genomföras med tillräcklig kontinuitet och bibehållen kvalitet?",
+      "Talar jämförbara pass för förbättrad kontroll, fart eller löpekonomi utan att kostnaden i återhämtning ökat oproportionerligt?",
+      "Har MTB/XC, simning och relevant styrka kunnat stödja målbilden utan att återkommande tränga undan mesocykelns prioriterade stimuli?",
+      "Ska nästa mesocykel fortsätta samma riktning, modifiera fokus eller byta utvecklingsområde utifrån faktisk respons?"
+    ]
   }
 }

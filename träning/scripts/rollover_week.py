@@ -6,12 +6,15 @@ from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+from strategy_contracts import validate_training_strategy
+
 ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "data"
 PLAN_FILE = DATA_DIR / "plan.json"
 UPCOMING_FILE = DATA_DIR / "upcoming_week.json"
 ACTIVITIES_FILE = DATA_DIR / "activities.json"
 COACH_FILE = DATA_DIR / "coach.json"
+STRATEGY_FILE = DATA_DIR / "training_strategy.json"
 WEEKS_DIR = DATA_DIR / "weeks"
 
 WEEKDAY_LABELS = (
@@ -97,6 +100,8 @@ def fixed_enduro_school_day(day_date, label="Måndag"):
         "classification": "training",
         "dose_open": True,
         "manual_lock": True,
+        "priority_role": "flex",
+        "stimuli": ["enduro_technical"],
     }
 
 
@@ -230,34 +235,51 @@ def _clean_preview_swim(source, target_date, target_label, next_key, focus_index
 
 
 def seed_preliminary_swims(promoted, future):
-    current_start, _ = validate_week_bounds(promoted.get("meta") or {}, "promoverad plan")
     next_start, _ = validate_week_bounds(future.get("meta") or {}, "framtidsplan")
     next_key = future["week_key"]
-    swim_days = [day for day in promoted.get("days") or [] if day.get("sport") == "swim"]
+    sources = [day for day in promoted.get("days") or [] if day.get("sport") == "swim"]
+    targets = [
+        (index, day)
+        for index, day in enumerate(future.get("days") or [])
+        if day.get("sport") == "swim"
+    ]
 
-    for ordinal, source in enumerate(swim_days):
-        source_date = date.fromisoformat(source["date"])
-        offset = (source_date - current_start).days
-        if not 0 <= offset <= 6:
-            raise RuntimeError("Veckoskifte: simpass ligger utanför promoverad vecka")
-        target_date = next_start + timedelta(days=offset)
-        future["days"][offset] = _clean_preview_swim(
+    for ordinal, ((target_index, target), source) in enumerate(zip(targets, sources)):
+        target_date = date.fromisoformat(target["date"])
+        copied = _clean_preview_swim(
             source,
             target_date,
-            WEEKDAY_LABELS[offset],
+            target.get("label") or WEEKDAY_LABELS[target_index],
             next_key,
             focus_index=next_start.isocalendar().week + ordinal,
         )
+        copied["priority_role"] = target.get("priority_role") or copied.get("priority_role") or "flex"
+        copied["stimuli"] = deepcopy(target.get("stimuli") or copied.get("stimuli") or [])
+        copied["mesocycle_slot"] = target.get("mesocycle_slot")
+        future["days"][target_index] = copied
     return future
 
 
-def build_open_next_week(promoted):
+def mesocycle_week_state(mesocycle, week_start):
+    start = date.fromisoformat(mesocycle["start_date"])
+    end = date.fromisoformat(mesocycle["end_date"])
+    total_weeks = max(1, ((end - start).days + 1 + 6) // 7)
+    if not (start <= week_start <= end):
+        return None, total_weeks
+    week = ((week_start - start).days // 7) + 1
+    return week, total_weeks
+
+
+def build_mesocycle_next_week(promoted, strategy):
+    validate_training_strategy(strategy)
     meta = promoted.get("meta") or {}
     _, current_end = validate_week_bounds(meta, "promoverad plan")
     next_start = current_end + timedelta(days=1)
     next_end = next_start + timedelta(days=6)
     next_iso = next_start.isocalendar()
     timezone_name = meta.get("timezone") or "Europe/Stockholm"
+    mesocycle = strategy["current_mesocycle"]
+    mesocycle_week, total_weeks = mesocycle_week_state(mesocycle, next_start)
 
     days = []
     for offset, label in enumerate(WEEKDAY_LABELS):
@@ -270,11 +292,63 @@ def build_open_next_week(promoted):
                 "planning_status": "open",
                 "session": "Öppet · planeras när underlag finns",
                 "reason": (
-                    "Ingen träningsdos sätts ännu. Passet planeras utifrån faktisk belastning, "
-                    "återhämtning och de närmast föregående 2–3 dagarna."
+                    "Ingen träningsdos sätts ännu. Närmaste beslut tas utifrån mesocykelns riktning, "
+                    "faktisk belastning, återhämtning och de föregående 2–3 dagarnas utfall."
                 ),
                 "sport": "open",
             }
+        )
+
+    inside_mesocycle = (
+        mesocycle_week is not None
+        and date.fromisoformat(mesocycle["start_date"]) <= next_start
+        and next_end <= date.fromisoformat(mesocycle["end_date"])
+    )
+
+    if inside_mesocycle:
+        for slot in mesocycle["weekly_template"]:
+            offset = int(slot["preferred_weekday"]) - 1
+            day_date = next_start + timedelta(days=offset)
+            planned_day = {
+                "date": day_date.isoformat(),
+                "label": WEEKDAY_LABELS[offset],
+                "status": "preliminary",
+                "planning_status": "preliminary",
+                "session": slot["session"],
+                "reason": slot["reason"],
+                "development_focus": slot["development_focus"],
+                "sport": slot["sport"],
+                "dose_open": True,
+                "priority_role": slot["priority_role"],
+                "stimuli": deepcopy(slot["stimuli"]),
+                "mesocycle_id": mesocycle["id"],
+                "mesocycle_week": mesocycle_week,
+                "mesocycle_slot": slot["slot"],
+            }
+            if slot["sport"] == "swim":
+                planned_day["swim_equipment"] = {"planned": "tbd"}
+            days[offset] = planned_day
+
+        title = f'{mesocycle["title"]} · vecka {mesocycle_week} av {total_weeks}'
+        principle = (
+            mesocycle["goal_contribution"]
+            + " Veckan är preliminär: mesocykelns stimuli skyddas, medan exakt dos och vid behov placering "
+              "avgörs först när närbelastningen är känd."
+        )
+        preview_summary = (
+            f'Mesocykel vecka {mesocycle_week} av {total_weeks}. '
+            "Skyddade stimuli: "
+            + ", ".join(mesocycle["protected_stimuli"])
+            + ". Doser är öppna och får inte ökas automatiskt."
+        )
+    else:
+        title = "Mesocykel avslutad · utvärdering krävs"
+        principle = (
+            "Ingen ny utvecklingsriktning skapas automatiskt efter avslutad mesocykel. "
+            "Fasta åtaganden kan ligga kvar, men nästa mesocykel ska väljas först efter utvärdering mot målbilden och faktisk respons."
+        )
+        preview_summary = (
+            "Övergångsvecka. Systemet väntar på mesocykelutvärdering innan nya utvecklingsstimuli planeras."
         )
 
     future = {
@@ -286,24 +360,57 @@ def build_open_next_week(promoted):
             "week": next_iso.week,
             "week_start": next_start.isoformat(),
             "week_end": next_end.isoformat(),
-            "title": "Preliminär framtidsvecka",
-            "principle": (
-                "Veckan hålls öppen tills faktisk belastning och återhämtning ger tillräckligt underlag. "
-                "Fasta åtaganden som enduroskolan ligger kvar; etablerade simpass förs preliminärt vidare utan automatisk volymökning."
-            ),
-            "preview_summary": (
-                "Översiktsvecka utan påhittad belastningsökning. Fasta åtaganden bevaras och etablerade simpass "
-                "skrivs ut preliminärt; övriga pass sätts när aktuell veckas utfall är känt."
-            ),
+            "title": title,
+            "principle": principle,
+            "preview_summary": preview_summary,
+            "mesocycle_id": mesocycle["id"] if inside_mesocycle else "",
+            "mesocycle_week": mesocycle_week if inside_mesocycle else None,
+            "mesocycle_total_weeks": total_weeks,
+            "requires_mesocycle_review": not inside_mesocycle,
         },
         "days": days,
         "strength_template": deepcopy(promoted.get("strength_template") or []),
     }
-    future = seed_preliminary_swims(promoted, future)
-    return seed_fixed_commitments(future)
+
+    if inside_mesocycle:
+        future = seed_preliminary_swims(promoted, future)
+        for day in future["days"]:
+            if day.get("sport") not in {"open", "rest"}:
+                day["mesocycle_id"] = mesocycle["id"]
+                day["mesocycle_week"] = mesocycle_week
+
+    future = seed_fixed_commitments(future)
+
+    if inside_mesocycle:
+        actual_stimuli = {
+            stimulus
+            for day in future["days"]
+            for stimulus in (day.get("stimuli") or [])
+        }
+        missing = [
+            stimulus
+            for stimulus in mesocycle["protected_stimuli"]
+            if stimulus not in actual_stimuli
+        ]
+        future["meta"]["missing_protected_stimuli"] = missing
+        future["meta"]["requires_mesocycle_review"] = bool(missing)
+        if missing:
+            future["meta"]["preview_summary"] += (
+                " Skyddat stimulus saknar plats efter fasta åtaganden och måste lösas i närtidsplaneringen: "
+                + ", ".join(missing)
+                + "."
+            )
+    return future
 
 
-def rollover_documents(plan, upcoming, today):
+# Legacy name kept for older callers; mesocycle strategy is now required.
+def build_open_next_week(promoted, strategy=None):
+    if strategy is None:
+        raise RuntimeError("Veckoskifte: training_strategy krävs för att bygga nästa vecka")
+    return build_mesocycle_next_week(promoted, strategy)
+
+
+def rollover_documents(plan, upcoming, today, strategy):
     plan_meta = plan.get("meta") or {}
     upcoming_meta = upcoming.get("meta") or {}
     _, current_end = validate_week_bounds(plan_meta, "aktiv plan")
@@ -324,7 +431,7 @@ def rollover_documents(plan, upcoming, today):
     promoted_start, _ = validate_week_bounds(promoted.get("meta") or {}, "promoverad plan")
     if promoted_start != upcoming_start:
         raise RuntimeError("Veckoskifte: promoveringen ändrade veckodatumen oväntat")
-    next_preview = build_open_next_week(promoted)
+    next_preview = build_mesocycle_next_week(promoted, strategy)
     return promoted, next_preview
 
 
@@ -333,6 +440,8 @@ def main(*, today_local=None):
     upcoming = load_json(UPCOMING_FILE)
     activities_state = load_json(ACTIVITIES_FILE, {"activities": []})
     coach_state = load_json(COACH_FILE, {"analyses": []})
+    strategy = load_json(STRATEGY_FILE)
+    validate_training_strategy(strategy)
 
     timezone_name = (plan.get("meta") or {}).get("timezone") or "Europe/Stockholm"
     tz = ZoneInfo(timezone_name)
@@ -340,7 +449,7 @@ def main(*, today_local=None):
     if isinstance(today, str):
         today = date.fromisoformat(today)
 
-    result = rollover_documents(plan, upcoming, today)
+    result = rollover_documents(plan, upcoming, today, strategy)
     if result is None:
         start, _ = validate_week_bounds((plan.get("meta") or {}), "aktiv plan")
         print(f"Veckoskifte: ingen ändring; {week_key(start)} är fortfarande aktuell.")

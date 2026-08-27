@@ -12,7 +12,7 @@ sys.path.insert(0, str(SCRIPTS))
 
 from finalize_training_brain_ui import SECTION_START, apply_ui, decorate_focus_card, render_section  # noqa: E402
 from strategy_contracts import StrategyContractError, validate_training_strategy  # noqa: E402
-from training_brain import resolve_block, resolve_next_decision, resolve_today  # noqa: E402
+from training_brain import resolve_mesocycle, resolve_next_decision, resolve_today  # noqa: E402
 
 
 class TrainingBrainTests(unittest.TestCase):
@@ -26,7 +26,7 @@ class TrainingBrainTests(unittest.TestCase):
 
     def test_unknown_protected_stimulus_fails_closed(self):
         strategy = deepcopy(self.strategy)
-        strategy["current_block"]["protected_stimuli"].append("invented_stimulus")
+        strategy["current_mesocycle"]["protected_stimuli"].append("invented_stimulus")
         with self.assertRaises(StrategyContractError):
             validate_training_strategy(strategy)
 
@@ -34,7 +34,7 @@ class TrainingBrainTests(unittest.TestCase):
         hierarchy = self.strategy["planning_hierarchy"]
         self.assertEqual(
             hierarchy["order"],
-            ["north_star", "development_block", "week", "near_term"],
+            ["north_star", "mesocycle", "week", "near_term", "session"],
         )
         self.assertTrue(self.strategy["decision_policy"]["long_term_goal_is_primary"])
         self.assertTrue(
@@ -78,28 +78,28 @@ class TrainingBrainTests(unittest.TestCase):
         self.assertEqual(decision["date"], "2026-08-28")
         self.assertIn("Backdosen", decision["note"])
 
-    def test_current_block_reports_week_one(self):
-        block = resolve_block(self.strategy, date(2026, 8, 26))
-        self.assertEqual(block["state"], "vecka 1 av 4")
-        self.assertEqual(block["evaluation_date"], "2026-09-21")
-        self.assertIn("Kontrollerad löptröskel", block["protected_stimuli"])
+    def test_current_mesocycle_reports_week_one(self):
+        mesocycle = resolve_mesocycle(self.strategy, date(2026, 8, 26))
+        self.assertEqual(mesocycle["state"], "vecka 1 av 4")
+        self.assertEqual(mesocycle["evaluation_date"], "2026-09-21")
+        self.assertIn("Kontrollerad löptröskel", mesocycle["protected_stimuli"])
 
     def test_primary_ui_contains_only_today_and_next_decision(self):
         section = render_section(self.plan, {"activities": []}, self.strategy, date(2026, 8, 26))
         self.assertIn("Idag ·", section)
         self.assertIn("Nästa beslut", section)
-        self.assertNotIn("Aktuellt block", section)
+        self.assertNotIn("Aktuell mesocykel", section)
         self.assertNotIn("Prioritering just nu", section)
         self.assertNotIn("brain-tags", section)
 
-    def test_block_context_moves_into_week_focus(self):
+    def test_mesocycle_context_moves_into_week_focus(self):
         page = '<div class="hero week-focus-card"><h2>Veckofokus</h2><details class="week-focus-details"><summary>Planidé</summary><p>Veckoplan.</p></details></div>'
-        block = resolve_block(self.strategy, date(2026, 8, 26))
-        rendered = decorate_focus_card(page, block)
-        self.assertIn('class="week-focus-block-meta"', rendered)
+        mesocycle = resolve_mesocycle(self.strategy, date(2026, 8, 26))
+        rendered = decorate_focus_card(page, mesocycle)
+        self.assertIn('class="week-focus-mesocycle-meta"', rendered)
         self.assertIn("vecka 1 av 4", rendered)
         self.assertIn("utvärdering 21/9", rendered)
-        self.assertIn("Blockhypotes:", rendered)
+        self.assertIn("Mesocykelhypotes:", rendered)
 
     def test_ui_insertion_is_idempotent(self):
         page = "<html><style></style><body><section class=\"dashboard\"></section></body></html>"
