@@ -3,32 +3,32 @@
     {
       "activity_id": 19926277295,
       "activity_date": "2026-08-27",
-      "activity_name": "Evening Mountain Bike Ride",
-      "generated_at_utc": "2026-08-27T18:10:44.809180+00:00",
+      "activity_name": "Evening Stigrull",
+      "generated_at_utc": "2026-08-27T18:17:12.821614+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Dagens MTB-pass var tekniskt och lugnt; veckans närbelastning är hög men absorberbar inför fredagens backkvalitet.",
-        "load_interpretation": "De senaste tre dagarna (löptröskel, swimrun med högre intensitet, MTB 60 min lugn) ger samlad belastning som kräver försiktighet inför backpasset.",
+        "summary": "60 min lugn/teknisk MTB är genomfört och räknas som konserverande stödbelastning inför fredagens backkvalitet.",
+        "load_interpretation": "Dagens 60 min teknikpass ger måttlig aerob belastning som ökar veckobelastningen men lämnar marginal för planerad backkvalitet.",
         "confidence": "medium",
         "facts": [
           "MountainBikeRide: 18,13 km · 1:10:48 · 210 m+ · snittpuls 128,3 · maxpuls 147.",
           "Planstatus 2026-08-27: dagens planerade pass är genomfört i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Veckans andra löpkvalitet (backar) är viktig för mesocykeln men bör inte lägga till risk för överbelastning efter swimrun+MTB.",
-          "Privat återhämtningsdata visar inga varningsmönster som pekar på akut behov av vila och stödjer konservativ genomförbarhet."
+          "Dagens MTB är redan kartlagd som stödpass (flex) och inte ett hårt intervallpass.",
+          "Veckans samlade belastning (må–to) är absorberbar utan att slå sönder möjligheten att genomföra fredagens backkvalitet i konservativ dos."
         ],
         "unknowns": [
-          "Subjektiv dagskänsla inför fredag morgon.",
-          "Exakt planerad dos för dagens MTB (använt 60 min) påverkade trötthet lokalt i benen?",
-          "Eventuella lokala muskelsmärtor eller skador efter onsdagens swimrun eller torsdagens MTB."
+          "Subjektiv dagskänsla inför fredag (morgon) kan påverka om full backdos kan hållas.",
+          "Eventuell lokal muskeltrötthet i benen från enduro/strength måndag bedöms redan i tidigare justeringar men kan vara mer uttalad än vad data visar.",
+          "Om användaren planerar hård körning under MTB-passet trots instruktion kan belastningen vara högre än registrerat."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-08-28",
-        "reason": "Belastningen är relativt hög men inom absorberbar gräns; backkvaliteten är mesocykelns skyddade stimulus.",
-        "recommendation": "Behåll backpasset som planerat; välj konservativ dos på backrepetitionerna: prioritera teknik och kontrollerad kraft, avsluta vid tydlig försämring i mekanik. Nästa pass (lördag MTB distans) bestäms efter hur du återhämtar dig efter fredagens pass.",
+        "reason": "Dagens MTB var tekniskt och lugnt enligt plan och veckobelastningen är absorberbar.",
+        "recommendation": "Behåll planerat backpass på 2026-08-28; bestäm slutlig backdos fredag morgon utifrån dagskänsla. Utför backkvaliteten kontrollerat enligt mesocykelns riktlinjer.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -410,7 +410,7 @@
       }
     }
   ],
-  "last_trigger_hash": "14592156bc9b191d6d5e400c9553fe71aa196e8b1a6325f210cc4dbbe5d9a37b",
-  "last_run_utc": "2026-08-27T18:10:44.809180+00:00",
+  "last_trigger_hash": "2876eb64dbba17216889d2740916dbf8054945549c460372613a2e599fa23104",
+  "last_run_utc": "2026-08-27T18:17:12.821614+00:00",
   "contract_version": 9
 }
