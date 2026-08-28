@@ -4,32 +4,31 @@
       "activity_id": 19939732259,
       "activity_date": "2026-08-28",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-08-28T19:36:52.020643+00:00",
+      "generated_at_utc": "2026-08-28T19:45:50.707304+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Behåll mesocykelns fokus men minska lördagens MTB distans för att säkra absorption efter 12 backar idag.",
-        "load_interpretation": "Fredagens 12 backreps + senaste swimrun och MTB ger hög närbelastning inför lördag–söndag.",
+        "summary": "Fredagens backpass blev större än ordinerat och ökar veckobelastningen; lördagens MTB skalar redan ner för absorption.",
+        "load_interpretation": "Höjd lokal backvolym (12 reps) plus tidigare swimrun och MTB ger ökad närbelastning inför helgens distanslöpning.",
         "confidence": "medium",
         "facts": [
-          "Löpning · backkvalitet: 9,67 km · 50:36 · 182 m+ · snittpuls 145,1 · maxpuls 169.",
-          "Användarrapport: Backkvalitet. Sprang relativt kontrollerat. Först 6 backar på cirka 40 s med jogg ned på cirka 60 s. Kände mig pigg, joggade några minuter och körde sedan 6 backar till före nedjogg. Totalt 12 backrepetitioner.",
+          "Run: 9,67 km · 50:36 · 182 m+ · snittpuls 145,1 · maxpuls 169.",
           "Planstatus 2026-08-28: dagens planerade pass är genomfört i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Den faktiska backvolymen (12×) ökar veckebelastningen jämfört med ursprungsdos; absorption kräver konservativ cykelvolym.",
-          "Bevara mesocykelns skyddade stimuli: backkvalitet är redan genomförd; lördagens MTB kan skalas utan att förlora löpstimulus."
+          "Fredagens högre backvolym kan kompromettera absorption om lördag vore lång och tekniskt krävande.",
+          "Reduktion av lördagens MTB till 75 min är lämplig för att bevara söndagens lugna distansmöjlighet."
         ],
         "unknowns": [
-          "Subjektiv dagskänsla natt till lördag (finns ej) kan motivera mindre justering.",
-          "Detaljer om hur hårda de 12 backarna blev mekaniskt (men användarrapport säger 'relativt kontrollerat').",
-          "Eventuella planer/åtaganden lördag som påverkar återhämtning."
+          "Subjektiv dagskänsla under lördag morgon (ben/trötthet) kan motivera ytterligare nedskalning.",
+          "Detaljer om planerad lördagstidpunkt/terräng som påverkar MTB:s faktisk belastning.",
+          "Eventuella icke-registrerande belastningar efter kvällens löpning (t.ex. tungt arbete) som påverkar återhämtning."
         ]
       },
       "plan_action": {
         "action": "reduce",
         "target_date": "2026-08-29",
-        "reason": "Säkra absorption efter högre än planerad backvolym idag.",
-        "recommendation": "Skala ner lördagens MTB distans till 75 min lugn körning (mtb-distance-75). Kör huvudsakligen lugnt, undvik upprepade hårda stigningar och avbryt tidigare vid tunga ben.",
+        "reason": "Veckans faktiska backvolym och tidigare sessioners belastning kräver konservativ absorption innan söndagens löpdistans.",
+        "recommendation": "Skala ner lördagens MTB-distans till mtb-distance-75 (75 min lugn körning); håll det huvudsakligen lugnt, undvik upprepade hårda stigningar och avbryt vid tunga ben.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -448,7 +447,7 @@
       }
     }
   ],
-  "last_trigger_hash": "e08d61ea60b6ec29931f35aa8aa26688f3cbf5a90f29728b7688caf8ba42f577",
-  "last_run_utc": "2026-08-28T19:36:52.020643+00:00",
+  "last_trigger_hash": "9274e145fc58a24d9d6fe7ba02746da7a1bbc6b13a04b98cbb8489670dff3119",
+  "last_run_utc": "2026-08-28T19:45:50.707304+00:00",
   "contract_version": 9
 }
