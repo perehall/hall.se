@@ -169,12 +169,12 @@
     {
       "date": "2026-08-29",
       "label": "Lördag",
-      "status": "planned",
-      "session": "MTB/XC · distans · huvudsakligen lugnt",
+      "status": "conditional",
+      "session": "MTB/XC · distans · 75 min · huvudsakligen lugnt",
       "reason": "Bygger cykelspecifik uthållighet och teknisk tid på cykeln. Distansens exakta omfattning bestäms när fredagens backkvalitet och veckans samlade faktiska belastning är kända.",
       "development_focus": "Ekonomisk körning och stabil teknik när tiden på cykeln ökar; undvik att varje backe blir ett hårt intervall.",
       "sport": "bike",
-      "dose_open": true,
+      "dose_open": false,
       "priority_role": "flex",
       "stimuli": [
         "mtb_aerobic",
@@ -197,7 +197,23 @@
           "value": 90,
           "session": "MTB/XC · distans · 90 min · huvudsakligen lugnt"
         }
-      ]
+      ],
+      "original_session": "MTB/XC · distans · huvudsakligen lugnt",
+      "dose_resolution": {
+        "state": "resolved",
+        "kind": "duration_minutes",
+        "value": 75,
+        "source": "near_term_ai",
+        "option_id": "mtb-distance-75",
+        "basis": "Behålla mesocykelns stimuli men säkra absorption före söndagens löpdistans.",
+        "applied_at_utc": "2026-08-28T19:02:39.214286+00:00"
+      },
+      "auto_coach": {
+        "action": "reduce",
+        "reason": "Behålla mesocykelns stimuli men säkra absorption före söndagens löpdistans.",
+        "applied_at_utc": "2026-08-28T19:02:39.214286+00:00"
+      },
+      "coach_adjustment": "Skala ned passet. Välj MTB/XC 75 min lugn distans (mtb-distance-75). Kör huvudsakligen lugnt, undvik upprepade hårda stigningar och håll teknisk fokus; avbryt tidigare om benen känns tunga."
     },
     {
       "date": "2026-08-30",
