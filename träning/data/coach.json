@@ -1,6 +1,44 @@
 {
   "analyses": [
     {
+      "activity_id": 19939732259,
+      "activity_date": "2026-08-28",
+      "activity_name": "Löpning på kvällen",
+      "generated_at_utc": "2026-08-28T19:36:52.020643+00:00",
+      "model": "gpt-5-mini",
+      "assessment": {
+        "summary": "Behåll mesocykelns fokus men minska lördagens MTB distans för att säkra absorption efter 12 backar idag.",
+        "load_interpretation": "Fredagens 12 backreps + senaste swimrun och MTB ger hög närbelastning inför lördag–söndag.",
+        "confidence": "medium",
+        "facts": [
+          "Löpning · backkvalitet: 9,67 km · 50:36 · 182 m+ · snittpuls 145,1 · maxpuls 169.",
+          "Användarrapport: Backkvalitet. Sprang relativt kontrollerat. Först 6 backar på cirka 40 s med jogg ned på cirka 60 s. Kände mig pigg, joggade några minuter och körde sedan 6 backar till före nedjogg. Totalt 12 backrepetitioner.",
+          "Planstatus 2026-08-28: dagens planerade pass är genomfört i coachens beslutsunderlag."
+        ],
+        "interpretations": [
+          "Den faktiska backvolymen (12×) ökar veckebelastningen jämfört med ursprungsdos; absorption kräver konservativ cykelvolym.",
+          "Bevara mesocykelns skyddade stimuli: backkvalitet är redan genomförd; lördagens MTB kan skalas utan att förlora löpstimulus."
+        ],
+        "unknowns": [
+          "Subjektiv dagskänsla natt till lördag (finns ej) kan motivera mindre justering.",
+          "Detaljer om hur hårda de 12 backarna blev mekaniskt (men användarrapport säger 'relativt kontrollerat').",
+          "Eventuella planer/åtaganden lördag som påverkar återhämtning."
+        ]
+      },
+      "plan_action": {
+        "action": "reduce",
+        "target_date": "2026-08-29",
+        "reason": "Säkra absorption efter högre än planerad backvolym idag.",
+        "recommendation": "Skala ner lördagens MTB distans till 75 min lugn körning (mtb-distance-75). Kör huvudsakligen lugnt, undvik upprepade hårda stigningar och avbryt tidigare vid tunga ben.",
+        "dose_option_id": "",
+        "requires_approval": false
+      },
+      "auto_apply": {
+        "applied": true,
+        "note": "Konservativ ändring applicerad på 2026-08-29: reduce."
+      }
+    },
+    {
       "activity_id": 19926277295,
       "activity_date": "2026-08-27",
       "activity_name": "Evening Stigrull",
@@ -410,7 +448,7 @@
       }
     }
   ],
-  "last_trigger_hash": null,
-  "last_run_utc": "2026-08-28T19:02:39.214822+00:00",
+  "last_trigger_hash": "e08d61ea60b6ec29931f35aa8aa26688f3cbf5a90f29728b7688caf8ba42f577",
+  "last_run_utc": "2026-08-28T19:36:52.020643+00:00",
   "contract_version": 9
 }
