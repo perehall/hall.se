@@ -16,6 +16,7 @@ from coach import (  # noqa: E402
     call_openai,
     extract_output_text,
     normalize_dose_option_field,
+    normalize_same_day_open_dose_action,
     scrub_private_wellness_output,
     stable_hash,
     validate_dose_option_action,
@@ -202,6 +203,41 @@ class CoachApiTests(unittest.TestCase):
         self.assertIn("återhämtningsunderlaget", text)
 
 
+
+
+    def test_same_day_keep_without_dose_option_becomes_review(self):
+        plan = {
+            "days": [
+                {
+                    "date": "2026-08-28",
+                    "status": "planned",
+                    "sport": "run",
+                    "session": "Löpning · backkvalitet · dos öppen",
+                    "dose_open": True,
+                    "dose_options": [
+                        {
+                            "id": "hill-6",
+                            "kind": "structured",
+                            "value": 6,
+                            "session": "6 × 150 m",
+                        }
+                    ],
+                }
+            ]
+        }
+        action = {
+            "action": "keep",
+            "target_date": "2026-08-28",
+            "reason": "Behåll kvaliteten.",
+            "recommendation": "Välj konservativ dos.",
+            "dose_option_id": "",
+            "requires_approval": False,
+        }
+        normalized = normalize_same_day_open_dose_action(plan, action, "2026-08-28")
+        self.assertEqual(normalized["action"], "review")
+        self.assertEqual(normalized["target_date"], "")
+        self.assertEqual(normalized["dose_option_id"], "")
+        self.assertIn("öppen dos", normalized["reason"])
 
     def test_review_clears_stale_dose_option(self):
         action = {
