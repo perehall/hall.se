@@ -94,7 +94,8 @@ class PostWorkoutUiTests(unittest.TestCase):
             "2026-08-28",
         )
         self.assertIn('data-post-workout-state="completed"', rendered)
-        self.assertIn('id="todayOutcomeTitle">Genomfört</h2>', rendered)\n        self.assertNotIn("<section class=\"training-brain\"><div>Dagens plan</div></section>", rendered)
+        self.assertIn('id="todayOutcomeTitle">Genomfört</h2>', rendered)
+        self.assertNotIn("<section class=\"training-brain\"><div>Dagens plan</div></section>", rendered)
         self.assertIn("50:36", rendered)
         self.assertIn("9,67 km", rendered)
         self.assertIn(">145</dd>", rendered)
