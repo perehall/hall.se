@@ -257,17 +257,18 @@ def add_week_anchor(page):
     return page.replace(old, new, 1)
 
 
-def inject_after_hero(page, card):
+def replace_training_brain(page, card):
     if CARD_MARKER in page:
         return page
-    hero_start = page.find('<div class="hero">')
-    if hero_start < 0:
-        raise RuntimeError("Post-workout UX: veckofokus saknas")
-    hero_end = page.find("</div>", hero_start)
-    if hero_end < 0:
-        raise RuntimeError("Post-workout UX: veckofokus är trasigt")
-    insert_at = hero_end + len("</div>")
-    return page[:insert_at] + "\n" + card + page[insert_at:]
+    start_marker = "<!-- training-brain-v1:start -->"
+    end_marker = "<!-- training-brain-v1:end -->"
+    start = page.find(start_marker)
+    end = page.find(end_marker, start + len(start_marker)) if start >= 0 else -1
+    if start < 0 or end < 0:
+        raise RuntimeError("Post-workout UX: träningshjärnans stabila renderingsmarkörer saknas")
+    end += len(end_marker)
+    replacement = start_marker + "\n" + card + "\n" + end_marker
+    return page[:start] + replacement + page[end:]
 
 
 def apply_post_workout_ui(page, plan, activities_state, coach_state, today):
@@ -285,7 +286,7 @@ def apply_post_workout_ui(page, plan, activities_state, coach_state, today):
 
     page = add_css(page)
     page = add_week_anchor(page)
-    page = inject_after_hero(page, card)
+    page = replace_training_brain(page, card)
     return page
 
 
