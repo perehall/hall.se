@@ -262,6 +262,23 @@ def normalize_same_day_open_dose_action(plan, action, today_local):
     return normalized
 
 
+def normalize_resolved_dose_reselection(plan, action):
+    normalized = dict(action)
+    option_id = str(normalized.get("dose_option_id") or "").strip()
+    target = str(normalized.get("target_date") or "").strip()
+    if not option_id or not target or normalized.get("action") not in {"keep", "reduce"}:
+        return normalized
+
+    day = next((item for item in plan.get("days", []) if item.get("date") == target), None)
+    if not day or day.get("dose_open") is True:
+        return normalized
+
+    resolved_id = str((day.get("dose_resolution") or {}).get("option_id") or "").strip()
+    if resolved_id and option_id == resolved_id:
+        normalized["dose_option_id"] = ""
+    return normalized
+
+
 def validate_dose_option_action(plan, action, today_local):
     option_id = str(action.get("dose_option_id") or "").strip()
     target = str(action.get("target_date") or "").strip()
@@ -271,16 +288,30 @@ def validate_dose_option_action(plan, action, today_local):
     if option_id:
         if not day:
             raise RuntimeError("AI coach: dose_option_id kräver en giltig target_date")
-        if day.get("dose_open") is not True:
-            raise RuntimeError("AI coach: dose_option_id får bara användas när måldagens dos är öppen")
         if kind not in {"keep", "reduce"}:
             raise RuntimeError("AI coach: dose_option_id får bara kombineras med keep eller reduce")
         options = day.get("dose_options") or []
-        if not any(option.get("id") == option_id for option in options):
+        option = next((item for item in options if item.get("id") == option_id), None)
+        if option is None:
             raise RuntimeError(
                 f"AI coach: okänt dose_option_id {option_id!r} för {target}; "
-                f"tillåtna är {[option.get('id') for option in options]!r}"
+                f"tillåtna är {[item.get('id') for item in options]!r}"
             )
+        if day.get("dose_open") is not True:
+            if kind != "reduce":
+                raise RuntimeError("AI coach: en redan löst dos får bara ändras konservativt med reduce")
+            current = day.get("dose_resolution") or {}
+            current_kind = current.get("kind")
+            current_value = current.get("value")
+            new_kind = option.get("kind")
+            new_value = option.get("value")
+            if (
+                current_kind != new_kind
+                or not isinstance(current_value, (int, float))
+                or not isinstance(new_value, (int, float))
+                or new_value >= current_value
+            ):
+                raise RuntimeError("AI coach: en redan löst dos får endast sänkas till ett mindre godkänt alternativ")
 
     if (
         day
@@ -322,8 +353,19 @@ def apply_conservative_action(plan, action, *, now_utc=None):
         )
         if option is None:
             raise RuntimeError(f"AI coach: okänt dose_option_id {option_id!r} för {target}")
-        if day.get("dose_open") is not True:
-            raise RuntimeError("AI coach: försökte lösa en dos som inte längre är öppen")
+        revising = day.get("dose_open") is not True
+        if revising:
+            current = day.get("dose_resolution") or {}
+            current_value = current.get("value")
+            new_value = option.get("value")
+            if (
+                kind != "reduce"
+                or current.get("kind") != option.get("kind")
+                or not isinstance(current_value, (int, float))
+                or not isinstance(new_value, (int, float))
+                or new_value >= current_value
+            ):
+                raise RuntimeError("AI coach: redan löst dos får endast sänkas konservativt")
         if "original_session" not in day:
             day["original_session"] = day.get("session", "")
         day["session"] = option["session"]
@@ -332,7 +374,7 @@ def apply_conservative_action(plan, action, *, now_utc=None):
             "state": "resolved",
             "kind": option.get("kind"),
             "value": option.get("value"),
-            "source": "near_term_ai",
+            "source": "near_term_ai_revision" if revising else "near_term_ai",
             "option_id": option_id,
             "basis": reason,
             "applied_at_utc": applied_at,
@@ -454,6 +496,10 @@ def main():
         fulfilled_dates=fulfilled_dates,
     )
     result["plan_action"] = normalize_dose_option_field(result["plan_action"])
+    result["plan_action"] = normalize_resolved_dose_reselection(
+        plan,
+        result["plan_action"],
+    )
     result["plan_action"] = normalize_same_day_open_dose_action(
         plan,
         result["plan_action"],
