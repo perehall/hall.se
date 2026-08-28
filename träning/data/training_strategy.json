@@ -223,7 +223,23 @@
         "session": "Löpning · kontrollerad tröskel · dos öppen",
         "reason": "Mesocykelns första prioriterade löpstimulus. Exakt dos bestäms först när de närmast föregående dagarnas faktiska belastning och återhämtning är kända.",
         "development_focus": "Jämn, kontrollerad kvalitet utan fartjakt; progression ska komma genom absorberbar träning.",
-        "day_index": 2
+        "day_index": 2,
+        "dose_options": [
+          {
+            "id": "run-threshold-3x8",
+            "kind": "structured",
+            "value": 24,
+            "session": "Löpning · kontrollerad tröskel · 3 × 8 min / 90 s jogg",
+            "intent": "Etablerad kontrollerad dos som redan har genomförts i aktuell utvecklingslinje."
+          },
+          {
+            "id": "run-threshold-3x10",
+            "kind": "structured",
+            "value": 30,
+            "session": "Löpning · kontrollerad tröskel · 3 × 10 min / 90 s jogg",
+            "intent": "Planerad progression genom längre arbetstid utan avsikt att höja intensiteten."
+          }
+        ]
       },
       {
         "slot": "swim_support",
@@ -236,7 +252,16 @@
         "session": "Simning · aerob/teknik · dos öppen",
         "reason": "Stödjer målbildens simkapacitet med liten mekanisk kostnad för benen och ska inte tränga undan mesocykelns prioriterade löpstimuli.",
         "development_focus": "Teknisk kvalitet och stabil aerob simning.",
-        "day_index": 3
+        "day_index": 3,
+        "dose_options": [
+          {
+            "id": "swim-support-3200",
+            "kind": "structured",
+            "value": 3200,
+            "session": "Simning · 3 200 m · aerob/teknik",
+            "intent": "Etablerad simdistans från nyligen genomförda pass; exakt serie kan återanvändas när strukturen finns i underlaget."
+          }
+        ]
       },
       {
         "slot": "mtb_support",
@@ -277,7 +302,23 @@
         "session": "Löpning · backkvalitet · dos öppen",
         "reason": "Mesocykelns andra prioriterade löpkvalitet: kraft, löpekonomi och mekanisk kvalitet. Dosen låses först när närbelastningen är känd.",
         "development_focus": "Kraftfull men kontrollerad löpning med bibehållen mekanik; ingen maximal sprint eller syrajakt.",
-        "day_index": 5
+        "day_index": 5,
+        "dose_options": [
+          {
+            "id": "run-hill-6x150",
+            "kind": "structured",
+            "value": 6,
+            "session": "Löpning · backkvalitet · 15 min lugnt + 6 × 150 m / full lugn nedjogg + 10 min lugnt",
+            "intent": "Konservativ första exponering i mesocykeln när närbelastningen kräver marginal och tidigare jämförbar backdos saknas."
+          },
+          {
+            "id": "run-hill-8x150",
+            "kind": "structured",
+            "value": 8,
+            "session": "Löpning · backkvalitet · 15 min lugnt + 8 × 150 m / full lugn nedjogg + 10 min lugnt",
+            "intent": "Nästa högre startalternativ när faktisk närbelastning och subjektiv känsla ger stöd för mer volym med bibehållen mekanik."
+          }
+        ]
       },
       {
         "slot": "run_easy_distance",
@@ -289,7 +330,23 @@
         "session": "Löpning · lugn distans · dos öppen",
         "reason": "Mesocykelns tredje löpstimulus bygger tålighet och kontinuitet utan att bli ytterligare kvalitet.",
         "development_focus": "Avslappnad rytm och jämn ansträngning.",
-        "day_index": 7
+        "day_index": 7,
+        "dose_options": [
+          {
+            "id": "run-easy-75",
+            "kind": "duration_minutes",
+            "value": 75,
+            "session": "Löpning · lugn distans · 75 min",
+            "intent": "Konservativ distansdos inom nyligen etablerad lugn löpvolym."
+          },
+          {
+            "id": "run-easy-90",
+            "kind": "duration_minutes",
+            "value": 90,
+            "session": "Löpning · lugn distans · 90 min",
+            "intent": "Etablerad längre lugn löpduration från nyligen genomförd träning när mikrocykeln är absorberad."
+          }
+        ]
       }
     ]
   }

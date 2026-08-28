@@ -13,7 +13,8 @@ concurrency:
   cancel-in-progress: false
 
 permissions:
-  contents: write
+  contents: read
+  actions: write
 
 jobs:
   refresh:
@@ -56,30 +57,10 @@ jobs:
           )
           PY
 
-      - name: Advance day rollover trigger
+      - name: Dispatch full training refresh
         if: steps.midnight.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          python - <<'PY'
-          from datetime import datetime
-          from pathlib import Path
-          from zoneinfo import ZoneInfo
-
-          today = datetime.now(ZoneInfo("Europe/Stockholm")).date().isoformat()
-          Path("träning/data/day-rollover-trigger.txt").write_text(
-              f"{today} Europe/Stockholm\n",
-              encoding="utf-8",
-          )
-          print(f"Day rollover trigger: {today}")
-          PY
-
-          if [ -z "$(git status --porcelain -- "träning/data/day-rollover-trigger.txt")" ]; then
-            echo "Day already refreshed."
-            exit 0
-          fi
-
-          git config user.name "training-bot"
-          git config user.email "actions@users.noreply.github.com"
-          git add "träning/data/day-rollover-trigger.txt"
-          git commit -m "Advance training day rollover"
-          git pull --rebase --autostash origin main
-          git push origin main
+          gh workflow run update-training.yml --ref main
+          echo "Dispatched full training refresh so today's dose can mature before rendering."

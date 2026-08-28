@@ -156,6 +156,11 @@ def validate_training_strategy(document):
         for field in ("session", "reason", "development_focus"):
             nonempty_string(item.get(field), f"{context}.{field}")
         dose_options = item.get("dose_options")
+        if "dos öppen" in str(item.get("session") or "").lower():
+            require(
+                isinstance(dose_options, list) and dose_options,
+                f"{context}: öppet dospass måste ha dose_options för närtidsresolution",
+            )
         if dose_options is not None:
             require(isinstance(dose_options, list) and dose_options, f"{context}.dose_options måste vara icke-tom lista")
             option_ids = set()

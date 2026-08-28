@@ -45,6 +45,9 @@ class TrainingBrainTests(unittest.TestCase):
         self.assertEqual(self.strategy["current_mesocycle"]["microcycle_structure"]["length_days"], 7)
         self.assertIn("microcycle_template", self.strategy["current_mesocycle"])
         self.assertNotIn("weekly_template", self.strategy["current_mesocycle"])
+        for slot in self.strategy["current_mesocycle"]["microcycle_template"]:
+            if "dos öppen" in slot["session"].lower():
+                self.assertTrue(slot.get("dose_options"), slot["slot"])
 
         broken = deepcopy(self.strategy)
         broken["decision_policy"]["long_term_goal_is_primary"] = False
@@ -121,10 +124,11 @@ class TrainingBrainTests(unittest.TestCase):
         self.assertEqual(brief["status"], "PLANERAT")
         self.assertIn("60 min", brief["headline"])
 
-    def test_explicit_next_decision_wins_inside_72_hour_horizon(self):
+    def test_next_decision_moves_forward_after_friday_dose_is_resolved(self):
         decision = resolve_next_decision(self.plan, [], self.strategy, date(2026, 8, 26))
-        self.assertEqual(decision["date"], "2026-08-28")
-        self.assertIn("Backdosen", decision["note"])
+        self.assertEqual(decision["date"], "2026-08-29")
+        self.assertIn("MTB/XC", decision["headline"])
+        self.assertIn("Dosen låses", decision["note"])
 
     def test_current_mesocycle_reports_microcycle_one(self):
         mesocycle = resolve_mesocycle(self.strategy, date(2026, 8, 26))

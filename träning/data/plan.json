@@ -129,20 +129,42 @@
       "date": "2026-08-28",
       "label": "Fredag",
       "status": "planned",
-      "session": "Löpning · backkvalitet · 150 m-backe · kontrollerad, dos öppen",
-      "reason": "Första passet i ett fyra veckor långt testblock där veckans andra löpkvalitet byts från ytterligare tröskel till backkvalitet. Syftet är ett kompletterande kraft-, teknik- och löpstyrkestimulus; exakt antal repetitioner bestäms efter tisdag–torsdagens faktiska belastning.",
+      "session": "Löpning · backkvalitet · 15 min lugnt + 6 × 150 m / full lugn nedjogg + 10 min lugnt",
+      "reason": "Första backkvalitetspasset i mesocykeln doseras konservativt efter tisdagens 3×8 min tröskel, onsdagens mer än rent aeroba swimrun och torsdagens 70:48 MTB. Syftet är mekanisk kvalitet, kraft och löpekonomi utan att göra passet till ett stort metaboliskt kvalitetspass.",
       "development_focus": "Spring kraftfullt men kontrollerat med stabil hållning, aktiv höft och bibehållen teknik hela vägen upp; ingen maximal sprint och ingen jakt på syra.",
       "sport": "run",
-      "dose_open": true,
+      "dose_open": false,
       "priority_role": "anchor",
       "stimuli": [
         "run_hill_quality"
       ],
-      "decision_note": "Backdosen fastställs först efter torsdagens faktiska MTB-belastning och återhämtningen från onsdagens swimrun; passets roll som veckans andra löpkvalitet ligger fast endast om belastningen kan absorberas.",
       "mesocycle_id": "run-threshold-hill-4w",
       "microcycle_id": "run-threshold-hill-4w:mc1",
       "microcycle_index": 1,
-      "microcycle_day": 5
+      "microcycle_day": 5,
+      "coach_adjustment": "15 min lugn uppvärmning. 6 × 150 m kraftfullt men kontrollerat; full lugn jogg/gång ned mellan repetitionerna. 10 min lugn nedjogg. Avsluta tidigare om mekaniken tydligt försämras.",
+      "dose_resolution": {
+        "state": "resolved",
+        "kind": "structured",
+        "value": 6,
+        "source": "near_term_decision",
+        "option_id": "run-hill-6x150",
+        "basis": "Torsdagens MTB blev 70:48, 18,13 km och 210 m+ med snittpuls 128,3/max 147. Onsdagens swimrun innehöll rapporterad belastning över ren aerob nivå. Subjektiv fredagskänsla saknas, därför väljs den konservativa första exponeringen."
+      },
+      "dose_options": [
+        {
+          "id": "run-hill-6x150",
+          "kind": "structured",
+          "value": 6,
+          "session": "Löpning · backkvalitet · 15 min lugnt + 6 × 150 m / full lugn nedjogg + 10 min lugnt"
+        },
+        {
+          "id": "run-hill-8x150",
+          "kind": "structured",
+          "value": 8,
+          "session": "Löpning · backkvalitet · 15 min lugnt + 8 × 150 m / full lugn nedjogg + 10 min lugnt"
+        }
+      ]
     },
     {
       "date": "2026-08-29",
@@ -161,7 +183,21 @@
       "mesocycle_id": "run-threshold-hill-4w",
       "microcycle_id": "run-threshold-hill-4w:mc1",
       "microcycle_index": 1,
-      "microcycle_day": 6
+      "microcycle_day": 6,
+      "dose_options": [
+        {
+          "id": "mtb-distance-75",
+          "kind": "duration_minutes",
+          "value": 75,
+          "session": "MTB/XC · distans · 75 min · huvudsakligen lugnt"
+        },
+        {
+          "id": "mtb-distance-90",
+          "kind": "duration_minutes",
+          "value": 90,
+          "session": "MTB/XC · distans · 90 min · huvudsakligen lugnt"
+        }
+      ]
     },
     {
       "date": "2026-08-30",
@@ -179,7 +215,21 @@
       "mesocycle_id": "run-threshold-hill-4w",
       "microcycle_id": "run-threshold-hill-4w:mc1",
       "microcycle_index": 1,
-      "microcycle_day": 7
+      "microcycle_day": 7,
+      "dose_options": [
+        {
+          "id": "run-easy-75",
+          "kind": "duration_minutes",
+          "value": 75,
+          "session": "Löpning · lugn distans · 75 min"
+        },
+        {
+          "id": "run-easy-90",
+          "kind": "duration_minutes",
+          "value": 90,
+          "session": "Löpning · lugn distans · 90 min"
+        }
+      ]
     }
   ],
   "strength_template": [

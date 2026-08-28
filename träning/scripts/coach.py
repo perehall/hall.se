@@ -232,6 +232,36 @@ def normalize_dose_option_field(action):
     return normalized
 
 
+def normalize_same_day_open_dose_action(plan, action, today_local):
+    normalized = dict(action)
+    target = str(normalized.get("target_date") or "").strip()
+    if target != today_local or normalized.get("action") not in {"keep", "reduce"}:
+        return normalized
+
+    day = next((item for item in plan.get("days", []) if item.get("date") == target), None)
+    if not day or day.get("dose_open") is not True:
+        return normalized
+
+    options = day.get("dose_options") or []
+    option_id = str(normalized.get("dose_option_id") or "").strip()
+    valid_ids = {str(option.get("id") or "") for option in options}
+    if options and option_id in valid_ids:
+        return normalized
+
+    normalized["action"] = "review"
+    normalized["target_date"] = ""
+    normalized["dose_option_id"] = ""
+    normalized["reason"] = (
+        "Dagens pass har fortfarande öppen dos men ingen giltig förhandsgodkänd dos valdes."
+    )
+    normalized["recommendation"] = (
+        "Lås inte passet som färdigt. Fastställ en konkret duration, distans eller struktur "
+        "från godkända alternativ när underlaget räcker."
+    )
+    normalized["requires_approval"] = False
+    return normalized
+
+
 def validate_dose_option_action(plan, action, today_local):
     option_id = str(action.get("dose_option_id") or "").strip()
     target = str(action.get("target_date") or "").strip()
@@ -424,6 +454,11 @@ def main():
         fulfilled_dates=fulfilled_dates,
     )
     result["plan_action"] = normalize_dose_option_field(result["plan_action"])
+    result["plan_action"] = normalize_same_day_open_dose_action(
+        plan,
+        result["plan_action"],
+        local_date,
+    )
     validate_plan_action(result["plan_action"], ready_dates)
     validate_dose_option_action(plan, result["plan_action"], local_date)
 
