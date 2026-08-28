@@ -1,43 +1,6 @@
 {
   "analyses": [
     {
-      "activity_id": 19939732259,
-      "activity_date": "2026-08-28",
-      "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-08-28T19:02:39.214822+00:00",
-      "model": "gpt-5-mini",
-      "assessment": {
-        "summary": "Fredagens backkvalitet genomförd som plan; påverkar lördagens MTB-dosering.",
-        "load_interpretation": "De senaste fyra dagarna innehåller flera längre/krävande pass vilket minskar marginal för extra volym.",
-        "confidence": "medium",
-        "facts": [
-          "Run: 9,67 km · 50:36 · 182 m+ · snittpuls 145,1 · maxpuls 169.",
-          "Planstatus 2026-08-28: dagens planerade pass är genomfört i coachens beslutsunderlag."
-        ],
-        "interpretations": [
-          "Veckans skyddade löpstimuli (tröskel + back) är genomförda enligt microcycle; kontinuiteten bevaras.",
-          "Lördagens MTB bör vara konservativ för att låta benen återhämta inför söndagens löpdistans."
-        ],
-        "unknowns": [
-          "Subjektiv dagskänsla lördag morgon (avgör skalning mellan 75/90 min).",
-          "Detaljer om fredagens lokal muskeltrötthet i benen efter backpassen.",
-          "Eventuella fasta åtaganden lördag som påverkar tid/återhämtning."
-        ]
-      },
-      "plan_action": {
-        "action": "reduce",
-        "target_date": "2026-08-29",
-        "reason": "Behålla mesocykelns stimuli men säkra absorption före söndagens löpdistans.",
-        "recommendation": "Välj MTB/XC 75 min lugn distans (mtb-distance-75). Kör huvudsakligen lugnt, undvik upprepade hårda stigningar och håll teknisk fokus; avbryt tidigare om benen känns tunga.",
-        "dose_option_id": "mtb-distance-75",
-        "requires_approval": false
-      },
-      "auto_apply": {
-        "applied": true,
-        "note": "Konservativ ändring applicerad på 2026-08-29: reduce."
-      }
-    },
-    {
       "activity_id": 19926277295,
       "activity_date": "2026-08-27",
       "activity_name": "Evening Stigrull",
@@ -447,7 +410,7 @@
       }
     }
   ],
-  "last_trigger_hash": "d7aac33d6299bad8f9dd8e8967c88a23e7d6371c8f61bc910f722f4dedf3de9e",
+  "last_trigger_hash": null,
   "last_run_utc": "2026-08-28T19:02:39.214822+00:00",
   "contract_version": 9
 }
