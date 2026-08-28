@@ -10,7 +10,10 @@ from finalize_post_workout_ui import apply_post_workout_ui  # noqa: E402
 
 
 BASE_PAGE = """<!doctype html><html><head><style>.hero{}</style></head><body><div class="wrap">
-<div class="hero"><h2>Veckofokus</h2><p>Princip.</p></div>
+<div class="hero week-focus-card"><h2>Veckofokus</h2><p>Princip.</p></div>
+<!-- training-brain-v1:start -->
+<section class="training-brain"><div>Dagens plan</div></section>
+<!-- training-brain-v1:end -->
 <section class="dashboard"><div class="dashboard-card"><div class="dashboard-title">Kommande dagar</div></div></section>
 <h2 class="section">Aktuell vecka</h2>
 </div></body></html>"""
@@ -91,7 +94,7 @@ class PostWorkoutUiTests(unittest.TestCase):
             "2026-08-28",
         )
         self.assertIn('data-post-workout-state="completed"', rendered)
-        self.assertIn('id="todayOutcomeTitle">Genomfört</h2>', rendered)
+        self.assertIn('id="todayOutcomeTitle">Genomfört</h2>', rendered)\n        self.assertNotIn("<section class=\"training-brain\"><div>Dagens plan</div></section>", rendered)
         self.assertIn("50:36", rendered)
         self.assertIn("9,67 km", rendered)
         self.assertIn(">145</dd>", rendered)
