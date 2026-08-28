@@ -4,7 +4,7 @@
   "week_start": "2026-08-24",
   "week_end": "2026-08-30",
   "created_at_utc": "2026-08-24T06:32:25.878995+00:00",
-  "updated_at_utc": "2026-08-28T21:55:28.062965+00:00",
+  "updated_at_utc": "2026-08-28T22:09:44.111327+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -421,37 +421,37 @@
       "activity_id": 19939732259,
       "activity_date": "2026-08-28",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-08-28T19:45:50.707304+00:00",
+      "generated_at_utc": "2026-08-28T22:09:43.493854+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Fredagens backpass blev större än ordinerat och ökar veckobelastningen; lördagens MTB skalar redan ner för absorption.",
-        "load_interpretation": "Höjd lokal backvolym (12 reps) plus tidigare swimrun och MTB ger ökad närbelastning inför helgens distanslöpning.",
+        "summary": "Fredagens 12-backar var kontrollerade men ökade veckans belastning; lördagens MTB bör hållas konservativ för absorption.",
+        "load_interpretation": "Senaste tre dagars faktiska belastning (swimrun + MTB + 12 backar) kräver konservativ absorption före söndagens distans.",
         "confidence": "medium",
         "facts": [
           "Run: 9,67 km · 50:36 · 182 m+ · snittpuls 145,1 · maxpuls 169.",
           "Planstatus 2026-08-28: dagens planerade pass är genomfört i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Fredagens högre backvolym kan kompromettera absorption om lördag vore lång och tekniskt krävande.",
-          "Reduktion av lördagens MTB till 75 min är lämplig för att bevara söndagens lugna distansmöjlighet."
+          "Veckans totala löp- och multisportbelastning är högre än ursprungligt konservativt antaget, men passen var kontrollerade och utan rapporterad lokal utmattning.",
+          "Absorption kräver att lördagens MTB hålls lugnare för att bevara söndagens lugna löpdistansstimulans."
         ],
         "unknowns": [
-          "Subjektiv dagskänsla under lördag morgon (ben/trötthet) kan motivera ytterligare nedskalning.",
-          "Detaljer om planerad lördagstidpunkt/terräng som påverkar MTB:s faktisk belastning.",
-          "Eventuella icke-registrerande belastningar efter kvällens löpning (t.ex. tungt arbete) som påverkar återhämtning."
+          "Subjektiv dagskänsla för lördag morgon saknas och kan stödja större dos.",
+          "Eventuella lokalbentröskor eller ömhet efter 12 backar är inte rapporterade.",
+          "Detaljer om hur mycket av lördagens MTB kommer att innehålla stigningar eller tekniska sektioner saknas."
         ]
       },
       "plan_action": {
-        "action": "reduce",
-        "target_date": "2026-08-29",
-        "reason": "Veckans faktiska backvolym och tidigare sessioners belastning kräver konservativ absorption innan söndagens löpdistans.",
-        "recommendation": "Skala ner lördagens MTB-distans till mtb-distance-75 (75 min lugn körning); håll det huvudsakligen lugnt, undvik upprepade hårda stigningar och avbryt vid tunga ben.",
+        "action": "review",
+        "target_date": "",
+        "reason": "AI-rådet hänvisar uttryckligen till en annan veckodag än target_date; ingen automatisk planändring görs.",
+        "recommendation": "Ändra inte planen utifrån detta råd. Bedöm rätt målpass först när det är beslutsmoget.",
         "dose_option_id": "",
         "requires_approval": false
       },
       "auto_apply": {
-        "applied": true,
-        "note": "Konservativ ändring applicerad på 2026-08-29: reduce."
+        "applied": false,
+        "note": "Ingen automatisk planändring."
       }
     },
     {
