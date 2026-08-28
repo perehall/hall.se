@@ -128,7 +128,8 @@ class TrainingBrainTests(unittest.TestCase):
         decision = resolve_next_decision(self.plan, [], self.strategy, date(2026, 8, 26))
         self.assertEqual(decision["date"], "2026-08-29")
         self.assertIn("MTB/XC", decision["headline"])
-        self.assertIn("Dosen låses", decision["note"])
+        self.assertIn("75 min", decision["headline"])
+        self.assertIn("Skala ned passet", decision["note"])
 
     def test_current_mesocycle_reports_microcycle_one(self):
         mesocycle = resolve_mesocycle(self.strategy, date(2026, 8, 26))
