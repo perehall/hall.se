@@ -16,6 +16,7 @@ from coach import (  # noqa: E402
     call_openai,
     extract_output_text,
     normalize_dose_option_field,
+    normalize_resolved_dose_reselection,
     normalize_same_day_open_dose_action,
     scrub_private_wellness_output,
     stable_hash,
@@ -204,6 +205,112 @@ class CoachApiTests(unittest.TestCase):
 
 
 
+
+
+    def test_reselecting_same_resolved_dose_is_idempotent(self):
+        plan = {
+            "days": [
+                {
+                    "date": "2026-08-29",
+                    "status": "conditional",
+                    "sport": "bike",
+                    "session": "MTB/XC · 75 min",
+                    "dose_open": False,
+                    "dose_resolution": {
+                        "state": "resolved",
+                        "kind": "duration_minutes",
+                        "value": 75,
+                        "option_id": "mtb-75",
+                    },
+                    "dose_options": [
+                        {
+                            "id": "mtb-75",
+                            "kind": "duration_minutes",
+                            "value": 75,
+                            "session": "MTB/XC · 75 min",
+                        },
+                        {
+                            "id": "mtb-90",
+                            "kind": "duration_minutes",
+                            "value": 90,
+                            "session": "MTB/XC · 90 min",
+                        },
+                    ],
+                }
+            ]
+        }
+        action = {
+            "action": "reduce",
+            "target_date": "2026-08-29",
+            "reason": "Behåll konservativ dos.",
+            "recommendation": "Kör 75 min.",
+            "dose_option_id": "mtb-75",
+            "requires_approval": False,
+        }
+        normalized = normalize_resolved_dose_reselection(plan, action)
+        self.assertEqual(normalized["dose_option_id"], "")
+        self.assertTrue(validate_dose_option_action(plan, normalized, "2026-08-28"))
+
+    def test_resolved_dose_can_only_move_downward(self):
+        plan = {
+            "days": [
+                {
+                    "date": "2026-08-29",
+                    "status": "conditional",
+                    "sport": "bike",
+                    "session": "MTB/XC · 90 min",
+                    "dose_open": False,
+                    "dose_resolution": {
+                        "state": "resolved",
+                        "kind": "duration_minutes",
+                        "value": 90,
+                        "option_id": "mtb-90",
+                    },
+                    "dose_options": [
+                        {
+                            "id": "mtb-60",
+                            "kind": "duration_minutes",
+                            "value": 60,
+                            "session": "MTB/XC · 60 min",
+                        },
+                        {
+                            "id": "mtb-90",
+                            "kind": "duration_minutes",
+                            "value": 90,
+                            "session": "MTB/XC · 90 min",
+                        },
+                    ],
+                }
+            ]
+        }
+        reduce_action = {
+            "action": "reduce",
+            "target_date": "2026-08-29",
+            "reason": "Ny belastning kräver mindre dos.",
+            "recommendation": "Kör 60 min.",
+            "dose_option_id": "mtb-60",
+            "requires_approval": False,
+        }
+        self.assertTrue(validate_dose_option_action(plan, reduce_action, "2026-08-28"))
+        changed, _ = apply_conservative_action(
+            plan,
+            reduce_action,
+            now_utc="2026-08-28T19:40:00+00:00",
+        )
+        self.assertTrue(changed)
+        self.assertEqual(plan["days"][0]["dose_resolution"]["value"], 60)
+        self.assertEqual(plan["days"][0]["dose_resolution"]["source"], "near_term_ai_revision")
+
+        increase_action = {
+            "action": "reduce",
+            "target_date": "2026-08-29",
+            "reason": "x",
+            "recommendation": "x",
+            "dose_option_id": "mtb-90",
+            "requires_approval": False,
+        }
+        with self.assertRaises(RuntimeError):
+            validate_dose_option_action(plan, increase_action, "2026-08-28")
 
     def test_same_day_keep_without_dose_option_becomes_review(self):
         plan = {
