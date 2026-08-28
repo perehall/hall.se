@@ -45,6 +45,9 @@ class TrainingBrainTests(unittest.TestCase):
         self.assertEqual(self.strategy["current_mesocycle"]["microcycle_structure"]["length_days"], 7)
         self.assertIn("microcycle_template", self.strategy["current_mesocycle"])
         self.assertNotIn("weekly_template", self.strategy["current_mesocycle"])
+        for slot in self.strategy["current_mesocycle"]["microcycle_template"]:
+            if "dos öppen" in slot["session"].lower():
+                self.assertTrue(slot.get("dose_options"), slot["slot"])
 
         broken = deepcopy(self.strategy)
         broken["decision_policy"]["long_term_goal_is_primary"] = False
