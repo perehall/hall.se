@@ -4,7 +4,7 @@
   "week_start": "2026-08-24",
   "week_end": "2026-08-30",
   "created_at_utc": "2026-08-24T06:32:25.878995+00:00",
-  "updated_at_utc": "2026-08-29T06:20:19.548143+00:00",
+  "updated_at_utc": "2026-08-29T09:19:56.900264+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -232,8 +232,8 @@
         },
         "auto_coach": {
           "action": "reduce",
-          "reason": "Behålla mesocykelns MTB-stimulus men säkra absorption efter högre backvolym.",
-          "applied_at_utc": "2026-08-29T00:19:40.226902+00:00"
+          "reason": "Säkra absorption efter högre backvolym och veckans ackumulerade belastning.",
+          "applied_at_utc": "2026-08-29T09:19:56.365948+00:00"
         },
         "coach_adjustment": "Skala ned passet. Skala ner dagens MTB-distans till mtb-distance-75 (75 min lugn körning); håll det huvudsakligen lugnt, undvik upprepade hårda stigningar och avbryt om benen känns tunga."
       },
@@ -421,37 +421,37 @@
       "activity_id": 19939732259,
       "activity_date": "2026-08-28",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-08-29T06:20:19.202317+00:00",
+      "generated_at_utc": "2026-08-29T09:19:56.366468+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Fredagens backpass var större än ordinerat; detta ökar närbelastningen före lördagens MTB-distans.",
-        "load_interpretation": "Hög backvolym (12 reps) plus tidigare swimrun och MTB gör att helgens cykling bör hållas konservativ.",
+        "summary": "Fredagens backpass blev längre än ordination och ökar veckobelastningen; lördagens MTB bör sparas i marginell dos för absorption.",
+        "load_interpretation": "Närbelastning: 12 backreps + swimrun och MTB/Enduro under veckan ökar ackumulerad löp- och generell belastning.",
         "confidence": "medium",
         "facts": [
           "Run: 9,67 km · 50:36 · 182 m+ · snittpuls 145,1 · maxpuls 169.",
           "Planstatus 2026-08-28: dagens planerade pass är genomfört i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Fredagens faktiska backvolym ger större mekanisk och neuromuskulär belastning än planerat 6×150.",
-          "Med nuvarande mikrocykel är det konservativt att bevara MTB-stimuluset men hålla distansen vid den lägre optionen för absorption."
+          "Den faktiska backvolymen (12 reps) är en tydlig ökning jämfört med ursprunglig dos och kräver extra absorption innan längre cykeldistans.",
+          "Veckans kombination av swimrun + flera cykel- och löppass talar för konservativ hantering av dagens MTB för att skydda söndagens lugna löpdistansstimulus."
         ],
         "unknowns": [
-          "Subjektiv dagskänsla lördag morgon (benens tyngd) kan ändra lämplig dos.",
-          "Eventuella lokala muskeltröttheter från backpassen som inte syns i pulsdata.",
-          "Exakt planerad söndagsdos (75 vs 90 min) kräver lördagens utfall för slutligt val."
+          "Subjektivt dagskänsla (ben-/lokal trötthet) efter fredagens pass saknas.",
+          "Exakt intensitetsfördelning i swimrunets pulsbortfallzon — påverkar marginalen något.",
+          "Eventuella fasta åtaganden/återhämtningsmöjligheter under lördag som kan ändra toleransen."
         ]
       },
       "plan_action": {
-        "action": "keep",
+        "action": "reduce",
         "target_date": "2026-08-29",
-        "reason": "Auto-coach har redan skalat ner lördagens MTB till 75 min för att säkra absorption efter hög backvolym.",
-        "recommendation": "Behåll dagens MTB som mtb-distance-75: 75 min huvudsakligen lugnt; undvik upprepade hårda stigningar och avbryt om benen känns tunga.",
+        "reason": "Säkra absorption efter högre backvolym och veckans ackumulerade belastning.",
+        "recommendation": "Skala ner dagens MTB-distans till mtb-distance-75 (75 min lugn körning); håll det huvudsakligen lugnt, undvik upprepade hårda stigningar och avbryt om benen känns tunga.",
         "dose_option_id": "",
         "requires_approval": false
       },
       "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
+        "applied": true,
+        "note": "Konservativ ändring applicerad på 2026-08-29: reduce."
       }
     },
     {
