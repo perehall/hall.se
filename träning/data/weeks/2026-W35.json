@@ -4,7 +4,7 @@
   "week_start": "2026-08-24",
   "week_end": "2026-08-30",
   "created_at_utc": "2026-08-24T06:32:25.878995+00:00",
-  "updated_at_utc": "2026-08-29T10:17:50.797390+00:00",
+  "updated_at_utc": "2026-08-29T11:29:46.965350+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -298,7 +298,13 @@
       "device_name": "Garmin Forerunner 970",
       "gear_id": null,
       "gear_name": null,
-      "source": "Strava API"
+      "source": "Strava API",
+      "source_sport_type": "Swim",
+      "classification": "training",
+      "display_label": "Simning · aerob + tröskel",
+      "user_report": "Spontant simpass: Aerob+tröskel 4K, 4 000 m. Passet är separat från dagens planerade MTB-pass och ska räknas som faktisk träningsbelastning, inte som genomförande av dagens plan.",
+      "classification_reason": "Användaren anger explicit att simpasset var spontant och ska registreras som ett eget pass, inte kopplas till dagens planerade MTB-pass.",
+      "plan_relation": "separate"
     },
     {
       "id": 19939732259,
@@ -441,30 +447,31 @@
       "activity_id": 19946705399,
       "activity_date": "2026-08-29",
       "activity_name": "Simning vid lunch",
-      "generated_at_utc": "2026-08-29T10:17:50.349557+00:00",
+      "generated_at_utc": "2026-08-29T11:29:46.433561+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Simpasset är en högvolyms aerob simning (4 000 m) som ger simstimulans men ökar veckobelastningen före dagens MTB-distans.",
-        "load_interpretation": "Simningen bidrar främst med simstimulus och lätt kardiovaskulär belastning; den ökar veckobelastningen men påverkar inte löpstyrka lokalt i benen.",
+        "summary": "4 000 m simpass räknas som separat, absorberbar aerob + tröskelbelastning som ökar veckans totalbelastning något.",
+        "load_interpretation": "Dagens simpass lägger till en betydande simstimulus och ökar närbelastningen inför dagens MTB-distansbeslut.",
         "confidence": "medium",
         "facts": [
-          "Swim: 4,00 km · 1:14:59 · snittpuls 129,7 · maxpuls 157."
+          "Simning · aerob + tröskel: 4,00 km · 1:14:59 · snittpuls 129,7 · maxpuls 157.",
+          "Användarrapport: Spontant simpass: Aerob+tröskel 4K, 4 000 m. Passet är separat från dagens planerade MTB-pass och ska räknas som faktisk träningsbelastning, inte som genomförande av dagens plan."
         ],
         "interpretations": [
-          "Passet bevarar simstimulus utan att öka risk för lokal löptrötthet signifikant.",
-          "Veckans samlade belastning motiverar fortsatt konservativ hantering av dagens MTB-distans."
+          "Simningen ökar veckans totala träning, så dagens MTB-distans bör hållas konservativ för absorption.",
+          "Ingen enskild signal kräver vila; bevara mesocykelns stimuli men prioritera absorption inför söndagens löpdistans."
         ],
         "unknowns": [
-          "Subjektiv dagskänsla efter simningen (benens tyngd) saknas och kan ändra lämplig MTB-dos.",
-          "Exakt intensitetsfördelning i simpasset (serie vs jämn distans) saknas och påverkar återhämtningsbedömning.",
-          "Eventuella akuta lokala besvär (muskel/värk) ej rapporterade."
+          "Subjektiv dagskänsla efter simpasset (ben-/lokal trötthet) kan ändra lämplig MTB-dos.",
+          "Eventuell planerad tid för MTB idag (starttid) och möjlighet att förkorta ytterligare.",
+          "Exakt intensitetskvalitet i simningen bortom användarrapporten (hur hårda tröskelintervaller var)."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-08-29",
-        "reason": "Simningen är värdeskapande för simstimulus och sväljer liten mekanisk kostnad för löpningen; MTB-dosen är redan konservativt skalad.",
-        "recommendation": "Behåll dagens beslut: mtb-distance-75 (75 min lugn körning); håll det huvudsakligen lugnt, undvik upprepade hårda stigningar och avbryt om benen känns tunga.",
+        "reason": "Simpasset är absorberbart och mesocykelns MTB-stimulus ska bibehållas med konservativ dos.",
+        "recommendation": "Behåll dagens MTB-distans som mtb-distance-75: 75 min lugn körning; håll det huvudsakligen lugnt, undvik upprepade hårda stigningar och avbryt om benen känns tunga.",
         "dose_option_id": "",
         "requires_approval": false
       },

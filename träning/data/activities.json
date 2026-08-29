@@ -1,5 +1,5 @@
 {
-  "last_sync_utc": "2026-08-29T10:17:40.723384+00:00",
+  "last_sync_utc": "2026-08-29T11:29:36.743107+00:00",
   "activities": [
     {
       "id": 19946705399,
@@ -19,7 +19,13 @@
       "device_name": "Garmin Forerunner 970",
       "gear_id": null,
       "gear_name": null,
-      "source": "Strava API"
+      "source": "Strava API",
+      "source_sport_type": "Swim",
+      "classification": "training",
+      "display_label": "Simning · aerob + tröskel",
+      "user_report": "Spontant simpass: Aerob+tröskel 4K, 4 000 m. Passet är separat från dagens planerade MTB-pass och ska räknas som faktisk träningsbelastning, inte som genomförande av dagens plan.",
+      "classification_reason": "Användaren anger explicit att simpasset var spontant och ska registreras som ett eget pass, inte kopplas till dagens planerade MTB-pass.",
+      "plan_relation": "separate"
     },
     {
       "id": 19939732259,
@@ -617,15 +623,18 @@
   ],
   "activity_semantics": {
     "schema_version": 1,
-    "overrides_applied": 4,
+    "overrides_applied": 5,
     "auto_rules_applied": 6,
     "override_ids_present": [
       "19852599244",
       "19862241646",
       "19897382163",
-      "19911120461"
+      "19911120461",
+      "19946705399"
     ],
-    "changed_ids": []
+    "changed_ids": [
+      "19946705399"
+    ]
   },
   "schema_version": 2,
   "last_webhook_event": {
