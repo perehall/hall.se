@@ -12,7 +12,7 @@ sys.path.insert(0, str(SCRIPTS))
 
 from finalize_training_brain_ui import SECTION_START, apply_ui, decorate_focus_card, render_section  # noqa: E402
 from strategy_contracts import StrategyContractError, validate_training_strategy  # noqa: E402
-from training_brain import resolve_mesocycle, resolve_next_decision, resolve_today  # noqa: E402
+from training_brain import resolve_mesocycle, resolve_next_decision, resolve_today, resolve_weather_advice  # noqa: E402
 
 
 class TrainingBrainTests(unittest.TestCase):
@@ -130,6 +130,200 @@ class TrainingBrainTests(unittest.TestCase):
         self.assertIn("MTB/XC", decision["headline"])
         self.assertIn("75 min", decision["headline"])
         self.assertIn("Skala ned passet", decision["note"])
+
+    def test_weather_advice_prefers_trainer_for_wet_mtb_after_run_quality(self):
+        plan = {
+            "days": [
+                {
+                    "date": "2026-08-28",
+                    "status": "completed",
+                    "session": "Löpning · backkvalitet",
+                    "sport": "run",
+                    "stimuli": ["run_hill_quality"],
+                },
+                {
+                    "date": "2026-08-29",
+                    "status": "conditional",
+                    "session": "MTB/XC · distans · 75 min · huvudsakligen lugnt",
+                    "sport": "bike",
+                    "priority_role": "flex",
+                    "stimuli": ["mtb_aerobic", "mtb_technical"],
+                },
+                {
+                    "date": "2026-08-30",
+                    "status": "planned",
+                    "session": "Löpning · lugn distans · 75 min",
+                    "sport": "run",
+                    "stimuli": ["run_easy_distance"],
+                },
+            ]
+        }
+        activities = [
+            {
+                "id": 77,
+                "sport_type": "Run",
+                "start_date_local": "2026-08-28T17:00:00",
+            }
+        ]
+        weather = {
+            "status": "ok",
+            "daily": {
+                "2026-08-29": {
+                    "symbol_code": 18,
+                    "precip_probability_max_pct": 90,
+                }
+            },
+        }
+        settings = {
+            "indoor_alternatives": {
+                "trainer": {"available": True, "bike_type": "gravel", "same_geometry_as_mtb": False},
+                "treadmill": {"available": True},
+                "swim": {"available": True},
+                "gym": {"available": True},
+            }
+        }
+
+        advice = resolve_weather_advice(
+            plan, activities, weather, settings, date(2026, 8, 29)
+        )
+        self.assertIsNotNone(advice)
+        self.assertIn("Trainer på gravel", advice["recommendation"])
+        self.assertIn("MTB-teknikdelen ersätts inte", advice["note"])
+        self.assertIn("extra löpmekanisk belastning", advice["note"])
+        self.assertIn("Löpband är därför inte förstahandsval", advice["note"])
+
+    def test_weather_advice_is_silent_on_non_actionable_weather(self):
+        plan = {
+            "days": [
+                {
+                    "date": "2026-08-29",
+                    "status": "planned",
+                    "session": "MTB/XC · 75 min · lugnt",
+                    "sport": "bike",
+                    "stimuli": ["mtb_aerobic"],
+                }
+            ]
+        }
+        weather = {
+            "status": "ok",
+            "daily": {
+                "2026-08-29": {
+                    "symbol_code": 6,
+                    "precip_probability_max_pct": 43,
+                }
+            },
+        }
+        settings = {"indoor_alternatives": {"trainer": {"available": True}}}
+        self.assertIsNone(
+            resolve_weather_advice(plan, [], weather, settings, date(2026, 8, 29))
+        )
+
+    def test_weather_advice_is_silent_for_already_indoor_session(self):
+        plan = {
+            "days": [
+                {
+                    "date": "2026-08-29",
+                    "status": "planned",
+                    "session": "Cykel · trainer · 60 min lugnt",
+                    "sport": "bike",
+                    "stimuli": ["mtb_aerobic"],
+                }
+            ]
+        }
+        weather = {
+            "status": "ok",
+            "daily": {
+                "2026-08-29": {
+                    "symbol_code": 20,
+                    "precip_probability_max_pct": 100,
+                }
+            },
+        }
+        settings = {"indoor_alternatives": {"trainer": {"available": True}}}
+        self.assertIsNone(
+            resolve_weather_advice(plan, [], weather, settings, date(2026, 8, 29))
+        )
+
+    def test_weather_advice_is_silent_for_stale_weather(self):
+        plan = {
+            "days": [
+                {
+                    "date": "2026-08-29",
+                    "status": "planned",
+                    "session": "MTB/XC · 75 min · lugnt",
+                    "sport": "bike",
+                    "stimuli": ["mtb_aerobic"],
+                }
+            ]
+        }
+        weather = {
+            "status": "stale",
+            "daily": {
+                "2026-08-29": {
+                    "symbol_code": 20,
+                    "precip_probability_max_pct": 100,
+                }
+            },
+        }
+        settings = {"indoor_alternatives": {"trainer": {"available": True}}}
+        self.assertIsNone(
+            resolve_weather_advice(plan, [], weather, settings, date(2026, 8, 29))
+        )
+
+    def test_training_brain_renders_weather_headsup_only_when_advice_exists(self):
+        plan = {
+            "days": [
+                {
+                    "date": "2026-08-29",
+                    "label": "Lördag",
+                    "status": "planned",
+                    "session": "MTB/XC · 75 min · lugnt",
+                    "reason": "Lugn cykelspecifik uthållighet.",
+                    "sport": "bike",
+                    "priority_role": "flex",
+                    "stimuli": ["mtb_aerobic", "mtb_technical"],
+                }
+            ]
+        }
+        weather = {
+            "status": "ok",
+            "daily": {
+                "2026-08-29": {
+                    "symbol_code": 18,
+                    "precip_probability_max_pct": 90,
+                }
+            },
+        }
+        settings = {
+            "indoor_alternatives": {
+                "trainer": {"available": True},
+                "treadmill": {"available": True},
+                "swim": {"available": True},
+            }
+        }
+        section = render_section(
+            plan,
+            {"activities": []},
+            self.strategy,
+            date(2026, 8, 29),
+            weather=weather,
+            settings=settings,
+        )
+        self.assertIn('data-weather-advice="true"', section)
+        self.assertIn("Trainer på gravel", section)
+
+        dry = deepcopy(weather)
+        dry["daily"]["2026-08-29"]["symbol_code"] = 6
+        dry["daily"]["2026-08-29"]["precip_probability_max_pct"] = 20
+        dry_section = render_section(
+            plan,
+            {"activities": []},
+            self.strategy,
+            date(2026, 8, 29),
+            weather=dry,
+            settings=settings,
+        )
+        self.assertNotIn('data-weather-advice="true"', dry_section)
 
     def test_current_mesocycle_reports_microcycle_one(self):
         mesocycle = resolve_mesocycle(self.strategy, date(2026, 8, 26))

@@ -18,6 +18,164 @@ ROLE_LABELS = {
     "optional": "OPTIONAL",
 }
 
+WET_WEATHER_SYMBOLS = {8, 9, 10, 11, 12, 13, 14, 18, 19, 20, 21, 22, 23, 24}
+HIGH_IMPACT_WEATHER_SYMBOLS = {10, 11, 14, 20, 21, 24}
+RUN_QUALITY_STIMULI = {"run_threshold", "run_hill_quality", "run_moderate_hard"}
+RUN_STIMULI = {
+    "run_threshold",
+    "run_hill_quality",
+    "run_moderate_hard",
+    "run_easy_distance",
+    "run_aerobic",
+    "run_long",
+}
+INDOOR_SESSION_TOKENS = {
+    "inomhus",
+    "löpband",
+    "treadmill",
+    "zwift",
+    "trainer",
+    "spinning",
+}
+
+
+def _number(value):
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def _bool_setting(settings, key):
+    alternatives = (settings or {}).get("indoor_alternatives") or {}
+    value = alternatives.get(key)
+    if isinstance(value, dict):
+        return value.get("available") is True
+    return value is True
+
+
+def _day_by_date(plan, day_text):
+    return next((item for item in plan.get("days") or [] if item.get("date") == day_text), None)
+
+
+def _nearby_plan_days(plan, today_date, *, before=0, after=0):
+    rows = []
+    for offset in range(-before, after + 1):
+        if offset == 0:
+            continue
+        day_date = today_date + timedelta(days=offset)
+        day = _day_by_date(plan, day_date.isoformat())
+        if day:
+            rows.append((offset, day))
+    return rows
+
+
+def _weather_is_actionable(forecast):
+    symbol = _number((forecast or {}).get("symbol_code"))
+    if symbol is None:
+        return False
+    symbol = int(round(symbol))
+    precip_probability = _number((forecast or {}).get("precip_probability_max_pct"))
+    if symbol in HIGH_IMPACT_WEATHER_SYMBOLS:
+        return True
+    return (
+        symbol in WET_WEATHER_SYMBOLS
+        and precip_probability is not None
+        and precip_probability >= 70
+    )
+
+
+def resolve_weather_advice(plan, activities, weather, settings, today):
+    """Return a short, conservative execution advisory or None.
+
+    Weather may alter how today's planned stimulus is executed, but must not
+    invent extra training or silently change the microcycle.
+    """
+    today_date = today if isinstance(today, date) else date.fromisoformat(str(today))
+    today_text = today_date.isoformat()
+    day = _day_by_date(plan, today_text)
+    if not day or day_fulfilled(day, activities):
+        return None
+    if (weather or {}).get("status") != "ok":
+        return None
+
+    forecast = ((weather or {}).get("daily") or {}).get(today_text) or {}
+    if not _weather_is_actionable(forecast):
+        return None
+
+    sport = str(day.get("sport") or "").strip().lower()
+    session = str(day.get("session") or "").strip().lower()
+    if any(token in session for token in INDOOR_SESSION_TOKENS):
+        return None
+    stimuli = set(day.get("stimuli") or [])
+    nearby = _nearby_plan_days(plan, today_date, before=2, after=2)
+
+    recent_run_quality = any(
+        offset < 0
+        and RUN_QUALITY_STIMULI.intersection(set(item.get("stimuli") or []))
+        and day_fulfilled(item, activities)
+        for offset, item in nearby
+    )
+    future_run = any(
+        offset > 0
+        and RUN_STIMULI.intersection(set(item.get("stimuli") or []))
+        for offset, item in nearby
+    )
+
+    trainer_available = _bool_setting(settings, "trainer")
+    treadmill_available = _bool_setting(settings, "treadmill")
+    swim_available = _bool_setting(settings, "swim")
+
+    if sport == "bike":
+        has_aerobic = "mtb_aerobic" in stimuli or any("bike" in item and "aerobic" in item for item in stimuli)
+        has_technical = "mtb_technical" in stimuli
+
+        if has_aerobic and trainer_available:
+            note = ["Behåller dagens aeroba cykelstimulus."]
+            if has_technical:
+                note.append("MTB-teknikdelen ersätts inte inomhus.")
+            if recent_run_quality:
+                note.append("Det undviker extra löpmekanisk belastning efter nylig löpkvalitet.")
+            if future_run and treadmill_available:
+                note.append("Löpband är därför inte förstahandsval med löpning nära i planen.")
+            if swim_available:
+                note.append("Simning är ett lättare alternativ.")
+            return {
+                "title": "Regn påverkar dagens MTB",
+                "recommendation": "Trainer på gravel är förstahandsval idag.",
+                "note": " ".join(note),
+                "kind": "weather_execution",
+            }
+
+        if has_technical:
+            return {
+                "title": "Regn påverkar dagens MTB",
+                "recommendation": "Trainer kan bara ersätta den fysiologiska delen; teknikstimulus uteblir.",
+                "note": "Behåll utepasset endast om våta förhållanden är ett avsiktligt och rimligt teknikstimulus.",
+                "kind": "weather_execution",
+            }
+
+        if swim_available:
+            return {
+                "title": "Regn påverkar dagens cykelpass",
+                "recommendation": "Simning är ett möjligt lättare alternativ.",
+                "note": "Det ändrar grenspecificiteten, så byt bara om dagens cykelspecifika stimulus inte behöver skyddas.",
+                "kind": "weather_execution",
+            }
+
+    if sport == "run" and treadmill_available:
+        note = "Behåller löpningens mekaniska och fysiologiska stimulus bättre än ett grenbyte."
+        if any("trail" in str(item).lower() or "technical" in str(item).lower() for item in stimuli):
+            note += " Eventuell stig-/teknikdel ersätts inte."
+        return {
+            "title": "Regn påverkar dagens löppass",
+            "recommendation": "Löpband är förstahandsval om du vill behålla passets syfte.",
+            "note": note,
+            "kind": "weather_execution",
+        }
+
+    return None
+
 
 def activities_on_date(activities, day_date):
     return [activity for activity in activities or [] if activity_local_date(activity) == day_date]

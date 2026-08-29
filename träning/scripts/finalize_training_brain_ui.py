@@ -7,21 +7,23 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from strategy_contracts import validate_training_strategy
-from training_brain import resolve_mesocycle, resolve_next_decision, resolve_today
+from training_brain import resolve_mesocycle, resolve_next_decision, resolve_today, resolve_weather_advice
 
 ROOT = Path(__file__).resolve().parents[1]
 INDEX_FILE = ROOT / "index.html"
 PLAN_FILE = ROOT / "data" / "plan.json"
 ACTIVITIES_FILE = ROOT / "data" / "activities.json"
 STRATEGY_FILE = ROOT / "data" / "training_strategy.json"
+WEATHER_FILE = ROOT / "data" / "weather.json"
+SETTINGS_FILE = ROOT / "data" / "settings.json"
 
 CSS_MARKER = "/* training-brain-v2 */"
 SECTION_START = "<!-- training-brain-v1:start -->"
 SECTION_END = "<!-- training-brain-v1:end -->"
 CSS = r'''
 /* training-brain-v2 */
-.training-brain{margin:0 0 18px}.brain-today{background:#fff;border:1px solid #bfdbfe;border-radius:20px;padding:17px 18px;box-shadow:var(--shadow)}.brain-kicker{font-size:.69rem;font-weight:900;letter-spacing:.09em;text-transform:uppercase;color:#1d4ed8;margin-bottom:6px}.brain-headline{font-size:1.28rem;font-weight:850;line-height:1.25;letter-spacing:-.015em}.brain-role{display:inline-block;margin-top:9px;padding:4px 8px;border-radius:999px;background:#e2e8f0;color:#334155;font-size:.68rem;font-weight:800}.brain-why{margin-top:8px;color:#334155;font-size:.88rem;line-height:1.43}.brain-next{margin-top:14px;padding-top:13px;border-top:1px solid #dbeafe}.brain-next-label{font-size:.68rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:#64748b;margin-bottom:5px}.brain-next strong{display:block;font-size:.98rem;line-height:1.35}.brain-note{margin-top:5px;color:#475569;font-size:.84rem;line-height:1.42}.week-focus-mesocycle-meta{margin-top:9px;color:#94a3b8;font-size:.74rem;font-weight:750;line-height:1.35}.week-focus-mesocycle-idea{margin-top:8px!important;padding-top:8px;border-top:1px solid rgba(148,163,184,.22)}.week-focus-mesocycle-idea strong{color:#fff}
-@media (max-width:620px){.brain-today{padding:15px}.brain-headline{font-size:1.16rem}.week-focus-mesocycle-meta{font-size:.7rem}}
+.training-brain{margin:0 0 18px}.brain-today{background:#fff;border:1px solid #bfdbfe;border-radius:20px;padding:17px 18px;box-shadow:var(--shadow)}.brain-kicker{font-size:.69rem;font-weight:900;letter-spacing:.09em;text-transform:uppercase;color:#1d4ed8;margin-bottom:6px}.brain-headline{font-size:1.28rem;font-weight:850;line-height:1.25;letter-spacing:-.015em}.brain-role{display:inline-block;margin-top:9px;padding:4px 8px;border-radius:999px;background:#e2e8f0;color:#334155;font-size:.68rem;font-weight:800}.brain-weather{margin-top:12px;padding:10px 12px;border:1px solid #bae6fd;border-radius:13px;background:#f0f9ff}.brain-weather-label{font-size:.65rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#0369a1;margin-bottom:3px}.brain-weather strong{display:block;font-size:.9rem;line-height:1.35}.brain-weather-note{margin-top:4px;color:#475569;font-size:.8rem;line-height:1.4}.brain-why{margin-top:8px;color:#334155;font-size:.88rem;line-height:1.43}.brain-next{margin-top:14px;padding-top:13px;border-top:1px solid #dbeafe}.brain-next-label{font-size:.68rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:#64748b;margin-bottom:5px}.brain-next strong{display:block;font-size:.98rem;line-height:1.35}.brain-note{margin-top:5px;color:#475569;font-size:.84rem;line-height:1.42}.week-focus-mesocycle-meta{margin-top:9px;color:#94a3b8;font-size:.74rem;font-weight:750;line-height:1.35}.week-focus-mesocycle-idea{margin-top:8px!important;padding-top:8px;border-top:1px solid rgba(148,163,184,.22)}.week-focus-mesocycle-idea strong{color:#fff}
+@media (max-width:620px){.brain-today{padding:15px}.brain-headline{font-size:1.16rem}.brain-weather{padding:9px 10px}.week-focus-mesocycle-meta{font-size:.7rem}}
 '''
 
 
@@ -39,11 +41,24 @@ def compact_date(value):
     return f"{day}/{month}"
 
 
-def render_section(plan, activities_state, strategy, today_date):
+def render_section(plan, activities_state, strategy, today_date, weather=None, settings=None):
     activities = activities_state.get("activities") or []
     today = resolve_today(plan, activities, strategy, today_date)
     decision = resolve_next_decision(plan, activities, strategy, today_date)
+    advice = resolve_weather_advice(plan, activities, weather or {}, settings or {}, today_date)
     role = f'<span class="brain-role">{html.escape(today["role"])}</span>' if today.get("role") else ""
+    weather_block = ""
+    if advice:
+        weather_block = (
+            '<div class="brain-weather" data-weather-advice="true">'
+            '<div class="brain-weather-label">Väder-heads-up · '
+            + html.escape(advice["title"])
+            + '</div><strong>'
+            + html.escape(advice["recommendation"])
+            + '</strong><div class="brain-weather-note">'
+            + html.escape(advice["note"])
+            + '</div></div>'
+        )
     decision_heading = html.escape(decision["headline"])
     if decision.get("label"):
         decision_heading = html.escape(decision["label"] + " · ") + decision_heading
@@ -54,6 +69,7 @@ def render_section(plan, activities_state, strategy, today_date):
     <div class="brain-kicker">Idag · {html.escape(today["status"])}</div>
     <div class="brain-headline">{html.escape(today["headline"])}</div>
     {role}
+    {weather_block}
     <div class="brain-why"><strong>Varför:</strong> {html.escape(today["why"])}</div>
     <div class="brain-next">
       <div class="brain-next-label">Nästa beslut</div>
@@ -118,11 +134,13 @@ def main():
     plan = load_json(PLAN_FILE)
     activities = load_json(ACTIVITIES_FILE)
     strategy = load_json(STRATEGY_FILE)
+    weather = load_json(WEATHER_FILE) if WEATHER_FILE.exists() else {}
+    settings = load_json(SETTINGS_FILE) if SETTINGS_FILE.exists() else {}
     validate_training_strategy(strategy)
     timezone_name = (plan.get("meta") or {}).get("timezone") or "Europe/Stockholm"
     today = datetime.now(ZoneInfo(timezone_name)).date()
     page = INDEX_FILE.read_text(encoding="utf-8")
-    section = render_section(plan, activities, strategy, today)
+    section = render_section(plan, activities, strategy, today, weather=weather, settings=settings)
     mesocycle = resolve_mesocycle(strategy, today)
     rendered = decorate_focus_card(apply_ui(page, section), mesocycle)
     INDEX_FILE.write_text(rendered, encoding="utf-8")
