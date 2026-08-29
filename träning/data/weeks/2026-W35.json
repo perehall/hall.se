@@ -4,7 +4,7 @@
   "week_start": "2026-08-24",
   "week_end": "2026-08-30",
   "created_at_utc": "2026-08-24T06:32:25.878995+00:00",
-  "updated_at_utc": "2026-08-28T22:09:44.111327+00:00",
+  "updated_at_utc": "2026-08-29T00:19:40.738498+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -232,10 +232,10 @@
         },
         "auto_coach": {
           "action": "reduce",
-          "reason": "Veckans faktiska backvolym och tidigare sessioners belastning kräver konservativ absorption innan söndagens löpdistans.",
-          "applied_at_utc": "2026-08-28T19:45:50.706691+00:00"
+          "reason": "Behålla mesocykelns MTB-stimulus men säkra absorption efter högre backvolym.",
+          "applied_at_utc": "2026-08-29T00:19:40.226902+00:00"
         },
-        "coach_adjustment": "Skala ned passet. Skala ner lördagens MTB-distans till mtb-distance-75 (75 min lugn körning); håll det huvudsakligen lugnt, undvik upprepade hårda stigningar och avbryt vid tunga ben."
+        "coach_adjustment": "Skala ned passet. Skala ner dagens MTB-distans till mtb-distance-75 (75 min lugn körning); håll det huvudsakligen lugnt, undvik upprepade hårda stigningar och avbryt om benen känns tunga."
       },
       {
         "date": "2026-08-30",
@@ -421,37 +421,37 @@
       "activity_id": 19939732259,
       "activity_date": "2026-08-28",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-08-28T22:09:43.493854+00:00",
+      "generated_at_utc": "2026-08-29T00:19:40.227495+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Fredagens 12-backar var kontrollerade men ökade veckans belastning; lördagens MTB bör hållas konservativ för absorption.",
-        "load_interpretation": "Senaste tre dagars faktiska belastning (swimrun + MTB + 12 backar) kräver konservativ absorption före söndagens distans.",
+        "summary": "Fredagens backpass genomfördes med högre volym än ordinerat; helgens MTB hålls kortare för absorption och söndagens lugna löpdistans beslutas senare.",
+        "load_interpretation": "Närbelastning: tre tunga löpdagar (tis–fre med backar), plus MTB och swimrun tidigare i veckan påverkar helgens absorberingsbehov.",
         "confidence": "medium",
         "facts": [
           "Run: 9,67 km · 50:36 · 182 m+ · snittpuls 145,1 · maxpuls 169.",
           "Planstatus 2026-08-28: dagens planerade pass är genomfört i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Veckans totala löp- och multisportbelastning är högre än ursprungligt konservativt antaget, men passen var kontrollerade och utan rapporterad lokal utmattning.",
-          "Absorption kräver att lördagens MTB hålls lugnare för att bevara söndagens lugna löpdistansstimulans."
+          "Fredagens faktiska backvolym ökar veckobelastningen mer än planerat och kräver konservativ absorption.",
+          "Privat återhämtningsunderlag visar inga tydliga varningsmönster som skulle ensam motivera vila; beslut kan vara konservativt utan extra vila."
         ],
         "unknowns": [
-          "Subjektiv dagskänsla för lördag morgon saknas och kan stödja större dos.",
-          "Eventuella lokalbentröskor eller ömhet efter 12 backar är inte rapporterade.",
-          "Detaljer om hur mycket av lördagens MTB kommer att innehålla stigningar eller tekniska sektioner saknas."
+          "Subjektiv dagskänsla idag (lördag) saknas och kan ändra lämplig dos.",
+          "Eventuella lokala muskelbesvär eller ömhet efter backpass saknas.",
+          "Detaljer om hur MTB-distansen föll ut om genomförd tidigare idag (om relevant) saknas."
         ]
       },
       "plan_action": {
-        "action": "review",
-        "target_date": "",
-        "reason": "AI-rådet hänvisar uttryckligen till en annan veckodag än target_date; ingen automatisk planändring görs.",
-        "recommendation": "Ändra inte planen utifrån detta råd. Bedöm rätt målpass först när det är beslutsmoget.",
+        "action": "reduce",
+        "target_date": "2026-08-29",
+        "reason": "Behålla mesocykelns MTB-stimulus men säkra absorption efter högre backvolym.",
+        "recommendation": "Skala ner dagens MTB-distans till mtb-distance-75 (75 min lugn körning); håll det huvudsakligen lugnt, undvik upprepade hårda stigningar och avbryt om benen känns tunga.",
         "dose_option_id": "",
         "requires_approval": false
       },
       "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
+        "applied": true,
+        "note": "Konservativ ändring applicerad på 2026-08-29: reduce."
       }
     },
     {
