@@ -6,6 +6,8 @@ from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+from coach_rules import matching_activity
+
 ROOT = Path(__file__).resolve().parents[1]
 PLAN_FILE = ROOT / "data" / "plan.json"
 ACTIVITIES_FILE = ROOT / "data" / "activities.json"
@@ -279,7 +281,10 @@ def apply_post_workout_ui(page, plan, activities_state, coach_state, today):
     if not day or not today_activities:
         return page
 
-    activity = find_primary_activity(day, today_activities)
+    activity = matching_activity(day, today_activities)
+    if not activity:
+        return page
+
     analysis = find_coach_analysis(day, coach_state, today)
     next_day = next_planned_day(plan, today)
     card = render_post_workout(day, activity, analysis, next_day)
@@ -301,10 +306,11 @@ def main():
     rendered = apply_post_workout_ui(page, plan, activities, coach, today)
     INDEX_FILE.write_text(rendered, encoding="utf-8")
 
-    today_has_activity = any(
-        local_date(a) == today for a in activities.get("activities", [])
+    today_day = next((d for d in plan.get("days", []) if d.get("date") == today), None)
+    today_has_fulfilled_activity = bool(
+        today_day and matching_activity(today_day, activities.get("activities", []))
     )
-    if today_has_activity and any(d.get("date") == today for d in plan.get("days", [])):
+    if today_has_fulfilled_activity:
         verify = INDEX_FILE.read_text(encoding="utf-8")
         required = [
             CSS_MARKER,
