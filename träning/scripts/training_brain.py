@@ -29,6 +29,14 @@ RUN_STIMULI = {
     "run_aerobic",
     "run_long",
 }
+INDOOR_SESSION_TOKENS = {
+    "inomhus",
+    "löpband",
+    "treadmill",
+    "zwift",
+    "trainer",
+    "spinning",
+}
 
 
 def _number(value):
@@ -96,6 +104,9 @@ def resolve_weather_advice(plan, activities, weather, settings, today):
         return None
 
     sport = str(day.get("sport") or "").strip().lower()
+    session = str(day.get("session") or "").strip().lower()
+    if any(token in session for token in INDOOR_SESSION_TOKENS):
+        return None
     stimuli = set(day.get("stimuli") or [])
     nearby = _nearby_plan_days(plan, today_date, before=2, after=2)
 
