@@ -218,6 +218,32 @@ class TrainingBrainTests(unittest.TestCase):
             resolve_weather_advice(plan, [], weather, settings, date(2026, 8, 29))
         )
 
+    def test_weather_advice_is_silent_for_already_indoor_session(self):
+        plan = {
+            "days": [
+                {
+                    "date": "2026-08-29",
+                    "status": "planned",
+                    "session": "Cykel · trainer · 60 min lugnt",
+                    "sport": "bike",
+                    "stimuli": ["mtb_aerobic"],
+                }
+            ]
+        }
+        weather = {
+            "status": "ok",
+            "daily": {
+                "2026-08-29": {
+                    "symbol_code": 20,
+                    "precip_probability_max_pct": 100,
+                }
+            },
+        }
+        settings = {"indoor_alternatives": {"trainer": {"available": True}}}
+        self.assertIsNone(
+            resolve_weather_advice(plan, [], weather, settings, date(2026, 8, 29))
+        )
+
     def test_weather_advice_is_silent_for_stale_weather(self):
         plan = {
             "days": [
