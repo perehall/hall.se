@@ -118,6 +118,44 @@ class PostWorkoutUiTests(unittest.TestCase):
         self.assertEqual(rendered, BASE_PAGE)
         self.assertNotIn("post-workout-ux-v1", rendered)
 
+    def test_unrelated_same_day_activity_does_not_complete_planned_session(self):
+        plan = {
+            "meta": {"timezone": "Europe/Stockholm"},
+            "days": [
+                {
+                    "date": "2026-08-29",
+                    "label": "Lördag",
+                    "status": "conditional",
+                    "sport": "bike",
+                    "session": "MTB/XC · 75 min lugnt",
+                }
+            ],
+        }
+        activities = {
+            "activities": [
+                {
+                    "id": 99,
+                    "name": "Simning vid lunch",
+                    "sport_type": "Swim",
+                    "start_date_local": "2026-08-29T11:00:00Z",
+                    "distance_m": 4000,
+                    "elapsed_time_s": 4499,
+                    "average_heartrate": 130,
+                    "plan_relation": "separate",
+                }
+            ]
+        }
+        rendered = apply_post_workout_ui(
+            BASE_PAGE,
+            plan,
+            activities,
+            {"analyses": []},
+            "2026-08-29",
+        )
+        self.assertEqual(rendered, BASE_PAGE)
+        self.assertNotIn('data-post-workout-state="completed"', rendered)
+
+
     def test_post_workout_transform_is_idempotent(self):
         once = apply_post_workout_ui(
             BASE_PAGE,
