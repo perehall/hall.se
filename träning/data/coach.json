@@ -1,6 +1,42 @@
 {
   "analyses": [
     {
+      "activity_id": 19946705399,
+      "activity_date": "2026-08-29",
+      "activity_name": "Simning vid lunch",
+      "generated_at_utc": "2026-08-29T10:17:50.349557+00:00",
+      "model": "gpt-5-mini",
+      "assessment": {
+        "summary": "Simpasset är en högvolyms aerob simning (4 000 m) som ger simstimulans men ökar veckobelastningen före dagens MTB-distans.",
+        "load_interpretation": "Simningen bidrar främst med simstimulus och lätt kardiovaskulär belastning; den ökar veckobelastningen men påverkar inte löpstyrka lokalt i benen.",
+        "confidence": "medium",
+        "facts": [
+          "Swim: 4,00 km · 1:14:59 · snittpuls 129,7 · maxpuls 157."
+        ],
+        "interpretations": [
+          "Passet bevarar simstimulus utan att öka risk för lokal löptrötthet signifikant.",
+          "Veckans samlade belastning motiverar fortsatt konservativ hantering av dagens MTB-distans."
+        ],
+        "unknowns": [
+          "Subjektiv dagskänsla efter simningen (benens tyngd) saknas och kan ändra lämplig MTB-dos.",
+          "Exakt intensitetsfördelning i simpasset (serie vs jämn distans) saknas och påverkar återhämtningsbedömning.",
+          "Eventuella akuta lokala besvär (muskel/värk) ej rapporterade."
+        ]
+      },
+      "plan_action": {
+        "action": "keep",
+        "target_date": "2026-08-29",
+        "reason": "Simningen är värdeskapande för simstimulus och sväljer liten mekanisk kostnad för löpningen; MTB-dosen är redan konservativt skalad.",
+        "recommendation": "Behåll dagens beslut: mtb-distance-75 (75 min lugn körning); håll det huvudsakligen lugnt, undvik upprepade hårda stigningar och avbryt om benen känns tunga.",
+        "dose_option_id": "",
+        "requires_approval": false
+      },
+      "auto_apply": {
+        "applied": false,
+        "note": "Ingen automatisk planändring."
+      }
+    },
+    {
       "activity_id": 19939732259,
       "activity_date": "2026-08-28",
       "activity_name": "Löpning på kvällen",
@@ -447,7 +483,7 @@
       }
     }
   ],
-  "last_trigger_hash": "189e47a03ce0c3ba6a21b3da1d5768b3adf4a7773cce783309967ed5c41e137e",
-  "last_run_utc": "2026-08-29T09:19:56.366468+00:00",
+  "last_trigger_hash": "da948de0497f161bde8dcce4f91f0b0c8ed2a8cabf673205b52aa92b9a961001",
+  "last_run_utc": "2026-08-29T10:17:50.349557+00:00",
   "contract_version": 9
 }

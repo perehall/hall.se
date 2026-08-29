@@ -4,7 +4,7 @@
   "week_start": "2026-08-24",
   "week_end": "2026-08-30",
   "created_at_utc": "2026-08-24T06:32:25.878995+00:00",
-  "updated_at_utc": "2026-08-29T09:19:56.900264+00:00",
+  "updated_at_utc": "2026-08-29T10:17:50.797390+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -281,6 +281,26 @@
   },
   "activities": [
     {
+      "id": 19946705399,
+      "name": "Simning vid lunch",
+      "sport_type": "Swim",
+      "start_date": "2026-08-29T09:00:21Z",
+      "start_date_local": "2026-08-29T11:00:21Z",
+      "distance_m": 4000.0,
+      "moving_time_s": 3397,
+      "elapsed_time_s": 4499,
+      "total_elevation_gain_m": 0,
+      "average_heartrate": 129.7,
+      "max_heartrate": 157.0,
+      "average_watts": null,
+      "weighted_average_watts": null,
+      "calories": 677.0,
+      "device_name": "Garmin Forerunner 970",
+      "gear_id": null,
+      "gear_name": null,
+      "source": "Strava API"
+    },
+    {
       "id": 19939732259,
       "name": "Löpning på kvällen",
       "sport_type": "Run",
@@ -417,6 +437,42 @@
     }
   ],
   "coach_analyses": [
+    {
+      "activity_id": 19946705399,
+      "activity_date": "2026-08-29",
+      "activity_name": "Simning vid lunch",
+      "generated_at_utc": "2026-08-29T10:17:50.349557+00:00",
+      "model": "gpt-5-mini",
+      "assessment": {
+        "summary": "Simpasset är en högvolyms aerob simning (4 000 m) som ger simstimulans men ökar veckobelastningen före dagens MTB-distans.",
+        "load_interpretation": "Simningen bidrar främst med simstimulus och lätt kardiovaskulär belastning; den ökar veckobelastningen men påverkar inte löpstyrka lokalt i benen.",
+        "confidence": "medium",
+        "facts": [
+          "Swim: 4,00 km · 1:14:59 · snittpuls 129,7 · maxpuls 157."
+        ],
+        "interpretations": [
+          "Passet bevarar simstimulus utan att öka risk för lokal löptrötthet signifikant.",
+          "Veckans samlade belastning motiverar fortsatt konservativ hantering av dagens MTB-distans."
+        ],
+        "unknowns": [
+          "Subjektiv dagskänsla efter simningen (benens tyngd) saknas och kan ändra lämplig MTB-dos.",
+          "Exakt intensitetsfördelning i simpasset (serie vs jämn distans) saknas och påverkar återhämtningsbedömning.",
+          "Eventuella akuta lokala besvär (muskel/värk) ej rapporterade."
+        ]
+      },
+      "plan_action": {
+        "action": "keep",
+        "target_date": "2026-08-29",
+        "reason": "Simningen är värdeskapande för simstimulus och sväljer liten mekanisk kostnad för löpningen; MTB-dosen är redan konservativt skalad.",
+        "recommendation": "Behåll dagens beslut: mtb-distance-75 (75 min lugn körning); håll det huvudsakligen lugnt, undvik upprepade hårda stigningar och avbryt om benen känns tunga.",
+        "dose_option_id": "",
+        "requires_approval": false
+      },
+      "auto_apply": {
+        "applied": false,
+        "note": "Ingen automatisk planändring."
+      }
+    },
     {
       "activity_id": 19939732259,
       "activity_date": "2026-08-28",
