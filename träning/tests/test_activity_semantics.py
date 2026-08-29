@@ -119,6 +119,36 @@ class ActivitySemanticsTests(unittest.TestCase):
         self.assertEqual(state["activity_semantics"]["changed_ids"], [])
         self.assertEqual(state["activities"][0]["source_sport_type"], "TrailRun")
 
+    def test_explicit_separate_relation_is_persisted_and_invalidates_coach_state(self):
+        state = {
+            "activities": [
+                {
+                    "id": 99,
+                    "name": "Simning vid lunch",
+                    "sport_type": "Swim",
+                    "start_date_local": "2026-08-29T11:00:00Z",
+                }
+            ]
+        }
+        config = {
+            "schema_version": 1,
+            "overrides": {
+                "99": {
+                    "sport": "Swim",
+                    "classification": "training",
+                    "source_sport_type": "Swim",
+                    "plan_relation": "separate",
+                }
+            },
+        }
+        apply_semantics(state, config)
+        self.assertEqual(state["activities"][0]["plan_relation"], "separate")
+        self.assertEqual(state["activity_semantics"]["changed_ids"], ["99"])
+
+        apply_semantics(state, config)
+        self.assertEqual(state["activity_semantics"]["changed_ids"], [])
+
+
     def test_semantic_change_invalidates_only_matching_coach_analysis(self):
         with tempfile.TemporaryDirectory() as temp_dir:
             path = Path(temp_dir) / "coach.json"
