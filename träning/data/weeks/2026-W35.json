@@ -4,7 +4,7 @@
   "week_start": "2026-08-24",
   "week_end": "2026-08-30",
   "created_at_utc": "2026-08-24T06:32:25.878995+00:00",
-  "updated_at_utc": "2026-08-29T18:19:56.480631+00:00",
+  "updated_at_utc": "2026-08-29T21:20:07.847243+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -447,37 +447,37 @@
       "activity_id": 19946705399,
       "activity_date": "2026-08-29",
       "activity_name": "Simning vid lunch",
-      "generated_at_utc": "2026-08-29T18:19:56.019948+00:00",
+      "generated_at_utc": "2026-08-29T21:20:07.323052+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "4 000 m spontant aerob+tröskelpass räknas som extra belastning för veckan; påverkar helgens cykeldistansbeslut.",
-        "load_interpretation": "Dagens simning ökade veckobelastningen och minskar marginalen för dagens MTB-distans.",
+        "summary": "Spontant 4 000 m simpass ökar veckobelastningen; lördagens MTB distans skalas ner för att säkra absorption inför söndagens löpdistans.",
+        "load_interpretation": "Dagens simning adderar ett simstimulus med måttlig aerob/tröskelbelastning som påverkar helgens absorberbar löp-/cykelvolym.",
         "confidence": "medium",
         "facts": [
           "Simning · aerob + tröskel: 4,00 km · 1:14:59 · snittpuls 129,7 · maxpuls 157.",
           "Användarrapport: Spontant simpass: Aerob+tröskel 4K, 4 000 m. Passet är separat från dagens planerade MTB-pass och ska räknas som faktisk träningsbelastning, inte som genomförande av dagens plan."
         ],
         "interpretations": [
-          "Simningen är ett substantiellt simstimulus och bidrar till veckans ackumulerade arbete utan att ersätta löpstimuli.",
-          "Givet tidigare kvaliteter denna vecka bör dagens MTB/distans hållas konservativ för att säkra absorption inför söndagens löpdistans."
+          "Simpasset motiverar försiktig konservativ nedskalning av lördagens MTB från 90→75 (redan applicerat).",
+          "Söndagens löpdistans bör hållas konservativ (75 min) men beslutas definitivt först när lördagens egentliga utfall är känt."
         ],
         "unknowns": [
-          "Exakt subjektiv dagskänsla efter simpass (ben- eller helkroppströtthet).",
-          "Hur hårt MTB-passet planeras genomföras tekniskt (kan det hållas helt lugnt?).",
-          "Eventuella tidskonflikter eller prioriteringar användaren föredrar idag."
+          "Subjektiv dagskänsla för lördag kväll/söndag morgon som kan tillåta längre löpdistans.",
+          "Eventuell lokal muskeltrötthet i ben efter dagens simning enligt användarens egen känsla.",
+          "Exakt lördagens faktiska MTB-intensitet om användaren väljer att köra hårt trots instruktion."
         ]
       },
       "plan_action": {
-        "action": "reduce",
+        "action": "keep",
         "target_date": "2026-08-29",
-        "reason": "Spontant 4 000 m simpass ökar veckobelastningen; säkra absorption inför söndagens löpdistans.",
-        "recommendation": "Gör mtb-distance-75: 75 min huvudsakligen lugn körning; undvik upprepade hårda stigningar och avbryt om benen känns tunga.",
+        "reason": "Simpasset absorberas genom redan applicerad nedskalning av lördagens MTB; mesocykelns stimuli bevaras.",
+        "recommendation": "Behåll mtb-distance-75 för idag: 75 min huvudsakligen lugn cykling; undvik upprepade hårda stigningar och avbryt om benen känns tunga.",
         "dose_option_id": "",
         "requires_approval": false
       },
       "auto_apply": {
-        "applied": true,
-        "note": "Konservativ ändring applicerad på 2026-08-29: reduce."
+        "applied": false,
+        "note": "Ingen automatisk planändring."
       }
     },
     {
