@@ -2,7 +2,7 @@
 from datetime import date, timedelta
 import math
 
-from coach_rules import activity_family, activity_local_date, planned_families
+from coach_rules import activity_local_date, matching_activity
 
 
 STATUS_LABELS = {
@@ -182,10 +182,7 @@ def activities_on_date(activities, day_date):
 
 
 def day_fulfilled(day, activities):
-    families = planned_families(day)
-    if not families:
-        return False
-    return any(activity_family(activity) in families for activity in activities_on_date(activities, day.get("date")))
+    return matching_activity(day, activities) is not None
 
 
 def capability_labels(strategy):
@@ -219,12 +216,13 @@ def resolve_today(plan, activities, strategy, today):
     status = "GENOMFÖRT" if fulfilled else STATUS_LABELS.get(day.get("status"), str(day.get("status") or "").upper())
     headline = "Dagens plan är genomförd" if fulfilled else day.get("session") or "Ingen session"
     if fulfilled:
-        labels = [
-            activity.get("display_label") or activity.get("sport_type") or "Aktivitet"
-            for activity in activities_on_date(activities, today_text)
-        ]
-        unique_labels = list(dict.fromkeys(labels))
-        why = "Registrerat idag: " + " + ".join(unique_labels) + "."
+        activity = matching_activity(day, activities)
+        label = (
+            (activity or {}).get("display_label")
+            or (activity or {}).get("sport_type")
+            or "Aktivitet"
+        )
+        why = "Registrerat som dagens plan: " + str(label) + "."
     else:
         why = day.get("reason") or "Ingen motivering registrerad."
         same_day_rule = (strategy.get("decision_policy") or {}).get("same_day_open_dose_must_resolve_or_review") is True

@@ -88,6 +88,47 @@ class TrainingBrainTests(unittest.TestCase):
         self.assertIn("Sim aerob kapacitet", brief["stimuli"])
 
 
+    def test_spontaneous_same_day_workout_stays_separate_from_plan(self):
+        plan = {
+            "days": [
+                {
+                    "date": "2026-08-29",
+                    "status": "planned",
+                    "session": "Simning · planerat tröskelpass",
+                    "sport": "swim",
+                    "priority_role": "flex",
+                    "stimuli": ["swim_aerobic"],
+                    "reason": "Planerat pass.",
+                }
+            ]
+        }
+        activities = [
+            {
+                "id": 99,
+                "sport_type": "Swim",
+                "display_label": "Simning · aerob + tröskel",
+                "start_date_local": "2026-08-29T11:00:00",
+                "distance_m": 4000,
+                "plan_relation": "separate",
+            }
+        ]
+        brief = resolve_today(plan, activities, self.strategy, date(2026, 8, 29))
+        self.assertFalse(brief["fulfilled"])
+        self.assertEqual(brief["status"], "PLANERAT")
+        self.assertIn("planerat tröskelpass", brief["headline"])
+
+        section = render_section(
+            plan,
+            {"activities": activities},
+            self.strategy,
+            date(2026, 8, 29),
+        )
+        self.assertIn('data-separate-workout="true"', section)
+        self.assertIn("Spontant pass · registrerat separat", section)
+        self.assertIn("Simning · aerob + tröskel · 4 000 m", section)
+        self.assertIn("markerar inte dagens planerade pass som genomfört", section)
+
+
     def test_same_day_open_dose_is_explicitly_flagged(self):
         plan = {
             "days": [

@@ -6,6 +6,7 @@ from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+from coach_rules import activity_local_date
 from strategy_contracts import validate_training_strategy
 from training_brain import resolve_mesocycle, resolve_next_decision, resolve_today, resolve_weather_advice
 
@@ -22,7 +23,7 @@ SECTION_START = "<!-- training-brain-v1:start -->"
 SECTION_END = "<!-- training-brain-v1:end -->"
 CSS = r'''
 /* training-brain-v2 */
-.training-brain{margin:0 0 18px}.brain-today{background:#fff;border:1px solid #bfdbfe;border-radius:20px;padding:17px 18px;box-shadow:var(--shadow)}.brain-kicker{font-size:.69rem;font-weight:900;letter-spacing:.09em;text-transform:uppercase;color:#1d4ed8;margin-bottom:6px}.brain-headline{font-size:1.28rem;font-weight:850;line-height:1.25;letter-spacing:-.015em}.brain-role{display:inline-block;margin-top:9px;padding:4px 8px;border-radius:999px;background:#e2e8f0;color:#334155;font-size:.68rem;font-weight:800}.brain-weather{margin-top:12px;padding:10px 12px;border:1px solid #bae6fd;border-radius:13px;background:#f0f9ff}.brain-weather-label{font-size:.65rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#0369a1;margin-bottom:3px}.brain-weather strong{display:block;font-size:.9rem;line-height:1.35}.brain-weather-note{margin-top:4px;color:#475569;font-size:.8rem;line-height:1.4}.brain-why{margin-top:8px;color:#334155;font-size:.88rem;line-height:1.43}.brain-next{margin-top:14px;padding-top:13px;border-top:1px solid #dbeafe}.brain-next-label{font-size:.68rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:#64748b;margin-bottom:5px}.brain-next strong{display:block;font-size:.98rem;line-height:1.35}.brain-note{margin-top:5px;color:#475569;font-size:.84rem;line-height:1.42}.week-focus-mesocycle-meta{margin-top:9px;color:#94a3b8;font-size:.74rem;font-weight:750;line-height:1.35}.week-focus-mesocycle-idea{margin-top:8px!important;padding-top:8px;border-top:1px solid rgba(148,163,184,.22)}.week-focus-mesocycle-idea strong{color:#fff}
+.training-brain{margin:0 0 18px}.brain-today{background:#fff;border:1px solid #bfdbfe;border-radius:20px;padding:17px 18px;box-shadow:var(--shadow)}.brain-kicker{font-size:.69rem;font-weight:900;letter-spacing:.09em;text-transform:uppercase;color:#1d4ed8;margin-bottom:6px}.brain-headline{font-size:1.28rem;font-weight:850;line-height:1.25;letter-spacing:-.015em}.brain-role{display:inline-block;margin-top:9px;padding:4px 8px;border-radius:999px;background:#e2e8f0;color:#334155;font-size:.68rem;font-weight:800}.brain-weather{margin-top:12px;padding:10px 12px;border:1px solid #bae6fd;border-radius:13px;background:#f0f9ff}.brain-weather-label{font-size:.65rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#0369a1;margin-bottom:3px}.brain-weather strong{display:block;font-size:.9rem;line-height:1.35}.brain-weather-note{margin-top:4px;color:#475569;font-size:.8rem;line-height:1.4}.brain-extra{margin-top:12px;padding:10px 12px;border:1px solid #d1d5db;border-radius:13px;background:#f8fafc}.brain-extra-label{font-size:.65rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#475569;margin-bottom:3px}.brain-extra strong{display:block;font-size:.9rem;line-height:1.35}.brain-extra-note{margin-top:3px;color:#64748b;font-size:.78rem;line-height:1.35}.brain-why{margin-top:8px;color:#334155;font-size:.88rem;line-height:1.43}.brain-next{margin-top:14px;padding-top:13px;border-top:1px solid #dbeafe}.brain-next-label{font-size:.68rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:#64748b;margin-bottom:5px}.brain-next strong{display:block;font-size:.98rem;line-height:1.35}.brain-note{margin-top:5px;color:#475569;font-size:.84rem;line-height:1.42}.week-focus-mesocycle-meta{margin-top:9px;color:#94a3b8;font-size:.74rem;font-weight:750;line-height:1.35}.week-focus-mesocycle-idea{margin-top:8px!important;padding-top:8px;border-top:1px solid rgba(148,163,184,.22)}.week-focus-mesocycle-idea strong{color:#fff}
 @media (max-width:620px){.brain-today{padding:15px}.brain-headline{font-size:1.16rem}.brain-weather{padding:9px 10px}.week-focus-mesocycle-meta{font-size:.7rem}}
 '''
 
@@ -41,12 +42,48 @@ def compact_date(value):
     return f"{day}/{month}"
 
 
+def _fmt_activity_distance(activity):
+    meters = float(activity.get("distance_m") or 0)
+    if meters <= 0:
+        return ""
+    if activity.get("sport_type") == "Swim":
+        return f"{round(meters):,} m".replace(",", " ")
+    return f"{meters / 1000:.2f} km".replace(".", ",")
+
+
+def _separate_activity_block(activities, today_text):
+    rows = [
+        activity
+        for activity in activities
+        if activity_local_date(activity) == today_text
+        and activity.get("plan_relation") == "separate"
+    ]
+    if not rows:
+        return ""
+
+    bits = []
+    for activity in rows:
+        label = activity.get("display_label") or activity.get("sport_type") or "Aktivitet"
+        distance = _fmt_activity_distance(activity)
+        bits.append(" · ".join(part for part in (str(label), distance) if part))
+
+    return (
+        '<div class="brain-extra" data-separate-workout="true">'
+        '<div class="brain-extra-label">Spontant pass · registrerat separat</div>'
+        f'<strong>{html.escape(" + ".join(bits))}</strong>'
+        '<div class="brain-extra-note">Påverkar belastningsbedömningen, men markerar inte dagens planerade pass som genomfört.</div>'
+        '</div>'
+    )
+
+
 def render_section(plan, activities_state, strategy, today_date, weather=None, settings=None):
     activities = activities_state.get("activities") or []
     today = resolve_today(plan, activities, strategy, today_date)
     decision = resolve_next_decision(plan, activities, strategy, today_date)
     advice = resolve_weather_advice(plan, activities, weather or {}, settings or {}, today_date)
     role = f'<span class="brain-role">{html.escape(today["role"])}</span>' if today.get("role") else ""
+    today_text = today_date.isoformat() if hasattr(today_date, "isoformat") else str(today_date)
+    separate_block = _separate_activity_block(activities, today_text)
     weather_block = ""
     if advice:
         weather_block = (
@@ -69,6 +106,7 @@ def render_section(plan, activities_state, strategy, today_date, weather=None, s
     <div class="brain-kicker">Idag · {html.escape(today["status"])}</div>
     <div class="brain-headline">{html.escape(today["headline"])}</div>
     {role}
+    {separate_block}
     {weather_block}
     <div class="brain-why"><strong>Varför:</strong> {html.escape(today["why"])}</div>
     <div class="brain-next">
