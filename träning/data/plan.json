@@ -234,11 +234,11 @@
       "date": "2026-08-30",
       "label": "Söndag",
       "status": "planned",
-      "session": "Löpning · distans · lugnt",
+      "session": "Löpning · lugn distans · 75 min",
       "reason": "Tredje löpstimulus för veckan och viktig för löputvecklingen. Exakt omfattning bestäms efter lördagens MTB och veckans faktiska belastning; grundavsikten är lugn distans, inte ytterligare kvalitet.",
       "development_focus": "Avslappnad rytm och jämn ansträngning; låt distansen bygga tålighet utan att driva intensiteten.",
       "sport": "run",
-      "dose_open": true,
+      "dose_open": false,
       "priority_role": "flex",
       "stimuli": [
         "run_easy_distance"
@@ -260,7 +260,22 @@
           "value": 90,
           "session": "Löpning · lugn distans · 90 min"
         }
-      ]
+      ],
+      "original_session": "Löpning · distans · lugnt",
+      "dose_resolution": {
+        "state": "resolved",
+        "kind": "duration_minutes",
+        "value": 75,
+        "source": "near_term_ai",
+        "option_id": "run-easy-75",
+        "basis": "Veckan absorberas bäst genom att behålla söndagens lugna löp enligt microcycle och skydda mesocykelns löpstimulus.",
+        "applied_at_utc": "2026-08-29T22:09:43.014917+00:00"
+      },
+      "auto_coach": {
+        "action": "keep",
+        "reason": "Veckan absorberas bäst genom att behålla söndagens lugna löp enligt microcycle och skydda mesocykelns löpstimulus.",
+        "applied_at_utc": "2026-08-29T22:09:43.014917+00:00"
+      }
     }
   ],
   "strength_template": [
