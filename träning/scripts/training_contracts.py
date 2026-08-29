@@ -9,6 +9,7 @@ MIN_COACH_CONTRACT_VERSION = 3
 VALID_DAY_STATUSES = {"completed", "planned", "preliminary", "conditional", "open"}
 VALID_PLANNING_STATUSES = {"fixed", "planned", "preliminary", "open"}
 VALID_CLASSIFICATIONS = {"training", "recreation"}
+VALID_PLAN_RELATIONS = {"separate"}
 VALID_PLAN_SPORTS = {"run", "swim", "bike", "strength", "enduro", "swimrun", "rest", "open"}
 VALID_WORKOUT_STEP_KINDS = {"swim", "rest", "lap_rest"}
 VALID_COACH_ACTIONS = {"keep", "reduce", "rest", "review"}
@@ -184,6 +185,8 @@ def validate_activities_document(document):
             require(activity.get("classification") in VALID_CLASSIFICATIONS, f"{context}: ogiltig classification")
         if "display_label" in activity:
             _nonempty_string(activity.get("display_label"), f"{context}.display_label")
+        if "plan_relation" in activity:
+            require(activity.get("plan_relation") in VALID_PLAN_RELATIONS, f"{context}: ogiltig plan_relation")
     return True
 
 
