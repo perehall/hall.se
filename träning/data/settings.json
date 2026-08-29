@@ -2,5 +2,21 @@
   "timezone": "Europe/Stockholm",
   "strava_sync_days_back": 14,
   "auto_match_date": true,
-  "auto_conservative_only": true
+  "auto_conservative_only": true,
+  "indoor_alternatives": {
+    "trainer": {
+      "available": true,
+      "bike_type": "gravel",
+      "same_geometry_as_mtb": false
+    },
+    "treadmill": {
+      "available": true
+    },
+    "swim": {
+      "available": true
+    },
+    "gym": {
+      "available": true
+    }
+  }
 }
