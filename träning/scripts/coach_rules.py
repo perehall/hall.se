@@ -45,17 +45,44 @@ def planned_family(day):
 
 
 def matching_activity(day, activities):
-    families = planned_families(day)
+    """Resolve the activity that fulfills a planned day.
+
+    Explicitly separate/spontaneous activities still count as training load, but
+    must never complete the planned session. Multiple same-family activities on
+    the same day are treated as ambiguous unless the plan already carries an
+    explicit activity_id.
+    """
     date_value = day.get("date") or ""
-    if not families or not date_value:
+    if not date_value:
         return None
 
-    for activity in activities:
-        if activity_local_date(activity) != date_value:
-            continue
-        if activity_family(activity) in families:
-            return activity
-    return None
+    explicit_id = day.get("activity_id")
+    if explicit_id is not None:
+        linked = next(
+            (
+                activity
+                for activity in activities
+                if str(activity.get("id")) == str(explicit_id)
+                and activity_local_date(activity) == date_value
+            ),
+            None,
+        )
+        if linked and linked.get("plan_relation") != "separate":
+            return linked
+        return None
+
+    families = planned_families(day)
+    if not families:
+        return None
+
+    candidates = [
+        activity
+        for activity in activities
+        if activity_local_date(activity) == date_value
+        and activity_family(activity) in families
+        and activity.get("plan_relation") != "separate"
+    ]
+    return candidates[0] if len(candidates) == 1 else None
 
 
 def fulfilled_plan_dates(plan, activities):
