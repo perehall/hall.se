@@ -4,37 +4,37 @@
       "activity_id": 19946705399,
       "activity_date": "2026-08-29",
       "activity_name": "Simning vid lunch",
-      "generated_at_utc": "2026-08-29T11:29:46.433561+00:00",
+      "generated_at_utc": "2026-08-29T12:13:22.618941+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "4 000 m simpass räknas som separat, absorberbar aerob + tröskelbelastning som ökar veckans totalbelastning något.",
-        "load_interpretation": "Dagens simpass lägger till en betydande simstimulus och ökar närbelastningen inför dagens MTB-distansbeslut.",
+        "summary": "4 km simning i aerob+tröskel räknas som extra belastning och ökar veckans totala träningsdos; påverkar absorption inför dagens MTB-distans.",
+        "load_interpretation": "Senaste tre dagarna innehåller flera kvaliteter (backar + tröskel + swimrun) vilket minskar marginalen för ytterligare hög belastning idag.",
         "confidence": "medium",
         "facts": [
           "Simning · aerob + tröskel: 4,00 km · 1:14:59 · snittpuls 129,7 · maxpuls 157.",
           "Användarrapport: Spontant simpass: Aerob+tröskel 4K, 4 000 m. Passet är separat från dagens planerade MTB-pass och ska räknas som faktisk träningsbelastning, inte som genomförande av dagens plan."
         ],
         "interpretations": [
-          "Simningen ökar veckans totala träning, så dagens MTB-distans bör hållas konservativ för absorption.",
-          "Ingen enskild signal kräver vila; bevara mesocykelns stimuli men prioritera absorption inför söndagens löpdistans."
+          "Simningen är ett meningsfullt aerobiskt/tröskelstimulus och bör räknas i veckobelastningen.",
+          "Behållning av mesocykelns MTB-stimulus går att göra utan att öka risk för överbelastning om dagens MTB hålls lugn och kortare alternativ väljs."
         ],
         "unknowns": [
-          "Subjektiv dagskänsla efter simpasset (ben-/lokal trötthet) kan ändra lämplig MTB-dos.",
-          "Eventuell planerad tid för MTB idag (starttid) och möjlighet att förkorta ytterligare.",
-          "Exakt intensitetskvalitet i simningen bortom användarrapporten (hur hårda tröskelintervaller var)."
+          "Subjektiv dagskänsla i eftermiddag (benens lokala trötthet) saknas och kan ändra lämplig dos.",
+          "Det exakta intensitetsutfallet under simpasset (zonfördelning) bygger delvis på användarens rapport och inte fullständiga pulsmönster.",
+          "Eventuella logistiska begränsningar eller tid som påverkar genomförbar dos idag."
         ]
       },
       "plan_action": {
-        "action": "keep",
+        "action": "reduce",
         "target_date": "2026-08-29",
-        "reason": "Simpasset är absorberbart och mesocykelns MTB-stimulus ska bibehållas med konservativ dos.",
-        "recommendation": "Behåll dagens MTB-distans som mtb-distance-75: 75 min lugn körning; håll det huvudsakligen lugnt, undvik upprepade hårda stigningar och avbryt om benen känns tunga.",
+        "reason": "Veckans ackumulerade kvaliteter kräver konservativ marginal inför söndagens löpdistans.",
+        "recommendation": "Gör mtb-distance-75: 75 min lugn körning; håll det huvudsakligen lugnt, undvik upprepade hårda stigningar och avbryt om benen känns tunga.",
         "dose_option_id": "",
         "requires_approval": false
       },
       "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
+        "applied": true,
+        "note": "Konservativ ändring applicerad på 2026-08-29: reduce."
       }
     },
     {
@@ -484,7 +484,7 @@
       }
     }
   ],
-  "last_trigger_hash": "19144ab0d2349415ddee811a0b8904c75daeb30dc91048454855ff0dc6f72d6f",
-  "last_run_utc": "2026-08-29T11:29:46.433561+00:00",
+  "last_trigger_hash": "0b2996c0d3dfa1c3fbc9e6c9da8d9ff6408c8a6bd363a1a10d20623d40ed5542",
+  "last_run_utc": "2026-08-29T12:13:22.618941+00:00",
   "contract_version": 9
 }
