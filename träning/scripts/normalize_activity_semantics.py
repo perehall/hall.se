@@ -21,6 +21,7 @@ COACH_SEMANTIC_FIELDS = (
     "classification",
     "source_sport_type",
     "user_report",
+    "plan_relation",
 )
 
 
@@ -129,6 +130,13 @@ def apply_override(activity, override, key):
         activity["user_report"] = override["user_report"]
     if override.get("reason"):
         activity["classification_reason"] = override["reason"]
+    if "plan_relation" in override:
+        relation = str(override.get("plan_relation") or "").strip()
+        if relation != "separate":
+            raise RuntimeError(
+                f"Aktivitetsnormalisering: override {key} har ogiltig plan_relation {relation!r}"
+            )
+        activity["plan_relation"] = relation
 
 
 def invalidate_coach_analyses(path: Path, changed_ids):
