@@ -4,37 +4,37 @@
       "activity_id": 19946705399,
       "activity_date": "2026-08-29",
       "activity_name": "Simning vid lunch",
-      "generated_at_utc": "2026-08-29T22:09:43.015477+00:00",
+      "generated_at_utc": "2026-08-30T00:19:50.818492+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Spontant 4 000 m simpass ökar veckobelastningen; håll lördagens MTB reducerad så söndagens lugna löpning kan genomföras.",
-        "load_interpretation": "Senaste simpasset adderar en märkbar aerob belastning i närbelastningen inför söndagens löpdistans.",
+        "summary": "4 000 m simning ökar veckobelastningen; behåll söndagens lugna löp men säkra absorption efter dagens MTB-alternativ.",
+        "load_interpretation": "Senaste simpasset plus tidigare back- och run-pass ökar närbelastningen inför söndag.",
         "confidence": "medium",
         "facts": [
           "Simning · aerob + tröskel: 4,00 km · 1:14:59 · snittpuls 129,7 · maxpuls 157.",
           "Användarrapport: Spontant simpass: Aerob+tröskel 4K, 4 000 m. Passet är separat från dagens planerade MTB-pass och ska räknas som faktisk träningsbelastning, inte som genomförande av dagens plan."
         ],
         "interpretations": [
-          "Samlad vecka visar flera tunga exponeringar; absorption kräver marginal inför söndagens lugna löpdistans.",
-          "Privat återhämtningsunderlag visar ingen signal som motsäger genomförbarheten för en konservativ distansdos."
+          "Veckans samlade belastning kräver konservativ absorption innan lång löpdistans.",
+          "Simningen räknas som faktisk belastning men ska inte tränga undan mesocykelns löpstimuli."
         ],
         "unknowns": [
-          "Subjektiv dagskänsla för söndag morgon (fötter/benlokal trötthet) saknas och kan påverka dosval.",
-          "Exakt hur hårt simpassets tröskelblock belastade benen kontra överkropp är delvis okänt.",
-          "Eventuella planerade åtaganden eller resa på söndag som påverkar genomförande saknas."
+          "Subjektiv dagskänsla idag (söndag) för löpning.",
+          "Hur lördagens MTB valdes/utfördes (75 vs 90 min) efter simpasset; auto-val visar 75 min.",
+          "Eventuell lokal muskeltrötthet i benen efter backpass och simning."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-08-30",
-        "reason": "Veckan absorberas bäst genom att behålla söndagens lugna löp enligt microcycle och skydda mesocykelns löpstimulus.",
-        "recommendation": "Behåll planerad lugn distans för 2026-08-30; genomför run-easy-75 (75 min) om morgonkänslan är normal, välj 90 min endast om du känner dig mycket fräsch i benen.",
-        "dose_option_id": "run-easy-75",
+        "reason": "Veckan absorberas bäst genom att behålla den ordinerade lugna löpdosen och skydda mesocykelns stimuli.",
+        "recommendation": "Gör run-easy-75: 75 min lugn distans; håll intensiteten lätt och avbryt om benen känns tunga. Prioritera återhämtning (återhämtningsunderlaget, näring) före eventuell längre distans.",
+        "dose_option_id": "",
         "requires_approval": false
       },
       "auto_apply": {
-        "applied": true,
-        "note": "Dagens dos löstes konservativt på 2026-08-30: run-easy-75."
+        "applied": false,
+        "note": "Ingen automatisk planändring."
       }
     },
     {
@@ -484,7 +484,7 @@
       }
     }
   ],
-  "last_trigger_hash": "4faa48a0a1ad968449439552a0817681677692114a349087060a8de0c4772b06",
-  "last_run_utc": "2026-08-29T22:09:43.015477+00:00",
+  "last_trigger_hash": "e113e9387602ac2901b221e798a71b3e41449e620487242b55b28f8865e6bfde",
+  "last_run_utc": "2026-08-30T00:19:50.818492+00:00",
   "contract_version": 9
 }
