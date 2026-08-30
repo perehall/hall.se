@@ -4,31 +4,30 @@
       "activity_id": 19960743008,
       "activity_date": "2026-08-30",
       "activity_name": "Löpning på morgonen",
-      "generated_at_utc": "2026-08-30T21:19:49.660249+00:00",
+      "generated_at_utc": "2026-08-30T22:09:43.076928+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Söndagens lugna 75-minuterslöpning kan behållas som veckans tredje löpstimulus och skyddar mesocykelns kontinuitet.",
-        "load_interpretation": "Veckans närbelastning visar tre löppass (inkl. tröskel + backar) samt extra sim och MTB; absorption är rimlig men kräver konservativ fortsättning.",
+        "summary": "Långt, krävande löppass ger hög närbelastning; påverkar beslut för tisdag–fredag i mikrocykeln.",
+        "load_interpretation": "Det senaste löppasset (≈18.9 km, ~1.7 h, hög puls/watts) ökar närbelastningen inför tisdag–fredag.",
         "confidence": "medium",
         "facts": [
-          "Run: 18,88 km · 1:43:14 · 184 m+ · snittpuls 139,3 · maxpuls 153.",
-          "Planstatus 2026-08-30: dagens planerade pass är genomfört i coachens beslutsunderlag."
+          "Run: 18,88 km · 1:43:14 · 184 m+ · snittpuls 139,3 · maxpuls 153."
         ],
         "interpretations": [
-          "Söndagens genomförda distans uppfyller planens run_easy-75 och hjälper veckans kontinuitet.",
-          "Veckans samlade belastning (kvaliteter + sim + MTB) talar för att behålla planerad lugn distans, inte lägga till mer kvalitet nästa vecka utan bedömning."
+          "Dagens löppass ger tillräcklig mekanisk och aerob belastning för att kräva konservativ dosering av nästa prioriterade löppass.",
+          "Med täta kvalitets- och långpass de senaste dagarna bör progression undvikas och prioritet ges att bibehålla teknik och absorberbarhet."
         ],
         "unknowns": [
-          "Subjektiv dagskänsla efter dagens löpning (lokal muskeltrötthet) saknas och kan påverka måndagens enduro eller tisdagens tröskeldos.",
-          "Eventuell planerad medverkan i swimrun-KM nästa helg är oavklarad och kan påverka dosval för kommande veckas pass.",
-          "Detaljer om eventuell lokal skada/ömhet saknas."
+          "Slutgiltigt utfallet av måndagens enduroskola (faktisk belastning) — avgörande för tisdagens dos.",
+          "Subjektiv återhämtning/local muskeltrötthet efter dagens långa pass saknas.",
+          "Eventuellt deltagande i swimrun-KM på lördag är ännu okänt och påverkar fredag–söndag."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "",
-        "reason": "Söndagens distans absorberas och bevarar mesocykelns tredje löpstimulus.",
-        "recommendation": "Behåll planerad struktur; inga ändringar i kalendern. Fortsätt med planerad måndagsenduro; besluta tröskeldos för tisdag efter måndagens faktiska belastning.",
+        "reason": "Närbelastningen kräver konservativ tolkning men mesocykelns skyddade stimuli ska bevaras.",
+        "recommendation": "Behåll planens struktur; låt tisdagens tröskeldos beslutas efter måndagens enduroutfall och din känsla morgon 1/9. Undvik att öka arbetsvolym eller välja progressionsalternativ automatiskt.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -521,7 +520,7 @@
       }
     }
   ],
-  "last_trigger_hash": "ca9745dae71d70186a9fc4080b35e8b85c2aa892df11dbebd8ea902b33304812",
-  "last_run_utc": "2026-08-30T21:19:49.660249+00:00",
+  "last_trigger_hash": "7c57f9b8cc8bc14ea50c7ad2170329801ea1ed5f6d69058d9369ec6d88d82d21",
+  "last_run_utc": "2026-08-30T22:09:43.076928+00:00",
   "contract_version": 10
 }

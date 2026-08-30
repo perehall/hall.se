@@ -1,0 +1,243 @@
+{
+  "schema_version": 1,
+  "week_key": "2026-W36",
+  "week_start": "2026-08-31",
+  "week_end": "2026-09-06",
+  "created_at_utc": "2026-08-30T22:09:50.110394+00:00",
+  "updated_at_utc": "2026-08-30T22:09:50.110394+00:00",
+  "plan": {
+    "schema_version": 3,
+    "meta": {
+      "timezone": "Europe/Stockholm",
+      "week": 36,
+      "week_start": "2026-08-31",
+      "week_end": "2026-09-06",
+      "title": "Mesocykel löpning · mikrocykel 2 av 4 · behåll strukturen, lås inte dosen för tidigt",
+      "principle": "Mikrocykeln fortsätter fyraveckorsmesocykeln med kontrollerad löptröskel, separat backkvalitet och lugn löpdistans. Måndagens enduroskola ligger fast. Simning och MTB stödjer helheten utan att tränga undan de prioriterade löpstimulansen. Exakta doser beslutas först när faktisk närbelastning är känd.",
+      "mesocycle_id": "run-threshold-hill-4w",
+      "requires_mesocycle_review": false,
+      "microcycle_id": "run-threshold-hill-4w:mc2",
+      "microcycle_index": 2,
+      "microcycle_total": 4,
+      "microcycle_length_days": 7,
+      "calendar_week_is_presentation": true
+    },
+    "days": [
+      {
+        "date": "2026-08-31",
+        "label": "Måndag",
+        "status": "planned",
+        "planning_status": "fixed",
+        "session": "Enduroskola · fast tillfälle",
+        "reason": "Fast återkommande enduroskola, totalt åtta måndagar från 24/8. Enduron räknas som faktisk träningsbelastning; övrig träning runt dagen anpassas efter utfallet.",
+        "development_focus": "Teknisk kvalitet och avslappnad körning; faktisk belastning styr efterföljande pass.",
+        "sport": "enduro",
+        "classification": "training",
+        "dose_open": true,
+        "manual_lock": true,
+        "priority_role": "flex",
+        "stimuli": [
+          "enduro_technical"
+        ],
+        "mesocycle_id": "run-threshold-hill-4w",
+        "microcycle_id": "run-threshold-hill-4w:mc2",
+        "microcycle_index": 2,
+        "microcycle_day": 1
+      },
+      {
+        "date": "2026-09-01",
+        "label": "Tisdag",
+        "status": "preliminary",
+        "session": "Löpning · kontrollerad tröskel · dos öppen",
+        "reason": "Veckans första prioriterade löpstimulus och fortsatt del av fyraveckorsmesocykeln. Den exakta arbetsdosen bestäms först efter måndagens faktiska endurobelastning och utifrån hur föregående tröskelpass absorberats.",
+        "development_focus": "Jämn, kontrollerad kvalitet utan fartjakt; progression ska komma genom absorberbar träning, inte genom att pressa ett enskilt pass.",
+        "sport": "run",
+        "dose_open": true,
+        "priority_role": "anchor",
+        "stimuli": [
+          "run_threshold"
+        ],
+        "decision_note": "Tröskeldosen fastställs efter måndagens faktiska endurobelastning; stimulus ligger kvar om närbelastningen tillåter kvalitet.",
+        "mesocycle_id": "run-threshold-hill-4w",
+        "microcycle_id": "run-threshold-hill-4w:mc2",
+        "microcycle_index": 2,
+        "microcycle_day": 2
+      },
+      {
+        "date": "2026-09-02",
+        "label": "Onsdag",
+        "status": "preliminary",
+        "session": "Simning · aerob/teknik · preliminärt 3 200 m · ca 60 min",
+        "swim_equipment": {
+          "planned": "none"
+        },
+        "reason": "Simningen används mellan löpkvalitetspassen för att bibehålla och långsamt utveckla simkapacitet med liten mekanisk kostnad för benen. Basdosen höjs inte automatiskt.",
+        "development_focus": "Rotera runt en stabil kroppslinje: låt höft och axel följa med utan att huvudet vandrar eller benen börjar slingra.",
+        "watch_workout": {
+          "sync_enabled": false,
+          "id": "swim-w36-wed-aerob-rotation-01",
+          "type": "Swim",
+          "equipment": [],
+          "name": "Aerob/teknik · kroppslinje och rotation · 3 200 m",
+          "planned_distance_m": 3200,
+          "blocks": [
+            {
+              "name": "Insim",
+              "steps": [
+                {
+                  "kind": "swim",
+                  "text": "Lugn insim",
+                  "distance_m": 400,
+                  "intensity": "warmup"
+                }
+              ]
+            },
+            {
+              "name": "Kroppslinje och rotation",
+              "repeat": 6,
+              "steps": [
+                {
+                  "kind": "swim",
+                  "text": "Stabil linje, kontrollerad rotation",
+                  "distance_m": 50,
+                  "intensity": "active"
+                },
+                {
+                  "kind": "rest",
+                  "duration_s": 15
+                }
+              ]
+            },
+            {
+              "name": "Aerob",
+              "repeat": 4,
+              "steps": [
+                {
+                  "kind": "swim",
+                  "text": "Stadigt aerob med stabil kroppslinje",
+                  "distance_m": 500,
+                  "intensity": "active"
+                },
+                {
+                  "kind": "rest",
+                  "duration_s": 30
+                }
+              ]
+            },
+            {
+              "name": "Frekvens",
+              "repeat": 6,
+              "steps": [
+                {
+                  "kind": "swim",
+                  "text": "Avslappnad frekvens med bibehållen linje",
+                  "distance_m": 50,
+                  "intensity": "active"
+                },
+                {
+                  "kind": "rest",
+                  "duration_s": 15
+                }
+              ]
+            },
+            {
+              "name": "Nedvarvning",
+              "steps": [
+                {
+                  "kind": "swim",
+                  "text": "Mycket lugnt",
+                  "distance_m": 200,
+                  "intensity": "cooldown"
+                }
+              ]
+            }
+          ]
+        },
+        "sport": "swim",
+        "priority_role": "flex",
+        "stimuli": [
+          "swim_aerobic",
+          "swim_technique"
+        ],
+        "mesocycle_id": "run-threshold-hill-4w",
+        "microcycle_id": "run-threshold-hill-4w:mc2",
+        "microcycle_index": 2,
+        "microcycle_day": 3
+      },
+      {
+        "date": "2026-09-03",
+        "label": "Torsdag",
+        "status": "preliminary",
+        "session": "MTB/XC · teknik + aerob stig · dos öppen",
+        "reason": "MTB/XC är fortsatt utvecklingsprioritet men passets omfattning ska inte göra fredagens löpkvalitet mekaniskt omöjlig. Teknik och flyt är förstahandsmål; faktisk belastning avgör nästa beslut.",
+        "development_focus": "Blick, linjeval, bromspunkter och flyt före segmentjakt.",
+        "sport": "bike",
+        "dose_open": true,
+        "priority_role": "flex",
+        "stimuli": [
+          "mtb_technical",
+          "mtb_aerobic"
+        ],
+        "mesocycle_id": "run-threshold-hill-4w",
+        "microcycle_id": "run-threshold-hill-4w:mc2",
+        "microcycle_index": 2,
+        "microcycle_day": 4
+      },
+      {
+        "date": "2026-09-04",
+        "label": "Fredag",
+        "status": "preliminary",
+        "session": "Löpning · backkvalitet · preliminär placering · dos öppen",
+        "reason": "Veckans andra prioriterade löpkvalitet och mesocykelns kompletterande kraft-/löpekonomistimulus. Placering och dos hålls preliminära eftersom torsdagens MTB-belastning och eventuell medverkan i swimrun-KM på lördagen ännu inte är kända.",
+        "development_focus": "Kraftfull men kontrollerad löpning med bibehållen mekanik; ingen maximal sprint eller syrajakt.",
+        "sport": "run",
+        "dose_open": true,
+        "priority_role": "anchor",
+        "stimuli": [
+          "run_hill_quality"
+        ],
+        "decision_note": "Backpassets placering och dos beslutas först när torsdagens faktiska belastning och lördagens swimrun-KM-intention är kända.",
+        "mesocycle_id": "run-threshold-hill-4w",
+        "microcycle_id": "run-threshold-hill-4w:mc2",
+        "microcycle_index": 2,
+        "microcycle_day": 5
+      },
+      {
+        "date": "2026-09-05",
+        "label": "Lördag",
+        "status": "open",
+        "session": "Öppet · möjlig swimrun-KM",
+        "reason": "Swimrun-KM finns som möjlig aktivitet men deltagande är inte fastställt i träningsplanen. Ingen ytterligare träningsdos läggs in innan detta och fredagens närbelastning är kända.",
+        "sport": "open"
+      },
+      {
+        "date": "2026-09-06",
+        "label": "Söndag",
+        "status": "preliminary",
+        "session": "Löpning · lugn distans · dos öppen",
+        "reason": "Blockets tredje löpstimulus är lugn distans/tålighet. Exakt omfattning och om passet ska ligga kvar på söndagen avgörs efter fredag–lördagens faktiska utfall.",
+        "development_focus": "Avslappnad rytm och jämn ansträngning; inget tredje kvalitetspass.",
+        "sport": "run",
+        "dose_open": true,
+        "priority_role": "flex",
+        "stimuli": [
+          "run_easy_distance"
+        ],
+        "mesocycle_id": "run-threshold-hill-4w",
+        "microcycle_id": "run-threshold-hill-4w:mc2",
+        "microcycle_index": 2,
+        "microcycle_day": 7
+      }
+    ],
+    "strength_template": [
+      "Liten dos explosivitet/plyometri när omkringliggande belastning tillåter.",
+      "Bulgarian split squat som huvudalternativ för unilateral benstyrka.",
+      "Marklyft eller RDL som normal höftdominant huvudövning.",
+      "Vad + soleus regelbundet.",
+      "Enarmsrodd + press som huvuddrag/press.",
+      "Välj två bålövningar; låt inte accessoarer tränga undan huvudstyrkan."
+    ]
+  },
+  "activities": [],
+  "coach_analyses": []
+}
