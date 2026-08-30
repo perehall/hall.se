@@ -4,30 +4,30 @@
       "activity_id": 19960743008,
       "activity_date": "2026-08-30",
       "activity_name": "Löpning på morgonen",
-      "generated_at_utc": "2026-08-30T10:29:45.875106+00:00",
+      "generated_at_utc": "2026-08-30T10:41:22.039499+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Behåll mesocykelns riktning; dagens lugna distans kan stå kvar som fullföljd och inga framtida pass ändras automatiskt.",
-        "load_interpretation": "Veckans närbelastning är hög med flera löp- och simpass de senaste dagarna, vilket minskar marginalen för att öka doser.",
+        "summary": "Passet var en lång lugn distanslöpning (ca 19 km) som fullföljer veckans tredje löpstimulus och absorberas i mikrocykeln.",
+        "load_interpretation": "Dagens löpning kompletterar veckans belastning utan att lägga till ny kvalitet som kräver ändring.",
         "confidence": "medium",
         "facts": [
           "Run: 18,88 km · 1:43:14 · 184 m+ · snittpuls 139,3 · maxpuls 153.",
           "Planstatus 2026-08-30: dagens planerade pass är genomfört i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Veckan absorberas bäst genom att inte lägga till eller öka doser; behålla planerad lugn distans är konservativt rätt.",
-          "Höjd backvolym och simpass talar för att tidigare auto-reduktioner var lämpliga och att inga återställningar till högre doser behövs nu."
+          "Passet motsvarar den planerade lugna distansen (run_easy_distance) och räknas som genomfört.",
+          "Veckans totala belastning är absorberbar; inga tecken på akut överbelastning i underlaget eller återhämtningsunderlaget-trend som kräver vila."
         ],
         "unknowns": [
-          "Subjektiv dagskänsla efter dagens långpass (lokal muskeltrötthet).",
-          "Eventuella planerade åtaganden kommande 48 timmar som påverkar absorption.",
-          "Detaljer om inre muskulär trötthet eller skadekänningar efter back- eller swimrun-pass."
+          "Subjektiv dagskänsla efter passet (lokal muskeltrötthet) saknas och kan påverka nästa mikrocykeldag.",
+          "Detaljer om dagens intensitetsfördelning (exakt zonfördelning) saknas men bedöms som lugn distans.",
+          "Eventuella kortsiktiga planer/åtaganden som påverkar vila eller återhämtning saknas."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "",
-        "reason": "Veckans belastning absorberas bäst utan att ändra kommande pass och mesocykelns stimuli skyddas.",
+        "reason": "Söndagens lugna distans är genomförd och mesocykelns stimuli bevaras.",
         "recommendation": "Ingen ytterligare träning ordineras idag; dagens planerade pass är redan genomfört. Nästa planerade pass saknas i aktuellt underlag.",
         "dose_option_id": "",
         "requires_approval": false
@@ -521,7 +521,7 @@
       }
     }
   ],
-  "last_trigger_hash": "e8a779a53df09cd4ad04ab1a45e0afd9568f0e6110932ce778399d58152098cd",
-  "last_run_utc": "2026-08-30T10:29:45.875106+00:00",
+  "last_trigger_hash": "0c3b8d454966d835aef61ee974d70460f2be0724310e1d1f6a17791ca4139f6b",
+  "last_run_utc": "2026-08-30T10:41:22.039499+00:00",
   "contract_version": 9
 }
