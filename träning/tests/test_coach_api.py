@@ -9,6 +9,8 @@ from pathlib import Path
 SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
+from coach_rules import normalize_no_remaining_plan  # noqa: E402
+
 from coach import (  # noqa: E402
     SCHEMA,
     apply_conservative_action,
@@ -189,6 +191,45 @@ class CoachApiTests(unittest.TestCase):
         changed = dict(wellness)
         changed["daily"] = [{"date": "2026-08-26", "hrv": 51}]
         self.assertNotEqual(first, stable_hash(plan, latest, "2026-08-26", strategy, changed))
+
+    def test_completed_day_keeps_known_future_fixed_session_visible(self):
+        action = {
+            "action": "keep",
+            "target_date": "",
+            "reason": "Dagens pass är genomfört.",
+            "recommendation": "Nästa pass är måndagens fasta enduroskola.",
+            "dose_option_id": "",
+            "requires_approval": False,
+        }
+        normalized = normalize_no_remaining_plan(
+            action,
+            allowed_dates=[],
+            latest_date="2026-08-30",
+            fulfilled_dates={"2026-08-30": 1},
+            remaining_dates=["2026-08-31"],
+        )
+        self.assertEqual(
+            normalized["recommendation"],
+            "Nästa pass är måndagens fasta enduroskola.",
+        )
+
+    def test_completed_day_only_claims_missing_plan_when_window_is_empty(self):
+        action = {
+            "action": "keep",
+            "target_date": "",
+            "reason": "Dagens pass är genomfört.",
+            "recommendation": "Behåll.",
+            "dose_option_id": "",
+            "requires_approval": False,
+        }
+        normalized = normalize_no_remaining_plan(
+            action,
+            allowed_dates=[],
+            latest_date="2026-08-30",
+            fulfilled_dates={"2026-08-30": 1},
+            remaining_dates=[],
+        )
+        self.assertIn("Nästa planerade pass saknas", normalized["recommendation"])
 
     def test_private_wellness_terms_are_scrubbed_before_persistence(self):
         result = valid_result()
