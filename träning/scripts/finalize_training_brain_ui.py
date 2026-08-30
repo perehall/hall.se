@@ -6,13 +6,14 @@ from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-from coach_rules import activity_local_date
+from coach_rules import activity_local_date, planning_window
 from strategy_contracts import validate_training_strategy
 from training_brain import resolve_mesocycle, resolve_next_decision, resolve_today, resolve_weather_advice
 
 ROOT = Path(__file__).resolve().parents[1]
 INDEX_FILE = ROOT / "index.html"
 PLAN_FILE = ROOT / "data" / "plan.json"
+UPCOMING_FILE = ROOT / "data" / "upcoming_week.json"
 ACTIVITIES_FILE = ROOT / "data" / "activities.json"
 STRATEGY_FILE = ROOT / "data" / "training_strategy.json"
 WEATHER_FILE = ROOT / "data" / "weather.json"
@@ -170,6 +171,8 @@ def apply_ui(page, section):
 
 def main():
     plan = load_json(PLAN_FILE)
+    upcoming = load_json(UPCOMING_FILE) if UPCOMING_FILE.exists() else {}
+    decision_plan = planning_window(plan, upcoming)
     activities = load_json(ACTIVITIES_FILE)
     strategy = load_json(STRATEGY_FILE)
     weather = load_json(WEATHER_FILE) if WEATHER_FILE.exists() else {}
@@ -178,7 +181,7 @@ def main():
     timezone_name = (plan.get("meta") or {}).get("timezone") or "Europe/Stockholm"
     today = datetime.now(ZoneInfo(timezone_name)).date()
     page = INDEX_FILE.read_text(encoding="utf-8")
-    section = render_section(plan, activities, strategy, today, weather=weather, settings=settings)
+    section = render_section(decision_plan, activities, strategy, today, weather=weather, settings=settings)
     mesocycle = resolve_mesocycle(strategy, today)
     rendered = decorate_focus_card(apply_ui(page, section), mesocycle)
     INDEX_FILE.write_text(rendered, encoding="utf-8")

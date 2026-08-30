@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS = ROOT / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
+from coach_rules import planning_window  # noqa: E402
 from finalize_training_brain_ui import SECTION_START, apply_ui, decorate_focus_card, render_section  # noqa: E402
 from strategy_contracts import StrategyContractError, validate_training_strategy  # noqa: E402
 from training_brain import resolve_mesocycle, resolve_next_decision, resolve_today, resolve_weather_advice  # noqa: E402
@@ -59,6 +60,60 @@ class TrainingBrainTests(unittest.TestCase):
         stale_goal["current_mesocycle"]["goal_basis_hash"] = "0" * 64
         with self.assertRaises(StrategyContractError):
             validate_training_strategy(stale_goal)
+
+    def test_next_decision_crosses_calendar_week_boundary(self):
+        active = {
+            "days": [
+                {
+                    "date": "2026-08-30",
+                    "label": "Söndag",
+                    "status": "completed",
+                    "session": "Löpning · lugn distans",
+                    "sport": "run",
+                    "stimuli": ["run_easy_distance"],
+                }
+            ]
+        }
+        upcoming = {
+            "days": [
+                {
+                    "date": "2026-08-31",
+                    "label": "Måndag",
+                    "status": "planned",
+                    "planning_status": "fixed",
+                    "session": "Enduroskola · fast tillfälle",
+                    "sport": "enduro",
+                    "classification": "training",
+                    "dose_open": True,
+                    "manual_lock": True,
+                    "priority_role": "anchor",
+                    "stimuli": ["enduro_technical"],
+                },
+                {
+                    "date": "2026-09-01",
+                    "label": "Tisdag",
+                    "status": "preliminary",
+                    "session": "Löpning · kontrollerad tröskel · dos öppen",
+                    "sport": "run",
+                    "dose_open": True,
+                    "priority_role": "anchor",
+                    "stimuli": ["run_threshold"],
+                },
+            ]
+        }
+
+        window = planning_window(active, upcoming)
+        decision = resolve_next_decision(window, [], self.strategy, date(2026, 8, 30))
+
+        self.assertEqual(decision["date"], "2026-08-31")
+        self.assertEqual(decision["label"], "Måndag")
+        self.assertIn("Enduroskola", decision["headline"])
+
+    def test_week_boundary_window_fails_closed_on_gap(self):
+        active = {"days": [{"date": "2026-08-30"}]}
+        upcoming = {"days": [{"date": "2026-09-01"}]}
+        with self.assertRaises(RuntimeError):
+            planning_window(active, upcoming)
 
     def test_today_uses_matching_actual_activity_as_completed(self):
         plan = {

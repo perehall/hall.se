@@ -18,6 +18,8 @@ from coach_rules import (
     normalize_deferred_future_action,
     normalize_no_remaining_plan,
     plan_for_coach,
+    planning_window,
+    remaining_training_dates,
     validate_plan_action,
 )
 from strategy_contracts import validate_training_strategy
@@ -25,6 +27,7 @@ from wellness_context import signature_payload, validate_context
 
 ROOT = Path(__file__).resolve().parents[1]
 PLAN_FILE = ROOT / "data" / "plan.json"
+UPCOMING_FILE = ROOT / "data" / "upcoming_week.json"
 ACTIVITIES_FILE = ROOT / "data" / "activities.json"
 COACH_FILE = ROOT / "data" / "coach.json"
 STRATEGY_FILE = ROOT / "data" / "training_strategy.json"
@@ -34,7 +37,7 @@ WELLNESS_CONTEXT_FILE = Path(
 )
 
 MODEL = os.environ.get("OPENAI_MODEL", "gpt-5-mini")
-COACH_CONTRACT_VERSION = 9
+COACH_CONTRACT_VERSION = 10
 PRIVATE_WELLNESS_PATTERN = re.compile(
     r"\b(?:hrv|vilopuls|restinghr|sömn(?:poäng|score)?|sleep(?:secs|score|quality)?|wellness|garmin|intervals\.icu)\b"
     r"(?:\s*[:=]?\s*[-+]?\d+(?:[.,]\d+)?)?",
@@ -418,6 +421,8 @@ def apply_conservative_action(plan, action, *, now_utc=None):
 
 def main():
     plan = load_json(PLAN_FILE, {})
+    upcoming = load_json(UPCOMING_FILE, {})
+    decision_plan = planning_window(plan, upcoming)
     activities_state = load_json(ACTIVITIES_FILE, {"activities": []})
     coach = load_json(COACH_FILE, {"analyses": [], "last_trigger_hash": None, "last_run_utc": None})
     strategy = load_json(STRATEGY_FILE, {})
@@ -432,7 +437,7 @@ def main():
     latest = max(activities, key=lambda activity: activity.get("start_date") or "")
     tz = ZoneInfo(plan.get("meta", {}).get("timezone", "Europe/Stockholm"))
     local_date = datetime.now(tz).date().isoformat()
-    trigger_hash = stable_hash(plan, latest, local_date, strategy, wellness_context)
+    trigger_hash = stable_hash(decision_plan, latest, local_date, strategy, wellness_context)
 
     if coach.get("last_trigger_hash") == trigger_hash:
         print("AI coach: inget nytt underlag; hoppar över API-anrop.")
@@ -444,10 +449,11 @@ def main():
 
     latest_date = (latest.get("start_date_local") or latest.get("start_date") or "")[:10]
     recent = sorted(activities, key=lambda activity: activity.get("start_date") or "", reverse=True)[:10]
-    coach_plan, fulfilled_dates = plan_for_coach(plan, activities)
-    candidate_dates = allowed_target_dates(plan, activities, local_date)
-    ready_dates = decision_ready_target_dates(plan, activities, local_date)
+    coach_plan, fulfilled_dates = plan_for_coach(decision_plan, activities)
+    candidate_dates = allowed_target_dates(decision_plan, activities, local_date)
+    ready_dates = decision_ready_target_dates(decision_plan, activities, local_date)
     deferred_dates = [date for date in candidate_dates if date not in ready_dates]
+    remaining_dates = remaining_training_dates(decision_plan, activities, local_date)
 
     input_data = {
         "today_local": local_date,
@@ -494,23 +500,35 @@ def main():
         allowed_dates=ready_dates,
         latest_date=latest_date,
         fulfilled_dates=fulfilled_dates,
+        remaining_dates=remaining_dates,
     )
     result["plan_action"] = normalize_dose_option_field(result["plan_action"])
     result["plan_action"] = normalize_resolved_dose_reselection(
-        plan,
+        decision_plan,
         result["plan_action"],
     )
     result["plan_action"] = normalize_same_day_open_dose_action(
-        plan,
+        decision_plan,
         result["plan_action"],
         local_date,
     )
     validate_plan_action(result["plan_action"], ready_dates)
-    validate_dose_option_action(plan, result["plan_action"], local_date)
+    validate_dose_option_action(decision_plan, result["plan_action"], local_date)
 
-    changed, apply_note = apply_conservative_action(plan, result["plan_action"])
+    target_date = str(result["plan_action"].get("target_date") or "")
+    target_plan = plan
+    target_file = PLAN_FILE
+    if target_date and not any(day.get("date") == target_date for day in plan.get("days", [])):
+        if any(day.get("date") == target_date for day in upcoming.get("days", [])):
+            target_plan = upcoming
+            target_file = UPCOMING_FILE
+
+    changed, apply_note = apply_conservative_action(target_plan, result["plan_action"])
     if changed:
-        PLAN_FILE.write_text(json.dumps(plan, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        target_file.write_text(
+            json.dumps(target_plan, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
 
     now_utc = datetime.now(timezone.utc).isoformat()
     entry = {
@@ -531,7 +549,14 @@ def main():
     analyses.insert(0, entry)
     coach["analyses"] = analyses[:30]
     coach["last_run_utc"] = now_utc
-    coach["last_trigger_hash"] = stable_hash(plan, latest, local_date, strategy, wellness_context)
+    decision_plan = planning_window(plan, upcoming)
+    coach["last_trigger_hash"] = stable_hash(
+        decision_plan,
+        latest,
+        local_date,
+        strategy,
+        wellness_context,
+    )
     coach["contract_version"] = COACH_CONTRACT_VERSION
     COACH_FILE.write_text(json.dumps(coach, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 

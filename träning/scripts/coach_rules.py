@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from copy import deepcopy
-from datetime import date
+from datetime import date, timedelta
 
 from training_contracts import ACTIVITY_FAMILY, PLAN_SPORT_ACTIVITY_FAMILIES
 
@@ -14,6 +14,67 @@ WEEKDAY_ALIASES = {
     5: ("lördag", "saturday"),
     6: ("söndag", "sunday"),
 }
+
+
+def planning_window(plan, upcoming=None):
+    """Combine the active calendar week with the contiguous upcoming week.
+
+    Calendar weeks are storage/presentation boundaries, not decision boundaries.
+    The returned document is a copy used for near-term reasoning only; callers
+    must still persist changes to the source document that owns the target date.
+    """
+    result = deepcopy(plan)
+    upcoming_days = (upcoming or {}).get("days") or []
+    if not upcoming_days:
+        return result
+
+    active_days = result.get("days") or []
+    if not active_days:
+        raise RuntimeError("Närtidsplan: aktiv plan saknar dagar")
+
+    try:
+        active_end = max(date.fromisoformat(day["date"]) for day in active_days)
+        upcoming_start = min(date.fromisoformat(day["date"]) for day in upcoming_days)
+    except (KeyError, TypeError, ValueError) as exc:
+        raise RuntimeError("Närtidsplan: ogiltigt datum i planunderlaget") from exc
+
+    if upcoming_start != active_end + timedelta(days=1):
+        raise RuntimeError(
+            "Närtidsplan: upcoming_week är inte sammanhängande med aktiv plan"
+        )
+
+    result["days"] = deepcopy(active_days) + [
+        deepcopy(day)
+        for day in upcoming_days
+        if date.fromisoformat(day["date"]) > active_end
+    ]
+    result["near_term_window"] = {
+        "active_week_end": active_end.isoformat(),
+        "upcoming_week_start": upcoming_start.isoformat(),
+        "window_end": max(
+            date.fromisoformat(day["date"]) for day in result["days"]
+        ).isoformat(),
+        "calendar_week_is_presentation": True,
+    }
+    return result
+
+
+def remaining_training_dates(plan, activities, today_local):
+    """Return known future training dates, including fixed/manual-lock sessions."""
+    fulfilled = fulfilled_plan_dates(plan, activities)
+    dates = []
+    for day in plan.get("days") or []:
+        date_value = str(day.get("date") or "")
+        if not date_value or date_value <= today_local:
+            continue
+        if day.get("status") == "completed" or date_value in fulfilled:
+            continue
+        if day.get("sport") in {"open", "rest"}:
+            continue
+        if day.get("classification") == "recreation":
+            continue
+        dates.append(date_value)
+    return dates
 
 
 def activity_local_date(activity):
@@ -255,8 +316,14 @@ def validate_plan_action(action, allowed_dates):
     return action
 
 
-def normalize_no_remaining_plan(action, allowed_dates, latest_date, fulfilled_dates):
-    if allowed_dates or latest_date not in fulfilled_dates:
+def normalize_no_remaining_plan(
+    action,
+    allowed_dates,
+    latest_date,
+    fulfilled_dates,
+    remaining_dates=None,
+):
+    if allowed_dates or remaining_dates or latest_date not in fulfilled_dates:
         return action
 
     normalized = dict(action)
