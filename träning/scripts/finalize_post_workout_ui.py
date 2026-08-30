@@ -6,10 +6,11 @@ from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-from coach_rules import matching_activity
+from coach_rules import matching_activity, planning_window
 
 ROOT = Path(__file__).resolve().parents[1]
 PLAN_FILE = ROOT / "data" / "plan.json"
+UPCOMING_FILE = ROOT / "data" / "upcoming_week.json"
 ACTIVITIES_FILE = ROOT / "data" / "activities.json"
 COACH_FILE = ROOT / "data" / "coach.json"
 INDEX_FILE = ROOT / "index.html"
@@ -297,16 +298,18 @@ def apply_post_workout_ui(page, plan, activities_state, coach_state, today):
 
 def main():
     plan = load_json(PLAN_FILE, {})
+    upcoming = load_json(UPCOMING_FILE, {})
+    decision_plan = planning_window(plan, upcoming)
     activities = load_json(ACTIVITIES_FILE, {"activities": []})
     coach = load_json(COACH_FILE, {"analyses": []})
     page = INDEX_FILE.read_text(encoding="utf-8")
     tz = ZoneInfo(plan.get("meta", {}).get("timezone", "Europe/Stockholm"))
     today = datetime.now(tz).date().isoformat()
 
-    rendered = apply_post_workout_ui(page, plan, activities, coach, today)
+    rendered = apply_post_workout_ui(page, decision_plan, activities, coach, today)
     INDEX_FILE.write_text(rendered, encoding="utf-8")
 
-    today_day = next((d for d in plan.get("days", []) if d.get("date") == today), None)
+    today_day = next((d for d in decision_plan.get("days", []) if d.get("date") == today), None)
     today_has_fulfilled_activity = bool(
         today_day and matching_activity(today_day, activities.get("activities", []))
     )
