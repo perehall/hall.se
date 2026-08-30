@@ -1,6 +1,43 @@
 {
   "analyses": [
     {
+      "activity_id": 19960743008,
+      "activity_date": "2026-08-30",
+      "activity_name": "Löpning på morgonen",
+      "generated_at_utc": "2026-08-30T10:29:45.875106+00:00",
+      "model": "gpt-5-mini",
+      "assessment": {
+        "summary": "Behåll mesocykelns riktning; dagens lugna distans kan stå kvar som fullföljd och inga framtida pass ändras automatiskt.",
+        "load_interpretation": "Veckans närbelastning är hög med flera löp- och simpass de senaste dagarna, vilket minskar marginalen för att öka doser.",
+        "confidence": "medium",
+        "facts": [
+          "Run: 18,88 km · 1:43:14 · 184 m+ · snittpuls 139,3 · maxpuls 153.",
+          "Planstatus 2026-08-30: dagens planerade pass är genomfört i coachens beslutsunderlag."
+        ],
+        "interpretations": [
+          "Veckan absorberas bäst genom att inte lägga till eller öka doser; behålla planerad lugn distans är konservativt rätt.",
+          "Höjd backvolym och simpass talar för att tidigare auto-reduktioner var lämpliga och att inga återställningar till högre doser behövs nu."
+        ],
+        "unknowns": [
+          "Subjektiv dagskänsla efter dagens långpass (lokal muskeltrötthet).",
+          "Eventuella planerade åtaganden kommande 48 timmar som påverkar absorption.",
+          "Detaljer om inre muskulär trötthet eller skadekänningar efter back- eller swimrun-pass."
+        ]
+      },
+      "plan_action": {
+        "action": "keep",
+        "target_date": "",
+        "reason": "Veckans belastning absorberas bäst utan att ändra kommande pass och mesocykelns stimuli skyddas.",
+        "recommendation": "Ingen ytterligare träning ordineras idag; dagens planerade pass är redan genomfört. Nästa planerade pass saknas i aktuellt underlag.",
+        "dose_option_id": "",
+        "requires_approval": false
+      },
+      "auto_apply": {
+        "applied": false,
+        "note": "Ingen automatisk planändring."
+      }
+    },
+    {
       "activity_id": 19946705399,
       "activity_date": "2026-08-29",
       "activity_name": "Simning vid lunch",
@@ -484,7 +521,7 @@
       }
     }
   ],
-  "last_trigger_hash": "1c78ade90dd026cdb6588a96f5597ad41d90d0df1ada8e752bd19f88119bbb3e",
-  "last_run_utc": "2026-08-30T09:19:51.776072+00:00",
+  "last_trigger_hash": "e8a779a53df09cd4ad04ab1a45e0afd9568f0e6110932ce778399d58152098cd",
+  "last_run_utc": "2026-08-30T10:29:45.875106+00:00",
   "contract_version": 9
 }
