@@ -48,6 +48,14 @@ def planning_window(plan, upcoming=None):
         for day in upcoming_days
         if date.fromisoformat(day["date"]) > active_end
     ]
+    result["near_term_window"] = {
+        "active_week_end": active_end.isoformat(),
+        "upcoming_week_start": upcoming_start.isoformat(),
+        "window_end": max(
+            date.fromisoformat(day["date"]) for day in result["days"]
+        ).isoformat(),
+        "calendar_week_is_presentation": True,
+    }
     return result
 
 
