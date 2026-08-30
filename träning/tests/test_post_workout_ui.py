@@ -6,6 +6,7 @@ from pathlib import Path
 SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
+from coach_rules import planning_window  # noqa: E402
 from finalize_post_workout_ui import apply_post_workout_ui  # noqa: E402
 
 
@@ -106,6 +107,55 @@ class PostWorkoutUiTests(unittest.TestCase):
         self.assertIn("MTB/XC · teknik + aerob stig · 75 min lugnt", rendered)
         self.assertIn("Justerat efter dagens faktiska utfall.", rendered)
         self.assertIn('id="aktuell-vecka"', rendered)
+
+    def test_completed_sunday_shows_monday_session_from_upcoming_week(self):
+        active = {
+            "days": [
+                {
+                    "date": "2026-08-30",
+                    "label": "Söndag",
+                    "status": "completed",
+                    "sport": "run",
+                    "session": "Löpning · lugn distans",
+                    "activity_id": 88,
+                }
+            ]
+        }
+        upcoming = {
+            "days": [
+                {
+                    "date": "2026-08-31",
+                    "label": "Måndag",
+                    "status": "planned",
+                    "sport": "enduro",
+                    "session": "Enduroskola · fast tillfälle",
+                    "dose_open": True,
+                    "manual_lock": True,
+                }
+            ]
+        }
+        activities = {
+            "activities": [
+                {
+                    "id": 88,
+                    "name": "Löpning på morgonen",
+                    "sport_type": "Run",
+                    "start_date_local": "2026-08-30T08:00:00",
+                    "distance_m": 10000,
+                    "elapsed_time_s": 3600,
+                }
+            ]
+        }
+        window = planning_window(active, upcoming)
+        rendered = apply_post_workout_ui(
+            BASE_PAGE,
+            window,
+            activities,
+            {"analyses": []},
+            "2026-08-30",
+        )
+        self.assertIn("Nästa pass · Måndag 31 aug", rendered)
+        self.assertIn("Enduroskola · fast tillfälle", rendered)
 
     def test_before_workout_state_is_untouched(self):
         rendered = apply_post_workout_ui(
