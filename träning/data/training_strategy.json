@@ -1,5 +1,5 @@
 {
-  "schema_version": 4,
+  "schema_version": 5,
   "north_star": "Bygga en bred, hållbar allroundatlet med stark löpning, teknisk MTB/XC och bibehållen eller förbättrad simning. Relevant styrka, core, löpstyrka och plyometri. Flexibilitet att senare vässa mot trail/ultra, triathlon, swimrun eller cykling.",
   "goal_contract": {
     "source_file": "data/goal.json",
@@ -139,7 +139,9 @@
     "protect_mesocycle_stimuli_before_optional_training": true,
     "same_day_open_dose_must_resolve_or_review": true,
     "concrete_near_term_plan_by_default": true,
-    "adjust_planned_session_only_when_new_evidence_justifies": true
+    "adjust_planned_session_only_when_new_evidence_justifies": true,
+    "normal_variation_is_absorbed_by_plan": true,
+    "multi_day_context_required": true
   },
   "planning_hierarchy": {
     "order": [
@@ -188,7 +190,11 @@
       "preserve_stimulus_before_preserving_exact_session": true,
       "missed_protected_stimulus_requires_review": true,
       "microcycle_may_reorganize_sessions": true,
-      "baseline_session_planned_in_microcycle": true
+      "baseline_session_planned_in_microcycle": true,
+      "progression_requires_explicit_criteria": true,
+      "change_one_load_variable_at_a_time": true,
+      "wellness_cannot_trigger_progression": true,
+      "normal_variation_does_not_trigger_change": true
     },
     "success_signals": [
       "Kontrollerad kvalitet kan genomföras med stabil känsla och teknik över blocket.",
@@ -202,13 +208,15 @@
       "Backpassets konkreta grundplan får ändras först när faktisk belastning eller återhämtning ger skäl; ingen automatisk progression.",
       "Enduro räknas som faktisk belastning men får ingen schablonmässig belastningsnivå.",
       "En ledig dag är inte i sig skäl att lägga till träning.",
-      "Privat återhämtningsdata används endast som konservativ beslutskontext och får aldrig ensam motivera ökad träningsbelastning."
+      "Privat återhämtningsdata används endast som konservativ beslutskontext och får aldrig ensam motivera ökad träningsbelastning.",
+      "Styrka/core får inte falla ur mikrocykeln som restpost; borttag kräver sakligt skäl och aktiv återplanering."
     ],
     "review_questions": [
       "Har de skyddade löpstimulansen kunnat genomföras med tillräcklig kontinuitet och bibehållen kvalitet?",
       "Talar jämförbara pass för förbättrad kontroll, fart eller löpekonomi utan att kostnaden i återhämtning ökat oproportionerligt?",
       "Har MTB/XC, simning och relevant styrka kunnat stödja målbilden utan att återkommande tränga undan mesocykelns prioriterade stimuli?",
-      "Ska nästa mesocykel fortsätta samma riktning, modifiera fokus eller byta utvecklingsområde utifrån faktisk respons?"
+      "Ska nästa mesocykel fortsätta samma riktning, modifiera fokus eller byta utvecklingsområde utifrån faktisk respons?",
+      "Har styrka/core fått en verklig, absorberbar exponering i varje mikrocykel och har plyometri skyddats över blocket utan att konkurrera med löpkvaliteten?"
     ],
     "microcycle_structure": {
       "length_days": 7,
@@ -243,7 +251,20 @@
             "intent": "Planerad progression genom längre arbetstid utan avsikt att höja intensiteten."
           }
         ],
-        "baseline_option_id": "run-threshold-3x8"
+        "baseline_option_id": "run-threshold-3x8",
+        "load_dimensions": [
+          "cardiovascular",
+          "mechanical"
+        ],
+        "performance_marker_id": "run-threshold-control",
+        "progression_target_option_id": "run-threshold-3x10",
+        "progression_criteria": [
+          "Mer än en jämförbar 3 × 8-exponering ska tala för stabil kontroll; ett enskilt bra pass räcker inte.",
+          "Intensiteten ska förbli kontrollerad och tekniken får inte försämras tydligt genom passet.",
+          "Återhämtningskostnaden får inte återkommande tränga undan nästa prioriterade stimulus.",
+          "Omgivande mikrocykel ska vara absorberad utan tydlig ackumulerad belastningssignal.",
+          "Progressionen ska öka arbetstid, inte samtidigt höja avsedd intensitet."
+        ]
       },
       {
         "slot": "swim_support",
@@ -266,7 +287,15 @@
             "intent": "Etablerad simdistans från nyligen genomförda pass; exakt serie kan återanvändas när strukturen finns i underlaget."
           }
         ],
-        "baseline_option_id": "swim-support-3200"
+        "baseline_option_id": "swim-support-3200",
+        "load_dimensions": [
+          "cardiovascular",
+          "technical"
+        ],
+        "progression_criteria": [
+          "Simningen är underhåll/långsam utveckling i denna mesocykel; ingen automatisk volymprogression krävs.",
+          "Teknisk kvalitet och låg konkurrens med prioriterad löpning väger tyngre än större mängd."
+        ]
       },
       {
         "slot": "mtb_support",
@@ -296,7 +325,18 @@
             "intent": "Normal konservativ stöddos när teknisk MTB/XC ska bibehållas utan att konkurrera med nästa prioriterade löpstimulus."
           }
         ],
-        "baseline_option_id": "mtb-support-60"
+        "baseline_option_id": "mtb-support-60",
+        "load_dimensions": [
+          "cardiovascular",
+          "neuromuscular",
+          "technical"
+        ],
+        "performance_marker_id": "mtb-technical-repeat",
+        "progression_criteria": [
+          "Teknisk kvalitet/flyt ska bibehållas eller förbättras i jämförbar terräng.",
+          "Passet får inte återkommande försämra fredagens prioriterade löpkvalitet.",
+          "Ökad fart eller tid på cykeln kräver faktisk marginal i mikrocykeln; wellness ensam får inte motivera ökning."
+        ]
       },
       {
         "slot": "run_hill_quality",
@@ -325,7 +365,63 @@
             "intent": "Nästa högre startalternativ när faktisk närbelastning och subjektiv känsla ger stöd för mer volym med bibehållen mekanik."
           }
         ],
-        "baseline_option_id": "run-hill-6x150"
+        "baseline_option_id": "run-hill-6x150",
+        "load_dimensions": [
+          "mechanical",
+          "neuromuscular",
+          "cardiovascular"
+        ],
+        "performance_marker_id": "run-hill-mechanics",
+        "progression_target_option_id": "run-hill-8x150",
+        "progression_criteria": [
+          "Flera jämförbara repetitioner ska kunna genomföras med bibehållen kraft och mekanik.",
+          "Sista repetitionerna ska inte kräva tydlig syrajakt eller teknikförlust för att matcha de första.",
+          "Fredagens mekaniska belastning ska kunna absorberas utan att söndagens lugna distans återkommande måste offras.",
+          "Progression från 6 till 8 repetitioner får endast ändra volymen; avsedd intensitet ska inte samtidigt höjas."
+        ]
+      },
+      {
+        "slot": "strength_support",
+        "sport": "strength",
+        "priority_role": "protected_support",
+        "stimuli": [
+          "strength_unilateral",
+          "strength_core"
+        ],
+        "optional_stimuli": [
+          "plyometric"
+        ],
+        "session": "Styrka/core · ca 35 min · styrkemall",
+        "reason": "Skyddar allroundatletens styrka och bål som en egen kapacitet i stället för att lämna den som restpost. Grundplanen motsvarar nyligen genomförd kort styrketräning; passet reduceras eller flyttas om fredagens faktiska mekaniska belastning motiverar det.",
+        "development_focus": "Kontrollerad unilateral styrka, höftdominant arbete, drag/press och bål. Ingen konditionsjakt; plyometri endast som liten kvalitetsdos när benen är mekaniskt fräscha.",
+        "day_index": 6,
+        "load_dimensions": [
+          "mechanical",
+          "neuromuscular"
+        ],
+        "performance_marker_id": "strength-repeatability",
+        "dose_options": [
+          {
+            "id": "strength-support-25",
+            "kind": "duration_minutes",
+            "value": 25,
+            "session": "Styrka/core · 25 min · styrkemall",
+            "intent": "Reducerad skyddsdos när närbelastningen kräver extra marginal."
+          },
+          {
+            "id": "strength-support-35",
+            "kind": "duration_minutes",
+            "value": 35,
+            "session": "Styrka/core · ca 35 min · styrkemall",
+            "intent": "Normal kort styrka/core-exponering, förankrad i nyligen genomförd cirka 36-minutersstyrka."
+          }
+        ],
+        "baseline_option_id": "strength-support-35",
+        "progression_criteria": [
+          "Styrkepasset ska kunna genomföras med god teknisk kvalitet utan att bli konditionspass.",
+          "Belastning eller repetitionsmängd höjs endast när samma huvudövningar är jämförbart loggade och omgivande löpkvalitet inte påverkas negativt.",
+          "Plyometri läggs inte till enbart för att sessionen finns; mekanisk fräschhet och närliggande back-/endurobelastning måste ge stöd."
+        ]
       },
       {
         "slot": "run_easy_distance",
@@ -354,7 +450,147 @@
             "intent": "Etablerad längre lugn löpduration från nyligen genomförd träning när mikrocykeln är absorberad."
           }
         ],
-        "baseline_option_id": "run-easy-75"
+        "baseline_option_id": "run-easy-75",
+        "load_dimensions": [
+          "cardiovascular",
+          "mechanical"
+        ],
+        "progression_target_option_id": "run-easy-90",
+        "progression_criteria": [
+          "75 minuter ska vara återkommande lugnt och absorberbart i den aktuella mikrocykeln.",
+          "Distansen får inte kompromettera tröskel- eller backkvaliteten i nästa cykel.",
+          "Progression till längre duration kräver faktisk marginal över flera dagar, inte en enskild pigg dag."
+        ]
+      }
+    ],
+    "contract": {
+      "primary": [
+        "run_threshold",
+        "run_hill_quality",
+        "run_easy_distance"
+      ],
+      "secondary": [
+        "mtb_technical",
+        "mtb_aerobic"
+      ],
+      "maintenance": [
+        "swim_aerobic",
+        "swim_technique"
+      ],
+      "protected_capacity": [
+        "strength_unilateral",
+        "strength_core",
+        "plyometric"
+      ],
+      "external_load": [
+        "enduro_technical"
+      ],
+      "principle": "Primära stimuli driver mesocykeln. Sekundära stimuli utvecklas när de inte tränger undan primärt arbete. Underhåll ska bevara kapacitet med låg konkurrens. Skyddad styrka/core/plyo får inte försvinna som restpost. Extern belastning räknas in men ges ingen schablondos."
+    },
+    "capacity_protection": {
+      "required_each_microcycle": [
+        "strength_unilateral",
+        "strength_core"
+      ],
+      "protected_across_mesocycle": [
+        "plyometric"
+      ],
+      "missing_required_action": "review_and_restore_in_next_absorbable_window",
+      "rules": [
+        "Minst en konkret styrka/core-exponering ska finnas i varje mikrocykel om inte faktisk belastning eller återhämtning ger dokumenterat skäl att ta bort den.",
+        "Plyometri skyddas över mesocykeln men tvingas inte in när benen inte är mekaniskt fräscha eller när den konkurrerar med backkvalitet/enduro.",
+        "Om en skyddad kapacitet tas bort ska orsaken lagras och nästa absorberbara möjlighet aktivt sökas; den får inte bara falla ur planen."
+      ]
+    }
+  },
+  "load_model": {
+    "lookback_days": 3,
+    "lookahead_days": 3,
+    "dimensions": [
+      {
+        "key": "cardiovascular",
+        "label": "Kardiovaskulär",
+        "principle": "Bedöm från faktisk varaktighet/intensitetsdata och relevant subjektiv rapport; hitta inte på en nivå."
+      },
+      {
+        "key": "mechanical",
+        "label": "Mekanisk/muskulär",
+        "principle": "Bedöm främst från gren, struktur, terräng/styrkeinnehåll och lokal trötthet när den finns; puls ensam räcker inte."
+      },
+      {
+        "key": "neuromuscular",
+        "label": "Neuromuskulär",
+        "principle": "Beakta sprint, backkraft, teknisk fart, styrka och plyometri utan att översätta dem till ett ogrundat totalscore."
+      },
+      {
+        "key": "technical",
+        "label": "Teknisk",
+        "principle": "Beakta färdighetskrav i MTB, enduro och simning separat från metabol belastning."
+      }
+    ],
+    "rules": [
+      "Beslut ska väga samman föregående tre och kommande tre kalenderdagar när data finns, inte bara senaste passet.",
+      "Ingen syntetisk totalsiffra för belastning används utan validerad individuell modell.",
+      "Normal variation i ett enskilt pass ska normalt absorberas av grundplanen.",
+      "Planen ändras först när flera relevanta observationer eller en tydlig avvikelse ger sakliga skäl.",
+      "Enduro får inte ges en schablonmässig belastningsnivå; faktisk varaktighet, relevant intensitetsdata och användarrapport styr."
+    ]
+  },
+  "performance_marker_policy": {
+    "prefer_embedded_markers": true,
+    "standalone_max_tests_required": false,
+    "evaluate_at_mesocycle_review": true,
+    "comparison_requires_comparable_context": true,
+    "principle": "Prestationsutveckling följs främst genom återkommande jämförbara pass som redan hör hemma i träningen. Testpass läggs inte till enbart för mätning om samma information kan fås med lägre kostnad.",
+    "markers": [
+      {
+        "id": "run-threshold-control",
+        "capability": "run_threshold",
+        "source": "embedded_session",
+        "compare_when": "Samma eller tydligt jämförbar tröskelstruktur genomförs under kontrollerade förhållanden.",
+        "metrics": [
+          "fart/tempo när jämförbart",
+          "puls när tillförlitlig",
+          "subjektiv kontroll när rapporterad",
+          "genomförd arbetstid"
+        ],
+        "interpretation": "Förbättring kräver samstämmig eller åtminstone icke-konflikterande utveckling; en enskild snabbare dag räcker inte."
+      },
+      {
+        "id": "run-hill-mechanics",
+        "capability": "run_hill_quality",
+        "source": "embedded_session",
+        "compare_when": "Samma backe eller tydligt jämförbara repetitioner finns.",
+        "metrics": [
+          "repetitionstid när jämförbar",
+          "bibehållen mekanik enligt rapport",
+          "antal kvalitativa repetitioner"
+        ],
+        "interpretation": "Mer volym eller fart är inte framsteg om mekaniken försämras eller återhämtningskostnaden blir oproportionerlig."
+      },
+      {
+        "id": "mtb-technical-repeat",
+        "capability": "mtb_technical",
+        "source": "embedded_session",
+        "compare_when": "Samma tekniska slinga eller segment uttryckligen finns i data och förhållandena är rimligt jämförbara.",
+        "metrics": [
+          "segment-/slingtid",
+          "flyt/teknisk kontroll när rapporterad",
+          "antal tydliga misstag när rapporterat"
+        ],
+        "interpretation": "Teknisk utveckling ska inte reduceras till puls eller totaldistans."
+      },
+      {
+        "id": "strength-repeatability",
+        "capability": "strength_unilateral",
+        "source": "embedded_session",
+        "compare_when": "Samma huvudövning återkommer och belastning/repetitioner faktiskt är loggade.",
+        "metrics": [
+          "belastning",
+          "repetitioner",
+          "teknisk kvalitet när rapporterad"
+        ],
+        "interpretation": "Styrkeutveckling bedöms från jämförbara lyft, inte från puls eller kalorier."
       }
     ]
   }

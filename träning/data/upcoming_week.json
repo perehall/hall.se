@@ -9,7 +9,7 @@
     "week_end": "2026-09-13",
     "title": "Mesocykel · löptröskel + backkvalitet · mikrocykel 3 av 4",
     "principle": "Flytta den prioriterade löpförmågan framåt genom kontrollerad tröskel, löpekonomi/backstyrka och lugn tålighet, samtidigt som MTB/XC och simning hålls aktiva utan att tränga undan löputvecklingen. Mikrocykeln är preliminär men konkret: planerade pass har en användbar grundplan som justeras först när faktisk information motiverar det. Kalenderveckan är bara visningen.",
-    "preview_summary": "Mikrocykel 3 av 4 i aktuell mesocykel. Skyddade stimuli: run_threshold, run_hill_quality, run_easy_distance. Grundpassen är konkreta och får inte ökas automatiskt; justering kräver stöd i faktisk information.",
+    "preview_summary": "Mikrocykel 3 av 4. Primärt: kontrollerad löptröskel, backkvalitet och lugn löpdistans. MTB är sekundär utveckling, simning underhåll/långsam utveckling och styrka/core skyddad kapacitet. Grundpassen är konkreta; progression kräver explicita kriterier och fler-dagars faktisk information.",
     "mesocycle_id": "run-threshold-hill-4w",
     "microcycle_id": "run-threshold-hill-4w:mc3",
     "microcycle_index": 3,
@@ -17,7 +17,47 @@
     "microcycle_length_days": 7,
     "calendar_week_is_presentation": true,
     "requires_mesocycle_review": false,
-    "missing_protected_stimuli": []
+    "missing_protected_stimuli": [],
+    "mesocycle_contract": {
+      "primary": [
+        "run_threshold",
+        "run_hill_quality",
+        "run_easy_distance"
+      ],
+      "secondary": [
+        "mtb_technical",
+        "mtb_aerobic"
+      ],
+      "maintenance": [
+        "swim_aerobic",
+        "swim_technique"
+      ],
+      "protected_capacity": [
+        "strength_unilateral",
+        "strength_core",
+        "plyometric"
+      ],
+      "external_load": [
+        "enduro_technical"
+      ],
+      "principle": "Primära stimuli driver mesocykeln. Sekundära stimuli utvecklas när de inte tränger undan primärt arbete. Underhåll ska bevara kapacitet med låg konkurrens. Skyddad styrka/core/plyo får inte försvinna som restpost. Extern belastning räknas in men ges ingen schablondos."
+    },
+    "capacity_protection": {
+      "required_each_microcycle": [
+        "strength_unilateral",
+        "strength_core"
+      ],
+      "protected_across_mesocycle": [
+        "plyometric"
+      ],
+      "missing_required_action": "review_and_restore_in_next_absorbable_window",
+      "rules": [
+        "Minst en konkret styrka/core-exponering ska finnas i varje mikrocykel om inte faktisk belastning eller återhämtning ger dokumenterat skäl att ta bort den.",
+        "Plyometri skyddas över mesocykeln men tvingas inte in när benen inte är mekaniskt fräscha eller när den konkurrerar med backkvalitet/enduro.",
+        "Om en skyddad kapacitet tas bort ska orsaken lagras och nästa absorberbara möjlighet aktivt sökas; den får inte bara falla ur planen."
+      ]
+    },
+    "missing_protected_capabilities": []
   },
   "days": [
     {
@@ -38,7 +78,11 @@
       "mesocycle_id": "run-threshold-hill-4w",
       "microcycle_id": "run-threshold-hill-4w:mc3",
       "microcycle_index": 3,
-      "microcycle_day": 1
+      "microcycle_day": 1,
+      "load_dimensions": [
+        "technical",
+        "neuromuscular"
+      ]
     },
     {
       "date": "2026-09-08",
@@ -80,7 +124,12 @@
         "kind": "structured",
         "value": 24,
         "option_id": "run-threshold-3x8"
-      }
+      },
+      "load_dimensions": [
+        "cardiovascular",
+        "mechanical"
+      ],
+      "performance_marker_id": "run-threshold-control"
     },
     {
       "date": "2026-09-09",
@@ -190,7 +239,11 @@
         "kind": "structured",
         "value": 3200,
         "option_id": "swim-support-3200"
-      }
+      },
+      "load_dimensions": [
+        "cardiovascular",
+        "technical"
+      ]
     },
     {
       "date": "2026-09-10",
@@ -233,7 +286,13 @@
         "kind": "duration_minutes",
         "value": 60,
         "option_id": "mtb-support-60"
-      }
+      },
+      "load_dimensions": [
+        "cardiovascular",
+        "neuromuscular",
+        "technical"
+      ],
+      "performance_marker_id": "mtb-technical-repeat"
     },
     {
       "date": "2026-09-11",
@@ -276,16 +335,64 @@
         "value": 6,
         "option_id": "run-hill-6x150"
       },
-      "decision_note": "Grundplan: 6 × 150 m med full lugn nedjogg. Ändra endast om närbelastning eller återhämtning ger sakliga skäl."
+      "decision_note": "Grundplan: 6 × 150 m med full lugn nedjogg. Ändra endast om närbelastning eller återhämtning ger sakliga skäl.",
+      "load_dimensions": [
+        "mechanical",
+        "neuromuscular",
+        "cardiovascular"
+      ],
+      "performance_marker_id": "run-hill-mechanics"
     },
     {
       "date": "2026-09-12",
       "label": "Lördag",
-      "status": "open",
-      "planning_status": "open",
-      "session": "Ingen planerad träning",
-      "reason": "Ingen träning är planerad som standard. En ledig dag är inte i sig skäl att lägga till ett pass; eventuell ändring ska tjäna mikrocykeln och bygga på faktisk information.",
-      "sport": "open"
+      "status": "preliminary",
+      "planning_status": "preliminary",
+      "session": "Styrka/core · ca 35 min · styrkemall",
+      "reason": "Skyddar allroundatletens styrka och bål som en egen kapacitet i stället för att lämna den som restpost. Grundplanen motsvarar nyligen genomförd kort styrketräning; passet reduceras eller flyttas om fredagens faktiska mekaniska belastning motiverar det.",
+      "sport": "strength",
+      "development_focus": "Kontrollerad unilateral styrka, höftdominant arbete, drag/press och bål. Ingen konditionsjakt; plyometri endast som liten kvalitetsdos när benen är mekaniskt fräscha.",
+      "priority_role": "protected_support",
+      "stimuli": [
+        "strength_unilateral",
+        "strength_core"
+      ],
+      "optional_stimuli": [
+        "plyometric"
+      ],
+      "load_dimensions": [
+        "mechanical",
+        "neuromuscular"
+      ],
+      "mesocycle_id": "run-threshold-hill-4w",
+      "microcycle_id": "run-threshold-hill-4w:mc3",
+      "microcycle_index": 3,
+      "microcycle_day": 6,
+      "microcycle_slot": "strength_support",
+      "dose_options": [
+        {
+          "id": "strength-support-25",
+          "kind": "duration_minutes",
+          "value": 25,
+          "session": "Styrka/core · 25 min · styrkemall",
+          "intent": "Reducerad skyddsdos när närbelastningen kräver extra marginal."
+        },
+        {
+          "id": "strength-support-35",
+          "kind": "duration_minutes",
+          "value": 35,
+          "session": "Styrka/core · ca 35 min · styrkemall",
+          "intent": "Normal kort styrka/core-exponering, förankrad i nyligen genomförd cirka 36-minutersstyrka."
+        }
+      ],
+      "baseline_option_id": "strength-support-35",
+      "dose_resolution": {
+        "state": "baseline",
+        "kind": "duration_minutes",
+        "value": 35,
+        "option_id": "strength-support-35"
+      },
+      "performance_marker_id": "strength-repeatability"
     },
     {
       "date": "2026-09-13",
@@ -327,7 +434,11 @@
         "kind": "duration_minutes",
         "value": 75,
         "option_id": "run-easy-75"
-      }
+      },
+      "load_dimensions": [
+        "cardiovascular",
+        "mechanical"
+      ]
     }
   ],
   "strength_template": [

@@ -369,12 +369,17 @@ def build_mesocycle_next_week(promoted, strategy):
                 "sport": slot["sport"],
                 "priority_role": slot["priority_role"],
                 "stimuli": deepcopy(slot["stimuli"]),
+                "load_dimensions": deepcopy(slot.get("load_dimensions") or []),
                 "mesocycle_id": mesocycle["id"],
                 "microcycle_id": f'{mesocycle["id"]}:mc{microcycle_index}',
                 "microcycle_index": microcycle_index,
                 "microcycle_day": int(slot["day_index"]),
                 "microcycle_slot": slot["slot"],
             }
+            if slot.get("optional_stimuli"):
+                planned_day["optional_stimuli"] = deepcopy(slot["optional_stimuli"])
+            if slot.get("performance_marker_id"):
+                planned_day["performance_marker_id"] = slot["performance_marker_id"]
             if slot.get("dose_options"):
                 planned_day["dose_options"] = deepcopy(slot["dose_options"])
                 planned_day["baseline_option_id"] = slot["baseline_option_id"]
@@ -397,7 +402,8 @@ def build_mesocycle_next_week(promoted, strategy):
             f'Mikrocykel {microcycle_index} av {total_microcycles} i aktuell mesocykel. '
             "Skyddade stimuli: "
             + ", ".join(mesocycle["protected_stimuli"])
-            + ". Grundpassen är konkreta och får inte ökas automatiskt; justering kräver stöd i faktisk information."
+            + ". Grundpassen är konkreta och får inte ökas automatiskt; progression kräver explicita kriterier och justering kräver stöd i fler-dagars faktisk information. "
+              "Styrka/core är skyddad kapacitet och får inte falla ur som restpost."
         )
     else:
         title = "Mesocykel avslutad · utvärdering krävs"
@@ -428,6 +434,8 @@ def build_mesocycle_next_week(promoted, strategy):
             "microcycle_length_days": microcycle_length,
             "calendar_week_is_presentation": True,
             "requires_mesocycle_review": not inside_mesocycle,
+            "mesocycle_contract": deepcopy(mesocycle.get("contract") or {}) if inside_mesocycle else {},
+            "capacity_protection": deepcopy(mesocycle.get("capacity_protection") or {}) if inside_mesocycle else {},
         },
         "days": days,
         "strength_template": deepcopy(promoted.get("strength_template") or []),
@@ -456,12 +464,25 @@ def build_mesocycle_next_week(promoted, strategy):
             for stimulus in mesocycle["protected_stimuli"]
             if stimulus not in actual_stimuli
         ]
+        required_capacity = (mesocycle.get("capacity_protection") or {}).get("required_each_microcycle") or []
+        missing_capacity = [
+            stimulus
+            for stimulus in required_capacity
+            if stimulus not in actual_stimuli
+        ]
         future["meta"]["missing_protected_stimuli"] = missing
-        future["meta"]["requires_mesocycle_review"] = bool(missing)
+        future["meta"]["missing_protected_capabilities"] = missing_capacity
+        future["meta"]["requires_mesocycle_review"] = bool(missing or missing_capacity)
         if missing:
             future["meta"]["preview_summary"] += (
                 " Skyddat stimulus saknar plats efter fasta åtaganden och måste lösas i närtidsplaneringen: "
                 + ", ".join(missing)
+                + "."
+            )
+        if missing_capacity:
+            future["meta"]["preview_summary"] += (
+                " Skyddad kapacitet saknar konkret exponering och måste aktivt återplaneras: "
+                + ", ".join(missing_capacity)
                 + "."
             )
     return future

@@ -147,6 +147,19 @@ def decorate_focus_card(page, mesocycle):
             f'<p class="week-focus-mesocycle-idea"><strong>Mesocykelhypotes:</strong> '
             f'{html.escape(hypothesis)}</p>'
         )
+        contract = mesocycle.get("contract") or {}
+        role_parts = []
+        for label, key in (
+            ("Primärt", "primary"),
+            ("Sekundärt", "secondary"),
+            ("Underhåll", "maintenance"),
+            ("Skyddad kapacitet", "protected_capacity"),
+        ):
+            values = contract.get(key) or []
+            if values:
+                role_parts.append(f"<strong>{label}:</strong> {html.escape(', '.join(values))}")
+        if role_parts:
+            extra += '<p class="week-focus-mesocycle-idea">' + " · ".join(role_parts) + "</p>"
         page = page.replace(close_marker, extra + close_marker, 1)
     return page
 

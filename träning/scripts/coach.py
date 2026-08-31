@@ -6,7 +6,7 @@ import re
 import time
 import urllib.error
 import urllib.request
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -37,7 +37,7 @@ WELLNESS_CONTEXT_FILE = Path(
 )
 
 MODEL = os.environ.get("OPENAI_MODEL", "gpt-5-mini")
-COACH_CONTRACT_VERSION = 10
+COACH_CONTRACT_VERSION = 11
 PRIVATE_WELLNESS_PATTERN = re.compile(
     r"\b(?:hrv|vilopuls|restinghr|sömn(?:poäng|score)?|sleep(?:secs|score|quality)?|wellness|garmin|intervals\.icu)\b"
     r"(?:\s*[:=]?\s*[-+]?\d+(?:[.,]\d+)?)?",
@@ -101,17 +101,63 @@ def load_private_wellness_context(path=None):
     return context
 
 
-def stable_hash(plan, latest_activity, local_date, strategy=None, wellness_context=None):
+def stable_hash(plan, latest_activity, local_date, strategy=None, wellness_context=None, rolling_context=None):
     payload = {
         "coach_contract_version": COACH_CONTRACT_VERSION,
         "plan": plan,
         "latest_activity": latest_activity,
         "local_date": local_date,
         "strategy": strategy or {},
+        "rolling_context": rolling_context or {},
         "private_wellness": signature_payload(wellness_context or {}),
     }
     raw = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()
+
+
+def rolling_load_context(activities, plan, local_date, strategy):
+    """Build the factual multi-day window used for plan-change decisions."""
+    today = datetime.fromisoformat(local_date).date()
+    load_model = strategy.get("load_model") or {}
+    lookback_days = int(load_model.get("lookback_days") or 3)
+    lookahead_days = int(load_model.get("lookahead_days") or 3)
+    actual_start = today - timedelta(days=lookback_days)
+    planned_end = today + timedelta(days=lookahead_days)
+
+    actuals = []
+    for activity in activities:
+        value = activity.get("start_date_local") or activity.get("start_date") or ""
+        day_text = value[:10] if isinstance(value, str) and len(value) >= 10 else ""
+        if not day_text:
+            continue
+        try:
+            activity_day = datetime.fromisoformat(day_text).date()
+        except ValueError:
+            continue
+        if actual_start <= activity_day <= today:
+            actuals.append(activity)
+
+    planned = []
+    for day in plan.get("days", []):
+        day_text = day.get("date") or ""
+        try:
+            planned_day = datetime.fromisoformat(day_text).date()
+        except (TypeError, ValueError):
+            continue
+        if today <= planned_day <= planned_end:
+            planned.append(day)
+
+    return {
+        "lookback_days": lookback_days,
+        "lookahead_days": lookahead_days,
+        "actual_activities": sorted(
+            actuals,
+            key=lambda item: item.get("start_date_local") or item.get("start_date") or "",
+        ),
+        "planned_days": sorted(planned, key=lambda item: item.get("date") or ""),
+        "load_dimensions": load_model.get("dimensions") or [],
+        "rules": load_model.get("rules") or [],
+    }
 
 
 def scrub_private_wellness_output(value):
@@ -437,7 +483,15 @@ def main():
     latest = max(activities, key=lambda activity: activity.get("start_date") or "")
     tz = ZoneInfo(plan.get("meta", {}).get("timezone", "Europe/Stockholm"))
     local_date = datetime.now(tz).date().isoformat()
-    trigger_hash = stable_hash(decision_plan, latest, local_date, strategy, wellness_context)
+    rolling_context = rolling_load_context(activities, decision_plan, local_date, strategy)
+    trigger_hash = stable_hash(
+        decision_plan,
+        latest,
+        local_date,
+        strategy,
+        wellness_context,
+        rolling_context,
+    )
 
     if coach.get("last_trigger_hash") == trigger_hash:
         print("AI coach: inget nytt underlag; hoppar över API-anrop.")
@@ -460,6 +514,7 @@ def main():
         "latest_activity": latest,
         "latest_activity_date": latest_date,
         "recent_activities": recent,
+        "rolling_load_context": rolling_context,
         "current_plan": coach_plan,
         "current_strategy": strategy,
         "private_wellness_context": wellness_context,
@@ -467,7 +522,9 @@ def main():
         "allowed_target_dates": ready_dates,
         "deferred_target_dates": deferred_dates,
         "instruction": (
-            "Analysera senaste passet mot faktisk närbelastning, aktuell plan och current_strategy. "
+            "Analysera senaste passet mot rolling_load_context, aktuell plan och current_strategy. "
+            "Beslut ska utgå från fler-dagarsmönstret; normal variation i ett enskilt pass ska normalt absorberas av grundplanen. "
+            "Skilj kardiovaskulär, mekanisk/muskulär, neuromuskulär och teknisk belastning när underlaget stödjer det och skapa aldrig ett ogrundat totalscore. "
             "private_wellness_context är ett privat, tillfälligt faktalager från Garmin via Intervals.icu. "
             "Använd det endast för att kalibrera återhämtningsbedömning mot individens egen trend; det får aldrig "
             "motivera ökad belastning och dess råvärden eller käll-/fältnamn får inte återges i synlig output. "
@@ -556,6 +613,7 @@ def main():
         local_date,
         strategy,
         wellness_context,
+        rolling_context,
     )
     coach["contract_version"] = COACH_CONTRACT_VERSION
     COACH_FILE.write_text(json.dumps(coach, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

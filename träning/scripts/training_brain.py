@@ -332,6 +332,15 @@ def resolve_mesocycle(strategy, today):
         "hypothesis": mesocycle.get("hypothesis") or "",
         "evaluation_date": mesocycle.get("evaluation_date") or "",
         "protected_stimuli": [capability_labels(strategy).get(key, key) for key in mesocycle.get("protected_stimuli") or []],
+        "contract": {
+            role: [capability_labels(strategy).get(key, key) for key in (mesocycle.get("contract") or {}).get(role) or []]
+            for role in ("primary", "secondary", "maintenance", "protected_capacity", "external_load")
+        },
+        "performance_markers": [
+            item.get("id")
+            for item in (strategy.get("performance_marker_policy") or {}).get("markers") or []
+            if item.get("id")
+        ],
     }
 
 

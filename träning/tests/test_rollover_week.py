@@ -151,7 +151,12 @@ class WeeklyRolloverTests(unittest.TestCase):
         self.assertEqual(future["days"][3]["sport"], "bike")
         self.assertEqual([item["value"] for item in future["days"][3]["dose_options"]], [45, 60])
         self.assertEqual(future["days"][4]["stimuli"], ["run_hill_quality"])
-        self.assertEqual(future["days"][5]["sport"], "open")
+        self.assertEqual(future["days"][1]["performance_marker_id"], "run-threshold-control")
+        self.assertIn("mechanical", future["days"][4]["load_dimensions"])
+        self.assertEqual(future["meta"]["mesocycle_contract"]["primary"], ["run_threshold", "run_hill_quality", "run_easy_distance"])
+        self.assertEqual(future["days"][5]["sport"], "strength")
+        self.assertEqual(future["days"][5]["priority_role"], "protected_support")
+        self.assertEqual(future["days"][5]["stimuli"], ["strength_unilateral", "strength_core"])
         self.assertEqual(future["days"][6]["stimuli"], ["run_easy_distance"])
 
     def test_enduro_school_has_exactly_eight_mondays(self):
@@ -183,6 +188,7 @@ class WeeklyRolloverTests(unittest.TestCase):
             2: ("swim-support-3200", "3 200 m"),
             3: ("mtb-support-60", "60 min"),
             4: ("run-hill-6x150", "6 × 150 m"),
+            5: ("strength-support-35", "35 min"),
             6: ("run-easy-75", "75 min"),
         }
         for index, (option_id, marker) in expected.items():
@@ -193,10 +199,14 @@ class WeeklyRolloverTests(unittest.TestCase):
             self.assertIn(marker, day["session"])
             self.assertNotIn("dos öppen", day["session"].lower())
 
-        free_day = future["days"][5]
-        self.assertEqual(free_day["planning_status"], "open")
-        self.assertEqual(free_day["session"], "Ingen planerad träning")
-        self.assertIn("Ingen träning är planerad som standard", free_day["reason"])
+        strength_day = future["days"][5]
+        self.assertEqual(strength_day["planning_status"], "preliminary")
+        self.assertEqual(strength_day["priority_role"], "protected_support")
+        self.assertIn("strength_unilateral", strength_day["stimuli"])
+        self.assertIn("strength_core", strength_day["stimuli"])
+        self.assertEqual(strength_day["performance_marker_id"], "strength-repeatability")
+        self.assertEqual(future["meta"]["missing_protected_capabilities"], [])
+        self.assertFalse(future["meta"]["requires_mesocycle_review"])
 
     def test_structured_swim_is_carried_forward_without_volume_increase(self):
         upcoming = add_structured_swim(upcoming_w35())
