@@ -11,7 +11,7 @@ from rollover_week import promote_upcoming  # noqa: E402
 
 
 class WeekTransitionSemanticsTests(unittest.TestCase):
-    def test_undosed_training_becomes_open_but_fixed_enduro_school_stays_planned(self):
+    def test_vague_training_fails_closed_but_fixed_enduro_school_stays_concrete(self):
         upcoming = {
             "state": "preliminary",
             "week_key": "2026-W35",
@@ -32,7 +32,6 @@ class WeekTransitionSemanticsTests(unittest.TestCase):
                     "planning_status": "fixed",
                     "sport": "enduro",
                     "classification": "training",
-                    "dose_open": True,
                     "session": "Enduroskola",
                     "reason": "Fast kalenderaktivitet och faktisk träningsbelastning.",
                 },
@@ -47,12 +46,15 @@ class WeekTransitionSemanticsTests(unittest.TestCase):
                 },
             ],
         }
-        promoted = promote_upcoming(upcoming)
+        with self.assertRaisesRegex(RuntimeError, "saknar konkret grundplan"):
+            promote_upcoming(upcoming)
+
+        fixed_only = {**upcoming, "days": [upcoming["days"][0]]}
+        promoted = promote_upcoming(fixed_only)
         self.assertEqual(promoted["days"][0]["status"], "planned")
         self.assertEqual(promoted["days"][0]["classification"], "training")
-        self.assertTrue(promoted["days"][0]["dose_open"])
-        self.assertEqual(promoted["days"][1]["status"], "open")
-        self.assertEqual(promoted["days"][1]["rollover_status_from"], "preliminary")
+        self.assertNotIn("dose_open", promoted["days"][0])
+        self.assertIn("Enduroskola", promoted["days"][0]["session"])
 
     def test_coach_cannot_target_open_or_recreation_days(self):
         plan = {
