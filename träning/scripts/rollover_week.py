@@ -211,6 +211,26 @@ def promote_upcoming(upcoming):
             # artificial uncertainty.
             day.pop("dose_open", None)
 
+        status = day.get("status")
+        sport = day.get("sport")
+        classification = day.get("classification")
+        session = day.get("session") or ""
+        externally_structured = (
+            day.get("manual_lock") is True
+            or is_enduro_school_date(day.get("date"))
+            or classification == "recreation"
+        )
+        if (
+            status in {"planned", "preliminary", "conditional"}
+            and sport not in {"rest", "open"}
+            and not externally_structured
+            and not has_explicit_dose(session)
+        ):
+            raise RuntimeError(
+                f"Veckoskifte: {day.get('date')} {session!r} saknar konkret grundplan. "
+                "Planen måste specificeras före aktivering; passet får inte döljas som öppet."
+            )
+
     return seed_fixed_commitments(promoted)
 
 
