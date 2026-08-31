@@ -35,6 +35,20 @@ class StravaSyncTests(unittest.TestCase):
             "device_name": "Garmin Forerunner 970",
             "gear_id": "b12345",
             "gear": {"id": "b12345", "name": "Merida One-Twenty"},
+            "laps": [
+                {
+                    "lap_index": 1,
+                    "name": "Lap 1",
+                    "elapsed_time": 480,
+                    "moving_time": 480,
+                    "distance": 2000.0,
+                    "average_speed": 4.1667,
+                    "average_heartrate": 150.0,
+                    "max_heartrate": 155.0,
+                    "average_watts": 300.0,
+                    "average_cadence": 88.0,
+                }
+            ],
         }
 
     def test_detail_mapping_is_exact_and_source_is_explicit(self):
@@ -47,6 +61,9 @@ class StravaSyncTests(unittest.TestCase):
         self.assertEqual(mapped["gear_id"], "b12345")
         self.assertEqual(mapped["gear_name"], "Merida One-Twenty")
         self.assertEqual(mapped["source"], "Strava API")
+        self.assertEqual(len(mapped["laps"]), 1)
+        self.assertEqual(mapped["laps"][0]["moving_time_s"], 480)
+        self.assertEqual(mapped["laps"][0]["average_heartrate"], 150.0)
 
     def test_mismatched_detail_id_fails_closed(self):
         detail = self.detail(activity_id=999)
