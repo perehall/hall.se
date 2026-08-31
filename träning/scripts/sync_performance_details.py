@@ -186,6 +186,59 @@ def infer_threshold_protocol(activity, detail):
     return None
 
 
+def infer_threshold_from_laps(activity):
+    laps = activity.get("laps") or []
+    if not isinstance(laps, list):
+        return None
+    report = str(activity.get("user_report") or "")
+    protocols = []
+    if EXPLICIT_3X8.search(report):
+        protocols.append(("run_threshold:3x8:90s", 480.0, 100.0))
+    if EXPLICIT_3X10.search(report):
+        protocols.append(("run_threshold:3x10:90s", 600.0, 110.0))
+    protocols.extend([
+        ("run_threshold:3x8:90s", 480.0, 75.0),
+        ("run_threshold:3x10:90s", 600.0, 90.0),
+    ])
+
+    rows = []
+    for lap in laps:
+        if not isinstance(lap, dict):
+            continue
+        mapped = {
+            "moving_time": lap.get("moving_time_s"),
+            "elapsed_time": lap.get("elapsed_time_s"),
+            "distance": lap.get("distance_m"),
+            "average_speed": lap.get("average_speed"),
+            "average_heartrate": lap.get("average_heartrate"),
+            "max_heartrate": lap.get("max_heartrate"),
+            "average_watts": lap.get("average_watts"),
+            "average_cadence": lap.get("average_cadence"),
+        }
+        seconds = interval_duration(mapped)
+        if seconds is not None:
+            rows.append((seconds, mapped))
+
+    seen = set()
+    for key, target, tolerance in protocols:
+        if key in seen:
+            continue
+        seen.add(key)
+        matching = [
+            (seconds, row)
+            for seconds, row in rows
+            if abs(seconds - target) <= tolerance
+        ]
+        if len(matching) == 3:
+            matching.sort(key=lambda item: rows.index(item))
+            return {
+                "marker_id": "run-threshold-control",
+                "protocol_key": key,
+                "work_rows": [row for _, row in matching],
+            }
+    return None
+
+
 def pace_s_per_km(row):
     duration, distance = interval_duration(row), num(row.get("distance"))
     if duration is not None and distance is not None and distance > 0:
@@ -217,7 +270,7 @@ def avg(rows, field):
     return rnd(mean(values)) if values else None
 
 
-def fingerprint(activity, intervals_row, detected):
+def fingerprint(activity, source_name, source_activity_id, detected):
     work = [interval_fact(row, i) for i, row in enumerate(detected["work_rows"], 1)]
     first, last = work[0], work[-1]
     summary = {
@@ -245,8 +298,8 @@ def fingerprint(activity, intervals_row, detected):
         "sport_type": activity.get("sport_type"),
         "marker_id": detected["marker_id"],
         "protocol_key": detected["protocol_key"],
-        "source": "Intervals.icu",
-        "source_activity_id": intervals_row.get("id"),
+        "source": source_name,
+        "source_activity_id": source_activity_id,
         "work_intervals": work,
         "summary": summary,
         "comparison": None,
@@ -307,16 +360,34 @@ def sync(state, history, intervals_rows, fetch_detail, oldest):
     updated = 0
     skipped = 0
     for activity in candidates(state, oldest):
+        detected = None
+        source_name = None
+        source_activity_id = None
+
         matched = match_activity(activity, intervals_rows)
-        if not matched or matched.get("id") in (None, ""):
-            skipped += 1
-            continue
-        detail = fetch_detail(matched["id"])
-        detected = infer_threshold_protocol(activity, detail)
+        if matched and matched.get("id") not in (None, ""):
+            detail = fetch_detail(matched["id"])
+            detected = infer_threshold_protocol(activity, detail)
+            if detected:
+                source_name = "Intervals.icu"
+                source_activity_id = matched.get("id")
+
+        if not detected:
+            detected = infer_threshold_from_laps(activity)
+            if detected:
+                source_name = "Strava laps"
+                source_activity_id = activity.get("id")
+
         if not detected:
             skipped += 1
             continue
-        entries[str(activity["id"])] = fingerprint(activity, matched, detected)
+
+        entries[str(activity["id"])] = fingerprint(
+            activity,
+            source_name,
+            source_activity_id,
+            detected,
+        )
         updated += 1
 
     ordered = sorted(entries.values(), key=lambda x: (x.get("activity_date") or "", str(x.get("activity_id"))))
