@@ -38,7 +38,11 @@ class TrainingBrainTests(unittest.TestCase):
             ["north_star", "mesocycle", "microcycle", "near_term", "session"],
         )
         self.assertTrue(self.strategy["decision_policy"]["long_term_goal_is_primary"])
-        self.assertTrue(self.strategy["decision_policy"]["same_day_open_dose_must_resolve_or_review"])
+        self.assertTrue(self.strategy["decision_policy"]["concrete_near_term_plan_by_default"])
+        self.assertFalse(self.strategy["decision_policy"]["defer_open_dose_until_near_load_known"])
+        self.assertTrue(
+            self.strategy["decision_policy"]["adjust_planned_session_only_when_new_evidence_justifies"]
+        )
         self.assertTrue(
             self.strategy["decision_policy"]["near_term_changes_must_serve_long_term_direction"]
         )
@@ -47,8 +51,14 @@ class TrainingBrainTests(unittest.TestCase):
         self.assertIn("microcycle_template", self.strategy["current_mesocycle"])
         self.assertNotIn("weekly_template", self.strategy["current_mesocycle"])
         for slot in self.strategy["current_mesocycle"]["microcycle_template"]:
-            if "dos öppen" in slot["session"].lower():
-                self.assertTrue(slot.get("dose_options"), slot["slot"])
+            self.assertNotIn("dos öppen", slot["session"].lower())
+            self.assertTrue(slot.get("dose_options"), slot["slot"])
+            self.assertTrue(slot.get("baseline_option_id"), slot["slot"])
+            baseline = next(
+                option for option in slot["dose_options"]
+                if option["id"] == slot["baseline_option_id"]
+            )
+            self.assertEqual(slot["session"], baseline["session"])
 
         broken = deepcopy(self.strategy)
         broken["decision_policy"]["long_term_goal_is_primary"] = False
@@ -84,7 +94,6 @@ class TrainingBrainTests(unittest.TestCase):
                     "session": "Enduroskola · fast tillfälle",
                     "sport": "enduro",
                     "classification": "training",
-                    "dose_open": True,
                     "manual_lock": True,
                     "priority_role": "anchor",
                     "stimuli": ["enduro_technical"],
@@ -93,9 +102,8 @@ class TrainingBrainTests(unittest.TestCase):
                     "date": "2026-09-01",
                     "label": "Tisdag",
                     "status": "preliminary",
-                    "session": "Löpning · kontrollerad tröskel · dos öppen",
+                    "session": "Löpning · kontrollerad tröskel · 3 × 8 min / 90 s jogg",
                     "sport": "run",
-                    "dose_open": True,
                     "priority_role": "anchor",
                     "stimuli": ["run_threshold"],
                 },
@@ -184,13 +192,13 @@ class TrainingBrainTests(unittest.TestCase):
         self.assertIn("markerar inte dagens planerade pass som genomfört", section)
 
 
-    def test_same_day_open_dose_is_explicitly_flagged(self):
+    def test_legacy_open_flag_does_not_create_user_facing_dose_warning(self):
         plan = {
             "days": [
                 {
                     "date": "2026-08-27",
                     "status": "planned",
-                    "session": "MTB/XC · teknik + aerob stig · dos öppen",
+                    "session": "MTB/XC · 60 min · teknik + lugn aerob stig",
                     "sport": "bike",
                     "dose_open": True,
                     "priority_role": "flex",
@@ -199,8 +207,9 @@ class TrainingBrainTests(unittest.TestCase):
             ]
         }
         brief = resolve_today(plan, [], self.strategy, date(2026, 8, 27))
-        self.assertEqual(brief["status"], "DOSBESLUT KRÄVS")
-        self.assertIn("dosen är fortfarande öppen", brief["why"])
+        self.assertEqual(brief["status"], "PLANERAT")
+        self.assertNotIn("DOSBESLUT", brief["status"])
+        self.assertNotIn("dosen är fortfarande öppen", brief["why"])
 
     def test_resolved_same_day_dose_is_shown_as_normal_plan(self):
         plan = {
@@ -220,12 +229,11 @@ class TrainingBrainTests(unittest.TestCase):
         self.assertEqual(brief["status"], "PLANERAT")
         self.assertIn("60 min", brief["headline"])
 
-    def test_next_decision_moves_forward_after_friday_dose_is_resolved(self):
-        decision = resolve_next_decision(self.plan, [], self.strategy, date(2026, 8, 26))
-        self.assertEqual(decision["date"], "2026-08-29")
-        self.assertIn("MTB/XC", decision["headline"])
-        self.assertIn("75 min", decision["headline"])
-        self.assertIn("Skala ned passet", decision["note"])
+    def test_next_session_is_concrete_before_previous_session_is_completed(self):
+        decision = resolve_next_decision(self.plan, [], self.strategy, date(2026, 8, 31))
+        self.assertEqual(decision["date"], "2026-09-01")
+        self.assertIn("3 × 8 min", decision["headline"])
+        self.assertIn("Grundplan", decision["note"])
 
     def test_weather_advice_prefers_trainer_for_wet_mtb_after_run_quality(self):
         plan = {
@@ -427,10 +435,10 @@ class TrainingBrainTests(unittest.TestCase):
         self.assertEqual(mesocycle["evaluation_date"], "2026-09-21")
         self.assertIn("Kontrollerad löptröskel", mesocycle["protected_stimuli"])
 
-    def test_primary_ui_contains_only_today_and_next_decision(self):
+    def test_primary_ui_contains_only_today_and_next_session(self):
         section = render_section(self.plan, {"activities": []}, self.strategy, date(2026, 8, 26))
         self.assertIn("Idag ·", section)
-        self.assertIn("Nästa beslut", section)
+        self.assertIn("Nästa pass", section)
         self.assertNotIn("Aktuell mesocykel", section)
         self.assertNotIn("Prioritering just nu", section)
         self.assertNotIn("brain-tags", section)
