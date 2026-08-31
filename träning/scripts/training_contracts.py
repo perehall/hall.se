@@ -190,6 +190,77 @@ def validate_activities_document(document):
     return True
 
 
+
+def validate_performance_history_document(document, activity_ids=None):
+    require(isinstance(document, dict), "performance_history: rot måste vara objekt")
+    require(document.get("schema_version") == 1, "performance_history: schema_version måste vara 1")
+    entries = document.get("entries")
+    require(isinstance(entries, list), "performance_history.entries måste vara lista")
+    seen = set()
+    for index, entry in enumerate(entries):
+        context = f"performance_history.entries[{index}]"
+        require(isinstance(entry, dict), f"{context}: måste vara objekt")
+        activity_id = entry.get("activity_id")
+        require(activity_id is not None, f"{context}.activity_id saknas")
+        key = str(activity_id)
+        require(key not in seen, f"performance_history: dubbelt activity_id {key}")
+        seen.add(key)
+        if activity_ids is not None:
+            require(key in activity_ids, f"{context}: activity_id {key} saknas i activities.json")
+        _iso_date(entry.get("activity_date"), f"{context}.activity_date")
+        _nonempty_string(entry.get("marker_id"), f"{context}.marker_id")
+        _nonempty_string(entry.get("protocol_key"), f"{context}.protocol_key")
+        require(entry.get("marker_id") == "run-threshold-control", f"{context}: endast run-threshold-control stöds i v1")
+        intervals = entry.get("work_intervals")
+        require(isinstance(intervals, list) and intervals, f"{context}.work_intervals saknas")
+        for interval_index, interval in enumerate(intervals):
+            interval_context = f"{context}.work_intervals[{interval_index}]"
+            require(isinstance(interval, dict), f"{interval_context}: måste vara objekt")
+            _positive_int(interval.get("index"), f"{interval_context}.index")
+            for field in (
+                "duration_s",
+                "distance_m",
+                "pace_s_per_km",
+                "average_heartrate",
+                "max_heartrate",
+                "average_watts",
+                "average_cadence",
+            ):
+                _nonnegative_number(interval.get(field), f"{interval_context}.{field}")
+        summary = entry.get("summary")
+        require(isinstance(summary, dict), f"{context}.summary saknas")
+        _positive_int(summary.get("work_interval_count"), f"{context}.summary.work_interval_count")
+        for field in (
+            "total_work_s",
+            "mean_pace_s_per_km",
+            "mean_heartrate",
+            "mean_watts",
+        ):
+            _nonnegative_number(summary.get(field), f"{context}.summary.{field}")
+        for field in (
+            "first_to_last_pace_delta_s_per_km",
+            "first_to_last_hr_delta",
+            "first_to_last_watts_delta",
+        ):
+            value = summary.get(field)
+            if value is not None:
+                require(isinstance(value, (int, float)) and not isinstance(value, bool), f"{context}.summary.{field} måste vara numeriskt")
+        comparison = entry.get("comparison")
+        if comparison is not None:
+            require(isinstance(comparison, dict), f"{context}.comparison måste vara objekt/null")
+            require(comparison.get("same_protocol") is True, f"{context}.comparison.same_protocol måste vara true")
+            require(comparison.get("previous_activity_id") is not None, f"{context}.comparison.previous_activity_id saknas")
+            for field in (
+                "mean_pace_delta_s_per_km",
+                "mean_hr_delta",
+                "mean_watts_delta",
+                "total_work_delta_s",
+            ):
+                value = comparison.get(field)
+                if value is not None:
+                    require(isinstance(value, (int, float)) and not isinstance(value, bool), f"{context}.comparison.{field} måste vara numeriskt")
+    return True
+
 def validate_coach_document(document, activity_ids=None):
     require(isinstance(document, dict), "coach: rot måste vara objekt")
     analyses = document.get("analyses") or []
