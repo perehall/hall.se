@@ -132,12 +132,14 @@
     "horizon_days": 3,
     "default_action": "keep",
     "free_day_is_not_training_reason": true,
-    "defer_open_dose_until_near_load_known": true,
+    "defer_open_dose_until_near_load_known": false,
     "prioritize_continuity_over_max_content": true,
     "long_term_goal_is_primary": true,
     "near_term_changes_must_serve_long_term_direction": true,
     "protect_mesocycle_stimuli_before_optional_training": true,
-    "same_day_open_dose_must_resolve_or_review": true
+    "same_day_open_dose_must_resolve_or_review": true,
+    "concrete_near_term_plan_by_default": true,
+    "adjust_planned_session_only_when_new_evidence_justifies": true
   },
   "planning_hierarchy": {
     "order": [
@@ -149,11 +151,11 @@
     ],
     "north_star_role": "Den långsiktiga målbilden är överordnad och anger vilken atlet och vilka förmågor träningen ska utveckla över tid.",
     "mesocycle_role": "Mesocykeln väljer ett avgränsat flerveckors utvecklingsfokus som för målbilden framåt och anger vilka stimuli som ska skyddas, stödjas och utvärderas.",
-    "microcycle_role": "Mikrocykeln är den korta operativa träningscykeln. Den organiserar mesocykelns stimuli till en absorberbar följd av pass och öppna beslut utifrån den aktuella situationen.",
-    "near_term_role": "Beslut de närmaste 2–3 dagarna justerar mikrocykeln efter faktisk belastning, återhämtning, fasta åtaganden och andra rådande omständigheter.",
+    "microcycle_role": "Mikrocykeln är den korta operativa träningscykeln. Den organiserar mesocykelns stimuli till en absorberbar följd av konkreta grundpass som kan justeras när faktisk belastning, återhämtning eller fasta åtaganden ger sakliga skäl.",
+    "near_term_role": "De närmaste 2–3 dagarna ska normalt vara konkreta. Faktisk belastning, återhämtning, fasta åtaganden och andra rådande omständigheter används som kontrollpunkter för att behålla, minska, flytta eller ta bort ett redan planerat pass.",
     "session_role": "Det enskilda passet verkställer ett definierat stimulus eller en uttryckligen stödjande/rekreativ roll inom mikrocykeln.",
     "calendar_role": "Kalenderveckan är ett presentations- och navigeringslager. I nuvarande implementation är mikrocykeln sju dagar och visas måndag–söndag, men veckan är inte en egen planeringsnivå.",
-    "adaptation_rule": "När målbilden ändras ska mesocykeln omprövas. När närtidens omständigheter ändras ska mikrocykeln och enskilda pass justeras, medan relevanta utvecklingsstimuli bevaras, flyttas eller återtas när det är absorberbart och fortfarande tjänar målbilden."
+    "adaptation_rule": "När målbilden ändras ska mesocykeln omprövas. När närtidens omständigheter ändras ska mikrocykeln och enskilda pass justeras från en konkret grundplan, medan relevanta utvecklingsstimuli bevaras, flyttas eller återtas när det är absorberbart och fortfarande tjänar målbilden."
   },
   "current_mesocycle": {
     "id": "run-threshold-hill-4w",
@@ -182,10 +184,11 @@
     "progression_policy": {
       "automatic_load_increase": false,
       "keep_intensity_controlled": true,
-      "dose_decided_near_term": true,
+      "dose_decided_near_term": false,
       "preserve_stimulus_before_preserving_exact_session": true,
       "missed_protected_stimulus_requires_review": true,
-      "microcycle_may_reorganize_sessions": true
+      "microcycle_may_reorganize_sessions": true,
+      "baseline_session_planned_in_microcycle": true
     },
     "success_signals": [
       "Kontrollerad kvalitet kan genomföras med stabil känsla och teknik över blocket.",
@@ -196,7 +199,7 @@
     ],
     "guardrails": [
       "Ingen extra kvalitet läggs till ovanpå tröskel + backkvalitet.",
-      "Exakt dos för backpass bestäms först när de föregående 2–3 dagarnas faktiska belastning är känd.",
+      "Backpassets konkreta grundplan får ändras först när faktisk belastning eller återhämtning ger skäl; ingen automatisk progression.",
       "Enduro räknas som faktisk belastning men får ingen schablonmässig belastningsnivå.",
       "En ledig dag är inte i sig skäl att lägga till träning.",
       "Privat återhämtningsdata används endast som konservativ beslutskontext och får aldrig ensam motivera ökad träningsbelastning."
@@ -220,8 +223,8 @@
         "stimuli": [
           "run_threshold"
         ],
-        "session": "Löpning · kontrollerad tröskel · dos öppen",
-        "reason": "Mesocykelns första prioriterade löpstimulus. Exakt dos bestäms först när de närmast föregående dagarnas faktiska belastning och återhämtning är kända.",
+        "session": "Löpning · kontrollerad tröskel · 3 × 8 min / 90 s jogg",
+        "reason": "Mesocykelns första prioriterade löpstimulus. Grundplanen är den etablerade kontrollerade tröskeldosen; den ändras bara om faktisk närbelastning eller återhämtning ger sakliga skäl.",
         "development_focus": "Jämn, kontrollerad kvalitet utan fartjakt; progression ska komma genom absorberbar träning.",
         "day_index": 2,
         "dose_options": [
@@ -239,7 +242,8 @@
             "session": "Löpning · kontrollerad tröskel · 3 × 10 min / 90 s jogg",
             "intent": "Planerad progression genom längre arbetstid utan avsikt att höja intensiteten."
           }
-        ]
+        ],
+        "baseline_option_id": "run-threshold-3x8"
       },
       {
         "slot": "swim_support",
@@ -249,8 +253,8 @@
           "swim_aerobic",
           "swim_technique"
         ],
-        "session": "Simning · aerob/teknik · dos öppen",
-        "reason": "Stödjer målbildens simkapacitet med liten mekanisk kostnad för benen och ska inte tränga undan mesocykelns prioriterade löpstimuli.",
+        "session": "Simning · 3 200 m · aerob/teknik",
+        "reason": "Stödjer målbildens simkapacitet med liten mekanisk kostnad för benen. En etablerad 3 200 m-struktur är grundplan; omfattning eller struktur justeras endast om närbelastningen motiverar det.",
         "development_focus": "Teknisk kvalitet och stabil aerob simning.",
         "day_index": 3,
         "dose_options": [
@@ -261,7 +265,8 @@
             "session": "Simning · 3 200 m · aerob/teknik",
             "intent": "Etablerad simdistans från nyligen genomförda pass; exakt serie kan återanvändas när strukturen finns i underlaget."
           }
-        ]
+        ],
+        "baseline_option_id": "swim-support-3200"
       },
       {
         "slot": "mtb_support",
@@ -271,8 +276,8 @@
           "mtb_technical",
           "mtb_aerobic"
         ],
-        "session": "MTB/XC · teknik + aerob stig · dos öppen",
-        "reason": "Utvecklar teknisk MTB/XC och aerob cykelkapacitet som stöd för målbilden, men omfattningen styrs så att mesocykelns nästa löpstimulus kan absorberas.",
+        "session": "MTB/XC · 60 min · teknik + lugn aerob stig",
+        "reason": "Utvecklar teknisk MTB/XC och aerob cykelkapacitet som stöd för målbilden. 60 minuter lugn teknisk stig är grundplan och kortas vid behov för att skydda nästa prioriterade löpstimulus.",
         "development_focus": "Blick, linjeval, bromspunkter och flyt före segmentjakt.",
         "day_index": 4,
         "dose_options": [
@@ -290,7 +295,8 @@
             "session": "MTB/XC · 60 min · teknik + lugn aerob stig",
             "intent": "Normal konservativ stöddos när teknisk MTB/XC ska bibehållas utan att konkurrera med nästa prioriterade löpstimulus."
           }
-        ]
+        ],
+        "baseline_option_id": "mtb-support-60"
       },
       {
         "slot": "run_hill_quality",
@@ -299,8 +305,8 @@
         "stimuli": [
           "run_hill_quality"
         ],
-        "session": "Löpning · backkvalitet · dos öppen",
-        "reason": "Mesocykelns andra prioriterade löpkvalitet: kraft, löpekonomi och mekanisk kvalitet. Dosen låses först när närbelastningen är känd.",
+        "session": "Löpning · backkvalitet · 15 min lugnt + 6 × 150 m / full lugn nedjogg + 10 min lugnt",
+        "reason": "Mesocykelns andra prioriterade löpkvalitet: kraft, löpekonomi och mekanisk kvalitet. Den konservativa grundplanen är 6 × 150 m; progression eller reduktion kräver stöd i faktisk belastning och kvalitet.",
         "development_focus": "Kraftfull men kontrollerad löpning med bibehållen mekanik; ingen maximal sprint eller syrajakt.",
         "day_index": 5,
         "dose_options": [
@@ -318,7 +324,8 @@
             "session": "Löpning · backkvalitet · 15 min lugnt + 8 × 150 m / full lugn nedjogg + 10 min lugnt",
             "intent": "Nästa högre startalternativ när faktisk närbelastning och subjektiv känsla ger stöd för mer volym med bibehållen mekanik."
           }
-        ]
+        ],
+        "baseline_option_id": "run-hill-6x150"
       },
       {
         "slot": "run_easy_distance",
@@ -327,8 +334,8 @@
         "stimuli": [
           "run_easy_distance"
         ],
-        "session": "Löpning · lugn distans · dos öppen",
-        "reason": "Mesocykelns tredje löpstimulus bygger tålighet och kontinuitet utan att bli ytterligare kvalitet.",
+        "session": "Löpning · lugn distans · 75 min",
+        "reason": "Mesocykelns tredje löpstimulus bygger tålighet och kontinuitet utan att bli ytterligare kvalitet. 75 minuter lugnt är grundplan; passet kortas, flyttas eller tas bort om föregående belastning motiverar det.",
         "development_focus": "Avslappnad rytm och jämn ansträngning.",
         "day_index": 7,
         "dose_options": [
@@ -346,7 +353,8 @@
             "session": "Löpning · lugn distans · 90 min",
             "intent": "Etablerad längre lugn löpduration från nyligen genomförd träning när mikrocykeln är absorberad."
           }
-        ]
+        ],
+        "baseline_option_id": "run-easy-75"
       }
     ]
   }
