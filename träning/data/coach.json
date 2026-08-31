@@ -4,30 +4,30 @@
       "activity_id": 19960743008,
       "activity_date": "2026-08-30",
       "activity_name": "Löpning på morgonen",
-      "generated_at_utc": "2026-08-31T06:57:31.432266+00:00",
+      "generated_at_utc": "2026-08-31T07:08:46.447562+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Stort löppass (≈18.9 km, 1h43) ökar närbelastningen inför tisdagens kontrollerade tröskel; behåll mesocykelns prioriteringar men var konservativ i närtid.",
-        "load_interpretation": "Dagens långa, relativt högintensiva löpning ökar löpbelastningen för de närmaste 48–72 timmarna.",
+        "summary": "Stort löppass (≈18.9 km, 1:43) nästa dag i mikrocykeln innebär hög närbelastning inför måndagens enduroskola och tisdagens prioriterade tröskel.",
+        "load_interpretation": "Ny närbelastning: två längre löppass (28–19 km) + sim 4 000 m inom 48 h som tillsammans ökar absorberad löp-/aerobbelastning.",
         "confidence": "medium",
         "facts": [
           "Run: 18,88 km · 1:43:14 · 184 m+ · snittpuls 139,3 · maxpuls 153."
         ],
         "interpretations": [
-          "Sammantaget hög ackumulerad löp- och simbelastning gör att tisdagens tröskel kan behöva konservativt reduceras eller flyttas.",
-          "Privat återhämtningsunderlag visar inga tydliga varningssignaler som ensam motiverar vila; belastningsmönstret talar för försiktighet inför prioritets-tröskeln."
+          "Detta block visar hög träningsvolym och flera längre löp- och simpass tätt; återhämtningsunderlaget visar inga tydliga avvikelser som skulle tala för vila.",
+          "Tisdagens tröskel är prioriterad men bör konservativt skyddas mot att placeras för nära en stor löpbelastning om måndagens enduro blir tung."
         ],
         "unknowns": [
-          "Måndagens faktiska enduroskola (2026-08-31) ännu okänt och påverkar tisdagens beslut.",
-          "Subjektiv dagskänsla/bentrötthet efter dagens långa pass saknas.",
-          "Detaljerad intensitetsfördelning för dagens löpning (t.ex. om stora delar var tröskel) saknas."
+          "Måndagens faktiska endurobelastning (avgör påverkan på tisdag).",
+          "Subjektiv dagskänsla/ lokal bentrötthet efter helgens pass.",
+          "Detaljerad återhämtningsunderlaget/återhämtning för natt efter senaste löppasset (återhämtningsunderlaget finns men enstaka natt bör inte överbetonas)."
         ]
       },
       "plan_action": {
         "action": "review",
         "target_date": "",
-        "reason": "Allowed_target_dates är tomt — inga automatiska framtidsändringar kan ordineras nu.",
-        "recommendation": "Behåll inte automatisk ändring; granska måndagens enduroskola och subjektiv känsla innan du beslutar om att behålla eller minska tisdagens 3×8 min-tröskel.",
+        "reason": "Många tunga pass tätt och måndagens enduro är ännu okänd — behöver mänsklig bedömning innan ändring.",
+        "recommendation": "Behåll mikrocykelns riktning men vänta på måndagens enduroutfall och subjektiv känsla innan du slutligt beslutar om tisdagens tröskel; om enduron blir tung, överväg att minska tröskelns dos eller flytta den. Ingen automatisk dosändring görs nu.",
         "dose_option_id": "",
         "requires_approval": true
       },
@@ -520,7 +520,7 @@
       }
     }
   ],
-  "last_trigger_hash": "fd9d3891f767dcc527c9626f271f1a097fe8cf3df5465b20932e59dbc1c7496f",
-  "last_run_utc": "2026-08-31T06:57:31.432266+00:00",
+  "last_trigger_hash": "df406a3410db36324550f622687a5b2313cf4e54e372244e7e80bf354a16ec4b",
+  "last_run_utc": "2026-08-31T07:08:46.447562+00:00",
   "contract_version": 10
 }
