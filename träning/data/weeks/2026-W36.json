@@ -4,7 +4,7 @@
   "week_start": "2026-08-31",
   "week_end": "2026-09-06",
   "created_at_utc": "2026-08-30T22:09:50.110394+00:00",
-  "updated_at_utc": "2026-08-31T19:03:38.484471+00:00",
+  "updated_at_utc": "2026-08-31T19:04:52.649062+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -376,8 +376,8 @@
   "activities": [
     {
       "id": 19980267962,
-      "name": "Cykeltur på kvällen",
-      "sport_type": "Ride",
+      "name": "Enduro på kvällen",
+      "sport_type": "EMountainBikeRide",
       "start_date": "2026-08-31T16:00:01Z",
       "start_date_local": "2026-08-31T18:00:01Z",
       "distance_m": 23403.7,
@@ -390,8 +390,8 @@
       "weighted_average_watts": null,
       "calories": 506.0,
       "device_name": "Garmin Forerunner 970",
-      "gear_id": "b5237682",
-      "gear_name": "Specialized Tarmac Sport",
+      "gear_id": "b18458212",
+      "gear_name": "KTM 300 EXC TPI",
       "source": "Strava API",
       "laps": [
         {
@@ -413,33 +413,33 @@
     {
       "activity_id": 19980267962,
       "activity_date": "2026-08-31",
-      "activity_name": "Cykeltur på kvällen",
-      "generated_at_utc": "2026-08-31T19:03:38.054328+00:00",
+      "activity_name": "Enduro på kvällen",
+      "generated_at_utc": "2026-08-31T19:04:52.206616+00:00",
       "model": "gpt-5-mini",
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Måndagens enduroskola räknas som genomförd och ger teknisk + neuromuskulär belastning; tisdagens tröskelpass hålls tills fler skäl finns.",
-        "load_interpretation": "Senaste 3 dagarna visar tung aerob och mekanisk exponering (löpning 30–62 min+; sim 4 000 m; enduro 66 min körtid med 508 hm).",
+        "summary": "Måndagens enduro registreras som extern teknisk belastning; använd den för att bedöma tisdagens tröskel.",
+        "load_interpretation": "Enduron gav teknisk och neuromuskulär belastning med måttlig varaktighet; kardiovaskulär och mekanisk kostnad troligen måttlig utifrån data.",
         "confidence": "medium",
         "facts": [
-          "Ride: 23,40 km · 1:40:24 · 508,6 m+ · snittpuls 110,9 · maxpuls 178."
+          "EMountainBikeRide: 23,40 km · 1:40:24 · 508,6 m+ · snittpuls 110,9 · maxpuls 178."
         ],
         "interpretations": [
-          "Enduropasset ger främst teknisk och neuromuskulär kostnad och bör inte automatiskt ersätta löpträning.",
-          "Kumulativt de senaste 3 dagarna är belastningen hög men inte uppenbart oförsvarlig för att avstå från planerad tröskel; löparmålet är primärt och ska skyddas."
+          "Enduron är extern teknisk/neuromuskulär stimulans som räknas in men saknar schablonmävikt; faktisk mekanisk bentrötthet är okänd men pulsmässigt inte maximal.",
+          "Givet multi-dagsmönstret finns ingen tydlig överbelastning som kräver vila; planen kan behållas med ögon för subjektiv återhämtning."
         ],
         "unknowns": [
-          "Användarens dagskänsla/RPE efter kvällens enduro.",
-          "Detaljerad lokal bentrötthet från enduro (rapport saknas).",
-          "Eventuella tidskonflikter eller fasta åtaganden imorgon."
+          "Subjektiv lokal bentrötthet eller ömhet efter enduro saknas.",
+          "Detaljer om faktisk pedaleffekt/engagemang på enduro (om det var mycket sittande körning) är osäkra.",
+          "Eventuella onsite-skador eller smärta rapporterade efter passet saknas."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "",
-        "reason": "Närbelastningen är absorberbar och mesocykelns prioriterade tröskelpass bör hållas.",
-        "recommendation": "Behåll morgondagens 3×8 min kontrollerade tröskel enligt plan; håll intensiteten kontrollerad och avbryt/reducera om du upplever oväntad lokal bentrötthet eller hög RPE vid uppvärmning.",
+        "reason": "Enduron bedöms absorberbar och tröskelpasset är prioriterat enligt mesocykeln.",
+        "recommendation": "Behåll tisdagens 3×8 min tröskel som planerat; avvakta subjektiv återhämtning på morgonen och skala ner till lugn jogg endast om lokal trötthet eller smärta rapporteras.",
         "dose_option_id": "",
         "requires_approval": false
       },
