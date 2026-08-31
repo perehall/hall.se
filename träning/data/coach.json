@@ -1,6 +1,44 @@
 {
   "analyses": [
     {
+      "activity_id": 19980267962,
+      "activity_date": "2026-08-31",
+      "activity_name": "Cykeltur på kvällen",
+      "generated_at_utc": "2026-08-31T19:03:38.054328+00:00",
+      "model": "gpt-5-mini",
+      "performance_marker_id": null,
+      "performance_protocol_key": null,
+      "assessment": {
+        "summary": "Måndagens enduroskola räknas som genomförd och ger teknisk + neuromuskulär belastning; tisdagens tröskelpass hålls tills fler skäl finns.",
+        "load_interpretation": "Senaste 3 dagarna visar tung aerob och mekanisk exponering (löpning 30–62 min+; sim 4 000 m; enduro 66 min körtid med 508 hm).",
+        "confidence": "medium",
+        "facts": [
+          "Ride: 23,40 km · 1:40:24 · 508,6 m+ · snittpuls 110,9 · maxpuls 178."
+        ],
+        "interpretations": [
+          "Enduropasset ger främst teknisk och neuromuskulär kostnad och bör inte automatiskt ersätta löpträning.",
+          "Kumulativt de senaste 3 dagarna är belastningen hög men inte uppenbart oförsvarlig för att avstå från planerad tröskel; löparmålet är primärt och ska skyddas."
+        ],
+        "unknowns": [
+          "Användarens dagskänsla/RPE efter kvällens enduro.",
+          "Detaljerad lokal bentrötthet från enduro (rapport saknas).",
+          "Eventuella tidskonflikter eller fasta åtaganden imorgon."
+        ]
+      },
+      "plan_action": {
+        "action": "keep",
+        "target_date": "",
+        "reason": "Närbelastningen är absorberbar och mesocykelns prioriterade tröskelpass bör hållas.",
+        "recommendation": "Behåll morgondagens 3×8 min kontrollerade tröskel enligt plan; håll intensiteten kontrollerad och avbryt/reducera om du upplever oväntad lokal bentrötthet eller hög RPE vid uppvärmning.",
+        "dose_option_id": "",
+        "requires_approval": false
+      },
+      "auto_apply": {
+        "applied": false,
+        "note": "Ingen automatisk planändring."
+      }
+    },
+    {
       "activity_id": 19960743008,
       "activity_date": "2026-08-30",
       "activity_name": "Löpning på morgonen",
@@ -522,7 +560,7 @@
       }
     }
   ],
-  "last_trigger_hash": "cbc0be9d98639aaabd8cca6f138e84f5e415a9ed28fcfb8d215c888023c19173",
-  "last_run_utc": "2026-08-31T18:10:59.820818+00:00",
+  "last_trigger_hash": "e40174db85c6fbafda85d017450c5726b2c4d2bca6b0f97c328f511e2bd14afb",
+  "last_run_utc": "2026-08-31T19:03:38.054328+00:00",
   "contract_version": 13
 }

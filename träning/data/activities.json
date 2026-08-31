@@ -1,6 +1,40 @@
 {
-  "last_sync_utc": "2026-08-31T18:19:45.137376+00:00",
+  "last_sync_utc": "2026-08-31T19:03:24.596500+00:00",
   "activities": [
+    {
+      "id": 19980267962,
+      "name": "Cykeltur på kvällen",
+      "sport_type": "Ride",
+      "start_date": "2026-08-31T16:00:01Z",
+      "start_date_local": "2026-08-31T18:00:01Z",
+      "distance_m": 23403.7,
+      "moving_time_s": 3973,
+      "elapsed_time_s": 6024,
+      "total_elevation_gain_m": 508.6,
+      "average_heartrate": 110.9,
+      "max_heartrate": 178.0,
+      "average_watts": 174.7,
+      "weighted_average_watts": null,
+      "calories": 506.0,
+      "device_name": "Garmin Forerunner 970",
+      "gear_id": "b5237682",
+      "gear_name": "Specialized Tarmac Sport",
+      "source": "Strava API",
+      "laps": [
+        {
+          "lap_index": 1,
+          "name": "Lap 1",
+          "elapsed_time_s": 6023,
+          "moving_time_s": 3973,
+          "distance_m": 23408.3,
+          "average_speed": 5.89,
+          "average_heartrate": 110.9,
+          "max_heartrate": 178.0,
+          "average_watts": 174.7,
+          "average_cadence": null
+        }
+      ]
+    },
     {
       "id": 19960743008,
       "name": "Löpning på morgonen",
@@ -656,10 +690,10 @@
   },
   "schema_version": 2,
   "last_webhook_event": {
-    "event_key": "368165:activity:19960743008:update:1788086465",
-    "object_id": 19960743008,
-    "aspect_type": "update",
-    "event_time": 1788086465,
-    "processed_at_utc": "2026-08-30T10:41:16.242599+00:00"
+    "event_key": "368165:activity:19980267962:create:1788202986",
+    "object_id": 19980267962,
+    "aspect_type": "create",
+    "event_time": 1788202986,
+    "processed_at_utc": "2026-08-31T19:03:24.596500+00:00"
   }
 }
