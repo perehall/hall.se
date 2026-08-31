@@ -13,6 +13,7 @@ from training_contracts import (  # noqa: E402
     validate_activities_document,
     validate_coach_document,
     validate_plan_document,
+    validate_performance_history_document,
     validate_watch_workout,
 )
 
@@ -65,6 +66,44 @@ def valid_activities():
                 "distance_m": 10000.0,
                 "moving_time_s": 3000,
                 "elapsed_time_s": 3100,
+            }
+        ],
+    }
+
+
+def valid_performance_history():
+    return {
+        "schema_version": 1,
+        "generated_at_utc": "2026-08-31T09:00:00+00:00",
+        "entries": [
+            {
+                "activity_id": 1,
+                "activity_date": "2026-08-26",
+                "marker_id": "run-threshold-control",
+                "protocol_key": "run_threshold:3x8:90s",
+                "work_intervals": [
+                    {
+                        "index": 1,
+                        "duration_s": 480.0,
+                        "distance_m": 2000.0,
+                        "pace_s_per_km": 240.0,
+                        "average_heartrate": 150.0,
+                        "max_heartrate": 155.0,
+                        "average_watts": 300.0,
+                        "average_cadence": 88.0,
+                    }
+                ],
+                "summary": {
+                    "work_interval_count": 1,
+                    "total_work_s": 480.0,
+                    "mean_pace_s_per_km": 240.0,
+                    "mean_heartrate": 150.0,
+                    "mean_watts": 300.0,
+                    "first_to_last_pace_delta_s_per_km": 0.0,
+                    "first_to_last_hr_delta": 0.0,
+                    "first_to_last_watts_delta": 0.0,
+                },
+                "comparison": None,
             }
         ],
     }
@@ -184,6 +223,13 @@ class TrainingContractTests(unittest.TestCase):
         state["activities"][0]["elapsed_time_s"] = -1
         with self.assertRaises(ContractError):
             validate_activities_document(state)
+
+    def test_valid_performance_history_passes(self):
+        self.assertTrue(validate_performance_history_document(valid_performance_history(), activity_ids={"1"}))
+
+    def test_performance_history_requires_known_activity(self):
+        with self.assertRaises(ContractError):
+            validate_performance_history_document(valid_performance_history(), activity_ids={"2"})
 
     def test_valid_coach_contract_passes(self):
         self.assertTrue(validate_coach_document(valid_coach(), activity_ids={"1"}))
