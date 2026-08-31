@@ -29,6 +29,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PLAN_FILE = ROOT / "data" / "plan.json"
 UPCOMING_FILE = ROOT / "data" / "upcoming_week.json"
 ACTIVITIES_FILE = ROOT / "data" / "activities.json"
+PERFORMANCE_FILE = ROOT / "data" / "performance_history.json"
 COACH_FILE = ROOT / "data" / "coach.json"
 STRATEGY_FILE = ROOT / "data" / "training_strategy.json"
 PROMPT_FILE = ROOT / "coach_prompt.md"
@@ -37,7 +38,7 @@ WELLNESS_CONTEXT_FILE = Path(
 )
 
 MODEL = os.environ.get("OPENAI_MODEL", "gpt-5-mini")
-COACH_CONTRACT_VERSION = 12
+COACH_CONTRACT_VERSION = 13
 PRIVATE_WELLNESS_PATTERN = re.compile(
     r"\b(?:hrv|vilopuls|restinghr|sömn(?:poäng|score)?|sleep(?:secs|score|quality)?|wellness|garmin|intervals\.icu)\b"
     r"(?:\s*[:=]?\s*[-+]?\d+(?:[.,]\d+)?)?",
@@ -121,7 +122,7 @@ def load_private_wellness_context(path=None):
     return context
 
 
-def stable_hash(plan, latest_activity, local_date, strategy=None, wellness_context=None, rolling_context=None):
+def stable_hash(plan, latest_activity, local_date, strategy=None, wellness_context=None, rolling_context=None, performance_context=None):
     payload = {
         "coach_contract_version": COACH_CONTRACT_VERSION,
         "plan": plan,
@@ -129,10 +130,85 @@ def stable_hash(plan, latest_activity, local_date, strategy=None, wellness_conte
         "local_date": local_date,
         "strategy": strategy or {},
         "rolling_context": rolling_context or {},
+        "performance_context": performance_context or {},
         "private_wellness": signature_payload(wellness_context or {}),
     }
     raw = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()
+
+
+def performance_context_for_activity(history, activity_id):
+    if activity_id is None:
+        return {}
+    for entry in history.get("entries") or []:
+        if str(entry.get("activity_id")) == str(activity_id):
+            return entry
+    return {}
+
+
+def fmt_pace(seconds):
+    if not isinstance(seconds, (int, float)) or isinstance(seconds, bool) or seconds <= 0:
+        return ""
+    total = int(round(seconds))
+    return f"{total // 60}:{total % 60:02d}/km"
+
+
+def signed(value, suffix=""):
+    if not isinstance(value, (int, float)) or isinstance(value, bool):
+        return ""
+    sign = "+" if value > 0 else ""
+    text = f"{sign}{value:.1f}".replace(".", ",")
+    return text + suffix
+
+
+def performance_facts(context):
+    if not context:
+        return []
+    work = context.get("work_intervals") or []
+    summary = context.get("summary") or {}
+    comparison = context.get("comparison") or {}
+    facts = []
+
+    paces = [fmt_pace(row.get("pace_s_per_km")) for row in work]
+    paces = [value for value in paces if value]
+    hrs = [
+        str(round(row["average_heartrate"]))
+        for row in work
+        if isinstance(row.get("average_heartrate"), (int, float))
+    ]
+    if paces:
+        line = f"Arbetsintervall {context.get('protocol_key', '')}: fart " + " / ".join(paces)
+        if hrs and len(hrs) == len(paces):
+            line += "; snittpuls " + " / ".join(hrs) + " bpm"
+        facts.append(line + ".")
+
+    within_bits = []
+    pace_delta = summary.get("first_to_last_pace_delta_s_per_km")
+    hr_delta = summary.get("first_to_last_hr_delta")
+    if isinstance(pace_delta, (int, float)):
+        within_bits.append("fart sista−första " + signed(pace_delta, " s/km"))
+    if isinstance(hr_delta, (int, float)):
+        within_bits.append("puls sista−första " + signed(hr_delta, " bpm"))
+    if within_bits:
+        facts.append("Inom passet: " + "; ".join(within_bits) + ".")
+
+    if comparison:
+        bits = []
+        pace_change = comparison.get("mean_pace_delta_s_per_km")
+        hr_change = comparison.get("mean_hr_delta")
+        watts_change = comparison.get("mean_watts_delta")
+        if isinstance(pace_change, (int, float)):
+            bits.append("medelfart " + signed(pace_change, " s/km"))
+        if isinstance(hr_change, (int, float)):
+            bits.append("medelpuls " + signed(hr_change, " bpm"))
+        if isinstance(watts_change, (int, float)):
+            bits.append("medeleffekt " + signed(watts_change, " W"))
+        if bits:
+            facts.append(
+                f"Mot föregående samma protokoll {comparison.get('previous_activity_date', '')}: "
+                + "; ".join(bits) + "."
+            )
+    return facts[:3]
 
 
 def rolling_load_context(activities, plan, local_date, strategy):
@@ -533,6 +609,7 @@ def main():
     upcoming = load_json(UPCOMING_FILE, {})
     decision_plan = planning_window(plan, upcoming)
     activities_state = load_json(ACTIVITIES_FILE, {"activities": []})
+    performance_history = load_json(PERFORMANCE_FILE, {"schema_version": 1, "entries": []})
     coach = load_json(COACH_FILE, {"analyses": [], "last_trigger_hash": None, "last_run_utc": None})
     strategy = load_json(STRATEGY_FILE, {})
     validate_training_strategy(strategy)
@@ -547,6 +624,7 @@ def main():
     tz = ZoneInfo(plan.get("meta", {}).get("timezone", "Europe/Stockholm"))
     local_date = datetime.now(tz).date().isoformat()
     rolling_context = rolling_load_context(activities, decision_plan, local_date, strategy)
+    performance_context = performance_context_for_activity(performance_history, latest.get("id"))
     trigger_hash = stable_hash(
         decision_plan,
         latest,
@@ -554,6 +632,7 @@ def main():
         strategy,
         wellness_context,
         rolling_context,
+        performance_context,
     )
 
     if coach.get("last_trigger_hash") == trigger_hash:
@@ -578,6 +657,7 @@ def main():
         "latest_activity_date": latest_date,
         "recent_activities": recent,
         "rolling_load_context": rolling_context,
+        "performance_context": performance_context,
         "current_plan": coach_plan,
         "current_strategy": strategy,
         "private_wellness_context": wellness_context,
@@ -585,7 +665,9 @@ def main():
         "allowed_target_dates": ready_dates,
         "deferred_target_dates": deferred_dates,
         "instruction": (
-            "Analysera senaste passet mot rolling_load_context, aktuell plan och current_strategy. "
+            "Analysera senaste passet mot rolling_load_context, performance_context, aktuell plan och current_strategy. "
+            "Om performance_context finns är dess arbetsintervall och jämförelsedelta deterministiska fakta: tolka dem, men rekonstruera eller ändra aldrig siffrorna. "
+            "Skilj inom-pass-trend från jämförelse mot tidigare samma protokoll och respektera comparison_limits. "
             "Beslut ska utgå från fler-dagarsmönstret; normal variation i ett enskilt pass ska normalt absorberas av grundplanen. "
             "Skilj kardiovaskulär, mekanisk/muskulär, neuromuskulär och teknisk belastning när underlaget stödjer det och skapa aldrig ett ogrundat totalscore. "
             "private_wellness_context är ett privat, tillfälligt faktalager från Garmin via Intervals.icu. "
@@ -610,7 +692,10 @@ def main():
         result = scrub_private_wellness_output(result)
     result = neutralize_unbased_load_labels(result)
     result["assessment"] = normalize_assessment_confidence(result["assessment"])
-    result["assessment"]["facts"] = canonical_facts(latest, latest_date, fulfilled_dates)
+    result["assessment"]["facts"] = (
+        canonical_facts(latest, latest_date, fulfilled_dates)
+        + performance_facts(performance_context)
+    )[:7]
     result["plan_action"] = normalize_deferred_future_action(
         result["plan_action"],
         candidate_dates=candidate_dates,
@@ -658,6 +743,8 @@ def main():
         "activity_name": latest.get("name"),
         "generated_at_utc": now_utc,
         "model": MODEL,
+        "performance_marker_id": performance_context.get("marker_id") if performance_context else None,
+        "performance_protocol_key": performance_context.get("protocol_key") if performance_context else None,
         "assessment": result["assessment"],
         "plan_action": result["plan_action"],
         "auto_apply": {
@@ -678,6 +765,7 @@ def main():
         strategy,
         wellness_context,
         rolling_context,
+        performance_context,
     )
     coach["contract_version"] = COACH_CONTRACT_VERSION
     COACH_FILE.write_text(json.dumps(coach, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
