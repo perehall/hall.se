@@ -66,6 +66,40 @@ class PerformanceDetailTests(unittest.TestCase):
         }
         self.assertIsNone(infer_threshold_protocol(activity, detail))
 
+    def test_strava_laps_are_used_when_intervals_activity_is_not_available(self):
+        state = {
+            "activities": [
+                {
+                    "id": 11,
+                    "sport_type": "Run",
+                    "start_date_local": "2026-09-01T18:00:00",
+                    "user_report": "3×8 min tröskel.",
+                    "laps": [
+                        {"lap_index": 1, "moving_time_s": 900, "distance_m": 3000},
+                        {"lap_index": 2, "moving_time_s": 480, "distance_m": 2000, "average_heartrate": 150},
+                        {"lap_index": 3, "moving_time_s": 90, "distance_m": 250},
+                        {"lap_index": 4, "moving_time_s": 481, "distance_m": 2010, "average_heartrate": 152},
+                        {"lap_index": 5, "moving_time_s": 90, "distance_m": 250},
+                        {"lap_index": 6, "moving_time_s": 479, "distance_m": 2020, "average_heartrate": 154},
+                        {"lap_index": 7, "moving_time_s": 600, "distance_m": 1800},
+                    ],
+                }
+            ]
+        }
+        history = {"schema_version": 1, "entries": []}
+        updated, skipped = sync(
+            state,
+            history,
+            [],
+            lambda _: self.fail("Intervals detail should not be called"),
+            date(2026, 8, 1),
+        )
+        self.assertEqual((updated, skipped), (1, 0))
+        entry = history["entries"][0]
+        self.assertEqual(entry["source"], "Strava laps")
+        self.assertEqual(entry["protocol_key"], "run_threshold:3x8:90s")
+        self.assertEqual(len(entry["work_intervals"]), 3)
+
     def test_same_protocol_comparison_keeps_raw_deltas(self):
         entries = [
             {
