@@ -8,8 +8,8 @@
     "week_start": "2026-09-07",
     "week_end": "2026-09-13",
     "title": "Mesocykel · löptröskel + backkvalitet · mikrocykel 3 av 4",
-    "principle": "Flytta den prioriterade löpförmågan framåt genom kontrollerad tröskel, löpekonomi/backstyrka och lugn tålighet, samtidigt som MTB/XC och simning hålls aktiva utan att tränga undan löputvecklingen. Mikrocykeln är preliminär: mesocykelns stimuli organiseras till en absorberbar följd, medan exakt dos och vid behov passplacering avgörs först när närbelastningen är känd. Kalenderveckan är bara visningen.",
-    "preview_summary": "Mikrocykel 3 av 4 i aktuell mesocykel. Skyddade stimuli: run_threshold, run_hill_quality, run_easy_distance. Doser är öppna och får inte ökas automatiskt.",
+    "principle": "Flytta den prioriterade löpförmågan framåt genom kontrollerad tröskel, löpekonomi/backstyrka och lugn tålighet, samtidigt som MTB/XC och simning hålls aktiva utan att tränga undan löputvecklingen. Mikrocykeln är preliminär men konkret: planerade pass har en användbar grundplan som justeras först när faktisk information motiverar det. Kalenderveckan är bara visningen.",
+    "preview_summary": "Mikrocykel 3 av 4 i aktuell mesocykel. Skyddade stimuli: run_threshold, run_hill_quality, run_easy_distance. Grundpassen är konkreta och får inte ökas automatiskt; justering kräver stöd i faktisk information.",
     "mesocycle_id": "run-threshold-hill-4w",
     "microcycle_id": "run-threshold-hill-4w:mc3",
     "microcycle_index": 3,
@@ -26,11 +26,10 @@
       "status": "planned",
       "planning_status": "fixed",
       "session": "Enduroskola · fast tillfälle",
-      "reason": "Fast återkommande enduroskola, totalt åtta måndagar från 24/8. Enduron räknas som faktisk träningsbelastning; övrig träning runt dagen anpassas efter utfallet.",
+      "reason": "Fast återkommande enduroskola. Passet är känt i förväg; den faktiska belastningen registreras efteråt och används som kontrollpunkt för kommande 2–3 dagar.",
       "development_focus": "Teknisk kvalitet och avslappnad körning; faktisk belastning styr efterföljande pass.",
       "sport": "enduro",
       "classification": "training",
-      "dose_open": true,
       "manual_lock": true,
       "priority_role": "flex",
       "stimuli": [
@@ -46,11 +45,10 @@
       "label": "Tisdag",
       "status": "preliminary",
       "planning_status": "preliminary",
-      "session": "Löpning · kontrollerad tröskel · dos öppen",
-      "reason": "Mesocykelns första prioriterade löpstimulus. Exakt dos bestäms först när de närmast föregående dagarnas faktiska belastning och återhämtning är kända.",
+      "session": "Löpning · kontrollerad tröskel · 3 × 8 min / 90 s jogg",
+      "reason": "Mesocykelns första prioriterade löpstimulus. Grundplanen är den etablerade kontrollerade tröskeldosen; den ändras bara om faktisk närbelastning eller återhämtning ger sakliga skäl.",
       "development_focus": "Jämn, kontrollerad kvalitet utan fartjakt; progression ska komma genom absorberbar träning.",
       "sport": "run",
-      "dose_open": true,
       "priority_role": "anchor",
       "stimuli": [
         "run_threshold"
@@ -75,17 +73,24 @@
           "session": "Löpning · kontrollerad tröskel · 3 × 10 min / 90 s jogg",
           "intent": "Planerad progression genom längre arbetstid utan avsikt att höja intensiteten."
         }
-      ]
+      ],
+      "baseline_option_id": "run-threshold-3x8",
+      "dose_resolution": {
+        "state": "baseline",
+        "kind": "structured",
+        "value": 24,
+        "option_id": "run-threshold-3x8"
+      }
     },
     {
       "date": "2026-09-09",
       "label": "Onsdag",
       "status": "preliminary",
-      "session": "Simning · aerob/teknik · preliminärt 3 200 m · ca 60 min",
+      "session": "Simning · 3 200 m · aerob/teknik",
       "swim_equipment": {
         "planned": "none"
       },
-      "reason": "Preliminär simstruktur förs vidare från föregående veckas etablerade simdos för kontinuitet. Totaldosen ökas inte automatiskt; slutlig dos och intensitet omprövas mot faktisk belastning och återhämtning från de närmast föregående 2–3 dagarna.",
+      "reason": "Stödjer målbildens simkapacitet med liten mekanisk kostnad för benen. En etablerad 3 200 m-struktur är grundplan; omfattning eller struktur justeras endast om närbelastningen motiverar det.",
       "development_focus": "Rotera runt en stabil kroppslinje: låt höft och axel följa med utan att huvudet vandrar eller benen börjar slingra.",
       "watch_workout": {
         "sync_enabled": false,
@@ -178,18 +183,24 @@
       "microcycle_index": 3,
       "microcycle_day": 3,
       "planning_status": "preliminary",
-      "microcycle_slot": "swim_support"
+      "microcycle_slot": "swim_support",
+      "baseline_option_id": "swim-support-3200",
+      "dose_resolution": {
+        "state": "baseline",
+        "kind": "structured",
+        "value": 3200,
+        "option_id": "swim-support-3200"
+      }
     },
     {
       "date": "2026-09-10",
       "label": "Torsdag",
       "status": "preliminary",
       "planning_status": "preliminary",
-      "session": "MTB/XC · teknik + aerob stig · dos öppen",
-      "reason": "Utvecklar teknisk MTB/XC och aerob cykelkapacitet som stöd för målbilden, men omfattningen styrs så att mesocykelns nästa löpstimulus kan absorberas.",
+      "session": "MTB/XC · 60 min · teknik + lugn aerob stig",
+      "reason": "Utvecklar teknisk MTB/XC och aerob cykelkapacitet som stöd för målbilden. 60 minuter lugn teknisk stig är grundplan och kortas vid behov för att skydda nästa prioriterade löpstimulus.",
       "development_focus": "Blick, linjeval, bromspunkter och flyt före segmentjakt.",
       "sport": "bike",
-      "dose_open": true,
       "priority_role": "flex",
       "stimuli": [
         "mtb_technical",
@@ -215,18 +226,24 @@
           "session": "MTB/XC · 60 min · teknik + lugn aerob stig",
           "intent": "Normal konservativ stöddos när teknisk MTB/XC ska bibehållas utan att konkurrera med nästa prioriterade löpstimulus."
         }
-      ]
+      ],
+      "baseline_option_id": "mtb-support-60",
+      "dose_resolution": {
+        "state": "baseline",
+        "kind": "duration_minutes",
+        "value": 60,
+        "option_id": "mtb-support-60"
+      }
     },
     {
       "date": "2026-09-11",
       "label": "Fredag",
       "status": "preliminary",
       "planning_status": "preliminary",
-      "session": "Löpning · backkvalitet · dos öppen",
-      "reason": "Mesocykelns andra prioriterade löpkvalitet: kraft, löpekonomi och mekanisk kvalitet. Dosen låses först när närbelastningen är känd.",
+      "session": "Löpning · backkvalitet · 15 min lugnt + 6 × 150 m / full lugn nedjogg + 10 min lugnt",
+      "reason": "Mesocykelns andra prioriterade löpkvalitet: kraft, löpekonomi och mekanisk kvalitet. Den konservativa grundplanen är 6 × 150 m; progression eller reduktion kräver stöd i faktisk belastning och kvalitet.",
       "development_focus": "Kraftfull men kontrollerad löpning med bibehållen mekanik; ingen maximal sprint eller syrajakt.",
       "sport": "run",
-      "dose_open": true,
       "priority_role": "anchor",
       "stimuli": [
         "run_hill_quality"
@@ -251,15 +268,23 @@
           "session": "Löpning · backkvalitet · 15 min lugnt + 8 × 150 m / full lugn nedjogg + 10 min lugnt",
           "intent": "Nästa högre startalternativ när faktisk närbelastning och subjektiv känsla ger stöd för mer volym med bibehållen mekanik."
         }
-      ]
+      ],
+      "baseline_option_id": "run-hill-6x150",
+      "dose_resolution": {
+        "state": "baseline",
+        "kind": "structured",
+        "value": 6,
+        "option_id": "run-hill-6x150"
+      },
+      "decision_note": "Grundplan: 6 × 150 m med full lugn nedjogg. Ändra endast om närbelastning eller lördagens eventuella swimrun-KM ger sakliga skäl."
     },
     {
       "date": "2026-09-12",
       "label": "Lördag",
       "status": "open",
       "planning_status": "open",
-      "session": "Öppet · planeras när underlag finns",
-      "reason": "Ingen träningsdos sätts ännu. Närmaste beslut tas utifrån mesocykelns riktning, faktisk belastning, återhämtning och de föregående 2–3 dagarnas utfall.",
+      "session": "Ingen planerad träning",
+      "reason": "Ingen träning är planerad som standard. En ledig dag är inte i sig skäl att lägga till ett pass; eventuell ändring ska tjäna mikrocykeln och bygga på faktisk information.",
       "sport": "open"
     },
     {
@@ -267,11 +292,10 @@
       "label": "Söndag",
       "status": "preliminary",
       "planning_status": "preliminary",
-      "session": "Löpning · lugn distans · dos öppen",
-      "reason": "Mesocykelns tredje löpstimulus bygger tålighet och kontinuitet utan att bli ytterligare kvalitet.",
+      "session": "Löpning · lugn distans · 75 min",
+      "reason": "Mesocykelns tredje löpstimulus bygger tålighet och kontinuitet utan att bli ytterligare kvalitet. 75 minuter lugnt är grundplan; passet kortas, flyttas eller tas bort om föregående belastning motiverar det.",
       "development_focus": "Avslappnad rytm och jämn ansträngning.",
       "sport": "run",
-      "dose_open": true,
       "priority_role": "flex",
       "stimuli": [
         "run_easy_distance"
@@ -296,7 +320,14 @@
           "session": "Löpning · lugn distans · 90 min",
           "intent": "Etablerad längre lugn löpduration från nyligen genomförd träning när mikrocykeln är absorberad."
         }
-      ]
+      ],
+      "baseline_option_id": "run-easy-75",
+      "dose_resolution": {
+        "state": "baseline",
+        "kind": "duration_minutes",
+        "value": 75,
+        "option_id": "run-easy-75"
+      }
     }
   ],
   "strength_template": [
