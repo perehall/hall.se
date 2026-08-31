@@ -4,7 +4,7 @@
   "week_start": "2026-08-31",
   "week_end": "2026-09-06",
   "created_at_utc": "2026-08-30T22:09:50.110394+00:00",
-  "updated_at_utc": "2026-08-31T19:05:47.063174+00:00",
+  "updated_at_utc": "2026-08-31T19:07:45.832966+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -414,32 +414,32 @@
       "activity_id": 19980267962,
       "activity_date": "2026-08-31",
       "activity_name": "Enduro på kvällen",
-      "generated_at_utc": "2026-08-31T19:05:46.546848+00:00",
+      "generated_at_utc": "2026-08-31T19:07:45.284584+00:00",
       "model": "gpt-5-mini",
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Enduroskolan registrerad; belastningen är teknisk/neuromuskulär och bör inte automatiskt tränga undan löpprogrammet.",
-        "load_interpretation": "Måndagens enduro gav teknisk och neuromuskulär exponering utan tydlig kardiovaskulär överbelastning för kommande tröskelpass.",
+        "summary": "Måndagens enduroskola registreras som faktisk teknik‑/neuromuskulär belastning och påverkar tisdagens löppass.",
+        "load_interpretation": "Enduro gav hög teknisk och neuromuskulär exponering med måttlig varaktighet; kardiovaskulär kostnad verkar måttlig.",
         "confidence": "medium",
         "facts": [
           "EMountainBikeRide: 23,40 km · 1:40:24 · 508,6 m+ · snittpuls 110,9 · maxpuls 178."
         ],
         "interpretations": [
-          "Aktiviteten är enduro (extern belastning) och räknas som faktisk träning men saknar entydig cykelmekanisk belastningsprofil för MTB-liknande benarbete.",
-          "Givet varaktighet, klättring och tidigare löpdagar är mikrocykeln fortfarande absorberbar för planerat tröskelpass."
+          "Enduro är tekniskt/neuromuskulärt tungt men inte entydigt konditionsmässigt fördrivande; tidigare löppass samma vecka var redan högvolym/intensivt.",
+          "Givet mesocykelns prioritering (run anchor) bör tisdagens tröskel behållas om inte subjektiv återhämtning eller lokala muskelsmärtor talar emot."
         ],
         "unknowns": [
-          "Användarens subjektiva lokal ben-/muskelttrötthet efter enduron.",
-          "Exakt hur mycket av registrerad effekt/puls kommer från motocrosskörning vs. fysiologiskt arbete.",
-          "Eventuella akuta skador eller stötar under enduron som påverkar löpning."
+          "Subjektiv dagskänsla/ lokal bentrötthet efter enduro saknas.",
+          "Detaljerad pulskontroll under enduro (perioder med hög ansträngning) saknas.",
+          "Eventuella planerade fasta åtaganden eller skador innan tisdag."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "",
-        "reason": "Enduron bedöms som teknisk/neuromuskulär extern last och mikrocykeln är absorberbar; löptröskeln ska därför behållas.",
-        "recommendation": "Behåll planen: kör tisdagens 3×8 min kontrollerad tröskel enligt grundplan. Rapportera om du har lokal ben- eller smärtproblematik före morgondagens pass.",
+        "reason": "Närbelastningen kan absorberas och mesocykelns löpstimulus ska skyddas.",
+        "recommendation": "Behåll tisdagens 3×8 min tröskel enligt grundplan; rapportera subjektiv bentrötthet eller lokal smärta före passet så vi kan skala ner konservativt.",
         "dose_option_id": "",
         "requires_approval": false
       },
