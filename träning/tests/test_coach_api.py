@@ -20,6 +20,7 @@ from coach import (  # noqa: E402
     normalize_dose_option_field,
     normalize_resolved_dose_reselection,
     normalize_same_day_open_dose_action,
+    neutralize_unbased_load_labels,
     scrub_private_wellness_output,
     rolling_load_context,
     stable_hash,
@@ -268,6 +269,51 @@ class CoachApiTests(unittest.TestCase):
             remaining_dates=[],
         )
         self.assertIn("Nästa planerade pass saknas", normalized["recommendation"])
+
+    def test_unbased_relative_load_labels_are_neutralized_but_facts_are_preserved(self):
+        result = valid_result()
+        result["assessment"]["summary"] = (
+            "Stort löppass ger hög kardiovaskulär volym och låg mekanisk belastning."
+        )
+        result["assessment"]["load_interpretation"] = (
+            "Kardiovaskulär volym är hög de senaste tre dagarna."
+        )
+        result["assessment"]["facts"] = [
+            'Användarrapport: "Lätt och inte det minsta slitsamt."'
+        ]
+        result["assessment"]["interpretations"] = [
+            "Måttlig träningsbelastning kan tala för bibehållen plan."
+        ]
+        result["assessment"]["unknowns"] = [
+            "Det går inte att avgöra om återhämtningsbehovet bedöms som högt."
+        ]
+        result["plan_action"]["reason"] = "Hög mekanisk belastning skulle motivera reduktion."
+        result["plan_action"]["recommendation"] = (
+            "Behåll planen om belastningen inte bedöms som hög."
+        )
+
+        calibrated = neutralize_unbased_load_labels(result)
+
+        derived = " ".join(
+            [
+                calibrated["assessment"]["summary"],
+                calibrated["assessment"]["load_interpretation"],
+                *calibrated["assessment"]["interpretations"],
+                *calibrated["assessment"]["unknowns"],
+                calibrated["plan_action"]["reason"],
+                calibrated["plan_action"]["recommendation"],
+            ]
+        ).lower()
+        self.assertNotIn("hög kardiovaskulär volym", derived)
+        self.assertNotIn("låg mekanisk belastning", derived)
+        self.assertNotIn("måttlig träningsbelastning", derived)
+        self.assertNotIn("volym är hög", derived)
+        self.assertNotIn("belastningen inte bedöms som hög", derived)
+        self.assertIn("kan inte nivåklassas mot personlig baslinje", derived)
+        self.assertEqual(
+            calibrated["assessment"]["facts"],
+            ['Användarrapport: "Lätt och inte det minsta slitsamt."'],
+        )
 
     def test_private_wellness_terms_are_scrubbed_before_persistence(self):
         result = valid_result()
