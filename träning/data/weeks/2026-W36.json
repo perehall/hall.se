@@ -4,7 +4,7 @@
   "week_start": "2026-08-31",
   "week_end": "2026-09-06",
   "created_at_utc": "2026-08-30T22:09:50.110394+00:00",
-  "updated_at_utc": "2026-08-31T19:07:45.832966+00:00",
+  "updated_at_utc": "2026-08-31T21:19:49.700128+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -377,7 +377,7 @@
     {
       "id": 19980267962,
       "name": "Enduro på kvällen",
-      "sport_type": "EMountainBikeRide",
+      "sport_type": "Enduro",
       "start_date": "2026-08-31T16:00:01Z",
       "start_date_local": "2026-08-31T18:00:01Z",
       "distance_m": 23403.7,
@@ -406,7 +406,17 @@
           "average_watts": 250.5,
           "average_cadence": null
         }
-      ]
+      ],
+      "source_sport_type": "EMountainBikeRide",
+      "classification": "recreation",
+      "display_label": "Enduro",
+      "sport_normalization": {
+        "rule": "emountainbike-user-enduro-proxy-v1",
+        "evidence": [
+          "source_sport_type=EMountainBikeRide",
+          "user convention: Strava e-MTB represents Enduro"
+        ]
+      }
     }
   ],
   "coach_analyses": [
@@ -414,32 +424,33 @@
       "activity_id": 19980267962,
       "activity_date": "2026-08-31",
       "activity_name": "Enduro på kvällen",
-      "generated_at_utc": "2026-08-31T19:07:45.284584+00:00",
+      "generated_at_utc": "2026-08-31T21:19:49.151950+00:00",
       "model": "gpt-5-mini",
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Måndagens enduroskola registreras som faktisk teknik‑/neuromuskulär belastning och påverkar tisdagens löppass.",
-        "load_interpretation": "Enduro gav hög teknisk och neuromuskulär exponering med måttlig varaktighet; kardiovaskulär kostnad verkar måttlig.",
+        "summary": "Måndagens enduro var långt och tekniskt; behåll löptröskelplanen i närtid med konservativ kalibrering.",
+        "load_interpretation": "Enduro gav teknisk och neuromuskulär belastning med måttlig kardiovaskulär varaktighet; inga direkta tecken på att skyddade löppass måste tas bort.",
         "confidence": "medium",
         "facts": [
-          "EMountainBikeRide: 23,40 km · 1:40:24 · 508,6 m+ · snittpuls 110,9 · maxpuls 178."
+          "Enduro: 23,40 km · 1:40:24 · 508,6 m+ · snittpuls 110,9 · maxpuls 178.",
+          "Planstatus 2026-08-31: dagens planerade pass är genomfört i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Enduro är tekniskt/neuromuskulärt tungt men inte entydigt konditionsmässigt fördrivande; tidigare löppass samma vecka var redan högvolym/intensivt.",
-          "Givet mesocykelns prioritering (run anchor) bör tisdagens tröskel behållas om inte subjektiv återhämtning eller lokala muskelsmärtor talar emot."
+          "Enduro-exponeringen är främst teknisk/neuromuskulär och bör räknas som extern belastning utan schablonhöjning av löpvolym.",
+          "Även om total aktivitet de senaste dagarna är hög saknas objektiva tecken för att helt avstå tisdagens kontrollerade tröskel; konservativt genomförande rekommenderas."
         ],
         "unknowns": [
-          "Subjektiv dagskänsla/ lokal bentrötthet efter enduro saknas.",
-          "Detaljerad pulskontroll under enduro (perioder med hög ansträngning) saknas.",
-          "Eventuella planerade fasta åtaganden eller skador innan tisdag."
+          "Subjektiv lokal ben-/muskeltrötthet efter enduro saknas.",
+          "Detaljerad inom-pass löpintensitet för jämförbar tröskel (prestandamarkör) saknas för direkt jämförelse.",
+          "Eventuella planerade tidsbegränsningar eller fasta åtaganden inför tisdag."
         ]
       },
       "plan_action": {
         "action": "keep",
-        "target_date": "",
-        "reason": "Närbelastningen kan absorberas och mesocykelns löpstimulus ska skyddas.",
-        "recommendation": "Behåll tisdagens 3×8 min tröskel enligt grundplan; rapportera subjektiv bentrötthet eller lokal smärta före passet så vi kan skala ner konservativt.",
+        "target_date": "2026-09-01",
+        "reason": "Närbelastningen talar för att grundplanens tröskelpass kan behållas med konservativ kontroll.",
+        "recommendation": "Behåll plan: genomför 3 × 8 min/90 s jogg som kontrollerad tröskel; håll intensiteten kontrollerad och prioritera teknik över tempo. Om du känner lokal trötthet morgonen efter, skala ner till lugn 40–50 min jogg och anmäl för review.",
         "dose_option_id": "",
         "requires_approval": false
       },

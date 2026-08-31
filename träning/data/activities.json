@@ -1,10 +1,10 @@
 {
-  "last_sync_utc": "2026-08-31T19:07:35.418567+00:00",
+  "last_sync_utc": "2026-08-31T21:19:35.725851+00:00",
   "activities": [
     {
       "id": 19980267962,
       "name": "Enduro på kvällen",
-      "sport_type": "EMountainBikeRide",
+      "sport_type": "Enduro",
       "start_date": "2026-08-31T16:00:01Z",
       "start_date_local": "2026-08-31T18:00:01Z",
       "distance_m": 23403.7,
@@ -33,7 +33,17 @@
           "average_watts": 250.5,
           "average_cadence": null
         }
-      ]
+      ],
+      "source_sport_type": "EMountainBikeRide",
+      "classification": "recreation",
+      "display_label": "Enduro",
+      "sport_normalization": {
+        "rule": "emountainbike-user-enduro-proxy-v1",
+        "evidence": [
+          "source_sport_type=EMountainBikeRide",
+          "user convention: Strava e-MTB represents Enduro"
+        ]
+      }
     },
     {
       "id": 19960743008,
@@ -678,7 +688,7 @@
   "activity_semantics": {
     "schema_version": 1,
     "overrides_applied": 5,
-    "auto_rules_applied": 6,
+    "auto_rules_applied": 7,
     "override_ids_present": [
       "19852599244",
       "19862241646",
@@ -686,7 +696,9 @@
       "19911120461",
       "19946705399"
     ],
-    "changed_ids": []
+    "changed_ids": [
+      "19980267962"
+    ]
   },
   "schema_version": 2,
   "last_webhook_event": {
