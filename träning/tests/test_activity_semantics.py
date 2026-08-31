@@ -41,6 +41,27 @@ class ActivitySemanticsTests(unittest.TestCase):
         activity = {"name": "Motocross kväll", "sport_type": "MountainBikeRide"}
         self.assertTrue(auto_enduro_candidate(activity))
 
+    def test_emountainbike_is_user_enduro_proxy_without_name_signal(self):
+        state = {
+            "activities": [
+                {
+                    "id": 20000000001,
+                    "name": "Kvällstur",
+                    "sport_type": "EMountainBikeRide",
+                    "start_date_local": "2026-08-31T18:00:00Z",
+                }
+            ]
+        }
+        override_count, auto_count, _ = apply_semantics(state, {"schema_version": 1, "overrides": {}})
+        activity = state["activities"][0]
+        self.assertEqual((override_count, auto_count), (0, 1))
+        self.assertEqual(activity["source_sport_type"], "EMountainBikeRide")
+        self.assertEqual(activity["sport_type"], "Enduro")
+        self.assertEqual(activity["classification"], "recreation")
+        self.assertEqual(activity["display_label"], "Enduro")
+        self.assertEqual(activity["sport_normalization"]["rule"], "emountainbike-user-enduro-proxy-v1")
+        self.assertEqual(state["activity_semantics"]["changed_ids"], ["20000000001"])
+
     def test_mtb_enduro_wording_is_ambiguous_and_not_reclassified(self):
         state = {
             "activities": [
