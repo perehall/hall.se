@@ -369,7 +369,39 @@ def candidates(state, oldest):
     return result
 
 
-def sync(state, history, intervals_rows, fetch_detail, oldest):
+def interval_shape(detail):
+    rows = detail.get("icu_intervals") if isinstance(detail, dict) else None
+    if not isinstance(rows, list):
+        return {"present": False, "count": 0, "types": {}, "duration_bands": {}}
+    types = {}
+    bands = {"lt_5m": 0, "5_7m": 0, "7_9m": 0, "9_11m": 0, "gt_11m": 0, "unknown": 0}
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        kind = str(row.get("type") or "<missing>").strip().upper() or "<missing>"
+        types[kind] = types.get(kind, 0) + 1
+        seconds = interval_duration(row)
+        if seconds is None:
+            bands["unknown"] += 1
+        elif seconds < 300:
+            bands["lt_5m"] += 1
+        elif seconds < 420:
+            bands["5_7m"] += 1
+        elif seconds < 540:
+            bands["7_9m"] += 1
+        elif seconds < 660:
+            bands["9_11m"] += 1
+        else:
+            bands["gt_11m"] += 1
+    return {"present": True, "count": len(rows), "types": types, "duration_bands": bands}
+
+
+def merge_counts(target, source):
+    for key, value in source.items():
+        target[key] = target.get(key, 0) + value
+
+
+def sync(state, history, intervals_rows, fetch_detail, oldest, diagnostics=None):
     entries = {
         str(item.get("activity_id")): item
         for item in history.get("entries") or []
@@ -377,30 +409,57 @@ def sync(state, history, intervals_rows, fetch_detail, oldest):
     }
     updated = 0
     skipped = 0
+    diag = diagnostics if diagnostics is not None else {}
+    diag.update({
+        "candidate_runs": 0,
+        "intervals_activity_matched": 0,
+        "detail_fetched": 0,
+        "detail_with_icu_intervals": 0,
+        "detected_from_intervals": 0,
+        "detected_from_strava_laps": 0,
+        "skipped_no_activity_match": 0,
+        "skipped_no_protocol": 0,
+    })
+    diag.setdefault("interval_types", {})
+    diag.setdefault("duration_bands", {})
+
     for activity in candidates(state, oldest):
+        diag["candidate_runs"] += 1
         detected = None
         source_name = None
         source_activity_id = None
 
         matched = match_activity(activity, intervals_rows)
         if matched and matched.get("id") not in (None, ""):
+            diag["intervals_activity_matched"] += 1
             try:
                 detail = fetch_detail(matched["id"])
             except Exception:
                 detail = None
             if detail:
+                diag["detail_fetched"] += 1
+                shape = interval_shape(detail)
+                if shape["present"]:
+                    diag["detail_with_icu_intervals"] += 1
+                    merge_counts(diag["interval_types"], shape["types"])
+                    merge_counts(diag["duration_bands"], shape["duration_bands"])
                 detected = infer_threshold_protocol(activity, detail)
                 if detected:
+                    diag["detected_from_intervals"] += 1
                     source_name = "Intervals.icu"
                     source_activity_id = matched.get("id")
+        else:
+            diag["skipped_no_activity_match"] += 1
 
         if not detected:
             detected = infer_threshold_from_laps(activity)
             if detected:
+                diag["detected_from_strava_laps"] += 1
                 source_name = "Strava laps"
                 source_activity_id = activity.get("id")
 
         if not detected:
+            diag["skipped_no_protocol"] += 1
             skipped += 1
             continue
 
@@ -441,18 +500,24 @@ def main():
         except Exception as exc:
             print(f"WARNING: Intervals.icu unavailable; using Strava lap fallback: {exc}", file=sys.stderr)
 
+    diagnostics = {}
     updated, skipped = sync(
         state,
         history,
         interval_activities,
         (lambda activity_id: fetch_activity_detail(activity_id, auth)) if auth else (lambda _: {}),
         oldest,
+        diagnostics=diagnostics,
     )
     write_json(HISTORY_FILE, history)
     print(
         "Performance sync OK: "
         f"protocol_entries={len(history.get('entries') or [])} "
         f"updated={updated} skipped_or_unmatched={skipped}."
+    )
+    print(
+        "Performance diagnostics: "
+        + json.dumps(diagnostics, ensure_ascii=True, sort_keys=True, separators=(",", ":"))
     )
     return 0
 
