@@ -72,6 +72,34 @@ def has_explicit_dose(session):
     return bool(DOSE_PATTERN.search(session) or CLOCK_DURATION_PATTERN.search(session))
 
 
+def _option_by_id(options, option_id):
+    return next((item for item in (options or []) if item.get("id") == option_id), None)
+
+
+def apply_baseline_option(day, baseline_option_id=None):
+    """Make a pre-approved concrete option the visible baseline plan.
+
+    Alternative options remain available for conservative adjustment, but the
+    athlete is never asked to wait for the previous session before seeing a
+    usable plan.
+    """
+    options = day.get("dose_options") or []
+    option_id = baseline_option_id or day.get("baseline_option_id")
+    option = _option_by_id(options, option_id)
+    if option is None:
+        return False
+    day["baseline_option_id"] = option_id
+    day["session"] = option["session"]
+    day["dose_open"] = False
+    day["dose_resolution"] = {
+        "state": "baseline",
+        "kind": option.get("kind"),
+        "value": option.get("value"),
+        "option_id": option_id,
+    }
+    return True
+
+
 def is_enduro_school_date(day_date):
     if isinstance(day_date, str):
         day_date = date.fromisoformat(day_date)
@@ -98,7 +126,6 @@ def fixed_enduro_school_day(day_date, label="Måndag"):
         "development_focus": "Teknisk kvalitet och avslappnad körning; faktisk belastning styr efterföljande pass.",
         "sport": "enduro",
         "classification": "training",
-        "dose_open": True,
         "manual_lock": True,
         "priority_role": "flex",
         "stimuli": ["enduro_technical"],
@@ -176,25 +203,33 @@ def promote_upcoming(upcoming):
     for day in promoted.get("days") or []:
         day.pop("planning_status", None)
 
+        if day.get("dose_open") is True and (day.get("dose_options") or []):
+            apply_baseline_option(day)
+        elif day.get("dose_open") is True:
+            # Legacy externally structured/fixed sessions may not have a numeric
+            # option. Keep the known session concrete instead of surfacing
+            # artificial uncertainty.
+            day.pop("dose_open", None)
+
         status = day.get("status")
         sport = day.get("sport")
         classification = day.get("classification")
         session = day.get("session") or ""
+        externally_structured = (
+            day.get("manual_lock") is True
+            or is_enduro_school_date(day.get("date"))
+            or classification == "recreation"
+        )
         if (
             status in {"planned", "preliminary", "conditional"}
             and sport not in {"rest", "open"}
-            and classification != "recreation"
-            and day.get("dose_open") is not True
+            and not externally_structured
             and not has_explicit_dose(session)
         ):
-            day["status"] = "open"
-            day["rollover_status_from"] = status
-            note = (
-                "Ingen träningsdos var fastställd när veckan blev aktiv; passet är därför öppet "
-                "tills faktisk belastning och återhämtning ger underlag."
+            raise RuntimeError(
+                f"Veckoskifte: {day.get('date')} {session!r} saknar konkret grundplan. "
+                "Planen måste specificeras före aktivering; passet får inte döljas som öppet."
             )
-            reason = str(day.get("reason") or "").strip()
-            day["reason"] = f"{reason} {note}".strip()
 
     return seed_fixed_commitments(promoted)
 
@@ -304,10 +339,10 @@ def build_mesocycle_next_week(promoted, strategy):
                 "label": label,
                 "status": "open",
                 "planning_status": "open",
-                "session": "Öppet · planeras när underlag finns",
+                "session": "Ingen planerad träning",
                 "reason": (
-                    "Ingen träningsdos sätts ännu. Närmaste beslut tas utifrån mesocykelns riktning, "
-                    "faktisk belastning, återhämtning och de föregående 2–3 dagarnas utfall."
+                    "Ingen träning är planerad som standard på denna dag. En ledig dag är inte i sig skäl "
+                    "att lägga till ett pass; eventuell ändring ska tjäna mikrocykeln och bygga på faktisk information."
                 ),
                 "sport": "open",
             }
@@ -332,7 +367,6 @@ def build_mesocycle_next_week(promoted, strategy):
                 "reason": slot["reason"],
                 "development_focus": slot["development_focus"],
                 "sport": slot["sport"],
-                "dose_open": True,
                 "priority_role": slot["priority_role"],
                 "stimuli": deepcopy(slot["stimuli"]),
                 "mesocycle_id": mesocycle["id"],
@@ -343,6 +377,11 @@ def build_mesocycle_next_week(promoted, strategy):
             }
             if slot.get("dose_options"):
                 planned_day["dose_options"] = deepcopy(slot["dose_options"])
+                planned_day["baseline_option_id"] = slot["baseline_option_id"]
+                if not apply_baseline_option(planned_day, slot["baseline_option_id"]):
+                    raise RuntimeError(
+                        f"Veckoplan: baseline_option_id {slot['baseline_option_id']!r} saknas för {slot['slot']!r}"
+                    )
             if slot["sport"] == "swim":
                 planned_day["swim_equipment"] = {"planned": "tbd"}
             days[offset] = planned_day
@@ -350,14 +389,15 @@ def build_mesocycle_next_week(promoted, strategy):
         title = f'{mesocycle["title"]} · mikrocykel {microcycle_index} av {total_microcycles}'
         principle = (
             mesocycle["goal_contribution"]
-            + " Mikrocykeln är preliminär: mesocykelns stimuli organiseras till en absorberbar följd, medan exakt dos "
-              "och vid behov passplacering avgörs först när närbelastningen är känd. Kalenderveckan är bara visningen."
+            + " Mikrocykeln är preliminär men konkret: varje planerat pass har en användbar grundplan. "
+              "Faktisk belastning och återhämtning används för att behålla eller justera planen, inte för att skapa den i sista stund. "
+              "Kalenderveckan är bara visningen."
         )
         preview_summary = (
             f'Mikrocykel {microcycle_index} av {total_microcycles} i aktuell mesocykel. '
             "Skyddade stimuli: "
             + ", ".join(mesocycle["protected_stimuli"])
-            + ". Doser är öppna och får inte ökas automatiskt."
+            + ". Grundpassen är konkreta och får inte ökas automatiskt; justering kräver stöd i faktisk information."
         )
     else:
         title = "Mesocykel avslutad · utvärdering krävs"

@@ -150,10 +150,12 @@ tz = ZoneInfo(plan.get("meta", {}).get("timezone", "Europe/Stockholm"))
 today = datetime.now(tz).date().isoformat()
 
 # Planned training should be usable even while preliminary. A future planned,
-# preliminary or conditional training session therefore needs an explicit dose
-# (time and/or distance), unless the plan explicitly marks the dose as open so
-# it can be set later from actual surrounding load without inventing a number.
-# Explicit rest/open states and recreation are also exempt.
+# preliminary or conditional training session therefore needs an explicit
+# duration/distance or another concrete pre-defined structure. Fixed external
+# commitments (for example enduro school) are exempt when manual_lock=true:
+# the session itself is known in advance even when its eventual recorded load
+# is not represented by an invented duration. Rest/open states and recreation
+# are also exempt.
 missing_plan_dose = []
 for day in plan.get("days", []):
     if day.get("date", "") < today:
@@ -164,7 +166,10 @@ for day in plan.get("days", []):
         continue
     if day.get("classification") == "recreation":
         continue
+    if day.get("manual_lock") is True:
+        continue
     if day.get("dose_open") is True:
+        # Legacy compatibility only. New planning uses concrete baselines.
         continue
     session = (day.get("session") or "").strip()
     if not has_explicit_dose(session):
@@ -172,7 +177,7 @@ for day in plan.get("days", []):
 
 if missing_plan_dose:
     raise RuntimeError(
-        "Planvalidering: kommande planerade/preliminära pass saknar dos (tid/distans): "
+        "Planvalidering: kommande planerade/preliminära pass saknar konkret omfattning (tid/distans): "
         + "; ".join(missing_plan_dose)
     )
 

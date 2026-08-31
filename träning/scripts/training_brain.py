@@ -225,14 +225,6 @@ def resolve_today(plan, activities, strategy, today):
         why = "Registrerat som dagens plan: " + str(label) + "."
     else:
         why = day.get("reason") or "Ingen motivering registrerad."
-        same_day_rule = (strategy.get("decision_policy") or {}).get("same_day_open_dose_must_resolve_or_review") is True
-        if same_day_rule and day.get("dose_open") is True:
-            status = "DOSBESLUT KRÄVS"
-            why = (
-                why
-                + " Dagens stimulus är känt men dosen är fortfarande öppen; systemet måste lösa dosen "
-                  "eller uttryckligen markera att underlaget inte räcker."
-            )
 
     return {
         "date": today_text,
@@ -271,16 +263,16 @@ def resolve_next_decision(plan, activities, strategy, today):
             "note": day.get("decision_note"),
         }
 
-    unresolved = [
+    conditional = [
         (day_date, day)
         for day_date, day in future
-        if day.get("status") == "conditional" or day.get("dose_open")
+        if day.get("status") == "conditional"
     ]
-    if unresolved:
-        day_date, day = unresolved[0]
-        note = day.get("coach_adjustment")
-        if not note:
-            note = "Dosen låses först när de närmast föregående dagarnas faktiska belastning är känd."
+    if conditional:
+        day_date, day = conditional[0]
+        note = day.get("coach_adjustment") or (
+            "Grundplanen finns kvar, men ny faktisk information har motiverat en uttrycklig villkorsmarkering."
+        )
         return {
             "date": day_date.isoformat(),
             "label": day.get("label") or day_date.isoformat(),
@@ -295,7 +287,7 @@ def resolve_next_decision(plan, activities, strategy, today):
             "date": day_date.isoformat(),
             "label": day.get("label") or day_date.isoformat(),
             "headline": day.get("session") or "Kommande nyckelpass",
-            "note": "Nästa prioriterade stimulus i den aktuella mesocykeln.",
+            "note": "Konkret grundplan. Ändra endast om ny belastning, återhämtning eller fasta åtaganden ger sakliga skäl.",
         }
 
     if future:
@@ -304,13 +296,13 @@ def resolve_next_decision(plan, activities, strategy, today):
             "date": day_date.isoformat(),
             "label": day.get("label") or day_date.isoformat(),
             "headline": day.get("session") or "Kommande pass",
-            "note": "Ingen särskild omplanering krävs med nuvarande underlag.",
+            "note": "Grundplanen ligger fast med nuvarande underlag.",
         }
     return {
         "date": "",
         "label": "",
-        "headline": "Inget beslut inom 72 timmar",
-        "note": "Planen behöver inte låsas längre fram innan mer faktisk träning är känd.",
+        "headline": "Inget planerat pass inom 72 timmar",
+        "note": "Ingen extra träning läggs in enbart för att tid finns.",
     }
 
 

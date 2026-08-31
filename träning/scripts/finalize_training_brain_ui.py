@@ -111,7 +111,7 @@ def render_section(plan, activities_state, strategy, today_date, weather=None, s
     {weather_block}
     <div class="brain-why"><strong>Varför:</strong> {html.escape(today["why"])}</div>
     <div class="brain-next">
-      <div class="brain-next-label">Nästa beslut</div>
+      <div class="brain-next-label">Nästa pass</div>
       <strong>{decision_heading}</strong>
       <div class="brain-note">{html.escape(decision["note"])}</div>
     </div>
@@ -187,7 +187,7 @@ def main():
     INDEX_FILE.write_text(rendered, encoding="utf-8")
 
     verify = INDEX_FILE.read_text(encoding="utf-8")
-    required = [SECTION_START, "Idag ·", "Nästa beslut", "week-focus-mesocycle-meta", "Mesocykelhypotes:", CSS_MARKER]
+    required = [SECTION_START, "Idag ·", "Nästa pass", "week-focus-mesocycle-meta", "Mesocykelhypotes:", CSS_MARKER]
     missing = [marker for marker in required if marker not in verify]
     if missing:
         raise RuntimeError(f"Träningshjärna: renderad sida saknar {missing!r}")
@@ -195,7 +195,7 @@ def main():
     leaked = [marker for marker in forbidden if marker in verify]
     if leaked:
         raise RuntimeError(f"Träningshjärna: redundant information kvar i normalvyn: {leaked!r}")
-    print("Träningshjärna OK: Veckofokus visar mesocykel + mikrocykel; Idag och Nästa beslut navigerar i närtid.")
+    print("Träningshjärna OK: Veckofokus visar mesocykel + mikrocykel; Idag och Nästa pass ger en konkret närtidsplan.")
 
 
 if __name__ == "__main__":
