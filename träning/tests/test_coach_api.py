@@ -21,6 +21,8 @@ from coach import (  # noqa: E402
     normalize_resolved_dose_reselection,
     normalize_same_day_open_dose_action,
     neutralize_unbased_load_labels,
+    performance_context_for_activity,
+    performance_facts,
     scrub_private_wellness_output,
     rolling_load_context,
     stable_hash,
@@ -225,6 +227,56 @@ class CoachApiTests(unittest.TestCase):
         )
         self.assertEqual(context["lookback_days"], 3)
         self.assertEqual(context["lookahead_days"], 3)
+
+    def test_performance_context_is_selected_by_activity_id(self):
+        history = {
+            "entries": [
+                {"activity_id": 10, "protocol_key": "run_threshold:3x8:90s"},
+                {"activity_id": 11, "protocol_key": "run_threshold:3x10:90s"},
+            ]
+        }
+        self.assertEqual(
+            performance_context_for_activity(history, 11)["protocol_key"],
+            "run_threshold:3x10:90s",
+        )
+        self.assertEqual(performance_context_for_activity(history, 99), {})
+
+    def test_performance_facts_preserve_interval_and_comparison_numbers(self):
+        context = {
+            "protocol_key": "run_threshold:3x8:90s",
+            "work_intervals": [
+                {"pace_s_per_km": 245.0, "average_heartrate": 150.0},
+                {"pace_s_per_km": 243.0, "average_heartrate": 152.0},
+                {"pace_s_per_km": 242.0, "average_heartrate": 154.0},
+            ],
+            "summary": {
+                "first_to_last_pace_delta_s_per_km": -3.0,
+                "first_to_last_hr_delta": 4.0,
+            },
+            "comparison": {
+                "previous_activity_date": "2026-08-25",
+                "mean_pace_delta_s_per_km": -2.0,
+                "mean_hr_delta": 1.0,
+                "mean_watts_delta": 3.0,
+            },
+        }
+        facts = performance_facts(context)
+        self.assertIn("4:05/km / 4:03/km / 4:02/km", facts[0])
+        self.assertIn("150 / 152 / 154 bpm", facts[0])
+        self.assertIn("-3,0 s/km", facts[1])
+        self.assertIn("+4,0 bpm", facts[1])
+        self.assertIn("2026-08-25", facts[2])
+        self.assertIn("-2,0 s/km", facts[2])
+        self.assertIn("+1,0 bpm", facts[2])
+
+    def test_performance_context_changes_stable_hash(self):
+        base = stable_hash(
+            {}, {"id": 1}, "2026-08-31", {}, {}, {}, {"protocol_key": "a"}
+        )
+        changed = stable_hash(
+            {}, {"id": 1}, "2026-08-31", {}, {}, {}, {"protocol_key": "b"}
+        )
+        self.assertNotEqual(base, changed)
 
     def test_rolling_context_changes_stable_hash(self):
         base = stable_hash({}, {"id": 1}, "2026-08-31", {}, {}, {"actual_activities": [{"id": 1}]})
