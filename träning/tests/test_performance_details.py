@@ -148,6 +148,51 @@ class PerformanceDetailTests(unittest.TestCase):
         self.assertEqual(comparison["mean_watts_delta"], 3.0)
         self.assertEqual(comparison["total_work_delta_s"], 0.0)
 
+    def test_diagnostics_are_aggregate_only_and_explain_protocol_detection(self):
+        state = {
+            "activities": [
+                {
+                    "id": 12,
+                    "sport_type": "Run",
+                    "start_date": "2026-09-01T16:00:00Z",
+                    "start_date_local": "2026-09-01T18:00:00",
+                    "user_report": "3×8 min tröskel.",
+                }
+            ]
+        }
+        rows = [
+            {
+                "id": "i12",
+                "type": "Run",
+                "source": "GARMIN",
+                "start_date": "2026-09-01T16:00:00Z",
+            }
+        ]
+        detail = {
+            "icu_intervals": [
+                interval(480, 2000, 150),
+                interval(480, 2010, 152),
+                interval(480, 2020, 154),
+            ]
+        }
+        history = {"schema_version": 1, "entries": []}
+        diagnostics = {}
+        sync(
+            state,
+            history,
+            rows,
+            lambda _: detail,
+            date(2026, 8, 1),
+            diagnostics=diagnostics,
+        )
+        self.assertEqual(diagnostics["candidate_runs"], 1)
+        self.assertEqual(diagnostics["intervals_activity_matched"], 1)
+        self.assertEqual(diagnostics["detail_with_icu_intervals"], 1)
+        self.assertEqual(diagnostics["detected_from_intervals"], 1)
+        self.assertEqual(diagnostics["interval_types"]["WORK"], 3)
+        self.assertNotIn("activity_id", diagnostics)
+        self.assertNotIn("heartrate", str(diagnostics).lower())
+
     def test_sync_builds_fingerprint_without_raw_streams(self):
         state = {
             "activities": [
