@@ -36,7 +36,7 @@ def write_json(path, payload):
 def authorization():
     key = os.environ.get("INTERVALS_API_KEY", "").strip()
     if not key:
-        raise RuntimeError("INTERVALS_API_KEY saknas")
+        return None
     token = base64.b64encode(f"API_KEY:{key}".encode("utf-8")).decode("ascii")
     return f"Basic {token}"
 
@@ -366,11 +366,15 @@ def sync(state, history, intervals_rows, fetch_detail, oldest):
 
         matched = match_activity(activity, intervals_rows)
         if matched and matched.get("id") not in (None, ""):
-            detail = fetch_detail(matched["id"])
-            detected = infer_threshold_protocol(activity, detail)
-            if detected:
-                source_name = "Intervals.icu"
-                source_activity_id = matched.get("id")
+            try:
+                detail = fetch_detail(matched["id"])
+            except Exception:
+                detail = None
+            if detail:
+                detected = infer_threshold_protocol(activity, detail)
+                if detected:
+                    source_name = "Intervals.icu"
+                    source_activity_id = matched.get("id")
 
         if not detected:
             detected = infer_threshold_from_laps(activity)
@@ -412,12 +416,18 @@ def main():
     newest = datetime.now(timezone.utc).date()
     oldest = newest - timedelta(days=args.days - 1)
     auth = authorization()
-    interval_activities = fetch_activity_list(oldest, newest, auth)
+    interval_activities = []
+    if auth:
+        try:
+            interval_activities = fetch_activity_list(oldest, newest, auth)
+        except Exception as exc:
+            print(f"WARNING: Intervals.icu unavailable; using Strava lap fallback: {exc}", file=sys.stderr)
+
     updated, skipped = sync(
         state,
         history,
         interval_activities,
-        lambda activity_id: fetch_activity_detail(activity_id, auth),
+        (lambda activity_id: fetch_activity_detail(activity_id, auth)) if auth else (lambda _: {}),
         oldest,
     )
     write_json(HISTORY_FILE, history)
