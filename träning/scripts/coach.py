@@ -37,10 +37,25 @@ WELLNESS_CONTEXT_FILE = Path(
 )
 
 MODEL = os.environ.get("OPENAI_MODEL", "gpt-5-mini")
-COACH_CONTRACT_VERSION = 11
+COACH_CONTRACT_VERSION = 12
 PRIVATE_WELLNESS_PATTERN = re.compile(
     r"\b(?:hrv|vilopuls|restinghr|sömn(?:poäng|score)?|sleep(?:secs|score|quality)?|wellness|garmin|intervals\.icu)\b"
     r"(?:\s*[:=]?\s*[-+]?\d+(?:[.,]\d+)?)?",
+    re.IGNORECASE,
+)
+
+_RELATIVE_LEVEL = r"(?:ovanligt\s+|relativt\s+)?(?:hög(?:t)?|låg(?:t)?|måttlig(?:t)?)(?:\s+till\s+(?:hög(?:t)?|låg(?:t)?|måttlig(?:t)?))?"
+_LOAD_NOUN = (
+    r"(?:(?:kardiovaskulär|kardiovaskulärt|mekanisk|mekaniskt|neuromuskulär|"
+    r"neuromuskulärt|samlad|samlat|tränings)\s+)?"
+    r"(?:volym|belastning|intensitet|återhämtningsbehov|kostnad)"
+)
+RELATIVE_LOAD_PREFIX_PATTERN = re.compile(
+    rf"\b{_RELATIVE_LEVEL}\s+(?={_LOAD_NOUN}\b)",
+    re.IGNORECASE,
+)
+RELATIVE_LOAD_PREDICATE_PATTERN = re.compile(
+    rf"\b({_LOAD_NOUN})\s+(?:är|var|ser\s+ut\s+att\s+vara|bedöms\s+som)\s+{_RELATIVE_LEVEL}\b",
     re.IGNORECASE,
 )
 
@@ -158,6 +173,45 @@ def rolling_load_context(activities, plan, local_date, strategy):
         "load_dimensions": load_model.get("dimensions") or [],
         "rules": load_model.get("rules") or [],
     }
+
+
+def neutralize_unbased_load_text(value):
+    """Remove unsupported relative load levels from model-generated prose.
+
+    The coach may describe observed facts, but without an explicit personal
+    baseline it may not classify load/volume/intensity/recovery need as high,
+    low or moderate. This guard changes only derived prose; canonical facts are
+    never passed through it.
+    """
+    text = str(value or "")
+    text = RELATIVE_LOAD_PREDICATE_PATTERN.sub(
+        lambda match: f"{match.group(1)} kan inte nivåklassas mot personlig baslinje",
+        text,
+    )
+    text = RELATIVE_LOAD_PREFIX_PATTERN.sub("", text)
+    text = re.sub(r"[ \t]{2,}", " ", text)
+    return text.strip()
+
+
+def neutralize_unbased_load_labels(result):
+    """Calibrate derived AI fields while preserving source facts verbatim."""
+    assessment = result.get("assessment") or {}
+    for field in ("summary", "load_interpretation"):
+        if isinstance(assessment.get(field), str):
+            assessment[field] = neutralize_unbased_load_text(assessment[field])
+    for field in ("interpretations", "unknowns"):
+        values = assessment.get(field)
+        if isinstance(values, list):
+            assessment[field] = [
+                neutralize_unbased_load_text(item) if isinstance(item, str) else item
+                for item in values
+            ]
+
+    action = result.get("plan_action") or {}
+    for field in ("reason", "recommendation"):
+        if isinstance(action.get(field), str):
+            action[field] = neutralize_unbased_load_text(action[field])
+    return result
 
 
 def scrub_private_wellness_output(value):
@@ -545,6 +599,7 @@ def main():
     result = call_openai(system_prompt, input_data)
     if wellness_context.get("daily"):
         result = scrub_private_wellness_output(result)
+    result = neutralize_unbased_load_labels(result)
     result["assessment"] = normalize_assessment_confidence(result["assessment"])
     result["assessment"]["facts"] = canonical_facts(latest, latest_date, fulfilled_dates)
     result["plan_action"] = normalize_deferred_future_action(
