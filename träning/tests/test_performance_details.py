@@ -28,6 +28,22 @@ def interval(seconds, distance, hr, watts=None, kind="WORK"):
 
 
 class PerformanceDetailTests(unittest.TestCase):
+    def test_utc_start_date_match_survives_missing_intervals_local_time(self):
+        activity = {
+            "sport_type": "Run",
+            "start_date": "2026-08-25T17:34:18Z",
+            "start_date_local": "2026-08-25T19:34:18Z",
+        }
+        rows = [
+            {
+                "id": "i-utc",
+                "type": "Run",
+                "source": "GARMIN",
+                "start_date": "2026-08-25T17:34:18Z",
+            }
+        ]
+        self.assertEqual(match_activity(activity, rows)["id"], "i-utc")
+
     def test_prefers_garmin_match_at_same_start_time(self):
         activity = {
             "sport_type": "Run",

@@ -79,8 +79,21 @@ def fetch_activity_detail(activity_id, auth):
     return data
 
 
+def utc_dt(row):
+    value = row.get("start_date")
+    if not isinstance(value, str) or len(value) < 19:
+        return None
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc)
+
+
 def local_dt(row):
-    value = row.get("start_date_local") or row.get("start_date")
+    value = row.get("start_date_local")
     if not isinstance(value, str) or len(value) < 19:
         return None
     try:
@@ -103,17 +116,22 @@ def sport_compatible(left, right):
 
 
 def match_activity(strava_row, intervals_rows, max_delta_s=600):
-    target = local_dt(strava_row)
-    if target is None:
+    target_utc = utc_dt(strava_row)
+    target_local = local_dt(strava_row)
+    if target_utc is None and target_local is None:
         return None
     candidates = []
     for row in intervals_rows:
         if not sport_compatible(strava_row, row):
             continue
-        when = local_dt(row)
-        if when is None:
+        when_utc = utc_dt(row)
+        when_local = local_dt(row)
+        if target_utc is not None and when_utc is not None:
+            delta = abs((when_utc - target_utc).total_seconds())
+        elif target_local is not None and when_local is not None:
+            delta = abs((when_local - target_local).total_seconds())
+        else:
             continue
-        delta = abs((when - target).total_seconds())
         if delta <= max_delta_s:
             source = str(row.get("source") or "").strip().upper()
             candidates.append((delta, SOURCE_PREFERENCE.get(source, 5), str(row.get("id") or ""), row))
