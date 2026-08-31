@@ -4,30 +4,32 @@
       "activity_id": 19960743008,
       "activity_date": "2026-08-30",
       "activity_name": "Löpning på morgonen",
-      "generated_at_utc": "2026-08-31T09:17:37.108556+00:00",
+      "generated_at_utc": "2026-08-31T09:58:12.498914+00:00",
       "model": "gpt-5-mini",
+      "performance_marker_id": null,
+      "performance_protocol_key": null,
       "assessment": {
-        "summary": "Stort aerobiskt löppass ökar kardiovaskulär och mekanisk närbelastning inför veckans löpkvalitet; måndagens enduroskola är fast och dess faktiska belastning ska värderas.",
-        "load_interpretation": "Senaste 3 dagarna visar kardiovaskulär volym (långa löp + 4 km sim) och ökad mekanisk belastning från lång löpning.",
+        "summary": "Långt löppass (ca 18.9 km, 1h43) ovanpå 4 000 m sim + tidigare hård löpvecka; påverkar främst kardiovaskulär och mekanisk belastning inför tisdagens tröskel.",
+        "load_interpretation": "De senaste 3 dagarna visar kardiovaskulär volym och märkbar mekanisk belastning från långa löppass och simning.",
         "confidence": "medium",
         "facts": [
           "Run: 18,88 km · 1:43:14 · 184 m+ · snittpuls 139,3 · maxpuls 153."
         ],
         "interpretations": [
-          "Kardiovaskulär belastning är tydligt förhöjd och mikrocykeln har mindre marginal inför tisdagens kontrollerade tröskel.",
-          "Ingen indikation på lokalt muskulär skada eller avvikande återhämtningsunderlaget-mönster som kräver vila; enduro måndag förblir fast och kommer avgöra om tisdag ska justeras."
+          "Tre dagars ackumulerad kardiovaskulär volym är högre än normalt mikrocykelbas; benen har haft upprepade löpbelastningar vilket ökar mekanisk kostnad.",
+          "Måndagens enduroskola är planerad men ej genomförd; dess faktiska belastning kan påverka tisdagens beslut senare."
         ],
         "unknowns": [
-          "Måndagens faktiska endurobelastning (teknisk vs. fysisk) och användarens subjektiva dagskänsla efter enduroskolan.",
-          "Detaljerad lokal muskeltrötthet i benen efter 18.9 km löp saknas.",
-          "Eventuell nattlig återhämtning eller akut stress som kan påverka tisdagens kvalitetspass."
+          "Måndagens (2026-08-31) enduroskolas faktiska belastning (avgör om ytterligare reduktion krävs).",
+          "Subjektivt dagskänsla/bentrötthet efter dagens långa löppass saknas.",
+          "Eventuell planerad aktiv vila eller andra fasta åtaganden innan tisdag."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "",
-        "reason": "Närbelastningen kan absorberas men måndagens enduro används som kontrollpunkt innan ändring av tisdagens tröskel.",
-        "recommendation": "Behåll grundplan: låt måndagens enduroskola genomföras som plan; utvärdera dess faktiska belastning och dagskänsla efter passet för att bekräfta att tisdagens 3×8 min tröskel kan genomföras oförändrad.",
+        "reason": "Närbelastningen kan normalt absorberas; ingen tydlig skada eller data som kräver omedelbar nedskalning före tisdag.",
+        "recommendation": "Behåll grundplanen för tisdag 2026-09-01 (3×8 min tröskel). Avvakta måndagens enduroutfall; om enduron blir tung absorberas konservativt eller tröskeln flyttas vid behov.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -520,7 +522,7 @@
       }
     }
   ],
-  "last_trigger_hash": "425334e339e827581f47e4f106d8539285aeecc8a058bb4c93c702f689c6d914",
-  "last_run_utc": "2026-08-31T09:17:37.108556+00:00",
-  "contract_version": 12
+  "last_trigger_hash": "9977086cd59154e6f5a129de386846294f5310c0eabb6b24ddd1960b6a160fc0",
+  "last_run_utc": "2026-08-31T09:58:12.498914+00:00",
+  "contract_version": 13
 }
