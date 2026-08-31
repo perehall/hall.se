@@ -35,7 +35,7 @@ h1{font-size:clamp(2rem,8vw,3.2rem);line-height:1;margin:0 0 8px;letter-spacing:
 .system-window{position:fixed;inset:auto;width:min(520px,calc(100vw - 32px));max-height:calc(100vh - 32px);left:50%;top:50%;transform:translate(-50%,-50%);margin:0;border:1px solid #e2e8f0;border-radius:18px;padding:0;background:#fff;color:#0f172a;box-shadow:0 24px 70px rgba(15,23,42,.28);overflow:auto}
 .system-window::backdrop{background:rgba(15,23,42,.38)}
 .system-inner{padding:0 18px 18px}
-.system-head{position:sticky;top:0;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 -18px 8px;padding:14px 18px 10px;background:#fff;border-bottom:1px solid #f1f5f9}
+.system-head{position:sticky;top:0;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 -18px 8px;padding:14px 18px 10px;background:#fff;border-bottom:1px solid #f1f5f9;cursor:move;touch-action:none;user-select:none}
 .system-head h2{font-size:1.1rem;line-height:1.25;margin:0}
 .system-close{appearance:none;border:0;background:#f1f5f9;color:#334155;border-radius:999px;padding:7px 10px;font:inherit;font-size:.78rem;font-weight:800;cursor:pointer}
 .system-lead{margin:10px 0 8px;color:#334155;font-size:.92rem;line-height:1.45}
@@ -57,6 +57,7 @@ h1{font-size:clamp(2rem,8vw,3.2rem);line-height:1;margin:0 0 8px;letter-spacing:
   .week-nav-center strong{font-size:.8rem}
   .system-window{width:min(100% - 16px,720px);max-height:min(78vh,680px);left:50%!important;top:auto!important;bottom:0;transform:translateX(-50%)!important;border:0;border-radius:22px 22px 0 0}
   .system-inner{padding:0 18px calc(20px + env(safe-area-inset-bottom))}
+  .system-head{cursor:default;touch-action:auto}
 }
 
 </style><style>
@@ -130,7 +131,7 @@ h1{font-size:clamp(2rem,8vw,3.2rem);line-height:1;margin:0 0 8px;letter-spacing:
 
 <dialog id="trainingSystemSheet" class="system-window" aria-labelledby="trainingSystemTitle">
   <div class="system-inner">
-    <div class="system-head">
+    <div class="system-head" id="trainingSystemDragHandle">
       <h2 id="trainingSystemTitle">Om träningssystemet</h2>
       <button class="system-close" type="button" onclick="document.getElementById('trainingSystemSheet').close()">Stäng</button>
     </div>
@@ -149,8 +150,56 @@ h1{font-size:clamp(2rem,8vw,3.2rem);line-height:1;margin:0 0 8px;letter-spacing:
 </dialog>
 <script>
 function openTrainingSystemInfo() {
-  document.getElementById('trainingSystemSheet').showModal();
+  const dialog = document.getElementById('trainingSystemSheet');
+  dialog.style.left = '50%';
+  dialog.style.top = '50%';
+  dialog.style.transform = 'translate(-50%,-50%)';
+  dialog.showModal();
 }
+(function() {
+  const dialog = document.getElementById('trainingSystemSheet');
+  const handle = document.getElementById('trainingSystemDragHandle');
+  let dragging = false;
+  let offsetX = 0;
+  let offsetY = 0;
+  function desktop() { return window.matchMedia('(min-width: 621px)').matches; }
+  function clamp(value, min, max) { return Math.min(Math.max(value, min), max); }
+  handle.addEventListener('pointerdown', (event) => {
+    if (!desktop() || event.target.closest('button')) return;
+    const rect = dialog.getBoundingClientRect();
+    dialog.style.transform = 'none';
+    dialog.style.left = rect.left + 'px';
+    dialog.style.top = rect.top + 'px';
+    offsetX = event.clientX - rect.left;
+    offsetY = event.clientY - rect.top;
+    dragging = true;
+    handle.setPointerCapture(event.pointerId);
+  });
+  handle.addEventListener('pointermove', (event) => {
+    if (!dragging || !desktop()) return;
+    const rect = dialog.getBoundingClientRect();
+    const margin = 8;
+    const maxLeft = Math.max(margin, window.innerWidth - rect.width - margin);
+    const maxTop = Math.max(margin, window.innerHeight - rect.height - margin);
+    dialog.style.left = clamp(event.clientX - offsetX, margin, maxLeft) + 'px';
+    dialog.style.top = clamp(event.clientY - offsetY, margin, maxTop) + 'px';
+  });
+  function stopDrag(event) {
+    if (!dragging) return;
+    dragging = false;
+    if (event.pointerId !== undefined && handle.hasPointerCapture(event.pointerId)) handle.releasePointerCapture(event.pointerId);
+  }
+  handle.addEventListener('pointerup', stopDrag);
+  handle.addEventListener('pointercancel', stopDrag);
+  window.addEventListener('resize', () => {
+    if (!dialog.open || !desktop()) return;
+    const rect = dialog.getBoundingClientRect();
+    const margin = 8;
+    dialog.style.transform = 'none';
+    dialog.style.left = clamp(rect.left, margin, Math.max(margin, window.innerWidth - rect.width - margin)) + 'px';
+    dialog.style.top = clamp(rect.top, margin, Math.max(margin, window.innerHeight - rect.height - margin)) + 'px';
+  });
+})();
 </script>
 
 <footer>Målbilden är kvalitativ och uppdateras när faktisk träning motiverar det. · <a href="/cdn-cgi/access/logout" style="color:inherit">Logga ut</a></footer></div>
