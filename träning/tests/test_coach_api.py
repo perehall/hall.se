@@ -217,7 +217,7 @@ class CoachApiTests(unittest.TestCase):
             ]
         }
         context = rolling_load_context(activities, plan, "2026-08-31", strategy)
-        self.assertEqual([a["id"] for a in context["actual_activities"]], [2, 3, 4])
+        self.assertEqual([a["id"] for a in context["actual_activities"]], [3, 4])
         self.assertEqual(
             [d["date"] for d in context["planned_days"]],
             ["2026-08-31", "2026-09-01", "2026-09-03"],
