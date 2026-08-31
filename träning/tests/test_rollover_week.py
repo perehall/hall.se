@@ -129,7 +129,7 @@ class WeeklyRolloverTests(unittest.TestCase):
         self.assertEqual(promoted["days"][0]["planning_status"], "fixed")
         self.assertEqual(promoted["days"][0]["sport"], "enduro")
         self.assertEqual(promoted["days"][0]["classification"], "training")
-        self.assertTrue(promoted["days"][0]["dose_open"])
+        self.assertNotIn("dose_open", promoted["days"][0])
         self.assertEqual(future["week_key"], "2026-W36")
         self.assertEqual(future["meta"]["week_start"], "2026-08-31")
         self.assertEqual(future["meta"]["week_end"], "2026-09-06")
@@ -138,7 +138,7 @@ class WeeklyRolloverTests(unittest.TestCase):
         self.assertEqual(future["days"][0]["microcycle_id"], "run-threshold-hill-4w:mc2")
         self.assertEqual(future["days"][0]["microcycle_day"], 1)
         self.assertEqual(future["days"][0]["classification"], "training")
-        self.assertTrue(future["days"][0]["dose_open"])
+        self.assertNotIn("dose_open", future["days"][0])
         self.assertEqual(future["meta"]["mesocycle_id"], "run-threshold-hill-4w")
         self.assertEqual(future["meta"]["microcycle_index"], 2)
         self.assertFalse(future["meta"]["requires_mesocycle_review"])
@@ -171,21 +171,32 @@ class WeeklyRolloverTests(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             rollover_documents(plan_w34(), upcoming, date(2026, 8, 24), STRATEGY)
 
-    def test_future_week_contains_no_invented_training_dose_without_established_session(self):
+    def test_future_week_has_concrete_baselines_without_automatic_progression(self):
         promoted, _ = rollover_documents(plan_w34(), upcoming_w35(), date(2026, 8, 24), STRATEGY)
         future = build_open_next_week(promoted, STRATEGY)
         enduro = future["days"][0]
         self.assertEqual(enduro["sport"], "enduro")
-        self.assertTrue(enduro["dose_open"])
-        for index, day in enumerate(future["days"][1:], start=1):
-            self.assertNotIn("duration", day)
-            self.assertNotIn("distance", day)
-            if index == 5:
-                self.assertEqual(day["planning_status"], "open")
-                self.assertIn("Ingen träningsdos", day["reason"])
-            else:
-                self.assertEqual(day["planning_status"], "preliminary")
-                self.assertTrue(day["dose_open"])
+        self.assertNotIn("dose_open", enduro)
+
+        expected = {
+            1: ("run-threshold-3x8", "3 × 8 min"),
+            2: ("swim-support-3200", "3 200 m"),
+            3: ("mtb-support-60", "60 min"),
+            4: ("run-hill-6x150", "6 × 150 m"),
+            6: ("run-easy-75", "75 min"),
+        }
+        for index, (option_id, marker) in expected.items():
+            day = future["days"][index]
+            self.assertEqual(day["planning_status"], "preliminary")
+            self.assertEqual(day["baseline_option_id"], option_id)
+            self.assertEqual(day["dose_resolution"]["state"], "baseline")
+            self.assertIn(marker, day["session"])
+            self.assertNotIn("dos öppen", day["session"].lower())
+
+        free_day = future["days"][5]
+        self.assertEqual(free_day["planning_status"], "open")
+        self.assertEqual(free_day["session"], "Ingen planerad träning")
+        self.assertIn("Ingen träning är planerad som standard", free_day["reason"])
 
     def test_structured_swim_is_carried_forward_without_volume_increase(self):
         upcoming = add_structured_swim(upcoming_w35())
