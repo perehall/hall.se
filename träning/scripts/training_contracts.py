@@ -187,6 +187,23 @@ def validate_activities_document(document):
             _nonempty_string(activity.get("display_label"), f"{context}.display_label")
         if "plan_relation" in activity:
             require(activity.get("plan_relation") in VALID_PLAN_RELATIONS, f"{context}: ogiltig plan_relation")
+        if "laps" in activity:
+            laps = activity.get("laps")
+            require(isinstance(laps, list), f"{context}.laps måste vara lista")
+            for lap_index, lap in enumerate(laps):
+                lap_context = f"{context}.laps[{lap_index}]"
+                require(isinstance(lap, dict), f"{lap_context}: måste vara objekt")
+                for field in (
+                    "elapsed_time_s",
+                    "moving_time_s",
+                    "distance_m",
+                    "average_speed",
+                    "average_heartrate",
+                    "max_heartrate",
+                    "average_watts",
+                    "average_cadence",
+                ):
+                    _nonnegative_number(lap.get(field), f"{lap_context}.{field}")
     return True
 
 
