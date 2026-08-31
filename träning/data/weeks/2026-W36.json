@@ -4,7 +4,7 @@
   "week_start": "2026-08-31",
   "week_end": "2026-09-06",
   "created_at_utc": "2026-08-30T22:09:50.110394+00:00",
-  "updated_at_utc": "2026-08-31T07:08:46.841457+00:00",
+  "updated_at_utc": "2026-08-31T09:10:03.054845+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -20,7 +20,47 @@
       "microcycle_index": 2,
       "microcycle_total": 4,
       "microcycle_length_days": 7,
-      "calendar_week_is_presentation": true
+      "calendar_week_is_presentation": true,
+      "mesocycle_contract": {
+        "primary": [
+          "run_threshold",
+          "run_hill_quality",
+          "run_easy_distance"
+        ],
+        "secondary": [
+          "mtb_technical",
+          "mtb_aerobic"
+        ],
+        "maintenance": [
+          "swim_aerobic",
+          "swim_technique"
+        ],
+        "protected_capacity": [
+          "strength_unilateral",
+          "strength_core",
+          "plyometric"
+        ],
+        "external_load": [
+          "enduro_technical"
+        ],
+        "principle": "Primära stimuli driver mesocykeln. Sekundära stimuli utvecklas när de inte tränger undan primärt arbete. Underhåll ska bevara kapacitet med låg konkurrens. Skyddad styrka/core/plyo får inte försvinna som restpost. Extern belastning räknas in men ges ingen schablondos."
+      },
+      "capacity_protection": {
+        "required_each_microcycle": [
+          "strength_unilateral",
+          "strength_core"
+        ],
+        "protected_across_mesocycle": [
+          "plyometric"
+        ],
+        "missing_required_action": "review_and_restore_in_next_absorbable_window",
+        "rules": [
+          "Minst en konkret styrka/core-exponering ska finnas i varje mikrocykel om inte faktisk belastning eller återhämtning ger dokumenterat skäl att ta bort den.",
+          "Plyometri skyddas över mesocykeln men tvingas inte in när benen inte är mekaniskt fräscha eller när den konkurrerar med backkvalitet/enduro.",
+          "Om en skyddad kapacitet tas bort ska orsaken lagras och nästa absorberbara möjlighet aktivt sökas; den får inte bara falla ur planen."
+        ]
+      },
+      "missing_protected_capabilities": []
     },
     "days": [
       {
@@ -41,7 +81,11 @@
         "mesocycle_id": "run-threshold-hill-4w",
         "microcycle_id": "run-threshold-hill-4w:mc2",
         "microcycle_index": 2,
-        "microcycle_day": 1
+        "microcycle_day": 1,
+        "load_dimensions": [
+          "technical",
+          "neuromuscular"
+        ]
       },
       {
         "date": "2026-09-01",
@@ -67,7 +111,12 @@
           "kind": "structured",
           "value": 24,
           "option_id": "run-threshold-3x8"
-        }
+        },
+        "load_dimensions": [
+          "cardiovascular",
+          "mechanical"
+        ],
+        "performance_marker_id": "run-threshold-control"
       },
       {
         "date": "2026-09-02",
@@ -194,7 +243,13 @@
           "kind": "duration_minutes",
           "value": 60,
           "option_id": "mtb-support-60"
-        }
+        },
+        "load_dimensions": [
+          "cardiovascular",
+          "neuromuscular",
+          "technical"
+        ],
+        "performance_marker_id": "mtb-technical-repeat"
       },
       {
         "date": "2026-09-04",
@@ -220,109 +275,64 @@
           "kind": "structured",
           "value": 6,
           "option_id": "run-hill-6x150"
-        }
+        },
+        "load_dimensions": [
+          "mechanical",
+          "neuromuscular",
+          "cardiovascular"
+        ],
+        "performance_marker_id": "run-hill-mechanics"
       },
       {
         "date": "2026-09-05",
         "label": "Lördag",
         "status": "planned",
-        "session": "Simning · lugn aerob/teknik · 3 000 m · ca 50–55 min",
-        "reason": "Ger ett andra simstimulus i veckan med låg mekanisk kostnad mellan fredagens backkvalitet och söndagens lugna löpdistans. Ingen tröskel eller hård benbelastning läggs till.",
-        "sport": "swim",
-        "development_focus": "Avslappnad teknik, stabil kroppslinje och jämn aerob ansträngning; passet ska lämna benen fräscha till söndagens löpning.",
-        "priority_role": "flex",
+        "session": "Styrka/core · 25 min · styrkemall",
+        "reason": "Skyddar styrka och bål som allroundkapacitet. Den reducerade 25-minutersvarianten används eftersom passet ligger mellan fredagens backkvalitet och söndagens lugna löpdistans; målet är kvalitativ styrka utan extra konditionsbelastning.",
+        "sport": "strength",
+        "development_focus": "Kontrollerad unilateral styrka, höftdominant arbete, drag/press och bål. Ingen konditionsjakt; plyometri endast som liten kvalitetsdos när benen är mekaniskt fräscha.",
+        "priority_role": "protected_support",
         "stimuli": [
-          "swim_aerobic",
-          "swim_technique"
+          "strength_unilateral",
+          "strength_core"
         ],
         "mesocycle_id": "run-threshold-hill-4w",
         "microcycle_id": "run-threshold-hill-4w:mc2",
         "microcycle_index": 2,
         "microcycle_day": 6,
-        "microcycle_slot": "swim_support_2",
-        "swim_equipment": {
-          "planned": "none"
+        "microcycle_slot": "strength_support",
+        "planning_status": "planned",
+        "optional_stimuli": [
+          "plyometric"
+        ],
+        "load_dimensions": [
+          "mechanical",
+          "neuromuscular"
+        ],
+        "dose_options": [
+          {
+            "id": "strength-support-25",
+            "kind": "duration_minutes",
+            "value": 25,
+            "session": "Styrka/core · 25 min · styrkemall",
+            "intent": "Reducerad skyddsdos när närbelastningen kräver extra marginal."
+          },
+          {
+            "id": "strength-support-35",
+            "kind": "duration_minutes",
+            "value": 35,
+            "session": "Styrka/core · ca 35 min · styrkemall",
+            "intent": "Normal kort styrka/core-exponering, förankrad i nyligen genomförd cirka 36-minutersstyrka."
+          }
+        ],
+        "baseline_option_id": "strength-support-35",
+        "dose_resolution": {
+          "state": "adjusted",
+          "kind": "duration_minutes",
+          "value": 25,
+          "option_id": "strength-support-25"
         },
-        "watch_workout": {
-          "sync_enabled": false,
-          "id": "swim-w36-sat-aerob-tech-3000",
-          "type": "Swim",
-          "equipment": [],
-          "name": "Lugn aerob/teknik · 3 000 m",
-          "planned_distance_m": 3000,
-          "blocks": [
-            {
-              "name": "Insim",
-              "steps": [
-                {
-                  "kind": "swim",
-                  "text": "Lugn insim",
-                  "distance_m": 400,
-                  "intensity": "warmup"
-                }
-              ]
-            },
-            {
-              "name": "Teknik",
-              "repeat": 6,
-              "steps": [
-                {
-                  "kind": "swim",
-                  "text": "Stabil linje och avslappnad rotation",
-                  "distance_m": 50,
-                  "intensity": "active"
-                },
-                {
-                  "kind": "rest",
-                  "duration_s": 15
-                }
-              ]
-            },
-            {
-              "name": "Aerob",
-              "repeat": 6,
-              "steps": [
-                {
-                  "kind": "swim",
-                  "text": "Jämnt lugn aerob, tekniken styr",
-                  "distance_m": 300,
-                  "intensity": "active"
-                },
-                {
-                  "kind": "rest",
-                  "duration_s": 20
-                }
-              ]
-            },
-            {
-              "name": "Frekvens",
-              "repeat": 6,
-              "steps": [
-                {
-                  "kind": "swim",
-                  "text": "Avslappnad frekvens utan fartjakt",
-                  "distance_m": 50,
-                  "intensity": "active"
-                },
-                {
-                  "kind": "rest",
-                  "duration_s": 15
-                }
-              ]
-            },
-            {
-              "name": "Nedvarvning",
-              "steps": [
-                {
-                  "kind": "swim",
-                  "text": "Mycket lugnt",
-                  "distance_m": 200,
-                  "intensity": "cooldown"
-                }
-              ]
-            }
-          ]
-        }
+        "performance_marker_id": "strength-repeatability"
       },
       {
         "date": "2026-09-06",
@@ -347,7 +357,11 @@
           "kind": "duration_minutes",
           "value": 75,
           "option_id": "run-easy-75"
-        }
+        },
+        "load_dimensions": [
+          "cardiovascular",
+          "mechanical"
+        ]
       }
     ],
     "strength_template": [
