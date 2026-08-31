@@ -4,7 +4,7 @@
   "week_start": "2026-08-31",
   "week_end": "2026-09-06",
   "created_at_utc": "2026-08-30T22:09:50.110394+00:00",
-  "updated_at_utc": "2026-08-31T19:04:52.649062+00:00",
+  "updated_at_utc": "2026-08-31T19:05:47.063174+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -381,12 +381,12 @@
       "start_date": "2026-08-31T16:00:01Z",
       "start_date_local": "2026-08-31T18:00:01Z",
       "distance_m": 23403.7,
-      "moving_time_s": 3973,
+      "moving_time_s": 3975,
       "elapsed_time_s": 6024,
       "total_elevation_gain_m": 508.6,
       "average_heartrate": 110.9,
       "max_heartrate": 178.0,
-      "average_watts": 174.7,
+      "average_watts": 250.5,
       "weighted_average_watts": null,
       "calories": 506.0,
       "device_name": "Garmin Forerunner 970",
@@ -403,7 +403,7 @@
           "average_speed": 5.89,
           "average_heartrate": 110.9,
           "max_heartrate": 178.0,
-          "average_watts": 174.7,
+          "average_watts": 250.5,
           "average_cadence": null
         }
       ]
@@ -414,32 +414,32 @@
       "activity_id": 19980267962,
       "activity_date": "2026-08-31",
       "activity_name": "Enduro på kvällen",
-      "generated_at_utc": "2026-08-31T19:04:52.206616+00:00",
+      "generated_at_utc": "2026-08-31T19:05:46.546848+00:00",
       "model": "gpt-5-mini",
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Måndagens enduro registreras som extern teknisk belastning; använd den för att bedöma tisdagens tröskel.",
-        "load_interpretation": "Enduron gav teknisk och neuromuskulär belastning med måttlig varaktighet; kardiovaskulär och mekanisk kostnad troligen måttlig utifrån data.",
+        "summary": "Enduroskolan registrerad; belastningen är teknisk/neuromuskulär och bör inte automatiskt tränga undan löpprogrammet.",
+        "load_interpretation": "Måndagens enduro gav teknisk och neuromuskulär exponering utan tydlig kardiovaskulär överbelastning för kommande tröskelpass.",
         "confidence": "medium",
         "facts": [
           "EMountainBikeRide: 23,40 km · 1:40:24 · 508,6 m+ · snittpuls 110,9 · maxpuls 178."
         ],
         "interpretations": [
-          "Enduron är extern teknisk/neuromuskulär stimulans som räknas in men saknar schablonmävikt; faktisk mekanisk bentrötthet är okänd men pulsmässigt inte maximal.",
-          "Givet multi-dagsmönstret finns ingen tydlig överbelastning som kräver vila; planen kan behållas med ögon för subjektiv återhämtning."
+          "Aktiviteten är enduro (extern belastning) och räknas som faktisk träning men saknar entydig cykelmekanisk belastningsprofil för MTB-liknande benarbete.",
+          "Givet varaktighet, klättring och tidigare löpdagar är mikrocykeln fortfarande absorberbar för planerat tröskelpass."
         ],
         "unknowns": [
-          "Subjektiv lokal bentrötthet eller ömhet efter enduro saknas.",
-          "Detaljer om faktisk pedaleffekt/engagemang på enduro (om det var mycket sittande körning) är osäkra.",
-          "Eventuella onsite-skador eller smärta rapporterade efter passet saknas."
+          "Användarens subjektiva lokal ben-/muskelttrötthet efter enduron.",
+          "Exakt hur mycket av registrerad effekt/puls kommer från motocrosskörning vs. fysiologiskt arbete.",
+          "Eventuella akuta skador eller stötar under enduron som påverkar löpning."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "",
-        "reason": "Enduron bedöms absorberbar och tröskelpasset är prioriterat enligt mesocykeln.",
-        "recommendation": "Behåll tisdagens 3×8 min tröskel som planerat; avvakta subjektiv återhämtning på morgonen och skala ner till lugn jogg endast om lokal trötthet eller smärta rapporteras.",
+        "reason": "Enduron bedöms som teknisk/neuromuskulär extern last och mikrocykeln är absorberbar; löptröskeln ska därför behållas.",
+        "recommendation": "Behåll planen: kör tisdagens 3×8 min kontrollerad tröskel enligt grundplan. Rapportera om du har lokal ben- eller smärtproblematik före morgondagens pass.",
         "dose_option_id": "",
         "requires_approval": false
       },
