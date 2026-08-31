@@ -11,6 +11,7 @@ from training_contracts import (
     validate_activities_document,
     validate_coach_document,
     validate_plan_document,
+    validate_performance_history_document,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -19,6 +20,7 @@ UPCOMING_FILE = ROOT / "data" / "upcoming_week.json"
 ACTIVITIES_FILE = ROOT / "data" / "activities.json"
 COACH_FILE = ROOT / "data" / "coach.json"
 STRATEGY_FILE = ROOT / "data" / "training_strategy.json"
+PERFORMANCE_FILE = ROOT / "data" / "performance_history.json"
 GOAL_FILE = ROOT / "data" / "goal.json"
 
 
@@ -34,6 +36,7 @@ def main():
     activities_state = load(ACTIVITIES_FILE)
     coach = load(COACH_FILE)
     strategy = load(STRATEGY_FILE)
+    performance = load(PERFORMANCE_FILE)
     goal = load(GOAL_FILE)
 
     validate_plan_document(plan)
@@ -63,6 +66,7 @@ def main():
 
     activities = activities_state.get("activities") or []
     by_id = {str(activity.get("id")): activity for activity in activities if activity.get("id") is not None}
+    validate_performance_history_document(performance, activity_ids=set(by_id))
     validate_coach_document(coach, activity_ids=set(by_id))
 
     analyses = coach.get("analyses") or []
@@ -82,7 +86,7 @@ def main():
         )
 
     print(
-        "Datakontrakt OK: plan v3, kommande vecka v3, aktiviteter v2, strategi v5 och coach-state är konsistenta."
+        "Datakontrakt OK: plan v3, kommande vecka v3, aktiviteter v2, strategi v5, performance v1 och coach-state är konsistenta."
     )
 
 
