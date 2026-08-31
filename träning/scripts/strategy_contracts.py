@@ -156,11 +156,7 @@ def validate_training_strategy(document):
         for field in ("session", "reason", "development_focus"):
             nonempty_string(item.get(field), f"{context}.{field}")
         dose_options = item.get("dose_options")
-        if "dos öppen" in str(item.get("session") or "").lower():
-            require(
-                isinstance(dose_options, list) and dose_options,
-                f"{context}: öppet dospass måste ha dose_options för närtidsresolution",
-            )
+        baseline_option_id = item.get("baseline_option_id")
         if dose_options is not None:
             require(isinstance(dose_options, list) and dose_options, f"{context}.dose_options måste vara icke-tom lista")
             option_ids = set()
@@ -176,6 +172,16 @@ def validate_training_strategy(document):
                 require(isinstance(value, (int, float)) and value > 0, f"{option_context}.value måste vara positivt tal")
                 nonempty_string(option.get("session"), f"{option_context}.session")
                 nonempty_string(option.get("intent"), f"{option_context}.intent")
+            nonempty_string(baseline_option_id, f"{context}.baseline_option_id")
+            require(
+                baseline_option_id in option_ids,
+                f"{context}.baseline_option_id måste referera till ett dose_options-id",
+            )
+            baseline_option = next(option for option in dose_options if option.get("id") == baseline_option_id)
+            require(
+                item.get("session") == baseline_option.get("session"),
+                f"{context}.session måste vara den konkreta grundplanen från baseline_option_id",
+            )
 
     missing_protected = [key for key in protected if key not in template_stimuli]
     require(
@@ -189,13 +195,18 @@ def validate_training_strategy(document):
         "automatic_load_increase",
         "keep_intensity_controlled",
         "dose_decided_near_term",
+        "baseline_session_planned_in_microcycle",
         "preserve_stimulus_before_preserving_exact_session",
         "missed_protected_stimulus_requires_review",
         "microcycle_may_reorganize_sessions",
     ):
         require(isinstance(progression.get(field), bool), f"strategi.current_mesocycle.progression_policy.{field} måste vara bool")
     require(progression.get("automatic_load_increase") is False, "strategi: automatisk belastningsökning får inte vara aktiverad")
-    require(progression.get("dose_decided_near_term") is True, "strategi: mesocykeldos måste beslutas i närtid")
+    require(progression.get("dose_decided_near_term") is False, "strategi: konkreta grundpass får inte skjutas upp till samma dag")
+    require(
+        progression.get("baseline_session_planned_in_microcycle") is True,
+        "strategi: mikrocykeln måste innehålla en konkret grundplan för varje planerat pass",
+    )
     require(
         progression.get("preserve_stimulus_before_preserving_exact_session") is True,
         "strategi: stimulus ska prioriteras före exakt passform",
@@ -239,8 +250,16 @@ def validate_training_strategy(document):
         "long_term_goal_is_primary",
         "near_term_changes_must_serve_long_term_direction",
         "same_day_open_dose_must_resolve_or_review",
+        "concrete_near_term_plan_by_default",
+        "adjust_planned_session_only_when_new_evidence_justifies",
     ):
         require(isinstance(policy.get(field), bool), f"strategi.decision_policy.{field} måste vara bool")
+    require(policy.get("defer_open_dose_until_near_load_known") is False, "strategi: konkret grundplan får inte skjutas upp bara för att föregående pass saknar utfall")
+    require(policy.get("concrete_near_term_plan_by_default") is True, "strategi: närtidsplanen måste vara konkret som standard")
+    require(
+        policy.get("adjust_planned_session_only_when_new_evidence_justifies") is True,
+        "strategi: planerade pass får bara ändras när ny information motiverar det",
+    )
     require(policy.get("long_term_goal_is_primary") is True, "strategi: långsiktig målbild måste vara överordnad")
     require(
         policy.get("near_term_changes_must_serve_long_term_direction") is True,
@@ -248,6 +267,6 @@ def validate_training_strategy(document):
     )
     require(
         policy.get("same_day_open_dose_must_resolve_or_review") is True,
-        "strategi: dagens öppna dos måste lösas eller markeras för review",
+        "strategi: legacy-pass med öppen omfattning måste fortfarande hanteras säkert",
     )
     return True
