@@ -14,6 +14,7 @@ ENDURO_NAME_RE = re.compile(r"\b(?:enduro|motocross)\b", re.IGNORECASE)
 MTB_NAME_RE = re.compile(r"\b(?:mtb|xc|mountain\s*bike|cykel)\b", re.IGNORECASE)
 SWIMRUN_NAME_RE = re.compile(r"\bswim\s*-?\s*run\b|\bswimrun\b", re.IGNORECASE)
 ENDURO_NAME_RULE = "mountainbike-explicit-enduro-name-v1"
+ENDURO_EMTB_PROXY_RULE = "emountainbike-user-enduro-proxy-v1"
 SWIMRUN_NAME_RULE = "trailrun-explicit-swimrun-name-v1"
 COACH_SEMANTIC_FIELDS = (
     "sport_type",
@@ -76,6 +77,21 @@ def auto_swimrun_candidate(activity):
 
 
 def apply_auto_semantics(activity):
+    if raw_sport(activity) == "EMountainBikeRide":
+        original = raw_sport(activity)
+        activity["source_sport_type"] = original
+        activity["sport_type"] = "Enduro"
+        activity["classification"] = "recreation"
+        activity["display_label"] = "Enduro"
+        activity["sport_normalization"] = {
+            "rule": ENDURO_EMTB_PROXY_RULE,
+            "evidence": [
+                "source_sport_type=EMountainBikeRide",
+                "user convention: Strava e-MTB represents Enduro",
+            ],
+        }
+        return True
+
     if auto_enduro_candidate(activity):
         original = raw_sport(activity)
         activity["source_sport_type"] = original
