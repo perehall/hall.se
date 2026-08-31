@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PLAN_FILE = ROOT / "data" / "plan.json"
 UPCOMING_FILE = ROOT / "data" / "upcoming_week.json"
 ACTIVITIES_FILE = ROOT / "data" / "activities.json"
+PERFORMANCE_FILE = ROOT / "data" / "performance_history.json"
 COACH_FILE = ROOT / "data" / "coach.json"
 INDEX_FILE = ROOT / "index.html"
 
@@ -35,6 +36,11 @@ CSS = r"""
 .today-outcome-compare>div+div{border-left:1px solid #e2e8f0;background:#fbfdfc}
 .today-outcome-label{display:block;margin-bottom:4px;font-size:.67rem;font-weight:900;letter-spacing:.07em;text-transform:uppercase;color:#64748b}
 .today-outcome-compare strong{display:block;font-size:.9rem;line-height:1.4}
+.today-outcome-performance{padding:12px 13px;border:1px solid #bae6fd;border-radius:15px;background:#f0f9ff;margin-bottom:12px}
+.today-outcome-performance-grid{display:grid;gap:5px;margin-top:7px}
+.today-outcome-performance-row{display:grid;grid-template-columns:24px minmax(72px,1fr) minmax(62px,1fr);gap:8px;font-size:.84rem;line-height:1.35}
+.today-outcome-performance-row strong{color:#075985}
+.today-outcome-performance-note{margin:8px 0 0;color:#0c4a6e;font-size:.78rem;line-height:1.4}
 .today-outcome-coach{padding:12px 13px;border:1px solid #ddd6fe;border-radius:15px;background:#faf5ff;margin-bottom:12px}
 .today-outcome-coach p{margin:0;color:#3b0764;font-size:.9rem;line-height:1.45}
 .today-outcome-impact{margin-top:8px;padding-top:8px;border-top:1px solid #e9d5ff;color:#4c1d95!important}
@@ -124,6 +130,89 @@ def find_coach_analysis(day, coach_state, today):
     return max(analyses, key=lambda a: a.get("generated_at_utc") or "")
 
 
+def find_performance(activity, history):
+    if not activity:
+        return None
+    activity_id = activity.get("id")
+    for entry in history.get("entries") or []:
+        if str(entry.get("activity_id")) == str(activity_id):
+            return entry
+    return None
+
+
+def fmt_pace_seconds(value):
+    if not isinstance(value, (int, float)) or value <= 0:
+        return "—"
+    total = int(round(value))
+    return f"{total // 60}:{total % 60:02d}/km"
+
+
+def signed_metric(value, suffix):
+    if not isinstance(value, (int, float)):
+        return "—"
+    sign = "+" if value > 0 else ""
+    return (f"{sign}{value:.1f}".replace(".", ",") + suffix)
+
+
+def render_performance(performance):
+    if not performance:
+        return ""
+    rows = []
+    for work in performance.get("work_intervals") or []:
+        pace = fmt_pace_seconds(work.get("pace_s_per_km"))
+        hr = work.get("average_heartrate")
+        hr_text = f"{round(hr)} bpm" if isinstance(hr, (int, float)) else "—"
+        rows.append(
+            '<div class="today-outcome-performance-row">'
+            f'<strong>{int(work.get("index") or len(rows) + 1)}</strong>'
+            f'<span>{html.escape(pace)}</span>'
+            f'<span>{html.escape(hr_text)}</span>'
+            '</div>'
+        )
+    if not rows:
+        return ""
+
+    notes = []
+    summary = performance.get("summary") or {}
+    pace_drift = summary.get("first_to_last_pace_delta_s_per_km")
+    hr_drift = summary.get("first_to_last_hr_delta")
+    if isinstance(pace_drift, (int, float)) or isinstance(hr_drift, (int, float)):
+        parts = []
+        if isinstance(pace_drift, (int, float)):
+            parts.append("tempo 1→sista " + signed_metric(pace_drift, " s/km"))
+        if isinstance(hr_drift, (int, float)):
+            parts.append("puls 1→sista " + signed_metric(hr_drift, " bpm"))
+        notes.append(" · ".join(parts))
+
+    comparison = performance.get("comparison") or {}
+    if comparison:
+        parts = []
+        pace_delta = comparison.get("mean_pace_delta_s_per_km")
+        hr_delta = comparison.get("mean_hr_delta")
+        if isinstance(pace_delta, (int, float)):
+            parts.append("medeltempo " + signed_metric(pace_delta, " s/km"))
+        if isinstance(hr_delta, (int, float)):
+            parts.append("medelpuls " + signed_metric(hr_delta, " bpm"))
+        if parts:
+            notes.append(
+                f'Mot {comparison.get("previous_activity_date")}: ' + " · ".join(parts)
+            )
+
+    note_html = "".join(
+        f'<p class="today-outcome-performance-note">{html.escape(note)}</p>'
+        for note in notes
+    )
+    return (
+        '<div class="today-outcome-performance">'
+        '<span class="today-outcome-label">Passanalys · arbetsintervall</span>'
+        '<div class="today-outcome-performance-grid">'
+        + "".join(rows)
+        + '</div>'
+        + note_html
+        + '</div>'
+    )
+
+
 def planned_text(day):
     return (
         str(day.get("planned_session") or "").strip()
@@ -176,7 +265,7 @@ def completion_note(day):
     return "Passet är registrerat och faktisk dos har vägts in i den fortsatta planen."
 
 
-def render_post_workout(day, activity, analysis, next_day):
+def render_post_workout(day, activity, analysis, next_day, performance=None):
     metrics = [
         ("Tid", fmt_duration((activity or {}).get("elapsed_time_s"))),
         ("Distans", fmt_distance(activity or {})),
@@ -236,6 +325,7 @@ def render_post_workout(day, activity, analysis, next_day):
     <div><span class="today-outcome-label">Plan</span><strong>{html.escape(planned_text(day))}</strong></div>
     <div><span class="today-outcome-label">Utfall</span><strong>{html.escape(actual_text(day, activity))}</strong></div>
   </div>
+  {render_performance(performance)}
   {coach_html}
   {next_html}
   <a class="today-outcome-link" href="#aktuell-vecka">Se hela planen ↓</a>
@@ -274,7 +364,7 @@ def replace_training_brain(page, card):
     return page[:start] + replacement + page[end:]
 
 
-def apply_post_workout_ui(page, plan, activities_state, coach_state, today):
+def apply_post_workout_ui(page, plan, activities_state, coach_state, performance_history, today):
     day = next((d for d in plan.get("days", []) if d.get("date") == today), None)
     today_activities = [
         a for a in activities_state.get("activities", []) if local_date(a) == today
@@ -287,8 +377,9 @@ def apply_post_workout_ui(page, plan, activities_state, coach_state, today):
         return page
 
     analysis = find_coach_analysis(day, coach_state, today)
+    performance = find_performance(activity, performance_history)
     next_day = next_planned_day(plan, today)
-    card = render_post_workout(day, activity, analysis, next_day)
+    card = render_post_workout(day, activity, analysis, next_day, performance=performance)
 
     page = add_css(page)
     page = add_week_anchor(page)
@@ -302,11 +393,12 @@ def main():
     decision_plan = planning_window(plan, upcoming)
     activities = load_json(ACTIVITIES_FILE, {"activities": []})
     coach = load_json(COACH_FILE, {"analyses": []})
+    performance = load_json(PERFORMANCE_FILE, {"schema_version": 1, "entries": []})
     page = INDEX_FILE.read_text(encoding="utf-8")
     tz = ZoneInfo(plan.get("meta", {}).get("timezone", "Europe/Stockholm"))
     today = datetime.now(tz).date().isoformat()
 
-    rendered = apply_post_workout_ui(page, decision_plan, activities, coach, today)
+    rendered = apply_post_workout_ui(page, decision_plan, activities, coach, performance, today)
     INDEX_FILE.write_text(rendered, encoding="utf-8")
 
     today_day = next((d for d in decision_plan.get("days", []) if d.get("date") == today), None)

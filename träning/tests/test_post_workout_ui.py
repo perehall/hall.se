@@ -92,6 +92,7 @@ class PostWorkoutUiTests(unittest.TestCase):
             sample_plan(),
             sample_activities(),
             sample_coach(),
+            {"entries": []},
             "2026-08-28",
         )
         self.assertIn('data-post-workout-state="completed"', rendered)
@@ -152,6 +153,7 @@ class PostWorkoutUiTests(unittest.TestCase):
             window,
             activities,
             {"analyses": []},
+            {"entries": []},
             "2026-08-30",
         )
         self.assertIn("Nästa pass · Måndag 31 aug", rendered)
@@ -163,6 +165,7 @@ class PostWorkoutUiTests(unittest.TestCase):
             sample_plan(),
             {"activities": []},
             sample_coach(),
+            {"entries": []},
             "2026-08-28",
         )
         self.assertEqual(rendered, BASE_PAGE)
@@ -200,11 +203,84 @@ class PostWorkoutUiTests(unittest.TestCase):
             plan,
             activities,
             {"analyses": []},
+            {"entries": []},
             "2026-08-29",
         )
         self.assertEqual(rendered, BASE_PAGE)
         self.assertNotIn('data-post-workout-state="completed"', rendered)
 
+
+    def test_threshold_performance_analysis_is_rendered_from_deterministic_facts(self):
+        plan = {
+            "meta": {"timezone": "Europe/Stockholm"},
+            "days": [
+                {
+                    "date": "2026-09-01",
+                    "label": "Tisdag",
+                    "status": "completed",
+                    "sport": "run",
+                    "session": "Löpning · kontrollerad tröskel · 3 × 8 min / 90 s jogg",
+                    "activity_id": 101,
+                },
+                {
+                    "date": "2026-09-02",
+                    "label": "Onsdag",
+                    "status": "preliminary",
+                    "sport": "swim",
+                    "session": "Simning · 3 200 m",
+                },
+            ],
+        }
+        activities = {
+            "activities": [
+                {
+                    "id": 101,
+                    "name": "Tröskel",
+                    "sport_type": "Run",
+                    "start_date_local": "2026-09-01T18:00:00",
+                    "distance_m": 10000,
+                    "elapsed_time_s": 3100,
+                    "average_heartrate": 145,
+                }
+            ]
+        }
+        performance = {
+            "entries": [
+                {
+                    "activity_id": 101,
+                    "protocol_key": "run_threshold:3x8:90s",
+                    "work_intervals": [
+                        {"index": 1, "pace_s_per_km": 245.0, "average_heartrate": 150.0},
+                        {"index": 2, "pace_s_per_km": 243.0, "average_heartrate": 152.0},
+                        {"index": 3, "pace_s_per_km": 242.0, "average_heartrate": 154.0},
+                    ],
+                    "summary": {
+                        "first_to_last_pace_delta_s_per_km": -3.0,
+                        "first_to_last_hr_delta": 4.0,
+                    },
+                    "comparison": {
+                        "previous_activity_date": "2026-08-25",
+                        "mean_pace_delta_s_per_km": -2.0,
+                        "mean_hr_delta": 1.0,
+                    },
+                }
+            ]
+        }
+        rendered = apply_post_workout_ui(
+            BASE_PAGE,
+            plan,
+            activities,
+            {"analyses": []},
+            performance,
+            "2026-09-01",
+        )
+        self.assertIn("Passanalys · arbetsintervall", rendered)
+        self.assertIn("4:05/km", rendered)
+        self.assertIn("4:03/km", rendered)
+        self.assertIn("4:02/km", rendered)
+        self.assertIn("Mot 2026-08-25", rendered)
+        self.assertIn("medeltempo -2,0 s/km", rendered)
+        self.assertIn("medelpuls +1,0 bpm", rendered)
 
     def test_post_workout_transform_is_idempotent(self):
         once = apply_post_workout_ui(
@@ -212,6 +288,7 @@ class PostWorkoutUiTests(unittest.TestCase):
             sample_plan(),
             sample_activities(),
             sample_coach(),
+            {"entries": []},
             "2026-08-28",
         )
         twice = apply_post_workout_ui(
@@ -219,6 +296,7 @@ class PostWorkoutUiTests(unittest.TestCase):
             sample_plan(),
             sample_activities(),
             sample_coach(),
+            {"entries": []},
             "2026-08-28",
         )
         self.assertEqual(once, twice)

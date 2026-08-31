@@ -36,6 +36,31 @@ def write_refresh_token(path, token):
     os.chmod(path, 0o600)
 
 
+def lap_summaries(detail):
+    rows = detail.get("laps") if isinstance(detail, dict) else None
+    if not isinstance(rows, list):
+        return []
+    result = []
+    for index, lap in enumerate(rows, start=1):
+        if not isinstance(lap, dict):
+            continue
+        result.append(
+            {
+                "lap_index": lap.get("lap_index") or index,
+                "name": lap.get("name"),
+                "elapsed_time_s": lap.get("elapsed_time"),
+                "moving_time_s": lap.get("moving_time"),
+                "distance_m": lap.get("distance"),
+                "average_speed": lap.get("average_speed"),
+                "average_heartrate": lap.get("average_heartrate"),
+                "max_heartrate": lap.get("max_heartrate"),
+                "average_watts": lap.get("average_watts"),
+                "average_cadence": lap.get("average_cadence"),
+            }
+        )
+    return result
+
+
 def activity_from_detail(activity_id, detail):
     if not isinstance(detail, dict):
         raise RuntimeError(f"Strava: aktivitet {activity_id} gav oväntat detaljsvar")
@@ -53,7 +78,8 @@ def activity_from_detail(activity_id, detail):
         raise RuntimeError(f"Strava: aktivitet {activity_id} saknar startdatum")
 
     gear = detail.get("gear") if isinstance(detail.get("gear"), dict) else {}
-    return {
+    laps = lap_summaries(detail)
+    mapped = {
         "id": int(activity_id),
         "name": detail.get("name"),
         "sport_type": sport_type,
@@ -73,6 +99,9 @@ def activity_from_detail(activity_id, detail):
         "gear_name": gear.get("name"),
         "source": "Strava API",
     }
+    if laps:
+        mapped["laps"] = laps
+    return mapped
 
 
 def merge_new_activities(state, summary, fetch_detail):

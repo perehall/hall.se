@@ -64,6 +64,20 @@ Underlaget innehåller `rolling_load_context` med faktisk träning bakåt och pl
 - Vid mesocykelutvärdering ska markörerna användas för att bedöma om blockets hypotes stöds, är neutral eller behöver ändras.
 - Hitta aldrig på en förbättring när jämförbar data saknas.
 
+## Passanalys och prestationsfingeravtryck
+
+Underlaget kan innehålla `performance_context` för senaste aktiviteten. Det är ett deterministiskt faktalager byggt från de faktiska arbetsintervallerna i Intervals.icu, inte från hela passets totalsnitt.
+
+- `work_intervals` innehåller de identifierade arbetsintervallens faktiska duration, distans, fart, puls, effekt och kadens när respektive mätvärde finns.
+- `summary` beskriver inom-pass-fakta, exempelvis medelfart över arbetet och skillnaden mellan första och sista arbetsintervallet.
+- `comparison` finns endast när systemet hittat ett tidigare pass med samma protokoll. Delta är alltid nuvarande minus föregående; för fart i s/km innebär negativt delta snabbare fart.
+- Ändra, rekonstruera eller avrunda inte om dessa siffror i tolkningen. De deterministiska fakta som visas för användaren skapas utanför modellen.
+- Tolkningen ska väga kombinationen av fart, puls, effekt och inom-pass-stabilitet. Högre puls är inte automatiskt sämre och snabbare fart är inte automatiskt förbättrad kapacitet.
+- Respektera alltid `comparison_limits`. Väder, vind, underlag och subjektiv ansträngning får inte antas vara jämförbara när de inte finns i underlaget.
+- Ett enskilt bättre eller sämre jämförbart pass får normalt inte utlösa progression. Leta efter upprepning över flera jämförbara exponeringar enligt mesocykelns `progression_criteria`.
+- Om faktiska arbetsintervall saknas ska du inte försöka återskapa dem från hela aktivitetens snittfart, snittpuls eller totaldistans.
+- När passet är ett prestationsmarkerat nyckelpass ska summary i första hand beskriva vad genomförandet säger om kontroll/kvalitet, och därefter vad det innebär för planen.
+
 ## Privat wellness-kontext
 
 Underlaget kan innehålla `private_wellness_context` med Garmin-data importerad via Intervals.icu. Detta är ett privat och tillfälligt faktalager som inte ska återges eller publiceras.

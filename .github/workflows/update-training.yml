@@ -100,6 +100,15 @@ jobs:
       - name: Sync weather
         run: python "träning/scripts/sync_weather.py"
 
+      - name: Sync interval performance details
+        continue-on-error: true
+        env:
+          INTERVALS_API_KEY: ${{ secrets.INTERVALS_API_KEY }}
+        run: python "träning/scripts/sync_performance_details.py" --days 60
+
+      - name: Validate performance data
+        run: python "träning/scripts/validate_training_data.py"
+
       - name: Load private Garmin wellness context
         continue-on-error: true
         env:
@@ -143,6 +152,7 @@ jobs:
         run: |
           TRACKED=(
             "träning/data/activities.json"
+            "träning/data/performance_history.json"
             "träning/data/activity_overrides.json"
             "träning/data/coach.json"
             "träning/data/plan.json"
