@@ -194,14 +194,14 @@
       "label": "Fredag",
       "status": "preliminary",
       "session": "Löpning · backkvalitet · 15 min lugnt + 6 × 150 m / full lugn nedjogg + 10 min lugnt",
-      "reason": "Veckans andra prioriterade löpkvalitet. Grundplanen är en konservativ backexponering med 6 × 150 m och full lugn nedjogg; den ändras om torsdagens faktiska belastning eller eventuell medverkan i swimrun-KM motiverar det.",
+      "reason": "Veckans andra prioriterade löpkvalitet. Grundplanen är en konservativ backexponering med 6 × 150 m och full lugn nedjogg; den ändras endast om torsdagens faktiska MTB-belastning eller återhämtningen motiverar det.",
       "development_focus": "Kraftfull men kontrollerad löpning med bibehållen mekanik; ingen maximal sprint eller syrajakt.",
       "sport": "run",
       "priority_role": "anchor",
       "stimuli": [
         "run_hill_quality"
       ],
-      "decision_note": "Grundplan: 6 × 150 m med full lugn nedjogg. Om du ska tävla i swimrun-KM på lördagen eller torsdagens MTB blir oväntat belastande ska fredagens pass omprövas.",
+      "decision_note": "Grundplan: 6 × 150 m med full lugn nedjogg. Ändra endast om torsdagens faktiska belastning eller återhämtning ger sakliga skäl.",
       "mesocycle_id": "run-threshold-hill-4w",
       "microcycle_id": "run-threshold-hill-4w:mc2",
       "microcycle_index": 2,
@@ -218,10 +218,104 @@
     {
       "date": "2026-09-05",
       "label": "Lördag",
-      "status": "open",
-      "session": "Ingen planerad träning",
-      "reason": "Ingen träning är planerad som standard. En ledig dag är inte i sig skäl att lägga till ett pass; eventuell ändring ska tjäna mikrocykeln och bygga på faktisk information.",
-      "sport": "open"
+      "status": "planned",
+      "session": "Simning · lugn aerob/teknik · 3 000 m · ca 50–55 min",
+      "reason": "Ger ett andra simstimulus i veckan med låg mekanisk kostnad mellan fredagens backkvalitet och söndagens lugna löpdistans. Ingen tröskel eller hård benbelastning läggs till.",
+      "sport": "swim",
+      "development_focus": "Avslappnad teknik, stabil kroppslinje och jämn aerob ansträngning; passet ska lämna benen fräscha till söndagens löpning.",
+      "priority_role": "flex",
+      "stimuli": [
+        "swim_aerobic",
+        "swim_technique"
+      ],
+      "mesocycle_id": "run-threshold-hill-4w",
+      "microcycle_id": "run-threshold-hill-4w:mc2",
+      "microcycle_index": 2,
+      "microcycle_day": 6,
+      "microcycle_slot": "swim_support_2",
+      "swim_equipment": {
+        "planned": "none"
+      },
+      "watch_workout": {
+        "sync_enabled": false,
+        "id": "swim-w36-sat-aerob-tech-3000",
+        "type": "Swim",
+        "equipment": [],
+        "name": "Lugn aerob/teknik · 3 000 m",
+        "planned_distance_m": 3000,
+        "blocks": [
+          {
+            "name": "Insim",
+            "steps": [
+              {
+                "kind": "swim",
+                "text": "Lugn insim",
+                "distance_m": 400,
+                "intensity": "warmup"
+              }
+            ]
+          },
+          {
+            "name": "Teknik",
+            "repeat": 6,
+            "steps": [
+              {
+                "kind": "swim",
+                "text": "Stabil linje och avslappnad rotation",
+                "distance_m": 50,
+                "intensity": "active"
+              },
+              {
+                "kind": "rest",
+                "duration_s": 15
+              }
+            ]
+          },
+          {
+            "name": "Aerob",
+            "repeat": 6,
+            "steps": [
+              {
+                "kind": "swim",
+                "text": "Jämnt lugn aerob, tekniken styr",
+                "distance_m": 300,
+                "intensity": "active"
+              },
+              {
+                "kind": "rest",
+                "duration_s": 20
+              }
+            ]
+          },
+          {
+            "name": "Frekvens",
+            "repeat": 6,
+            "steps": [
+              {
+                "kind": "swim",
+                "text": "Avslappnad frekvens utan fartjakt",
+                "distance_m": 50,
+                "intensity": "active"
+              },
+              {
+                "kind": "rest",
+                "duration_s": 15
+              }
+            ]
+          },
+          {
+            "name": "Nedvarvning",
+            "steps": [
+              {
+                "kind": "swim",
+                "text": "Mycket lugnt",
+                "distance_m": 200,
+                "intensity": "cooldown"
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "date": "2026-09-06",
