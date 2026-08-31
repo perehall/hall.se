@@ -47,11 +47,16 @@ PRIVATE_WELLNESS_PATTERN = re.compile(
 _RELATIVE_LEVEL = r"(?:ovanligt\s+|relativt\s+)?(?:hög(?:t)?|låg(?:t)?|måttlig(?:t)?)(?:\s+till\s+(?:hög(?:t)?|låg(?:t)?|måttlig(?:t)?))?"
 _LOAD_NOUN = (
     r"(?:(?:kardiovaskulär|kardiovaskulärt|mekanisk|mekaniskt|neuromuskulär|"
-    r"neuromuskulärt|samlad|samlat|tränings)\s+)?"
-    r"(?:volym|belastning|intensitet|återhämtningsbehov|kostnad)"
+    r"neuromuskulärt|samlad|samlat)\s+)?"
+    r"(?:träningsbelastning(?:en)?|träningsvolym(?:en)?|volym(?:en)?|"
+    r"belastning(?:en)?|intensitet(?:en)?|återhämtningsbehov(?:et)?|kostnad(?:en)?)"
 )
 RELATIVE_LOAD_PREFIX_PATTERN = re.compile(
     rf"\b{_RELATIVE_LEVEL}\s+(?={_LOAD_NOUN}\b)",
+    re.IGNORECASE,
+)
+RELATIVE_LOAD_NEGATED_PREDICATE_PATTERN = re.compile(
+    rf"\b({_LOAD_NOUN})\s+inte\s+(?:är|var|ser\s+ut\s+att\s+vara|bedöms\s+som)\s+{_RELATIVE_LEVEL}\b",
     re.IGNORECASE,
 )
 RELATIVE_LOAD_PREDICATE_PATTERN = re.compile(
@@ -184,6 +189,10 @@ def neutralize_unbased_load_text(value):
     never passed through it.
     """
     text = str(value or "")
+    text = RELATIVE_LOAD_NEGATED_PREDICATE_PATTERN.sub(
+        lambda match: f"{match.group(1)} inte ger sakligt stöd för en konservativ planändring",
+        text,
+    )
     text = RELATIVE_LOAD_PREDICATE_PATTERN.sub(
         lambda match: f"{match.group(1)} kan inte nivåklassas mot personlig baslinje",
         text,
