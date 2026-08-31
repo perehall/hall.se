@@ -429,6 +429,28 @@ class TrainingBrainTests(unittest.TestCase):
         )
         self.assertNotIn('data-weather-advice="true"', dry_section)
 
+    def test_strategy_v5_has_explicit_contract_progression_and_markers(self):
+        self.assertEqual(self.strategy["schema_version"], 5)
+        mesocycle = self.strategy["current_mesocycle"]
+        self.assertEqual(
+            mesocycle["contract"]["primary"],
+            ["run_threshold", "run_hill_quality", "run_easy_distance"],
+        )
+        self.assertIn("strength_unilateral", mesocycle["contract"]["protected_capacity"])
+        self.assertTrue(mesocycle["progression_policy"]["progression_requires_explicit_criteria"])
+        threshold = next(item for item in mesocycle["microcycle_template"] if item["slot"] == "run_threshold")
+        self.assertEqual(threshold["progression_target_option_id"], "run-threshold-3x10")
+        self.assertGreaterEqual(len(threshold["progression_criteria"]), 3)
+        marker_ids = {item["id"] for item in self.strategy["performance_marker_policy"]["markers"]}
+        self.assertIn("run-threshold-control", marker_ids)
+        self.assertIn("strength-repeatability", marker_ids)
+
+    def test_mesocycle_exposes_roles_without_changing_primary_dashboard(self):
+        mesocycle = resolve_mesocycle(self.strategy, date(2026, 8, 26))
+        self.assertIn("Kontrollerad löptröskel", mesocycle["contract"]["primary"])
+        self.assertIn("Unilateral benstyrka", mesocycle["contract"]["protected_capacity"])
+        self.assertIn("run-threshold-control", mesocycle["performance_markers"])
+
     def test_current_mesocycle_reports_microcycle_one(self):
         mesocycle = resolve_mesocycle(self.strategy, date(2026, 8, 26))
         self.assertEqual(mesocycle["state"], "mikrocykel 1 av 4")
