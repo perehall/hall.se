@@ -21,6 +21,7 @@ from coach import (  # noqa: E402
     normalize_resolved_dose_reselection,
     normalize_same_day_open_dose_action,
     scrub_private_wellness_output,
+    rolling_load_context,
     stable_hash,
     validate_dose_option_action,
 )
@@ -191,6 +192,43 @@ class CoachApiTests(unittest.TestCase):
         changed = dict(wellness)
         changed["daily"] = [{"date": "2026-08-26", "hrv": 51}]
         self.assertNotEqual(first, stable_hash(plan, latest, "2026-08-26", strategy, changed))
+
+    def test_rolling_load_context_uses_three_days_back_and_forward(self):
+        strategy = {
+            "load_model": {
+                "lookback_days": 3,
+                "lookahead_days": 3,
+                "dimensions": [{"key": "mechanical"}],
+                "rules": ["Use multi-day context."],
+            }
+        }
+        activities = [
+            {"id": 1, "start_date_local": "2026-08-26T08:00:00", "sport_type": "Run"},
+            {"id": 2, "start_date_local": "2026-08-27T08:00:00", "sport_type": "Run"},
+            {"id": 3, "start_date_local": "2026-08-30T08:00:00", "sport_type": "Run"},
+            {"id": 4, "start_date_local": "2026-08-31T08:00:00", "sport_type": "Enduro"},
+        ]
+        plan = {
+            "days": [
+                {"date": "2026-08-31", "session": "Enduro"},
+                {"date": "2026-09-01", "session": "Threshold"},
+                {"date": "2026-09-03", "session": "MTB"},
+                {"date": "2026-09-04", "session": "Hills"},
+            ]
+        }
+        context = rolling_load_context(activities, plan, "2026-08-31", strategy)
+        self.assertEqual([a["id"] for a in context["actual_activities"]], [2, 3, 4])
+        self.assertEqual(
+            [d["date"] for d in context["planned_days"]],
+            ["2026-08-31", "2026-09-01", "2026-09-03"],
+        )
+        self.assertEqual(context["lookback_days"], 3)
+        self.assertEqual(context["lookahead_days"], 3)
+
+    def test_rolling_context_changes_stable_hash(self):
+        base = stable_hash({}, {"id": 1}, "2026-08-31", {}, {}, {"actual_activities": [{"id": 1}]})
+        changed = stable_hash({}, {"id": 1}, "2026-08-31", {}, {}, {"actual_activities": [{"id": 2}]})
+        self.assertNotEqual(base, changed)
 
     def test_completed_day_keeps_known_future_fixed_session_visible(self):
         action = {
