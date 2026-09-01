@@ -1,6 +1,45 @@
 {
   "analyses": [
     {
+      "activity_id": 19994118756,
+      "activity_date": "2026-09-01",
+      "activity_name": "Löpning på kvällen",
+      "generated_at_utc": "2026-09-01T17:58:31.880518+00:00",
+      "model": "gpt-5-mini",
+      "performance_marker_id": null,
+      "performance_protocol_key": null,
+      "assessment": {
+        "summary": "Genomfört 3×8 min tröskelpass (≈10.3 km) efter måndagens enduro; håll planen för onsdag under konservativ bedömning.",
+        "load_interpretation": "Närbelastning visar hög kardiovaskulär varaktighet senaste 3 dagar (enduro+lång löpning+dagens tröskel); mekanisk belastning måttlig–hög från löp och enduro.",
+        "confidence": "medium",
+        "facts": [
+          "Run: 10,35 km · 50:29 · 61 m+ · snittpuls 145,3 · maxpuls 165.",
+          "Planstatus 2026-09-01: dagens planerade pass är genomfört i coachens beslutsunderlag."
+        ],
+        "interpretations": [
+          "Kardiovaskulär belastning är ackumulerad över 3 dagar men privat återhämtningsunderlaget visar inga tecken på försämrad återhämtning som skulle tvinga vila.",
+          "Ingen explicit rapport om lokal benutmattning; enduro registrerad som extern teknisk belastning men med betydande varaktighet som bidrar till total belastning."
+        ],
+        "unknowns": [
+          "Subjektiv dagskänsla/benlokal trötthet efter dagens pass saknas.",
+          "Detaljerad inom-pass struktur (exakta 3×8 min intervalldata) saknas i performance_context för jämförbar kontroll.",
+          "Eventuella planer/åtaganden samma kväll som påverkar återhämtning saknas."
+        ]
+      },
+      "plan_action": {
+        "action": "keep",
+        "target_date": "2026-09-02",
+        "reason": "Mesocykelns simpass kan behållas; senaste 3 dagars belastning är absorberbar utan sakliga skäl att reducera.",
+        "recommendation": "Behåll planerat simpass onsdag 2026-09-02 (≈3 200 m aerobt/teknik) enligt grundplan; håll intensiteten kontrollerad och fokusera teknik. Avvakta subjektiv känsla morgon över eventuell lokal trötthet; kontakta coach om benen känns tunga.",
+        "dose_option_id": "",
+        "requires_approval": false
+      },
+      "auto_apply": {
+        "applied": false,
+        "note": "Ingen automatisk planändring."
+      }
+    },
+    {
       "activity_id": 19980267962,
       "activity_date": "2026-08-31",
       "activity_name": "Enduro på kvällen",
@@ -561,7 +600,7 @@
       }
     }
   ],
-  "last_trigger_hash": "170b505dd74e794da0718cbe5871178389beb3dced8bf2b19ce9afa2a8ad89ef",
-  "last_run_utc": "2026-09-01T15:44:54.001909+00:00",
+  "last_trigger_hash": "eac58a88ad4da61f118c8223dcb92eec684f528ffde850ac1b6bc0178a6056d4",
+  "last_run_utc": "2026-09-01T17:58:31.880518+00:00",
   "contract_version": 13
 }
