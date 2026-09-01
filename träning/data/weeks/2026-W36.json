@@ -4,7 +4,7 @@
   "week_start": "2026-08-31",
   "week_end": "2026-09-06",
   "created_at_utc": "2026-08-30T22:09:50.110394+00:00",
-  "updated_at_utc": "2026-09-01T21:24:46.356378+00:00",
+  "updated_at_utc": "2026-09-01T22:16:02.387956+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -662,33 +662,33 @@
       "activity_id": 19994118756,
       "activity_date": "2026-09-01",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-09-01T21:24:45.829285+00:00",
+      "generated_at_utc": "2026-09-01T22:16:01.959433+00:00",
       "model": "gpt-5-mini",
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört 3×8 min tröskelpass registrerat; planen kan behållas utan ändring.",
-        "load_interpretation": "Måndagens långa enduro + helgens långa löp och simning ger samlad kardiovaskulär och mekanisk stress de senaste 3 dagarna, men inget som entydigt kräver reduktion.",
+        "summary": "Passet är ett längre tröskel-/kontrollerat tempo-pass (≈10.3 km, 50–65 min) som ligger i linje med mesocykelns tröskelstimulus.",
+        "load_interpretation": "Senaste tre dagarna visar stor totalkostnad (lång löp + enduro); kardiovaskulärt och mekaniskt är närbelastningen högre än en ensam normal löpdos.",
         "confidence": "medium",
         "facts": [
           "Run: 10,35 km · 50:29 · 61 m+ · snittpuls 145,3 · maxpuls 165.",
           "Planstatus 2026-09-01: dagens planerade pass är genomfört i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Tröskelpasset genomfördes i linje med grundplanens avsikt och visar stabil kontroll genom passet (ingen uppenbar teknisk kollaps).",
-          "Närbelastningen (enduro + lång löp tidigare i fönstret) absorberas inom mesocykelns ramar och ska inte automatiskt minska skyddade löpstimulit."
+          "Löp-passet genomfördes som avsett och ger önskat tröskelstimulus men kommer ovanpå en tung enduro dag innan, vilket ökar mekanisk/neuromuskulär och tekniskt belastning i mikrocykeln.",
+          "Med nuvarande mikrocykelprioritering skyddas fredagens backkvalitet; torsdagens MTB och onsdagens simning bör inte tränga undan det men kan skalas för att bevara återhämtning."
         ],
         "unknowns": [
-          "Subjektiv dagskänsla/ lokal bentrötthet efter dagens pass saknas.",
-          "Detaljerad inom-pass intensitetsstruktur (exakt tröskeltempo per interval) saknas i performance_context.",
-          "Möjliga oförutsedda muskelömheter eller skador användaren inte rapporterat."
+          "Subjektivt dagskänsla/ lokal bentrötthet efter enduro + löp saknas.",
+          "Detaljer om hur hårt löppassen var avsett (exakt intensitetsmål) finns inte i rådata utöver puls.",
+          "Eventuella planerade fasta åtaganden eller känslor inför fredag saknas."
         ]
       },
       "plan_action": {
-        "action": "keep",
-        "target_date": "2026-09-02",
-        "reason": "Passet motsvarar planens avsikt och närbelastningen är absorberbar enligt mesocykeln.",
-        "recommendation": "Behåll simpasset i morgon enligt grundplan (3 200 m aerob/teknik). Fortsätt som planerat; rapportera om lokal bentrötthet eller oväntad återhämtningstapp.",
+        "action": "review",
+        "target_date": "",
+        "reason": "AI-rådet hänvisar uttryckligen till en annan veckodag än target_date; ingen automatisk planändring görs.",
+        "recommendation": "Ändra inte planen utifrån detta råd. Bedöm rätt målpass först när det är beslutsmoget.",
         "dose_option_id": "",
         "requires_approval": false
       },
