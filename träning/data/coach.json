@@ -4,33 +4,33 @@
       "activity_id": 19980267962,
       "activity_date": "2026-08-31",
       "activity_name": "Enduro på kvällen",
-      "generated_at_utc": "2026-09-01T09:26:47.572989+00:00",
+      "generated_at_utc": "2026-09-01T12:31:40.248084+00:00",
       "model": "gpt-5-mini",
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Behåll tisdagens kontrollerade tröskelpass som planerat med konservativ marginal.",
-        "load_interpretation": "Måndagens enduro gav teknisk/neuromuskulär och kardiovaskulär belastning som bör absorberas innan löpkvalitet.",
+        "summary": "Behåll planerad 3×8 min tröskel i morgon; måndagens enduro räknas som teknisk extern belastning men ser inte ut att kräva vila.",
+        "load_interpretation": "Enduro bidrog främst teknisk/neuromuskulär belastning; kardiovaskulär och mekanisk påverkan verkar måttlig i fler-dagarsbilden.",
         "confidence": "medium",
         "facts": [
           "Enduro: 23,40 km · 1:40:24 · 508,6 m+ · snittpuls 110,9 · maxpuls 178.",
           "Planstatus 2026-08-31: dagens planerade pass är genomfört i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Enduron är främst teknisk/neuromuskulär med kardiovaskulär kostnad och bör inte per automatik diskvalificera ett kontrollerat tröskelpass.",
-          "Det kringliggande 3‑dagarsmönstret (sim + lång löp + enduro) ger en ackumulerad aerob och mekanisk belastning men inget entydigt behov av reduktion."
+          "Enduron är främst teknisk extern belastning enligt mesocykelns kontrakt och behöver inte automatiskt ersätta löpstimulus.",
+          "Kombinationen av flera pass senaste två dagarna är absorberbar utan att offra morgondagens kontrollerade tröskel enligt mikrocykelns guardrails."
         ],
         "unknowns": [
-          "Subjektivt dagskänsla/RPE för enduron och lokal ben-/muskulär trötthet efter nattens vila.",
-          "Detaljerad intensitet i enduron (w/kg eller sekundära arbetsintervaller) saknas pga enduroklassificering.",
-          "Eventuella fasta åtaganden eller sen kvällsplaner idag som påverkar genomförande."
+          "Subjektiv lokal ben-/muskelt trötthet efter enduro ej rapporterad av användaren.",
+          "Detaljerad inom-pass intensitet för enduro (effekt/kadens stabilitet) saknas.",
+          "Eventuella fasta åtaganden eller kvällssymptom innan morgonpasset."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-09-01",
-        "reason": "Inga sakliga tecken på att det tekniska enduropasset ökade återhämtningskostnaden tillräckligt för att kräva reduktion.",
-        "recommendation": "Gör 3×8 min kontrollerad tröskel enligt grundplan; håll intensiteten kontrollerad och prioritera teknik framför fart. Avbryt eller skala ner till lugn distans endast om du kännbart känner lokal bentrötthet eller hög RPE vid uppvärmning.",
+        "reason": "Måndagens enduro värderas som teknisk extern belastning och fler-dagarsbilden är absorberbar.",
+        "recommendation": "Kör planerat 3×8 min kontrollerad tröskel; håll intensiteten kontrollerad och prioritera teknisk/ekonomisk löpning framför maxtempo. Avbryt eller skala ner om du kännar ovanlig lokal trötthet före start.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -561,7 +561,7 @@
       }
     }
   ],
-  "last_trigger_hash": "723bc95da2e3dd9faacdd2b6e47d1cc8a6bcf5b43c86cb1e5f0d46ddb3d15092",
-  "last_run_utc": "2026-09-01T09:26:47.572989+00:00",
+  "last_trigger_hash": "ec3dc0faf70ea3f6b99b1e35150e3b4acaf2a698b11c8781b9fd019807d9ac99",
+  "last_run_utc": "2026-09-01T12:31:40.248084+00:00",
   "contract_version": 13
 }
