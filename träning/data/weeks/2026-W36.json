@@ -4,7 +4,7 @@
   "week_start": "2026-08-31",
   "week_end": "2026-09-06",
   "created_at_utc": "2026-08-30T22:09:50.110394+00:00",
-  "updated_at_utc": "2026-09-01T00:36:13.365378+00:00",
+  "updated_at_utc": "2026-09-01T03:26:42.513188+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -424,33 +424,33 @@
       "activity_id": 19980267962,
       "activity_date": "2026-08-31",
       "activity_name": "Enduro på kvällen",
-      "generated_at_utc": "2026-08-31T22:09:47.296363+00:00",
+      "generated_at_utc": "2026-09-01T03:26:41.954749+00:00",
       "model": "gpt-5-mini",
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Behåll tisdagens tröskelpass med konservativ marginal; måndagens enduro absorberas som tekniskt/neuromuskulärt arbete.",
-        "load_interpretation": "Måndagens enduro gav teknisk och neuromuskulär belastning med måttlig varaktighet; kardiovaskulär kostnad ser inte ut att kräva återhämtningstext.",
+        "summary": "Behåll tröskelpasset i morgon men var konservativ: måndagens enduro gav teknisk/neuromuskulär exponering och kardiovaskulär belastning.",
+        "load_interpretation": "Enduro bidrog främst teknisk och neuromuskulär belastning med måttlig varaktighet; kardiovaskulär och mekanisk närbelastning är absorberbar.",
         "confidence": "medium",
         "facts": [
           "Enduro: 23,40 km · 1:40:24 · 508,6 m+ · snittpuls 110,9 · maxpuls 178.",
           "Planstatus 2026-08-31: dagens planerade pass är genomfört i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Enduron räknas som extern teknisk/neuromuskulär belastning och bör inte förhindra planerat tröskelstimulus i normal omfattning.",
-          "Kardiovaskulär belastning från senaste 2–3 dagarna är absorberbar med planerad tröskeldos under mesocykelns guardrails."
+          "Enduron ger teknisk/neuromuskulär kostnad som kan påverka löpteknik men inte så stor mekanisk skada att tröskelpasset måste tas bort.",
+          "Givet mesocykelns prioritet på löptröskel och multi-dagarsbilden bör grunddosen kunna genomföras med konservativ självkontroll."
         ],
         "unknowns": [
-          "Subjektiv dagskänsla/RPE för måndagens enduro (kan påverka behov av reduktion).",
-          "Detaljerad lokal muskeltrötthet i ben efter enduro (ej explicit rapporterat).",
-          "Eventuella akuta fasta åtaganden eller känsla dagen efter som inte rapporterats."
+          "Subjektiv dagskänsla/bentrötthet i dag saknas och kan påverka förmågan att hålla kontrollerad intensitet.",
+          "Detaljerad inom-pass löpintensitet (puls under tröskelpasset) saknas för att jämföra mot tidigare 3×8-mätningar.",
+          "Eventuella skadebesvär eller lokal muskeltrötthet rapporterad av användaren saknas."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-09-01",
-        "reason": "Inga sakliga skäl från fler-dagarsbilden att reducera; enduron bedöms teknisk/neuromuskulär och absorberbar.",
-        "recommendation": "Genomför 3×8 min kontrollerad tröskel som planerat; håll intensiteten kontrollerad och prioritera teknisk löpkänsla. Avstå progression och rapportera subjektiv trötthet efter passet om det känns tyngre än väntat.",
+        "reason": "Närbelastningen talar för att grunddosen är absorberbar och mesocykelns löpstimulus ska skyddas.",
+        "recommendation": "Kör 3 × 8 min kontrollerad tröskel enligt grundplan; håll intensiteten kontrollerad och avbryt/skalera om benen känns oväntat tunga eller tekniken försämras.",
         "dose_option_id": "",
         "requires_approval": false
       },
