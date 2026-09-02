@@ -7,13 +7,13 @@ INDEX = ROOT / "index.html"
 GOAL_PAGE = ROOT / "malbild" / "index.html"
 
 WEEK_CSS = r'''
-/* goal-link-layout-v2 */
-.goal-page-link{display:flex;justify-content:flex-end;margin:0 0 8px}.goal-page-link a{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid #ddd6fe;border-radius:12px;background:#faf5ff;color:#5b21b6;text-decoration:none;font-size:.78rem;font-weight:900;box-shadow:0 5px 14px rgba(76,29,149,.05)}
+/* goal-link-layout-v3 */
+.goal-page-link{display:flex;justify-content:flex-end;margin:0 0 8px}.goal-page-link a{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid #e2e8f0;border-radius:12px;background:#fff;color:#475569;text-decoration:none;font-size:.78rem;font-weight:700;box-shadow:0 5px 14px rgba(15,23,42,.04)}
 '''.strip()
 
 GOAL_CSS = r'''
-/* goal-back-layout-v2 */
-.goal-back-row{display:flex;justify-content:flex-end;margin:12px 0 4px}.goal-back-row a{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid #e2e8f0;border-radius:12px;background:#fff;color:#475569;text-decoration:none;font-size:.78rem;font-weight:900;box-shadow:0 5px 14px rgba(15,23,42,.04)}
+/* goal-back-layout-v3 */
+.goal-back-row{display:flex;justify-content:flex-end;margin:12px 0 4px}.goal-back-row a{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid #e2e8f0;border-radius:12px;background:#fff;color:#475569;text-decoration:none;font-size:.78rem;font-weight:700;box-shadow:0 5px 14px rgba(15,23,42,.04)}
 '''.strip()
 
 
@@ -29,7 +29,8 @@ def patch_week() -> None:
     page = INDEX.read_text(encoding="utf-8")
     page = re.sub(r'<div class="goal-home-link">.*?</div>', '', page, flags=re.S)
     page = re.sub(r'<div class="goal-page-link">.*?</div>', '', page, flags=re.S)
-    page = add_css(page, "/* goal-link-layout-v2 */", WEEK_CSS)
+    page = re.sub(r'/\* goal-link-layout-v2 \*/.*?(?=(?:/\*|</style>))', '', page, flags=re.S)
+    page = add_css(page, "/* goal-link-layout-v3 */", WEEK_CSS)
 
     nav = page.find('<nav class="week-nav"')
     if nav < 0:
@@ -47,7 +48,8 @@ def patch_goal_page() -> None:
     page = GOAL_PAGE.read_text(encoding="utf-8")
     page = re.sub(r'<a class="back" href="/träning/">← Veckoplan</a>', '', page)
     page = re.sub(r'<div class="goal-back-row">.*?</div>', '', page, flags=re.S)
-    page = add_css(page, "/* goal-back-layout-v2 */", GOAL_CSS)
+    page = re.sub(r'/\* goal-back-layout-v2 \*/.*?(?=(?:/\*|</style>))', '', page, flags=re.S)
+    page = add_css(page, "/* goal-back-layout-v3 */", GOAL_CSS)
 
     card = page.find('<section class="card goal">')
     if card < 0:
@@ -72,15 +74,17 @@ def validate() -> None:
         raise RuntimeError("Länklayout: målbilden ska ha exakt en Veckoplan-länk")
     if goal.find('class="goal-back-row"') > goal.find('<section class="card goal">'):
         raise RuntimeError("Länklayout: Veckoplan-länken ligger inte ovanför Övergripande mål")
-    if goal.count('class="mountain-phase-point') != 5:
-        raise RuntimeError("Länklayout: canonical målbild saknar fem fasmarkörer")
+    if goal.count('data-goal-hierarchy="true"') != 1:
+        raise RuntimeError("Länklayout: canonical målbild saknar planeringshierarki")
+    if goal.count('data-current-mesocycle="true"') != 1:
+        raise RuntimeError("Länklayout: canonical målbild saknar aktuell mesocykel")
 
 
 def main() -> None:
     patch_week()
     patch_goal_page()
     validate()
-    print("Målbildslayout OK: länkar placerade utan att modifiera SVG eller interaktionslogik.")
+    print("Målbildslayout OK: fram- och tillbakalänk delar neutral visuell stil.")
 
 
 if __name__ == "__main__":
