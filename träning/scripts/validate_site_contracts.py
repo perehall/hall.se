@@ -194,17 +194,17 @@ def main() -> None:
     mirror = GOAL_MIRROR.read_text(encoding="utf-8")
     require(canonical == mirror, "Preflight: /malbild/ och /malbild-2027/ är inte identiska")
 
-    require(canonical.count('class="mountain-phase-point') == 5, "Preflight: exakt fem fasmarkörer krävs")
-    require(canonical.count('id="phase-trail"') == 1, "Preflight: exakt en phase-trail krävs")
-    require(canonical.count('id="phase-trail-underlay"') == 1, "Preflight: exakt en phase-trail-underlay krävs")
-    require(canonical.count('data-progress="') == 5, "Preflight: alla fem fasmarkörer måste vara path-bundna")
-    require("getPointAtLength" in canonical, "Preflight: path-baserad markörplacering saknas")
-    require(canonical.count("<!-- phase-trail-sync-v2 -->") == 2, "Preflight: exakt ett trail-sync-v2-block krävs")
-    require("phase-trail-sync-v1" not in canonical, "Preflight: gammal trail-sync-v1 finns kvar")
+    require(canonical.count('data-goal-hierarchy="true"') == 1, "Preflight: målbilden ska ha exakt en planeringshierarki")
+    require(canonical.count('data-current-mesocycle="true"') == 1, "Preflight: målbilden ska ha exakt en aktuell mesocykel")
+    require("Så styr målbilden träningen" in canonical, "Preflight: målbilden förklarar inte faktisk planeringshierarki")
+    require("Aktuell utvecklingsväg" in canonical, "Preflight: målbilden visar inte aktuell utvecklingsväg")
+    require("Beslutsprinciper" in canonical, "Preflight: målbilden visar inte beslutsprinciper")
+    for stale in ("mountain-phase-point", "phase-trail", "Faser och periodisering", "Kvalitativ utvecklingsstatus"):
+        require(stale not in canonical, f"Preflight: gammal målbilds-UX finns kvar: {stale}")
 
     print(
         "Preflight OK: normaliserade aktiviteter, plan, ikoner, canonical veckonavigation och "
-        "målbildens canonical/mirror-kontrakt är konsistenta."
+        "målbildens canonical/mirror- och systemhierarkikontrakt är konsistenta."
     )
 
 
