@@ -6,14 +6,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 CURRENT = ROOT / "index.html"
 ARCHIVE_ROOT = ROOT / "vecka"
-CSS_MARKER = "/* week-header-layout-v7 */"
+CSS_MARKER = "/* week-header-layout-v8 */"
 CSS = """
 /* week-header-layout-v7 */
-.header-updated{margin-top:4px;color:#94a3b8;font-size:.74rem;font-weight:500;line-height:1.35}
-.header-status{margin-top:4px;color:#64748b;font-size:.76rem;font-weight:700;line-height:1.35}
-.week-period{font-weight:800;color:#334155;white-space:nowrap}
-.hero.week-focus-card{padding:17px 20px}.week-focus-title{margin:0!important;font-size:1.08rem;line-height:1.35;letter-spacing:-.01em}.week-focus-title strong{font-weight:900}.week-focus-details{margin-top:8px}.week-focus-details>summary{cursor:pointer;list-style:none;color:#94a3b8;font-size:.76rem;font-weight:800}.week-focus-details>summary::-webkit-details-marker{display:none}.week-focus-details>summary:after{content:" +"}.week-focus-details[open]>summary:after{content:" −"}.week-focus-details p{margin:8px 0 0!important;color:#cbd5e1!important;font-size:.9rem;line-height:1.5}
-@media (max-width:520px){.header-updated{font-size:.7rem}.header-status{font-size:.72rem}.week-period{font-size:.92rem}.hero.week-focus-card{padding:15px 17px}.week-focus-title{font-size:1rem}.week-focus-details p{font-size:.86rem}}
+.header-meta-line{display:flex;flex-wrap:wrap;gap:4px;color:#94a3b8;font-size:.76rem;line-height:1.4}.header-updated,.header-status{color:#94a3b8;font-size:inherit;font-weight:500}.week-period{font-weight:600;color:#64748b;white-space:nowrap}
+.hero.week-focus-card{padding:16px 18px}.week-focus-title{margin:0!important;font-size:1.06rem;line-height:1.35;letter-spacing:-.01em;font-weight:700}.week-focus-details{margin-top:8px}.week-focus-details>summary{cursor:pointer;list-style:none;color:#94a3b8;font-size:.76rem;font-weight:600}.week-focus-details>summary::-webkit-details-marker{display:none}.week-focus-details>summary:after{content:" +"}.week-focus-details[open]>summary:after{content:" −"}.week-focus-details p{margin:8px 0 0!important;color:#cbd5e1!important;font-size:.88rem;line-height:1.5}
+@media (max-width:520px){.header-meta-line{font-size:.72rem}.hero.week-focus-card{padding:14px 16px}.week-focus-title{font-size:1rem}.week-focus-details p{font-size:.84rem}}
 """.strip()
 
 HEADER_RE = re.compile(
@@ -26,6 +24,8 @@ HERO_RE = re.compile(
     r'<div class="hero(?P<class_extra>[^"]*)"><h2>(?P<focus>.*?)</h2><p>(?P<principle>.*?)</p></div>',
     re.S,
 )
+
+MONTH_SHORT = {1: "jan", 2: "feb", 3: "mar", 4: "apr", 5: "maj", 6: "jun", 7: "jul", 8: "aug", 9: "sep", 10: "okt", 11: "nov", 12: "dec"}
 
 MONTHS = {
     "januari": 1,
@@ -69,8 +69,20 @@ def format_meta(meta):
     month = MONTHS.get(month_name)
     if month is None:
         raise RuntimeError(f"Header UI: okänd svensk månad {month_name!r}")
-    text = f'Senast uppdaterad {int(match.group("day"))}/{month} {match.group("time")}'
+    text = f'uppdaterad {int(match.group("day"))} {MONTH_SHORT[month]} {match.group("time")}'
     return "header-updated", text
+
+
+def compact_period(start_value, end_value):
+    from datetime import date
+    start = date.fromisoformat(start_value)
+    end = date.fromisoformat(end_value)
+    if start.year == end.year:
+        if start.month == end.month:
+            return f"{start.day}–{end.day} {MONTH_SHORT[start.month]}"
+        return f"{start.day} {MONTH_SHORT[start.month]}–{end.day} {MONTH_SHORT[end.month]}"
+    return f"{start.day} {MONTH_SHORT[start.month]} {start.year}–{end.day} {MONTH_SHORT[end.month]} {end.year}"
+
 
 
 def extract_focus(page):
@@ -98,17 +110,16 @@ def update_page(path):
         raise RuntimeError(f"Header UI: kunde inte tolka header i {path}")
 
     focus, principle, _ = extract_focus(page)
-    eyebrow = match.group("eyebrow")
+    eyebrow = "Träningsplan"
     title = match.group("title")
-    period = f'{match.group("period")} till {match.group("end")}'
+    period = compact_period(match.group("period"), match.group("end"))
     meta_class, meta = format_meta(match.group("meta"))
 
     replacement = (
         '<header>'
         f'<div class="eyebrow">{eyebrow}</div>'
         f'<h1>{title}</h1>'
-        f'<div class="sub"><strong class="week-period">{period}</strong></div>'
-        f'<div class="{meta_class}">{meta}</div>'
+        f'<div class="sub header-meta-line"><span class="week-period">{period}</span><span>·</span><span class="{meta_class}">{meta}</span></div>'
         '</header>'
     )
     page = page[:match.start()] + replacement + page[match.end():]
@@ -118,7 +129,7 @@ def update_page(path):
         raise RuntimeError(f"Header UI: hero försvann efter headerbyte i {path}")
     hero_replacement = (
         '<div class="hero week-focus-card">'
-        f'<h2 class="week-focus-title"><strong>Veckofokus:</strong> {html.escape(focus)}</h2>'
+        f'<h2 class="week-focus-title">{html.escape(focus)}</h2>'
         '<details class="week-focus-details">'
         '<summary>Planidé</summary>'
         f'<p>{html.escape(principle)}</p>'
@@ -129,7 +140,7 @@ def update_page(path):
 
     # Remove obsolete current-page header layouts before adding the current rule set.
     page = re.sub(
-        r'/\* week-header-layout-v[23456] \*/.*?(?=(?:/\*|</style>))',
+        r'/\* week-header-layout-v[234567] \*/.*?(?=(?:/\*|</style>))',
         '',
         page,
         flags=re.S,
@@ -143,14 +154,12 @@ def update_page(path):
     required = [
         '<div class="eyebrow">',
         '<h1>',
-        '<div class="sub"><strong class="week-period">',
+        '<div class="sub header-meta-line"><span class="week-period">',
         f'class="{meta_class}"',
         '<div class="hero week-focus-card">',
-        '<strong>Veckofokus:</strong>',
         html.escape(focus),
         '<summary>Planidé</summary>',
         html.escape(principle),
-        " till ",
         meta,
         CSS_MARKER,
     ]
