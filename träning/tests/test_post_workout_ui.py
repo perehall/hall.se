@@ -394,7 +394,7 @@ class PostWorkoutUiTests(unittest.TestCase):
         )
         self.assertIn("Simning · aerob/teknik · 3 200 m · ca 60 min", rendered)
         self.assertIn("alternativ: Swimrun · Jogersö Extreme · 1 varv", rendered)
-        self.assertIn("Swimrun · SLK Swimrun Jogersö Extreme", rendered)
+        self.assertIn("<strong>SLK Swimrun Jogersö Extreme</strong>", rendered)
         self.assertNotIn("Planerad dos saknas i historiken", rendered)
 
 
