@@ -96,14 +96,15 @@ class PostWorkoutUiTests(unittest.TestCase):
             "2026-08-28",
         )
         self.assertIn('data-post-workout-state="completed"', rendered)
-        self.assertIn('id="todayOutcomeTitle">Genomfört</h2>', rendered)
+        self.assertIn('id="todayOutcomeTitle">Coachens analys är klar</h2>', rendered)
+        self.assertIn("Dagens pass · genomfört", rendered)
+        self.assertIn("Visa analys", rendered)
         self.assertNotIn("<section class=\"training-brain\"><div>Dagens plan</div></section>", rendered)
         self.assertIn("50:36", rendered)
         self.assertIn("9,67 km", rendered)
         self.assertIn(">145</dd>", rendered)
         self.assertIn("6 × 150 m", rendered)
         self.assertIn("12 backar · ca 40 s upp · ca 60 s jogg ned", rendered)
-        self.assertIn("Coachens bedömning", rendered)
         self.assertIn("Effekt på planen", rendered)
         self.assertIn("MTB/XC · teknik + aerob stig · 75 min lugnt", rendered)
         self.assertIn("Justerat efter dagens faktiska utfall.", rendered)
@@ -260,6 +261,7 @@ class PostWorkoutUiTests(unittest.TestCase):
                     },
                     "comparison": {
                         "previous_activity_date": "2026-08-25",
+                        "same_protocol": True,
                         "mean_pace_delta_s_per_km": -2.0,
                         "mean_hr_delta": 1.0,
                     },
@@ -274,6 +276,11 @@ class PostWorkoutUiTests(unittest.TestCase):
             performance,
             "2026-09-01",
         )
+        self.assertIn("Snabbare än senaste jämförbara tröskelpasset", rendered)
+        self.assertIn("3 × 8 min / 90 s", rendered)
+        self.assertIn("medeltempo -2,0 s/km", rendered)
+        self.assertIn("medelpuls +1,0 bpm", rendered)
+        self.assertIn("väder, underlag och subjektiv ansträngning", rendered)
         self.assertIn("Passanalys · arbetsintervall", rendered)
         self.assertIn("4:05/km", rendered)
         self.assertIn("4:03/km", rendered)
@@ -281,6 +288,64 @@ class PostWorkoutUiTests(unittest.TestCase):
         self.assertIn("Mot 2026-08-25", rendered)
         self.assertIn("medeltempo -2,0 s/km", rendered)
         self.assertIn("medelpuls +1,0 bpm", rendered)
+
+    def test_interval_only_insight_describes_facts_without_capacity_claim(self):
+        plan = {
+            "meta": {"timezone": "Europe/Stockholm"},
+            "days": [
+                {
+                    "date": "2026-09-01",
+                    "label": "Tisdag",
+                    "status": "completed",
+                    "sport": "run",
+                    "session": "Löpning · tröskel",
+                    "activity_id": 102,
+                }
+            ],
+        }
+        activities = {
+            "activities": [
+                {
+                    "id": 102,
+                    "name": "Tröskel",
+                    "sport_type": "Run",
+                    "start_date_local": "2026-09-01T18:00:00",
+                    "distance_m": 9000,
+                    "elapsed_time_s": 3000,
+                }
+            ]
+        }
+        performance = {
+            "entries": [
+                {
+                    "activity_id": 102,
+                    "protocol_key": "run_threshold:3x8:90s",
+                    "work_intervals": [
+                        {"index": 1, "pace_s_per_km": 245.0, "average_heartrate": 150.0},
+                        {"index": 2, "pace_s_per_km": 243.0, "average_heartrate": 152.0},
+                        {"index": 3, "pace_s_per_km": 241.0, "average_heartrate": 154.0},
+                    ],
+                    "summary": {
+                        "first_to_last_pace_delta_s_per_km": -4.0,
+                        "first_to_last_hr_delta": 4.0,
+                    },
+                    "comparison": None,
+                }
+            ]
+        }
+        rendered = apply_post_workout_ui(
+            BASE_PAGE,
+            plan,
+            activities,
+            {"analyses": []},
+            performance,
+            "2026-09-01",
+        )
+        self.assertIn("Du avslutade arbetsintervallerna snabbare än du började", rendered)
+        self.assertIn("tempo -4,0 s/km", rendered)
+        self.assertIn("puls +4,0 bpm", rendered)
+        self.assertIn("inte i sig en förändring i kapacitet", rendered)
+
 
     def test_post_workout_transform_is_idempotent(self):
         once = apply_post_workout_ui(
