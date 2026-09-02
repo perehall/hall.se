@@ -71,6 +71,8 @@ class SignalUiTests(unittest.TestCase):
         self.assertIn('class="week-state"', rendered)
         self.assertGreater(rendered.find('class="week-state"'), rendered.find('<h2 class="section">Aktuell vecka</h2>'))
         self.assertIn('.week-state .dashboard>.dashboard-card:last-child{display:none}', rendered)
+        self.assertIn('.today-completed .session,.today-completed .next-weather', rendered)
+        self.assertIn('.today-completed .pass-title{display:none}', rendered)
         self.assertIn('<span class="dow">Onsdag</span><span class="date">26 aug</span>', rendered)
         self.assertIn('<div class="badge conditional">Alternativ finns</div>', rendered)
         self.assertIn('<strong class="session-title">Simning 3 200 m aerob/teknik</strong>', rendered)
