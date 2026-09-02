@@ -35,7 +35,7 @@
       "label": "Simning",
       "mode": "maintain_develop",
       "priority": 4,
-      "intent": "Bibehåll stark simkapacitet och utveckla teknik utan att konkurrera onödigt med prioriterad löp- och MTB-belastning."
+      "intent": "Bibehåll stark simkapacitet och utveckla teknik med normalt två simexponeringar per mikrocykel när de är absorberbara, utan att konkurrera onödigt med prioriterad löp- och MTB-belastning."
     }
   ],
   "capability_portfolio": [
@@ -209,7 +209,8 @@
       "Enduro räknas som faktisk belastning men får ingen schablonmässig belastningsnivå.",
       "En ledig dag är inte i sig skäl att lägga till träning.",
       "Privat återhämtningsdata används endast som konservativ beslutskontext och får aldrig ensam motivera ökad träningsbelastning.",
-      "Styrka/core får inte falla ur mikrocykeln som restpost; borttag kräver sakligt skäl och aktiv återplanering."
+      "Styrka/core får inte falla ur mikrocykeln som restpost; borttag kräver sakligt skäl och aktiv återplanering.",
+      "Två simexponeringar per mikrocykel är normal grundplan när de är absorberbara. Den andra simningen hålls aerob/teknisk och får kombineras med styrkedagen eftersom den har låg mekanisk kostnad för benen; den ska inte göras till ett extra kvalitetspass."
     ],
     "review_questions": [
       "Har de skyddade löpstimulansen kunnat genomföras med tillräcklig kontinuitet och bibehållen kvalitet?",
@@ -386,18 +387,22 @@
         "priority_role": "protected_support",
         "stimuli": [
           "strength_unilateral",
-          "strength_core"
+          "strength_core",
+          "swim_aerobic",
+          "swim_technique"
         ],
         "optional_stimuli": [
           "plyometric"
         ],
-        "session": "Styrka/core · ca 35 min · styrkemall",
-        "reason": "Skyddar allroundatletens styrka och bål som en egen kapacitet i stället för att lämna den som restpost. Grundplanen motsvarar nyligen genomförd kort styrketräning; passet reduceras eller flyttas om fredagens faktiska mekaniska belastning motiverar det.",
-        "development_focus": "Kontrollerad unilateral styrka, höftdominant arbete, drag/press och bål. Ingen konditionsjakt; plyometri endast som liten kvalitetsdos när benen är mekaniskt fräscha.",
+        "session": "Simning · 3 200 m · aerob/teknik + styrka/core · ca 35 min · styrkemall",
+        "reason": "Kombinerar mikrocykelns andra simexponering med skyddad styrka/core. Simningen är aerob/teknisk för låg mekanisk kostnad; styrkan förblir en egen skyddad kapacitet och reduceras eller flyttas om fredagens faktiska belastning motiverar det.",
+        "development_focus": "Simning: teknisk kvalitet och stabil aerob rytm. Styrka: kontrollerad unilateral styrka, höftdominant arbete, drag/press och bål; plyometri endast när benen är mekaniskt fräscha.",
         "day_index": 6,
         "load_dimensions": [
           "mechanical",
-          "neuromuscular"
+          "neuromuscular",
+          "cardiovascular",
+          "technical"
         ],
         "performance_marker_id": "strength-repeatability",
         "dose_options": [
@@ -405,14 +410,14 @@
             "id": "strength-support-25",
             "kind": "duration_minutes",
             "value": 25,
-            "session": "Styrka/core · 25 min · styrkemall",
+            "session": "Simning · 3 200 m · aerob/teknik + styrka/core · 25 min · styrkemall",
             "intent": "Reducerad skyddsdos när närbelastningen kräver extra marginal."
           },
           {
             "id": "strength-support-35",
             "kind": "duration_minutes",
             "value": 35,
-            "session": "Styrka/core · ca 35 min · styrkemall",
+            "session": "Simning · 3 200 m · aerob/teknik + styrka/core · ca 35 min · styrkemall",
             "intent": "Normal kort styrka/core-exponering, förankrad i nyligen genomförd cirka 36-minutersstyrka."
           }
         ],
