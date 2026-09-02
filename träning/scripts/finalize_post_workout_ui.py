@@ -16,11 +16,11 @@ PERFORMANCE_FILE = ROOT / "data" / "performance_history.json"
 COACH_FILE = ROOT / "data" / "coach.json"
 INDEX_FILE = ROOT / "index.html"
 
-CSS_MARKER = "/* post-workout-ux-v2 */"
+CSS_MARKER = "/* post-workout-ux-v3 */"
 CARD_MARKER = 'data-post-workout-state="completed"'
 
 CSS = r"""
-/* post-workout-ux-v2 */
+/* post-workout-ux-v3 */
 .today-outcome{background:#fff;border:1px solid #dbe5df;border-radius:18px;padding:16px 17px;margin:0 0 14px;box-shadow:0 7px 20px rgba(15,23,42,.05)}
 .today-outcome-head{display:flex;align-items:center;gap:9px;margin-bottom:9px}
 .today-outcome-check{width:28px;height:28px;flex:0 0 28px;border-radius:50%;display:grid;place-items:center;background:#dcfce7;color:#15803d;font-weight:900;font-size:.86rem}
@@ -29,9 +29,12 @@ CSS = r"""
 .today-outcome-title{margin:0;font-size:1.08rem;line-height:1.28;font-weight:800;letter-spacing:-.01em;color:#0f172a}
 .today-outcome-meta{margin-top:4px;color:#64748b;font-size:.82rem;line-height:1.4;font-variant-numeric:tabular-nums}
 .today-outcome-label{display:block;margin-bottom:4px;font-size:.67rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:#64748b}
-.today-outcome-coach{padding:11px 12px;border:1px solid #e2e8f0;border-radius:13px;background:#f8fafc;margin-bottom:10px}
-.today-outcome-coach strong{display:block;margin-bottom:3px;font-size:.94rem;line-height:1.35;color:#0f172a}
-.today-outcome-coach p{margin:0;color:#475569;font-size:.84rem;line-height:1.43}
+.today-outcome-evaluation{padding:0 0 10px;margin-bottom:10px;border-bottom:1px solid #e2e8f0}
+.today-outcome-evaluation strong{display:block;margin-bottom:3px;font-size:.94rem;line-height:1.35;color:#0f172a}
+.today-outcome-evaluation p{margin:0;color:#475569;font-size:.84rem;line-height:1.43}
+.today-outcome-impact{padding:11px 12px;border:1px solid #e2e8f0;border-radius:13px;background:#f8fafc;margin-bottom:10px}
+.today-outcome-impact strong{display:block;margin-bottom:3px;font-size:.94rem;line-height:1.35;color:#0f172a}
+.today-outcome-impact p{margin:0;color:#475569;font-size:.84rem;line-height:1.43}
 .today-outcome-signal{margin-top:7px;padding-top:7px;border-top:1px solid #e2e8f0;color:#334155;font-size:.8rem;line-height:1.4}
 .today-outcome-next{padding:11px 12px;border:1px solid #cbd5e1;border-radius:13px;background:#fff}
 .today-outcome-next strong{display:block;font-size:.92rem;line-height:1.38}
@@ -415,9 +418,9 @@ def plan_impact_label(analysis):
 
 
 def plan_impact_message(analysis, day):
-    assessment = (analysis or {}).get("assessment") or {}
-    summary = first_sentence(assessment.get("summary"))
-    return summary or completion_note(day)
+    action = (analysis or {}).get("plan_action") or {}
+    reason = first_sentence(action.get("reason"))
+    return reason or completion_note(day)
 
 
 def recommendation_note(analysis, next_day):
@@ -461,25 +464,22 @@ def render_analysis_evidence(analysis):
 def render_post_workout(day, activity, analysis, next_day, performance=None):
     title = outcome_title(activity)
     meta = outcome_meta(activity)
+    evaluation = build_outcome_insight(day, analysis, performance)
     impact_label = plan_impact_label(analysis)
     impact_message = plan_impact_message(analysis, day)
 
-    performance_signal = ""
-    if performance:
-        signal = build_outcome_insight(day, analysis, performance)
-        if signal.get("headline"):
-            performance_signal = (
-                '<div class="today-outcome-signal">'
-                '<span class="today-outcome-label">Passsignal</span>'
-                f'<strong>{html.escape(signal["headline"])}</strong>'
-                '</div>'
-            )
+    evaluation_html = f"""
+  <div class="today-outcome-evaluation">
+    <span class="today-outcome-label">Utvärdering</span>
+    <strong>{html.escape(evaluation["headline"])}</strong>
+    <p>{html.escape(evaluation["body"])}</p>
+  </div>"""
 
-    coach_html = f"""
-  <div class="today-outcome-coach">
+    impact_html = f"""
+  <div class="today-outcome-impact">
+    <span class="today-outcome-label">Planpåverkan</span>
     <strong>{html.escape(impact_label)}</strong>
     <p>{html.escape(impact_message)}</p>
-    {performance_signal}
   </div>"""
 
     next_html = ""
@@ -516,7 +516,8 @@ def render_post_workout(day, activity, analysis, next_day, performance=None):
     <h2 class="today-outcome-title" id="todayOutcomeTitle">{html.escape(title)}</h2>
     {meta_html}
   </div>
-  {coach_html}
+  {evaluation_html}
+  {impact_html}
   {next_html}
   {detail_html}
   <a class="today-outcome-link" href="#aktuell-vecka">Se hela planen ↓</a>
@@ -525,7 +526,7 @@ def render_post_workout(day, activity, analysis, next_day, performance=None):
 
 def add_css(page):
     page = re.sub(
-        r'/\* post-workout-ux-v1 \*/.*?(?=(?:/\*|</style>))',
+        r'/\* post-workout-ux-v[12] \*/.*?(?=(?:/\*|</style>))',
         "",
         page,
         flags=re.S,
@@ -648,7 +649,8 @@ def main():
             'id="todayOutcomeTitle">',
             'class="today-outcome-main"',
             'class="today-outcome-details"',
-            'class="today-outcome-coach"',
+            'class="today-outcome-evaluation"',
+            'class="today-outcome-impact"',
             'class="today-outcome-compare"',
             'id="aktuell-vecka"',
             'class="today-outcome-link"',
@@ -656,7 +658,7 @@ def main():
         missing = [marker for marker in required if marker not in verify]
         if missing:
             raise RuntimeError("Post-workout UX-validering misslyckades: " + repr(missing))
-        print("Post-workout UX OK: utfall → planpåverkan → nästa pass → underlag.")
+        print("Post-workout UX OK: utfall → utvärdering → planpåverkan → nästa pass → underlag.")
     else:
         print("Post-workout UX: inget genomfört pass idag; före-pass-läget lämnas oförändrat.")
 
