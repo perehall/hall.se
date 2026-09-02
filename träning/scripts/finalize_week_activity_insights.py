@@ -163,6 +163,10 @@ def historical_insight(day, activity, analysis, performance):
     body = re.sub(r"^Dagens tröskel\b", "Tröskelpasset", body, flags=re.IGNORECASE)
     body = re.sub(r"^Dagens\s+", "", body, flags=re.IGNORECASE)
     body = body.replace(
+        "Enduron räknas som faktisk extern teknisk belastning och ger ökad neuromuskulär/teknisk kostnad som bör vägas men inte automatiskt straffa tröskelpasset.",
+        "Enduron gav teknisk och neuromuskulär belastning som vägdes in utan att tröskelpasset behövde ändras.",
+    )
+    body = body.replace(
         "ger ökad neuromuskulär/teknisk kostnad som bör vägas men inte automatiskt straffa tröskelpasset",
         "gav teknisk och neuromuskulär belastning som vägdes in utan att tröskelpasset behövde ändras",
     )
