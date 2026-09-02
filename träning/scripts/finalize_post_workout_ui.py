@@ -227,6 +227,7 @@ def planned_text(day):
     return (
         str(day.get("planned_session") or "").strip()
         or str(day.get("original_session") or "").strip()
+        or str(day.get("session") or "").strip()
         or "Planerad dos saknas i historiken."
     )
 
@@ -243,11 +244,13 @@ def actual_text(day, activity):
         if down:
             bits.append(f"ca {round(float(down))} s jogg ned")
         return " · ".join(bits)
-    session = str(day.get("session") or "").strip()
-    planned = planned_text(day)
-    if session and session != planned:
-        return session
-    return str((activity or {}).get("name") or "Genomfört pass").strip()
+
+    activity = activity or {}
+    label = str(activity.get("display_label") or activity.get("sport_type") or "").strip()
+    name = str(activity.get("name") or "").strip()
+    if label and name and label.lower() not in name.lower():
+        return f"{label} · {name}"
+    return name or label or "Genomfört pass"
 
 
 def next_planned_day(plan, today):
