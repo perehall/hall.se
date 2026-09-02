@@ -4,33 +4,33 @@
       "activity_id": 19994118756,
       "activity_date": "2026-09-01",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-09-02T06:05:17.232142+00:00",
+      "generated_at_utc": "2026-09-02T06:22:39.239487+00:00",
       "model": "gpt-5-mini",
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört tröskelpass 3×8 min; mikrocykeln absorberar detta utan ändring.",
-        "load_interpretation": "Senaste tre dagarna visar hög kardiovaskulär varaktighet (lång löpning + enduro + 10K) men inga klara tecken på överbelastning.",
+        "summary": "Tröskelpass genomfört; mikrocykeln absorberar aktiviteten utan omedelbar ändring.",
+        "load_interpretation": "Senaste 3 dagarna visar kardiovaskulär volym och mekanisk belastning som är absorberbar.",
         "confidence": "medium",
         "facts": [
           "Run: 10,35 km · 50:29 · 61 m+ · snittpuls 145,3 · maxpuls 165.",
           "Planstatus 2026-09-01: dagens planerade pass är genomfört i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Kardiovaskulärt fönster är tungt men mekanisk kostnad från senaste löppasset var måttlig (61 hm).",
-          "Simpasset imorgon kan genomföras som planerat då det är mekanisk belastning och stödjer mesocykeln."
+          "Dagens tröskel var kontrollerad och följer mikrocykelns plan; inte tydligt överstimulerande.",
+          "Föregående enduro och längre löppass ger ökad total närbelastning men inte motiverande för automatisk reduktion av kommande backpass."
         ],
         "unknowns": [
-          "Subjektiv dagskänsla/bentrötthet efter långa löp- och endurodagar.",
-          "Detaljerad kvalitet i 3×8-min passets intervallintensitet (zonmål saknas).",
-          "Eventuella fasta åtaganden som påverkar återhämtning resten av dagen."
+          "Subjektiv dagskänsla/bentrötthet efter kvällens pass saknas.",
+          "Detaljerad löpteknisk kvalitet under tröskelintervallerna (performance_context saknas).",
+          "Eventuella fasta åtaganden eller känslig lokal muskulär smärta inga data visar."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-09-02",
-        "reason": "Mikrocykeln absorberar senaste passen och simning är lågmekanisk stödexponering.",
-        "recommendation": "Behåll planerad simning 3 200 m imorgon som aerob/teknikpass; håll intensiteten kontrollerad enligt workoutens fokus.",
+        "reason": "Senaste tröskelpasset är genomfört och mikrocykeln absorberar belastningen utan sakliga skäl att skala ner.",
+        "recommendation": "Behåll simpasset idag enligt plan (3 200 m aerob/teknik). Förbered torsdagens MTB som baseline 60 min; om du känner ovanlig lokal trötthet eller smärta, meddela för konservativ reduktion innan beslut.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -600,7 +600,7 @@
       }
     }
   ],
-  "last_trigger_hash": "49cf1849fbdddca5f8e1d0a9619e84843dc71081d8406ccad9926933ee517328",
-  "last_run_utc": "2026-09-02T06:05:17.232142+00:00",
+  "last_trigger_hash": "75ba7326c1c87a2266a83b608610501ee42af4961539ef1fcc5f17e9bd545a4e",
+  "last_run_utc": "2026-09-02T06:22:39.239487+00:00",
   "contract_version": 13
 }
