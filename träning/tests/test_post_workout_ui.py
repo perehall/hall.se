@@ -261,6 +261,7 @@ class PostWorkoutUiTests(unittest.TestCase):
                     },
                     "comparison": {
                         "previous_activity_date": "2026-08-25",
+                        "same_protocol": True,
                         "mean_pace_delta_s_per_km": -2.0,
                         "mean_hr_delta": 1.0,
                     },
