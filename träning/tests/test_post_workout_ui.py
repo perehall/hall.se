@@ -100,6 +100,8 @@ class PostWorkoutUiTests(unittest.TestCase):
         self.assertIn("Dagens pass · genomfört", rendered)
         self.assertIn("Visa underlag", rendered)
         self.assertIn("Planen justerad", rendered)
+        self.assertIn("Utvärdering", rendered)
+        self.assertIn("Planpåverkan", rendered)
         self.assertIn("Fredagens backpass blev större än ordinerat och ökar veckobelastningen.", rendered)
         self.assertNotIn("<section class=\"training-brain\"><div>Dagens plan</div></section>", rendered)
         self.assertIn("50:36", rendered)
@@ -445,7 +447,7 @@ class PostWorkoutUiTests(unittest.TestCase):
         )
         self.assertEqual(once, twice)
         self.assertEqual(twice.count('data-post-workout-state="completed"'), 1)
-        self.assertEqual(twice.count("/* post-workout-ux-v2 */"), 1)
+        self.assertEqual(twice.count("/* post-workout-ux-v3 */"), 1)
 
 
 if __name__ == "__main__":
