@@ -231,7 +231,7 @@ class CoachRulesTests(unittest.TestCase):
         )
         self.assertEqual(normalized["action"], "review")
         self.assertEqual(normalized["target_date"], "")
-        self.assertIn("annan veckodag", normalized["reason"])
+        self.assertIn("inte kopplas entydigt", normalized["reason"])
 
     def test_target_day_may_reference_surrounding_day_when_target_is_explicit(self):
         action = {
