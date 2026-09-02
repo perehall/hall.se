@@ -1,6 +1,45 @@
 {
   "analyses": [
     {
+      "activity_id": 20008258969,
+      "activity_date": "2026-09-02",
+      "activity_name": "SLK Swimrun Jogersö Extreme",
+      "generated_at_utc": "2026-09-02T17:51:42.702128+00:00",
+      "model": "gpt-5-mini",
+      "performance_marker_id": null,
+      "performance_protocol_key": null,
+      "assessment": {
+        "summary": "Swimrun på Jogersö genomfört; ersätter planerad simning och räknas som faktisk belastning inför torsdag–fredag.",
+        "load_interpretation": "Närbelastning visar flera dagars löp/teknisk och ett längre swimrun med måttlig kardiovaskulär och varierad mekanisk/teknisk belastning.",
+        "confidence": "medium",
+        "facts": [
+          "Swimrun: 6,89 km · 54:25 · 104,3 m+ · snittpuls 135,4 · maxpuls 158.",
+          "Planstatus 2026-09-02: dagens planerade pass är genomfört i coachens beslutsunderlag."
+        ],
+        "interpretations": [
+          "Swimrun ger kardiovaskulär belastning och teknisk ansträngning; inte en tung mekanisk löpbelastning jämfört med längre distanslöpning.",
+          "Det finns ingen tydlig signal att fredagens backkvalitet måste tas bort, men MTB på torsdag kan behöva kortas om benkänslan är trött."
+        ],
+        "unknowns": [
+          "Subjektiv benkänsla/lokal muskeltrötthet efter dagens swimrun.",
+          "Detaljer om intensitet i swimrun-intervaller (ögt/lågt tempo mellan varven).",
+          "Eventuella fasta åtaganden eller resor imorgon som påverkar återhämtning."
+        ]
+      },
+      "plan_action": {
+        "action": "keep",
+        "target_date": "2026-09-03",
+        "reason": "Swimrun ersatte planerad simning och närbelastningen är absorberbar inför torsdag–fredag.",
+        "recommendation": "Behåll torsdagens MTB 60 min som plan; avvakta morgondagens benkänsla och korta till 45 min om benen känns trötta. Behåll fredagens 6×150 m som prioriterad backkvalitet om dagskänsla är acceptabel.",
+        "dose_option_id": "",
+        "requires_approval": false
+      },
+      "auto_apply": {
+        "applied": false,
+        "note": "Ingen automatisk planändring."
+      }
+    },
+    {
       "activity_id": 19994118756,
       "activity_date": "2026-09-01",
       "activity_name": "Löpning på kvällen",
@@ -601,7 +640,7 @@
       }
     }
   ],
-  "last_trigger_hash": "3255d10075907f4a5ed8ba0bf94d25ce76bf66d10745a50e18152c75b5369eb9",
-  "last_run_utc": "2026-09-02T09:26:31.400560+00:00",
+  "last_trigger_hash": "dbf7e44ee5745b65fbc2da0cb5e5acaafc644eee897c5df8023d50c05099b8b6",
+  "last_run_utc": "2026-09-02T17:51:42.702128+00:00",
   "contract_version": 13
 }

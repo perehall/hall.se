@@ -126,6 +126,52 @@ body{line-height:1.42}.wrap{width:min(100%,720px)}
 .week-status-expander .dashboard-grid{grid-template-columns:1fr 1fr}
 @media (max-width:620px){.week-status-expander .dashboard-grid{grid-template-columns:1fr}}
 
+/* post-workout-ux-v1 */
+.today-outcome{background:#fff;border:1px solid #dbe5df;border-radius:20px;padding:18px 20px;margin:0 0 14px;box-shadow:0 8px 24px rgba(15,23,42,.06)}
+.today-outcome-head{display:flex;align-items:center;gap:12px;margin-bottom:7px}
+.today-outcome-check{width:34px;height:34px;flex:0 0 34px;border-radius:50%;display:grid;place-items:center;background:#dcfce7;color:#15803d;font-weight:950;font-size:1rem}
+.today-outcome-kicker{font-size:.7rem;font-weight:900;letter-spacing:.09em;text-transform:uppercase;color:#64748b}
+.today-outcome h2{font-size:1.2rem;line-height:1.25;margin:1px 0 0}
+.today-outcome-note{margin:0 0 15px;color:#334155;font-size:.92rem;line-height:1.45}
+.today-outcome-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+.today-outcome-metrics>div{border:1px solid #e2e8f0;border-radius:13px;padding:10px 11px;background:#f8fafc}
+.today-outcome-metrics dt{font-size:.67rem;font-weight:850;letter-spacing:.06em;text-transform:uppercase;color:#64748b}
+.today-outcome-metrics dd{margin:2px 0 0;font-size:1rem;font-weight:900;font-variant-numeric:tabular-nums}
+.today-outcome-compare{display:grid;grid-template-columns:1fr 1fr;border:1px solid #e2e8f0;border-radius:15px;overflow:hidden;margin-bottom:12px}
+.today-outcome-compare>div{padding:12px 13px;min-width:0}
+.today-outcome-compare>div+div{border-left:1px solid #e2e8f0;background:#fbfdfc}
+.today-outcome-label{display:block;margin-bottom:4px;font-size:.67rem;font-weight:900;letter-spacing:.07em;text-transform:uppercase;color:#64748b}
+.today-outcome-compare strong{display:block;font-size:.9rem;line-height:1.4}
+.today-outcome-performance{padding:12px 13px;border:1px solid #bae6fd;border-radius:15px;background:#f0f9ff;margin-bottom:12px}
+.today-outcome-performance-grid{display:grid;gap:5px;margin-top:7px}
+.today-outcome-performance-row{display:grid;grid-template-columns:24px minmax(72px,1fr) minmax(62px,1fr);gap:8px;font-size:.84rem;line-height:1.35}
+.today-outcome-performance-row strong{color:#075985}
+.today-outcome-performance-note{margin:8px 0 0;color:#0c4a6e;font-size:.78rem;line-height:1.4}
+.today-outcome-coach{padding:12px 13px;border:1px solid #ddd6fe;border-radius:15px;background:#faf5ff;margin-bottom:12px}
+.today-outcome-coach p{margin:0;color:#3b0764;font-size:.9rem;line-height:1.45}
+.today-outcome-impact{margin-top:8px;padding-top:8px;border-top:1px solid #e9d5ff;color:#4c1d95!important}
+.today-outcome-next{padding:12px 13px;border:1px solid #cbd5e1;border-radius:15px;background:#f8fafc}
+.today-outcome-next strong{display:block;font-size:.96rem;line-height:1.4}
+.today-outcome-next small{display:block;margin-top:4px;color:#64748b;font-size:.76rem;line-height:1.35}
+.today-outcome-insight{margin:4px 0 16px}
+.today-outcome-insight h2{font-size:1.55rem;line-height:1.16;margin:0 0 8px;letter-spacing:-.02em}
+.today-outcome-insight p{margin:0;color:#334155;font-size:.96rem;line-height:1.5}
+.today-outcome-details{margin:0 0 12px;border:1px solid #e2e8f0;border-radius:15px;background:#fff;overflow:hidden}
+.today-outcome-details summary{cursor:pointer;list-style:none;padding:12px 13px;font-size:.82rem;font-weight:850;color:#475569}
+.today-outcome-details summary::-webkit-details-marker{display:none}
+.today-outcome-details summary:after{content:"＋";float:right;color:#64748b}
+.today-outcome-details[open] summary:after{content:"−"}
+.today-outcome-details-inner{padding:0 12px 12px}
+.today-outcome-details .today-outcome-metrics{margin-top:0}
+.today-outcome-link{display:inline-block;margin-top:11px;color:#475569;font-size:.8rem;font-weight:800;text-underline-offset:3px}
+@media(max-width:620px){
+  .today-outcome{padding:16px 15px;border-radius:17px}
+  .today-outcome-metrics{gap:6px}
+  .today-outcome-metrics>div{padding:9px 8px}
+  .today-outcome-metrics dd{font-size:.92rem}
+  .today-outcome-compare{grid-template-columns:1fr}
+  .today-outcome-compare>div+div{border-left:0;border-top:1px solid #e2e8f0}
+}
 /* goal-page-link-v3 */
 .goal-page-link{display:flex;justify-content:flex-end;margin:0 0 8px}
 .goal-page-link a{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid #e2e8f0;border-radius:12px;background:#fff;color:#475569;text-decoration:none;font-size:.78rem;font-weight:700;box-shadow:0 5px 14px rgba(15,23,42,.04)}
@@ -186,45 +232,67 @@ h1{font-size:clamp(2rem,8vw,3.2rem);line-height:1;margin:0 0 8px;letter-spacing:
 </style>
 </head>
 <body><div class="wrap">
-<header><div class="eyebrow">Träningsplan</div><h1>Vecka 36</h1><div class="sub header-meta-line"><span class="week-period">31 aug–6 sep</span><span>·</span><span class="header-updated">uppdaterad 2 sep 14:32</span></div></header>
+<header><div class="eyebrow">Träningsplan</div><h1>Vecka 36</h1><div class="sub header-meta-line"><span class="week-period">31 aug–6 sep</span><span>·</span><span class="header-updated">uppdaterad 2 sep 19:51</span></div></header>
 
 <div class="goal-page-link"><a href="/träning/malbild-2027/">Målbild 2027 <span>→</span></a></div>
 <nav class="week-nav" aria-label="Veckonavigering"><a class="prev" href="/träning/vecka/2026-W35/">← Vecka 35</a><div class="week-nav-center"><strong>Vecka 36</strong><span>AKTUELL</span></div><a class="next" href="/träning/vecka/2026-W37/">Vecka 37 →</a></nav>
 <div class="hero week-focus-card"><h2 class="week-focus-title">Löpning prioriteras denna vecka</h2><div class="week-focus-mesocycle-meta">Löptröskel + backkvalitet · mikrocykel 2 av 4</div><details class="week-focus-details"><summary>Planidé</summary><p>Mikrocykeln fortsätter fyraveckorsmesocykeln med kontrollerad löptröskel, separat backkvalitet och lugn löpdistans. Måndagens enduroskola ligger fast. Simning och MTB stödjer helheten utan att tränga undan de prioriterade löpstimulansen. De kommande passen har konkreta grundplaner och ändras endast när faktisk belastning, återhämtning eller fasta åtaganden ger sakliga skäl.</p><p class="week-focus-mesocycle-idea"><strong>Mesocykelhypotes:</strong> En differentierad löpkvalitet med ett kontrollerat tröskelstimulus och ett separat backstimulus kan ge bättre kompletterande utveckling och bättre plats för MTB/enduro än två snarlika tröskelpass per vecka.</p><p class="week-focus-mesocycle-idea"><strong>Primärt:</strong> Kontrollerad löptröskel, Backstyrka / löpekonomi, Lugn löpdistans / tålighet · <strong>Sekundärt:</strong> MTB teknisk fart, MTB/XC aerob kapacitet · <strong>Underhåll:</strong> Sim aerob kapacitet, Simteknik · <strong>Skyddad kapacitet:</strong> Unilateral benstyrka, Core, Plyometrisk exponering</p></details></div>
 <!-- training-brain-v1:start -->
-<section class="training-brain" aria-label="Träningsbeslut">
-  <div class="brain-today">
-    <div class="brain-topline"><span class="brain-kicker">Idag</span><span class="brain-status">Alternativ finns</span></div>
-    <div class="brain-headline">Simning 3 200 m aerob/teknik</div>
-    <div class="brain-subline">ca 60 min · alternativ: Swimrun, Jogersö Extreme 1 varv</div>
-
-
-    <details class="brain-why-details"><summary>Motivering</summary><div class="brain-why">Baslinjen är simning med liten mekanisk kostnad efter söndagens längre löpning, måndagens enduro och tisdagens tröskel. Ett varv Jogersö Extreme kan ersätta simningen om det hålls kontrollerat; det ska inte läggas ovanpå simpasset och räknas som faktisk löp-/teknisk belastning inför resten av veckan.</div></details>
-    <div class="brain-next">
-      <div class="brain-next-label">Nästa</div>
-      <strong>Torsdag · MTB/XC 60 min</strong>
-      <div class="brain-note">Grundplan: teknik + lugn aerob stig.</div>
-    </div>
+<section class="today-outcome" data-post-workout-state="completed" aria-labelledby="todayOutcomeTitle">
+  <div class="today-outcome-head">
+    <span class="today-outcome-check" aria-hidden="true">✓</span>
+    <div><div class="today-outcome-kicker">Dagens pass · genomfört</div></div>
   </div>
+  <div class="today-outcome-insight">
+    <h2 id="todayOutcomeTitle">Swimrun på Jogersö genomfört; ersätter planerad simning och räknas som faktisk belastning inför torsdag–fredag</h2>
+    <p>Närbelastning visar flera dagars löp/teknisk och ett längre swimrun med måttlig kardiovaskulär och varierad mekanisk/teknisk belastning.</p>
+  </div>
+
+  <div class="today-outcome-coach">
+    <span class="today-outcome-label">Effekt på planen</span>
+    <p>Behåll torsdagens MTB 60 min som plan; avvakta morgondagens benkänsla och korta till 45 min om benen känns trötta. Behåll fredagens 6×150 m som prioriterad backkvalitet om dagskänsla är acceptabel.</p>
+  </div>
+
+  <div class="today-outcome-next">
+    <span class="today-outcome-label">Nästa pass · Torsdag 3 sep</span>
+    <strong>MTB/XC · 60 min · teknik + lugn aerob stig</strong>
+    <small>Nästa planerade steg i mikrocykeln.</small>
+  </div>
+
+  <details class="today-outcome-details">
+    <summary>Visa analys</summary>
+    <div class="today-outcome-details-inner">
+      <dl class="today-outcome-metrics"><div><dt>Tid</dt><dd>54:25</dd></div><div><dt>Distans</dt><dd>6,89 km</dd></div><div><dt>Snittpuls</dt><dd>135</dd></div></dl>
+      <div class="today-outcome-compare" aria-label="Planerad och faktisk dos">
+        <div><span class="today-outcome-label">Plan</span><strong>Planerad dos saknas i historiken.</strong></div>
+        <div><span class="today-outcome-label">Utfall</span><strong>Simning · aerob/teknik · 3 200 m · ca 60 min · alternativ: Swimrun · Jogersö Extreme · 1 varv</strong></div>
+      </div>
+
+    </div>
+  </details>
+  <a class="today-outcome-link" href="#aktuell-vecka">Se hela planen ↓</a>
 </section>
 <!-- training-brain-v1:end -->
 
-<h2 class="section">Aktuell vecka</h2>
-<details class="week-status-expander"><summary>Veckostatus · 2 pass · 2:30:53 · 2 dagar</summary><div class="week-status-body"><section class="dashboard" aria-label="Veckoöversikt">
+<h2 class="section" id="aktuell-vecka">Aktuell vecka</h2>
+<details class="week-status-expander"><summary>Veckostatus · 3 pass · 3:25:18 · 3 dagar</summary><div class="week-status-body"><section class="dashboard" aria-label="Veckoöversikt">
   <div class="metrics">
-    <div class="metric"><strong>2</strong><span>pass</span></div>
-    <div class="metric"><strong>2:30:53</strong><span>passtid</span></div>
-    <div class="metric"><strong>2</strong><span>träningsdagar</span></div>
+    <div class="metric"><strong>3</strong><span>pass</span></div>
+    <div class="metric"><strong>3:25:18</strong><span>passtid</span></div>
+    <div class="metric"><strong>3</strong><span>träningsdagar</span></div>
   </div>
   <div class="dashboard-grid">
     <div class="dashboard-card">
       <div class="dashboard-title">Grenfördelning · passtid</div>
       <div class="sport-row">
   <div class="sport-head"><span class="sport-name"><svg class="sport-icon icon-enduro" aria-hidden="true" viewBox="0 0 640 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M280 32c-13.3 0-24 10.7-24 24s10.7 24 24 24l57.7 0 16.4 30.3L256 192l-45.3-45.3c-12-12-28.3-18.7-45.3-18.7L64 128c-17.7 0-32 14.3-32 32l0 32 96 0c88.4 0 160 71.6 160 160c0 11-1.1 21.7-3.2 32l70.4 0c-2.1-10.3-3.2-21-3.2-32c0-52.2 25-98.6 63.7-127.8l15.4 28.6C402.4 276.3 384 312 384 352c0 70.7 57.3 128 128 128s128-57.3 128-128s-57.3-128-128-128c-13.5 0-26.5 2.1-38.7 6L418.2 128l61.8 0c17.7 0 32-14.3 32-32l0-32c0-17.7-14.3-32-32-32l-20.4 0c-7.5 0-14.7 2.6-20.5 7.4L391.7 78.9l-14-26c-7-12.9-20.5-21-35.2-21L280 32zM462.7 311.2l28.2 52.2c6.3 11.7 20.9 16 32.5 9.7s16-20.9 9.7-32.5l-28.2-52.2c2.3-.3 4.7-.4 7.1-.4c35.3 0 64 28.7 64 64s-28.7 64-64 64s-64-28.7-64-64c0-15.5 5.5-29.7 14.7-40.8zM187.3 376c-9.5 23.5-32.5 40-59.3 40c-35.3 0-64-28.7-64-64s28.7-64 64-64c26.9 0 49.9 16.5 59.3 40l66.4 0C242.5 268.8 190.5 224 128 224C57.3 224 0 281.3 0 352s57.3 128 128 128c62.5 0 114.5-44.8 125.8-104l-66.4 0zM128 384a32 32 0 1 0 0-64 32 32 0 1 0 0 64z"/></svg>Enduro (23,4km)</span><strong>1:40:24</strong></div>
-  <div class="sport-track"><div class="sport-fill" style="width:67%"></div></div>
+  <div class="sport-track"><div class="sport-fill" style="width:49%"></div></div>
+</div><div class="sport-row">
+  <div class="sport-head"><span class="sport-name"><svg class="sport-icon icon-run" aria-hidden="true" viewBox="0 0 448 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M320 48a48 48 0 1 0-96 0 48 48 0 1 0 96 0zM125.7 175.5c9.9-9.9 23.4-15.5 37.5-15.5 1.9 0 3.8.1 5.6.3L137.6 254c-9.3 28 1.7 58.8 26.8 74.5l86.2 53.9-25.4 88.8c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l28.7-100.4c5.9-20.6-2.6-42.6-20.7-53.9L238 299l30.9-82.4 5.1 12.3C289 264.7 323.9 288 362.7 288H384c17.7 0 32-14.3 32-32s-14.3-32-32-32h-21.3c-12.9 0-24.6-7.8-29.5-19.7l-6.3-15c-14.6-35.1-44.1-61.9-80.5-73.1l-48.7-15c-11.1-3.4-22.7-5.2-34.4-5.2-31 0-60.8 12.3-82.7 34.3l-23.2 23.1c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l23.1-23.1zM91.2 352H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h69.6c19 0 36.2-11.2 43.9-28.5l11.5-25.9-9.5-6c-17.5-10.9-30.5-26.8-37.9-44.9L91.2 352z"/></svg>Swimrun (6,9km)</span><strong>54:25</strong></div>
+  <div class="sport-track"><div class="sport-fill" style="width:27%"></div></div>
 </div><div class="sport-row">
   <div class="sport-head"><span class="sport-name"><svg class="sport-icon icon-run" aria-hidden="true" viewBox="0 0 448 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M320 48a48 48 0 1 0-96 0 48 48 0 1 0 96 0zM125.7 175.5c9.9-9.9 23.4-15.5 37.5-15.5 1.9 0 3.8.1 5.6.3L137.6 254c-9.3 28 1.7 58.8 26.8 74.5l86.2 53.9-25.4 88.8c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l28.7-100.4c5.9-20.6-2.6-42.6-20.7-53.9L238 299l30.9-82.4 5.1 12.3C289 264.7 323.9 288 362.7 288H384c17.7 0 32-14.3 32-32s-14.3-32-32-32h-21.3c-12.9 0-24.6-7.8-29.5-19.7l-6.3-15c-14.6-35.1-44.1-61.9-80.5-73.1l-48.7-15c-11.1-3.4-22.7-5.2-34.4-5.2-31 0-60.8 12.3-82.7 34.3l-23.2 23.1c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l23.1-23.1zM91.2 352H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h69.6c19 0 36.2-11.2 43.9-28.5l11.5-25.9-9.5-6c-17.5-10.9-30.5-26.8-37.9-44.9L91.2 352z"/></svg>Löpning (10,3km)</span><strong>50:29</strong></div>
-  <div class="sport-track"><div class="sport-fill" style="width:33%"></div></div>
+  <div class="sport-track"><div class="sport-fill" style="width:25%"></div></div>
 </div>
     </div>
     <div class="dashboard-card">
@@ -237,7 +305,7 @@ h1{font-size:clamp(2rem,8vw,3.2rem);line-height:1;margin:0 0 8px;letter-spacing:
   <div class="week-day-dot fixed">✓</div>
 </div><div class="week-day today">
   <div class="week-day-label">On</div>
-  <div class="week-day-dot conditional">◐</div>
+  <div class="week-day-dot fixed">✓</div>
 </div><div class="week-day">
   <div class="week-day-label">To</div>
   <div class="week-day-dot conditional">◐</div>
@@ -256,20 +324,19 @@ h1{font-size:clamp(2rem,8vw,3.2rem);line-height:1;margin:0 0 8px;letter-spacing:
   </div>
   <div class="dashboard-card">
     <div class="dashboard-title">Kommande dagar</div>
-    <div class="next-item" data-next-date="2026-09-02"><a class="next-jump" href="#dag-2026-09-02" aria-label="Visa detaljer för Onsdag"></a>
-  <div class="next-top"><strong><span class="today-pill">IDAG</span>Onsdag</strong><span class="badge conditional">VILLKORAT</span></div>
-  <div class="swim-workout compact"><div class="swim-session-head"><strong class="session-with-icon"><svg class="sport-icon icon-swim" aria-hidden="true" viewBox="0 0 576 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M309.5 178.4 447.9 297.1c-1.6.9-3.2 2-4.8 3-18 12.4-40.1 20.3-59.2 20.3-19.6 0-40.8-7.7-59.2-20.3-22.1-15.5-51.6-15.5-73.7 0-17.1 11.8-38 20.3-59.2 20.3-10.1 0-21.1-2.2-31.9-6.2C163.1 193.2 262.2 96 384 96h64c17.7 0 32 14.3 32 32s-14.3 32-32 32h-64c-26.9 0-52.3 6.6-74.5 18.4zM160 160A64 64 0 1 1 32 160a64 64 0 1 1 128 0zM306.5 325.9C329 341.4 356.5 352 384 352c26.9 0 55.4-10.8 77.4-26.1 11.9-8.5 28.1-7.8 39.2 1.7 14.4 11.9 32.5 21 50.6 25.2 17.2 4 27.9 21.2 23.9 38.4s-21.2 27.9-38.4 23.9c-24.5-5.7-44.9-16.5-58.2-25C449.5 405.7 417 416 384 416c-31.9 0-60.6-9.9-80.4-18.9-5.8-2.7-11.1-5.3-15.6-7.7-4.5 2.4-9.7 5.1-15.6 7.7-19.8 9-48.5 18.9-80.4 18.9-33 0-65.5-10.3-94.5-25.8-13.4 8.4-33.7 19.3-58.2 25-17.2 4-34.4-6.7-38.4-23.9s6.7-34.4 23.9-38.4c18.1-4.2 36.2-13.3 50.6-25.2 11.1-9.4 27.3-10.1 39.2-1.7C136.7 341.2 165.1 352 192 352c27.5 0 55-10.6 77.5-26.1 11.1-7.9 25.9-7.9 37 0z"/></svg>Simning · aerob/teknik</strong><span class="swim-meta">3 200 m · ≈ 60 min · alternativ: Swimrun · Jogersö Extreme · 1 varv</span></div></div>
-  <div class="next-weather" data-weather-date="2026-09-02" data-weather-scope="next" style="color:#475569;font-size:.82rem;margin-top:5px"><strong>Väder · Oxelösund</strong> · <svg class="weather-icon" aria-hidden="true" viewBox="0 0 24 24" style="width:18px;height:18px;vertical-align:-4px;margin-right:5px;color:#475569;overflow:visible"><circle cx="8" cy="8" r="2.8" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 3V1.8M8 13v-1.2M3 8H1.8M12.2 8H11M4.5 4.5l-.9-.9M11.5 4.5l.9-.9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M7.2 19h10a3.6 3.6 0 0 0 .2-7.2 5 5 0 0 0-9.5-.7A4 4 0 0 0 7.2 19Z" fill="white" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Växlande molnighet · 15,7–21,1 °C · nederbördsrisk max 3 % · vind max 6,5 m/s</div>
-
-</div><div class="next-item" data-next-date="2026-09-03"><a class="next-jump" href="#dag-2026-09-03" aria-label="Visa detaljer för Torsdag"></a>
+    <div class="next-item" data-next-date="2026-09-03"><a class="next-jump" href="#dag-2026-09-03" aria-label="Visa detaljer för Torsdag"></a>
   <div class="next-top"><strong>Torsdag</strong><span class="badge conditional">PRELIMINÄRT</span></div>
   <div class="next-session"><svg class="sport-icon icon-bike" aria-hidden="true" viewBox="0 0 640 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M312 32c-13.3 0-24 10.7-24 24s10.7 24 24 24h25.7l34.6 64H222.9l-27.4-38C191 99.7 183.7 96 176 96h-56c-13.3 0-24 10.7-24 24s10.7 24 24 24h43.7l22.1 30.7-26.6 53.1c-10-2.5-20.5-3.8-31.2-3.8C57.3 224 0 281.3 0 352s57.3 128 128 128c65.3 0 119.1-48.9 127-112h49c8.5 0 16.3-4.5 20.7-11.8l84.8-143.5 21.7 40.1C402.4 276.3 384 312 384 352c0 70.7 57.3 128 128 128s128-57.3 128-128-57.3-128-128-128c-13.5 0-26.5 2.1-38.7 6L375.4 48.8C369.8 38.4 359 32 347.2 32H312zM458.6 303.7l32.3 59.7c6.3 11.7 20.9 16 32.5 9.7s16-20.9 9.7-32.5l-32.3-59.7c3.6-.6 7.4-.9 11.2-.9 39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72c0-18.6 7-35.5 18.6-48.3zM133.2 368h65c-7.3 32.1-36 56-70.2 56-39.8 0-72-32.2-72-72s32.2-72 72-72c1.7 0 3.4.1 5.1.2l-24.2 48.5c-9 18.1 4.1 39.4 24.3 39.4zm33.7-48 50.7-101.3 72.9 101.2-.1.1H166.9zm90.6-128H366L317 274.8 257.4 192z"/></svg><span>MTB/XC · 60 min · teknik + lugn aerob stig</span></div>
-  <div class="next-weather" data-weather-date="2026-09-03" data-weather-scope="next" style="color:#475569;font-size:.82rem;margin-top:5px"><strong>Väder · Oxelösund</strong> · <svg class="weather-icon" aria-hidden="true" viewBox="0 0 24 24" style="width:18px;height:18px;vertical-align:-4px;margin-right:5px;color:#475569;overflow:visible"><circle cx="12" cy="12" r="3.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M18.7 5.3l-1.4 1.4M6.7 17.3l-1.4 1.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Klart · 12,4–19,6 °C · nederbördsrisk max 13 % · vind max 6,4 m/s</div>
+  <div class="next-weather" data-weather-date="2026-09-03" data-weather-scope="next" style="color:#475569;font-size:.82rem;margin-top:5px"><strong>Väder · Oxelösund</strong> · <svg class="weather-icon" aria-hidden="true" viewBox="0 0 24 24" style="width:18px;height:18px;vertical-align:-4px;margin-right:5px;color:#475569;overflow:visible"><circle cx="12" cy="12" r="3.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M18.7 5.3l-1.4 1.4M6.7 17.3l-1.4 1.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Klart · 12,3–19,6 °C · nederbördsrisk max 30 % · vind max 6,5 m/s</div>
 
 </div><div class="next-item" data-next-date="2026-09-04"><a class="next-jump" href="#dag-2026-09-04" aria-label="Visa detaljer för Fredag"></a>
   <div class="next-top"><strong>Fredag</strong><span class="badge conditional">PRELIMINÄRT</span></div>
   <div class="next-session"><svg class="sport-icon icon-run" aria-hidden="true" viewBox="0 0 448 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M320 48a48 48 0 1 0-96 0 48 48 0 1 0 96 0zM125.7 175.5c9.9-9.9 23.4-15.5 37.5-15.5 1.9 0 3.8.1 5.6.3L137.6 254c-9.3 28 1.7 58.8 26.8 74.5l86.2 53.9-25.4 88.8c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l28.7-100.4c5.9-20.6-2.6-42.6-20.7-53.9L238 299l30.9-82.4 5.1 12.3C289 264.7 323.9 288 362.7 288H384c17.7 0 32-14.3 32-32s-14.3-32-32-32h-21.3c-12.9 0-24.6-7.8-29.5-19.7l-6.3-15c-14.6-35.1-44.1-61.9-80.5-73.1l-48.7-15c-11.1-3.4-22.7-5.2-34.4-5.2-31 0-60.8 12.3-82.7 34.3l-23.2 23.1c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l23.1-23.1zM91.2 352H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h69.6c19 0 36.2-11.2 43.9-28.5l11.5-25.9-9.5-6c-17.5-10.9-30.5-26.8-37.9-44.9L91.2 352z"/></svg><span>Löpning · backkvalitet · 15 min lugnt + 6 × 150 m / full lugn nedjogg + 10 min lugnt</span></div>
-  <div class="next-weather" data-weather-date="2026-09-04" data-weather-scope="next" style="color:#475569;font-size:.82rem;margin-top:5px"><strong>Väder · Oxelösund</strong> · <svg class="weather-icon" aria-hidden="true" viewBox="0 0 24 24" style="width:18px;height:18px;vertical-align:-4px;margin-right:5px;color:#475569;overflow:visible"><path d="M6.7 18h10.1a3.7 3.7 0 0 0 .3-7.4A5.3 5.3 0 0 0 7 9.8 4.1 4.1 0 0 0 6.7 18Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Mulet · 10,2–16,0 °C · nederbördsrisk max 50 % · vind max 5,1 m/s</div>
+  <div class="next-weather" data-weather-date="2026-09-04" data-weather-scope="next" style="color:#475569;font-size:.82rem;margin-top:5px"><strong>Väder · Oxelösund</strong> · <svg class="weather-icon" aria-hidden="true" viewBox="0 0 24 24" style="width:18px;height:18px;vertical-align:-4px;margin-right:5px;color:#475569;overflow:visible"><path d="M6.7 18h10.1a3.7 3.7 0 0 0 .3-7.4A5.3 5.3 0 0 0 7 9.8 4.1 4.1 0 0 0 6.7 18Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Mulet · 9,0–16,3 °C · nederbördsrisk max 40 % · vind max 3,5 m/s</div>
+
+</div><div class="next-item" data-next-date="2026-09-05"><a class="next-jump" href="#dag-2026-09-05" aria-label="Visa detaljer för Lördag"></a>
+  <div class="next-top"><strong>Lördag</strong><span class="badge planned">PLANERAT</span></div>
+  <div class="next-session"><svg class="sport-icon icon-strength" aria-hidden="true" viewBox="0 0 640 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M96 64c0-17.7 14.3-32 32-32h32c17.7 0 32 14.3 32 32v160 64 160c0 17.7-14.3 32-32 32h-32c-17.7 0-32-14.3-32-32v-64H64c-17.7 0-32-14.3-32-32v-64c-17.7 0-32-14.3-32-32s14.3-32 32-32v-64c0-17.7 14.3-32 32-32h32V64zm448 0v64h32c17.7 0 32 14.3 32 32v64c17.7 0 32 14.3 32 32s-14.3 32-32 32v64c0 17.7-14.3 32-32 32h-32v64c0 17.7-14.3 32-32 32h-32c-17.7 0-32-14.3-32-32V288 224 64c0-17.7 14.3-32 32-32h32c17.7 0 32 14.3 32 32zM416 224v64H224v-64h192z"/></svg><span>Simning · 3 200 m · aerob/teknik + styrka/core · 25 min · styrkemall</span></div>
 
 </div>
   </div>
@@ -298,21 +365,41 @@ h1{font-size:clamp(2rem,8vw,3.2rem);line-height:1;margin:0 0 8px;letter-spacing:
   <div class="week-activity-plan-impact"><span>Planpåverkan</span><strong>Ingen ändring</strong></div>
   <details class="week-activity-evidence"><summary>Visa underlag</summary><div class="week-activity-evidence-body"><div class="week-activity-evidence-block"><strong>Fakta</strong><ul><li>Run: 10,35 km · 50:29 · 61 m+ · snittpuls 145,3 · maxpuls 165.</li><li>Användarrapport: Började segt och kände mig långsam i uppvärmningen. Gjorde 3 stegringslopp för att väcka kroppen. I 8-minutersintervallerna var känslan bättre: inga problem att hålla arbetstiden, och efter sista intervallen kändes kroppen riktigt pigg genom hela nedjoggen. Bedömning från användaren: hade definitivt kunnat köra ytterligare en 8-minutersintervall.</li><li>Planstatus 2026-09-01: dagens planerade pass är genomfört i coachens beslutsunderlag.</li></ul></div><div class="week-activity-evidence-block"><strong>Tolkning</strong><ul><li>Tröskelpasset hölls kontrollerat och tekniken/energin förbättrades genom passet — ingen omedelbar återhämtningsrisk.</li><li>Ingen enstaka dag i närbelastningen motiverar att ta bort eller vila bort onsdagens simning; simningen är lågmekanisk och absorberbar.</li></ul></div><div class="week-activity-evidence-block"><strong>Osäkerhet</strong><ul><li>Exakt lokal ben-/muskeltrötthet kväll/nästa förmiddag (användarrapport indikerar pigg känsla efter pass).</li><li>Om användaren väljer att göra Jogersö Swimrun i stället för simning: faktisk mekanisk belastning från det varvet.</li><li>Eventuella fasta åtaganden eller subjektiv dagskänsla morgonen efter som kan påverka torsdagens MTB.</li></ul></div></div></details>
 </section></div><div class="day decision-horizon" id="dag-2026-09-02">
-  <div class="daytop"><div class="day-date-line"><span class="dow">Onsdag</span><span class="date">2 sep</span></div><div class="badge conditional">Alternativ finns</div></div>
+  <div class="daytop"><div class="day-date-line"><span class="dow">Onsdag</span><span class="date">2 sep</span></div><div class="badge fixed">Alternativ finns</div></div>
   <div class="session session-with-icon"><svg class="sport-icon icon-swim" aria-hidden="true" viewBox="0 0 576 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M309.5 178.4 447.9 297.1c-1.6.9-3.2 2-4.8 3-18 12.4-40.1 20.3-59.2 20.3-19.6 0-40.8-7.7-59.2-20.3-22.1-15.5-51.6-15.5-73.7 0-17.1 11.8-38 20.3-59.2 20.3-10.1 0-21.1-2.2-31.9-6.2C163.1 193.2 262.2 96 384 96h64c17.7 0 32 14.3 32 32s-14.3 32-32 32h-64c-26.9 0-52.3 6.6-74.5 18.4zM160 160A64 64 0 1 1 32 160a64 64 0 1 1 128 0zM306.5 325.9C329 341.4 356.5 352 384 352c26.9 0 55.4-10.8 77.4-26.1 11.9-8.5 28.1-7.8 39.2 1.7 14.4 11.9 32.5 21 50.6 25.2 17.2 4 27.9 21.2 23.9 38.4s-21.2 27.9-38.4 23.9c-24.5-5.7-44.9-16.5-58.2-25C449.5 405.7 417 416 384 416c-31.9 0-60.6-9.9-80.4-18.9-5.8-2.7-11.1-5.3-15.6-7.7-4.5 2.4-9.7 5.1-15.6 7.7-19.8 9-48.5 18.9-80.4 18.9-33 0-65.5-10.3-94.5-25.8-13.4 8.4-33.7 19.3-58.2 25-17.2 4-34.4-6.7-38.4-23.9s6.7-34.4 23.9-38.4c18.1-4.2 36.2-13.3 50.6-25.2 11.1-9.4 27.3-10.1 39.2-1.7C136.7 341.2 165.1 352 192 352c27.5 0 55-10.6 77.5-26.1 11.1-7.9 25.9-7.9 37 0z"/></svg><span class="session-text"><strong class="session-title">Simning 3 200 m aerob/teknik</strong><span class="session-meta">ca 60 min · alternativ: Swimrun, Jogersö Extreme 1 varv</span></span></div>
-  <div class="next-weather" data-weather-date="2026-09-02" data-weather-scope="day" style="color:#475569;font-size:.82rem;margin-top:5px"><span class="weather-label">Väder i Oxelösund:</span> <svg class="weather-icon" aria-hidden="true" viewBox="0 0 24 24" style="width:18px;height:18px;vertical-align:-4px;margin-right:5px;color:#475569;overflow:visible"><circle cx="8" cy="8" r="2.8" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 3V1.8M8 13v-1.2M3 8H1.8M12.2 8H11M4.5 4.5l-.9-.9M11.5 4.5l.9-.9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M7.2 19h10a3.6 3.6 0 0 0 .2-7.2 5 5 0 0 0-9.5-.7A4 4 0 0 0 7.2 19Z" fill="white" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Växlande molnighet · 15,7–21,1 °C · nederbördsrisk max 3 % · vind max 6,5 m/s</div>
+  <div class="next-weather" data-weather-date="2026-09-02" data-weather-scope="day" style="color:#475569;font-size:.82rem;margin-top:5px"><span class="weather-label">Väder i Oxelösund:</span> <svg class="weather-icon" aria-hidden="true" viewBox="0 0 24 24" style="width:18px;height:18px;vertical-align:-4px;margin-right:5px;color:#475569;overflow:visible"><circle cx="8" cy="8" r="2.8" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 3V1.8M8 13v-1.2M3 8H1.8M12.2 8H11M4.5 4.5l-.9-.9M11.5 4.5l.9-.9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M7.2 19h10a3.6 3.6 0 0 0 .2-7.2 5 5 0 0 0-9.5-.7A4 4 0 0 0 7.2 19Z" fill="white" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Mest klart · 15,8–18,7 °C · nederbördsrisk max 0 % · vind max 5,5 m/s</div>
   <details class="day-why"><summary>Motivering</summary><div class="reason">Baslinjen är simning med liten mekanisk kostnad efter söndagens längre löpning, måndagens enduro och tisdagens tröskel. Ett varv Jogersö Extreme kan ersätta simningen om det hålls kontrollerat; det ska inte läggas ovanpå simpasset och räknas som faktisk löp-/teknisk belastning inför resten av veckan.</div></details>
-
+  <div class="workout-history" data-workout-history="swim-w36-wed-aerob-rotation-01"><div class="workout-history-label">Genomfört simpass · passupplägg</div><div class="swim-session-head"><strong>Aerob/teknik · kroppslinje och rotation · 3 200 m</strong></div><div class="workout-equipment"><div><strong>Planerade hjälpmedel:</strong> inga</div><div><strong>Faktiskt använda:</strong> ej registrerat</div></div><div class="swim-set-list"><div class="swim-set-row"><span class="swim-dose">400 m</span><span>Lugn insim</span></div><div class="swim-set-row"><span class="swim-dose">6 × 50 m</span><span>Stabil linje, kontrollerad rotation · 15 s vila</span></div><div class="swim-set-row"><span class="swim-dose">4 × 500 m</span><span>Stadigt aerob med stabil kroppslinje · 30 s vila</span></div><div class="swim-set-row"><span class="swim-dose">6 × 50 m</span><span>Avslappnad frekvens med bibehållen linje · 15 s vila</span></div><div class="swim-set-row"><span class="swim-dose">200 m</span><span>Mycket lugnt</span></div></div></div><div class="pass"><div class="pass-title">Automatiskt från Strava</div><div><strong>Swimrun</strong> · 6,89 km · 54:25 · snittpuls 135 · max 158</div></div><div class="coach yoda-v2">
+  <div class="coach-title">Tränings-Yoda (AI)</div>
+  <div class="coach-decision"><span>Beslut</span><strong>Behåll planen</strong><span class="coach-target">2026-09-03</span></div>
+  <div class="coach-summary">Swimrun på Jogersö genomfört; ersätter planerad simning och räknas som faktisk belastning inför torsdag–fredag.</div>
+  <div class="coach-next"><span class="coach-next-label">Nästa steg</span><div>Behåll torsdagens MTB 60 min som plan; avvakta morgondagens benkänsla och korta till 45 min om benen känns trötta.</div></div>
+  <details class="coach-why"><summary>Motivering</summary>
+    <div class="coach-why-body">
+      <div class="coach-full-summary"><strong>Bedömning</strong><span>Swimrun på Jogersö genomfört; ersätter planerad simning och räknas som faktisk belastning inför torsdag–fredag.</span></div>
+      <div class="coach-load">Närbelastning visar flera dagars löp/teknisk och ett längre swimrun med måttlig kardiovaskulär och varierad mekanisk/teknisk belastning.</div>
+      <div class="coach-reason"><strong>Motivering</strong><span>Swimrun ersatte planerad simning och närbelastningen är absorberbar inför torsdag–fredag.</span></div>
+      <details class="coach-details"><summary>Fakta, tolkning och osäkerhet</summary>
+    <div class="coach-grid">
+      <div><strong>Fakta</strong><ul><li>Swimrun: 6,89 km · 54:25 · 104,3 m+ · snittpuls 135,4 · maxpuls 158.</li><li>Planstatus 2026-09-02: dagens planerade pass är genomfört i coachens beslutsunderlag.</li></ul></div>
+      <div><strong>Tolkning</strong><ul><li>Swimrun ger kardiovaskulär belastning och teknisk ansträngning; inte en tung mekanisk löpbelastning jämfört med längre distanslöpning.</li><li>Det finns ingen tydlig signal att fredagens backkvalitet måste tas bort, men MTB på torsdag kan behöva kortas om benkänslan är trött.</li></ul></div>
+      <div><strong>Osäkert/saknas</strong><ul><li>Subjektiv benkänsla/lokal muskeltrötthet efter dagens swimrun.</li><li>Detaljer om intensitet i swimrun-intervaller (ögt/lågt tempo mellan varven).</li><li>Eventuella fasta åtaganden eller resor imorgon som påverkar återhämtning.</li></ul></div>
+    </div>
+      </details>
+    </div>
+  </details>
+  <div class="coach-apply"><small>Ingen automatisk ändring applicerad.</small></div>
+</div>
 <div class="development-focus"><strong>Passfokus</strong><span>Simning: stabil kroppslinje och kontrollerad rotation. Swimrun: jämn kontrollerad ansträngning och tekniskt flyt utan fart- eller segmentjakt.</span></div></div><div class="day decision-horizon" id="dag-2026-09-03">
   <div class="daytop"><div class="day-date-line"><span class="dow">Torsdag</span><span class="date">3 sep</span></div><div class="badge conditional">Preliminärt</div></div>
   <div class="session session-with-icon"><svg class="sport-icon icon-bike" aria-hidden="true" viewBox="0 0 640 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M312 32c-13.3 0-24 10.7-24 24s10.7 24 24 24h25.7l34.6 64H222.9l-27.4-38C191 99.7 183.7 96 176 96h-56c-13.3 0-24 10.7-24 24s10.7 24 24 24h43.7l22.1 30.7-26.6 53.1c-10-2.5-20.5-3.8-31.2-3.8C57.3 224 0 281.3 0 352s57.3 128 128 128c65.3 0 119.1-48.9 127-112h49c8.5 0 16.3-4.5 20.7-11.8l84.8-143.5 21.7 40.1C402.4 276.3 384 312 384 352c0 70.7 57.3 128 128 128s128-57.3 128-128-57.3-128-128-128c-13.5 0-26.5 2.1-38.7 6L375.4 48.8C369.8 38.4 359 32 347.2 32H312zM458.6 303.7l32.3 59.7c6.3 11.7 20.9 16 32.5 9.7s16-20.9 9.7-32.5l-32.3-59.7c3.6-.6 7.4-.9 11.2-.9 39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72c0-18.6 7-35.5 18.6-48.3zM133.2 368h65c-7.3 32.1-36 56-70.2 56-39.8 0-72-32.2-72-72s32.2-72 72-72c1.7 0 3.4.1 5.1.2l-24.2 48.5c-9 18.1 4.1 39.4 24.3 39.4zm33.7-48 50.7-101.3 72.9 101.2-.1.1H166.9zm90.6-128H366L317 274.8 257.4 192z"/></svg><span class="session-text"><strong class="session-title">MTB/XC 60 min</strong><span class="session-meta">teknik + lugn aerob stig</span></span></div>
-  <div class="next-weather" data-weather-date="2026-09-03" data-weather-scope="day" style="color:#475569;font-size:.82rem;margin-top:5px"><span class="weather-label">Väder i Oxelösund:</span> <svg class="weather-icon" aria-hidden="true" viewBox="0 0 24 24" style="width:18px;height:18px;vertical-align:-4px;margin-right:5px;color:#475569;overflow:visible"><circle cx="12" cy="12" r="3.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M18.7 5.3l-1.4 1.4M6.7 17.3l-1.4 1.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Klart · 12,4–19,6 °C · nederbördsrisk max 13 % · vind max 6,4 m/s</div>
+  <div class="next-weather" data-weather-date="2026-09-03" data-weather-scope="day" style="color:#475569;font-size:.82rem;margin-top:5px"><span class="weather-label">Väder i Oxelösund:</span> <svg class="weather-icon" aria-hidden="true" viewBox="0 0 24 24" style="width:18px;height:18px;vertical-align:-4px;margin-right:5px;color:#475569;overflow:visible"><circle cx="12" cy="12" r="3.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M18.7 5.3l-1.4 1.4M6.7 17.3l-1.4 1.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Klart · 12,3–19,6 °C · nederbördsrisk max 30 % · vind max 6,5 m/s</div>
   <details class="day-why"><summary>Motivering</summary><div class="reason">MTB/XC är fortsatt utvecklingsprioritet. Grundplanen är 60 minuter lugn teknisk stig. Om onsdagen blir Swimrun på Jogersö används dess faktiska belastning som kontrollpunkt och MTB-passet kortas eller tas bort endast om återhämtningen eller benkänslan ger sakliga skäl, för att skydda fredagens prioriterade löpkvalitet.</div></details>
 
 <div class="development-focus"><strong>Passfokus</strong><span>Blick, linjeval, bromspunkter och flyt före segmentjakt.</span></div></div><div class="day decision-horizon" id="dag-2026-09-04">
   <div class="daytop"><div class="day-date-line"><span class="dow">Fredag</span><span class="date">4 sep</span></div><div class="badge conditional">Preliminärt</div></div>
   <div class="session session-with-icon"><svg class="sport-icon icon-run" aria-hidden="true" viewBox="0 0 448 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M320 48a48 48 0 1 0-96 0 48 48 0 1 0 96 0zM125.7 175.5c9.9-9.9 23.4-15.5 37.5-15.5 1.9 0 3.8.1 5.6.3L137.6 254c-9.3 28 1.7 58.8 26.8 74.5l86.2 53.9-25.4 88.8c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l28.7-100.4c5.9-20.6-2.6-42.6-20.7-53.9L238 299l30.9-82.4 5.1 12.3C289 264.7 323.9 288 362.7 288H384c17.7 0 32-14.3 32-32s-14.3-32-32-32h-21.3c-12.9 0-24.6-7.8-29.5-19.7l-6.3-15c-14.6-35.1-44.1-61.9-80.5-73.1l-48.7-15c-11.1-3.4-22.7-5.2-34.4-5.2-31 0-60.8 12.3-82.7 34.3l-23.2 23.1c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l23.1-23.1zM91.2 352H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h69.6c19 0 36.2-11.2 43.9-28.5l11.5-25.9-9.5-6c-17.5-10.9-30.5-26.8-37.9-44.9L91.2 352z"/></svg><span class="session-text"><strong class="session-title">Löpning · backkvalitet</strong><span class="session-meta">15 min lugnt + 6 × 150 m / full lugn nedjogg + 10 min lugnt</span></span></div>
-  <div class="next-weather" data-weather-date="2026-09-04" data-weather-scope="day" style="color:#475569;font-size:.82rem;margin-top:5px"><span class="weather-label">Väder i Oxelösund:</span> <svg class="weather-icon" aria-hidden="true" viewBox="0 0 24 24" style="width:18px;height:18px;vertical-align:-4px;margin-right:5px;color:#475569;overflow:visible"><path d="M6.7 18h10.1a3.7 3.7 0 0 0 .3-7.4A5.3 5.3 0 0 0 7 9.8 4.1 4.1 0 0 0 6.7 18Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Mulet · 10,2–16,0 °C · nederbördsrisk max 50 % · vind max 5,1 m/s</div>
+  <div class="next-weather" data-weather-date="2026-09-04" data-weather-scope="day" style="color:#475569;font-size:.82rem;margin-top:5px"><span class="weather-label">Väder i Oxelösund:</span> <svg class="weather-icon" aria-hidden="true" viewBox="0 0 24 24" style="width:18px;height:18px;vertical-align:-4px;margin-right:5px;color:#475569;overflow:visible"><path d="M6.7 18h10.1a3.7 3.7 0 0 0 .3-7.4A5.3 5.3 0 0 0 7 9.8 4.1 4.1 0 0 0 6.7 18Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Mulet · 9,0–16,3 °C · nederbördsrisk max 40 % · vind max 3,5 m/s</div>
   <details class="day-why"><summary>Motivering</summary><div class="reason">Veckans andra prioriterade löpkvalitet. Grundplanen är en konservativ backexponering med 6 × 150 m och full lugn nedjogg; den ändras endast om torsdagens faktiska MTB-belastning eller återhämtningen motiverar det.</div></details>
 
 <div class="development-focus"><strong>Passfokus</strong><span>Kraftfull men kontrollerad löpning med bibehållen mekanik; ingen maximal sprint eller syrajakt.</span></div></div><div class="day decision-horizon" id="dag-2026-09-05">
