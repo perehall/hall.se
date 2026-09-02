@@ -159,8 +159,19 @@ def historical_insight(day, activity, analysis, performance):
         body = first_sentence(assessment.get("load_interpretation"))
     if not body:
         body = first_sentence(assessment.get("summary"))
+    body = re.sub(r"^Dagens tröskel var kontrollerad\b", "Tröskelpasset var kontrollerat", body, flags=re.IGNORECASE)
     body = re.sub(r"^Dagens tröskel\b", "Tröskelpasset", body, flags=re.IGNORECASE)
     body = re.sub(r"^Dagens\s+", "", body, flags=re.IGNORECASE)
+    body = body.replace(
+        "ger ökad neuromuskulär/teknisk kostnad som bör vägas men inte automatiskt straffa tröskelpasset",
+        "gav teknisk och neuromuskulär belastning som vägdes in utan att tröskelpasset behövde ändras",
+    )
+    body = re.sub(
+        r";\s*inte tydligt överstimulerande\.?$",
+        ", utan tydliga skäl att skala ned efterföljande träning.",
+        body,
+        flags=re.IGNORECASE,
+    )
     body = body.strip()
     return {
         "headline": headline,
