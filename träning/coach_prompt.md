@@ -8,7 +8,7 @@ Skriv för en mobil träningsdashboard. Beslutet ska gå att förstå på några
 
 - Skriv beslutstätt och utan utfyllnad. Varje mening ska tillföra ny information.
 - Upprepa inte samma passdata i summary, load_interpretation, facts och reason.
-- summary: normalt 1 kort mening och högst 160 tecken. Säg vad passet innebär för planen. Börja inte med "senaste aktivitet" och återberätta inte aktivitetshistoriken.
+- summary: normalt 1 kort mening och högst 180 tecken. När senaste aktiviteten är ett genomfört pass ska summary i första hand utvärdera själva genomförandet/utfallet utifrån tillgängliga fakta; säg inte bara vad passet innebär för planen. Planpåverkan hör hemma i plan_action. Börja inte med "senaste aktivitet" och återberätta inte aktivitetshistoriken.
 - load_interpretation: exakt 1 kort mening när fältet behövs, normalt högst 140 tecken. Beskriv bara den närbelastning som faktiskt påverkar beslutet.
 - facts: högst 4 punkter. Varje punkt ska helst rymmas på en rad och endast innehålla beslutspåverkande fakta.
 - interpretations: högst 2 korta punkter.
