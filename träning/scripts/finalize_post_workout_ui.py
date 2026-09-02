@@ -339,10 +339,11 @@ def build_outcome_insight(day, analysis, performance):
     if analysis:
         assessment = analysis.get("assessment") or {}
         summary = first_sentence(assessment.get("summary"))
+        load = first_sentence(assessment.get("load_interpretation"))
         if summary:
             return {
-                "headline": "Coachens analys är klar",
-                "body": summary,
+                "headline": summary.rstrip("."),
+                "body": load or "Bedömningen bygger på registrerade passdata och planens aktuella närbelastning.",
             }
 
     return {

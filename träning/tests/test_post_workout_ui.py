@@ -96,7 +96,7 @@ class PostWorkoutUiTests(unittest.TestCase):
             "2026-08-28",
         )
         self.assertIn('data-post-workout-state="completed"', rendered)
-        self.assertIn('id="todayOutcomeTitle">Coachens analys är klar</h2>', rendered)
+        self.assertIn('id="todayOutcomeTitle">Fredagens backpass blev större än ordinerat och ökar veckobelastningen</h2>', rendered)
         self.assertIn("Dagens pass · genomfört", rendered)
         self.assertIn("Visa analys", rendered)
         self.assertNotIn("<section class=\"training-brain\"><div>Dagens plan</div></section>", rendered)
