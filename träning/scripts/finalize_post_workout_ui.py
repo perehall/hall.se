@@ -16,53 +16,50 @@ PERFORMANCE_FILE = ROOT / "data" / "performance_history.json"
 COACH_FILE = ROOT / "data" / "coach.json"
 INDEX_FILE = ROOT / "index.html"
 
-CSS_MARKER = "/* post-workout-ux-v1 */"
+CSS_MARKER = "/* post-workout-ux-v2 */"
 CARD_MARKER = 'data-post-workout-state="completed"'
 
 CSS = r"""
-/* post-workout-ux-v1 */
-.today-outcome{background:#fff;border:1px solid #dbe5df;border-radius:20px;padding:18px 20px;margin:0 0 14px;box-shadow:0 8px 24px rgba(15,23,42,.06)}
-.today-outcome-head{display:flex;align-items:center;gap:12px;margin-bottom:7px}
-.today-outcome-check{width:34px;height:34px;flex:0 0 34px;border-radius:50%;display:grid;place-items:center;background:#dcfce7;color:#15803d;font-weight:950;font-size:1rem}
-.today-outcome-kicker{font-size:.7rem;font-weight:900;letter-spacing:.09em;text-transform:uppercase;color:#64748b}
-.today-outcome h2{font-size:1.2rem;line-height:1.25;margin:1px 0 0}
-.today-outcome-note{margin:0 0 15px;color:#334155;font-size:.92rem;line-height:1.45}
-.today-outcome-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
-.today-outcome-metrics>div{border:1px solid #e2e8f0;border-radius:13px;padding:10px 11px;background:#f8fafc}
-.today-outcome-metrics dt{font-size:.67rem;font-weight:850;letter-spacing:.06em;text-transform:uppercase;color:#64748b}
-.today-outcome-metrics dd{margin:2px 0 0;font-size:1rem;font-weight:900;font-variant-numeric:tabular-nums}
-.today-outcome-compare{display:grid;grid-template-columns:1fr 1fr;border:1px solid #e2e8f0;border-radius:15px;overflow:hidden;margin-bottom:12px}
-.today-outcome-compare>div{padding:12px 13px;min-width:0}
+/* post-workout-ux-v2 */
+.today-outcome{background:#fff;border:1px solid #dbe5df;border-radius:18px;padding:16px 17px;margin:0 0 14px;box-shadow:0 7px 20px rgba(15,23,42,.05)}
+.today-outcome-head{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.today-outcome-check{width:28px;height:28px;flex:0 0 28px;border-radius:50%;display:grid;place-items:center;background:#dcfce7;color:#15803d;font-weight:900;font-size:.86rem}
+.today-outcome-kicker{font-size:.72rem;font-weight:800;color:#475569}
+.today-outcome-main{margin:0 0 13px}
+.today-outcome-title{margin:0;font-size:1.08rem;line-height:1.28;font-weight:800;letter-spacing:-.01em;color:#0f172a}
+.today-outcome-meta{margin-top:4px;color:#64748b;font-size:.82rem;line-height:1.4;font-variant-numeric:tabular-nums}
+.today-outcome-label{display:block;margin-bottom:4px;font-size:.67rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:#64748b}
+.today-outcome-coach{padding:11px 12px;border:1px solid #e2e8f0;border-radius:13px;background:#f8fafc;margin-bottom:10px}
+.today-outcome-coach strong{display:block;margin-bottom:3px;font-size:.94rem;line-height:1.35;color:#0f172a}
+.today-outcome-coach p{margin:0;color:#475569;font-size:.84rem;line-height:1.43}
+.today-outcome-signal{margin-top:7px;padding-top:7px;border-top:1px solid #e2e8f0;color:#334155;font-size:.8rem;line-height:1.4}
+.today-outcome-next{padding:11px 12px;border:1px solid #cbd5e1;border-radius:13px;background:#fff}
+.today-outcome-next strong{display:block;font-size:.92rem;line-height:1.38}
+.today-outcome-next small{display:block;margin-top:4px;color:#64748b;font-size:.76rem;line-height:1.38}
+.today-outcome-details{margin:9px 0 0;border-top:1px solid #e2e8f0}
+.today-outcome-details>summary{cursor:pointer;list-style:none;padding:10px 1px 3px;font-size:.78rem;font-weight:750;color:#64748b}
+.today-outcome-details>summary::-webkit-details-marker{display:none}
+.today-outcome-details>summary:after{content:" +"}
+.today-outcome-details[open]>summary:after{content:" −"}
+.today-outcome-details-inner{padding:8px 0 1px}
+.today-outcome-compare{display:grid;grid-template-columns:1fr 1fr;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;margin-bottom:9px}
+.today-outcome-compare>div{padding:9px 10px;min-width:0}
 .today-outcome-compare>div+div{border-left:1px solid #e2e8f0;background:#fbfdfc}
-.today-outcome-label{display:block;margin-bottom:4px;font-size:.67rem;font-weight:900;letter-spacing:.07em;text-transform:uppercase;color:#64748b}
-.today-outcome-compare strong{display:block;font-size:.9rem;line-height:1.4}
-.today-outcome-performance{padding:12px 13px;border:1px solid #bae6fd;border-radius:15px;background:#f0f9ff;margin-bottom:12px}
+.today-outcome-compare strong{display:block;font-size:.8rem;line-height:1.4}
+.today-outcome-evidence{display:grid;gap:8px;padding:9px 10px;border-radius:12px;background:#f8fafc;color:#475569;font-size:.76rem;line-height:1.42}
+.today-outcome-evidence-block+.today-outcome-evidence-block{padding-top:8px;border-top:1px solid #e2e8f0}
+.today-outcome-evidence-block>strong{display:block;margin-bottom:3px;color:#334155;font-size:.66rem;text-transform:uppercase;letter-spacing:.05em}
+.today-outcome-evidence ul{margin:0;padding-left:17px}
+.today-outcome-evidence li+li{margin-top:3px}
+.today-outcome-performance{padding:10px 11px;border:1px solid #bae6fd;border-radius:12px;background:#f0f9ff;margin-top:9px}
 .today-outcome-performance-grid{display:grid;gap:5px;margin-top:7px}
-.today-outcome-performance-row{display:grid;grid-template-columns:24px minmax(72px,1fr) minmax(62px,1fr);gap:8px;font-size:.84rem;line-height:1.35}
+.today-outcome-performance-row{display:grid;grid-template-columns:24px minmax(72px,1fr) minmax(62px,1fr);gap:8px;font-size:.82rem;line-height:1.35}
 .today-outcome-performance-row strong{color:#075985}
-.today-outcome-performance-note{margin:8px 0 0;color:#0c4a6e;font-size:.78rem;line-height:1.4}
-.today-outcome-coach{padding:12px 13px;border:1px solid #ddd6fe;border-radius:15px;background:#faf5ff;margin-bottom:12px}
-.today-outcome-coach p{margin:0;color:#3b0764;font-size:.9rem;line-height:1.45}
-.today-outcome-impact{margin-top:8px;padding-top:8px;border-top:1px solid #e9d5ff;color:#4c1d95!important}
-.today-outcome-next{padding:12px 13px;border:1px solid #cbd5e1;border-radius:15px;background:#f8fafc}
-.today-outcome-next strong{display:block;font-size:.96rem;line-height:1.4}
-.today-outcome-next small{display:block;margin-top:4px;color:#64748b;font-size:.76rem;line-height:1.35}
-.today-outcome-insight{margin:4px 0 16px}
-.today-outcome-insight h2{font-size:1.55rem;line-height:1.16;margin:0 0 8px;letter-spacing:-.02em}
-.today-outcome-insight p{margin:0;color:#334155;font-size:.96rem;line-height:1.5}
-.today-outcome-details{margin:0 0 12px;border:1px solid #e2e8f0;border-radius:15px;background:#fff;overflow:hidden}
-.today-outcome-details summary{cursor:pointer;list-style:none;padding:12px 13px;font-size:.82rem;font-weight:850;color:#475569}
-.today-outcome-details summary::-webkit-details-marker{display:none}
-.today-outcome-details summary:after{content:"＋";float:right;color:#64748b}
-.today-outcome-details[open] summary:after{content:"−"}
-.today-outcome-details-inner{padding:0 12px 12px}
-.today-outcome-details .today-outcome-metrics{margin-top:0}
-.today-outcome-link{display:inline-block;margin-top:11px;color:#475569;font-size:.8rem;font-weight:800;text-underline-offset:3px}
+.today-outcome-performance-note{margin:7px 0 0;color:#0c4a6e;font-size:.76rem;line-height:1.4}
+.today-outcome-link{display:inline-block;margin-top:8px;color:#64748b;font-size:.76rem;font-weight:750;text-underline-offset:3px}
 @media(max-width:620px){
-  .today-outcome{padding:16px 15px;border-radius:17px}
-  .today-outcome-metrics{gap:6px}
-  .today-outcome-metrics>div{padding:9px 8px}
-  .today-outcome-metrics dd{font-size:.92rem}
+  .today-outcome{padding:14px 14px;border-radius:16px}
+  .today-outcome-title{font-size:1.02rem}
   .today-outcome-compare{grid-template-columns:1fr}
   .today-outcome-compare>div+div{border-left:0;border-top:1px solid #e2e8f0}
 }
@@ -106,6 +103,44 @@ def fmt_distance(activity):
 def fmt_hr(activity):
     value = activity.get("average_heartrate")
     return str(round(float(value))) if value else "—"
+
+
+SPORT_LABELS = {
+    "Run": "Löpning",
+    "TrailRun": "Löpning",
+    "VirtualRun": "Löpning",
+    "Swim": "Simning",
+    "Swimrun": "Swimrun",
+    "MountainBikeRide": "MTB/XC",
+    "Ride": "Cykel",
+    "VirtualRide": "Cykel",
+    "WeightTraining": "Styrka",
+    "Enduro": "Enduro",
+}
+
+
+def outcome_title(activity):
+    activity = activity or {}
+    label = str(activity.get("display_label") or "").strip()
+    if not label:
+        label = SPORT_LABELS.get(activity.get("sport_type"), activity.get("sport_type") or "Pass")
+    duration = fmt_duration(activity.get("elapsed_time_s") or activity.get("moving_time_s"))
+    return f"{label} · {duration}" if duration and duration != "—" else label
+
+
+def outcome_meta(activity):
+    activity = activity or {}
+    bits = []
+    distance = fmt_distance(activity)
+    if distance != "—":
+        bits.append(distance)
+    hr = fmt_hr(activity)
+    if hr != "—":
+        bits.append(f"snittpuls {hr}")
+    max_hr = activity.get("max_heartrate")
+    if max_hr:
+        bits.append(f"max {round(float(max_hr))}")
+    return " · ".join(bits)
 
 
 def first_sentence(value):
@@ -355,70 +390,123 @@ def build_outcome_insight(day, analysis, performance):
     }
 
 
-def render_post_workout(day, activity, analysis, next_day, performance=None):
-    metrics = [
-        ("Tid", fmt_duration((activity or {}).get("elapsed_time_s"))),
-        ("Distans", fmt_distance(activity or {})),
-        ("Snittpuls", fmt_hr(activity or {})),
+
+def plan_impact_label(analysis):
+    if not analysis:
+        return "Passet registrerat"
+    action = analysis.get("plan_action") or {}
+    kind = action.get("action")
+    applied = bool((analysis.get("auto_apply") or {}).get("applied"))
+    if kind == "keep":
+        return "Planen står kvar"
+    if kind in {"reduce", "rest"}:
+        return "Planen justerad" if applied else "Justering föreslagen"
+    if kind == "review":
+        return "Ingen ändring ännu"
+    return "Coachbedömning"
+
+
+def plan_impact_message(analysis, day):
+    assessment = (analysis or {}).get("assessment") or {}
+    summary = first_sentence(assessment.get("summary"))
+    return summary or completion_note(day)
+
+
+def recommendation_note(analysis, next_day):
+    if not analysis or not next_day:
+        return ""
+    action = analysis.get("plan_action") or {}
+    if str(action.get("target_date") or "") != str(next_day.get("date") or ""):
+        return ""
+    recommendation = str(action.get("recommendation") or "").strip()
+    if not recommendation:
+        return ""
+    sentences = [part.strip() for part in re.split(r"(?<=[.!?])\s+", recommendation) if part.strip()]
+    if action.get("action") == "keep" and len(sentences) > 1:
+        return sentences[1]
+    return sentences[0] if action.get("action") in {"reduce", "rest"} else ""
+
+
+def render_analysis_evidence(analysis):
+    if not analysis:
+        return ""
+    assessment = analysis.get("assessment") or {}
+    sections = [
+        ("Fakta", assessment.get("facts") or []),
+        ("Tolkning", assessment.get("interpretations") or []),
+        ("Osäkerhet", assessment.get("unknowns") or []),
     ]
-    metrics_html = "".join(
-        f"<div><dt>{html.escape(label)}</dt><dd>{html.escape(value)}</dd></div>"
-        for label, value in metrics
-    )
-
-    insight = build_outcome_insight(day, analysis, performance)
-
-    coach_html = ""
-    adjusted_next = False
-    if analysis:
-        action = analysis.get("plan_action") or {}
-        recommendation = str(action.get("recommendation") or "").strip()
-        applied = bool((analysis.get("auto_apply") or {}).get("applied"))
-        adjusted_next = bool(
-            applied and next_day and action.get("target_date") == next_day.get("date")
+    blocks = []
+    for label, items in sections:
+        clean = [str(item).strip() for item in items if str(item).strip()]
+        if not clean:
+            continue
+        lis = "".join(f"<li>{html.escape(item)}</li>" for item in clean)
+        blocks.append(
+            f'<div class="today-outcome-evidence-block"><strong>{html.escape(label)}</strong><ul>{lis}</ul></div>'
         )
-        if recommendation:
-            coach_html = f"""
+    if not blocks:
+        return ""
+    return '<div class="today-outcome-evidence">' + "".join(blocks) + "</div>"
+
+
+def render_post_workout(day, activity, analysis, next_day, performance=None):
+    title = outcome_title(activity)
+    meta = outcome_meta(activity)
+    impact_label = plan_impact_label(analysis)
+    impact_message = plan_impact_message(analysis, day)
+
+    performance_signal = ""
+    if performance:
+        signal = build_outcome_insight(day, analysis, performance)
+        if signal.get("headline"):
+            performance_signal = (
+                '<div class="today-outcome-signal">'
+                '<span class="today-outcome-label">Passsignal</span>'
+                f'<strong>{html.escape(signal["headline"])}</strong>'
+                '</div>'
+            )
+
+    coach_html = f"""
   <div class="today-outcome-coach">
-    <span class="today-outcome-label">Effekt på planen</span>
-    <p>{html.escape(recommendation)}</p>
+    <strong>{html.escape(impact_label)}</strong>
+    <p>{html.escape(impact_message)}</p>
+    {performance_signal}
   </div>"""
 
     next_html = ""
     if next_day:
-        adjustment = (
-            "Justerat efter dagens faktiska utfall."
-            if adjusted_next else
-            "Nästa planerade steg i mikrocykeln."
-        )
+        note = recommendation_note(analysis, next_day)
+        note_html = f"<small>{html.escape(note)}</small>" if note else ""
         next_html = f"""
   <div class="today-outcome-next">
-    <span class="today-outcome-label">Nästa pass · {html.escape(format_day(next_day))}</span>
+    <span class="today-outcome-label">Nästa · {html.escape(format_day(next_day))}</span>
     <strong>{html.escape(str(next_day.get("session") or "Öppet beslut"))}</strong>
-    <small>{html.escape(adjustment)}</small>
+    {note_html}
   </div>"""
 
     detail_html = f"""
   <details class="today-outcome-details">
-    <summary>Visa analys</summary>
+    <summary>Visa underlag</summary>
     <div class="today-outcome-details-inner">
-      <dl class="today-outcome-metrics">{metrics_html}</dl>
-      <div class="today-outcome-compare" aria-label="Planerad och faktisk dos">
+      <div class="today-outcome-compare" aria-label="Plan och utfall">
         <div><span class="today-outcome-label">Plan</span><strong>{html.escape(planned_text(day))}</strong></div>
         <div><span class="today-outcome-label">Utfall</span><strong>{html.escape(actual_text(day, activity))}</strong></div>
       </div>
+      {render_analysis_evidence(analysis)}
       {render_performance(performance)}
     </div>
   </details>"""
 
+    meta_html = f'<div class="today-outcome-meta">{html.escape(meta)}</div>' if meta else ""
     return f"""<section class="today-outcome" {CARD_MARKER} aria-labelledby="todayOutcomeTitle">
   <div class="today-outcome-head">
     <span class="today-outcome-check" aria-hidden="true">✓</span>
-    <div><div class="today-outcome-kicker">Dagens pass · genomfört</div></div>
+    <div class="today-outcome-kicker">Dagens pass · genomfört</div>
   </div>
-  <div class="today-outcome-insight">
-    <h2 id="todayOutcomeTitle">{html.escape(insight["headline"])}</h2>
-    <p>{html.escape(insight["body"])}</p>
+  <div class="today-outcome-main">
+    <h2 class="today-outcome-title" id="todayOutcomeTitle">{html.escape(title)}</h2>
+    {meta_html}
   </div>
   {coach_html}
   {next_html}
@@ -428,6 +516,12 @@ def render_post_workout(day, activity, analysis, next_day, performance=None):
 
 
 def add_css(page):
+    page = re.sub(
+        r'/\* post-workout-ux-v1 \*/.*?(?=(?:/\*|</style>))',
+        "",
+        page,
+        flags=re.S,
+    )
     if CSS_MARKER in page:
         return page
     if "</style>" not in page:
@@ -459,6 +553,43 @@ def replace_training_brain(page, card):
     return page[:start] + replacement + page[end:]
 
 
+
+def _balanced_div_end(text, start):
+    tag_re = re.compile(r"<div\b[^>]*>|</div>")
+    depth = 0
+    for match in tag_re.finditer(text, start):
+        if match.group(0).startswith("<div"):
+            depth += 1
+        else:
+            depth -= 1
+            if depth == 0:
+                return match.end()
+    return None
+
+
+def strip_current_day_coach(page, today):
+    marker = re.search(
+        rf'<div class="day[^"]*" id="dag-{re.escape(today)}">',
+        page,
+    )
+    if not marker:
+        return page
+    next_day = re.search(
+        r'<div class="day[^"]*" id="dag-\d{4}-\d{2}-\d{2}">',
+        page[marker.end():],
+    )
+    end = marker.end() + next_day.start() if next_day else len(page)
+    block = page[marker.start():end]
+    coach_start = block.find('<div class="coach yoda-v2">')
+    if coach_start < 0:
+        return page
+    coach_end = _balanced_div_end(block, coach_start)
+    if coach_end is None:
+        raise RuntimeError(f"Post-workout UX: kunde inte avgränsa coachblocket för {today}")
+    block = block[:coach_start] + block[coach_end:]
+    return page[:marker.start()] + block + page[end:]
+
+
 def apply_post_workout_ui(page, plan, activities_state, coach_state, performance_history, today):
     day = next((d for d in plan.get("days", []) if d.get("date") == today), None)
     today_activities = [
@@ -479,6 +610,7 @@ def apply_post_workout_ui(page, plan, activities_state, coach_state, performance
     page = add_css(page)
     page = add_week_anchor(page)
     page = replace_training_brain(page, card)
+    page = strip_current_day_coach(page, today)
     return page
 
 
@@ -506,9 +638,9 @@ def main():
             CSS_MARKER,
             CARD_MARKER,
             'id="todayOutcomeTitle">',
-            'class="today-outcome-insight"',
+            'class="today-outcome-main"',
             'class="today-outcome-details"',
-            'class="today-outcome-metrics"',
+            'class="today-outcome-coach"',
             'class="today-outcome-compare"',
             'id="aktuell-vecka"',
             'class="today-outcome-link"',
@@ -516,7 +648,7 @@ def main():
         missing = [marker for marker in required if marker not in verify]
         if missing:
             raise RuntimeError("Post-workout UX-validering misslyckades: " + repr(missing))
-        print("Post-workout UX OK: insight → coachkonsekvens → nästa pass → detaljer.")
+        print("Post-workout UX OK: utfall → planpåverkan → nästa pass → underlag.")
     else:
         print("Post-workout UX: inget genomfört pass idag; före-pass-läget lämnas oförändrat.")
 
