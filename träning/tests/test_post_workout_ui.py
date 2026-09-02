@@ -96,18 +96,20 @@ class PostWorkoutUiTests(unittest.TestCase):
             "2026-08-28",
         )
         self.assertIn('data-post-workout-state="completed"', rendered)
-        self.assertIn('id="todayOutcomeTitle">Fredagens backpass blev större än ordinerat och ökar veckobelastningen</h2>', rendered)
+        self.assertIn('id="todayOutcomeTitle">Löpning · 50:36</h2>', rendered)
         self.assertIn("Dagens pass · genomfört", rendered)
-        self.assertIn("Visa analys", rendered)
+        self.assertIn("Visa underlag", rendered)
+        self.assertIn("Planen justerad", rendered)
+        self.assertIn("Fredagens backpass blev större än ordinerat och ökar veckobelastningen.", rendered)
         self.assertNotIn("<section class=\"training-brain\"><div>Dagens plan</div></section>", rendered)
         self.assertIn("50:36", rendered)
         self.assertIn("9,67 km", rendered)
-        self.assertIn(">145</dd>", rendered)
+        self.assertIn("snittpuls 145", rendered)
         self.assertIn("6 × 150 m", rendered)
         self.assertIn("12 backar · ca 40 s upp · ca 60 s jogg ned", rendered)
-        self.assertIn("Effekt på planen", rendered)
+        self.assertNotIn("Effekt på planen", rendered)
         self.assertIn("MTB/XC · teknik + aerob stig · 75 min lugnt", rendered)
-        self.assertIn("Justerat efter dagens faktiska utfall.", rendered)
+        self.assertIn("Skala ner lördagens MTB till 75 min lugn körning.", rendered)
         self.assertIn('id="aktuell-vecka"', rendered)
 
     def test_completed_sunday_shows_monday_session_from_upcoming_week(self):
@@ -395,9 +397,34 @@ class PostWorkoutUiTests(unittest.TestCase):
         self.assertIn("Simning · aerob/teknik · 3 200 m · ca 60 min", rendered)
         self.assertIn("alternativ: Swimrun · Jogersö Extreme · 1 varv", rendered)
         self.assertIn("<strong>SLK Swimrun Jogersö Extreme</strong>", rendered)
+        self.assertIn('id="todayOutcomeTitle">Swimrun · 54:25</h2>', rendered)
+        self.assertIn("6,89 km · snittpuls 135", rendered)
+        self.assertIn("Visa underlag", rendered)
         self.assertNotIn("Planerad dos saknas i historiken", rendered)
+        self.assertNotIn("Behöver bedömas", rendered)
+        self.assertNotIn("target_date", rendered)
 
 
+
+    def test_completed_today_removes_duplicate_yoda_from_day_card(self):
+        page = BASE_PAGE.replace(
+            '<h2 class="section">Aktuell vecka</h2>',
+            '<h2 class="section">Aktuell vecka</h2>'
+            '<div class="day today-completed" id="dag-2026-08-28">'
+            '<div class="coach yoda-v2"><div class="coach-title">Tränings-Yoda (AI)</div>'
+            '<div class="coach-next">Debugråd</div></div>'
+            '</div>'
+        )
+        rendered = apply_post_workout_ui(
+            page,
+            sample_plan(),
+            sample_activities(),
+            sample_coach(),
+            {"entries": []},
+            "2026-08-28",
+        )
+        self.assertNotIn("Tränings-Yoda (AI)", rendered)
+        self.assertNotIn("Debugråd", rendered)
 
     def test_post_workout_transform_is_idempotent(self):
         once = apply_post_workout_ui(
@@ -418,7 +445,7 @@ class PostWorkoutUiTests(unittest.TestCase):
         )
         self.assertEqual(once, twice)
         self.assertEqual(twice.count('data-post-workout-state="completed"'), 1)
-        self.assertEqual(twice.count("/* post-workout-ux-v1 */"), 1)
+        self.assertEqual(twice.count("/* post-workout-ux-v2 */"), 1)
 
 
 if __name__ == "__main__":
