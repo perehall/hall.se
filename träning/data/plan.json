@@ -114,13 +114,13 @@
     {
       "date": "2026-09-02",
       "label": "Onsdag",
-      "status": "preliminary",
-      "session": "Simning · aerob/teknik · preliminärt 3 200 m · ca 60 min",
+      "status": "conditional",
+      "session": "Simning · aerob/teknik · 3 200 m · ca 60 min · alternativ: Swimrun · Jogersö Extreme · 1 varv",
       "swim_equipment": {
         "planned": "none"
       },
-      "reason": "Simningen används mellan löpkvalitetspassen för att bibehålla och långsamt utveckla simkapacitet med liten mekanisk kostnad för benen. Basdosen höjs inte automatiskt.",
-      "development_focus": "Rotera runt en stabil kroppslinje: låt höft och axel följa med utan att huvudet vandrar eller benen börjar slingra.",
+      "reason": "Baslinjen är simning med liten mekanisk kostnad efter söndagens längre löpning, måndagens enduro och tisdagens tröskel. Ett varv Jogersö Extreme kan ersätta simningen om det hålls kontrollerat; det ska inte läggas ovanpå simpasset och räknas som faktisk löp-/teknisk belastning inför resten av veckan.",
+      "development_focus": "Simning: stabil kroppslinje och kontrollerad rotation. Swimrun: jämn kontrollerad ansträngning och tekniskt flyt utan fart- eller segmentjakt.",
       "watch_workout": {
         "sync_enabled": false,
         "id": "swim-w36-wed-aerob-rotation-01",
@@ -210,14 +210,18 @@
       "mesocycle_id": "run-threshold-hill-4w",
       "microcycle_id": "run-threshold-hill-4w:mc2",
       "microcycle_index": 2,
-      "microcycle_day": 3
+      "microcycle_day": 3,
+      "alternative_sports": [
+        "swimrun"
+      ],
+      "decision_note": "Swimrun är ett ersättningsalternativ, inte ett extra pass. Om det genomförs används den faktiska belastningen som kontrollpunkt för torsdagens MTB; fredagens backkvalitet skyddas."
     },
     {
       "date": "2026-09-03",
       "label": "Torsdag",
       "status": "preliminary",
       "session": "MTB/XC · 60 min · teknik + lugn aerob stig",
-      "reason": "MTB/XC är fortsatt utvecklingsprioritet. Grundplanen är 60 minuter lugn teknisk stig; passet kortas vid behov för att skydda fredagens prioriterade löpkvalitet.",
+      "reason": "MTB/XC är fortsatt utvecklingsprioritet. Grundplanen är 60 minuter lugn teknisk stig. Om onsdagen blir Swimrun på Jogersö används dess faktiska belastning som kontrollpunkt och MTB-passet kortas eller tas bort endast om återhämtningen eller benkänslan ger sakliga skäl, för att skydda fredagens prioriterade löpkvalitet.",
       "development_focus": "Blick, linjeval, bromspunkter och flyt före segmentjakt.",
       "sport": "bike",
       "priority_role": "flex",
@@ -242,7 +246,8 @@
         "neuromuscular",
         "technical"
       ],
-      "performance_marker_id": "mtb-technical-repeat"
+      "performance_marker_id": "mtb-technical-repeat",
+      "decision_note": "Grundplan: 60 min lugn teknik + aerob stig. Efter eventuell onsdags-Swimrun behålls passet bara om faktisk belastning och dagskänsla är förenliga med fredagens backkvalitet."
     },
     {
       "date": "2026-09-04",
