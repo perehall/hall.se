@@ -233,7 +233,7 @@ jobs:
           if grep -q 'data-current-mesocycle="true"' /tmp/deployed-goal.html 2>/dev/null; then has_mesocycle=true; fi
           if grep -qi 'Cloudflare Access\|Sign in.*Cloudflare Access' /tmp/deployed-goal.html 2>/dev/null; then access_intercept=true; fi
           if [ "$code" = "200" ] && [ "$has_hierarchy" = "true" ] && [ "$has_mesocycle" = "true" ]; then ok=true; else ok=false; fi
-          export TARGET_URL="$target" HTTP_STATUS="$code" HAS_COMPONENT="$has_component" HAS_PHASE2="$has_phase2" ACCESS_INTERCEPT="$access_intercept" VERIFY_OK="$ok"
+          export TARGET_URL="$target" HTTP_STATUS="$code" HAS_HIERARCHY="$has_hierarchy" HAS_MESOCYCLE="$has_mesocycle" ACCESS_INTERCEPT="$access_intercept" VERIFY_OK="$ok"
           python - <<'PY'
           import json, os
           from pathlib import Path
@@ -245,8 +245,8 @@ jobs:
               "verification_attempted": True,
               "target_url": os.environ.get("TARGET_URL"),
               "http_status": os.environ.get("HTTP_STATUS"),
-              "interactive_component_found": os.environ.get("HAS_COMPONENT") == "true",
-              "phase_2_anchor_found": os.environ.get("HAS_PHASE2") == "true",
+              "goal_hierarchy_found": os.environ.get("HAS_HIERARCHY") == "true",
+              "current_mesocycle_found": os.environ.get("HAS_MESOCYCLE") == "true",
               "cloudflare_access_intercepted_probe": os.environ.get("ACCESS_INTERCEPT") == "true",
               "verification_ok": os.environ.get("VERIFY_OK") == "true",
               "response_headers": headers[:4000],
