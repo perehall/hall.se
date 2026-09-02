@@ -10,8 +10,8 @@ from finalize_week_activity_insights import apply_week_activity_insights  # noqa
 
 
 BASE_PAGE = """<!doctype html><html><head><style>.x{}</style></head><body>
-<div class="day past-completed" id="dag-2026-08-31"><div class="pass">Enduro</div><details class="historical-coach"><summary>AI-analys · historik</summary></details></div>
-<div class="day past-completed" id="dag-2026-09-01"><div class="pass">Löpning</div><details class="historical-coach"><summary>AI-analys · historik</summary></details></div>
+<div class="day past-completed" id="dag-2026-08-31"><div class="pass">Enduro</div></div>
+<div class="day past-completed" id="dag-2026-09-01"><div class="pass">Löpning</div></div>
 <div class="day decision-horizon" id="dag-2026-09-02"><div class="pass">Simning</div></div>
 </body></html>"""
 
@@ -25,7 +25,7 @@ def plan():
         },
         "days": [
             {"date": "2026-08-31", "session": "Enduroskola"},
-            {"date": "2026-09-01", "session": "Löpning · 3 × 8 min"},
+            {"date": "2026-09-01", "session": "Löpning · kontrollerad tröskel · 3 × 8 min"},
             {"date": "2026-09-02", "session": "Simning"},
         ],
     }
@@ -73,10 +73,15 @@ def coach():
                 "assessment": {
                     "summary": "Enduron lämnar nästa dags tröskelpass kvar i planen.",
                     "load_interpretation": "Passet bidrog med teknisk och neuromuskulär belastning.",
+                    "facts": ["Enduro: 23,00 km · 1:40:00 · snittpuls 111."],
+                    "interpretations": ["Enduron bidrog med teknisk och neuromuskulär belastning utan skäl att ändra planen."],
+                    "unknowns": ["Subjektiv benkänsla saknas."],
                 },
                 "plan_action": {
+                    "action": "keep",
                     "recommendation": "Genomför 3 × 8 min kontrollerat nästa dag.",
                 },
+                "auto_apply": {"applied": False},
             },
             {
                 "activity_id": 2,
@@ -85,10 +90,15 @@ def coach():
                 "assessment": {
                     "summary": "Tröskelpasset absorberas utan planändring.",
                     "load_interpretation": "Närbelastningen motiverar inte en hårdare progression.",
+                    "facts": ["Run: 10,35 km · 50:30 · snittpuls 145."],
+                    "interpretations": ["Tröskelpasset var kontrollerat och följer mikrocykelns plan."],
+                    "unknowns": ["Subjektiv benkänsla saknas."],
                 },
                 "plan_action": {
+                    "action": "keep",
                     "recommendation": "Behåll planerad simning som lågmekanisk stödexponering.",
                 },
+                "auto_apply": {"applied": False},
             },
         ]
     }
@@ -107,10 +117,14 @@ class WeekActivityInsightTests(unittest.TestCase):
         self.assertIn('data-week-activity-insight="1"', rendered)
         self.assertIn('data-week-activity-insight="2"', rendered)
         self.assertNotIn('data-week-activity-insight="3"', rendered)
-        self.assertIn("Enduron lämnar nästa dags tröskelpass kvar i planen", rendered)
-        self.assertIn("Tröskelpasset absorberas utan planändring", rendered)
-        self.assertIn("Påverkan på planen", rendered)
-        self.assertIn("Visa passfakta", rendered)
+        self.assertIn("Enduron krävde ingen planändring", rendered)
+        self.assertIn("Tröskelpasset krävde ingen planändring", rendered)
+        self.assertIn("Planpåverkan", rendered)
+        self.assertIn("Ingen ändring", rendered)
+        self.assertIn("Visa underlag", rendered)
+        self.assertNotIn("Visa passfakta", rendered)
+        self.assertNotIn("AI-analys · historik", rendered)
+        self.assertNotIn('class="historical-coach"', rendered)
         self.assertIn("1:40:00", rendered)
         self.assertIn("10,35 km", rendered)
 
