@@ -48,9 +48,11 @@ PRIVATE_WELLNESS_PATTERN = re.compile(
 _RELATIVE_LEVEL = r"(?:ovanligt\s+|relativt\s+)?(?:hög(?:t)?|låg(?:t)?|måttlig(?:t)?)(?:\s+till\s+(?:hög(?:t)?|låg(?:t)?|måttlig(?:t)?))?"
 _LOAD_NOUN = (
     r"(?:(?:kardiovaskulär|kardiovaskulärt|mekanisk|mekaniskt|neuromuskulär|"
-    r"neuromuskulärt|samlad|samlat)\s+)?"
+    r"neuromuskulärt|samlad|samlat)(?:/(?:kardiovaskulär|kardiovaskulärt|"
+    r"mekanisk|mekaniskt|neuromuskulär|neuromuskulärt))?\s+)?"
     r"(?:träningsbelastning(?:en)?|träningsvolym(?:en)?|volym(?:en)?|"
-    r"belastning(?:en)?|intensitet(?:en)?|återhämtningsbehov(?:et)?|kostnad(?:en)?)"
+    r"belastning(?:en)?|intensitet(?:en)?|återhämtningsbehov(?:et)?|"
+    r"kostnad(?:en)?|varaktighet(?:en)?|exponering(?:en)?)"
 )
 RELATIVE_LOAD_PREFIX_PATTERN = re.compile(
     rf"\b{_RELATIVE_LEVEL}\s+(?={_LOAD_NOUN}\b)",
@@ -62,6 +64,10 @@ RELATIVE_LOAD_NEGATED_PREDICATE_PATTERN = re.compile(
 )
 RELATIVE_LOAD_PREDICATE_PATTERN = re.compile(
     rf"\b({_LOAD_NOUN})\s+(?:är|var|ser\s+ut\s+att\s+vara|bedöms\s+som)\s+{_RELATIVE_LEVEL}\b",
+    re.IGNORECASE,
+)
+ABSORPTION_CLAIM_PATTERN = re.compile(
+    r"\babsorber(?:bar(?:t)?|ad(?:e)?|at(?:s)?)\b",
     re.IGNORECASE,
 )
 
@@ -296,6 +302,31 @@ def neutralize_unbased_load_labels(result):
     for field in ("reason", "recommendation"):
         if isinstance(action.get(field), str):
             action[field] = neutralize_unbased_load_text(action[field])
+    return result
+
+
+def neutralize_same_day_absorption_claims(result, latest_activity, latest_date, local_date):
+    """Do not let same-day pass data masquerade as proof of absorption."""
+    if latest_date != local_date:
+        return result
+    if str((latest_activity or {}).get("user_report") or "").strip():
+        return result
+
+    assessment = result.get("assessment") or {}
+    neutral = (
+        "Det går inte att avgöra ännu om dagens belastning är absorberad "
+        "eftersom subjektiv respons efter passet saknas."
+    )
+    for field in ("summary", "load_interpretation"):
+        value = assessment.get(field)
+        if isinstance(value, str) and ABSORPTION_CLAIM_PATTERN.search(value):
+            assessment[field] = neutral
+    values = assessment.get("interpretations")
+    if isinstance(values, list):
+        assessment["interpretations"] = [
+            neutral if isinstance(item, str) and ABSORPTION_CLAIM_PATTERN.search(item) else item
+            for item in values
+        ]
     return result
 
 
@@ -691,6 +722,12 @@ def main():
     if wellness_context.get("daily"):
         result = scrub_private_wellness_output(result)
     result = neutralize_unbased_load_labels(result)
+    result = neutralize_same_day_absorption_claims(
+        result,
+        latest_activity=latest,
+        latest_date=latest_date,
+        local_date=local_date,
+    )
     result["assessment"] = normalize_assessment_confidence(result["assessment"])
     result["assessment"]["facts"] = (
         canonical_facts(latest, latest_date, fulfilled_dates)
