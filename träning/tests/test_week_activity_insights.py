@@ -73,10 +73,15 @@ def coach():
                 "assessment": {
                     "summary": "Enduron lämnar nästa dags tröskelpass kvar i planen.",
                     "load_interpretation": "Passet bidrog med teknisk och neuromuskulär belastning.",
+                    "facts": ["Enduro: 23,00 km · 1:40:00 · snittpuls 111."],
+                    "interpretations": ["Enduron bidrog med teknisk och neuromuskulär belastning utan skäl att ändra planen."],
+                    "unknowns": ["Subjektiv benkänsla saknas."],
                 },
                 "plan_action": {
+                    "action": "keep",
                     "recommendation": "Genomför 3 × 8 min kontrollerat nästa dag.",
                 },
+                "auto_apply": {"applied": False},
             },
             {
                 "activity_id": 2,
@@ -85,10 +90,15 @@ def coach():
                 "assessment": {
                     "summary": "Tröskelpasset absorberas utan planändring.",
                     "load_interpretation": "Närbelastningen motiverar inte en hårdare progression.",
+                    "facts": ["Run: 10,35 km · 50:30 · snittpuls 145."],
+                    "interpretations": ["Tröskelpasset var kontrollerat och följer mikrocykelns plan."],
+                    "unknowns": ["Subjektiv benkänsla saknas."],
                 },
                 "plan_action": {
+                    "action": "keep",
                     "recommendation": "Behåll planerad simning som lågmekanisk stödexponering.",
                 },
+                "auto_apply": {"applied": False},
             },
         ]
     }
