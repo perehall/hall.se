@@ -344,7 +344,7 @@ class PostWorkoutUiTests(unittest.TestCase):
             "2026-09-01",
         )
         self.assertIn("Du avslutade arbetsintervallerna snabbare än du började", rendered)
-        self.assertIn("tempo -4,0 s/km", rendered)
+        self.assertIn("tempo 1→sista -4,0 s/km", rendered)
         self.assertIn("puls +4,0 bpm", rendered)
         self.assertIn("inte i sig en förändring i kapacitet", rendered)
 
