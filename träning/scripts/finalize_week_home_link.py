@@ -9,8 +9,8 @@ PLAN = ROOT / "data" / "plan.json"
 UPCOMING = ROOT / "data" / "upcoming_week.json"
 INDEX = ROOT / "index.html"
 WEEK_DIR = ROOT / "vecka"
-CSS_MARKER = "/* goal-page-link-v1 */"
-CSS = '.goal-page-link{display:flex;justify-content:flex-end;margin:0 0 8px}.goal-page-link a{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid #ddd6fe;border-radius:12px;background:#faf5ff;color:#5b21b6;text-decoration:none;font-size:.78rem;font-weight:900;box-shadow:0 5px 14px rgba(76,29,149,.05)}'
+CSS_MARKER = "/* goal-page-link-v3 */"
+CSS = '.goal-page-link{display:flex;justify-content:flex-end;margin:0 0 8px}.goal-page-link a{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid #e2e8f0;border-radius:12px;background:#fff;color:#475569;text-decoration:none;font-size:.78rem;font-weight:700;box-shadow:0 5px 14px rgba(15,23,42,.04)}'
 
 
 def load(path):
@@ -32,6 +32,7 @@ def patch(path):
     page = re.sub(r'<div class="goal-home-link">.*?</div>', '', page, flags=re.S)
     page = re.sub(r'<div class="goal-page-link">.*?</div>', '', page, flags=re.S)
 
+    page = re.sub(r'/\* goal-page-link-v[12] \*/.*?(?=(?:/\*|</style>))', '', page, flags=re.S)
     if CSS_MARKER not in page:
         page = page.replace("</style>", CSS_MARKER + CSS + "</style>", 1)
 
