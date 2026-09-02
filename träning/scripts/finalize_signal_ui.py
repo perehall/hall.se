@@ -322,8 +322,14 @@ def annotate_week_days(page, plan, activities, today):
 
         if fulfilled and day_date <= today:
             card_start = match.start()
-            next_card = page.find('<div class="day', card_start + len(replacement))
-            card_end = next_card if next_card >= 0 else len(page)
+            next_match = re.search(
+                r'<div class="day[^"]*" id="dag-\d{4}-\d{2}-\d{2}">',
+                page[card_start + len(replacement):],
+            )
+            card_end = (
+                card_start + len(replacement) + next_match.start()
+                if next_match else len(page)
+            )
             block = page[card_start:card_end]
             block, count = re.subn(
                 r'<div class="badge [^"]+">[^<]*</div>',
