@@ -4,7 +4,7 @@
   "week_start": "2026-08-31",
   "week_end": "2026-09-06",
   "created_at_utc": "2026-08-30T22:09:50.110394+00:00",
-  "updated_at_utc": "2026-09-02T03:25:19.838862+00:00",
+  "updated_at_utc": "2026-09-02T06:05:17.800200+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -662,33 +662,33 @@
       "activity_id": 19994118756,
       "activity_date": "2026-09-01",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-09-02T03:25:19.263624+00:00",
+      "generated_at_utc": "2026-09-02T06:05:17.232142+00:00",
       "model": "gpt-5-mini",
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Passet är godkänt som genomfört och kvarstår som absorberbar kardiovaskulär belastning inför onsdagens simning och torsdagens MTB.",
-        "load_interpretation": "Senaste tre dagarnas belastning visar kardiovaskulär volym med mekanisk kostnad; inga tydliga varningssignaler.",
+        "summary": "Genomfört tröskelpass 3×8 min; mikrocykeln absorberar detta utan ändring.",
+        "load_interpretation": "Senaste tre dagarna visar hög kardiovaskulär varaktighet (lång löpning + enduro + 10K) men inga klara tecken på överbelastning.",
         "confidence": "medium",
         "facts": [
           "Run: 10,35 km · 50:29 · 61 m+ · snittpuls 145,3 · maxpuls 165.",
           "Planstatus 2026-09-01: dagens planerade pass är genomfört i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Kardiovaskulärt fönster är högre än en enskild grunddos men fortfarande absorberbart för planerad simning (mekanisk kostnad).",
-          "Ingen enskild observation motiverar reducering av det kommande simpasset eller flytt av torsdagens MTB; fredagens backkvalitet skyddas."
+          "Kardiovaskulärt fönster är tungt men mekanisk kostnad från senaste löppasset var måttlig (61 hm).",
+          "Simpasset imorgon kan genomföras som planerat då det är mekanisk belastning och stödjer mesocykeln."
         ],
         "unknowns": [
-          "Subjektiv lokal bentrötthet efter tisdagens tröskel ej rapporterad.",
-          "Detaljerad intensitetsfördelning i enduro saknas (kan påverka neuromuskulär belastning).",
-          "Eventuella fasta åtaganden eller dagskänsla för onsdag ej angivna."
+          "Subjektiv dagskänsla/bentrötthet efter långa löp- och endurodagar.",
+          "Detaljerad kvalitet i 3×8-min passets intervallintensitet (zonmål saknas).",
+          "Eventuella fasta åtaganden som påverkar återhämtning resten av dagen."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-09-02",
-        "reason": "Simningen är mekanisk kostnad och mikrocykeln behöver behålla simstödet utan att störa löpprogrammet.",
-        "recommendation": "Behåll simpasset enligt plan (3 200 m, teknik + aerob). Fokusera på stabil kroppslinje och lugn genomföring inför torsdagens MTB och fredagens backkvalitet.",
+        "reason": "Mikrocykeln absorberar senaste passen och simning är lågmekanisk stödexponering.",
+        "recommendation": "Behåll planerad simning 3 200 m imorgon som aerob/teknikpass; håll intensiteten kontrollerad enligt workoutens fokus.",
         "dose_option_id": "",
         "requires_approval": false
       },
