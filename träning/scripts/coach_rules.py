@@ -247,11 +247,12 @@ def normalize_deferred_future_action(action, candidate_dates, ready_dates):
             normalized["action"] = "review"
             normalized["target_date"] = ""
             normalized["reason"] = (
-                "AI-rådet hänvisar uttryckligen till en annan veckodag än target_date; "
-                "ingen automatisk planändring görs."
+                "Rådet kunde inte kopplas entydigt till det angivna målpasset och "
+                "appliceras därför inte automatiskt."
             )
             normalized["recommendation"] = (
-                "Ändra inte planen utifrån detta råd. Bedöm rätt målpass först när det är beslutsmoget."
+                "Behåll grundplanen tills nästa beslutsmogna pass kan bedömas mot "
+                "faktisk närbelastning och återhämtning."
             )
             normalized["requires_approval"] = False
             return normalized
@@ -401,7 +402,7 @@ def canonical_facts(latest_activity, latest_date, fulfilled_dates):
 
     if latest_date in fulfilled_dates:
         facts.append(
-            f"Planstatus {latest_date}: dagens planerade pass är genomfört i coachens beslutsunderlag."
+            f"Planstatus {latest_date}: dagen är markerad genomförd i coachens beslutsunderlag."
         )
 
     return facts[:4]
