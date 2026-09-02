@@ -8,7 +8,7 @@ CURRENT = ROOT / "index.html"
 ARCHIVE_ROOT = ROOT / "vecka"
 CSS_MARKER = "/* week-header-layout-v8 */"
 CSS = """
-/* week-header-layout-v7 */
+/* week-header-layout-v8 */
 .header-meta-line{display:flex;flex-wrap:wrap;gap:4px;color:#94a3b8;font-size:.76rem;line-height:1.4}.header-updated,.header-status{color:#94a3b8;font-size:inherit;font-weight:500}.week-period{font-weight:600;color:#64748b;white-space:nowrap}
 .hero.week-focus-card{padding:16px 18px}.week-focus-title{margin:0!important;font-size:1.06rem;line-height:1.35;letter-spacing:-.01em;font-weight:700}.week-focus-details{margin-top:8px}.week-focus-details>summary{cursor:pointer;list-style:none;color:#94a3b8;font-size:.76rem;font-weight:600}.week-focus-details>summary::-webkit-details-marker{display:none}.week-focus-details>summary:after{content:" +"}.week-focus-details[open]>summary:after{content:" −"}.week-focus-details p{margin:8px 0 0!important;color:#cbd5e1!important;font-size:.88rem;line-height:1.5}
 @media (max-width:520px){.header-meta-line{font-size:.72rem}.hero.week-focus-card{padding:14px 16px}.week-focus-title{font-size:1rem}.week-focus-details p{font-size:.84rem}}
