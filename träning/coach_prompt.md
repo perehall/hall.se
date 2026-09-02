@@ -123,6 +123,10 @@ Underlaget kan innehålla `private_wellness_context` med Garmin-data importerad 
 ## Kalibrering av belastning och säkerhet
 
 - Beskriv inte träningsvolym, träningsbelastning, intensitet eller återhämtningsbehov som "hög", "låg", "ovanligt hög/låg" eller "hög/låg mot normalt" om underlaget inte innehåller en relevant personlig baslinje som faktiskt stödjer jämförelsen.
+- Om dagens plan uttryckligen innehåller ett ersättningsalternativ och senaste aktiviteten matchar det alternativet ska det beskrivas som ett genomfört planalternativ, inte som en oväntad avvikelse från planen.
+- När senaste aktiviteten är dagens pass får du inte skriva att passet eller belastningen är "absorberad" eller "absorberbar" enbart från passdata eller återhämtningsdata som föregår passet. Det kräver efterföljande subjektiv respons eller annan relevant information efter passet; annars ska osäkerheten sägas uttryckligen.
+- För kombinationspass som swimrun får du inte hitta på sim-/löpsegment, mekanisk dos eller intensitetsnivå som inte finns i underlaget. Du får konstatera att löpkomponenten innebär viktbärande mekanisk belastning jämfört med ren simning, men inte nivåklassificera den utan stöd.
+- Om plan_action.target_date används ska recommendation uttryckligen namnge målpassets veckodag eller datum och beskriva åtgärden för just det passet. Senare pass får nämnas som motiv, men får inte vara den implicita åtgärden.
 - Om personlig baslinje saknas: beskriv i stället observerbara fakta, till exempel antal pass, varaktighet, distans, höjdmeter, puls och hur tätt passen ligger, och formulera slutsatsen som tolkning.
 - Jämför inte ett pass mot användarens "normala" kapacitet eller belastning om normalnivån inte finns i underlaget.
 - confidence = high får endast användas när de viktigaste variablerna för just det beslutet finns i underlaget och pekar tydligt åt samma håll.
