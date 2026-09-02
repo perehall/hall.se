@@ -20,6 +20,7 @@ from coach import (  # noqa: E402
     normalize_dose_option_field,
     normalize_resolved_dose_reselection,
     normalize_same_day_open_dose_action,
+    neutralize_same_day_absorption_claims,
     neutralize_unbased_load_labels,
     performance_context_for_activity,
     performance_facts,
@@ -321,6 +322,23 @@ class CoachApiTests(unittest.TestCase):
             remaining_dates=[],
         )
         self.assertIn("Nästa planerade pass saknas", normalized["recommendation"])
+
+
+    def test_same_day_absorption_claim_requires_post_workout_response(self):
+        result = valid_result()
+        result["assessment"]["summary"] = "Belastningen är absorberbar."
+        result["assessment"]["interpretations"] = [
+            "Passet är absorberat och torsdagens plan kan köras utan kontrollpunkt."
+        ]
+        normalized = neutralize_same_day_absorption_claims(
+            result,
+            latest_activity={"id": 1, "sport_type": "Swimrun"},
+            latest_date="2026-09-02",
+            local_date="2026-09-02",
+        )
+        self.assertIn("går inte att avgöra", normalized["assessment"]["summary"])
+        self.assertIn("subjektiv respons", normalized["assessment"]["interpretations"][0])
+
 
     def test_unbased_relative_load_labels_are_neutralized_but_facts_are_preserved(self):
         result = valid_result()
