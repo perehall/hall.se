@@ -213,7 +213,7 @@ def decorate_focus_card(page, mesocycle):
         return page
 
     meta = html.escape(focus_meta(mesocycle))
-    title_match = re.search(r'<h2 class="week-focus-title">.*?</h2>', page, flags=re.S)
+    title_match = re.search(r'<h2(?: class="week-focus-title")?>.*?</h2>', page, flags=re.S)
     if not title_match:
         raise RuntimeError("Träningshjärna: veckofokus-rubrik saknas")
     page = page[:title_match.start()] + f'<h2 class="week-focus-title">{html.escape(focus_title(mesocycle))}</h2>' + page[title_match.end():]
