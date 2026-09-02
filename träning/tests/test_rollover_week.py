@@ -156,7 +156,11 @@ class WeeklyRolloverTests(unittest.TestCase):
         self.assertEqual(future["meta"]["mesocycle_contract"]["primary"], ["run_threshold", "run_hill_quality", "run_easy_distance"])
         self.assertEqual(future["days"][5]["sport"], "strength")
         self.assertEqual(future["days"][5]["priority_role"], "protected_support")
-        self.assertEqual(future["days"][5]["stimuli"], ["strength_unilateral", "strength_core"])
+        self.assertEqual(
+            future["days"][5]["stimuli"],
+            ["strength_unilateral", "strength_core", "swim_aerobic", "swim_technique"],
+        )
+        self.assertIn("3 200 m", future["days"][5]["session"])
         self.assertEqual(future["days"][6]["stimuli"], ["run_easy_distance"])
 
     def test_enduro_school_has_exactly_eight_mondays(self):
