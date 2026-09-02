@@ -242,6 +242,14 @@ def render_performance(performance):
             notes.append(
                 f'Mot {comparison.get("previous_activity_date")}: ' + " · ".join(parts)
             )
+        if comparison.get("same_protocol") is True:
+            notes.append(
+                "Jämförelsen är inte normaliserad för väder, underlag och subjektiv ansträngning när de uppgifterna saknas."
+            )
+    elif rows:
+        notes.append(
+            "Inom-pass-trenden beskriver genomförandet, inte i sig en förändring i kapacitet."
+        )
 
     note_html = "".join(
         f'<p class="today-outcome-performance-note">{html.escape(note)}</p>'
