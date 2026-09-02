@@ -47,6 +47,16 @@ CSS = r"""
 .today-outcome-next{padding:12px 13px;border:1px solid #cbd5e1;border-radius:15px;background:#f8fafc}
 .today-outcome-next strong{display:block;font-size:.96rem;line-height:1.4}
 .today-outcome-next small{display:block;margin-top:4px;color:#64748b;font-size:.76rem;line-height:1.35}
+.today-outcome-insight{margin:4px 0 16px}
+.today-outcome-insight h2{font-size:1.55rem;line-height:1.16;margin:0 0 8px;letter-spacing:-.02em}
+.today-outcome-insight p{margin:0;color:#334155;font-size:.96rem;line-height:1.5}
+.today-outcome-details{margin:0 0 12px;border:1px solid #e2e8f0;border-radius:15px;background:#fff;overflow:hidden}
+.today-outcome-details summary{cursor:pointer;list-style:none;padding:12px 13px;font-size:.82rem;font-weight:850;color:#475569}
+.today-outcome-details summary::-webkit-details-marker{display:none}
+.today-outcome-details summary:after{content:"＋";float:right;color:#64748b}
+.today-outcome-details[open] summary:after{content:"−"}
+.today-outcome-details-inner{padding:0 12px 12px}
+.today-outcome-details .today-outcome-metrics{margin-top:0}
 .today-outcome-link{display:inline-block;margin-top:11px;color:#475569;font-size:.8rem;font-weight:800;text-underline-offset:3px}
 @media(max-width:620px){
   .today-outcome{padding:16px 15px;border-radius:17px}
@@ -265,6 +275,82 @@ def completion_note(day):
     return "Passet är registrerat och faktisk dos har vägts in i den fortsatta planen."
 
 
+def protocol_label(protocol_key):
+    labels = {
+        "run_threshold:3x8:90s": "3 × 8 min / 90 s",
+        "run_threshold:3x10:90s": "3 × 10 min / 90 s",
+    }
+    return labels.get(str(protocol_key or ""), "samma protokoll")
+
+
+def metric_delta_text(value, suffix):
+    if not isinstance(value, (int, float)):
+        return None
+    sign = "+" if value > 0 else ""
+    return (f"{sign}{value:.1f}".replace(".", ",") + suffix)
+
+
+def build_outcome_insight(day, analysis, performance):
+    """Select one high-signal post-workout message without inventing physiology."""
+    if performance:
+        comparison = performance.get("comparison") or {}
+        pace_delta = comparison.get("mean_pace_delta_s_per_km")
+        hr_delta = comparison.get("mean_hr_delta")
+        previous_date = comparison.get("previous_activity_date")
+        if comparison.get("same_protocol") is True and isinstance(pace_delta, (int, float)):
+            if pace_delta < -0.5:
+                headline = "Snabbare än senaste jämförbara tröskelpasset"
+            elif pace_delta > 0.5:
+                headline = "Långsammare än senaste jämförbara tröskelpasset"
+            else:
+                headline = "Nästan samma fart som senaste jämförbara tröskelpasset"
+            facts = [
+                f"medeltempo {metric_delta_text(pace_delta, ' s/km')}",
+            ]
+            if isinstance(hr_delta, (int, float)):
+                facts.append(f"medelpuls {metric_delta_text(hr_delta, ' bpm')}")
+            date_text = f" den {previous_date}" if previous_date else ""
+            body = (
+                f"{protocol_label(performance.get('protocol_key'))}: "
+                + " och ".join(facts)
+                + f" jämfört med motsvarande pass{date_text}. "
+                + "Detta är en passjämförelse; väder, underlag och subjektiv ansträngning är inte normaliserade när de saknas."
+            )
+            return {"headline": headline, "body": body}
+
+        summary = performance.get("summary") or {}
+        pace_drift = summary.get("first_to_last_pace_delta_s_per_km")
+        hr_drift = summary.get("first_to_last_hr_delta")
+        if isinstance(pace_drift, (int, float)):
+            if pace_drift < -0.5:
+                headline = "Du avslutade arbetsintervallerna snabbare än du började"
+            elif pace_drift > 0.5:
+                headline = "Farten sjönk från första till sista arbetsintervallet"
+            else:
+                headline = "Farten var i stort sett oförändrad genom arbetsintervallerna"
+            parts = [f"Första → sista: tempo {metric_delta_text(pace_drift, ' s/km')}"]
+            if isinstance(hr_drift, (int, float)):
+                parts.append(f"puls {metric_delta_text(hr_drift, ' bpm')}")
+            return {
+                "headline": headline,
+                "body": " · ".join(parts) + ". Det beskriver genomförandet, inte i sig en förändring i kapacitet.",
+            }
+
+    if analysis:
+        assessment = analysis.get("assessment") or {}
+        summary = first_sentence(assessment.get("summary"))
+        if summary:
+            return {
+                "headline": "Coachens analys är klar",
+                "body": summary,
+            }
+
+    return {
+        "headline": "Passet är genomfört",
+        "body": completion_note(day),
+    }
+
+
 def render_post_workout(day, activity, analysis, next_day, performance=None):
     metrics = [
         ("Tid", fmt_duration((activity or {}).get("elapsed_time_s"))),
@@ -276,28 +362,22 @@ def render_post_workout(day, activity, analysis, next_day, performance=None):
         for label, value in metrics
     )
 
+    insight = build_outcome_insight(day, analysis, performance)
+
     coach_html = ""
     adjusted_next = False
     if analysis:
-        assessment = analysis.get("assessment") or {}
         action = analysis.get("plan_action") or {}
-        summary = first_sentence(assessment.get("summary"))
         recommendation = str(action.get("recommendation") or "").strip()
         applied = bool((analysis.get("auto_apply") or {}).get("applied"))
         adjusted_next = bool(
             applied and next_day and action.get("target_date") == next_day.get("date")
         )
-        if summary or recommendation:
-            impact = (
-                f'<p class="today-outcome-impact"><strong>Effekt på planen:</strong> '
-                f'{html.escape(recommendation)}</p>'
-                if recommendation else ""
-            )
+        if recommendation:
             coach_html = f"""
   <div class="today-outcome-coach">
-    <span class="today-outcome-label">Coachens bedömning</span>
-    <p>{html.escape(summary or "Genomförandet är inläst i nästa beslut.")}</p>
-    {impact}
+    <span class="today-outcome-label">Effekt på planen</span>
+    <p>{html.escape(recommendation)}</p>
   </div>"""
 
     next_html = ""
@@ -314,20 +394,31 @@ def render_post_workout(day, activity, analysis, next_day, performance=None):
     <small>{html.escape(adjustment)}</small>
   </div>"""
 
+    detail_html = f"""
+  <details class="today-outcome-details">
+    <summary>Visa analys</summary>
+    <div class="today-outcome-details-inner">
+      <dl class="today-outcome-metrics">{metrics_html}</dl>
+      <div class="today-outcome-compare" aria-label="Planerad och faktisk dos">
+        <div><span class="today-outcome-label">Plan</span><strong>{html.escape(planned_text(day))}</strong></div>
+        <div><span class="today-outcome-label">Utfall</span><strong>{html.escape(actual_text(day, activity))}</strong></div>
+      </div>
+      {render_performance(performance)}
+    </div>
+  </details>"""
+
     return f"""<section class="today-outcome" {CARD_MARKER} aria-labelledby="todayOutcomeTitle">
   <div class="today-outcome-head">
     <span class="today-outcome-check" aria-hidden="true">✓</span>
-    <div><div class="today-outcome-kicker">Dagens pass</div><h2 id="todayOutcomeTitle">Genomfört</h2></div>
+    <div><div class="today-outcome-kicker">Dagens pass · genomfört</div></div>
   </div>
-  <p class="today-outcome-note">{html.escape(completion_note(day))}</p>
-  <dl class="today-outcome-metrics">{metrics_html}</dl>
-  <div class="today-outcome-compare" aria-label="Planerad och faktisk dos">
-    <div><span class="today-outcome-label">Plan</span><strong>{html.escape(planned_text(day))}</strong></div>
-    <div><span class="today-outcome-label">Utfall</span><strong>{html.escape(actual_text(day, activity))}</strong></div>
+  <div class="today-outcome-insight">
+    <h2 id="todayOutcomeTitle">{html.escape(insight["headline"])}</h2>
+    <p>{html.escape(insight["body"])}</p>
   </div>
-  {render_performance(performance)}
   {coach_html}
   {next_html}
+  {detail_html}
   <a class="today-outcome-link" href="#aktuell-vecka">Se hela planen ↓</a>
 </section>"""
 
@@ -410,7 +501,9 @@ def main():
         required = [
             CSS_MARKER,
             CARD_MARKER,
-            'id="todayOutcomeTitle">Genomfört</h2>',
+            'id="todayOutcomeTitle">',
+            'class="today-outcome-insight"',
+            'class="today-outcome-details"',
             'class="today-outcome-metrics"',
             'class="today-outcome-compare"',
             'id="aktuell-vecka"',
@@ -419,7 +512,7 @@ def main():
         missing = [marker for marker in required if marker not in verify]
         if missing:
             raise RuntimeError("Post-workout UX-validering misslyckades: " + repr(missing))
-        print("Post-workout UX OK: genomfört → plan/utfall → coachkonsekvens → nästa pass.")
+        print("Post-workout UX OK: insight → coachkonsekvens → nästa pass → detaljer.")
     else:
         print("Post-workout UX: inget genomfört pass idag; före-pass-läget lämnas oförändrat.")
 
