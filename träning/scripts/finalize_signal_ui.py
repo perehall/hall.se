@@ -13,21 +13,25 @@ INDEX_FILE = ROOT / "index.html"
 PLAN_FILE = ROOT / "data" / "plan.json"
 ACTIVITIES_FILE = ROOT / "data" / "activities.json"
 
-CSS_MARKER = "/* signal-first-ui-v2 */"
+CSS_MARKER = "/* signal-first-ui-v3 */"
 
 CSS = r'''
-/* signal-first-ui-v2 */
+/* signal-first-ui-v3 */
 body{line-height:1.42}.wrap{width:min(100%,720px)}
-.day{padding:16px 17px}.session{line-height:1.28}.reason{font-size:.9rem;line-height:1.48}
-.day-why{margin-top:8px}.day-why>summary,.brain-why-details>summary{cursor:pointer;color:#64748b;font-size:.78rem;font-weight:800;list-style:none}.day-why>summary::-webkit-details-marker,.brain-why-details>summary::-webkit-details-marker{display:none}.day-why>summary:after,.brain-why-details>summary:after{content:" +"}.day-why[open]>summary:after,.brain-why-details[open]>summary:after{content:" −"}.day-why .reason{margin-top:7px;color:#475569}
-.development-focus{margin-top:10px}.development-focus strong{font-size:.7rem}.development-focus span{line-height:1.42}
+.day{padding:16px 17px}.reason{font-size:.9rem;line-height:1.48}
+.daytop{align-items:center;margin-bottom:9px}.day-date-line{display:flex;align-items:baseline;gap:6px;min-width:0}.dow{font-size:.86rem;font-weight:700;color:#334155;text-transform:none;letter-spacing:0}.date{font-size:.8rem;color:#94a3b8}
+.badge{padding:4px 8px;font-size:.68rem;font-weight:700;letter-spacing:0;text-transform:none}
+.session{margin:2px 0 4px;font-size:1rem;font-weight:700;line-height:1.28}.session-with-icon{align-items:flex-start}.session-with-icon .sport-icon{margin-top:2px;flex:0 0 auto}.session-text{display:flex;min-width:0;flex-direction:column;gap:2px}.session-title{font-size:1.08rem;font-weight:700;line-height:1.28;letter-spacing:-.01em;color:#0f172a}.session-meta{font-size:.82rem;font-weight:500;line-height:1.4;color:#64748b}
+.day .next-weather{margin-top:7px!important;color:#64748b!important;font-size:.78rem!important;line-height:1.4}.day .next-weather .weather-label{color:#475569;font-weight:600}.day .next-weather .weather-icon{margin-right:4px!important}
+.day-why{margin-top:8px}.day-why>summary,.brain-why-details>summary{cursor:pointer;color:#64748b;font-size:.78rem;font-weight:600;list-style:none}.day-why>summary::-webkit-details-marker,.brain-why-details>summary::-webkit-details-marker{display:none}.day-why>summary:after,.brain-why-details>summary:after{content:" +"}.day-why[open]>summary:after,.brain-why-details[open]>summary:after{content:" −"}.day-why .reason{margin-top:7px;color:#475569}
+.development-focus{margin-top:10px;padding:10px 12px;border-color:#e2e8f0;background:#f8fafc}.development-focus strong{color:#475569;font-size:.72rem;font-weight:700;text-transform:none;letter-spacing:0}.development-focus span{color:#334155;font-size:.86rem;line-height:1.42}
 .yoda-v2 .coach-summary,.yoda-v2 .coach-apply{display:none}.coach.yoda-v2{margin-top:12px}.coach-next{line-height:1.4}.coach-why{margin-top:7px}
 .brain-why-details{margin-top:8px}.brain-why-details .brain-why{margin-top:6px}.brain-note{line-height:1.4}
-.day.past-completed,.day.future-compact{padding:12px 14px;box-shadow:0 3px 10px rgba(15,23,42,.035)}.past-completed .daytop,.future-compact .daytop{margin-bottom:5px;align-items:center}.past-completed .session,.future-compact .session{font-size:1rem;margin:2px 0}.past-completed .day-why,.past-completed .development-focus,.past-completed .decision,.future-compact .day-why,.future-compact .development-focus,.future-compact .decision,.future-compact .coach{display:none}.past-completed .pass{margin-top:6px;padding-top:6px;gap:2px;font-size:.78rem;color:#64748b}.past-completed .pass-title{display:none}.future-compact .swim-set-list{display:none}.future-compact .swim-workout{margin:5px 0 0;padding:8px 10px;background:#fff}.future-compact .swim-session-head strong{font-size:.95rem}.past-exception{border-color:#f59e0b}
+.day.past-completed,.day.future-compact{padding:12px 14px;box-shadow:0 3px 10px rgba(15,23,42,.035)}.past-completed .daytop,.future-compact .daytop{margin-bottom:5px;align-items:center}.past-completed .session,.future-compact .session{font-size:1rem;margin:2px 0}.past-completed .session-title,.future-compact .session-title{font-size:.96rem}.past-completed .session-meta,.future-compact .session-meta{display:none}.past-completed .day-why,.past-completed .development-focus,.past-completed .decision,.future-compact .day-why,.future-compact .development-focus,.future-compact .decision,.future-compact .coach{display:none}.past-completed .pass{margin-top:6px;padding-top:6px;gap:2px;font-size:.78rem;color:#64748b}.past-completed .pass-title{display:none}.future-compact .swim-set-list{display:none}.future-compact .swim-workout{margin:5px 0 0;padding:8px 10px;background:#fff}.future-compact .swim-session-head strong{font-size:.95rem}.past-exception{border-color:#f59e0b}
 .week-state{margin:20px 0 8px;border-top:1px solid #e2e8f0;padding-top:12px}.week-state>summary{cursor:pointer;list-style:none;color:#475569;font-size:.82rem;font-weight:850}.week-state>summary::-webkit-details-marker{display:none}.week-state>summary:after{content:" +"}.week-state[open]>summary:after{content:" −"}.week-state .dashboard{margin:12px 0 0}.week-state .dashboard>.dashboard-card:last-child{display:none}.week-state .dashboard-grid{grid-template-columns:1fr 1fr}.week-state .dashboard-card{box-shadow:none}.week-state .metrics{margin-bottom:0}
 .reference-tools{display:flex;justify-content:flex-start;margin:12px 0 8px}.reference-chip{appearance:none;border:1px solid #cbd5e1;background:#fff;color:#334155;border-radius:999px;padding:9px 13px;font:inherit;font-size:.82rem;font-weight:800;cursor:pointer;box-shadow:0 3px 10px rgba(15,23,42,.04)}
 .strength-window{position:fixed;inset:auto;width:min(520px,calc(100vw - 32px));max-height:calc(100vh - 32px);left:50%;top:50%;transform:translate(-50%,-50%);margin:0;border:1px solid #e2e8f0;border-radius:18px;padding:0;background:#fff;color:#0f172a;box-shadow:0 24px 70px rgba(15,23,42,.28);overflow:auto}.strength-window::backdrop{background:rgba(15,23,42,.38)}.sheet-inner{padding:0 18px 18px}.sheet-head{position:sticky;top:0;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 -18px 8px;padding:14px 18px 10px;background:#fff;border-bottom:1px solid #f1f5f9;cursor:move;touch-action:none;user-select:none}.sheet-head h2{font-size:1.1rem;margin:0}.sheet-close{appearance:none;border:0;background:#f1f5f9;color:#334155;border-radius:999px;padding:7px 10px;font:inherit;font-size:.78rem;font-weight:800;cursor:pointer}.sheet-note{margin:0 0 10px;color:#64748b;font-size:.8rem}.strength-list{margin:0;padding:0;list-style:none;display:grid;gap:0}.strength-list li{padding:10px 0;border-top:1px solid #e2e8f0;font-size:.9rem;line-height:1.38}.strength-list li:first-child{border-top:0}
-@media (max-width:620px){.wrap{padding-left:13px;padding-right:13px}.day{border-radius:17px;padding:15px}.day.past-completed,.day.future-compact{padding:11px 12px}.brain-today,.dashboard-card{border-radius:16px}.week-state .dashboard-grid{grid-template-columns:1fr}.reference-tools{margin-top:10px}.strength-window{width:min(100% - 16px,720px);max-height:min(78vh,680px);left:50%!important;top:auto!important;bottom:0;transform:translateX(-50%)!important;border:0;border-radius:22px 22px 0 0}.sheet-inner{padding:0 18px calc(20px + env(safe-area-inset-bottom))}.sheet-head{cursor:default;touch-action:auto}}
+@media (max-width:620px){.wrap{padding-left:13px;padding-right:13px}.day{border-radius:17px;padding:15px}.day.past-completed,.day.future-compact{padding:11px 12px}.session-title{font-size:1.02rem}.session-meta{font-size:.8rem}.brain-today,.dashboard-card{border-radius:16px}.week-state .dashboard-grid{grid-template-columns:1fr}.reference-tools{margin-top:10px}.strength-window{width:min(100% - 16px,720px);max-height:min(78vh,680px);left:50%!important;top:auto!important;bottom:0;transform:translateX(-50%)!important;border:0;border-radius:22px 22px 0 0}.sheet-inner{padding:0 18px calc(20px + env(safe-area-inset-bottom))}.sheet-head{cursor:default;touch-action:auto}}
 '''
 
 
@@ -44,12 +48,189 @@ def compact_text(value, max_chars):
     return clipped.rstrip(".,;:") + "…"
 
 
+MONTH_SHORT = {
+    1: "jan", 2: "feb", 3: "mar", 4: "apr", 5: "maj", 6: "jun",
+    7: "jul", 8: "aug", 9: "sep", 10: "okt", 11: "nov", 12: "dec",
+}
+
+
+def short_day_date(day):
+    try:
+        parsed = date.fromisoformat(str(day.get("date") or ""))
+    except ValueError:
+        return str(day.get("label") or ""), str(day.get("date") or "")
+    return str(day.get("label") or ""), f"{parsed.day} {MONTH_SHORT[parsed.month]}"
+
+
+def status_copy(day, rendered_status):
+    if day.get("alternative_sports"):
+        return "Alternativ finns"
+    labels = {
+        "completed": "Genomfört",
+        "planned": "Planerat",
+        "preliminary": "Preliminärt",
+        "conditional": "Villkorat",
+        "open": "Öppet",
+    }
+    status = str(day.get("status") or "").strip()
+    return labels.get(status, rendered_status.strip().capitalize())
+
+
+def _distance_token(tokens):
+    return next((token for token in tokens if re.fullmatch(r"\d[\d ]*\s*m", token)), "")
+
+
+def _duration_token(tokens):
+    return next((token for token in tokens if re.search(r"\b(?:ca\s*)?\d+\s*min\b", token)), "")
+
+
+def session_display_parts(day):
+    """Create a calm visual title without changing the canonical session prescription."""
+    session = str(day.get("session") or "").strip()
+    tokens = [token.strip() for token in session.split(" · ") if token.strip()]
+    if not tokens:
+        return session, ""
+    first = tokens[0]
+    sport = str(day.get("sport") or "").strip().lower()
+
+    if first.lower().startswith("simning") and any("styrka/core" in token.lower() for token in tokens):
+        distance = _distance_token(tokens)
+        quality = next(
+            (
+                token.split(" + ", 1)[0].strip()
+                for token in tokens
+                if "styrka/core" in token.lower() and " + " in token
+            ),
+            "aerob/teknik",
+        )
+        duration = _duration_token(tokens[2:])
+        meta = " ".join(x for x in (distance, quality) if x)
+        if duration:
+            meta += (" · " if meta else "") + f"styrka {duration}"
+        if any(token.lower() == "styrkemall" for token in tokens):
+            meta += (" · " if meta else "") + "styrkemall"
+        return "Simning + styrka/core", meta
+
+    if sport == "swim" or first.lower().startswith("simning"):
+        distance = _distance_token(tokens)
+        quality = next(
+            (
+                token for token in tokens[1:]
+                if any(word in token.lower() for word in ("aerob", "teknik", "tröskel"))
+                and not token.lower().startswith("alternativ:")
+            ),
+            "",
+        )
+        duration = _duration_token(tokens)
+        title = " ".join(x for x in ("Simning", distance, quality) if x)
+        alt_index = next(
+            (index for index, token in enumerate(tokens) if token.lower().startswith("alternativ:")),
+            None,
+        )
+        meta_parts = [duration] if duration else []
+        if alt_index is not None:
+            alt_tokens = tokens[alt_index:]
+            first_alt = alt_tokens[0].split(":", 1)[1].strip() if ":" in alt_tokens[0] else alt_tokens[0]
+            rest_alt = " ".join(alt_tokens[1:]).strip()
+            alt_text = f"alternativ: {first_alt}"
+            if rest_alt:
+                alt_text += f", {rest_alt}"
+            meta_parts.append(alt_text)
+        return title or first, " · ".join(meta_parts)
+
+    if sport == "bike" or first.lower().startswith(("mtb", "cykel")):
+        duration = _duration_token(tokens)
+        title = " ".join(x for x in (first, duration) if x)
+        remaining = [token for token in tokens[1:] if token != duration]
+        return title, " · ".join(remaining)
+
+    if sport == "strength" or first.lower().startswith("styrka"):
+        duration = _duration_token(tokens)
+        title = " ".join(x for x in (first, duration) if x)
+        remaining = [token for token in tokens[1:] if token != duration]
+        return title, " · ".join(remaining)
+
+    if sport == "run" or first.lower().startswith(("löpning", "trail")):
+        if len(tokens) >= 2:
+            return f"{first} · {tokens[1]}", " · ".join(tokens[2:])
+        return first, ""
+
+    if len(tokens) >= 2:
+        return first, " · ".join(tokens[1:])
+    return first, ""
+
+
+def day_card_ranges(page):
+    pattern = re.compile(r'<div class="day[^"]*" id="dag-(?P<date>\d{4}-\d{2}-\d{2})">')
+    matches = list(pattern.finditer(page))
+    return [
+        (
+            match.start(),
+            matches[index + 1].start() if index + 1 < len(matches) else len(page),
+            match.group("date"),
+        )
+        for index, match in enumerate(matches)
+    ]
+
+
+def calm_day_card_hierarchy(page, plan):
+    days_by_date = {str(day.get("date") or ""): day for day in (plan or {}).get("days") or []}
+    for start, end, day_text in reversed(day_card_ranges(page)):
+        day = days_by_date.get(day_text)
+        if not day:
+            continue
+        block = page[start:end]
+
+        day_label, short_date = short_day_date(day)
+        top_pattern = re.compile(
+            r'<div class="daytop">\s*<div><div class="dow">.*?</div><div class="date">.*?</div></div>\s*'
+            r'<div class="badge (?P<class>[^"]+)">(?P<label>[^<]*)</div>\s*</div>',
+            re.S,
+        )
+        top_match = top_pattern.search(block)
+        if top_match:
+            badge_label = status_copy(day, top_match.group("label"))
+            replacement = (
+                '<div class="daytop"><div class="day-date-line">'
+                f'<span class="dow">{html.escape(day_label)}</span>'
+                f'<span class="date">{html.escape(short_date)}</span></div>'
+                f'<div class="badge {html.escape(top_match.group("class"))}">{html.escape(badge_label)}</div></div>'
+            )
+            block = block[:top_match.start()] + replacement + block[top_match.end():]
+
+        raw_session = html.escape(str(day.get("session") or ""))
+        title, meta = session_display_parts(day)
+        session_copy = (
+            f'<span class="session-text"><strong class="session-title">{html.escape(title)}</strong>'
+            + (f'<span class="session-meta">{html.escape(meta)}</span>' if meta else "")
+            + '</span>'
+        )
+        decorated = f"<span>{raw_session}</span>"
+        if decorated in block:
+            block = block.replace(decorated, session_copy, 1)
+        else:
+            plain = f'<div class="session">{raw_session}</div>'
+            if plain in block:
+                block = block.replace(plain, f'<div class="session">{session_copy}</div>', 1)
+
+        block = re.sub(
+            r'<strong>Väder · ([^<]+)</strong>\s*·\s*',
+            r'<span class="weather-label">Väder i \1:</span> ',
+            block,
+        )
+        block = block.replace("<summary>Varför?</summary>", "<summary>Motivering</summary>")
+        block = block.replace("<strong>Fokus</strong>", "<strong>Passfokus</strong>")
+        block = block.replace("<strong>Utvecklingsfokus</strong>", "<strong>Passfokus</strong>")
+        page = page[:start] + block + page[end:]
+    return page
+
+
 def collapse_day_reasons(page):
     if 'class="day-why"' in page:
         return page
     return re.sub(
         r'<div class="reason">(.*?)</div>',
-        r'<details class="day-why"><summary>Varför?</summary><div class="reason">\1</div></details>',
+        r'<details class="day-why"><summary>Motivering</summary><div class="reason">\1</div></details>',
         page,
         flags=re.S,
     )
@@ -87,7 +268,7 @@ def compact_visible_text(page):
         return match.group(1) + html.escape(compact_text(match.group(2), 150)) + match.group(3)
 
     page = re.sub(
-        r'(<div class="development-focus"><strong>Fokus</strong><span>)(.*?)(</span></div>)',
+        r'(<div class="development-focus"><strong>Passfokus</strong><span>)(.*?)(</span></div>)',
         replace_focus,
         page,
         flags=re.S,
@@ -271,15 +452,16 @@ def move_dashboard_to_week_state(page):
 
 
 def apply_signal_ui(page, strength_template, *, plan=None, activities=None, today=None):
-    page = page.replace("<strong>Utvecklingsfokus</strong>", "<strong>Fokus</strong>")
+    page = page.replace("<strong>Utvecklingsfokus</strong>", "<strong>Passfokus</strong>")
     page = collapse_day_reasons(page)
     page = simplify_training_brain(page)
     page = compact_visible_text(page)
     if plan is not None and today is not None:
         page = annotate_week_days(page, plan, activities or [], today)
+        page = calm_day_card_hierarchy(page, plan)
     page = replace_strength_section(page, strength_template)
     page = move_dashboard_to_week_state(page)
-    page = re.sub(r'/\* signal-first-ui-v1 \*/.*?(?=(?:/\*|</style>))', '', page, flags=re.S)
+    page = re.sub(r'/\* signal-first-ui-v[12] \*/.*?(?=(?:/\*|</style>))', '', page, flags=re.S)
     if CSS_MARKER not in page:
         if "</style>" not in page:
             raise RuntimeError("Signal-UI: index.html saknar </style>")
@@ -312,7 +494,7 @@ def main():
         'function openStrengthWindow()',
         'class="day-why"',
         'class="brain-why-details"',
-        '<strong>Fokus</strong>',
+        '<strong>Passfokus</strong>',
         'class="week-state"',
         '<summary>Veckoläge</summary>',
     ]
