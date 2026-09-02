@@ -126,52 +126,6 @@ body{line-height:1.42}.wrap{width:min(100%,720px)}
 .week-status-expander .dashboard-grid{grid-template-columns:1fr 1fr}
 @media (max-width:620px){.week-status-expander .dashboard-grid{grid-template-columns:1fr}}
 
-/* post-workout-ux-v1 */
-.today-outcome{background:#fff;border:1px solid #dbe5df;border-radius:20px;padding:18px 20px;margin:0 0 14px;box-shadow:0 8px 24px rgba(15,23,42,.06)}
-.today-outcome-head{display:flex;align-items:center;gap:12px;margin-bottom:7px}
-.today-outcome-check{width:34px;height:34px;flex:0 0 34px;border-radius:50%;display:grid;place-items:center;background:#dcfce7;color:#15803d;font-weight:950;font-size:1rem}
-.today-outcome-kicker{font-size:.7rem;font-weight:900;letter-spacing:.09em;text-transform:uppercase;color:#64748b}
-.today-outcome h2{font-size:1.2rem;line-height:1.25;margin:1px 0 0}
-.today-outcome-note{margin:0 0 15px;color:#334155;font-size:.92rem;line-height:1.45}
-.today-outcome-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
-.today-outcome-metrics>div{border:1px solid #e2e8f0;border-radius:13px;padding:10px 11px;background:#f8fafc}
-.today-outcome-metrics dt{font-size:.67rem;font-weight:850;letter-spacing:.06em;text-transform:uppercase;color:#64748b}
-.today-outcome-metrics dd{margin:2px 0 0;font-size:1rem;font-weight:900;font-variant-numeric:tabular-nums}
-.today-outcome-compare{display:grid;grid-template-columns:1fr 1fr;border:1px solid #e2e8f0;border-radius:15px;overflow:hidden;margin-bottom:12px}
-.today-outcome-compare>div{padding:12px 13px;min-width:0}
-.today-outcome-compare>div+div{border-left:1px solid #e2e8f0;background:#fbfdfc}
-.today-outcome-label{display:block;margin-bottom:4px;font-size:.67rem;font-weight:900;letter-spacing:.07em;text-transform:uppercase;color:#64748b}
-.today-outcome-compare strong{display:block;font-size:.9rem;line-height:1.4}
-.today-outcome-performance{padding:12px 13px;border:1px solid #bae6fd;border-radius:15px;background:#f0f9ff;margin-bottom:12px}
-.today-outcome-performance-grid{display:grid;gap:5px;margin-top:7px}
-.today-outcome-performance-row{display:grid;grid-template-columns:24px minmax(72px,1fr) minmax(62px,1fr);gap:8px;font-size:.84rem;line-height:1.35}
-.today-outcome-performance-row strong{color:#075985}
-.today-outcome-performance-note{margin:8px 0 0;color:#0c4a6e;font-size:.78rem;line-height:1.4}
-.today-outcome-coach{padding:12px 13px;border:1px solid #ddd6fe;border-radius:15px;background:#faf5ff;margin-bottom:12px}
-.today-outcome-coach p{margin:0;color:#3b0764;font-size:.9rem;line-height:1.45}
-.today-outcome-impact{margin-top:8px;padding-top:8px;border-top:1px solid #e9d5ff;color:#4c1d95!important}
-.today-outcome-next{padding:12px 13px;border:1px solid #cbd5e1;border-radius:15px;background:#f8fafc}
-.today-outcome-next strong{display:block;font-size:.96rem;line-height:1.4}
-.today-outcome-next small{display:block;margin-top:4px;color:#64748b;font-size:.76rem;line-height:1.35}
-.today-outcome-insight{margin:4px 0 16px}
-.today-outcome-insight h2{font-size:1.55rem;line-height:1.16;margin:0 0 8px;letter-spacing:-.02em}
-.today-outcome-insight p{margin:0;color:#334155;font-size:.96rem;line-height:1.5}
-.today-outcome-details{margin:0 0 12px;border:1px solid #e2e8f0;border-radius:15px;background:#fff;overflow:hidden}
-.today-outcome-details summary{cursor:pointer;list-style:none;padding:12px 13px;font-size:.82rem;font-weight:850;color:#475569}
-.today-outcome-details summary::-webkit-details-marker{display:none}
-.today-outcome-details summary:after{content:"＋";float:right;color:#64748b}
-.today-outcome-details[open] summary:after{content:"−"}
-.today-outcome-details-inner{padding:0 12px 12px}
-.today-outcome-details .today-outcome-metrics{margin-top:0}
-.today-outcome-link{display:inline-block;margin-top:11px;color:#475569;font-size:.8rem;font-weight:800;text-underline-offset:3px}
-@media(max-width:620px){
-  .today-outcome{padding:16px 15px;border-radius:17px}
-  .today-outcome-metrics{gap:6px}
-  .today-outcome-metrics>div{padding:9px 8px}
-  .today-outcome-metrics dd{font-size:.92rem}
-  .today-outcome-compare{grid-template-columns:1fr}
-  .today-outcome-compare>div+div{border-left:0;border-top:1px solid #e2e8f0}
-}
 /* goal-page-link-v3 */
 .goal-page-link{display:flex;justify-content:flex-end;margin:0 0 8px}
 .goal-page-link a{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid #e2e8f0;border-radius:12px;background:#fff;color:#475569;text-decoration:none;font-size:.78rem;font-weight:700;box-shadow:0 5px 14px rgba(15,23,42,.04)}
@@ -229,6 +183,52 @@ h1{font-size:clamp(2rem,8vw,3.2rem);line-height:1;margin:0 0 8px;letter-spacing:
   .system-head{cursor:default;touch-action:auto}
 }
 
+/* post-workout-ux-v3 */
+.today-outcome{background:#fff;border:1px solid #dbe5df;border-radius:18px;padding:16px 17px;margin:0 0 14px;box-shadow:0 7px 20px rgba(15,23,42,.05)}
+.today-outcome-head{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.today-outcome-check{width:28px;height:28px;flex:0 0 28px;border-radius:50%;display:grid;place-items:center;background:#dcfce7;color:#15803d;font-weight:900;font-size:.86rem}
+.today-outcome-kicker{font-size:.72rem;font-weight:800;color:#475569}
+.today-outcome-main{margin:0 0 13px}
+.today-outcome-title{margin:0;font-size:1.08rem;line-height:1.28;font-weight:800;letter-spacing:-.01em;color:#0f172a}
+.today-outcome-meta{margin-top:4px;color:#64748b;font-size:.82rem;line-height:1.4;font-variant-numeric:tabular-nums}
+.today-outcome-label{display:block;margin-bottom:4px;font-size:.67rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:#64748b}
+.today-outcome-evaluation{padding:0 0 10px;margin-bottom:10px;border-bottom:1px solid #e2e8f0}
+.today-outcome-evaluation strong{display:block;margin-bottom:3px;font-size:.94rem;line-height:1.35;color:#0f172a}
+.today-outcome-evaluation p{margin:0;color:#475569;font-size:.84rem;line-height:1.43}
+.today-outcome-impact{padding:11px 12px;border:1px solid #e2e8f0;border-radius:13px;background:#f8fafc;margin-bottom:10px}
+.today-outcome-impact strong{display:block;margin-bottom:3px;font-size:.94rem;line-height:1.35;color:#0f172a}
+.today-outcome-impact p{margin:0;color:#475569;font-size:.84rem;line-height:1.43}
+.today-outcome-signal{margin-top:7px;padding-top:7px;border-top:1px solid #e2e8f0;color:#334155;font-size:.8rem;line-height:1.4}
+.today-outcome-next{padding:11px 12px;border:1px solid #cbd5e1;border-radius:13px;background:#fff}
+.today-outcome-next strong{display:block;font-size:.92rem;line-height:1.38}
+.today-outcome-next small{display:block;margin-top:4px;color:#64748b;font-size:.76rem;line-height:1.38}
+.today-outcome-details{margin:9px 0 0;border-top:1px solid #e2e8f0}
+.today-outcome-details>summary{cursor:pointer;list-style:none;padding:10px 1px 3px;font-size:.78rem;font-weight:750;color:#64748b}
+.today-outcome-details>summary::-webkit-details-marker{display:none}
+.today-outcome-details>summary:after{content:" +"}
+.today-outcome-details[open]>summary:after{content:" −"}
+.today-outcome-details-inner{padding:8px 0 1px}
+.today-outcome-compare{display:grid;grid-template-columns:1fr 1fr;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;margin-bottom:9px}
+.today-outcome-compare>div{padding:9px 10px;min-width:0}
+.today-outcome-compare>div+div{border-left:1px solid #e2e8f0;background:#fbfdfc}
+.today-outcome-compare strong{display:block;font-size:.8rem;line-height:1.4}
+.today-outcome-evidence{display:grid;gap:8px;padding:9px 10px;border-radius:12px;background:#f8fafc;color:#475569;font-size:.76rem;line-height:1.42}
+.today-outcome-evidence-block+.today-outcome-evidence-block{padding-top:8px;border-top:1px solid #e2e8f0}
+.today-outcome-evidence-block>strong{display:block;margin-bottom:3px;color:#334155;font-size:.66rem;text-transform:uppercase;letter-spacing:.05em}
+.today-outcome-evidence ul{margin:0;padding-left:17px}
+.today-outcome-evidence li+li{margin-top:3px}
+.today-outcome-performance{padding:10px 11px;border:1px solid #bae6fd;border-radius:12px;background:#f0f9ff;margin-top:9px}
+.today-outcome-performance-grid{display:grid;gap:5px;margin-top:7px}
+.today-outcome-performance-row{display:grid;grid-template-columns:24px minmax(72px,1fr) minmax(62px,1fr);gap:8px;font-size:.82rem;line-height:1.35}
+.today-outcome-performance-row strong{color:#075985}
+.today-outcome-performance-note{margin:7px 0 0;color:#0c4a6e;font-size:.76rem;line-height:1.4}
+.today-outcome-link{display:inline-block;margin-top:8px;color:#64748b;font-size:.76rem;font-weight:750;text-underline-offset:3px}
+@media(max-width:620px){
+  .today-outcome{padding:14px 14px;border-radius:16px}
+  .today-outcome-title{font-size:1.02rem}
+  .today-outcome-compare{grid-template-columns:1fr}
+  .today-outcome-compare>div+div{border-left:0;border-top:1px solid #e2e8f0}
+}
 </style>
 </head>
 <body><div class="wrap">
@@ -241,33 +241,43 @@ h1{font-size:clamp(2rem,8vw,3.2rem);line-height:1;margin:0 0 8px;letter-spacing:
 <section class="today-outcome" data-post-workout-state="completed" aria-labelledby="todayOutcomeTitle">
   <div class="today-outcome-head">
     <span class="today-outcome-check" aria-hidden="true">✓</span>
-    <div><div class="today-outcome-kicker">Dagens pass · genomfört</div></div>
+    <div class="today-outcome-kicker">Dagens pass · genomfört</div>
   </div>
-  <div class="today-outcome-insight">
-    <h2 id="todayOutcomeTitle">Du valde dagens planerade Swimrun-alternativ; det räknas som dagens fulla pass och ersätter simningen</h2>
+  <div class="today-outcome-main">
+    <h2 class="today-outcome-title" id="todayOutcomeTitle">Swimrun · 54:25</h2>
+    <div class="today-outcome-meta">6,89 km · snittpuls 135 · max 158</div>
+  </div>
+
+  <div class="today-outcome-evaluation">
+    <span class="today-outcome-label">Utvärdering</span>
+    <strong>Du valde dagens planerade Swimrun-alternativ; det räknas som dagens fulla pass och ersätter simningen</strong>
     <p>Löpkomponenten ger viktbärande mekanisk belastning som ren simning inte gör; exakt belastningsnivå kan inte avgöras från dessa data.</p>
   </div>
 
-  <div class="today-outcome-coach">
-    <span class="today-outcome-label">Effekt på planen</span>
-    <p>Torsdag 3 sep: behåll grundplanen MTB/XC 60 min teknik + lugn aerob stig. Korta eller ta bort passet endast om ben- eller återhämtningskänslan i morgon ger sakligt skäl; ingen segmentjakt.</p>
+  <div class="today-outcome-impact">
+    <span class="today-outcome-label">Planpåverkan</span>
+    <strong>Planen står kvar</strong>
+    <p>Torsdagens grundplan är redan lugn och det finns inget nytt sakligt underlag som motiverar nedskalning i kväll; fredagens backkvalitet skyddas genom en ny kontrollpunkt i morgon.</p>
   </div>
 
   <div class="today-outcome-next">
-    <span class="today-outcome-label">Nästa pass · Torsdag 3 sep</span>
+    <span class="today-outcome-label">Nästa · Torsdag 3 sep</span>
     <strong>MTB/XC · 60 min · teknik + lugn aerob stig</strong>
-    <small>Nästa planerade steg i mikrocykeln.</small>
+    <small>Korta eller ta bort passet endast om ben- eller återhämtningskänslan i morgon ger sakligt skäl; ingen segmentjakt.</small>
   </div>
 
   <details class="today-outcome-details">
-    <summary>Visa analys</summary>
+    <summary>Visa underlag</summary>
     <div class="today-outcome-details-inner">
-      <dl class="today-outcome-metrics"><div><dt>Tid</dt><dd>54:25</dd></div><div><dt>Distans</dt><dd>6,89 km</dd></div><div><dt>Snittpuls</dt><dd>135</dd></div></dl>
-      <div class="today-outcome-compare" aria-label="Planerad och faktisk dos">
+      <div class="today-outcome-compare" aria-label="Plan och utfall">
         <div><span class="today-outcome-label">Plan</span><strong>Simning · aerob/teknik · 3 200 m · ca 60 min · alternativ: Swimrun · Jogersö Extreme · 1 varv</strong></div>
         <div><span class="today-outcome-label">Utfall</span><strong>SLK Swimrun Jogersö Extreme</strong></div>
       </div>
-
+      <div class="today-outcome-evidence">
+        <div class="today-outcome-evidence-block"><strong>Fakta</strong><ul><li>Swimrun: 6,89 km · 54:25 · 104,3 m+ · snittpuls 135,4 · maxpuls 158.</li><li>Planstatus 2026-09-02: dagen är markerad genomförd i coachens beslutsunderlag.</li></ul></div>
+        <div class="today-outcome-evidence-block"><strong>Tolkning</strong><ul><li>Swimrun var ett uttryckligt alternativ i dagens plan, inte ett extra eller oplanerat pass.</li><li>Det finns inte sakligt underlag för att skala ner torsdagens lugna MTB redan i kväll; fredagens backkvalitet är fortsatt det prioriterade stimulus som torsdagens beslut ska skydda.</li></ul></div>
+        <div class="today-outcome-evidence-block"><strong>Osäkerhet</strong><ul><li>Subjektiv ben- eller muskelkänsla efter dagens Swimrun saknas.</li><li>Stravaunderlaget ger inte en tillförlitlig sim/löp-fördelning som kan kvantifiera den mekaniska dosen.</li><li>Torsdagens dagskänsla före MTB-passet är ännu inte känd.</li></ul></div>
+      </div>
     </div>
   </details>
   <a class="today-outcome-link" href="#aktuell-vecka">Se hela planen ↓</a>
