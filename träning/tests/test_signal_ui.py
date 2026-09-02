@@ -7,7 +7,7 @@ from pathlib import Path
 SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
-from finalize_signal_ui import apply_signal_ui, compact_text, session_display_parts  # noqa: E402
+from finalize_signal_ui import annotate_week_days, apply_signal_ui, compact_text, session_display_parts  # noqa: E402
 
 
 class SignalUiTests(unittest.TestCase):
@@ -78,6 +78,35 @@ class SignalUiTests(unittest.TestCase):
         self.assertIn('<span class="weather-label">Väder i Oxelösund:</span>', rendered)
         self.assertIn('<summary>Motivering</summary>', rendered)
         self.assertNotIn('<summary>Varför?</summary><div class="reason">Motivering.</div>', rendered)
+
+
+    def test_fulfilled_today_is_rendered_as_completed_not_alternative_open(self):
+        page = (
+            '<div class="day decision-horizon" id="dag-2026-09-02">'
+            '<div class="daytop"><div><div class="dow">Onsdag</div><div class="date">2026-09-02</div></div>'
+            '<div class="badge conditional">Alternativ finns</div></div>'
+            '<div class="session">Simning · alternativ: Swimrun</div>'
+            '</div>'
+        )
+        plan = {
+            "days": [{
+                "date": "2026-09-02",
+                "status": "conditional",
+                "sport": "swim",
+                "alternative_sports": ["swimrun"],
+                "session": "Simning · alternativ: Swimrun",
+            }]
+        }
+        activities = [{
+            "id": 1,
+            "sport_type": "Swimrun",
+            "start_date_local": "2026-09-02T18:00:00+02:00",
+        }]
+        rendered = annotate_week_days(page, plan, activities, date(2026, 9, 2))
+        self.assertIn('class="day past-completed today-completed" id="dag-2026-09-02"', rendered)
+        self.assertIn('<div class="badge fixed">Genomfört</div>', rendered)
+        self.assertNotIn("Alternativ finns", rendered)
+
 
 
 if __name__ == "__main__":
