@@ -159,7 +159,7 @@ class PostWorkoutUiTests(unittest.TestCase):
             {"entries": []},
             "2026-08-30",
         )
-        self.assertIn("Nästa pass · Måndag 31 aug", rendered)
+        self.assertIn("Nästa · Måndag 31 aug", rendered)
         self.assertIn("Enduroskola · fast tillfälle", rendered)
 
     def test_before_workout_state_is_untouched(self):
