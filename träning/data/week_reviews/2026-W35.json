@@ -4,8 +4,8 @@
   "week_key": "2026-W35",
   "week_start": "2026-08-24",
   "week_end": "2026-08-30",
-  "source_hash": "ca9bbc279d92ccfd6e821c76b3b159aa2a8b665685621c688fa3e71cfc286b74",
-  "generated_at_utc": "2026-08-30T22:09:49.733637+00:00",
+  "source_hash": "f443cdd680f8de720a165ada22d0c90fbfdb35ab6f772fec90f67640bc62703a",
+  "generated_at_utc": "2026-09-02T06:51:56.138292+00:00",
   "model": "gpt-5-mini",
   "facts": {
     "week_key": "2026-W35",
@@ -140,9 +140,9 @@
         "distance_m": 9672.9,
         "elapsed_time_s": 3036,
         "moving_time_s": 3036,
-        "total_elevation_gain_m": 182.0,
+        "total_elevation_gain_m": 182,
         "average_heartrate": 145.1,
-        "max_heartrate": 169.0,
+        "max_heartrate": 169,
         "user_report": null,
         "source_sport_type": null,
         "garmin_activity_type": null
@@ -153,12 +153,12 @@
         "label": "Simning · aerob + tröskel",
         "sport_type": "Swim",
         "classification": "training",
-        "distance_m": 4000.0,
+        "distance_m": 4000,
         "elapsed_time_s": 4499,
         "moving_time_s": 3397,
         "total_elevation_gain_m": 0,
         "average_heartrate": 129.7,
-        "max_heartrate": 157.0,
+        "max_heartrate": 157,
         "user_report": "Spontant simpass: Aerob+tröskel 4K, 4 000 m. Passet är separat från dagens planerade MTB-pass och ska räknas som faktisk träningsbelastning, inte som genomförande av dagens plan.",
         "source_sport_type": "Swim",
         "garmin_activity_type": null
@@ -172,9 +172,9 @@
         "distance_m": 18876.3,
         "elapsed_time_s": 6194,
         "moving_time_s": 6194,
-        "total_elevation_gain_m": 184.0,
+        "total_elevation_gain_m": 184,
         "average_heartrate": 139.3,
-        "max_heartrate": 153.0,
+        "max_heartrate": 153,
         "user_report": null,
         "source_sport_type": null,
         "garmin_activity_type": null
@@ -346,26 +346,26 @@
     }
   },
   "assessment": {
-    "summary": "Veckan innehöll tre löppass (tröskel, backkvalitet, lång lugn distans), kompletterat med swimrun, simning, två MTB-pass, enduro och ett styrkepass; alla planerade sessioner markerade som träningsutförda utom ett cykelpass som ersattes av simning.",
+    "summary": "Veckan genomfördes med alla planerade löppass och kompletterande simning, MTB och styrka; ett planerat MTB-pass byttes mot ett separat simpass. Aktivitet genomfördes alla sju dagar.",
     "worked": [
-      "Löpningen genomfördes enligt plan med tre tydliga stimuli: kontrollerad tröskel, backkvalitet (fler repetitioner än ordinerat) och lugn långdistans.",
-      "Styrka genomförd direkt efter enduro enligt plan, vilket gav kontrollerad samlad belastning måndag.",
-      "Swimrun genomfört trots pulsglapp; användaren bedömer delar av passet som högre intensitet än pulsdatan visar, så kvalitetsstimulus finns dokumenterat.",
-      "MTB/Enduro-pass genomförda som separata träningsstimuli utan att klassificeras som rekreation."
+      "Tre löppass genomförda inklusive kontrollerad tröskel och utökad backvolym — kvalitetspassen fullföljda.",
+      "Styrka genomförd direkt efter enduro enligt plan, vilket gav samlad belastning måndag.",
+      "Swimrunpass genomfört men med stundvis bortfall i pulsmätning; användarens bedömning indikerar högre intensitet än pulsdatan visade.",
+      "Spontant simpass på lördag tillförde extra simbelastning och räknades som träning, inte ersättning för MTB."
     ],
     "not_as_planned": [
-      "Lördagens planerade MTB-distans byttes till ett fristående simpass (se plan_outcomes: different_activity).",
-      "Tisdagens kvalitet passades ner i praktiken till 3×8 min enligt användarrapport och coachens justering (plan anger conditional/skalning).",
-      "Pulsmätning saknades under cirka 2 km av swimrunpasset vilket gör dels intensitetsbedömningen från pulsen otillförlitlig.",
-      "Fredagens backpass blev längre (12 vs ordinerade 6 rep), vilket ökade helgens närbelastning jämfört med plan."
+      "Lördagens planerade MTB-distans byttes ut mot ett simpass — ingen mtb-matchning för det planerade passet.",
+      "Tisdagens kvalitet skalades enligt planens coachjustering till 3×8 min (aktiviteten visar detta) och upplevdes som något sämre tempo än föregående vecka.",
+      "Pulsmätningen under swimrun föll bort cirka 2 km vilket gör pulssnittet missvisande för den delen.",
+      "Fredagens backpass blev större än ordinationen (12 reps vs 6) vilket ökade veckans närbelastning."
     ],
-    "load_continuity": "Veckan visar konsekvent daglig träning med ackumulerad belastning: flera kvalitetsstimuli i löpning plus extra aerob/MTB-inslag och styrka som skapar ett flerdagars sammanhängande belastningsmönster att beakta inför återhämtning.",
-    "key_lesson": "Flera kvalitetsinslag och ett oväntat extra simpass ökade den totala närbelastningen; faktiska passdoser (antal backrepetitioner, ersatta aktiviteter, pulsglapp) styr tolkningen mer än planens etiketter.",
-    "next_week_implication": "Justera nästa veckas dosering utifrån den ökade närbelastningen denna vecka — prioritera kontroll av återhämtning innan att lägga till nya kvalitetsblock och undvik fler oplanerade högintensiva pass förrän subjektiv/objektiv återhämtning bekräftas.",
+    "load_continuity": "Veckan visar konsekvent daglig belastning med tre prioriterade löpstimuli spridda över veckan och kompletterande cykel-, sim- och styrkepass nära i tid; den samlade närbelastningen är ackumulerad snarare än fragmenterad.",
+    "key_lesson": "När subjektiva rapporter (känsla, upplevd intensitet) och pulsmätning divergerar måste planjusteringar och belastningsbedömning baseras på användarens observationer i kombination med aktiviteternas tidsmässiga fördelning.",
+    "next_week_implication": "Planera nästa veckas dosering utifrån den verkliga ackumulerade belastningen denna vecka — särskilt med tanke på högre backvolym fredag och extra simpass istället för MTB; prioritera återhämtning eller reducerad volym för att bibehålla kvalitet i kommande prioriterade löppass.",
     "uncertainties": [
-      "Exakt subjektiv återhämtning/fatigue efter helgens ackumulerade belastning saknas.",
-      "Detaljer kring intensitet för delar av swimrun där pulsen fallit bort (exakt duration/intensitet under den perioden).",
-      "Eventuella känslor eller smärtor efter ökad backvolym och kombinationen enduro+styrka saknas."
+      "Exakt subjektiv återhämtning/dagskänsla efter veckans sammanlagda belastning saknas.",
+      "Detaljer om intensitetsfördelning under delar av swimrun (pulsbortfall) begränsar precis tolkning av intensiv belastning.",
+      "Ingen användarrapport för flera aktiviteter (särskilt MTB-pass och söndagens långa löp) försvårar full bedömning av upplevd ansträngning."
     ]
   }
 }
