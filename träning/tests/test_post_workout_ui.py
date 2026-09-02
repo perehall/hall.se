@@ -347,6 +347,58 @@ class PostWorkoutUiTests(unittest.TestCase):
         self.assertIn("inte i sig en förändring i kapacitet", rendered)
 
 
+    def test_planned_alternative_renders_real_plan_and_actual_activity(self):
+        plan = {
+            "days": [
+                {
+                    "date": "2026-09-02",
+                    "label": "Onsdag",
+                    "status": "conditional",
+                    "sport": "swim",
+                    "alternative_sports": ["swimrun"],
+                    "session": (
+                        "Simning · aerob/teknik · 3 200 m · ca 60 min · "
+                        "alternativ: Swimrun · Jogersö Extreme · 1 varv"
+                    ),
+                },
+                {
+                    "date": "2026-09-03",
+                    "label": "Torsdag",
+                    "status": "preliminary",
+                    "sport": "bike",
+                    "session": "MTB/XC · 60 min · teknik + lugn aerob stig",
+                },
+            ]
+        }
+        activities = {
+            "activities": [
+                {
+                    "id": 20008258969,
+                    "name": "SLK Swimrun Jogersö Extreme",
+                    "display_label": "Swimrun",
+                    "sport_type": "Swimrun",
+                    "start_date_local": "2026-09-02T18:01:01+02:00",
+                    "distance_m": 6885.6,
+                    "elapsed_time_s": 3265,
+                    "average_heartrate": 135.4,
+                }
+            ]
+        }
+        rendered = apply_post_workout_ui(
+            BASE_PAGE,
+            plan,
+            activities,
+            {"analyses": []},
+            {"entries": []},
+            "2026-09-02",
+        )
+        self.assertIn("Simning · aerob/teknik · 3 200 m · ca 60 min", rendered)
+        self.assertIn("alternativ: Swimrun · Jogersö Extreme · 1 varv", rendered)
+        self.assertIn("Swimrun · SLK Swimrun Jogersö Extreme", rendered)
+        self.assertNotIn("Planerad dos saknas i historiken", rendered)
+
+
+
     def test_post_workout_transform_is_idempotent(self):
         once = apply_post_workout_ui(
             BASE_PAGE,
