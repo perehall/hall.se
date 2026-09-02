@@ -53,6 +53,19 @@ def fmt_equipment(value, unknown="ej registrerat"):
     raise RuntimeError(f"Workout history: ogiltigt hjälpmedelsvärde {value!r}")
 
 
+def matching_swim_dates(activities):
+    dates = set()
+    for activity in activities:
+        if activity.get("sport_type") != "Swim":
+            continue
+        if activity.get("plan_relation") == "separate":
+            continue
+        date = activity_date(activity)
+        if date:
+            dates.add(date)
+    return dates
+
+
 def render_workout(day, completed):
     workout = day.get("watch_workout") or {}
     title = workout.get("name") or day.get("session") or "Simning"
@@ -136,11 +149,13 @@ def main():
     activities = json.loads(ACTIVITIES_FILE.read_text(encoding="utf-8"))
     page = INDEX_FILE.read_text(encoding="utf-8")
 
+    all_activities = activities.get("activities", [])
     completed_dates = {
         activity_date(activity)
-        for activity in activities.get("activities", [])
+        for activity in all_activities
         if activity_date(activity)
     }
+    completed_swim_dates = matching_swim_dates(all_activities)
 
     structured_days = [
         day
@@ -152,7 +167,7 @@ def main():
     # workouts created before this rule may show "ej registrerat" instead of guessing.
     for day in structured_days:
         date = day.get("date", "")
-        completed = date in completed_dates or day.get("status") == "completed"
+        completed = date in completed_swim_dates
         workout = day.get("watch_workout") or {}
         if not completed and "equipment" not in workout:
             raise RuntimeError(
@@ -187,13 +202,13 @@ def main():
             if block_start >= 0:
                 block_end = segment.find('</div><div class="pass">', block_start)
                 if block_end >= 0:
-                    completed = date in completed_dates or day.get("status") == "completed"
-                    replacement = render_workout(day, completed=completed)
+                    completed = date in completed_swim_dates
+                    replacement = render_workout(day, completed=True) if completed else ""
                     segment = segment[:block_start] + replacement + segment[block_end + len('</div>'):]
                     page = page[:start] + segment + page[end:]
             continue
 
-        completed = date in completed_dates or day.get("status") == "completed"
+        completed = date in completed_swim_dates
         if not completed:
             continue
 
@@ -223,7 +238,7 @@ def main():
     required = [CSS_MARKER]
     for day in structured_days:
         date = day.get("date", "")
-        if date in completed_dates or day.get("status") == "completed":
+        if date in completed_swim_dates:
             workout = day.get("watch_workout") or {}
             workout_id = str(workout.get("id") or workout.get("external_id") or date)
             required.append(f'data-workout-history="{html.escape(workout_id)}"')
