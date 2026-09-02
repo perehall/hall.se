@@ -48,7 +48,7 @@ jobs:
           test -s "träning/index.html"
           grep -Fq '<section class="dashboard"' "träning/index.html"
           grep -Eq '<section class="training-brain"|data-post-workout-state="completed"' "träning/index.html"
-          grep -Fq 'Nästa pass' "träning/index.html"
+          grep -Fq 'class="brain-next-label">Nästa</div>' "träning/index.html"
           grep -Fq 'week-focus-mesocycle-meta' "träning/index.html"
           grep -Fq 'mikrocykel' "träning/index.html"
           grep -Fq 'Kalendervecka:' "träning/index.html"

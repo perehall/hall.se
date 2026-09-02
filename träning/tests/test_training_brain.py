@@ -457,10 +457,48 @@ class TrainingBrainTests(unittest.TestCase):
         self.assertEqual(mesocycle["evaluation_date"], "2026-09-21")
         self.assertIn("Kontrollerad löptröskel", mesocycle["protected_stimuli"])
 
+    def test_today_with_explicit_alternative_uses_calm_status_and_split_title(self):
+        plan = {
+            "days": [
+                {
+                    "date": "2026-09-02",
+                    "label": "Onsdag",
+                    "status": "conditional",
+                    "session": "Simning · aerob/teknik · 3 200 m · ca 60 min · alternativ: Swimrun · Jogersö Extreme · 1 varv",
+                    "sport": "swim",
+                    "alternative_sports": ["swimrun"],
+                    "priority_role": "flex",
+                    "stimuli": ["swim_aerobic", "swim_technique"],
+                    "reason": "Kontrollerad stödträning.",
+                },
+                {
+                    "date": "2026-09-03",
+                    "label": "Torsdag",
+                    "status": "preliminary",
+                    "session": "MTB/XC · 60 min · teknik + lugn aerob stig",
+                    "sport": "bike",
+                    "priority_role": "flex",
+                    "stimuli": ["mtb_technical", "mtb_aerobic"],
+                    "decision_note": "Grundplanen ligger kvar.",
+                },
+            ]
+        }
+        section = render_section(plan, {"activities": []}, self.strategy, date(2026, 9, 2))
+        self.assertIn(">Alternativ finns</span>", section)
+        self.assertIn(">Simning 3 200 m aerob/teknik</div>", section)
+        self.assertIn("ca 60 min · alternativ: Swimrun, Jogersö Extreme 1 varv", section)
+        self.assertIn("Torsdag · MTB/XC 60 min", section)
+        self.assertIn("Grundplan: teknik + lugn aerob stig.", section)
+        self.assertNotIn(">FLEX<", section)
+        self.assertNotIn("Idag · VILLKORAT", section)
+
+
     def test_primary_ui_contains_only_today_and_next_session(self):
         section = render_section(self.plan, {"activities": []}, self.strategy, date(2026, 8, 26))
-        self.assertIn("Idag ·", section)
-        self.assertIn("Nästa pass", section)
+        self.assertIn('class="brain-kicker">Idag</span>', section)
+        self.assertIn('class="brain-next-label">Nästa</div>', section)
+        self.assertIn("<summary>Motivering</summary>", section)
+        self.assertNotIn("brain-role", section)
         self.assertNotIn("Aktuell mesocykel", section)
         self.assertNotIn("Prioritering just nu", section)
         self.assertNotIn("brain-tags", section)
@@ -471,7 +509,9 @@ class TrainingBrainTests(unittest.TestCase):
         rendered = decorate_focus_card(page, mesocycle)
         self.assertIn('class="week-focus-mesocycle-meta"', rendered)
         self.assertIn("mikrocykel 1 av 4", rendered)
-        self.assertIn("utvärdering 21/9", rendered)
+        self.assertIn("Löpning prioriteras denna vecka", rendered)
+        self.assertIn("Löptröskel + backkvalitet", rendered)
+        self.assertNotIn("utvärdering 21/9", rendered)
         self.assertIn("Mesocykelhypotes:", rendered)
 
     def test_ui_insertion_is_idempotent(self):
@@ -479,7 +519,7 @@ class TrainingBrainTests(unittest.TestCase):
         once = apply_ui(page, f"{SECTION_START}<section>brain</section><!-- training-brain-v1:end -->")
         twice = apply_ui(once, f"{SECTION_START}<section>brain2</section><!-- training-brain-v1:end -->")
         self.assertEqual(twice.count(SECTION_START), 1)
-        self.assertEqual(twice.count("/* training-brain-v2 */"), 1)
+        self.assertEqual(twice.count("/* training-brain-v3 */"), 1)
         self.assertIn("brain2", twice)
         self.assertNotIn(">brain<", twice)
 
