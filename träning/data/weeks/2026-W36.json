@@ -4,7 +4,7 @@
   "week_start": "2026-08-31",
   "week_end": "2026-09-06",
   "created_at_utc": "2026-08-30T22:09:50.110394+00:00",
-  "updated_at_utc": "2026-09-02T07:10:28.003916+00:00",
+  "updated_at_utc": "2026-09-02T09:26:31.793065+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -672,13 +672,13 @@
       "activity_id": 19994118756,
       "activity_date": "2026-09-01",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-09-02T07:10:27.464011+00:00",
+      "generated_at_utc": "2026-09-02T09:26:31.400560+00:00",
       "model": "gpt-5-mini",
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "3×8‑min tröskel genomförd med stigande kontroll; kroppen kändes pigg efter sista intervallen.",
-        "load_interpretation": "Närbelastningen visar hög kardiovaskulär exponering de senaste tre dagarna men ingen tydlig mekanisk överbelastning.",
+        "summary": "3×8 min tröskel genomfört bra; kroppen pigg efter sista intervallen — behåll plan.",
+        "load_interpretation": "Tidigare enduro + 18–19 km och sim 4K ger mångdagars belastning men inget som talar för nedskalning.",
         "confidence": "medium",
         "facts": [
           "Run: 10,35 km · 50:29 · 61 m+ · snittpuls 145,3 · maxpuls 165.",
@@ -686,20 +686,20 @@
           "Planstatus 2026-09-01: dagens planerade pass är genomfört i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Kardiovaskulärt var detta en tydlig kvalitetsstimulans men mekanisk kostnad kan inte nivåklassas mot personlig baslinje jämfört med längre distans eller backserier.",
-          "Passet är absorberbart i mikrocykeln; inga data talar för att skyddade stimuli (fredagens backkvalitet, lördagens styrka) måste tas bort."
+          "Tröskelpasset hölls kontrollerat och tekniken/energin förbättrades genom passet — ingen omedelbar återhämtningsrisk.",
+          "Ingen enstaka dag i närbelastningen motiverar att ta bort eller vila bort onsdagens simning; simningen är lågmekanisk och absorberbar."
         ],
         "unknowns": [
-          "Subjektiv lokal bentrötthet utöver användarrapport saknas detaljerat.",
-          "Exakt intensitetsmål för tröskel jämfört med tidigare markörer (performance_context saknas).",
-          "Eventuella akuta muskuloskeletala besvär är ej rapporterade."
+          "Exakt lokal ben-/muskeltrötthet kväll/nästa förmiddag (användarrapport indikerar pigg känsla efter pass).",
+          "Om användaren väljer att göra Jogersö Swimrun i stället för simning: faktisk mekanisk belastning från det varvet.",
+          "Eventuella fasta åtaganden eller subjektiv dagskänsla morgonen efter som kan påverka torsdagens MTB."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-09-02",
-        "reason": "Passet absorberas och mesocykelns prioriterade stimuli skyddas.",
-        "recommendation": "Behåll planerad simning/alternativt kontrollerat swimrun idag; gör antingen den planerade 3 200 m‑tekniksimningen eller ett kontrollerat Jogersö‑varv utan att lägga till extra löpning. Fortsätt med ordinarie MTB på torsdag endast om dagskänslan är god.",
+        "reason": "Passet var kontrollerat och absorberbart; simningen är lågmekanisk och stöder mesocykeln.",
+        "recommendation": "Behåll dagens simpass enligt plan (3 200 m) eller ersätt med ett kontrollerat ettvarvs Swimrun utan segmentjakt; räkna ersättningen som dagens belastning inför torsdagens MTB.",
         "dose_option_id": "",
         "requires_approval": false
       },
