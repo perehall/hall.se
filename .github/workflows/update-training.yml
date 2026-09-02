@@ -226,13 +226,13 @@ jobs:
           set -u
           target="${PAGE_URL%/}/träning/malbild-2027/?verify=${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
           code=$(curl -L -sS -o /tmp/deployed-goal.html -D /tmp/deployed-headers.txt -w '%{http_code}' --max-time 30 "$target" || true)
-          has_component=false
-          has_phase2=false
+          has_hierarchy=false
+          has_mesocycle=false
           access_intercept=false
-          if grep -q 'mountain-phase-point' /tmp/deployed-goal.html 2>/dev/null; then has_component=true; fi
-          if grep -q 'href="#fas-2"' /tmp/deployed-goal.html 2>/dev/null; then has_phase2=true; fi
+          if grep -q 'data-goal-hierarchy="true"' /tmp/deployed-goal.html 2>/dev/null; then has_hierarchy=true; fi
+          if grep -q 'data-current-mesocycle="true"' /tmp/deployed-goal.html 2>/dev/null; then has_mesocycle=true; fi
           if grep -qi 'Cloudflare Access\|Sign in.*Cloudflare Access' /tmp/deployed-goal.html 2>/dev/null; then access_intercept=true; fi
-          if [ "$code" = "200" ] && [ "$has_component" = "true" ] && [ "$has_phase2" = "true" ]; then ok=true; else ok=false; fi
+          if [ "$code" = "200" ] && [ "$has_hierarchy" = "true" ] && [ "$has_mesocycle" = "true" ]; then ok=true; else ok=false; fi
           export TARGET_URL="$target" HTTP_STATUS="$code" HAS_COMPONENT="$has_component" HAS_PHASE2="$has_phase2" ACCESS_INTERCEPT="$access_intercept" VERIFY_OK="$ok"
           python - <<'PY'
           import json, os
