@@ -102,7 +102,7 @@ class PostWorkoutUiTests(unittest.TestCase):
         self.assertIn("Planen justerad", rendered)
         self.assertIn("Utvärdering", rendered)
         self.assertIn("Planpåverkan", rendered)
-        self.assertIn("Fredagens backpass blev större än ordinerat och ökar veckobelastningen.", rendered)
+        self.assertIn("<strong>Fredagens backpass blev större än ordinerat och ökar veckobelastningen</strong>", rendered)
         self.assertNotIn("<section class=\"training-brain\"><div>Dagens plan</div></section>", rendered)
         self.assertIn("50:36", rendered)
         self.assertIn("9,67 km", rendered)
