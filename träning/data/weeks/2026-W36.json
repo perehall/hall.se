@@ -116,7 +116,23 @@
           "cardiovascular",
           "mechanical"
         ],
-        "performance_marker_id": "run-threshold-control"
+        "performance_marker_id": "run-threshold-control",
+        "dose_options": [
+          {
+            "id": "run-threshold-3x8",
+            "kind": "structured",
+            "value": 24,
+            "session": "Löpning · kontrollerad tröskel · 3 × 8 min / 90 s jogg",
+            "intent": "Etablerad kontrollerad dos som redan har genomförts i aktuell utvecklingslinje."
+          },
+          {
+            "id": "run-threshold-3x10",
+            "kind": "structured",
+            "value": 30,
+            "session": "Löpning · kontrollerad tröskel · 3 × 10 min / 90 s jogg",
+            "intent": "Planerad progression genom längre arbetstid utan avsikt att höja intensiteten."
+          }
+        ]
       },
       {
         "date": "2026-09-02",
@@ -254,7 +270,23 @@
           "technical"
         ],
         "performance_marker_id": "mtb-technical-repeat",
-        "decision_note": "Grundplan: 60 min lugn teknik + aerob stig. Efter eventuell onsdags-Swimrun behålls passet bara om faktisk belastning och dagskänsla är förenliga med fredagens backkvalitet."
+        "decision_note": "Grundplan: 60 min lugn teknik + aerob stig. Efter eventuell onsdags-Swimrun behålls passet bara om faktisk belastning och dagskänsla är förenliga med fredagens backkvalitet.",
+        "dose_options": [
+          {
+            "id": "mtb-support-45",
+            "kind": "duration_minutes",
+            "value": 45,
+            "session": "MTB/XC · 45 min · teknik + lugn aerob stig",
+            "intent": "Kort stödpass när närbelastningen talar för extra marginal inför nästa prioriterade löpstimulus."
+          },
+          {
+            "id": "mtb-support-60",
+            "kind": "duration_minutes",
+            "value": 60,
+            "session": "MTB/XC · 60 min · teknik + lugn aerob stig",
+            "intent": "Normal konservativ stöddos när teknisk MTB/XC ska bibehållas utan att konkurrera med nästa prioriterade löpstimulus."
+          }
+        ]
       },
       {
         "date": "2026-09-04",
@@ -286,7 +318,23 @@
           "neuromuscular",
           "cardiovascular"
         ],
-        "performance_marker_id": "run-hill-mechanics"
+        "performance_marker_id": "run-hill-mechanics",
+        "dose_options": [
+          {
+            "id": "run-hill-6x150",
+            "kind": "structured",
+            "value": 6,
+            "session": "Löpning · backkvalitet · 15 min lugnt + 6 × 150 m / full lugn nedjogg + 10 min lugnt",
+            "intent": "Konservativ första exponering i mesocykeln när närbelastningen kräver marginal och tidigare jämförbar backdos saknas."
+          },
+          {
+            "id": "run-hill-8x150",
+            "kind": "structured",
+            "value": 8,
+            "session": "Löpning · backkvalitet · 15 min lugnt + 8 × 150 m / full lugn nedjogg + 10 min lugnt",
+            "intent": "Nästa högre startalternativ när faktisk närbelastning och subjektiv känsla ger stöd för mer volym med bibehållen mekanik."
+          }
+        ]
       },
       {
         "date": "2026-09-05",
@@ -370,6 +418,22 @@
         "load_dimensions": [
           "cardiovascular",
           "mechanical"
+        ],
+        "dose_options": [
+          {
+            "id": "run-easy-75",
+            "kind": "duration_minutes",
+            "value": 75,
+            "session": "Löpning · lugn distans · 75 min",
+            "intent": "Konservativ distansdos inom nyligen etablerad lugn löpvolym."
+          },
+          {
+            "id": "run-easy-90",
+            "kind": "duration_minutes",
+            "value": 90,
+            "session": "Löpning · lugn distans · 90 min",
+            "intent": "Etablerad längre lugn löpduration från nyligen genomförd träning när mikrocykeln är absorberad."
+          }
         ]
       }
     ],

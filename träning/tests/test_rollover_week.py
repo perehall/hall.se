@@ -231,6 +231,9 @@ class WeeklyRolloverTests(unittest.TestCase):
         self.assertNotIn("external_id", target["watch_workout"])
         self.assertTrue(target["development_focus"])
         self.assertIn("ökas inte automatiskt", target["reason"])
+        self.assertEqual(target["baseline_option_id"], "swim-support-3200")
+        self.assertEqual(target["dose_resolution"]["option_id"], "swim-support-3200")
+        self.assertIn("swim-support-3200", {option["id"] for option in target["dose_options"]})
 
 
     def test_mesocycle_end_requires_review_instead_of_inventing_next_direction(self):

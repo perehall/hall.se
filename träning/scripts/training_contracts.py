@@ -77,6 +77,59 @@ def _nonnegative_number(value, context):
     require(value >= 0, f"{context}: får inte vara negativt")
 
 
+def _validate_baseline_dose_contract(day, context):
+    baseline_id = str(day.get("baseline_option_id") or "").strip()
+    if not baseline_id:
+        return
+
+    options = day.get("dose_options")
+    require(
+        isinstance(options, list) and options,
+        f"{context}: baseline_option_id kräver en icke-tom dose_options-lista",
+    )
+    option_ids = set()
+    option_by_id = {}
+    for option_index, option in enumerate(options):
+        option_context = f"{context}.dose_options[{option_index}]"
+        require(isinstance(option, dict), f"{option_context}: måste vara objekt")
+        option_id = str(option.get("id") or "").strip()
+        _nonempty_string(option_id, f"{option_context}.id")
+        require(option_id not in option_ids, f"{context}: dubbelt dose_options-id {option_id!r}")
+        option_ids.add(option_id)
+        option_by_id[option_id] = option
+        _nonempty_string(option.get("kind"), f"{option_context}.kind")
+        value = option.get("value")
+        require(
+            isinstance(value, (int, float)) and not isinstance(value, bool) and value > 0,
+            f"{option_context}.value måste vara positivt tal",
+        )
+        _nonempty_string(option.get("session"), f"{option_context}.session")
+
+    require(
+        baseline_id in option_ids,
+        f"{context}: baseline_option_id {baseline_id!r} saknas i dose_options",
+    )
+
+    resolution = day.get("dose_resolution")
+    if resolution is not None:
+        require(isinstance(resolution, dict), f"{context}.dose_resolution måste vara objekt")
+        resolution_id = str(resolution.get("option_id") or "").strip()
+        if resolution_id:
+            require(
+                resolution_id in option_ids,
+                f"{context}: dose_resolution.option_id {resolution_id!r} saknas i dose_options",
+            )
+        if resolution.get("state") == "baseline":
+            require(
+                resolution_id == baseline_id,
+                f"{context}: baseline-resolution måste använda baseline_option_id",
+            )
+            require(
+                day.get("session") == option_by_id[baseline_id].get("session"),
+                f"{context}: baseline-session måste matcha baseline_option_id",
+            )
+
+
 def workout_distance_m(workout):
     total = 0
     for block in workout.get("blocks") or []:
@@ -154,6 +207,7 @@ def validate_plan_document(document, *, upcoming=False):
             require(day.get("planning_status") in VALID_PLANNING_STATUSES, f"{context}: ogiltig planning_status")
         if "watch_workout" in day:
             validate_watch_workout(day["watch_workout"], f"{context}.watch_workout")
+        _validate_baseline_dose_contract(day, context)
 
     if upcoming:
         require(document.get("state") == "preliminary", "upcoming plan: state måste vara 'preliminary'")

@@ -166,6 +166,37 @@ class TrainingContractTests(unittest.TestCase):
         with self.assertRaises(ContractError):
             validate_plan_document(plan)
 
+    def test_baseline_option_requires_matching_internal_options(self):
+        plan = valid_week()
+        day = plan["days"][2]
+        day["session"] = "Löpning · 60 min"
+        day["baseline_option_id"] = "run-60"
+        day["dose_options"] = [
+            {
+                "id": "run-45",
+                "kind": "duration_minutes",
+                "value": 45,
+                "session": "Löpning · 45 min",
+            },
+            {
+                "id": "run-60",
+                "kind": "duration_minutes",
+                "value": 60,
+                "session": "Löpning · 60 min",
+            },
+        ]
+        day["dose_resolution"] = {
+            "state": "baseline",
+            "kind": "duration_minutes",
+            "value": 60,
+            "option_id": "run-60",
+        }
+        self.assertTrue(validate_plan_document(plan))
+
+        del day["dose_options"]
+        with self.assertRaisesRegex(ContractError, "baseline_option_id kräver"):
+            validate_plan_document(plan)
+
     def test_structured_swim_distance_must_match(self):
         workout = {
             "sync_enabled": True,

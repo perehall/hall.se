@@ -303,6 +303,13 @@ def seed_preliminary_swims(promoted, future):
         copied["microcycle_id"] = target.get("microcycle_id")
         copied["microcycle_index"] = target.get("microcycle_index")
         copied["microcycle_slot"] = target.get("microcycle_slot")
+        if target.get("dose_options"):
+            copied["dose_options"] = deepcopy(target["dose_options"])
+            copied["baseline_option_id"] = target.get("baseline_option_id")
+            if not apply_baseline_option(copied, target.get("baseline_option_id")):
+                raise RuntimeError(
+                    f"Veckoskifte: simpass {target.get('date')} tappade baseline/dose_options vid strukturkopiering"
+                )
         future["days"][target_index] = copied
     return future
 
