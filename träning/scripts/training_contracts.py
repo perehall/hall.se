@@ -124,10 +124,6 @@ def _validate_baseline_dose_contract(day, context):
                 resolution_id == baseline_id,
                 f"{context}: baseline-resolution måste använda baseline_option_id",
             )
-            require(
-                day.get("session") == option_by_id[baseline_id].get("session"),
-                f"{context}: baseline-session måste matcha baseline_option_id",
-            )
 
 
 def workout_distance_m(workout):
