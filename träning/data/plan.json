@@ -235,8 +235,8 @@
     {
       "date": "2026-09-03",
       "label": "Torsdag",
-      "status": "preliminary",
-      "session": "MTB/XC · 60 min · teknik + lugn aerob stig",
+      "status": "conditional",
+      "session": "MTB/XC · 45 min · teknik + lugn aerob stig",
       "reason": "MTB/XC är fortsatt utvecklingsprioritet. Grundplanen är 60 minuter lugn teknisk stig. Om onsdagen blir Swimrun på Jogersö används dess faktiska belastning som kontrollpunkt och MTB-passet kortas eller tas bort endast om återhämtningen eller benkänslan ger sakliga skäl, för att skydda fredagens prioriterade löpkvalitet.",
       "development_focus": "Blick, linjeval, bromspunkter och flyt före segmentjakt.",
       "sport": "bike",
@@ -252,10 +252,13 @@
       "microcycle_slot": "mtb_support",
       "baseline_option_id": "mtb-support-60",
       "dose_resolution": {
-        "state": "baseline",
+        "state": "resolved",
         "kind": "duration_minutes",
-        "value": 60,
-        "option_id": "mtb-support-60"
+        "value": 45,
+        "source": "near_term_ai_revision",
+        "option_id": "mtb-support-45",
+        "basis": "Skydda fredagens prioriterade löpkvalitet efter tre tunga dagars belastning.",
+        "applied_at_utc": "2026-09-03T11:35:46.121873+00:00"
       },
       "load_dimensions": [
         "cardiovascular",
@@ -279,7 +282,15 @@
           "session": "MTB/XC · 60 min · teknik + lugn aerob stig",
           "intent": "Normal konservativ stöddos när teknisk MTB/XC ska bibehållas utan att konkurrera med nästa prioriterade löpstimulus."
         }
-      ]
+      ],
+      "original_session": "MTB/XC · 60 min · teknik + lugn aerob stig",
+      "dose_open": false,
+      "auto_coach": {
+        "action": "reduce",
+        "reason": "Skydda fredagens prioriterade löpkvalitet efter tre tunga dagars belastning.",
+        "applied_at_utc": "2026-09-03T11:35:46.121873+00:00"
+      },
+      "coach_adjustment": "Skala ned passet. Gör MTB/XC 45 min istället för 60 min (mtb-support-45): fokusera kort teknikrunda med låg kraftpådrag och undvik tunga stigningar eller maximal accelerationsövning."
     },
     {
       "date": "2026-09-04",

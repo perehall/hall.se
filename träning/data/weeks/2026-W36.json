@@ -4,7 +4,7 @@
   "week_start": "2026-08-31",
   "week_end": "2026-09-06",
   "created_at_utc": "2026-08-30T22:09:50.110394+00:00",
-  "updated_at_utc": "2026-09-02T18:41:52.573550+00:00",
+  "updated_at_utc": "2026-09-03T11:35:46.679236+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -242,8 +242,8 @@
       {
         "date": "2026-09-03",
         "label": "Torsdag",
-        "status": "preliminary",
-        "session": "MTB/XC · 60 min · teknik + lugn aerob stig",
+        "status": "conditional",
+        "session": "MTB/XC · 45 min · teknik + lugn aerob stig",
         "reason": "MTB/XC är fortsatt utvecklingsprioritet. Grundplanen är 60 minuter lugn teknisk stig. Om onsdagen blir Swimrun på Jogersö används dess faktiska belastning som kontrollpunkt och MTB-passet kortas eller tas bort endast om återhämtningen eller benkänslan ger sakliga skäl, för att skydda fredagens prioriterade löpkvalitet.",
         "development_focus": "Blick, linjeval, bromspunkter och flyt före segmentjakt.",
         "sport": "bike",
@@ -259,10 +259,13 @@
         "microcycle_slot": "mtb_support",
         "baseline_option_id": "mtb-support-60",
         "dose_resolution": {
-          "state": "baseline",
+          "state": "resolved",
           "kind": "duration_minutes",
-          "value": 60,
-          "option_id": "mtb-support-60"
+          "value": 45,
+          "source": "near_term_ai_revision",
+          "option_id": "mtb-support-45",
+          "basis": "Skydda fredagens prioriterade löpkvalitet efter tre tunga dagars belastning.",
+          "applied_at_utc": "2026-09-03T11:35:46.121873+00:00"
         },
         "load_dimensions": [
           "cardiovascular",
@@ -286,7 +289,15 @@
             "session": "MTB/XC · 60 min · teknik + lugn aerob stig",
             "intent": "Normal konservativ stöddos när teknisk MTB/XC ska bibehållas utan att konkurrera med nästa prioriterade löpstimulus."
           }
-        ]
+        ],
+        "original_session": "MTB/XC · 60 min · teknik + lugn aerob stig",
+        "dose_open": false,
+        "auto_coach": {
+          "action": "reduce",
+          "reason": "Skydda fredagens prioriterade löpkvalitet efter tre tunga dagars belastning.",
+          "applied_at_utc": "2026-09-03T11:35:46.121873+00:00"
+        },
+        "coach_adjustment": "Skala ned passet. Gör MTB/XC 45 min istället för 60 min (mtb-support-45): fokusera kort teknikrunda med låg kraftpådrag och undvik tunga stigningar eller maximal accelerationsövning."
       },
       {
         "date": "2026-09-04",
@@ -458,10 +469,10 @@
       "elapsed_time_s": 3265,
       "total_elevation_gain_m": 104.3,
       "average_heartrate": 135.4,
-      "max_heartrate": 158,
+      "max_heartrate": 158.0,
       "average_watts": 222.4,
       "weighted_average_watts": 418,
-      "calories": 483,
+      "calories": 483.0,
       "device_name": "Garmin Forerunner 970",
       "gear_id": null,
       "gear_name": null,
@@ -472,10 +483,10 @@
           "name": "Lap 1",
           "elapsed_time_s": 390,
           "moving_time_s": 384,
-          "distance_m": 1000,
+          "distance_m": 1000.0,
           "average_speed": 2.6,
           "average_heartrate": 127.8,
-          "max_heartrate": 143,
+          "max_heartrate": 143.0,
           "average_watts": 250.6,
           "average_cadence": 78.8
         },
@@ -487,7 +498,7 @@
           "distance_m": 923.81,
           "average_speed": 1.63,
           "average_heartrate": 130.1,
-          "max_heartrate": 143,
+          "max_heartrate": 143.0,
           "average_watts": 115.3,
           "average_cadence": 70.1
         },
@@ -496,10 +507,10 @@
           "name": "Lap 3",
           "elapsed_time_s": 405,
           "moving_time_s": 404,
-          "distance_m": 1000,
+          "distance_m": 1000.0,
           "average_speed": 2.48,
           "average_heartrate": 130.2,
-          "max_heartrate": 142,
+          "max_heartrate": 142.0,
           "average_watts": 288.2,
           "average_cadence": 75.1
         },
@@ -508,10 +519,10 @@
           "name": "Lap 4",
           "elapsed_time_s": 711,
           "moving_time_s": 646,
-          "distance_m": 1000,
+          "distance_m": 1000.0,
           "average_speed": 1.55,
-          "average_heartrate": 134,
-          "max_heartrate": 152,
+          "average_heartrate": 134.0,
+          "max_heartrate": 152.0,
           "average_watts": 111.4,
           "average_cadence": 61.9
         },
@@ -520,10 +531,10 @@
           "name": "Lap 5",
           "elapsed_time_s": 457,
           "moving_time_s": 457,
-          "distance_m": 1000,
+          "distance_m": 1000.0,
           "average_speed": 2.19,
           "average_heartrate": 131.8,
-          "max_heartrate": 148,
+          "max_heartrate": 148.0,
           "average_watts": 243.6,
           "average_cadence": 77.1
         },
@@ -532,10 +543,10 @@
           "name": "Lap 6",
           "elapsed_time_s": 297,
           "moving_time_s": 297,
-          "distance_m": 1000,
+          "distance_m": 1000.0,
           "average_speed": 3.37,
           "average_heartrate": 151.4,
-          "max_heartrate": 157,
+          "max_heartrate": 157.0,
           "average_watts": 306.5,
           "average_cadence": 82.5
         },
@@ -546,8 +557,8 @@
           "moving_time_s": 343,
           "distance_m": 961.83,
           "average_speed": 2.8,
-          "average_heartrate": 149,
-          "max_heartrate": 158,
+          "average_heartrate": 149.0,
+          "max_heartrate": 158.0,
           "average_watts": 308.7,
           "average_cadence": 84.6
         }
@@ -851,39 +862,39 @@
       "activity_id": 20008258969,
       "activity_date": "2026-09-02",
       "activity_name": "SLK Swimrun Jogersö Extreme",
-      "generated_at_utc": "2026-09-02T18:41:52.029887+00:00",
+      "generated_at_utc": "2026-09-03T11:35:46.122640+00:00",
       "model": "gpt-5-mini",
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Swimrun-alternativet genomfördes 6,89 km på 54:25; utan subjektiv ansträngning går det inte att avgöra hur kontrollerat passet faktiskt var.",
-        "load_interpretation": "Löpkomponenten ger mer viktbärande belastning än ren simning, men segmentfördelning och benkänsla saknas för att kvantifiera skillnaden.",
+        "summary": "Swimrun-passet genomfört; stabila intervallslut med stigande puls mot slutet indikerar hög neuromuskulär och teknisk ansträngning i slutet av varvet.",
+        "load_interpretation": "Onsdagens swimrun gav måttlig–hög kardiovaskulär och ökad mekanisk/neuromuskulär belastning sista 20–30 min som påverkar torsdagens MTB-beslut.",
         "confidence": "medium",
         "facts": [
           "Swimrun: 6,89 km · 54:25 · 104,3 m+ · snittpuls 135,4 · maxpuls 158.",
           "Planstatus 2026-09-02: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Passet uppfyllde dagens uttryckliga ersättningsalternativ och ska behandlas som dagens fulla pass, inte läggas ovanpå simning.",
-          "Det finns inte sakligt underlag för att skala ner torsdagens lugna MTB redan i kväll; fredagens backkvalitet är fortsatt det prioriterade stimulus som torsdagens beslut ska skydda."
+          "Swimrun ökade neuromuskulär och mekanisk belastning mot passets slut; benen var aktivt belastade i löpsekvenserna.",
+          "Kardiovaskulärt är mikrocykeln fortsatt tung men inte överdrivet; fredagens backkvalitet bör skyddas."
         ],
         "unknowns": [
-          "Subjektiv ben- eller muskelkänsla efter dagens Swimrun saknas.",
-          "Stravaunderlaget ger inte en tillförlitlig sim/löp-fördelning som kan kvantifiera den mekaniska dosen.",
-          "Torsdagens dagskänsla före MTB-passet är ännu inte känd."
+          "Subjektiv dagskänsla efter passet (ben/rygg) och lokal muskeltrötthet saknas.",
+          "Eventuella skador eller ömhet som skulle motivera vila saknas i data.",
+          "Exakt hur teknisk MTB/XC-påverkan från swimrun jämförs mot planerat MTB-teknikarbete i terräng är okänt."
         ]
       },
       "plan_action": {
-        "action": "keep",
+        "action": "reduce",
         "target_date": "2026-09-03",
-        "reason": "Torsdagens grundplan är redan lugn och det finns inget nytt sakligt underlag som motiverar nedskalning i kväll; fredagens backkvalitet skyddas genom en ny kontrollpunkt i morgon.",
-        "recommendation": "Torsdag 3 sep: behåll grundplanen MTB/XC 60 min teknik + lugn aerob stig. Korta eller ta bort passet endast om ben- eller återhämtningskänslan i morgon ger sakligt skäl; ingen segmentjakt.",
-        "dose_option_id": "",
+        "reason": "Skydda fredagens prioriterade löpkvalitet efter tre tunga dagars belastning.",
+        "recommendation": "Gör MTB/XC 45 min istället för 60 min (mtb-support-45): fokusera kort teknikrunda med låg kraftpådrag och undvik tunga stigningar eller maximal accelerationsövning.",
+        "dose_option_id": "mtb-support-45",
         "requires_approval": false
       },
       "auto_apply": {
-        "applied": false,
-        "note": "Ingen planändring; grundplanen står kvar."
+        "applied": true,
+        "note": "Konservativ ändring applicerad på 2026-09-03: reduce."
       }
     },
     {
