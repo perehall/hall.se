@@ -4,34 +4,34 @@
       "activity_id": 20008258969,
       "activity_date": "2026-09-02",
       "activity_name": "SLK Swimrun Jogersö Extreme",
-      "generated_at_utc": "2026-09-03T11:35:46.122640+00:00",
+      "generated_at_utc": "2026-09-03T16:24:58.462418+00:00",
       "model": "gpt-5-mini",
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Swimrun-passet genomfört; stabila intervallslut med stigande puls mot slutet indikerar hög neuromuskulär och teknisk ansträngning i slutet av varvet.",
-        "load_interpretation": "Onsdagens swimrun gav måttlig–hög kardiovaskulär och ökad mekanisk/neuromuskulär belastning sista 20–30 min som påverkar torsdagens MTB-beslut.",
+        "summary": "Jogget igenom ett hårt men kontrollerat Swimrun-varv (≈3,100–3,300 s) med stigande puls och höga arbetswatt i senare löpblock; passet är kompatibelt med veckans plan men adderar mekanisk belastning för benen.",
+        "load_interpretation": "Närbelastningen: kardiovaskulär volym + måttlig–mekanisk/neuromuskulär belastning från löp-/byten under Swimrun.",
         "confidence": "medium",
         "facts": [
           "Swimrun: 6,89 km · 54:25 · 104,3 m+ · snittpuls 135,4 · maxpuls 158.",
           "Planstatus 2026-09-02: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Swimrun ökade neuromuskulär och mekanisk belastning mot passets slut; benen var aktivt belastade i löpsekvenserna.",
-          "Kardiovaskulärt är mikrocykeln fortsatt tung men inte överdrivet; fredagens backkvalitet bör skyddas."
+          "Swimrun ersatte planerad simning och gav både aerob träning och mekanisk löpbelastning som ökar veckans totala benkostnad.",
+          "Belastningsmönstret tre dagar i följd (enduro, tröskel, Swimrun) talar för konservativ justering av dagens MTB för att skydda fredagens backkvalitet."
         ],
         "unknowns": [
-          "Subjektiv dagskänsla efter passet (ben/rygg) och lokal muskeltrötthet saknas.",
-          "Eventuella skador eller ömhet som skulle motivera vila saknas i data.",
-          "Exakt hur teknisk MTB/XC-påverkan från swimrun jämförs mot planerat MTB-teknikarbete i terräng är okänt."
+          "Subjektiv dagskänsla efter passet (benkänsla) saknas och kan ändra beslut.",
+          "Exakt andel sim vs löp i varje lap (hur mycket mekanisk belastning per del) saknas som kan finjustera skalning.",
+          "Eventuella lokala muskelömheter eller småskador rapporterade av användaren saknas."
         ]
       },
       "plan_action": {
         "action": "reduce",
         "target_date": "2026-09-03",
-        "reason": "Skydda fredagens prioriterade löpkvalitet efter tre tunga dagars belastning.",
-        "recommendation": "Gör MTB/XC 45 min istället för 60 min (mtb-support-45): fokusera kort teknikrunda med låg kraftpådrag och undvik tunga stigningar eller maximal accelerationsövning.",
-        "dose_option_id": "mtb-support-45",
+        "reason": "Skydda fredagens prioriterade backkvalitet efter tre dagars ackumulerad belastning.",
+        "recommendation": "Gör dagens MTB/XC som ordinerat men i förkortad dos: mtb-support-45 (45 min). Håll det tekniskt fokus, låg kraft, undvik tunga stigningar och maximal accelerationsträning.",
+        "dose_option_id": "",
         "requires_approval": false
       },
       "auto_apply": {
@@ -640,7 +640,7 @@
       }
     }
   ],
-  "last_trigger_hash": "1d6eb22bef0a7e66ff8d50e4500bfbd066afe5befcc53dad0b2981b7117c6f3f",
-  "last_run_utc": "2026-09-03T11:35:46.122640+00:00",
+  "last_trigger_hash": "3278d427e4f72e5c09f6dbfbdf981e42f238fbb8d847e503446b9cf3edfde9e3",
+  "last_run_utc": "2026-09-03T16:24:58.462418+00:00",
   "contract_version": 15
 }
