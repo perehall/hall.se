@@ -4,7 +4,7 @@
   "week_start": "2026-08-31",
   "week_end": "2026-09-06",
   "created_at_utc": "2026-08-30T22:09:50.110394+00:00",
-  "updated_at_utc": "2026-09-03T18:54:25.554181+00:00",
+  "updated_at_utc": "2026-09-03T19:27:08.695225+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -975,39 +975,39 @@
       "activity_id": 20024236347,
       "activity_date": "2026-09-03",
       "activity_name": "Mountainbiketur på kvällen",
-      "generated_at_utc": "2026-09-03T18:54:24.717401+00:00",
+      "generated_at_utc": "2026-09-03T19:27:08.163310+00:00",
       "model": "gpt-5-mini",
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Lugn teknisk MTB-långtur genomförd; låg snittpuls men lång varaktighet och varierande effekt per varv tyder på tekniskt fokus framför maximal kraft.",
-        "load_interpretation": "Tre dagars hög totalbelastning (Enduro, tröskel, Swimrun) ger ackumulerad kardiovaskulär och mekanisk kostnad som påverkar fredagens backkvalitet.",
+        "summary": "45-minuters MTB blev ett långt tekniskt turpass med låg till måttlig puls och spridning i effekt över laps; inga tydliga intensiva block.",
+        "load_interpretation": "Dagarnas belastning visar tre tunga dagar före fredag (enduro, tröskel, swimrun) och dagens MTB ökar teknisk + kardiovaskulär belastning men utan skarpa neuromuskulära toppar.",
         "confidence": "medium",
         "facts": [
           "MountainBikeRide: 31,47 km · 2:11:23 · 318 m+ · snittpuls 114 · maxpuls 139.",
           "Planstatus 2026-09-03: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Torsdagens faktiska MTB-aktivitet är betydligt längre än ordinerad 45 min men pulsnivån och varvtalsvariation visar tekniskt, inte maximal kraftfokus.",
-          "Givet tre tunga dagar i följd finns risk att fredagens löpbackar blir lidande om full dos genomförs."
+          "MTB-passet var huvudsakligen tekniskt/aerobt med sjunkande effekt mot mitten — ingen akut överbelastning eller hög-intensiv spurtexponering identifierad",
+          "Givet tre tidigare tunga dagar är dagens kortare tekniska MTB ett lämpligt konservativt stödpass som inte bör äventyra fredagens backkvalitet"
         ],
         "unknowns": [
-          "Subjektiv ben- och lokal trötthet efter kvällens långa MTB (användarrapport saknas).",
-          "Exakt hur mycket torsdagens långa MTB bidrar mekaniskt jämfört med planerad 45 min teknisk dos.",
-          "Eventuell tidsbegränsning eller preferens för att ändå genomföra backpass i morgon."
+          "Subjektiv benkänsla efter passet (lokal trötthet)",
+          "Detaljerad inom-pass ansträngningskvalitet på tekniska sektioner utöver lap-snitt",
+          "Eventuella skador eller lokala ömheter rapporterade efter turen"
         ]
       },
       "plan_action": {
-        "action": "reduce",
+        "action": "keep",
         "target_date": "2026-09-04",
-        "reason": "Skydda fredagens prioriterade backkvalitet efter tre dagars ackumulerad belastning.",
-        "recommendation": "Gör fredagens backpass som reducerad dos: behåll teknisk fokus och välj baseline run-hill-6x150 endast om du känner dig fräsch i benen; annars minska till 4–5 ×150 m eller skjuta till review vid upplevd trötthet.",
+        "reason": "Dagens genomförande matchar den redan beslutade reducerade dosen för att skydda fredagens prioritet.",
+        "recommendation": "Behåll fredagspasset som planerat (run-hill-6x150) om benen känns normala; gör inga ytterligare MTB- eller styrkeexponeringar före fredag. Om du känner ovanlig lokal trötthet eller stelhet: vila fredag eller minska till 4–5×150 m och markera för review.",
         "dose_option_id": "",
         "requires_approval": false
       },
       "auto_apply": {
-        "applied": true,
-        "note": "Konservativ ändring applicerad på 2026-09-04: reduce."
+        "applied": false,
+        "note": "Ingen automatisk planändring."
       }
     },
     {
