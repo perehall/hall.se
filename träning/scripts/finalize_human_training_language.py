@@ -103,7 +103,7 @@ def humanize_post_workout_details(page, reported_structure=None):
         r'(<div><span class="today-outcome-label">Genomfört</span><strong>)(.*?)(</strong></div>)',
         re.S,
     )
-    replacement = r"\1" + html.escape(reported_structure) + r"\3"
+    replacement = r"\g<1>" + html.escape(reported_structure) + r"\g<3>"
     return pattern.sub(replacement, page, count=1)
 
 
