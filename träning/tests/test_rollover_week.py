@@ -191,7 +191,7 @@ class WeeklyRolloverTests(unittest.TestCase):
             1: ("run-threshold-3x8", "3 × 8 min"),
             2: ("swim-support-3200", "3 200 m"),
             3: ("mtb-support-60", "60 min"),
-            4: ("run-hill-2x7x150", "2 × 7 × 150 m"),
+            4: ("run-hill-3x6x150", "3 × 6 × 150 m"),
             5: ("strength-support-35", "35 min"),
             6: ("run-easy-75", "75 min"),
         }
@@ -234,7 +234,6 @@ class WeeklyRolloverTests(unittest.TestCase):
         self.assertEqual(target["baseline_option_id"], "swim-support-3200")
         self.assertEqual(target["dose_resolution"]["option_id"], "swim-support-3200")
         self.assertIn("swim-support-3200", {option["id"] for option in target["dose_options"]})
-
 
     def test_mesocycle_end_requires_review_instead_of_inventing_next_direction(self):
         promoted = {
