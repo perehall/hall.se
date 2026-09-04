@@ -4,7 +4,7 @@
   "week_start": "2026-08-31",
   "week_end": "2026-09-06",
   "created_at_utc": "2026-08-30T22:09:50.110394+00:00",
-  "updated_at_utc": "2026-09-04T20:45:09.076707+00:00",
+  "updated_at_utc": "2026-09-04T21:44:33.940318+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -1608,13 +1608,13 @@
       "activity_id": 20036445971,
       "activity_date": "2026-09-04",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-09-04T20:45:08.453195+00:00",
+      "generated_at_utc": "2026-09-04T21:44:33.381363+00:00",
       "model": "gpt-5-mini",
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört: 3 × 6 backintervaller (18 totalt). Tekniken och pulsmönstret visar kontrollerad kraftexponering utan tydlig försämring mot slutet",
-        "load_interpretation": "Tre tunga dagar (enduro, MTB, swimrun) skapar ökad mekanisk och kardiovaskulär närbelastning inför helgens pass.",
+        "summary": "Genomfört: 3 × 6 backintervaller (18 totalt). Kroppen höll kontroll över hela passet",
+        "load_interpretation": "De senaste tre dagarna visar hög mekanisk/neuromuskulär och måttlig kardiovaskulär ackumulering inför helgens sim+styrka och söndagens distans.",
         "confidence": "medium",
         "facts": [
           "Löpning · backintervaller: 12,68 km · 1:06:28 · 243 m+ · snittpuls 142,4 · maxpuls 167.",
@@ -1622,20 +1622,20 @@
           "Planstatus 2026-09-04: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Passet uppfyller dagens ordinerade reducerade dos (2×6×150) och visar bibehållen mekanisk kontroll.",
-          "Givet multi-dagarsbelastningen är fortsatt konservatism mot lördagens kombinerade sim+styrka motiverad."
+          "Användarrapporterad 3×6 legitimerar att mesocykelns baseline uppdateras till minst 3×6 (volymgolv).",
+          "Återhämtningsunderlaget och närbelastningen stödjer tillfällig progression nästa mikrocykel enligt mesocykelkontrakt, inte en omedelbar ytterligare ökning denna vecka."
         ],
         "unknowns": [
-          "Subjektiv trötthet/benkänsla efter passet (användarrapport).",
-          "Exakt intensitet på varje backrepetition jämfört med plan (performance_context saknas).",
-          "Eventuella akuta lokalömheter eller skador efter kvällens pass."
+          "Subjektiv dagskänsla efter passet (ömhet, lokal trötthet) som kan påverka lördagens styrkedos eller söndagens distans.",
+          "Detaljerad inom-pass mekanikbedömning från performance_marker för att bekräfta att ökad volym kan bibehållas utan teknikförlust.",
+          "Om användaren vill prioritera återställning framför planerad progression denna mikrocykel."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-09-05",
-        "reason": "Backpasset genomfördes som 3 × 6 backintervaller (18 totalt), alltså över den planerade omfattningen före passet (12 arbetsintervaller).",
-        "recommendation": "Behåll lördagens reducerade plan: Sim 3 200 m aerob/teknik + styrka/core 25 min; undvik plyometri och håll simningen kontrollerad.",
+        "reason": "Backpasset genomfördes som 3 × 6 backintervaller (18 totalt), alltså över den planerade omfattningen före passet (12 arbetsintervaller). Mesocykelns utvecklingslinje bevaras.",
+        "recommendation": "Behåll lördagens plan men genomför styrkedelen i reducerad dos som redan planerat (styrka 25 min) och håll simningen aerob/teknisk; undvik plyometri.",
         "dose_option_id": "",
         "requires_approval": false
       },
