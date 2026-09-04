@@ -180,7 +180,7 @@ class WeeklyRolloverTests(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             rollover_documents(plan_w34(), upcoming, date(2026, 8, 24), STRATEGY)
 
-    def test_future_week_has_concrete_baselines_without_automatic_progression(self):
+    def test_future_week_has_concrete_baselines_with_mesocycle_progression(self):
         promoted, _ = rollover_documents(plan_w34(), upcoming_w35(), date(2026, 8, 24), STRATEGY)
         future = build_open_next_week(promoted, STRATEGY)
         enduro = future["days"][0]
@@ -191,7 +191,7 @@ class WeeklyRolloverTests(unittest.TestCase):
             1: ("run-threshold-3x8", "3 × 8 min"),
             2: ("swim-support-3200", "3 200 m"),
             3: ("mtb-support-60", "60 min"),
-            4: ("run-hill-6x150", "6 × 150 m"),
+            4: ("run-hill-2x7x150", "2 × 7 × 150 m"),
             5: ("strength-support-35", "35 min"),
             6: ("run-easy-75", "75 min"),
         }

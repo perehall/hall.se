@@ -141,7 +141,10 @@
     "concrete_near_term_plan_by_default": true,
     "adjust_planned_session_only_when_new_evidence_justifies": true,
     "normal_variation_is_absorbed_by_plan": true,
-    "multi_day_context_required": true
+    "multi_day_context_required": true,
+    "development_goal_requires_progression": true,
+    "development_hold_or_regression_requires_reason": true,
+    "maintenance_repeat_is_separate_mode": true
   },
   "planning_hierarchy": {
     "order": [
@@ -194,7 +197,11 @@
       "progression_requires_explicit_criteria": true,
       "change_one_load_variable_at_a_time": true,
       "wellness_cannot_trigger_progression": true,
-      "normal_variation_does_not_trigger_change": true
+      "normal_variation_does_not_trigger_change": true,
+      "development_key_sessions_must_progress_or_justify_hold": true,
+      "regression_below_demonstrated_floor_requires_reason": true,
+      "maintenance_sessions_may_repeat_without_progression": true,
+      "max_consecutive_development_repeats_without_reason": 1
     },
     "success_signals": [
       "Kontrollerad kvalitet kan genomföras med stabil känsla och teknik över blocket.",
@@ -205,7 +212,7 @@
     ],
     "guardrails": [
       "Ingen extra kvalitet läggs till ovanpå tröskel + backkvalitet.",
-      "Backpassets konkreta grundplan får ändras först när faktisk belastning eller återhämtning ger skäl; ingen automatisk progression.",
+      "Utvecklingspass får inte fastna på en historisk baseline. Planerad progression hör till mesocykeln; samma dos får hållas eller en lägre dos användas endast med explicit skäl. Reaktiv wellness får aldrig ensam öka belastningen.",
       "Enduro räknas som faktisk belastning men får ingen schablonmässig belastningsnivå.",
       "En ledig dag är inte i sig skäl att lägga till träning.",
       "Privat återhämtningsdata används endast som konservativ beslutskontext och får aldrig ensam motivera ökad träningsbelastning.",
@@ -265,7 +272,33 @@
           "Återhämtningskostnaden får inte återkommande tränga undan nästa prioriterade stimulus.",
           "Omgivande mikrocykel ska vara absorberad utan tydlig ackumulerad belastningssignal.",
           "Progressionen ska öka arbetstid, inte samtidigt höja avsedd intensitet."
-        ]
+        ],
+        "development_progression": {
+          "mode": "develop",
+          "demonstrated_floor_option_id": "run-threshold-3x8",
+          "same_dose_repeat_requires_reason": true,
+          "source": "absorbed_training_history",
+          "microcycle_plan": [
+            {
+              "microcycle": 2,
+              "option_id": "run-threshold-3x8",
+              "relation": "hold",
+              "reason": "Kriterierna kräver mer än en jämförbar 3 × 8-exponering innan arbetstiden ökas."
+            },
+            {
+              "microcycle": 3,
+              "option_id": "run-threshold-3x10",
+              "relation": "progress",
+              "reason": "Planerad utveckling från etablerade 24 till 30 min kontrollerat tröskelarbete; intensiteten hålls oförändrat kontrollerad."
+            },
+            {
+              "microcycle": 4,
+              "option_id": "run-threshold-3x10",
+              "relation": "hold",
+              "reason": "Konsolidera den högre arbetstiden och skapa jämförbar data inför mesocykelutvärderingen."
+            }
+          ]
+        }
       },
       {
         "slot": "swim_support",
@@ -346,9 +379,9 @@
         "stimuli": [
           "run_hill_quality"
         ],
-        "session": "Löpning · backkvalitet · 15 min lugnt + 6 × 150 m / full lugn nedjogg + 10 min lugnt",
-        "reason": "Mesocykelns andra prioriterade löpkvalitet: kraft, löpekonomi och mekanisk kvalitet. Den konservativa grundplanen är 6 × 150 m; progression eller reduktion kräver stöd i faktisk belastning och kvalitet.",
-        "development_focus": "Kraftfull men kontrollerad löpning med bibehållen mekanik; ingen maximal sprint eller syrajakt.",
+        "session": "Löpning · backkvalitet · 15 min lugnt + 2 × 7 × 150 m / lugn joggvila + 10 min lugnt",
+        "reason": "Mesocykelns andra prioriterade löpkvalitet: kraft, löpekonomi och mekanisk kvalitet. Tidigare 2 × 6 × 150 m är demonstrerat utan problem, därför är 2 × 7 nästa utvecklingsbaseline. Regression kräver ett explicit närbelastningsskäl.",
+        "development_focus": "Kraftfull men kontrollerad löpning med bibehållen mekanik. Utveckla arbetsmängden stegvis; ingen maximal sprint eller syrajakt.",
         "day_index": 5,
         "dose_options": [
           {
@@ -356,30 +389,70 @@
             "kind": "structured",
             "value": 6,
             "session": "Löpning · backkvalitet · 15 min lugnt + 6 × 150 m / full lugn nedjogg + 10 min lugnt",
-            "intent": "Konservativ första exponering i mesocykeln när närbelastningen kräver marginal och tidigare jämförbar backdos saknas."
+            "intent": "Tydligt reducerad reservdos. Får bara användas som tillfällig regression när faktisk närbelastning eller återhämtning motiverar det; aldrig som normal utvecklingsbaseline."
           },
           {
-            "id": "run-hill-8x150",
+            "id": "run-hill-2x6x150",
             "kind": "structured",
-            "value": 8,
-            "session": "Löpning · backkvalitet · 15 min lugnt + 8 × 150 m / full lugn nedjogg + 10 min lugnt",
-            "intent": "Nästa högre startalternativ när faktisk närbelastning och subjektiv känsla ger stöd för mer volym med bibehållen mekanik."
+            "value": 12,
+            "session": "Löpning · backkvalitet · 15 min lugnt + 2 × 6 × 150 m / lugn joggvila + 10 min lugnt",
+            "intent": "Demonstrerat kapacitetsgolv: 2 × 6 × 150 m har genomförts utan problem. I utvecklingsläge är detta golv, inte nästa utvecklingsmål."
+          },
+          {
+            "id": "run-hill-2x7x150",
+            "kind": "structured",
+            "value": 14,
+            "session": "Löpning · backkvalitet · 15 min lugnt + 2 × 7 × 150 m / lugn joggvila + 10 min lugnt",
+            "intent": "Nästa konservativa utvecklingssteg från demonstrerade 2 × 6: endast repetitionsvolymen ökas, inte avsedd intensitet."
+          },
+          {
+            "id": "run-hill-2x8x150",
+            "kind": "structured",
+            "value": 16,
+            "session": "Löpning · backkvalitet · 15 min lugnt + 2 × 8 × 150 m / lugn joggvila + 10 min lugnt",
+            "intent": "Följande progressionssteg när 2 × 7 är absorberat med bibehållen mekanik och utan oproportionerlig återhämtningskostnad."
           }
         ],
-        "baseline_option_id": "run-hill-6x150",
+        "baseline_option_id": "run-hill-2x7x150",
         "load_dimensions": [
           "mechanical",
           "neuromuscular",
           "cardiovascular"
         ],
         "performance_marker_id": "run-hill-mechanics",
-        "progression_target_option_id": "run-hill-8x150",
+        "progression_target_option_id": "run-hill-2x8x150",
         "progression_criteria": [
-          "Flera jämförbara repetitioner ska kunna genomföras med bibehållen kraft och mekanik.",
-          "Sista repetitionerna ska inte kräva tydlig syrajakt eller teknikförlust för att matcha de första.",
+          "Demonstrerade 2 × 6 × 150 m är kapacitetsgolv och får inte åter bli normal utvecklingsbaseline.",
+          "2 × 7 ska kunna genomföras med bibehållen kraft och mekanik utan tydlig syrajakt eller teknikförlust i slutet.",
           "Fredagens mekaniska belastning ska kunna absorberas utan att söndagens lugna distans återkommande måste offras.",
-          "Progression från 6 till 8 repetitioner får endast ändra volymen; avsedd intensitet ska inte samtidigt höjas."
-        ]
+          "Progression från 2 × 7 till 2 × 8 ändrar endast repetitionsvolymen; avsedd intensitet ska inte samtidigt höjas."
+        ],
+        "development_progression": {
+          "mode": "develop",
+          "demonstrated_floor_option_id": "run-hill-2x6x150",
+          "same_dose_repeat_requires_reason": true,
+          "source": "user_report_2026-09-04",
+          "microcycle_plan": [
+            {
+              "microcycle": 2,
+              "option_id": "run-hill-2x7x150",
+              "relation": "progress",
+              "reason": "2 × 6 × 150 m är redan genomfört utan problem; nästa normala utvecklingsdos ökar endast repetitionsvolymen."
+            },
+            {
+              "microcycle": 3,
+              "option_id": "run-hill-2x8x150",
+              "relation": "progress",
+              "reason": "Fortsatt planerad volymprogression när mikrocykel 2 absorberats; kortsiktig regression är fortfarande tillåten med explicit skäl."
+            },
+            {
+              "microcycle": 4,
+              "option_id": "run-hill-2x8x150",
+              "relation": "hold",
+              "reason": "Konsolidera den högre dosen inför mesocykelutvärdering i stället för att öka två belastningsvariabler samtidigt."
+            }
+          ]
+        }
       },
       {
         "slot": "strength_support",

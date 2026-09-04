@@ -44,6 +44,18 @@ Planeringshierarkin är: **långsiktig målbild → mesocykel → mikrocykel →
 - Bevara träningsidén över mesocykeln och organisera den adaptivt via mikrocykeln. Undvik onödig variation eller metodbyte efter enstaka normala utfall.
 - Vid målkonflikt ska prioriterad utveckling och absorberbar belastning väga tyngre än att maximera mängden genomförda aktiviteter.
 
+
+## Utvecklingsläge: progression är ett kontrakt
+
+Ett pass med utvecklingsroll får inte behandlas som ett återkommande underhållspass.
+
+- `development_progression` anger demonstrerat kapacitetsgolv och den planerade utvecklingslinjen för ett nyckelpass. En planerad högre baseline i en senare mikrocykel är avsiktlig mesocykelprogression och ska inte feltolkas som förbjuden reaktiv "automatisk belastningsökning".
+- När `mode` är `develop` ska nyckelpass normalt flytta minst en relevant belastningsvariabel över blocket. Samma dos får upprepas endast när `development_step.relation` är `hold` och en konkret orsak finns, till exempel bekräftelse/konsolidering, återhämtningsvecka, taper eller återgång.
+- `demonstrated_floor_option_id` är senast demonstrerade absorberade kapacitetsgolv. En normal utvecklingsbaseline får inte ligga under golvet. Tillfällig regression under eller till golvet kräver ett explicit skäl i faktisk närbelastning/återhämtning och får inte skrivas tillbaka som ny normalbaseline.
+- Underhåll och aktivering är legitima roller, men de får inte etiketteras som mesocykelns utvecklande kvalitet bara för att de innehåller fart eller struktur.
+- `same_dose_repeat_requires_reason` betyder att upprepning utan utveckling är ett aktivt beslut som ska kunna motiveras. Om ingen sådan motivering finns ska passet fortsätta sin definierade progressionslinje.
+- Kortsiktig belastningsstyrning får fortfarande reducera, flytta eller ta bort ett planerat utvecklingspass. Skillnaden är att den långsiktiga utvecklingslinjen bevaras och återtas när den åter är absorberbar.
+
 ## Fler-dagars belastningsmodell
 
 Underlaget innehåller `rolling_load_context` med faktisk träning bakåt och planerad träning framåt enligt strategins fönster. Det är primärt beslutsunderlag för närbelastning.

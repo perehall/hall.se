@@ -133,6 +133,7 @@ def validate_training_strategy(document):
     capabilities = document.get("capability_portfolio")
     require(isinstance(capabilities, list) and capabilities, "strategi.capability_portfolio saknas")
     capability_keys = set()
+    capability_modes = {}
     for index, item in enumerate(capabilities):
         context = f"strategi.capability_portfolio[{index}]"
         require(isinstance(item, dict), f"{context}: måste vara objekt")
@@ -142,6 +143,7 @@ def validate_training_strategy(document):
         capability_keys.add(key)
         nonempty_string(item.get("label"), f"{context}.label")
         require(item.get("mode") in VALID_PRIORITY_MODES, f"{context}: ogiltigt mode")
+        capability_modes[key] = item.get("mode")
         priority = item.get("priority")
         require(isinstance(priority, int) and priority > 0, f"{context}.priority måste vara positivt heltal")
 
@@ -279,6 +281,41 @@ def validate_training_strategy(document):
                 require(progression_target in option_ids, f"{context}.progression_target_option_id måste referera till ett dose_options-id")
                 require(progression_target != baseline_option_id, f"{context}.progression_target_option_id får inte vara baseline")
 
+        is_development_anchor = (
+            item.get("priority_role") == "anchor"
+            and any(capability_modes.get(key) == "develop" for key in stimuli)
+        )
+        if is_development_anchor:
+            require(dose_options is not None, f"{context}: utvecklande nyckelpass måste ha dose_options")
+            development = item.get("development_progression")
+            require(isinstance(development, dict), f"{context}.development_progression saknas")
+            require(development.get("mode") == "develop", f"{context}.development_progression.mode måste vara develop")
+            floor_id = development.get("demonstrated_floor_option_id")
+            nonempty_string(floor_id, f"{context}.development_progression.demonstrated_floor_option_id")
+            require(floor_id in option_ids, f"{context}: demonstrerat golv måste referera till ett dose_options-id")
+            require(development.get("same_dose_repeat_requires_reason") is True, f"{context}: upprepad utvecklingsdos måste kräva skäl")
+            plan_steps = development.get("microcycle_plan")
+            require(isinstance(plan_steps, list) and plan_steps, f"{context}.development_progression.microcycle_plan saknas")
+            seen_microcycles = set()
+            for step_index, step in enumerate(plan_steps):
+                step_context = f"{context}.development_progression.microcycle_plan[{step_index}]"
+                require(isinstance(step, dict), f"{step_context}: måste vara objekt")
+                microcycle = step.get("microcycle")
+                require(isinstance(microcycle, int) and microcycle > 0, f"{step_context}.microcycle måste vara positivt heltal")
+                require(microcycle not in seen_microcycles, f"{step_context}: dubblerad microcycle {microcycle}")
+                seen_microcycles.add(microcycle)
+                option_id = step.get("option_id")
+                nonempty_string(option_id, f"{step_context}.option_id")
+                require(option_id in option_ids, f"{step_context}.option_id måste referera till dose_options")
+                require(step.get("relation") in {"progress", "hold", "establish"}, f"{step_context}.relation ogiltig")
+                nonempty_string(step.get("reason"), f"{step_context}.reason")
+            baseline_value = next(option["value"] for option in dose_options if option["id"] == baseline_option_id)
+            floor_value = next(option["value"] for option in dose_options if option["id"] == floor_id)
+            require(baseline_value >= floor_value, f"{context}: normal utvecklingsbaseline får inte ligga under demonstrerat kapacitetsgolv")
+            require(progression_target is not None, f"{context}: utvecklande nyckelpass måste ha progression_target_option_id")
+            target_value = next(option["value"] for option in dose_options if option["id"] == progression_target)
+            require(target_value > baseline_value, f"{context}: progression_target måste vara större än baseline i vald belastningsvariabel")
+
     missing_protected = [key for key in protected if key not in template_stimuli]
     require(
         not missing_protected,
@@ -304,6 +341,9 @@ def validate_training_strategy(document):
         "change_one_load_variable_at_a_time",
         "wellness_cannot_trigger_progression",
         "normal_variation_does_not_trigger_change",
+        "development_key_sessions_must_progress_or_justify_hold",
+        "regression_below_demonstrated_floor_requires_reason",
+        "maintenance_sessions_may_repeat_without_progression",
     ):
         require(isinstance(progression.get(field), bool), f"strategi.current_mesocycle.progression_policy.{field} måste vara bool")
     require(progression.get("automatic_load_increase") is False, "strategi: automatisk belastningsökning får inte vara aktiverad")
@@ -324,6 +364,11 @@ def validate_training_strategy(document):
     require(progression.get("change_one_load_variable_at_a_time") is True, "strategi: progression ska ändra en belastningsvariabel i taget")
     require(progression.get("wellness_cannot_trigger_progression") is True, "strategi: wellness får inte utlösa progression")
     require(progression.get("normal_variation_does_not_trigger_change") is True, "strategi: normal variation får inte utlösa planändring")
+    require(progression.get("development_key_sessions_must_progress_or_justify_hold") is True, "strategi: utvecklande nyckelpass måste progrediera eller ha explicit hold-skäl")
+    require(progression.get("regression_below_demonstrated_floor_requires_reason") is True, "strategi: regression under demonstrerat golv måste kräva explicit skäl")
+    require(progression.get("maintenance_sessions_may_repeat_without_progression") is True, "strategi: underhåll får upprepas utan utvecklingskrav")
+    repeat_limit = progression.get("max_consecutive_development_repeats_without_reason")
+    require(isinstance(repeat_limit, int) and repeat_limit == 1, "strategi: max omotiverade upprepningar av utvecklingsdos måste vara 1")
 
     for field in ("success_signals", "guardrails", "review_questions"):
         values = mesocycle.get(field)
@@ -363,6 +408,9 @@ def validate_training_strategy(document):
         "adjust_planned_session_only_when_new_evidence_justifies",
         "normal_variation_is_absorbed_by_plan",
         "multi_day_context_required",
+        "development_goal_requires_progression",
+        "development_hold_or_regression_requires_reason",
+        "maintenance_repeat_is_separate_mode",
     ):
         require(isinstance(policy.get(field), bool), f"strategi.decision_policy.{field} måste vara bool")
     require(policy.get("defer_open_dose_until_near_load_known") is False, "strategi: konkret grundplan får inte skjutas upp bara för att föregående pass saknar utfall")
@@ -373,6 +421,9 @@ def validate_training_strategy(document):
     )
     require(policy.get("normal_variation_is_absorbed_by_plan") is True, "strategi: normal passvariation ska absorberas av planen")
     require(policy.get("multi_day_context_required") is True, "strategi: planändring måste använda fler-dagars kontext")
+    require(policy.get("development_goal_requires_progression") is True, "strategi: utvecklingsmål måste kräva progression")
+    require(policy.get("development_hold_or_regression_requires_reason") is True, "strategi: hold/regression i utvecklingsläge måste kräva skäl")
+    require(policy.get("maintenance_repeat_is_separate_mode") is True, "strategi: underhåll ska vara en separat roll från utveckling")
     require(policy.get("long_term_goal_is_primary") is True, "strategi: långsiktig målbild måste vara överordnad")
     require(
         policy.get("near_term_changes_must_serve_long_term_direction") is True,
