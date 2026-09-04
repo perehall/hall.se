@@ -311,6 +311,22 @@ def validate_training_strategy(document):
                 nonempty_string(step.get("reason"), f"{step_context}.reason")
             baseline_value = next(option["value"] for option in dose_options if option["id"] == baseline_option_id)
             floor_value = next(option["value"] for option in dose_options if option["id"] == floor_id)
+            option_values = {option["id"]: option["value"] for option in dose_options}
+            previous_value = floor_value
+            for sequence_index, step in enumerate(sorted(plan_steps, key=lambda value: value["microcycle"])):
+                step_context = f"{context}.development_progression.microcycle_plan[{sequence_index}]"
+                step_value = option_values[step["option_id"]]
+                relation = step["relation"]
+                require(step_value >= floor_value, f"{step_context}: planerad utvecklingsdos får inte ligga under demonstrerat golv")
+                if relation == "establish":
+                    require(sequence_index == 0, f"{step_context}: establish får bara vara första utvecklingssteget")
+                elif step_value > previous_value:
+                    require(relation == "progress", f"{step_context}: högre dos måste markeras som progress")
+                elif step_value == previous_value:
+                    require(relation == "hold", f"{step_context}: samma utvecklingsdos måste markeras som hold och ha explicit skäl")
+                else:
+                    require(False, f"{step_context}: planerad regression hör inte hemma i normal utvecklingslinje")
+                previous_value = step_value
             require(baseline_value >= floor_value, f"{context}: normal utvecklingsbaseline får inte ligga under demonstrerat kapacitetsgolv")
             require(progression_target is not None, f"{context}: utvecklande nyckelpass måste ha progression_target_option_id")
             target_value = next(option["value"] for option in dose_options if option["id"] == progression_target)

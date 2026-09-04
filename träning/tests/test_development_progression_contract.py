@@ -36,6 +36,21 @@ class DevelopmentProgressionContractTests(unittest.TestCase):
         with self.assertRaises(StrategyContractError):
             validate_training_strategy(broken)
 
+    def test_same_dose_cannot_be_disguised_as_progress(self):
+        broken = deepcopy(self.strategy)
+        hill = next(item for item in broken["current_mesocycle"]["microcycle_template"] if item["slot"] == "run_hill_quality")
+        hill["development_progression"]["microcycle_plan"][1]["option_id"] = "run-hill-2x7x150"
+        hill["development_progression"]["microcycle_plan"][1]["relation"] = "progress"
+        with self.assertRaises(StrategyContractError):
+            validate_training_strategy(broken)
+
+    def test_existing_today_reduction_preserves_development_baseline(self):
+        today = next(day for day in self.plan["days"] if day.get("date") == "2026-09-04")
+        self.assertEqual(today["baseline_option_id"], "run-hill-2x7x150")
+        self.assertEqual(today["dose_resolution"]["option_id"], "run-hill-2x6x150")
+        self.assertIn("2 × 6 × 150 m", today["session"])
+        self.assertIn("2 × 7 × 150 m", today["original_session"])
+
     def test_next_microcycle_advances_development_anchors(self):
         future = build_mesocycle_next_week(self.plan, self.strategy)
         threshold = next(day for day in future["days"] if day.get("microcycle_slot") == "run_threshold")

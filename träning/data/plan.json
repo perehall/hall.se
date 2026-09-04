@@ -85,7 +85,7 @@
       "label": "Tisdag",
       "status": "preliminary",
       "session": "Löpning · kontrollerad tröskel · 3 × 8 min / 90 s jogg",
-      "reason": "Mesocykelns första prioriterade löpstimulus. Grundplanen är den etablerade kontrollerade tröskeldosen; den ändras bara om faktisk närbelastning eller återhämtning ger sakliga skäl.",
+      "reason": "Mesocykelns första prioriterade löpstimulus. Aktuell mikrocykel väljer etablering, hold eller progression från den definierade utvecklingslinjen; kortsiktig ändring kräver sakligt stöd i faktisk närbelastning eller återhämtning.",
       "development_focus": "Jämn, kontrollerad kvalitet utan fartjakt; progression ska komma genom absorberbar träning.",
       "sport": "run",
       "priority_role": "anchor",
@@ -329,15 +329,15 @@
       "date": "2026-09-04",
       "label": "Fredag",
       "status": "conditional",
-      "session": "Löpning · backkvalitet · 15 min lugnt + 2 × 7 × 150 m / lugn joggvila + 10 min lugnt",
-      "reason": "Mesocykelns andra prioriterade löpkvalitet: kraft, löpekonomi och mekanisk kvalitet. Tidigare 2 × 6 × 150 m är demonstrerat utan problem, därför är 2 × 7 nästa utvecklingsbaseline. Regression kräver ett explicit närbelastningsskäl.",
+      "session": "Löpning · backkvalitet · 15 min lugnt + 2 × 6 × 150 m / lugn joggvila + 10 min lugnt",
+      "reason": "Mesocykelns andra prioriterade löpkvalitet: kraft, löpekonomi och mekanisk kvalitet. 2 × 6 × 150 m är demonstrerat kapacitetsgolv; aktuell mikrocykel väljer nästa utvecklingssteg. Regression kräver ett explicit närbelastningsskäl.",
       "development_focus": "Kraftfull men kontrollerad löpning med bibehållen mekanik. Utveckla arbetsmängden stegvis; ingen maximal sprint eller syrajakt.",
       "sport": "run",
       "priority_role": "anchor",
       "stimuli": [
         "run_hill_quality"
       ],
-      "decision_note": "Grundplan: 6 × 150 m med full lugn nedjogg. Ändra endast om torsdagens faktiska belastning eller återhämtning ger sakliga skäl.",
+      "decision_note": "Utvecklingsplan för mikrocykeln: Löpning · backkvalitet · 15 min lugnt + 2 × 7 × 150 m / lugn joggvila + 10 min lugnt. En lägre dos är ett tillfälligt belastningsbeslut och får inte bli ny normalbaseline.",
       "mesocycle_id": "run-threshold-hill-4w",
       "microcycle_id": "run-threshold-hill-4w:mc2",
       "microcycle_index": 2,
@@ -345,10 +345,13 @@
       "microcycle_slot": "run_hill_quality",
       "baseline_option_id": "run-hill-2x7x150",
       "dose_resolution": {
-        "state": "baseline",
+        "state": "resolved",
         "kind": "structured",
-        "value": 14,
-        "option_id": "run-hill-2x7x150"
+        "value": 12,
+        "source": "migrated_existing_near_term_revision",
+        "option_id": "run-hill-2x6x150",
+        "basis": "Skydda fredagens prioriterade backkvalitet efter tre dagars ackumulerad belastning.",
+        "applied_at_utc": "2026-09-04T04:31:25.734748+00:00"
       },
       "load_dimensions": [
         "mechanical",
@@ -386,7 +389,7 @@
           "intent": "Följande progressionssteg när 2 × 7 är absorberat med bibehållen mekanik och utan oproportionerlig återhämtningskostnad."
         }
       ],
-      "original_session": "Löpning · backkvalitet · 15 min lugnt + 6 × 150 m / full lugn nedjogg + 10 min lugnt",
+      "original_session": "Löpning · backkvalitet · 15 min lugnt + 2 × 7 × 150 m / lugn joggvila + 10 min lugnt",
       "auto_coach": {
         "action": "reduce",
         "reason": "Skydda fredagens prioriterade backkvalitet efter tre dagars ackumulerad belastning.",
