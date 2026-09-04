@@ -1,0 +1,52 @@
+name: Apply development progression patch
+
+on:
+  push:
+    branches:
+      - fix/development-progression-contract
+    paths:
+      - tools/apply_development_progression_patch.py
+      - .github/workflows/apply-development-progression.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/development-progression-contract
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Apply progression migration
+        run: python tools/apply_development_progression_patch.py
+
+      - name: Run regression tests
+        run: |
+          python -m compileall -q "träning/scripts" "träning/tests"
+          python -m unittest discover -s "träning/tests" -p "test_*.py" -v
+
+      - name: Commit migrated training system
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git config user.name "training-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -- \
+            "träning/data/training_strategy.json" \
+            "träning/data/plan.json" \
+            "träning/data/upcoming_week.json" \
+            "träning/data/coach.json" \
+            "träning/coach_prompt.md" \
+            "träning/scripts/strategy_contracts.py" \
+            "träning/scripts/rollover_week.py" \
+            "träning/tests/test_development_progression_contract.py"
+          git commit -m "Enforce development progression contract"
+          git push origin HEAD:fix/development-progression-contract
