@@ -4,7 +4,7 @@
   "week_start": "2026-08-31",
   "week_end": "2026-09-06",
   "created_at_utc": "2026-08-30T22:09:50.110394+00:00",
-  "updated_at_utc": "2026-09-04T04:31:26.259620+00:00",
+  "updated_at_utc": "2026-09-04T06:42:19.735635+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -92,8 +92,8 @@
         "label": "Tisdag",
         "status": "preliminary",
         "session": "Löpning · kontrollerad tröskel · 3 × 8 min / 90 s jogg",
-        "reason": "Veckans första prioriterade löpstimulus. Grundplanen är samma etablerade kontrollerade tröskelpass som nyligen genomförts; måndagens faktiska endurobelastning används för att bedöma om planen behöver minskas eller flyttas.",
-        "development_focus": "Jämn, kontrollerad kvalitet utan fartjakt; progression ska komma genom absorberbar träning, inte genom att pressa ett enskilt pass.",
+        "reason": "Mesocykelns första prioriterade löpstimulus. Aktuell mikrocykel väljer etablering, hold eller progression från den definierade utvecklingslinjen; kortsiktig ändring kräver sakligt stöd i faktisk närbelastning eller återhämtning.",
+        "development_focus": "Jämn, kontrollerad kvalitet utan fartjakt; progression ska komma genom absorberbar träning.",
         "sport": "run",
         "priority_role": "anchor",
         "stimuli": [
@@ -132,7 +132,40 @@
             "session": "Löpning · kontrollerad tröskel · 3 × 10 min / 90 s jogg",
             "intent": "Planerad progression genom längre arbetstid utan avsikt att höja intensiteten."
           }
-        ]
+        ],
+        "dose_open": false,
+        "development_progression": {
+          "mode": "develop",
+          "demonstrated_floor_option_id": "run-threshold-3x8",
+          "same_dose_repeat_requires_reason": true,
+          "source": "absorbed_training_history",
+          "microcycle_plan": [
+            {
+              "microcycle": 2,
+              "option_id": "run-threshold-3x8",
+              "relation": "hold",
+              "reason": "Kriterierna kräver mer än en jämförbar 3 × 8-exponering innan arbetstiden ökas."
+            },
+            {
+              "microcycle": 3,
+              "option_id": "run-threshold-3x10",
+              "relation": "progress",
+              "reason": "Planerad utveckling från etablerade 24 till 30 min kontrollerat tröskelarbete; intensiteten hålls oförändrat kontrollerad."
+            },
+            {
+              "microcycle": 4,
+              "option_id": "run-threshold-3x10",
+              "relation": "hold",
+              "reason": "Konsolidera den högre arbetstiden och skapa jämförbar data inför mesocykelutvärderingen."
+            }
+          ]
+        },
+        "development_step": {
+          "microcycle": 2,
+          "option_id": "run-threshold-3x8",
+          "relation": "hold",
+          "reason": "Kriterierna kräver mer än en jämförbar 3 × 8-exponering innan arbetstiden ökas."
+        }
       },
       {
         "date": "2026-09-02",
@@ -303,26 +336,29 @@
         "date": "2026-09-04",
         "label": "Fredag",
         "status": "conditional",
-        "session": "Löpning · backkvalitet · 15 min lugnt + 6 × 150 m / full lugn nedjogg + 10 min lugnt",
-        "reason": "Veckans andra prioriterade löpkvalitet. Grundplanen är en konservativ backexponering med 6 × 150 m och full lugn nedjogg; den ändras endast om torsdagens faktiska MTB-belastning eller återhämtningen motiverar det.",
-        "development_focus": "Kraftfull men kontrollerad löpning med bibehållen mekanik; ingen maximal sprint eller syrajakt.",
+        "session": "Löpning · backkvalitet · 15 min lugnt + 2 × 6 × 150 m / lugn joggvila + 10 min lugnt",
+        "reason": "Mesocykelns andra prioriterade löpkvalitet: kraft, löpekonomi och mekanisk kvalitet. 2 × 6 × 150 m är demonstrerat kapacitetsgolv; aktuell mikrocykel väljer nästa utvecklingssteg. Regression kräver ett explicit närbelastningsskäl.",
+        "development_focus": "Kraftfull men kontrollerad löpning med bibehållen mekanik. Utveckla arbetsmängden stegvis; ingen maximal sprint eller syrajakt.",
         "sport": "run",
         "priority_role": "anchor",
         "stimuli": [
           "run_hill_quality"
         ],
-        "decision_note": "Grundplan: 6 × 150 m med full lugn nedjogg. Ändra endast om torsdagens faktiska belastning eller återhämtning ger sakliga skäl.",
+        "decision_note": "Utvecklingsplan för mikrocykeln: Löpning · backkvalitet · 15 min lugnt + 2 × 7 × 150 m / lugn joggvila + 10 min lugnt. En lägre dos är ett tillfälligt belastningsbeslut och får inte bli ny normalbaseline.",
         "mesocycle_id": "run-threshold-hill-4w",
         "microcycle_id": "run-threshold-hill-4w:mc2",
         "microcycle_index": 2,
         "microcycle_day": 5,
         "microcycle_slot": "run_hill_quality",
-        "baseline_option_id": "run-hill-6x150",
+        "baseline_option_id": "run-hill-2x7x150",
         "dose_resolution": {
-          "state": "baseline",
+          "state": "resolved",
           "kind": "structured",
-          "value": 6,
-          "option_id": "run-hill-6x150"
+          "value": 12,
+          "source": "migrated_existing_near_term_revision",
+          "option_id": "run-hill-2x6x150",
+          "basis": "Skydda fredagens prioriterade backkvalitet efter tre dagars ackumulerad belastning.",
+          "applied_at_utc": "2026-09-04T04:31:25.734748+00:00"
         },
         "load_dimensions": [
           "mechanical",
@@ -336,23 +372,70 @@
             "kind": "structured",
             "value": 6,
             "session": "Löpning · backkvalitet · 15 min lugnt + 6 × 150 m / full lugn nedjogg + 10 min lugnt",
-            "intent": "Konservativ första exponering i mesocykeln när närbelastningen kräver marginal och tidigare jämförbar backdos saknas."
+            "intent": "Tydligt reducerad reservdos. Får bara användas som tillfällig regression när faktisk närbelastning eller återhämtning motiverar det; aldrig som normal utvecklingsbaseline."
           },
           {
-            "id": "run-hill-8x150",
+            "id": "run-hill-2x6x150",
             "kind": "structured",
-            "value": 8,
-            "session": "Löpning · backkvalitet · 15 min lugnt + 8 × 150 m / full lugn nedjogg + 10 min lugnt",
-            "intent": "Nästa högre startalternativ när faktisk närbelastning och subjektiv känsla ger stöd för mer volym med bibehållen mekanik."
+            "value": 12,
+            "session": "Löpning · backkvalitet · 15 min lugnt + 2 × 6 × 150 m / lugn joggvila + 10 min lugnt",
+            "intent": "Demonstrerat kapacitetsgolv: 2 × 6 × 150 m har genomförts utan problem. I utvecklingsläge är detta golv, inte nästa utvecklingsmål."
+          },
+          {
+            "id": "run-hill-2x7x150",
+            "kind": "structured",
+            "value": 14,
+            "session": "Löpning · backkvalitet · 15 min lugnt + 2 × 7 × 150 m / lugn joggvila + 10 min lugnt",
+            "intent": "Nästa konservativa utvecklingssteg från demonstrerade 2 × 6: endast repetitionsvolymen ökas, inte avsedd intensitet."
+          },
+          {
+            "id": "run-hill-2x8x150",
+            "kind": "structured",
+            "value": 16,
+            "session": "Löpning · backkvalitet · 15 min lugnt + 2 × 8 × 150 m / lugn joggvila + 10 min lugnt",
+            "intent": "Följande progressionssteg när 2 × 7 är absorberat med bibehållen mekanik och utan oproportionerlig återhämtningskostnad."
           }
         ],
-        "original_session": "Löpning · backkvalitet · 15 min lugnt + 6 × 150 m / full lugn nedjogg + 10 min lugnt",
+        "original_session": "Löpning · backkvalitet · 15 min lugnt + 2 × 7 × 150 m / lugn joggvila + 10 min lugnt",
         "auto_coach": {
           "action": "reduce",
           "reason": "Skydda fredagens prioriterade backkvalitet efter tre dagars ackumulerad belastning.",
           "applied_at_utc": "2026-09-04T04:31:25.734748+00:00"
         },
-        "coach_adjustment": "Skala ned passet. Gör fredagens backpass i reducerad dos: välj baseline run-hill-6x150 endast om benen känns fräscha; annars minska till 4–5×150 m och behåll full lugn nedjogg."
+        "coach_adjustment": "Tillfällig regression från utvecklingsplanens 2 × 7 × 150 m till 2 × 6 × 150 m. Skälet är den redan dokumenterade ackumulerade närbelastningen; detta är belastningsstyrning, inte ny utvecklingsbaseline.",
+        "dose_open": false,
+        "development_progression": {
+          "mode": "develop",
+          "demonstrated_floor_option_id": "run-hill-2x6x150",
+          "same_dose_repeat_requires_reason": true,
+          "source": "user_report_2026-09-04",
+          "microcycle_plan": [
+            {
+              "microcycle": 2,
+              "option_id": "run-hill-2x7x150",
+              "relation": "progress",
+              "reason": "2 × 6 × 150 m är redan genomfört utan problem; nästa normala utvecklingsdos ökar endast repetitionsvolymen."
+            },
+            {
+              "microcycle": 3,
+              "option_id": "run-hill-2x8x150",
+              "relation": "progress",
+              "reason": "Fortsatt planerad volymprogression när mikrocykel 2 absorberats; kortsiktig regression är fortfarande tillåten med explicit skäl."
+            },
+            {
+              "microcycle": 4,
+              "option_id": "run-hill-2x8x150",
+              "relation": "hold",
+              "reason": "Konsolidera den högre dosen inför mesocykelutvärdering i stället för att öka två belastningsvariabler samtidigt."
+            }
+          ]
+        },
+        "development_step": {
+          "microcycle": 2,
+          "option_id": "run-hill-2x7x150",
+          "relation": "progress",
+          "reason": "2 × 6 × 150 m är redan genomfört utan problem; nästa normala utvecklingsdos ökar endast repetitionsvolymen."
+        }
       },
       {
         "date": "2026-09-05",
@@ -975,39 +1058,39 @@
       "activity_id": 20024236347,
       "activity_date": "2026-09-03",
       "activity_name": "Mountainbiketur på kvällen",
-      "generated_at_utc": "2026-09-04T04:31:25.735412+00:00",
+      "generated_at_utc": "2026-09-04T06:42:19.176243+00:00",
       "model": "gpt-5-mini",
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "MTB-passet var långt (≈7h rörlig tid), kontrollerat tekniskt och med måttlig puls; inga tydliga högintensiva block.",
-        "load_interpretation": "kardiovaskulär varaktighet och mekanisk belastning från tre tunga dagar påverkar fredagens backpass.",
+        "summary": "Lång teknisk MTB 3+ timmar med måttlig puls; inga tydliga tecken på lokal löptrötthet.",
+        "load_interpretation": "Tre tunga dagar (run, swimrun, MTB) ger ökad närbelastning främst mekaniskt och kardiovaskulärt.",
         "confidence": "medium",
         "facts": [
           "MountainBikeRide: 31,47 km · 2:11:23 · 318 m+ · snittpuls 114 · maxpuls 139.",
           "Planstatus 2026-09-03: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Totalt tre dagars ackumulerad belastning gör mekanisk/fräschhetsmarginal för fredag osäker.",
-          "Ingen indikation att MTB översteg teknisk/neuromuskulär gräns som kräver vila; konservativ reducering är rimlig för att skydda backkvalitet."
+          "MTB-passet var tekniskt/aerob och inte en maximal neuromuskulär stressdag; belastningen adderar mekanisk trötthet inför fredag.",
+          "Givet att planens coach_adjustment redan sänkt fredagens dos finns inget nytillkommet skäl att vila helt."
         ],
         "unknowns": [
-          "Subjektiv dagskänsla i benen efter gårdagens 7h MTB (ej rapporterad).",
-          "Detaljer om eventuella lokala muskelbesvär eller ömhet.",
-          "Exakt planerat underlag för fredagens backe (branthet/återhämtningsmöjlighet) som påverkar dosval."
+          "Subjektiv benkänsla efter MTB (ingen användarrapport ännu).",
+          "Eventuell lokal trötthet i låren från onsdagens swimrun intervaller som användaren noterat tidigare.",
+          "Specifika detaljer om dagens intensiva stigningar/accelerationsanknutna neuromuskulära spikes saknas."
         ]
       },
       "plan_action": {
-        "action": "reduce",
+        "action": "keep",
         "target_date": "2026-09-04",
-        "reason": "Skydda fredagens prioriterade backkvalitet efter tre dagars ackumulerad belastning.",
-        "recommendation": "Gör fredagens backpass i reducerad dos: välj baseline run-hill-6x150 endast om benen känns fräscha; annars minska till 4–5×150 m och behåll full lugn nedjogg.",
+        "reason": "Planen har redan konservativt reducerat fredagens backpass efter tre dagars ackumulerad belastning.",
+        "recommendation": "Behåll dagens ordination: Löpning · backkvalitet som 15 min lugnt + 2 × 6 × 150 m (den redan tillämpade reducerade dosen). Överväg att avvakta subjektiv benkänsla efter nattens återhämtning innan du skalar upp till 2 × 7 × 150 vid nästa beslut.",
         "dose_option_id": "",
         "requires_approval": false
       },
       "auto_apply": {
-        "applied": true,
-        "note": "Konservativ ändring applicerad på 2026-09-04: reduce."
+        "applied": false,
+        "note": "Ingen automatisk planändring."
       }
     },
     {
