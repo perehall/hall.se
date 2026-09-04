@@ -67,16 +67,13 @@ def explicit_interval_structure(user_report):
 
 def latest_structured_report(activities_state):
     activities = activities_state.get("activities") or []
-    ordered = sorted(
+    if not activities:
+        return None
+    latest = max(
         activities,
         key=lambda item: item.get("start_date_local") or item.get("start_date") or "",
-        reverse=True,
     )
-    for activity in ordered:
-        structure = explicit_interval_structure(activity.get("user_report"))
-        if structure:
-            return structure
-    return None
+    return explicit_interval_structure(latest.get("user_report"))
 
 
 def replace_exact_element_text(page, old, new):
