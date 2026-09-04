@@ -10,6 +10,7 @@ from render_training_site import PIPELINE, REPO_ROOT, run_pipeline  # noqa: E402
 
 
 EXPECTED_PIPELINE = (
+    "normalize_coach_language.py",
     "build.py",
     "finalize_dashboard.py",
     "finalize_dashboard_ui.py",
@@ -30,6 +31,7 @@ EXPECTED_PIPELINE = (
     "finalize_week_activity_insights.py",
     "finalize_week_status_ui.py",
     "finalize_post_workout_ui.py",
+    "finalize_human_training_language.py",
     "build_home.py",
     "finalize_goal_link_layout.py",
     "publish_goal_cache_bypass.py",
@@ -47,6 +49,7 @@ class RenderPipelineTests(unittest.TestCase):
         self.assertEqual(PIPELINE, EXPECTED_PIPELINE)
         self.assertEqual(len(PIPELINE), len(set(PIPELINE)))
         self.assertEqual(PIPELINE[-2:], ("validate_site_contracts.py", "validate_training_data.py"))
+        self.assertLess(PIPELINE.index("normalize_coach_language.py"), PIPELINE.index("build.py"))
         self.assertLess(PIPELINE.index("archive_weeks.py"), PIPELINE.index("finalize_week_review_ui.py"))
         self.assertLess(PIPELINE.index("finalize_week_review_ui.py"), PIPELINE.index("check_week_review_ui.py"))
         self.assertLess(PIPELINE.index("finalize_navigation_ui.py"), PIPELINE.index("finalize_training_brain_ui.py"))
@@ -56,7 +59,8 @@ class RenderPipelineTests(unittest.TestCase):
         self.assertLess(PIPELINE.index("finalize_historical_coach_ui.py"), PIPELINE.index("finalize_week_activity_insights.py"))
         self.assertLess(PIPELINE.index("finalize_week_activity_insights.py"), PIPELINE.index("finalize_week_status_ui.py"))
         self.assertLess(PIPELINE.index("finalize_week_status_ui.py"), PIPELINE.index("finalize_post_workout_ui.py"))
-        self.assertLess(PIPELINE.index("finalize_post_workout_ui.py"), PIPELINE.index("build_home.py"))
+        self.assertLess(PIPELINE.index("finalize_post_workout_ui.py"), PIPELINE.index("finalize_human_training_language.py"))
+        self.assertLess(PIPELINE.index("finalize_human_training_language.py"), PIPELINE.index("build_home.py"))
         self.assertLess(PIPELINE.index("publish_goal_cache_bypass.py"), PIPELINE.index("finalize_generated_whitespace.py"))
         self.assertLess(PIPELINE.index("finalize_generated_whitespace.py"), PIPELINE.index("finalize_week_shell_ui.py"))
         self.assertLess(PIPELINE.index("finalize_week_shell_ui.py"), PIPELINE.index("validate_site_contracts.py"))
