@@ -4,7 +4,7 @@
   "week_start": "2026-08-31",
   "week_end": "2026-09-06",
   "created_at_utc": "2026-08-30T22:09:50.110394+00:00",
-  "updated_at_utc": "2026-09-04T11:16:38.310338+00:00",
+  "updated_at_utc": "2026-09-04T16:20:45.826766+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -1058,33 +1058,33 @@
       "activity_id": 20024236347,
       "activity_date": "2026-09-03",
       "activity_name": "Mountainbiketur på kvällen",
-      "generated_at_utc": "2026-09-04T06:42:19.176243+00:00",
+      "generated_at_utc": "2026-09-04T16:20:45.372573+00:00",
       "model": "gpt-5-mini",
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Lång teknisk MTB 3+ timmar med måttlig puls; inga tydliga tecken på lokal löptrötthet.",
-        "load_interpretation": "Tre tunga dagar (run, swimrun, MTB) ger ökad närbelastning främst mekaniskt och kardiovaskulärt.",
+        "summary": "Lugn, lång MTB 31 km med måttlig puls och gradvis avtagande effekt — teknisk/aerob exponering utan skadliga tecken.",
+        "load_interpretation": "MTB-passet bidrar främst teknisk och kardiovaskulär belastning; mekanisk/neuromuskulär belastning kan inte nivåklassas mot personlig baslinje.",
         "confidence": "medium",
         "facts": [
           "MountainBikeRide: 31,47 km · 2:11:23 · 318 m+ · snittpuls 114 · maxpuls 139.",
           "Planstatus 2026-09-03: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "MTB-passet var tekniskt/aerob och inte en maximal neuromuskulär stressdag; belastningen adderar mekanisk trötthet inför fredag.",
-          "Givet att planens coach_adjustment redan sänkt fredagens dos finns inget nytillkommet skäl att vila helt."
+          "Passet var kontrollerat och tekniskt; ingen indikation på akut överbelastning eller oförmåga att genomföra plan.",
+          "Kardiovaskulär kostnad adderar till redan ackumulerad tre-dagarsbelastning men ligger inom skäl för i förväg beslutad regression."
         ],
         "unknowns": [
-          "Subjektiv benkänsla efter MTB (ingen användarrapport ännu).",
-          "Eventuell lokal trötthet i låren från onsdagens swimrun intervaller som användaren noterat tidigare.",
-          "Specifika detaljer om dagens intensiva stigningar/accelerationsanknutna neuromuskulära spikes saknas."
+          "Subjektiv lokal bentrötthet efter MTB (användarrapport saknas) som kan påverka löppasset.",
+          "Detaljer om terrängintensiva korta ryck/tekniska fall som skulle öka neuromuskulär kostnad saknas.",
+          "Efterpass-återhämtning/kvällens känsla som kan bekräfta att fredagspasset är lämpligt i reducerad dos."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-09-04",
-        "reason": "Planen har redan konservativt reducerat fredagens backpass efter tre dagars ackumulerad belastning.",
-        "recommendation": "Behåll dagens ordination: Löpning · backkvalitet som 15 min lugnt + 2 × 6 × 150 m (den redan tillämpade reducerade dosen). Överväg att avvakta subjektiv benkänsla efter nattens återhämtning innan du skalar upp till 2 × 7 × 150 vid nästa beslut.",
+        "reason": "Aktuell mikrocykel har redan konservativt reducerat fredagens backpass baserat på ackumulerad närbelastning och MTB-passet bekräftar ingen extra risk.",
+        "recommendation": "Behåll dagens planade backkvalitet som reducerad dos: 2 × 6 × 150 m enligt redan applicerat dose_resolution; förbered uppvärmning och bedöm benkänslan före passet.",
         "dose_option_id": "",
         "requires_approval": false
       },
