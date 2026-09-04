@@ -6,7 +6,7 @@ from pathlib import Path
 SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
-from normalize_coach_language import normalize_state  # noqa: E402
+from normalize_coach_language import assert_no_forbidden_visible_terms, normalize_state  # noqa: E402
 
 
 class NormalizeCoachLanguageTests(unittest.TestCase):
@@ -18,6 +18,7 @@ class NormalizeCoachLanguageTests(unittest.TestCase):
                     "assessment": {
                         "summary": "Genomfört backkvalitetspass motsvarar 2×6×150; stabilt utan försämring i lapparna.",
                         "load_interpretation": "Lapparna såg jämna ut.",
+                        "facts": ["18 lappar registrerades som arbetsdelar."],
                         "interpretations": ["Ingen tydlig försämring mellan lapparna."],
                         "unknowns": [],
                     },
@@ -38,13 +39,16 @@ class NormalizeCoachLanguageTests(unittest.TestCase):
         }
 
         changed = normalize_state(coach, activities)
+        assert_no_forbidden_visible_terms(coach)
 
         self.assertEqual(changed, 1)
         summary = coach["analyses"][0]["assessment"]["summary"]
         self.assertIn("3 × 6 backintervaller", summary)
         self.assertNotIn("2×6×150", summary)
         self.assertNotIn("lapparna", str(coach).lower())
+        self.assertNotIn("lappar", str(coach).lower())
         self.assertIn("intervallerna", str(coach).lower())
+        self.assertIn("18 intervaller", str(coach).lower())
 
 
 if __name__ == "__main__":
