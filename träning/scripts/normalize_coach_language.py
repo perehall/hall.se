@@ -45,10 +45,7 @@ def explicit_interval_structure(user_report):
     sets = int(match.group("sets"))
     reps = int(match.group("reps"))
     kind = match.group("kind").lower()
-    if kind.startswith("back"):
-        label = "backintervaller"
-    else:
-        label = "intervaller"
+    label = "backintervaller" if kind.startswith("back") else "intervaller"
     return {
         "sets": sets,
         "reps": reps,
@@ -73,6 +70,20 @@ def enforce_reported_structure(text, structure):
     return value
 
 
+def normalize_text_list(assessment, field):
+    values = assessment.get(field)
+    if not isinstance(values, list):
+        return False
+    normalized_values = [
+        visible_training_language(item) if isinstance(item, str) else item
+        for item in values
+    ]
+    if normalized_values == values:
+        return False
+    assessment[field] = normalized_values
+    return True
+
+
 def normalize_analysis(entry, activity):
     changed = False
     structure = explicit_interval_structure((activity or {}).get("user_report"))
@@ -85,24 +96,15 @@ def normalize_analysis(entry, activity):
             assessment["summary"] = normalized
             changed = True
 
-    for field in ("load_interpretation",):
-        value = assessment.get(field)
-        if isinstance(value, str):
-            normalized = visible_training_language(value)
-            if normalized != value:
-                assessment[field] = normalized
-                changed = True
+    value = assessment.get("load_interpretation")
+    if isinstance(value, str):
+        normalized = visible_training_language(value)
+        if normalized != value:
+            assessment["load_interpretation"] = normalized
+            changed = True
 
-    for field in ("interpretations", "unknowns"):
-        values = assessment.get(field)
-        if not isinstance(values, list):
-            continue
-        normalized_values = [
-            visible_training_language(item) if isinstance(item, str) else item
-            for item in values
-        ]
-        if normalized_values != values:
-            assessment[field] = normalized_values
+    for field in ("facts", "interpretations", "unknowns"):
+        if normalize_text_list(assessment, field):
             changed = True
 
     action = entry.get("plan_action") or {}
@@ -131,8 +133,31 @@ def normalize_state(coach, activities_state):
     return changed
 
 
+def visible_analysis_texts(entry):
+    assessment = entry.get("assessment") or {}
+    action = entry.get("plan_action") or {}
+    values = []
+    for field in ("summary", "load_interpretation"):
+        value = assessment.get(field)
+        if isinstance(value, str):
+            values.append(value)
+    for field in ("facts", "interpretations", "unknowns"):
+        for value in assessment.get(field) or []:
+            if isinstance(value, str):
+                values.append(value)
+    for field in ("reason", "recommendation"):
+        value = action.get(field)
+        if isinstance(value, str):
+            values.append(value)
+    return values
+
+
 def assert_no_forbidden_visible_terms(coach):
-    raw = json.dumps(coach.get("analyses") or [], ensure_ascii=False)
+    raw = "\n".join(
+        text
+        for entry in (coach.get("analyses") or [])
+        for text in visible_analysis_texts(entry)
+    )
     forbidden = re.search(r"\blappar(?:na)?\b|\blaps\b", raw, re.IGNORECASE)
     if forbidden:
         raise RuntimeError(
