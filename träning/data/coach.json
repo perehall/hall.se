@@ -4,39 +4,39 @@
       "activity_id": 20024236347,
       "activity_date": "2026-09-03",
       "activity_name": "Mountainbiketur på kvällen",
-      "generated_at_utc": "2026-09-03T23:16:35.112038+00:00",
+      "generated_at_utc": "2026-09-04T04:31:25.735412+00:00",
       "model": "gpt-5-mini",
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Torsdagens MTB blev ett långt tekniskt stödpass (≈7 h rörlig tid, låg snittpuls) utan högt neuromuskulärt tryck; inget indikerar lokal utmattning i benen.",
-        "load_interpretation": "Närbelastningen visar varaktighet men kardiovaskulär intensitet och mekanisk kostnad.",
+        "summary": "MTB-passet var långt (≈7h rörlig tid), kontrollerat tekniskt och med måttlig puls; inga tydliga högintensiva block.",
+        "load_interpretation": "kardiovaskulär varaktighet och mekanisk belastning från tre tunga dagar påverkar fredagens backpass.",
         "confidence": "medium",
         "facts": [
           "MountainBikeRide: 31,47 km · 2:11:23 · 318 m+ · snittpuls 114 · maxpuls 139.",
           "Planstatus 2026-09-03: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "MTB-passets låga snittpuls och avtagande effekt talar för teknisk/uthållig körning snarare än tunga neuromuskulära sprint- eller styrkeintervaller.",
-          "Samlad 3‑dagarsbild: två tidigare högre intensitetsinslag (tröskel + swimrun) följt av detta långa MTB ger ackumulerad varaktighet men inte uppenbart mekanisk benutmattning."
+          "Totalt tre dagars ackumulerad belastning gör mekanisk/fräschhetsmarginal för fredag osäker.",
+          "Ingen indikation att MTB översteg teknisk/neuromuskulär gräns som kräver vila; konservativ reducering är rimlig för att skydda backkvalitet."
         ],
         "unknowns": [
-          "Subjektiv benkänsla efter MTB (ansträngning i lokala muskler) saknas och kan ändra beslutet.",
-          "Exakt fördelning mellan stillastående/teknisk väntan och aktiv trampning i MTB är oklar.",
-          "Väder/terrängförhållanden som kan ha ökat neuromuskulär kostnad saknas."
+          "Subjektiv dagskänsla i benen efter gårdagens 7h MTB (ej rapporterad).",
+          "Detaljer om eventuella lokala muskelbesvär eller ömhet.",
+          "Exakt planerat underlag för fredagens backe (branthet/återhämtningsmöjlighet) som påverkar dosval."
         ]
       },
       "plan_action": {
-        "action": "keep",
+        "action": "reduce",
         "target_date": "2026-09-04",
-        "reason": "MTB-passet var långvarigt men lågintensivt; närbelastningen stöder att behålla fredagens plan som prioriterad backkvalitet.",
-        "recommendation": "Behåll ordinerat backpass 2026-09-04: 15 min lugnt + 6×150 m med full lugn nedjogg; gör självbedömning i uppvärmningen och minska till 4–5×150 m om benen känns tunga.",
+        "reason": "Skydda fredagens prioriterade backkvalitet efter tre dagars ackumulerad belastning.",
+        "recommendation": "Gör fredagens backpass i reducerad dos: välj baseline run-hill-6x150 endast om benen känns fräscha; annars minska till 4–5×150 m och behåll full lugn nedjogg.",
         "dose_option_id": "",
         "requires_approval": false
       },
       "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
+        "applied": true,
+        "note": "Konservativ ändring applicerad på 2026-09-04: reduce."
       }
     },
     {
@@ -679,7 +679,7 @@
       }
     }
   ],
-  "last_trigger_hash": "b590a6be5b9b839744cd186461e3c2d73a465d206ae83e77e337c7136122125c",
-  "last_run_utc": "2026-09-03T23:16:35.112038+00:00",
+  "last_trigger_hash": "dfa8a4b894477520f6399745fd72136872cb2d726320c1edb8fde785c9059091",
+  "last_run_utc": "2026-09-04T04:31:25.735412+00:00",
   "contract_version": 15
 }
