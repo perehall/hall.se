@@ -6,6 +6,7 @@ on:
       - fix/development-progression-contract
     paths:
       - tools/apply_development_progression_patch.py
+      - tools/fix_development_progression_patch.py
       - .github/workflows/apply-development-progression.yml
 
 permissions:
@@ -24,7 +25,9 @@ jobs:
           python-version: "3.12"
 
       - name: Apply progression migration
-        run: python tools/apply_development_progression_patch.py
+        run: |
+          python tools/apply_development_progression_patch.py
+          python tools/fix_development_progression_patch.py
 
       - name: Run regression tests
         run: |
@@ -33,8 +36,8 @@ jobs:
 
       - name: Commit migrated training system
         run: |
-          if [ -z "$(git status --porcelain)" ]; then
-            echo "No changes to commit."
+          if [ -z "$(git status --porcelain -- träning)" ]; then
+            echo "No migrated training changes to commit."
             exit 0
           fi
           git config user.name "training-bot"
@@ -47,6 +50,7 @@ jobs:
             "träning/coach_prompt.md" \
             "träning/scripts/strategy_contracts.py" \
             "träning/scripts/rollover_week.py" \
+            "träning/tests/test_rollover_week.py" \
             "träning/tests/test_development_progression_contract.py"
           git commit -m "Enforce development progression contract"
           git push origin HEAD:fix/development-progression-contract
