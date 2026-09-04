@@ -389,10 +389,25 @@ def build_mesocycle_next_week(promoted, strategy):
                 planned_day["performance_marker_id"] = slot["performance_marker_id"]
             if slot.get("dose_options"):
                 planned_day["dose_options"] = deepcopy(slot["dose_options"])
-                planned_day["baseline_option_id"] = slot["baseline_option_id"]
-                if not apply_baseline_option(planned_day, slot["baseline_option_id"]):
+                option_id = slot["baseline_option_id"]
+                development = slot.get("development_progression") or {}
+                planned_step = next(
+                    (
+                        step
+                        for step in (development.get("microcycle_plan") or [])
+                        if step.get("microcycle") == microcycle_index
+                    ),
+                    None,
+                )
+                if development:
+                    planned_day["development_progression"] = deepcopy(development)
+                if planned_step:
+                    option_id = planned_step["option_id"]
+                    planned_day["development_step"] = deepcopy(planned_step)
+                planned_day["baseline_option_id"] = option_id
+                if not apply_baseline_option(planned_day, option_id):
                     raise RuntimeError(
-                        f"Veckoplan: baseline_option_id {slot['baseline_option_id']!r} saknas för {slot['slot']!r}"
+                        f"Veckoplan: baseline_option_id {option_id!r} saknas för {slot['slot']!r}"
                     )
             if slot["sport"] == "swim":
                 planned_day["swim_equipment"] = {"planned": "tbd"}
