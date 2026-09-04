@@ -379,8 +379,8 @@
         "stimuli": [
           "run_hill_quality"
         ],
-        "session": "Löpning · backkvalitet · 15 min lugnt + 2 × 7 × 150 m / lugn joggvila + 10 min lugnt",
-        "reason": "Mesocykelns andra prioriterade löpkvalitet: kraft, löpekonomi och mekanisk kvalitet. 2 × 6 × 150 m är demonstrerat kapacitetsgolv; aktuell mikrocykel väljer nästa utvecklingssteg. Regression kräver ett explicit närbelastningsskäl.",
+        "session": "Löpning · backkvalitet · 15 min lugnt + 3 × 7 × 150 m / lugn joggvila + 10 min lugnt",
+        "reason": "Mesocykelns andra prioriterade löpkvalitet. Användaren har uttryckligen rapporterat 3 × 6 = 18 genomförda backintervaller; det är nu demonstrerat repetitionsvolymgolv. Nästa normaldos ska därför ligga över 18 arbetsrepetitioner eller ha ett explicit hold-/regressionsskäl.",
         "development_focus": "Kraftfull men kontrollerad löpning med bibehållen mekanik. Utveckla arbetsmängden stegvis; ingen maximal sprint eller syrajakt.",
         "day_index": 5,
         "dose_options": [
@@ -411,45 +411,66 @@
             "value": 16,
             "session": "Löpning · backkvalitet · 15 min lugnt + 2 × 8 × 150 m / lugn joggvila + 10 min lugnt",
             "intent": "Följande progressionssteg när 2 × 7 är absorberat med bibehållen mekanik och utan oproportionerlig återhämtningskostnad."
+          },
+          {
+            "id": "run-hill-3x6x150",
+            "kind": "structured",
+            "value": 18,
+            "session": "Löpning · backkvalitet · 15 min lugnt + 3 × 6 × 150 m / lugn joggvila + 10 min lugnt",
+            "intent": "Volymgolv från uttrycklig användarrapport: 3 × 6 = 18 genomförda backintervaller. 150 m är repetitionslängden i den framtida ordinationen; användarrapporten används inte för att påstå exakt längd på varje tidigare intervall."
+          },
+          {
+            "id": "run-hill-3x7x150",
+            "kind": "structured",
+            "value": 21,
+            "session": "Löpning · backkvalitet · 15 min lugnt + 3 × 7 × 150 m / lugn joggvila + 10 min lugnt",
+            "intent": "Planerat utvecklingssteg från 3 × 6: endast repetitionsvolymen ökas. Avsedd intensitet och planerad repetitionslängd 150 m hålls oförändrade."
+          },
+          {
+            "id": "run-hill-3x8x150",
+            "kind": "structured",
+            "value": 24,
+            "session": "Löpning · backkvalitet · 15 min lugnt + 3 × 8 × 150 m / lugn joggvila + 10 min lugnt",
+            "intent": "Planerat utvecklingssteg från 3 × 7: endast repetitionsvolymen ökas. Avsedd intensitet och planerad repetitionslängd 150 m hålls oförändrade."
           }
         ],
-        "baseline_option_id": "run-hill-2x7x150",
+        "baseline_option_id": "run-hill-3x7x150",
         "load_dimensions": [
           "mechanical",
           "neuromuscular",
           "cardiovascular"
         ],
         "performance_marker_id": "run-hill-mechanics",
-        "progression_target_option_id": "run-hill-2x8x150",
+        "progression_target_option_id": "run-hill-3x8x150",
         "progression_criteria": [
-          "Demonstrerade 2 × 6 × 150 m är kapacitetsgolv och får inte åter bli normal utvecklingsbaseline.",
-          "2 × 7 ska kunna genomföras med bibehållen kraft och mekanik utan tydlig syrajakt eller teknikförlust i slutet.",
+          "3 × 6 = 18 genomförda backintervaller är demonstrerat repetitionsvolymgolv och får inte åter bli en lägre normal utvecklingsbaseline.",
+          "3 × 7 ska kunna genomföras med bibehållen kraft och mekanik utan tydlig syrajakt eller teknikförlust i slutet.",
           "Fredagens mekaniska belastning ska kunna absorberas utan att söndagens lugna distans återkommande måste offras.",
-          "Progression från 2 × 7 till 2 × 8 ändrar endast repetitionsvolymen; avsedd intensitet ska inte samtidigt höjas."
+          "Progression från 3 × 7 till 3 × 8 ändrar endast repetitionsvolymen; avsedd intensitet ska inte samtidigt höjas."
         ],
         "development_progression": {
           "mode": "develop",
-          "demonstrated_floor_option_id": "run-hill-2x6x150",
+          "demonstrated_floor_option_id": "run-hill-3x6x150",
           "same_dose_repeat_requires_reason": true,
-          "source": "user_report_2026-09-04",
+          "source": "explicit_user_report",
           "microcycle_plan": [
             {
               "microcycle": 2,
-              "option_id": "run-hill-2x7x150",
-              "relation": "progress",
-              "reason": "2 × 6 × 150 m är redan genomfört utan problem; nästa normala utvecklingsdos ökar endast repetitionsvolymen."
+              "option_id": "run-hill-3x6x150",
+              "relation": "hold",
+              "reason": "Uttrycklig användarrapport etablerar 18 genomförda backintervaller i 3 × 6. Steget förankrar det nya volymgolvet; exakt tidigare repetitionslängd antas inte."
             },
             {
               "microcycle": 3,
-              "option_id": "run-hill-2x8x150",
+              "option_id": "run-hill-3x7x150",
               "relation": "progress",
-              "reason": "Fortsatt planerad volymprogression när mikrocykel 2 absorberats; kortsiktig regression är fortfarande tillåten med explicit skäl."
+              "reason": "Nästa normala utvecklingssteg ökar endast arbetsrepetitionerna från 18 till 21."
             },
             {
               "microcycle": 4,
-              "option_id": "run-hill-2x8x150",
-              "relation": "hold",
-              "reason": "Konsolidera den högre dosen inför mesocykelutvärdering i stället för att öka två belastningsvariabler samtidigt."
+              "option_id": "run-hill-3x8x150",
+              "relation": "progress",
+              "reason": "Fortsatt volymprogression från 21 till 24 arbetsrepetitioner om föregående steg absorberats; annars krävs explicit hold-skäl."
             }
           ]
         }

@@ -4,13 +4,13 @@
       "activity_id": 20036445971,
       "activity_date": "2026-09-04",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-09-04T20:33:24.178423+00:00",
+      "generated_at_utc": "2026-09-04T20:44:01.640240+00:00",
       "model": "gpt-5-mini",
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Backintervaller genomförda som rapporterat: 3 × 6 backintervaller backar (2×6×150 enligt planreduktion); stabil puls och upprepade kraftiga korta repetitioner indikerar god kontroll men ackumulerad närbelastning finns.",
-        "load_interpretation": "Tre föregående dagar visar hög ackumulerad mekanisk och kardiovaskulär belastning mot fredagens backstimulus.",
+        "summary": "Genomfört: 3 × 6 backintervaller (18 totalt).",
+        "load_interpretation": "Flera tunga dagar (enduro, swimrun, MTB + dagens backar) ger ackumulerad mekanisk och neuromuskulär belastning de senaste 3 dagarna.",
         "confidence": "medium",
         "facts": [
           "Löpning · backintervaller: 12,68 km · 1:06:28 · 243 m+ · snittpuls 142,4 · maxpuls 167.",
@@ -18,26 +18,26 @@
           "Planstatus 2026-09-04: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Genomförandet visar god förmåga att leverera upprepade korta kraftinsatser utan tydlig teknisk försämring.",
-          "Samlad närbelastning är skäl för att hålla fredagens reducerade dos som genomförd och i närtid undvika ökad mekanisk stress."
+          "Den faktiska genomförda volymen (3×6) motiverar att nästa normala utvecklingsdos bör ligga över 18 repetitioner i framtida ordinationer.",
+          "Ackumulerad mekanisk/neuromuskulär belastning rättfärdigar konservativ närtidshantering för att skydda kvalitet i kommande nyckelpass."
         ],
         "unknowns": [
-          "Subjektiv återhämtning efter passet (smärta/lokal muskeltrötthet) saknas som kan påverka styrkedelen imorgon.",
-          "Detaljer om varje backreps exakt tid/kontrolltal saknas i performance_context för formell jämförelse mot tidigare protokoll.",
-          "Eventuella preferenser för att flytta styrkepassen eller lägga in vila istället finns inte uttryckta av användaren."
+          "Subjektiv dagskänsla efter passet (ben-/lokal trötthet) saknas och kan påverka om styrka på lördag är lämplig i full dos.",
+          "Detaljerad inom-pass mekanikbedömning från performance_marker saknas; påverkar om progression behålls exakt.",
+          "Eventuella småskador eller ömhet som användaren kan rapportera efter passet saknas."
         ]
       },
       "plan_action": {
-        "action": "keep",
+        "action": "reduce",
         "target_date": "2026-09-05",
-        "reason": "Fredagens reducerade backdos genomförd; behåll planerad lågkostnads sim + reducerad styrka för att skydda mekaniken.",
-        "recommendation": "Gör planerad simning 3 200 m aerob/teknik och styrka/core enligt den reducerade 25 min-mallen; undvik plyometri och tunga enbensövningar om benen känns stumma.",
+        "reason": "Backpasset genomfördes som 3 × 6 backintervaller (18 totalt), alltså över den planerade omfattningen före passet (12 arbetsintervaller).",
+        "recommendation": "Gör lördagens skyddade styrka+sim som planerat men i reducerad styrkedos (styrka 25 min) och håll simningen aerob/teknisk; undvik plyometri. Behåll simens 3 200 m-struktur men håll intensiteten kontrollerad.",
         "dose_option_id": "",
         "requires_approval": false
       },
       "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
+        "applied": true,
+        "note": "Konservativ ändring applicerad på 2026-09-05: reduce."
       }
     },
     {
@@ -719,7 +719,7 @@
       }
     }
   ],
-  "last_trigger_hash": "2cf5df06bf52d782ebc219e1882956bc48b270cacb3946ce59e3882c4471c8be",
-  "last_run_utc": "2026-09-04T20:33:24.178423+00:00",
+  "last_trigger_hash": "a39e54d945ab011c19525b62177661d1977bb387371a23d0faaee54632ce3101",
+  "last_run_utc": "2026-09-04T20:44:01.640240+00:00",
   "contract_version": 15
 }

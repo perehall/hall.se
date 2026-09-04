@@ -433,7 +433,7 @@
     {
       "date": "2026-09-05",
       "label": "Lördag",
-      "status": "planned",
+      "status": "conditional",
       "session": "Simning · 3 200 m · aerob/teknik + styrka/core · 25 min · styrkemall",
       "reason": "Lördagen används som dubbel lågkostnads-/stöddag: en etablerad 3 200 m aerob/teknisk simexponering för att hålla simfrekvensen uppe samt reducerad styrka/core. Simningen ger liten mekanisk kostnad för benen; styrkan hålls kort eftersom dagen ligger mellan fredagens backkvalitet och söndagens lugna distans. Fredagens faktiska utfall är kontrollpunkt.",
       "sport": "strength",
@@ -483,7 +483,14 @@
         "value": 25,
         "option_id": "strength-support-25"
       },
-      "performance_marker_id": "strength-repeatability"
+      "performance_marker_id": "strength-repeatability",
+      "original_session": "Simning · 3 200 m · aerob/teknik + styrka/core · 25 min · styrkemall",
+      "auto_coach": {
+        "action": "reduce",
+        "reason": "Skydda mesocykelns prioriterade backkvalitet och absorberbarheten efter flera tunga dagar.",
+        "applied_at_utc": "2026-09-04T20:44:01.639345+00:00"
+      },
+      "coach_adjustment": "Skala ned passet. Gör lördagens skyddade styrka+sim som planerat men i reducerad styrkedos (styrka 25 min) och håll simningen aerob/teknisk; undvik plyometri. Behåll simens 3 200 m-struktur men håll intensiteten kontrollerad."
     },
     {
       "date": "2026-09-06",
