@@ -4,13 +4,13 @@
       "activity_id": 20036445971,
       "activity_date": "2026-09-04",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-09-04T20:44:01.640240+00:00",
+      "generated_at_utc": "2026-09-04T20:45:08.453195+00:00",
       "model": "gpt-5-mini",
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört: 3 × 6 backintervaller (18 totalt).",
-        "load_interpretation": "Flera tunga dagar (enduro, swimrun, MTB + dagens backar) ger ackumulerad mekanisk och neuromuskulär belastning de senaste 3 dagarna.",
+        "summary": "Genomfört: 3 × 6 backintervaller (18 totalt). Tekniken och pulsmönstret visar kontrollerad kraftexponering utan tydlig försämring mot slutet",
+        "load_interpretation": "Tre tunga dagar (enduro, MTB, swimrun) skapar ökad mekanisk och kardiovaskulär närbelastning inför helgens pass.",
         "confidence": "medium",
         "facts": [
           "Löpning · backintervaller: 12,68 km · 1:06:28 · 243 m+ · snittpuls 142,4 · maxpuls 167.",
@@ -18,26 +18,26 @@
           "Planstatus 2026-09-04: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Den faktiska genomförda volymen (3×6) motiverar att nästa normala utvecklingsdos bör ligga över 18 repetitioner i framtida ordinationer.",
-          "Ackumulerad mekanisk/neuromuskulär belastning rättfärdigar konservativ närtidshantering för att skydda kvalitet i kommande nyckelpass."
+          "Passet uppfyller dagens ordinerade reducerade dos (2×6×150) och visar bibehållen mekanisk kontroll.",
+          "Givet multi-dagarsbelastningen är fortsatt konservatism mot lördagens kombinerade sim+styrka motiverad."
         ],
         "unknowns": [
-          "Subjektiv dagskänsla efter passet (ben-/lokal trötthet) saknas och kan påverka om styrka på lördag är lämplig i full dos.",
-          "Detaljerad inom-pass mekanikbedömning från performance_marker saknas; påverkar om progression behålls exakt.",
-          "Eventuella småskador eller ömhet som användaren kan rapportera efter passet saknas."
+          "Subjektiv trötthet/benkänsla efter passet (användarrapport).",
+          "Exakt intensitet på varje backrepetition jämfört med plan (performance_context saknas).",
+          "Eventuella akuta lokalömheter eller skador efter kvällens pass."
         ]
       },
       "plan_action": {
-        "action": "reduce",
+        "action": "keep",
         "target_date": "2026-09-05",
         "reason": "Backpasset genomfördes som 3 × 6 backintervaller (18 totalt), alltså över den planerade omfattningen före passet (12 arbetsintervaller).",
-        "recommendation": "Gör lördagens skyddade styrka+sim som planerat men i reducerad styrkedos (styrka 25 min) och håll simningen aerob/teknisk; undvik plyometri. Behåll simens 3 200 m-struktur men håll intensiteten kontrollerad.",
+        "recommendation": "Behåll lördagens reducerade plan: Sim 3 200 m aerob/teknik + styrka/core 25 min; undvik plyometri och håll simningen kontrollerad.",
         "dose_option_id": "",
         "requires_approval": false
       },
       "auto_apply": {
-        "applied": true,
-        "note": "Konservativ ändring applicerad på 2026-09-05: reduce."
+        "applied": false,
+        "note": "Ingen automatisk planändring."
       }
     },
     {
@@ -719,7 +719,7 @@
       }
     }
   ],
-  "last_trigger_hash": "a39e54d945ab011c19525b62177661d1977bb387371a23d0faaee54632ce3101",
-  "last_run_utc": "2026-09-04T20:44:01.640240+00:00",
+  "last_trigger_hash": "0818c0580869383b687e2f5a00c9e7cce23c4535121c2e231e31b3121ed5a209",
+  "last_run_utc": "2026-09-04T20:45:08.453195+00:00",
   "contract_version": 15
 }
