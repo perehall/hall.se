@@ -6,6 +6,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 COACH_FILE = ROOT / "data" / "coach.json"
 ACTIVITIES_FILE = ROOT / "data" / "activities.json"
+PLAN_FILE = ROOT / "data" / "plan.json"
 
 FORBIDDEN_VISIBLE_TERMS = (
     (re.compile(r"\blapparna\b", re.IGNORECASE), "intervallerna"),
@@ -19,6 +20,10 @@ STRUCTURE_RE = re.compile(
 )
 CONFLICTING_HILL_STRUCTURE_RE = re.compile(
     r"\d+\s*[×xX]\s*\d+(?:\s*[×xX]\s*\d+)?(?:\s*m)?",
+    re.IGNORECASE,
+)
+PAREN_WITH_STRUCTURE_RE = re.compile(
+    r"\s*\([^)]*\d+\s*[×xX]\s*\d+[^)]*\)",
     re.IGNORECASE,
 )
 TOTAL_HILLS_RE = re.compile(r"\b\d+\s+backar\b", re.IGNORECASE)
@@ -55,19 +60,37 @@ def explicit_interval_structure(user_report):
     }
 
 
-def enforce_reported_structure(text, structure):
+def canonical_actual_summary(text, structure):
     value = visible_training_language(text)
     if not structure or not value:
         return value
     if not re.search(r"\bback|intervall", value, re.IGNORECASE):
         return value
 
-    normalized = structure["text"]
-    if CONFLICTING_HILL_STRUCTURE_RE.search(value):
-        return CONFLICTING_HILL_STRUCTURE_RE.sub(normalized, value, count=1)
-    if TOTAL_HILLS_RE.search(value):
-        return TOTAL_HILLS_RE.sub(normalized, value, count=1)
-    return value
+    # The actual outcome is authoritative. Planned/reduced structures belong in
+    # the separate "Plan före passet" field and must never leak into this sentence.
+    tail = ""
+    if ";" in value:
+        tail = value.split(";", 1)[1].strip()
+    else:
+        stripped = PAREN_WITH_STRUCTURE_RE.sub("", value)
+        stripped = CONFLICTING_HILL_STRUCTURE_RE.sub("", stripped)
+        stripped = TOTAL_HILLS_RE.sub("", stripped)
+        stripped = re.sub(r"\bbackintervaller\s+backar\b", "backintervaller", stripped, flags=re.IGNORECASE)
+        parts = re.split(r"(?<=[.!?])\s+", stripped, maxsplit=1)
+        if len(parts) > 1:
+            tail = parts[1].strip()
+
+    tail = PAREN_WITH_STRUCTURE_RE.sub("", tail)
+    tail = CONFLICTING_HILL_STRUCTURE_RE.sub("", tail)
+    tail = TOTAL_HILLS_RE.sub("", tail)
+    tail = re.sub(r"\bbackintervaller\s+backar\b", "backintervaller", tail, flags=re.IGNORECASE)
+    tail = re.sub(r"\s{2,}", " ", tail).strip(" .;,-")
+
+    prefix = f"Genomfört: {structure['text']} ({structure['total']} totalt)."
+    if not tail:
+        return prefix
+    return f"{prefix} {tail[0].upper() + tail[1:]}"
 
 
 def normalize_text_list(assessment, field):
@@ -84,14 +107,42 @@ def normalize_text_list(assessment, field):
     return True
 
 
-def normalize_analysis(entry, activity):
+def planned_structured_value(plan_day):
+    resolution = (plan_day or {}).get("dose_resolution") or {}
+    value = resolution.get("value")
+    if resolution.get("kind") == "structured" and isinstance(value, (int, float)):
+        return value
+    return None
+
+
+def normalize_action_reason(action, structure, plan_day):
+    reason = action.get("reason")
+    if not isinstance(reason, str):
+        return False
+    normalized = visible_training_language(reason)
+    planned_value = planned_structured_value(plan_day)
+    if structure and planned_value is not None and structure["total"] != planned_value:
+        tail = normalized.split(";", 1)[1].strip() if ";" in normalized else ""
+        relation = "över" if structure["total"] > planned_value else "under"
+        prefix = (
+            f"Backpasset genomfördes som {structure['text']} ({structure['total']} totalt), "
+            f"alltså {relation} den planerade omfattningen före passet ({int(planned_value)} arbetsintervaller)."
+        )
+        normalized = f"{prefix} {tail[0].upper() + tail[1:]}" if tail else prefix
+    if normalized == reason:
+        return False
+    action["reason"] = normalized
+    return True
+
+
+def normalize_analysis(entry, activity, plan_day=None):
     changed = False
     structure = explicit_interval_structure((activity or {}).get("user_report"))
     assessment = entry.get("assessment") or {}
 
     summary = assessment.get("summary")
     if isinstance(summary, str):
-        normalized = enforce_reported_structure(summary, structure)
+        normalized = canonical_actual_summary(summary, structure)
         if normalized != summary:
             assessment["summary"] = normalized
             changed = True
@@ -108,27 +159,34 @@ def normalize_analysis(entry, activity):
             changed = True
 
     action = entry.get("plan_action") or {}
-    for field in ("reason", "recommendation"):
-        value = action.get(field)
-        if isinstance(value, str):
-            normalized = visible_training_language(value)
-            if normalized != value:
-                action[field] = normalized
-                changed = True
+    if normalize_action_reason(action, structure, plan_day):
+        changed = True
+    recommendation = action.get("recommendation")
+    if isinstance(recommendation, str):
+        normalized = visible_training_language(recommendation)
+        if normalized != recommendation:
+            action["recommendation"] = normalized
+            changed = True
 
     return changed
 
 
-def normalize_state(coach, activities_state):
+def normalize_state(coach, activities_state, plan_state=None):
     by_id = {
         str(activity.get("id")): activity
         for activity in (activities_state.get("activities") or [])
         if activity.get("id") is not None
     }
+    plan_by_date = {
+        str(day.get("date")): day
+        for day in ((plan_state or {}).get("days") or [])
+        if day.get("date")
+    }
     changed = 0
     for entry in coach.get("analyses") or []:
         activity = by_id.get(str(entry.get("activity_id")))
-        if normalize_analysis(entry, activity):
+        plan_day = plan_by_date.get(str(entry.get("activity_date")))
+        if normalize_analysis(entry, activity, plan_day=plan_day):
             changed += 1
     return changed
 
@@ -168,7 +226,8 @@ def assert_no_forbidden_visible_terms(coach):
 def main():
     coach = load(COACH_FILE, {"analyses": []})
     activities = load(ACTIVITIES_FILE, {"activities": []})
-    changed = normalize_state(coach, activities)
+    plan = load(PLAN_FILE, {"days": []})
+    changed = normalize_state(coach, activities, plan)
     assert_no_forbidden_visible_terms(coach)
     if changed:
         COACH_FILE.write_text(
