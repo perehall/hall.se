@@ -41,6 +41,9 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Sync demonstrated progression from explicit user reports
+        run: python "träning/scripts/sync_user_reported_progression.py"
+
       - name: Run deterministic regression tests
         run: |
           python -m compileall -q "träning/scripts" "träning/tests"
@@ -77,6 +80,9 @@ jobs:
 
       - name: Normalize activity semantics
         run: python "träning/scripts/normalize_activity_semantics.py"
+
+      - name: Re-sync progression after semantic normalization
+        run: python "träning/scripts/sync_user_reported_progression.py"
 
       - name: Migrate typed plan data
         run: python "träning/scripts/migrate_training_data_v3.py"
@@ -157,6 +163,7 @@ jobs:
             "träning/data/coach.json"
             "träning/data/plan.json"
             "träning/data/upcoming_week.json"
+            "träning/data/training_strategy.json"
             "träning/data/goal.json"
             "träning/data/weather.json"
             "träning/data/dashboard_summary.json"
