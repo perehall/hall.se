@@ -1,6 +1,45 @@
 {
   "analyses": [
     {
+      "activity_id": 20036445971,
+      "activity_date": "2026-09-04",
+      "activity_name": "Löpning på kvällen",
+      "generated_at_utc": "2026-09-04T17:42:38.538546+00:00",
+      "model": "gpt-5-mini",
+      "performance_marker_id": null,
+      "performance_protocol_key": null,
+      "assessment": {
+        "summary": "Genomfört backpass motsvarar planens reducerade dos (2×6×150); upprepade korta, kraftfulla repetitioner och stabil puls men mekanisk kostnad efter tre tunga dagar.",
+        "load_interpretation": "Närbelastningen: hög mekanisk/neuromuskulär efter 3 tunga dagar; kardiovaskulär belastning måttlig–hög.",
+        "confidence": "medium",
+        "facts": [
+          "Run: 12,68 km · 1:06:28 · 243 m+ · snittpuls 142,4 · maxpuls 167.",
+          "Planstatus 2026-09-04: dagen är markerad genomförd i coachens beslutsunderlag."
+        ],
+        "interpretations": [
+          "Passet genomfördes i linje med den redan beslutade kortsiktiga regressionen; mekanisk kostnad är den främsta belastningsfaktorn för nästa 48–72 timmar.",
+          "Ingen indikation i data för att öka dos eller kräva vila omedelbart; söndagens lugna distans kan behöva kortas beroende på subjektiv benkänsla."
+        ],
+        "unknowns": [
+          "Användarens subjektiva lokal bentrötthet efter passet (kan kräva ytterligare nedskalning).",
+          "Detaljerad inom-pass teknikbedömning för backrepetitioner (performance_marker-data saknas).",
+          "Planerat pass 2026-09-05 kräver användarens dagskänsla för slutligt beslut om styrkevolym/plyometri."
+        ]
+      },
+      "plan_action": {
+        "action": "keep",
+        "target_date": "2026-09-05",
+        "reason": "Fredagens reducerade backdos genomfördes som plan och mesocykelns skyddade stimuli bör bevaras.",
+        "recommendation": "Behåll lördagens plan: Simning 3 200 m aerob/teknik + styrka/core kort (25 min alternativt 35 min beroende på benkänsla); undvik plyometri om benen känns tunga.",
+        "dose_option_id": "",
+        "requires_approval": false
+      },
+      "auto_apply": {
+        "applied": false,
+        "note": "Ingen automatisk planändring."
+      }
+    },
+    {
       "activity_id": 20024236347,
       "activity_date": "2026-09-03",
       "activity_name": "Mountainbiketur på kvällen",
@@ -679,7 +718,7 @@
       }
     }
   ],
-  "last_trigger_hash": "06d83d055330fff2cc810e1f27353c5d4aa0109fcb6e0c49711cda82279a56b0",
-  "last_run_utc": "2026-09-04T16:20:45.372573+00:00",
+  "last_trigger_hash": "d7bd9e9966b2b3347baf1bf04b52a3f7665564d5ec52b8c26d20cb8e7d16e53b",
+  "last_run_utc": "2026-09-04T17:42:38.538546+00:00",
   "contract_version": 15
 }
