@@ -4,33 +4,34 @@
       "activity_id": 20036445971,
       "activity_date": "2026-09-04",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-09-04T17:46:57.513202+00:00",
+      "generated_at_utc": "2026-09-04T20:33:24.178423+00:00",
       "model": "gpt-5-mini",
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört backkvalitetspass motsvarar planens reducerade dos (2×6×150); utförandet tekniskt stabilt utan tydlig försämring i lapparna.",
-        "load_interpretation": "Tre föregående dagar ger ackumulerad mekanisk och kardiovaskulär belastning som motiverade redan applicerad reducering.",
+        "summary": "Backintervaller genomförda som rapporterat: 3 × 6 backintervaller backar (2×6×150 enligt planreduktion); stabil puls och upprepade kraftiga korta repetitioner indikerar god kontroll men ackumulerad närbelastning finns.",
+        "load_interpretation": "Tre föregående dagar visar hög ackumulerad mekanisk och kardiovaskulär belastning mot fredagens backstimulus.",
         "confidence": "medium",
         "facts": [
-          "Run: 12,68 km · 1:06:28 · 243 m+ · snittpuls 142,4 · maxpuls 167.",
+          "Löpning · backintervaller: 12,68 km · 1:06:28 · 243 m+ · snittpuls 142,4 · maxpuls 167.",
+          "Användarrapport: 3 × 6 backintervaller (18 backar totalt). Tre serier om sex intervaller; arbetsdelarna ska beskrivas som intervaller.",
           "Planstatus 2026-09-04: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Passet genomfördes i en konservativ dos som coach redan valt; prestationsfingertoppar i korta reps indikerar god neuromuskulär kapacitet idag.",
-          "Givet multi‑dagarsbelastningen är att behålla reducerad dos lämpligt för att skydda mesocykelns stimuli."
+          "Genomförandet visar god förmåga att leverera upprepade korta kraftinsatser utan tydlig teknisk försämring.",
+          "Samlad närbelastning är skäl för att hålla fredagens reducerade dos som genomförd och i närtid undvika ökad mekanisk stress."
         ],
         "unknowns": [
-          "Subjektiv dagskänsla efter passet (lokal muskeltrötthet) saknas och kan påverka lördagens styrka.",
-          "Detaljerad ban‑/backjämförbarhet mot framtida performance-marker saknas för långtidstolkning.",
-          "Eventuell senare rapporterad ömhet eller skada under natten."
+          "Subjektiv återhämtning efter passet (smärta/lokal muskeltrötthet) saknas som kan påverka styrkedelen imorgon.",
+          "Detaljer om varje backreps exakt tid/kontrolltal saknas i performance_context för formell jämförelse mot tidigare protokoll.",
+          "Eventuella preferenser för att flytta styrkepassen eller lägga in vila istället finns inte uttryckta av användaren."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-09-05",
-        "reason": "Fredagens backpass genomfördes i den redan beslutade reducerade dosen och visar teknisk kontroll.",
-        "recommendation": "Behåll lördagens plan: Simning 3 200 m aerob/teknik + styrka/core 25 min (reducerad styrkedos). Utvärdera subjektiv benkänsla morgonen efter innan plyometri eller ökad styrkedos.",
+        "reason": "Fredagens reducerade backdos genomförd; behåll planerad lågkostnads sim + reducerad styrka för att skydda mekaniken.",
+        "recommendation": "Gör planerad simning 3 200 m aerob/teknik och styrka/core enligt den reducerade 25 min-mallen; undvik plyometri och tunga enbensövningar om benen känns stumma.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -718,7 +719,7 @@
       }
     }
   ],
-  "last_trigger_hash": "d588da91d5dbc1abf462877bbc5dd07438fb7393df135fe7b98a1b5f085db762",
-  "last_run_utc": "2026-09-04T17:46:57.513202+00:00",
+  "last_trigger_hash": "2cf5df06bf52d782ebc219e1882956bc48b270cacb3946ce59e3882c4471c8be",
+  "last_run_utc": "2026-09-04T20:33:24.178423+00:00",
   "contract_version": 15
 }
