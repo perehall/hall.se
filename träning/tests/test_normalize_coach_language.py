@@ -15,15 +15,16 @@ class NormalizeCoachLanguageTests(unittest.TestCase):
             "analyses": [
                 {
                     "activity_id": 42,
+                    "activity_date": "2026-09-04",
                     "assessment": {
-                        "summary": "Genomfört backkvalitetspass motsvarar 2×6×150; stabilt utan försämring i lapparna.",
+                        "summary": "Backintervaller genomförda som rapporterat: 2×6×150 (reducerad plan); stabilt utan försämring i lapparna.",
                         "load_interpretation": "Lapparna såg jämna ut.",
                         "facts": ["18 lappar registrerades som arbetsdelar."],
                         "interpretations": ["Ingen tydlig försämring mellan lapparna."],
                         "unknowns": [],
                     },
                     "plan_action": {
-                        "reason": "Behåll planen.",
+                        "reason": "Fredagens reducerade backdos genomförd; behåll lördagens stödpass.",
                         "recommendation": "Fortsätt enligt planen.",
                     },
                 }
@@ -37,14 +38,29 @@ class NormalizeCoachLanguageTests(unittest.TestCase):
                 }
             ]
         }
+        plan = {
+            "days": [
+                {
+                    "date": "2026-09-04",
+                    "dose_resolution": {"kind": "structured", "value": 12},
+                }
+            ]
+        }
 
-        changed = normalize_state(coach, activities)
+        changed = normalize_state(coach, activities, plan)
         assert_no_forbidden_visible_terms(coach)
 
         self.assertEqual(changed, 1)
         summary = coach["analyses"][0]["assessment"]["summary"]
-        self.assertIn("3 × 6 backintervaller", summary)
+        reason = coach["analyses"][0]["plan_action"]["reason"]
+        self.assertEqual(
+            summary,
+            "Genomfört: 3 × 6 backintervaller (18 totalt). Stabilt utan försämring i intervallerna",
+        )
         self.assertNotIn("2×6×150", summary)
+        self.assertIn("18 totalt", reason)
+        self.assertIn("planerade omfattningen före passet (12 arbetsintervaller)", reason)
+        self.assertNotIn("reducerade backdos genomförd", reason)
         self.assertNotIn("lapparna", str(coach).lower())
         self.assertNotIn("lappar", str(coach).lower())
         self.assertIn("intervallerna", str(coach).lower())
