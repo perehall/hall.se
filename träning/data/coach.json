@@ -4,13 +4,13 @@
       "activity_id": 20036445971,
       "activity_date": "2026-09-04",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-09-04T21:44:33.381363+00:00",
+      "generated_at_utc": "2026-09-04T23:02:52.465303+00:00",
       "model": "gpt-5-mini",
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört: 3 × 6 backintervaller (18 totalt). Kroppen höll kontroll över hela passet",
-        "load_interpretation": "De senaste tre dagarna visar hög mekanisk/neuromuskulär och måttlig kardiovaskulär ackumulering inför helgens sim+styrka och söndagens distans.",
+        "summary": "Genomfört: 3 × 6 backintervaller (18 totalt). Bra kontroll och mekanik i arbetsrepetitioner utan tydlig kapacitetsmiss",
+        "load_interpretation": "Hög mekanisk/neuromuskulär och kardiovaskulär belastning de senaste 3 dagarna påverkar beslutet.",
         "confidence": "medium",
         "facts": [
           "Löpning · backintervaller: 12,68 km · 1:06:28 · 243 m+ · snittpuls 142,4 · maxpuls 167.",
@@ -18,20 +18,20 @@
           "Planstatus 2026-09-04: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Användarrapporterad 3×6 legitimerar att mesocykelns baseline uppdateras till minst 3×6 (volymgolv).",
-          "Återhämtningsunderlaget och närbelastningen stödjer tillfällig progression nästa mikrocykel enligt mesocykelkontrakt, inte en omedelbar ytterligare ökning denna vecka."
+          "Genomförandet bekräftar det nya volymgolvet (3×6=18) utan uppenbar mekanisk degradering.",
+          "Ackumulerad fler-dagarsbelastning motiverar konservativ hantering av efterföljande stöddag (styrka/sim)."
         ],
         "unknowns": [
-          "Subjektiv dagskänsla efter passet (ömhet, lokal trötthet) som kan påverka lördagens styrkedos eller söndagens distans.",
-          "Detaljerad inom-pass mekanikbedömning från performance_marker för att bekräfta att ökad volym kan bibehållas utan teknikförlust.",
-          "Om användaren vill prioritera återställning framför planerad progression denna mikrocykel."
+          "Subjektiv dagskänsla efter passet (benlokal trötthet) kan ändra rekommendation.",
+          "Detaljerad jämförbarhet mot planerad 150 m-längd för varje tidigare intervall (användarrapport anger inte exakt intervallängd).",
+          "Eventuella nya symptom eller trötthet rapporterade efter passet."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-09-05",
-        "reason": "Backpasset genomfördes som 3 × 6 backintervaller (18 totalt), alltså över den planerade omfattningen före passet (12 arbetsintervaller). Mesocykelns utvecklingslinje bevaras.",
-        "recommendation": "Behåll lördagens plan men genomför styrkedelen i reducerad dos som redan planerat (styrka 25 min) och håll simningen aerob/teknisk; undvik plyometri.",
+        "reason": "Backpasset genomfördes som 3 × 6 backintervaller (18 totalt), alltså över den planerade omfattningen före passet (12 arbetsintervaller). Närbelastningen kräver dock att skyddade stödpass hålls konservativa.",
+        "recommendation": "Behåll lördagens planerade simning 3 200 m och reducerad styrka enligt redan applicerat alternativ (styrka 25 min); undvik plyometri och håll simningen aerob/teknisk.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -719,7 +719,7 @@
       }
     }
   ],
-  "last_trigger_hash": "b8ffd37575b2d44aaa9432ec63dd3872d49ff74fd42682748689172d4680f232",
-  "last_run_utc": "2026-09-04T21:44:33.381363+00:00",
+  "last_trigger_hash": "3cca6251d44661d9fc8d264796987323513a68077380857ba21fb524e398af05",
+  "last_run_utc": "2026-09-04T23:02:52.465303+00:00",
   "contract_version": 15
 }
