@@ -4,7 +4,7 @@
   "week_start": "2026-08-31",
   "week_end": "2026-09-06",
   "created_at_utc": "2026-08-30T22:09:50.110394+00:00",
-  "updated_at_utc": "2026-09-05T20:19:41.383183+00:00",
+  "updated_at_utc": "2026-09-05T20:31:16.388214+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -2211,27 +2211,24 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Mycket långt, kontrollerat 4 000 m simpass med stigande puls mot slutet; inga uppenbara tekniska krascher i serien.",
-        "load_interpretation": "Kardiovaskulär exponering hög för simning men mekanisk belastning för benen de närmaste dagarna.",
-        "confidence": "medium",
+        "summary": "Simningen blev 4 000 m mot planerade 3 200 m (800 m mer).",
+        "load_interpretation": "Set-/intervallnivå saknas i det strukturerade analyslagret; teknik, fartstabilitet och intensitetsutveckling går därför inte att bedöma säkert.",
+        "confidence": "low",
         "facts": [
           "Swim: 4,00 km · 1:13:53 · snittpuls 128,5 · maxpuls 153."
         ],
         "interpretations": [
-          "Simningen är ett underhålls-/tekniskt aerobstimulus med begränsad mekanisk kostnad för benen; pulsstegringen antyder hög aerob ansträngning men inga inom-pass-data visar tekniskt haveri.",
-          "Givet senaste tre dagars samlade belastning är det konservativt att hålla styrkedosen reducerad och undvika plyometri idag."
+          "Distansavvikelsen är ett faktum; dess träningsmässiga betydelse kan inte avgöras utan setstruktur och subjektiv känsla."
         ],
         "unknowns": [
-          "Subjektiv dagskänsla/benstatus efter dagens pass saknas och kan påverka om plyometri är acceptabelt.",
-          "Detaljer om hur kontrollerad simintensiteten upplevdes (RPE) saknas och påverkar om simning borde skalas ner ytterligare.",
-          "Eventuell planerad aktivitet senare samma dag (efter allowed_target_dates) saknas men påverkar återhämtning."
+          "Set-/intervallstruktur och subjektiv känsla efter simningen saknas."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-09-05",
-        "reason": "Planen redan anpassad till reducerad styrkedos och simmen levererar avsett aerob/tekniskt stimulus utan mekanisk risk för benen.",
-        "recommendation": "Behåll dagens ordination: genomför simningen som aerob/teknik (3 200–4 000 m-struktur) och gör styrka/core enligt den redan valda reducerade dosen (styrka 25 min); undvik plyometri.",
+        "reason": "Den genomförda passdelen ska inte ordineras en gång till.",
+        "recommendation": "Simningen är genomförd. Återstår enligt dagens plan: styrka/core · 25 min · styrkemall.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -2249,7 +2246,7 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört: 3 × 6 backintervaller (18 totalt). Passet innehöll upprepade korta högkraftsdrag och ökande puls mot slutet",
+        "summary": "Genomfört: 3 × 6 backintervaller (18 totalt).",
         "load_interpretation": "Flera tunga dagar (swimrun, MTB, backpass) skapar ackumulerad mekanisk och kardiovaskulär närbelastning som påverkar helgens skyddade styrka.",
         "confidence": "medium",
         "facts": [
@@ -2263,8 +2260,7 @@
         ],
         "unknowns": [
           "Subjektiv dagskänsla/återhämtning efter dagens pass saknas.",
-          "Detaljer om nattens sömn eller wellness som kan påverka återhämtning.",
-          "Eventuell lokal muskelömhet i ben som skulle påverka plyometri eller styrkedjup."
+          "Detaljer om nattens sömn eller wellness som kan påverka återhämtning."
         ]
       },
       "plan_action": {
@@ -2302,8 +2298,7 @@
         ],
         "unknowns": [
           "Subjektiv lokal bentrötthet efter MTB (användarrapport saknas) som kan påverka löppasset.",
-          "Detaljer om terrängintensiva korta ryck/tekniska fall som skulle öka neuromuskulär kostnad saknas.",
-          "Efterpass-återhämtning/kvällens känsla som kan bekräfta att fredagspasset är lämpligt i reducerad dos."
+          "Detaljer om terrängintensiva korta ryck/tekniska fall som skulle öka neuromuskulär kostnad saknas."
         ]
       },
       "plan_action": {
@@ -2328,7 +2323,7 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Jogget igenom ett hårt men kontrollerat Swimrun-varv (≈3,100–3,300 s) med stigande puls och höga arbetswatt i senare löpblock; passet är kompatibelt med veckans plan men adderar mekanisk belastning för benen.",
+        "summary": "Jogget igenom ett hårt men kontrollerat Swimrun-varv (≈3,100–3,300 s) med stigande puls och höga arbetswatt i senare löpblock; passet är kompatibelt med veckans plan men adderar…",
         "load_interpretation": "Närbelastningen: kardiovaskulär volym + måttlig–mekanisk/neuromuskulär belastning från löp-/byten under Swimrun.",
         "confidence": "medium",
         "facts": [
@@ -2341,8 +2336,7 @@
         ],
         "unknowns": [
           "Subjektiv dagskänsla efter passet (benkänsla) saknas och kan ändra beslut.",
-          "Exakt andel sim vs löp i varje lap (hur mycket mekanisk belastning per del) saknas som kan finjustera skalning.",
-          "Eventuella lokala muskelömheter eller småskador rapporterade av användaren saknas."
+          "Exakt andel sim vs löp i varje lap (hur mycket mekanisk belastning per del) saknas som kan finjustera skalning."
         ]
       },
       "plan_action": {
@@ -2381,8 +2375,7 @@
         ],
         "unknowns": [
           "Exakt lokal ben-/muskeltrötthet kväll/nästa förmiddag (användarrapport indikerar pigg känsla efter pass).",
-          "Om användaren väljer att göra Jogersö Swimrun i stället för simning: faktisk mekanisk belastning från det varvet.",
-          "Eventuella fasta åtaganden eller subjektiv dagskänsla morgonen efter som kan påverka torsdagens MTB."
+          "Om användaren väljer att göra Jogersö Swimrun i stället för simning: faktisk mekanisk belastning från det varvet."
         ]
       },
       "plan_action": {
@@ -2420,8 +2413,7 @@
         ],
         "unknowns": [
           "Subjektiv lokal ben- eller muskeltrötthet efter enduron (användarrapport saknas).",
-          "Detaljerad intensitetsfördelning inom enduro (t.ex. om upprepade högintensiva stapplar förekom) saknas.",
-          "Eventuella fasta åtaganden eller känsla i morgon som kan påverka genomförande."
+          "Detaljerad intensitetsfördelning inom enduro (t.ex."
         ]
       },
       "plan_action": {
