@@ -4,32 +4,32 @@
       "activity_id": 20047602146,
       "activity_date": "2026-09-05",
       "activity_name": "Simning på eftermiddagen",
-      "generated_at_utc": "2026-09-05T17:20:59.088956+00:00",
+      "generated_at_utc": "2026-09-05T20:19:40.769422+00:00",
       "model": "gpt-5-mini",
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Långt, kontrollerat 4 000 m simpass med stigande puls mot slutet; inga röda flaggor men passet adderar betydande kardiovaskulär volym i veckan.",
-        "load_interpretation": "Kardiovaskulärt hög daglig volymtillskott; mekanisk belastning för benen låg.",
+        "summary": "Mycket långt, kontrollerat 4 000 m simpass med stigande puls mot slutet; inga uppenbara tekniska krascher i serien.",
+        "load_interpretation": "Kardiovaskulär exponering hög för simning men mekanisk belastning för benen de närmaste dagarna.",
         "confidence": "medium",
         "facts": [
           "Swim: 4,00 km · 1:13:53 · snittpuls 128,5 · maxpuls 153."
         ],
         "interpretations": [
-          "Simningen uppfyller planens tekniska/aeroba stimulus men utgör en tydlig kardiovaskulär volymaddition efter flera tunga dagar.",
-          "Mekanisk/muskulär belastning för löp/styrka är låg; därför påverkas inte fredagens backkvalitet direkt av dagens sim men absorberbarheten i mikrocykeln minskar."
+          "Simningen är ett underhålls-/tekniskt aerobstimulus med begränsad mekanisk kostnad för benen; pulsstegringen antyder hög aerob ansträngning men inga inom-pass-data visar tekniskt haveri.",
+          "Givet senaste tre dagars samlade belastning är det konservativt att hålla styrkedosen reducerad och undvika plyometri idag."
         ],
         "unknowns": [
-          "Subjektiv dagskänsla efter passet (ben/trötthet) saknas och kan ändra styrkebeslut.",
-          "Exakt intensitetsfördelning i simseriernas arbetsset är okänd (inte markerade som intervall).",
-          "Eventuell lokal muskeltrötthet från tidigare dagar inte explicit rapporterad."
+          "Subjektiv dagskänsla/benstatus efter dagens pass saknas och kan påverka om plyometri är acceptabelt.",
+          "Detaljer om hur kontrollerad simintensiteten upplevdes (RPE) saknas och påverkar om simning borde skalas ner ytterligare.",
+          "Eventuell planerad aktivitet senare samma dag (efter allowed_target_dates) saknas men påverkar återhämtning."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-09-05",
-        "reason": "Passet levererar planerat simstimulus med mekanisk kostnad men ökar kardiovaskulär volym efter flera tunga dagar.",
-        "recommendation": "Behåll dagens sim enligt plan (3 200–4 000 m aerob/teknik) och genomför den redan valda reducerade styrkedosen (styrka 25 min); undvik plyometri och håll styrkan kontrollerad.",
+        "reason": "Planen redan anpassad till reducerad styrkedos och simmen levererar avsett aerob/tekniskt stimulus utan mekanisk risk för benen.",
+        "recommendation": "Behåll dagens ordination: genomför simningen som aerob/teknik (3 200–4 000 m-struktur) och gör styrka/core enligt den redan valda reducerade dosen (styrka 25 min); undvik plyometri.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -757,7 +757,7 @@
       }
     }
   ],
-  "last_trigger_hash": "870db9b282fa9ac2c87e98ec37d7b267c183b3c0d08d812a0c28904ea9369dd2",
-  "last_run_utc": "2026-09-05T17:20:59.088956+00:00",
+  "last_trigger_hash": "bece3e71ee58c83239fd4ce0477ba5acc2bd4dd3a03b581b7050a01525b63dcd",
+  "last_run_utc": "2026-09-05T20:19:40.769422+00:00",
   "contract_version": 15
 }
