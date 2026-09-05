@@ -4,13 +4,13 @@
       "activity_id": 20036445971,
       "activity_date": "2026-09-04",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-09-04T23:02:52.465303+00:00",
+      "generated_at_utc": "2026-09-05T04:26:42.631189+00:00",
       "model": "gpt-5-mini",
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört: 3 × 6 backintervaller (18 totalt). Bra kontroll och mekanik i arbetsrepetitioner utan tydlig kapacitetsmiss",
-        "load_interpretation": "Hög mekanisk/neuromuskulär och kardiovaskulär belastning de senaste 3 dagarna påverkar beslutet.",
+        "summary": "Genomfört: 3 × 6 backintervaller (18 totalt). Passet uppfyller kapacitetsgolvet för backstimulus",
+        "load_interpretation": "mekanisk/neuromuskulär kostnad senaste 3 dagar (enduro, lång MTB, swimrun) plus dagens backkvalitet.",
         "confidence": "medium",
         "facts": [
           "Löpning · backintervaller: 12,68 km · 1:06:28 · 243 m+ · snittpuls 142,4 · maxpuls 167.",
@@ -18,20 +18,20 @@
           "Planstatus 2026-09-04: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Genomförandet bekräftar det nya volymgolvet (3×6=18) utan uppenbar mekanisk degradering.",
-          "Ackumulerad fler-dagarsbelastning motiverar konservativ hantering av efterföljande stöddag (styrka/sim)."
+          "Passet är ett giltigt genomförande av mesocykelns backstimulus och etablerar 18-rep som demonstrerat golv.",
+          "Givet den flera-dagars ackumuleringen bör kortsiktig regress (reducerad styrkedos och undvik plyometri) behållas för att skydda absorberbarheten."
         ],
         "unknowns": [
-          "Subjektiv dagskänsla efter passet (benlokal trötthet) kan ändra rekommendation.",
-          "Detaljerad jämförbarhet mot planerad 150 m-längd för varje tidigare intervall (användarrapport anger inte exakt intervallängd).",
-          "Eventuella nya symptom eller trötthet rapporterade efter passet."
+          "Subjektiv benkänsla/restenivå efter passet (ej rapporterad).",
+          "Detaljerad lokal muskeltrötthet eller skador som kan påverka styrka/plyometri.",
+          "Exakt intensitet på varje intervall jämfört med planerade 150 m-rep (användarrapport anger volym men inte exakt rep-längd)."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-09-05",
         "reason": "Backpasset genomfördes som 3 × 6 backintervaller (18 totalt), alltså över den planerade omfattningen före passet (12 arbetsintervaller).",
-        "recommendation": "Behåll lördagens planerade simning 3 200 m och reducerad styrka enligt redan applicerat alternativ (styrka 25 min); undvik plyometri och håll simningen aerob/teknisk.",
+        "recommendation": "Behåll dagens bedömning: genomfört backpass räknas som fullgjort; håll lördagens reducerade styrkedos (styrka 25 min) och undvik plyometri; genomför simningen aerob/teknisk som planerat.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -719,7 +719,7 @@
       }
     }
   ],
-  "last_trigger_hash": "3cca6251d44661d9fc8d264796987323513a68077380857ba21fb524e398af05",
-  "last_run_utc": "2026-09-04T23:02:52.465303+00:00",
+  "last_trigger_hash": "2baf9fe38eaae145f63ab7465d390f2561aa35e872fadbb313c98b2cfa13588f",
+  "last_run_utc": "2026-09-05T04:26:42.631189+00:00",
   "contract_version": 15
 }
