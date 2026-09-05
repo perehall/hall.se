@@ -1,6 +1,43 @@
 {
   "analyses": [
     {
+      "activity_id": 20047602146,
+      "activity_date": "2026-09-05",
+      "activity_name": "Simning på eftermiddagen",
+      "generated_at_utc": "2026-09-05T14:03:56.472732+00:00",
+      "model": "gpt-5-mini",
+      "performance_marker_id": null,
+      "performance_protocol_key": null,
+      "assessment": {
+        "summary": "Långt, kontrollerat 4 000 m-simpass genomfört; pulskurva visar uppbyggnad mot tröskel i senare block utan teknikras.",
+        "load_interpretation": "Kardiovaskulärt måttligt–högt från flera dagar; mekanisk belastning för benen låg från simningen.",
+        "confidence": "medium",
+        "facts": [
+          "Swim: 4,00 km · 1:13:53 · snittpuls 128,5 · maxpuls 153."
+        ],
+        "interpretations": [
+          "Simningen levererade auktoriserad aerob/teknisk exponering med vissa högre pulstoppar i senare arbetsblock, inte ren plyometrisk eller mekanisk benbelastning.",
+          "Givet mesocykelns guardrails ska simningen hållas som underhåll och styrkedosen reduceras enligt redan applicerat beslut."
+        ],
+        "unknowns": [
+          "Subjektiv dagskänsla efter passet (muskeltrötthet i ben/axlar).",
+          "Detaljerad intensitetsmål för simdelen (hur mycket av pulstopparna var avsiktliga)."
+        ]
+      },
+      "plan_action": {
+        "action": "keep",
+        "target_date": "2026-09-05",
+        "reason": "Auto-coach har redan skalat ned styrkedosen för att skydda fredagens backkvalitet och simningen är korrekt aerob/teknisk.",
+        "recommendation": "Behåll dagens genomförande: sim 4 000 m som aerob/teknik och utför reducerad styrka 25 min (strength-support-25); undvik plyometri och håll simintensiteten kontrollerad.",
+        "dose_option_id": "",
+        "requires_approval": false
+      },
+      "auto_apply": {
+        "applied": false,
+        "note": "Ingen automatisk planändring."
+      }
+    },
+    {
       "activity_id": 20036445971,
       "activity_date": "2026-09-04",
       "activity_name": "Löpning på kvällen",
@@ -719,7 +756,7 @@
       }
     }
   ],
-  "last_trigger_hash": "cf7867a30d8264b21a0f77726ccebd8b238db1d9077cd3de99ad0ccaf2fc6f46",
-  "last_run_utc": "2026-09-05T10:34:01.683527+00:00",
+  "last_trigger_hash": "97877ae10e05945e904d9fd6844a8ec79a8f9d8db2830fa7081af09ab3be98b3",
+  "last_run_utc": "2026-09-05T14:03:56.472732+00:00",
   "contract_version": 15
 }
