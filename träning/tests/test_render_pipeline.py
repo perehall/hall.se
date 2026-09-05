@@ -10,6 +10,7 @@ from render_training_site import PIPELINE, REPO_ROOT, run_pipeline  # noqa: E402
 
 
 EXPECTED_PIPELINE = (
+    "enforce_coach_output_contract.py",
     "normalize_coach_language.py",
     "build.py",
     "finalize_dashboard.py",
@@ -50,6 +51,7 @@ class RenderPipelineTests(unittest.TestCase):
         self.assertEqual(PIPELINE, EXPECTED_PIPELINE)
         self.assertEqual(len(PIPELINE), len(set(PIPELINE)))
         self.assertEqual(PIPELINE[-2:], ("validate_site_contracts.py", "validate_training_data.py"))
+        self.assertLess(PIPELINE.index("enforce_coach_output_contract.py"), PIPELINE.index("normalize_coach_language.py"))
         self.assertLess(PIPELINE.index("normalize_coach_language.py"), PIPELINE.index("build.py"))
         self.assertLess(PIPELINE.index("archive_weeks.py"), PIPELINE.index("finalize_week_review_ui.py"))
         self.assertLess(PIPELINE.index("finalize_week_review_ui.py"), PIPELINE.index("check_week_review_ui.py"))
