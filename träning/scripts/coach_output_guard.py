@@ -10,8 +10,11 @@ from __future__ import annotations
 import copy
 import json
 import re
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
+from zoneinfo import ZoneInfo
+
+from workout_plan_context import build_plan_comparison
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -169,7 +172,9 @@ def guard_result(result, *, latest_date, local_date, plan_comparison=None):
             [str(assessment.get("summary") or "")]
             + [str(value) for value in assessment.get("interpretations") or []]
         )
-        if str(int(round(plan_comparison.get("actual_duration_minutes", 0)))) not in combined or "tidsdos" not in combined.lower():
+        actual = plan_comparison.get("actual_duration_minutes")
+        actual_token = str(int(round(actual))) if isinstance(actual, (int, float)) else ""
+        if not actual_token or actual_token not in combined or "tidsdos" not in combined.lower():
             interpretations = list(assessment.get("interpretations") or [])
             if interpretations and interpretations[-1] == _neutral_future_sentence():
                 interpretations[-1] = deviation
@@ -219,15 +224,16 @@ def _load(path):
 
 
 def main():
-    # CLI guard for workflow use. The richer coach pipeline normally calls the
-    # same pure function before writing, while this remains a final safety net.
-    if not COACH_FILE.exists() or not ACTIVITIES_FILE.exists():
+    # Final workflow safety net: rebuild plan comparison independently instead
+    # of trusting transient AI input state.
+    if not COACH_FILE.exists() or not ACTIVITIES_FILE.exists() or not PLAN_FILE.exists():
         return 0
     coach = _load(COACH_FILE)
     analyses = coach.get("analyses") or []
     if not analyses:
         return 0
     activities = _load(ACTIVITIES_FILE).get("activities") or []
+    plan = _load(PLAN_FILE)
     entry = analyses[0]
     activity = next(
         (row for row in activities if str(row.get("id")) == str(entry.get("activity_id"))),
@@ -237,8 +243,9 @@ def main():
         raise RuntimeError("Coach output guard: latest analysis activity not found")
 
     latest_date = entry.get("activity_date") or ""
-    local_date = datetime.now().date().isoformat()
-    plan_comparison = ((activity.get("workout_analysis_context") or {}).get("plan_comparison"))
+    timezone_name = (plan.get("meta") or {}).get("timezone") or "Europe/Stockholm"
+    local_date = datetime.now(ZoneInfo(timezone_name)).date().isoformat()
+    plan_comparison = build_plan_comparison(plan, activity, latest_date)
     guarded = guard_result(
         {"assessment": entry.get("assessment") or {}, "plan_action": entry.get("plan_action") or {}},
         latest_date=latest_date,
