@@ -45,6 +45,7 @@ Strava-data innehåller råa hastighetsfält som lätt kan misstolkas. Enhetsfel
 - `average_speed` i aktivitetens/lappens Strava-data är **meter per sekund (m/s)**. Värdet `3.11` betyder alltså 3,11 m/s, inte 3:11/km.
 - Om du anger löptempo ska det beräknas deterministiskt från tid och distans: `pace_s_per_km = duration_s / (distance_m / 1000)`.
 - För total snittfart används `moving_time_s` och `distance_m` när båda finns. För en lapp används i första hand lappens `moving_time_s` och `distance_m`.
+- För `Run`, `TrailRun` och `VirtualRun` ska `assessment.summary` alltid ange total distans i kilometer och verifierad snittfart i min/km när `moving_time_s` och `distance_m` finns. Använd format i stil med `22,00 km · 1:56:00 · 5:16/km`; skriv inte rå meterprecision som `22,001.5 m`.
 - Ett rått decimalvärde från `average_speed` får aldrig återges eller formatteras som min/km.
 - Innan min/km skrivs i `summary`, `facts`, `interpretations`, `load_interpretation`, `reason` eller `recommendation` ska värdet aritmetiskt verifieras mot tillhörande tid och distans.
 - Om fart inte går att verifiera från tid + distans eller från deterministiskt `performance_context`, utelämna fart i stället för att gissa.
