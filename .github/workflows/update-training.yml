@@ -127,7 +127,10 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_MODEL: gpt-5-mini
           WELLNESS_CONTEXT_FILE: /tmp/training_wellness_context.json
-        run: python "träning/scripts/coach.py"
+        run: python "träning/scripts/coach_pipeline.py"
+
+      - name: Guard AI coach claims
+        run: python "träning/scripts/coach_output_guard.py"
 
       - name: Remove private wellness context
         if: always()
