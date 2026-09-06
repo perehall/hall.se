@@ -4,32 +4,33 @@
       "activity_id": 20057585521,
       "activity_date": "2026-09-06",
       "activity_name": "Löpning på morgonen",
-      "generated_at_utc": "2026-09-06T20:23:34.851435+00:00",
+      "generated_at_utc": "2026-09-06T20:50:15.596340+00:00",
       "model": "gpt-5-mini",
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "22,00 km · 1:56:00 · 5:16/km",
-        "load_interpretation": "Långt distanspass med måttlig genomsnittspuls; påverkar främst kardiovaskulär och mekanisk närbelastning de närmaste 2–3 dagarna.",
+        "summary": "22 km lugn distans genomförd kontrollerat; tempoökning kring km 20–21 fungerade väl och du var pigg resten av dagen.",
+        "load_interpretation": "Passet gav långvarig kardiovaskulär och mekanisk belastning men användarrapporten anger god tolerans, inga akuta problem för nästa 48–72 h.",
         "confidence": "medium",
         "facts": [
           "Löpning · distans: 22,00 km · 1:56:00 · 219 m+ · snittpuls 139 · maxpuls 164.",
+          "Användarrapport: Kände mig stark hela passet och höll ett kontrollerat tempo. Tog en gel efter cirka en timme. Testade en tempoökning kring km 20–21, cirka 4:25/km, vilket fungerade bra. Pigg resten av dagen och inte ont någonstans.",
           "Planstatus 2026-09-06: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Passet genomförde planerat lugn distansstimulus och registrerades som dagens avslutande löppass.",
-          "I flerdagsperspektiv adderar detta till tre tunga dagar tidigare i veckan (fri–lördag) och ökar ackumulerad kardiovaskulär/mekanisk belastning."
+          "Långt kontrollerat distanspass visar god uthållighetsbas och förmåga att avsluta med en tempoökning utan nedsatt känsla.",
+          "Givet tidigare tre tunga dagar (enduro, tröskel, backar) bör mikrocykelns nästa prioriterade anchor-pass skyddas men ingen omedelbar vila krävs om känslan är fortsatt bra."
         ],
         "unknowns": [
-          "Subjektiv dagskänsla och lokal bentrötthet efter passet.",
-          "Detaljer om återstående dagsaktiviteter eller senare aktivitet idag som kan påverka återhämtning."
+          "Detaljerad lokal muskeltrötthet nästa morgon (kan påverka måndagens enduro)",
+          "Eventuell påverkan på tisdagens planerade tröskel (3×10) beroende på återhämtning över natt"
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "",
-        "reason": "Passet motsvarar planerad lugn distans och ska räknas som genomförd utan att behöva reduceras.",
-        "recommendation": "Ingen förändring i närmaste plan; vila eller mycket lätt aktivitet imorgon tills du känner hur benen svarar. Rapportera kort om benkänsla om du vill att jag ska överväga ändring för nästa mikrocykeldag.",
+        "reason": "Passet tolererades väl enligt både data och användarrapport och ligger i linje med microcycle-planen.",
+        "recommendation": "Behåll planerad måndagsenduro och tisdagens tröskel (3×10) som slutförande av mikrocykeln om du känner dig pigg morgonen efter; vila eller reducera om morgondagens benkänsla är tung eller smärta uppträder.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -764,8 +765,8 @@
       }
     }
   ],
-  "last_trigger_hash": "6cce58aab7e61bbd4f453446c41113189fc8d701e0e2d4fbaa1650bfab34de6f",
-  "last_run_utc": "2026-09-06T20:23:34.851435+00:00",
+  "last_trigger_hash": "db09d9876e09b8b5e0f0b33728df2d6ba79faf18b26f71c75567e3567f2f420d",
+  "last_run_utc": "2026-09-06T20:50:15.596340+00:00",
   "contract_version": 15,
   "output_contract_version": 16
 }

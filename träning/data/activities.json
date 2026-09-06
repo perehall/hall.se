@@ -1,5 +1,5 @@
 {
-  "last_sync_utc": "2026-09-06T20:23:21.728117+00:00",
+  "last_sync_utc": "2026-09-06T20:50:01.720501+00:00",
   "activities": [
     {
       "id": 20057585521,
@@ -289,7 +289,216 @@
       "source_sport_type": "Run",
       "classification": "training",
       "display_label": "Löpning · distans",
-      "classification_reason": "Explicit semantisk normalisering av löppasset. Ändringen invaliderar föregående coachanalys så att löpsummeringen räknas om med verifierad min/km från tid och distans."
+      "classification_reason": "Explicit användarrapport beskriver både passkänsla, energiintag, sen fartökning och respons efter passet. Dessa uppgifter ska vara förstaklassunderlag i coachanalysen.",
+      "user_report": "Kände mig stark hela passet och höll ett kontrollerat tempo. Tog en gel efter cirka en timme. Testade en tempoökning kring km 20–21, cirka 4:25/km, vilket fungerade bra. Pigg resten av dagen och inte ont någonstans.",
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 20057585521,
+        "sport_type": "Run",
+        "display_label": "Löpning · distans",
+        "classification": "training",
+        "user_report": "Kände mig stark hela passet och höll ett kontrollerat tempo. Tog en gel efter cirka en timme. Testade en tempoökning kring km 20–21, cirka 4:25/km, vilket fungerade bra. Pigg resten av dagen och inte ont någonstans.",
+        "total": {
+          "distance_m": 22001.5,
+          "distance_km": 22.002,
+          "moving_time_s": 6960.0,
+          "elapsed_time_s": 6960.0,
+          "elevation_gain_m": 219.0,
+          "average_heartrate": 139.0,
+          "max_heartrate": 164.0
+        },
+        "run": {
+          "average_pace_s_per_km": 316.34,
+          "average_pace": "5:16/km",
+          "source_laps_near_1km": [
+            {
+              "lap_index": 1,
+              "distance_m": 1000.0,
+              "moving_time_s": 322,
+              "pace_s_per_km": 322.0,
+              "pace": "5:22/km",
+              "average_heartrate": 128.0
+            },
+            {
+              "lap_index": 2,
+              "distance_m": 1000.0,
+              "moving_time_s": 305,
+              "pace_s_per_km": 305.0,
+              "pace": "5:05/km",
+              "average_heartrate": 129.7
+            },
+            {
+              "lap_index": 3,
+              "distance_m": 1000.0,
+              "moving_time_s": 314,
+              "pace_s_per_km": 314.0,
+              "pace": "5:14/km",
+              "average_heartrate": 132.9
+            },
+            {
+              "lap_index": 4,
+              "distance_m": 1000.0,
+              "moving_time_s": 319,
+              "pace_s_per_km": 319.0,
+              "pace": "5:19/km",
+              "average_heartrate": 132.7
+            },
+            {
+              "lap_index": 5,
+              "distance_m": 1000.0,
+              "moving_time_s": 321,
+              "pace_s_per_km": 321.0,
+              "pace": "5:21/km",
+              "average_heartrate": 135.7
+            },
+            {
+              "lap_index": 6,
+              "distance_m": 1000.0,
+              "moving_time_s": 330,
+              "pace_s_per_km": 330.0,
+              "pace": "5:30/km",
+              "average_heartrate": 136.7
+            },
+            {
+              "lap_index": 7,
+              "distance_m": 1000.0,
+              "moving_time_s": 320,
+              "pace_s_per_km": 320.0,
+              "pace": "5:20/km",
+              "average_heartrate": 136.1
+            },
+            {
+              "lap_index": 8,
+              "distance_m": 1000.0,
+              "moving_time_s": 328,
+              "pace_s_per_km": 328.0,
+              "pace": "5:28/km",
+              "average_heartrate": 138.8
+            },
+            {
+              "lap_index": 9,
+              "distance_m": 1000.0,
+              "moving_time_s": 320,
+              "pace_s_per_km": 320.0,
+              "pace": "5:20/km",
+              "average_heartrate": 137.5
+            },
+            {
+              "lap_index": 10,
+              "distance_m": 1000.0,
+              "moving_time_s": 324,
+              "pace_s_per_km": 324.0,
+              "pace": "5:24/km",
+              "average_heartrate": 136.9
+            },
+            {
+              "lap_index": 11,
+              "distance_m": 1000.0,
+              "moving_time_s": 320,
+              "pace_s_per_km": 320.0,
+              "pace": "5:20/km",
+              "average_heartrate": 137.2
+            },
+            {
+              "lap_index": 12,
+              "distance_m": 1000.0,
+              "moving_time_s": 322,
+              "pace_s_per_km": 322.0,
+              "pace": "5:22/km",
+              "average_heartrate": 139.2
+            },
+            {
+              "lap_index": 13,
+              "distance_m": 1000.0,
+              "moving_time_s": 317,
+              "pace_s_per_km": 317.0,
+              "pace": "5:17/km",
+              "average_heartrate": 139.3
+            },
+            {
+              "lap_index": 14,
+              "distance_m": 1000.0,
+              "moving_time_s": 319,
+              "pace_s_per_km": 319.0,
+              "pace": "5:19/km",
+              "average_heartrate": 139.1
+            },
+            {
+              "lap_index": 15,
+              "distance_m": 1000.0,
+              "moving_time_s": 319,
+              "pace_s_per_km": 319.0,
+              "pace": "5:19/km",
+              "average_heartrate": 138.1
+            },
+            {
+              "lap_index": 16,
+              "distance_m": 1000.0,
+              "moving_time_s": 321,
+              "pace_s_per_km": 321.0,
+              "pace": "5:21/km",
+              "average_heartrate": 138.0
+            },
+            {
+              "lap_index": 17,
+              "distance_m": 1000.0,
+              "moving_time_s": 320,
+              "pace_s_per_km": 320.0,
+              "pace": "5:20/km",
+              "average_heartrate": 141.8
+            },
+            {
+              "lap_index": 18,
+              "distance_m": 1000.0,
+              "moving_time_s": 322,
+              "pace_s_per_km": 322.0,
+              "pace": "5:22/km",
+              "average_heartrate": 139.1
+            },
+            {
+              "lap_index": 19,
+              "distance_m": 1000.0,
+              "moving_time_s": 311,
+              "pace_s_per_km": 311.0,
+              "pace": "5:11/km",
+              "average_heartrate": 143.9
+            },
+            {
+              "lap_index": 20,
+              "distance_m": 1000.0,
+              "moving_time_s": 301,
+              "pace_s_per_km": 301.0,
+              "pace": "5:01/km",
+              "average_heartrate": 147.0
+            },
+            {
+              "lap_index": 21,
+              "distance_m": 1000.0,
+              "moving_time_s": 264,
+              "pace_s_per_km": 264.0,
+              "pace": "4:24/km",
+              "average_heartrate": 157.3
+            },
+            {
+              "lap_index": 22,
+              "distance_m": 1000.0,
+              "moving_time_s": 309,
+              "pace_s_per_km": 309.0,
+              "pace": "5:09/km",
+              "average_heartrate": 155.8
+            }
+          ],
+          "fastest_source_lap_near_1km": {
+            "lap_index": 21,
+            "distance_m": 1000.0,
+            "moving_time_s": 264,
+            "pace_s_per_km": 264.0,
+            "pace": "4:24/km",
+            "average_heartrate": 157.3
+          },
+          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals."
+        }
+      }
     },
     {
       "id": 20047602146,
@@ -887,7 +1096,25 @@
           "average_watts": null,
           "average_cadence": null
         }
-      ]
+      ],
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 20047602146,
+        "sport_type": "Swim",
+        "display_label": "Swim",
+        "classification": null,
+        "user_report": "",
+        "total": {
+          "distance_m": 4000.0,
+          "distance_km": 4.0,
+          "moving_time_s": 3401.0,
+          "elapsed_time_s": 4433.0,
+          "elevation_gain_m": 0.0,
+          "average_heartrate": 128.5,
+          "max_heartrate": 153.0
+        },
+        "run": null
+      }
     },
     {
       "id": 20036445971,
@@ -1430,7 +1657,87 @@
       "classification": "training",
       "display_label": "Löpning · backintervaller",
       "user_report": "3 × 6 backintervaller (18 backar totalt). Tre serier om sex intervaller; arbetsdelarna ska beskrivas som intervaller.",
-      "classification_reason": "Explicit användarrapport korrigerar passets faktiska intervallstruktur. Garmin/Strava-varv får inte överskriva användarens rapporterade 3 × 6-struktur."
+      "classification_reason": "Explicit användarrapport korrigerar passets faktiska intervallstruktur. Garmin/Strava-varv får inte överskriva användarens rapporterade 3 × 6-struktur.",
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 20036445971,
+        "sport_type": "Run",
+        "display_label": "Löpning · backintervaller",
+        "classification": "training",
+        "user_report": "3 × 6 backintervaller (18 backar totalt). Tre serier om sex intervaller; arbetsdelarna ska beskrivas som intervaller.",
+        "total": {
+          "distance_m": 12681.6,
+          "distance_km": 12.682,
+          "moving_time_s": 3988.0,
+          "elapsed_time_s": 3988.0,
+          "elevation_gain_m": 243.0,
+          "average_heartrate": 142.4,
+          "max_heartrate": 167.0
+        },
+        "run": {
+          "average_pace_s_per_km": 314.47,
+          "average_pace": "5:14/km",
+          "source_laps_near_1km": [
+            {
+              "lap_index": 1,
+              "distance_m": 1000.0,
+              "moving_time_s": 323,
+              "pace_s_per_km": 323.0,
+              "pace": "5:23/km",
+              "average_heartrate": 125.4
+            },
+            {
+              "lap_index": 2,
+              "distance_m": 1000.0,
+              "moving_time_s": 307,
+              "pace_s_per_km": 307.0,
+              "pace": "5:07/km",
+              "average_heartrate": 133.0
+            },
+            {
+              "lap_index": 15,
+              "distance_m": 1000.0,
+              "moving_time_s": 324,
+              "pace_s_per_km": 324.0,
+              "pace": "5:24/km",
+              "average_heartrate": 138.3
+            },
+            {
+              "lap_index": 28,
+              "distance_m": 1000.0,
+              "moving_time_s": 331,
+              "pace_s_per_km": 331.0,
+              "pace": "5:31/km",
+              "average_heartrate": 143.1
+            },
+            {
+              "lap_index": 41,
+              "distance_m": 1000.0,
+              "moving_time_s": 325,
+              "pace_s_per_km": 325.0,
+              "pace": "5:25/km",
+              "average_heartrate": 141.5
+            },
+            {
+              "lap_index": 42,
+              "distance_m": 1000.0,
+              "moving_time_s": 326,
+              "pace_s_per_km": 326.0,
+              "pace": "5:26/km",
+              "average_heartrate": 139.6
+            }
+          ],
+          "fastest_source_lap_near_1km": {
+            "lap_index": 2,
+            "distance_m": 1000.0,
+            "moving_time_s": 307,
+            "pace_s_per_km": 307.0,
+            "pace": "5:07/km",
+            "average_heartrate": 133.0
+          },
+          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals."
+        }
+      }
     },
     {
       "id": 20024236347,
@@ -1536,7 +1843,25 @@
           "average_watts": 130.5,
           "average_cadence": null
         }
-      ]
+      ],
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 20024236347,
+        "sport_type": "MountainBikeRide",
+        "display_label": "MountainBikeRide",
+        "classification": null,
+        "user_report": "",
+        "total": {
+          "distance_m": 31467.5,
+          "distance_km": 31.468,
+          "moving_time_s": 7013.0,
+          "elapsed_time_s": 7883.0,
+          "elevation_gain_m": 318.0,
+          "average_heartrate": 114.0,
+          "max_heartrate": 139.0
+        },
+        "run": null
+      }
     },
     {
       "id": 20008258969,
@@ -1651,6 +1976,24 @@
           "source_sport_type=TrailRun",
           "explicit Swimrun activity name"
         ]
+      },
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 20008258969,
+        "sport_type": "Swimrun",
+        "display_label": "Swimrun",
+        "classification": null,
+        "user_report": "",
+        "total": {
+          "distance_m": 6885.6,
+          "distance_km": 6.886,
+          "moving_time_s": 3099.0,
+          "elapsed_time_s": 3265.0,
+          "elevation_gain_m": 104.3,
+          "average_heartrate": 135.4,
+          "max_heartrate": 158.0
+        },
+        "run": null
       }
     },
     {
@@ -1890,7 +2233,87 @@
           "average_cadence": 79.5
         }
       ],
-      "user_report": "Började segt och kände mig långsam i uppvärmningen. Gjorde 3 stegringslopp för att väcka kroppen. I 8-minutersintervallerna var känslan bättre: inga problem att hålla arbetstiden, och efter sista intervallen kändes kroppen riktigt pigg genom hela nedjoggen. Bedömning från användaren: hade definitivt kunnat köra ytterligare en 8-minutersintervall."
+      "user_report": "Började segt och kände mig långsam i uppvärmningen. Gjorde 3 stegringslopp för att väcka kroppen. I 8-minutersintervallerna var känslan bättre: inga problem att hålla arbetstiden, och efter sista intervallen kändes kroppen riktigt pigg genom hela nedjoggen. Bedömning från användaren: hade definitivt kunnat köra ytterligare en 8-minutersintervall.",
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 19994118756,
+        "sport_type": "Run",
+        "display_label": "Run",
+        "classification": null,
+        "user_report": "Började segt och kände mig långsam i uppvärmningen. Gjorde 3 stegringslopp för att väcka kroppen. I 8-minutersintervallerna var känslan bättre: inga problem att hålla arbetstiden, och efter sista intervallen kändes kroppen riktigt pigg genom hela nedjoggen. Bedömning från användaren: hade definitivt kunnat köra ytterligare en 8-minutersintervall.",
+        "total": {
+          "distance_m": 10348.9,
+          "distance_km": 10.349,
+          "moving_time_s": 3029.0,
+          "elapsed_time_s": 3029.0,
+          "elevation_gain_m": 61.0,
+          "average_heartrate": 145.3,
+          "max_heartrate": 165.0
+        },
+        "run": {
+          "average_pace_s_per_km": 292.69,
+          "average_pace": "4:53/km",
+          "source_laps_near_1km": [
+            {
+              "lap_index": 1,
+              "distance_m": 1000.0,
+              "moving_time_s": 324,
+              "pace_s_per_km": 324.0,
+              "pace": "5:24/km",
+              "average_heartrate": 127.3
+            },
+            {
+              "lap_index": 2,
+              "distance_m": 983.1,
+              "moving_time_s": 315,
+              "pace_s_per_km": 320.41,
+              "pace": "5:20/km",
+              "average_heartrate": 131.6
+            },
+            {
+              "lap_index": 9,
+              "distance_m": 1000.0,
+              "moving_time_s": 257,
+              "pace_s_per_km": 257.0,
+              "pace": "4:17/km",
+              "average_heartrate": 145.8
+            },
+            {
+              "lap_index": 12,
+              "distance_m": 1000.0,
+              "moving_time_s": 262,
+              "pace_s_per_km": 262.0,
+              "pace": "4:22/km",
+              "average_heartrate": 154.4
+            },
+            {
+              "lap_index": 15,
+              "distance_m": 1000.0,
+              "moving_time_s": 265,
+              "pace_s_per_km": 265.0,
+              "pace": "4:25/km",
+              "average_heartrate": 155.5
+            },
+            {
+              "lap_index": 17,
+              "distance_m": 1000.0,
+              "moving_time_s": 323,
+              "pace_s_per_km": 323.0,
+              "pace": "5:23/km",
+              "average_heartrate": 147.2
+            }
+          ],
+          "fastest_source_lap_near_1km": {
+            "lap_index": 9,
+            "distance_m": 1000.0,
+            "moving_time_s": 257,
+            "pace_s_per_km": 257.0,
+            "pace": "4:17/km",
+            "average_heartrate": 145.8
+          },
+          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals."
+        }
+      }
     },
     {
       "id": 19980267962,
@@ -1934,6 +2357,24 @@
           "source_sport_type=EMountainBikeRide",
           "user convention: Strava e-MTB represents Enduro"
         ]
+      },
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 19980267962,
+        "sport_type": "Enduro",
+        "display_label": "Enduro",
+        "classification": "recreation",
+        "user_report": "",
+        "total": {
+          "distance_m": 23403.7,
+          "distance_km": 23.404,
+          "moving_time_s": 3975.0,
+          "elapsed_time_s": 6024.0,
+          "elevation_gain_m": 508.6,
+          "average_heartrate": 110.9,
+          "max_heartrate": 178.0
+        },
+        "run": null
       }
     },
     {
@@ -1954,7 +2395,31 @@
       "device_name": "Garmin Forerunner 970",
       "gear_id": "g32837890",
       "gear_name": "Saucony Triumph 23 Saucony Triumph 23",
-      "source": "Strava API"
+      "source": "Strava API",
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 19960743008,
+        "sport_type": "Run",
+        "display_label": "Run",
+        "classification": null,
+        "user_report": "",
+        "total": {
+          "distance_m": 18876.3,
+          "distance_km": 18.876,
+          "moving_time_s": 6194.0,
+          "elapsed_time_s": 6194.0,
+          "elevation_gain_m": 184.0,
+          "average_heartrate": 139.3,
+          "max_heartrate": 153.0
+        },
+        "run": {
+          "average_pace_s_per_km": 328.14,
+          "average_pace": "5:28/km",
+          "source_laps_near_1km": [],
+          "fastest_source_lap_near_1km": null,
+          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals."
+        }
+      }
     },
     {
       "id": 19946705399,
@@ -1980,7 +2445,25 @@
       "display_label": "Simning · aerob + tröskel",
       "user_report": "Spontant simpass: Aerob+tröskel 4K, 4 000 m. Passet är separat från dagens planerade MTB-pass och ska räknas som faktisk träningsbelastning, inte som genomförande av dagens plan.",
       "classification_reason": "Användaren anger explicit att simpasset var spontant och ska registreras som ett eget pass, inte kopplas till dagens planerade MTB-pass.",
-      "plan_relation": "separate"
+      "plan_relation": "separate",
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 19946705399,
+        "sport_type": "Swim",
+        "display_label": "Simning · aerob + tröskel",
+        "classification": "training",
+        "user_report": "Spontant simpass: Aerob+tröskel 4K, 4 000 m. Passet är separat från dagens planerade MTB-pass och ska räknas som faktisk träningsbelastning, inte som genomförande av dagens plan.",
+        "total": {
+          "distance_m": 4000.0,
+          "distance_km": 4.0,
+          "moving_time_s": 3397.0,
+          "elapsed_time_s": 4499.0,
+          "elevation_gain_m": 0.0,
+          "average_heartrate": 129.7,
+          "max_heartrate": 157.0
+        },
+        "run": null
+      }
     },
     {
       "id": 19939732259,
@@ -2000,7 +2483,31 @@
       "device_name": "Garmin Forerunner 970",
       "gear_id": "g32837896",
       "gear_name": "Saucony Triumph 23",
-      "source": "Strava API"
+      "source": "Strava API",
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 19939732259,
+        "sport_type": "Run",
+        "display_label": "Run",
+        "classification": null,
+        "user_report": "",
+        "total": {
+          "distance_m": 9672.9,
+          "distance_km": 9.673,
+          "moving_time_s": 3036.0,
+          "elapsed_time_s": 3036.0,
+          "elevation_gain_m": 182.0,
+          "average_heartrate": 145.1,
+          "max_heartrate": 169.0
+        },
+        "run": {
+          "average_pace_s_per_km": 313.87,
+          "average_pace": "5:14/km",
+          "source_laps_near_1km": [],
+          "fastest_source_lap_near_1km": null,
+          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals."
+        }
+      }
     },
     {
       "id": 19926277295,
@@ -2020,7 +2527,25 @@
       "device_name": "Garmin Forerunner 970",
       "gear_id": "b18453520",
       "gear_name": "Merida One Twenty 3000",
-      "source": "Strava API"
+      "source": "Strava API",
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 19926277295,
+        "sport_type": "MountainBikeRide",
+        "display_label": "MountainBikeRide",
+        "classification": null,
+        "user_report": "",
+        "total": {
+          "distance_m": 18132.6,
+          "distance_km": 18.133,
+          "moving_time_s": 4248.0,
+          "elapsed_time_s": 4248.0,
+          "elevation_gain_m": 210.0,
+          "average_heartrate": 128.3,
+          "max_heartrate": 147.0
+        },
+        "run": null
+      }
     },
     {
       "id": 19911120461,
@@ -2045,7 +2570,25 @@
       "classification": "training",
       "display_label": "Swimrun · Jogersö Extreme",
       "user_report": "Ett varv på Jogersö Extreme. Pulsmätningen tappades under cirka 2 km där ansträngningen gick rätt hårt; registrerad Z1 på den delen är felaktig och faktisk intensitet bedöms av användaren som minst Z3.",
-      "classification_reason": "Aktivitetsnamnet identifierar passet som swimrun. Användarrapporten anger dessutom ett tydligt pulsbortfall, så registrerad pulszonsfördelning och snittpuls ska inte användas som fullgod intensitetsbeskrivning för passet."
+      "classification_reason": "Aktivitetsnamnet identifierar passet som swimrun. Användarrapporten anger dessutom ett tydligt pulsbortfall, så registrerad pulszonsfördelning och snittpuls ska inte användas som fullgod intensitetsbeskrivning för passet.",
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 19911120461,
+        "sport_type": "Swimrun",
+        "display_label": "Swimrun · Jogersö Extreme",
+        "classification": "training",
+        "user_report": "Ett varv på Jogersö Extreme. Pulsmätningen tappades under cirka 2 km där ansträngningen gick rätt hårt; registrerad Z1 på den delen är felaktig och faktisk intensitet bedöms av användaren som minst Z3.",
+        "total": {
+          "distance_m": 6804.5,
+          "distance_km": 6.804,
+          "moving_time_s": 3053.0,
+          "elapsed_time_s": 3385.0,
+          "elevation_gain_m": 102.2,
+          "average_heartrate": 131.9,
+          "max_heartrate": 164.0
+        },
+        "run": null
+      }
     },
     {
       "id": 19897382163,
@@ -2070,7 +2613,31 @@
       "classification": "training",
       "display_label": "Run",
       "user_report": "3×8 min tröskel. Motsvarande känsla som föregående vecka, lite sämre tempo och ingen känsla av att vara starkare.",
-      "classification_reason": "Explicit användarrapport beskriver passets faktiska struktur och upplevda utfall och ska användas i fortsatt löpplanering."
+      "classification_reason": "Explicit användarrapport beskriver passets faktiska struktur och upplevda utfall och ska användas i fortsatt löpplanering.",
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 19897382163,
+        "sport_type": "Run",
+        "display_label": "Run",
+        "classification": "training",
+        "user_report": "3×8 min tröskel. Motsvarande känsla som föregående vecka, lite sämre tempo och ingen känsla av att vara starkare.",
+        "total": {
+          "distance_m": 10343.1,
+          "distance_km": 10.343,
+          "moving_time_s": 3093.0,
+          "elapsed_time_s": 3094.0,
+          "elevation_gain_m": 75.0,
+          "average_heartrate": 144.8,
+          "max_heartrate": 165.0
+        },
+        "run": {
+          "average_pace_s_per_km": 299.04,
+          "average_pace": "4:59/km",
+          "source_laps_near_1km": [],
+          "fastest_source_lap_near_1km": null,
+          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals."
+        }
+      }
     },
     {
       "id": 19883021281,
@@ -2088,7 +2655,25 @@
       "weighted_average_watts": null,
       "calories": 104,
       "device_name": "Garmin Forerunner 970",
-      "source": "Strava API"
+      "source": "Strava API",
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 19883021281,
+        "sport_type": "WeightTraining",
+        "display_label": "WeightTraining",
+        "classification": null,
+        "user_report": "",
+        "total": {
+          "distance_m": null,
+          "distance_km": null,
+          "moving_time_s": 1745.0,
+          "elapsed_time_s": 1745.0,
+          "elevation_gain_m": 0.0,
+          "average_heartrate": 84.0,
+          "max_heartrate": 108.0
+        },
+        "run": null
+      }
     },
     {
       "id": 19882521682,
@@ -2115,6 +2700,24 @@
           "source_sport_type=MountainBikeRide",
           "explicit Enduro/Motocross activity name"
         ]
+      },
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 19882521682,
+        "sport_type": "Enduro",
+        "display_label": "Enduro",
+        "classification": null,
+        "user_report": "",
+        "total": {
+          "distance_m": 27175.2,
+          "distance_km": 27.175,
+          "moving_time_s": 4730.0,
+          "elapsed_time_s": 5841.0,
+          "elevation_gain_m": 515.2,
+          "average_heartrate": 118.7,
+          "max_heartrate": 160.0
+        },
+        "run": null
       }
     },
     {
@@ -2138,7 +2741,31 @@
       "classification": "training",
       "display_label": "Löpning · grus/asfalt",
       "user_report": "Underlag: grus och asfalt; inte trail.",
-      "classification_reason": "Explicit användarrapport korrigerar underlaget till grus/asfalt. Aktiviteten är fortsatt vanlig löpning, inte TrailRun."
+      "classification_reason": "Explicit användarrapport korrigerar underlaget till grus/asfalt. Aktiviteten är fortsatt vanlig löpning, inte TrailRun.",
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 19862241646,
+        "sport_type": "Run",
+        "display_label": "Löpning · grus/asfalt",
+        "classification": "training",
+        "user_report": "Underlag: grus och asfalt; inte trail.",
+        "total": {
+          "distance_m": 17158.0,
+          "distance_km": 17.158,
+          "moving_time_s": 5459.0,
+          "elapsed_time_s": 5459.0,
+          "elevation_gain_m": 161.0,
+          "average_heartrate": 138.9,
+          "max_heartrate": 157.0
+        },
+        "run": {
+          "average_pace_s_per_km": 318.16,
+          "average_pace": "5:18/km",
+          "source_laps_near_1km": [],
+          "fastest_source_lap_near_1km": null,
+          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals."
+        }
+      }
     },
     {
       "id": 19852599244,
@@ -2162,7 +2789,25 @@
       "display_label": "Enduro",
       "garmin_activity_type": "Motocross",
       "user_report": "Lätt och inte det minsta slitsamt.",
-      "classification_reason": "Strava saknar enduro som aktivitetstyp och exponerar därför passet som MountainBikeRide. Garmin Connect klassar originalaktiviteten som Motocross."
+      "classification_reason": "Strava saknar enduro som aktivitetstyp och exponerar därför passet som MountainBikeRide. Garmin Connect klassar originalaktiviteten som Motocross.",
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 19852599244,
+        "sport_type": "Enduro",
+        "display_label": "Enduro",
+        "classification": "recreation",
+        "user_report": "Lätt och inte det minsta slitsamt.",
+        "total": {
+          "distance_m": 23887.9,
+          "distance_km": 23.888,
+          "moving_time_s": 3940.0,
+          "elapsed_time_s": 4921.0,
+          "elevation_gain_m": 512.4,
+          "average_heartrate": 127.0,
+          "max_heartrate": 152.0
+        },
+        "run": null
+      }
     },
     {
       "id": 19841136162,
@@ -2180,7 +2825,25 @@
       "weighted_average_watts": null,
       "calories": 274,
       "device_name": "Garmin Forerunner 970",
-      "source": "Strava API"
+      "source": "Strava API",
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 19841136162,
+        "sport_type": "StandUpPaddling",
+        "display_label": "StandUpPaddling",
+        "classification": null,
+        "user_report": "",
+        "total": {
+          "distance_m": 6021.0,
+          "distance_km": 6.021,
+          "moving_time_s": 4323.0,
+          "elapsed_time_s": 4360.0,
+          "elevation_gain_m": 42.8,
+          "average_heartrate": 89.7,
+          "max_heartrate": 108.0
+        },
+        "run": null
+      }
     },
     {
       "id": 19839384290,
@@ -2198,7 +2861,25 @@
       "weighted_average_watts": null,
       "calories": 555,
       "device_name": "Garmin Forerunner 970",
-      "source": "Strava API"
+      "source": "Strava API",
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 19839384290,
+        "sport_type": "Swim",
+        "display_label": "Swim",
+        "classification": null,
+        "user_report": "",
+        "total": {
+          "distance_m": 3200.0,
+          "distance_km": 3.2,
+          "moving_time_s": 2903.0,
+          "elapsed_time_s": 3588.0,
+          "elevation_gain_m": 0.0,
+          "average_heartrate": 127.4,
+          "max_heartrate": 154.0
+        },
+        "run": null
+      }
     },
     {
       "id": 19827029587,
@@ -2216,7 +2897,31 @@
       "weighted_average_watts": 278,
       "calories": 574,
       "device_name": "Garmin Forerunner 970",
-      "source": "Strava API"
+      "source": "Strava API",
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 19827029587,
+        "sport_type": "Run",
+        "display_label": "Run",
+        "classification": null,
+        "user_report": "",
+        "total": {
+          "distance_m": 10347.9,
+          "distance_km": 10.348,
+          "moving_time_s": 3048.0,
+          "elapsed_time_s": 3048.0,
+          "elevation_gain_m": 63.0,
+          "average_heartrate": 145.7,
+          "max_heartrate": 167.0
+        },
+        "run": {
+          "average_pace_s_per_km": 294.55,
+          "average_pace": "4:55/km",
+          "source_laps_near_1km": [],
+          "fastest_source_lap_near_1km": null,
+          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals."
+        }
+      }
     },
     {
       "id": 19811963700,
@@ -2243,6 +2948,24 @@
           "source_sport_type=TrailRun",
           "explicit Swimrun activity name"
         ]
+      },
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 19811963700,
+        "sport_type": "Swimrun",
+        "display_label": "Swimrun",
+        "classification": null,
+        "user_report": "",
+        "total": {
+          "distance_m": 6939.6,
+          "distance_km": 6.94,
+          "moving_time_s": 3247.0,
+          "elapsed_time_s": 3290.0,
+          "elevation_gain_m": 100.7,
+          "average_heartrate": 143.4,
+          "max_heartrate": 173.0
+        },
+        "run": null
       }
     },
     {
@@ -2261,7 +2984,25 @@
       "weighted_average_watts": null,
       "calories": 138,
       "device_name": "Garmin Forerunner 970",
-      "source": "Strava API"
+      "source": "Strava API",
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 19798624389,
+        "sport_type": "WeightTraining",
+        "display_label": "WeightTraining",
+        "classification": null,
+        "user_report": "",
+        "total": {
+          "distance_m": null,
+          "distance_km": null,
+          "moving_time_s": 2145.0,
+          "elapsed_time_s": 2145.0,
+          "elevation_gain_m": 0.0,
+          "average_heartrate": 87.3,
+          "max_heartrate": 119.0
+        },
+        "run": null
+      }
     },
     {
       "id": 19783232279,
@@ -2279,7 +3020,25 @@
       "weighted_average_watts": null,
       "calories": 536,
       "device_name": "Garmin Forerunner 970",
-      "source": "Strava API"
+      "source": "Strava API",
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 19783232279,
+        "sport_type": "Swim",
+        "display_label": "Swim",
+        "classification": null,
+        "user_report": "",
+        "total": {
+          "distance_m": 3200.0,
+          "distance_km": 3.2,
+          "moving_time_s": 2786.0,
+          "elapsed_time_s": 3849.0,
+          "elevation_gain_m": 0.0,
+          "average_heartrate": 127.1,
+          "max_heartrate": 154.0
+        },
+        "run": null
+      }
     },
     {
       "id": 19764777192,
@@ -2297,7 +3056,31 @@
       "weighted_average_watts": 262,
       "calories": 894,
       "device_name": "Garmin Forerunner 970",
-      "source": "Strava API"
+      "source": "Strava API",
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 19764777192,
+        "sport_type": "TrailRun",
+        "display_label": "TrailRun",
+        "classification": null,
+        "user_report": "",
+        "total": {
+          "distance_m": 14641.5,
+          "distance_km": 14.642,
+          "moving_time_s": 5061.0,
+          "elapsed_time_s": 5061.0,
+          "elevation_gain_m": 251.0,
+          "average_heartrate": 139.2,
+          "max_heartrate": 158.0
+        },
+        "run": {
+          "average_pace_s_per_km": 345.66,
+          "average_pace": "5:46/km",
+          "source_laps_near_1km": [],
+          "fastest_source_lap_near_1km": null,
+          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals."
+        }
+      }
     },
     {
       "id": 19742479980,
@@ -2315,7 +3098,31 @@
       "weighted_average_watts": 269,
       "calories": 827,
       "device_name": "Garmin Forerunner 970",
-      "source": "Strava API"
+      "source": "Strava API",
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 19742479980,
+        "sport_type": "Run",
+        "display_label": "Run",
+        "classification": null,
+        "user_report": "",
+        "total": {
+          "distance_m": 14602.7,
+          "distance_km": 14.603,
+          "moving_time_s": 4771.0,
+          "elapsed_time_s": 4771.0,
+          "elevation_gain_m": 131.0,
+          "average_heartrate": 138.4,
+          "max_heartrate": 151.0
+        },
+        "run": {
+          "average_pace_s_per_km": 326.72,
+          "average_pace": "5:27/km",
+          "source_laps_near_1km": [],
+          "fastest_source_lap_near_1km": null,
+          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals."
+        }
+      }
     },
     {
       "id": 19729740029,
@@ -2333,7 +3140,25 @@
       "weighted_average_watts": null,
       "calories": 143,
       "device_name": "Garmin Forerunner 970",
-      "source": "Strava API"
+      "source": "Strava API",
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 19729740029,
+        "sport_type": "WeightTraining",
+        "display_label": "WeightTraining",
+        "classification": null,
+        "user_report": "",
+        "total": {
+          "distance_m": null,
+          "distance_km": null,
+          "moving_time_s": 2161.0,
+          "elapsed_time_s": 2161.0,
+          "elevation_gain_m": 0.0,
+          "average_heartrate": 88.2,
+          "max_heartrate": 120.0
+        },
+        "run": null
+      }
     },
     {
       "id": 19729195603,
@@ -2351,7 +3176,25 @@
       "weighted_average_watts": null,
       "calories": 814,
       "device_name": "Garmin Forerunner 970",
-      "source": "Strava API"
+      "source": "Strava API",
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 19729195603,
+        "sport_type": "MountainBikeRide",
+        "display_label": "MountainBikeRide",
+        "classification": null,
+        "user_report": "",
+        "total": {
+          "distance_m": 16723.6,
+          "distance_km": 16.724,
+          "moving_time_s": 3880.0,
+          "elapsed_time_s": 4739.0,
+          "elevation_gain_m": 177.0,
+          "average_heartrate": 136.1,
+          "max_heartrate": 160.0
+        },
+        "run": null
+      }
     },
     {
       "id": 19713717236,
@@ -2369,7 +3212,31 @@
       "weighted_average_watts": 263,
       "calories": 292,
       "device_name": "Garmin Forerunner 970",
-      "source": "Strava API"
+      "source": "Strava API",
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 19713717236,
+        "sport_type": "Run",
+        "display_label": "Run",
+        "classification": null,
+        "user_report": "",
+        "total": {
+          "distance_m": 5125.4,
+          "distance_km": 5.125,
+          "moving_time_s": 1668.0,
+          "elapsed_time_s": 1698.0,
+          "elevation_gain_m": 34.0,
+          "average_heartrate": 135.9,
+          "max_heartrate": 148.0
+        },
+        "run": {
+          "average_pace_s_per_km": 325.44,
+          "average_pace": "5:25/km",
+          "source_laps_near_1km": [],
+          "fastest_source_lap_near_1km": null,
+          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals."
+        }
+      }
     },
     {
       "id": 19685310052,
@@ -2387,7 +3254,31 @@
       "weighted_average_watts": 265,
       "calories": 708,
       "device_name": "Garmin Forerunner 970",
-      "source": "Strava API"
+      "source": "Strava API",
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 19685310052,
+        "sport_type": "TrailRun",
+        "display_label": "TrailRun",
+        "classification": null,
+        "user_report": "",
+        "total": {
+          "distance_m": 11933.3,
+          "distance_km": 11.933,
+          "moving_time_s": 4228.0,
+          "elapsed_time_s": 4253.0,
+          "elevation_gain_m": 204.0,
+          "average_heartrate": 133.9,
+          "max_heartrate": 151.0
+        },
+        "run": {
+          "average_pace_s_per_km": 354.3,
+          "average_pace": "5:54/km",
+          "source_laps_near_1km": [],
+          "fastest_source_lap_near_1km": null,
+          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals."
+        }
+      }
     },
     {
       "id": 19652667197,
@@ -2414,6 +3305,24 @@
           "source_sport_type=TrailRun",
           "explicit Swimrun activity name"
         ]
+      },
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 19652667197,
+        "sport_type": "Swimrun",
+        "display_label": "Swimrun",
+        "classification": null,
+        "user_report": "",
+        "total": {
+          "distance_m": 23502.9,
+          "distance_km": 23.503,
+          "moving_time_s": 9970.0,
+          "elapsed_time_s": 10697.0,
+          "elevation_gain_m": 255.8,
+          "average_heartrate": 144.3,
+          "max_heartrate": 173.0
+        },
+        "run": null
       }
     },
     {
@@ -2432,7 +3341,31 @@
       "weighted_average_watts": 255,
       "calories": 284,
       "device_name": "Garmin Forerunner 970",
-      "source": "Strava API"
+      "source": "Strava API",
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 19637678466,
+        "sport_type": "Run",
+        "display_label": "Run",
+        "classification": null,
+        "user_report": "",
+        "total": {
+          "distance_m": 5135.7,
+          "distance_km": 5.136,
+          "moving_time_s": 1812.0,
+          "elapsed_time_s": 1812.0,
+          "elevation_gain_m": 41.0,
+          "average_heartrate": 122.5,
+          "max_heartrate": 132.0
+        },
+        "run": {
+          "average_pace_s_per_km": 352.82,
+          "average_pace": "5:53/km",
+          "source_laps_near_1km": [],
+          "fastest_source_lap_near_1km": null,
+          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals."
+        }
+      }
     },
     {
       "id": 19630701484,
@@ -2450,7 +3383,25 @@
       "weighted_average_watts": null,
       "calories": 575,
       "device_name": "Garmin Forerunner 970",
-      "source": "Strava API"
+      "source": "Strava API",
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 19630701484,
+        "sport_type": "Walk",
+        "display_label": "Walk",
+        "classification": null,
+        "user_report": "",
+        "total": {
+          "distance_m": 8569.8,
+          "distance_km": 8.57,
+          "moving_time_s": 8838.0,
+          "elapsed_time_s": 23980.0,
+          "elevation_gain_m": 164.0,
+          "average_heartrate": 62.2,
+          "max_heartrate": 102.0
+        },
+        "run": null
+      }
     },
     {
       "id": 19617642414,
@@ -2468,7 +3419,25 @@
       "weighted_average_watts": null,
       "calories": 142,
       "device_name": "Garmin Forerunner 970",
-      "source": "Strava API"
+      "source": "Strava API",
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 19617642414,
+        "sport_type": "StandUpPaddling",
+        "display_label": "StandUpPaddling",
+        "classification": null,
+        "user_report": "",
+        "total": {
+          "distance_m": 2627.1,
+          "distance_km": 2.627,
+          "moving_time_s": 2157.0,
+          "elapsed_time_s": 4387.0,
+          "elevation_gain_m": 25.8,
+          "average_heartrate": 85.2,
+          "max_heartrate": 115.0
+        },
+        "run": null
+      }
     },
     {
       "id": 19615250168,
@@ -2495,6 +3464,24 @@
           "source_sport_type=TrailRun",
           "explicit Swimrun activity name"
         ]
+      },
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 19615250168,
+        "sport_type": "Swimrun",
+        "display_label": "Swimrun",
+        "classification": null,
+        "user_report": "",
+        "total": {
+          "distance_m": 7044.8,
+          "distance_km": 7.045,
+          "moving_time_s": 3292.0,
+          "elapsed_time_s": 3350.0,
+          "elevation_gain_m": 325.0,
+          "average_heartrate": 134.6,
+          "max_heartrate": 161.0
+        },
+        "run": null
       }
     },
     {
@@ -2524,6 +3511,24 @@
           "source_sport_type=TrailRun",
           "explicit Swimrun activity name"
         ]
+      },
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 19051548390,
+        "sport_type": "Swimrun",
+        "display_label": "Swimrun",
+        "classification": null,
+        "user_report": "",
+        "total": {
+          "distance_m": 6882.0,
+          "distance_km": 6.882,
+          "moving_time_s": 2922.0,
+          "elapsed_time_s": 3322.0,
+          "elevation_gain_m": 345.0,
+          "average_heartrate": 143.7,
+          "max_heartrate": 171.0
+        },
+        "run": null
       }
     },
     {
@@ -2544,7 +3549,31 @@
       "device_name": "Garmin Forerunner 965",
       "gear_id": "g11972593",
       "gear_name": "Saucony shift 2",
-      "source": "Strava API"
+      "source": "Strava API",
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 15526802607,
+        "sport_type": "TrailRun",
+        "display_label": "TrailRun",
+        "classification": null,
+        "user_report": "",
+        "total": {
+          "distance_m": 6732.9,
+          "distance_km": 6.733,
+          "moving_time_s": 3063.0,
+          "elapsed_time_s": 3107.0,
+          "elevation_gain_m": 286.0,
+          "average_heartrate": 140.1,
+          "max_heartrate": 166.0
+        },
+        "run": {
+          "average_pace_s_per_km": 454.93,
+          "average_pace": "7:35/km",
+          "source_laps_near_1km": [],
+          "fastest_source_lap_near_1km": null,
+          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals."
+        }
+      }
     },
     {
       "id": 15212074050,
@@ -2573,11 +3602,30 @@
           "source_sport_type=TrailRun",
           "explicit Swimrun activity name"
         ]
+      },
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 15212074050,
+        "sport_type": "Swimrun",
+        "display_label": "Swimrun",
+        "classification": null,
+        "user_report": "",
+        "total": {
+          "distance_m": 6784.4,
+          "distance_km": 6.784,
+          "moving_time_s": 3960.0,
+          "elapsed_time_s": 4077.0,
+          "elevation_gain_m": 283.0,
+          "average_heartrate": 134.1,
+          "max_heartrate": 155.0
+        },
+        "run": null
       }
     }
   ],
   "activity_semantics": {
     "schema_version": 1,
+    "workout_analysis_contract_version": 1,
     "overrides_applied": 7,
     "auto_rules_applied": 8,
     "override_ids_present": [
@@ -2589,7 +3637,9 @@
       "20036445971",
       "20057585521"
     ],
-    "changed_ids": []
+    "changed_ids": [
+      "20057585521"
+    ]
   },
   "schema_version": 2,
   "last_webhook_event": {

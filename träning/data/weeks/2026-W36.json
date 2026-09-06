@@ -4,7 +4,7 @@
   "week_start": "2026-08-31",
   "week_end": "2026-09-06",
   "created_at_utc": "2026-08-30T22:09:50.110394+00:00",
-  "updated_at_utc": "2026-09-06T20:23:35.439073+00:00",
+  "updated_at_utc": "2026-09-06T20:50:16.276727+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -843,7 +843,216 @@
       "source_sport_type": "Run",
       "classification": "training",
       "display_label": "Löpning · distans",
-      "classification_reason": "Explicit semantisk normalisering av löppasset. Ändringen invaliderar föregående coachanalys så att löpsummeringen räknas om med verifierad min/km från tid och distans."
+      "classification_reason": "Explicit användarrapport beskriver både passkänsla, energiintag, sen fartökning och respons efter passet. Dessa uppgifter ska vara förstaklassunderlag i coachanalysen.",
+      "user_report": "Kände mig stark hela passet och höll ett kontrollerat tempo. Tog en gel efter cirka en timme. Testade en tempoökning kring km 20–21, cirka 4:25/km, vilket fungerade bra. Pigg resten av dagen och inte ont någonstans.",
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 20057585521,
+        "sport_type": "Run",
+        "display_label": "Löpning · distans",
+        "classification": "training",
+        "user_report": "Kände mig stark hela passet och höll ett kontrollerat tempo. Tog en gel efter cirka en timme. Testade en tempoökning kring km 20–21, cirka 4:25/km, vilket fungerade bra. Pigg resten av dagen och inte ont någonstans.",
+        "total": {
+          "distance_m": 22001.5,
+          "distance_km": 22.002,
+          "moving_time_s": 6960.0,
+          "elapsed_time_s": 6960.0,
+          "elevation_gain_m": 219.0,
+          "average_heartrate": 139.0,
+          "max_heartrate": 164.0
+        },
+        "run": {
+          "average_pace_s_per_km": 316.34,
+          "average_pace": "5:16/km",
+          "source_laps_near_1km": [
+            {
+              "lap_index": 1,
+              "distance_m": 1000.0,
+              "moving_time_s": 322,
+              "pace_s_per_km": 322.0,
+              "pace": "5:22/km",
+              "average_heartrate": 128.0
+            },
+            {
+              "lap_index": 2,
+              "distance_m": 1000.0,
+              "moving_time_s": 305,
+              "pace_s_per_km": 305.0,
+              "pace": "5:05/km",
+              "average_heartrate": 129.7
+            },
+            {
+              "lap_index": 3,
+              "distance_m": 1000.0,
+              "moving_time_s": 314,
+              "pace_s_per_km": 314.0,
+              "pace": "5:14/km",
+              "average_heartrate": 132.9
+            },
+            {
+              "lap_index": 4,
+              "distance_m": 1000.0,
+              "moving_time_s": 319,
+              "pace_s_per_km": 319.0,
+              "pace": "5:19/km",
+              "average_heartrate": 132.7
+            },
+            {
+              "lap_index": 5,
+              "distance_m": 1000.0,
+              "moving_time_s": 321,
+              "pace_s_per_km": 321.0,
+              "pace": "5:21/km",
+              "average_heartrate": 135.7
+            },
+            {
+              "lap_index": 6,
+              "distance_m": 1000.0,
+              "moving_time_s": 330,
+              "pace_s_per_km": 330.0,
+              "pace": "5:30/km",
+              "average_heartrate": 136.7
+            },
+            {
+              "lap_index": 7,
+              "distance_m": 1000.0,
+              "moving_time_s": 320,
+              "pace_s_per_km": 320.0,
+              "pace": "5:20/km",
+              "average_heartrate": 136.1
+            },
+            {
+              "lap_index": 8,
+              "distance_m": 1000.0,
+              "moving_time_s": 328,
+              "pace_s_per_km": 328.0,
+              "pace": "5:28/km",
+              "average_heartrate": 138.8
+            },
+            {
+              "lap_index": 9,
+              "distance_m": 1000.0,
+              "moving_time_s": 320,
+              "pace_s_per_km": 320.0,
+              "pace": "5:20/km",
+              "average_heartrate": 137.5
+            },
+            {
+              "lap_index": 10,
+              "distance_m": 1000.0,
+              "moving_time_s": 324,
+              "pace_s_per_km": 324.0,
+              "pace": "5:24/km",
+              "average_heartrate": 136.9
+            },
+            {
+              "lap_index": 11,
+              "distance_m": 1000.0,
+              "moving_time_s": 320,
+              "pace_s_per_km": 320.0,
+              "pace": "5:20/km",
+              "average_heartrate": 137.2
+            },
+            {
+              "lap_index": 12,
+              "distance_m": 1000.0,
+              "moving_time_s": 322,
+              "pace_s_per_km": 322.0,
+              "pace": "5:22/km",
+              "average_heartrate": 139.2
+            },
+            {
+              "lap_index": 13,
+              "distance_m": 1000.0,
+              "moving_time_s": 317,
+              "pace_s_per_km": 317.0,
+              "pace": "5:17/km",
+              "average_heartrate": 139.3
+            },
+            {
+              "lap_index": 14,
+              "distance_m": 1000.0,
+              "moving_time_s": 319,
+              "pace_s_per_km": 319.0,
+              "pace": "5:19/km",
+              "average_heartrate": 139.1
+            },
+            {
+              "lap_index": 15,
+              "distance_m": 1000.0,
+              "moving_time_s": 319,
+              "pace_s_per_km": 319.0,
+              "pace": "5:19/km",
+              "average_heartrate": 138.1
+            },
+            {
+              "lap_index": 16,
+              "distance_m": 1000.0,
+              "moving_time_s": 321,
+              "pace_s_per_km": 321.0,
+              "pace": "5:21/km",
+              "average_heartrate": 138.0
+            },
+            {
+              "lap_index": 17,
+              "distance_m": 1000.0,
+              "moving_time_s": 320,
+              "pace_s_per_km": 320.0,
+              "pace": "5:20/km",
+              "average_heartrate": 141.8
+            },
+            {
+              "lap_index": 18,
+              "distance_m": 1000.0,
+              "moving_time_s": 322,
+              "pace_s_per_km": 322.0,
+              "pace": "5:22/km",
+              "average_heartrate": 139.1
+            },
+            {
+              "lap_index": 19,
+              "distance_m": 1000.0,
+              "moving_time_s": 311,
+              "pace_s_per_km": 311.0,
+              "pace": "5:11/km",
+              "average_heartrate": 143.9
+            },
+            {
+              "lap_index": 20,
+              "distance_m": 1000.0,
+              "moving_time_s": 301,
+              "pace_s_per_km": 301.0,
+              "pace": "5:01/km",
+              "average_heartrate": 147.0
+            },
+            {
+              "lap_index": 21,
+              "distance_m": 1000.0,
+              "moving_time_s": 264,
+              "pace_s_per_km": 264.0,
+              "pace": "4:24/km",
+              "average_heartrate": 157.3
+            },
+            {
+              "lap_index": 22,
+              "distance_m": 1000.0,
+              "moving_time_s": 309,
+              "pace_s_per_km": 309.0,
+              "pace": "5:09/km",
+              "average_heartrate": 155.8
+            }
+          ],
+          "fastest_source_lap_near_1km": {
+            "lap_index": 21,
+            "distance_m": 1000.0,
+            "moving_time_s": 264,
+            "pace_s_per_km": 264.0,
+            "pace": "4:24/km",
+            "average_heartrate": 157.3
+          },
+          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals."
+        }
+      }
     },
     {
       "id": 20047602146,
@@ -1441,7 +1650,25 @@
           "average_watts": null,
           "average_cadence": null
         }
-      ]
+      ],
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 20047602146,
+        "sport_type": "Swim",
+        "display_label": "Swim",
+        "classification": null,
+        "user_report": "",
+        "total": {
+          "distance_m": 4000.0,
+          "distance_km": 4.0,
+          "moving_time_s": 3401.0,
+          "elapsed_time_s": 4433.0,
+          "elevation_gain_m": 0.0,
+          "average_heartrate": 128.5,
+          "max_heartrate": 153.0
+        },
+        "run": null
+      }
     },
     {
       "id": 20036445971,
@@ -1984,7 +2211,87 @@
       "classification": "training",
       "display_label": "Löpning · backintervaller",
       "user_report": "3 × 6 backintervaller (18 backar totalt). Tre serier om sex intervaller; arbetsdelarna ska beskrivas som intervaller.",
-      "classification_reason": "Explicit användarrapport korrigerar passets faktiska intervallstruktur. Garmin/Strava-varv får inte överskriva användarens rapporterade 3 × 6-struktur."
+      "classification_reason": "Explicit användarrapport korrigerar passets faktiska intervallstruktur. Garmin/Strava-varv får inte överskriva användarens rapporterade 3 × 6-struktur.",
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 20036445971,
+        "sport_type": "Run",
+        "display_label": "Löpning · backintervaller",
+        "classification": "training",
+        "user_report": "3 × 6 backintervaller (18 backar totalt). Tre serier om sex intervaller; arbetsdelarna ska beskrivas som intervaller.",
+        "total": {
+          "distance_m": 12681.6,
+          "distance_km": 12.682,
+          "moving_time_s": 3988.0,
+          "elapsed_time_s": 3988.0,
+          "elevation_gain_m": 243.0,
+          "average_heartrate": 142.4,
+          "max_heartrate": 167.0
+        },
+        "run": {
+          "average_pace_s_per_km": 314.47,
+          "average_pace": "5:14/km",
+          "source_laps_near_1km": [
+            {
+              "lap_index": 1,
+              "distance_m": 1000.0,
+              "moving_time_s": 323,
+              "pace_s_per_km": 323.0,
+              "pace": "5:23/km",
+              "average_heartrate": 125.4
+            },
+            {
+              "lap_index": 2,
+              "distance_m": 1000.0,
+              "moving_time_s": 307,
+              "pace_s_per_km": 307.0,
+              "pace": "5:07/km",
+              "average_heartrate": 133.0
+            },
+            {
+              "lap_index": 15,
+              "distance_m": 1000.0,
+              "moving_time_s": 324,
+              "pace_s_per_km": 324.0,
+              "pace": "5:24/km",
+              "average_heartrate": 138.3
+            },
+            {
+              "lap_index": 28,
+              "distance_m": 1000.0,
+              "moving_time_s": 331,
+              "pace_s_per_km": 331.0,
+              "pace": "5:31/km",
+              "average_heartrate": 143.1
+            },
+            {
+              "lap_index": 41,
+              "distance_m": 1000.0,
+              "moving_time_s": 325,
+              "pace_s_per_km": 325.0,
+              "pace": "5:25/km",
+              "average_heartrate": 141.5
+            },
+            {
+              "lap_index": 42,
+              "distance_m": 1000.0,
+              "moving_time_s": 326,
+              "pace_s_per_km": 326.0,
+              "pace": "5:26/km",
+              "average_heartrate": 139.6
+            }
+          ],
+          "fastest_source_lap_near_1km": {
+            "lap_index": 2,
+            "distance_m": 1000.0,
+            "moving_time_s": 307,
+            "pace_s_per_km": 307.0,
+            "pace": "5:07/km",
+            "average_heartrate": 133.0
+          },
+          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals."
+        }
+      }
     },
     {
       "id": 20024236347,
@@ -2090,7 +2397,25 @@
           "average_watts": 130.5,
           "average_cadence": null
         }
-      ]
+      ],
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 20024236347,
+        "sport_type": "MountainBikeRide",
+        "display_label": "MountainBikeRide",
+        "classification": null,
+        "user_report": "",
+        "total": {
+          "distance_m": 31467.5,
+          "distance_km": 31.468,
+          "moving_time_s": 7013.0,
+          "elapsed_time_s": 7883.0,
+          "elevation_gain_m": 318.0,
+          "average_heartrate": 114.0,
+          "max_heartrate": 139.0
+        },
+        "run": null
+      }
     },
     {
       "id": 20008258969,
@@ -2205,6 +2530,24 @@
           "source_sport_type=TrailRun",
           "explicit Swimrun activity name"
         ]
+      },
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 20008258969,
+        "sport_type": "Swimrun",
+        "display_label": "Swimrun",
+        "classification": null,
+        "user_report": "",
+        "total": {
+          "distance_m": 6885.6,
+          "distance_km": 6.886,
+          "moving_time_s": 3099.0,
+          "elapsed_time_s": 3265.0,
+          "elevation_gain_m": 104.3,
+          "average_heartrate": 135.4,
+          "max_heartrate": 158.0
+        },
+        "run": null
       }
     },
     {
@@ -2444,7 +2787,87 @@
           "average_cadence": 79.5
         }
       ],
-      "user_report": "Började segt och kände mig långsam i uppvärmningen. Gjorde 3 stegringslopp för att väcka kroppen. I 8-minutersintervallerna var känslan bättre: inga problem att hålla arbetstiden, och efter sista intervallen kändes kroppen riktigt pigg genom hela nedjoggen. Bedömning från användaren: hade definitivt kunnat köra ytterligare en 8-minutersintervall."
+      "user_report": "Började segt och kände mig långsam i uppvärmningen. Gjorde 3 stegringslopp för att väcka kroppen. I 8-minutersintervallerna var känslan bättre: inga problem att hålla arbetstiden, och efter sista intervallen kändes kroppen riktigt pigg genom hela nedjoggen. Bedömning från användaren: hade definitivt kunnat köra ytterligare en 8-minutersintervall.",
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 19994118756,
+        "sport_type": "Run",
+        "display_label": "Run",
+        "classification": null,
+        "user_report": "Började segt och kände mig långsam i uppvärmningen. Gjorde 3 stegringslopp för att väcka kroppen. I 8-minutersintervallerna var känslan bättre: inga problem att hålla arbetstiden, och efter sista intervallen kändes kroppen riktigt pigg genom hela nedjoggen. Bedömning från användaren: hade definitivt kunnat köra ytterligare en 8-minutersintervall.",
+        "total": {
+          "distance_m": 10348.9,
+          "distance_km": 10.349,
+          "moving_time_s": 3029.0,
+          "elapsed_time_s": 3029.0,
+          "elevation_gain_m": 61.0,
+          "average_heartrate": 145.3,
+          "max_heartrate": 165.0
+        },
+        "run": {
+          "average_pace_s_per_km": 292.69,
+          "average_pace": "4:53/km",
+          "source_laps_near_1km": [
+            {
+              "lap_index": 1,
+              "distance_m": 1000.0,
+              "moving_time_s": 324,
+              "pace_s_per_km": 324.0,
+              "pace": "5:24/km",
+              "average_heartrate": 127.3
+            },
+            {
+              "lap_index": 2,
+              "distance_m": 983.1,
+              "moving_time_s": 315,
+              "pace_s_per_km": 320.41,
+              "pace": "5:20/km",
+              "average_heartrate": 131.6
+            },
+            {
+              "lap_index": 9,
+              "distance_m": 1000.0,
+              "moving_time_s": 257,
+              "pace_s_per_km": 257.0,
+              "pace": "4:17/km",
+              "average_heartrate": 145.8
+            },
+            {
+              "lap_index": 12,
+              "distance_m": 1000.0,
+              "moving_time_s": 262,
+              "pace_s_per_km": 262.0,
+              "pace": "4:22/km",
+              "average_heartrate": 154.4
+            },
+            {
+              "lap_index": 15,
+              "distance_m": 1000.0,
+              "moving_time_s": 265,
+              "pace_s_per_km": 265.0,
+              "pace": "4:25/km",
+              "average_heartrate": 155.5
+            },
+            {
+              "lap_index": 17,
+              "distance_m": 1000.0,
+              "moving_time_s": 323,
+              "pace_s_per_km": 323.0,
+              "pace": "5:23/km",
+              "average_heartrate": 147.2
+            }
+          ],
+          "fastest_source_lap_near_1km": {
+            "lap_index": 9,
+            "distance_m": 1000.0,
+            "moving_time_s": 257,
+            "pace_s_per_km": 257.0,
+            "pace": "4:17/km",
+            "average_heartrate": 145.8
+          },
+          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals."
+        }
+      }
     },
     {
       "id": 19980267962,
@@ -2488,6 +2911,24 @@
           "source_sport_type=EMountainBikeRide",
           "user convention: Strava e-MTB represents Enduro"
         ]
+      },
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 19980267962,
+        "sport_type": "Enduro",
+        "display_label": "Enduro",
+        "classification": "recreation",
+        "user_report": "",
+        "total": {
+          "distance_m": 23403.7,
+          "distance_km": 23.404,
+          "moving_time_s": 3975.0,
+          "elapsed_time_s": 6024.0,
+          "elevation_gain_m": 508.6,
+          "average_heartrate": 110.9,
+          "max_heartrate": 178.0
+        },
+        "run": null
       }
     }
   ],
@@ -2496,32 +2937,33 @@
       "activity_id": 20057585521,
       "activity_date": "2026-09-06",
       "activity_name": "Löpning på morgonen",
-      "generated_at_utc": "2026-09-06T20:23:34.851435+00:00",
+      "generated_at_utc": "2026-09-06T20:50:15.596340+00:00",
       "model": "gpt-5-mini",
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "22,00 km · 1:56:00 · 5:16/km",
-        "load_interpretation": "Långt distanspass med måttlig genomsnittspuls; påverkar främst kardiovaskulär och mekanisk närbelastning de närmaste 2–3 dagarna.",
+        "summary": "22 km lugn distans genomförd kontrollerat; tempoökning kring km 20–21 fungerade väl och du var pigg resten av dagen.",
+        "load_interpretation": "Passet gav långvarig kardiovaskulär och mekanisk belastning men användarrapporten anger god tolerans, inga akuta problem för nästa 48–72 h.",
         "confidence": "medium",
         "facts": [
           "Löpning · distans: 22,00 km · 1:56:00 · 219 m+ · snittpuls 139 · maxpuls 164.",
+          "Användarrapport: Kände mig stark hela passet och höll ett kontrollerat tempo. Tog en gel efter cirka en timme. Testade en tempoökning kring km 20–21, cirka 4:25/km, vilket fungerade bra. Pigg resten av dagen och inte ont någonstans.",
           "Planstatus 2026-09-06: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Passet genomförde planerat lugn distansstimulus och registrerades som dagens avslutande löppass.",
-          "I flerdagsperspektiv adderar detta till tre tunga dagar tidigare i veckan (fri–lördag) och ökar ackumulerad kardiovaskulär/mekanisk belastning."
+          "Långt kontrollerat distanspass visar god uthållighetsbas och förmåga att avsluta med en tempoökning utan nedsatt känsla.",
+          "Givet tidigare tre tunga dagar (enduro, tröskel, backar) bör mikrocykelns nästa prioriterade anchor-pass skyddas men ingen omedelbar vila krävs om känslan är fortsatt bra."
         ],
         "unknowns": [
-          "Subjektiv dagskänsla och lokal bentrötthet efter passet.",
-          "Detaljer om återstående dagsaktiviteter eller senare aktivitet idag som kan påverka återhämtning."
+          "Detaljerad lokal muskeltrötthet nästa morgon (kan påverka måndagens enduro)",
+          "Eventuell påverkan på tisdagens planerade tröskel (3×10) beroende på återhämtning över natt"
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "",
-        "reason": "Passet motsvarar planerad lugn distans och ska räknas som genomförd utan att behöva reduceras.",
-        "recommendation": "Ingen förändring i närmaste plan; vila eller mycket lätt aktivitet imorgon tills du känner hur benen svarar. Rapportera kort om benkänsla om du vill att jag ska överväga ändring för nästa mikrocykeldag.",
+        "reason": "Passet tolererades väl enligt både data och användarrapport och ligger i linje med microcycle-planen.",
+        "recommendation": "Behåll planerad måndagsenduro och tisdagens tröskel (3×10) som slutförande av mikrocykeln om du känner dig pigg morgonen efter; vila eller reducera om morgondagens benkänsla är tung eller smärta uppträder.",
         "dose_option_id": "",
         "requires_approval": false
       },
