@@ -4,7 +4,7 @@
   "week_start": "2026-08-31",
   "week_end": "2026-09-06",
   "created_at_utc": "2026-08-30T22:09:50.110394+00:00",
-  "updated_at_utc": "2026-09-06T20:54:57.914635+00:00",
+  "updated_at_utc": "2026-09-06T21:03:19.137312+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -2944,33 +2944,40 @@
       "activity_id": 20057585521,
       "activity_date": "2026-09-06",
       "activity_name": "Löpning på morgonen",
-      "generated_at_utc": "2026-09-06T20:54:57.386196+00:00",
+      "generated_at_utc": "2026-09-06T21:03:18.608933+00:00",
       "model": "gpt-5-mini",
+      "analysis_contract": {
+        "pipeline_version": 1,
+        "workout_context_version": 1,
+        "plan_comparison_version": 1,
+        "coach_prompt_sha256": "da2ef602289127ad2c0438bfa5d9356a109494ca3832020780357ab5b639444f"
+      },
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "22 km lugn distans genomförd kontrollerat, med pigg känsla och en lyckad tempoökning vid km 20–21.",
-        "load_interpretation": "Ingen omedelbar nedskalning krävs utifrån subjektiv rapport och passdata; närbelastningen de senaste dagarna är hög men planens skyddade stimuli är intakta.",
+        "summary": "22 km lugn distans i 5:16/km snitt med stabil puls och en kontrollerad fartökning vid km 20–21 som kändes bra.",
+        "load_interpretation": "Passet översteg planerad dos (75 min → 116 min) och lägger extra närbelastning inför kommande 2–3 dagar.",
         "confidence": "medium",
         "facts": [
           "Löpning · distans: 22,00 km · 1:56:00 · 219 m+ · snittpuls 139 · maxpuls 164.",
           "Användarrapport: Kände mig stark hela passet och höll ett kontrollerat tempo. Tog en gel efter cirka en timme. Testade en tempoökning kring km 20–21, cirka 4:25/km, vilket fungerade bra. Pigg resten av dagen och inte ont någonstans.",
-          "Planstatus 2026-09-06: dagen är markerad genomförd i coachens beslutsunderlag."
+          "Planstatus 2026-09-06: dagen är markerad genomförd i coachens beslutsunderlag.",
+          "Planerad tidsdos 75 min; faktisk rörelsetid 116 min (+41 min mot vald dos); över längsta godkända alternativet 90 min."
         ],
         "interpretations": [
-          "Passet visar att planerad lugn distans kunde genomföras och att en sen fartökning tolererades väl, vilket talar för god akutfunktion den här dagen.",
-          "I flerdagsperspektiv finns ackumulerad belastning (MTB, backintervaller, simning) men inga subjektiva tecken på otillräcklig återhämtning som skulle kräva vila i nästa 48–72 h."
+          "Ett långt genomfört lugnpass visar att aktuell distans och näringsstrategi tolererades väl denna dag.",
+          "Tidsdosen blev 116 min mot valda 75 min och översteg även det längsta godkända alternativet 90 min."
         ],
         "unknowns": [
-          "Hur benen känns vid uppvaknande nästa dag (mekanisk fräschhet).",
-          "Eventuell morgondagens fasta endurobelastningens faktiska intensitet/varaktighet."
+          "Hur mycket teknisk/neuromuskulär belastning måndagens enduro kommer bli",
+          "Hur du subjektivt känner dig nästa morgon och om benen är mekaniskt fräscha"
         ]
       },
       "plan_action": {
-        "action": "keep",
+        "action": "review",
         "target_date": "",
-        "reason": "Passet var genomfört enligt plan, användarrapport och data indikerar god tolerans och inga sakliga skäl till kortsiktig regress.",
-        "recommendation": "Följ befintlig plan för kommande dagar; genomför måndagens enduroskola som planerat men rapportera dagens benkänsla morgon 07–09 om den känns avvikande.",
+        "reason": "Beslutet skjuts upp eftersom mellanliggande planerade dagar ännu inte har ett känt utfall.",
+        "recommendation": "Ändra inte ett senare pass ännu. Bedöm det på nytt när de mellanliggande dagarnas faktiska belastning och återhämtning finns i underlaget.",
         "dose_option_id": "",
         "requires_approval": false
       },
