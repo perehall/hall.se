@@ -32,6 +32,11 @@ NEAR_LOAD_PREFIX_PATTERN = re.compile(
     r"\b(?:ovanligt\s+|relativt\s+)?(?:hög(?:t)?|låg(?:t)?|måttlig(?:t)?)\s+närbelastning(?:en)?\b",
     re.IGNORECASE,
 )
+LOAD_MAGNITUDE_PATTERN = re.compile(
+    r"\b(?:betydande|stor(?:t|a)?|påtaglig(?:t|a)?|avsevärd(?:t|a)?)\s+"
+    r"(?=[^.,;]{0,48}\b(?:belastning|exponering)\b)",
+    re.IGNORECASE,
+)
 FUTURE_WINDOW_PATTERN = re.compile(
     r"\b(?:nästa|kommande)\s+(?:24|48|72)(?:\s*[–-]\s*(?:24|48|72))?\s*(?:h|timmar)\b",
     re.IGNORECASE,
@@ -55,6 +60,10 @@ UNVERIFIED_HR_PATTERN = re.compile(
     r"\b(?:stabil|jämn)\s+puls\b|"
     r"\bpuls(?:en)?\s+(?:var|är|hölls|förblev)\s+(?:stabil|jämn)\b|"
     r"\b(?:ingen|låg|liten)\s+pulsdrift\b",
+    re.IGNORECASE,
+)
+ABSORPTION_PATTERN = re.compile(
+    r"\babsorber(?:bar(?:t)?|ad(?:e|t)?|as|ades|ats)\b",
     re.IGNORECASE,
 )
 
@@ -94,14 +103,12 @@ def _neutralize_near_load_level(text):
         value,
     )
     value = NEAR_LOAD_PREFIX_PATTERN.sub("närbelastningen", value)
+    value = LOAD_MAGNITUDE_PATTERN.sub("", value)
     return re.sub(r"[ \t]{2,}", " ", value).strip()
 
 
 def _neutralize_unverified_hr_characterization(text):
     value = str(text or "")
-    # Preserve the surrounding observation while removing an interpretation that
-    # requires an explicit drift/stability metric. This handles the common form
-    # "... med stabil puls och en kontrollerad fartökning ..." cleanly.
     value = re.sub(
         r"\s+med\s+(?:stabil|jämn)\s+puls\s+och\s+",
         " med ",
@@ -129,6 +136,31 @@ def _neutralize_unverified_hr_characterization(text):
     return re.sub(r"[ \t]{2,}", " ", value).strip()
 
 
+def _neutralize_same_day_absorption(text, *, latest_date, local_date):
+    value = str(text or "")
+    if latest_date != local_date or not ABSORPTION_PATTERN.search(value):
+        return value
+
+    # Preserve a supported observation that follows the unsupported absorption
+    # claim, e.g. "visar att dagens dos var absorberbar och att sen fartökning...".
+    value = re.sub(
+        r"dagens\s+(?:dos|belastning)\s+(?:var|är)\s+absorberbar(?:t)?\s+och\s+att\s+",
+        "",
+        value,
+        flags=re.IGNORECASE,
+    )
+    value = re.sub(
+        r"(?:passet|belastningen|dosen)\s+(?:var|är|bedöms\s+som)\s+"
+        r"absorber(?:bar(?:t)?|ad(?:e|t)?|as|ades|ats)",
+        "full återhämtning från passet är ännu inte verifierad",
+        value,
+        flags=re.IGNORECASE,
+    )
+    if ABSORPTION_PATTERN.search(value):
+        return "Full återhämtning från dagens pass är ännu inte verifierad."
+    return re.sub(r"[ \t]{2,}", " ", value).strip()
+
+
 def _has_future_certainty(text):
     value = str(text or "")
     return bool(FUTURE_WINDOW_PATTERN.search(value) and FUTURE_CERTAINTY_PATTERN.search(value))
@@ -142,8 +174,6 @@ def _sanitize_reporting_window(text):
     value = str(text or "")
     if not REPORT_CLOCK_WINDOW_PATTERN.search(value):
         return value
-    # Exact feedback windows are not training facts. Keep the useful checkpoint,
-    # remove the invented clock time.
     value = re.sub(
         r"rapportera\s+(?:dagens\s+)?benkänsla\s+(?:morgon(?:en)?\s*)?"
         r"(?:[01]?\d|2[0-3])(?::[0-5]\d)?\s*[–-]\s*"
@@ -160,6 +190,11 @@ def _sanitize_reporting_window(text):
 def _sanitize_assessment_text(text, *, latest_date, local_date):
     value = _neutralize_near_load_level(text)
     value = _neutralize_unverified_hr_characterization(value)
+    value = _neutralize_same_day_absorption(
+        value,
+        latest_date=latest_date,
+        local_date=local_date,
+    )
     if latest_date == local_date and _has_future_certainty(value):
         return _neutral_future_sentence()
     return value
@@ -258,8 +293,12 @@ def validate_guarded_result(result, *, latest_date, local_date, plan_comparison=
 
     if any(NEAR_LOAD_LEVEL_PATTERN.search(text) or NEAR_LOAD_PREFIX_PATTERN.search(text) for text in texts):
         raise RuntimeError("Coach output guard: unsupported relative near-load label remained")
+    if any(LOAD_MAGNITUDE_PATTERN.search(text) for text in texts):
+        raise RuntimeError("Coach output guard: unsupported load magnitude claim remained")
     if any(UNVERIFIED_HR_PATTERN.search(text) for text in texts):
         raise RuntimeError("Coach output guard: unsupported heart-rate stability claim remained")
+    if latest_date == local_date and any(ABSORPTION_PATTERN.search(text) for text in texts):
+        raise RuntimeError("Coach output guard: unsupported same-day absorption claim remained")
     if latest_date == local_date and any(_has_future_certainty(text) for text in texts):
         raise RuntimeError("Coach output guard: unsupported future recovery certainty remained")
     if any(REPORT_CLOCK_WINDOW_PATTERN.search(text) for text in texts):
@@ -274,8 +313,6 @@ def _load(path):
 
 
 def main():
-    # Final workflow safety net: rebuild plan comparison independently instead
-    # of trusting transient AI input state.
     if not COACH_FILE.exists() or not ACTIVITIES_FILE.exists() or not PLAN_FILE.exists():
         return 0
     coach = _load(COACH_FILE)
