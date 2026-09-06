@@ -4,7 +4,7 @@
   "week_start": "2026-08-31",
   "week_end": "2026-09-06",
   "created_at_utc": "2026-08-30T22:09:50.110394+00:00",
-  "updated_at_utc": "2026-09-06T09:32:57.796645+00:00",
+  "updated_at_utc": "2026-09-06T09:45:10.825930+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -571,8 +571,8 @@
       "weighted_average_watts": 270,
       "calories": 1217.0,
       "device_name": "Garmin Forerunner 970",
-      "gear_id": null,
-      "gear_name": null,
+      "gear_id": "g32837896",
+      "gear_name": "Saucony Triumph 23",
       "source": "Strava API",
       "laps": [
         {
@@ -2492,32 +2492,32 @@
       "activity_id": 20057585521,
       "activity_date": "2026-09-06",
       "activity_name": "Löpning på morgonen",
-      "generated_at_utc": "2026-09-06T09:32:57.192478+00:00",
+      "generated_at_utc": "2026-09-06T09:45:10.227155+00:00",
       "model": "gpt-5-mini",
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört 22 km lugn/distanslöpning på 6 960 s med 219 m klättring; genomsnittspuls 139 bpm och viktad effekt ~270 W.",
-        "load_interpretation": "Senaste tre dagarna innehåller tunga sessioner (MTB 3/9, backintervaller 4/9, sim 5/9); dagens distans adderar kardiovaskulär och mekanisk belastning i mikrocykeln.",
+        "summary": "Genomförde 22 km löpning på 1:56:00 med 219 m höjd och genomsnittspuls 139 bpm (återhämtningsunderlaget).",
+        "load_interpretation": "Aktuella data visar ytterligare långdistanslöpning efter flera tunga dagar; påverkan på kommande prioriterade löppass kan inte uteslutas.",
         "confidence": "medium",
         "facts": [
           "Run: 22,00 km · 1:56:00 · 219 m+ · snittpuls 139 · maxpuls 164.",
           "Planstatus 2026-09-06: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Passet motsvarar det planerade lugna distansstimuluset och är registrerat som coach_fulfilled_by_activity.",
-          "Givet föregående tunga dagar är mikrocykelns prioriterade stimuli (särskilt kommande tisdagens tröskel) börjat ackumulera belastning."
+          "Detta blev ett avsevärt längre lugnt/distanspass än planens 75 min; det adderar mekanisk och kardiovaskulär belastning i mikrocykeln.",
+          "Eftersom mikrocykeln redan haft belastning de senaste dagarna kan nästa mikrocykeldag (enduroskola måndag och tröskel tisdag) påverkas om inte återhämtningen är god."
         ],
         "unknowns": [
-          "Subjektiv dagskänsla/bentrötthet efter passet kan påverka närmaste dagars behov men saknas.",
-          "Ingen explicit användarrapport om intensitet eller terrain för dagens löpning; vissa mekaniska effekter kan därför vara underbedömda."
+          "Subjektiv dagskänsla och lokal bentrötthet efter passet.",
+          "Exakt intensitetsfördelning inom passet (struktur: kontinuerligt lugnt vs inslag av kvalitet) kan inte utan ytterligare data avgöras."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "",
-        "reason": "Dagens genomförda lugna distans motsvarar planens run-easy-75 och ligger inom mikrocykelns absorberbara variation.",
-        "recommendation": "Behåll planerade kommande pass oförändrade; utvärdera subjektiv benkänsla före tisdagens tröskel och rapportera om det känns slitet.",
+        "reason": "Ingen konkret open target-date att ändra och aktuell plan prioriterar att behålla mikrocykelns stimuli när normal variation kan absorberas.",
+        "recommendation": "Behåll kommande planerade pass; vila, återhämtningsunderlaget och lätt återhämtningsdag rekommenderas i kväll och morgon om du känner bentrötthet. Rapportera dagskänsla/benstatus före tisdagens tröskel så plan kan justeras vid behov.",
         "dose_option_id": "",
         "requires_approval": false
       },
