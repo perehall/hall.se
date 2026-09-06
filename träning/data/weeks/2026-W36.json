@@ -4,7 +4,7 @@
   "week_start": "2026-08-31",
   "week_end": "2026-09-06",
   "created_at_utc": "2026-08-30T22:09:50.110394+00:00",
-  "updated_at_utc": "2026-09-06T21:07:51.524538+00:00",
+  "updated_at_utc": "2026-09-06T21:11:23.136424+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -2944,20 +2944,20 @@
       "activity_id": 20057585521,
       "activity_date": "2026-09-06",
       "activity_name": "Löpning på morgonen",
-      "generated_at_utc": "2026-09-06T21:07:50.988816+00:00",
+      "generated_at_utc": "2026-09-06T21:11:22.632246+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 1,
         "workout_context_version": 1,
         "plan_comparison_version": 1,
         "coach_prompt_sha256": "da2ef602289127ad2c0438bfa5d9356a109494ca3832020780357ab5b639444f",
-        "analysis_code_sha256": "3203e0a9c36fdceee87140e187ed4a0fb1a7194e24ab12f78053df952ae1a28e"
+        "analysis_code_sha256": "9683a484ae915f4799de23b72cde0fe2e485f72509c02c11752b6d99d3bfaf13"
       },
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört 22 km lugn distans på 5:16/km med en kontrollerad tempoökning kring km 20–21 som kändes bra.",
-        "load_interpretation": "Passet översteg planerad 75 min (blev 116 min) och adderar betydande kardiovaskulär och mekanisk belastning inför kommande dagar.",
+        "summary": "22 km lugn distans genomförd på 5:16/km i 116 min med stabil känsla och en kontrollerad tempoökning vid km 20–21.",
+        "load_interpretation": "Aktuell närbelastning visar ackumulerad träning de senaste dagarna (enduro, backintervaller, simning) men användaren rapporterar god tolerans efter passet.",
         "confidence": "medium",
         "facts": [
           "Löpning · distans: 22,00 km · 1:56:00 · 219 m+ · snittpuls 139 · maxpuls 164.",
@@ -2966,19 +2966,19 @@
           "Planerad tidsdos 75 min; faktisk rörelsetid 116 min (+41 min mot vald dos); över längsta godkända alternativet 90 min."
         ],
         "interpretations": [
-          "Ett långt genomfört distanspass visar att dagens dos var absorberbar och att sen fartökning var hållbar utan smärta.",
+          "Passet visar att långdistansdosen översteg planerad 75 min (116 min) men genomfördes utan subjektiva problem, vilket indikerar god dagens tolerans.",
           "Tidsdosen blev 116 min mot valda 75 min och översteg även det längsta godkända alternativet 90 min."
         ],
         "unknowns": [
-          "Hur benen känns morgon–nästa dag (kan påverka måndagens enduro och tisdagens tröskel)",
-          "Subjektiv återhämtning över natt och under kommande 24–48 h"
+          "Hur benen känns nästa morgon inför måndagens enduroskola",
+          "Detaljerad återhämtning över 24–72 h trots pigg samma-dag-rapport"
         ]
       },
       "plan_action": {
-        "action": "review",
+        "action": "keep",
         "target_date": "",
-        "reason": "Beslutet skjuts upp eftersom mellanliggande planerade dagar ännu inte har ett känt utfall.",
-        "recommendation": "Måndag: Enduroskola · fast tillfälle ligger kvar som plan. Tisdag: Löpning · kontrollerad tröskel · 3 × 10 min / 90 s jogg bedöms efter den faktiska belastningen från måndag och återhämtningen därefter.",
+        "reason": "Inga sakliga skäl i närbelastningen eller användarrapporten för att ändra kommande fasta enduroskola eller nästa prioriterade tröskelpass.",
+        "recommendation": "Fortsätt med planerat schema; notera hur benen känns imorgon och rapportera eventuell stelhet eller ovanlig trötthet innan ändring. Ingen ändring av söndagens eller kommande fasta pass krävs nu.",
         "dose_option_id": "",
         "requires_approval": false
       },
