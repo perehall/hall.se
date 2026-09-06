@@ -13,7 +13,9 @@ class CoachOutputGuardTests(unittest.TestCase):
     def _result(self):
         return {
             "assessment": {
-                "summary": "22 km distans genomförd kontrollerat.",
+                "summary": (
+                    "22 km distans i 5:16/km med stabil puls och en kontrollerad fartökning."
+                ),
                 "load_interpretation": (
                     "Ingen omedelbar nedskalning krävs; närbelastningen de senaste dagarna är hög."
                 ),
@@ -57,12 +59,15 @@ class CoachOutputGuardTests(unittest.TestCase):
         self.assertNotIn("nästa 48–72 h", text)
         self.assertNotIn("genomfört enligt plan", text)
         self.assertNotIn("07–09", text)
+        self.assertNotIn("stabil puls", text)
+        self.assertIn("med en kontrollerad fartökning", guarded["assessment"]["summary"])
         self.assertIn("116 min", text)
         self.assertIn("90 min", text)
         self.assertIn("nästa morgon", guarded["plan_action"]["recommendation"])
 
     def test_future_recovery_claim_is_not_removed_for_historical_analysis(self):
         result = self._result()
+        result["assessment"]["summary"] = "Neutral."
         result["assessment"]["load_interpretation"] = "Neutral."
         result["plan_action"]["reason"] = "Neutral."
         result["plan_action"]["recommendation"] = "Behåll planen."
