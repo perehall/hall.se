@@ -4,7 +4,7 @@
       "activity_id": 20057585521,
       "activity_date": "2026-09-06",
       "activity_name": "Löpning på morgonen",
-      "generated_at_utc": "2026-09-06T21:11:22.632246+00:00",
+      "generated_at_utc": "2026-09-06T22:19:28.457293+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 1,
@@ -16,29 +16,27 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "22 km lugn distans genomförd på 5:16/km i 116 min med stabil känsla och en kontrollerad tempoökning vid km 20–21.",
-        "load_interpretation": "Aktuell närbelastning visar ackumulerad träning de senaste dagarna (enduro, backintervaller, simning) men användaren rapporterar god tolerans efter passet.",
+        "summary": "22 km distanslöpning genomförd kontrollerat (5:16/km snitt) med en lyckad tempoökning vid km 20–21 och god subjektiv återkoppling.",
+        "load_interpretation": "Passet ger kardiovaskulär och mekanisk belastning inom de senaste 2–3 dagarna men visar god tolerans enligt användarrapport.",
         "confidence": "medium",
         "facts": [
           "Löpning · distans: 22,00 km · 1:56:00 · 219 m+ · snittpuls 139 · maxpuls 164.",
-          "Användarrapport: Kände mig stark hela passet och höll ett kontrollerat tempo. Tog en gel efter cirka en timme. Testade en tempoökning kring km 20–21, cirka 4:25/km, vilket fungerade bra. Pulsen gick upp i fartökningen. Pigg resten av dagen och inte ont någonstans.",
-          "Planstatus 2026-09-06: dagen är markerad genomförd i coachens beslutsunderlag.",
-          "Planerad tidsdos 75 min; faktisk rörelsetid 116 min (+41 min mot vald dos); över längsta godkända alternativet 90 min."
+          "Användarrapport: Kände mig stark hela passet och höll ett kontrollerat tempo. Tog en gel efter cirka en timme. Testade en tempoökning kring km 20–21, cirka 4:25/km, vilket fungerade bra. Pulsen gick upp i fartökningen. Pigg resten av dagen och inte ont någonstans."
         ],
         "interpretations": [
-          "Passet visar att långdistansdosen översteg planerad 75 min (116 min) men genomfördes utan subjektiva problem, vilket indikerar god dagens tolerans.",
-          "Tidsdosen blev 116 min mot valda 75 min och översteg även det längsta godkända alternativet 90 min."
+          "Stabil genomförd distans med kapacitet för en avslutande tempoökning utan tydlig försämring under passet.",
+          "Resultatet talar för att planerad progression i mikrocykeln (3×10 min tröskel på tisdag) inte automatiskt behöver reduceras om inga nya negativa signaler uppstår."
         ],
         "unknowns": [
-          "Hur benen känns nästa morgon inför måndagens enduroskola",
-          "Detaljerad återhämtning över 24–72 h trots pigg samma-dag-rapport"
+          "Hur benen känns nästa morgon inför inplanerad enduro/skola",
+          "Detaljerad återhämtningseffekt på tisdagens kontrollerade tröskelpass"
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "",
-        "reason": "Inga sakliga skäl i närbelastningen eller användarrapporten för att ändra kommande fasta enduroskola eller nästa prioriterade tröskelpass.",
-        "recommendation": "Fortsätt med planerat schema; notera hur benen känns imorgon och rapportera eventuell stelhet eller ovanlig trötthet innan ändring. Ingen ändring av söndagens eller kommande fasta pass krävs nu.",
+        "reason": "Passet tolererades väl och saknar signaler som kräver omedelbar nedskalning eller vila de närmaste 2–3 dagarna.",
+        "recommendation": "Följ nuvarande plan; genomför tisdagens 3×10 min tröskel enligt mikrocykel om morgondagens upplevda fräschhet är normal. Rapportera morgonstatus (ben, återhämtningsunderlaget, energi) om något känns avvikande innan tröskelpasset.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -56,15 +54,13 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Simningen blev 4 000 m mot planerade 3 200 m (800 m mer).",
+        "summary": "Simningen genomfördes: 4 000 m på 1:13:53.",
         "load_interpretation": "Set-/intervallnivå saknas i det strukturerade analyslagret; teknik, fartstabilitet och intensitetsutveckling går därför inte att bedöma säkert.",
         "confidence": "low",
         "facts": [
           "Swim: 4,00 km · 1:13:53 · snittpuls 128,5 · maxpuls 153."
         ],
-        "interpretations": [
-          "Distansavvikelsen är ett faktum; dess träningsmässiga betydelse kan inte avgöras utan setstruktur och subjektiv känsla."
-        ],
+        "interpretations": [],
         "unknowns": [
           "Set-/intervallstruktur och subjektiv känsla efter simningen saknas."
         ]
@@ -773,8 +769,8 @@
       }
     }
   ],
-  "last_trigger_hash": "b632e29403c44e423970b4d695974eb646baf58f37eba0bb00524194cbb902b6",
-  "last_run_utc": "2026-09-06T21:11:22.632246+00:00",
+  "last_trigger_hash": "dc28a3de5ccc8f4dc6fe1ddd6614639262af1ada609067056658fb63769bdc39",
+  "last_run_utc": "2026-09-06T22:19:28.457293+00:00",
   "contract_version": 15,
   "output_contract_version": 16,
   "pipeline_contract_version": 1

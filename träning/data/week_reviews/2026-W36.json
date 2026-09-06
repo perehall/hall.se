@@ -1,0 +1,358 @@
+{
+  "schema_version": 1,
+  "contract_version": 1,
+  "week_key": "2026-W36",
+  "week_start": "2026-08-31",
+  "week_end": "2026-09-06",
+  "source_hash": "0fcd15f91835f998f83ffedc41d99a75ab67ba94227e7a8041e03036a7b0fc9f",
+  "generated_at_utc": "2026-09-06T22:19:36.413471+00:00",
+  "model": "gpt-5-mini",
+  "facts": {
+    "week_key": "2026-W36",
+    "week_start": "2026-08-31",
+    "week_end": "2026-09-06",
+    "activity_count": 7,
+    "training_activity_count": 6,
+    "recreation_activity_count": 1,
+    "active_days": 7,
+    "total_activity_time_s": 35582,
+    "training_time_s": 29558,
+    "recreation_time_s": 6024,
+    "by_sport": [
+      {
+        "label": "MountainBikeRide",
+        "activity_count": 1,
+        "time_s": 7883
+      },
+      {
+        "label": "Löpning · distans",
+        "activity_count": 1,
+        "time_s": 6960
+      },
+      {
+        "label": "Enduro",
+        "activity_count": 1,
+        "time_s": 6024
+      },
+      {
+        "label": "Swim",
+        "activity_count": 1,
+        "time_s": 4433
+      },
+      {
+        "label": "Löpning · backintervaller",
+        "activity_count": 1,
+        "time_s": 3988
+      },
+      {
+        "label": "Swimrun",
+        "activity_count": 1,
+        "time_s": 3265
+      },
+      {
+        "label": "Run",
+        "activity_count": 1,
+        "time_s": 3029
+      }
+    ],
+    "activities": [
+      {
+        "id": 19980267962,
+        "date": "2026-08-31",
+        "label": "Enduro",
+        "sport_type": "Enduro",
+        "classification": "recreation",
+        "distance_m": 23403.7,
+        "elapsed_time_s": 6024,
+        "moving_time_s": 3975,
+        "total_elevation_gain_m": 508.6,
+        "average_heartrate": 110.9,
+        "max_heartrate": 178,
+        "user_report": null,
+        "source_sport_type": "EMountainBikeRide",
+        "garmin_activity_type": null
+      },
+      {
+        "id": 19994118756,
+        "date": "2026-09-01",
+        "label": "Run",
+        "sport_type": "Run",
+        "classification": "training",
+        "distance_m": 10348.9,
+        "elapsed_time_s": 3029,
+        "moving_time_s": 3029,
+        "total_elevation_gain_m": 61,
+        "average_heartrate": 145.3,
+        "max_heartrate": 165,
+        "user_report": "Började segt och kände mig långsam i uppvärmningen. Gjorde 3 stegringslopp för att väcka kroppen. I 8-minutersintervallerna var känslan bättre: inga problem att hålla arbetstiden, och efter sista intervallen kändes kroppen riktigt pigg genom hela nedjoggen. Bedömning från användaren: hade definitivt kunnat köra ytterligare en 8-minutersintervall.",
+        "source_sport_type": null,
+        "garmin_activity_type": null
+      },
+      {
+        "id": 20008258969,
+        "date": "2026-09-02",
+        "label": "Swimrun",
+        "sport_type": "Swimrun",
+        "classification": "training",
+        "distance_m": 6885.6,
+        "elapsed_time_s": 3265,
+        "moving_time_s": 3099,
+        "total_elevation_gain_m": 104.3,
+        "average_heartrate": 135.4,
+        "max_heartrate": 158.0,
+        "user_report": null,
+        "source_sport_type": "TrailRun",
+        "garmin_activity_type": null
+      },
+      {
+        "id": 20024236347,
+        "date": "2026-09-03",
+        "label": "MountainBikeRide",
+        "sport_type": "MountainBikeRide",
+        "classification": "training",
+        "distance_m": 31467.5,
+        "elapsed_time_s": 7883,
+        "moving_time_s": 7013,
+        "total_elevation_gain_m": 318.0,
+        "average_heartrate": 114.0,
+        "max_heartrate": 139.0,
+        "user_report": null,
+        "source_sport_type": null,
+        "garmin_activity_type": null
+      },
+      {
+        "id": 20036445971,
+        "date": "2026-09-04",
+        "label": "Löpning · backintervaller",
+        "sport_type": "Run",
+        "classification": "training",
+        "distance_m": 12681.6,
+        "elapsed_time_s": 3988,
+        "moving_time_s": 3988,
+        "total_elevation_gain_m": 243.0,
+        "average_heartrate": 142.4,
+        "max_heartrate": 167.0,
+        "user_report": "3 × 6 backintervaller (18 backar totalt). Tre serier om sex intervaller; arbetsdelarna ska beskrivas som intervaller.",
+        "source_sport_type": "Run",
+        "garmin_activity_type": null
+      },
+      {
+        "id": 20047602146,
+        "date": "2026-09-05",
+        "label": "Swim",
+        "sport_type": "Swim",
+        "classification": "training",
+        "distance_m": 4000.0,
+        "elapsed_time_s": 4433,
+        "moving_time_s": 3401,
+        "total_elevation_gain_m": 0,
+        "average_heartrate": 128.5,
+        "max_heartrate": 153.0,
+        "user_report": null,
+        "source_sport_type": null,
+        "garmin_activity_type": null
+      },
+      {
+        "id": 20057585521,
+        "date": "2026-09-06",
+        "label": "Löpning · distans",
+        "sport_type": "Run",
+        "classification": "training",
+        "distance_m": 22001.5,
+        "elapsed_time_s": 6960,
+        "moving_time_s": 6960,
+        "total_elevation_gain_m": 219.0,
+        "average_heartrate": 139.0,
+        "max_heartrate": 164.0,
+        "user_report": "Kände mig stark hela passet och höll ett kontrollerat tempo. Tog en gel efter cirka en timme. Testade en tempoökning kring km 20–21, cirka 4:25/km, vilket fungerade bra. Pulsen gick upp i fartökningen. Pigg resten av dagen och inte ont någonstans.",
+        "source_sport_type": "Run",
+        "garmin_activity_type": null
+      }
+    ],
+    "plan_outcomes": [
+      {
+        "date": "2026-08-31",
+        "label": "Måndag",
+        "planned_sport": "enduro",
+        "recorded_session": "Enduroskola · fast tillfälle",
+        "original_session": null,
+        "status": "planned",
+        "outcome": "fulfilled",
+        "actual_activity_ids": [
+          19980267962
+        ],
+        "actual_labels": [
+          "Enduro"
+        ],
+        "matching_activity_ids": [
+          19980267962
+        ],
+        "context": {
+          "reason": "Fast återkommande enduroskola. Passet är känt i förväg; den faktiska belastningen registreras efteråt och används som kontrollpunkt för kommande 2–3 dagar.",
+          "coach_adjustment": null
+        }
+      },
+      {
+        "date": "2026-09-01",
+        "label": "Tisdag",
+        "planned_sport": "run",
+        "recorded_session": "Löpning · kontrollerad tröskel · 3 × 8 min / 90 s jogg",
+        "original_session": null,
+        "status": "preliminary",
+        "outcome": "fulfilled",
+        "actual_activity_ids": [
+          19994118756
+        ],
+        "actual_labels": [
+          "Run"
+        ],
+        "matching_activity_ids": [
+          19994118756
+        ],
+        "context": {
+          "reason": "Mesocykelns första prioriterade löpstimulus. Aktuell mikrocykel väljer etablering, hold eller progression från den definierade utvecklingslinjen; kortsiktig ändring kräver sakligt stöd i faktisk närbelastning eller återhämtning.",
+          "coach_adjustment": null
+        }
+      },
+      {
+        "date": "2026-09-02",
+        "label": "Onsdag",
+        "planned_sport": "swim",
+        "recorded_session": "Simning · aerob/teknik · 3 200 m · ca 60 min · alternativ: Swimrun · Jogersö Extreme · 1 varv",
+        "original_session": null,
+        "status": "conditional",
+        "outcome": "fulfilled",
+        "actual_activity_ids": [
+          20008258969
+        ],
+        "actual_labels": [
+          "Swimrun"
+        ],
+        "matching_activity_ids": [
+          20008258969
+        ],
+        "context": {
+          "reason": "Baslinjen är simning med liten mekanisk kostnad efter söndagens längre löpning, måndagens enduro och tisdagens tröskel. Ett varv Jogersö Extreme kan ersätta simningen om det hålls kontrollerat; det ska inte läggas ovanpå simpasset och räknas som faktisk löp-/teknisk belastning inför resten av veckan.",
+          "coach_adjustment": null
+        }
+      },
+      {
+        "date": "2026-09-03",
+        "label": "Torsdag",
+        "planned_sport": "bike",
+        "recorded_session": "MTB/XC · 45 min · teknik + lugn aerob stig",
+        "original_session": "MTB/XC · 60 min · teknik + lugn aerob stig",
+        "status": "conditional",
+        "outcome": "fulfilled",
+        "actual_activity_ids": [
+          20024236347
+        ],
+        "actual_labels": [
+          "MountainBikeRide"
+        ],
+        "matching_activity_ids": [
+          20024236347
+        ],
+        "context": {
+          "reason": "MTB/XC är fortsatt utvecklingsprioritet. Grundplanen är 60 minuter lugn teknisk stig. Om onsdagen blir Swimrun på Jogersö används dess faktiska belastning som kontrollpunkt och MTB-passet kortas eller tas bort endast om återhämtningen eller benkänslan ger sakliga skäl, för att skydda fredagens prioriterade löpkvalitet.",
+          "coach_adjustment": "Skala ned passet. Gör dagens MTB/XC som ordinerat men i förkortad dos: mtb-support-45 (45 min). Håll det tekniskt fokus, låg kraft, undvik tunga stigningar och maximal accelerationsträning."
+        }
+      },
+      {
+        "date": "2026-09-04",
+        "label": "Fredag",
+        "planned_sport": "run",
+        "recorded_session": "Löpning · backkvalitet · 15 min lugnt + 2 × 6 × 150 m / lugn joggvila + 10 min lugnt",
+        "original_session": "Löpning · backkvalitet · 15 min lugnt + 2 × 7 × 150 m / lugn joggvila + 10 min lugnt",
+        "status": "conditional",
+        "outcome": "fulfilled",
+        "actual_activity_ids": [
+          20036445971
+        ],
+        "actual_labels": [
+          "Löpning · backintervaller"
+        ],
+        "matching_activity_ids": [
+          20036445971
+        ],
+        "context": {
+          "reason": "Mesocykelns andra prioriterade löpkvalitet: kraft, löpekonomi och mekanisk kvalitet. 2 × 6 × 150 m är demonstrerat kapacitetsgolv; aktuell mikrocykel väljer nästa utvecklingssteg. Regression kräver ett explicit närbelastningsskäl.",
+          "coach_adjustment": "Tillfällig regression från utvecklingsplanens 2 × 7 × 150 m till 2 × 6 × 150 m. Skälet är den redan dokumenterade ackumulerade närbelastningen; detta är belastningsstyrning, inte ny utvecklingsbaseline."
+        }
+      },
+      {
+        "date": "2026-09-05",
+        "label": "Lördag",
+        "planned_sport": "strength",
+        "recorded_session": "Simning · 3 200 m · aerob/teknik + styrka/core · 25 min · styrkemall",
+        "original_session": "Simning · 3 200 m · aerob/teknik + styrka/core · 25 min · styrkemall",
+        "status": "conditional",
+        "outcome": "different_activity",
+        "actual_activity_ids": [
+          20047602146
+        ],
+        "actual_labels": [
+          "Swim"
+        ],
+        "matching_activity_ids": [],
+        "context": {
+          "reason": "Lördagen används som dubbel lågkostnads-/stöddag: en etablerad 3 200 m aerob/teknisk simexponering för att hålla simfrekvensen uppe samt reducerad styrka/core. Simningen ger liten mekanisk kostnad för benen; styrkan hålls kort eftersom dagen ligger mellan fredagens backkvalitet och söndagens lugna distans. Fredagens faktiska utfall är kontrollpunkt.",
+          "coach_adjustment": "Skala ned passet. Gör lördagens skyddade styrka+sim som planerat men i reducerad styrkedos (styrka 25 min) och håll simningen aerob/teknisk; undvik plyometri. Behåll simens 3 200 m-struktur men håll intensiteten kontrollerad."
+        }
+      },
+      {
+        "date": "2026-09-06",
+        "label": "Söndag",
+        "planned_sport": "run",
+        "recorded_session": "Löpning · lugn distans · 75 min",
+        "original_session": null,
+        "status": "preliminary",
+        "outcome": "fulfilled",
+        "actual_activity_ids": [
+          20057585521
+        ],
+        "actual_labels": [
+          "Löpning · distans"
+        ],
+        "matching_activity_ids": [
+          20057585521
+        ],
+        "context": {
+          "reason": "Blockets tredje löpstimulus bygger tålighet och kontinuitet utan att bli ytterligare kvalitet. Grundplanen är 75 minuter lugnt; fredag–lördagens faktiska utfall kan motivera kortare pass, flytt eller vila.",
+          "coach_adjustment": null
+        }
+      }
+    ],
+    "outcome_counts": {
+      "different_activity": 1,
+      "fulfilled": 6
+    },
+    "plan_meta": {
+      "title": "Mesocykel löpning · mikrocykel 2 av 4 · konkret grundplan",
+      "principle": "Mikrocykeln fortsätter fyraveckorsmesocykeln med kontrollerad löptröskel, separat backkvalitet och lugn löpdistans. Måndagens enduroskola ligger fast. Simning och MTB stödjer helheten utan att tränga undan de prioriterade löpstimulansen. De kommande passen har konkreta grundplaner och ändras endast när faktisk belastning, återhämtning eller fasta åtaganden ger sakliga skäl."
+    }
+  },
+  "assessment": {
+    "summary": "Veckan innehöll alla planerade träningspass plus en rekreation (enduro); löpkvaliteter och långdistans genomfördes enligt plan och sim/MTB stödde veckan i reducerad form.",
+    "worked": [
+      "Prioriterade löppass genomförda: kontrollert tröskelintervall (3×8 min) och backkvalitet (2×6×150 m) genomförda som avsett.",
+      "Långdistanslöpning genomförd och upplevdes stark med kontrollerad tempoökning runt km 20–21.",
+      "Swimrun och simpass genomförda som aeroba/tekniska exponeringar, bibehöll simfrekvensen.",
+      "MTB/XC-pass genomfört i förkortad/teknisk form och enduro genomförd som planerad rekreation."
+    ],
+    "not_as_planned": [
+      "Lördagens plan var kombinerad sim + styrka; endast simning registrerades (styrkedel saknas i faktalagret).",
+      "MTB-planen i planen var 60 min men coach justerade till 45 min; det genomförda mountainbikepasset hade 7883 s (längre än 45 min) — detta avviker från coachens skala-ned-instruktion i planmetadatan.",
+      "Planens ursprungliga backserie var 2×7×150 m men utfördes som 2×6×150 m enligt coachjustering; detta var avsett belastningsstyrning, inte ny baseline.",
+      "Enduro registrerades som recreation och räknas inte som träning trots tider och höjdmeter."
+    ],
+    "load_continuity": "Veckan visar en konsekvent daglig träningsexponering med flera prioriterade löpstimuli tidigt och sent i veckan samt kompletterande sim och MTB mellan löppassen; total närbelastning är sammanhängande utan större luckor.",
+    "key_lesson": "Planens skyddade prioritering av löpkvaliteter hölls samtidigt som kompletterande discipliner gav stöd utan att tränga undan huvudstimuli.",
+    "next_week_implication": "Fortsätt prioritera löpkvaliteter och långdistans samtidigt som kompletterande sim/MTB hålls kontrollerat reducerade eller tekniska för att bevara återhämtning och möjlig progression i nästa mikrocykel.",
+    "uncertainties": [
+      "Ingen registrerad styrkedel för lördagens planerade styrka; påverkan på återhämtning/kapacitet oklar.",
+      "Detaljerad intensitet/effort för MTB-pass och swimrun saknas (för att kvantifiera belastning relativt coachjustering).",
+      "Subjektiv återhämtning och sömn eller annan återhämtningsdata saknas."
+    ]
+  }
+}

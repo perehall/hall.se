@@ -1,18 +1,18 @@
 {
   "schema_version": 3,
   "state": "preliminary",
-  "week_key": "2026-W37",
+  "week_key": "2026-W38",
   "meta": {
     "timezone": "Europe/Stockholm",
-    "week": 37,
-    "week_start": "2026-09-07",
-    "week_end": "2026-09-13",
-    "title": "Mesocykel · löptröskel + backkvalitet · mikrocykel 3 av 4",
+    "week": 38,
+    "week_start": "2026-09-14",
+    "week_end": "2026-09-20",
+    "title": "Mesocykel · löptröskel + backkvalitet · mikrocykel 4 av 4",
     "principle": "Flytta den prioriterade löpförmågan framåt genom kontrollerad tröskel, löpekonomi/backstyrka och lugn tålighet, samtidigt som MTB/XC och simning hålls aktiva utan att tränga undan löputvecklingen. Mikrocykeln är preliminär men konkret: varje planerat pass har en användbar grundplan. Faktisk belastning och återhämtning används för att behålla eller justera planen, inte för att skapa den i sista stund. Kalenderveckan är bara visningen.",
-    "preview_summary": "Mikrocykel 3 av 4 i aktuell mesocykel. Skyddade stimuli: run_threshold, run_hill_quality, run_easy_distance. Grundpassen är konkreta och får inte ökas automatiskt; progression kräver explicita kriterier och justering kräver stöd i fler-dagars faktisk information. Styrka/core är skyddad kapacitet och får inte falla ur som restpost.",
+    "preview_summary": "Mikrocykel 4 av 4 i aktuell mesocykel. Skyddade stimuli: run_threshold, run_hill_quality, run_easy_distance. Grundpassen är konkreta och får inte ökas automatiskt; progression kräver explicita kriterier och justering kräver stöd i fler-dagars faktisk information. Styrka/core är skyddad kapacitet och får inte falla ur som restpost.",
     "mesocycle_id": "run-threshold-hill-4w",
-    "microcycle_id": "run-threshold-hill-4w:mc3",
-    "microcycle_index": 3,
+    "microcycle_id": "run-threshold-hill-4w:mc4",
+    "microcycle_index": 4,
     "microcycle_total": 4,
     "microcycle_length_days": 7,
     "calendar_week_is_presentation": true,
@@ -61,7 +61,7 @@
   },
   "days": [
     {
-      "date": "2026-09-07",
+      "date": "2026-09-14",
       "label": "Måndag",
       "status": "planned",
       "planning_status": "fixed",
@@ -76,12 +76,12 @@
         "enduro_technical"
       ],
       "mesocycle_id": "run-threshold-hill-4w",
-      "microcycle_id": "run-threshold-hill-4w:mc3",
-      "microcycle_index": 3,
+      "microcycle_id": "run-threshold-hill-4w:mc4",
+      "microcycle_index": 4,
       "microcycle_day": 1
     },
     {
-      "date": "2026-09-08",
+      "date": "2026-09-15",
       "label": "Tisdag",
       "status": "preliminary",
       "planning_status": "preliminary",
@@ -98,8 +98,8 @@
         "mechanical"
       ],
       "mesocycle_id": "run-threshold-hill-4w",
-      "microcycle_id": "run-threshold-hill-4w:mc3",
-      "microcycle_index": 3,
+      "microcycle_id": "run-threshold-hill-4w:mc4",
+      "microcycle_index": 4,
       "microcycle_day": 2,
       "microcycle_slot": "run_threshold",
       "performance_marker_id": "run-threshold-control",
@@ -146,10 +146,10 @@
         ]
       },
       "development_step": {
-        "microcycle": 3,
+        "microcycle": 4,
         "option_id": "run-threshold-3x10",
-        "relation": "progress",
-        "reason": "Planerad utveckling från etablerade 24 till 30 min kontrollerat tröskelarbete; intensiteten hålls oförändrat kontrollerad."
+        "relation": "hold",
+        "reason": "Konsolidera den högre arbetstiden och skapa jämförbar data inför mesocykelutvärderingen."
       },
       "baseline_option_id": "run-threshold-3x10",
       "dose_open": false,
@@ -161,7 +161,7 @@
       }
     },
     {
-      "date": "2026-09-09",
+      "date": "2026-09-16",
       "label": "Onsdag",
       "status": "preliminary",
       "session": "Simning · 3 200 m · aerob/teknik",
@@ -169,10 +169,10 @@
         "planned": "none"
       },
       "reason": "Preliminär simstruktur förs vidare från föregående veckas etablerade simdos för kontinuitet. Totaldosen ökas inte automatiskt; slutlig dos och intensitet omprövas mot faktisk belastning och återhämtning från de närmast föregående 2–3 dagarna.",
-      "development_focus": "Rotera runt en stabil kroppslinje: låt höft och axel följa med utan att huvudet vandrar eller benen börjar slingra.",
+      "development_focus": "Låt återföringen vara avslappnad och isättningen ren; behåll ett tidigt grepp när handen går i vattnet.",
       "watch_workout": {
         "sync_enabled": false,
-        "id": "swim-2026-w37-2026-09-09-preview",
+        "id": "swim-2026-w38-2026-09-16-preview",
         "type": "Swim",
         "equipment": [],
         "name": "Aerob/teknik · kroppslinje och rotation · 3 200 m",
@@ -257,14 +257,13 @@
         "swim_technique"
       ],
       "mesocycle_id": "run-threshold-hill-4w",
-      "microcycle_id": "run-threshold-hill-4w:mc3",
-      "microcycle_index": 3,
+      "microcycle_id": "run-threshold-hill-4w:mc4",
+      "microcycle_index": 4,
       "microcycle_day": 3,
       "alternative_sports": [
         "swimrun"
       ],
       "decision_note": "Swimrun är ett ersättningsalternativ, inte ett extra pass. Om det genomförs används den faktiska belastningen som kontrollpunkt för torsdagens MTB; fredagens backkvalitet skyddas.",
-      "planning_status": "preliminary",
       "microcycle_slot": "swim_support",
       "dose_options": [
         {
@@ -282,10 +281,11 @@
         "kind": "structured",
         "value": 3200,
         "option_id": "swim-support-3200"
-      }
+      },
+      "planning_status": "preliminary"
     },
     {
-      "date": "2026-09-10",
+      "date": "2026-09-17",
       "label": "Torsdag",
       "status": "preliminary",
       "planning_status": "preliminary",
@@ -304,8 +304,8 @@
         "technical"
       ],
       "mesocycle_id": "run-threshold-hill-4w",
-      "microcycle_id": "run-threshold-hill-4w:mc3",
-      "microcycle_index": 3,
+      "microcycle_id": "run-threshold-hill-4w:mc4",
+      "microcycle_index": 4,
       "microcycle_day": 4,
       "microcycle_slot": "mtb_support",
       "performance_marker_id": "mtb-technical-repeat",
@@ -335,11 +335,11 @@
       }
     },
     {
-      "date": "2026-09-11",
+      "date": "2026-09-18",
       "label": "Fredag",
       "status": "preliminary",
       "planning_status": "preliminary",
-      "session": "Löpning · backkvalitet · 15 min lugnt + 3 × 7 × 150 m / lugn joggvila + 10 min lugnt",
+      "session": "Löpning · backkvalitet · 15 min lugnt + 3 × 8 × 150 m / lugn joggvila + 10 min lugnt",
       "reason": "Mesocykelns andra prioriterade löpkvalitet. Användaren har uttryckligen rapporterat 3 × 6 = 18 genomförda backintervaller; det är nu demonstrerat repetitionsvolymgolv. Nästa normaldos ska därför ligga över 18 arbetsrepetitioner eller ha ett explicit hold-/regressionsskäl.",
       "development_focus": "Kraftfull men kontrollerad löpning med bibehållen mekanik. Utveckla arbetsmängden stegvis; ingen maximal sprint eller syrajakt.",
       "sport": "run",
@@ -353,8 +353,8 @@
         "cardiovascular"
       ],
       "mesocycle_id": "run-threshold-hill-4w",
-      "microcycle_id": "run-threshold-hill-4w:mc3",
-      "microcycle_index": 3,
+      "microcycle_id": "run-threshold-hill-4w:mc4",
+      "microcycle_index": 4,
       "microcycle_day": 5,
       "microcycle_slot": "run_hill_quality",
       "performance_marker_id": "run-hill-mechanics",
@@ -436,22 +436,22 @@
         ]
       },
       "development_step": {
-        "microcycle": 3,
-        "option_id": "run-hill-3x7x150",
+        "microcycle": 4,
+        "option_id": "run-hill-3x8x150",
         "relation": "progress",
-        "reason": "Nästa normala utvecklingssteg ökar endast arbetsrepetitionerna från 18 till 21."
+        "reason": "Fortsatt volymprogression från 21 till 24 arbetsrepetitioner om föregående steg absorberats; annars krävs explicit hold-skäl."
       },
-      "baseline_option_id": "run-hill-3x7x150",
+      "baseline_option_id": "run-hill-3x8x150",
       "dose_open": false,
       "dose_resolution": {
         "state": "baseline",
         "kind": "structured",
-        "value": 21,
-        "option_id": "run-hill-3x7x150"
+        "value": 24,
+        "option_id": "run-hill-3x8x150"
       }
     },
     {
-      "date": "2026-09-12",
+      "date": "2026-09-19",
       "label": "Lördag",
       "status": "preliminary",
       "planning_status": "preliminary",
@@ -473,8 +473,8 @@
         "technical"
       ],
       "mesocycle_id": "run-threshold-hill-4w",
-      "microcycle_id": "run-threshold-hill-4w:mc3",
-      "microcycle_index": 3,
+      "microcycle_id": "run-threshold-hill-4w:mc4",
+      "microcycle_index": 4,
       "microcycle_day": 6,
       "microcycle_slot": "strength_support",
       "optional_stimuli": [
@@ -507,7 +507,7 @@
       }
     },
     {
-      "date": "2026-09-13",
+      "date": "2026-09-20",
       "label": "Söndag",
       "status": "preliminary",
       "planning_status": "preliminary",
@@ -524,8 +524,8 @@
         "mechanical"
       ],
       "mesocycle_id": "run-threshold-hill-4w",
-      "microcycle_id": "run-threshold-hill-4w:mc3",
-      "microcycle_index": 3,
+      "microcycle_id": "run-threshold-hill-4w:mc4",
+      "microcycle_index": 4,
       "microcycle_day": 7,
       "microcycle_slot": "run_easy_distance",
       "dose_options": [
