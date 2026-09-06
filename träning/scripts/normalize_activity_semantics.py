@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import hashlib
 import json
 import re
 from pathlib import Path
@@ -13,6 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 ACTIVITIES = ROOT / "data" / "activities.json"
 OVERRIDES = ROOT / "data" / "activity_overrides.json"
 COACH = ROOT / "data" / "coach.json"
+COACH_PROMPT = ROOT / "coach_prompt.md"
 
 ENDURO_NAME_RE = re.compile(r"\b(?:enduro|motocross)\b", re.IGNORECASE)
 MTB_NAME_RE = re.compile(r"\b(?:mtb|xc|mountain\s*bike|cykel)\b", re.IGNORECASE)
@@ -39,6 +41,11 @@ def write_state(state):
         json.dumps(state, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
+
+
+def coach_prompt_signature(path=COACH_PROMPT):
+    """Version coach interpretations by the exact rules used to produce them."""
+    return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 def raw_sport(activity):
@@ -176,7 +183,7 @@ def invalidate_coach_analyses(path: Path, changed_ids):
     return removed
 
 
-def apply_semantics(state, config=None):
+def apply_semantics(state, config=None, prompt_signature=None):
     if not isinstance(state, dict):
         raise RuntimeError("Aktivitetsnormalisering: state måste vara objekt")
     state["schema_version"] = ACTIVITIES_SCHEMA_VERSION
@@ -186,6 +193,7 @@ def apply_semantics(state, config=None):
     if not isinstance(activities, list):
         raise RuntimeError("Aktivitetsnormalisering: activities måste vara lista")
 
+    prompt_signature = prompt_signature or coach_prompt_signature()
     override_applied = 0
     auto_applied = 0
     seen = set()
@@ -204,9 +212,12 @@ def apply_semantics(state, config=None):
             auto_applied += 1
 
         # Enrich after semantic normalization so sport and user report are final.
-        # This context is deterministic and versioned; the AI coach interprets it
-        # instead of calculating pace or meaning from raw provider fields.
-        activity["workout_analysis_context"] = build_workout_analysis_context(activity)
+        # The prompt signature is deliberately part of the latest activity data:
+        # coach.stable_hash already hashes that object, so rule changes invalidate
+        # the latest analysis automatically without fake semantic overrides.
+        context = build_workout_analysis_context(activity)
+        context["coach_prompt_sha256"] = prompt_signature
+        activity["workout_analysis_context"] = context
 
         after = coach_semantic_fingerprint(activity)
         if key and before != after:
@@ -215,6 +226,7 @@ def apply_semantics(state, config=None):
     state["activity_semantics"] = {
         "schema_version": config.get("schema_version", 1),
         "workout_analysis_contract_version": WORKOUT_ANALYSIS_CONTRACT_VERSION,
+        "coach_prompt_sha256": prompt_signature,
         "overrides_applied": override_applied,
         "auto_rules_applied": auto_applied,
         "override_ids_present": sorted(seen),
@@ -229,7 +241,12 @@ def main():
 
     state = load(ACTIVITIES)
     config = load(OVERRIDES) if OVERRIDES.exists() else {"schema_version": 1, "overrides": {}}
-    applied, auto_applied, seen = apply_semantics(state, config)
+    prompt_signature = coach_prompt_signature()
+    applied, auto_applied, seen = apply_semantics(
+        state,
+        config,
+        prompt_signature=prompt_signature,
+    )
     changed_ids = state.get("activity_semantics", {}).get("changed_ids") or []
     write_state(state)
     invalidated = invalidate_coach_analyses(COACH, changed_ids)
@@ -237,8 +254,11 @@ def main():
     rendered = load(ACTIVITIES)
     if rendered.get("schema_version") != ACTIVITIES_SCHEMA_VERSION:
         raise RuntimeError("Aktivitetsnormalisering: schemaversion verifierades inte")
-    if (rendered.get("activity_semantics") or {}).get("workout_analysis_contract_version") != WORKOUT_ANALYSIS_CONTRACT_VERSION:
+    semantics = rendered.get("activity_semantics") or {}
+    if semantics.get("workout_analysis_contract_version") != WORKOUT_ANALYSIS_CONTRACT_VERSION:
         raise RuntimeError("Aktivitetsnormalisering: workout analysis-contract verifierades inte")
+    if semantics.get("coach_prompt_sha256") != prompt_signature:
+        raise RuntimeError("Aktivitetsnormalisering: coachprompt-signatur verifierades inte")
 
     by_id = {str(a.get("id")): a for a in rendered.get("activities", [])}
     overrides = config.get("overrides") or {}
@@ -249,6 +269,8 @@ def main():
             raise RuntimeError(f"Aktivitetsnormalisering: effektiv sport verifierades inte för {key}")
         if activity.get("classification") != override.get("classification"):
             raise RuntimeError(f"Aktivitetsnormalisering: classification verifierades inte för {key}")
+        if (activity.get("workout_analysis_context") or {}).get("coach_prompt_sha256") != prompt_signature:
+            raise RuntimeError(f"Aktivitetsnormalisering: coachprompt-signatur saknas för {key}")
 
     print(
         f"Aktivitetsnormalisering OK: schema v{ACTIVITIES_SCHEMA_VERSION}, "
