@@ -238,6 +238,11 @@ def resolve_today(plan, activities, strategy, today):
 
 
 def resolve_next_decision(plan, activities, strategy, today):
+    """Return the chronologically next unfulfilled planned session.
+
+    Notes, conditional status and anchor priority describe that next session;
+    they must never cause the UI to skip an earlier planned session.
+    """
     today_date = today if isinstance(today, date) else date.fromisoformat(str(today))
     horizon_days = int((strategy.get("decision_policy") or {}).get("horizon_days") or 3)
     horizon_end = today_date + timedelta(days=horizon_days)
@@ -251,28 +256,22 @@ def resolve_next_decision(plan, activities, strategy, today):
             continue
         if day_fulfilled(day, activities):
             continue
+        if not str(day.get("session") or "").strip():
+            continue
         future.append((day_date, day))
 
-    explicit = [(day_date, day) for day_date, day in future if day.get("decision_note")]
-    if explicit:
-        day_date, day = explicit[0]
-        return {
-            "date": day_date.isoformat(),
-            "label": day.get("label") or day_date.isoformat(),
-            "headline": day.get("session") or "Kommande pass",
-            "note": day.get("decision_note"),
-        }
-
-    conditional = [
-        (day_date, day)
-        for day_date, day in future
-        if day.get("status") == "conditional"
-    ]
-    if conditional:
-        day_date, day = conditional[0]
-        note = day.get("coach_adjustment") or (
-            "Grundplanen finns kvar, men ny faktisk information har motiverat en uttrycklig villkorsmarkering."
-        )
+    if future:
+        day_date, day = min(future, key=lambda item: item[0])
+        if day.get("decision_note"):
+            note = day.get("decision_note")
+        elif day.get("status") == "conditional":
+            note = day.get("coach_adjustment") or (
+                "Grundplanen finns kvar, men ny faktisk information har motiverat en uttrycklig villkorsmarkering."
+            )
+        elif day.get("priority_role") == "anchor":
+            note = "Konkret grundplan. Ändra endast om ny belastning, återhämtning eller fasta åtaganden ger sakliga skäl."
+        else:
+            note = "Grundplanen ligger fast med nuvarande underlag."
         return {
             "date": day_date.isoformat(),
             "label": day.get("label") or day_date.isoformat(),
@@ -280,28 +279,10 @@ def resolve_next_decision(plan, activities, strategy, today):
             "note": note,
         }
 
-    anchors = [(day_date, day) for day_date, day in future if day.get("priority_role") == "anchor"]
-    if anchors:
-        day_date, day = anchors[0]
-        return {
-            "date": day_date.isoformat(),
-            "label": day.get("label") or day_date.isoformat(),
-            "headline": day.get("session") or "Kommande nyckelpass",
-            "note": "Konkret grundplan. Ändra endast om ny belastning, återhämtning eller fasta åtaganden ger sakliga skäl.",
-        }
-
-    if future:
-        day_date, day = future[0]
-        return {
-            "date": day_date.isoformat(),
-            "label": day.get("label") or day_date.isoformat(),
-            "headline": day.get("session") or "Kommande pass",
-            "note": "Grundplanen ligger fast med nuvarande underlag.",
-        }
     return {
         "date": "",
         "label": "",
-        "headline": "Inget planerat pass inom 72 timmar",
+        "headline": f"Inget planerat pass inom {horizon_days * 24} timmar",
         "note": "Ingen extra träning läggs in enbart för att tid finns.",
     }
 
