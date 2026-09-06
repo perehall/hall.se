@@ -7,9 +7,11 @@ facts and a deterministic planned-versus-actual comparison before interpretation
 
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 from datetime import datetime, timezone
+from pathlib import Path
 from zoneinfo import ZoneInfo
 
 import coach as legacy
@@ -22,16 +24,85 @@ from workout_plan_context import (
 
 
 COACH_PIPELINE_CONTRACT_VERSION = 1
+SCRIPTS = Path(__file__).resolve().parent
+ANALYSIS_CODE_FILES = (
+    SCRIPTS / "coach_pipeline.py",
+    SCRIPTS / "coach_output_guard.py",
+    SCRIPTS / "workout_plan_context.py",
+    SCRIPTS / "workout_analysis_context.py",
+)
+DEFERRED_REVIEW_REASON = (
+    "Beslutet skjuts upp eftersom mellanliggande planerade dagar ännu inte har ett känt utfall."
+)
 
 
-def latest_for_analysis(latest, decision_plan, latest_date):
+def analysis_code_signature(paths=ANALYSIS_CODE_FILES):
+    """Hash the deterministic analysis pipeline so code changes self-invalidate."""
+    digest = hashlib.sha256()
+    for path in sorted(paths, key=lambda item: item.name):
+        digest.update(path.name.encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(path.read_bytes())
+        digest.update(b"\0")
+    return digest.hexdigest()
+
+
+def latest_for_analysis(latest, decision_plan, latest_date, code_signature=None):
     enriched = dict(latest)
     workout_context = dict(latest.get("workout_analysis_context") or {})
     plan_comparison = build_plan_comparison(decision_plan, latest, latest_date)
     workout_context["plan_comparison"] = plan_comparison
     workout_context["coach_pipeline_contract_version"] = COACH_PIPELINE_CONTRACT_VERSION
+    workout_context["analysis_code_sha256"] = code_signature or analysis_code_signature()
     enriched["workout_analysis_context"] = workout_context
     return enriched, plan_comparison
+
+
+def concretize_deferred_review(action, decision_plan, latest_date):
+    """Replace generic deferred copy with known adjacent sessions when possible."""
+    normalized = dict(action)
+    if normalized.get("action") != "review" or normalized.get("reason") != DEFERRED_REVIEW_REASON:
+        return normalized
+
+    future_days = sorted(
+        [
+            day
+            for day in (decision_plan.get("days") or [])
+            if str(day.get("date") or "") > latest_date and day.get("session")
+        ],
+        key=lambda day: day.get("date"),
+    )
+    fixed_day = next(
+        (
+            day
+            for day in future_days
+            if day.get("manual_lock") is True or day.get("planning_status") == "fixed"
+        ),
+        None,
+    )
+    if not fixed_day:
+        return normalized
+
+    following_day = next(
+        (
+            day
+            for day in future_days
+            if str(day.get("date") or "") > str(fixed_day.get("date") or "")
+            and day.get("session")
+        ),
+        None,
+    )
+    if not following_day:
+        return normalized
+
+    fixed_label = fixed_day.get("label") or fixed_day.get("date")
+    following_label = following_day.get("label") or following_day.get("date")
+    normalized["recommendation"] = (
+        f"{fixed_label}: {fixed_day.get('session')} ligger kvar som plan. "
+        f"{following_label}: {following_day.get('session')} bedöms efter den faktiska belastningen "
+        f"från {str(fixed_label).lower()} och återhämtningen därefter."
+    )
+    return normalized
 
 
 def main():
@@ -61,7 +132,12 @@ def main():
     tz = ZoneInfo(plan.get("meta", {}).get("timezone", "Europe/Stockholm"))
     local_date = datetime.now(tz).date().isoformat()
 
-    latest_input, plan_comparison = latest_for_analysis(latest, decision_plan, latest_date)
+    latest_input, plan_comparison = latest_for_analysis(
+        latest,
+        decision_plan,
+        latest_date,
+        code_signature=analysis_code_signature(),
+    )
     rolling_context = legacy.rolling_load_context(
         activities,
         decision_plan,
@@ -160,6 +236,11 @@ def main():
         candidate_dates=candidate_dates,
         ready_dates=ready_dates,
     )
+    result["plan_action"] = concretize_deferred_review(
+        result["plan_action"],
+        decision_plan,
+        latest_date,
+    )
     result["plan_action"] = legacy.normalize_no_remaining_plan(
         result["plan_action"],
         allowed_dates=ready_dates,
@@ -214,6 +295,7 @@ def main():
             "workout_context_version": workout_context.get("contract_version"),
             "plan_comparison_version": PLAN_COMPARISON_CONTRACT_VERSION,
             "coach_prompt_sha256": workout_context.get("coach_prompt_sha256"),
+            "analysis_code_sha256": workout_context.get("analysis_code_sha256"),
         },
         "performance_marker_id": performance_context.get("marker_id") if performance_context else None,
         "performance_protocol_key": performance_context.get("protocol_key") if performance_context else None,
