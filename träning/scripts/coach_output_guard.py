@@ -51,6 +51,12 @@ PLAN_MATCH_PATTERN = re.compile(
     r"ligger\s+i\s+linje\s+med\s+(?:mikrocykelns\s+)?plan(?:en)?)\b",
     re.IGNORECASE,
 )
+UNVERIFIED_HR_PATTERN = re.compile(
+    r"\b(?:stabil|jämn)\s+puls\b|"
+    r"\bpuls(?:en)?\s+(?:var|är|hölls|förblev)\s+(?:stabil|jämn)\b|"
+    r"\b(?:ingen|låg|liten)\s+pulsdrift\b",
+    re.IGNORECASE,
+)
 
 
 def _outside_planned_duration(comparison):
@@ -91,6 +97,38 @@ def _neutralize_near_load_level(text):
     return re.sub(r"[ \t]{2,}", " ", value).strip()
 
 
+def _neutralize_unverified_hr_characterization(text):
+    value = str(text or "")
+    # Preserve the surrounding observation while removing an interpretation that
+    # requires an explicit drift/stability metric. This handles the common form
+    # "... med stabil puls och en kontrollerad fartökning ..." cleanly.
+    value = re.sub(
+        r"\s+med\s+(?:stabil|jämn)\s+puls\s+och\s+",
+        " med ",
+        value,
+        flags=re.IGNORECASE,
+    )
+    value = re.sub(
+        r"\s+med\s+(?:stabil|jämn)\s+puls\b",
+        "",
+        value,
+        flags=re.IGNORECASE,
+    )
+    value = re.sub(
+        r"\bpuls(?:en)?\s+(?:var|är|hölls|förblev)\s+(?:stabil|jämn)\b",
+        "pulsstabilitet är inte deterministiskt verifierad",
+        value,
+        flags=re.IGNORECASE,
+    )
+    value = re.sub(
+        r"\b(?:ingen|låg|liten)\s+pulsdrift\b",
+        "pulsdrift är inte deterministiskt verifierad",
+        value,
+        flags=re.IGNORECASE,
+    )
+    return re.sub(r"[ \t]{2,}", " ", value).strip()
+
+
 def _has_future_certainty(text):
     value = str(text or "")
     return bool(FUTURE_WINDOW_PATTERN.search(value) and FUTURE_CERTAINTY_PATTERN.search(value))
@@ -119,30 +157,40 @@ def _sanitize_reporting_window(text):
     return value
 
 
+def _sanitize_assessment_text(text, *, latest_date, local_date):
+    value = _neutralize_near_load_level(text)
+    value = _neutralize_unverified_hr_characterization(value)
+    if latest_date == local_date and _has_future_certainty(value):
+        return _neutral_future_sentence()
+    return value
+
+
 def guard_result(result, *, latest_date, local_date, plan_comparison=None):
     guarded = copy.deepcopy(result)
     assessment = guarded.get("assessment") or {}
 
     for field in ("summary", "load_interpretation"):
         if isinstance(assessment.get(field), str):
-            assessment[field] = _neutralize_near_load_level(assessment[field])
-            if latest_date == local_date and _has_future_certainty(assessment[field]):
-                assessment[field] = _neutral_future_sentence()
+            assessment[field] = _sanitize_assessment_text(
+                assessment[field],
+                latest_date=latest_date,
+                local_date=local_date,
+            )
 
     for field in ("interpretations", "unknowns"):
         values = assessment.get(field)
         if not isinstance(values, list):
             continue
-        sanitized = []
-        for item in values:
-            if not isinstance(item, str):
-                sanitized.append(item)
-                continue
-            item = _neutralize_near_load_level(item)
-            if latest_date == local_date and _has_future_certainty(item):
-                item = _neutral_future_sentence()
-            sanitized.append(item)
-        assessment[field] = sanitized
+        assessment[field] = [
+            _sanitize_assessment_text(
+                item,
+                latest_date=latest_date,
+                local_date=local_date,
+            )
+            if isinstance(item, str)
+            else item
+            for item in values
+        ]
 
     action = guarded.get("plan_action") or {}
     for field in ("reason", "recommendation"):
@@ -210,6 +258,8 @@ def validate_guarded_result(result, *, latest_date, local_date, plan_comparison=
 
     if any(NEAR_LOAD_LEVEL_PATTERN.search(text) or NEAR_LOAD_PREFIX_PATTERN.search(text) for text in texts):
         raise RuntimeError("Coach output guard: unsupported relative near-load label remained")
+    if any(UNVERIFIED_HR_PATTERN.search(text) for text in texts):
+        raise RuntimeError("Coach output guard: unsupported heart-rate stability claim remained")
     if latest_date == local_date and any(_has_future_certainty(text) for text in texts):
         raise RuntimeError("Coach output guard: unsupported future recovery certainty remained")
     if any(REPORT_CLOCK_WINDOW_PATTERN.search(text) for text in texts):
