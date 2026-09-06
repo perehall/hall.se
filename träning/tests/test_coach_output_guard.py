@@ -17,12 +17,17 @@ class CoachOutputGuardTests(unittest.TestCase):
                     "22 km distans i 5:16/km med stabil puls och en kontrollerad fartökning."
                 ),
                 "load_interpretation": (
-                    "Ingen omedelbar nedskalning krävs; närbelastningen de senaste dagarna är hög."
+                    "Passet adderar betydande kardiovaskulär och mekanisk belastning; "
+                    "närbelastningen de senaste dagarna är hög."
                 ),
                 "confidence": "medium",
                 "facts": [],
                 "interpretations": [
-                    "Inga subjektiva tecken finns som skulle kräva vila i nästa 48–72 h."
+                    (
+                        "Ett långt genomfört distanspass visar att dagens dos var absorberbar "
+                        "och att sen fartökning var hållbar utan smärta."
+                    ),
+                    "Inga subjektiva tecken finns som skulle kräva vila i nästa 48–72 h.",
                 ],
                 "unknowns": [],
             },
@@ -56,11 +61,14 @@ class CoachOutputGuardTests(unittest.TestCase):
         )
         text = str(guarded)
         self.assertNotIn("är hög", text)
+        self.assertNotIn("betydande", text)
+        self.assertNotIn("absorberbar", text)
         self.assertNotIn("nästa 48–72 h", text)
         self.assertNotIn("genomfört enligt plan", text)
         self.assertNotIn("07–09", text)
         self.assertNotIn("stabil puls", text)
         self.assertIn("med en kontrollerad fartökning", guarded["assessment"]["summary"])
+        self.assertIn("sen fartökning var hållbar utan smärta", text)
         self.assertIn("116 min", text)
         self.assertIn("90 min", text)
         self.assertIn("nästa morgon", guarded["plan_action"]["recommendation"])
