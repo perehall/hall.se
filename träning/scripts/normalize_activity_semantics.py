@@ -4,6 +4,10 @@ import re
 from pathlib import Path
 
 from training_contracts import ACTIVITIES_SCHEMA_VERSION
+from workout_analysis_context import (
+    WORKOUT_ANALYSIS_CONTRACT_VERSION,
+    build_workout_analysis_context,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 ACTIVITIES = ROOT / "data" / "activities.json"
@@ -198,12 +202,19 @@ def apply_semantics(state, config=None):
             override_applied += 1
         elif apply_auto_semantics(activity):
             auto_applied += 1
+
+        # Enrich after semantic normalization so sport and user report are final.
+        # This context is deterministic and versioned; the AI coach interprets it
+        # instead of calculating pace or meaning from raw provider fields.
+        activity["workout_analysis_context"] = build_workout_analysis_context(activity)
+
         after = coach_semantic_fingerprint(activity)
         if key and before != after:
             changed_ids.add(key)
 
     state["activity_semantics"] = {
         "schema_version": config.get("schema_version", 1),
+        "workout_analysis_contract_version": WORKOUT_ANALYSIS_CONTRACT_VERSION,
         "overrides_applied": override_applied,
         "auto_rules_applied": auto_applied,
         "override_ids_present": sorted(seen),
@@ -226,6 +237,9 @@ def main():
     rendered = load(ACTIVITIES)
     if rendered.get("schema_version") != ACTIVITIES_SCHEMA_VERSION:
         raise RuntimeError("Aktivitetsnormalisering: schemaversion verifierades inte")
+    if (rendered.get("activity_semantics") or {}).get("workout_analysis_contract_version") != WORKOUT_ANALYSIS_CONTRACT_VERSION:
+        raise RuntimeError("Aktivitetsnormalisering: workout analysis-contract verifierades inte")
+
     by_id = {str(a.get("id")): a for a in rendered.get("activities", [])}
     overrides = config.get("overrides") or {}
     for key in seen:
@@ -238,6 +252,7 @@ def main():
 
     print(
         f"Aktivitetsnormalisering OK: schema v{ACTIVITIES_SCHEMA_VERSION}, "
+        f"analysis v{WORKOUT_ANALYSIS_CONTRACT_VERSION}, "
         f"{applied} explicit override(s), {auto_applied} auto-regel(er) applicerade, "
         f"{invalidated} stale coach-analys(er) invaliderade."
     )
