@@ -169,6 +169,31 @@ class ActivitySemanticsTests(unittest.TestCase):
         apply_semantics(state, config)
         self.assertEqual(state["activity_semantics"]["changed_ids"], [])
 
+    def test_prompt_signature_versions_analysis_without_fake_semantic_change(self):
+        state = {
+            "activities": [
+                {
+                    "id": 123,
+                    "name": "Löpning",
+                    "sport_type": "Run",
+                    "distance_m": 10000,
+                    "moving_time_s": 3000,
+                    "start_date_local": "2026-09-06T10:00:00Z",
+                }
+            ]
+        }
+        config = {"schema_version": 1, "overrides": {}}
+
+        apply_semantics(state, config, prompt_signature="a" * 64)
+        first = state["activities"][0]["workout_analysis_context"]["coach_prompt_sha256"]
+        self.assertEqual(first, "a" * 64)
+        self.assertEqual(state["activity_semantics"]["changed_ids"], [])
+
+        apply_semantics(state, config, prompt_signature="b" * 64)
+        second = state["activities"][0]["workout_analysis_context"]["coach_prompt_sha256"]
+        self.assertEqual(second, "b" * 64)
+        self.assertNotEqual(first, second)
+        self.assertEqual(state["activity_semantics"]["changed_ids"], [])
 
     def test_semantic_change_invalidates_only_matching_coach_analysis(self):
         with tempfile.TemporaryDirectory() as temp_dir:
