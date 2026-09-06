@@ -4,7 +4,7 @@
   "week_start": "2026-08-31",
   "week_end": "2026-09-06",
   "created_at_utc": "2026-08-30T22:09:50.110394+00:00",
-  "updated_at_utc": "2026-09-06T09:45:10.825930+00:00",
+  "updated_at_utc": "2026-09-06T10:54:59.807496+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -2492,32 +2492,32 @@
       "activity_id": 20057585521,
       "activity_date": "2026-09-06",
       "activity_name": "Löpning på morgonen",
-      "generated_at_utc": "2026-09-06T09:45:10.227155+00:00",
+      "generated_at_utc": "2026-09-06T10:54:59.185953+00:00",
       "model": "gpt-5-mini",
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomförde 22 km löpning på 1:56:00 med 219 m höjd och genomsnittspuls 139 bpm (återhämtningsunderlaget).",
-        "load_interpretation": "Aktuella data visar ytterligare långdistanslöpning efter flera tunga dagar; påverkan på kommande prioriterade löppass kan inte uteslutas.",
+        "summary": "Genomfört 22 km lugn distanslöpning på 1:56:00 med 219 m stigning, snittpuls 139 bpm och varierande kilometertider runt 3:05–3:30/km.",
+        "load_interpretation": "Kardiovaskulärt och mekaniskt arbete är signifikant efter flera tunga dagar; närbelastningen talar för att inte lägga till ökad belastning de närmaste 2–3 dagarna.",
         "confidence": "medium",
         "facts": [
           "Run: 22,00 km · 1:56:00 · 219 m+ · snittpuls 139 · maxpuls 164.",
           "Planstatus 2026-09-06: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Detta blev ett avsevärt längre lugnt/distanspass än planens 75 min; det adderar mekanisk och kardiovaskulär belastning i mikrocykeln.",
-          "Eftersom mikrocykeln redan haft belastning de senaste dagarna kan nästa mikrocykeldag (enduroskola måndag och tröskel tisdag) påverkas om inte återhämtningen är god."
+          "Passet fullföljde planens löpelement utan att indikera extra kvalitet/intervaller i datalagringen.",
+          "Givet ackumulerad belastning senaste dagarna bör prioriterade framtida löppass skyddas från ytterligare upptrappning."
         ],
         "unknowns": [
-          "Subjektiv dagskänsla och lokal bentrötthet efter passet.",
-          "Exakt intensitetsfördelning inom passet (struktur: kontinuerligt lugnt vs inslag av kvalitet) kan inte utan ytterligare data avgöras."
+          "Subjektiv dagskänsla efter passet (ben/trötthet) saknas och kan ändra beslut.",
+          "Detaljerad återhämtningsrapport eller skaderapport från användaren saknas."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "",
-        "reason": "Ingen konkret open target-date att ändra och aktuell plan prioriterar att behålla mikrocykelns stimuli när normal variation kan absorberas.",
-        "recommendation": "Behåll kommande planerade pass; vila, återhämtningsunderlaget och lätt återhämtningsdag rekommenderas i kväll och morgon om du känner bentrötthet. Rapportera dagskänsla/benstatus före tisdagens tröskel så plan kan justeras vid behov.",
+        "reason": "Söndagens lugna distans genomförd och omgivande belastning talar inte för att ändra kommande fasta plan.",
+        "recommendation": "Behåll nästa fasta plan (enduroskola måndag; tisdagens tröskel hålles enligt plan om du känner dig återhämtad). Rapportera subjektiv benkänsla eller trötthet om den avviker så omplanering kan övervägas.",
         "dose_option_id": "",
         "requires_approval": false
       },
