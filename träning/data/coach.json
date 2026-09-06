@@ -1,6 +1,44 @@
 {
   "analyses": [
     {
+      "activity_id": 20057585521,
+      "activity_date": "2026-09-06",
+      "activity_name": "Löpning på morgonen",
+      "generated_at_utc": "2026-09-06T09:32:57.192478+00:00",
+      "model": "gpt-5-mini",
+      "performance_marker_id": null,
+      "performance_protocol_key": null,
+      "assessment": {
+        "summary": "Genomfört 22 km lugn/distanslöpning på 6 960 s med 219 m klättring; genomsnittspuls 139 bpm och viktad effekt ~270 W.",
+        "load_interpretation": "Senaste tre dagarna innehåller tunga sessioner (MTB 3/9, backintervaller 4/9, sim 5/9); dagens distans adderar kardiovaskulär och mekanisk belastning i mikrocykeln.",
+        "confidence": "medium",
+        "facts": [
+          "Run: 22,00 km · 1:56:00 · 219 m+ · snittpuls 139 · maxpuls 164.",
+          "Planstatus 2026-09-06: dagen är markerad genomförd i coachens beslutsunderlag."
+        ],
+        "interpretations": [
+          "Passet motsvarar det planerade lugna distansstimuluset och är registrerat som coach_fulfilled_by_activity.",
+          "Givet föregående tunga dagar är mikrocykelns prioriterade stimuli (särskilt kommande tisdagens tröskel) börjat ackumulera belastning."
+        ],
+        "unknowns": [
+          "Subjektiv dagskänsla/bentrötthet efter passet kan påverka närmaste dagars behov men saknas.",
+          "Ingen explicit användarrapport om intensitet eller terrain för dagens löpning; vissa mekaniska effekter kan därför vara underbedömda."
+        ]
+      },
+      "plan_action": {
+        "action": "keep",
+        "target_date": "",
+        "reason": "Dagens genomförda lugna distans motsvarar planens run-easy-75 och ligger inom mikrocykelns absorberbara variation.",
+        "recommendation": "Behåll planerade kommande pass oförändrade; utvärdera subjektiv benkänsla före tisdagens tröskel och rapportera om det känns slitet.",
+        "dose_option_id": "",
+        "requires_approval": false
+      },
+      "auto_apply": {
+        "applied": false,
+        "note": "Ingen automatisk planändring."
+      }
+    },
+    {
       "activity_id": 20047602146,
       "activity_date": "2026-09-05",
       "activity_name": "Simning på eftermiddagen",
@@ -726,8 +764,8 @@
       }
     }
   ],
-  "last_trigger_hash": "983da2f724c719ae8a789420ddc95e02698a02411a94c67993e0000196a5eb05",
-  "last_run_utc": "2026-09-05T22:54:32.006236+00:00",
+  "last_trigger_hash": "e033b4c6b088ebd10a5613fd3c6d4d7786d5922655ec59304bec15eebf4e3290",
+  "last_run_utc": "2026-09-06T09:32:57.192478+00:00",
   "contract_version": 15,
   "output_contract_version": 16
 }
