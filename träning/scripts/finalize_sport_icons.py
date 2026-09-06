@@ -2,18 +2,32 @@
 import html
 import json
 import re
+from datetime import datetime
 from pathlib import Path
+from zoneinfo import ZoneInfo
+
+from coach_rules import planning_window
 
 ROOT = Path(__file__).resolve().parents[1]
 PLAN_FILE = ROOT / "data" / "plan.json"
+UPCOMING_FILE = ROOT / "data" / "upcoming_week.json"
 ACTIVITIES_FILE = ROOT / "data" / "activities.json"
 ICON_FILE = ROOT / "data" / "sport_icons.json"
 INDEX_FILE = ROOT / "index.html"
 
 plan = json.loads(PLAN_FILE.read_text(encoding="utf-8"))
+upcoming = json.loads(UPCOMING_FILE.read_text(encoding="utf-8")) if UPCOMING_FILE.exists() else {}
+icon_plan = planning_window(plan, upcoming)
 activities_state = json.loads(ACTIVITIES_FILE.read_text(encoding="utf-8"))
 icon_registry = json.loads(ICON_FILE.read_text(encoding="utf-8"))["icons"]
 page = INDEX_FILE.read_text(encoding="utf-8")
+
+timezone_name = (plan.get("meta") or {}).get("timezone") or "Europe/Stockholm"
+today_text = datetime.now(ZoneInfo(timezone_name)).date().isoformat()
+today_day = next(
+    (day for day in icon_plan.get("days", []) if day.get("date") == today_text),
+    None,
+)
 
 activity_dates = {
     (activity.get("start_date_local") or "")[:10]
@@ -149,6 +163,24 @@ def sport_repl(match):
 
 page, sport_icon_count = sport_pattern.subn(sport_repl, page)
 
+# The training-brain "Idag" card uses the same explicit sport field and SVG
+# registry as all other planned-session icons. It reads the merged planning
+# window so the icon also survives a calendar-week boundary.
+brain_today_icon_key = None
+if today_day and str(today_day.get("session") or "").strip():
+    brain_today_icon_key = icon_for_sport(today_day.get("sport"), today_day.get("session", ""))
+    brain_pattern = re.compile(r'<div class="brain-headline">(.*?)</div>', flags=re.DOTALL)
+    if not brain_pattern.search(page):
+        raise RuntimeError(f"Sportikoner: Idag-rubrik saknas för {today_text}")
+    page = brain_pattern.sub(
+        lambda match: (
+            '<div class="brain-headline session-with-icon">'
+            f'{icon(brain_today_icon_key)}<span>{match.group(1)}</span></div>'
+        ),
+        page,
+        count=1,
+    )
+
 # Upcoming plan rows use explicit plan.sport when present. Text parsing is only
 # a backwards-compatibility fallback for older plan entries.
 for day in plan.get("days", []):
@@ -270,6 +302,15 @@ if css_marker not in rendered:
 if sport_icon_count and rendered.count('class="sport-name"') < sport_icon_count:
     raise RuntimeError("Sportikoner: alla grenrader fick inte ikon")
 
+if brain_today_icon_key:
+    brain_match = re.search(
+        r'<div class="brain-headline session-with-icon">(.*?)</div>',
+        rendered,
+        flags=re.DOTALL,
+    )
+    if not brain_match or f'class="sport-icon icon-{brain_today_icon_key}"' not in brain_match.group(1):
+        raise RuntimeError(f"Sportikoner: Idag saknar {brain_today_icon_key}-ikon för {today_text}")
+
 for day in plan.get("days", []):
     date = day.get("date", "")
     if f'data-next-date="{date}"' not in rendered:
@@ -318,6 +359,7 @@ for day in watch_days:
 
 print(
     f"Sportikoner OK: {sport_icon_count} grenrader, "
-    f"{expected_manual} manuella aktiviteter och "
-    f"{len(watch_days)} aktiv(a) klocksync-indikator(er)."
+    f"{expected_manual} manuella aktiviteter, "
+    f"{len(watch_days)} aktiv(a) klocksync-indikator(er) och "
+    f"{'1' if brain_today_icon_key else '0'} Idag-ikon."
 )
