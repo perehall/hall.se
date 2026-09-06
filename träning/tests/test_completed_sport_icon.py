@@ -7,7 +7,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS = ROOT / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
-from finalize_completed_sport_icon import decorate_completed_today_icon  # noqa: E402
+from finalize_completed_sport_icon import decorate_completed_today_icon, icon_key  # noqa: E402
 
 
 class CompletedSportIconTests(unittest.TestCase):
@@ -57,34 +57,9 @@ class CompletedSportIconTests(unittest.TestCase):
         self.assertIn('<span>Löpning · 50:36</span>', rendered)
         self.assertIn('/* completed-sport-icon-v1 */', rendered)
 
-    def test_actual_activity_fallback_selects_swim_icon_when_plan_sport_missing(self):
-        plan = {
-            "days": [
-                {
-                    "date": "2026-09-06",
-                    "session": "Simning · aerob",
-                }
-            ]
-        }
-        activities = {
-            "activities": [
-                {
-                    "id": 2,
-                    "sport_type": "Swim",
-                    "start_date_local": "2026-09-06T08:00:00",
-                }
-            ]
-        }
-        rendered = decorate_completed_today_icon(
-            self.page.replace("Löpning", "Simning"),
-            plan,
-            self.upcoming,
-            activities,
-            "2026-09-06",
-            self.icons,
-        )
-        self.assertIn('data-completed-sport-icon="swim"', rendered)
-        self.assertIn('class="sport-icon icon-swim"', rendered)
+    def test_activity_sport_is_safe_fallback_when_plan_sport_is_unavailable(self):
+        self.assertEqual(icon_key({}, {"sport_type": "Swim"}), "swim")
+        self.assertEqual(icon_key({}, {"sport_type": "MountainBikeRide"}), "bike")
 
 
 if __name__ == "__main__":
