@@ -4,7 +4,7 @@
   "week_start": "2026-08-31",
   "week_end": "2026-09-06",
   "created_at_utc": "2026-08-30T22:09:50.110394+00:00",
-  "updated_at_utc": "2026-09-06T21:03:19.137312+00:00",
+  "updated_at_utc": "2026-09-06T21:07:51.524538+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -843,15 +843,15 @@
       "source_sport_type": "Run",
       "classification": "training",
       "display_label": "Löpning · distans",
-      "classification_reason": "Explicit användarrapport beskriver både passkänsla, energiintag, sen fartökning och respons efter passet. Dessa uppgifter ska vara förstaklassunderlag i coachanalysen.",
-      "user_report": "Kände mig stark hela passet och höll ett kontrollerat tempo. Tog en gel efter cirka en timme. Testade en tempoökning kring km 20–21, cirka 4:25/km, vilket fungerade bra. Pigg resten av dagen och inte ont någonstans.",
+      "classification_reason": "Explicit användarrapport beskriver passkänsla, energiintag, sen fartökning, pulsrespons och respons efter passet. Dessa uppgifter ska vara förstaklassunderlag i coachanalysen.",
+      "user_report": "Kände mig stark hela passet och höll ett kontrollerat tempo. Tog en gel efter cirka en timme. Testade en tempoökning kring km 20–21, cirka 4:25/km, vilket fungerade bra. Pulsen gick upp i fartökningen. Pigg resten av dagen och inte ont någonstans.",
       "workout_analysis_context": {
         "contract_version": 1,
         "activity_id": 20057585521,
         "sport_type": "Run",
         "display_label": "Löpning · distans",
         "classification": "training",
-        "user_report": "Kände mig stark hela passet och höll ett kontrollerat tempo. Tog en gel efter cirka en timme. Testade en tempoökning kring km 20–21, cirka 4:25/km, vilket fungerade bra. Pigg resten av dagen och inte ont någonstans.",
+        "user_report": "Kände mig stark hela passet och höll ett kontrollerat tempo. Tog en gel efter cirka en timme. Testade en tempoökning kring km 20–21, cirka 4:25/km, vilket fungerade bra. Pulsen gick upp i fartökningen. Pigg resten av dagen och inte ont någonstans.",
         "total": {
           "distance_m": 22001.5,
           "distance_km": 22.002,
@@ -2944,40 +2944,41 @@
       "activity_id": 20057585521,
       "activity_date": "2026-09-06",
       "activity_name": "Löpning på morgonen",
-      "generated_at_utc": "2026-09-06T21:03:18.608933+00:00",
+      "generated_at_utc": "2026-09-06T21:07:50.988816+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 1,
         "workout_context_version": 1,
         "plan_comparison_version": 1,
-        "coach_prompt_sha256": "da2ef602289127ad2c0438bfa5d9356a109494ca3832020780357ab5b639444f"
+        "coach_prompt_sha256": "da2ef602289127ad2c0438bfa5d9356a109494ca3832020780357ab5b639444f",
+        "analysis_code_sha256": "3203e0a9c36fdceee87140e187ed4a0fb1a7194e24ab12f78053df952ae1a28e"
       },
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "22 km lugn distans i 5:16/km snitt med stabil puls och en kontrollerad fartökning vid km 20–21 som kändes bra.",
-        "load_interpretation": "Passet översteg planerad dos (75 min → 116 min) och lägger extra närbelastning inför kommande 2–3 dagar.",
+        "summary": "Genomfört 22 km lugn distans på 5:16/km med en kontrollerad tempoökning kring km 20–21 som kändes bra.",
+        "load_interpretation": "Passet översteg planerad 75 min (blev 116 min) och adderar betydande kardiovaskulär och mekanisk belastning inför kommande dagar.",
         "confidence": "medium",
         "facts": [
           "Löpning · distans: 22,00 km · 1:56:00 · 219 m+ · snittpuls 139 · maxpuls 164.",
-          "Användarrapport: Kände mig stark hela passet och höll ett kontrollerat tempo. Tog en gel efter cirka en timme. Testade en tempoökning kring km 20–21, cirka 4:25/km, vilket fungerade bra. Pigg resten av dagen och inte ont någonstans.",
+          "Användarrapport: Kände mig stark hela passet och höll ett kontrollerat tempo. Tog en gel efter cirka en timme. Testade en tempoökning kring km 20–21, cirka 4:25/km, vilket fungerade bra. Pulsen gick upp i fartökningen. Pigg resten av dagen och inte ont någonstans.",
           "Planstatus 2026-09-06: dagen är markerad genomförd i coachens beslutsunderlag.",
           "Planerad tidsdos 75 min; faktisk rörelsetid 116 min (+41 min mot vald dos); över längsta godkända alternativet 90 min."
         ],
         "interpretations": [
-          "Ett långt genomfört lugnpass visar att aktuell distans och näringsstrategi tolererades väl denna dag.",
+          "Ett långt genomfört distanspass visar att dagens dos var absorberbar och att sen fartökning var hållbar utan smärta.",
           "Tidsdosen blev 116 min mot valda 75 min och översteg även det längsta godkända alternativet 90 min."
         ],
         "unknowns": [
-          "Hur mycket teknisk/neuromuskulär belastning måndagens enduro kommer bli",
-          "Hur du subjektivt känner dig nästa morgon och om benen är mekaniskt fräscha"
+          "Hur benen känns morgon–nästa dag (kan påverka måndagens enduro och tisdagens tröskel)",
+          "Subjektiv återhämtning över natt och under kommande 24–48 h"
         ]
       },
       "plan_action": {
         "action": "review",
         "target_date": "",
         "reason": "Beslutet skjuts upp eftersom mellanliggande planerade dagar ännu inte har ett känt utfall.",
-        "recommendation": "Ändra inte ett senare pass ännu. Bedöm det på nytt när de mellanliggande dagarnas faktiska belastning och återhämtning finns i underlaget.",
+        "recommendation": "Måndag: Enduroskola · fast tillfälle ligger kvar som plan. Tisdag: Löpning · kontrollerad tröskel · 3 × 10 min / 90 s jogg bedöms efter den faktiska belastningen från måndag och återhämtningen därefter.",
         "dose_option_id": "",
         "requires_approval": false
       },
