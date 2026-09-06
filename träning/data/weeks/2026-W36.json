@@ -4,7 +4,7 @@
   "week_start": "2026-08-31",
   "week_end": "2026-09-06",
   "created_at_utc": "2026-08-30T22:09:50.110394+00:00",
-  "updated_at_utc": "2026-09-06T15:27:32.570793+00:00",
+  "updated_at_utc": "2026-09-06T18:52:02.648016+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -839,7 +839,11 @@
           "average_watts": 281.2,
           "average_cadence": 82.1
         }
-      ]
+      ],
+      "source_sport_type": "Run",
+      "classification": "training",
+      "display_label": "Löpning",
+      "classification_reason": "Explicit semantisk normalisering av löppasset. Ändringen invaliderar den tidigare coachanalysen så att den räknas om med korrigerat enhetskontrakt för fart."
     },
     {
       "id": 20047602146,
@@ -2492,32 +2496,32 @@
       "activity_id": 20057585521,
       "activity_date": "2026-09-06",
       "activity_name": "Löpning på morgonen",
-      "generated_at_utc": "2026-09-06T10:54:59.185953+00:00",
+      "generated_at_utc": "2026-09-06T18:52:02.046022+00:00",
       "model": "gpt-5-mini",
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört 22 km lugn distanslöpning på 1:56:00 med 219 m stigning, snittpuls 139 bpm och varierande kilometertider runt 3:05–3:30/km.",
-        "load_interpretation": "Kardiovaskulärt och mekaniskt arbete är signifikant efter flera tunga dagar; närbelastningen talar för att inte lägga till ökad belastning de närmaste 2–3 dagarna.",
+        "summary": "Genomförd lugn distanslöpning 22,001.5 m på 1:56:00 med genomsnittspuls 139 och 219 m höjdmeter.",
+        "load_interpretation": "Tre tunga dagar tidigare i förra veckan plus simning och MTB innebär fortsatt ackumulerad närbelastning; påverkar närmaste 2–3 dagar.",
         "confidence": "medium",
         "facts": [
-          "Run: 22,00 km · 1:56:00 · 219 m+ · snittpuls 139 · maxpuls 164.",
+          "Löpning: 22,00 km · 1:56:00 · 219 m+ · snittpuls 139 · maxpuls 164.",
           "Planstatus 2026-09-06: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Passet fullföljde planens löpelement utan att indikera extra kvalitet/intervaller i datalagringen.",
-          "Givet ackumulerad belastning senaste dagarna bör prioriterade framtida löppass skyddas från ytterligare upptrappning."
+          "Passet motsvarar det planerade lugna distansstimuluset (run-easy-75) i tid/roll.",
+          "Ackumulerad mekanisk/kardiovaskulär belastning över flera dagar kan kräva konservativ fortsättning av planerade stimuli."
         ],
         "unknowns": [
-          "Subjektiv dagskänsla efter passet (ben/trötthet) saknas och kan ändra beslut.",
-          "Detaljerad återhämtningsrapport eller skaderapport från användaren saknas."
+          "Subjektiv dagskänsla efter passet (muskeltrötthet eller lokalömhet).",
+          "Detaljerad jämförbarhet mot planens planerade 75 min (pace/verifiering av lugn intensitet saknas)."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "",
-        "reason": "Söndagens lugna distans genomförd och omgivande belastning talar inte för att ändra kommande fasta plan.",
-        "recommendation": "Behåll nästa fasta plan (enduroskola måndag; tisdagens tröskel hålles enligt plan om du känner dig återhämtad). Rapportera subjektiv benkänsla eller trötthet om den avviker så omplanering kan övervägas.",
+        "reason": "Mikrocykeln kräver kontinuitet och passet uppfyller dagens lugna distans utan jämförbart negativt bevis i data.",
+        "recommendation": "Behåll kommande plan; genomför måndagens enduroskola enligt plan och tisdagens tröskel (3×10) hålls som plan om du känner dig fräsch. Om du upplever ovanlig lokal trötthet eller försämrad dagskänsla, vila eller minska tisdagens dos och återrapportera.",
         "dose_option_id": "",
         "requires_approval": false
       },

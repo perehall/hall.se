@@ -1,5 +1,5 @@
 {
-  "last_sync_utc": "2026-09-06T15:27:27.221644+00:00",
+  "last_sync_utc": "2026-09-06T18:51:49.526399+00:00",
   "activities": [
     {
       "id": 20057585521,
@@ -285,7 +285,11 @@
           "average_watts": 281.2,
           "average_cadence": 82.1
         }
-      ]
+      ],
+      "source_sport_type": "Run",
+      "classification": "training",
+      "display_label": "Löpning",
+      "classification_reason": "Explicit semantisk normalisering av löppasset. Ändringen invaliderar den tidigare coachanalysen så att den räknas om med korrigerat enhetskontrakt för fart."
     },
     {
       "id": 20047602146,
@@ -2574,7 +2578,7 @@
   ],
   "activity_semantics": {
     "schema_version": 1,
-    "overrides_applied": 6,
+    "overrides_applied": 7,
     "auto_rules_applied": 8,
     "override_ids_present": [
       "19852599244",
@@ -2582,9 +2586,12 @@
       "19897382163",
       "19911120461",
       "19946705399",
-      "20036445971"
+      "20036445971",
+      "20057585521"
     ],
-    "changed_ids": []
+    "changed_ids": [
+      "20057585521"
+    ]
   },
   "schema_version": 2,
   "last_webhook_event": {
