@@ -1,6 +1,59 @@
 {
-  "last_sync_utc": "2026-09-07T19:18:05.907026+00:00",
+  "last_sync_utc": "2026-09-07T19:30:06.009359+00:00",
   "activities": [
+    {
+      "id": 20079150228,
+      "name": "Styrketräning på natten",
+      "sport_type": "WeightTraining",
+      "start_date": "2026-09-07T19:00:00Z",
+      "start_date_local": "2026-09-07T21:00:00Z",
+      "distance_m": 0.0,
+      "moving_time_s": 1659,
+      "elapsed_time_s": 1659,
+      "total_elevation_gain_m": 0,
+      "average_heartrate": 75.7,
+      "max_heartrate": 112.0,
+      "average_watts": null,
+      "weighted_average_watts": null,
+      "calories": 77.0,
+      "device_name": "Garmin Forerunner 970",
+      "gear_id": null,
+      "gear_name": null,
+      "source": "Strava API",
+      "laps": [
+        {
+          "lap_index": 1,
+          "name": "Lap 1",
+          "elapsed_time_s": 1659,
+          "moving_time_s": 1659,
+          "distance_m": 0.0,
+          "average_speed": 0.0,
+          "average_heartrate": 75.7,
+          "max_heartrate": 112.0,
+          "average_watts": null,
+          "average_cadence": null
+        }
+      ],
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 20079150228,
+        "sport_type": "WeightTraining",
+        "display_label": "WeightTraining",
+        "classification": null,
+        "user_report": "",
+        "total": {
+          "distance_m": null,
+          "distance_km": null,
+          "moving_time_s": 1659.0,
+          "elapsed_time_s": 1659.0,
+          "elevation_gain_m": 0.0,
+          "average_heartrate": 75.7,
+          "max_heartrate": 112.0
+        },
+        "run": null,
+        "coach_prompt_sha256": "da2ef602289127ad2c0438bfa5d9356a109494ca3832020780357ab5b639444f"
+      }
+    },
     {
       "id": 20078705519,
       "name": "Enduro på kvällen",
@@ -3732,10 +3785,10 @@
   },
   "schema_version": 2,
   "last_webhook_event": {
-    "event_key": "368165:activity:20057585521:update:1788687885",
-    "object_id": 20057585521,
-    "aspect_type": "update",
-    "event_time": 1788687885,
-    "processed_at_utc": "2026-09-06T09:44:57.057255+00:00"
+    "event_key": "368165:activity:20079150228:create:1788809387",
+    "object_id": 20079150228,
+    "aspect_type": "create",
+    "event_time": 1788809387,
+    "processed_at_utc": "2026-09-07T19:30:06.009359+00:00"
   }
 }

@@ -4,7 +4,7 @@
   "week_start": "2026-09-07",
   "week_end": "2026-09-13",
   "created_at_utc": "2026-09-06T22:19:36.896236+00:00",
-  "updated_at_utc": "2026-09-07T19:18:22.654513+00:00",
+  "updated_at_utc": "2026-09-07T19:30:20.110065+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -563,6 +563,59 @@
   },
   "activities": [
     {
+      "id": 20079150228,
+      "name": "Styrketräning på natten",
+      "sport_type": "WeightTraining",
+      "start_date": "2026-09-07T19:00:00Z",
+      "start_date_local": "2026-09-07T21:00:00Z",
+      "distance_m": 0.0,
+      "moving_time_s": 1659,
+      "elapsed_time_s": 1659,
+      "total_elevation_gain_m": 0,
+      "average_heartrate": 75.7,
+      "max_heartrate": 112.0,
+      "average_watts": null,
+      "weighted_average_watts": null,
+      "calories": 77.0,
+      "device_name": "Garmin Forerunner 970",
+      "gear_id": null,
+      "gear_name": null,
+      "source": "Strava API",
+      "laps": [
+        {
+          "lap_index": 1,
+          "name": "Lap 1",
+          "elapsed_time_s": 1659,
+          "moving_time_s": 1659,
+          "distance_m": 0.0,
+          "average_speed": 0.0,
+          "average_heartrate": 75.7,
+          "max_heartrate": 112.0,
+          "average_watts": null,
+          "average_cadence": null
+        }
+      ],
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 20079150228,
+        "sport_type": "WeightTraining",
+        "display_label": "WeightTraining",
+        "classification": null,
+        "user_report": "",
+        "total": {
+          "distance_m": null,
+          "distance_km": null,
+          "moving_time_s": 1659.0,
+          "elapsed_time_s": 1659.0,
+          "elevation_gain_m": 0.0,
+          "average_heartrate": 75.7,
+          "max_heartrate": 112.0
+        },
+        "run": null,
+        "coach_prompt_sha256": "da2ef602289127ad2c0438bfa5d9356a109494ca3832020780357ab5b639444f"
+      }
+    },
+    {
       "id": 20078705519,
       "name": "Enduro på kvällen",
       "sport_type": "Ride",
@@ -617,6 +670,50 @@
     }
   ],
   "coach_analyses": [
+    {
+      "activity_id": 20079150228,
+      "activity_date": "2026-09-07",
+      "activity_name": "Styrketräning på natten",
+      "generated_at_utc": "2026-09-07T19:30:19.440395+00:00",
+      "model": "gpt-5-mini",
+      "analysis_contract": {
+        "pipeline_version": 1,
+        "workout_context_version": 1,
+        "plan_comparison_version": 1,
+        "coach_prompt_sha256": "da2ef602289127ad2c0438bfa5d9356a109494ca3832020780357ab5b639444f",
+        "analysis_code_sha256": "9683a484ae915f4799de23b72cde0fe2e485f72509c02c11752b6d99d3bfaf13"
+      },
+      "performance_marker_id": null,
+      "performance_protocol_key": null,
+      "assessment": {
+        "summary": "Genomfört styrkepass (27,7 min) kvällstid med låg genomsnittspuls (75,7) efter en dag med enduro och tidigare långdistanslöpning; passet var lågmekaniskt men bidrar till skyddad…",
+        "load_interpretation": "Närbelastningen de senaste 2–3 dagarna innehåller lång löpdistans (22 km), flera löppass/backintervaller och kvällens enduro; dagens styrka är en lågkostnadsexponering…",
+        "confidence": "medium",
+        "facts": [
+          "WeightTraining: 27:39 · snittpuls 75,7 · maxpuls 112."
+        ],
+        "interpretations": [
+          "Styrkepasset var kort och lågintensivt i pulsmätning; det fungerar som skyddad styrka/core-exponering utan att troligen kompromettera morgondagens prioriterade tröskelpass.",
+          "Givet den omfattande närbelastningen (långdistans + enduro + intervaller under senaste dagar) är dagens styrka lämplig som konservativ underhållsexponering men ger inte skäl för att öka…"
+        ],
+        "unknowns": [
+          "Ingen användarrapport om hur benen kändes efter enduron och styrkan",
+          "Detaljer om styrkans övningar/intensitet saknas"
+        ]
+      },
+      "plan_action": {
+        "action": "keep",
+        "target_date": "",
+        "reason": "Kort, lågintensivt styrkepass efter en redan belastad period ger ingen saklig anledning att ändra kommande plan.",
+        "recommendation": "Behåll planerade tisdagströskelpass (3×10 enligt mesocykel) oförändrat; se över subjektiv återhämtning morgon efter och rapportera om trötta ben eller smärta.",
+        "dose_option_id": "",
+        "requires_approval": false
+      },
+      "auto_apply": {
+        "applied": false,
+        "note": "Ingen automatisk planändring."
+      }
+    },
     {
       "activity_id": 20078705519,
       "activity_date": "2026-09-07",

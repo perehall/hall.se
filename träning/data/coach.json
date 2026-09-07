@@ -1,6 +1,50 @@
 {
   "analyses": [
     {
+      "activity_id": 20079150228,
+      "activity_date": "2026-09-07",
+      "activity_name": "Styrketräning på natten",
+      "generated_at_utc": "2026-09-07T19:30:19.440395+00:00",
+      "model": "gpt-5-mini",
+      "analysis_contract": {
+        "pipeline_version": 1,
+        "workout_context_version": 1,
+        "plan_comparison_version": 1,
+        "coach_prompt_sha256": "da2ef602289127ad2c0438bfa5d9356a109494ca3832020780357ab5b639444f",
+        "analysis_code_sha256": "9683a484ae915f4799de23b72cde0fe2e485f72509c02c11752b6d99d3bfaf13"
+      },
+      "performance_marker_id": null,
+      "performance_protocol_key": null,
+      "assessment": {
+        "summary": "Genomfört styrkepass (27,7 min) kvällstid med låg genomsnittspuls (75,7) efter en dag med enduro och tidigare långdistanslöpning; passet var lågmekaniskt men bidrar till skyddad…",
+        "load_interpretation": "Närbelastningen de senaste 2–3 dagarna innehåller lång löpdistans (22 km), flera löppass/backintervaller och kvällens enduro; dagens styrka är en lågkostnadsexponering…",
+        "confidence": "medium",
+        "facts": [
+          "WeightTraining: 27:39 · snittpuls 75,7 · maxpuls 112."
+        ],
+        "interpretations": [
+          "Styrkepasset var kort och lågintensivt i pulsmätning; det fungerar som skyddad styrka/core-exponering utan att troligen kompromettera morgondagens prioriterade tröskelpass.",
+          "Givet den omfattande närbelastningen (långdistans + enduro + intervaller under senaste dagar) är dagens styrka lämplig som konservativ underhållsexponering men ger inte skäl för att öka…"
+        ],
+        "unknowns": [
+          "Ingen användarrapport om hur benen kändes efter enduron och styrkan",
+          "Detaljer om styrkans övningar/intensitet saknas"
+        ]
+      },
+      "plan_action": {
+        "action": "keep",
+        "target_date": "",
+        "reason": "Kort, lågintensivt styrkepass efter en redan belastad period ger ingen saklig anledning att ändra kommande plan.",
+        "recommendation": "Behåll planerade tisdagströskelpass (3×10 enligt mesocykel) oförändrat; se över subjektiv återhämtning morgon efter och rapportera om trötta ben eller smärta.",
+        "dose_option_id": "",
+        "requires_approval": false
+      },
+      "auto_apply": {
+        "applied": false,
+        "note": "Ingen automatisk planändring."
+      }
+    },
+    {
       "activity_id": 20078705519,
       "activity_date": "2026-09-07",
       "activity_name": "Enduro på kvällen",
@@ -813,8 +857,8 @@
       }
     }
   ],
-  "last_trigger_hash": "1a5e6d360bcb5bd458b0429a136e4089eb47067c415cf5cddf37f4d2234affec",
-  "last_run_utc": "2026-09-07T19:18:21.959792+00:00",
+  "last_trigger_hash": "0f85f211ba6558ed392edd946f5562523abf19c8e0550b4bc909604f403891ce",
+  "last_run_utc": "2026-09-07T19:30:19.440395+00:00",
   "contract_version": 15,
   "output_contract_version": 16,
   "pipeline_contract_version": 1
