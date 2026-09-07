@@ -14,6 +14,8 @@ from coach_pipeline import (  # noqa: E402
     analysis_code_signature,
     concretize_deferred_review,
     latest_for_analysis,
+    link_fulfilled_activity_ids,
+    select_activity_for_analysis,
 )
 
 
@@ -122,6 +124,109 @@ class CoachPipelineTests(unittest.TestCase):
         self.assertIn("Måndag: Enduroskola · fast tillfälle", normalized["recommendation"])
         self.assertIn("Tisdag: Löpning · kontrollerad tröskel", normalized["recommendation"])
         self.assertIn("måndag", normalized["recommendation"])
+
+    def test_unambiguous_fulfilled_plan_is_persistently_linked(self):
+        plan = {
+            "days": [
+                {
+                    "date": "2026-09-07",
+                    "sport": "enduro",
+                    "session": "Enduroskola · fast tillfälle",
+                    "classification": "training",
+                }
+            ]
+        }
+        activities = [
+            {
+                "id": 20078705519,
+                "sport_type": "Enduro",
+                "classification": "training",
+                "start_date_local": "2026-09-07T18:04:35Z",
+            },
+            {
+                "id": 20079150228,
+                "sport_type": "WeightTraining",
+                "start_date_local": "2026-09-07T21:00:00Z",
+            },
+        ]
+        self.assertTrue(link_fulfilled_activity_ids(plan, activities))
+        self.assertEqual(plan["days"][0]["activity_id"], 20078705519)
+        self.assertFalse(link_fulfilled_activity_ids(plan, activities))
+
+    def test_ambiguous_plan_match_is_not_persisted(self):
+        plan = {
+            "days": [
+                {
+                    "date": "2026-09-07",
+                    "sport": "enduro",
+                    "session": "Enduroskola",
+                }
+            ]
+        }
+        activities = [
+            {"id": 1, "sport_type": "Enduro", "start_date_local": "2026-09-07T18:00:00"},
+            {"id": 2, "sport_type": "Enduro", "start_date_local": "2026-09-07T19:00:00"},
+        ]
+        self.assertFalse(link_fulfilled_activity_ids(plan, activities))
+        self.assertNotIn("activity_id", plan["days"][0])
+
+    def test_unanalysed_planned_activity_wins_over_later_same_day_support_activity(self):
+        plan = {
+            "days": [
+                {
+                    "date": "2026-09-07",
+                    "sport": "enduro",
+                    "session": "Enduroskola",
+                    "activity_id": 20078705519,
+                }
+            ]
+        }
+        enduro = {
+            "id": 20078705519,
+            "sport_type": "Enduro",
+            "start_date": "2026-09-07T16:04:35Z",
+            "start_date_local": "2026-09-07T18:04:35Z",
+        }
+        strength = {
+            "id": 20079150228,
+            "sport_type": "WeightTraining",
+            "start_date": "2026-09-07T19:00:00Z",
+            "start_date_local": "2026-09-07T21:00:00Z",
+        }
+        coach_state = {"analyses": [{"activity_id": 20079150228}]}
+        selected = select_activity_for_analysis(
+            plan, [enduro, strength], coach_state, "2026-09-07"
+        )
+        self.assertEqual(selected["id"], 20078705519)
+
+    def test_latest_activity_resumes_once_planned_activity_has_analysis(self):
+        plan = {
+            "days": [
+                {
+                    "date": "2026-09-07",
+                    "sport": "enduro",
+                    "session": "Enduroskola",
+                    "activity_id": 20078705519,
+                }
+            ]
+        }
+        enduro = {
+            "id": 20078705519,
+            "sport_type": "Enduro",
+            "start_date": "2026-09-07T16:04:35Z",
+            "start_date_local": "2026-09-07T18:04:35Z",
+        }
+        strength = {
+            "id": 20079150228,
+            "sport_type": "WeightTraining",
+            "start_date": "2026-09-07T19:00:00Z",
+            "start_date_local": "2026-09-07T21:00:00Z",
+        }
+        coach_state = {"analyses": [{"activity_id": 20078705519}]}
+        selected = select_activity_for_analysis(
+            plan, [enduro, strength], coach_state, "2026-09-07"
+        )
+        self.assertEqual(selected["id"], 20079150228)
 
 
 if __name__ == "__main__":
