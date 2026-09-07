@@ -28,11 +28,8 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Compile Python
-        run: python -m compileall -q "träning/scripts" "träning/tests"
-
-      - name: Unit and regression tests
-        run: python -m unittest discover -s "träning/tests" -p "test_*.py" -v
+      - name: Run deterministic regression suite
+        run: python "träning/scripts/run_regression_tests.py"
 
       - name: Test Strava webhook worker
         run: |
