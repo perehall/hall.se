@@ -10,8 +10,9 @@ from __future__ import annotations
 from math import isclose
 
 
-WORKOUT_ANALYSIS_CONTRACT_VERSION = 1
+WORKOUT_ANALYSIS_CONTRACT_VERSION = 2
 RUN_TYPES = {"Run", "TrailRun", "VirtualRun"}
+ENDURO_TYPES = {"Enduro"}
 
 
 def _number(value):
@@ -71,8 +72,6 @@ def _run_context(activity):
         if distance is None or duration is None or lap_pace is None:
             continue
 
-        # Near-kilometre source laps are useful descriptive measurements for running.
-        # They are never labelled as workout intervals here.
         if 900 <= distance <= 1100:
             source_laps.append(
                 {
@@ -100,6 +99,25 @@ def _run_context(activity):
     }
 
 
+def _enduro_context(activity):
+    elapsed = _positive(activity.get("elapsed_time_s"))
+    moving = _positive(activity.get("moving_time_s"))
+    session_duration = elapsed or moving
+    non_moving = None
+    if elapsed is not None and moving is not None:
+        non_moving = max(0.0, elapsed - moving)
+
+    return {
+        "session_duration_s": session_duration,
+        "duration_basis": "elapsed_time_s" if elapsed is not None else "moving_time_s_fallback",
+        "moving_time_s": moving,
+        "non_moving_time_s": non_moving,
+        "duration_note": (
+            "For Enduro, session_duration_s is the workout duration. Strava moving_time_s only describes time classified as moving and must not replace total session duration."
+        ),
+    }
+
+
 def build_workout_analysis_context(activity):
     """Build the versioned deterministic analysis contract for one activity."""
     sport_type = str(activity.get("sport_type") or "")
@@ -112,6 +130,7 @@ def build_workout_analysis_context(activity):
         "user_report": str(activity.get("user_report") or "").strip(),
         "total": _total_facts(activity),
         "run": _run_context(activity) if sport_type in RUN_TYPES else None,
+        "enduro": _enduro_context(activity) if sport_type in ENDURO_TYPES else None,
     }
     validate_workout_analysis_context(activity, context)
     return context
@@ -127,27 +146,39 @@ def validate_workout_analysis_context(activity, context):
         raise RuntimeError("Workout analysis: user report mismatch")
 
     run = context.get("run")
-    if run is None:
-        return True
+    if run is not None:
+        expected = pace_s_per_km(activity.get("moving_time_s"), activity.get("distance_m"))
+        actual = run.get("average_pace_s_per_km")
+        if expected is None:
+            if actual is not None:
+                raise RuntimeError("Workout analysis: pace exists without source time/distance")
+        elif actual is None or not isclose(float(actual), expected, abs_tol=0.02):
+            raise RuntimeError("Workout analysis: total running pace failed arithmetic validation")
 
-    expected = pace_s_per_km(activity.get("moving_time_s"), activity.get("distance_m"))
-    actual = run.get("average_pace_s_per_km")
-    if expected is None:
-        if actual is not None:
-            raise RuntimeError("Workout analysis: pace exists without source time/distance")
-    elif actual is None or not isclose(float(actual), expected, abs_tol=0.02):
-        raise RuntimeError("Workout analysis: total running pace failed arithmetic validation")
+        by_index = {lap.get("lap_index"): lap for lap in activity.get("laps") or []}
+        for row in run.get("source_laps_near_1km") or []:
+            source = by_index.get(row.get("lap_index"))
+            expected_lap = pace_s_per_km(
+                (source or {}).get("moving_time_s"),
+                (source or {}).get("distance_m"),
+            )
+            if expected_lap is None or not isclose(
+                float(row.get("pace_s_per_km")), expected_lap, abs_tol=0.02
+            ):
+                raise RuntimeError("Workout analysis: lap pace failed arithmetic validation")
 
-    by_index = {lap.get("lap_index"): lap for lap in activity.get("laps") or []}
-    for row in run.get("source_laps_near_1km") or []:
-        source = by_index.get(row.get("lap_index"))
-        expected_lap = pace_s_per_km(
-            (source or {}).get("moving_time_s"),
-            (source or {}).get("distance_m"),
-        )
-        if expected_lap is None or not isclose(
-            float(row.get("pace_s_per_km")), expected_lap, abs_tol=0.02
-        ):
-            raise RuntimeError("Workout analysis: lap pace failed arithmetic validation")
+    enduro = context.get("enduro")
+    if enduro is not None:
+        elapsed = _positive(activity.get("elapsed_time_s"))
+        moving = _positive(activity.get("moving_time_s"))
+        expected_duration = elapsed or moving
+        if expected_duration is None:
+            if enduro.get("session_duration_s") is not None:
+                raise RuntimeError("Workout analysis: Enduro duration exists without source time")
+        elif not isclose(float(enduro.get("session_duration_s")), expected_duration, abs_tol=0.01):
+            raise RuntimeError("Workout analysis: Enduro session duration failed arithmetic validation")
+        expected_basis = "elapsed_time_s" if elapsed is not None else "moving_time_s_fallback"
+        if enduro.get("duration_basis") != expected_basis:
+            raise RuntimeError("Workout analysis: Enduro duration basis mismatch")
 
     return True
