@@ -6,10 +6,12 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
+from training_job_runner import build_stages, cleanup_private_context  # noqa: E402
 from wellness_context import (  # noqa: E402
     WELLNESS_FIELDS,
     build_context,
@@ -73,21 +75,29 @@ class WellnessContextTests(unittest.TestCase):
             mode = stat.S_IMODE(path.stat().st_mode)
             self.assertEqual(mode, stat.S_IRUSR | stat.S_IWUSR)
 
-    def test_update_workflow_uses_tmp_file_and_never_tracks_wellness_data(self):
+    def test_update_pipeline_keeps_wellness_private_and_ephemeral(self):
         repo_root = SCRIPTS.parents[1]
         workflow = (repo_root / ".github" / "workflows" / "update-training.yml").read_text(
             encoding="utf-8"
         )
-        self.assertIn("Load private Garmin wellness context", workflow)
         self.assertIn("WELLNESS_CONTEXT_FILE: /tmp/training_wellness_context.json", workflow)
-        self.assertIn('python "träning/scripts/wellness_context.py" --days 28', workflow)
-        self.assertIn("Remove private wellness context", workflow)
         tracked_block = workflow.split("TRACKED=(", 1)[1].split(")", 1)[0]
         self.assertNotIn("wellness", tracked_block.lower())
-        self.assertLess(
-            workflow.index("Load private Garmin wellness context"),
-            workflow.index("AI coach analysis"),
-        )
+
+        stages = build_stages("reconcile")
+        keys = [stage.key for stage in stages]
+        self.assertLess(keys.index("load_wellness_context"), keys.index("coach_analysis"))
+        wellness_stage = next(stage for stage in stages if stage.key == "load_wellness_context")
+        self.assertTrue(wellness_stage.optional)
+        self.assertIn(str(SCRIPTS / "wellness_context.py"), wellness_stage.command)
+        self.assertEqual(wellness_stage.command[-2:], ("--days", "28"))
+
+        with tempfile.TemporaryDirectory() as tmp:
+            private_path = Path(tmp) / "wellness.json"
+            private_path.write_text("{}", encoding="utf-8")
+            with patch.dict(os.environ, {"WELLNESS_CONTEXT_FILE": str(private_path)}):
+                cleanup_private_context()
+            self.assertFalse(private_path.exists())
 
 
 if __name__ == "__main__":
