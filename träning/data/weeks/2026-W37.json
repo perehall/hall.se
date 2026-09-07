@@ -4,7 +4,7 @@
   "week_start": "2026-09-07",
   "week_end": "2026-09-13",
   "created_at_utc": "2026-09-06T22:19:36.896236+00:00",
-  "updated_at_utc": "2026-09-06T22:19:36.896236+00:00",
+  "updated_at_utc": "2026-09-07T19:18:22.654513+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -561,6 +561,105 @@
       "Välj två bålövningar; låt inte accessoarer tränga undan huvudstyrkan."
     ]
   },
-  "activities": [],
-  "coach_analyses": []
+  "activities": [
+    {
+      "id": 20078705519,
+      "name": "Enduro på kvällen",
+      "sport_type": "Ride",
+      "start_date": "2026-09-07T16:04:35Z",
+      "start_date_local": "2026-09-07T18:04:35Z",
+      "distance_m": 14637.8,
+      "moving_time_s": 2915,
+      "elapsed_time_s": 5718,
+      "total_elevation_gain_m": 508.4,
+      "average_heartrate": 106.7,
+      "max_heartrate": 168.0,
+      "average_watts": 222.0,
+      "weighted_average_watts": null,
+      "calories": 451.0,
+      "device_name": "Garmin Forerunner 970",
+      "gear_id": "b18458212",
+      "gear_name": "KTM 300 EXC TPI",
+      "source": "Strava API",
+      "laps": [
+        {
+          "lap_index": 1,
+          "name": "Lap 1",
+          "elapsed_time_s": 5718,
+          "moving_time_s": 2915,
+          "distance_m": 14640.3,
+          "average_speed": 5.02,
+          "average_heartrate": 106.7,
+          "max_heartrate": 168.0,
+          "average_watts": 222.0,
+          "average_cadence": null
+        }
+      ],
+      "workout_analysis_context": {
+        "contract_version": 1,
+        "activity_id": 20078705519,
+        "sport_type": "Ride",
+        "display_label": "Ride",
+        "classification": null,
+        "user_report": "",
+        "total": {
+          "distance_m": 14637.8,
+          "distance_km": 14.638,
+          "moving_time_s": 2915.0,
+          "elapsed_time_s": 5718.0,
+          "elevation_gain_m": 508.4,
+          "average_heartrate": 106.7,
+          "max_heartrate": 168.0
+        },
+        "run": null,
+        "coach_prompt_sha256": "da2ef602289127ad2c0438bfa5d9356a109494ca3832020780357ab5b639444f"
+      }
+    }
+  ],
+  "coach_analyses": [
+    {
+      "activity_id": 20078705519,
+      "activity_date": "2026-09-07",
+      "activity_name": "Enduro på kvällen",
+      "generated_at_utc": "2026-09-07T19:18:21.959792+00:00",
+      "model": "gpt-5-mini",
+      "analysis_contract": {
+        "pipeline_version": 1,
+        "workout_context_version": 1,
+        "plan_comparison_version": 1,
+        "coach_prompt_sha256": "da2ef602289127ad2c0438bfa5d9356a109494ca3832020780357ab5b639444f",
+        "analysis_code_sha256": "9683a484ae915f4799de23b72cde0fe2e485f72509c02c11752b6d99d3bfaf13"
+      },
+      "performance_marker_id": null,
+      "performance_protocol_key": null,
+      "assessment": {
+        "summary": "Genomfört enduropass (14.6 km, 2915 s moving) med 508 m höjd och genomsnittspuls 106,7; tekniskt endurostimulus registrerat som flex i planen.",
+        "load_interpretation": "Enduron ger teknisk extern belastning inför mikrocykelns löpstimuli och bör vägas mot de senaste 2–3 dagarnas löpning innan nästa prioriterade löppass.",
+        "confidence": "medium",
+        "facts": [
+          "Ride: 14,64 km · 1:35:18 · 508,4 m+ · snittpuls 106,7 · maxpuls 168."
+        ],
+        "interpretations": [
+          "Passet levererar planerat tekniskt endurostimulus utan mätbart hög kardiovaskulärt snittpuls; innebär mekanisk/extern belastning som kan påverka löpkvalitet nästa dag.",
+          "Givet föregående 48–72 h med långa/distanta löppass och backintervaller bör tisdagens prioriterade löptröskel (3×10 min) bedömas mot ackumulerad närbelastning innan progression av dos väljs."
+        ],
+        "unknowns": [
+          "Subjektiv återhämtning/benstatus efter enduron (ingen användarrapport)",
+          "Detaljer om endurons tekniska belastning (fall, hårda landningar) som skulle påverka mekanisk trötthet"
+        ]
+      },
+      "plan_action": {
+        "action": "review",
+        "target_date": "",
+        "reason": "Närliggande löppass är prioriterade och beslut om tisdagens tröskeldos kräver att endurons mekaniska påverkan och subjektiv återhämtning bekräftas.",
+        "recommendation": "Rapportera hur benen känns imorgon morgon (ömhet/trötthet) och om möjligt ange subjektiv återhämtning; baserat på det fattar vi om tisdagens löpning hålls som plan (3×10) eller skalas tillbaka till 3×8.",
+        "dose_option_id": "",
+        "requires_approval": true
+      },
+      "auto_apply": {
+        "applied": false,
+        "note": "Ingen automatisk planändring."
+      }
+    }
+  ]
 }

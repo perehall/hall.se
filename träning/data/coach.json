@@ -1,6 +1,50 @@
 {
   "analyses": [
     {
+      "activity_id": 20078705519,
+      "activity_date": "2026-09-07",
+      "activity_name": "Enduro på kvällen",
+      "generated_at_utc": "2026-09-07T19:18:21.959792+00:00",
+      "model": "gpt-5-mini",
+      "analysis_contract": {
+        "pipeline_version": 1,
+        "workout_context_version": 1,
+        "plan_comparison_version": 1,
+        "coach_prompt_sha256": "da2ef602289127ad2c0438bfa5d9356a109494ca3832020780357ab5b639444f",
+        "analysis_code_sha256": "9683a484ae915f4799de23b72cde0fe2e485f72509c02c11752b6d99d3bfaf13"
+      },
+      "performance_marker_id": null,
+      "performance_protocol_key": null,
+      "assessment": {
+        "summary": "Genomfört enduropass (14.6 km, 2915 s moving) med 508 m höjd och genomsnittspuls 106,7; tekniskt endurostimulus registrerat som flex i planen.",
+        "load_interpretation": "Enduron ger teknisk extern belastning inför mikrocykelns löpstimuli och bör vägas mot de senaste 2–3 dagarnas löpning innan nästa prioriterade löppass.",
+        "confidence": "medium",
+        "facts": [
+          "Ride: 14,64 km · 1:35:18 · 508,4 m+ · snittpuls 106,7 · maxpuls 168."
+        ],
+        "interpretations": [
+          "Passet levererar planerat tekniskt endurostimulus utan mätbart hög kardiovaskulärt snittpuls; innebär mekanisk/extern belastning som kan påverka löpkvalitet nästa dag.",
+          "Givet föregående 48–72 h med långa/distanta löppass och backintervaller bör tisdagens prioriterade löptröskel (3×10 min) bedömas mot ackumulerad närbelastning innan progression av dos väljs."
+        ],
+        "unknowns": [
+          "Subjektiv återhämtning/benstatus efter enduron (ingen användarrapport)",
+          "Detaljer om endurons tekniska belastning (fall, hårda landningar) som skulle påverka mekanisk trötthet"
+        ]
+      },
+      "plan_action": {
+        "action": "review",
+        "target_date": "",
+        "reason": "Närliggande löppass är prioriterade och beslut om tisdagens tröskeldos kräver att endurons mekaniska påverkan och subjektiv återhämtning bekräftas.",
+        "recommendation": "Rapportera hur benen känns imorgon morgon (ömhet/trötthet) och om möjligt ange subjektiv återhämtning; baserat på det fattar vi om tisdagens löpning hålls som plan (3×10) eller skalas tillbaka till 3×8.",
+        "dose_option_id": "",
+        "requires_approval": true
+      },
+      "auto_apply": {
+        "applied": false,
+        "note": "Ingen automatisk planändring."
+      }
+    },
+    {
       "activity_id": 20057585521,
       "activity_date": "2026-09-06",
       "activity_name": "Löpning på morgonen",
@@ -769,8 +813,8 @@
       }
     }
   ],
-  "last_trigger_hash": "dc28a3de5ccc8f4dc6fe1ddd6614639262af1ada609067056658fb63769bdc39",
-  "last_run_utc": "2026-09-06T22:19:28.457293+00:00",
+  "last_trigger_hash": "1a5e6d360bcb5bd458b0429a136e4089eb47067c415cf5cddf37f4d2234affec",
+  "last_run_utc": "2026-09-07T19:18:21.959792+00:00",
   "contract_version": 15,
   "output_contract_version": 16,
   "pipeline_contract_version": 1
