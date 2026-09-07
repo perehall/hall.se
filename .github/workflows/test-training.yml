@@ -38,6 +38,7 @@ jobs:
 
       - name: Offline site-generation smoke test
         run: |
+          set -x
           python "träning/scripts/migrate_training_data_v3.py"
           python "träning/scripts/normalize_activity_semantics.py"
           python "träning/scripts/validate_training_data.py"
