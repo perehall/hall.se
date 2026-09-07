@@ -4,7 +4,7 @@
   "week_start": "2026-09-07",
   "week_end": "2026-09-13",
   "created_at_utc": "2026-09-06T22:19:36.896236+00:00",
-  "updated_at_utc": "2026-09-07T20:25:55.514819+00:00",
+  "updated_at_utc": "2026-09-07T23:29:45.159885+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -695,7 +695,7 @@
       "activity_id": 20079150228,
       "activity_date": "2026-09-07",
       "activity_name": "Styrketräning på natten",
-      "generated_at_utc": "2026-09-07T20:25:54.947056+00:00",
+      "generated_at_utc": "2026-09-07T23:29:44.713086+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 1,
@@ -707,27 +707,27 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "36 minuter styrka registrerat samma dag som en 95-minuters endurosession; styrkepasset hade låg genomsnittspuls och kort kaloriförbrukning.",
-        "load_interpretation": "Enduron var huvudbelastningen (5718 s session_duration); kvällens styrka ger liten ytterligare mekanisk belastning i närbelastningsfönstret.",
+        "summary": "Genomfört: 27,7 min styrketräning på samma dag som en 95 min enduro-session; styrkepasset hade låg genomsnittspuls (75,7) och moderat maxpuls (112).",
+        "load_interpretation": "Närbelastningen de senaste 2–3 dagarna inkluderar lång löpdistans (22 km), en full enduro-session och denna ~28 min styrka; skyddade löppass nästa dag bör prioriteras.",
         "confidence": "medium",
         "facts": [
           "WeightTraining: 27:39 · snittpuls 75,7 · maxpuls 112.",
           "Planstatus 2026-09-07: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Enduron utgör den faktiska närbelastningen som bör styra förändringar de närmaste 48–72 timmarna.",
-          "Styrkepasset var kort/lågintensivt enligt pulldata och behöver sannolikt inte tas som anledning att skala ner kommande prioriterade löppass."
+          "Styrkepasset var kort och lågmekaniskt jämfört med dagens enduro; det ökar inte tydligt risk för att behöva reglera morgondagens prioriterade löppass.",
+          "Givet den totala närbelastningen (enduro + långdistans tidigare + kvällsstyrka) är konservativt agerande mot morgondagens tröskelpass motiverat om subjektiv trötthet uppstår."
         ],
         "unknowns": [
-          "Användarrapport för enduron och styrkan saknas; subjektiv trötthet efter enduron okänd.",
-          "Eventuella lokala muskelömheter från enduro/styrka som kan påverka tisdagens tröskelpass är ännu okända."
+          "Användarrapport för kvällens styrka (känsla/energi) saknas.",
+          "Subjektiv återhämtning över natten och sömnkvalitet fram till morgon är okänd."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-09-08",
-        "reason": "Kvällens styrka var lågintensiv och enduron är huvudbelastningen; ingenting i närbelastningen kräver att prioritetslöppasset ändras.",
-        "recommendation": "Behåll tisdagens planerade 3×10 min kontrollerad tröskel; om du vaknar märkbart trött eller öm morgonrapportera för eventuell nedskalning till 3×8 min.",
+        "reason": "Styrkepasset var kort/lågintensivt och påverkar inte entydigt morgondagens prioriterade tröskel enligt närbelastningsfönstret och mesocykelns prioriteringar.",
+        "recommendation": "Genomför planerat tröskelpass som planerat men skala intensiteten konservativt om du känner ovanlig trötthet i benen imorgon; rapportera subjektiv känsla före start.",
         "dose_option_id": "",
         "requires_approval": false
       },
