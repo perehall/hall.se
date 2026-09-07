@@ -66,7 +66,7 @@ ABSORPTION_PATTERN = re.compile(
     r"\babsorber(?:bar(?:t)?|ad(?:e|t)?|as|ades|ats)\b",
     re.IGNORECASE,
 )
-ENDURO_INTERNAL_FIELD_PATTERN = re.compile(
+INTERNAL_PROVIDER_FIELD_PATTERN = re.compile(
     r"\b(?:session_duration(?:_s)?|moving_time(?:_s)?|non_moving_time(?:_s)?|elapsed_time(?:_s)?)\b",
     re.IGNORECASE,
 )
@@ -98,6 +98,71 @@ def _plan_deviation_text(comparison):
             f"det kortaste godkända alternativet {low:g} min."
         )
     return f"Tidsdosen blev {actual:g} min mot planerade {selected:g} min."
+
+
+def _fmt_duration(seconds):
+    if not isinstance(seconds, (int, float)) or seconds < 0:
+        return ""
+    total = int(round(seconds))
+    hours, remainder = divmod(total, 3600)
+    minutes, secs = divmod(remainder, 60)
+    return f"{hours}:{minutes:02d}:{secs:02d}" if hours else f"{minutes}:{secs:02d}"
+
+
+def _seconds_match_to_duration(match, label):
+    raw = match.group(1)
+    try:
+        seconds = float(raw.replace(",", "."))
+    except (TypeError, ValueError):
+        return match.group(0)
+    duration = _fmt_duration(seconds)
+    return f"{duration} {label}" if duration else match.group(0)
+
+
+def _humanize_internal_provider_fields(text):
+    """Convert provider implementation fields to public human language."""
+    value = str(text or "")
+
+    value = re.sub(
+        r"(\d+(?:[.,]\d+)?)\s*s\s+session_duration(?:_s)?\b",
+        lambda match: _seconds_match_to_duration(match, "total tid"),
+        value,
+        flags=re.IGNORECASE,
+    )
+    value = re.sub(
+        r"session_duration(?:_s)?\s*[:=]?\s*(\d+(?:[.,]\d+)?)\s*s\b",
+        lambda match: _seconds_match_to_duration(match, "total tid"),
+        value,
+        flags=re.IGNORECASE,
+    )
+    value = re.sub(
+        r"moving_time(?:_s)?\s*[:=]?\s*(\d+(?:[.,]\d+)?)\s*s\b",
+        lambda match: _seconds_match_to_duration(match, "rörelsetid"),
+        value,
+        flags=re.IGNORECASE,
+    )
+    value = re.sub(
+        r"non_moving_time(?:_s)?\s*[:=]?\s*(\d+(?:[.,]\d+)?)\s*s\b",
+        lambda match: _seconds_match_to_duration(match, "utanför Stravas rörelsetid"),
+        value,
+        flags=re.IGNORECASE,
+    )
+    value = re.sub(
+        r"elapsed_time(?:_s)?\s*[:=]?\s*(\d+(?:[.,]\d+)?)\s*s\b",
+        lambda match: _seconds_match_to_duration(match, "total tid"),
+        value,
+        flags=re.IGNORECASE,
+    )
+
+    replacements = (
+        (r"\bsession_duration(?:_s)?\b", "total tid"),
+        (r"\bmoving_time(?:_s)?\b", "rörelsetid"),
+        (r"\bnon_moving_time(?:_s)?\b", "tid utanför Stravas rörelsetid"),
+        (r"\belapsed_time(?:_s)?\b", "total tid"),
+    )
+    for pattern, replacement in replacements:
+        value = re.sub(pattern, replacement, value, flags=re.IGNORECASE)
+    return re.sub(r"[ \t]{2,}", " ", value).strip()
 
 
 def _neutralize_near_load_level(text):
@@ -190,7 +255,8 @@ def _sanitize_reporting_window(text):
 
 
 def _sanitize_assessment_text(text, *, latest_date, local_date):
-    value = _neutralize_near_load_level(text)
+    value = _humanize_internal_provider_fields(text)
+    value = _neutralize_near_load_level(value)
     value = _neutralize_unverified_hr_characterization(value)
     value = _neutralize_same_day_absorption(
         value,
@@ -200,15 +266,6 @@ def _sanitize_assessment_text(text, *, latest_date, local_date):
     if latest_date == local_date and _has_future_certainty(value):
         return _neutral_future_sentence()
     return value
-
-
-def _fmt_duration(seconds):
-    if not isinstance(seconds, (int, float)) or seconds < 0:
-        return ""
-    total = int(round(seconds))
-    hours, remainder = divmod(total, 3600)
-    minutes, secs = divmod(remainder, 60)
-    return f"{hours}:{minutes:02d}:{secs:02d}" if hours else f"{minutes}:{secs:02d}"
 
 
 def _fmt_number_sv(value, decimals=0):
@@ -268,7 +325,7 @@ def _sanitize_enduro_assessment(assessment, activity):
         text = str(item or "").strip()
         if not text:
             continue
-        if ENDURO_INTERNAL_FIELD_PATTERN.search(text):
+        if INTERNAL_PROVIDER_FIELD_PATTERN.search(text):
             if not internal_replaced:
                 cleaned.append(natural_duration_note)
                 internal_replaced = True
@@ -310,6 +367,7 @@ def guard_result(result, *, latest_date, local_date, plan_comparison=None, activ
     action = guarded.get("plan_action") or {}
     for field in ("reason", "recommendation"):
         if isinstance(action.get(field), str):
+            action[field] = _humanize_internal_provider_fields(action[field])
             action[field] = _neutralize_near_load_level(action[field])
     if isinstance(action.get("recommendation"), str):
         action["recommendation"] = _sanitize_reporting_window(action["recommendation"])
@@ -386,9 +444,8 @@ def validate_guarded_result(result, *, latest_date, local_date, plan_comparison=
         raise RuntimeError("Coach output guard: invented feedback clock window remained")
     if _outside_planned_duration(plan_comparison) and any(PLAN_MATCH_PATTERN.search(text) for text in texts):
         raise RuntimeError("Coach output guard: plan-match claim conflicts with deterministic duration comparison")
-    if activity and activity.get("sport_type") == "Enduro":
-        if any(ENDURO_INTERNAL_FIELD_PATTERN.search(text) for text in texts):
-            raise RuntimeError("Coach output guard: internal Enduro field name remained in public text")
+    if any(INTERNAL_PROVIDER_FIELD_PATTERN.search(text) for text in texts):
+        raise RuntimeError("Coach output guard: internal provider field name remained in public text")
     return True
 
 
