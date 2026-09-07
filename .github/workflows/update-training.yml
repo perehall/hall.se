@@ -20,15 +20,33 @@ concurrency:
   group: training-pages
   cancel-in-progress: false
 
-permissions:
-  contents: write
-  actions: read
-  pages: write
-  id-token: write
+permissions: {}
 
 jobs:
-  update:
+  verify:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run deterministic regression suite
+        run: python "träning/scripts/run_regression_tests.py"
+
+  update:
+    needs: verify
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: read
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -41,22 +59,13 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Sync demonstrated progression from explicit user reports
-        run: python "träning/scripts/sync_user_reported_progression.py"
-
-      - name: Run deterministic regression tests
-        run: |
-          python -m compileall -q "träning/scripts" "träning/tests"
-          python -m unittest discover -s "träning/tests" -p "test_*.py" -v
-
       - name: Backup current live page once
         run: |
           if [ ! -f "träning/index.manual-backup.html" ]; then
             cp "träning/index.html" "träning/index.manual-backup.html"
           fi
 
-      - name: Sync Strava webhook event
-        if: github.event_name == 'repository_dispatch'
+      - name: Run canonical training update pipeline
         env:
           STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
           STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
@@ -67,95 +76,18 @@ jobs:
           STRAVA_WEBHOOK_ASPECT_TYPE: ${{ github.event.client_payload.aspect_type }}
           STRAVA_WEBHOOK_EVENT_TIME: ${{ github.event.client_payload.event_time }}
           STRAVA_WEBHOOK_EVENT_KEY: ${{ github.event.client_payload.event_key }}
-        run: python "träning/scripts/sync_strava_event.py"
-
-      - name: Sync Strava safety reconcile
-        if: github.event_name != 'repository_dispatch'
-        env:
-          STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
-          STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
-          STRAVA_REFRESH_TOKEN: ${{ secrets.STRAVA_REFRESH_TOKEN }}
-          STRAVA_REFRESH_TOKEN_FILE: /tmp/strava_refresh_token
-        run: python "träning/scripts/sync_strava.py"
-
-      - name: Normalize activity semantics
-        run: python "träning/scripts/normalize_activity_semantics.py"
-
-      - name: Re-sync progression after semantic normalization
-        run: python "träning/scripts/sync_user_reported_progression.py"
-
-      - name: Migrate typed plan data
-        run: python "träning/scripts/migrate_training_data_v3.py"
-
-      - name: Validate normalized training data
-        run: python "träning/scripts/validate_training_data.py"
-
-      - name: Roll over calendar week
-        run: python "träning/scripts/rollover_week.py"
-
-      - name: Validate rolled-over training data
-        run: python "träning/scripts/validate_training_data.py"
-
-      - name: Persist rotated Strava refresh token
-        env:
           GH_TOKEN: ${{ secrets.TRAINING_SECRET_PAT }}
+          INTERVALS_API_KEY: ${{ secrets.INTERVALS_API_KEY }}
+          WELLNESS_CONTEXT_FILE: /tmp/training_wellness_context.json
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_MODEL: gpt-5-mini
         run: |
-          gh secret set STRAVA_REFRESH_TOKEN --repo "$GITHUB_REPOSITORY" < /tmp/strava_refresh_token
-          rm -f /tmp/strava_refresh_token
-
-      - name: Sync weather
-        run: python "träning/scripts/sync_weather.py"
-
-      - name: Sync interval performance details
-        continue-on-error: true
-        env:
-          INTERVALS_API_KEY: ${{ secrets.INTERVALS_API_KEY }}
-        run: python "träning/scripts/sync_performance_details.py" --days 60
-
-      - name: Validate performance data
-        run: python "träning/scripts/validate_training_data.py"
-
-      - name: Load private Garmin wellness context
-        continue-on-error: true
-        env:
-          INTERVALS_API_KEY: ${{ secrets.INTERVALS_API_KEY }}
-          WELLNESS_CONTEXT_FILE: /tmp/training_wellness_context.json
-        run: python "träning/scripts/wellness_context.py" --days 28
-
-      - name: AI coach analysis
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          OPENAI_MODEL: gpt-5-mini
-          WELLNESS_CONTEXT_FILE: /tmp/training_wellness_context.json
-        run: python "träning/scripts/coach_pipeline.py"
-
-      - name: Guard AI coach claims
-        run: python "träning/scripts/coach_output_guard.py"
-
-      - name: Remove private wellness context
-        if: always()
-        run: rm -f /tmp/training_wellness_context.json
-
-      - name: Validate post-coach training data
-        run: python "träning/scripts/validate_training_data.py"
-
-      - name: Generate closed week review
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          OPENAI_MODEL: gpt-5-mini
-        run: python "träning/scripts/weekly_review.py"
-
-      - name: Validate week review contracts
-        run: python "träning/scripts/check_week_reviews.py"
-
-      - name: Sync structured swim workouts to Intervals/Garmin
-        continue-on-error: true
-        env:
-          INTERVALS_API_KEY: ${{ secrets.INTERVALS_API_KEY }}
-        run: python "träning/scripts/sync_intervals_swim.py"
-
-      - name: Render and validate training site
-        run: python "träning/scripts/render_training_site.py"
+          if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
+            ingest_mode=event
+          else
+            ingest_mode=reconcile
+          fi
+          python "träning/scripts/training_job_runner.py" --ingest-mode "$ingest_mode"
 
       - name: Commit synced data, coach state and live page
         run: |
