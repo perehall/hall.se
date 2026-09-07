@@ -18,9 +18,11 @@ COACH_PROMPT = ROOT / "coach_prompt.md"
 
 ENDURO_NAME_RE = re.compile(r"\b(?:enduro|motocross)\b", re.IGNORECASE)
 MTB_NAME_RE = re.compile(r"\b(?:mtb|xc|mountain\s*bike|cykel)\b", re.IGNORECASE)
+MOTORCYCLE_GEAR_RE = re.compile(r"\b(?:exc|tpi|te\s*\d{2,3}|ec\s*\d{2,3})\b", re.IGNORECASE)
 SWIMRUN_NAME_RE = re.compile(r"\bswim\s*-?\s*run\b|\bswimrun\b", re.IGNORECASE)
 ENDURO_NAME_RULE = "mountainbike-explicit-enduro-name-v1"
 ENDURO_EMTB_PROXY_RULE = "emountainbike-user-enduro-proxy-v1"
+ENDURO_RIDE_GEAR_RULE = "ride-explicit-enduro-motorcycle-gear-v1"
 SWIMRUN_NAME_RULE = "trailrun-explicit-swimrun-name-v1"
 COACH_SEMANTIC_FIELDS = (
     "sport_type",
@@ -57,13 +59,7 @@ def coach_semantic_fingerprint(activity):
 
 
 def auto_enduro_candidate(activity):
-    """Return True only for a strong, explicit Enduro/Motocross name signal.
-
-    Strava exposes Garmin motocross/enduro recordings as MountainBikeRide in
-    this dataset. A name that explicitly says Enduro or Motocross is therefore
-    a strong user/source signal. Explicit MTB/XC/bike wording blocks automatic
-    reclassification because MTB enduro is a legitimate cycling discipline.
-    """
+    """Return True only for a strong, explicit Enduro/Motocross name signal."""
     if raw_sport(activity) != "MountainBikeRide":
         return False
     name = str(activity.get("name") or "").strip()
@@ -74,52 +70,82 @@ def auto_enduro_candidate(activity):
     return True
 
 
-def auto_swimrun_candidate(activity):
-    """Return True when a Strava TrailRun explicitly identifies itself as swimrun.
+def auto_enduro_ride_candidate(activity):
+    """Recognize Strava's generic Ride fallback only with motorcycle evidence.
 
-    Garmin/Strava commonly expose multisport swimrun recordings as TrailRun in
-    this dataset. The explicit activity name is therefore the strongest
-    available semantic signal once the user has named the activity in Strava.
+    A bare Ride named Enduro is ambiguous because MTB enduro is a cycling
+    discipline. The combination of an explicit Enduro/Motocross name and a
+    motorcycle-style gear name (for example KTM 300 EXC TPI) is strong enough
+    to normalize safely without reclassifying ordinary bike rides.
     """
+    if raw_sport(activity) != "Ride":
+        return False
+    name = str(activity.get("name") or "").strip()
+    gear = str(activity.get("gear_name") or "").strip()
+    if not name or not ENDURO_NAME_RE.search(name):
+        return False
+    if MTB_NAME_RE.search(name):
+        return False
+    return bool(gear and MOTORCYCLE_GEAR_RE.search(gear))
+
+
+def auto_swimrun_candidate(activity):
     if raw_sport(activity) != "TrailRun":
         return False
     name = str(activity.get("name") or "").strip()
     return bool(name and SWIMRUN_NAME_RE.search(name))
 
 
+def _apply_enduro(activity, *, original, rule, evidence, reason):
+    activity["source_sport_type"] = original
+    activity["sport_type"] = "Enduro"
+    activity["classification"] = "training"
+    activity["display_label"] = "Enduro"
+    activity["classification_reason"] = reason
+    activity["sport_normalization"] = {
+        "rule": rule,
+        "evidence": evidence,
+    }
+    return True
+
+
 def apply_auto_semantics(activity):
     if raw_sport(activity) == "EMountainBikeRide":
         original = raw_sport(activity)
-        activity["source_sport_type"] = original
-        activity["sport_type"] = "Enduro"
-        activity["classification"] = "training"
-        activity["display_label"] = "Enduro"
-        activity["classification_reason"] = (
-            "User convention: Strava e-MTB represents Enduro; Enduro is actual training load."
-        )
-        activity["sport_normalization"] = {
-            "rule": ENDURO_EMTB_PROXY_RULE,
-            "evidence": [
+        return _apply_enduro(
+            activity,
+            original=original,
+            rule=ENDURO_EMTB_PROXY_RULE,
+            evidence=[
                 "source_sport_type=EMountainBikeRide",
                 "user convention: Strava e-MTB represents Enduro",
             ],
-        }
-        return True
+            reason="User convention: Strava e-MTB represents Enduro; Enduro is actual training load.",
+        )
+
+    if auto_enduro_ride_candidate(activity):
+        original = raw_sport(activity)
+        return _apply_enduro(
+            activity,
+            original=original,
+            rule=ENDURO_RIDE_GEAR_RULE,
+            evidence=[
+                "source_sport_type=Ride",
+                "explicit Enduro/Motocross activity name",
+                f"motorcycle gear={activity.get('gear_name')}",
+            ],
+            reason="Strava exposed the Enduro recording as Ride, but the explicit activity name and motorcycle gear identify actual Enduro training load.",
+        )
 
     if auto_enduro_candidate(activity):
         original = raw_sport(activity)
-        activity["source_sport_type"] = original
-        activity["sport_type"] = "Enduro"
-        activity["classification"] = "training"
-        activity["display_label"] = "Enduro"
-        activity["classification_reason"] = (
-            "Explicit Enduro/Motocross source signal; Enduro is actual training load."
+        return _apply_enduro(
+            activity,
+            original=original,
+            rule=ENDURO_NAME_RULE,
+            evidence=["source_sport_type=MountainBikeRide", "explicit Enduro/Motocross activity name"],
+            reason="Explicit Enduro/Motocross source signal; Enduro is actual training load.",
         )
-        activity["sport_normalization"] = {
-            "rule": ENDURO_NAME_RULE,
-            "evidence": ["source_sport_type=MountainBikeRide", "explicit Enduro/Motocross activity name"],
-        }
-        return True
 
     if auto_swimrun_candidate(activity):
         original = raw_sport(activity)
