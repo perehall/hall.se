@@ -66,6 +66,10 @@ ABSORPTION_PATTERN = re.compile(
     r"\babsorber(?:bar(?:t)?|ad(?:e|t)?|as|ades|ats)\b",
     re.IGNORECASE,
 )
+ENDURO_INTERNAL_FIELD_PATTERN = re.compile(
+    r"\b(?:session_duration(?:_s)?|moving_time(?:_s)?|non_moving_time(?:_s)?|elapsed_time(?:_s)?)\b",
+    re.IGNORECASE,
+)
 
 
 def _outside_planned_duration(comparison):
@@ -141,8 +145,6 @@ def _neutralize_same_day_absorption(text, *, latest_date, local_date):
     if latest_date != local_date or not ABSORPTION_PATTERN.search(value):
         return value
 
-    # Preserve a supported observation that follows the unsupported absorption
-    # claim, e.g. "visar att dagens dos var absorberbar och att sen fartökning...".
     value = re.sub(
         r"dagens\s+(?:dos|belastning)\s+(?:var|är)\s+absorberbar(?:t)?\s+och\s+att\s+",
         "",
@@ -200,7 +202,83 @@ def _sanitize_assessment_text(text, *, latest_date, local_date):
     return value
 
 
-def guard_result(result, *, latest_date, local_date, plan_comparison=None):
+def _fmt_duration(seconds):
+    if not isinstance(seconds, (int, float)) or seconds < 0:
+        return ""
+    total = int(round(seconds))
+    hours, remainder = divmod(total, 3600)
+    minutes, secs = divmod(remainder, 60)
+    return f"{hours}:{minutes:02d}:{secs:02d}" if hours else f"{minutes}:{secs:02d}"
+
+
+def _fmt_number_sv(value, decimals=0):
+    if not isinstance(value, (int, float)):
+        return ""
+    if decimals == 0:
+        return str(int(round(value)))
+    return f"{value:.{decimals}f}".replace(".", ",")
+
+
+def _sanitize_enduro_assessment(assessment, activity):
+    """Replace recurrent provider-field leakage with deterministic human language."""
+    if not activity or activity.get("sport_type") != "Enduro":
+        return assessment
+    context = (activity.get("workout_analysis_context") or {}).get("enduro") or {}
+    session_seconds = context.get("session_duration_s")
+    moving_seconds = context.get("moving_time_s")
+    if not isinstance(session_seconds, (int, float)) or session_seconds <= 0:
+        return assessment
+
+    session_text = _fmt_duration(session_seconds)
+    moving_text = _fmt_duration(moving_seconds) if isinstance(moving_seconds, (int, float)) else ""
+    elevation = activity.get("total_elevation_gain_m")
+    elevation_text = _fmt_number_sv(elevation)
+    avg_hr = activity.get("average_heartrate")
+    hr_text = _fmt_number_sv(avg_hr)
+
+    summary_bits = [f"Enduropasset omfattade {session_text} totalt"]
+    if elevation_text:
+        summary_bits.append(f"{elevation_text} m+")
+    assessment["summary"] = (
+        " och ".join(summary_bits)
+        + "; det räknas som faktisk teknisk och mekanisk träningsbelastning inför nästa prioriterade pass."
+    )
+
+    secondary = []
+    if moving_text:
+        secondary.append(f"Stravas rörelsetid {moving_text}")
+    if hr_text:
+        secondary.append(f"snittpuls {hr_text}")
+    suffix = " och ".join(secondary)
+    assessment["load_interpretation"] = (
+        f"För Enduro används hela {session_text} som tidsomfattning; {suffix} beskriver inte den tekniska/mekaniska belastningen ensamma."
+        if suffix
+        else f"För Enduro används hela {session_text} som tidsomfattning; rörelsetid och puls får inte ersätta den totala passbedömningen."
+    )
+
+    interpretations = list(assessment.get("interpretations") or [])
+    natural_duration_note = (
+        f"Strava klassade {moving_text} av totalt {session_text} som rörelsetid; rörelsetiden används därför inte som total passduration."
+        if moving_text
+        else f"Hela {session_text} används som total passduration för Enduro."
+    )
+    cleaned = []
+    internal_replaced = False
+    for item in interpretations:
+        text = str(item or "").strip()
+        if not text:
+            continue
+        if ENDURO_INTERNAL_FIELD_PATTERN.search(text):
+            if not internal_replaced:
+                cleaned.append(natural_duration_note)
+                internal_replaced = True
+            continue
+        cleaned.append(text)
+    assessment["interpretations"] = cleaned[:2]
+    return assessment
+
+
+def guard_result(result, *, latest_date, local_date, plan_comparison=None, activity=None):
     guarded = copy.deepcopy(result)
     assessment = guarded.get("assessment") or {}
 
@@ -226,6 +304,8 @@ def guard_result(result, *, latest_date, local_date, plan_comparison=None):
             else item
             for item in values
         ]
+
+    assessment = _sanitize_enduro_assessment(assessment, activity)
 
     action = guarded.get("plan_action") or {}
     for field in ("reason", "recommendation"):
@@ -274,11 +354,12 @@ def guard_result(result, *, latest_date, local_date, plan_comparison=None):
         latest_date=latest_date,
         local_date=local_date,
         plan_comparison=plan_comparison,
+        activity=activity,
     )
     return guarded
 
 
-def validate_guarded_result(result, *, latest_date, local_date, plan_comparison=None):
+def validate_guarded_result(result, *, latest_date, local_date, plan_comparison=None, activity=None):
     assessment = result.get("assessment") or {}
     action = result.get("plan_action") or {}
     derived = [
@@ -305,6 +386,9 @@ def validate_guarded_result(result, *, latest_date, local_date, plan_comparison=
         raise RuntimeError("Coach output guard: invented feedback clock window remained")
     if _outside_planned_duration(plan_comparison) and any(PLAN_MATCH_PATTERN.search(text) for text in texts):
         raise RuntimeError("Coach output guard: plan-match claim conflicts with deterministic duration comparison")
+    if activity and activity.get("sport_type") == "Enduro":
+        if any(ENDURO_INTERNAL_FIELD_PATTERN.search(text) for text in texts):
+            raise RuntimeError("Coach output guard: internal Enduro field name remained in public text")
     return True
 
 
@@ -321,28 +405,34 @@ def main():
         return 0
     activities = _load(ACTIVITIES_FILE).get("activities") or []
     plan = _load(PLAN_FILE)
-    entry = analyses[0]
-    activity = next(
-        (row for row in activities if str(row.get("id")) == str(entry.get("activity_id"))),
-        None,
-    )
-    if not activity:
-        raise RuntimeError("Coach output guard: latest analysis activity not found")
-
-    latest_date = entry.get("activity_date") or ""
+    by_id = {
+        str(row.get("id")): row
+        for row in activities
+        if row.get("id") is not None
+    }
     timezone_name = (plan.get("meta") or {}).get("timezone") or "Europe/Stockholm"
     local_date = datetime.now(ZoneInfo(timezone_name)).date().isoformat()
-    plan_comparison = build_plan_comparison(plan, activity, latest_date)
-    guarded = guard_result(
-        {"assessment": entry.get("assessment") or {}, "plan_action": entry.get("plan_action") or {}},
-        latest_date=latest_date,
-        local_date=local_date,
-        plan_comparison=plan_comparison,
-    )
-    entry["assessment"] = guarded["assessment"]
-    entry["plan_action"] = guarded["plan_action"]
+
+    guarded_count = 0
+    for entry in analyses:
+        activity = by_id.get(str(entry.get("activity_id")))
+        if not activity:
+            continue
+        latest_date = entry.get("activity_date") or ""
+        plan_comparison = build_plan_comparison(plan, activity, latest_date)
+        guarded = guard_result(
+            {"assessment": entry.get("assessment") or {}, "plan_action": entry.get("plan_action") or {}},
+            latest_date=latest_date,
+            local_date=local_date,
+            plan_comparison=plan_comparison,
+            activity=activity,
+        )
+        entry["assessment"] = guarded["assessment"]
+        entry["plan_action"] = guarded["plan_action"]
+        guarded_count += 1
+
     COACH_FILE.write_text(json.dumps(coach, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print("Coach output guard: OK")
+    print(f"Coach output guard: OK ({guarded_count} analysis/analyses guarded)")
     return 0
 
 
