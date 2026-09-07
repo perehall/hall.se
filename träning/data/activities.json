@@ -1,5 +1,5 @@
 {
-  "last_sync_utc": "2026-09-07T20:09:00.093296+00:00",
+  "last_sync_utc": "2026-09-07T20:14:06.728542+00:00",
   "activities": [
     {
       "id": 20079150228,
@@ -58,7 +58,7 @@
     {
       "id": 20078705519,
       "name": "Enduro på kvällen",
-      "sport_type": "Ride",
+      "sport_type": "Enduro",
       "start_date": "2026-09-07T16:04:35Z",
       "start_date_local": "2026-09-07T18:04:35Z",
       "distance_m": 14637.8,
@@ -91,9 +91,9 @@
       "workout_analysis_context": {
         "contract_version": 2,
         "activity_id": 20078705519,
-        "sport_type": "Ride",
-        "display_label": "Ride",
-        "classification": null,
+        "sport_type": "Enduro",
+        "display_label": "Enduro",
+        "classification": "training",
         "user_report": "",
         "total": {
           "distance_m": 14637.8,
@@ -105,8 +105,26 @@
           "max_heartrate": 168.0
         },
         "run": null,
-        "enduro": null,
+        "enduro": {
+          "session_duration_s": 5718.0,
+          "duration_basis": "elapsed_time_s",
+          "moving_time_s": 2915.0,
+          "non_moving_time_s": 2803.0,
+          "duration_note": "For Enduro, session_duration_s is the workout duration. Strava moving_time_s only describes time classified as moving and must not replace total session duration."
+        },
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+      },
+      "source_sport_type": "Ride",
+      "classification": "training",
+      "display_label": "Enduro",
+      "classification_reason": "Strava exposed the Enduro recording as Ride, but the explicit activity name and motorcycle gear identify actual Enduro training load.",
+      "sport_normalization": {
+        "rule": "ride-explicit-enduro-motorcycle-gear-v1",
+        "evidence": [
+          "source_sport_type=Ride",
+          "explicit Enduro/Motocross activity name",
+          "motorcycle gear=KTM 300 EXC TPI"
+        ]
       }
     },
     {
@@ -3831,7 +3849,7 @@
     "workout_analysis_contract_version": 2,
     "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
     "overrides_applied": 7,
-    "auto_rules_applied": 8,
+    "auto_rules_applied": 9,
     "override_ids_present": [
       "19852599244",
       "19862241646",
@@ -3842,8 +3860,7 @@
       "20057585521"
     ],
     "changed_ids": [
-      "19882521682",
-      "19980267962"
+      "20078705519"
     ]
   },
   "schema_version": 2,

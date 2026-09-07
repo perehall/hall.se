@@ -4,7 +4,7 @@
   "week_start": "2026-09-07",
   "week_end": "2026-09-13",
   "created_at_utc": "2026-09-06T22:19:36.896236+00:00",
-  "updated_at_utc": "2026-09-07T20:09:22.685369+00:00",
+  "updated_at_utc": "2026-09-07T20:14:22.723912+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -619,7 +619,7 @@
     {
       "id": 20078705519,
       "name": "Enduro på kvällen",
-      "sport_type": "Ride",
+      "sport_type": "Enduro",
       "start_date": "2026-09-07T16:04:35Z",
       "start_date_local": "2026-09-07T18:04:35Z",
       "distance_m": 14637.8,
@@ -652,9 +652,9 @@
       "workout_analysis_context": {
         "contract_version": 2,
         "activity_id": 20078705519,
-        "sport_type": "Ride",
-        "display_label": "Ride",
-        "classification": null,
+        "sport_type": "Enduro",
+        "display_label": "Enduro",
+        "classification": "training",
         "user_report": "",
         "total": {
           "distance_m": 14637.8,
@@ -666,8 +666,26 @@
           "max_heartrate": 168.0
         },
         "run": null,
-        "enduro": null,
+        "enduro": {
+          "session_duration_s": 5718.0,
+          "duration_basis": "elapsed_time_s",
+          "moving_time_s": 2915.0,
+          "non_moving_time_s": 2803.0,
+          "duration_note": "For Enduro, session_duration_s is the workout duration. Strava moving_time_s only describes time classified as moving and must not replace total session duration."
+        },
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+      },
+      "source_sport_type": "Ride",
+      "classification": "training",
+      "display_label": "Enduro",
+      "classification_reason": "Strava exposed the Enduro recording as Ride, but the explicit activity name and motorcycle gear identify actual Enduro training load.",
+      "sport_normalization": {
+        "rule": "ride-explicit-enduro-motorcycle-gear-v1",
+        "evidence": [
+          "source_sport_type=Ride",
+          "explicit Enduro/Motocross activity name",
+          "motorcycle gear=KTM 300 EXC TPI"
+        ]
       }
     }
   ],
@@ -676,7 +694,7 @@
       "activity_id": 20079150228,
       "activity_date": "2026-09-07",
       "activity_name": "Styrketräning på natten",
-      "generated_at_utc": "2026-09-07T20:09:13.370971+00:00",
+      "generated_at_utc": "2026-09-07T20:14:22.132675+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 1,
@@ -688,72 +706,29 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomförd styrketräning 27,7 min på måndagskvällen efter enduro; låg genomsnittspuls (75,7) och max 112 indikerar låg till måttlig intern belastning.",
-        "load_interpretation": "Dagens styrkepass bidrar marginellt mekaniskt/neuromuskulärt men ökar inte kardiovaskulär belastning i närtid jämfört med enduro-sessionen tidigare samma dag.",
+        "summary": "Genomförd styrketräning 27,6 min efter långdag med Enduro och långt distanspass; passet registrerar låg genomsnittspuls och inga användarrapporter om ansträngning.",
+        "load_interpretation": "Närbelastningen visar fortsatt ackumulering (Enduro + långt löppass samma och föregående dag); styrkepasset var kort och lågkardio utan indikation på överbelastning.",
         "confidence": "medium",
         "facts": [
-          "WeightTraining: 27:39 · snittpuls 75,7 · maxpuls 112."
+          "WeightTraining: 27:39 · snittpuls 75,7 · maxpuls 112.",
+          "Planstatus 2026-09-07: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Styrkepasset var kort och lågintensivt i puls; det ger viss mekanisk/neuromuskulär stimulans utan att troligen störa återhämtningen efter dagens enduro.",
-          "Eftersom enduro tidigare samma dag var huvudbelastning (teknisk extern belastning) bör planens prioriterade löppass i nästa 48–72 h skyddas mot ytterligare hård mekanisk belastning."
+          "Styrkepasset var en kort skyddad styrkeexponering som troligen inte komprometterar morgondagens prioriterade tröskelpass.",
+          "Närbelastningen de senaste 2–3 dagarna (22 km löp + Enduro) motiverar konservativ hantering av morgondagens utvecklingspass om subjektiv trötthet uppstår."
         ],
         "unknowns": [
-          "Användarens subjektiva återhämtning efter kvällens dubbelpass",
-          "Detaljerat innehåll/tyngd i styrkepasset (saknas i rapport)"
+          "Användarens subjektiva återhämtning ikväll/natt (ingen user_report för styrkan).",
+          "Detaljer om styrkepassets faktisk belastning/intensitet (workout_analysis_context saknar set/övningsdata)."
         ]
       },
       "plan_action": {
         "action": "keep",
-        "target_date": "",
-        "reason": "Underlaget visar inte överraskande eller närbelastningen som motiverar dämpning av kommande planerade pass.",
-        "recommendation": "Behåll planerade pass; genomför tisdagens kontrollerade tröskel enligt plan. Undvik tung plyometri eller maximal styrka de närmaste 48 timmarna och rapportera hur du känner dig vid morgonen före tröskelpasset.",
+        "target_date": "2026-09-08",
+        "reason": "Styrkepasset var kort och lågintensivt och ger inte sakligt skäl att ändra morgondagens prioriterade tröskel enligt närbelastningsreglerna.",
+        "recommendation": "Håll planerat tröskelpass 2026-09-08 (3×10 min) om du känner dig normalt återhämtad; avvakta subjektiv feedback imorgon morgon och rapportera trötthet eller lokal muskelstelhet för eventuell reduktion.",
         "dose_option_id": "",
         "requires_approval": false
-      },
-      "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
-      }
-    },
-    {
-      "activity_id": 20078705519,
-      "activity_date": "2026-09-07",
-      "activity_name": "Enduro på kvällen",
-      "generated_at_utc": "2026-09-07T19:18:21.959792+00:00",
-      "model": "gpt-5-mini",
-      "analysis_contract": {
-        "pipeline_version": 1,
-        "workout_context_version": 1,
-        "plan_comparison_version": 1,
-        "coach_prompt_sha256": "da2ef602289127ad2c0438bfa5d9356a109494ca3832020780357ab5b639444f",
-        "analysis_code_sha256": "9683a484ae915f4799de23b72cde0fe2e485f72509c02c11752b6d99d3bfaf13"
-      },
-      "performance_marker_id": null,
-      "performance_protocol_key": null,
-      "assessment": {
-        "summary": "Genomfört enduropass (14.6 km, 2915 s moving) med 508 m höjd och genomsnittspuls 106,7; tekniskt endurostimulus registrerat som flex i planen.",
-        "load_interpretation": "Enduron ger teknisk extern belastning inför mikrocykelns löpstimuli och bör vägas mot de senaste 2–3 dagarnas löpning innan nästa prioriterade löppass.",
-        "confidence": "medium",
-        "facts": [
-          "Ride: 14,64 km · 1:35:18 · 508,4 m+ · snittpuls 106,7 · maxpuls 168."
-        ],
-        "interpretations": [
-          "Passet levererar planerat tekniskt endurostimulus utan mätbart hög kardiovaskulärt snittpuls; innebär mekanisk/extern belastning som kan påverka löpkvalitet nästa dag.",
-          "Givet föregående 48–72 h med långa/distanta löppass och backintervaller bör tisdagens prioriterade löptröskel (3×10 min) bedömas mot ackumulerad närbelastning innan progression av dos väljs."
-        ],
-        "unknowns": [
-          "Subjektiv återhämtning/benstatus efter enduron (ingen användarrapport)",
-          "Detaljer om endurons tekniska belastning (fall, hårda landningar) som skulle påverka mekanisk trötthet"
-        ]
-      },
-      "plan_action": {
-        "action": "review",
-        "target_date": "",
-        "reason": "Närliggande löppass är prioriterade och beslut om tisdagens tröskeldos kräver att endurons mekaniska påverkan och subjektiv återhämtning bekräftas.",
-        "recommendation": "Rapportera hur benen känns imorgon morgon (ömhet/trötthet) och om möjligt ange subjektiv återhämtning; baserat på det fattar vi om tisdagens löpning hålls som plan (3×10) eller skalas tillbaka till 3×8.",
-        "dose_option_id": "",
-        "requires_approval": true
       },
       "auto_apply": {
         "applied": false,
