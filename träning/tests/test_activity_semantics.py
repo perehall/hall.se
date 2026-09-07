@@ -16,7 +16,7 @@ from normalize_activity_semantics import (  # noqa: E402
 
 
 class ActivitySemanticsTests(unittest.TestCase):
-    def test_explicit_enduro_name_reclassifies_raw_mountain_bike(self):
+    def test_explicit_enduro_name_reclassifies_raw_mountain_bike_as_training(self):
         state = {
             "activities": [
                 {
@@ -33,6 +33,7 @@ class ActivitySemanticsTests(unittest.TestCase):
         self.assertEqual(auto_count, 1)
         self.assertEqual(activity["source_sport_type"], "MountainBikeRide")
         self.assertEqual(activity["sport_type"], "Enduro")
+        self.assertEqual(activity["classification"], "training")
         self.assertEqual(activity["display_label"], "Enduro")
         self.assertEqual(activity["sport_normalization"]["rule"], "mountainbike-explicit-enduro-name-v1")
         self.assertEqual(state["activity_semantics"]["changed_ids"], ["19882521682"])
@@ -41,7 +42,7 @@ class ActivitySemanticsTests(unittest.TestCase):
         activity = {"name": "Motocross kväll", "sport_type": "MountainBikeRide"}
         self.assertTrue(auto_enduro_candidate(activity))
 
-    def test_emountainbike_is_user_enduro_proxy_without_name_signal(self):
+    def test_emountainbike_is_user_enduro_training_proxy_without_name_signal(self):
         state = {
             "activities": [
                 {
@@ -57,10 +58,38 @@ class ActivitySemanticsTests(unittest.TestCase):
         self.assertEqual((override_count, auto_count), (0, 1))
         self.assertEqual(activity["source_sport_type"], "EMountainBikeRide")
         self.assertEqual(activity["sport_type"], "Enduro")
-        self.assertEqual(activity["classification"], "recreation")
+        self.assertEqual(activity["classification"], "training")
         self.assertEqual(activity["display_label"], "Enduro")
         self.assertEqual(activity["sport_normalization"]["rule"], "emountainbike-user-enduro-proxy-v1")
         self.assertEqual(state["activity_semantics"]["changed_ids"], ["20000000001"])
+
+    def test_explicit_override_can_still_mark_enduro_as_recreation(self):
+        state = {
+            "activities": [
+                {
+                    "id": 8,
+                    "name": "Enduro på kvällen",
+                    "sport_type": "EMountainBikeRide",
+                    "start_date_local": "2026-08-31T18:00:00Z",
+                }
+            ]
+        }
+        config = {
+            "schema_version": 1,
+            "overrides": {
+                "8": {
+                    "sport": "Enduro",
+                    "classification": "recreation",
+                    "display_label": "Enduro",
+                    "source_sport_type": "EMountainBikeRide",
+                }
+            },
+        }
+        override_count, auto_count, _ = apply_semantics(state, config)
+        activity = state["activities"][0]
+        self.assertEqual((override_count, auto_count), (1, 0))
+        self.assertEqual(activity["sport_type"], "Enduro")
+        self.assertEqual(activity["classification"], "recreation")
 
     def test_mtb_enduro_wording_is_ambiguous_and_not_reclassified(self):
         state = {
