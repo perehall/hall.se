@@ -16,6 +16,7 @@ from zoneinfo import ZoneInfo
 
 import coach as legacy
 from coach_output_guard import guard_result
+from coach_rules import matching_activity
 from workout_plan_context import (
     PLAN_COMPARISON_CONTRACT_VERSION,
     build_plan_comparison,
@@ -56,6 +57,58 @@ def latest_for_analysis(latest, decision_plan, latest_date, code_signature=None)
     workout_context["analysis_code_sha256"] = code_signature or analysis_code_signature()
     enriched["workout_analysis_context"] = workout_context
     return enriched, plan_comparison
+
+
+def link_fulfilled_activity_ids(plan, activities):
+    """Persist an unambiguous plan→activity identity link.
+
+    Downstream UI and coach code must never guess which same-day activity fulfilled
+    a planned session. matching_activity already fails closed on ambiguity, so a
+    link is only persisted when sport family/date semantics identify one source.
+    Existing explicit links are preserved.
+    """
+    changed = False
+    for day in plan.get("days") or []:
+        if day.get("activity_id") is not None:
+            continue
+        activity = matching_activity(day, activities)
+        if not activity or activity.get("id") is None:
+            continue
+        day["activity_id"] = activity["id"]
+        changed = True
+    return changed
+
+
+def select_activity_for_analysis(decision_plan, activities, coach_state, local_date):
+    """Prefer an unanalysed fulfilled plan session over a later support activity.
+
+    Multiple activities can occur on one day. The planned session is the primary
+    coaching object and must receive its own analysis even if a later spontaneous
+    or support activity is chronologically newer. Once that planned activity has
+    an analysis, normal latest-activity behavior resumes.
+    """
+    if not activities:
+        return None
+
+    analysed_ids = {
+        str(entry.get("activity_id"))
+        for entry in coach_state.get("analyses") or []
+        if entry.get("activity_id") is not None
+    }
+    current_day = next(
+        (day for day in decision_plan.get("days") or [] if day.get("date") == local_date),
+        None,
+    )
+    if current_day:
+        planned_activity = matching_activity(current_day, activities)
+        if (
+            planned_activity
+            and planned_activity.get("id") is not None
+            and str(planned_activity.get("id")) not in analysed_ids
+        ):
+            return planned_activity
+
+    return max(activities, key=lambda activity: activity.get("start_date") or "")
 
 
 def concretize_deferred_review(action, decision_plan, latest_date):
@@ -108,7 +161,6 @@ def concretize_deferred_review(action, decision_plan, latest_date):
 def main():
     plan = legacy.load_json(legacy.PLAN_FILE, {})
     upcoming = legacy.load_json(legacy.UPCOMING_FILE, {})
-    decision_plan = legacy.planning_window(plan, upcoming)
     activities_state = legacy.load_json(legacy.ACTIVITIES_FILE, {"activities": []})
     performance_history = legacy.load_json(
         legacy.PERFORMANCE_FILE,
@@ -127,11 +179,27 @@ def main():
         print("AI coach pipeline: inga aktiviteter att analysera.")
         return 0
 
-    latest = max(activities, key=lambda activity: activity.get("start_date") or "")
-    latest_date = (latest.get("start_date_local") or latest.get("start_date") or "")[:10]
     tz = ZoneInfo(plan.get("meta", {}).get("timezone", "Europe/Stockholm"))
     local_date = datetime.now(tz).date().isoformat()
 
+    if link_fulfilled_activity_ids(plan, activities):
+        legacy.PLAN_FILE.write_text(
+            json.dumps(plan, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+
+    decision_plan = legacy.planning_window(plan, upcoming)
+    latest = select_activity_for_analysis(
+        decision_plan,
+        activities,
+        coach_state,
+        local_date,
+    )
+    if latest is None:
+        print("AI coach pipeline: inga aktiviteter att analysera.")
+        return 0
+
+    latest_date = (latest.get("start_date_local") or latest.get("start_date") or "")[:10]
     latest_input, plan_comparison = latest_for_analysis(
         latest,
         decision_plan,
