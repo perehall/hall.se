@@ -159,6 +159,41 @@ class CoachOutputGuardTests(unittest.TestCase):
         self.assertNotIn("2915s", public_text)
         self.assertNotIn("korta icke-rörelseperioder", public_text)
 
+    def test_support_activity_text_humanizes_referenced_enduro_provider_fields(self):
+        result = {
+            "assessment": {
+                "summary": "Styrkepass efter Enduro.",
+                "load_interpretation": (
+                    "Enduron var huvudbelastningen (5718 s session_duration); "
+                    "moving_time 2915s beskriver inte hela passet."
+                ),
+                "confidence": "medium",
+                "facts": [],
+                "interpretations": [],
+                "unknowns": [],
+            },
+            "plan_action": {
+                "action": "keep",
+                "target_date": "2026-09-08",
+                "reason": "Behåll planen.",
+                "recommendation": "Behåll tröskelpasset.",
+            },
+        }
+        guarded = guard_result(
+            result,
+            latest_date="2026-09-07",
+            local_date="2026-09-07",
+            plan_comparison={},
+            activity={"sport_type": "WeightTraining"},
+        )
+        text = guarded["assessment"]["load_interpretation"]
+        self.assertIn("1:35:18 total tid", text)
+        self.assertIn("48:35 rörelsetid", text)
+        self.assertNotIn("session_duration", text)
+        self.assertNotIn("moving_time", text)
+        self.assertNotIn("5718 s", text)
+        self.assertNotIn("2915s", text)
+
 
 if __name__ == "__main__":
     unittest.main()
