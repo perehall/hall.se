@@ -92,8 +92,11 @@ def apply_auto_semantics(activity):
         original = raw_sport(activity)
         activity["source_sport_type"] = original
         activity["sport_type"] = "Enduro"
-        activity["classification"] = "recreation"
+        activity["classification"] = "training"
         activity["display_label"] = "Enduro"
+        activity["classification_reason"] = (
+            "User convention: Strava e-MTB represents Enduro; Enduro is actual training load."
+        )
         activity["sport_normalization"] = {
             "rule": ENDURO_EMTB_PROXY_RULE,
             "evidence": [
@@ -107,7 +110,11 @@ def apply_auto_semantics(activity):
         original = raw_sport(activity)
         activity["source_sport_type"] = original
         activity["sport_type"] = "Enduro"
+        activity["classification"] = "training"
         activity["display_label"] = "Enduro"
+        activity["classification_reason"] = (
+            "Explicit Enduro/Motocross source signal; Enduro is actual training load."
+        )
         activity["sport_normalization"] = {
             "rule": ENDURO_NAME_RULE,
             "evidence": ["source_sport_type=MountainBikeRide", "explicit Enduro/Motocross activity name"],
@@ -211,10 +218,6 @@ def apply_semantics(state, config=None, prompt_signature=None):
         elif apply_auto_semantics(activity):
             auto_applied += 1
 
-        # Enrich after semantic normalization so sport and user report are final.
-        # The prompt signature is deliberately part of the latest activity data:
-        # coach.stable_hash already hashes that object, so rule changes invalidate
-        # the latest analysis automatically without fake semantic overrides.
         context = build_workout_analysis_context(activity)
         context["coach_prompt_sha256"] = prompt_signature
         activity["workout_analysis_context"] = context
