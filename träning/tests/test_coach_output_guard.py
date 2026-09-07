@@ -90,6 +90,75 @@ class CoachOutputGuardTests(unittest.TestCase):
         )
         self.assertIn("nästa 48–72 h", guarded["assessment"]["interpretations"][0])
 
+    def test_enduro_public_text_uses_human_duration_and_no_internal_field_names(self):
+        result = {
+            "assessment": {
+                "summary": (
+                    "Genomfört 95 min Enduro-session (session_duration 5718s) med 2915s moving time, "
+                    "måttlig snittpuls och korta icke-rörelseperioder."
+                ),
+                "load_interpretation": (
+                    "Den långa elapsed_time ger teknisk belastning medan moving_time är kortare."
+                ),
+                "confidence": "medium",
+                "facts": [
+                    "Enduro: 14,64 km · 1:35:18 · 508,4 m+ · snittpuls 106,7 · maxpuls 168."
+                ],
+                "interpretations": [
+                    "Passet påverkar nästa prioriterade löpstimulus.",
+                    "Den långa elapsed-tiden med non_moving_time 2803s fångas inte av moving_time.",
+                ],
+                "unknowns": ["Subjektiv benstatus saknas."],
+            },
+            "plan_action": {
+                "action": "keep",
+                "target_date": "2026-09-08",
+                "reason": "Behåll planen.",
+                "recommendation": "Behåll tisdagens planerade tröskelpass.",
+            },
+        }
+        activity = {
+            "id": 20078705519,
+            "sport_type": "Enduro",
+            "total_elevation_gain_m": 508.4,
+            "average_heartrate": 106.7,
+            "workout_analysis_context": {
+                "enduro": {
+                    "session_duration_s": 5718.0,
+                    "moving_time_s": 2915.0,
+                    "non_moving_time_s": 2803.0,
+                    "duration_basis": "elapsed_time_s",
+                }
+            },
+        }
+        guarded = guard_result(
+            result,
+            latest_date="2026-09-07",
+            local_date="2026-09-07",
+            plan_comparison={},
+            activity=activity,
+        )
+        assessment = guarded["assessment"]
+        public_text = " ".join(
+            [assessment["summary"], assessment["load_interpretation"]]
+            + assessment["interpretations"]
+        )
+        self.assertIn("1:35:18", assessment["summary"])
+        self.assertIn("508 m+", assessment["summary"])
+        self.assertIn("48:35", assessment["load_interpretation"])
+        self.assertIn("snittpuls 107", assessment["load_interpretation"])
+        self.assertIn(
+            "Strava klassade 48:35 av totalt 1:35:18 som rörelsetid",
+            public_text,
+        )
+        self.assertNotIn("session_duration", public_text)
+        self.assertNotIn("moving_time", public_text)
+        self.assertNotIn("non_moving_time", public_text)
+        self.assertNotIn("elapsed_time", public_text)
+        self.assertNotIn("5718s", public_text)
+        self.assertNotIn("2915s", public_text)
+        self.assertNotIn("korta icke-rörelseperioder", public_text)
+
 
 if __name__ == "__main__":
     unittest.main()
