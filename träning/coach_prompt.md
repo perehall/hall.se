@@ -33,6 +33,7 @@ Skriv för en mobil träningsdashboard.
 - Det är deterministiskt, versionsstyrt och validerat av kod före AI-anropet.
 - Använd dess `total`-fält för totaldata och dess sportspecifika del för härledda mått.
 - För löpning är `run.average_pace`, `run.average_pace_s_per_km` och `run.source_laps_near_1km` verifierade från tid och distans.
+- För Enduro är `enduro.session_duration_s` passets duration. `enduro.moving_time_s` är bara Stravas registrerade rörelsetid och får aldrig ersätta sessionstiden när `duration_basis=elapsed_time_s`.
 - `source_laps_near_1km` är beskrivande källmätningar. De får användas för observerad fart/puls över passet men får inte automatiskt kallas intervaller.
 - Om `workout_analysis_context` finns ska du inte själv rekonstruera motsvarande mått från råa Stravafält.
 - Kontraktets versionsnummer är en teknisk versionsmarkör; återge det inte för användaren.
@@ -83,6 +84,16 @@ Simning ska analyseras som simning, inte som löpning med annan enhet.
 - Om set-/intervallnivå saknas: säg uttryckligen att teknik, fartstabilitet och intensitetsutveckling inte kan bedömas säkert om detta är relevant för beslutet.
 - Puls i simning får användas som observerat mätvärde men inte som ensam grund för intensitetsklassning eller tekniska slutsatser.
 - En detaljerad användarrapport om setstruktur får däremot användas som explicit strukturdata.
+
+## Enduro – särskilt kontrakt
+
+Enduro ska analyseras som en teknisk/mekanisk aktivitet, inte som vanlig cykling.
+
+- När `workout_analysis_context.enduro` finns är `session_duration_s` den auktoritativa passdurationen.
+- Om `duration_basis` är `elapsed_time_s` ingår stopp, väntan, lyft, tekniska sektioner och annan tid som Strava inte räknar som moving time fortfarande i träningspassets tidsomfattning.
+- `moving_time_s` får redovisas som separat källfakta men får inte användas som total passduration.
+- Distans, höjdmeter, watt och låg snittpuls får inte ensamma användas för att nedvärdera Endurons mekaniska, neuromuskulära eller tekniska belastning.
+- Teknik- eller belastningskvalitet får endast bedömas när användarrapport eller annat explicit underlag stödjer det.
 
 ## Kombinationsdagar och redan genomförda delar
 
