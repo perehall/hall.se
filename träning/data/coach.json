@@ -1,6 +1,51 @@
 {
   "analyses": [
     {
+      "activity_id": 20078705519,
+      "activity_date": "2026-09-07",
+      "activity_name": "Enduro på kvällen",
+      "generated_at_utc": "2026-09-07T20:21:37.047095+00:00",
+      "model": "gpt-5-mini",
+      "analysis_contract": {
+        "pipeline_version": 1,
+        "workout_context_version": 2,
+        "plan_comparison_version": 1,
+        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
+        "analysis_code_sha256": "fa594b640d55a1bf2ac4080c6e3b3eca18c47af8939c66055482726b5159b48d"
+      },
+      "performance_marker_id": null,
+      "performance_protocol_key": null,
+      "assessment": {
+        "summary": "Genomfört 95 min Enduro-session (session_duration 5718s) med 2915s moving time, måttlig snittpuls (106.7) och korta icke-rörelseperioder; teknisk extern belastning registrerad.",
+        "load_interpretation": "Enduron ger verklig extern teknisk och mekanisk belastning för mikrocykeln; kardiovaskulärt bidrag verkar måttligt utifrån snittpuls men sessionens långa elapsed-tid…",
+        "confidence": "medium",
+        "facts": [
+          "Enduro: 14,64 km · 1:35:18 · 508,4 m+ · snittpuls 106,7 · maxpuls 168.",
+          "Planstatus 2026-09-07: dagen är markerad genomförd i coachens beslutsunderlag."
+        ],
+        "interpretations": [
+          "Passet räknas som faktisk träningsbelastning mot mikrocykelns stimuli för enduro_technical och påverkar möjligheten att genomföra tisdagens prioriterade löpstimulus.",
+          "Den långa elapsed-tiden med många stopp (non_moving_time 2803s) innebär teknisk/neuromuskulär belastning som inte fångas av moving_time eller snittpuls ensam."
+        ],
+        "unknowns": [
+          "Subjektiv återhämtning/benstatus efter passet (ingen user_report)",
+          "Detaljerad intensitet under körningens tekniska sekvenser och om de tröttade benen mekaniskt"
+        ]
+      },
+      "plan_action": {
+        "action": "keep",
+        "target_date": "2026-09-08",
+        "reason": "Ingen uppenbar akut överbelastning i de närmaste 2–3 dagarna och mikrocykelns prioriterade löppass ska skyddas om inte tydliga signalskäl finns.",
+        "recommendation": "Behåll tisdagens planerade 3×10 min tröskel som prioritet; om du känner ovanlig bentrötthet eller ofräschhet morgonen efter, skala ner till 3×8 (option run-threshold-3x8).",
+        "dose_option_id": "",
+        "requires_approval": false
+      },
+      "auto_apply": {
+        "applied": false,
+        "note": "Ingen automatisk planändring."
+      }
+    },
+    {
       "activity_id": 20079150228,
       "activity_date": "2026-09-07",
       "activity_name": "Styrketräning på natten",
@@ -742,8 +787,8 @@
       }
     }
   ],
-  "last_trigger_hash": "92e5e33b9c47e24d43aa0625a468e79999b3fd414eae0e51db66e5757fb3e644",
-  "last_run_utc": "2026-09-07T20:14:22.132675+00:00",
+  "last_trigger_hash": "454e1cde929c1025e2e8e15d048534b78858535078b9637818c8cc60758d851e",
+  "last_run_utc": "2026-09-07T20:21:37.047095+00:00",
   "contract_version": 15,
   "output_contract_version": 16,
   "pipeline_contract_version": 1
