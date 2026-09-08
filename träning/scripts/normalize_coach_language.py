@@ -3,6 +3,8 @@ import json
 import re
 from pathlib import Path
 
+from finalize_activity_labels import PUBLIC_ACTIVITY_LABELS
+
 ROOT = Path(__file__).resolve().parents[1]
 COACH_FILE = ROOT / "data" / "coach.json"
 ACTIVITIES_FILE = ROOT / "data" / "activities.json"
@@ -137,12 +139,29 @@ def _replace_internal_identifier(text, labels):
     return value
 
 
+def _replace_provider_activity_fact_labels(text):
+    value = text
+    for raw_label, public_label in sorted(
+        PUBLIC_ACTIVITY_LABELS.items(),
+        key=lambda item: len(item[0]),
+        reverse=True,
+    ):
+        value = re.sub(
+            rf"\b{re.escape(raw_label)}(?=\s*:)",
+            public_label,
+            value,
+            flags=re.IGNORECASE,
+        )
+    return value
+
+
 def visible_training_language(text, strategy_labels=None):
     value = str(text or "")
     for pattern, replacement in FORBIDDEN_VISIBLE_TERMS:
         value = pattern.sub(replacement, value)
     labels = strategy_labels or dict(INTERNAL_FIELD_LABELS)
     value = _replace_internal_identifier(value, labels)
+    value = _replace_provider_activity_fact_labels(value)
     for pattern, replacement in SYSTEM_LANGUAGE_RULES:
         value = pattern.sub(replacement, value)
     return value
@@ -333,6 +352,12 @@ def assert_no_forbidden_visible_terms(coach):
         raise RuntimeError(
             f"Coachspråk: förbjuden plattformsterm kvar i synlig analys: {forbidden.group(0)!r}"
         )
+    for raw_label in PUBLIC_ACTIVITY_LABELS:
+        provider_fact = re.search(rf"\b{re.escape(raw_label)}\s*:", raw, re.IGNORECASE)
+        if provider_fact:
+            raise RuntimeError(
+                f"Coachspråk: rå aktivitetstyp kvar i synlig analys: {raw_label!r}"
+            )
     internal = INTERNAL_IDENTIFIER_PATTERN.search(raw)
     if internal:
         raise RuntimeError(
