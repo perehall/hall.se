@@ -13,7 +13,35 @@ FORBIDDEN_VISIBLE_TERMS = (
     (re.compile(r"\blapparna\b", re.IGNORECASE), "intervallerna"),
     (re.compile(r"\blappar\b", re.IGNORECASE), "intervaller"),
     (re.compile(r"\blaps\b", re.IGNORECASE), "intervaller"),
+    (re.compile(r"\boption\b", re.IGNORECASE), "alternativ"),
 )
+
+# Provider/schema field names that may legitimately exist in the internal fact
+# model but must never be exposed verbatim in Swedish coaching copy.
+INTERNAL_FIELD_LABELS = {
+    "session_duration_s": "total passduration",
+    "session_duration": "total passduration",
+    "moving_time_s": "rörelsetid",
+    "moving_time": "rörelsetid",
+    "non_moving_time_s": "tid utan registrerad rörelse",
+    "non_moving_time": "tid utan registrerad rörelse",
+    "elapsed_time_s": "total tid",
+    "elapsed_time": "total tid",
+    "duration_basis": "tidsgrund",
+    "duration_note": "tidsnotering",
+    "user_report": "användarrapport",
+    "dose_resolution": "valt dosalternativ",
+    "dose_option_id": "dosalternativ",
+    "auto_coach": "coachen",
+    "plan_comparison": "jämförelsen med planen",
+    "rolling_load_context": "närbelastningen",
+    "performance_context": "passjämförelsen",
+    "current_strategy": "träningsstrategin",
+    "private_wellness_context": "återhämtningsunderlaget",
+    "source_laps_near_1km": "kilometervarv",
+    "average_pace_s_per_km": "snittfart",
+    "average_pace": "snittfart",
+}
 
 SYSTEM_LANGUAGE_RULES = (
     (
@@ -32,6 +60,10 @@ SYSTEM_LANGUAGE_RULES = (
     (
         re.compile(r"\bprioriterade\s+löpstimulus\b", re.IGNORECASE),
         "prioriterade löppass",
+    ),
+    (
+        re.compile(r"\benligt\s+baseline\b", re.IGNORECASE),
+        "enligt planerad grunddos",
     ),
 )
 
@@ -62,8 +94,8 @@ def load(path, fallback):
 
 
 def strategy_visible_labels(strategy):
-    """Collect canonical public labels for internal strategy keys."""
-    labels = {}
+    """Collect canonical public labels for strategy keys and named internal IDs."""
+    labels = dict(INTERNAL_FIELD_LABELS)
 
     def visit(value):
         if isinstance(value, dict):
@@ -71,6 +103,17 @@ def strategy_visible_labels(strategy):
             label = value.get("label")
             if isinstance(key, str) and key.strip() and isinstance(label, str) and label.strip():
                 labels[key.strip()] = label.strip()
+
+            identifier = value.get("id")
+            public_name = value.get("session") or value.get("title") or value.get("label")
+            if (
+                isinstance(identifier, str)
+                and identifier.strip()
+                and isinstance(public_name, str)
+                and public_name.strip()
+            ):
+                labels[identifier.strip()] = public_name.strip()
+
             for child in value.values():
                 visit(child)
         elif isinstance(value, list):
@@ -98,7 +141,8 @@ def visible_training_language(text, strategy_labels=None):
     value = str(text or "")
     for pattern, replacement in FORBIDDEN_VISIBLE_TERMS:
         value = pattern.sub(replacement, value)
-    value = _replace_internal_identifier(value, strategy_labels or {})
+    labels = strategy_labels or dict(INTERNAL_FIELD_LABELS)
+    value = _replace_internal_identifier(value, labels)
     for pattern, replacement in SYSTEM_LANGUAGE_RULES:
         value = pattern.sub(replacement, value)
     return value
