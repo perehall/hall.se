@@ -3,24 +3,12 @@ import html
 import json
 from pathlib import Path
 
+from activity_labels import PUBLIC_ACTIVITY_LABELS, public_activity_label
+
 ROOT = Path(__file__).resolve().parents[1]
 PLAN_FILE = ROOT / "data" / "plan.json"
 ACTIVITIES_FILE = ROOT / "data" / "activities.json"
 INDEX_FILE = ROOT / "index.html"
-
-# Public UI labels for raw provider activity types that require translation.
-# A semantic display_label on the normalized activity always wins.
-PUBLIC_ACTIVITY_LABELS = {
-    "Run": "Löpning",
-    "TrailRun": "Löpning",
-    "VirtualRun": "Löpning",
-    "Swim": "Simning",
-    "MountainBikeRide": "MTB/XC",
-    "EMountainBikeRide": "MTB/XC",
-    "Ride": "Cykel",
-    "VirtualRide": "Cykel",
-    "WeightTraining": "Styrka",
-}
 
 
 def fmt_duration(sec):
@@ -43,14 +31,6 @@ def fmt_activity(activity):
     if activity.get("max_heartrate"):
         bits.append(f'max {round(activity["max_heartrate"])}')
     return " · ".join(bits)
-
-
-def public_activity_label(activity):
-    raw_label = str(activity.get("sport_type") or "Aktivitet").strip() or "Aktivitet"
-    semantic_label = str(activity.get("display_label") or "").strip()
-    if semantic_label:
-        return semantic_label
-    return PUBLIC_ACTIVITY_LABELS.get(raw_label, raw_label)
 
 
 def render_activity_line(activity, label=None):
