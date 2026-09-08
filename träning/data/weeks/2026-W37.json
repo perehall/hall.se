@@ -4,7 +4,7 @@
   "week_start": "2026-09-07",
   "week_end": "2026-09-13",
   "created_at_utc": "2026-09-06T22:19:36.896236+00:00",
-  "updated_at_utc": "2026-09-08T21:09:12.484320+00:00",
+  "updated_at_utc": "2026-09-08T23:23:28.036946+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -924,7 +924,7 @@
       "activity_id": 20092166843,
       "activity_date": "2026-09-08",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-09-08T21:09:11.792842+00:00",
+      "generated_at_utc": "2026-09-08T23:23:27.471483+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 1,
@@ -936,27 +936,27 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört pass var 13.14 km löpning på 61.97 min med genomsnittspuls 137 och stabilt kontrollerad tröskelfart (4:43/km).",
-        "load_interpretation": "Passet ger avsedd tröskelstimulans utan uppenbar överbelastning i de närmaste 2–3 dagarna när tidigare enduro och styrka beaktas.",
+        "summary": "Genomfört pass var 13.1 km löpning på 61,97 min med medelpuls 137 och visar genomfört kontrollerat tröskelstimulus enligt planens dosval.",
+        "load_interpretation": "Närbelastningen visar ett absorberbart tröskelpass utan subjektiv rapport om trötthet; omgivande 2–3 dagars logg innehåller tung distans (22 km) och enduro + styrka…",
         "confidence": "medium",
         "facts": [
           "Löpning: 13,14 km · 1:02:20 · snittpuls 137,3 · maxpuls 163.",
           "Planstatus 2026-09-08: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Snittfart 4:43/km och pulsnivå visar att arbetstiden motsvarar ett kontrollerat tröskelpass vilket stödjer mesocykelns planerade 3×10‑min‑dos.",
-          "Föregående 48–72h innehöll långenduro (elapsed 5718s) och ett 36‑min styrkepass; kombinerat talar detta för att planen ska skydda fredagens prioriterade backkvalitet genom konservativt…"
+          "Passet genomförde planerat tröskelstimulus (3×10min) vilket stöder mikrocykelns planerade progression mot längre arbetstid.",
+          "Föregående 2–3 dagars belastning (22 km långpass + enduro + styrka) ökar samlad närbelastning; därför ska kommande flexpass skyddas mot att konkurrera med fredagarnas backkvalitet."
         ],
         "unknowns": [
-          "Ingen användarrapport om dagens subjektiva känsla efter passet finns i analyslagret.",
-          "Detaljer om omedelbar lokal muskeltrötthet efter kvällspasset saknas och kan påverka fredagens backpass."
+          "Ingen subjektiv användarrapport för detta pass tillgänglig—kan ändra återhämtningsbedömning",
+          "Detaljer om hur passets intensitet fördelade över de tre 10-min-blocken saknas för finjustering"
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-09-09",
-        "reason": "Närbelastningen och dagens utförande stödjer att planerad simning nästa dag kan stå kvar utan reducering.",
-        "recommendation": "Behåll onsdagens simning 3 200 m enligt plan; undvik att lägga extra kvalitet eller öka volym de närmsta 48–72 timmarna.",
+        "reason": "Passet fullgjorde planerat tröskelstimulus och närbelastningen är absorberbar men kräver konservativ fortsättning.",
+        "recommendation": "Behåll onsdagens simning som planerat (3×2000 m/teknik 3200 m). Undvik att lägga extra kvalitet; håll simningen aerob/teknisk enligt plan.",
         "dose_option_id": "",
         "requires_approval": false
       },
