@@ -348,7 +348,7 @@ class CoachRulesTests(unittest.TestCase):
             latest_date="2026-08-23",
             fulfilled_dates={"2026-08-23": 1},
         )
-        self.assertEqual(facts[0], "Run: 5,00 km · 25:00.")
+        self.assertEqual(facts[0], "Löpning: 5,00 km · 25:00.")
         self.assertEqual(facts[1], "Användarrapport: Underlag: grus och asfalt; inte trail.")
         self.assertIn("Planstatus 2026-08-23", facts[2])
 
