@@ -4,7 +4,7 @@
   "week_start": "2026-09-07",
   "week_end": "2026-09-13",
   "created_at_utc": "2026-09-06T22:19:36.896236+00:00",
-  "updated_at_utc": "2026-09-08T12:53:18.468834+00:00",
+  "updated_at_utc": "2026-09-08T13:05:35.426320+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -695,7 +695,7 @@
       "activity_id": 20079150228,
       "activity_date": "2026-09-07",
       "activity_name": "Styrketräning på natten",
-      "generated_at_utc": "2026-09-08T10:03:18.670482+00:00",
+      "generated_at_utc": "2026-09-08T13:05:34.738291+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 1,
@@ -707,27 +707,27 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "36 minuter styrketräning registrerad samma kväll som en 95-minuters Enduro-session; styrkepasset var lågintensivt enligt puls och kalorier.",
-        "load_interpretation": "Styrkepasset ger mekanisk/neuromuskulär stimulans men är låg i kardiovaskulär kostnad och bör inte blockera morgondagens prioriterade tröskelpass.",
+        "summary": "36 minuter styrketräning (1659 s) registrerat efter dagens enduro; pulsnivå låg–måttlig (avg 75.7, max 112) vilket tyder på låg metabol belastning från styrkepasset.",
+        "load_interpretation": "I närbelastningsfönstret finns dessutom en lång endurosession (elapsed 5718 s) och en 22 km löpning två dagar tidigare; dagens styrka ger liten extra kardiovaskulär…",
         "confidence": "medium",
         "facts": [
-          "WeightTraining: 27:39 · snittpuls 75,7 · maxpuls 112.",
+          "Styrka: 27:39 · snittpuls 75,7 · maxpuls 112.",
           "Planstatus 2026-09-07: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Styrkepasset verkar vara en kort, lågintensiv skyddsexponering — ger viss neuromuskulär/me-kanisk stimulans utan stor kardio‑kostnad.",
-          "Givet dagens omfattande Enduro-session och låg subjektiv belastningssignal finns ingen uppenbar anledning att ta bort eller reglera morgondagens tröskelpass automatiskt."
+          "Styrkepasset var lågintensivt kardiovaskulärt men representerar konkret mekanisk/neuromuskulär exponering som skyddad styrka/core.",
+          "Ingen signal i puls eller närbelastningsmönster talar för att skydda eller reducera morgondagens planerade löptröskel; planen kan hållas om subjektiv återhämtning är OK."
         ],
         "unknowns": [
-          "Användarrapport för styrkepasset saknas (kvalitet/känsla)",
-          "Subjektiv återhämtning nästa morgon okänd och kan påverka tolerans för planerat tröskelpass"
+          "Användarrapport för styrkepasset saknas (subjektiv trötthet/ömhet)",
+          "Eventuell lokal muskeltrötthet från endurons mekaniska krav är okänt utan subjektiv input"
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-09-08",
-        "reason": "Dagens styrka var lågintensiv och dagens Enduro utgör huvudextern belastning; underlaget stödjer att tisdagens planerade tröskelpass kan stå kvar.",
-        "recommendation": "Behåll planerat 3×10 min tröskel på 2026-09-08; om du vaknar oväntat trött eller stel, sänk till 3×8 (håll intensiteten kontrollerad) eller vila. Rapportera subjektiv morgonkänsla före passet om du behöver justera.",
+        "reason": "Närbelastningen visar absorberbar styrka efter enduro utan tydlig återhämtningssignal som skulle kräva reduktion.",
+        "recommendation": "Behåll planerat tröskelpass 3×10 min i dag; vila/avstå endast om du känner ovanlig trötthet eller lokal muskelsmärta. Rapportera hur benen känns före uppvärmning om något avviker.",
         "dose_option_id": "",
         "requires_approval": false
       },
