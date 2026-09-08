@@ -4,7 +4,7 @@
   "week_start": "2026-09-07",
   "week_end": "2026-09-13",
   "created_at_utc": "2026-09-06T22:19:36.896236+00:00",
-  "updated_at_utc": "2026-09-08T04:34:23.161694+00:00",
+  "updated_at_utc": "2026-09-08T10:03:19.369264+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -695,7 +695,7 @@
       "activity_id": 20079150228,
       "activity_date": "2026-09-07",
       "activity_name": "Styrketräning på natten",
-      "generated_at_utc": "2026-09-08T04:34:22.626461+00:00",
+      "generated_at_utc": "2026-09-08T10:03:18.670482+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 1,
@@ -707,27 +707,27 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört 27,7 min styrkepass kvällstid med låg pulsvariation och utan användarrapport; passet räknas som skyddad styrka/core-exponering i mikrocykeln.",
-        "load_interpretation": "Styrkepasset är en låg-mekanisk, låg-kardiovaskulär exponering som kompletterar målcadern och ger inget skäl att ändra prioritetslöpet imorgon.",
+        "summary": "36 minuter styrketräning registrerad samma kväll som en 95-minuters Enduro-session; styrkepasset var lågintensivt enligt puls och kalorier.",
+        "load_interpretation": "Styrkepasset ger mekanisk/neuromuskulär stimulans men är låg i kardiovaskulär kostnad och bör inte blockera morgondagens prioriterade tröskelpass.",
         "confidence": "medium",
         "facts": [
           "WeightTraining: 27:39 · snittpuls 75,7 · maxpuls 112.",
           "Planstatus 2026-09-07: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Passet uppfyller skyddat styrka/core-stimulus utan hög pulskostnad.",
-          "Ingen indikation i data eller återhämtningsunderlaget att morgondagens prioriterade tröskelpass måste reduceras."
+          "Styrkepasset verkar vara en kort, lågintensiv skyddsexponering — ger viss neuromuskulär/me-kanisk stimulans utan stor kardio‑kostnad.",
+          "Givet dagens omfattande Enduro-session och låg subjektiv belastningssignal finns ingen uppenbar anledning att ta bort eller reglera morgondagens tröskelpass automatiskt."
         ],
         "unknowns": [
-          "Subjektiv återhämtningskänsla efter passet saknas i användarrapport",
-          "Detaljer om passets övningsval/intensitet saknas och påverkar inte dosbedömningen"
+          "Användarrapport för styrkepasset saknas (kvalitet/känsla)",
+          "Subjektiv återhämtning nästa morgon okänd och kan påverka tolerans för planerat tröskelpass"
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-09-08",
-        "reason": "Styrkepasset var en lågkostnadsexponering som inte hotar morgondagens prioriterade tröskelpass.",
-        "recommendation": "Behåll planerat tröskelpass 2026-09-08 (3×10 min enligt baseline). Ingen skalning eller vila nödvändig; rapportera om du känner ovanlig stelhet eller trötthet innan start.",
+        "reason": "Dagens styrka var lågintensiv och dagens Enduro utgör huvudextern belastning; underlaget stödjer att tisdagens planerade tröskelpass kan stå kvar.",
+        "recommendation": "Behåll planerat 3×10 min tröskel på 2026-09-08; om du vaknar oväntat trött eller stel, sänk till 3×8 (håll intensiteten kontrollerad) eller vila. Rapportera subjektiv morgonkänsla före passet om du behöver justera.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -760,11 +760,11 @@
           "Planstatus 2026-09-07: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Passet räknas som faktisk träningsbelastning mot mikrocykelns stimuli för enduro_technical och påverkar möjligheten att genomföra tisdagens prioriterade löpstimulus.",
+          "Enduropasset är en del av veckans träningsbelastning. Därför vägs det in när tisdagens löppass planeras.",
           "Strava klassade 48:35 av totalt 1:35:18 som rörelsetid; rörelsetiden används därför inte som total passduration."
         ],
         "unknowns": [
-          "Subjektiv återhämtning/benstatus efter passet (ingen user_report)",
+          "Subjektiv återhämtning/benstatus efter passet (ingen användarrapport)",
           "Detaljerad intensitet under körningens tekniska sekvenser och om de tröttade benen mekaniskt"
         ]
       },
@@ -772,7 +772,7 @@
         "action": "keep",
         "target_date": "2026-09-08",
         "reason": "Ingen uppenbar akut överbelastning i de närmaste 2–3 dagarna och mikrocykelns prioriterade löppass ska skyddas om inte tydliga signalskäl finns.",
-        "recommendation": "Behåll tisdagens planerade 3×10 min tröskel som prioritet; om du känner ovanlig bentrötthet eller ofräschhet morgonen efter, skala ner till 3×8 (option run-threshold-3x8).",
+        "recommendation": "Behåll tisdagens planerade 3×10 min tröskel som prioritet; om du känner ovanlig bentrötthet eller ofräschhet morgonen efter, skala ner till 3×8 (alternativ Löpning · kontrollerad tröskel · 3 × 8 min / 90 s jogg).",
         "dose_option_id": "",
         "requires_approval": false
       },

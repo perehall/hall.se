@@ -4,7 +4,7 @@
       "activity_id": 20079150228,
       "activity_date": "2026-09-07",
       "activity_name": "Styrketräning på natten",
-      "generated_at_utc": "2026-09-08T04:34:22.626461+00:00",
+      "generated_at_utc": "2026-09-08T10:03:18.670482+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 1,
@@ -16,27 +16,27 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört 27,7 min styrkepass kvällstid med låg pulsvariation och utan användarrapport; passet räknas som skyddad styrka/core-exponering i mikrocykeln.",
-        "load_interpretation": "Styrkepasset är en låg-mekanisk, låg-kardiovaskulär exponering som kompletterar målcadern och ger inget skäl att ändra prioritetslöpet imorgon.",
+        "summary": "36 minuter styrketräning registrerad samma kväll som en 95-minuters Enduro-session; styrkepasset var lågintensivt enligt puls och kalorier.",
+        "load_interpretation": "Styrkepasset ger mekanisk/neuromuskulär stimulans men är låg i kardiovaskulär kostnad och bör inte blockera morgondagens prioriterade tröskelpass.",
         "confidence": "medium",
         "facts": [
           "WeightTraining: 27:39 · snittpuls 75,7 · maxpuls 112.",
           "Planstatus 2026-09-07: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Passet uppfyller skyddat styrka/core-stimulus utan hög pulskostnad.",
-          "Ingen indikation i data eller återhämtningsunderlaget att morgondagens prioriterade tröskelpass måste reduceras."
+          "Styrkepasset verkar vara en kort, lågintensiv skyddsexponering — ger viss neuromuskulär/me-kanisk stimulans utan stor kardio‑kostnad.",
+          "Givet dagens omfattande Enduro-session och låg subjektiv belastningssignal finns ingen uppenbar anledning att ta bort eller reglera morgondagens tröskelpass automatiskt."
         ],
         "unknowns": [
-          "Subjektiv återhämtningskänsla efter passet saknas i användarrapport",
-          "Detaljer om passets övningsval/intensitet saknas och påverkar inte dosbedömningen"
+          "Användarrapport för styrkepasset saknas (kvalitet/känsla)",
+          "Subjektiv återhämtning nästa morgon okänd och kan påverka tolerans för planerat tröskelpass"
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-09-08",
-        "reason": "Styrkepasset var en lågkostnadsexponering som inte hotar morgondagens prioriterade tröskelpass.",
-        "recommendation": "Behåll planerat tröskelpass 2026-09-08 (3×10 min enligt baseline). Ingen skalning eller vila nödvändig; rapportera om du känner ovanlig stelhet eller trötthet innan start.",
+        "reason": "Dagens styrka var lågintensiv och dagens Enduro utgör huvudextern belastning; underlaget stödjer att tisdagens planerade tröskelpass kan stå kvar.",
+        "recommendation": "Behåll planerat 3×10 min tröskel på 2026-09-08; om du vaknar oväntat trött eller stel, sänk till 3×8 (håll intensiteten kontrollerad) eller vila. Rapportera subjektiv morgonkänsla före passet om du behöver justera.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -69,11 +69,11 @@
           "Planstatus 2026-09-07: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Passet räknas som faktisk träningsbelastning mot mikrocykelns stimuli för enduro_technical och påverkar möjligheten att genomföra tisdagens prioriterade löpstimulus.",
+          "Enduropasset är en del av veckans träningsbelastning. Därför vägs det in när tisdagens löppass planeras.",
           "Strava klassade 48:35 av totalt 1:35:18 som rörelsetid; rörelsetiden används därför inte som total passduration."
         ],
         "unknowns": [
-          "Subjektiv återhämtning/benstatus efter passet (ingen user_report)",
+          "Subjektiv återhämtning/benstatus efter passet (ingen användarrapport)",
           "Detaljerad intensitet under körningens tekniska sekvenser och om de tröttade benen mekaniskt"
         ]
       },
@@ -81,7 +81,7 @@
         "action": "keep",
         "target_date": "2026-09-08",
         "reason": "Ingen uppenbar akut överbelastning i de närmaste 2–3 dagarna och mikrocykelns prioriterade löppass ska skyddas om inte tydliga signalskäl finns.",
-        "recommendation": "Behåll tisdagens planerade 3×10 min tröskel som prioritet; om du känner ovanlig bentrötthet eller ofräschhet morgonen efter, skala ner till 3×8 (option run-threshold-3x8).",
+        "recommendation": "Behåll tisdagens planerade 3×10 min tröskel som prioritet; om du känner ovanlig bentrötthet eller ofräschhet morgonen efter, skala ner till 3×8 (alternativ Löpning · kontrollerad tröskel · 3 × 8 min / 90 s jogg).",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -148,7 +148,7 @@
         "load_interpretation": "Set-/intervallnivå saknas i det strukturerade analyslagret; teknik, fartstabilitet och intensitetsutveckling går därför inte att bedöma säkert.",
         "confidence": "low",
         "facts": [
-          "Swim: 4,00 km · 1:13:53 · snittpuls 128,5 · maxpuls 153."
+          "Simning: 4,00 km · 1:13:53 · snittpuls 128,5 · maxpuls 153."
         ],
         "interpretations": [],
         "unknowns": [
@@ -178,7 +178,7 @@
       "performance_protocol_key": null,
       "assessment": {
         "summary": "Genomfört: 3 × 6 backintervaller (18 totalt).",
-        "load_interpretation": "Flera tunga dagar (swimrun, MTB, backpass) skapar ackumulerad mekanisk och kardiovaskulär närbelastning som påverkar helgens skyddade styrka.",
+        "load_interpretation": "Flera tunga dagar (Swimrun, MTB/XC, backpass) skapar ackumulerad mekanisk och kardiovaskulär närbelastning som påverkar helgens skyddade styrka.",
         "confidence": "medium",
         "facts": [
           "Löpning · backintervaller: 12,68 km · 1:06:28 · 243 m+ · snittpuls 142,4 · maxpuls 167.",
@@ -216,7 +216,7 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Lugn, lång MTB 31 km med måttlig puls och gradvis avtagande effekt — teknisk/aerob exponering utan skadliga tecken.",
+        "summary": "Lugn, lång MTB/XC 31 km med måttlig puls och gradvis avtagande effekt — teknisk/aerob exponering utan skadliga tecken.",
         "load_interpretation": "MTB-passet bidrar främst teknisk och kardiovaskulär belastning; mekanisk/neuromuskulär belastning kan inte nivåklassas mot personlig baslinje.",
         "confidence": "medium",
         "facts": [
@@ -228,7 +228,7 @@
           "Kardiovaskulär kostnad adderar till redan ackumulerad tre-dagarsbelastning men ligger inom skäl för i förväg beslutad regression."
         ],
         "unknowns": [
-          "Subjektiv lokal bentrötthet efter MTB (användarrapport saknas) som kan påverka löppasset.",
+          "Subjektiv lokal bentrötthet efter MTB/XC (användarrapport saknas) som kan påverka löppasset.",
           "Detaljer om terrängintensiva korta ryck/tekniska fall som skulle öka neuromuskulär kostnad saknas."
         ]
       },
@@ -236,7 +236,7 @@
         "action": "keep",
         "target_date": "2026-09-04",
         "reason": "Aktuell mikrocykel har redan konservativt reducerat fredagens backpass baserat på ackumulerad närbelastning och MTB-passet bekräftar ingen extra risk.",
-        "recommendation": "Behåll dagens planade backkvalitet som reducerad dos: 2 × 6 × 150 m enligt redan applicerat dose_resolution; förbered uppvärmning och bedöm benkänslan före passet.",
+        "recommendation": "Behåll dagens planade backkvalitet som reducerad dos: 2 × 6 × 150 m enligt redan applicerat valt dosalternativ; förbered uppvärmning och bedöm benkänslan före passet.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -263,7 +263,7 @@
         ],
         "interpretations": [
           "Swimrun ersatte planerad simning och gav både aerob träning och mekanisk löpbelastning som ökar veckans totala benkostnad.",
-          "Belastningsmönstret tre dagar i följd (enduro, tröskel, Swimrun) talar för konservativ justering av dagens MTB för att skydda fredagens backkvalitet."
+          "Belastningsmönstret tre dagar i följd (enduro, tröskel, Swimrun) talar för konservativ justering av dagens MTB/XC för att skydda fredagens backkvalitet."
         ],
         "unknowns": [
           "Subjektiv dagskänsla efter passet (benkänsla) saknas och kan ändra beslut.",
@@ -274,7 +274,7 @@
         "action": "reduce",
         "target_date": "2026-09-03",
         "reason": "Skydda fredagens prioriterade backkvalitet efter tre dagars ackumulerad belastning.",
-        "recommendation": "Gör dagens MTB/XC som ordinerat men i förkortad dos: mtb-support-45 (45 min). Håll det tekniskt fokus, låg kraft, undvik tunga stigningar och maximal accelerationsträning.",
+        "recommendation": "Gör dagens MTB/XC/XC som ordinerat men i förkortad dos: MTB/XC/XC · 45 min · teknik + lugn aerob stig (45 min). Håll det tekniskt fokus, låg kraft, undvik tunga stigningar och maximal accelerationsträning.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -296,7 +296,7 @@
         "load_interpretation": "Tidigare enduro + 18–19 km och sim 4K ger mångdagars belastning men inget som talar för nedskalning.",
         "confidence": "medium",
         "facts": [
-          "Run: 10,35 km · 50:29 · 61 m+ · snittpuls 145,3 · maxpuls 165.",
+          "Löpning: 10,35 km · 50:29 · 61 m+ · snittpuls 145,3 · maxpuls 165.",
           "Användarrapport: Började segt och kände mig långsam i uppvärmningen. Gjorde 3 stegringslopp för att väcka kroppen. I 8-minutersintervallerna var känslan bättre: inga problem att hålla arbetstiden, och efter sista intervallen kändes kroppen riktigt pigg genom hela nedjoggen. Bedömning från användaren: hade definitivt kunnat köra ytterligare en 8-minutersintervall.",
           "Planstatus 2026-09-01: dagens planerade pass är genomfört i coachens beslutsunderlag."
         ],
@@ -313,7 +313,7 @@
         "action": "keep",
         "target_date": "2026-09-02",
         "reason": "Passet var kontrollerat och absorberbart; simningen är lågmekanisk och stöder mesocykeln.",
-        "recommendation": "Behåll dagens simpass enligt plan (3 200 m) eller ersätt med ett kontrollerat ettvarvs Swimrun utan segmentjakt; räkna ersättningen som dagens belastning inför torsdagens MTB.",
+        "recommendation": "Behåll dagens simpass enligt plan (3 200 m) eller ersätt med ett kontrollerat ettvarvs Swimrun utan segmentjakt; räkna ersättningen som dagens belastning inför torsdagens MTB/XC.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -335,7 +335,7 @@
         "load_interpretation": "Två längre löppass + ett långt simpass ger kardiovaskulär volym men ingen isolerad mekanisk skada; måndagens enduroskola avgör teknisk/neuromuskulär kostnad.",
         "confidence": "medium",
         "facts": [
-          "Run: 18,88 km · 1:43:14 · 184 m+ · snittpuls 139,3 · maxpuls 153."
+          "Löpning: 18,88 km · 1:43:14 · 184 m+ · snittpuls 139,3 · maxpuls 153."
         ],
         "interpretations": [
           "Kardiovaskulär belastning är ackumulerad men absorberbar; inga tydliga tecken på överbelastning i återhämtningsunderlaget-serien.",
@@ -382,7 +382,7 @@
         "action": "keep",
         "target_date": "2026-08-30",
         "reason": "Veckan absorberas bäst genom att behålla söndagens lugna löp enligt mikrocykel och skydda mesocykelns löpstimulus.",
-        "recommendation": "Gör run-easy-75: 75 min lugn distans; håll intensiteten lätt och avbryt eller korta ner om benen känns tunga.",
+        "recommendation": "Gör Löpning · lugn distans · 75 min: 75 min lugn distans; håll intensiteten lätt och avbryt eller korta ner om benen känns tunga.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -398,16 +398,16 @@
       "generated_at_utc": "2026-08-29T09:19:56.366468+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Fredagens backpass blev längre än ordination och ökar veckobelastningen; lördagens MTB bör sparas i marginell dos för absorption.",
-        "load_interpretation": "Närbelastning: 12 backreps + swimrun och MTB/Enduro under veckan ökar ackumulerad löp- och generell belastning.",
+        "summary": "Fredagens backpass blev längre än ordination och ökar veckobelastningen; lördagens MTB/XC bör sparas i marginell dos för absorption.",
+        "load_interpretation": "Närbelastning: 12 backreps + Swimrun och MTB/XC/Enduro under veckan ökar ackumulerad löp- och generell belastning.",
         "confidence": "medium",
         "facts": [
-          "Run: 9,67 km · 50:36 · 182 m+ · snittpuls 145,1 · maxpuls 169.",
+          "Löpning: 9,67 km · 50:36 · 182 m+ · snittpuls 145,1 · maxpuls 169.",
           "Planstatus 2026-08-28: dagens planerade pass är genomfört i coachens beslutsunderlag."
         ],
         "interpretations": [
           "Den faktiska backvolymen (12 reps) är en tydlig ökning jämfört med ursprunglig dos och kräver extra absorption innan längre cykeldistans.",
-          "Veckans kombination av swimrun + flera cykel- och löppass talar för konservativ hantering av dagens MTB för att skydda söndagens lugna löpdistansstimulus."
+          "Veckans kombination av Swimrun + flera cykel- och löppass talar för konservativ hantering av dagens MTB/XC för att skydda söndagens lugna löpdistansstimulus."
         ],
         "unknowns": [
           "Subjektivt dagskänsla (ben-/lokal trötthet) efter fredagens pass saknas.",
@@ -434,8 +434,8 @@
       "generated_at_utc": "2026-08-28T01:05:04.449248+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "MTB 60 min var tekniskt lugnt och ger begränsat aerobstöd; veckans backkvalitet kan genomföras med margin.",
-        "load_interpretation": "De senaste fyra dagarna innehåller 3 tunga/medeltunga pass; dagens MTB var återhämtningsorienterad men bidrar till ackumulerad belastning.",
+        "summary": "MTB/XC 60 min var tekniskt lugnt och ger begränsat aerobstöd; veckans backkvalitet kan genomföras med margin.",
+        "load_interpretation": "De senaste fyra dagarna innehåller 3 tunga/medeltunga pass; dagens MTB/XC var återhämtningsorienterad men bidrar till ackumulerad belastning.",
         "confidence": "medium",
         "facts": [
           "MountainBikeRide: 18,13 km · 1:10:48 · 210 m+ · snittpuls 128,3 · maxpuls 147.",
@@ -453,7 +453,7 @@
       "plan_action": {
         "action": "keep",
         "target_date": "2026-08-28",
-        "reason": "Närbelastningen från måndag–torsdag går ihop med mesocykelns prioritering och dagens MTB var återhämtningsorienterad.",
+        "reason": "Närbelastningen från måndag–torsdag går ihop med mesocykelns prioritering och dagens MTB/XC var återhämtningsorienterad.",
         "recommendation": "Behåll dagens backkvalitet enligt plan men välj en konservativ dos i linje med mesocykeln: start med ett måttligt antal repetitioner och prioritera mekanisk kvalitet framför volym; avbryt eller korta ner om lokal trötthet upplevs vid uppvärmning.",
         "dose_option_id": "",
         "requires_approval": false
@@ -470,7 +470,7 @@
       "generated_at_utc": "2026-08-27T13:22:06.233402+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Onsdagens swimrun var mer belastande än pulsdatan visar och ökar veckobelastningen; torsdags-MTB bör hållas teknisk och lugn.",
+        "summary": "Onsdagens Swimrun var mer belastande än pulsdatan visar och ökar veckobelastningen; torsdags-MTB bör hållas teknisk och lugn.",
         "load_interpretation": "Det närbelastande swimrunpasset innehöll åtminstone en period motsvarande minst Z3 och höjer behovet av absorbering före ny kvalitet.",
         "confidence": "medium",
         "facts": [
@@ -480,18 +480,18 @@
         ],
         "interpretations": [
           "Samlad belastning mån–ons ökar risken att lägga ny hård kvalitet utan extra absorption.",
-          "Dagens MTB bör inte innehålla backintervaller eller upprepad krafttoppar för att bevara möjlighet till fredagets backkvalitet."
+          "Dagens MTB/XC bör inte innehålla backintervaller eller upprepad krafttoppar för att bevara möjlighet till fredagets backkvalitet."
         ],
         "unknowns": [
           "Subjektiv dagskänsla torsdag morgon (kan motivera återställning).",
-          "Exakt intensitet under swimrunens pulsbortfall strax över Z3 (påverkar hur mycket MTB ska skalas)."
+          "Exakt intensitet under swimrunens pulsbortfall strax över Z3 (påverkar hur mycket MTB/XC ska skalas)."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-08-27",
-        "reason": "Planen redan villkorat skalat ned MTB för att säkra absorption efter swimrun.",
-        "recommendation": "Behåll dagens ordination: MTB/XC teknik + aerob stig, håll det tekniskt och lugnt; undvik upprepade hårda stigningar eller fartjakt. Bedöm subjektiv känsla torsdag morgon och återställ endast om känslan är klart pigg.",
+        "reason": "Planen redan villkorat skalat ned MTB/XC för att säkra absorption efter Swimrun.",
+        "recommendation": "Behåll dagens ordination: MTB/XC/XC teknik + aerob stig, håll det tekniskt och lugnt; undvik upprepade hårda stigningar eller fartjakt. Bedöm subjektiv känsla torsdag morgon och återställ endast om känslan är klart pigg.",
         "requires_approval": false
       },
       "auto_apply": {
@@ -510,7 +510,7 @@
         "load_interpretation": "Två hårda löppass (23/8 och 25/8) plus enduro och styrka ger samlad närbelastning som motiverade nedskalning idag.",
         "confidence": "medium",
         "facts": [
-          "Run: 10,34 km · 51:34 · 75 m+ · snittpuls 144,8 · maxpuls 165.",
+          "Löpning: 10,34 km · 51:34 · 75 m+ · snittpuls 144,8 · maxpuls 165.",
           "Användarrapport: 3×8 min tröskel. Motsvarande känsla som föregående vecka, lite sämre tempo och ingen känsla av att vara starkare.",
           "Planstatus 2026-08-25: dagens planerade pass är genomfört i coachens beslutsunderlag."
         ],
@@ -527,7 +527,7 @@
         "action": "keep",
         "target_date": "2026-08-26",
         "reason": "Dagens simdag är lågmekanisk och blockets löpstimuli skyddas utan att öka belastningen.",
-        "recommendation": "Behåll simning (~60 min lugn teknik/aerob) som planerat; välj swimrun endast om löpningen hålls mycket lätt och kontrollerad. Skicka morgonrapport om lokal bentrötthet innan torsdagens MTB.",
+        "recommendation": "Behåll simning (~60 min lugn teknik/aerob) som planerat; välj Swimrun endast om löpningen hålls mycket lätt och kontrollerad. Skicka morgonrapport om lokal bentrötthet innan torsdagens MTB/XC.",
         "requires_approval": false
       },
       "auto_apply": {
@@ -551,7 +551,7 @@
         ],
         "interpretations": [
           "Kombinationen av långt enduropass och efterföljande styrka minskar marginalen för ett planerat tröskelpass nästa dag.",
-          "Auto_coach har redan föreslagit nedskalning till 3×8 min; dagens data stödjer den konservativa justeringen."
+          "coachen har redan föreslagit nedskalning till 3×8 min; dagens data stödjer den konservativa justeringen."
         ],
         "unknowns": [
           "Subjektiv dagskänsla, sömn och lokal bentrötthet inför tisdag morgon.",
@@ -649,11 +649,11 @@
       "generated_at_utc": "2026-08-22T13:53:59.996335+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "SUP-passet var lågintensivt rekreation och påverkar inte behovet av vila före kvällens MTB/XC.",
+        "summary": "SUP-passet var lågintensivt rekreation och påverkar inte behovet av vila före kvällens MTB/XC/XC.",
         "load_interpretation": "SUP var långvarigt men låg puls; det ger minimal akut muskel- eller kardiell belastning.",
         "confidence": "medium",
         "facts": [
-          "SUP: 6,02 km, 1:12:03 (moving_time 4323 s), snittpuls 89,7, max 108, 274 kcal.",
+          "SUP: 6,02 km, 1:12:03 (rörelsetid 4323 s), snittpuls 89,7, max 108, 274 kcal.",
           "Samma dag simning 3 200 m, 59:48, snittpuls 127,4 — total passtid fredag ~2:12:28.",
           "Inga subjektiva trötthetsdata eller sömn rapporterade efter passen."
         ],
@@ -663,14 +663,14 @@
         ],
         "unknowns": [
           "Subjektiv lokal muskeltrötthet i ben/axlar kväll 22/8.",
-          "Planerad intensitet/tid för kvällens MTB/XC är ännu inte specificerad."
+          "Planerad intensitet/tid för kvällens MTB/XC/XC är ännu inte specificerad."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-08-22",
         "reason": "SUP var rekreationellt och simningen var redan planerad lågkostnad; inget som kräver nedskalning.",
-        "recommendation": "Behåll kvällens MTB/XC enligt plan; prioritera teknik/stigkörning och håll intensiteten kontrollerad om benen känns trötta. Om du upplever lokal trötthet, skala ner till teknikpass eller vila.",
+        "recommendation": "Behåll kvällens MTB/XC/XC enligt plan; prioritera teknik/stigkörning och håll intensiteten kontrollerad om benen känns trötta. Om du upplever lokal trötthet, skala ner till teknikpass eller vila.",
         "requires_approval": false
       },
       "auto_apply": {
@@ -689,7 +689,7 @@
         "load_interpretation": "Set-/intervallnivå saknas i det strukturerade analyslagret; teknik, fartstabilitet och intensitetsutveckling går därför inte att bedöma säkert.",
         "confidence": "low",
         "facts": [
-          "Simning 2026-08-21: 3 200 m, moving_time 2 903 s, snittpuls 127, maxpuls 154, 555 kcal.",
+          "Simning 2026-08-21: 3 200 m, rörelsetid 2 903 s, snittpuls 127, maxpuls 154, 555 kcal.",
           "Tor–ons: torsdagens kontrollerade tröskel (10,35 km, snittpuls 145,7) genomförd dagen före.",
           "Tidigare vecka innehåller flera längre löp- och MTB-pass; dagens simning var planerad som lågkostnad.",
           "Planerat lördag MTB-teknik och söndag lugn trail beroende på absorbering."
@@ -723,7 +723,7 @@
         "confidence": "medium",
         "facts": [
           "Torsdag: 10,35 km, 50:48, 63 m+, snittpuls 145,7, maxpuls 167, snitteffekt 277 W.",
-          "Onsdag: 6,94 km swimrun 54:50, snittpuls 143, maxpuls 173, bedömd absorberad.",
+          "Onsdag: 6,94 km Swimrun 54:50, snittpuls 143, maxpuls 173, bedömd absorberad.",
           "Fredag planerad: simning ~3 200 m aerob/teknik, syfte låg återhämtningskostnad.",
           "Inga subjektiva återhämtningsdata (sömn/HRV/dagskänsla) i underlaget för fredag."
         ],
@@ -759,25 +759,25 @@
         "load_interpretation": "Fakta: det finns tre genomförda pass de senaste tre dagarna: 2026-08-16 trail (långt), 2026-08-17 simning 3 200 m, 2026-08-18 styrketräning 35–36 min med låg snittpuls.",
         "confidence": "medium",
         "facts": [
-          "2026-08-16: Trail 14.6 km, 251 m+, moving_time 5061 s, snittpuls 139.2.",
-          "2026-08-17: Simning 3200 m, moving_time 2786 s, snittpuls 127.1.",
+          "2026-08-16: Trail 14.6 km, 251 m+, rörelsetid 5061 s, snittpuls 139.2.",
+          "2026-08-17: Simning 3200 m, rörelsetid 2786 s, snittpuls 127.1.",
           "2026-08-18: Styrketräning 2145 s (35:45), snittpuls 87.3, maxpuls 119.",
           "Planerad 2026-08-19: Swimrun · Jogersö Extreme · 1 varv (ersätter löptröskel om genomförd).",
           "Planerad 2026-08-20: Simning aerob/teknik eller vila; redan föreslagen att skalas ner tills onsdagens data finns."
         ],
         "interpretations": [
-          "Styrkepasset bedöms vara låg-kardiovaskulär och inte kräva extra återhämtning innan dagens swimrun, utifrån tillgängliga pulsdata.",
+          "Styrkepasset bedöms vara låg-kardiovaskulär och inte kräva extra återhämtning innan dagens Swimrun, utifrån tillgängliga pulsdata.",
           "Osäkerhet kring swimrunets verkliga intensitet/varaktighet: kan vara högre än planerad löptröskel och påverka torsdagens simning och helgens kvalitetspass."
         ],
         "unknowns": [
           "Aktuell subjektiv återhämtning/fatigue och sömn.",
-          "Exakt varaktighet och intensitet för planerade swimrun (2026-08-19) om det genomförs."
+          "Exakt varaktighet och intensitet för planerade Swimrun (2026-08-19) om det genomförs."
         ]
       },
       "plan_action": {
         "action": "reduce",
         "target_date": "2026-08-20",
-        "reason": "Onsdagens swimrun kan vara högre belastning än planerad löptröskel; torsdagens simning bör konservativt skalas ner tills onsdagens faktiska belastning bekräftas.",
+        "reason": "Onsdagens Swimrun kan vara högre belastning än planerad löptröskel; torsdagens simning bör konservativt skalas ner tills onsdagens faktiska belastning bekräftas.",
         "recommendation": "Ersätt planerad 'Simning · aerob/teknik' 2026-08-20 med vila eller mycket lätt teknisk simning (kortare och lägre effort). Behåll övrig plan oförändrad.",
         "requires_approval": false
       },
@@ -787,8 +787,8 @@
       }
     }
   ],
-  "last_trigger_hash": "3a295a4a13a05d81512d33399f033d88e972c18f0a2cb1fe388ce72c895a5e66",
-  "last_run_utc": "2026-09-08T04:34:22.626461+00:00",
+  "last_trigger_hash": "b24afe151649bd48473ae30bb028652707f2e27e74b292f0a18dae7254346886",
+  "last_run_utc": "2026-09-08T10:03:18.670482+00:00",
   "contract_version": 15,
   "output_contract_version": 16,
   "pipeline_contract_version": 1
