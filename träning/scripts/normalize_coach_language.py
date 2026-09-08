@@ -7,11 +7,37 @@ ROOT = Path(__file__).resolve().parents[1]
 COACH_FILE = ROOT / "data" / "coach.json"
 ACTIVITIES_FILE = ROOT / "data" / "activities.json"
 PLAN_FILE = ROOT / "data" / "plan.json"
+STRATEGY_FILE = ROOT / "data" / "training_strategy.json"
 
 FORBIDDEN_VISIBLE_TERMS = (
     (re.compile(r"\blapparna\b", re.IGNORECASE), "intervallerna"),
     (re.compile(r"\blappar\b", re.IGNORECASE), "intervaller"),
     (re.compile(r"\blaps\b", re.IGNORECASE), "intervaller"),
+)
+
+SYSTEM_LANGUAGE_RULES = (
+    (
+        re.compile(
+            r"Passet\s+räknas\s+som\s+faktisk\s+träningsbelastning\s+mot\s+"
+            r"mikrocykelns\s+stimuli\s+för\s+Enduroteknik\s+och\s+påverkar\s+"
+            r"möjligheten\s+att\s+genomföra\s+(?P<target>[^.]+?)\s+prioriterade\s+löpstimulus\.",
+            re.IGNORECASE,
+        ),
+        r"Enduropasset är en del av veckans träningsbelastning. Därför vägs det in när \g<target> löppass planeras.",
+    ),
+    (
+        re.compile(r"\bmikrocykelns\s+stimuli\s+för\s+Enduroteknik\b", re.IGNORECASE),
+        "den endurotekniska träningen i veckan",
+    ),
+    (
+        re.compile(r"\bprioriterade\s+löpstimulus\b", re.IGNORECASE),
+        "prioriterade löppass",
+    ),
+)
+
+INTERNAL_IDENTIFIER_PATTERN = re.compile(
+    r"\b[a-z][a-z0-9]*(?:_[a-z0-9]+)+\b",
+    re.IGNORECASE,
 )
 
 STRUCTURE_RE = re.compile(
@@ -35,9 +61,45 @@ def load(path, fallback):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def visible_training_language(text):
+def strategy_visible_labels(strategy):
+    """Collect canonical public labels for internal strategy keys."""
+    labels = {}
+
+    def visit(value):
+        if isinstance(value, dict):
+            key = value.get("key")
+            label = value.get("label")
+            if isinstance(key, str) and key.strip() and isinstance(label, str) and label.strip():
+                labels[key.strip()] = label.strip()
+            for child in value.values():
+                visit(child)
+        elif isinstance(value, list):
+            for child in value:
+                visit(child)
+
+    visit(strategy or {})
+    return labels
+
+
+def _replace_internal_identifier(text, labels):
+    if not labels:
+        return text
+    value = text
+    for key, label in sorted(labels.items(), key=lambda item: len(item[0]), reverse=True):
+        pattern = re.compile(
+            rf"(?<![A-Za-z0-9_-]){re.escape(key)}(?![A-Za-z0-9_-])",
+            re.IGNORECASE,
+        )
+        value = pattern.sub(label, value)
+    return value
+
+
+def visible_training_language(text, strategy_labels=None):
     value = str(text or "")
     for pattern, replacement in FORBIDDEN_VISIBLE_TERMS:
+        value = pattern.sub(replacement, value)
+    value = _replace_internal_identifier(value, strategy_labels or {})
+    for pattern, replacement in SYSTEM_LANGUAGE_RULES:
         value = pattern.sub(replacement, value)
     return value
 
@@ -60,8 +122,8 @@ def explicit_interval_structure(user_report):
     }
 
 
-def canonical_actual_summary(text, structure):
-    value = visible_training_language(text)
+def canonical_actual_summary(text, structure, strategy_labels=None):
+    value = visible_training_language(text, strategy_labels)
     if not structure or not value:
         return value
     if not re.search(r"\bback|intervall", value, re.IGNORECASE):
@@ -93,12 +155,12 @@ def canonical_actual_summary(text, structure):
     return f"{prefix} {tail[0].upper() + tail[1:]}"
 
 
-def normalize_text_list(assessment, field):
+def normalize_text_list(assessment, field, strategy_labels=None):
     values = assessment.get(field)
     if not isinstance(values, list):
         return False
     normalized_values = [
-        visible_training_language(item) if isinstance(item, str) else item
+        visible_training_language(item, strategy_labels) if isinstance(item, str) else item
         for item in values
     ]
     if normalized_values == values:
@@ -115,11 +177,11 @@ def planned_structured_value(plan_day):
     return None
 
 
-def normalize_action_reason(action, structure, plan_day):
+def normalize_action_reason(action, structure, plan_day, strategy_labels=None):
     reason = action.get("reason")
     if not isinstance(reason, str):
         return False
-    normalized = visible_training_language(reason)
+    normalized = visible_training_language(reason, strategy_labels)
     planned_value = planned_structured_value(plan_day)
     if structure and planned_value is not None and structure["total"] != planned_value:
         tail = normalized.split(";", 1)[1].strip() if ";" in normalized else ""
@@ -135,35 +197,35 @@ def normalize_action_reason(action, structure, plan_day):
     return True
 
 
-def normalize_analysis(entry, activity, plan_day=None):
+def normalize_analysis(entry, activity, plan_day=None, strategy_labels=None):
     changed = False
     structure = explicit_interval_structure((activity or {}).get("user_report"))
     assessment = entry.get("assessment") or {}
 
     summary = assessment.get("summary")
     if isinstance(summary, str):
-        normalized = canonical_actual_summary(summary, structure)
+        normalized = canonical_actual_summary(summary, structure, strategy_labels)
         if normalized != summary:
             assessment["summary"] = normalized
             changed = True
 
     value = assessment.get("load_interpretation")
     if isinstance(value, str):
-        normalized = visible_training_language(value)
+        normalized = visible_training_language(value, strategy_labels)
         if normalized != value:
             assessment["load_interpretation"] = normalized
             changed = True
 
     for field in ("facts", "interpretations", "unknowns"):
-        if normalize_text_list(assessment, field):
+        if normalize_text_list(assessment, field, strategy_labels):
             changed = True
 
     action = entry.get("plan_action") or {}
-    if normalize_action_reason(action, structure, plan_day):
+    if normalize_action_reason(action, structure, plan_day, strategy_labels):
         changed = True
     recommendation = action.get("recommendation")
     if isinstance(recommendation, str):
-        normalized = visible_training_language(recommendation)
+        normalized = visible_training_language(recommendation, strategy_labels)
         if normalized != recommendation:
             action["recommendation"] = normalized
             changed = True
@@ -171,7 +233,8 @@ def normalize_analysis(entry, activity, plan_day=None):
     return changed
 
 
-def normalize_state(coach, activities_state, plan_state=None):
+def normalize_state(coach, activities_state, plan_state=None, strategy=None):
+    labels = strategy_visible_labels(strategy or {})
     by_id = {
         str(activity.get("id")): activity
         for activity in (activities_state.get("activities") or [])
@@ -186,7 +249,12 @@ def normalize_state(coach, activities_state, plan_state=None):
     for entry in coach.get("analyses") or []:
         activity = by_id.get(str(entry.get("activity_id")))
         plan_day = plan_by_date.get(str(entry.get("activity_date")))
-        if normalize_analysis(entry, activity, plan_day=plan_day):
+        if normalize_analysis(
+            entry,
+            activity,
+            plan_day=plan_day,
+            strategy_labels=labels,
+        ):
             changed += 1
     return changed
 
@@ -221,13 +289,19 @@ def assert_no_forbidden_visible_terms(coach):
         raise RuntimeError(
             f"Coachspråk: förbjuden plattformsterm kvar i synlig analys: {forbidden.group(0)!r}"
         )
+    internal = INTERNAL_IDENTIFIER_PATTERN.search(raw)
+    if internal:
+        raise RuntimeError(
+            f"Coachspråk: internt variabelnamn kvar i synlig analys: {internal.group(0)!r}"
+        )
 
 
 def main():
     coach = load(COACH_FILE, {"analyses": []})
     activities = load(ACTIVITIES_FILE, {"activities": []})
     plan = load(PLAN_FILE, {"days": []})
-    changed = normalize_state(coach, activities, plan)
+    strategy = load(STRATEGY_FILE, {})
+    changed = normalize_state(coach, activities, plan, strategy)
     assert_no_forbidden_visible_terms(coach)
     if changed:
         COACH_FILE.write_text(
