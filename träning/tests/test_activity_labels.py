@@ -6,7 +6,9 @@ from pathlib import Path
 SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
-from finalize_activity_labels import public_activity_label, render_activity_line  # noqa: E402
+from activity_labels import public_activity_label  # noqa: E402
+from coach_rules import canonical_activity_fact  # noqa: E402
+from finalize_activity_labels import render_activity_line  # noqa: E402
 
 
 class ActivityLabelTests(unittest.TestCase):
@@ -40,6 +42,20 @@ class ActivityLabelTests(unittest.TestCase):
         self.assertEqual(label, "Styrka")
         self.assertIn("<strong>Styrka</strong>", rendered)
         self.assertNotIn("WeightTraining", rendered)
+
+    def test_canonical_activity_fact_uses_same_public_strength_label(self):
+        activity = {
+            "sport_type": "WeightTraining",
+            "elapsed_time_s": 1659,
+            "average_heartrate": 75.7,
+            "max_heartrate": 112,
+        }
+        fact = canonical_activity_fact(activity)
+        self.assertEqual(
+            fact,
+            "Styrka: 27:39 · snittpuls 75,7 · maxpuls 112.",
+        )
+        self.assertNotIn("WeightTraining", fact)
 
     def test_raw_sport_label_remains_available_for_exact_replacement(self):
         activity = {
