@@ -3,6 +3,7 @@ import hashlib
 import json
 from pathlib import Path
 
+from activity_labels import public_activity_label
 from coach_rules import activity_local_date, canonical_activity_fact
 from strategy_contracts import StrategyContractError, validate_training_strategy
 from training_contracts import (
@@ -28,6 +29,25 @@ def load(path):
     if not path.exists():
         raise ContractError(f"Datakontrakt: fil saknas: {path}")
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def legacy_provider_fact(activity, canonical_fact):
+    """Return the exact pre-public-label fact for migration compatibility only.
+
+    Numeric/source content is not relaxed. The only tolerated difference is the
+    provider label prefix that preceded the shared public-label contract.
+    """
+    raw_label = str(activity.get("display_label") or activity.get("sport_type") or "Aktivitet")
+    public_label = public_activity_label(activity)
+    if raw_label == public_label:
+        return canonical_fact
+
+    public_prefix = f"{public_label}: "
+    if canonical_fact.startswith(public_prefix):
+        return f"{raw_label}: {canonical_fact[len(public_prefix):]}"
+    if canonical_fact == f"{public_label}.":
+        return f"{raw_label}."
+    return canonical_fact
 
 
 def main():
@@ -80,8 +100,9 @@ def main():
         facts = (latest.get("assessment") or {}).get("facts") or []
         require(bool(facts), "coach: senaste analysen saknar deterministiska facts")
         expected_first_fact = canonical_activity_fact(activity)
+        legacy_first_fact = legacy_provider_fact(activity, expected_first_fact)
         require(
-            facts[0] == expected_first_fact,
+            facts[0] in {expected_first_fact, legacy_first_fact},
             "coach: första faktaraden avviker från canonical source fact",
         )
 
