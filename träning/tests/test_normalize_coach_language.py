@@ -106,6 +106,45 @@ class NormalizeCoachLanguageTests(unittest.TestCase):
             "Nästa fokus är Kontrollerad löptröskel.",
         )
 
+    def test_schema_field_names_are_humanized(self):
+        normalized = visible_training_language(
+            "session_duration 5718 s, moving_time 2915 s, ingen user_report och dose_resolution vald."
+        )
+        self.assertEqual(
+            normalized,
+            "total passduration 5718 s, rörelsetid 2915 s, ingen användarrapport och valt dosalternativ vald.",
+        )
+        self.assertNotIn("_", normalized)
+
+    def test_named_internal_ids_use_public_session_text(self):
+        labels = strategy_visible_labels(
+            {
+                "current_mesocycle": {
+                    "id": "run-threshold-hill-4w",
+                    "title": "Mesocykel · löptröskel + backkvalitet",
+                    "microcycle_template": [
+                        {
+                            "dose_options": [
+                                {
+                                    "id": "run-threshold-3x8",
+                                    "session": "Löpning · kontrollerad tröskel · 3 × 8 min / 90 s jogg",
+                                }
+                            ]
+                        }
+                    ],
+                }
+            }
+        )
+        normalized = visible_training_language(
+            "Skala ner till alternativ run-threshold-3x8.",
+            labels,
+        )
+        self.assertEqual(
+            normalized,
+            "Skala ner till alternativ Löpning · kontrollerad tröskel · 3 × 8 min / 90 s jogg.",
+        )
+        self.assertNotIn("run-threshold-3x8", normalized)
+
     def test_visible_output_fails_closed_if_unknown_snake_case_remains(self):
         coach = {
             "analyses": [
