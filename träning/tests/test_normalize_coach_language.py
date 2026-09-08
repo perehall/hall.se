@@ -6,7 +6,12 @@ from pathlib import Path
 SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
-from normalize_coach_language import assert_no_forbidden_visible_terms, normalize_state  # noqa: E402
+from normalize_coach_language import (  # noqa: E402
+    assert_no_forbidden_visible_terms,
+    normalize_state,
+    strategy_visible_labels,
+    visible_training_language,
+)
 
 
 class NormalizeCoachLanguageTests(unittest.TestCase):
@@ -65,6 +70,59 @@ class NormalizeCoachLanguageTests(unittest.TestCase):
         self.assertNotIn("lappar", str(coach).lower())
         self.assertIn("intervallerna", str(coach).lower())
         self.assertIn("18 intervaller", str(coach).lower())
+
+    def test_internal_strategy_key_is_humanized_and_system_phrase_is_rewritten(self):
+        strategy = {
+            "capability_portfolio": [
+                {"key": "enduro_technical", "label": "Enduroteknik"},
+                {"key": "run_threshold", "label": "Kontrollerad löptröskel"},
+            ]
+        }
+        labels = strategy_visible_labels(strategy)
+        raw = (
+            "Passet räknas som faktisk träningsbelastning mot mikrocykelns stimuli för "
+            "enduro_technical och påverkar möjligheten att genomföra tisdagens prioriterade "
+            "löpstimulus."
+        )
+        normalized = visible_training_language(raw, labels)
+        self.assertEqual(
+            normalized,
+            "Enduropasset är en del av veckans träningsbelastning. "
+            "Därför vägs det in när tisdagens löppass planeras.",
+        )
+        self.assertNotIn("enduro_technical", normalized)
+        self.assertNotIn("löpstimulus", normalized)
+
+    def test_other_strategy_keys_use_canonical_public_label(self):
+        labels = strategy_visible_labels(
+            {
+                "capability_portfolio": [
+                    {"key": "run_threshold", "label": "Kontrollerad löptröskel"}
+                ]
+            }
+        )
+        self.assertEqual(
+            visible_training_language("Nästa fokus är run_threshold.", labels),
+            "Nästa fokus är Kontrollerad löptröskel.",
+        )
+
+    def test_visible_output_fails_closed_if_unknown_snake_case_remains(self):
+        coach = {
+            "analyses": [
+                {
+                    "assessment": {
+                        "summary": "Internt unknown_internal_name läckte ut.",
+                        "load_interpretation": "",
+                        "facts": [],
+                        "interpretations": [],
+                        "unknowns": [],
+                    },
+                    "plan_action": {"reason": "", "recommendation": ""},
+                }
+            ]
+        }
+        with self.assertRaisesRegex(RuntimeError, "internt variabelnamn"):
+            assert_no_forbidden_visible_terms(coach)
 
 
 if __name__ == "__main__":
