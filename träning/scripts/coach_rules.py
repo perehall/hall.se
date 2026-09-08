@@ -2,6 +2,7 @@
 from copy import deepcopy
 from datetime import date, timedelta
 
+from activity_labels import public_activity_label
 from training_contracts import ACTIVITY_FAMILY, PLAN_SPORT_ACTIVITY_FAMILIES
 
 
@@ -362,8 +363,8 @@ def _fmt_number_sv(value, decimals=1):
 
 
 def canonical_activity_fact(activity):
-    """Render exact latest-activity facts from source data, never model prose."""
-    label = activity.get("display_label") or activity.get("sport_type") or "Aktivitet"
+    """Render exact latest-activity facts from source data with canonical public terminology."""
+    label = public_activity_label(activity)
     bits = []
 
     distance = activity.get("distance_m")
