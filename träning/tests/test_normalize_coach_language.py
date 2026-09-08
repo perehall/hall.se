@@ -116,6 +116,16 @@ class NormalizeCoachLanguageTests(unittest.TestCase):
         )
         self.assertNotIn("_", normalized)
 
+    def test_provider_activity_type_in_fact_is_humanized(self):
+        normalized = visible_training_language(
+            "WeightTraining: 27:39 · snittpuls 75,7 · maxpuls 112."
+        )
+        self.assertEqual(
+            normalized,
+            "Styrka: 27:39 · snittpuls 75,7 · maxpuls 112.",
+        )
+        self.assertNotIn("WeightTraining", normalized)
+
     def test_named_internal_ids_use_public_session_text(self):
         labels = strategy_visible_labels(
             {
@@ -161,6 +171,24 @@ class NormalizeCoachLanguageTests(unittest.TestCase):
             ]
         }
         with self.assertRaisesRegex(RuntimeError, "internt variabelnamn"):
+            assert_no_forbidden_visible_terms(coach)
+
+    def test_visible_output_fails_closed_if_raw_provider_fact_label_remains(self):
+        coach = {
+            "analyses": [
+                {
+                    "assessment": {
+                        "summary": "Neutral.",
+                        "load_interpretation": "",
+                        "facts": ["WeightTraining: 27:39."],
+                        "interpretations": [],
+                        "unknowns": [],
+                    },
+                    "plan_action": {"reason": "", "recommendation": ""},
+                }
+            ]
+        }
+        with self.assertRaisesRegex(RuntimeError, "rå aktivitetstyp"):
             assert_no_forbidden_visible_terms(coach)
 
 
