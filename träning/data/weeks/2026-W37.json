@@ -4,7 +4,7 @@
   "week_start": "2026-09-07",
   "week_end": "2026-09-13",
   "created_at_utc": "2026-09-06T22:19:36.896236+00:00",
-  "updated_at_utc": "2026-09-08T00:10:20.892749+00:00",
+  "updated_at_utc": "2026-09-08T04:34:23.161694+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -695,7 +695,7 @@
       "activity_id": 20079150228,
       "activity_date": "2026-09-07",
       "activity_name": "Styrketräning på natten",
-      "generated_at_utc": "2026-09-07T23:29:44.713086+00:00",
+      "generated_at_utc": "2026-09-08T04:34:22.626461+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 1,
@@ -707,27 +707,27 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört: 27,7 min styrketräning på samma dag som en 95 min enduro-session; styrkepasset hade låg genomsnittspuls (75,7) och moderat maxpuls (112).",
-        "load_interpretation": "Närbelastningen de senaste 2–3 dagarna inkluderar lång löpdistans (22 km), en full enduro-session och denna ~28 min styrka; skyddade löppass nästa dag bör prioriteras.",
+        "summary": "Genomfört 27,7 min styrkepass kvällstid med låg pulsvariation och utan användarrapport; passet räknas som skyddad styrka/core-exponering i mikrocykeln.",
+        "load_interpretation": "Styrkepasset är en låg-mekanisk, låg-kardiovaskulär exponering som kompletterar målcadern och ger inget skäl att ändra prioritetslöpet imorgon.",
         "confidence": "medium",
         "facts": [
           "WeightTraining: 27:39 · snittpuls 75,7 · maxpuls 112.",
           "Planstatus 2026-09-07: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Styrkepasset var kort och lågmekaniskt jämfört med dagens enduro; det ökar inte tydligt risk för att behöva reglera morgondagens prioriterade löppass.",
-          "Givet den totala närbelastningen (enduro + långdistans tidigare + kvällsstyrka) är konservativt agerande mot morgondagens tröskelpass motiverat om subjektiv trötthet uppstår."
+          "Passet uppfyller skyddat styrka/core-stimulus utan hög pulskostnad.",
+          "Ingen indikation i data eller återhämtningsunderlaget att morgondagens prioriterade tröskelpass måste reduceras."
         ],
         "unknowns": [
-          "Användarrapport för kvällens styrka (känsla/energi) saknas.",
-          "Subjektiv återhämtning över natten och sömnkvalitet fram till morgon är okänd."
+          "Subjektiv återhämtningskänsla efter passet saknas i användarrapport",
+          "Detaljer om passets övningsval/intensitet saknas och påverkar inte dosbedömningen"
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-09-08",
-        "reason": "Styrkepasset var kort/lågintensivt och påverkar inte entydigt morgondagens prioriterade tröskel enligt närbelastningsfönstret och mesocykelns prioriteringar.",
-        "recommendation": "Genomför planerat tröskelpass som planerat men skala intensiteten konservativt om du känner ovanlig trötthet i benen imorgon; rapportera subjektiv känsla före start.",
+        "reason": "Styrkepasset var en lågkostnadsexponering som inte hotar morgondagens prioriterade tröskelpass.",
+        "recommendation": "Behåll planerat tröskelpass 2026-09-08 (3×10 min enligt baseline). Ingen skalning eller vila nödvändig; rapportera om du känner ovanlig stelhet eller trötthet innan start.",
         "dose_option_id": "",
         "requires_approval": false
       },
