@@ -8,21 +8,18 @@ PLAN_FILE = ROOT / "data" / "plan.json"
 ACTIVITIES_FILE = ROOT / "data" / "activities.json"
 INDEX_FILE = ROOT / "index.html"
 
-# Public UI labels for raw provider activity types. A semantic display_label on
-# the normalized activity always wins; this table is the safe fallback when the
-# activity does not need a more specific label.
+# Public UI labels for raw provider activity types that require translation.
+# A semantic display_label on the normalized activity always wins.
 PUBLIC_ACTIVITY_LABELS = {
     "Run": "Löpning",
     "TrailRun": "Löpning",
     "VirtualRun": "Löpning",
     "Swim": "Simning",
-    "Swimrun": "Swimrun",
     "MountainBikeRide": "MTB/XC",
     "EMountainBikeRide": "MTB/XC",
     "Ride": "Cykel",
     "VirtualRide": "Cykel",
     "WeightTraining": "Styrka",
-    "Enduro": "Enduro",
 }
 
 
