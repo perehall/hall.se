@@ -33,6 +33,11 @@ API_BASE = "https://intervals.icu/api/v1/athlete/0"
 BULK_UPSERT_URL = f"{API_BASE}/events/bulk?upsert=true"
 BULK_DELETE_URL = f"{API_BASE}/events/bulk-delete"
 OWNED_PREFIXES = ("hall-device:", "hall-training:")
+SWIM_SET_REST_LABEL = "Setvila"
+# Intervals.icu needs a nominal duration token even when Press lap controls the
+# transition. One minute matches the already verified swim press-lap POC; it is
+# transport metadata, not a prescribed recovery duration.
+SWIM_SET_REST_DESCRIPTION = f"- Press lap {SWIM_SET_REST_LABEL} 1m intensity=rest"
 
 
 class IntervalsSyncError(RuntimeError):
@@ -129,6 +134,18 @@ def render_description(workout):
             lines = [name]
             lines.extend(render_step(step) for step in block.get("steps") or [])
             sections.append("\n".join(lines))
+
+    # Pool-swim sets must never auto-chain. Intervals.icu's established text
+    # syntax encodes a manual Garmin transition as a standalone Press lap rest
+    # step. Inject it between every expanded swim section, never after the last.
+    if workout.get("sport") == "swim" and len(sections) > 1:
+        swim_sections = []
+        for index, section in enumerate(sections):
+            swim_sections.append(section)
+            if index < len(sections) - 1:
+                swim_sections.append(SWIM_SET_REST_DESCRIPTION)
+        sections = swim_sections
+
     return "\n\n".join(sections)
 
 
@@ -143,6 +160,16 @@ def semantic_expectations(workout):
             counts[intensity] += 1
             if step.get("press_lap"):
                 press_lap_labels.append(clean_prompt(step.get("instruction")))
+
+    if workout.get("sport") == "swim":
+        expanded_sections = sum(
+            int(block.get("sets") or 1) for block in workout.get("blocks") or []
+        )
+        set_rest_count = max(0, expanded_sections - 1)
+        if set_rest_count:
+            counts["rest"] += set_rest_count
+            press_lap_labels.extend([SWIM_SET_REST_LABEL] * set_rest_count)
+
     return {"counts": dict(counts), "press_lap_labels": press_lap_labels}
 
 
@@ -233,12 +260,20 @@ def verify_semantics(stored, workout):
             raise IntervalsSyncError(
                 f'{workout["external_id"]}: {intensity} väntat minst {count}, fick {actual}'
             )
-    for label in expected["press_lap_labels"]:
+
+    for label, count in Counter(expected["press_lap_labels"]).items():
         label_lower = label.lower()
-        if not any(label_lower in str(node.get("text") or "").lower() for node in nodes):
+        actual = sum(
+            1
+            for node in nodes
+            if label_lower in str(node.get("text") or "").lower()
+        )
+        if actual < count:
             raise IntervalsSyncError(
-                f'{workout["external_id"]}: Press-lap-text {label!r} saknas efter readback'
+                f'{workout["external_id"]}: Press-lap-text {label!r} '
+                f'väntat minst {count}, fick {actual}'
             )
+
     if workout["sport"] == "swim":
         expected_distance = sum(
             int(step["duration"]["meters"])
