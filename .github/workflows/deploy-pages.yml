@@ -41,11 +41,13 @@ jobs:
           node --check "infra/strava-webhook/src/worker.mjs"
           node --test "infra/strava-webhook/test/worker.test.mjs"
 
-      - name: Normalize training data for render
+      - name: Normalize and materialize training data for render
         run: |
           python "träning/scripts/migrate_training_data_v3.py"
           python "träning/scripts/normalize_activity_semantics.py"
           python "träning/scripts/validate_training_data.py"
+          python "träning/scripts/materialize_workout_designs.py"
+          python "träning/scripts/validate_workout_designs.py"
 
       - name: Render and validate training site
         run: python "träning/scripts/render_training_site.py"
