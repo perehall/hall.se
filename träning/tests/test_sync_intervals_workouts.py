@@ -121,6 +121,40 @@ class IntervalsWorkoutSyncTests(unittest.TestCase):
         self.assertIn("500mtr", description)
         self.assertNotIn("400m intensity", description)
 
+    def test_swim_inserts_press_lap_rest_between_every_set_section(self):
+        workout = compile_device_workout(swim_day())
+        description = sync.render_description(workout)
+        sections = description.split("\n\n")
+
+        self.assertEqual(len(sections), 3)
+        self.assertEqual(sections[1], sync.SWIM_SET_REST_DESCRIPTION)
+        self.assertEqual(description.count(sync.SWIM_SET_REST_DESCRIPTION), 1)
+        self.assertFalse(description.endswith(sync.SWIM_SET_REST_DESCRIPTION))
+
+        expected = sync.semantic_expectations(workout)
+        self.assertEqual(expected["press_lap_labels"].count(sync.SWIM_SET_REST_LABEL), 1)
+        self.assertEqual(expected["counts"]["rest"], 2)
+
+    def test_swim_readback_rejects_missing_set_rest(self):
+        workout = compile_device_workout(swim_day())
+        stored = {
+            "workout_doc": {
+                "distance": 2400,
+                "steps": [
+                    {"intensity": "warmup", "distance": 400, "text": "Lugn insim"},
+                    {
+                        "reps": 4,
+                        "steps": [
+                            {"intensity": "active", "distance": 500, "text": "Stadigt aerob"},
+                            {"intensity": "rest", "duration": 30, "text": "Vila"},
+                        ],
+                    },
+                ],
+            }
+        }
+        with self.assertRaises(sync.IntervalsSyncError):
+            sync.verify_semantics(stored, workout)
+
     def test_reconcile_upserts_desired_deletes_stale_and_records_verified_transport(self):
         day = run_day()
         workout = compile_device_workout(day)
