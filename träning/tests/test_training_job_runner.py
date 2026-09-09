@@ -41,17 +41,20 @@ class TrainingJobRunnerTests(unittest.TestCase):
             ],
         )
         self.assertLess(keys.index("rollover_calendar"), keys.index("sync_weather"))
-        self.assertLess(keys.index("coach_analysis"), keys.index("guard_coach_claims"))
+        self.assertLess(keys.index("coach_analysis"), keys.index("materialize_device_workouts"))
+        self.assertLess(keys.index("materialize_device_workouts"), keys.index("validate_device_workouts"))
+        self.assertLess(keys.index("validate_device_workouts"), keys.index("sync_device_workouts"))
+        self.assertLess(keys.index("sync_device_workouts"), keys.index("guard_coach_claims"))
         self.assertEqual(keys[-1], "render_and_validate_site")
 
-    def test_only_resilient_enrichment_stages_are_optional(self):
+    def test_only_resilient_enrichment_and_transport_stages_are_optional(self):
         optional = {stage.key for stage in build_stages("event") if stage.optional}
         self.assertEqual(
             optional,
             {
                 "sync_performance_details",
                 "load_wellness_context",
-                "sync_structured_swim_workouts",
+                "sync_device_workouts",
             },
         )
 
