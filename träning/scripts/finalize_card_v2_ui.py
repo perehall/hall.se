@@ -29,6 +29,7 @@ CSS = r'''
 DAY_OPEN_RE = re.compile(r'<div class="day(?P<classes>[^"]*)" id="dag-(?P<date>\d{4}-\d{2}-\d{2})">')
 DIV_TAG_RE = re.compile(r'<div\b[^>]*>|</div>')
 WHY_RE = re.compile(r'<details class="day-why">.*?</details>', re.S)
+RAW_REASON_RE = re.compile(r'<div class="reason">(.*?)</div>', re.S)
 SYNC_START_RE = re.compile(r'<div class="device-sync-state [^"]+"[^>]*>')
 
 
@@ -77,9 +78,16 @@ def extract_sync(block):
 
 def extract_why(block):
     match = WHY_RE.search(block)
-    if not match:
+    if match:
+        return block[:match.start()] + block[match.end():], match.group(0)
+    reason = RAW_REASON_RE.search(block)
+    if not reason:
         return block, ""
-    return block[:match.start()] + block[match.end():], match.group(0)
+    why = (
+        '<details class="day-why"><summary>Motivering</summary>'
+        f'<div class="reason">{reason.group(1)}</div></details>'
+    )
+    return block[:reason.start()] + block[reason.end():], why
 
 
 def transform_card(block, *, day_text, today_text):
@@ -123,7 +131,8 @@ def validate_page(page):
         raise RuntimeError("Card v2: inga dagkort hittades")
     for start, end, day_text in ranges:
         block = page[start:end]
-        if "workout-card-v2" not in DAY_OPEN_RE.match(block).group("classes"):
+        opening = DAY_OPEN_RE.match(block)
+        if not opening or "workout-card-v2" not in opening.group("classes"):
             raise RuntimeError(f"Card v2: klass saknas på {day_text}")
         if "<strong>Passfokus</strong>" in block or "<strong>Utvecklingsfokus</strong>" in block:
             raise RuntimeError(f"Card v2: gammal fokuslabel kvar på {day_text}")
