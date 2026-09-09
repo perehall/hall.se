@@ -78,15 +78,17 @@ def build_stages(ingest_mode: str) -> list[Stage]:
         Stage("coach_analysis", python_stage("coach_pipeline.py")),
         Stage("materialize_workout_designs_post_coach", python_stage("materialize_workout_designs.py")),
         Stage("validate_workout_designs_post_coach", python_stage("validate_workout_designs.py")),
+        Stage("materialize_device_workouts", python_stage("materialize_device_workouts.py")),
+        Stage("validate_device_workouts", python_stage("validate_device_workouts.py")),
+        Stage(
+            "sync_device_workouts",
+            python_stage("sync_intervals_workouts.py"),
+            optional=True,
+        ),
         Stage("guard_coach_claims", python_stage("coach_output_guard.py")),
         Stage("validate_post_coach", python_stage("validate_training_data.py")),
         Stage("weekly_review", python_stage("weekly_review.py")),
         Stage("validate_week_reviews", python_stage("check_week_reviews.py")),
-        Stage(
-            "sync_structured_swim_workouts",
-            python_stage("sync_intervals_swim.py"),
-            optional=True,
-        ),
         Stage("render_and_validate_site", python_stage("render_training_site.py")),
     ]
 

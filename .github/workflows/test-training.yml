@@ -43,6 +43,8 @@ jobs:
           python "träning/scripts/validate_training_data.py"
           python "träning/scripts/materialize_workout_designs.py"
           python "träning/scripts/validate_workout_designs.py"
+          python "träning/scripts/materialize_device_workouts.py"
+          python "träning/scripts/validate_device_workouts.py"
           python "träning/scripts/render_training_site.py"
           test -s "träning/index.html"
           grep -Fq '<section class="dashboard"' "träning/index.html"
@@ -57,6 +59,7 @@ jobs:
           grep -Fq 'Väderprognos:' "träning/index.html"
           grep -Fq '>SMHI</a>' "träning/index.html"
           grep -Fq 'Passupplägg' "träning/index.html"
+          grep -Fq 'Klocksync väntar' "träning/index.html"
           ! grep -Fq 'Prioritering just nu:' "träning/index.html"
 
       - name: Diff hygiene
