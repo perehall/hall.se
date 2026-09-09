@@ -48,6 +48,8 @@ jobs:
           python "träning/scripts/validate_training_data.py"
           python "träning/scripts/materialize_workout_designs.py"
           python "träning/scripts/validate_workout_designs.py"
+          python "träning/scripts/materialize_device_workouts.py"
+          python "träning/scripts/validate_device_workouts.py"
 
       - name: Render and validate training site
         run: python "träning/scripts/render_training_site.py"
