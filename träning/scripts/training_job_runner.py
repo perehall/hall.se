@@ -60,6 +60,8 @@ def build_stages(ingest_mode: str) -> list[Stage]:
         Stage("validate_normalized_data", python_stage("validate_training_data.py")),
         Stage("rollover_calendar", python_stage("rollover_week.py")),
         Stage("validate_rollover", python_stage("validate_training_data.py")),
+        Stage("materialize_workout_designs", python_stage("materialize_workout_designs.py")),
+        Stage("validate_workout_designs", python_stage("validate_workout_designs.py")),
         persist_token,
         Stage("sync_weather", python_stage("sync_weather.py")),
         Stage(
@@ -74,6 +76,8 @@ def build_stages(ingest_mode: str) -> list[Stage]:
             optional=True,
         ),
         Stage("coach_analysis", python_stage("coach_pipeline.py")),
+        Stage("materialize_workout_designs_post_coach", python_stage("materialize_workout_designs.py")),
+        Stage("validate_workout_designs_post_coach", python_stage("validate_workout_designs.py")),
         Stage("guard_coach_claims", python_stage("coach_output_guard.py")),
         Stage("validate_post_coach", python_stage("validate_training_data.py")),
         Stage("weekly_review", python_stage("weekly_review.py")),
