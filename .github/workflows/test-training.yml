@@ -59,7 +59,9 @@ jobs:
           grep -Fq 'Väderprognos:' "träning/index.html"
           grep -Fq '>SMHI</a>' "träning/index.html"
           grep -Fq 'Passupplägg' "träning/index.html"
-          grep -Fq 'Klocksync väntar' "träning/index.html"
+          grep -Fq 'workout-card-v2' "träning/index.html"
+          grep -Fq 'class="card-v2-footer"' "träning/index.html"
+          grep -Eq 'Klocksync (väntar|skickad|fel)' "träning/index.html"
           ! grep -Fq 'Prioritering just nu:' "träning/index.html"
 
       - name: Diff hygiene
