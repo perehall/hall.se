@@ -4,7 +4,7 @@
   "week_start": "2026-09-07",
   "week_end": "2026-09-13",
   "created_at_utc": "2026-09-06T22:19:36.896236+00:00",
-  "updated_at_utc": "2026-09-09T21:07:08.496866+00:00",
+  "updated_at_utc": "2026-09-09T23:14:25.000842+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -600,142 +600,6 @@
             "reason_for_today": "Etablerad simdistans från nyligen genomförda pass; exakt serie kan återanvändas när strukturen finns i underlaget."
           }
         },
-        "device_workout": {
-          "schema_version": 1,
-          "external_id": "hall-device:2026-09-09:swim:swim_support",
-          "date": "2026-09-09",
-          "sport": "swim",
-          "provider_type": "Swim",
-          "name": "Simning · 3 200 m · aerob/teknik",
-          "source_candidate_id": "swim-support-3200",
-          "source_hash": "f07d9a231b5eb9a1d8e3e5fc5d5648411fc0d16f68348e1f21ec61eb3bc82a30",
-          "blocks": [
-            {
-              "name": "Insim",
-              "sets": 1,
-              "repetitions_per_set": 1,
-              "steps": [
-                {
-                  "kind": "work",
-                  "duration": {
-                    "kind": "distance",
-                    "meters": 400
-                  },
-                  "instruction": "Lugn insim",
-                  "intensity_class": "warmup"
-                }
-              ]
-            },
-            {
-              "name": "Kroppslinje och rotation",
-              "sets": 1,
-              "repetitions_per_set": 6,
-              "steps": [
-                {
-                  "kind": "work",
-                  "duration": {
-                    "kind": "distance",
-                    "meters": 50
-                  },
-                  "instruction": "Stabil linje, kontrollerad rotation",
-                  "intensity_class": "interval"
-                },
-                {
-                  "kind": "recovery",
-                  "duration": {
-                    "kind": "time",
-                    "seconds": 15
-                  },
-                  "instruction": "Vila",
-                  "intensity_class": "recovery",
-                  "press_lap": false,
-                  "transport_reference_only": false
-                }
-              ]
-            },
-            {
-              "name": "Aerob",
-              "sets": 1,
-              "repetitions_per_set": 4,
-              "steps": [
-                {
-                  "kind": "work",
-                  "duration": {
-                    "kind": "distance",
-                    "meters": 500
-                  },
-                  "instruction": "Stadigt aerob med stabil kroppslinje",
-                  "intensity_class": "interval"
-                },
-                {
-                  "kind": "recovery",
-                  "duration": {
-                    "kind": "time",
-                    "seconds": 30
-                  },
-                  "instruction": "Vila",
-                  "intensity_class": "recovery",
-                  "press_lap": false,
-                  "transport_reference_only": false
-                }
-              ]
-            },
-            {
-              "name": "Frekvens",
-              "sets": 1,
-              "repetitions_per_set": 6,
-              "steps": [
-                {
-                  "kind": "work",
-                  "duration": {
-                    "kind": "distance",
-                    "meters": 50
-                  },
-                  "instruction": "Avslappnad frekvens med bibehållen linje",
-                  "intensity_class": "interval"
-                },
-                {
-                  "kind": "recovery",
-                  "duration": {
-                    "kind": "time",
-                    "seconds": 15
-                  },
-                  "instruction": "Vila",
-                  "intensity_class": "recovery",
-                  "press_lap": false,
-                  "transport_reference_only": false
-                }
-              ]
-            },
-            {
-              "name": "Nedvarvning",
-              "sets": 1,
-              "repetitions_per_set": 1,
-              "steps": [
-                {
-                  "kind": "work",
-                  "duration": {
-                    "kind": "distance",
-                    "meters": 200
-                  },
-                  "instruction": "Mycket lugnt",
-                  "intensity_class": "cooldown"
-                }
-              ]
-            }
-          ],
-          "target_policy": "explicit_single_primary_only",
-          "transport": "intervals_icu"
-        },
-        "device_sync": {
-          "status": "synced",
-          "transport": "intervals_icu",
-          "source_hash": "f07d9a231b5eb9a1d8e3e5fc5d5648411fc0d16f68348e1f21ec61eb3bc82a30",
-          "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-09T21:07:07.248865+00:00",
-          "provider_event_id": 134978146,
-          "verified_at_utc": "2026-09-09T21:07:07.248865+00:00"
-        },
         "activity_id": 20106458579
       },
       {
@@ -936,9 +800,9 @@
           "transport": "intervals_icu",
           "source_hash": "037d4e58d570ed501666892cacf319aad92fa8431d4bda18da47f0daf6a8606c",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-09T21:07:07.376242+00:00",
+          "updated_at_utc": "2026-09-09T23:14:23.222068+00:00",
           "provider_event_id": 134978147,
-          "verified_at_utc": "2026-09-09T21:07:07.376242+00:00"
+          "verified_at_utc": "2026-09-09T23:14:23.222068+00:00"
         }
       },
       {
@@ -1415,9 +1279,9 @@
           "transport": "intervals_icu",
           "source_hash": "a831731360ac98c9494694a4af555b6d85d4c3c7e7195e31b09be04941041d2e",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-09T21:07:07.513003+00:00",
+          "updated_at_utc": "2026-09-09T23:14:23.351510+00:00",
           "provider_event_id": 134978148,
-          "verified_at_utc": "2026-09-09T21:07:07.513003+00:00"
+          "verified_at_utc": "2026-09-09T23:14:23.351510+00:00"
         }
       },
       {
@@ -1866,9 +1730,9 @@
           "transport": "intervals_icu",
           "source_hash": "2d2c41bd986a3a4bae6608a871a354dd35d75540bd3bf21e7e20703c1f11b0f7",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-09T21:07:07.644088+00:00",
+          "updated_at_utc": "2026-09-09T23:14:23.476584+00:00",
           "provider_event_id": 134978150,
-          "verified_at_utc": "2026-09-09T21:07:07.644088+00:00"
+          "verified_at_utc": "2026-09-09T23:14:23.476584+00:00"
         }
       }
     ],
@@ -2742,7 +2606,7 @@
       "activity_id": 20106458579,
       "activity_date": "2026-09-09",
       "activity_name": "Simning på kvällen",
-      "generated_at_utc": "2026-09-09T21:07:06.395202+00:00",
+      "generated_at_utc": "2026-09-09T23:14:22.381252+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 1,
@@ -2769,8 +2633,8 @@
       "plan_action": {
         "action": "keep",
         "target_date": "2026-09-10",
-        "reason": "Simningen var avsedd underhåll/teknik med mekanisk kostnad och ger inget sakligt skäl att ändra det planerade MTB-stödet.",
-        "recommendation": "Behåll torsdagens MTB/XC/XC 60 min enligt plan; om du känner ovanlig lokal bentrötthet eller stelhet i morgon, korta till 45 min istället.",
+        "reason": "Simningen var avsedd som underhåll/teknik och ger mekanisk kostnad inför kommande prioriterade löppass.",
+        "recommendation": "Behåll planerad MTB/XC/XC 60 min för 2026-09-10 som baseline (MTB/XC/XC · 60 min · teknik + lugn aerob stig). Ingen ändring av fredagens backpass rekommenderas utifrån denna simning.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -2815,7 +2679,7 @@
         "action": "keep",
         "target_date": "2026-09-09",
         "reason": "Senaste passet motsvarade den planerade progressionen och närbelastningen tillåter att planen kvarstår.",
-        "recommendation": "Behåll simpasset 3 200 m imorgon enligt plan; notera subjektiv återhämtning och benkänsla före torsdagens MTB/XC/XC/XC/XC/XC och fredagens backpass.",
+        "recommendation": "Behåll simpasset 3 200 m imorgon enligt plan; notera subjektiv återhämtning och benkänsla före torsdagens MTB/XC/XC/XC/XC/XC/XC och fredagens backpass.",
         "dose_option_id": "",
         "requires_approval": false
       },
