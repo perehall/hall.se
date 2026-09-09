@@ -592,6 +592,142 @@
           "preferred_dose_option_id": "swim-support-3200",
           "reason_for_today": "Etablerad simdistans från nyligen genomförda pass; exakt serie kan återanvändas när strukturen finns i underlaget."
         }
+      },
+      "device_workout": {
+        "schema_version": 1,
+        "external_id": "hall-device:2026-09-09:swim:swim_support",
+        "date": "2026-09-09",
+        "sport": "swim",
+        "provider_type": "Swim",
+        "name": "Simning · 3 200 m · aerob/teknik",
+        "source_candidate_id": "swim-support-3200",
+        "source_hash": "f07d9a231b5eb9a1d8e3e5fc5d5648411fc0d16f68348e1f21ec61eb3bc82a30",
+        "blocks": [
+          {
+            "name": "Insim",
+            "sets": 1,
+            "repetitions_per_set": 1,
+            "steps": [
+              {
+                "kind": "work",
+                "duration": {
+                  "kind": "distance",
+                  "meters": 400
+                },
+                "instruction": "Lugn insim",
+                "intensity_class": "warmup"
+              }
+            ]
+          },
+          {
+            "name": "Kroppslinje och rotation",
+            "sets": 1,
+            "repetitions_per_set": 6,
+            "steps": [
+              {
+                "kind": "work",
+                "duration": {
+                  "kind": "distance",
+                  "meters": 50
+                },
+                "instruction": "Stabil linje, kontrollerad rotation",
+                "intensity_class": "interval"
+              },
+              {
+                "kind": "recovery",
+                "duration": {
+                  "kind": "time",
+                  "seconds": 15
+                },
+                "instruction": "Vila",
+                "intensity_class": "recovery",
+                "press_lap": false,
+                "transport_reference_only": false
+              }
+            ]
+          },
+          {
+            "name": "Aerob",
+            "sets": 1,
+            "repetitions_per_set": 4,
+            "steps": [
+              {
+                "kind": "work",
+                "duration": {
+                  "kind": "distance",
+                  "meters": 500
+                },
+                "instruction": "Stadigt aerob med stabil kroppslinje",
+                "intensity_class": "interval"
+              },
+              {
+                "kind": "recovery",
+                "duration": {
+                  "kind": "time",
+                  "seconds": 30
+                },
+                "instruction": "Vila",
+                "intensity_class": "recovery",
+                "press_lap": false,
+                "transport_reference_only": false
+              }
+            ]
+          },
+          {
+            "name": "Frekvens",
+            "sets": 1,
+            "repetitions_per_set": 6,
+            "steps": [
+              {
+                "kind": "work",
+                "duration": {
+                  "kind": "distance",
+                  "meters": 50
+                },
+                "instruction": "Avslappnad frekvens med bibehållen linje",
+                "intensity_class": "interval"
+              },
+              {
+                "kind": "recovery",
+                "duration": {
+                  "kind": "time",
+                  "seconds": 15
+                },
+                "instruction": "Vila",
+                "intensity_class": "recovery",
+                "press_lap": false,
+                "transport_reference_only": false
+              }
+            ]
+          },
+          {
+            "name": "Nedvarvning",
+            "sets": 1,
+            "repetitions_per_set": 1,
+            "steps": [
+              {
+                "kind": "work",
+                "duration": {
+                  "kind": "distance",
+                  "meters": 200
+                },
+                "instruction": "Mycket lugnt",
+                "intensity_class": "cooldown"
+              }
+            ]
+          }
+        ],
+        "target_policy": "explicit_single_primary_only",
+        "transport": "intervals_icu"
+      },
+      "device_sync": {
+        "status": "synced",
+        "transport": "intervals_icu",
+        "source_hash": "f07d9a231b5eb9a1d8e3e5fc5d5648411fc0d16f68348e1f21ec61eb3bc82a30",
+        "device_delivery": "unverified",
+        "updated_at_utc": "2026-09-09T12:38:30.141203+00:00",
+        "provider_event_id": 134978146,
+        "verified_at_utc": "2026-09-09T12:38:30.141203+00:00"
       }
     },
     {
@@ -756,6 +892,45 @@
           "preferred_dose_option_id": "mtb-support-60",
           "reason_for_today": "Normal konservativ stöddos när teknisk MTB/XC ska bibehållas utan att konkurrera med nästa prioriterade löpstimulus."
         }
+      },
+      "device_workout": {
+        "schema_version": 1,
+        "external_id": "hall-device:2026-09-10:bike:mtb_support",
+        "date": "2026-09-10",
+        "sport": "bike",
+        "provider_type": "Ride",
+        "name": "MTB/XC · 60 min · teknik + lugn aerob stig",
+        "source_candidate_id": "mtb-support-60",
+        "source_hash": "037d4e58d570ed501666892cacf319aad92fa8431d4bda18da47f0daf6a8606c",
+        "blocks": [
+          {
+            "name": "MTB/XC",
+            "sets": 1,
+            "repetitions_per_set": 1,
+            "steps": [
+              {
+                "kind": "work",
+                "duration": {
+                  "kind": "time",
+                  "seconds": 3600
+                },
+                "instruction": "Blick, linjeval, bromspunkter och flyt före segmentjakt.",
+                "intensity_class": "active"
+              }
+            ]
+          }
+        ],
+        "target_policy": "explicit_single_primary_only",
+        "transport": "intervals_icu"
+      },
+      "device_sync": {
+        "status": "synced",
+        "transport": "intervals_icu",
+        "source_hash": "037d4e58d570ed501666892cacf319aad92fa8431d4bda18da47f0daf6a8606c",
+        "device_delivery": "unverified",
+        "updated_at_utc": "2026-09-09T12:38:30.454748+00:00",
+        "provider_event_id": 134978147,
+        "verified_at_utc": "2026-09-09T12:38:30.454748+00:00"
       }
     },
     {
@@ -1153,6 +1328,88 @@
           "preferred_dose_option_id": "run-hill-3x7x150",
           "reason_for_today": "Nästa normala utvecklingssteg ökar endast arbetsrepetitionerna från 18 till 21."
         }
+      },
+      "device_workout": {
+        "schema_version": 1,
+        "external_id": "hall-device:2026-09-11:run:run_hill_quality",
+        "date": "2026-09-11",
+        "sport": "run",
+        "provider_type": "Run",
+        "name": "Löpning · backkvalitet · 15 min lugnt + 3 × 7 × 150 m / lugn joggvila + 10 min lugnt",
+        "source_candidate_id": "run-hill-3x7x150",
+        "source_hash": "a831731360ac98c9494694a4af555b6d85d4c3c7e7195e31b09be04941041d2e",
+        "blocks": [
+          {
+            "name": "Uppvärmning",
+            "sets": 1,
+            "repetitions_per_set": 1,
+            "steps": [
+              {
+                "kind": "work",
+                "duration": {
+                  "kind": "time",
+                  "seconds": 900
+                },
+                "instruction": "Lugnt",
+                "intensity_class": "active"
+              }
+            ]
+          },
+          {
+            "name": "Backkvalitet",
+            "sets": 3,
+            "repetitions_per_set": 7,
+            "steps": [
+              {
+                "kind": "work",
+                "duration": {
+                  "kind": "distance",
+                  "meters": 150
+                },
+                "instruction": "Kraftfull men kontrollerad löpning med bibehållen mekanik. Utveckla arbetsmängden stegvis; ingen maximal sprint eller syrajakt.",
+                "intensity_class": "interval"
+              },
+              {
+                "kind": "recovery",
+                "duration": {
+                  "kind": "time",
+                  "seconds": 1
+                },
+                "instruction": "Lugn joggvila",
+                "intensity_class": "recovery",
+                "press_lap": true,
+                "transport_reference_only": true
+              }
+            ]
+          },
+          {
+            "name": "Nedjogg",
+            "sets": 1,
+            "repetitions_per_set": 1,
+            "steps": [
+              {
+                "kind": "work",
+                "duration": {
+                  "kind": "time",
+                  "seconds": 600
+                },
+                "instruction": "Lugnt",
+                "intensity_class": "active"
+              }
+            ]
+          }
+        ],
+        "target_policy": "explicit_single_primary_only",
+        "transport": "intervals_icu"
+      },
+      "device_sync": {
+        "status": "synced",
+        "transport": "intervals_icu",
+        "source_hash": "a831731360ac98c9494694a4af555b6d85d4c3c7e7195e31b09be04941041d2e",
+        "device_delivery": "unverified",
+        "updated_at_utc": "2026-09-09T12:38:30.580763+00:00",
+        "provider_event_id": 134978148,
+        "verified_at_utc": "2026-09-09T12:38:30.580763+00:00"
       }
     },
     {
@@ -1565,6 +1822,45 @@
           "preferred_dose_option_id": "run-easy-75",
           "reason_for_today": "Konservativ distansdos inom nyligen etablerad lugn löpvolym."
         }
+      },
+      "device_workout": {
+        "schema_version": 1,
+        "external_id": "hall-device:2026-09-13:run:run_easy_distance",
+        "date": "2026-09-13",
+        "sport": "run",
+        "provider_type": "Run",
+        "name": "Löpning · lugn distans · 75 min",
+        "source_candidate_id": "run-easy-75",
+        "source_hash": "2d2c41bd986a3a4bae6608a871a354dd35d75540bd3bf21e7e20703c1f11b0f7",
+        "blocks": [
+          {
+            "name": "Pass",
+            "sets": 1,
+            "repetitions_per_set": 1,
+            "steps": [
+              {
+                "kind": "work",
+                "duration": {
+                  "kind": "time",
+                  "seconds": 4500
+                },
+                "instruction": "Avslappnad rytm och jämn ansträngning.",
+                "intensity_class": "active"
+              }
+            ]
+          }
+        ],
+        "target_policy": "explicit_single_primary_only",
+        "transport": "intervals_icu"
+      },
+      "device_sync": {
+        "status": "synced",
+        "transport": "intervals_icu",
+        "source_hash": "2d2c41bd986a3a4bae6608a871a354dd35d75540bd3bf21e7e20703c1f11b0f7",
+        "device_delivery": "unverified",
+        "updated_at_utc": "2026-09-09T12:38:30.738485+00:00",
+        "provider_event_id": 134978150,
+        "verified_at_utc": "2026-09-09T12:38:30.738485+00:00"
       }
     }
   ],
@@ -1576,5 +1872,6 @@
     "Enarmsrodd + press som huvuddrag/press.",
     "Välj två bålövningar; låt inte accessoarer tränga undan huvudstyrkan."
   ],
-  "workout_design_schema_version": 1
+  "workout_design_schema_version": 1,
+  "device_workout_schema_version": 1
 }
