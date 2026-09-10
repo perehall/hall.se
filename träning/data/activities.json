@@ -1,5 +1,5 @@
 {
-  "last_sync_utc": "2026-09-10T19:33:04.034163+00:00",
+  "last_sync_utc": "2026-09-10T19:39:36.941371+00:00",
   "activities": [
     {
       "id": 20120769386,
@@ -74,9 +74,9 @@
         "contract_version": 3,
         "activity_id": 20120769386,
         "sport_type": "MountainBikeRide",
-        "display_label": "MountainBikeRide",
-        "classification": null,
-        "user_report": "",
+        "display_label": "MTB/XC",
+        "classification": "training",
+        "user_report": "Passet blev lite lugnare och längre på grund av mörkret.",
         "total": {
           "distance_m": 17118.2,
           "distance_km": 17.118,
@@ -90,7 +90,12 @@
         "swim": null,
         "enduro": null,
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
-      }
+      },
+      "source_sport_type": "MountainBikeRide",
+      "classification": "training",
+      "display_label": "MTB/XC",
+      "user_report": "Passet blev lite lugnare och längre på grund av mörkret.",
+      "classification_reason": "Explicit användarrapport förklarar att den längre varaktigheten inte speglar en avsiktlig belastningsökning: mörkret sänkte farten och gjorde passet lugnare samtidigt som tiden blev längre. Detta ska vägas in vid bedömning av närbelastning inför nästa löppass."
     },
     {
       "id": 20106458579,
@@ -5926,7 +5931,7 @@
     "schema_version": 1,
     "workout_analysis_contract_version": 3,
     "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
-    "overrides_applied": 8,
+    "overrides_applied": 9,
     "auto_rules_applied": 9,
     "override_ids_present": [
       "19852599244",
@@ -5936,9 +5941,12 @@
       "19946705399",
       "20036445971",
       "20057585521",
-      "20092166843"
+      "20092166843",
+      "20120769386"
     ],
-    "changed_ids": []
+    "changed_ids": [
+      "20120769386"
+    ]
   },
   "schema_version": 2,
   "last_webhook_event": {
