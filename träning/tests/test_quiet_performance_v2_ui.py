@@ -58,7 +58,11 @@ class QuietPerformanceV2Tests(unittest.TestCase):
         self.assertEqual(twice.count(CSS_END), 1)
 
     def test_v1_is_required(self):
-        raw = self.sample_page().replace('quiet-performance', 'legacy', 1)
+        raw = self.sample_page().replace(
+            '<body class="quiet-performance">',
+            '<body class="legacy">',
+            1,
+        )
         with self.assertRaises(RuntimeError):
             apply_v2(raw, current=True)
 
