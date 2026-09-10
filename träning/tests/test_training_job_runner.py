@@ -40,6 +40,8 @@ class TrainingJobRunnerTests(unittest.TestCase):
                 "sync_reported_progression_post",
             ],
         )
+        self.assertLess(keys.index("rollover_calendar"), keys.index("apply_plan_overrides"))
+        self.assertLess(keys.index("apply_plan_overrides"), keys.index("validate_rollover"))
         self.assertLess(keys.index("rollover_calendar"), keys.index("sync_weather"))
         self.assertLess(keys.index("coach_analysis"), keys.index("materialize_device_workouts"))
         self.assertLess(keys.index("materialize_device_workouts"), keys.index("validate_device_workouts"))
