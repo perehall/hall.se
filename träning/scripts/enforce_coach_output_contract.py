@@ -22,7 +22,8 @@ SPORT_WORDS = {
 
 # Canonical strategy/stimulus identifiers are valid machine data but must never
 # leak into visible coaching copy. Keep a deterministic safety mapping here as
-# a guard before the broader language normalizer runs.
+# a guard before the broader language normalizer runs. The sim_* aliases cover
+# the hybrid Swedish/English identifiers the model has actually emitted.
 VISIBLE_INTERNAL_TERMS = {
     "run_threshold": "kontrollerad löptröskel",
     "run_hill_quality": "backstyrka/löpekonomi",
@@ -33,6 +34,8 @@ VISIBLE_INTERNAL_TERMS = {
     "strength_core": "core",
     "swim_aerobic": "aerob simning",
     "swim_technique": "simteknik",
+    "sim_aerobic": "aerob simning",
+    "sim_technique": "simteknik",
     "enduro_technical": "enduroteknik",
     "swim_support": "stödjande simpass",
     "mtb_support": "stödjande MTB-pass",
