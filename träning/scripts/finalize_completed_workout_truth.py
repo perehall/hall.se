@@ -64,6 +64,21 @@ def day_card_ranges(page):
     ]
 
 
+def ensure_completed_class(block, day_text):
+    pattern = re.compile(
+        rf'<div class="day(?P<classes>[^"]*)" id="dag-{re.escape(day_text)}">'
+    )
+    opening = pattern.search(block)
+    if not opening:
+        raise RuntimeError(f"Genomfört-kontrakt: dagöppning saknas för {day_text}")
+    classes = [token for token in (opening.group("classes") or "").split() if token]
+    if "completed-day" in classes:
+        return block
+    classes.append("completed-day")
+    replacement = f'<div class="day {" ".join(classes)}" id="dag-{day_text}">'
+    return block[:opening.start()] + replacement + block[opening.end():]
+
+
 def force_completed_badges(page, plan, activities):
     fulfilled_dates = {
         str(day.get("date"))
@@ -74,6 +89,7 @@ def force_completed_badges(page, plan, activities):
         if day_text not in fulfilled_dates:
             continue
         block = page[start:end]
+        block = ensure_completed_class(block, day_text)
         block, count = re.subn(
             r'<div class="badge [^"]+">[^<]*</div>',
             '<div class="badge fixed">Genomfört</div>',
@@ -154,6 +170,14 @@ def assert_completed_truth(page, plan, activities, today_context):
         if not fulfilled_activity(day, activities):
             continue
         day_text = str(day.get("date") or "")
+        opening = re.search(
+            rf'<div class="day(?P<classes>[^"]*)" id="dag-{re.escape(day_text)}">',
+            page,
+        )
+        if not opening:
+            raise RuntimeError(f"Genomfört-kontrakt: dagkort saknas för {day_text}")
+        if "completed-day" not in (opening.group("classes") or "").split():
+            raise RuntimeError(f"Genomfört-kontrakt: {day_text} saknar completed-day")
         match = re.search(
             rf'<div class="day[^"]*" id="dag-{re.escape(day_text)}">(.*?)(?=<div class="day[^"]*" id="dag-|<footer>|$)',
             page,
