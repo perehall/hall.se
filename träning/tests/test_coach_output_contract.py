@@ -161,6 +161,69 @@ class CoachOutputContractTests(unittest.TestCase):
         self.assertEqual(len(analysis["assessment"]["unknowns"]), 2)
         self.assertEqual(analysis["plan_action"]["recommendation"], "Gör A. Gör B.")
 
+    def test_reduced_dose_copy_never_exposes_machine_id_or_unapproved_alternative(self):
+        bad_copy = (
+            'Skala ner fredagens backkvalitet till dose_option_id "run-hill-3x6x150" '
+            '(3×6×150 m) och prioritera mekanik och lugn joggvila; eller behåll struktur '
+            'men förkorta varje repetition till ~120–130 m. Välj "run-hill-3x6x150" om '
+            'du vill ha konkret reduceringsdos.'
+        )
+        coach = {"analyses": [{
+            "activity_id": 5,
+            "activity_date": "2026-09-10",
+            "performance_marker_id": None,
+            "assessment": {
+                "summary": "MTB-passet är genomfört.",
+                "load_interpretation": "Bedömning.",
+                "confidence": "medium",
+                "facts": [],
+                "interpretations": [],
+                "unknowns": [],
+            },
+            "plan_action": {
+                "action": "reduce",
+                "target_date": "2026-09-11",
+                "reason": "MTB-passet motiverar en konservativ justering.",
+                "recommendation": bad_copy,
+                "dose_option_id": "",
+                "requires_approval": False,
+            },
+        }]}
+        plan = {"days": [{
+            "date": "2026-09-11",
+            "session": "Löpning · backkvalitet · 15 min lugnt + 3 × 6 × 150 m / lugn joggvila + 10 min lugnt",
+            "original_session": "Löpning · backkvalitet · 15 min lugnt + 3 × 7 × 150 m / lugn joggvila + 10 min lugnt",
+            "dose_options": [{
+                "id": "run-hill-3x6x150",
+                "kind": "structured",
+                "value": 18,
+                "session": "Löpning · backkvalitet · 15 min lugnt + 3 × 6 × 150 m / lugn joggvila + 10 min lugnt",
+            }],
+            "dose_resolution": {
+                "state": "resolved",
+                "option_id": "run-hill-3x6x150",
+                "value": 18,
+            },
+            "auto_coach": {"action": "reduce"},
+            "coach_adjustment": "Skala ned passet. " + bad_copy,
+        }]}
+        activities = {"activities": [{"id": 5, "sport_type": "MountainBikeRide"}]}
+
+        self.assertTrue(contract.enforce_contract(coach, plan, activities))
+        self.assertTrue(contract.enforce_plan_copy_contract(plan))
+
+        recommendation = coach["analyses"][0]["plan_action"]["recommendation"]
+        adjustment = plan["days"][0]["coach_adjustment"]
+        self.assertEqual(recommendation, "Följ det justerade passupplägget i planen.")
+        self.assertEqual(
+            adjustment,
+            "Passet är nedjusterat från grundplanen. Följ passupplägget ovan.",
+        )
+        visible = recommendation + " " + adjustment
+        self.assertNotIn("dose_option_id", visible)
+        self.assertNotIn("run-hill-3x6x150", visible)
+        self.assertNotIn("120–130", visible)
+
 
 if __name__ == "__main__":
     unittest.main()
