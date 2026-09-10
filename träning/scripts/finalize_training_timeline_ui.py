@@ -134,6 +134,15 @@ body.quiet-performance.qp-current .week-timeline>.day.card-v2-today>.daytop::aft
   border-color:var(--qp-accent);
   background:var(--qp-accent);
 }
+body.quiet-performance.qp-current .week-timeline>.day>.daytop .day-date-line{
+  display:block!important;
+  min-width:0;
+}
+body.quiet-performance.qp-current .week-timeline>.day>.daytop .dow,
+body.quiet-performance.qp-current .week-timeline>.day>.daytop .date{
+  display:block!important;
+  max-width:100%;
+}
 body.quiet-performance.qp-current .week-timeline>.day>.daytop .dow{
   margin:0;
   color:var(--qp-tertiary);
@@ -179,6 +188,7 @@ body.quiet-performance.qp-current .week-timeline>.day>.session{
 }
 body.quiet-performance.qp-current .week-timeline>.day>.reason{margin-top:3px;color:var(--qp-secondary)}
 body.quiet-performance.qp-current .week-timeline>.day .workout-prescription{margin-top:12px}
+body.quiet-performance.qp-current .week-timeline>.day.completed-day .workout-prescription{display:none!important}
 body.quiet-performance.qp-current .week-timeline>.day .card-v2-footer{margin-top:12px}
 
 /* No nested card language inside the week timeline either. */
@@ -407,6 +417,8 @@ def validate_page(page: str) -> None:
         "border-radius:0!important;",
         "box-shadow:none!important;",
         "timeline-active",
+        ".daytop .day-date-line",
+        ".day.completed-day .workout-prescription{display:none!important}",
     ]
     missing = [value for value in required if value not in page]
     if missing:
