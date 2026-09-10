@@ -4,7 +4,7 @@
   "week_start": "2026-09-07",
   "week_end": "2026-09-13",
   "created_at_utc": "2026-09-06T22:19:36.896236+00:00",
-  "updated_at_utc": "2026-09-10T20:51:39.732295+00:00",
+  "updated_at_utc": "2026-09-10T23:10:10.634052+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -605,45 +605,6 @@
             "reason_for_today": "Normal konservativ stöddos när teknisk MTB/XC ska bibehållas utan att konkurrera med nästa prioriterade löpstimulus."
           }
         },
-        "device_workout": {
-          "schema_version": 1,
-          "external_id": "hall-device:2026-09-10:bike:mtb_support",
-          "date": "2026-09-10",
-          "sport": "bike",
-          "provider_type": "Ride",
-          "name": "MTB/XC · 60 min · teknik + lugn aerob stig",
-          "source_candidate_id": "mtb-support-60",
-          "source_hash": "037d4e58d570ed501666892cacf319aad92fa8431d4bda18da47f0daf6a8606c",
-          "blocks": [
-            {
-              "name": "MTB/XC",
-              "sets": 1,
-              "repetitions_per_set": 1,
-              "steps": [
-                {
-                  "kind": "work",
-                  "duration": {
-                    "kind": "time",
-                    "seconds": 3600
-                  },
-                  "instruction": "Blick, linjeval, bromspunkter och flyt före segmentjakt.",
-                  "intensity_class": "active"
-                }
-              ]
-            }
-          ],
-          "target_policy": "explicit_single_primary_only",
-          "transport": "intervals_icu"
-        },
-        "device_sync": {
-          "status": "synced",
-          "transport": "intervals_icu",
-          "source_hash": "037d4e58d570ed501666892cacf319aad92fa8431d4bda18da47f0daf6a8606c",
-          "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-10T20:51:38.301123+00:00",
-          "provider_event_id": 134978147,
-          "verified_at_utc": "2026-09-10T20:51:38.301123+00:00"
-        },
         "activity_id": 20120769386
       },
       {
@@ -1123,15 +1084,15 @@
           "transport": "intervals_icu",
           "source_hash": "32ecea7f2d845d2d95a0191b4cdf54dc34eb3ca3c3c4963ef7923a1a38671446",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-10T20:51:38.428742+00:00",
+          "updated_at_utc": "2026-09-10T23:10:09.305109+00:00",
           "provider_event_id": 134978148,
-          "verified_at_utc": "2026-09-10T20:51:38.428742+00:00"
+          "verified_at_utc": "2026-09-10T23:10:09.305109+00:00"
         },
         "original_session": "Löpning · backkvalitet · 15 min lugnt + 3 × 7 × 150 m / lugn joggvila + 10 min lugnt",
         "auto_coach": {
           "action": "reduce",
-          "reason": "MTB-passet översteg godkänd duration och minskar marginalen inför morgondagens prioriterade backkvalitet.",
-          "applied_at_utc": "2026-09-10T20:51:37.654390+00:00"
+          "reason": "MTB-passet översteg godkänd duration och near-term-policy väljer konservativ reduktion för att skydda fredagens prioriterade backkvalitet.",
+          "applied_at_utc": "2026-09-10T23:10:08.332629+00:00"
         },
         "coach_adjustment": "Passet är nedjusterat från grundplanen. Följ passupplägget ovan."
       },
@@ -1356,9 +1317,9 @@
           "transport": "intervals_icu",
           "source_hash": "2d2c41bd986a3a4bae6608a871a354dd35d75540bd3bf21e7e20703c1f11b0f7",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-10T20:51:38.555322+00:00",
+          "updated_at_utc": "2026-09-10T23:10:09.556534+00:00",
           "provider_event_id": 134978150,
-          "verified_at_utc": "2026-09-10T20:51:38.555322+00:00"
+          "verified_at_utc": "2026-09-10T23:10:09.556534+00:00"
         }
       }
     ],
@@ -2864,7 +2825,7 @@
       "activity_id": 20120769386,
       "activity_date": "2026-09-10",
       "activity_name": "Evening Mountain Bike Ride",
-      "generated_at_utc": "2026-09-10T20:51:37.656261+00:00",
+      "generated_at_utc": "2026-09-10T23:10:08.333939+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 2,
@@ -2876,8 +2837,8 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "71,8 min MTB/XC/XC genomfördes lugnare än planerat p.g.a.",
-        "load_interpretation": "Varaktigheten överskred godkänd 60 min men användarrapport säger lägre intensitet, så närbelastningen påverkar fredagens backkvalitet måttligt.",
+        "summary": "MTB-passet blev längre än godkänd dos men användarrapport och lägre intensitet visar att det var lugnare; ingen akut negativ signal för fredagens backkvalitet.",
+        "load_interpretation": "Närbelastningen är lätt–moderat kardiovaskulärt men med ökad varaktighet; mekanisk/neuromuskulär påverkan bedöms måttlig utan rapporterade problem.",
         "confidence": "medium",
         "facts": [
           "MTB/XC: 17,12 km · 1:13:14 · 183 m+ · snittpuls 125,5 · maxpuls 147.",
@@ -2886,18 +2847,18 @@
           "Planerad tidsdos 60 min; faktisk rörelsetid 71.8 min (+11.8 min mot vald dos); över längsta godkända alternativet 60 min."
         ],
         "interpretations": [
-          "Passet visar att teknisk/aerob MTB-stöd genomfördes men överstiget duration godkänd dos; det minskar marginalen inför morgondagens prioriterade löppass.",
+          "Den längre varaktigheten överstiger godkänd range men subjektiv rapport och snittpuls pekar mot reducerad intensitet snarare än extra kvalitet.",
           "Tidsdosen blev 71.8 min mot valda 60 min och översteg även det längsta godkända alternativet 60 min."
         ],
         "unknowns": [
-          "Hur du känner dig imorgon (24–72 h återhämtning)",
-          "Eventuella lokala muskeltröttheter eller småskador efter mörkerkörning"
+          "Hur subjektiv återhämtning känns nästa morgon (24–48 h)",
+          "Detaljerad mekanisk trötthet i benen efter MTB/XC stopp/tekniska sektioner"
         ]
       },
       "plan_action": {
         "action": "reduce",
         "target_date": "2026-09-11",
-        "reason": "MTB-passet översteg godkänd duration och minskar marginalen inför morgondagens prioriterade backkvalitet.",
+        "reason": "MTB-passet översteg godkänd duration och near-term-policy väljer konservativ reduktion för att skydda fredagens prioriterade backkvalitet.",
         "recommendation": "Följ det justerade passupplägget i planen.",
         "dose_option_id": "",
         "requires_approval": false
@@ -2943,7 +2904,7 @@
         "action": "keep",
         "target_date": "2026-09-10",
         "reason": "Simpasset var underhåll/teknikorienterat och visar inga tecken som kräver kortsiktig nedskalning av planerad MTB-stöddos.",
-        "recommendation": "Behåll planerad MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC 60 min (MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC · 60 min · teknik + lugn aerob stig). Om du kände dig ovanligt trött senare, meddela det innan beslut om ändring tas.",
+        "recommendation": "Behåll planerad MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC 60 min (MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC · 60 min · teknik + lugn aerob stig). Om du kände dig ovanligt trött senare, meddela det innan beslut om ändring tas.",
         "dose_option_id": "",
         "requires_approval": false
       },
