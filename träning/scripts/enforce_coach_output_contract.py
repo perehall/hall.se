@@ -20,6 +20,27 @@ SPORT_WORDS = {
     "Enduro": ("enduro",),
 }
 
+# Canonical strategy/stimulus identifiers are valid machine data but must never
+# leak into visible coaching copy. Keep a deterministic safety mapping here as
+# a guard before the broader language normalizer runs. The sim_* aliases cover
+# the hybrid Swedish/English identifiers the model has actually emitted.
+VISIBLE_INTERNAL_TERMS = {
+    "run_threshold": "kontrollerad löptröskel",
+    "run_hill_quality": "backstyrka/löpekonomi",
+    "run_easy_distance": "lugn löpdistans",
+    "mtb_technical": "MTB-teknik",
+    "mtb_aerobic": "aerob MTB/XC",
+    "strength_unilateral": "unilateral benstyrka",
+    "strength_core": "core",
+    "swim_aerobic": "aerob simning",
+    "swim_technique": "simteknik",
+    "sim_aerobic": "aerob simning",
+    "sim_technique": "simteknik",
+    "enduro_technical": "enduroteknik",
+    "swim_support": "stödjande simpass",
+    "mtb_support": "stödjande MTB-pass",
+}
+
 
 def load_json(path, fallback):
     if not path.exists():
@@ -27,8 +48,20 @@ def load_json(path, fallback):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def replace_visible_internal_terms(value):
+    text = str(value or "")
+    for raw, public in sorted(VISIBLE_INTERNAL_TERMS.items(), key=lambda item: len(item[0]), reverse=True):
+        text = re.sub(
+            rf"(?<![A-Za-z0-9_-]){re.escape(raw)}(?![A-Za-z0-9_-])",
+            public,
+            text,
+            flags=re.IGNORECASE,
+        )
+    return text
+
+
 def first_sentences(value, count=1, max_chars=None):
-    text = re.sub(r"\s+", " ", str(value or "").strip())
+    text = re.sub(r"\s+", " ", replace_visible_internal_terms(value).strip())
     if not text:
         return ""
     parts = [p.strip() for p in re.split(r"(?<=[.!?])\s+", text) if p.strip()]
@@ -95,6 +128,19 @@ def compact_list(values, limit, max_chars):
         if text and text not in result:
             result.append(text)
         if len(result) >= limit:
+            break
+    return result
+
+
+def clean_fact_list(values):
+    result = []
+    for item in values or []:
+        if not isinstance(item, str):
+            continue
+        text = replace_visible_internal_terms(item).strip()
+        if text and text not in result:
+            result.append(text)
+        if len(result) >= 4:
             break
     return result
 
@@ -188,6 +234,7 @@ def enforce_contract(coach, plan, activities_state):
         assessment["load_interpretation"] = first_sentences(
             assessment.get("load_interpretation"), 1, 170
         )
+        assessment["facts"] = clean_fact_list(assessment.get("facts"))
         assessment["interpretations"] = compact_list(
             assessment.get("interpretations"), 2, 190
         )
@@ -223,13 +270,13 @@ def main():
     coach = load_json(COACH_FILE, {"analyses": []})
     changed = enforce_contract(coach, plan, activities)
     if changed:
-        coach["output_contract_version"] = 17
+        coach["output_contract_version"] = 18
         COACH_FILE.write_text(
             json.dumps(coach, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
         )
-        print("Coach output contract v17: analysen kompakterad och evidensgrindar applicerade.")
+        print("Coach output contract v18: analysen kompakterad och evidens-/språkgrindar applicerade.")
     else:
-        print("Coach output contract v17: inga korrigeringar behövdes.")
+        print("Coach output contract v18: inga korrigeringar behövdes.")
     return 0
 
 
