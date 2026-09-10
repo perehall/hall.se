@@ -44,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      actions: read
+      actions: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -85,6 +85,7 @@ jobs:
           python "träning/scripts/training_job_runner.py" --ingest-mode "$ingest_mode"
 
       - name: Commit synced data, coach state and live page
+        id: commit_changes
         run: |
           TRACKED=(
             "träning/data/activities.json"
@@ -106,6 +107,7 @@ jobs:
             "träning/index.manual-backup.html"
           )
           if [ -z "$(git status --porcelain -- "${TRACKED[@]}")" ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
             echo "No repository changes."
           else
             git config user.name "training-bot"
@@ -114,8 +116,17 @@ jobs:
             git commit -m "Auto-update training page and AI coach"
             git pull --rebase --autostash origin main
             git push origin main
+            echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Confirm Pages handoff
+      - name: Dispatch canonical Pages deployment
+        if: steps.commit_changes.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          echo "Training update complete. Published site changes are deployed only by deploy-pages.yml."
+          gh workflow run deploy-pages.yml --ref main
+          echo "Published site changes handed off to the single canonical Pages deployer."
+
+      - name: Confirm no deployment needed
+        if: steps.commit_changes.outputs.changed != 'true'
+        run: echo "Training update complete; site content was unchanged, so no Pages deployment is needed."
