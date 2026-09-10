@@ -24,7 +24,7 @@ from workout_plan_context import (
 )
 
 
-COACH_PIPELINE_CONTRACT_VERSION = 1
+COACH_PIPELINE_CONTRACT_VERSION = 2
 SCRIPTS = Path(__file__).resolve().parent
 ANALYSIS_CODE_FILES = (
     SCRIPTS / "coach_pipeline.py",
@@ -158,6 +158,45 @@ def concretize_deferred_review(action, decision_plan, latest_date):
     return normalized
 
 
+def normalize_invalid_dose_option_action(action, decision_plan):
+    """Fail closed when the model mixes a dose option from another planned day.
+
+    A model-generated option id is advisory until it has been matched against the
+    target day's deterministic dose_options. A cross-day or invented id must never
+    abort activity ingestion/publication and must never be replaced by a guessed
+    alternative. Convert only that invalid automatic action to review.
+    """
+    normalized = dict(action)
+    option_id = str(normalized.get("dose_option_id") or "").strip()
+    target = str(normalized.get("target_date") or "").strip()
+    kind = normalized.get("action")
+    if not option_id or not target or kind not in {"keep", "reduce"}:
+        return normalized
+
+    day = next(
+        (item for item in decision_plan.get("days") or [] if item.get("date") == target),
+        None,
+    )
+    if not day:
+        return normalized
+
+    valid_ids = {
+        str(option.get("id") or "").strip()
+        for option in (day.get("dose_options") or [])
+        if str(option.get("id") or "").strip()
+    }
+    if option_id in valid_ids:
+        return normalized
+
+    normalized["action"] = "review"
+    normalized["target_date"] = ""
+    normalized["dose_option_id"] = ""
+    normalized["reason"] = "Det valda dosalternativet matchar inte det planerade passet."
+    normalized["recommendation"] = "Behåll nuvarande plan; ingen automatisk ändring görs."
+    normalized["requires_approval"] = False
+    return normalized
+
+
 def main():
     plan = legacy.load_json(legacy.PLAN_FILE, {})
     upcoming = legacy.load_json(legacy.UPCOMING_FILE, {})
@@ -269,6 +308,7 @@ def main():
             "Dagar i fulfilled_plan_dates är redan genomförda och får aldrig ordineras igen. target_date får endast väljas ur allowed_target_dates. "
             "Datum i deferred_target_dates är inte beslutsmogna och ska inte ändras nu. Om allowed_target_dates är tom ska target_date vara tomt. "
             "Föreslå endast konservativ automatisk ändring; allt som kan innebära ökad belastning ska vara review. "
+            "Om dose_option_id används måste id:t finnas i dose_options för exakt samma target_date; blanda aldrig dosalternativ mellan dagar. "
             "Hitta aldrig på klockslag eller rapporteringsfönster för användarfeedback."
         ),
     }
@@ -331,6 +371,10 @@ def main():
         latest_date=latest_date,
         local_date=local_date,
         plan_comparison=plan_comparison,
+    )
+    result["plan_action"] = normalize_invalid_dose_option_action(
+        result["plan_action"],
+        decision_plan,
     )
     legacy.validate_plan_action(result["plan_action"], ready_dates)
     legacy.validate_dose_option_action(decision_plan, result["plan_action"], local_date)
