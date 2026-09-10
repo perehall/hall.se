@@ -4,7 +4,7 @@
   "week_start": "2026-09-07",
   "week_end": "2026-09-13",
   "created_at_utc": "2026-09-06T22:19:36.896236+00:00",
-  "updated_at_utc": "2026-09-10T06:43:39.744600+00:00",
+  "updated_at_utc": "2026-09-10T06:53:23.901437+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -800,9 +800,9 @@
           "transport": "intervals_icu",
           "source_hash": "037d4e58d570ed501666892cacf319aad92fa8431d4bda18da47f0daf6a8606c",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-10T06:43:38.350188+00:00",
+          "updated_at_utc": "2026-09-10T06:53:22.702384+00:00",
           "provider_event_id": 134978147,
-          "verified_at_utc": "2026-09-10T06:43:38.350188+00:00"
+          "verified_at_utc": "2026-09-10T06:53:22.702384+00:00"
         }
       },
       {
@@ -1279,9 +1279,9 @@
           "transport": "intervals_icu",
           "source_hash": "a831731360ac98c9494694a4af555b6d85d4c3c7e7195e31b09be04941041d2e",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-10T06:43:38.486382+00:00",
+          "updated_at_utc": "2026-09-10T06:53:22.890963+00:00",
           "provider_event_id": 134978148,
-          "verified_at_utc": "2026-09-10T06:43:38.486382+00:00"
+          "verified_at_utc": "2026-09-10T06:53:22.890963+00:00"
         }
       },
       {
@@ -1730,9 +1730,9 @@
           "transport": "intervals_icu",
           "source_hash": "2d2c41bd986a3a4bae6608a871a354dd35d75540bd3bf21e7e20703c1f11b0f7",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-10T06:43:38.618128+00:00",
+          "updated_at_utc": "2026-09-10T06:53:23.079122+00:00",
           "provider_event_id": 134978150,
-          "verified_at_utc": "2026-09-10T06:43:38.618128+00:00"
+          "verified_at_utc": "2026-09-10T06:53:23.079122+00:00"
         }
       }
     ],
@@ -3137,7 +3137,7 @@
       "activity_id": 20106458579,
       "activity_date": "2026-09-09",
       "activity_name": "Simning på kvällen",
-      "generated_at_utc": "2026-09-10T06:43:37.681716+00:00",
+      "generated_at_utc": "2026-09-10T06:53:21.929143+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 1,
@@ -3149,27 +3149,27 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört 3 200 m simpass med tydlig struktur (1×400, 6×50, 4×500, 6×50, 1×200) och stabil pace/HR-progression genom sets.",
-        "load_interpretation": "Simningen var strukturerad och främst aerob/teknisk; inom-mål för underhåll utan indikation att den äventyrade kommande löpstimulus.",
+        "summary": "Genomförd simning 3 200 m enligt planstruktur med stabila 4×500m aerobblock och snabba 50:or i set — passet ger önskat tekniskt/aerobt stimulus.",
+        "load_interpretation": "Simningen är underhållande/teknisk; i närbelastningsfönstret finns tunga löp- och enduropass som kräver konservativ hantering av kommande MTB/XC.",
         "confidence": "medium",
         "facts": [
           "Simning: 3,20 km · 58:38 · snittpuls 128,4 · maxpuls 157.",
           "Planstatus 2026-09-09: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Passet levererade avsedd aerob/teknisk volym och ger underhåll av simstimuli i mikrocykeln.",
-          "Inga mätvärden eller användarrapport visar behov av att minska eller ersätta planerade närmaste löppass."
+          "Passet levererade stabil aerob volym och repeterbar teknikarbete — betyder bibehållen simkapacitet utan oväntad stress.",
+          "Givet föregående 3 dagar (enduro, styrka, löpning) bör dagens simning inte öka andra dagars planerade belastning; det talar för att planen hålls eller att stödpass kortas om nödvändigt."
         ],
         "unknowns": [
-          "Subjektiv trötthet efter pass (användarrapport tom)",
-          "hur användarens ben/mekanik känns inför fredagssessionen"
+          "Subjektiv återhämtning efter passet (användarrapport tom)",
+          "Exakt hur simningen påverkar fredagens prioriterade backpass mekaniskt"
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-09-10",
-        "reason": "Simningen var aerob/teknisk och inom planens underhållsroll; ingen närbelastning kräver förändring.",
-        "recommendation": "Fortsätt med planerat MTB-pass i dag (60 min) enligt mikrocykel; rapportera kort om benkänsla före och efter MTB/XC så fredagens backpass kan justeras vid behov.",
+        "reason": "Simningen var ett underhålls-/teknikpass utan indikationer på att kortsiktigt kräva vila eller reducering.",
+        "recommendation": "Behåll planerad MTB/XC 60 min i morgon som baseline; om du känner ovanlig lokal trötthet eller stelhet, välj MTB/XC/XC · 45 min · teknik + lugn aerob stig istället.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -3214,7 +3214,7 @@
         "action": "keep",
         "target_date": "2026-09-09",
         "reason": "Senaste passet motsvarade den planerade progressionen och närbelastningen tillåter att planen kvarstår.",
-        "recommendation": "Behåll simpasset 3 200 m imorgon enligt plan; notera subjektiv återhämtning och benkänsla före torsdagens MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC och fredagens backpass.",
+        "recommendation": "Behåll simpasset 3 200 m imorgon enligt plan; notera subjektiv återhämtning och benkänsla före torsdagens MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC och fredagens backpass.",
         "dose_option_id": "",
         "requires_approval": false
       },
