@@ -4,7 +4,7 @@
       "activity_id": 20120769386,
       "activity_date": "2026-09-10",
       "activity_name": "Evening Mountain Bike Ride",
-      "generated_at_utc": "2026-09-10T20:09:49.473801+00:00",
+      "generated_at_utc": "2026-09-10T20:22:56.854847+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 2,
@@ -16,8 +16,8 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört MTB-pass blev längre (71,8 min) men användarrapport och lägre snittpuls visar att det var lugnare än planerat; det minskar marginalen inför fredagets backkvalitet.",
-        "load_interpretation": "Kardiovaskulär och teknisk belastning var än så länge lätt–moderat för MTB/XC; total varaktighet översteg godkänd dos och påverkar närbelastningen inför löpning.",
+        "summary": "Genomfört MTB-pass blev längre än plan (71,8 min vs godkänd 45–60) men användarrapport och lägre effekt/puls indikerar lugnare intensitet i mörkret.",
+        "load_interpretation": "Närbelastningen mot fredagens prioriterade backpass minskar marginalen eftersom varaktigheten översteg godkänd range; konservativ justering rekommenderas.",
         "confidence": "medium",
         "facts": [
           "MTB/XC: 17,12 km · 1:13:14 · 183 m+ · snittpuls 125,5 · maxpuls 147.",
@@ -26,18 +26,18 @@
           "Planerad tidsdos 60 min; faktisk rörelsetid 71.8 min (+11.8 min mot vald dos); över längsta godkända alternativet 60 min."
         ],
         "interpretations": [
-          "Passet visar att teknisk/aerob stimulans genomfördes men totaltid överskred godkänd dos vilket minskar reserver inför morgondagens prioriterade backkvalitet.",
+          "Passet visar att teknisk MTB-stund genomfördes längre men med lägre genomsnittseffekt — det var tolererat men ökade total närbelastning i veckan.",
           "Tidsdosen blev 71.8 min mot valda 60 min och översteg även det längsta godkända alternativet 60 min."
         ],
         "unknowns": [
-          "Hur användarens subjektiva återhämtning över natten utvecklas (återhämtningsunderlaget/feeling).",
-          "Exakt planerat intensitetsutfall för fredagens backpass i morgon jämfört med historik."
+          "Hur du känner dig imorgon (24–72h återhämtning) kan påverka om ytterligare reduktion krävs.",
+          "Exakt teknisk belastning från mörkret (fall/incidenter) ej rapporterad, vilket kan ändra rekommendation."
         ]
       },
       "plan_action": {
         "action": "reduce",
         "target_date": "2026-09-11",
-        "reason": "MTB-passet överskred godkänd duration och kan minska marginalen inför fredagens prioriterade backkvalitet.",
+        "reason": "MTB-passet översteg godkänd duration och minskar marginalen inför fredagens prioriterade backkvalitet.",
         "recommendation": "Följ det justerade passupplägget i planen.",
         "dose_option_id": "",
         "requires_approval": false
@@ -83,7 +83,7 @@
         "action": "keep",
         "target_date": "2026-09-10",
         "reason": "Simpasset var underhåll/teknikorienterat och visar inga tecken som kräver kortsiktig nedskalning av planerad MTB-stöddos.",
-        "recommendation": "Behåll planerad MTB/XC/XC/XC/XC/XC/XC/XC 60 min (MTB/XC/XC/XC/XC/XC/XC/XC · 60 min · teknik + lugn aerob stig). Om du kände dig ovanligt trött senare, meddela det innan beslut om ändring tas.",
+        "recommendation": "Behåll planerad MTB/XC/XC/XC/XC/XC/XC/XC/XC 60 min (MTB/XC/XC/XC/XC/XC/XC/XC/XC · 60 min · teknik + lugn aerob stig). Om du kände dig ovanligt trött senare, meddela det innan beslut om ändring tas.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -270,7 +270,7 @@
       "performance_protocol_key": null,
       "assessment": {
         "summary": "Genomfört: 3 × 6 backintervaller (18 totalt).",
-        "load_interpretation": "Flera tunga dagar (Swimrun, MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC, backpass) skapar ackumulerad mekanisk och…",
+        "load_interpretation": "Flera tunga dagar (Swimrun, MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC, backpass) skapar ackumulerad mekanisk…",
         "confidence": "medium",
         "facts": [
           "Löpning · backintervaller: 12,68 km · 1:06:28 · 243 m+ · snittpuls 142,4 · maxpuls 167.",
@@ -308,7 +308,7 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Lugn, lång MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC 31 km med måttlig puls och gradvis avtagande effekt — teknisk/aerob…",
+        "summary": "Lugn, lång MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC 31 km med måttlig puls och gradvis avtagande effekt — teknisk/aerob…",
         "load_interpretation": "MTB-passet bidrar främst teknisk och kardiovaskulär belastning; mekanisk/neuromuskulär belastning kan inte nivåklassas mot personlig baslinje.",
         "confidence": "medium",
         "facts": [
@@ -320,7 +320,7 @@
           "Kardiovaskulär kostnad adderar till redan ackumulerad tre-dagarsbelastning men ligger inom skäl för i förväg beslutad regression."
         ],
         "unknowns": [
-          "Subjektiv lokal bentrötthet efter MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC (användarrapport saknas) som kan påverka löppasset.",
+          "Subjektiv lokal bentrötthet efter MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC (användarrapport saknas) som kan påverka löppasset.",
           "Detaljer om terrängintensiva korta ryck/tekniska fall som skulle öka neuromuskulär kostnad saknas."
         ]
       },
@@ -366,7 +366,7 @@
         "action": "reduce",
         "target_date": "2026-09-03",
         "reason": "Skydda fredagens prioriterade backkvalitet efter tre dagars ackumulerad belastning.",
-        "recommendation": "Gör dagens MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC som ordinerat men i förkortad dos: MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC · 45 min ·…",
+        "recommendation": "Gör dagens MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC som ordinerat men i förkortad dos: MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC · 45…",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -490,8 +490,8 @@
       "generated_at_utc": "2026-08-29T09:19:56.366468+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Fredagens backpass blev längre än ordination och ökar veckobelastningen; lördagens MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC…",
-        "load_interpretation": "Närbelastning: 12 backreps + Swimrun och MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/Enduro under veckan ökar…",
+        "summary": "Fredagens backpass blev längre än ordination och ökar veckobelastningen; lördagens…",
+        "load_interpretation": "Närbelastning: 12 backreps + Swimrun och MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/Enduro under veckan ökar…",
         "confidence": "medium",
         "facts": [
           "Löpning: 9,67 km · 50:36 · 182 m+ · snittpuls 145,1 · maxpuls 169.",
@@ -526,8 +526,8 @@
       "generated_at_utc": "2026-08-28T01:05:04.449248+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC 60 min var tekniskt lugnt och ger begränsat aerobstöd; veckans backkvalitet kan…",
-        "load_interpretation": "De senaste fyra dagarna innehåller 3 tunga/medeltunga pass; dagens MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC var…",
+        "summary": "MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC 60 min var tekniskt lugnt och ger begränsat aerobstöd; veckans backkvalitet kan…",
+        "load_interpretation": "De senaste fyra dagarna innehåller 3 tunga/medeltunga pass; dagens MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC…",
         "confidence": "medium",
         "facts": [
           "MTB/XC: 18,13 km · 1:10:48 · 210 m+ · snittpuls 128,3 · maxpuls 147.",
@@ -572,18 +572,18 @@
         ],
         "interpretations": [
           "Samlad belastning mån–ons ökar risken att lägga ny hård kvalitet utan extra absorption.",
-          "Dagens MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC bör inte innehålla backintervaller eller upprepad krafttoppar för att bevara…"
+          "Dagens MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC bör inte innehålla backintervaller eller upprepad krafttoppar för att bevara…"
         ],
         "unknowns": [
           "Subjektiv dagskänsla torsdag morgon (kan motivera återställning).",
-          "Exakt intensitet under swimrunens pulsbortfall strax över Z3 (påverkar hur mycket MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC ska…"
+          "Exakt intensitet under swimrunens pulsbortfall strax över Z3 (påverkar hur mycket MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC ska…"
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-08-27",
-        "reason": "Planen redan villkorat skalat ned MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC för att säkra absorption efter Swimrun.",
-        "recommendation": "Behåll dagens ordination: MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC teknik + aerob stig, håll det tekniskt och lugnt; undvik upprepade hårda stigningar eller fartjakt. Bedöm subjektiv känsla torsdag…",
+        "reason": "Planen redan villkorat skalat ned MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC för att säkra absorption efter Swimrun.",
+        "recommendation": "Behåll dagens ordination: MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC teknik + aerob stig, håll det tekniskt och lugnt; undvik upprepade hårda stigningar eller fartjakt. Bedöm subjektiv känsla torsdag…",
         "requires_approval": false
       },
       "auto_apply": {
@@ -755,14 +755,14 @@
         ],
         "unknowns": [
           "Subjektiv lokal muskeltrötthet i ben/axlar kväll 22/8.",
-          "Planerad intensitet/tid för kvällens MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC är ännu inte specificerad."
+          "Planerad intensitet/tid för kvällens MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC är ännu inte specificerad."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-08-22",
         "reason": "SUP var rekreationellt och simningen var redan planerad lågkostnad; inget som kräver nedskalning.",
-        "recommendation": "Behåll kvällens MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC enligt plan; prioritera teknik/stigkörning och håll intensiteten kontrollerad om benen känns trötta. Om du upplever lokal trötthet, skala ner…",
+        "recommendation": "Behåll kvällens MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC enligt plan; prioritera teknik/stigkörning och håll intensiteten kontrollerad om benen känns trötta. Om du upplever lokal trötthet, skala…",
         "requires_approval": false
       },
       "auto_apply": {
@@ -878,8 +878,8 @@
       }
     }
   ],
-  "last_trigger_hash": "adcbede8f3a682de7a9b1fe11bfce774adb291a77de943d60b4995afa3106dd7",
-  "last_run_utc": "2026-09-10T20:09:49.473801+00:00",
+  "last_trigger_hash": "333bb41b86279e0245068842ef88f5bc3a1f76ca873311fc290ff56874d091e5",
+  "last_run_utc": "2026-09-10T20:22:56.854847+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 2
