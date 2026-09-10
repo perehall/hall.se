@@ -1,6 +1,7 @@
 name: Deploy Pages
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -25,8 +26,10 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Checkout
+      - name: Checkout latest main
         uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Setup Python
         uses: actions/setup-python@v5
