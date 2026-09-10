@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "overrides": [
+    {
+      "date": "2026-09-12",
+      "source": "user_confirmed",
+      "note": "Enduro i Krokek 10:00–14:00 ersätter lördagens tidigare simning + styrka.",
+      "remove_fields": [
+        "microcycle_slot",
+        "optional_stimuli",
+        "performance_marker_id",
+        "dose_options",
+        "baseline_option_id",
+        "dose_open",
+        "dose_resolution",
+        "development_progression",
+        "development_step",
+        "workout_design",
+        "device_workout",
+        "device_sync",
+        "watch_workout",
+        "alternative_sports",
+        "coach_adjustment"
+      ],
+      "set": {
+        "status": "planned",
+        "planning_status": "fixed",
+        "session": "Enduro · Krokek · 10:00–14:00",
+        "reason": "Fast användarbekräftat enduropass. Fyra timmar enduro räknas som faktisk träningsbelastning och ersätter lördagens tidigare simning + styrka; ingen extra träning läggs ovanpå. Söndagens lugna distans är fortsatt preliminär och bedöms efter den faktiska lördagsbelastningen.",
+        "development_focus": "Teknisk kvalitet, avslappnad körning och hållbar koncentration. Ingen särskild intensitetsdos föreskrivs för det externa passet.",
+        "sport": "enduro",
+        "classification": "training",
+        "manual_lock": true,
+        "priority_role": "flex",
+        "stimuli": [
+          "enduro_technical"
+        ],
+        "load_dimensions": [
+          "mechanical",
+          "neuromuscular",
+          "technical"
+        ]
+      },
+      "set_meta": {
+        "missing_protected_stimuli": [
+          "strength_unilateral",
+          "strength_core"
+        ],
+        "protected_capacity_follow_up": {
+          "source_date": "2026-09-12",
+          "reason": "Den planerade styrka/core-exponeringen ersätts av ett fast fyratimmars enduropass och ska inte läggas ovanpå.",
+          "action": "restore_in_next_absorbable_window",
+          "stimuli": [
+            "strength_unilateral",
+            "strength_core"
+          ]
+        }
+      }
+    }
+  ]
+}

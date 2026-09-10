@@ -9,6 +9,7 @@ REPO_ROOT = ROOT.parent
 # Canonical deterministic rendering order. CI and production must call this
 # same pipeline instead of maintaining separate lists of finalizers.
 PIPELINE = (
+    "apply_plan_overrides.py",
     "enforce_coach_output_contract.py",
     "normalize_coach_language.py",
     "build.py",
@@ -22,6 +23,7 @@ PIPELINE = (
     "finalize_header_ui.py",
     "finalize_navigation_ui.py",
     "finalize_training_brain_ui.py",
+    "finalize_relative_next_ui.py",
     "finalize_progression_ui.py",
     "finalize_sport_icons.py",
     "finalize_day_session_icons.py",
