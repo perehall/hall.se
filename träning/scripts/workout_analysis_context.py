@@ -8,10 +8,12 @@ This module converts source measurements into a compact, versioned contract.
 from __future__ import annotations
 
 from math import isclose
+from statistics import mean
 
 
-WORKOUT_ANALYSIS_CONTRACT_VERSION = 2
+WORKOUT_ANALYSIS_CONTRACT_VERSION = 3
 RUN_TYPES = {"Run", "TrailRun", "VirtualRun"}
+SWIM_TYPES = {"Swim"}
 ENDURO_TYPES = {"Enduro"}
 
 
@@ -34,12 +36,29 @@ def pace_s_per_km(duration_s, distance_m):
     return duration / (distance / 1000.0)
 
 
+def pace_s_per_100m(duration_s, distance_m):
+    duration = _positive(duration_s)
+    distance = _positive(distance_m)
+    if duration is None or distance is None:
+        return None
+    return duration / (distance / 100.0)
+
+
 def fmt_pace(seconds_per_km):
     value = _positive(seconds_per_km)
     if value is None:
         return ""
     total = int(round(value))
     return f"{total // 60}:{total % 60:02d}/km"
+
+
+def fmt_swim_pace(seconds_per_100m):
+    value = _positive(seconds_per_100m)
+    if value is None:
+        return ""
+    minutes = int(value // 60)
+    seconds = value - minutes * 60
+    return f"{minutes}:{seconds:04.1f}/100 m".replace(".", ",")
 
 
 def _total_facts(activity):
@@ -99,6 +118,146 @@ def _run_context(activity):
     }
 
 
+def _swim_source_intervals(activity):
+    """Extract source swim intervals without inventing set semantics.
+
+    Positive-distance laps are swim intervals. Zero-distance laps are treated only
+    as recorded rest/lap markers. A later grouping step may join equal-distance
+    intervals into a repeat set only when such a marker exists between them.
+    """
+    intervals = []
+    rest_before_s = 0.0
+    rest_marker_before = False
+
+    for lap in activity.get("laps") or []:
+        distance = _positive(lap.get("distance_m"))
+        if distance is None:
+            rest_marker_before = True
+            rest = _positive(lap.get("elapsed_time_s")) or _positive(lap.get("moving_time_s"))
+            if rest is not None:
+                rest_before_s += rest
+            continue
+
+        duration = _positive(lap.get("moving_time_s")) or _positive(lap.get("elapsed_time_s"))
+        pace = pace_s_per_100m(duration, distance)
+        if duration is None or pace is None:
+            rest_before_s = 0.0
+            rest_marker_before = False
+            continue
+
+        intervals.append(
+            {
+                "lap_index": lap.get("lap_index"),
+                "distance_m": round(distance, 1),
+                "moving_time_s": round(duration, 1),
+                "pace_s_per_100m": round(pace, 2),
+                "pace": fmt_swim_pace(pace),
+                "average_heartrate": _number(lap.get("average_heartrate")),
+                "max_heartrate": _number(lap.get("max_heartrate")),
+                "rest_marker_before": rest_marker_before,
+                "recorded_rest_before_s": round(rest_before_s, 1),
+            }
+        )
+        rest_before_s = 0.0
+        rest_marker_before = False
+
+    return intervals
+
+
+def _same_swim_distance(left, right):
+    return isclose(float(left), float(right), abs_tol=1.0)
+
+
+def _swim_repeat_set(group, set_index):
+    intervals = group["intervals"]
+    paces = [row["pace_s_per_100m"] for row in intervals]
+    hrs = [
+        row["average_heartrate"]
+        for row in intervals
+        if isinstance(row.get("average_heartrate"), (int, float))
+        and row.get("average_heartrate") > 0
+    ]
+    rests = [row["recorded_rest_before_s"] for row in intervals[1:]]
+
+    return {
+        "set_index": set_index,
+        "repetitions": len(intervals),
+        "distance_per_rep_m": round(group["distance_m"], 1),
+        "total_distance_m": round(sum(row["distance_m"] for row in intervals), 1),
+        "lap_indices": [row.get("lap_index") for row in intervals],
+        "reps": intervals,
+        "pace_mean_s_per_100m": round(mean(paces), 2),
+        "pace_fastest_s_per_100m": round(min(paces), 2),
+        "pace_slowest_s_per_100m": round(max(paces), 2),
+        "pace_range_s_per_100m": round(max(paces) - min(paces), 2),
+        "pace_first_to_last_delta_s_per_100m": round(paces[-1] - paces[0], 2),
+        "average_heartrate_mean": round(mean(hrs), 1) if hrs else None,
+        "recorded_rest_between_reps_s": rests,
+    }
+
+
+def _swim_context(activity):
+    intervals = _swim_source_intervals(activity)
+    groups = []
+
+    for row in intervals:
+        if (
+            groups
+            and _same_swim_distance(groups[-1]["distance_m"], row["distance_m"])
+            and row["rest_marker_before"]
+        ):
+            groups[-1]["intervals"].append(row)
+        else:
+            groups.append({"distance_m": row["distance_m"], "intervals": [row]})
+
+    structure = []
+    repeat_sets = []
+    repeat_index = 0
+    for group in groups:
+        reps = len(group["intervals"])
+        distance = round(group["distance_m"])
+        structure.append(
+            {
+                "repetitions": reps,
+                "distance_per_rep_m": distance,
+                "total_distance_m": round(sum(row["distance_m"] for row in group["intervals"]), 1),
+                "lap_indices": [row.get("lap_index") for row in group["intervals"]],
+            }
+        )
+        if reps >= 2:
+            repeat_index += 1
+            repeat_sets.append(_swim_repeat_set(group, repeat_index))
+
+    source_distance = round(sum(row["distance_m"] for row in intervals), 1)
+    activity_distance = _positive(activity.get("distance_m"))
+    structure_signature = "+".join(
+        f"{block['repetitions']}x{block['distance_per_rep_m']}"
+        for block in structure
+    )
+
+    return {
+        "structured": bool(repeat_sets),
+        "structure_signature": structure_signature,
+        "structure": structure,
+        "repeat_sets": repeat_sets,
+        "source_intervals": intervals,
+        "source_lap_distance_sum_m": source_distance,
+        "source_lap_distance_matches_activity": (
+            isclose(source_distance, activity_distance, abs_tol=5.0)
+            if activity_distance is not None and source_distance > 0
+            else None
+        ),
+        "structure_basis": (
+            "Equal-distance positive source laps are grouped as a repeat set only when a zero-distance lap/rest marker separates the repetitions."
+        ),
+        "interpretation_limits": [
+            "Pace is derived deterministically from source lap time and distance.",
+            "Set structure and pace stability do not by themselves prove stroke-technique quality or physiological intensity.",
+            "Swimming heart rate is observed source data and is not an intensity classification by itself.",
+        ],
+    }
+
+
 def _enduro_context(activity):
     elapsed = _positive(activity.get("elapsed_time_s"))
     moving = _positive(activity.get("moving_time_s"))
@@ -130,6 +289,7 @@ def build_workout_analysis_context(activity):
         "user_report": str(activity.get("user_report") or "").strip(),
         "total": _total_facts(activity),
         "run": _run_context(activity) if sport_type in RUN_TYPES else None,
+        "swim": _swim_context(activity) if sport_type in SWIM_TYPES else None,
         "enduro": _enduro_context(activity) if sport_type in ENDURO_TYPES else None,
     }
     validate_workout_analysis_context(activity, context)
@@ -166,6 +326,31 @@ def validate_workout_analysis_context(activity, context):
                 float(row.get("pace_s_per_km")), expected_lap, abs_tol=0.02
             ):
                 raise RuntimeError("Workout analysis: lap pace failed arithmetic validation")
+
+    swim = context.get("swim")
+    if swim is not None:
+        by_index = {lap.get("lap_index"): lap for lap in activity.get("laps") or []}
+        for row in swim.get("source_intervals") or []:
+            source = by_index.get(row.get("lap_index"))
+            expected_pace = pace_s_per_100m(
+                (source or {}).get("moving_time_s") or (source or {}).get("elapsed_time_s"),
+                (source or {}).get("distance_m"),
+            )
+            if expected_pace is None or not isclose(
+                float(row.get("pace_s_per_100m")), expected_pace, abs_tol=0.02
+            ):
+                raise RuntimeError("Workout analysis: swim interval pace failed arithmetic validation")
+
+        repeat_sets = swim.get("repeat_sets") or []
+        if bool(repeat_sets) != bool(swim.get("structured")):
+            raise RuntimeError("Workout analysis: swim structured flag mismatch")
+        for repeat_set in repeat_sets:
+            reps = repeat_set.get("reps") or []
+            if len(reps) < 2 or repeat_set.get("repetitions") != len(reps):
+                raise RuntimeError("Workout analysis: invalid swim repeat set")
+            for rep in reps[1:]:
+                if not rep.get("rest_marker_before"):
+                    raise RuntimeError("Workout analysis: swim repeat set lacks separating rest marker")
 
     enduro = context.get("enduro")
     if enduro is not None:
