@@ -161,11 +161,11 @@
       "date": "2026-09-08",
       "label": "Tisdag",
       "status": "preliminary",
-      "session": "Löpning · kontrollerad tröskel · 3 × 10 min / 90 s jogg",
-      "reason": "Mesocykelns första prioriterade löpstimulus. Aktuell mikrocykel väljer etablering, hold eller progression från den definierade utvecklingslinjen; kortsiktig ändring kräver sakligt stöd i faktisk närbelastning eller återhämtning.",
-      "development_focus": "Jämn, kontrollerad kvalitet utan fartjakt; progression ska komma genom absorberbar träning.",
+      "session": "Löpband · 4 × 8 min Tempo (Garmin)",
+      "reason": "Användarbekräftad ändring av tisdagens ordination före genomförandet. Den historiska planen ska därför visa 4 × 8 min på löpband, inte den tidigare 3 × 10 min-grundplanen.",
+      "development_focus": "Kontrollerat tempoarbete på löpband. Faktiskt genomförande och subjektiv känsla lagras på aktiviteten och ska väga tyngre än den ersatta grundplanen.",
       "sport": "run",
-      "priority_role": "anchor",
+      "priority_role": "flex",
       "stimuli": [
         "run_threshold"
       ],
@@ -179,185 +179,13 @@
       "microcycle_day": 2,
       "microcycle_slot": "run_threshold",
       "performance_marker_id": "run-threshold-control",
-      "dose_options": [
-        {
-          "id": "run-threshold-3x8",
-          "kind": "structured",
-          "value": 24,
-          "session": "Löpning · kontrollerad tröskel · 3 × 8 min / 90 s jogg",
-          "intent": "Etablerad kontrollerad dos som redan har genomförts i aktuell utvecklingslinje."
-        },
-        {
-          "id": "run-threshold-3x10",
-          "kind": "structured",
-          "value": 30,
-          "session": "Löpning · kontrollerad tröskel · 3 × 10 min / 90 s jogg",
-          "intent": "Planerad progression genom längre arbetstid utan avsikt att höja intensiteten."
-        }
-      ],
-      "development_progression": {
-        "mode": "develop",
-        "demonstrated_floor_option_id": "run-threshold-3x8",
-        "same_dose_repeat_requires_reason": true,
-        "source": "absorbed_training_history",
-        "microcycle_plan": [
-          {
-            "microcycle": 2,
-            "option_id": "run-threshold-3x8",
-            "relation": "hold",
-            "reason": "Kriterierna kräver mer än en jämförbar 3 × 8-exponering innan arbetstiden ökas."
-          },
-          {
-            "microcycle": 3,
-            "option_id": "run-threshold-3x10",
-            "relation": "progress",
-            "reason": "Planerad utveckling från etablerade 24 till 30 min kontrollerat tröskelarbete; intensiteten hålls oförändrat kontrollerad."
-          },
-          {
-            "microcycle": 4,
-            "option_id": "run-threshold-3x10",
-            "relation": "hold",
-            "reason": "Konsolidera den högre arbetstiden och skapa jämförbar data inför mesocykelutvärderingen."
-          }
-        ]
-      },
-      "development_step": {
-        "microcycle": 3,
-        "option_id": "run-threshold-3x10",
-        "relation": "progress",
-        "reason": "Planerad utveckling från etablerade 24 till 30 min kontrollerat tröskelarbete; intensiteten hålls oförändrat kontrollerad."
-      },
-      "baseline_option_id": "run-threshold-3x10",
-      "dose_open": false,
-      "dose_resolution": {
-        "state": "baseline",
-        "kind": "structured",
-        "value": 30,
-        "option_id": "run-threshold-3x10"
-      },
       "activity_id": 20092166843,
-      "workout_design": {
-        "schema_version": 1,
-        "objective": {
-          "mesocycle_role": "primary",
-          "priority_role": "anchor",
-          "stimuli": [
-            "run_threshold"
-          ],
-          "mesocycle_id": "run-threshold-hill-4w",
-          "microcycle_id": "run-threshold-hill-4w:mc3",
-          "microcycle_slot": "run_threshold"
-        },
-        "near_term_context": {
-          "load_dimensions": [
-            "cardiovascular",
-            "mechanical"
-          ],
-          "selection_uses_only_preapproved_doses": true
-        },
-        "progression_from_previous": {
-          "relation": "progress",
-          "reason": "Planerad utveckling från etablerade 24 till 30 min kontrollerat tröskelarbete; intensiteten hålls oförändrat kontrollerad.",
-          "demonstrated_floor_option_id": "run-threshold-3x8"
-        },
-        "candidates": [
-          {
-            "id": "run-threshold-3x10",
-            "dose_option_id": "run-threshold-3x10",
-            "session": "Löpning · kontrollerad tröskel · 3 × 10 min / 90 s jogg",
-            "intent": "Planerad progression genom längre arbetstid utan avsikt att höja intensiteten.",
-            "dose": {
-              "kind": "structured",
-              "value": 30
-            },
-            "stimuli": [
-              "run_threshold"
-            ],
-            "prescription": {
-              "executable": true,
-              "completeness": "full",
-              "blocks": [
-                {
-                  "name": "Arbetsdel",
-                  "work": {
-                    "repetitions": 3,
-                    "duration_s": 600,
-                    "total_work_s": 1800
-                  },
-                  "instruction": "Kontrollerad tröskel",
-                  "intensity": "kontrollerad tröskel",
-                  "recovery": {
-                    "duration_s": 90,
-                    "instruction": "Lugn jogg"
-                  }
-                }
-              ],
-              "source": "structured_session"
-            },
-            "score": {
-              "total": 100,
-              "breakdown": {
-                "mesocycle_alignment": 30,
-                "microcycle_alignment": 30,
-                "progression_alignment": 15,
-                "prescription_specificity": 15,
-                "near_term_resolution": 10
-              },
-              "basis": "deterministic_constraint_alignment"
-            }
-          },
-          {
-            "id": "run-threshold-3x8",
-            "dose_option_id": "run-threshold-3x8",
-            "session": "Löpning · kontrollerad tröskel · 3 × 8 min / 90 s jogg",
-            "intent": "Etablerad kontrollerad dos som redan har genomförts i aktuell utvecklingslinje.",
-            "dose": {
-              "kind": "structured",
-              "value": 24
-            },
-            "stimuli": [
-              "run_threshold"
-            ],
-            "prescription": {
-              "executable": true,
-              "completeness": "full",
-              "blocks": [
-                {
-                  "name": "Arbetsdel",
-                  "work": {
-                    "repetitions": 3,
-                    "duration_s": 480,
-                    "total_work_s": 1440
-                  },
-                  "instruction": "Kontrollerad tröskel",
-                  "intensity": "kontrollerad tröskel",
-                  "recovery": {
-                    "duration_s": 90,
-                    "instruction": "Lugn jogg"
-                  }
-                }
-              ],
-              "source": "structured_session"
-            },
-            "score": {
-              "total": 63,
-              "breakdown": {
-                "mesocycle_alignment": 30,
-                "microcycle_alignment": 10,
-                "progression_alignment": 8,
-                "prescription_specificity": 15,
-                "near_term_resolution": 0
-              },
-              "basis": "deterministic_constraint_alignment"
-            }
-          }
-        ],
-        "selected_candidate_id": "run-threshold-3x10",
-        "selection": {
-          "method": "deterministic_constraint_scoring",
-          "preferred_dose_option_id": "run-threshold-3x10",
-          "reason_for_today": "Planerad utveckling från etablerade 24 till 30 min kontrollerat tröskelarbete; intensiteten hålls oförändrat kontrollerad."
-        }
+      "original_session": "Löpning · kontrollerad tröskel · 3 × 10 min / 90 s jogg",
+      "classification": "training",
+      "manual_lock": true,
+      "manual_override": {
+        "source": "user_confirmed",
+        "note": "Tisdagens ordination ändrades före genomförandet till löpband 4 × 8 min Tempo enligt Garmin."
       }
     },
     {
@@ -805,9 +633,9 @@
         "transport": "intervals_icu",
         "source_hash": "037d4e58d570ed501666892cacf319aad92fa8431d4bda18da47f0daf6a8606c",
         "device_delivery": "unverified",
-        "updated_at_utc": "2026-09-10T07:28:51.681140+00:00",
+        "updated_at_utc": "2026-09-10T07:38:17.734509+00:00",
         "provider_event_id": 134978147,
-        "verified_at_utc": "2026-09-10T07:28:51.681140+00:00"
+        "verified_at_utc": "2026-09-10T07:38:17.734509+00:00"
       }
     },
     {
@@ -1284,9 +1112,9 @@
         "transport": "intervals_icu",
         "source_hash": "a831731360ac98c9494694a4af555b6d85d4c3c7e7195e31b09be04941041d2e",
         "device_delivery": "unverified",
-        "updated_at_utc": "2026-09-10T07:28:51.813227+00:00",
+        "updated_at_utc": "2026-09-10T07:38:17.970971+00:00",
         "provider_event_id": 134978148,
-        "verified_at_utc": "2026-09-10T07:28:51.813227+00:00"
+        "verified_at_utc": "2026-09-10T07:38:17.970971+00:00"
       }
     },
     {
@@ -1510,9 +1338,9 @@
         "transport": "intervals_icu",
         "source_hash": "2d2c41bd986a3a4bae6608a871a354dd35d75540bd3bf21e7e20703c1f11b0f7",
         "device_delivery": "unverified",
-        "updated_at_utc": "2026-09-10T07:28:51.950013+00:00",
+        "updated_at_utc": "2026-09-10T07:38:18.195772+00:00",
         "provider_event_id": 134978150,
-        "verified_at_utc": "2026-09-10T07:28:51.950013+00:00"
+        "verified_at_utc": "2026-09-10T07:38:18.195772+00:00"
       }
     }
   ],
