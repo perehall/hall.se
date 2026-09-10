@@ -212,6 +212,16 @@ def balanced_div_end(text: str, start: int) -> int:
     raise RuntimeError("Quiet Performance v2: obalanserad div-struktur")
 
 
+def body_classes(page: str) -> set[str]:
+    match = BODY_RE.search(page)
+    if not match:
+        raise RuntimeError("Quiet Performance v2: body-taggen saknas")
+    class_match = CLASS_RE.search(match.group("attrs") or "")
+    if not class_match:
+        return set()
+    return {value for value in class_match.group("classes").split() if value}
+
+
 def add_body_class(page: str, class_name: str) -> str:
     match = BODY_RE.search(page)
     if not match:
@@ -276,7 +286,7 @@ def add_css(page: str) -> str:
 
 
 def apply_v2(page: str, *, current: bool) -> str:
-    if "quiet-performance" not in page:
+    if "quiet-performance" not in body_classes(page):
         raise RuntimeError("Quiet Performance v2: v1 måste appliceras först")
     page = add_body_class(page, "qp-current" if current else "qp-history")
     if current:
@@ -286,8 +296,11 @@ def apply_v2(page: str, *, current: bool) -> str:
 
 
 def validate_page(page: str, *, current: bool, label: str) -> None:
-    required = [CSS_START, CSS_END, "quiet-performance"]
-    required.append("qp-current" if current else "qp-history")
+    expected_class = "qp-current" if current else "qp-history"
+    classes = body_classes(page)
+    if "quiet-performance" not in classes or expected_class not in classes:
+        raise RuntimeError(f"Quiet Performance v2: {label} saknar aktiv body-klass")
+    required = [CSS_START, CSS_END]
     missing = [marker for marker in required if marker not in page]
     if missing:
         raise RuntimeError(f"Quiet Performance v2: {label} saknar {missing!r}")
