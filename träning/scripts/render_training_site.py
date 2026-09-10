@@ -12,6 +12,7 @@ PIPELINE = (
     "apply_plan_overrides.py",
     "enforce_coach_output_contract.py",
     "normalize_coach_language.py",
+    "finalize_canonical_coach_facts.py",
     "build.py",
     "finalize_dashboard.py",
     "finalize_dashboard_ui.py",
