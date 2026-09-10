@@ -4,7 +4,7 @@
   "week_start": "2026-09-07",
   "week_end": "2026-09-13",
   "created_at_utc": "2026-09-06T22:19:36.896236+00:00",
-  "updated_at_utc": "2026-09-10T04:41:24.311184+00:00",
+  "updated_at_utc": "2026-09-10T06:38:15.257454+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -800,9 +800,9 @@
           "transport": "intervals_icu",
           "source_hash": "037d4e58d570ed501666892cacf319aad92fa8431d4bda18da47f0daf6a8606c",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-10T04:41:22.945928+00:00",
+          "updated_at_utc": "2026-09-10T06:38:13.578008+00:00",
           "provider_event_id": 134978147,
-          "verified_at_utc": "2026-09-10T04:41:22.945928+00:00"
+          "verified_at_utc": "2026-09-10T06:38:13.578008+00:00"
         }
       },
       {
@@ -1279,9 +1279,9 @@
           "transport": "intervals_icu",
           "source_hash": "a831731360ac98c9494694a4af555b6d85d4c3c7e7195e31b09be04941041d2e",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-10T04:41:23.123407+00:00",
+          "updated_at_utc": "2026-09-10T06:38:13.795341+00:00",
           "provider_event_id": 134978148,
-          "verified_at_utc": "2026-09-10T04:41:23.123407+00:00"
+          "verified_at_utc": "2026-09-10T06:38:13.795341+00:00"
         }
       },
       {
@@ -1730,9 +1730,9 @@
           "transport": "intervals_icu",
           "source_hash": "2d2c41bd986a3a4bae6608a871a354dd35d75540bd3bf21e7e20703c1f11b0f7",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-10T04:41:23.311648+00:00",
+          "updated_at_utc": "2026-09-10T06:38:13.999852+00:00",
           "provider_event_id": 134978150,
-          "verified_at_utc": "2026-09-10T04:41:23.311648+00:00"
+          "verified_at_utc": "2026-09-10T06:38:13.999852+00:00"
         }
       }
     ],
@@ -2226,7 +2226,7 @@
         }
       ],
       "workout_analysis_context": {
-        "contract_version": 2,
+        "contract_version": 3,
         "activity_id": 20106458579,
         "sport_type": "Swim",
         "display_label": "Swim",
@@ -2242,6 +2242,534 @@
           "max_heartrate": 157.0
         },
         "run": null,
+        "swim": {
+          "structured": true,
+          "structure_signature": "1x400+6x50+4x500+6x50+1x200",
+          "structure": [
+            {
+              "repetitions": 1,
+              "distance_per_rep_m": 400,
+              "total_distance_m": 400.0,
+              "lap_indices": [
+                1
+              ]
+            },
+            {
+              "repetitions": 6,
+              "distance_per_rep_m": 50,
+              "total_distance_m": 300.0,
+              "lap_indices": [
+                3,
+                5,
+                7,
+                9,
+                11,
+                13
+              ]
+            },
+            {
+              "repetitions": 4,
+              "distance_per_rep_m": 500,
+              "total_distance_m": 2000.0,
+              "lap_indices": [
+                15,
+                18,
+                20,
+                23
+              ]
+            },
+            {
+              "repetitions": 6,
+              "distance_per_rep_m": 50,
+              "total_distance_m": 300.0,
+              "lap_indices": [
+                25,
+                27,
+                29,
+                31,
+                33,
+                35
+              ]
+            },
+            {
+              "repetitions": 1,
+              "distance_per_rep_m": 200,
+              "total_distance_m": 200.0,
+              "lap_indices": [
+                37
+              ]
+            }
+          ],
+          "repeat_sets": [
+            {
+              "set_index": 1,
+              "repetitions": 6,
+              "distance_per_rep_m": 50.0,
+              "total_distance_m": 300.0,
+              "lap_indices": [
+                3,
+                5,
+                7,
+                9,
+                11,
+                13
+              ],
+              "reps": [
+                {
+                  "lap_index": 3,
+                  "distance_m": 50.0,
+                  "moving_time_s": 42.0,
+                  "pace_s_per_100m": 84.0,
+                  "pace": "1:24,0/100 m",
+                  "average_heartrate": 93.8,
+                  "max_heartrate": 114.0,
+                  "rest_marker_before": true,
+                  "recorded_rest_before_s": 36.0
+                },
+                {
+                  "lap_index": 5,
+                  "distance_m": 50.0,
+                  "moving_time_s": 40.0,
+                  "pace_s_per_100m": 80.0,
+                  "pace": "1:20,0/100 m",
+                  "average_heartrate": 120.3,
+                  "max_heartrate": 123.0,
+                  "rest_marker_before": true,
+                  "recorded_rest_before_s": 15.0
+                },
+                {
+                  "lap_index": 7,
+                  "distance_m": 50.0,
+                  "moving_time_s": 38.0,
+                  "pace_s_per_100m": 76.0,
+                  "pace": "1:16,0/100 m",
+                  "average_heartrate": 121.9,
+                  "max_heartrate": 133.0,
+                  "rest_marker_before": true,
+                  "recorded_rest_before_s": 15.0
+                },
+                {
+                  "lap_index": 9,
+                  "distance_m": 50.0,
+                  "moving_time_s": 38.0,
+                  "pace_s_per_100m": 76.0,
+                  "pace": "1:16,0/100 m",
+                  "average_heartrate": 124.1,
+                  "max_heartrate": 137.0,
+                  "rest_marker_before": true,
+                  "recorded_rest_before_s": 15.0
+                },
+                {
+                  "lap_index": 11,
+                  "distance_m": 50.0,
+                  "moving_time_s": 38.0,
+                  "pace_s_per_100m": 76.0,
+                  "pace": "1:16,0/100 m",
+                  "average_heartrate": 130.4,
+                  "max_heartrate": 140.0,
+                  "rest_marker_before": true,
+                  "recorded_rest_before_s": 15.0
+                },
+                {
+                  "lap_index": 13,
+                  "distance_m": 50.0,
+                  "moving_time_s": 37.0,
+                  "pace_s_per_100m": 74.0,
+                  "pace": "1:14,0/100 m",
+                  "average_heartrate": 132.1,
+                  "max_heartrate": 136.0,
+                  "rest_marker_before": true,
+                  "recorded_rest_before_s": 15.0
+                }
+              ],
+              "pace_mean_s_per_100m": 77.67,
+              "pace_fastest_s_per_100m": 74.0,
+              "pace_slowest_s_per_100m": 84.0,
+              "pace_range_s_per_100m": 10.0,
+              "pace_first_to_last_delta_s_per_100m": -10.0,
+              "average_heartrate_mean": 120.4,
+              "recorded_rest_between_reps_s": [
+                15.0,
+                15.0,
+                15.0,
+                15.0,
+                15.0
+              ]
+            },
+            {
+              "set_index": 2,
+              "repetitions": 4,
+              "distance_per_rep_m": 500.0,
+              "total_distance_m": 2000.0,
+              "lap_indices": [
+                15,
+                18,
+                20,
+                23
+              ],
+              "reps": [
+                {
+                  "lap_index": 15,
+                  "distance_m": 500.0,
+                  "moving_time_s": 440.0,
+                  "pace_s_per_100m": 88.0,
+                  "pace": "1:28,0/100 m",
+                  "average_heartrate": 130.9,
+                  "max_heartrate": 141.0,
+                  "rest_marker_before": true,
+                  "recorded_rest_before_s": 0.0
+                },
+                {
+                  "lap_index": 18,
+                  "distance_m": 500.0,
+                  "moving_time_s": 437.0,
+                  "pace_s_per_100m": 87.4,
+                  "pace": "1:27,4/100 m",
+                  "average_heartrate": 139.5,
+                  "max_heartrate": 146.0,
+                  "rest_marker_before": true,
+                  "recorded_rest_before_s": 29.0
+                },
+                {
+                  "lap_index": 20,
+                  "distance_m": 500.0,
+                  "moving_time_s": 441.0,
+                  "pace_s_per_100m": 88.2,
+                  "pace": "1:28,2/100 m",
+                  "average_heartrate": 145.1,
+                  "max_heartrate": 153.0,
+                  "rest_marker_before": true,
+                  "recorded_rest_before_s": 30.0
+                },
+                {
+                  "lap_index": 23,
+                  "distance_m": 500.0,
+                  "moving_time_s": 442.0,
+                  "pace_s_per_100m": 88.4,
+                  "pace": "1:28,4/100 m",
+                  "average_heartrate": 145.3,
+                  "max_heartrate": 155.0,
+                  "rest_marker_before": true,
+                  "recorded_rest_before_s": 29.0
+                }
+              ],
+              "pace_mean_s_per_100m": 88.0,
+              "pace_fastest_s_per_100m": 87.4,
+              "pace_slowest_s_per_100m": 88.4,
+              "pace_range_s_per_100m": 1.0,
+              "pace_first_to_last_delta_s_per_100m": 0.4,
+              "average_heartrate_mean": 140.2,
+              "recorded_rest_between_reps_s": [
+                29.0,
+                30.0,
+                29.0
+              ]
+            },
+            {
+              "set_index": 3,
+              "repetitions": 6,
+              "distance_per_rep_m": 50.0,
+              "total_distance_m": 300.0,
+              "lap_indices": [
+                25,
+                27,
+                29,
+                31,
+                33,
+                35
+              ],
+              "reps": [
+                {
+                  "lap_index": 25,
+                  "distance_m": 50.0,
+                  "moving_time_s": 39.0,
+                  "pace_s_per_100m": 78.0,
+                  "pace": "1:18,0/100 m",
+                  "average_heartrate": 107.2,
+                  "max_heartrate": 118.0,
+                  "rest_marker_before": true,
+                  "recorded_rest_before_s": 0.0
+                },
+                {
+                  "lap_index": 27,
+                  "distance_m": 50.0,
+                  "moving_time_s": 37.0,
+                  "pace_s_per_100m": 74.0,
+                  "pace": "1:14,0/100 m",
+                  "average_heartrate": 143.5,
+                  "max_heartrate": 146.0,
+                  "rest_marker_before": true,
+                  "recorded_rest_before_s": 15.0
+                },
+                {
+                  "lap_index": 29,
+                  "distance_m": 50.0,
+                  "moving_time_s": 37.0,
+                  "pace_s_per_100m": 74.0,
+                  "pace": "1:14,0/100 m",
+                  "average_heartrate": 146.6,
+                  "max_heartrate": 150.0,
+                  "rest_marker_before": true,
+                  "recorded_rest_before_s": 15.0
+                },
+                {
+                  "lap_index": 31,
+                  "distance_m": 50.0,
+                  "moving_time_s": 38.0,
+                  "pace_s_per_100m": 76.0,
+                  "pace": "1:16,0/100 m",
+                  "average_heartrate": 150.2,
+                  "max_heartrate": 157.0,
+                  "rest_marker_before": true,
+                  "recorded_rest_before_s": 15.0
+                },
+                {
+                  "lap_index": 33,
+                  "distance_m": 50.0,
+                  "moving_time_s": 38.0,
+                  "pace_s_per_100m": 76.0,
+                  "pace": "1:16,0/100 m",
+                  "average_heartrate": 146.6,
+                  "max_heartrate": 148.0,
+                  "rest_marker_before": true,
+                  "recorded_rest_before_s": 15.0
+                },
+                {
+                  "lap_index": 35,
+                  "distance_m": 50.0,
+                  "moving_time_s": 36.0,
+                  "pace_s_per_100m": 72.0,
+                  "pace": "1:12,0/100 m",
+                  "average_heartrate": 148.3,
+                  "max_heartrate": 151.0,
+                  "rest_marker_before": true,
+                  "recorded_rest_before_s": 15.0
+                }
+              ],
+              "pace_mean_s_per_100m": 75.0,
+              "pace_fastest_s_per_100m": 72.0,
+              "pace_slowest_s_per_100m": 78.0,
+              "pace_range_s_per_100m": 6.0,
+              "pace_first_to_last_delta_s_per_100m": -6.0,
+              "average_heartrate_mean": 140.4,
+              "recorded_rest_between_reps_s": [
+                15.0,
+                15.0,
+                15.0,
+                15.0,
+                15.0
+              ]
+            }
+          ],
+          "source_intervals": [
+            {
+              "lap_index": 1,
+              "distance_m": 400.0,
+              "moving_time_s": 365.0,
+              "pace_s_per_100m": 91.25,
+              "pace": "1:31,2/100 m",
+              "average_heartrate": 111.9,
+              "max_heartrate": 126.0,
+              "rest_marker_before": false,
+              "recorded_rest_before_s": 0.0
+            },
+            {
+              "lap_index": 3,
+              "distance_m": 50.0,
+              "moving_time_s": 42.0,
+              "pace_s_per_100m": 84.0,
+              "pace": "1:24,0/100 m",
+              "average_heartrate": 93.8,
+              "max_heartrate": 114.0,
+              "rest_marker_before": true,
+              "recorded_rest_before_s": 36.0
+            },
+            {
+              "lap_index": 5,
+              "distance_m": 50.0,
+              "moving_time_s": 40.0,
+              "pace_s_per_100m": 80.0,
+              "pace": "1:20,0/100 m",
+              "average_heartrate": 120.3,
+              "max_heartrate": 123.0,
+              "rest_marker_before": true,
+              "recorded_rest_before_s": 15.0
+            },
+            {
+              "lap_index": 7,
+              "distance_m": 50.0,
+              "moving_time_s": 38.0,
+              "pace_s_per_100m": 76.0,
+              "pace": "1:16,0/100 m",
+              "average_heartrate": 121.9,
+              "max_heartrate": 133.0,
+              "rest_marker_before": true,
+              "recorded_rest_before_s": 15.0
+            },
+            {
+              "lap_index": 9,
+              "distance_m": 50.0,
+              "moving_time_s": 38.0,
+              "pace_s_per_100m": 76.0,
+              "pace": "1:16,0/100 m",
+              "average_heartrate": 124.1,
+              "max_heartrate": 137.0,
+              "rest_marker_before": true,
+              "recorded_rest_before_s": 15.0
+            },
+            {
+              "lap_index": 11,
+              "distance_m": 50.0,
+              "moving_time_s": 38.0,
+              "pace_s_per_100m": 76.0,
+              "pace": "1:16,0/100 m",
+              "average_heartrate": 130.4,
+              "max_heartrate": 140.0,
+              "rest_marker_before": true,
+              "recorded_rest_before_s": 15.0
+            },
+            {
+              "lap_index": 13,
+              "distance_m": 50.0,
+              "moving_time_s": 37.0,
+              "pace_s_per_100m": 74.0,
+              "pace": "1:14,0/100 m",
+              "average_heartrate": 132.1,
+              "max_heartrate": 136.0,
+              "rest_marker_before": true,
+              "recorded_rest_before_s": 15.0
+            },
+            {
+              "lap_index": 15,
+              "distance_m": 500.0,
+              "moving_time_s": 440.0,
+              "pace_s_per_100m": 88.0,
+              "pace": "1:28,0/100 m",
+              "average_heartrate": 130.9,
+              "max_heartrate": 141.0,
+              "rest_marker_before": true,
+              "recorded_rest_before_s": 0.0
+            },
+            {
+              "lap_index": 18,
+              "distance_m": 500.0,
+              "moving_time_s": 437.0,
+              "pace_s_per_100m": 87.4,
+              "pace": "1:27,4/100 m",
+              "average_heartrate": 139.5,
+              "max_heartrate": 146.0,
+              "rest_marker_before": true,
+              "recorded_rest_before_s": 29.0
+            },
+            {
+              "lap_index": 20,
+              "distance_m": 500.0,
+              "moving_time_s": 441.0,
+              "pace_s_per_100m": 88.2,
+              "pace": "1:28,2/100 m",
+              "average_heartrate": 145.1,
+              "max_heartrate": 153.0,
+              "rest_marker_before": true,
+              "recorded_rest_before_s": 30.0
+            },
+            {
+              "lap_index": 23,
+              "distance_m": 500.0,
+              "moving_time_s": 442.0,
+              "pace_s_per_100m": 88.4,
+              "pace": "1:28,4/100 m",
+              "average_heartrate": 145.3,
+              "max_heartrate": 155.0,
+              "rest_marker_before": true,
+              "recorded_rest_before_s": 29.0
+            },
+            {
+              "lap_index": 25,
+              "distance_m": 50.0,
+              "moving_time_s": 39.0,
+              "pace_s_per_100m": 78.0,
+              "pace": "1:18,0/100 m",
+              "average_heartrate": 107.2,
+              "max_heartrate": 118.0,
+              "rest_marker_before": true,
+              "recorded_rest_before_s": 0.0
+            },
+            {
+              "lap_index": 27,
+              "distance_m": 50.0,
+              "moving_time_s": 37.0,
+              "pace_s_per_100m": 74.0,
+              "pace": "1:14,0/100 m",
+              "average_heartrate": 143.5,
+              "max_heartrate": 146.0,
+              "rest_marker_before": true,
+              "recorded_rest_before_s": 15.0
+            },
+            {
+              "lap_index": 29,
+              "distance_m": 50.0,
+              "moving_time_s": 37.0,
+              "pace_s_per_100m": 74.0,
+              "pace": "1:14,0/100 m",
+              "average_heartrate": 146.6,
+              "max_heartrate": 150.0,
+              "rest_marker_before": true,
+              "recorded_rest_before_s": 15.0
+            },
+            {
+              "lap_index": 31,
+              "distance_m": 50.0,
+              "moving_time_s": 38.0,
+              "pace_s_per_100m": 76.0,
+              "pace": "1:16,0/100 m",
+              "average_heartrate": 150.2,
+              "max_heartrate": 157.0,
+              "rest_marker_before": true,
+              "recorded_rest_before_s": 15.0
+            },
+            {
+              "lap_index": 33,
+              "distance_m": 50.0,
+              "moving_time_s": 38.0,
+              "pace_s_per_100m": 76.0,
+              "pace": "1:16,0/100 m",
+              "average_heartrate": 146.6,
+              "max_heartrate": 148.0,
+              "rest_marker_before": true,
+              "recorded_rest_before_s": 15.0
+            },
+            {
+              "lap_index": 35,
+              "distance_m": 50.0,
+              "moving_time_s": 36.0,
+              "pace_s_per_100m": 72.0,
+              "pace": "1:12,0/100 m",
+              "average_heartrate": 148.3,
+              "max_heartrate": 151.0,
+              "rest_marker_before": true,
+              "recorded_rest_before_s": 15.0
+            },
+            {
+              "lap_index": 37,
+              "distance_m": 200.0,
+              "moving_time_s": 176.0,
+              "pace_s_per_100m": 88.0,
+              "pace": "1:28,0/100 m",
+              "average_heartrate": 124.6,
+              "max_heartrate": 134.0,
+              "rest_marker_before": true,
+              "recorded_rest_before_s": 2.0
+            }
+          ],
+          "source_lap_distance_sum_m": 3200.0,
+          "source_lap_distance_matches_activity": true,
+          "structure_basis": "Equal-distance positive source laps are grouped as a repeat set only when a zero-distance lap/rest marker separates the repetitions.",
+          "interpretation_limits": [
+            "Pace is derived deterministically from source lap time and distance.",
+            "Set structure and pace stability do not by themselves prove stroke-technique quality or physiological intensity.",
+            "Swimming heart rate is observed source data and is not an intensity classification by itself."
+          ]
+        },
         "enduro": null,
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
       }
@@ -2448,7 +2976,7 @@
         }
       ],
       "workout_analysis_context": {
-        "contract_version": 2,
+        "contract_version": 3,
         "activity_id": 20092166843,
         "sport_type": "Run",
         "display_label": "Run",
@@ -2470,6 +2998,7 @@
           "fastest_source_lap_near_1km": null,
           "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals."
         },
+        "swim": null,
         "enduro": null,
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
       }
@@ -2508,7 +3037,7 @@
         }
       ],
       "workout_analysis_context": {
-        "contract_version": 2,
+        "contract_version": 3,
         "activity_id": 20079150228,
         "sport_type": "WeightTraining",
         "display_label": "WeightTraining",
@@ -2524,6 +3053,7 @@
           "max_heartrate": 112.0
         },
         "run": null,
+        "swim": null,
         "enduro": null,
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
       }
@@ -2562,7 +3092,7 @@
         }
       ],
       "workout_analysis_context": {
-        "contract_version": 2,
+        "contract_version": 3,
         "activity_id": 20078705519,
         "sport_type": "Enduro",
         "display_label": "Enduro",
@@ -2578,6 +3108,7 @@
           "max_heartrate": 168.0
         },
         "run": null,
+        "swim": null,
         "enduro": {
           "session_duration_s": 5718.0,
           "duration_basis": "elapsed_time_s",
@@ -2606,35 +3137,39 @@
       "activity_id": 20106458579,
       "activity_date": "2026-09-09",
       "activity_name": "Simning på kvällen",
-      "generated_at_utc": "2026-09-10T04:41:22.127918+00:00",
+      "generated_at_utc": "2026-09-10T06:38:12.702702+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 1,
-        "workout_context_version": 2,
+        "workout_context_version": 3,
         "plan_comparison_version": 1,
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
-        "analysis_code_sha256": "eca5b921283f06098c0bca80840d04f9fbc044dacc81a9084774be7dfe2f724d"
+        "analysis_code_sha256": "7f516df31a5e82dd8cab3dc218fb5637f38c55d89cdf66aa63f9e81b72369f28"
       },
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Simningen genomfördes enligt planerad distans: 3 200 m.",
-        "load_interpretation": "Set-/intervallnivå saknas i det strukturerade analyslagret; teknik, fartstabilitet och intensitetsutveckling går därför inte att bedöma säkert.",
-        "confidence": "low",
+        "summary": "Genomförd simning 3 200 m med tydlig setstruktur (1×400, 6×50, 4×500, 6×50, 1×200) och stabil takt/pace i de långa 500‑seten.",
+        "load_interpretation": "Passet är en underhålls/teknik‑exponering som matchar planens sim‑stimulus och ger mekanisk kostnad inför kommande löppass.",
+        "confidence": "medium",
         "facts": [
           "Simning: 3,20 km · 58:38 · snittpuls 128,4 · maxpuls 157.",
           "Planstatus 2026-09-09: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
-        "interpretations": [],
+        "interpretations": [
+          "Setstrukturen visar genomfört tekniskt/aerobt arbete som underhåller simkapaciteten utan mekanisk belastning för benen.",
+          "Ingen indikation i datan eller plan jämfört med närbelastningen att simningen kräver att fredagens prioriterade backkvalitet ändras."
+        ],
         "unknowns": [
-          "Set-/intervallstruktur och subjektiv känsla efter simningen saknas."
+          "Subjektiv känsla efter passet (användarrapport tom) som kan påverka nästa‑dagens tolerans",
+          "Eventuell lokal muskeltrötthet i ben/axel ej specificerad och kan påverka styrkeinslag"
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-09-10",
-        "reason": "Simningen var genomförd enligt plan och har mekanisk kostnad; ingen omedelbar ändring behövs för dagens MTB-stödpass.",
-        "recommendation": "Följ plan: genomför dagens MTB/XC/XC 60 min enligt plan; om du känner oväntad muskeltrötthet eller stelhet, välj MTB/XC/XC · 45 min · teknik + lugn aerob stig istället.",
+        "reason": "Simningen var planerad som aerob/teknik och genomfördes med förväntad struktur och mekanisk kostnad.",
+        "recommendation": "Behåll dagens MTB/XC 60‑min planerade dos oförändrad; genomför som plan (teknik + lugn aerob). Ingen ändring av fredagens backkvalitet krävs baserat på dessa data.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -2679,7 +3214,7 @@
         "action": "keep",
         "target_date": "2026-09-09",
         "reason": "Senaste passet motsvarade den planerade progressionen och närbelastningen tillåter att planen kvarstår.",
-        "recommendation": "Behåll simpasset 3 200 m imorgon enligt plan; notera subjektiv återhämtning och benkänsla före torsdagens MTB/XC/XC/XC/XC/XC/XC/XC/XC och fredagens backpass.",
+        "recommendation": "Behåll simpasset 3 200 m imorgon enligt plan; notera subjektiv återhämtning och benkänsla före torsdagens MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC och fredagens backpass.",
         "dose_option_id": "",
         "requires_approval": false
       },
