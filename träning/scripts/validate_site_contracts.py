@@ -124,11 +124,17 @@ def main() -> None:
 
     expected_manual = 0
     explicit_sport_days = []
+    dose_option_ids = set()
     for day in days:
         status = day.get("status")
         day_date = day.get("date")
         require(status in VALID_STATUSES, f"Preflight: ogiltig status {status!r} för {day_date}")
         require(bool((day.get("session") or "").strip()), f"Preflight: tom session för {day_date}")
+
+        for option in day.get("dose_options") or []:
+            option_id = str(option.get("id") or "").strip()
+            if option_id:
+                dose_option_ids.add(option_id)
 
         if "sport" in day:
             sport = (day.get("sport") or "").strip().lower()
@@ -161,6 +167,16 @@ def main() -> None:
             )
 
     index = INDEX.read_text(encoding="utf-8")
+    require(
+        "dose_option_id" not in index,
+        "Preflight: intern variabel dose_option_id läcker till den publicerade sidan",
+    )
+    for option_id in sorted(dose_option_ids):
+        require(
+            option_id not in index,
+            f"Preflight: internt passalternativ {option_id!r} läcker till den publicerade sidan",
+        )
+
     duplicate_href = f'href="/träning/vecka/{current_key}/"'
     require(duplicate_href not in index, "Preflight: index länkar till en duplicerad aktuell veckosida")
     if WEEK_PAGES.exists():
@@ -203,7 +219,7 @@ def main() -> None:
         require(stale not in canonical, f"Preflight: gammal målbilds-UX finns kvar: {stale}")
 
     print(
-        "Preflight OK: normaliserade aktiviteter, plan, ikoner, canonical veckonavigation och "
+        "Preflight OK: normaliserade aktiviteter, plan, ikoner, canonical veckonavigation, publik coachtext och "
         "målbildens canonical/mirror- och systemhierarkikontrakt är konsistenta."
     )
 
