@@ -48,9 +48,9 @@ class CoachOutputContractTests(unittest.TestCase):
             analysis["assessment"]["summary"],
             "Simningen blev 4 000 m mot planerade 3 200 m (800 m mer).",
         )
-        self.assertIn(
-            "går därför inte att bedöma säkert",
+        self.assertEqual(
             analysis["assessment"]["load_interpretation"],
+            "Ingen setbaserad slutsats används för planändring.",
         )
         self.assertNotIn("tekniska krascher", analysis["assessment"]["summary"].lower())
         self.assertEqual(analysis["assessment"]["confidence"], "low")
@@ -58,6 +58,44 @@ class CoachOutputContractTests(unittest.TestCase):
             analysis["plan_action"]["recommendation"],
             "Simningen är genomförd. Återstår enligt dagens plan: styrka/core · 25 min · styrkemall.",
         )
+
+    def test_structured_swim_context_is_not_overwritten_by_missing_performance_marker(self):
+        coach = {"analyses": [{
+            "activity_id": 3,
+            "activity_date": "2026-09-09",
+            "performance_marker_id": None,
+            "assessment": {
+                "summary": "Fyra 500:or låg inom en sekund per 100 m.",
+                "load_interpretation": "Ingen ändring av kommande plan behövs.",
+                "confidence": "medium",
+                "facts": [],
+                "interpretations": ["Farten var stabil i 500-meterssetet."],
+                "unknowns": [],
+            },
+            "plan_action": {
+                "action": "keep",
+                "target_date": "2026-09-10",
+                "reason": "Passet ger inget skäl att ändra nästa pass.",
+                "recommendation": "Behåll planen.",
+                "dose_option_id": "",
+                "requires_approval": False,
+            },
+        }]}
+        activities = {"activities": [{
+            "id": 3,
+            "sport_type": "Swim",
+            "distance_m": 3200.0,
+            "workout_analysis_context": {
+                "swim": {
+                    "structured": True,
+                    "repeat_sets": [{"repetitions": 4, "distance_per_rep_m": 500.0}],
+                }
+            },
+        }]}
+        self.assertFalse(contract.enforce_contract(coach, {"days": []}, activities))
+        assessment = coach["analyses"][0]["assessment"]
+        self.assertEqual(assessment["summary"], "Fyra 500:or låg inom en sekund per 100 m.")
+        self.assertNotIn("setbaserad slutsats", assessment["load_interpretation"].lower())
 
     def test_compacts_free_text(self):
         coach = {"analyses": [{
