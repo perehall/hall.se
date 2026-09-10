@@ -44,10 +44,10 @@ EXPECTED_PIPELINE = (
     "build_home.py",
     "finalize_goal_link_layout.py",
     "publish_goal_cache_bypass.py",
-    "finalize_generated_whitespace.py",
     "finalize_week_shell_ui.py",
     "finalize_quiet_performance_ui.py",
     "finalize_quiet_performance_v2_ui.py",
+    "finalize_generated_whitespace.py",
     "check_week_reviews.py",
     "check_week_review_ui.py",
     "validate_site_contracts.py",
@@ -81,11 +81,11 @@ class RenderPipelineTests(unittest.TestCase):
         self.assertLess(PIPELINE.index("finalize_completed_sport_icon.py"), PIPELINE.index("finalize_coach_clarity_ui.py"))
         self.assertLess(PIPELINE.index("finalize_coach_clarity_ui.py"), PIPELINE.index("finalize_card_v2_ui.py"))
         self.assertLess(PIPELINE.index("finalize_card_v2_ui.py"), PIPELINE.index("build_home.py"))
-        self.assertLess(PIPELINE.index("publish_goal_cache_bypass.py"), PIPELINE.index("finalize_generated_whitespace.py"))
-        self.assertLess(PIPELINE.index("finalize_generated_whitespace.py"), PIPELINE.index("finalize_week_shell_ui.py"))
+        self.assertLess(PIPELINE.index("publish_goal_cache_bypass.py"), PIPELINE.index("finalize_week_shell_ui.py"))
         self.assertLess(PIPELINE.index("finalize_week_shell_ui.py"), PIPELINE.index("finalize_quiet_performance_ui.py"))
         self.assertLess(PIPELINE.index("finalize_quiet_performance_ui.py"), PIPELINE.index("finalize_quiet_performance_v2_ui.py"))
-        self.assertLess(PIPELINE.index("finalize_quiet_performance_v2_ui.py"), PIPELINE.index("validate_site_contracts.py"))
+        self.assertLess(PIPELINE.index("finalize_quiet_performance_v2_ui.py"), PIPELINE.index("finalize_generated_whitespace.py"))
+        self.assertLess(PIPELINE.index("finalize_generated_whitespace.py"), PIPELINE.index("validate_site_contracts.py"))
 
     def test_runner_executes_every_stage_in_canonical_order(self):
         calls = []
