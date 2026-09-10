@@ -16,7 +16,7 @@ class CardV2UiTests(unittest.TestCase):
   <div class="daytop"><div class="day-date-line"><span class="dow">Onsdag</span><span class="date">9 sep</span></div><div class="badge conditional">Alternativ finns</div></div>
   <div class="session"><span class="session-text"><strong class="session-title">Simning 3 200 m aerob/teknik</strong><span class="session-meta">ca 60 min</span></span></div>
   <div class="device-sync-state synced"><svg></svg><span>Klocksync skickad</span></div>
-  <div class="workout-prescription"><div class="workout-prescription-head">Passupplägg</div><div class="workout-prescription-row"><span class="workout-prescription-dose">4×500 m</span><span class="workout-prescription-text">Stabil aerob · vila 30 s</span></div></div>
+  <div class="workout-prescription"><div class="workout-prescription-head">Passupplägg</div><div class="workout-prescription-row"><span class="workout-prescription-dose">15 min</span><span class="workout-prescription-text">Lugnt</span></div><div class="workout-prescription-row"><span class="workout-prescription-dose">3×7×150 m</span><span class="workout-prescription-text">Kraftfull men kontrollerad löpning med bibehållen mekanik.</span></div><div class="workout-prescription-row"><span class="workout-prescription-dose">10 min</span><span class="workout-prescription-text">Lugnt</span></div></div>
   <details class="day-why"><summary>Motivering</summary><div class="reason">Mesocykelns aeroba simstimulus.</div></details>
   <div class="development-focus"><strong>Passfokus</strong><span>Stabil kroppslinje och avslappnad rotation.</span></div>
 </div>
@@ -33,9 +33,23 @@ class CardV2UiTests(unittest.TestCase):
         card = rendered.split('id="dag-2026-09-09"', 1)[1].split('id="dag-2026-09-13"', 1)[0]
         self.assertGreater(card.find('class="card-v2-footer"'), card.find('class="workout-prescription"'))
         self.assertGreater(card.find('class="device-sync-state synced"'), card.find('class="workout-prescription"'))
-        self.assertIn('.workout-card-v2 .workout-prescription{margin:13px 0 3px;padding:0;border:0', rendered)
-        self.assertIn('.workout-card-v2 .development-focus{display:flex', rendered)
+        self.assertIn('.workout-card-v2 .workout-prescription{margin:13px 0 3px;padding:0;border:0;border-radius:0;background:transparent;display:grid;grid-template-columns:max-content minmax(0,1fr)', rendered)
+        self.assertIn('.workout-card-v2 .workout-prescription-row{display:contents}', rendered)
+        self.assertIn('text-align:right;white-space:nowrap', rendered)
+        self.assertIn('border-left:1px solid #e2e8f0', rendered)
+        self.assertIn('.workout-card-v2 .development-focus{display:flex;align-items:flex-start', rendered)
+        self.assertIn('border-radius:999px;background:#f1f5f9', rendered)
         self.assertIn('.card-v2-footer .device-sync-state{margin:0 0 0 auto;padding:0;border:0', rendered)
+
+    def test_existing_card_css_is_refreshed_in_place(self):
+        legacy = self.sample_page().replace(
+            '<style></style>',
+            '<style>/* workout-card-v2 */\n.legacy-columns{display:block}\n/* workout-card-v2 */</style>',
+        )
+        rendered = apply_card_v2(legacy, today_text="2026-09-09")
+        self.assertNotIn('.legacy-columns', rendered)
+        self.assertIn('.workout-card-v2 .workout-prescription-row{display:contents}', rendered)
+        self.assertEqual(rendered.count('/* workout-card-v2 */'), 2)
 
     def test_card_v2_is_idempotent_and_keeps_compact_cards_compact(self):
         once = apply_card_v2(self.sample_page(), today_text="2026-09-09")
