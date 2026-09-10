@@ -13,6 +13,7 @@ EXPECTED_PIPELINE = (
     "apply_plan_overrides.py",
     "enforce_coach_output_contract.py",
     "normalize_coach_language.py",
+    "finalize_canonical_coach_facts.py",
     "build.py",
     "finalize_dashboard.py",
     "finalize_dashboard_ui.py",
@@ -63,7 +64,8 @@ class RenderPipelineTests(unittest.TestCase):
         self.assertEqual(PIPELINE[-2:], ("validate_site_contracts.py", "validate_training_data.py"))
         self.assertLess(PIPELINE.index("apply_plan_overrides.py"), PIPELINE.index("enforce_coach_output_contract.py"))
         self.assertLess(PIPELINE.index("enforce_coach_output_contract.py"), PIPELINE.index("normalize_coach_language.py"))
-        self.assertLess(PIPELINE.index("normalize_coach_language.py"), PIPELINE.index("build.py"))
+        self.assertLess(PIPELINE.index("normalize_coach_language.py"), PIPELINE.index("finalize_canonical_coach_facts.py"))
+        self.assertLess(PIPELINE.index("finalize_canonical_coach_facts.py"), PIPELINE.index("build.py"))
         self.assertLess(PIPELINE.index("archive_weeks.py"), PIPELINE.index("finalize_week_review_ui.py"))
         self.assertLess(PIPELINE.index("finalize_week_review_ui.py"), PIPELINE.index("check_week_review_ui.py"))
         self.assertLess(PIPELINE.index("finalize_navigation_ui.py"), PIPELINE.index("finalize_training_brain_ui.py"))
