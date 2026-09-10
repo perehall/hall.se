@@ -10,7 +10,9 @@ historical surfaces become progressively quieter.
 from __future__ import annotations
 
 import re
+from datetime import date, datetime
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parents[1]
 INDEX_FILE = ROOT / "index.html"
@@ -24,23 +26,62 @@ CSS_BLOCK_RE = re.compile(re.escape(CSS_START) + r".*?" + re.escape(CSS_END), re
 DIV_TAG_RE = re.compile(r"<div\b[^>]*>|</div>", re.I)
 BODY_RE = re.compile(r"<body(?P<attrs>[^>]*)>", re.I)
 CLASS_RE = re.compile(r'\sclass="(?P<classes>[^"]*)"', re.I)
+BRAIN_KICKER_RE = re.compile(r'<span class="brain-kicker">Idag(?:\s*·\s*[^<]+)?</span>', re.I)
 TRAINING_START = "<!-- training-brain-v1:start -->"
 TRAINING_END = "<!-- training-brain-v1:end -->"
 UPCOMING_TITLE = '<div class="dashboard-title">Kommande dagar</div>'
 
+SWEDISH_WEEKDAYS = (
+    "måndag",
+    "tisdag",
+    "onsdag",
+    "torsdag",
+    "fredag",
+    "lördag",
+    "söndag",
+)
+SWEDISH_MONTHS = (
+    "jan",
+    "feb",
+    "mar",
+    "apr",
+    "maj",
+    "jun",
+    "jul",
+    "aug",
+    "sep",
+    "okt",
+    "nov",
+    "dec",
+)
+
 CSS = r'''
-/* Current page has one strong operational surface; everything else recedes. */
+/* Current decision is an editorial section, not another card. */
 body.quiet-performance.qp-current .wrap{max-width:700px!important}
 body.quiet-performance.qp-current header{padding-bottom:14px}
-body.quiet-performance.qp-current .training-brain{margin:2px 0 22px}
-body.quiet-performance.qp-current .brain-today{
-  padding:18px 18px 16px;
-  background:#FFFFFF;
-  border-color:#DEE1DD;
-  border-radius:12px;
-  box-shadow:inset 2px 0 0 var(--qp-accent);
+body.quiet-performance.qp-current .training-brain{
+  margin:2px 0 24px;
+  padding:0 0 22px;
+  border-bottom:1px solid var(--qp-line);
 }
-body.quiet-performance.qp-current .brain-topline{margin-bottom:10px}
+body.quiet-performance.qp-current .brain-today{
+  padding:0;
+  background:transparent;
+  border:0;
+  border-radius:0;
+  box-shadow:none;
+}
+body.quiet-performance.qp-current .brain-topline{
+  position:sticky;
+  top:0;
+  z-index:24;
+  margin:0 0 10px;
+  padding:7px 0 8px;
+  border-bottom:1px solid var(--qp-line-soft);
+  background:rgba(246,247,245,.94);
+  -webkit-backdrop-filter:blur(10px);
+  backdrop-filter:blur(10px);
+}
 body.quiet-performance.qp-current .brain-kicker{
   color:var(--qp-tertiary);
   font-size:.69rem;
@@ -48,8 +89,47 @@ body.quiet-performance.qp-current .brain-kicker{
   letter-spacing:.075em;
   text-transform:uppercase;
 }
+body.quiet-performance.qp-current .brain-status{
+  padding:0;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  color:var(--qp-tertiary);
+  font-size:.66rem;
+  font-weight:600;
+}
 body.quiet-performance.qp-current .brain-headline{font-size:1.22rem;font-weight:650}
 body.quiet-performance.qp-current .brain-subline{margin-top:4px;font-size:.82rem}
+body.quiet-performance.qp-current .brain-weather,
+body.quiet-performance.qp-current .brain-extra{
+  margin:12px 0 0;
+  padding:9px 0 0 12px;
+  border:0;
+  border-left:1px solid var(--qp-line);
+  border-radius:0;
+  background:transparent;
+}
+body.quiet-performance.qp-current .brain-weather-label,
+body.quiet-performance.qp-current .brain-extra-label{
+  margin-bottom:3px;
+  color:var(--qp-tertiary);
+  font-size:.67rem;
+  font-weight:650;
+  letter-spacing:.055em;
+  text-transform:uppercase;
+}
+body.quiet-performance.qp-current .brain-weather strong,
+body.quiet-performance.qp-current .brain-extra strong{
+  color:var(--qp-text);
+  font-size:.86rem;
+  font-weight:600;
+}
+body.quiet-performance.qp-current .brain-weather-note,
+body.quiet-performance.qp-current .brain-extra-note{
+  margin-top:3px;
+  color:var(--qp-secondary);
+  font-size:.77rem;
+}
 body.quiet-performance.qp-current .brain-next{
   display:grid;
   grid-template-columns:88px minmax(0,1fr);
@@ -186,7 +266,7 @@ body.quiet-performance.qp-history .day.workout-card-v2.past-completed{
 }
 
 @media(max-width:620px){
-  body.quiet-performance.qp-current .brain-today{padding:16px 15px 14px}
+  body.quiet-performance.qp-current .brain-topline{padding:6px 0 7px}
   body.quiet-performance.qp-current .brain-next{grid-template-columns:72px minmax(0,1fr);column-gap:9px}
   body.quiet-performance.qp-current .metrics{justify-content:space-between}
   body.quiet-performance.qp-current .metric{padding:0 9px;gap:4px}
@@ -239,6 +319,20 @@ def add_body_class(page: str, class_name: str) -> str:
     return page[: match.start()] + f"<body{attrs}>" + page[match.end() :]
 
 
+def current_day_label(today: date | None = None) -> str:
+    local_date = today or datetime.now(ZoneInfo("Europe/Stockholm")).date()
+    weekday = SWEDISH_WEEKDAYS[local_date.weekday()]
+    month = SWEDISH_MONTHS[local_date.month - 1]
+    return f"{weekday} {local_date.day} {month}"
+
+
+def decorate_today_kicker(page: str, *, today: date | None = None) -> str:
+    if not BRAIN_KICKER_RE.search(page):
+        return page
+    replacement = f'<span class="brain-kicker">Idag · {current_day_label(today)}</span>'
+    return BRAIN_KICKER_RE.sub(replacement, page, count=1)
+
+
 def move_today_before_week_focus(page: str) -> str:
     brain_start = page.find(TRAINING_START)
     brain_end = page.find(TRAINING_END, brain_start + len(TRAINING_START)) if brain_start >= 0 else -1
@@ -285,11 +379,12 @@ def add_css(page: str) -> str:
     return page.replace("</style>", block + "\n</style>", 1)
 
 
-def apply_v2(page: str, *, current: bool) -> str:
+def apply_v2(page: str, *, current: bool, today: date | None = None) -> str:
     if "quiet-performance" not in body_classes(page):
         raise RuntimeError("Quiet Performance v2: v1 måste appliceras först")
     page = add_body_class(page, "qp-current" if current else "qp-history")
     if current:
+        page = decorate_today_kicker(page, today=today)
         page = move_today_before_week_focus(page)
         page = remove_duplicate_upcoming_card(page)
     return add_css(page)
@@ -313,6 +408,8 @@ def validate_page(page: str, *, current: bool, label: str) -> None:
         focus = page.find('<div class="hero week-focus-card">')
         if brain >= 0 and focus >= 0 and brain > focus:
             raise RuntimeError("Quiet Performance v2: Idag ligger fortfarande efter veckofokus")
+        if '<span class="brain-kicker">Idag · ' not in page:
+            raise RuntimeError("Quiet Performance v2: Idag-raden saknar dag och datum")
 
 
 def page_paths() -> list[tuple[Path, bool]]:
