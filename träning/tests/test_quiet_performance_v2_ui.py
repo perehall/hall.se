@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 import sys
 import unittest
+from datetime import date
 from pathlib import Path
 
 SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
 from finalize_quiet_performance_v2_ui import (  # noqa: E402
+    CSS,
     CSS_END,
     CSS_START,
     TRAINING_START,
@@ -23,7 +25,7 @@ class QuietPerformanceV2Tests(unittest.TestCase):
 /* quiet-performance-v1:end */</style></head><body class="quiet-performance"><div class="wrap">
 <div class="hero week-focus-card"><h2 class="week-focus-title">Veckofokus</h2></div>
 <!-- training-brain-v1:start -->
-<section class="training-brain"><div class="brain-today"><div class="brain-headline">Dagens pass</div><div class="brain-next"><div class="brain-next-label">Nästa</div><strong>Fredag</strong></div></div></section>
+<section class="training-brain"><div class="brain-today"><div class="brain-topline"><span class="brain-kicker">Idag</span><span class="brain-status">Planerat</span></div><div class="brain-headline">Dagens pass</div><div class="brain-next"><div class="brain-next-label">Nästa</div><strong>Fredag</strong></div></div></section>
 <!-- training-brain-v1:end -->
 <section class="dashboard">
 <div class="metrics"><div class="metric"><strong>4</strong><span>pass</span></div></div>
@@ -35,13 +37,45 @@ class QuietPerformanceV2Tests(unittest.TestCase):
 </div></body></html>'''
 
     def test_current_page_moves_today_first_and_removes_duplicate_upcoming(self):
-        rendered = apply_v2(self.sample_page(), current=True)
+        rendered = apply_v2(self.sample_page(), current=True, today=date(2026, 9, 10))
         validate_page(rendered, current=True, label="current")
         self.assertIn('class="quiet-performance qp-current"', rendered)
         self.assertLess(rendered.index(TRAINING_START), rendered.index('class="hero week-focus-card"'))
         self.assertNotIn(UPCOMING_TITLE, rendered)
         self.assertIn('class="dashboard-grid"', rendered)
         self.assertIn('class="day workout-card-v2 past-completed"', rendered)
+        self.assertIn('<span class="brain-kicker">Idag · torsdag 10 sep</span>', rendered)
+
+    def test_today_surface_is_editorial_not_card_chrome(self):
+        self.assertIn(
+            '''body.quiet-performance.qp-current .brain-today{
+  padding:0;
+  background:transparent;
+  border:0;
+  border-radius:0;
+  box-shadow:none;
+}''',
+            CSS,
+        )
+        self.assertIn(
+            '''body.quiet-performance.qp-current .brain-status{
+  padding:0;
+  border:0;
+  border-radius:0;
+  background:transparent;''',
+            CSS,
+        )
+        self.assertIn(
+            '''body.quiet-performance.qp-current .brain-weather,
+body.quiet-performance.qp-current .brain-extra{
+  margin:12px 0 0;
+  padding:9px 0 0 12px;
+  border:0;
+  border-left:1px solid var(--qp-line);
+  border-radius:0;
+  background:transparent;''',
+            CSS,
+        )
 
     def test_history_keeps_structure_but_gets_history_class(self):
         rendered = apply_v2(self.sample_page(), current=False)
@@ -49,10 +83,11 @@ class QuietPerformanceV2Tests(unittest.TestCase):
         self.assertIn('class="quiet-performance qp-history"', rendered)
         self.assertIn(UPCOMING_TITLE, rendered)
         self.assertGreater(rendered.index(TRAINING_START), rendered.index('class="hero week-focus-card"'))
+        self.assertIn('<span class="brain-kicker">Idag</span>', rendered)
 
     def test_transform_is_idempotent(self):
-        once = apply_v2(self.sample_page(), current=True)
-        twice = apply_v2(once, current=True)
+        once = apply_v2(self.sample_page(), current=True, today=date(2026, 9, 10))
+        twice = apply_v2(once, current=True, today=date(2026, 9, 10))
         self.assertEqual(once, twice)
         self.assertEqual(twice.count(CSS_START), 1)
         self.assertEqual(twice.count(CSS_END), 1)
