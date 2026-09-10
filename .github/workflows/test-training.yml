@@ -62,6 +62,9 @@ jobs:
           grep -Fq 'workout-card-v2' "träning/index.html"
           grep -Fq 'class="card-v2-footer"' "träning/index.html"
           grep -Eq 'Klocksync (väntar|skickad|fel)' "träning/index.html"
+          grep -Fq 'quiet-performance-v1:start' "träning/index.html"
+          grep -Fq 'content="#F6F7F5"' "träning/index.html"
+          grep -Fq 'quiet-performance' "träning/index.html"
           ! grep -Fq 'Prioritering just nu:' "träning/index.html"
 
       - name: Diff hygiene
