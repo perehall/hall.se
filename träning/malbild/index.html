@@ -1,4 +1,4 @@
-<!doctype html><html lang="sv"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f5f7fb"><title>Målbild 2027 · Träningsplan</title>
+<!doctype html><html lang="sv"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#F6F7F5"><title>Målbild 2027 · Träningsplan</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#0f172a;--muted:#64748b;--line:#e2e8f0;--accent:#2563eb;--shadow:0 8px 24px rgba(15,23,42,.06)}*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);line-height:1.45}.wrap{width:min(100%,720px);margin:auto;padding:20px 16px 56px}.eyebrow{font-size:.76rem;font-weight:700;color:#64748b;margin-bottom:6px}h1{font-size:clamp(2rem,8vw,3.2rem);line-height:1;margin:0 0 8px;letter-spacing:-.04em}.sub{color:#64748b;font-size:.94rem;line-height:1.45}.goal-back-row{display:flex;justify-content:flex-end;margin:12px 0 4px}.goal-back-row a{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid #e2e8f0;border-radius:12px;background:#fff;color:#475569;text-decoration:none;font-size:.78rem;font-weight:700;box-shadow:0 5px 14px rgba(15,23,42,.04)}.card{background:#fff;border:1px solid var(--line);box-shadow:var(--shadow);border-radius:20px;padding:17px;margin:12px 0}.title{font-size:1.06rem;font-weight:700;margin-bottom:12px}.goal p{margin:0;color:#334155;font-size:.96rem;line-height:1.5}.goal-note{margin-top:8px!important;color:#64748b!important;font-size:.8rem!important}
 .system-steps{display:grid;gap:0}.system-step{display:grid;grid-template-columns:30px 1fr;gap:10px;padding:10px 0;border-top:1px solid #edf1f6}.system-step:first-child{border-top:0;padding-top:0}.system-step-num{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:#eff6ff;color:#1d4ed8;font-size:.72rem;font-weight:700}.system-step strong{display:block;font-size:.9rem}.system-step p{margin:2px 0 0;color:#64748b;font-size:.82rem;line-height:1.42}.feedback-loop{margin-top:11px;padding:10px 11px;border-radius:12px;background:#f8fafc;border:1px solid #e2e8f0}.feedback-loop strong{display:block;font-size:.75rem;color:#475569;margin-bottom:3px}.feedback-loop span{display:block;color:#475569;font-size:.8rem;line-height:1.42}.calendar-note{margin-top:8px;color:#94a3b8;font-size:.73rem;line-height:1.4}
@@ -59,7 +59,494 @@ h1{font-size:clamp(2rem,8vw,3.2rem);line-height:1;margin:0 0 8px;letter-spacing:
   .system-head{cursor:default;touch-action:auto}
 }
 
-</style></head><body class="goal-page"><div class="wrap">
+/* quiet-performance-v1:start */
+:root{
+  --qp-canvas:#F6F7F5;
+  --qp-surface:#FCFCFB;
+  --qp-elevated:#FFFFFF;
+  --qp-text:#171918;
+  --qp-secondary:#6C716D;
+  --qp-tertiary:#979C98;
+  --qp-line:#E4E7E3;
+  --qp-line-soft:#ECEEEB;
+  --qp-accent:#5964E8;
+  --qp-accent-soft:#F1F2FD;
+  --qp-green:#287A54;
+  --qp-green-soft:#EDF7F1;
+  --qp-amber:#946200;
+  --qp-amber-soft:#FFF6DD;
+  --qp-red:#B54747;
+  --qp-red-soft:#FFF1F0;
+  --bg:var(--qp-canvas);
+  --card:var(--qp-surface);
+  --text:var(--qp-text);
+  --muted:var(--qp-secondary);
+  --line:var(--qp-line);
+  --accent:var(--qp-accent);
+  --green:var(--qp-green);
+  --green-soft:var(--qp-green-soft);
+  --amber:var(--qp-amber);
+  --amber-soft:var(--qp-amber-soft);
+  --purple:var(--qp-accent);
+  --purple-soft:var(--qp-accent-soft);
+  --shadow:none;
+  color-scheme:light;
+}
+body.quiet-performance{
+  background:var(--qp-canvas);
+  color:var(--qp-text);
+  font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",sans-serif;
+  letter-spacing:-.005em;
+}
+body.quiet-performance ::selection{background:var(--qp-accent-soft)}
+body.quiet-performance :focus-visible{outline:2px solid var(--qp-accent);outline-offset:2px}
+body.quiet-performance .wrap{padding-top:24px;padding-bottom:64px}
+body.quiet-performance header{padding-bottom:20px}
+body.quiet-performance .eyebrow{color:var(--qp-tertiary);font-weight:650;letter-spacing:.09em}
+body.quiet-performance h1{font-size:clamp(1.9rem,7vw,2.75rem);font-weight:650;letter-spacing:-.045em}
+body.quiet-performance .sub,
+body.quiet-performance .header-meta-line,
+body.quiet-performance .header-updated,
+body.quiet-performance .header-status{color:var(--qp-tertiary)}
+body.quiet-performance .week-period{color:var(--qp-secondary)}
+body.quiet-performance .section{font-size:1.12rem;font-weight:650;letter-spacing:-.018em;margin-top:30px}
+
+/* Editorial week focus: important, but not another floating card. */
+body.quiet-performance .hero,
+body.quiet-performance .hero.week-focus-card{
+  margin:8px 0 22px;
+  padding:3px 0 3px 15px;
+  border:0;
+  border-left:2px solid var(--qp-accent);
+  border-radius:0;
+  background:transparent;
+  color:var(--qp-text);
+  box-shadow:none;
+}
+body.quiet-performance .hero h2,
+body.quiet-performance .week-focus-title{color:var(--qp-text);font-weight:600}
+body.quiet-performance .hero p,
+body.quiet-performance .week-focus-details p{color:var(--qp-secondary)!important}
+body.quiet-performance .week-focus-details>summary{color:var(--qp-tertiary)}
+
+/* Overview surfaces use hairlines and spacing instead of elevation. */
+body.quiet-performance .dashboard{gap:10px;margin-bottom:26px}
+body.quiet-performance .metrics{gap:8px}
+body.quiet-performance .metric,
+body.quiet-performance .dashboard-card{
+  background:var(--qp-surface);
+  border:1px solid var(--qp-line);
+  border-radius:13px;
+  box-shadow:none;
+}
+body.quiet-performance .metric{padding:12px 13px}
+body.quiet-performance .metric strong{font-size:1.12rem;font-weight:650;letter-spacing:-.02em}
+body.quiet-performance .metric span,
+body.quiet-performance .dashboard-empty{color:var(--qp-tertiary)}
+body.quiet-performance .dashboard-title{
+  color:var(--qp-tertiary);
+  font-size:.7rem;
+  font-weight:650;
+  letter-spacing:.075em;
+}
+body.quiet-performance .sport-head{color:var(--qp-secondary)}
+body.quiet-performance .sport-head strong{color:var(--qp-text);font-weight:600}
+body.quiet-performance .sport-track{height:5px;background:var(--qp-line-soft)}
+body.quiet-performance .sport-fill{background:var(--qp-accent)}
+body.quiet-performance .week-day.today{background:var(--qp-accent-soft)}
+body.quiet-performance .week-day-label,
+body.quiet-performance .dashboard-legend{color:var(--qp-tertiary)}
+body.quiet-performance .next-item+.next-item{border-color:var(--qp-line-soft)}
+body.quiet-performance .next-item:hover{background:var(--qp-canvas)}
+body.quiet-performance .next-coach{color:var(--qp-secondary)}
+
+/* Today / next: one subtle accent, never a blue panel. */
+body.quiet-performance .brain-today{
+  background:#FAFAFE;
+  border:1px solid var(--qp-line);
+  border-radius:14px;
+  box-shadow:inset 2px 0 0 var(--qp-accent);
+  padding:16px 17px;
+}
+body.quiet-performance .brain-kicker{color:var(--qp-secondary);font-weight:600}
+body.quiet-performance .brain-headline{color:var(--qp-text);font-size:1.14rem;font-weight:650;letter-spacing:-.018em}
+body.quiet-performance .brain-subline{color:var(--qp-secondary)}
+body.quiet-performance .brain-weather,
+body.quiet-performance .brain-extra{
+  margin-top:11px;
+  padding:9px 0 0;
+  border:0;
+  border-top:1px solid var(--qp-line-soft);
+  border-radius:0;
+  background:transparent;
+}
+body.quiet-performance .brain-weather-label,
+body.quiet-performance .brain-next-label{color:var(--qp-tertiary);font-weight:650}
+body.quiet-performance .brain-weather-note{color:var(--qp-secondary)}
+body.quiet-performance .brain-next{border-color:var(--qp-line-soft)}
+body.quiet-performance .brain-status{font-weight:650;letter-spacing:.01em}
+
+/* Workout cards: flat, precise and dose-led. */
+body.quiet-performance .day,
+body.quiet-performance .day.workout-card-v2{
+  background:var(--qp-surface);
+  border:1px solid var(--qp-line);
+  border-radius:14px;
+  box-shadow:none;
+}
+body.quiet-performance .day.workout-card-v2.card-v2-today{
+  background:#FAFAFE;
+  border-color:var(--qp-line);
+  box-shadow:inset 2px 0 0 var(--qp-accent);
+}
+body.quiet-performance .day.workout-card-v2.past-completed,
+body.quiet-performance .day.workout-card-v2.future-compact{box-shadow:none}
+body.quiet-performance .dow{color:var(--qp-secondary);font-weight:650;letter-spacing:.065em}
+body.quiet-performance .date,
+body.quiet-performance .session-meta{color:var(--qp-tertiary)}
+body.quiet-performance .session,
+body.quiet-performance .session-title,
+body.quiet-performance .session-with-icon{color:var(--qp-text);font-weight:650}
+body.quiet-performance .reason{color:var(--qp-secondary)}
+body.quiet-performance .workout-card-v2 .workout-prescription-dose{color:var(--qp-text);font-weight:650}
+body.quiet-performance .workout-card-v2 .workout-prescription-text{color:var(--qp-secondary);border-left-color:var(--qp-line)}
+body.quiet-performance .workout-card-v2 .development-focus{border-top-color:var(--qp-line-soft)}
+body.quiet-performance .workout-card-v2 .development-focus strong{
+  margin-top:2px;
+  padding:0;
+  border-radius:0;
+  background:transparent;
+  color:var(--qp-tertiary);
+  font-size:.65rem;
+  font-weight:650;
+  letter-spacing:.055em;
+  text-transform:uppercase;
+}
+body.quiet-performance .workout-card-v2 .development-focus span{color:var(--qp-secondary)}
+body.quiet-performance .card-v2-footer{border-top-color:var(--qp-line-soft)}
+body.quiet-performance .card-v2-footer .day-why>summary,
+body.quiet-performance .card-v2-footer .device-sync-state{color:var(--qp-tertiary);font-weight:600}
+body.quiet-performance .workout-history,
+body.quiet-performance .swim-workout{
+  border-color:var(--qp-line);
+  background:var(--qp-canvas);
+  border-radius:12px;
+}
+body.quiet-performance .swim-dose{color:var(--qp-text);font-weight:650}
+body.quiet-performance .swim-meta,
+body.quiet-performance .workout-history-note,
+body.quiet-performance .workout-equipment{color:var(--qp-secondary)}
+
+/* Only genuine state remains pill-shaped and coloured. */
+body.quiet-performance .badge{font-weight:650;letter-spacing:.015em}
+body.quiet-performance .fixed{background:var(--qp-green-soft);color:var(--qp-green)}
+body.quiet-performance .planned{background:var(--qp-accent-soft);color:#454FC7}
+body.quiet-performance .conditional,
+body.quiet-performance .brain-status{background:var(--qp-amber-soft);color:var(--qp-amber)}
+body.quiet-performance .open{background:var(--qp-line-soft);color:var(--qp-secondary)}
+body.quiet-performance .device-sync-state.error{color:var(--qp-red)}
+
+/* Icons identify function; they do not create a second colour system. */
+body.quiet-performance .sport-icon,
+body.quiet-performance .watch-sync .watch-icon,
+body.quiet-performance .completed-session-with-icon .sport-icon{color:var(--qp-secondary)}
+body.quiet-performance .manual-activity{border-color:var(--qp-line);background:transparent}
+body.quiet-performance .manual-activity-class{color:var(--qp-tertiary)}
+
+/* Coach content is information, not a purple sub-product. */
+body.quiet-performance .coach,
+body.quiet-performance .coach.yoda-v2{
+  background:var(--qp-surface);
+  border:1px solid var(--qp-line);
+  border-radius:12px;
+  box-shadow:none;
+}
+body.quiet-performance .coach-title,
+body.quiet-performance .coach-decision>span:first-child,
+body.quiet-performance .coach-target,
+body.quiet-performance .coach-next-label,
+body.quiet-performance .coach-full-summary strong,
+body.quiet-performance .coach-reason strong{color:var(--qp-tertiary);font-weight:650}
+body.quiet-performance .coach-decision strong{color:var(--qp-text);font-weight:650}
+body.quiet-performance .yoda-v2 .coach-summary,
+body.quiet-performance .coach-full-summary,
+body.quiet-performance .coach-reason{color:var(--qp-secondary)}
+body.quiet-performance .coach-next,
+body.quiet-performance .coach-why,
+body.quiet-performance .yoda-v2 .coach-details,
+body.quiet-performance .yoda-v2 .coach-load{
+  background:var(--qp-canvas);
+  border-color:var(--qp-line);
+  color:var(--qp-secondary);
+}
+body.quiet-performance .coach-why>summary,
+body.quiet-performance .yoda-v2 .coach-details summary,
+body.quiet-performance .coach-apply{color:var(--qp-secondary)}
+
+/* Navigation and utilities look like controls, not badges. */
+body.quiet-performance .week-nav{
+  background:transparent;
+  border-color:var(--qp-line);
+  border-radius:12px;
+  box-shadow:none;
+}
+body.quiet-performance .week-nav a{color:var(--qp-accent);font-weight:600}
+body.quiet-performance .week-nav-center span{color:var(--qp-tertiary)}
+body.quiet-performance .reference-chip,
+body.quiet-performance .goal-page-link a,
+body.quiet-performance .goal-back-row a{
+  background:var(--qp-surface);
+  border-color:var(--qp-line);
+  border-radius:10px;
+  box-shadow:none;
+  color:var(--qp-secondary);
+  font-weight:600;
+}
+body.quiet-performance .reference-chip:hover,
+body.quiet-performance .goal-page-link a:hover,
+body.quiet-performance .goal-back-row a:hover{background:var(--qp-elevated);color:var(--qp-text)}
+
+/* History / evaluation blocks inherit the same quiet hierarchy. */
+body.quiet-performance .week-activity-insight,
+body.quiet-performance .week-review,
+body.quiet-performance .decision,
+body.quiet-performance .feedback-loop{
+  background:var(--qp-canvas);
+  border-color:var(--qp-line);
+  box-shadow:none;
+}
+body.quiet-performance .week-activity-insight-kicker,
+body.quiet-performance .week-activity-user-report span{color:var(--qp-tertiary)}
+body.quiet-performance .week-activity-user-report{border-top-color:var(--qp-line);color:var(--qp-secondary)}
+
+/* Goal hierarchy: same product, same visual grammar. */
+body.quiet-performance.goal-page .card{
+  background:var(--qp-surface);
+  border-color:var(--qp-line);
+  border-radius:14px;
+  box-shadow:none;
+}
+body.quiet-performance.goal-page .title,
+body.quiet-performance.goal-page .current-path h2{color:var(--qp-text);font-weight:650}
+body.quiet-performance.goal-page .goal p,
+body.quiet-performance.goal-page .current-purpose,
+body.quiet-performance.goal-page .mesocycle-why p{color:var(--qp-secondary)}
+body.quiet-performance.goal-page .goal-note,
+body.quiet-performance.goal-page .current-meta,
+body.quiet-performance.goal-page .section-kicker,
+body.quiet-performance.goal-page .role-row span,
+body.quiet-performance.goal-page .calendar-note{color:var(--qp-tertiary)!important}
+body.quiet-performance.goal-page .system-step,
+body.quiet-performance.goal-page .role-list,
+body.quiet-performance.goal-page .role-row,
+body.quiet-performance.goal-page .decision-principle{border-color:var(--qp-line-soft)}
+body.quiet-performance.goal-page .system-step-num{background:var(--qp-accent-soft);color:var(--qp-accent);font-weight:650}
+body.quiet-performance.goal-page .system-step p,
+body.quiet-performance.goal-page .decision-principle span{color:var(--qp-secondary)}
+body.quiet-performance.goal-page .goal-change{
+  background:transparent;
+  color:var(--qp-text);
+  border-left:2px solid var(--qp-accent);
+}
+body.quiet-performance.goal-page .goal-change p{color:var(--qp-secondary)}
+
+/* Modal elevation is intentional: it is the only truly elevated surface. */
+body.quiet-performance .system-window{
+  background:var(--qp-elevated);
+  color:var(--qp-text);
+  border-color:var(--qp-line);
+  border-radius:16px;
+  box-shadow:0 24px 64px rgba(23,25,24,.14);
+}
+body.quiet-performance .system-window::backdrop{background:rgba(23,25,24,.32)}
+body.quiet-performance .system-head{background:var(--qp-elevated);border-bottom-color:var(--qp-line-soft)}
+body.quiet-performance .system-head h2{font-weight:650}
+body.quiet-performance .system-close{background:var(--qp-canvas);color:var(--qp-secondary);font-weight:600}
+body.quiet-performance .system-lead{color:var(--qp-secondary)}
+body.quiet-performance .system-list li{border-top-color:var(--qp-line);color:var(--qp-secondary)}
+body.quiet-performance .system-list strong{color:var(--qp-text)}
+body.quiet-performance footer{color:var(--qp-tertiary)}
+
+@media(max-width:620px){
+  body.quiet-performance .wrap{padding-top:20px;padding-bottom:56px}
+  body.quiet-performance h1{font-size:2rem}
+  body.quiet-performance .day,
+  body.quiet-performance .day.workout-card-v2{border-radius:13px}
+  body.quiet-performance .brain-today{border-radius:13px}
+  body.quiet-performance .metric,
+  body.quiet-performance .dashboard-card{border-radius:12px}
+}
+/* quiet-performance-v1:end */
+/* quiet-performance-v2:start */
+/* Current page has one strong operational surface; everything else recedes. */
+body.quiet-performance.qp-current .wrap{max-width:700px!important}
+body.quiet-performance.qp-current header{padding-bottom:14px}
+body.quiet-performance.qp-current .training-brain{margin:2px 0 22px}
+body.quiet-performance.qp-current .brain-today{
+  padding:18px 18px 16px;
+  background:#FFFFFF;
+  border-color:#DEE1DD;
+  border-radius:12px;
+  box-shadow:inset 2px 0 0 var(--qp-accent);
+}
+body.quiet-performance.qp-current .brain-topline{margin-bottom:10px}
+body.quiet-performance.qp-current .brain-kicker{
+  color:var(--qp-tertiary);
+  font-size:.69rem;
+  font-weight:650;
+  letter-spacing:.075em;
+  text-transform:uppercase;
+}
+body.quiet-performance.qp-current .brain-headline{font-size:1.22rem;font-weight:650}
+body.quiet-performance.qp-current .brain-subline{margin-top:4px;font-size:.82rem}
+body.quiet-performance.qp-current .brain-next{
+  display:grid;
+  grid-template-columns:88px minmax(0,1fr);
+  column-gap:12px;
+  row-gap:2px;
+  margin-top:15px;
+  padding-top:12px;
+}
+body.quiet-performance.qp-current .brain-next-label{
+  grid-row:1 / span 2;
+  align-self:start;
+  margin:2px 0 0;
+  font-size:.67rem;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+body.quiet-performance.qp-current .brain-next strong{font-size:.91rem;font-weight:600}
+body.quiet-performance.qp-current .brain-note{margin:0;font-size:.76rem;color:var(--qp-tertiary)}
+body.quiet-performance.qp-current .brain-why-details>summary{color:var(--qp-tertiary);font-size:.73rem}
+
+/* Strategy follows execution, as a quiet editorial note. */
+body.quiet-performance.qp-current .hero.week-focus-card{
+  margin:0 0 24px;
+  padding:0 0 0 13px;
+  border-left-width:1px;
+}
+body.quiet-performance.qp-current .week-focus-title{font-size:.98rem;font-weight:600}
+body.quiet-performance.qp-current .week-focus-mesocycle-meta{font-size:.69rem}
+body.quiet-performance.qp-current .week-focus-details>summary{font-size:.71rem}
+
+/* The overview is now a signal strip, not five more cards. */
+body.quiet-performance.qp-current .dashboard{
+  gap:0;
+  margin:0 0 27px;
+  padding:13px 0 15px;
+  border-top:1px solid var(--qp-line);
+  border-bottom:1px solid var(--qp-line);
+}
+body.quiet-performance.qp-current .metrics{
+  display:flex;
+  gap:0;
+  align-items:baseline;
+  margin:0;
+}
+body.quiet-performance.qp-current .metric{
+  display:flex;
+  align-items:baseline;
+  gap:5px;
+  min-width:0;
+  padding:0 14px;
+  border:0;
+  border-left:1px solid var(--qp-line-soft);
+  border-radius:0;
+  background:transparent;
+}
+body.quiet-performance.qp-current .metric:first-child{padding-left:0;border-left:0}
+body.quiet-performance.qp-current .metric strong{display:inline;font-size:.94rem;font-weight:650}
+body.quiet-performance.qp-current .metric span{display:inline;margin:0;font-size:.7rem;white-space:nowrap}
+body.quiet-performance.qp-current .dashboard-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:22px;
+  margin-top:13px;
+}
+body.quiet-performance.qp-current .dashboard-card{
+  padding:0;
+  border:0;
+  border-radius:0;
+  background:transparent;
+}
+body.quiet-performance.qp-current .dashboard-title{margin-bottom:8px;font-size:.64rem}
+body.quiet-performance.qp-current .sport-row+.sport-row{margin-top:7px}
+body.quiet-performance.qp-current .sport-head{font-size:.76rem}
+body.quiet-performance.qp-current .sport-head strong{font-size:.72rem}
+body.quiet-performance.qp-current .sport-track{height:3px;margin-top:3px}
+body.quiet-performance.qp-current .week-day{padding:2px 1px}
+body.quiet-performance.qp-current .week-day.today{background:transparent}
+body.quiet-performance.qp-current .week-day-label{font-size:.61rem}
+body.quiet-performance.qp-current .week-day-dot{width:23px;height:23px;font-size:.68rem}
+body.quiet-performance.qp-current .dashboard-legend{margin-top:7px;font-size:.64rem;line-height:1.38}
+body.quiet-performance.qp-current .dashboard-legend small{color:var(--qp-tertiary)}
+
+/* Day list is a hierarchy: actionable cards > contextual rows. */
+body.quiet-performance.qp-current .section{margin:27px 0 9px;font-size:1.03rem}
+body.quiet-performance.qp-current .day.workout-card-v2{margin:9px 0}
+body.quiet-performance.qp-current .day.workout-card-v2.past-completed,
+body.quiet-performance.qp-current .day.workout-card-v2.future-compact{
+  margin:0;
+  padding:11px 2px;
+  border:0;
+  border-top:1px solid var(--qp-line-soft);
+  border-radius:0;
+  background:transparent;
+}
+body.quiet-performance.qp-current .day.workout-card-v2.past-completed:first-of-type,
+body.quiet-performance.qp-current .day.workout-card-v2.future-compact:first-of-type{border-top-color:transparent}
+body.quiet-performance.qp-current .past-completed .session,
+body.quiet-performance.qp-current .future-compact .session{font-size:.96rem}
+body.quiet-performance.qp-current .past-completed .dow,
+body.quiet-performance.qp-current .future-compact .dow{font-size:.72rem}
+body.quiet-performance.qp-current .past-completed .date,
+body.quiet-performance.qp-current .future-compact .date{font-size:.74rem}
+
+/* Quiet statuses: background colour is reserved for a state that needs attention. */
+body.quiet-performance.qp-current .badge.planned,
+body.quiet-performance.qp-current .badge.open{
+  padding-left:0;
+  padding-right:0;
+  background:transparent;
+  color:var(--qp-tertiary);
+}
+body.quiet-performance.qp-current .badge.fixed{background:var(--qp-green-soft);color:var(--qp-green)}
+body.quiet-performance.qp-current .badge.conditional{background:var(--qp-amber-soft);color:var(--qp-amber)}
+
+/* Secondary coach/history surfaces should read like annotations, not cards. */
+body.quiet-performance.qp-current .coach,
+body.quiet-performance.qp-current .coach.yoda-v2,
+body.quiet-performance.qp-current .week-activity-insight{
+  border-left:1px solid var(--qp-line);
+  border-right:0;
+  border-top:0;
+  border-bottom:0;
+  border-radius:0;
+  background:transparent;
+  padding-left:12px;
+}
+
+/* Historical pages use the same progressive-disclosure principle. */
+body.quiet-performance.qp-history .metric,
+body.quiet-performance.qp-history .dashboard-card{box-shadow:none}
+body.quiet-performance.qp-history .day.workout-card-v2.past-completed{
+  box-shadow:none;
+  background:transparent;
+}
+
+@media(max-width:620px){
+  body.quiet-performance.qp-current .brain-today{padding:16px 15px 14px}
+  body.quiet-performance.qp-current .brain-next{grid-template-columns:72px minmax(0,1fr);column-gap:9px}
+  body.quiet-performance.qp-current .metrics{justify-content:space-between}
+  body.quiet-performance.qp-current .metric{padding:0 9px;gap:4px}
+  body.quiet-performance.qp-current .metric strong{font-size:.88rem}
+  body.quiet-performance.qp-current .metric span{font-size:.64rem}
+  body.quiet-performance.qp-current .dashboard-grid{grid-template-columns:1fr;gap:13px}
+  body.quiet-performance.qp-current .dashboard-grid .dashboard-card:first-child{display:none}
+  body.quiet-performance.qp-current .dashboard{padding:11px 0 13px}
+}
+/* quiet-performance-v2:end */
+</style></head><body class="goal-page quiet-performance qp-history"><div class="wrap">
 <header><div class="eyebrow">Träningsplan</div><h1>Målbild 2027</h1><div class="sub">Långsiktig riktning för hur systemet väljer mesocykel, mikrocykel och pass.</div></header>
 
 <div class="goal-back-row"><a href="/träning/">← Veckoplan</a></div>

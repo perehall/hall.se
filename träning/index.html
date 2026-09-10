@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0f172a">
+<meta name="theme-color" content="#F6F7F5">
 <title>Träningsplan</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#0f172a;--muted:#64748b;--line:#e2e8f0;--accent:#2563eb;--green:#15803d;--green-soft:#dcfce7;--amber:#a16207;--amber-soft:#fef3c7;--purple:#6d28d9;--purple-soft:#f3e8ff;--shadow:0 8px 24px rgba(15,23,42,.06)}
@@ -201,14 +201,710 @@ h1{font-size:clamp(2rem,8vw,3.2rem);line-height:1;margin:0 0 8px;letter-spacing:
   .system-head{cursor:default;touch-action:auto}
 }
 
+/* quiet-performance-v1:start */
+:root{
+  --qp-canvas:#F6F7F5;
+  --qp-surface:#FCFCFB;
+  --qp-elevated:#FFFFFF;
+  --qp-text:#171918;
+  --qp-secondary:#6C716D;
+  --qp-tertiary:#979C98;
+  --qp-line:#E4E7E3;
+  --qp-line-soft:#ECEEEB;
+  --qp-accent:#5964E8;
+  --qp-accent-soft:#F1F2FD;
+  --qp-green:#287A54;
+  --qp-green-soft:#EDF7F1;
+  --qp-amber:#946200;
+  --qp-amber-soft:#FFF6DD;
+  --qp-red:#B54747;
+  --qp-red-soft:#FFF1F0;
+  --bg:var(--qp-canvas);
+  --card:var(--qp-surface);
+  --text:var(--qp-text);
+  --muted:var(--qp-secondary);
+  --line:var(--qp-line);
+  --accent:var(--qp-accent);
+  --green:var(--qp-green);
+  --green-soft:var(--qp-green-soft);
+  --amber:var(--qp-amber);
+  --amber-soft:var(--qp-amber-soft);
+  --purple:var(--qp-accent);
+  --purple-soft:var(--qp-accent-soft);
+  --shadow:none;
+  color-scheme:light;
+}
+body.quiet-performance{
+  background:var(--qp-canvas);
+  color:var(--qp-text);
+  font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",sans-serif;
+  letter-spacing:-.005em;
+}
+body.quiet-performance ::selection{background:var(--qp-accent-soft)}
+body.quiet-performance :focus-visible{outline:2px solid var(--qp-accent);outline-offset:2px}
+body.quiet-performance .wrap{padding-top:24px;padding-bottom:64px}
+body.quiet-performance header{padding-bottom:20px}
+body.quiet-performance .eyebrow{color:var(--qp-tertiary);font-weight:650;letter-spacing:.09em}
+body.quiet-performance h1{font-size:clamp(1.9rem,7vw,2.75rem);font-weight:650;letter-spacing:-.045em}
+body.quiet-performance .sub,
+body.quiet-performance .header-meta-line,
+body.quiet-performance .header-updated,
+body.quiet-performance .header-status{color:var(--qp-tertiary)}
+body.quiet-performance .week-period{color:var(--qp-secondary)}
+body.quiet-performance .section{font-size:1.12rem;font-weight:650;letter-spacing:-.018em;margin-top:30px}
+
+/* Editorial week focus: important, but not another floating card. */
+body.quiet-performance .hero,
+body.quiet-performance .hero.week-focus-card{
+  margin:8px 0 22px;
+  padding:3px 0 3px 15px;
+  border:0;
+  border-left:2px solid var(--qp-accent);
+  border-radius:0;
+  background:transparent;
+  color:var(--qp-text);
+  box-shadow:none;
+}
+body.quiet-performance .hero h2,
+body.quiet-performance .week-focus-title{color:var(--qp-text);font-weight:600}
+body.quiet-performance .hero p,
+body.quiet-performance .week-focus-details p{color:var(--qp-secondary)!important}
+body.quiet-performance .week-focus-details>summary{color:var(--qp-tertiary)}
+
+/* Overview surfaces use hairlines and spacing instead of elevation. */
+body.quiet-performance .dashboard{gap:10px;margin-bottom:26px}
+body.quiet-performance .metrics{gap:8px}
+body.quiet-performance .metric,
+body.quiet-performance .dashboard-card{
+  background:var(--qp-surface);
+  border:1px solid var(--qp-line);
+  border-radius:13px;
+  box-shadow:none;
+}
+body.quiet-performance .metric{padding:12px 13px}
+body.quiet-performance .metric strong{font-size:1.12rem;font-weight:650;letter-spacing:-.02em}
+body.quiet-performance .metric span,
+body.quiet-performance .dashboard-empty{color:var(--qp-tertiary)}
+body.quiet-performance .dashboard-title{
+  color:var(--qp-tertiary);
+  font-size:.7rem;
+  font-weight:650;
+  letter-spacing:.075em;
+}
+body.quiet-performance .sport-head{color:var(--qp-secondary)}
+body.quiet-performance .sport-head strong{color:var(--qp-text);font-weight:600}
+body.quiet-performance .sport-track{height:5px;background:var(--qp-line-soft)}
+body.quiet-performance .sport-fill{background:var(--qp-accent)}
+body.quiet-performance .week-day.today{background:var(--qp-accent-soft)}
+body.quiet-performance .week-day-label,
+body.quiet-performance .dashboard-legend{color:var(--qp-tertiary)}
+body.quiet-performance .next-item+.next-item{border-color:var(--qp-line-soft)}
+body.quiet-performance .next-item:hover{background:var(--qp-canvas)}
+body.quiet-performance .next-coach{color:var(--qp-secondary)}
+
+/* Today / next: one subtle accent, never a blue panel. */
+body.quiet-performance .brain-today{
+  background:#FAFAFE;
+  border:1px solid var(--qp-line);
+  border-radius:14px;
+  box-shadow:inset 2px 0 0 var(--qp-accent);
+  padding:16px 17px;
+}
+body.quiet-performance .brain-kicker{color:var(--qp-secondary);font-weight:600}
+body.quiet-performance .brain-headline{color:var(--qp-text);font-size:1.14rem;font-weight:650;letter-spacing:-.018em}
+body.quiet-performance .brain-subline{color:var(--qp-secondary)}
+body.quiet-performance .brain-weather,
+body.quiet-performance .brain-extra{
+  margin-top:11px;
+  padding:9px 0 0;
+  border:0;
+  border-top:1px solid var(--qp-line-soft);
+  border-radius:0;
+  background:transparent;
+}
+body.quiet-performance .brain-weather-label,
+body.quiet-performance .brain-next-label{color:var(--qp-tertiary);font-weight:650}
+body.quiet-performance .brain-weather-note{color:var(--qp-secondary)}
+body.quiet-performance .brain-next{border-color:var(--qp-line-soft)}
+body.quiet-performance .brain-status{font-weight:650;letter-spacing:.01em}
+
+/* Workout cards: flat, precise and dose-led. */
+body.quiet-performance .day,
+body.quiet-performance .day.workout-card-v2{
+  background:var(--qp-surface);
+  border:1px solid var(--qp-line);
+  border-radius:14px;
+  box-shadow:none;
+}
+body.quiet-performance .day.workout-card-v2.card-v2-today{
+  background:#FAFAFE;
+  border-color:var(--qp-line);
+  box-shadow:inset 2px 0 0 var(--qp-accent);
+}
+body.quiet-performance .day.workout-card-v2.past-completed,
+body.quiet-performance .day.workout-card-v2.future-compact{box-shadow:none}
+body.quiet-performance .dow{color:var(--qp-secondary);font-weight:650;letter-spacing:.065em}
+body.quiet-performance .date,
+body.quiet-performance .session-meta{color:var(--qp-tertiary)}
+body.quiet-performance .session,
+body.quiet-performance .session-title,
+body.quiet-performance .session-with-icon{color:var(--qp-text);font-weight:650}
+body.quiet-performance .reason{color:var(--qp-secondary)}
+body.quiet-performance .workout-card-v2 .workout-prescription-dose{color:var(--qp-text);font-weight:650}
+body.quiet-performance .workout-card-v2 .workout-prescription-text{color:var(--qp-secondary);border-left-color:var(--qp-line)}
+body.quiet-performance .workout-card-v2 .development-focus{border-top-color:var(--qp-line-soft)}
+body.quiet-performance .workout-card-v2 .development-focus strong{
+  margin-top:2px;
+  padding:0;
+  border-radius:0;
+  background:transparent;
+  color:var(--qp-tertiary);
+  font-size:.65rem;
+  font-weight:650;
+  letter-spacing:.055em;
+  text-transform:uppercase;
+}
+body.quiet-performance .workout-card-v2 .development-focus span{color:var(--qp-secondary)}
+body.quiet-performance .card-v2-footer{border-top-color:var(--qp-line-soft)}
+body.quiet-performance .card-v2-footer .day-why>summary,
+body.quiet-performance .card-v2-footer .device-sync-state{color:var(--qp-tertiary);font-weight:600}
+body.quiet-performance .workout-history,
+body.quiet-performance .swim-workout{
+  border-color:var(--qp-line);
+  background:var(--qp-canvas);
+  border-radius:12px;
+}
+body.quiet-performance .swim-dose{color:var(--qp-text);font-weight:650}
+body.quiet-performance .swim-meta,
+body.quiet-performance .workout-history-note,
+body.quiet-performance .workout-equipment{color:var(--qp-secondary)}
+
+/* Only genuine state remains pill-shaped and coloured. */
+body.quiet-performance .badge{font-weight:650;letter-spacing:.015em}
+body.quiet-performance .fixed{background:var(--qp-green-soft);color:var(--qp-green)}
+body.quiet-performance .planned{background:var(--qp-accent-soft);color:#454FC7}
+body.quiet-performance .conditional,
+body.quiet-performance .brain-status{background:var(--qp-amber-soft);color:var(--qp-amber)}
+body.quiet-performance .open{background:var(--qp-line-soft);color:var(--qp-secondary)}
+body.quiet-performance .device-sync-state.error{color:var(--qp-red)}
+
+/* Icons identify function; they do not create a second colour system. */
+body.quiet-performance .sport-icon,
+body.quiet-performance .watch-sync .watch-icon,
+body.quiet-performance .completed-session-with-icon .sport-icon{color:var(--qp-secondary)}
+body.quiet-performance .manual-activity{border-color:var(--qp-line);background:transparent}
+body.quiet-performance .manual-activity-class{color:var(--qp-tertiary)}
+
+/* Coach content is information, not a purple sub-product. */
+body.quiet-performance .coach,
+body.quiet-performance .coach.yoda-v2{
+  background:var(--qp-surface);
+  border:1px solid var(--qp-line);
+  border-radius:12px;
+  box-shadow:none;
+}
+body.quiet-performance .coach-title,
+body.quiet-performance .coach-decision>span:first-child,
+body.quiet-performance .coach-target,
+body.quiet-performance .coach-next-label,
+body.quiet-performance .coach-full-summary strong,
+body.quiet-performance .coach-reason strong{color:var(--qp-tertiary);font-weight:650}
+body.quiet-performance .coach-decision strong{color:var(--qp-text);font-weight:650}
+body.quiet-performance .yoda-v2 .coach-summary,
+body.quiet-performance .coach-full-summary,
+body.quiet-performance .coach-reason{color:var(--qp-secondary)}
+body.quiet-performance .coach-next,
+body.quiet-performance .coach-why,
+body.quiet-performance .yoda-v2 .coach-details,
+body.quiet-performance .yoda-v2 .coach-load{
+  background:var(--qp-canvas);
+  border-color:var(--qp-line);
+  color:var(--qp-secondary);
+}
+body.quiet-performance .coach-why>summary,
+body.quiet-performance .yoda-v2 .coach-details summary,
+body.quiet-performance .coach-apply{color:var(--qp-secondary)}
+
+/* Navigation and utilities look like controls, not badges. */
+body.quiet-performance .week-nav{
+  background:transparent;
+  border-color:var(--qp-line);
+  border-radius:12px;
+  box-shadow:none;
+}
+body.quiet-performance .week-nav a{color:var(--qp-accent);font-weight:600}
+body.quiet-performance .week-nav-center span{color:var(--qp-tertiary)}
+body.quiet-performance .reference-chip,
+body.quiet-performance .goal-page-link a,
+body.quiet-performance .goal-back-row a{
+  background:var(--qp-surface);
+  border-color:var(--qp-line);
+  border-radius:10px;
+  box-shadow:none;
+  color:var(--qp-secondary);
+  font-weight:600;
+}
+body.quiet-performance .reference-chip:hover,
+body.quiet-performance .goal-page-link a:hover,
+body.quiet-performance .goal-back-row a:hover{background:var(--qp-elevated);color:var(--qp-text)}
+
+/* History / evaluation blocks inherit the same quiet hierarchy. */
+body.quiet-performance .week-activity-insight,
+body.quiet-performance .week-review,
+body.quiet-performance .decision,
+body.quiet-performance .feedback-loop{
+  background:var(--qp-canvas);
+  border-color:var(--qp-line);
+  box-shadow:none;
+}
+body.quiet-performance .week-activity-insight-kicker,
+body.quiet-performance .week-activity-user-report span{color:var(--qp-tertiary)}
+body.quiet-performance .week-activity-user-report{border-top-color:var(--qp-line);color:var(--qp-secondary)}
+
+/* Goal hierarchy: same product, same visual grammar. */
+body.quiet-performance.goal-page .card{
+  background:var(--qp-surface);
+  border-color:var(--qp-line);
+  border-radius:14px;
+  box-shadow:none;
+}
+body.quiet-performance.goal-page .title,
+body.quiet-performance.goal-page .current-path h2{color:var(--qp-text);font-weight:650}
+body.quiet-performance.goal-page .goal p,
+body.quiet-performance.goal-page .current-purpose,
+body.quiet-performance.goal-page .mesocycle-why p{color:var(--qp-secondary)}
+body.quiet-performance.goal-page .goal-note,
+body.quiet-performance.goal-page .current-meta,
+body.quiet-performance.goal-page .section-kicker,
+body.quiet-performance.goal-page .role-row span,
+body.quiet-performance.goal-page .calendar-note{color:var(--qp-tertiary)!important}
+body.quiet-performance.goal-page .system-step,
+body.quiet-performance.goal-page .role-list,
+body.quiet-performance.goal-page .role-row,
+body.quiet-performance.goal-page .decision-principle{border-color:var(--qp-line-soft)}
+body.quiet-performance.goal-page .system-step-num{background:var(--qp-accent-soft);color:var(--qp-accent);font-weight:650}
+body.quiet-performance.goal-page .system-step p,
+body.quiet-performance.goal-page .decision-principle span{color:var(--qp-secondary)}
+body.quiet-performance.goal-page .goal-change{
+  background:transparent;
+  color:var(--qp-text);
+  border-left:2px solid var(--qp-accent);
+}
+body.quiet-performance.goal-page .goal-change p{color:var(--qp-secondary)}
+
+/* Modal elevation is intentional: it is the only truly elevated surface. */
+body.quiet-performance .system-window{
+  background:var(--qp-elevated);
+  color:var(--qp-text);
+  border-color:var(--qp-line);
+  border-radius:16px;
+  box-shadow:0 24px 64px rgba(23,25,24,.14);
+}
+body.quiet-performance .system-window::backdrop{background:rgba(23,25,24,.32)}
+body.quiet-performance .system-head{background:var(--qp-elevated);border-bottom-color:var(--qp-line-soft)}
+body.quiet-performance .system-head h2{font-weight:650}
+body.quiet-performance .system-close{background:var(--qp-canvas);color:var(--qp-secondary);font-weight:600}
+body.quiet-performance .system-lead{color:var(--qp-secondary)}
+body.quiet-performance .system-list li{border-top-color:var(--qp-line);color:var(--qp-secondary)}
+body.quiet-performance .system-list strong{color:var(--qp-text)}
+body.quiet-performance footer{color:var(--qp-tertiary)}
+
+@media(max-width:620px){
+  body.quiet-performance .wrap{padding-top:20px;padding-bottom:56px}
+  body.quiet-performance h1{font-size:2rem}
+  body.quiet-performance .day,
+  body.quiet-performance .day.workout-card-v2{border-radius:13px}
+  body.quiet-performance .brain-today{border-radius:13px}
+  body.quiet-performance .metric,
+  body.quiet-performance .dashboard-card{border-radius:12px}
+}
+/* quiet-performance-v1:end */
+/* quiet-performance-v2:start */
+/* Current page has one strong operational surface; everything else recedes. */
+body.quiet-performance.qp-current .wrap{max-width:700px!important}
+body.quiet-performance.qp-current header{padding-bottom:14px}
+body.quiet-performance.qp-current .training-brain{margin:2px 0 22px}
+body.quiet-performance.qp-current .brain-today{
+  padding:18px 18px 16px;
+  background:#FFFFFF;
+  border-color:#DEE1DD;
+  border-radius:12px;
+  box-shadow:inset 2px 0 0 var(--qp-accent);
+}
+body.quiet-performance.qp-current .brain-topline{margin-bottom:10px}
+body.quiet-performance.qp-current .brain-kicker{
+  color:var(--qp-tertiary);
+  font-size:.69rem;
+  font-weight:650;
+  letter-spacing:.075em;
+  text-transform:uppercase;
+}
+body.quiet-performance.qp-current .brain-headline{font-size:1.22rem;font-weight:650}
+body.quiet-performance.qp-current .brain-subline{margin-top:4px;font-size:.82rem}
+body.quiet-performance.qp-current .brain-next{
+  display:grid;
+  grid-template-columns:88px minmax(0,1fr);
+  column-gap:12px;
+  row-gap:2px;
+  margin-top:15px;
+  padding-top:12px;
+}
+body.quiet-performance.qp-current .brain-next-label{
+  grid-row:1 / span 2;
+  align-self:start;
+  margin:2px 0 0;
+  font-size:.67rem;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+body.quiet-performance.qp-current .brain-next strong{font-size:.91rem;font-weight:600}
+body.quiet-performance.qp-current .brain-note{margin:0;font-size:.76rem;color:var(--qp-tertiary)}
+body.quiet-performance.qp-current .brain-why-details>summary{color:var(--qp-tertiary);font-size:.73rem}
+
+/* Strategy follows execution, as a quiet editorial note. */
+body.quiet-performance.qp-current .hero.week-focus-card{
+  margin:0 0 24px;
+  padding:0 0 0 13px;
+  border-left-width:1px;
+}
+body.quiet-performance.qp-current .week-focus-title{font-size:.98rem;font-weight:600}
+body.quiet-performance.qp-current .week-focus-mesocycle-meta{font-size:.69rem}
+body.quiet-performance.qp-current .week-focus-details>summary{font-size:.71rem}
+
+/* The overview is now a signal strip, not five more cards. */
+body.quiet-performance.qp-current .dashboard{
+  gap:0;
+  margin:0 0 27px;
+  padding:13px 0 15px;
+  border-top:1px solid var(--qp-line);
+  border-bottom:1px solid var(--qp-line);
+}
+body.quiet-performance.qp-current .metrics{
+  display:flex;
+  gap:0;
+  align-items:baseline;
+  margin:0;
+}
+body.quiet-performance.qp-current .metric{
+  display:flex;
+  align-items:baseline;
+  gap:5px;
+  min-width:0;
+  padding:0 14px;
+  border:0;
+  border-left:1px solid var(--qp-line-soft);
+  border-radius:0;
+  background:transparent;
+}
+body.quiet-performance.qp-current .metric:first-child{padding-left:0;border-left:0}
+body.quiet-performance.qp-current .metric strong{display:inline;font-size:.94rem;font-weight:650}
+body.quiet-performance.qp-current .metric span{display:inline;margin:0;font-size:.7rem;white-space:nowrap}
+body.quiet-performance.qp-current .dashboard-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:22px;
+  margin-top:13px;
+}
+body.quiet-performance.qp-current .dashboard-card{
+  padding:0;
+  border:0;
+  border-radius:0;
+  background:transparent;
+}
+body.quiet-performance.qp-current .dashboard-title{margin-bottom:8px;font-size:.64rem}
+body.quiet-performance.qp-current .sport-row+.sport-row{margin-top:7px}
+body.quiet-performance.qp-current .sport-head{font-size:.76rem}
+body.quiet-performance.qp-current .sport-head strong{font-size:.72rem}
+body.quiet-performance.qp-current .sport-track{height:3px;margin-top:3px}
+body.quiet-performance.qp-current .week-day{padding:2px 1px}
+body.quiet-performance.qp-current .week-day.today{background:transparent}
+body.quiet-performance.qp-current .week-day-label{font-size:.61rem}
+body.quiet-performance.qp-current .week-day-dot{width:23px;height:23px;font-size:.68rem}
+body.quiet-performance.qp-current .dashboard-legend{margin-top:7px;font-size:.64rem;line-height:1.38}
+body.quiet-performance.qp-current .dashboard-legend small{color:var(--qp-tertiary)}
+
+/* Day list is a hierarchy: actionable cards > contextual rows. */
+body.quiet-performance.qp-current .section{margin:27px 0 9px;font-size:1.03rem}
+body.quiet-performance.qp-current .day.workout-card-v2{margin:9px 0}
+body.quiet-performance.qp-current .day.workout-card-v2.past-completed,
+body.quiet-performance.qp-current .day.workout-card-v2.future-compact{
+  margin:0;
+  padding:11px 2px;
+  border:0;
+  border-top:1px solid var(--qp-line-soft);
+  border-radius:0;
+  background:transparent;
+}
+body.quiet-performance.qp-current .day.workout-card-v2.past-completed:first-of-type,
+body.quiet-performance.qp-current .day.workout-card-v2.future-compact:first-of-type{border-top-color:transparent}
+body.quiet-performance.qp-current .past-completed .session,
+body.quiet-performance.qp-current .future-compact .session{font-size:.96rem}
+body.quiet-performance.qp-current .past-completed .dow,
+body.quiet-performance.qp-current .future-compact .dow{font-size:.72rem}
+body.quiet-performance.qp-current .past-completed .date,
+body.quiet-performance.qp-current .future-compact .date{font-size:.74rem}
+
+/* Quiet statuses: background colour is reserved for a state that needs attention. */
+body.quiet-performance.qp-current .badge.planned,
+body.quiet-performance.qp-current .badge.open{
+  padding-left:0;
+  padding-right:0;
+  background:transparent;
+  color:var(--qp-tertiary);
+}
+body.quiet-performance.qp-current .badge.fixed{background:var(--qp-green-soft);color:var(--qp-green)}
+body.quiet-performance.qp-current .badge.conditional{background:var(--qp-amber-soft);color:var(--qp-amber)}
+
+/* Secondary coach/history surfaces should read like annotations, not cards. */
+body.quiet-performance.qp-current .coach,
+body.quiet-performance.qp-current .coach.yoda-v2,
+body.quiet-performance.qp-current .week-activity-insight{
+  border-left:1px solid var(--qp-line);
+  border-right:0;
+  border-top:0;
+  border-bottom:0;
+  border-radius:0;
+  background:transparent;
+  padding-left:12px;
+}
+
+/* Historical pages use the same progressive-disclosure principle. */
+body.quiet-performance.qp-history .metric,
+body.quiet-performance.qp-history .dashboard-card{box-shadow:none}
+body.quiet-performance.qp-history .day.workout-card-v2.past-completed{
+  box-shadow:none;
+  background:transparent;
+}
+
+@media(max-width:620px){
+  body.quiet-performance.qp-current .brain-today{padding:16px 15px 14px}
+  body.quiet-performance.qp-current .brain-next{grid-template-columns:72px minmax(0,1fr);column-gap:9px}
+  body.quiet-performance.qp-current .metrics{justify-content:space-between}
+  body.quiet-performance.qp-current .metric{padding:0 9px;gap:4px}
+  body.quiet-performance.qp-current .metric strong{font-size:.88rem}
+  body.quiet-performance.qp-current .metric span{font-size:.64rem}
+  body.quiet-performance.qp-current .dashboard-grid{grid-template-columns:1fr;gap:13px}
+  body.quiet-performance.qp-current .dashboard-grid .dashboard-card:first-child{display:none}
+  body.quiet-performance.qp-current .dashboard{padding:11px 0 13px}
+}
+/* quiet-performance-v2:end */
+/* training-timeline-v1:start */
+/* Flat week journal: a reading axis replaces card boundaries. */
+body.quiet-performance.qp-current .week-timeline{
+  position:relative;
+  margin:5px 0 30px;
+}
+body.quiet-performance.qp-current .timeline-scroll-context{
+  position:sticky;
+  top:0;
+  z-index:30;
+  display:grid;
+  grid-template-columns:92px minmax(0,1fr);
+  gap:20px;
+  align-items:center;
+  min-height:42px;
+  margin:0;
+  padding:9px 0 8px;
+  border-bottom:1px solid var(--qp-line);
+  background:rgba(246,247,245,.94);
+  -webkit-backdrop-filter:blur(10px);
+  backdrop-filter:blur(10px);
+}
+body.quiet-performance.qp-current .timeline-context-day{
+  color:var(--qp-secondary);
+  font-size:.66rem;
+  font-weight:700;
+  letter-spacing:.065em;
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+body.quiet-performance.qp-current .timeline-context-session{
+  min-width:0;
+  overflow:hidden;
+  color:var(--qp-text);
+  font-size:.78rem;
+  font-weight:600;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+body.quiet-performance.qp-current .week-timeline>.day,
+body.quiet-performance.qp-current .week-timeline>.day.workout-card-v2,
+body.quiet-performance.qp-current .week-timeline>.day.workout-card-v2.past-completed,
+body.quiet-performance.qp-current .week-timeline>.day.workout-card-v2.future-compact,
+body.quiet-performance.qp-current .week-timeline>.day.workout-card-v2.card-v2-today{
+  position:relative;
+  display:grid;
+  grid-template-columns:92px minmax(0,1fr);
+  column-gap:20px;
+  align-items:start;
+  margin:0!important;
+  padding:23px 0 27px!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  scroll-margin-top:54px;
+}
+body.quiet-performance.qp-current .week-timeline>.day+.day{
+  border-top:1px solid var(--qp-line-soft)!important;
+}
+body.quiet-performance.qp-current .week-timeline>.day::before{
+  content:"";
+  position:absolute;
+  top:0;
+  bottom:0;
+  left:82px;
+  width:1px;
+  background:var(--qp-line-soft);
+  pointer-events:none;
+}
+body.quiet-performance.qp-current .week-timeline>.day:first-of-type::before{top:29px}
+body.quiet-performance.qp-current .week-timeline>.day:last-of-type::before{bottom:calc(100% - 30px)}
+
+body.quiet-performance.qp-current .week-timeline>.day>.daytop{
+  position:sticky;
+  top:50px;
+  z-index:3;
+  grid-column:1;
+  grid-row:1;
+  display:block!important;
+  align-self:start;
+  min-width:0;
+  margin:0!important;
+  padding:0 20px 0 0;
+  background:var(--qp-canvas);
+}
+body.quiet-performance.qp-current .week-timeline>.day>.daytop::after{
+  content:"";
+  position:absolute;
+  top:6px;
+  right:5px;
+  width:7px;
+  height:7px;
+  border:1px solid var(--qp-tertiary);
+  border-radius:50%;
+  background:var(--qp-canvas);
+  box-shadow:0 0 0 4px var(--qp-canvas);
+}
+body.quiet-performance.qp-current .week-timeline>.day.timeline-active>.daytop::after{
+  border-color:var(--qp-text);
+  background:var(--qp-text);
+}
+body.quiet-performance.qp-current .week-timeline>.day.card-v2-today>.daytop::after{
+  border-color:var(--qp-accent);
+  background:var(--qp-accent);
+}
+body.quiet-performance.qp-current .week-timeline>.day>.daytop .dow{
+  margin:0;
+  color:var(--qp-tertiary);
+  font-size:.7rem;
+  font-weight:700;
+  line-height:1.25;
+  letter-spacing:.055em;
+}
+body.quiet-performance.qp-current .week-timeline>.day.timeline-active>.daytop .dow{color:var(--qp-text)}
+body.quiet-performance.qp-current .week-timeline>.day.card-v2-today>.daytop .dow{color:var(--qp-accent)}
+body.quiet-performance.qp-current .week-timeline>.day>.daytop .date{
+  margin-top:3px;
+  color:var(--qp-tertiary);
+  font-size:.67rem;
+  line-height:1.25;
+  font-variant-numeric:tabular-nums;
+}
+body.quiet-performance.qp-current .week-timeline>.day>.daytop .badge{
+  display:block;
+  width:max-content;
+  max-width:72px;
+  margin-top:9px;
+  padding:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  color:var(--qp-tertiary)!important;
+  font-size:.56rem;
+  font-weight:650;
+  line-height:1.25;
+  white-space:normal;
+}
+body.quiet-performance.qp-current .week-timeline>.day.card-v2-today>.daytop .badge{color:var(--qp-accent)!important}
+body.quiet-performance.qp-current .week-timeline>.day>:not(.daytop){grid-column:2;min-width:0}
+
+body.quiet-performance.qp-current .week-timeline>.day>.session{
+  margin:0 0 3px!important;
+  color:var(--qp-text);
+  font-size:1.04rem;
+  font-weight:650;
+  line-height:1.38;
+  letter-spacing:-.014em;
+}
+body.quiet-performance.qp-current .week-timeline>.day>.reason{margin-top:3px;color:var(--qp-secondary)}
+body.quiet-performance.qp-current .week-timeline>.day .workout-prescription{margin-top:12px}
+body.quiet-performance.qp-current .week-timeline>.day .card-v2-footer{margin-top:12px}
+
+/* No nested card language inside the week timeline either. */
+body.quiet-performance.qp-current .week-timeline .swim-workout,
+body.quiet-performance.qp-current .week-timeline .workout-history,
+body.quiet-performance.qp-current .week-timeline .coach,
+body.quiet-performance.qp-current .week-timeline .coach.yoda-v2,
+body.quiet-performance.qp-current .week-timeline .decision,
+body.quiet-performance.qp-current .week-timeline .feedback-loop,
+body.quiet-performance.qp-current .week-timeline .week-activity-insight{
+  margin-left:0;
+  margin-right:0;
+  padding-left:0;
+  padding-right:0;
+  border-left:0;
+  border-right:0;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+}
+body.quiet-performance.qp-current .week-timeline .swim-workout,
+body.quiet-performance.qp-current .week-timeline .workout-history,
+body.quiet-performance.qp-current .week-timeline .coach,
+body.quiet-performance.qp-current .week-timeline .coach.yoda-v2,
+body.quiet-performance.qp-current .week-timeline .decision,
+body.quiet-performance.qp-current .week-timeline .feedback-loop{
+  border-top:1px solid var(--qp-line-soft);
+  border-bottom:0;
+}
+
+@media(max-width:620px){
+  body.quiet-performance.qp-current .timeline-scroll-context{
+    grid-template-columns:72px minmax(0,1fr);
+    gap:12px;
+    min-height:40px;
+    padding:8px 0 7px;
+  }
+  body.quiet-performance.qp-current .week-timeline>.day,
+  body.quiet-performance.qp-current .week-timeline>.day.workout-card-v2,
+  body.quiet-performance.qp-current .week-timeline>.day.workout-card-v2.past-completed,
+  body.quiet-performance.qp-current .week-timeline>.day.workout-card-v2.future-compact,
+  body.quiet-performance.qp-current .week-timeline>.day.workout-card-v2.card-v2-today{
+    grid-template-columns:72px minmax(0,1fr);
+    column-gap:12px;
+    padding:20px 0 24px!important;
+    scroll-margin-top:50px;
+  }
+  body.quiet-performance.qp-current .week-timeline>.day::before{left:64px}
+  body.quiet-performance.qp-current .week-timeline>.day>.daytop{top:47px;padding-right:15px}
+  body.quiet-performance.qp-current .week-timeline>.day>.daytop::after{right:4px}
+  body.quiet-performance.qp-current .week-timeline>.day>.daytop .dow{font-size:.64rem}
+  body.quiet-performance.qp-current .week-timeline>.day>.daytop .date{font-size:.61rem}
+  body.quiet-performance.qp-current .week-timeline>.day>.daytop .badge{max-width:56px;font-size:.51rem}
+  body.quiet-performance.qp-current .timeline-context-day{font-size:.6rem}
+  body.quiet-performance.qp-current .timeline-context-session{font-size:.73rem}
+  body.quiet-performance.qp-current .week-timeline>.day>.session{font-size:.98rem}
+}
+/* training-timeline-v1:end */
 </style>
 </head>
-<body><div class="wrap">
-<header><div class="eyebrow">Träningsplan</div><h1>Vecka 37</h1><div class="sub header-meta-line"><span class="week-period">7–13 sep</span><span>·</span><span class="header-updated">uppdaterad 10 sep 09:38</span></div></header>
+<body class="quiet-performance qp-current"><div class="wrap">
+<header><div class="eyebrow">Träningsplan</div><h1>Vecka 37</h1><div class="sub header-meta-line"><span class="week-period">7–13 sep</span><span>·</span><span class="header-updated">uppdaterad 10 sep 13:18</span></div></header>
 
 <div class="goal-page-link"><a href="/träning/malbild-2027/">Målbild 2027 <span>→</span></a></div>
 <nav class="week-nav" aria-label="Veckonavigering"><a class="prev" href="/träning/vecka/2026-W36/">← Vecka 36</a><div class="week-nav-center"><strong>Vecka 37</strong><span>AKTUELL</span></div><a class="next" href="/träning/vecka/2026-W38/">Vecka 38 →</a></nav>
-<div class="hero week-focus-card"><h2 class="week-focus-title">Löpning prioriteras denna vecka</h2><div class="week-focus-mesocycle-meta">Löptröskel + backkvalitet · mikrocykel 3 av 4</div><details class="week-focus-details"><summary>Planidé</summary><p>Flytta den prioriterade löpförmågan framåt genom kontrollerad tröskel, löpekonomi/backstyrka och lugn tålighet, samtidigt som MTB/XC och simning hålls aktiva utan att tränga undan löputvecklingen. Mikrocykeln är preliminär men konkret: varje planerat pass har en användbar grundplan. Faktisk belastning och återhämtning används för att behålla eller justera planen, inte för att skapa den i sista stund. Kalenderveckan är bara visningen.</p><p class="week-focus-mesocycle-idea"><strong>Mesocykelhypotes:</strong> En differentierad löpkvalitet med ett kontrollerat tröskelstimulus och ett separat backstimulus kan ge bättre kompletterande utveckling och bättre plats för MTB/enduro än två snarlika tröskelpass per vecka.</p><p class="week-focus-mesocycle-idea"><strong>Primärt:</strong> Kontrollerad löptröskel, Backstyrka / löpekonomi, Lugn löpdistans / tålighet · <strong>Sekundärt:</strong> MTB teknisk fart, MTB/XC aerob kapacitet · <strong>Underhåll:</strong> Sim aerob kapacitet, Simteknik · <strong>Skyddad kapacitet:</strong> Unilateral benstyrka, Core, Plyometrisk exponering</p></details></div>
 <!-- training-brain-v1:start -->
 <section class="training-brain" aria-label="Träningsbeslut">
   <div class="brain-today">
@@ -226,6 +922,8 @@ h1{font-size:clamp(2rem,8vw,3.2rem);line-height:1;margin:0 0 8px;letter-spacing:
   </div>
 </section>
 <!-- training-brain-v1:end -->
+<div class="hero week-focus-card"><h2 class="week-focus-title">Löpning prioriteras denna vecka</h2><div class="week-focus-mesocycle-meta">Löptröskel + backkvalitet · mikrocykel 3 av 4</div><details class="week-focus-details"><summary>Planidé</summary><p>Flytta den prioriterade löpförmågan framåt genom kontrollerad tröskel, löpekonomi/backstyrka och lugn tålighet, samtidigt som MTB/XC och simning hålls aktiva utan att tränga undan löputvecklingen. Mikrocykeln är preliminär men konkret: varje planerat pass har en användbar grundplan. Faktisk belastning och återhämtning används för att behålla eller justera planen, inte för att skapa den i sista stund. Kalenderveckan är bara visningen.</p><p class="week-focus-mesocycle-idea"><strong>Mesocykelhypotes:</strong> En differentierad löpkvalitet med ett kontrollerat tröskelstimulus och ett separat backstimulus kan ge bättre kompletterande utveckling och bättre plats för MTB/enduro än två snarlika tröskelpass per vecka.</p><p class="week-focus-mesocycle-idea"><strong>Primärt:</strong> Kontrollerad löptröskel, Backstyrka / löpekonomi, Lugn löpdistans / tålighet · <strong>Sekundärt:</strong> MTB teknisk fart, MTB/XC aerob kapacitet · <strong>Underhåll:</strong> Sim aerob kapacitet, Simteknik · <strong>Skyddad kapacitet:</strong> Unilateral benstyrka, Core, Plyometrisk exponering</p></details></div>
+
 
 <h2 class="section">Aktuell vecka</h2>
 <details class="week-status-expander"><summary>Veckostatus · 4 pass · 4:03:55 · 3 dagar</summary><div class="week-status-body"><section class="dashboard" aria-label="Veckoöversikt">
@@ -278,26 +976,10 @@ h1{font-size:clamp(2rem,8vw,3.2rem);line-height:1;margin:0 0 8px;letter-spacing:
       <div class="dashboard-legend">✓ genomfört · ● aktuell plan · ◐ kan ändras · · inte bestämt<br><small>Aktuell plan = passet du utgår från. Kan ändras = samma konkreta pass gäller, men coachen får justera det om ny information ger sakliga skäl.</small></div>
     </div>
   </div>
-  <div class="dashboard-card">
-    <div class="dashboard-title">Kommande dagar</div>
-    <div class="next-item" data-next-date="2026-09-10"><a class="next-jump" href="#dag-2026-09-10" aria-label="Visa detaljer för Torsdag"></a>
-  <div class="next-top"><strong><span class="today-pill">IDAG</span>Torsdag</strong><span class="badge conditional">KAN ÄNDRAS</span></div>
-  <div class="next-session"><svg class="sport-icon icon-bike" aria-hidden="true" viewBox="0 0 640 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M312 32c-13.3 0-24 10.7-24 24s10.7 24 24 24h25.7l34.6 64H222.9l-27.4-38C191 99.7 183.7 96 176 96h-56c-13.3 0-24 10.7-24 24s10.7 24 24 24h43.7l22.1 30.7-26.6 53.1c-10-2.5-20.5-3.8-31.2-3.8C57.3 224 0 281.3 0 352s57.3 128 128 128c65.3 0 119.1-48.9 127-112h49c8.5 0 16.3-4.5 20.7-11.8l84.8-143.5 21.7 40.1C402.4 276.3 384 312 384 352c0 70.7 57.3 128 128 128s128-57.3 128-128-57.3-128-128-128c-13.5 0-26.5 2.1-38.7 6L375.4 48.8C369.8 38.4 359 32 347.2 32H312zM458.6 303.7l32.3 59.7c6.3 11.7 20.9 16 32.5 9.7s16-20.9 9.7-32.5l-32.3-59.7c3.6-.6 7.4-.9 11.2-.9 39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72c0-18.6 7-35.5 18.6-48.3zM133.2 368h65c-7.3 32.1-36 56-70.2 56-39.8 0-72-32.2-72-72s32.2-72 72-72c1.7 0 3.4.1 5.1.2l-24.2 48.5c-9 18.1 4.1 39.4 24.3 39.4zm33.7-48 50.7-101.3 72.9 101.2-.1.1H166.9zm90.6-128H366L317 274.8 257.4 192z"/></svg><span>MTB/XC · 60 min · teknik + lugn aerob stig</span></div>
-  <div class="next-weather" data-weather-date="2026-09-10" data-weather-scope="next" style="color:#475569;font-size:.82rem;margin-top:5px"><strong>Väder · Oxelösund</strong> · <svg class="weather-icon" aria-hidden="true" viewBox="0 0 24 24" style="width:18px;height:18px;vertical-align:-4px;margin-right:5px;color:#475569;overflow:visible"><path d="M6.7 18h10.1a3.7 3.7 0 0 0 .3-7.4A5.3 5.3 0 0 0 7 9.8 4.1 4.1 0 0 0 6.7 18Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.5 20.2l-.7 1.3M12.5 20.2l-.7 1.3M16.5 20.2l-.7 1.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Regnskurar · 10,0–14,4 °C · nederbördsrisk max 97 % · vind max 6,6 m/s</div>
 
-</div><div class="next-item" data-next-date="2026-09-11"><a class="next-jump" href="#dag-2026-09-11" aria-label="Visa detaljer för Fredag"></a>
-  <div class="next-top"><strong>Fredag</strong><span class="badge conditional">KAN ÄNDRAS</span></div>
-  <div class="next-session"><svg class="sport-icon icon-run" aria-hidden="true" viewBox="0 0 448 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M320 48a48 48 0 1 0-96 0 48 48 0 1 0 96 0zM125.7 175.5c9.9-9.9 23.4-15.5 37.5-15.5 1.9 0 3.8.1 5.6.3L137.6 254c-9.3 28 1.7 58.8 26.8 74.5l86.2 53.9-25.4 88.8c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l28.7-100.4c5.9-20.6-2.6-42.6-20.7-53.9L238 299l30.9-82.4 5.1 12.3C289 264.7 323.9 288 362.7 288H384c17.7 0 32-14.3 32-32s-14.3-32-32-32h-21.3c-12.9 0-24.6-7.8-29.5-19.7l-6.3-15c-14.6-35.1-44.1-61.9-80.5-73.1l-48.7-15c-11.1-3.4-22.7-5.2-34.4-5.2-31 0-60.8 12.3-82.7 34.3l-23.2 23.1c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l23.1-23.1zM91.2 352H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h69.6c19 0 36.2-11.2 43.9-28.5l11.5-25.9-9.5-6c-17.5-10.9-30.5-26.8-37.9-44.9L91.2 352z"/></svg><span>Löpning · backkvalitet · 15 min lugnt + 3 × 7 × 150 m / lugn joggvila + 10 min lugnt</span></div>
-  <div class="next-weather" data-weather-date="2026-09-11" data-weather-scope="next" style="color:#475569;font-size:.82rem;margin-top:5px"><strong>Väder · Oxelösund</strong> · <svg class="weather-icon" aria-hidden="true" viewBox="0 0 24 24" style="width:18px;height:18px;vertical-align:-4px;margin-right:5px;color:#475569;overflow:visible"><circle cx="12" cy="12" r="3.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M18.7 5.3l-1.4 1.4M6.7 17.3l-1.4 1.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Klart · 8,9–17,8 °C · nederbördsrisk max 7 % · vind max 4,6 m/s</div>
-
-</div><div class="next-item" data-next-date="2026-09-12"><a class="next-jump" href="#dag-2026-09-12" aria-label="Visa detaljer för Lördag"></a>
-  <div class="next-top"><strong>Lördag</strong><span class="badge planned">AKTUELL PLAN</span></div>
-  <div class="next-session"><svg class="sport-icon icon-enduro" aria-hidden="true" viewBox="0 0 640 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M280 32c-13.3 0-24 10.7-24 24s10.7 24 24 24l57.7 0 16.4 30.3L256 192l-45.3-45.3c-12-12-28.3-18.7-45.3-18.7L64 128c-17.7 0-32 14.3-32 32l0 32 96 0c88.4 0 160 71.6 160 160c0 11-1.1 21.7-3.2 32l70.4 0c-2.1-10.3-3.2-21-3.2-32c0-52.2 25-98.6 63.7-127.8l15.4 28.6C402.4 276.3 384 312 384 352c0 70.7 57.3 128 128 128s128-57.3 128-128s-57.3-128-128-128c-13.5 0-26.5 2.1-38.7 6L418.2 128l61.8 0c17.7 0 32-14.3 32-32l0-32c0-17.7-14.3-32-32-32l-20.4 0c-7.5 0-14.7 2.6-20.5 7.4L391.7 78.9l-14-26c-7-12.9-20.5-21-35.2-21L280 32zM462.7 311.2l28.2 52.2c6.3 11.7 20.9 16 32.5 9.7s16-20.9 9.7-32.5l-28.2-52.2c2.3-.3 4.7-.4 7.1-.4c35.3 0 64 28.7 64 64s-28.7 64-64 64s-64-28.7-64-64c0-15.5 5.5-29.7 14.7-40.8zM187.3 376c-9.5 23.5-32.5 40-59.3 40c-35.3 0-64-28.7-64-64s28.7-64 64-64c26.9 0 49.9 16.5 59.3 40l66.4 0C242.5 268.8 190.5 224 128 224C57.3 224 0 281.3 0 352s57.3 128 128 128c62.5 0 114.5-44.8 125.8-104l-66.4 0zM128 384a32 32 0 1 0 0-64 32 32 0 1 0 0 64z"/></svg><span>Enduro · Krokek · 10:00–14:00</span></div>
-  <div class="next-weather" data-weather-date="2026-09-12" data-weather-scope="next" style="color:#475569;font-size:.82rem;margin-top:5px"><strong>Väder · Oxelösund</strong> · <svg class="weather-icon" aria-hidden="true" viewBox="0 0 24 24" style="width:18px;height:18px;vertical-align:-4px;margin-right:5px;color:#475569;overflow:visible"><path d="M6.7 18h10.1a3.7 3.7 0 0 0 .3-7.4A5.3 5.3 0 0 0 7 9.8 4.1 4.1 0 0 0 6.7 18Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Mulet · 13,4–18,5 °C · nederbördsrisk max 7 % · vind max 3,9 m/s</div>
-
-</div>
-  </div>
-</section></div></details><div class="day past-completed workout-card-v2" id="dag-2026-09-07">
+</section></div></details><!-- training-timeline-v1:start -->
+<section class="week-timeline" aria-label="Aktuell veckas pass"><div class="timeline-scroll-context" aria-hidden="true"><span class="timeline-context-day">Aktuell vecka</span><span class="timeline-context-session">Träningsplan</span></div>
+<div class="day past-completed workout-card-v2" id="dag-2026-09-07">
   <div class="daytop"><div class="day-date-line"><span class="dow">Måndag</span><span class="date">7 sep</span></div><div class="badge fixed">Genomfört</div></div>
   <div class="session session-with-icon"><svg class="sport-icon icon-enduro" aria-hidden="true" viewBox="0 0 640 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M280 32c-13.3 0-24 10.7-24 24s10.7 24 24 24l57.7 0 16.4 30.3L256 192l-45.3-45.3c-12-12-28.3-18.7-45.3-18.7L64 128c-17.7 0-32 14.3-32 32l0 32 96 0c88.4 0 160 71.6 160 160c0 11-1.1 21.7-3.2 32l70.4 0c-2.1-10.3-3.2-21-3.2-32c0-52.2 25-98.6 63.7-127.8l15.4 28.6C402.4 276.3 384 312 384 352c0 70.7 57.3 128 128 128s128-57.3 128-128s-57.3-128-128-128c-13.5 0-26.5 2.1-38.7 6L418.2 128l61.8 0c17.7 0 32-14.3 32-32l0-32c0-17.7-14.3-32-32-32l-20.4 0c-7.5 0-14.7 2.6-20.5 7.4L391.7 78.9l-14-26c-7-12.9-20.5-21-35.2-21L280 32zM462.7 311.2l28.2 52.2c6.3 11.7 20.9 16 32.5 9.7s16-20.9 9.7-32.5l-28.2-52.2c2.3-.3 4.7-.4 7.1-.4c35.3 0 64 28.7 64 64s-28.7 64-64 64s-64-28.7-64-64c0-15.5 5.5-29.7 14.7-40.8zM187.3 376c-9.5 23.5-32.5 40-59.3 40c-35.3 0-64-28.7-64-64s28.7-64 64-64c26.9 0 49.9 16.5 59.3 40l66.4 0C242.5 268.8 190.5 224 128 224C57.3 224 0 281.3 0 352s57.3 128 128 128c62.5 0 114.5-44.8 125.8-104l-66.4 0zM128 384a32 32 0 1 0 0-64 32 32 0 1 0 0 64z"/></svg><span class="session-text"><strong class="session-title">Enduroskola</strong><span class="session-meta">fast tillfälle</span></span></div>
 
@@ -342,32 +1024,34 @@ h1{font-size:clamp(2rem,8vw,3.2rem);line-height:1;margin:0 0 8px;letter-spacing:
   <div class="week-activity-metrics">3 200 m · 58:38 · snittpuls 128</div>
   <p class="week-activity-insight-copy">Snitt 1:28,0/100 m; snabbast 1:27,4/100 m och långsammast 1:28,4/100 m. Registrerad vila 29–30 s.</p>
   <div class="week-activity-plan-impact"><span>Planpåverkan</span><strong>Ingen ändring</strong></div>
-  <details class="week-activity-evidence"><summary>Visa underlag</summary><div class="week-activity-evidence-body"><div class="week-activity-evidence-block"><strong>Fakta</strong><ul><li>Simning: 3,20 km · 58:38 · snittpuls 128,4 · maxpuls 157.</li><li>Planstatus 2026-09-09: dagen är markerad genomförd i coachens beslutsunderlag.</li></ul></div><div class="week-activity-evidence-block"><strong>Tolkning</strong><ul><li>Passet levererade avsedd teknik+aerobt stimulus och går att klassificera som genomförd underhållsexponering för simningen.</li><li>Ökningen i puls under 500 m-blocken är normal för arbetsset och visar att sessionen belastade kardiovaskulärt utan att ge entydiga tecken på överbelastning i efterföljande närtid.</li></ul></div><div class="week-activity-evidence-block"><strong>Osäkerhet</strong><ul><li>Subjektiv återhämtningskänsla efter passet (användarrapport tom)</li><li>Effekt av föregående enduro + styrka på torsdagens MTB-plan om trötthet kvarstår</li></ul></div></div></details>
+  <details class="week-activity-evidence"><summary>Visa underlag</summary><div class="week-activity-evidence-body"><div class="week-activity-evidence-block"><strong>Fakta</strong><ul><li>Simning: 3,20 km · 58:38 · snittpuls 128,4 · maxpuls 157.</li><li>Planstatus 2026-09-09: dagen är markerad genomförd i coachens beslutsunderlag.</li></ul></div><div class="week-activity-evidence-block"><strong>Tolkning</strong><ul><li>Stabilitet i 4×500 (pace 1:27–1:28/100m, liten delta) visar god uthållig aerob kontroll för detta set, så simningen uppfyller underhålls-/teknikstimulus.</li><li>De korta 50‑serierna blev snabbare mot slutet och puls ökade—det indikerar god kapacitet att avsluta starkt men också lokal trötthet som kan påverka ben/axlar om följande dagar är tunga.</li></ul></div><div class="week-activity-evidence-block"><strong>Osäkerhet</strong><ul><li>Användarrapport saknas (ingen subjektiv trötthet/återhämtning rapporterad)</li><li>Ingen explicit planerad belastningskonflikt från efterföljande externa aktiviteter bortsett från redan kända planer</li></ul></div></div></details>
 </section><div class="card-v2-footer"><details class="day-why"><summary>Motivering</summary><div class="reason">Preliminär simstruktur förs vidare från föregående veckas etablerade simdos för kontinuitet.</div></details></div></div><div class="day decision-horizon workout-card-v2 card-v2-today" id="dag-2026-09-10">
   <div class="daytop"><div class="day-date-line"><span class="dow">Torsdag</span><span class="date">10 sep</span></div><div class="badge conditional">Kan ändras</div></div>
   <div class="session session-with-icon"><svg class="sport-icon icon-bike" aria-hidden="true" viewBox="0 0 640 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M312 32c-13.3 0-24 10.7-24 24s10.7 24 24 24h25.7l34.6 64H222.9l-27.4-38C191 99.7 183.7 96 176 96h-56c-13.3 0-24 10.7-24 24s10.7 24 24 24h43.7l22.1 30.7-26.6 53.1c-10-2.5-20.5-3.8-31.2-3.8C57.3 224 0 281.3 0 352s57.3 128 128 128c65.3 0 119.1-48.9 127-112h49c8.5 0 16.3-4.5 20.7-11.8l84.8-143.5 21.7 40.1C402.4 276.3 384 312 384 352c0 70.7 57.3 128 128 128s128-57.3 128-128-57.3-128-128-128c-13.5 0-26.5 2.1-38.7 6L375.4 48.8C369.8 38.4 359 32 347.2 32H312zM458.6 303.7l32.3 59.7c6.3 11.7 20.9 16 32.5 9.7s16-20.9 9.7-32.5l-32.3-59.7c3.6-.6 7.4-.9 11.2-.9 39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72c0-18.6 7-35.5 18.6-48.3zM133.2 368h65c-7.3 32.1-36 56-70.2 56-39.8 0-72-32.2-72-72s32.2-72 72-72c1.7 0 3.4.1 5.1.2l-24.2 48.5c-9 18.1 4.1 39.4 24.3 39.4zm33.7-48 50.7-101.3 72.9 101.2-.1.1H166.9zm90.6-128H366L317 274.8 257.4 192z"/></svg><span class="session-text"><strong class="session-title">MTB/XC 60 min</strong><span class="session-meta">teknik + lugn aerob stig</span></span></div>
-  <div class="next-weather" data-weather-date="2026-09-10" data-weather-scope="day" style="color:#475569;font-size:.82rem;margin-top:5px"><span class="weather-label">Väder i Oxelösund:</span> <svg class="weather-icon" aria-hidden="true" viewBox="0 0 24 24" style="width:18px;height:18px;vertical-align:-4px;margin-right:5px;color:#475569;overflow:visible"><path d="M6.7 18h10.1a3.7 3.7 0 0 0 .3-7.4A5.3 5.3 0 0 0 7 9.8 4.1 4.1 0 0 0 6.7 18Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.5 20.2l-.7 1.3M12.5 20.2l-.7 1.3M16.5 20.2l-.7 1.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Regnskurar · 10,0–14,4 °C · nederbördsrisk max 97 % · vind max 6,6 m/s</div>
+  <div class="next-weather" data-weather-date="2026-09-10" data-weather-scope="day" style="color:#475569;font-size:.82rem;margin-top:5px"><span class="weather-label">Väder i Oxelösund:</span> <svg class="weather-icon" aria-hidden="true" viewBox="0 0 24 24" style="width:18px;height:18px;vertical-align:-4px;margin-right:5px;color:#475569;overflow:visible"><path d="M6.7 18h10.1a3.7 3.7 0 0 0 .3-7.4A5.3 5.3 0 0 0 7 9.8 4.1 4.1 0 0 0 6.7 18Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.5 20.2l-.7 1.3M12.5 20.2l-.7 1.3M16.5 20.2l-.7 1.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Regn · 10,2–14,1 °C · nederbördsrisk max 97 % · vind max 6,4 m/s</div>
   <div class="workout-prescription"><div class="workout-prescription-head">Passupplägg</div><div class="workout-prescription-row"><span class="workout-prescription-dose">60 min</span><span class="workout-prescription-text">Blick, linjeval, bromspunkter och flyt före segmentjakt.</span></div></div>
 
 <div class="development-focus"><strong>Fokus:</strong><span>Blick, linjeval, bromspunkter och flyt före segmentjakt.</span></div><div class="card-v2-footer"><details class="day-why"><summary>Motivering</summary><div class="reason">Utvecklar teknisk MTB/XC och aerob cykelkapacitet som stöd för målbilden.</div></details><div class="device-sync-state synced" title="Passet är verifierat i Intervals.icu och kan därifrån skickas vidare till Garmin; leverans till själva klockan kan inte verifieras av träningssystemet."><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="5" width="10" height="14" rx="2.2"/><path d="M9.5 5V2.5h5V5M9.5 19v2.5h5V19M12 9v3l2 1.5"/></svg><span>Klocksync skickad</span></div></div></div><div class="day decision-horizon workout-card-v2" id="dag-2026-09-11">
   <div class="daytop"><div class="day-date-line"><span class="dow">Fredag</span><span class="date">11 sep</span></div><div class="badge conditional">Kan ändras</div></div>
   <div class="session session-with-icon"><svg class="sport-icon icon-run" aria-hidden="true" viewBox="0 0 448 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M320 48a48 48 0 1 0-96 0 48 48 0 1 0 96 0zM125.7 175.5c9.9-9.9 23.4-15.5 37.5-15.5 1.9 0 3.8.1 5.6.3L137.6 254c-9.3 28 1.7 58.8 26.8 74.5l86.2 53.9-25.4 88.8c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l28.7-100.4c5.9-20.6-2.6-42.6-20.7-53.9L238 299l30.9-82.4 5.1 12.3C289 264.7 323.9 288 362.7 288H384c17.7 0 32-14.3 32-32s-14.3-32-32-32h-21.3c-12.9 0-24.6-7.8-29.5-19.7l-6.3-15c-14.6-35.1-44.1-61.9-80.5-73.1l-48.7-15c-11.1-3.4-22.7-5.2-34.4-5.2-31 0-60.8 12.3-82.7 34.3l-23.2 23.1c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l23.1-23.1zM91.2 352H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h69.6c19 0 36.2-11.2 43.9-28.5l11.5-25.9-9.5-6c-17.5-10.9-30.5-26.8-37.9-44.9L91.2 352z"/></svg><span class="session-text"><strong class="session-title">Löpning · backkvalitet</strong><span class="session-meta">15 min lugnt + 3 × 7 × 150 m / lugn joggvila + 10 min lugnt</span></span></div>
-  <div class="next-weather" data-weather-date="2026-09-11" data-weather-scope="day" style="color:#475569;font-size:.82rem;margin-top:5px"><span class="weather-label">Väder i Oxelösund:</span> <svg class="weather-icon" aria-hidden="true" viewBox="0 0 24 24" style="width:18px;height:18px;vertical-align:-4px;margin-right:5px;color:#475569;overflow:visible"><circle cx="12" cy="12" r="3.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M18.7 5.3l-1.4 1.4M6.7 17.3l-1.4 1.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Klart · 8,9–17,8 °C · nederbördsrisk max 7 % · vind max 4,6 m/s</div>
+  <div class="next-weather" data-weather-date="2026-09-11" data-weather-scope="day" style="color:#475569;font-size:.82rem;margin-top:5px"><span class="weather-label">Väder i Oxelösund:</span> <svg class="weather-icon" aria-hidden="true" viewBox="0 0 24 24" style="width:18px;height:18px;vertical-align:-4px;margin-right:5px;color:#475569;overflow:visible"><circle cx="12" cy="12" r="3.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M18.7 5.3l-1.4 1.4M6.7 17.3l-1.4 1.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Klart · 8,7–17,6 °C · nederbördsrisk max 7 % · vind max 5,1 m/s</div>
   <div class="workout-prescription"><div class="workout-prescription-head">Passupplägg</div><div class="workout-prescription-row"><span class="workout-prescription-dose">15 min</span><span class="workout-prescription-text">Lugnt</span></div><div class="workout-prescription-row"><span class="workout-prescription-dose">3×7×150 m</span><span class="workout-prescription-text">Kraftfull men kontrollerad löpning med bibehållen mekanik. Utveckla arbetsmängden stegvis; ingen maximal sprint eller syrajakt. · Lugn joggvila</span></div><div class="workout-prescription-row"><span class="workout-prescription-dose">10 min</span><span class="workout-prescription-text">Lugnt</span></div></div>
 
 <div class="development-focus"><strong>Fokus:</strong><span>Kraftfull men kontrollerad löpning med bibehållen mekanik. Utveckla arbetsmängden stegvis; ingen maximal sprint eller syrajakt.</span></div><div class="card-v2-footer"><details class="day-why"><summary>Motivering</summary><div class="reason">Mesocykelns andra prioriterade löpkvalitet.</div></details><div class="device-sync-state synced" title="Passet är verifierat i Intervals.icu och kan därifrån skickas vidare till Garmin; leverans till själva klockan kan inte verifieras av träningssystemet."><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="5" width="10" height="14" rx="2.2"/><path d="M9.5 5V2.5h5V5M9.5 19v2.5h5V19M12 9v3l2 1.5"/></svg><span>Klocksync skickad</span></div></div></div><div class="day decision-horizon workout-card-v2" id="dag-2026-09-12">
   <div class="daytop"><div class="day-date-line"><span class="dow">Lördag</span><span class="date">12 sep</span></div><div class="badge planned">Aktuell plan</div></div>
   <div class="session session-with-icon"><svg class="sport-icon icon-enduro" aria-hidden="true" viewBox="0 0 640 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M280 32c-13.3 0-24 10.7-24 24s10.7 24 24 24l57.7 0 16.4 30.3L256 192l-45.3-45.3c-12-12-28.3-18.7-45.3-18.7L64 128c-17.7 0-32 14.3-32 32l0 32 96 0c88.4 0 160 71.6 160 160c0 11-1.1 21.7-3.2 32l70.4 0c-2.1-10.3-3.2-21-3.2-32c0-52.2 25-98.6 63.7-127.8l15.4 28.6C402.4 276.3 384 312 384 352c0 70.7 57.3 128 128 128s128-57.3 128-128s-57.3-128-128-128c-13.5 0-26.5 2.1-38.7 6L418.2 128l61.8 0c17.7 0 32-14.3 32-32l0-32c0-17.7-14.3-32-32-32l-20.4 0c-7.5 0-14.7 2.6-20.5 7.4L391.7 78.9l-14-26c-7-12.9-20.5-21-35.2-21L280 32zM462.7 311.2l28.2 52.2c6.3 11.7 20.9 16 32.5 9.7s16-20.9 9.7-32.5l-28.2-52.2c2.3-.3 4.7-.4 7.1-.4c35.3 0 64 28.7 64 64s-28.7 64-64 64s-64-28.7-64-64c0-15.5 5.5-29.7 14.7-40.8zM187.3 376c-9.5 23.5-32.5 40-59.3 40c-35.3 0-64-28.7-64-64s28.7-64 64-64c26.9 0 49.9 16.5 59.3 40l66.4 0C242.5 268.8 190.5 224 128 224C57.3 224 0 281.3 0 352s57.3 128 128 128c62.5 0 114.5-44.8 125.8-104l-66.4 0zM128 384a32 32 0 1 0 0-64 32 32 0 1 0 0 64z"/></svg><span class="session-text"><strong class="session-title">Enduro</strong><span class="session-meta">Krokek · 10:00–14:00</span></span></div>
-  <div class="next-weather" data-weather-date="2026-09-12" data-weather-scope="day" style="color:#475569;font-size:.82rem;margin-top:5px"><span class="weather-label">Väder i Oxelösund:</span> <svg class="weather-icon" aria-hidden="true" viewBox="0 0 24 24" style="width:18px;height:18px;vertical-align:-4px;margin-right:5px;color:#475569;overflow:visible"><path d="M6.7 18h10.1a3.7 3.7 0 0 0 .3-7.4A5.3 5.3 0 0 0 7 9.8 4.1 4.1 0 0 0 6.7 18Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Mulet · 13,4–18,5 °C · nederbördsrisk max 7 % · vind max 3,9 m/s</div>
+  <div class="next-weather" data-weather-date="2026-09-12" data-weather-scope="day" style="color:#475569;font-size:.82rem;margin-top:5px"><span class="weather-label">Väder i Oxelösund:</span> <svg class="weather-icon" aria-hidden="true" viewBox="0 0 24 24" style="width:18px;height:18px;vertical-align:-4px;margin-right:5px;color:#475569;overflow:visible"><circle cx="8" cy="8" r="2.8" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 3V1.8M8 13v-1.2M3 8H1.8M12.2 8H11M4.5 4.5l-.9-.9M11.5 4.5l.9-.9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M7.2 19h10a3.6 3.6 0 0 0 .2-7.2 5 5 0 0 0-9.5-.7A4 4 0 0 0 7.2 19Z" fill="white" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Halvklart · 13,7–18,7 °C · nederbördsrisk max 7 % · vind max 4,8 m/s</div>
 
 
 <div class="development-focus"><strong>Fokus:</strong><span>Teknisk kvalitet, avslappnad körning och hållbar koncentration. Ingen särskild intensitetsdos föreskrivs för det externa passet.</span></div><div class="card-v2-footer"><details class="day-why"><summary>Motivering</summary><div class="reason">Fast användarbekräftat enduropass.</div></details></div></div><div class="day decision-horizon workout-card-v2" id="dag-2026-09-13">
   <div class="daytop"><div class="day-date-line"><span class="dow">Söndag</span><span class="date">13 sep</span></div><div class="badge conditional">Kan ändras</div></div>
   <div class="session session-with-icon"><svg class="sport-icon icon-run" aria-hidden="true" viewBox="0 0 448 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M320 48a48 48 0 1 0-96 0 48 48 0 1 0 96 0zM125.7 175.5c9.9-9.9 23.4-15.5 37.5-15.5 1.9 0 3.8.1 5.6.3L137.6 254c-9.3 28 1.7 58.8 26.8 74.5l86.2 53.9-25.4 88.8c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l28.7-100.4c5.9-20.6-2.6-42.6-20.7-53.9L238 299l30.9-82.4 5.1 12.3C289 264.7 323.9 288 362.7 288H384c17.7 0 32-14.3 32-32s-14.3-32-32-32h-21.3c-12.9 0-24.6-7.8-29.5-19.7l-6.3-15c-14.6-35.1-44.1-61.9-80.5-73.1l-48.7-15c-11.1-3.4-22.7-5.2-34.4-5.2-31 0-60.8 12.3-82.7 34.3l-23.2 23.1c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l23.1-23.1zM91.2 352H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h69.6c19 0 36.2-11.2 43.9-28.5l11.5-25.9-9.5-6c-17.5-10.9-30.5-26.8-37.9-44.9L91.2 352z"/></svg><span class="session-text"><strong class="session-title">Löpning · lugn distans</strong><span class="session-meta">75 min</span></span></div>
-  <div class="next-weather" data-weather-date="2026-09-13" data-weather-scope="day" style="color:#475569;font-size:.82rem;margin-top:5px"><span class="weather-label">Väder i Oxelösund:</span> <svg class="weather-icon" aria-hidden="true" viewBox="0 0 24 24" style="width:18px;height:18px;vertical-align:-4px;margin-right:5px;color:#475569;overflow:visible"><path d="M6.7 18h10.1a3.7 3.7 0 0 0 .3-7.4A5.3 5.3 0 0 0 7 9.8 4.1 4.1 0 0 0 6.7 18Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.5 20.2l-.7 1.3M12.5 20.2l-.7 1.3M16.5 20.2l-.7 1.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Lätta regnskurar · 14,5–18,2 °C · nederbördsrisk max 70 % · vind max 4,9 m/s</div>
+  <div class="next-weather" data-weather-date="2026-09-13" data-weather-scope="day" style="color:#475569;font-size:.82rem;margin-top:5px"><span class="weather-label">Väder i Oxelösund:</span> <svg class="weather-icon" aria-hidden="true" viewBox="0 0 24 24" style="width:18px;height:18px;vertical-align:-4px;margin-right:5px;color:#475569;overflow:visible"><path d="M6.7 18h10.1a3.7 3.7 0 0 0 .3-7.4A5.3 5.3 0 0 0 7 9.8 4.1 4.1 0 0 0 6.7 18Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.5 20.2l-.7 1.3M12.5 20.2l-.7 1.3M16.5 20.2l-.7 1.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Lätta regnskurar · 14,5–18,2 °C · nederbördsrisk max 66 % · vind max 4,9 m/s</div>
   <div class="workout-prescription"><div class="workout-prescription-head">Passupplägg</div><div class="workout-prescription-row"><span class="workout-prescription-dose">75 min</span><span class="workout-prescription-text">Avslappnad rytm och jämn ansträngning.</span></div></div>
 
 <div class="development-focus"><strong>Fokus:</strong><span>Avslappnad rytm och jämn ansträngning.</span></div><div class="card-v2-footer"><details class="day-why"><summary>Motivering</summary><div class="reason">Mesocykelns tredje löpstimulus bygger tålighet och kontinuitet utan att bli ytterligare kvalitet.</div></details><div class="device-sync-state synced" title="Passet är verifierat i Intervals.icu och kan därifrån skickas vidare till Garmin; leverans till själva klockan kan inte verifieras av träningssystemet."><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="5" width="10" height="14" rx="2.2"/><path d="M9.5 5V2.5h5V5M9.5 19v2.5h5V19M12 9v3l2 1.5"/></svg><span>Klocksync skickad</span></div></div></div>
+</section>
+<!-- training-timeline-v1:end -->
 <div class="reference-tools">
   <button class="reference-chip" type="button" onclick="openStrengthWindow()">Styrkemall</button>
   <button class="reference-chip" type="button" onclick="openTrainingSystemInfo()">Om systemet</button>
@@ -514,5 +1198,59 @@ window.addEventListener("pageshow", (event) => {
     window.location.reload();
   }
 });
+</script>
+<script>
+/* training-timeline-js-v1:start */
+(function(){
+  const timeline=document.querySelector('.week-timeline');
+  if(!timeline) return;
+  const context=timeline.querySelector('.timeline-scroll-context');
+  if(!context) return;
+  const dayLabel=context.querySelector('.timeline-context-day');
+  const sessionLabel=context.querySelector('.timeline-context-session');
+  const days=Array.from(timeline.children).filter((node)=>node.classList&&node.classList.contains('day'));
+  if(!days.length) return;
+
+  let active=null;
+  let scheduled=false;
+  const clean=(value)=>(value||'').replace(/\s+/g,' ').trim();
+  const compactDate=(value)=>{
+    const match=clean(value).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if(!match) return clean(value);
+    const months=['jan','feb','mar','apr','maj','jun','jul','aug','sep','okt','nov','dec'];
+    return Number(match[3])+' '+months[Number(match[2])-1];
+  };
+  const setActive=(day)=>{
+    if(!day||day===active) return;
+    if(active) active.classList.remove('timeline-active');
+    active=day;
+    active.classList.add('timeline-active');
+    const dow=clean(active.querySelector('.dow')?.textContent);
+    const date=compactDate(active.querySelector('.date')?.textContent);
+    const session=clean(active.querySelector('.session')?.textContent);
+    dayLabel.textContent=clean(dow+' '+date);
+    sessionLabel.textContent=session||'Planerad träningsdag';
+  };
+  const update=()=>{
+    scheduled=false;
+    const threshold=context.getBoundingClientRect().bottom+18;
+    let candidate=days[0];
+    for(const day of days){
+      if(day.getBoundingClientRect().top<=threshold) candidate=day;
+      else break;
+    }
+    setActive(candidate);
+  };
+  const schedule=()=>{
+    if(scheduled) return;
+    scheduled=true;
+    requestAnimationFrame(update);
+  };
+  setActive(days[0]);
+  update();
+  addEventListener('scroll',schedule,{passive:true});
+  addEventListener('resize',schedule,{passive:true});
+})();
+/* training-timeline-js-v1:end */
 </script>
 </body></html>
