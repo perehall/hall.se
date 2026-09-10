@@ -97,6 +97,36 @@ class CoachOutputContractTests(unittest.TestCase):
         self.assertEqual(assessment["summary"], "Fyra 500:or låg inom en sekund per 100 m.")
         self.assertNotIn("setbaserad slutsats", assessment["load_interpretation"].lower())
 
+    def test_machine_stimulus_ids_are_removed_from_all_visible_fields(self):
+        coach = {"analyses": [{
+            "activity_id": 4,
+            "activity_date": "2026-09-09",
+            "performance_marker_id": "swim",
+            "assessment": {
+                "summary": "Passet gav stöd åt sim_aerobic.",
+                "load_interpretation": "sim_aerobic kvarstår som stödjande stimulus.",
+                "confidence": "medium",
+                "facts": ["Stimulus sim_aerobic verifierat i planen."],
+                "interpretations": ["sim_technique stöddes också."],
+                "unknowns": [],
+            },
+            "plan_action": {
+                "action": "keep",
+                "target_date": "2026-09-10",
+                "reason": "sim_aerobic kräver ingen ändring.",
+                "recommendation": "Behåll planen efter sim_aerobic.",
+                "dose_option_id": "",
+                "requires_approval": False,
+            },
+        }]}
+        activities = {"activities": [{"id": 4, "sport_type": "Swim"}]}
+        self.assertTrue(contract.enforce_contract(coach, {"days": []}, activities))
+        visible = str(coach["analyses"][0])
+        self.assertNotIn("sim_aerobic", visible)
+        self.assertNotIn("sim_technique", visible)
+        self.assertIn("aerob simning", visible)
+        self.assertIn("simteknik", visible)
+
     def test_compacts_free_text(self):
         coach = {"analyses": [{
             "activity_id": 2,
