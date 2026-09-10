@@ -2,6 +2,39 @@
   "schema_version": 1,
   "overrides": [
     {
+      "date": "2026-09-08",
+      "source": "user_confirmed",
+      "note": "Tisdagens ordination ändrades före genomförandet till löpband 4 × 8 min Tempo enligt Garmin.",
+      "remove_fields": [
+        "dose_options",
+        "baseline_option_id",
+        "dose_open",
+        "dose_resolution",
+        "development_progression",
+        "development_step",
+        "workout_design",
+        "device_workout",
+        "device_sync",
+        "watch_workout",
+        "coach_adjustment"
+      ],
+      "set": {
+        "session": "Löpband · 4 × 8 min Tempo (Garmin)",
+        "reason": "Användarbekräftad ändring av tisdagens ordination före genomförandet. Den historiska planen ska därför visa 4 × 8 min på löpband, inte den tidigare 3 × 10 min-grundplanen.",
+        "development_focus": "Kontrollerat tempoarbete på löpband. Faktiskt genomförande och subjektiv känsla lagras på aktiviteten och ska väga tyngre än den ersatta grundplanen.",
+        "sport": "run",
+        "classification": "training",
+        "manual_lock": true,
+        "stimuli": [
+          "run_threshold"
+        ],
+        "load_dimensions": [
+          "cardiovascular",
+          "mechanical"
+        ]
+      }
+    },
+    {
       "date": "2026-09-12",
       "source": "user_confirmed",
       "note": "Enduro i Krokek 10:00–14:00 ersätter lördagens tidigare simning + styrka.",
