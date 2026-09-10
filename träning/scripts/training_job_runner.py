@@ -59,6 +59,7 @@ def build_stages(ingest_mode: str) -> list[Stage]:
         Stage("migrate_typed_plan", python_stage("migrate_training_data_v3.py")),
         Stage("validate_normalized_data", python_stage("validate_training_data.py")),
         Stage("rollover_calendar", python_stage("rollover_week.py")),
+        Stage("apply_plan_overrides", python_stage("apply_plan_overrides.py")),
         Stage("validate_rollover", python_stage("validate_training_data.py")),
         Stage("materialize_workout_designs", python_stage("materialize_workout_designs.py")),
         Stage("validate_workout_designs", python_stage("validate_workout_designs.py")),
