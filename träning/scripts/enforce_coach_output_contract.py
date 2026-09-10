@@ -82,6 +82,12 @@ def has_user_report(activity):
     return bool(str((activity or {}).get("user_report") or "").strip())
 
 
+def has_structured_swim_analysis(activity):
+    context = (activity or {}).get("workout_analysis_context") or {}
+    swim = context.get("swim") or {}
+    return swim.get("structured") is True and bool(swim.get("repeat_sets"))
+
+
 def compact_list(values, limit, max_chars):
     result = []
     for item in values or []:
@@ -118,16 +124,14 @@ def swim_without_structured_analysis(analysis, activity, day):
         summary = "Simpasset är genomfört."
 
     assessment["summary"] = summary
-    assessment["load_interpretation"] = (
-        "Set-/intervallnivå saknas i det strukturerade analyslagret; teknik, fartstabilitet och intensitetsutveckling går därför inte att bedöma säkert."
-    )
+    assessment["load_interpretation"] = "Ingen setbaserad slutsats används för planändring."
     interpretations = []
     if isinstance(actual_m, (int, float)) and planned_m and actual_m != planned_m:
         interpretations.append(
-            "Distansavvikelsen är ett faktum; dess träningsmässiga betydelse kan inte avgöras utan setstruktur och subjektiv känsla."
+            "Distansavvikelsen är verifierad; träningsmässig betydelse kräver säkrare setstruktur eller användarrapport."
         )
     assessment["interpretations"] = interpretations
-    assessment["unknowns"] = ["Set-/intervallstruktur och subjektiv känsla efter simningen saknas."]
+    assessment["unknowns"] = ["Setstruktur kunde inte verifieras från passdata."]
     if not has_user_report(activity):
         assessment["confidence"] = "low"
 
@@ -195,10 +199,14 @@ def enforce_contract(coach, plan, activities_state):
             action.get("recommendation"), 2, 260
         )
 
-        # Raw pool laps/rests are not a validated set analysis. Without a
-        # dedicated performance context, do not infer technique or within-pass
-        # progression from total distance, total heart rate or raw lap rows.
-        if activity.get("sport_type") == "Swim" and not analysis.get("performance_marker_id"):
+        # A verified workout_analysis_context.swim is a structured, deterministic
+        # set layer. Only fall back to evidence-limited totals when neither that
+        # context nor the legacy performance marker is available.
+        if (
+            activity.get("sport_type") == "Swim"
+            and not analysis.get("performance_marker_id")
+            and not has_structured_swim_analysis(activity)
+        ):
             swim_without_structured_analysis(analysis, activity, day)
 
         prevent_repeat_of_completed_component(analysis, activity, day)
@@ -215,13 +223,13 @@ def main():
     coach = load_json(COACH_FILE, {"analyses": []})
     changed = enforce_contract(coach, plan, activities)
     if changed:
-        coach["output_contract_version"] = 16
+        coach["output_contract_version"] = 17
         COACH_FILE.write_text(
             json.dumps(coach, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
         )
-        print("Coach output contract v16: analysen kompakterad och evidensgrindar applicerade.")
+        print("Coach output contract v17: analysen kompakterad och evidensgrindar applicerade.")
     else:
-        print("Coach output contract v16: inga korrigeringar behövdes.")
+        print("Coach output contract v17: inga korrigeringar behövdes.")
     return 0
 
 
