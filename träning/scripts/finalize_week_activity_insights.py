@@ -135,9 +135,103 @@ def plan_impact(analysis):
     return ""
 
 
+def _number(value):
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        return None
+    return float(value)
+
+
+def fmt_swim_pace(seconds_per_100m):
+    value = _number(seconds_per_100m)
+    if value is None or value <= 0:
+        return ""
+    minutes = int(value // 60)
+    seconds = value - minutes * 60
+    return f"{minutes}:{seconds:04.1f}/100 m".replace(".", ",")
+
+
+def fmt_decimal(value, digits=1):
+    number = _number(value)
+    if number is None:
+        return ""
+    return f"{number:.{digits}f}".replace(".", ",")
+
+
+def structured_swim_insight(activity):
+    if str(activity.get("sport_type") or "") != "Swim":
+        return None
+    context = activity.get("workout_analysis_context") or {}
+    swim = context.get("swim") or {}
+    if swim.get("structured") is not True:
+        return None
+
+    valid_sets = []
+    for row in swim.get("repeat_sets") or []:
+        if not isinstance(row, dict):
+            continue
+        reps = _number(row.get("repetitions"))
+        distance = _number(row.get("distance_per_rep_m"))
+        total_distance = _number(row.get("total_distance_m"))
+        pace_range = _number(row.get("pace_range_s_per_100m"))
+        mean_pace = _number(row.get("pace_mean_s_per_100m"))
+        fastest = _number(row.get("pace_fastest_s_per_100m"))
+        slowest = _number(row.get("pace_slowest_s_per_100m"))
+        if (
+            reps is None or reps < 2 or distance is None or distance <= 0
+            or total_distance is None or total_distance <= 0
+            or pace_range is None or pace_range < 0
+            or mean_pace is None or mean_pace <= 0
+            or fastest is None or fastest <= 0
+            or slowest is None or slowest <= 0
+        ):
+            continue
+        valid_sets.append(row)
+
+    if not valid_sets:
+        return None
+
+    main_set = max(
+        valid_sets,
+        key=lambda row: (
+            _number(row.get("total_distance_m")) or 0,
+            _number(row.get("distance_per_rep_m")) or 0,
+        ),
+    )
+    reps = int(round(_number(main_set.get("repetitions"))))
+    distance = int(round(_number(main_set.get("distance_per_rep_m"))))
+    pace_range = _number(main_set.get("pace_range_s_per_100m"))
+    mean_pace = _number(main_set.get("pace_mean_s_per_100m"))
+    fastest = _number(main_set.get("pace_fastest_s_per_100m"))
+    slowest = _number(main_set.get("pace_slowest_s_per_100m"))
+
+    headline = f"{reps}×{distance} låg inom {fmt_decimal(pace_range)} s/100 m"
+    body = (
+        f"Snitt {fmt_swim_pace(mean_pace)}; snabbast {fmt_swim_pace(fastest)} "
+        f"och långsammast {fmt_swim_pace(slowest)}."
+    )
+
+    rests = [
+        _number(value)
+        for value in main_set.get("recorded_rest_between_reps_s") or []
+    ]
+    rests = [value for value in rests if value is not None and value > 0]
+    if rests:
+        low, high = min(rests), max(rests)
+        if abs(high - low) < 0.5:
+            body += f" Registrerad vila {int(round(low))} s."
+        else:
+            body += f" Registrerad vila {int(round(low))}–{int(round(high))} s."
+
+    return {"headline": headline, "body": body}
+
+
 def historical_insight(day, activity, analysis, performance):
     if performance:
         return build_outcome_insight(day, analysis, performance)
+
+    swim_insight = structured_swim_insight(activity)
+    if swim_insight:
+        return swim_insight
 
     subject = session_subject(day, activity)
     impact = plan_impact(analysis)
