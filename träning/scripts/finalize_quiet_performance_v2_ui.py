@@ -27,6 +27,11 @@ DIV_TAG_RE = re.compile(r"<div\b[^>]*>|</div>", re.I)
 BODY_RE = re.compile(r"<body(?P<attrs>[^>]*)>", re.I)
 CLASS_RE = re.compile(r'\sclass="(?P<classes>[^"]*)"', re.I)
 BRAIN_KICKER_RE = re.compile(r'<span class="brain-kicker">Idag(?:\s*·\s*[^<]+)?</span>', re.I)
+POST_WORKOUT_KICKER_RE = re.compile(
+    r'(<div class="today-outcome-kicker">)[^<]*(</div>)',
+    re.I,
+)
+POST_WORKOUT_MARKER = 'data-post-workout-state="completed"'
 TRAINING_START = "<!-- training-brain-v1:start -->"
 TRAINING_END = "<!-- training-brain-v1:end -->"
 UPCOMING_TITLE = '<div class="dashboard-title">Kommande dagar</div>'
@@ -327,10 +332,17 @@ def current_day_label(today: date | None = None) -> str:
 
 
 def decorate_today_kicker(page: str, *, today: date | None = None) -> str:
-    if not BRAIN_KICKER_RE.search(page):
-        return page
-    replacement = f'<span class="brain-kicker">Idag · {current_day_label(today)}</span>'
-    return BRAIN_KICKER_RE.sub(replacement, page, count=1)
+    label = current_day_label(today)
+    if BRAIN_KICKER_RE.search(page):
+        replacement = f'<span class="brain-kicker">Idag · {label}</span>'
+        return BRAIN_KICKER_RE.sub(replacement, page, count=1)
+    if POST_WORKOUT_MARKER in page and POST_WORKOUT_KICKER_RE.search(page):
+        return POST_WORKOUT_KICKER_RE.sub(
+            lambda match: f'{match.group(1)}Idag · {label} · genomfört{match.group(2)}',
+            page,
+            count=1,
+        )
+    return page
 
 
 def move_today_before_week_focus(page: str) -> str:
@@ -408,7 +420,10 @@ def validate_page(page: str, *, current: bool, label: str) -> None:
         focus = page.find('<div class="hero week-focus-card">')
         if brain >= 0 and focus >= 0 and brain > focus:
             raise RuntimeError("Quiet Performance v2: Idag ligger fortfarande efter veckofokus")
-        if '<span class="brain-kicker">Idag · ' not in page:
+        if POST_WORKOUT_MARKER in page:
+            if 'class="today-outcome-kicker">Idag · ' not in page or ' · genomfört</div>' not in page:
+                raise RuntimeError("Quiet Performance v2: genomfört Idag-läge saknar dag, datum eller status")
+        elif '<span class="brain-kicker">Idag · ' not in page:
             raise RuntimeError("Quiet Performance v2: Idag-raden saknar dag och datum")
 
 
