@@ -24,9 +24,9 @@ class TrainingTimelineUiTests(unittest.TestCase):
 <body class="quiet-performance qp-current"><div class="wrap">
 <h2 class="section">Aktuell vecka</h2>
 <details class="week-status-expander"><summary>Veckostatus</summary></details>
-<div class="day workout-card-v2 past-completed" id="dag-2026-09-08"><div class="daytop"><div><div class="dow">Tisdag</div><div class="date">2026-09-08</div></div><div class="badge fixed">GENOMFÖRT</div></div><div class="session">Löpning · 4 × 8 min tröskel</div></div>
-<div class="day workout-card-v2 card-v2-today" id="dag-2026-09-10"><div class="daytop"><div><div class="dow">Torsdag</div><div class="date">2026-09-10</div></div><div class="badge conditional">KAN ÄNDRAS</div></div><div class="session">MTB/XC · 60 min · teknik</div><div class="coach yoda-v2">Råd</div></div>
-<div class="day workout-card-v2 future-compact" id="dag-2026-09-11"><div class="daytop"><div><div class="dow">Fredag</div><div class="date">2026-09-11</div></div><div class="badge planned">AKTUELL PLAN</div></div><div class="session">Löpning · backkvalitet</div></div>
+<div class="day workout-card-v2 past-completed completed-day" id="dag-2026-09-08"><div class="daytop"><div class="day-date-line"><span class="dow">Tisdag</span><span class="date">8 sep</span></div><div class="badge fixed">GENOMFÖRT</div></div><div class="session">Löpning · 4 × 8 min tröskel</div></div>
+<div class="day workout-card-v2 card-v2-today completed-day" id="dag-2026-09-10"><div class="daytop"><div class="day-date-line"><span class="dow">Torsdag</span><span class="date">10 sep</span></div><div class="badge fixed">GENOMFÖRT</div></div><div class="session">MTB/XC · 60 min · teknik</div><div class="workout-prescription"><div class="workout-prescription-row"><span class="workout-prescription-dose">60 min</span><span class="workout-prescription-text">Teknik</span></div></div></div>
+<div class="day workout-card-v2 future-compact" id="dag-2026-09-11"><div class="daytop"><div class="day-date-line"><span class="dow">Fredag</span><span class="date">11 sep</span></div><div class="badge planned">AKTUELL PLAN</div></div><div class="session">Löpning · backkvalitet</div></div>
 <div class="principles">Efter veckan</div>
 </div></body></html>'''
 
@@ -50,6 +50,20 @@ class TrainingTimelineUiTests(unittest.TestCase):
         self.assertIn('box-shadow:none!important;', rendered)
         self.assertIn('.week-timeline>.day>.daytop', rendered)
         self.assertIn('.week-timeline .coach.yoda-v2', rendered)
+
+    def test_day_axis_keeps_date_clear_of_marker(self):
+        rendered = apply_timeline(self.sample_page())
+        self.assertIn('.week-timeline>.day>.daytop .day-date-line{', rendered)
+        self.assertIn('display:block!important;', rendered)
+        self.assertIn('.week-timeline>.day>.daytop .dow,', rendered)
+        self.assertIn('.week-timeline>.day>.daytop .date{', rendered)
+
+    def test_completed_day_hides_planned_prescription(self):
+        rendered = apply_timeline(self.sample_page())
+        self.assertIn(
+            '.week-timeline>.day.completed-day .workout-prescription{display:none!important}',
+            rendered,
+        )
 
     def test_scroll_context_updates_day_and_session(self):
         rendered = apply_timeline(self.sample_page())
