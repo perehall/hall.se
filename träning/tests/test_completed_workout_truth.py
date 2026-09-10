@@ -75,7 +75,16 @@ class CompletedWorkoutTruthTests(unittest.TestCase):
 </div><footer></footer></body></html>'''
         rendered = force_completed_badges(page, self.plan, [self.activity])
         self.assertIn('<div class="badge fixed">Genomfört</div>', rendered)
+        self.assertIn('class="day past-completed today-completed completed-day"', rendered)
         self.assertNotIn('>Kan ändras<', rendered)
+
+    def test_completed_class_is_idempotent(self):
+        page = '''<html><body>
+<div class="day card-v2-today completed-day" id="dag-2026-09-04">
+<div class="daytop"><div></div><div class="badge fixed">Genomfört</div></div>
+</div><footer></footer></body></html>'''
+        rendered = force_completed_badges(page, self.plan, [self.activity])
+        self.assertEqual(rendered.count("completed-day"), 1)
 
     def test_post_workout_card_is_rebuilt_from_current_sources(self):
         stale = '''<html><body>
@@ -84,7 +93,7 @@ class CompletedWorkoutTruthTests(unittest.TestCase):
 <div><span class="today-outcome-label">Genomfört</span><strong>2 × 6 × 150 m</strong></div>
 <div class="today-outcome-evidence"><div>Passet uppfyller dagens ordinerade reducerade dos.</div></div>
 </section>
-<div class="day past-completed today-completed" id="dag-2026-09-04"><div class="daytop"><div></div><div class="badge fixed">Genomfört</div></div></div>
+<div class="day past-completed today-completed completed-day" id="dag-2026-09-04"><div class="daytop"><div></div><div class="badge fixed">Genomfört</div></div></div>
 <footer></footer></body></html>'''
 
         rendered, context = replace_current_post_workout_card(
