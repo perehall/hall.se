@@ -445,18 +445,32 @@ body.quiet-performance footer{color:var(--qp-tertiary)}
 }
 /* quiet-performance-v1:end */
 /* quiet-performance-v2:start */
-/* Current page has one strong operational surface; everything else recedes. */
+/* Current decision is an editorial section, not another card. */
 body.quiet-performance.qp-current .wrap{max-width:700px!important}
 body.quiet-performance.qp-current header{padding-bottom:14px}
-body.quiet-performance.qp-current .training-brain{margin:2px 0 22px}
-body.quiet-performance.qp-current .brain-today{
-  padding:18px 18px 16px;
-  background:#FFFFFF;
-  border-color:#DEE1DD;
-  border-radius:12px;
-  box-shadow:inset 2px 0 0 var(--qp-accent);
+body.quiet-performance.qp-current .training-brain{
+  margin:2px 0 24px;
+  padding:0 0 22px;
+  border-bottom:1px solid var(--qp-line);
 }
-body.quiet-performance.qp-current .brain-topline{margin-bottom:10px}
+body.quiet-performance.qp-current .brain-today{
+  padding:0;
+  background:transparent;
+  border:0;
+  border-radius:0;
+  box-shadow:none;
+}
+body.quiet-performance.qp-current .brain-topline{
+  position:sticky;
+  top:0;
+  z-index:24;
+  margin:0 0 10px;
+  padding:7px 0 8px;
+  border-bottom:1px solid var(--qp-line-soft);
+  background:rgba(246,247,245,.94);
+  -webkit-backdrop-filter:blur(10px);
+  backdrop-filter:blur(10px);
+}
 body.quiet-performance.qp-current .brain-kicker{
   color:var(--qp-tertiary);
   font-size:.69rem;
@@ -464,8 +478,47 @@ body.quiet-performance.qp-current .brain-kicker{
   letter-spacing:.075em;
   text-transform:uppercase;
 }
+body.quiet-performance.qp-current .brain-status{
+  padding:0;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  color:var(--qp-tertiary);
+  font-size:.66rem;
+  font-weight:600;
+}
 body.quiet-performance.qp-current .brain-headline{font-size:1.22rem;font-weight:650}
 body.quiet-performance.qp-current .brain-subline{margin-top:4px;font-size:.82rem}
+body.quiet-performance.qp-current .brain-weather,
+body.quiet-performance.qp-current .brain-extra{
+  margin:12px 0 0;
+  padding:9px 0 0 12px;
+  border:0;
+  border-left:1px solid var(--qp-line);
+  border-radius:0;
+  background:transparent;
+}
+body.quiet-performance.qp-current .brain-weather-label,
+body.quiet-performance.qp-current .brain-extra-label{
+  margin-bottom:3px;
+  color:var(--qp-tertiary);
+  font-size:.67rem;
+  font-weight:650;
+  letter-spacing:.055em;
+  text-transform:uppercase;
+}
+body.quiet-performance.qp-current .brain-weather strong,
+body.quiet-performance.qp-current .brain-extra strong{
+  color:var(--qp-text);
+  font-size:.86rem;
+  font-weight:600;
+}
+body.quiet-performance.qp-current .brain-weather-note,
+body.quiet-performance.qp-current .brain-extra-note{
+  margin-top:3px;
+  color:var(--qp-secondary);
+  font-size:.77rem;
+}
 body.quiet-performance.qp-current .brain-next{
   display:grid;
   grid-template-columns:88px minmax(0,1fr);
@@ -602,7 +655,7 @@ body.quiet-performance.qp-history .day.workout-card-v2.past-completed{
 }
 
 @media(max-width:620px){
-  body.quiet-performance.qp-current .brain-today{padding:16px 15px 14px}
+  body.quiet-performance.qp-current .brain-topline{padding:6px 0 7px}
   body.quiet-performance.qp-current .brain-next{grid-template-columns:72px minmax(0,1fr);column-gap:9px}
   body.quiet-performance.qp-current .metrics{justify-content:space-between}
   body.quiet-performance.qp-current .metric{padding:0 9px;gap:4px}
