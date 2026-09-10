@@ -10,6 +10,7 @@ from render_training_site import PIPELINE, REPO_ROOT, run_pipeline  # noqa: E402
 
 
 EXPECTED_PIPELINE = (
+    "apply_plan_overrides.py",
     "enforce_coach_output_contract.py",
     "normalize_coach_language.py",
     "build.py",
@@ -23,6 +24,7 @@ EXPECTED_PIPELINE = (
     "finalize_header_ui.py",
     "finalize_navigation_ui.py",
     "finalize_training_brain_ui.py",
+    "finalize_relative_next_ui.py",
     "finalize_progression_ui.py",
     "finalize_sport_icons.py",
     "finalize_day_session_icons.py",
@@ -55,12 +57,14 @@ class RenderPipelineTests(unittest.TestCase):
         self.assertEqual(PIPELINE, EXPECTED_PIPELINE)
         self.assertEqual(len(PIPELINE), len(set(PIPELINE)))
         self.assertEqual(PIPELINE[-2:], ("validate_site_contracts.py", "validate_training_data.py"))
+        self.assertLess(PIPELINE.index("apply_plan_overrides.py"), PIPELINE.index("enforce_coach_output_contract.py"))
         self.assertLess(PIPELINE.index("enforce_coach_output_contract.py"), PIPELINE.index("normalize_coach_language.py"))
         self.assertLess(PIPELINE.index("normalize_coach_language.py"), PIPELINE.index("build.py"))
         self.assertLess(PIPELINE.index("archive_weeks.py"), PIPELINE.index("finalize_week_review_ui.py"))
         self.assertLess(PIPELINE.index("finalize_week_review_ui.py"), PIPELINE.index("check_week_review_ui.py"))
         self.assertLess(PIPELINE.index("finalize_navigation_ui.py"), PIPELINE.index("finalize_training_brain_ui.py"))
-        self.assertLess(PIPELINE.index("finalize_training_brain_ui.py"), PIPELINE.index("finalize_progression_ui.py"))
+        self.assertLess(PIPELINE.index("finalize_training_brain_ui.py"), PIPELINE.index("finalize_relative_next_ui.py"))
+        self.assertLess(PIPELINE.index("finalize_relative_next_ui.py"), PIPELINE.index("finalize_progression_ui.py"))
         self.assertLess(PIPELINE.index("finalize_workout_history.py"), PIPELINE.index("finalize_signal_ui.py"))
         self.assertLess(PIPELINE.index("finalize_signal_ui.py"), PIPELINE.index("finalize_device_sync_ui.py"))
         self.assertLess(PIPELINE.index("finalize_device_sync_ui.py"), PIPELINE.index("finalize_historical_coach_ui.py"))
