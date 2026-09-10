@@ -45,6 +45,7 @@ PIPELINE = (
     "publish_goal_cache_bypass.py",
     "finalize_generated_whitespace.py",
     "finalize_week_shell_ui.py",
+    "finalize_quiet_performance_ui.py",
     "check_week_reviews.py",
     "check_week_review_ui.py",
     "validate_site_contracts.py",
