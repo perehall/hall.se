@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import json
 import os
+import time
+import urllib.error
 import urllib.parse
 import urllib.request
 from datetime import datetime, timedelta, timezone
@@ -12,6 +14,8 @@ DEFAULT_TOKEN_FILE = Path("/tmp/strava_refresh_token")
 TOKEN_URL = "https://www.strava.com/oauth/token"
 ACTIVITIES_URL = "https://www.strava.com/api/v3/athlete/activities"
 ACTIVITY_URL = "https://www.strava.com/api/v3/activities"
+RETRYABLE_HTTP_CODES = {429, 500, 502, 503, 504}
+GET_RETRY_DELAYS_S = (1, 3, 8)
 
 
 def post_form(url, payload):
@@ -21,10 +25,22 @@ def post_form(url, payload):
         return json.load(response)
 
 
-def get_json(url, token):
+def get_json(url, token, *, sleeper=time.sleep):
     req = urllib.request.Request(url, headers={"Authorization": f"Bearer {token}"})
-    with urllib.request.urlopen(req, timeout=30) as response:
-        return json.load(response)
+    for attempt in range(len(GET_RETRY_DELAYS_S) + 1):
+        try:
+            with urllib.request.urlopen(req, timeout=30) as response:
+                return json.load(response)
+        except urllib.error.HTTPError as exc:
+            if exc.code not in RETRYABLE_HTTP_CODES or attempt >= len(GET_RETRY_DELAYS_S):
+                raise
+            delay = GET_RETRY_DELAYS_S[attempt]
+            print(
+                f"Strava HTTP {exc.code}; transient API failure, retrying in {delay}s "
+                f"({attempt + 1}/{len(GET_RETRY_DELAYS_S)})."
+            )
+            sleeper(delay)
+    raise RuntimeError("Strava: unreachable retry state")
 
 
 def write_refresh_token(path, token):

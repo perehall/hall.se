@@ -6,6 +6,7 @@ import sys
 import tempfile
 import unittest
 from datetime import datetime, timezone
+from io import BytesIO
 from pathlib import Path
 from unittest.mock import patch
 
@@ -74,6 +75,27 @@ class StravaSyncTests(unittest.TestCase):
         }
         laps = sync_strava.lap_summaries(detail)
         self.assertEqual([lap["lap_index"] for lap in laps], [1, 2])
+
+    def test_get_json_retries_transient_http_error(self):
+        url = "https://www.strava.com/api/v3/athlete/activities"
+        transient = sync_strava.urllib.error.HTTPError(
+            url,
+            503,
+            "Service Temporarily Unavailable",
+            hdrs=None,
+            fp=None,
+        )
+        sleeps = []
+        with patch.object(
+            sync_strava.urllib.request,
+            "urlopen",
+            side_effect=[transient, BytesIO(b'{"ok": true}')],
+        ) as urlopen:
+            result = sync_strava.get_json(url, "access-token", sleeper=sleeps.append)
+
+        self.assertEqual(result, {"ok": True})
+        self.assertEqual(sleeps, [1])
+        self.assertEqual(urlopen.call_count, 2)
 
     def test_mismatched_detail_id_fails_closed(self):
         detail = self.detail(activity_id=999)
