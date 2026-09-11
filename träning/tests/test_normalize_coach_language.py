@@ -116,6 +116,16 @@ class NormalizeCoachLanguageTests(unittest.TestCase):
         )
         self.assertNotIn("_", normalized)
 
+    def test_rolling_load_alias_is_humanized(self):
+        normalized = visible_training_language(
+            "rolling_load visar att närbelastningen redan innehåller kvalitet."
+        )
+        self.assertEqual(
+            normalized,
+            "närbelastningen visar att närbelastningen redan innehåller kvalitet.",
+        )
+        self.assertNotIn("rolling_load", normalized)
+
     def test_provider_activity_type_in_fact_is_humanized(self):
         normalized = visible_training_language(
             "WeightTraining: 27:39 · snittpuls 75,7 · maxpuls 112."
