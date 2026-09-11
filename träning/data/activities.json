@@ -1,5 +1,5 @@
 {
-  "last_sync_utc": "2026-09-11T20:12:11.569590+00:00",
+  "last_sync_utc": "2026-09-11T20:16:25.891270+00:00",
   "activities": [
     {
       "id": 20133500464,
@@ -662,9 +662,9 @@
         "contract_version": 3,
         "activity_id": 20133500464,
         "sport_type": "Run",
-        "display_label": "Run",
-        "classification": null,
-        "user_report": "",
+        "display_label": "Löpning · backintervaller",
+        "classification": "training",
+        "user_report": "3 × 7 backintervaller (21 backar totalt). Tre serier om sju intervaller; arbetsdelarna ska beskrivas som intervaller.",
         "total": {
           "distance_m": 13667.0,
           "distance_km": 13.667,
@@ -740,7 +740,12 @@
         "swim": null,
         "enduro": null,
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
-      }
+      },
+      "source_sport_type": "Run",
+      "classification": "training",
+      "display_label": "Löpning · backintervaller",
+      "user_report": "3 × 7 backintervaller (21 backar totalt). Tre serier om sju intervaller; arbetsdelarna ska beskrivas som intervaller.",
+      "classification_reason": "Explicit användarrapport korrigerar dagens faktiska intervallstruktur till 3 × 7. Garmin/Strava-varv och den planerade 3 × 6-dosen får inte överskriva användarens rapporterade genomförande."
     },
     {
       "id": 20120769386,
@@ -4533,15 +4538,15 @@
       "source_sport_type": "Run",
       "classification": "training",
       "display_label": "Löpning · backintervaller",
-      "user_report": "3 × 7 backintervaller (21 backar totalt). Tre serier om sju intervaller; arbetsdelarna ska beskrivas som intervaller.",
-      "classification_reason": "Explicit användarrapport korrigerar passets faktiska intervallstruktur. Garmin/Strava-varv får inte överskriva användarens rapporterade 3 × 7-struktur.",
+      "user_report": "3 × 6 backintervaller (18 backar totalt). Tre serier om sex intervaller; arbetsdelarna ska beskrivas som intervaller.",
+      "classification_reason": "Explicit användarrapport korrigerar passets faktiska intervallstruktur. Garmin/Strava-varv får inte överskriva användarens rapporterade 3 × 6-struktur.",
       "workout_analysis_context": {
         "contract_version": 3,
         "activity_id": 20036445971,
         "sport_type": "Run",
         "display_label": "Löpning · backintervaller",
         "classification": "training",
-        "user_report": "3 × 7 backintervaller (21 backar totalt). Tre serier om sju intervaller; arbetsdelarna ska beskrivas som intervaller.",
+        "user_report": "3 × 6 backintervaller (18 backar totalt). Tre serier om sex intervaller; arbetsdelarna ska beskrivas som intervaller.",
         "total": {
           "distance_m": 12681.6,
           "distance_km": 12.682,
@@ -6672,7 +6677,7 @@
     "schema_version": 1,
     "workout_analysis_contract_version": 3,
     "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
-    "overrides_applied": 9,
+    "overrides_applied": 10,
     "auto_rules_applied": 9,
     "override_ids_present": [
       "19852599244",
@@ -6683,10 +6688,12 @@
       "20036445971",
       "20057585521",
       "20092166843",
-      "20120769386"
+      "20120769386",
+      "20133500464"
     ],
     "changed_ids": [
-      "20036445971"
+      "20036445971",
+      "20133500464"
     ]
   },
   "schema_version": 2,

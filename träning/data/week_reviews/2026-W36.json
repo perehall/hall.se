@@ -4,8 +4,8 @@
   "week_key": "2026-W36",
   "week_start": "2026-08-31",
   "week_end": "2026-09-06",
-  "source_hash": "7129ba30d01de6584c18720d5c79791383d91372476664af88c88c823deaa5df",
-  "generated_at_utc": "2026-09-11T20:12:43.772555+00:00",
+  "source_hash": "f77cdb5116b09927f28f8fd8a0a3c866a047046acf7cc6f7caaa3c79ee511183",
+  "generated_at_utc": "2026-09-11T20:16:57.686276+00:00",
   "model": "gpt-5-mini",
   "facts": {
     "week_key": "2026-W36",
@@ -132,7 +132,7 @@
         "total_elevation_gain_m": 243.0,
         "average_heartrate": 142.4,
         "max_heartrate": 167.0,
-        "user_report": "3 × 7 backintervaller (21 backar totalt). Tre serier om sju intervaller; arbetsdelarna ska beskrivas som intervaller.",
+        "user_report": "3 × 6 backintervaller (18 backar totalt). Tre serier om sex intervaller; arbetsdelarna ska beskrivas som intervaller.",
         "source_sport_type": "Run",
         "garmin_activity_type": null
       },
@@ -333,26 +333,26 @@
     }
   },
   "assessment": {
-    "summary": "Veckan genomfördes i enlighet med planen med alla sju träningspass utförda; fokus låg på prioriterade löpkvaliteter kompletterade av MTB, simning och enduro.",
+    "summary": "Full träningsvecka med alla planerade sessioner genomförda; löpkvaliteter och distans löpning genomförda som prioriterat, MTB och simning genomförda i stödjande roller.",
     "worked": [
-      "Samtliga planerade träningspass genomfördes (6 matchande + 1 different_activity).",
-      "Tisdagens kontrollerade tröskelintervaller avslutades starkt och användaren rapporterar kapacitet för ytterligare en intervall.",
-      "Fredagens backserier genomfördes enligt modifierad plan (2×6×150 m) som avsedd belastningsstyrning.",
-      "Söndagens distanspass kändes starkt och kontrollerat med lyckad tempoökning kring km 20–21 utan negativa efterverkningar."
+      "Prioriterade löppass levererade: tröskel 3×8 min genomförd med möjlighet till ytterligare upprepning enligt användarrapport.",
+      "Backkvalitet genomförd enligt modifierad plan (2×6×150 m) och passet dokumenterat som arbetsintervaller.",
+      "Lång distanslöpning på söndagen genomförd kontrollerat; användaren rapporterar stark känsla och lyckad tempoökning mot slutet.",
+      "MTB- och simexponering genomförd och hölls i stödjande/teknisk roll snarare än att konkurrera med löpprioritet."
     ],
     "not_as_planned": [
-      "Lördagens planerade kombination simning+styrka registrerades endast som ren simning (3 200 m), styrkedelen saknas i faktalagret.",
-      "MTB-passet kortades enligt planens coach_adjustment men utfördes som MountainBikeRide med längre varaktighet än standard 45 min (actual elapsed_time 7883 s).",
-      "Enduro var planerat som skolpass och registrerades korrekt, men dess mekaniska/ackumulerade belastning används endast som kontrollpunkt enligt kontext.",
-      "Ingen aktivitet klassificerades som recreation; alla registrerade aktiviteter är training, vilket bekräftar belastningsmängden utan vilodagar."
+      "Lördagens plan innehöll både sim + styrka; endast simning (3 200 m) registrerades och styrkedelen saknas i faktalagret.",
+      "MTB-passet hade coachjustering att skalas ned till 45 min; faktiskt MTB-aktivitet var längre i tid än planens skalning (registrerat 7 883 s).",
+      "Onsdagens plan gav alternativet Jogersö (swimrun) och det valdes istället för ren simning — detta räknas som träning men har annan mekanisk kostnad.",
+      "Ingen planerad styrke-/core-session finns dokumenterad i aktivitetslistan."
     ],
-    "load_continuity": "Veckan visar en kontinuerlig och uttalad träningsexponering varje dag med kumulativ belastning för löpning i flera prioriterade kvaliteter, kompletterad av cykel och simning som stöd; belastningen framstår som planmässigt ackumulerad över mikrocykeln.",
-    "key_lesson": "Planens anpassningar (kortare backserier och reducerad styrka) användes konsekvent för att styra nära belastning utan att äventyra prioriterade löpkvaliteter.",
-    "next_week_implication": "Bevara tydlig prioritering av löpkvaliteter och använd faktiska närbelastningsindikatorer (utförda pass och användarrapporter) för att besluta om progression eller fortsatt konservativ belastningsstyrning nästa vecka.",
+    "load_continuity": "Veckan visar kontinuerlig daglig belastning med prioriterade löppass spridda och kompletterande MTB/sim utan vilodagar; närbelastningen är ackumulerad men distribuerad över olika modaliteter.",
+    "key_lesson": "Prioriterade löpstimuli hölls intakta genom veckan trots kompletterande MTB/sim, men planerad styrkekomponent uteblev i registreringen.",
+    "next_week_implication": "Behåll prioriteringsordningen (löpkvalitet + distans) och säkerställ att planerad styrka faktiskt genomförs eller dokumenteras för att upprätthålla mekanisk och neuromuskulär stimulans.",
     "uncertainties": [
-      "Ingen registrering av styrkepasset på lördag — påverkar bedömningen av total muskelstödande belastning.",
-      "Detaljer kring intensitet/zonspecifika data för vissa pass saknas (t.ex. exakt arbetsbelastning på MTB/Enduro) vilket begränsar preciserad tolkning.",
-      "Subjektiva återhämtningsdata (sömn, dagsform utöver två användarrapporter) saknas och begränsar bedömning av återhämtningsstatus."
+      "Ingen registrering av styrkedel som fanns i plan — påverkar bedömning av total mekanisk belastning.",
+      "Ingen användarrapport för MTB, swimrun eller simpass vilket begränsar tolkning av subjektiv ansträngning och återhämtning.",
+      "Detaljer om intensitet eller innehåll för MTB och sim (t.ex. teknisk vs. kraft) saknas bortom källans korta kontext."
     ]
   }
 }
