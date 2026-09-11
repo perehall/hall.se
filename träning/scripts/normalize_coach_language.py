@@ -48,6 +48,10 @@ INTERNAL_FIELD_LABELS = {
 
 SYSTEM_LANGUAGE_RULES = (
     (
+        re.compile(r"\bnear_term(?:_[a-z0-9]+)*\b", re.IGNORECASE),
+        "närtidsplaneringen",
+    ),
+    (
         re.compile(
             r"Passet\s+räknas\s+som\s+faktisk\s+träningsbelastning\s+mot\s+"
             r"mikrocykelns\s+stimuli\s+för\s+Enduroteknik\s+och\s+påverkar\s+"
