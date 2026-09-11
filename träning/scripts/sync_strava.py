@@ -46,7 +46,9 @@ def lap_summaries(detail):
             continue
         result.append(
             {
-                "lap_index": lap.get("lap_index") or index,
+                # Internal lap identity must be stable and unique. Provider lap_index
+                # may be missing, zero-based or otherwise unsuitable as a key.
+                "lap_index": index,
                 "name": lap.get("name"),
                 "elapsed_time_s": lap.get("elapsed_time"),
                 "moving_time_s": lap.get("moving_time"),
