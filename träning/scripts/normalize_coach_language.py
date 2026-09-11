@@ -37,6 +37,7 @@ INTERNAL_FIELD_LABELS = {
     "auto_coach": "coachen",
     "plan_comparison": "jämförelsen med planen",
     "rolling_load_context": "närbelastningen",
+    "rolling_load": "närbelastningen",
     "performance_context": "passjämförelsen",
     "current_strategy": "träningsstrategin",
     "private_wellness_context": "återhämtningsunderlaget",
