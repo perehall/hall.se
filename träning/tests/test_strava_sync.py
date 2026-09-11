@@ -65,6 +65,16 @@ class StravaSyncTests(unittest.TestCase):
         self.assertEqual(mapped["laps"][0]["moving_time_s"], 480)
         self.assertEqual(mapped["laps"][0]["average_heartrate"], 150.0)
 
+    def test_lap_indices_are_unique_even_if_provider_indices_are_zero_based(self):
+        detail = {
+            "laps": [
+                {"lap_index": 0, "moving_time": 480, "distance": 1600.0},
+                {"lap_index": 1, "moving_time": 480, "distance": 1700.0},
+            ]
+        }
+        laps = sync_strava.lap_summaries(detail)
+        self.assertEqual([lap["lap_index"] for lap in laps], [1, 2])
+
     def test_mismatched_detail_id_fails_closed(self):
         detail = self.detail(activity_id=999)
         with self.assertRaises(RuntimeError):
