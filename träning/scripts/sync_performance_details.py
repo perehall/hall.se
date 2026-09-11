@@ -371,8 +371,18 @@ def candidates(state, oldest):
 
 def interval_shape(detail):
     rows = detail.get("icu_intervals") if isinstance(detail, dict) else None
+    laps = detail.get("laps") if isinstance(detail, dict) else None
+    list_fields = sorted(
+        key for key, value in (detail.items() if isinstance(detail, dict) else [])
+        if isinstance(value, list)
+    )
+    base = {
+        "lap_count": len(laps) if isinstance(laps, list) else 0,
+        "laps_present": isinstance(laps, list),
+        "list_fields": list_fields,
+    }
     if not isinstance(rows, list):
-        return {"present": False, "count": 0, "types": {}, "duration_bands": {}}
+        return {**base, "present": False, "count": 0, "types": {}, "duration_bands": {}}
     types = {}
     bands = {"lt_5m": 0, "5_7m": 0, "7_9m": 0, "9_11m": 0, "gt_11m": 0, "unknown": 0}
     for row in rows:
@@ -393,7 +403,7 @@ def interval_shape(detail):
             bands["9_11m"] += 1
         else:
             bands["gt_11m"] += 1
-    return {"present": True, "count": len(rows), "types": types, "duration_bands": bands}
+    return {**base, "present": True, "count": len(rows), "types": types, "duration_bands": bands}
 
 
 def merge_counts(target, source):
@@ -422,6 +432,8 @@ def sync(state, history, intervals_rows, fetch_detail, oldest, diagnostics=None)
     })
     diag.setdefault("interval_types", {})
     diag.setdefault("duration_bands", {})
+    diag.setdefault("detail_list_fields", {})
+    diag.setdefault("lap_count_bands", {"0": 0, "1_5": 0, "6_15": 0, "gt_15": 0})
 
     for activity in candidates(state, oldest):
         diag["candidate_runs"] += 1
@@ -443,6 +455,17 @@ def sync(state, history, intervals_rows, fetch_detail, oldest, diagnostics=None)
                     diag["detail_with_icu_intervals"] += 1
                     merge_counts(diag["interval_types"], shape["types"])
                     merge_counts(diag["duration_bands"], shape["duration_bands"])
+                for field in shape.get("list_fields") or []:
+                    diag["detail_list_fields"][field] = diag["detail_list_fields"].get(field, 0) + 1
+                lap_count = int(shape.get("lap_count") or 0)
+                if lap_count == 0:
+                    diag["lap_count_bands"]["0"] += 1
+                elif lap_count <= 5:
+                    diag["lap_count_bands"]["1_5"] += 1
+                elif lap_count <= 15:
+                    diag["lap_count_bands"]["6_15"] += 1
+                else:
+                    diag["lap_count_bands"]["gt_15"] += 1
                 detected = infer_threshold_protocol(activity, detail)
                 if detected:
                     diag["detected_from_intervals"] += 1
