@@ -126,6 +126,16 @@ class NormalizeCoachLanguageTests(unittest.TestCase):
         )
         self.assertNotIn("rolling_load", normalized)
 
+    def test_near_term_identifier_family_is_humanized(self):
+        normalized = visible_training_language(
+            "Planen kommer från near_term_ai_revision; near_term styr valet."
+        )
+        self.assertEqual(
+            normalized,
+            "Planen kommer från närtidsplaneringen; närtidsplaneringen styr valet.",
+        )
+        self.assertNotIn("near_term", normalized)
+
     def test_provider_activity_type_in_fact_is_humanized(self):
         normalized = visible_training_language(
             "WeightTraining: 27:39 · snittpuls 75,7 · maxpuls 112."
