@@ -191,7 +191,7 @@ class WeeklyRolloverTests(unittest.TestCase):
             1: ("run-threshold-3x8", "3 × 8 min"),
             2: ("swim-support-3200", "3 200 m"),
             3: ("mtb-support-60", "60 min"),
-            4: ("run-hill-3x6x150", "3 × 6 × 150 m"),
+            4: ("run-hill-3x8x150", "3 × 8 × 150 m"),
             5: ("strength-support-35", "35 min"),
             6: ("run-easy-75", "75 min"),
         }
