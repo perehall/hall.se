@@ -4,7 +4,7 @@
   "week_start": "2026-09-07",
   "week_end": "2026-09-13",
   "created_at_utc": "2026-09-06T22:19:36.896236+00:00",
-  "updated_at_utc": "2026-09-12T15:42:15.353029+00:00",
+  "updated_at_utc": "2026-09-12T20:32:48.639935+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -1049,7 +1049,7 @@
       {
         "date": "2026-09-13",
         "label": "Söndag",
-        "status": "preliminary",
+        "status": "conditional",
         "session": "Löpning · lugn distans · 75 min",
         "reason": "Mesocykelns tredje löpstimulus bygger tålighet och kontinuitet utan att bli ytterligare kvalitet. 75 minuter lugnt är grundplan; passet kortas, flyttas eller tas bort om föregående belastning motiverar det.",
         "development_focus": "Avslappnad rytm och jämn ansträngning.",
@@ -1237,10 +1237,17 @@
           "transport": "intervals_icu",
           "source_hash": "2d2c41bd986a3a4bae6608a871a354dd35d75540bd3bf21e7e20703c1f11b0f7",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-12T15:42:14.057342+00:00",
+          "updated_at_utc": "2026-09-12T20:32:47.319303+00:00",
           "provider_event_id": 134978150,
-          "verified_at_utc": "2026-09-12T15:42:14.057342+00:00"
-        }
+          "verified_at_utc": "2026-09-12T20:32:47.319303+00:00"
+        },
+        "original_session": "Löpning · lugn distans · 75 min",
+        "auto_coach": {
+          "action": "reduce",
+          "reason": "Fyra timmars enduro räknas som faktisk belastning och minskar marginalen inför planerad 75 min lugn löpning.",
+          "applied_at_utc": "2026-09-12T20:32:46.623698+00:00"
+        },
+        "coach_adjustment": "Passet är nedjusterat. Följ passupplägget ovan."
       }
     ],
     "strength_template": [
@@ -3563,7 +3570,7 @@
       "activity_id": 20144331562,
       "activity_date": "2026-09-12",
       "activity_name": "Träningspass på morgonen",
-      "generated_at_utc": "2026-09-12T15:42:13.379583+00:00",
+      "generated_at_utc": "2026-09-12T20:32:46.625567+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 2,
@@ -3583,25 +3590,25 @@
           "Planstatus 2026-09-12: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Passet uppfyller det fasta externa åtagandet och ersätter lördagens simning+styrka enligt planen.",
-          "Den mekaniska/neuromuskulära belastningen minskar marginalen för morgondagens planerade 75 min lugn löpning och bör värderas innan exekvering."
+          "Fyra timmar enduro räknas som faktisk extern belastning och ersätter lördagens simning+styrka i mikrocykeln; skyddad styrka/core måste återinsättas i nästa absorberbara fönster",
+          "Påverkan är främst mekanisk/neuromuskulär och kan motivera att söndagens löpning (2026-09-13) kortas eller hålls konservativ beroende på subjektiv återhämtning"
         ],
         "unknowns": [
-          "Subjektiv återhämtning i timmar efter passet (ingen användarrapport)",
-          "Eventuella lokala muskel-/ledsmärtor eller sömnkvalitet under natten som påverkar nästa dag"
+          "Ingen subjektiv användarrapport om trötthet/smärta efter enduron",
+          "Detaljer om eventuell skada eller mekanisk lokal trötthet saknas"
         ]
       },
       "plan_action": {
-        "action": "review",
+        "action": "reduce",
         "target_date": "2026-09-13",
-        "reason": "Externt fyra timmars enduro ersätter simning+styrka och kan kräva justering av morgondagens lugna löpning.",
-        "recommendation": "Bedöm hur du känner dig imorgon morgon; om stel/trött eller ofräsch: ersätt 75 min löpning med vila eller mycket lugn gång/30–45 min lätt cykel. Om du känner dig fräsch: genomför planerad 75 min lugn löpning som plan.",
+        "reason": "Fyra timmars enduro räknas som faktisk belastning och minskar marginalen inför planerad 75 min lugn löpning.",
+        "recommendation": "Följ det justerade passupplägget i planen.",
         "dose_option_id": "",
         "requires_approval": false
       },
       "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
+        "applied": true,
+        "note": "Konservativ ändring applicerad på 2026-09-13: reduce."
       }
     },
     {
@@ -3666,7 +3673,7 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "71,8 min MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC visade längre varaktighet men lägre intensiv karaktär enligt användarrapport och data; passet ökade inte tydligt…",
+        "summary": "71,8 min MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC visade längre varaktighet men lägre intensiv karaktär enligt användarrapport och data; passet ökade inte tydligt…",
         "load_interpretation": "Varaktighet över godkänd range (+11,8 min) men användarrapport anger lugnare tempo, så närbelastningsmarginalen mot fredag minskar måttligt.",
         "confidence": "medium",
         "facts": [
@@ -3687,7 +3694,7 @@
       "plan_action": {
         "action": "keep",
         "target_date": "2026-09-11",
-        "reason": "Systemet har redan konservativt reducerat fredagens backpass baserat på MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC‑passets ökade duration och användarrapport.",
+        "reason": "Systemet har redan konservativt reducerat fredagens backpass baserat på MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC‑passets ökade duration och användarrapport.",
         "recommendation": "Följ den redan applicerade reducerade ordinationen för 2026-09-11 (3×6×150). Om du känner dig ovanligt trött eller stel imorgon, avboka och meddela coach för review.",
         "dose_option_id": "",
         "requires_approval": false
@@ -3733,7 +3740,7 @@
         "action": "keep",
         "target_date": "2026-09-10",
         "reason": "Simpasset var underhåll/teknikorienterat och visar inga tecken som kräver kortsiktig nedskalning av planerad MTB-stöddos.",
-        "recommendation": "Behåll planerad MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC 60 min (MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC · 60 min · teknik + lugn aerob stig). Om du kände dig ovanligt trött…",
+        "recommendation": "Behåll planerad MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC 60 min (MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC · 60 min · teknik + lugn aerob stig). Om du kände dig ovanligt…",
         "dose_option_id": "",
         "requires_approval": false
       },

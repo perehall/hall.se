@@ -1042,7 +1042,7 @@
     {
       "date": "2026-09-13",
       "label": "Söndag",
-      "status": "preliminary",
+      "status": "conditional",
       "session": "Löpning · lugn distans · 75 min",
       "reason": "Mesocykelns tredje löpstimulus bygger tålighet och kontinuitet utan att bli ytterligare kvalitet. 75 minuter lugnt är grundplan; passet kortas, flyttas eller tas bort om föregående belastning motiverar det.",
       "development_focus": "Avslappnad rytm och jämn ansträngning.",
@@ -1230,10 +1230,17 @@
         "transport": "intervals_icu",
         "source_hash": "2d2c41bd986a3a4bae6608a871a354dd35d75540bd3bf21e7e20703c1f11b0f7",
         "device_delivery": "unverified",
-        "updated_at_utc": "2026-09-12T15:42:14.057342+00:00",
+        "updated_at_utc": "2026-09-12T20:32:47.319303+00:00",
         "provider_event_id": 134978150,
-        "verified_at_utc": "2026-09-12T15:42:14.057342+00:00"
-      }
+        "verified_at_utc": "2026-09-12T20:32:47.319303+00:00"
+      },
+      "original_session": "Löpning · lugn distans · 75 min",
+      "auto_coach": {
+        "action": "reduce",
+        "reason": "Fyra timmars enduro räknas som faktisk belastning och minskar marginalen inför planerad 75 min lugn löpning.",
+        "applied_at_utc": "2026-09-12T20:32:46.623698+00:00"
+      },
+      "coach_adjustment": "Passet är nedjusterat. Följ passupplägget ovan."
     }
   ],
   "strength_template": [
