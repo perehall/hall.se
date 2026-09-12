@@ -46,13 +46,27 @@ jobs:
       contents: write
       actions: write
     steps:
-      - name: Checkout
+      # repository_dispatch freezes github.sha when the webhook event is created.
+      # A queued writer must instead start from main as it exists when the writer
+      # actually gets the serialized training-pages slot.
+      - name: Checkout current main
         uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
 
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
+      - name: Pin writable base to latest main
+        id: training_base
+        run: |
+          git fetch origin main --depth=1
+          git checkout -B main origin/main
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          echo "Training writer base: $(git rev-parse --short HEAD)"
 
       - name: Backup current live page once
         run: |
@@ -114,8 +128,19 @@ jobs:
             git config user.email "actions@users.noreply.github.com"
             git add -- "${TRACKED[@]}"
             git commit -m "Auto-update training page and AI coach"
-            git pull --rebase --autostash origin main
-            git push origin main
+
+            # Generated JSON/HTML files are complete snapshots. They must never be
+            # rebased/merged with a newer generated snapshot. The shared concurrency
+            # group should keep this stable; this guard fails closed if another writer
+            # nevertheless moves main while the pipeline is running.
+            BASE_SHA="${{ steps.training_base.outputs.sha }}"
+            REMOTE_SHA="$(git ls-remote origin refs/heads/main | awk '{print $1}')"
+            if [ "$REMOTE_SHA" != "$BASE_SHA" ]; then
+              echo "::error::main moved from $BASE_SHA to $REMOTE_SHA while the training pipeline was running. Refusing to rebase generated training snapshots; rerun the full pipeline from current main."
+              exit 1
+            fi
+
+            git push origin HEAD:main
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 
