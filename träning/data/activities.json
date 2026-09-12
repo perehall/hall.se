@@ -1,6 +1,61 @@
 {
-  "last_sync_utc": "2026-09-12T10:44:25.091914+00:00",
+  "last_sync_utc": "2026-09-12T13:53:49.695474+00:00",
   "activities": [
+    {
+      "id": 20144331562,
+      "name": "Träningspass på morgonen",
+      "sport_type": "Workout",
+      "start_date": "2026-09-12T08:16:35Z",
+      "start_date_local": "2026-09-12T10:16:35Z",
+      "distance_m": 53920.4,
+      "moving_time_s": 8127,
+      "elapsed_time_s": 13578,
+      "total_elevation_gain_m": 1490.4,
+      "average_heartrate": 124.9,
+      "max_heartrate": 154.0,
+      "average_watts": null,
+      "weighted_average_watts": null,
+      "calories": 1216.0,
+      "device_name": "Garmin Forerunner 970",
+      "gear_id": null,
+      "gear_name": null,
+      "source": "Strava API",
+      "laps": [
+        {
+          "lap_index": 1,
+          "name": "Lap 0",
+          "elapsed_time_s": 10577,
+          "moving_time_s": 8127,
+          "distance_m": 53920.4,
+          "average_speed": 5.1,
+          "average_heartrate": 124.9,
+          "max_heartrate": 154.0,
+          "average_watts": null,
+          "average_cadence": null
+        }
+      ],
+      "workout_analysis_context": {
+        "contract_version": 3,
+        "activity_id": 20144331562,
+        "sport_type": "Workout",
+        "display_label": "Workout",
+        "classification": null,
+        "user_report": "",
+        "total": {
+          "distance_m": 53920.4,
+          "distance_km": 53.92,
+          "moving_time_s": 8127.0,
+          "elapsed_time_s": 13578.0,
+          "elevation_gain_m": 1490.4,
+          "average_heartrate": 124.9,
+          "max_heartrate": 154.0
+        },
+        "run": null,
+        "swim": null,
+        "enduro": null,
+        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+      }
+    },
     {
       "id": 20133500464,
       "name": "Löpning på kvällen",
@@ -6695,10 +6750,10 @@
   },
   "schema_version": 2,
   "last_webhook_event": {
-    "event_key": "368165:activity:20106458579:update:1788980425",
-    "object_id": 20106458579,
-    "aspect_type": "update",
-    "event_time": 1788980425,
-    "processed_at_utc": "2026-09-09T19:00:45.865649+00:00"
+    "event_key": "368165:activity:20144331562:create:1789221214",
+    "object_id": 20144331562,
+    "aspect_type": "create",
+    "event_time": 1789221214,
+    "processed_at_utc": "2026-09-12T13:53:49.695474+00:00"
   }
 }
