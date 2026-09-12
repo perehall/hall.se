@@ -4,7 +4,7 @@
   "week_start": "2026-09-07",
   "week_end": "2026-09-13",
   "created_at_utc": "2026-09-06T22:19:36.896236+00:00",
-  "updated_at_utc": "2026-09-11T23:15:52.271506+00:00",
+  "updated_at_utc": "2026-09-12T00:07:01.813440+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -1236,9 +1236,9 @@
           "transport": "intervals_icu",
           "source_hash": "2d2c41bd986a3a4bae6608a871a354dd35d75540bd3bf21e7e20703c1f11b0f7",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-11T23:15:51.035112+00:00",
+          "updated_at_utc": "2026-09-12T00:07:00.484675+00:00",
           "provider_event_id": 134978150,
-          "verified_at_utc": "2026-09-11T23:15:51.035112+00:00"
+          "verified_at_utc": "2026-09-12T00:07:00.484675+00:00"
         }
       }
     ],
@@ -3490,7 +3490,7 @@
       "activity_id": 20133500464,
       "activity_date": "2026-09-11",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-09-11T23:15:50.170440+00:00",
+      "generated_at_utc": "2026-09-12T00:06:59.765679+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 2,
@@ -3502,8 +3502,8 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört: 3 × 7 backintervaller (21 totalt).",
-        "load_interpretation": "Närbelastningen ökar mekanisk/neuromuskulärt för veckan; tidigare MTB- och enduropass måste vägas in innan nästa löpstimulus.",
+        "summary": "Genomfört: 3 × 7 backintervaller (21 totalt). Passet var ett genomfört anchor-stimulus men nedjusterat från planerat → av coachen innan genomförande",
+        "load_interpretation": "Närbelastningen de senaste 2–3 dagarna innehåller MTB/XC 17 km (10/9), Simning (9/9) och tidigare backpass; aktuell mikrocykel absorberas konservativt och kräver ingen…",
         "confidence": "medium",
         "facts": [
           "Löpning · backintervaller: 13,67 km · 1:11:40 · 264 m+ · snittpuls 144,3 · maxpuls 169.",
@@ -3511,19 +3511,19 @@
           "Planstatus 2026-09-11: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Genomfört pass visar att backkvalitet-stimulus levererades med 21 repetitioner vilket etablerar ett nytt volymgolv för backarbete.",
-          "Kombinationen av senaste MTB/XC/enduro och detta pass ökar veckans mekaniska belastning; bevara kommande prioriterade tröskelstimuli genom konservativ justering om nödvändigt."
+          "Passet bekräftar att du klarade hög repetitionsvolym i backar (21), vilket etablerar ett nytt volymgolv för backstimulus i mesocykeln.",
+          "Givet föregående MTB- och simpass samt automatisk coachnedjustering är fortsatt plan för kommande 2–3 dagar konservativ och kräver ingen ytterligare nedskalning just nu."
         ],
         "unknowns": [
-          "Subjektiv återhämtning efter dagens pass (om inte rapporterad)",
-          "Detaljerad lokal muskeltrötthet eller smärta som kan påverka nästa pass"
+          "Hur du känner dig subjektivt under de kommande 24–48 timmarna (samma-dags pigg/ömhet kan påverka söndagens distans).",
+          "Exakt teknisk kvalitet i sista repetitioner — användarrapport saknar detaljer om formtrötthet."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "",
-        "reason": "Backpasset genomfördes som 3 × 7 backintervaller (21 totalt), alltså över den planerade omfattningen före passet (18 arbetsintervaller).",
-        "recommendation": "Följ planerad mikrocykel oförändrad; observera återhämtning och rapportera trötthet eller lokal smärta innan nästa prioriterade löpdag.",
+        "reason": "Backpasset genomfördes som 3 × 7 backintervaller (21 totalt), alltså över den planerade omfattningen före passet (18 arbetsintervaller). Ingen omedelbar ändring behövs nu.",
+        "recommendation": "Fortsätt enligt mikrocykel: vila aktivt eller lätt återhämtning kväll/natt, håll söndagens 75 min lugn distans preliminär tills enduro-resultatet är inrapporterat.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -3548,7 +3548,7 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "71,8 min MTB/XC/XC/XC/XC/XC/XC/XC visade längre varaktighet men lägre intensiv karaktär enligt användarrapport och data; passet ökade inte tydligt närbelastningen mot fredagens…",
+        "summary": "71,8 min MTB/XC/XC/XC/XC/XC/XC/XC/XC visade längre varaktighet men lägre intensiv karaktär enligt användarrapport och data; passet ökade inte tydligt närbelastningen mot fredagens…",
         "load_interpretation": "Varaktighet över godkänd range (+11,8 min) men användarrapport anger lugnare tempo, så närbelastningsmarginalen mot fredag minskar måttligt.",
         "confidence": "medium",
         "facts": [
@@ -3569,7 +3569,7 @@
       "plan_action": {
         "action": "keep",
         "target_date": "2026-09-11",
-        "reason": "Systemet har redan konservativt reducerat fredagens backpass baserat på MTB/XC/XC/XC/XC/XC/XC‑passets ökade duration och användarrapport.",
+        "reason": "Systemet har redan konservativt reducerat fredagens backpass baserat på MTB/XC/XC/XC/XC/XC/XC/XC‑passets ökade duration och användarrapport.",
         "recommendation": "Följ den redan applicerade reducerade ordinationen för 2026-09-11 (3×6×150). Om du känner dig ovanligt trött eller stel imorgon, avboka och meddela coach för review.",
         "dose_option_id": "",
         "requires_approval": false
@@ -3615,7 +3615,7 @@
         "action": "keep",
         "target_date": "2026-09-10",
         "reason": "Simpasset var underhåll/teknikorienterat och visar inga tecken som kräver kortsiktig nedskalning av planerad MTB-stöddos.",
-        "recommendation": "Behåll planerad MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC 60 min (MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC · 60 min · teknik + lugn aerob stig). Om du kände dig ovanligt trött senare, meddela det innan beslut om ändring tas.",
+        "recommendation": "Behåll planerad MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC 60 min (MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC · 60 min · teknik + lugn aerob stig). Om du kände dig ovanligt trött senare, meddela det innan beslut om ändring…",
         "dose_option_id": "",
         "requires_approval": false
       },
