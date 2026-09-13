@@ -4,7 +4,7 @@
   "week_start": "2026-09-07",
   "week_end": "2026-09-13",
   "created_at_utc": "2026-09-06T22:19:36.896236+00:00",
-  "updated_at_utc": "2026-09-13T08:36:25.074766+00:00",
+  "updated_at_utc": "2026-09-13T09:44:30.013860+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -1237,15 +1237,15 @@
           "transport": "intervals_icu",
           "source_hash": "2d2c41bd986a3a4bae6608a871a354dd35d75540bd3bf21e7e20703c1f11b0f7",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-13T08:36:23.723587+00:00",
+          "updated_at_utc": "2026-09-13T09:44:28.514150+00:00",
           "provider_event_id": 134978150,
-          "verified_at_utc": "2026-09-13T08:36:23.723587+00:00"
+          "verified_at_utc": "2026-09-13T09:44:28.514150+00:00"
         },
         "original_session": "Löpning · lugn distans · 75 min",
         "auto_coach": {
           "action": "reduce",
-          "reason": "Fyra timmars enduro räknas som faktisk belastning och minskar marginalen inför planerad 75 min lugn löpning.",
-          "applied_at_utc": "2026-09-12T23:55:52.033297+00:00"
+          "reason": "Fyra timmars Enduro dagen innan är huvudbelastningen och kort lågintensiv Ride ändrar inte behovet av marginal inför löppasset.",
+          "applied_at_utc": "2026-09-13T09:44:27.693949+00:00"
         },
         "coach_adjustment": "Passet är nedjusterat. Följ passupplägget ovan."
       }
@@ -1264,7 +1264,7 @@
   "activities": [
     {
       "id": 20153873263,
-      "name": "Cykeltur på morgonen",
+      "name": "Val 2026",
       "sport_type": "Ride",
       "start_date": "2026-09-13T08:01:32Z",
       "start_date_local": "2026-09-13T10:01:32Z",
@@ -1274,12 +1274,12 @@
       "total_elevation_gain_m": 41.0,
       "average_heartrate": 82.4,
       "max_heartrate": 108.0,
-      "average_watts": 48.0,
+      "average_watts": 87.8,
       "weighted_average_watts": null,
       "calories": 109.0,
       "device_name": "Garmin Forerunner 970",
-      "gear_id": "b5237682",
-      "gear_name": "Specialized Tarmac Sport",
+      "gear_id": "b18453520",
+      "gear_name": "Merida One Twenty 3000",
       "source": "Strava API",
       "laps": [
         {
@@ -1291,7 +1291,7 @@
           "average_speed": 3.38,
           "average_heartrate": 82.4,
           "max_heartrate": 108.0,
-          "average_watts": 48.0,
+          "average_watts": 87.8,
           "average_cadence": null
         }
       ],
@@ -3624,8 +3624,8 @@
     {
       "activity_id": 20153873263,
       "activity_date": "2026-09-13",
-      "activity_name": "Cykeltur på morgonen",
-      "generated_at_utc": "2026-09-13T08:36:22.934319+00:00",
+      "activity_name": "Val 2026",
+      "generated_at_utc": "2026-09-13T09:44:27.695854+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 2,
@@ -3637,33 +3637,33 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Kort, lugn cykeltur (4.56 km, ~22 min) med låg puls och watt; dagens planerade 75 min lugn löpning var avsedd men passet var ett kort ersättande Ride.",
-        "load_interpretation": "Aktiviteten tillför mycket låg kardiovaskulär och mekanisk belastning jämfört med planerad 75 min löpning; närbelastningen minskar inte marginalen för planerat löppass.",
+        "summary": "Kort, lugn cykeltur (4.56 km, 31–31 min moving/elapsed) med mycket låg puls och effekt; det ersatte planerad löpdosis och minskar löpmarginalen.",
+        "load_interpretation": "Passet ger minimal kardiovaskulär och mekanisk belastning jämfört med planerad 75 min lugn löpning; föregående 4‑timmars Enduro är den dominerande närbelastningen.",
         "confidence": "medium",
         "facts": [
           "Cykel: 4,56 km · 30:54 · 41 m+ · snittpuls 82,4 · maxpuls 108.",
           "Planerad tidsdos 75 min; faktisk rörelsetid 22 min (-53 min mot vald dos); under kortaste godkända alternativet 75 min."
         ],
         "interpretations": [
-          "Passet var mycket lätt och ger inte samma stimulus som planerad lugn löpning; det påverkar inte behovet att reducera löppasset baserat på denna aktivitet.",
+          "Detta korta, lågintensiva Ride visar belastning från dagens aktivitet men förändrar inte det faktiska stora belastningsfaktumet: gårdagens 4‑timmars Enduro.",
           "Tidsdosen blev 22 min mot valda 75 min och understeg det kortaste godkända alternativet 75 min."
         ],
         "unknowns": [
-          "Subjektiv känsla efter cykelturen (användarrapport tom)",
-          "Eventuella kvällsplaner/smärta som påverkar löpprestation"
+          "Ingen subjektiv användarrapport för dagens Ride finns; användarens återhämtning/benkänsla okänd",
+          "Ingen direkt mätning av löpspecifik mekanisk trötthet efter Enduro utöver aktivitetsloggar"
         ]
       },
       "plan_action": {
-        "action": "keep",
+        "action": "reduce",
         "target_date": "2026-09-13",
-        "reason": "Dagens korta, lågintensiva cykeltur ändrar inte den tidigare konservativa reduktionen som redan applicerats baserat på gårdagens 4‑timmars enduro.",
-        "recommendation": "Följ det redan justerade löppasset (reducerat enligt coachen). Ingen ytterligare ändring behövs idag.",
+        "reason": "Fyra timmars Enduro dagen innan är huvudbelastningen och kort lågintensiv Ride ändrar inte behovet av marginal inför löppasset.",
+        "recommendation": "Följ det justerade passupplägget i planen.",
         "dose_option_id": "",
         "requires_approval": false
       },
       "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
+        "applied": true,
+        "note": "Konservativ ändring applicerad på 2026-09-13: reduce."
       }
     },
     {
@@ -3773,7 +3773,7 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "71,8 min MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC visade längre varaktighet men lägre intensiv karaktär enligt användarrapport och data; passet ökade inte…",
+        "summary": "71,8 min MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC visade längre varaktighet men lägre intensiv karaktär enligt användarrapport och data; passet ökade inte…",
         "load_interpretation": "Varaktighet över godkänd range (+11,8 min) men användarrapport anger lugnare tempo, så närbelastningsmarginalen mot fredag minskar måttligt.",
         "confidence": "medium",
         "facts": [
@@ -3794,7 +3794,7 @@
       "plan_action": {
         "action": "keep",
         "target_date": "2026-09-11",
-        "reason": "Systemet har redan konservativt reducerat fredagens backpass baserat på MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC‑passets ökade duration och användarrapport.",
+        "reason": "Systemet har redan konservativt reducerat fredagens backpass baserat på MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC‑passets ökade duration och användarrapport.",
         "recommendation": "Följ den redan applicerade reducerade ordinationen för 2026-09-11 (3×6×150). Om du känner dig ovanligt trött eller stel imorgon, avboka och meddela coach för review.",
         "dose_option_id": "",
         "requires_approval": false
@@ -3840,7 +3840,7 @@
         "action": "keep",
         "target_date": "2026-09-10",
         "reason": "Simpasset var underhåll/teknikorienterat och visar inga tecken som kräver kortsiktig nedskalning av planerad MTB-stöddos.",
-        "recommendation": "Behåll planerad MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC 60 min (MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC · 60 min · teknik + lugn aerob stig). Om…",
+        "recommendation": "Behåll planerad MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC 60 min (MTB/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC/XC · 60 min · teknik + lugn aerob…",
         "dose_option_id": "",
         "requires_approval": false
       },
