@@ -4,7 +4,7 @@
       "activity_id": 20157600319,
       "activity_date": "2026-09-13",
       "activity_name": "Stiglöpning vid lunch",
-      "generated_at_utc": "2026-09-14T07:39:28.896793+00:00",
+      "generated_at_utc": "2026-09-14T07:43:37.463496+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 2,
@@ -16,26 +16,26 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Lång, varierad trailstiglöpning 18.7 km med 237 m upp och stabil snittpuls 137 bpm – genomfört utan användarrapport om känsla.",
-        "load_interpretation": "Passet ger betydande närbelastning kardio-mekaniskt inom senaste 3 dagar och måste vägas mot tisdagens prioriterade tröskel.",
+        "summary": "18.7 km trailstiglöpning (5:44/km) på 6.45 h med genomsnittspuls 137 och stabila 1‑km-varv; ett långt tekniskt-kardio pass genomfört.",
+        "load_interpretation": "Stort volymbidrag kardiovaskulärt och mekaniskt inom 2–3‑dagarsfönstret; inga omedelbara allvarliga pulssignaler i datan.",
         "confidence": "medium",
         "facts": [
           "Löpning: 18,75 km · 1:47:42 · 237 m+ · snittpuls 137,2 · maxpuls 150."
         ],
         "interpretations": [
-          "Stabil snittpuls och blandade 1km-intervaller tyder på ett genomfört långt tekniskt/stigpass snarare än maximal kvalitet; detta etablerar att stor volym kunde genomföras idag.",
-          "Eftersom mikrocykeln har en prioriterad tröskel-session 2026-09-15 bör tisdagens 3×10 min beslut ta hänsyn till dagens omfattning och tidigare enduro, inte öka belastningen."
+          "Passet visar att lång löpstig kapacitet kunde genomföras utan extrem HR‑peak; det räknas som kardiovaskulär och mekanisk belastning i närtid.",
+          "Eftersom enduro och tidigare backintervaller finns i de senaste dagarna bör nästa prioriterade löppass (15/9 tröskel) skyddas från överbelastning."
         ],
         "unknowns": [
-          "Subjektiv återhämtningskänsla efter passet saknas i användarrapport för detta aktivitet",
-          "Exakt teknisk intensitet under enduropassen påverkar mekanisk belastning men är ej beskrivet"
+          "Subjektiv återhämtning efter passet (ingen användarrapport för senaste aktiviteten).",
+          "Detaljer om terrängteknisk skadepåverkan eller lokal muskulär trötthet."
         ]
       },
       "plan_action": {
-        "action": "keep",
+        "action": "review",
         "target_date": "",
-        "reason": "Ingen automatisk reduktion krävs men tisdagens prioriterade tröskel bör inte ökas efter denna omfattande trail- och föregående endurobelastning.",
-        "recommendation": "Behåll befintlig plan; genomför planerat tröskelpass 2026-09-15 som ordinerat men håll intensiteten strikt kontrollerad eller välj baseline 3×8 om du känner ovanlig trötthet morgonen efter.",
+        "reason": "Beslutet skjuts upp eftersom mellanliggande planerade dagar ännu inte har ett känt utfall.",
+        "recommendation": "Måndag: Enduroskola · fast tillfälle ligger kvar som plan. Tisdag: Löpning · kontrollerad tröskel · 3 × 10 min / 90 s jogg bedöms efter den faktiska belastningen från måndag och återhämtningen därefter.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -1019,8 +1019,8 @@
       }
     }
   ],
-  "last_trigger_hash": "1c60778fcd5a85af2f4f9df7e2f50a479150c33950c302d19c71affc4fa9c687",
-  "last_run_utc": "2026-09-14T07:39:28.896793+00:00",
+  "last_trigger_hash": "e4a00e03f0f31c9ce55e63a2862c498adf2fe47002bbfd6abb26489776f66391",
+  "last_run_utc": "2026-09-14T07:43:37.463496+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 2
