@@ -4,7 +4,7 @@
   "week_start": "2026-09-14",
   "week_end": "2026-09-20",
   "created_at_utc": "2026-09-13T23:09:46.558327+00:00",
-  "updated_at_utc": "2026-09-14T20:18:19.675145+00:00",
+  "updated_at_utc": "2026-09-14T20:20:24.292097+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -94,7 +94,8 @@
         "manual_override": {
           "source": "user_confirmed",
           "note": "Styrka läggs direkt efter måndagens enduroskola."
-        }
+        },
+        "activity_id": 20175917270
       },
       {
         "date": "2026-09-15",
@@ -343,9 +344,9 @@
           "transport": "intervals_icu",
           "source_hash": "b99edb0f717c3fcc0275f181f6cbd9d4fc700498783ef9d57a9bad805ecd9441",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-14T20:18:18.252620+00:00",
+          "updated_at_utc": "2026-09-14T20:20:22.729270+00:00",
           "provider_event_id": 134978151,
-          "verified_at_utc": "2026-09-14T20:18:18.252620+00:00"
+          "verified_at_utc": "2026-09-14T20:20:22.729270+00:00"
         }
       },
       {
@@ -726,9 +727,9 @@
           "transport": "intervals_icu",
           "source_hash": "b8617aa5915acd49350bdc68503a7c58f4be457b379a325c9b79bd2f08f23bd7",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-14T20:18:18.455793+00:00",
+          "updated_at_utc": "2026-09-14T20:20:22.926798+00:00",
           "provider_event_id": 135078982,
-          "verified_at_utc": "2026-09-14T20:18:18.455793+00:00"
+          "verified_at_utc": "2026-09-14T20:20:22.926798+00:00"
         }
       },
       {
@@ -929,9 +930,9 @@
           "transport": "intervals_icu",
           "source_hash": "880240979678aa1fd8eb1374a2c83823bc9a3be49d997ef05575bbe4595f8147",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-14T20:18:18.678901+00:00",
+          "updated_at_utc": "2026-09-14T20:20:23.138927+00:00",
           "provider_event_id": 135275790,
-          "verified_at_utc": "2026-09-14T20:18:18.678901+00:00"
+          "verified_at_utc": "2026-09-14T20:20:23.138927+00:00"
         }
       },
       {
@@ -1409,9 +1410,9 @@
           "transport": "intervals_icu",
           "source_hash": "96ff096994283fcf6db8dbd51bf9f4e0562a7433568527e707b7f052353bc988",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-14T20:18:18.875032+00:00",
+          "updated_at_utc": "2026-09-14T20:20:23.349148+00:00",
           "provider_event_id": 135486213,
-          "verified_at_utc": "2026-09-14T20:18:18.875032+00:00"
+          "verified_at_utc": "2026-09-14T20:20:23.349148+00:00"
         }
       },
       {
@@ -1860,9 +1861,9 @@
           "transport": "intervals_icu",
           "source_hash": "be9d1761e0c308fa21de98a0bdd657b35c17e11a343dff54f1e561a58f74ec71",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-14T20:18:19.089047+00:00",
+          "updated_at_utc": "2026-09-14T20:20:23.549197+00:00",
           "provider_event_id": 135973445,
-          "verified_at_utc": "2026-09-14T20:18:19.089047+00:00"
+          "verified_at_utc": "2026-09-14T20:20:23.549197+00:00"
         }
       }
     ],
@@ -1935,22 +1936,22 @@
     },
     {
       "id": 20175917270,
-      "name": "Träningspass på kvällen",
-      "sport_type": "Workout",
+      "name": "Enduro på kvällen",
+      "sport_type": "Enduro",
       "start_date": "2026-09-14T16:03:34Z",
       "start_date_local": "2026-09-14T18:03:34Z",
-      "distance_m": 13930.7,
+      "distance_m": 13929.8,
       "moving_time_s": 3612,
       "elapsed_time_s": 5344,
       "total_elevation_gain_m": 222.2,
       "average_heartrate": 107.0,
       "max_heartrate": 166.0,
-      "average_watts": null,
+      "average_watts": 163.8,
       "weighted_average_watts": null,
       "calories": 421.0,
       "device_name": "Garmin Forerunner 970",
-      "gear_id": null,
-      "gear_name": null,
+      "gear_id": "b18458212",
+      "gear_name": "KTM 300 EXC TPI",
       "source": "Strava API",
       "laps": [
         {
@@ -1959,23 +1960,34 @@
           "elapsed_time_s": 5344,
           "moving_time_s": 3612,
           "distance_m": 13930.7,
-          "average_speed": 2.61,
+          "average_speed": 3.86,
           "average_heartrate": 107.0,
           "max_heartrate": 166.0,
-          "average_watts": null,
+          "average_watts": 163.8,
           "average_cadence": null
         }
       ],
+      "source_sport_type": "EMountainBikeRide",
+      "classification": "training",
+      "display_label": "Enduro",
+      "classification_reason": "User convention: Strava e-MTB represents Enduro; Enduro is actual training load.",
+      "sport_normalization": {
+        "rule": "emountainbike-user-enduro-proxy-v1",
+        "evidence": [
+          "source_sport_type=EMountainBikeRide",
+          "user convention: Strava e-MTB represents Enduro"
+        ]
+      },
       "workout_analysis_context": {
         "contract_version": 3,
         "activity_id": 20175917270,
-        "sport_type": "Workout",
-        "display_label": "Workout",
-        "classification": null,
+        "sport_type": "Enduro",
+        "display_label": "Enduro",
+        "classification": "training",
         "user_report": "",
         "total": {
-          "distance_m": 13930.7,
-          "distance_km": 13.931,
+          "distance_m": 13929.8,
+          "distance_km": 13.93,
           "moving_time_s": 3612.0,
           "elapsed_time_s": 5344.0,
           "elevation_gain_m": 222.2,
@@ -1984,12 +1996,63 @@
         },
         "run": null,
         "swim": null,
-        "enduro": null,
+        "enduro": {
+          "session_duration_s": 5344.0,
+          "duration_basis": "elapsed_time_s",
+          "moving_time_s": 3612.0,
+          "non_moving_time_s": 1732.0,
+          "duration_note": "For Enduro, session_duration_s is the workout duration. Strava moving_time_s only describes time classified as moving and must not replace total session duration."
+        },
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
       }
     }
   ],
   "coach_analyses": [
+    {
+      "activity_id": 20175917270,
+      "activity_date": "2026-09-14",
+      "activity_name": "Enduro på kvällen",
+      "generated_at_utc": "2026-09-14T20:20:21.867054+00:00",
+      "model": "gpt-5-mini",
+      "analysis_contract": {
+        "pipeline_version": 2,
+        "workout_context_version": 3,
+        "plan_comparison_version": 1,
+        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
+        "analysis_code_sha256": "10e4515222f1f7936852f8a7fd62e9afd2eddb7e0f7693c636500142c97927a1"
+      },
+      "performance_marker_id": null,
+      "performance_protocol_key": null,
+      "assessment": {
+        "summary": "Enduropasset omfattade 1:29:04 totalt och 222 m+; det räknas som faktisk teknisk och mekanisk träningsbelastning inför nästa prioriterade pass.",
+        "load_interpretation": "För Enduro används hela 1:29:04 som tidsomfattning; Stravas rörelsetid 1:00:12 och snittpuls 107 beskriver inte den tekniska/mekaniska belastningen ensamma.",
+        "confidence": "medium",
+        "facts": [
+          "Enduro: 13,93 km · 1:29:04 · 222,2 m+ · snittpuls 107 · maxpuls 166.",
+          "Planstatus 2026-09-14: dagen är markerad genomförd i coachens beslutsunderlag."
+        ],
+        "interpretations": [
+          "Dagens kombination levererade teknisk enduro + kontrollerad styrka som planen krävde; detta ökar mekanisk/neuromuskulär närbelastning inför tisdagens löpning.",
+          "Inget i data motsäger att löpningen i morgon bör behållas men närbelastningen talar för att vi beaktar marginaler (kortare alternativ) om du känner lokal bentrötthet eller stelhet)."
+        ],
+        "unknowns": [
+          "Subjektiv återhämtning/benkänsla efter passen (användarrapport tom)",
+          "Exakt styrkeintensitet/antal set/reps från kvällspasset"
+        ]
+      },
+      "plan_action": {
+        "action": "keep",
+        "target_date": "2026-09-15",
+        "reason": "Närbelastningen från enduro + styrka är uppenbar men inte starkt avvikande; planens prioriterade löppass bör skyddas om du känner dig fräsch.",
+        "recommendation": "Behåll planerad 3×10 min tröskel imorgon; om du upplever lokal bentrötthet eller nedsatt teknik, välj reducerad dos det valda passalternativet eller kortare jogg som uppvärmning. Om du har smärta eller markant stelhet: vila och anmäl för review.",
+        "dose_option_id": "",
+        "requires_approval": false
+      },
+      "auto_apply": {
+        "applied": false,
+        "note": "Ingen automatisk planändring."
+      }
+    },
     {
       "activity_id": 20175536586,
       "activity_date": "2026-09-14",
