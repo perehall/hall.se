@@ -35,6 +35,32 @@ class ArchiveWeekUrlTests(unittest.TestCase):
         self.assertIn('href="/träning/">Vecka 35 →</a>', html)
         self.assertNotIn('/träning/vecka/2026-W35/', html)
 
+    def test_legacy_mtb_label_expansion_is_repaired_recursively_and_idempotently(self):
+        snapshot = {
+            "plan": {"days": [{"session": "MTB/XC · 60 min"}]},
+            "coach_analyses": [
+                {
+                    "assessment": {
+                        "summary": "71,8 min MTB/XC/XC/XC visade längre varaktighet."
+                    },
+                    "plan_action": {
+                        "recommendation": "Behåll planerad MTB/XC/XC/XC/XC 60 min."
+                    },
+                }
+            ],
+        }
+
+        self.assertTrue(archive_weeks.repair_legacy_snapshot_copy(snapshot))
+        self.assertEqual(
+            snapshot["coach_analyses"][0]["assessment"]["summary"],
+            "71,8 min MTB/XC visade längre varaktighet.",
+        )
+        self.assertEqual(
+            snapshot["coach_analyses"][0]["plan_action"]["recommendation"],
+            "Behåll planerad MTB/XC 60 min.",
+        )
+        self.assertFalse(archive_weeks.repair_legacy_snapshot_copy(snapshot))
+
 
 if __name__ == "__main__":
     unittest.main()
