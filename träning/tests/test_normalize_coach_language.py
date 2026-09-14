@@ -106,6 +106,25 @@ class NormalizeCoachLanguageTests(unittest.TestCase):
             "Nästa fokus är Kontrollerad löptröskel.",
         )
 
+    def test_public_mtb_label_is_idempotent_and_repairs_historical_expansion(self):
+        labels = strategy_visible_labels(
+            {
+                "capability_portfolio": [
+                    {"key": "mtb", "label": "MTB/XC"}
+                ]
+            }
+        )
+        once = visible_training_language("Behåll planerad MTB/XC 60 min.", labels)
+        twice = visible_training_language(once, labels)
+        repaired = visible_training_language(
+            "Behåll planerad MTB/XC/XC/XC/XC 60 min.",
+            labels,
+        )
+
+        self.assertEqual(once, "Behåll planerad MTB/XC 60 min.")
+        self.assertEqual(twice, once)
+        self.assertEqual(repaired, once)
+
     def test_schema_field_names_are_humanized(self):
         normalized = visible_training_language(
             "session_duration 5718 s, moving_time 2915 s, ingen user_report och dose_resolution vald."
