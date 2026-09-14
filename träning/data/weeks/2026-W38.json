@@ -4,7 +4,7 @@
   "week_start": "2026-09-14",
   "week_end": "2026-09-20",
   "created_at_utc": "2026-09-13T23:09:46.558327+00:00",
-  "updated_at_utc": "2026-09-14T19:50:53.012744+00:00",
+  "updated_at_utc": "2026-09-14T20:18:19.675145+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -343,9 +343,9 @@
           "transport": "intervals_icu",
           "source_hash": "b99edb0f717c3fcc0275f181f6cbd9d4fc700498783ef9d57a9bad805ecd9441",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-14T19:50:51.389342+00:00",
+          "updated_at_utc": "2026-09-14T20:18:18.252620+00:00",
           "provider_event_id": 134978151,
-          "verified_at_utc": "2026-09-14T19:50:51.389342+00:00"
+          "verified_at_utc": "2026-09-14T20:18:18.252620+00:00"
         }
       },
       {
@@ -726,9 +726,9 @@
           "transport": "intervals_icu",
           "source_hash": "b8617aa5915acd49350bdc68503a7c58f4be457b379a325c9b79bd2f08f23bd7",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-14T19:50:51.567300+00:00",
+          "updated_at_utc": "2026-09-14T20:18:18.455793+00:00",
           "provider_event_id": 135078982,
-          "verified_at_utc": "2026-09-14T19:50:51.567300+00:00"
+          "verified_at_utc": "2026-09-14T20:18:18.455793+00:00"
         }
       },
       {
@@ -929,9 +929,9 @@
           "transport": "intervals_icu",
           "source_hash": "880240979678aa1fd8eb1374a2c83823bc9a3be49d997ef05575bbe4595f8147",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-14T19:50:51.744627+00:00",
+          "updated_at_utc": "2026-09-14T20:18:18.678901+00:00",
           "provider_event_id": 135275790,
-          "verified_at_utc": "2026-09-14T19:50:51.744627+00:00"
+          "verified_at_utc": "2026-09-14T20:18:18.678901+00:00"
         }
       },
       {
@@ -1409,9 +1409,9 @@
           "transport": "intervals_icu",
           "source_hash": "96ff096994283fcf6db8dbd51bf9f4e0562a7433568527e707b7f052353bc988",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-14T19:50:51.950547+00:00",
+          "updated_at_utc": "2026-09-14T20:18:18.875032+00:00",
           "provider_event_id": 135486213,
-          "verified_at_utc": "2026-09-14T19:50:51.950547+00:00"
+          "verified_at_utc": "2026-09-14T20:18:18.875032+00:00"
         }
       },
       {
@@ -1860,9 +1860,9 @@
           "transport": "intervals_icu",
           "source_hash": "be9d1761e0c308fa21de98a0bdd657b35c17e11a343dff54f1e561a58f74ec71",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-14T19:50:52.150201+00:00",
+          "updated_at_utc": "2026-09-14T20:18:19.089047+00:00",
           "provider_event_id": 135973445,
-          "verified_at_utc": "2026-09-14T19:50:52.150201+00:00"
+          "verified_at_utc": "2026-09-14T20:18:19.089047+00:00"
         }
       }
     ],
@@ -1932,6 +1932,61 @@
         "enduro": null,
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
       }
+    },
+    {
+      "id": 20175917270,
+      "name": "Träningspass på kvällen",
+      "sport_type": "Workout",
+      "start_date": "2026-09-14T16:03:34Z",
+      "start_date_local": "2026-09-14T18:03:34Z",
+      "distance_m": 13930.7,
+      "moving_time_s": 3612,
+      "elapsed_time_s": 5344,
+      "total_elevation_gain_m": 222.2,
+      "average_heartrate": 107.0,
+      "max_heartrate": 166.0,
+      "average_watts": null,
+      "weighted_average_watts": null,
+      "calories": 421.0,
+      "device_name": "Garmin Forerunner 970",
+      "gear_id": null,
+      "gear_name": null,
+      "source": "Strava API",
+      "laps": [
+        {
+          "lap_index": 1,
+          "name": "Lap 0",
+          "elapsed_time_s": 5344,
+          "moving_time_s": 3612,
+          "distance_m": 13930.7,
+          "average_speed": 2.61,
+          "average_heartrate": 107.0,
+          "max_heartrate": 166.0,
+          "average_watts": null,
+          "average_cadence": null
+        }
+      ],
+      "workout_analysis_context": {
+        "contract_version": 3,
+        "activity_id": 20175917270,
+        "sport_type": "Workout",
+        "display_label": "Workout",
+        "classification": null,
+        "user_report": "",
+        "total": {
+          "distance_m": 13930.7,
+          "distance_km": 13.931,
+          "moving_time_s": 3612.0,
+          "elapsed_time_s": 5344.0,
+          "elevation_gain_m": 222.2,
+          "average_heartrate": 107.0,
+          "max_heartrate": 166.0
+        },
+        "run": null,
+        "swim": null,
+        "enduro": null,
+        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+      }
     }
   ],
   "coach_analyses": [
@@ -1939,7 +1994,7 @@
       "activity_id": 20175536586,
       "activity_date": "2026-09-14",
       "activity_name": "Styrketräning på natten",
-      "generated_at_utc": "2026-09-14T19:50:50.552947+00:00",
+      "generated_at_utc": "2026-09-14T20:18:17.432287+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 2,
@@ -1951,26 +2006,26 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört styrkepass 34,8 min efter planerad enduroskola; pulsnivåer låg–måttliga och ingen användarrapport angiven.",
-        "load_interpretation": "Styrkepasset var genomfört och kort; i närbelastningen innebär det ytterligare mekanisk/neuromuskulär belastning inför tisdagens prioriterade löpning.",
+        "summary": "Genomförd styrketräning 34,8 min efter enduro; puls låg (avg 74,8, max 109) och plan jämförde styrka efter enduron.",
+        "load_interpretation": "Inget omedelbart behov av att ta bort tisdagens tröskelpass– närbelastning från enduro+styrka är dokumenterad men inte uppvisar hög puls eller uppenbar lokal katastrof.",
         "confidence": "medium",
         "facts": [
           "Styrka: 34:49 · snittpuls 74,8 · maxpuls 109."
         ],
         "interpretations": [
-          "Passet bekräftar att planerad styrka efter enduro genomfördes kontrollerat utan hög puls — tillför mekanisk/neuromuskulär stimulans som måste vägas mot morgondagens löptröskel.",
-          "Eftersom styrkan var kort och lågintensiv finns inget entydigt skäl att avboka eller kraftigt reducera morgondagens planerade 3×10 tröskel, men den ökar den samlade belastningen i…"
+          "Styrkepasset genomfördes som kort, kontrollerad session efter externt enduro-pass och gav låg genomsnittspuls vilket talar för kontrollerad intensitet.",
+          "Tisdagens prioriterade tröskel (anchor) kan genomföras som planerat om subjektiv återhämtning är ok; det finns inga deterministiska data här som kräver automatisk reducering."
         ],
         "unknowns": [
-          "Subjektiv trötthet/benstatus efter dagen ej rapporterad.",
-          "Exakt omfattning och intensitet på dagens enduro (se tidigare enduro-logg) och hur mycket den bidrog mekaniskt idag."
+          "Subjektiv ben-/muskeltrötthet efter kvällens styrka (ingen användarrapport).",
+          "Eventuell lokal mekanisk trötthet från enduro (enduron hade lång total passduration) som kan påverka löpteknik nästa dag."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "",
-        "reason": "Styrkepasset var kontrollerat och inom den planerade kombinationen; ingen stark signal för automatisk reduktion eller vila inför morgondagens prioriterade tröskel.",
-        "recommendation": "Följ planerad tröskel 3×10 imorgon men håll intensiteten kontrollerad och var beredd att byta till 3×8 om benen känns tunga vid uppvärmning eller subjektiv trötthet uppstår.",
+        "reason": "Närbelastningen från måndagens enduro+styrka är dokumenterad men saknar objektiva tecken som motiverar konservativ reduktion inför tisdagens prioriterade tröskel.",
+        "recommendation": "Följ befintlig plan; rapportera avvikande känsla innan nästa belastande pass.",
         "dose_option_id": "",
         "requires_approval": false
       },

@@ -1,5 +1,5 @@
 {
-  "last_sync_utc": "2026-09-14T19:50:33.412390+00:00",
+  "last_sync_utc": "2026-09-14T20:18:00.252885+00:00",
   "activities": [
     {
       "id": 20175536586,
@@ -49,6 +49,61 @@
           "elevation_gain_m": 0.0,
           "average_heartrate": 74.8,
           "max_heartrate": 109.0
+        },
+        "run": null,
+        "swim": null,
+        "enduro": null,
+        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+      }
+    },
+    {
+      "id": 20175917270,
+      "name": "Träningspass på kvällen",
+      "sport_type": "Workout",
+      "start_date": "2026-09-14T16:03:34Z",
+      "start_date_local": "2026-09-14T18:03:34Z",
+      "distance_m": 13930.7,
+      "moving_time_s": 3612,
+      "elapsed_time_s": 5344,
+      "total_elevation_gain_m": 222.2,
+      "average_heartrate": 107.0,
+      "max_heartrate": 166.0,
+      "average_watts": null,
+      "weighted_average_watts": null,
+      "calories": 421.0,
+      "device_name": "Garmin Forerunner 970",
+      "gear_id": null,
+      "gear_name": null,
+      "source": "Strava API",
+      "laps": [
+        {
+          "lap_index": 1,
+          "name": "Lap 0",
+          "elapsed_time_s": 5344,
+          "moving_time_s": 3612,
+          "distance_m": 13930.7,
+          "average_speed": 2.61,
+          "average_heartrate": 107.0,
+          "max_heartrate": 166.0,
+          "average_watts": null,
+          "average_cadence": null
+        }
+      ],
+      "workout_analysis_context": {
+        "contract_version": 3,
+        "activity_id": 20175917270,
+        "sport_type": "Workout",
+        "display_label": "Workout",
+        "classification": null,
+        "user_report": "",
+        "total": {
+          "distance_m": 13930.7,
+          "distance_km": 13.931,
+          "moving_time_s": 3612.0,
+          "elapsed_time_s": 5344.0,
+          "elevation_gain_m": 222.2,
+          "average_heartrate": 107.0,
+          "max_heartrate": 166.0
         },
         "run": null,
         "swim": null,
@@ -7306,10 +7361,10 @@
   },
   "schema_version": 2,
   "last_webhook_event": {
-    "event_key": "368165:activity:20175536586:create:1789414634",
-    "object_id": 20175536586,
+    "event_key": "368165:activity:20175917270:create:1789417063",
+    "object_id": 20175917270,
     "aspect_type": "create",
-    "event_time": 1789414634,
-    "processed_at_utc": "2026-09-14T19:37:33.893045+00:00"
+    "event_time": 1789417063,
+    "processed_at_utc": "2026-09-14T20:18:00.252885+00:00"
   }
 }
