@@ -90,6 +90,38 @@
           ]
         }
       }
+    },
+    {
+      "date": "2026-09-14",
+      "source": "user_confirmed",
+      "note": "Styrka läggs direkt efter måndagens enduroskola.",
+      "remove_fields": [
+        "workout_design",
+        "device_workout",
+        "device_sync",
+        "coach_adjustment"
+      ],
+      "set": {
+        "status": "planned",
+        "planning_status": "fixed",
+        "session": "Enduroskola + styrka · styrkan efter enduron",
+        "reason": "Användarbekräftad kombination: enduroskolan genomförs först och styrka/core direkt efter. Styrkan hålls kontrollerad utan failure; den samlade faktiska belastningen från enduro och styrka ska vägas in inför tisdagens prioriterade löptröskel.",
+        "development_focus": "Enduro: teknisk kvalitet och avslappnad körning. Styrka: kontrollerad unilateral styrka och bål med marginal i benen inför tisdagens löpning.",
+        "sport": "enduro",
+        "classification": "training",
+        "manual_lock": true,
+        "priority_role": "flex",
+        "stimuli": [
+          "enduro_technical",
+          "strength_unilateral",
+          "strength_core"
+        ],
+        "load_dimensions": [
+          "mechanical",
+          "neuromuscular",
+          "technical"
+        ]
+      }
     }
   ]
 }
