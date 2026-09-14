@@ -40,6 +40,11 @@ HISTORY_CSS = r'''
 @media (max-width:520px){.week-nav{grid-template-columns:1fr auto 1fr;padding:8px}.week-nav a{font-size:.75rem}.week-nav-center strong{font-size:.8rem}}
 '''
 
+LEGACY_MTB_XC_EXPANSION_PATTERN = re.compile(
+    r"\bMTB/XC(?:/XC)+\b",
+    re.IGNORECASE,
+)
+
 
 def load_json(path, fallback=None):
     if not path.exists():
@@ -50,6 +55,35 @@ def load_json(path, fallback=None):
 def write_json(path, payload):
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+def _repair_legacy_public_copy(value):
+    if isinstance(value, str):
+        repaired = LEGACY_MTB_XC_EXPANSION_PATTERN.sub("MTB/XC", value)
+        return repaired, repaired != value
+    if isinstance(value, list):
+        changed = False
+        for index, item in enumerate(value):
+            repaired, item_changed = _repair_legacy_public_copy(item)
+            if item_changed:
+                value[index] = repaired
+                changed = True
+        return value, changed
+    if isinstance(value, dict):
+        changed = False
+        for key, item in list(value.items()):
+            repaired, item_changed = _repair_legacy_public_copy(item)
+            if item_changed:
+                value[key] = repaired
+                changed = True
+        return value, changed
+    return value, False
+
+
+def repair_legacy_snapshot_copy(snapshot):
+    """Migrate archived copy damaged by the old non-idempotent MTB label normalizer."""
+    _, changed = _repair_legacy_public_copy(snapshot)
+    return changed
 
 
 def activity_date(activity):
@@ -115,6 +149,8 @@ def load_snapshots():
             raise RuntimeError(f"Veckoarkiv: fel week_key i {path.name}")
         if not snapshot.get("plan"):
             raise RuntimeError(f"Veckoarkiv: plan saknas i {path.name}")
+        if repair_legacy_snapshot_copy(snapshot):
+            write_json(path, snapshot)
         snapshots[key] = snapshot
     return snapshots
 
