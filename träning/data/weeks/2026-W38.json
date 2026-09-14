@@ -4,7 +4,7 @@
   "week_start": "2026-09-14",
   "week_end": "2026-09-20",
   "created_at_utc": "2026-09-13T23:09:46.558327+00:00",
-  "updated_at_utc": "2026-09-14T20:20:24.292097+00:00",
+  "updated_at_utc": "2026-09-14T20:21:10.314195+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -344,9 +344,9 @@
           "transport": "intervals_icu",
           "source_hash": "b99edb0f717c3fcc0275f181f6cbd9d4fc700498783ef9d57a9bad805ecd9441",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-14T20:20:22.729270+00:00",
+          "updated_at_utc": "2026-09-14T20:21:08.624304+00:00",
           "provider_event_id": 134978151,
-          "verified_at_utc": "2026-09-14T20:20:22.729270+00:00"
+          "verified_at_utc": "2026-09-14T20:21:08.624304+00:00"
         }
       },
       {
@@ -727,9 +727,9 @@
           "transport": "intervals_icu",
           "source_hash": "b8617aa5915acd49350bdc68503a7c58f4be457b379a325c9b79bd2f08f23bd7",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-14T20:20:22.926798+00:00",
+          "updated_at_utc": "2026-09-14T20:21:08.827808+00:00",
           "provider_event_id": 135078982,
-          "verified_at_utc": "2026-09-14T20:20:22.926798+00:00"
+          "verified_at_utc": "2026-09-14T20:21:08.827808+00:00"
         }
       },
       {
@@ -930,9 +930,9 @@
           "transport": "intervals_icu",
           "source_hash": "880240979678aa1fd8eb1374a2c83823bc9a3be49d997ef05575bbe4595f8147",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-14T20:20:23.138927+00:00",
+          "updated_at_utc": "2026-09-14T20:21:09.022453+00:00",
           "provider_event_id": 135275790,
-          "verified_at_utc": "2026-09-14T20:20:23.138927+00:00"
+          "verified_at_utc": "2026-09-14T20:21:09.022453+00:00"
         }
       },
       {
@@ -1410,9 +1410,9 @@
           "transport": "intervals_icu",
           "source_hash": "96ff096994283fcf6db8dbd51bf9f4e0562a7433568527e707b7f052353bc988",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-14T20:20:23.349148+00:00",
+          "updated_at_utc": "2026-09-14T20:21:09.206151+00:00",
           "provider_event_id": 135486213,
-          "verified_at_utc": "2026-09-14T20:20:23.349148+00:00"
+          "verified_at_utc": "2026-09-14T20:21:09.206151+00:00"
         }
       },
       {
@@ -1861,9 +1861,9 @@
           "transport": "intervals_icu",
           "source_hash": "be9d1761e0c308fa21de98a0bdd657b35c17e11a343dff54f1e561a58f74ec71",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-14T20:20:23.549197+00:00",
+          "updated_at_utc": "2026-09-14T20:21:09.384175+00:00",
           "provider_event_id": 135973445,
-          "verified_at_utc": "2026-09-14T20:20:23.549197+00:00"
+          "verified_at_utc": "2026-09-14T20:21:09.384175+00:00"
         }
       }
     ],
@@ -2009,6 +2009,51 @@
   ],
   "coach_analyses": [
     {
+      "activity_id": 20175536586,
+      "activity_date": "2026-09-14",
+      "activity_name": "Styrketräning på natten",
+      "generated_at_utc": "2026-09-14T20:21:07.788407+00:00",
+      "model": "gpt-5-mini",
+      "analysis_contract": {
+        "pipeline_version": 2,
+        "workout_context_version": 3,
+        "plan_comparison_version": 1,
+        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
+        "analysis_code_sha256": "10e4515222f1f7936852f8a7fd62e9afd2eddb7e0f7693c636500142c97927a1"
+      },
+      "performance_marker_id": null,
+      "performance_protocol_key": null,
+      "assessment": {
+        "summary": "Genomförd enduro (5344 s totalt) följt av 34,8 min styrka; styrkepasset hade låg puls (avg 75) och hölls kontrollerat efter enduron.",
+        "load_interpretation": "Sammantaget ger måndagens enduro + kontrollerad styrka mekanisk/neuromuskulär belastning inför tisdagens prioriterade tröskelpass.",
+        "confidence": "medium",
+        "facts": [
+          "Styrka: 34:49 · snittpuls 74,8 · maxpuls 109.",
+          "Planstatus 2026-09-14: dagen är markerad genomförd i coachens beslutsunderlag."
+        ],
+        "interpretations": [
+          "Passets kombination uppfyller den användarbekräftade planen och innebär en konkret mekanisk och teknisk exponering som bör vägas in i morgondagens löpning.",
+          "Eftersom styrkan hölls kontrollerad (lågt pulsregister) talar det för att tröskelpasset troligen kan genomföras men med viss reducerad marginal för maximal kvalitet."
+        ],
+        "unknowns": [
+          "Subjektiv dagskänsla/bentrötthet efter passet saknas i användarrapport.",
+          "Eventuella lokala muskelsmärtor eller återhämtningsunderlaget/återhämtningsdetaljer som påverkar imorgon."
+        ]
+      },
+      "plan_action": {
+        "action": "keep",
+        "target_date": "2026-09-15",
+        "reason": "Närbelastningen från måndagens enduro + kontrollerad styrka ger inte entydigt skäl att minska eller vila inför planerat tröskelpass imorgon.",
+        "recommendation": "Behåll planerat 3×10 min tröskel; starta kontrollerat och skala ner till 3×8 om du upplever ovanlig tunghet eller teknikförsämring under första intervallet.",
+        "dose_option_id": "",
+        "requires_approval": false
+      },
+      "auto_apply": {
+        "applied": false,
+        "note": "Ingen automatisk planändring."
+      }
+    },
+    {
       "activity_id": 20175917270,
       "activity_date": "2026-09-14",
       "activity_name": "Enduro på kvällen",
@@ -2045,50 +2090,6 @@
         "target_date": "2026-09-15",
         "reason": "Närbelastningen från enduro + styrka är uppenbar men inte starkt avvikande; planens prioriterade löppass bör skyddas om du känner dig fräsch.",
         "recommendation": "Behåll planerad 3×10 min tröskel imorgon; om du upplever lokal bentrötthet eller nedsatt teknik, välj reducerad dos det valda passalternativet eller kortare jogg som uppvärmning. Om du har smärta eller markant stelhet: vila och anmäl för review.",
-        "dose_option_id": "",
-        "requires_approval": false
-      },
-      "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
-      }
-    },
-    {
-      "activity_id": 20175536586,
-      "activity_date": "2026-09-14",
-      "activity_name": "Styrketräning på natten",
-      "generated_at_utc": "2026-09-14T20:18:17.432287+00:00",
-      "model": "gpt-5-mini",
-      "analysis_contract": {
-        "pipeline_version": 2,
-        "workout_context_version": 3,
-        "plan_comparison_version": 1,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
-        "analysis_code_sha256": "10e4515222f1f7936852f8a7fd62e9afd2eddb7e0f7693c636500142c97927a1"
-      },
-      "performance_marker_id": null,
-      "performance_protocol_key": null,
-      "assessment": {
-        "summary": "Genomförd styrketräning 34,8 min efter enduro; puls låg (avg 74,8, max 109) och plan jämförde styrka efter enduron.",
-        "load_interpretation": "Inget omedelbart behov av att ta bort tisdagens tröskelpass– närbelastning från enduro+styrka är dokumenterad men inte uppvisar hög puls eller uppenbar lokal katastrof.",
-        "confidence": "medium",
-        "facts": [
-          "Styrka: 34:49 · snittpuls 74,8 · maxpuls 109."
-        ],
-        "interpretations": [
-          "Styrkepasset genomfördes som kort, kontrollerad session efter externt enduro-pass och gav låg genomsnittspuls vilket talar för kontrollerad intensitet.",
-          "Tisdagens prioriterade tröskel (anchor) kan genomföras som planerat om subjektiv återhämtning är ok; det finns inga deterministiska data här som kräver automatisk reducering."
-        ],
-        "unknowns": [
-          "Subjektiv ben-/muskeltrötthet efter kvällens styrka (ingen användarrapport).",
-          "Eventuell lokal mekanisk trötthet från enduro (enduron hade lång total passduration) som kan påverka löpteknik nästa dag."
-        ]
-      },
-      "plan_action": {
-        "action": "keep",
-        "target_date": "",
-        "reason": "Närbelastningen från måndagens enduro+styrka är dokumenterad men saknar objektiva tecken som motiverar konservativ reduktion inför tisdagens prioriterade tröskel.",
-        "recommendation": "Följ befintlig plan; rapportera avvikande känsla innan nästa belastande pass.",
         "dose_option_id": "",
         "requires_approval": false
       },
