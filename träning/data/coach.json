@@ -1,6 +1,50 @@
 {
   "analyses": [
     {
+      "activity_id": 20175536586,
+      "activity_date": "2026-09-14",
+      "activity_name": "Styrketräning på natten",
+      "generated_at_utc": "2026-09-14T19:37:50.898778+00:00",
+      "model": "gpt-5-mini",
+      "analysis_contract": {
+        "pipeline_version": 2,
+        "workout_context_version": 3,
+        "plan_comparison_version": 1,
+        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
+        "analysis_code_sha256": "10e4515222f1f7936852f8a7fd62e9afd2eddb7e0f7693c636500142c97927a1"
+      },
+      "performance_marker_id": null,
+      "performance_protocol_key": null,
+      "assessment": {
+        "summary": "Genomförd styrketräning (34,8 min) efter måndagens enduroskola registrerad med låg genomsnittspuls och maxpuls 109 bpm.",
+        "load_interpretation": "Styrkepasset var kontrollerat och kort; tillsammans med helgens och måndagens enduro+löppass ger det fortsatt osäker närbelastning inför tisdagens prioriterade tröskel.",
+        "confidence": "medium",
+        "facts": [
+          "Styrka: 34:49 · snittpuls 74,8 · maxpuls 109."
+        ],
+        "interpretations": [
+          "Styrkepasset var kontrollerat och sannolikt inte i failure; det adderar mekanisk/neuromuskulär belastning som måste vägas med söndagens löp och måndagens långa enduro",
+          "Det finns inte tillräcklig signal för att automatiskt ta bort eller kraftigt reducera tisdagens tröskel, men nära-term närbelastningen kan inte nivåklassas mot personlig baslinje och…"
+        ],
+        "unknowns": [
+          "Subjektiv trötthet/benstatus efter styrkan (ingen användarrapport)",
+          "Detaljer om intensitet eller huvudövningar i styrkepasset"
+        ]
+      },
+      "plan_action": {
+        "action": "review",
+        "target_date": "",
+        "reason": "Närbelastningen från helgens löp + måndagens enduro plus kvällens styrka påverkar tisdagens prioriterade tröskel och kräver manuell bedömning.",
+        "recommendation": "Coach: kontrollera subjektiv ben-/energinivå i morgon för att avgöra om Löpning‑threshold 3×10 ska behållas eller skalas till 3×8; om användaren är pigg och benen känns fräscha behåll 3×10, annars överväg 3×8 eller flytta progression till nästa mikrocykel.",
+        "dose_option_id": "",
+        "requires_approval": true
+      },
+      "auto_apply": {
+        "applied": false,
+        "note": "Ingen automatisk planändring."
+      }
+    },
+    {
       "activity_id": 20157600319,
       "activity_date": "2026-09-13",
       "activity_name": "Stiglöpning vid lunch",
@@ -1019,8 +1063,8 @@
       }
     }
   ],
-  "last_trigger_hash": "9357b4476696b95a7a1519db4ed9fed0e68b3bce777192962618bdc06a9d6e06",
-  "last_run_utc": "2026-09-14T12:44:46.072545+00:00",
+  "last_trigger_hash": "779d580b1c748693f322ef437e1ab052a1ba9d4fb3d338852744ffb270fed703",
+  "last_run_utc": "2026-09-14T19:37:50.898778+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 2

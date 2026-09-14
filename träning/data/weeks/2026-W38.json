@@ -4,7 +4,7 @@
   "week_start": "2026-09-14",
   "week_end": "2026-09-20",
   "created_at_utc": "2026-09-13T23:09:46.558327+00:00",
-  "updated_at_utc": "2026-09-14T12:44:48.059992+00:00",
+  "updated_at_utc": "2026-09-14T19:37:53.552900+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -343,9 +343,9 @@
           "transport": "intervals_icu",
           "source_hash": "b99edb0f717c3fcc0275f181f6cbd9d4fc700498783ef9d57a9bad805ecd9441",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-14T12:44:46.789563+00:00",
+          "updated_at_utc": "2026-09-14T19:37:51.746396+00:00",
           "provider_event_id": 134978151,
-          "verified_at_utc": "2026-09-14T12:44:46.789563+00:00"
+          "verified_at_utc": "2026-09-14T19:37:51.746396+00:00"
         }
       },
       {
@@ -726,9 +726,9 @@
           "transport": "intervals_icu",
           "source_hash": "b8617aa5915acd49350bdc68503a7c58f4be457b379a325c9b79bd2f08f23bd7",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-14T12:44:46.967606+00:00",
+          "updated_at_utc": "2026-09-14T19:37:51.936161+00:00",
           "provider_event_id": 135078982,
-          "verified_at_utc": "2026-09-14T12:44:46.967606+00:00"
+          "verified_at_utc": "2026-09-14T19:37:51.936161+00:00"
         }
       },
       {
@@ -929,9 +929,9 @@
           "transport": "intervals_icu",
           "source_hash": "880240979678aa1fd8eb1374a2c83823bc9a3be49d997ef05575bbe4595f8147",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-14T12:44:47.145631+00:00",
+          "updated_at_utc": "2026-09-14T19:37:52.114452+00:00",
           "provider_event_id": 135275790,
-          "verified_at_utc": "2026-09-14T12:44:47.145631+00:00"
+          "verified_at_utc": "2026-09-14T19:37:52.114452+00:00"
         }
       },
       {
@@ -1409,9 +1409,9 @@
           "transport": "intervals_icu",
           "source_hash": "96ff096994283fcf6db8dbd51bf9f4e0562a7433568527e707b7f052353bc988",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-14T12:44:47.315508+00:00",
+          "updated_at_utc": "2026-09-14T19:37:52.299648+00:00",
           "provider_event_id": 135486213,
-          "verified_at_utc": "2026-09-14T12:44:47.315508+00:00"
+          "verified_at_utc": "2026-09-14T19:37:52.299648+00:00"
         }
       },
       {
@@ -1860,9 +1860,9 @@
           "transport": "intervals_icu",
           "source_hash": "be9d1761e0c308fa21de98a0bdd657b35c17e11a343dff54f1e561a58f74ec71",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-14T12:44:47.484586+00:00",
+          "updated_at_utc": "2026-09-14T19:37:52.489897+00:00",
           "provider_event_id": 135973445,
-          "verified_at_utc": "2026-09-14T12:44:47.484586+00:00"
+          "verified_at_utc": "2026-09-14T19:37:52.489897+00:00"
         }
       }
     ],
@@ -1877,6 +1877,107 @@
     "workout_design_schema_version": 1,
     "device_workout_schema_version": 1
   },
-  "activities": [],
-  "coach_analyses": []
+  "activities": [
+    {
+      "id": 20175536586,
+      "name": "Styrketräning på natten",
+      "sport_type": "WeightTraining",
+      "start_date": "2026-09-14T19:01:16Z",
+      "start_date_local": "2026-09-14T21:01:16Z",
+      "distance_m": 0.0,
+      "moving_time_s": 2089,
+      "elapsed_time_s": 2089,
+      "total_elevation_gain_m": 0,
+      "average_heartrate": 74.8,
+      "max_heartrate": 109.0,
+      "average_watts": null,
+      "weighted_average_watts": null,
+      "calories": 94.0,
+      "device_name": "Garmin Forerunner 970",
+      "gear_id": null,
+      "gear_name": null,
+      "source": "Strava API",
+      "laps": [
+        {
+          "lap_index": 1,
+          "name": "Lap 0",
+          "elapsed_time_s": 2089,
+          "moving_time_s": 2089,
+          "distance_m": 0.0,
+          "average_speed": 0.0,
+          "average_heartrate": 74.8,
+          "max_heartrate": 109.0,
+          "average_watts": null,
+          "average_cadence": null
+        }
+      ],
+      "workout_analysis_context": {
+        "contract_version": 3,
+        "activity_id": 20175536586,
+        "sport_type": "WeightTraining",
+        "display_label": "WeightTraining",
+        "classification": null,
+        "user_report": "",
+        "total": {
+          "distance_m": null,
+          "distance_km": null,
+          "moving_time_s": 2089.0,
+          "elapsed_time_s": 2089.0,
+          "elevation_gain_m": 0.0,
+          "average_heartrate": 74.8,
+          "max_heartrate": 109.0
+        },
+        "run": null,
+        "swim": null,
+        "enduro": null,
+        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+      }
+    }
+  ],
+  "coach_analyses": [
+    {
+      "activity_id": 20175536586,
+      "activity_date": "2026-09-14",
+      "activity_name": "Styrketräning på natten",
+      "generated_at_utc": "2026-09-14T19:37:50.898778+00:00",
+      "model": "gpt-5-mini",
+      "analysis_contract": {
+        "pipeline_version": 2,
+        "workout_context_version": 3,
+        "plan_comparison_version": 1,
+        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
+        "analysis_code_sha256": "10e4515222f1f7936852f8a7fd62e9afd2eddb7e0f7693c636500142c97927a1"
+      },
+      "performance_marker_id": null,
+      "performance_protocol_key": null,
+      "assessment": {
+        "summary": "Genomförd styrketräning (34,8 min) efter måndagens enduroskola registrerad med låg genomsnittspuls och maxpuls 109 bpm.",
+        "load_interpretation": "Styrkepasset var kontrollerat och kort; tillsammans med helgens och måndagens enduro+löppass ger det fortsatt osäker närbelastning inför tisdagens prioriterade tröskel.",
+        "confidence": "medium",
+        "facts": [
+          "Styrka: 34:49 · snittpuls 74,8 · maxpuls 109."
+        ],
+        "interpretations": [
+          "Styrkepasset var kontrollerat och sannolikt inte i failure; det adderar mekanisk/neuromuskulär belastning som måste vägas med söndagens löp och måndagens långa enduro",
+          "Det finns inte tillräcklig signal för att automatiskt ta bort eller kraftigt reducera tisdagens tröskel, men nära-term närbelastningen kan inte nivåklassas mot personlig baslinje och…"
+        ],
+        "unknowns": [
+          "Subjektiv trötthet/benstatus efter styrkan (ingen användarrapport)",
+          "Detaljer om intensitet eller huvudövningar i styrkepasset"
+        ]
+      },
+      "plan_action": {
+        "action": "review",
+        "target_date": "",
+        "reason": "Närbelastningen från helgens löp + måndagens enduro plus kvällens styrka påverkar tisdagens prioriterade tröskel och kräver manuell bedömning.",
+        "recommendation": "Coach: kontrollera subjektiv ben-/energinivå i morgon för att avgöra om Löpning‑threshold 3×10 ska behållas eller skalas till 3×8; om användaren är pigg och benen känns fräscha behåll 3×10, annars överväg 3×8 eller flytta progression till nästa mikrocykel.",
+        "dose_option_id": "",
+        "requires_approval": true
+      },
+      "auto_apply": {
+        "applied": false,
+        "note": "Ingen automatisk planändring."
+      }
+    }
+  ]
 }
