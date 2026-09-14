@@ -62,86 +62,31 @@
       "label": "Måndag",
       "status": "planned",
       "planning_status": "fixed",
-      "session": "Enduroskola · fast tillfälle",
-      "reason": "Fast återkommande enduroskola, totalt åtta måndagar från 24/8. Enduron räknas som faktisk träningsbelastning; övrig träning runt dagen anpassas efter utfallet.",
-      "development_focus": "Teknisk kvalitet och avslappnad körning; faktisk belastning styr efterföljande pass.",
+      "session": "Enduroskola + styrka · styrkan efter enduron",
+      "reason": "Användarbekräftad kombination: enduroskolan genomförs först och styrka/core direkt efter. Styrkan hålls kontrollerad utan failure; den samlade faktiska belastningen från enduro och styrka ska vägas in inför tisdagens prioriterade löptröskel.",
+      "development_focus": "Enduro: teknisk kvalitet och avslappnad körning. Styrka: kontrollerad unilateral styrka och bål med marginal i benen inför tisdagens löpning.",
       "sport": "enduro",
       "classification": "training",
       "manual_lock": true,
       "priority_role": "flex",
       "stimuli": [
-        "enduro_technical"
+        "enduro_technical",
+        "strength_unilateral",
+        "strength_core"
       ],
       "mesocycle_id": "run-threshold-hill-4w",
       "microcycle_id": "run-threshold-hill-4w:mc4",
       "microcycle_index": 4,
       "microcycle_day": 1,
-      "workout_design": {
-        "schema_version": 1,
-        "objective": {
-          "mesocycle_role": "external_load",
-          "priority_role": "flex",
-          "stimuli": [
-            "enduro_technical"
-          ],
-          "mesocycle_id": "run-threshold-hill-4w",
-          "microcycle_id": "run-threshold-hill-4w:mc4",
-          "microcycle_slot": ""
-        },
-        "near_term_context": {
-          "load_dimensions": [],
-          "selection_uses_only_preapproved_doses": false
-        },
-        "progression_from_previous": {
-          "relation": "support",
-          "reason": "Fast återkommande enduroskola, totalt åtta måndagar från 24/8. Enduron räknas som faktisk träningsbelastning; övrig träning runt dagen anpassas efter utfallet.",
-          "demonstrated_floor_option_id": ""
-        },
-        "candidates": [
-          {
-            "id": "current-session",
-            "dose_option_id": "",
-            "session": "Enduroskola · fast tillfälle",
-            "intent": "Fast återkommande enduroskola, totalt åtta måndagar från 24/8. Enduron räknas som faktisk träningsbelastning; övrig träning runt dagen anpassas efter utfallet.",
-            "dose": {
-              "kind": "external",
-              "value": 1
-            },
-            "stimuli": [
-              "enduro_technical"
-            ],
-            "prescription": {
-              "executable": true,
-              "completeness": "external",
-              "blocks": [
-                {
-                  "name": "Fast/externt strukturerat pass",
-                  "work": {},
-                  "instruction": "Teknisk kvalitet och avslappnad körning; faktisk belastning styr efterföljande pass.",
-                  "intensity": "extern struktur"
-                }
-              ],
-              "source": "external_commitment"
-            },
-            "score": {
-              "total": 65,
-              "breakdown": {
-                "mesocycle_alignment": 30,
-                "microcycle_alignment": 10,
-                "progression_alignment": 15,
-                "prescription_specificity": 10,
-                "near_term_resolution": 0
-              },
-              "basis": "deterministic_constraint_alignment"
-            }
-          }
-        ],
-        "selected_candidate_id": "current-session",
-        "selection": {
-          "method": "deterministic_constraint_scoring",
-          "preferred_dose_option_id": "",
-          "reason_for_today": "Fast återkommande enduroskola, totalt åtta måndagar från 24/8. Enduron räknas som faktisk träningsbelastning; övrig träning runt dagen anpassas efter utfallet."
-        }
+      "original_session": "Enduroskola · fast tillfälle",
+      "load_dimensions": [
+        "mechanical",
+        "neuromuscular",
+        "technical"
+      ],
+      "manual_override": {
+        "source": "user_confirmed",
+        "note": "Styrka läggs direkt efter måndagens enduroskola."
       }
     },
     {
@@ -391,9 +336,9 @@
         "transport": "intervals_icu",
         "source_hash": "b99edb0f717c3fcc0275f181f6cbd9d4fc700498783ef9d57a9bad805ecd9441",
         "device_delivery": "unverified",
-        "updated_at_utc": "2026-09-14T07:43:38.121326+00:00",
+        "updated_at_utc": "2026-09-14T12:44:46.789563+00:00",
         "provider_event_id": 134978151,
-        "verified_at_utc": "2026-09-14T07:43:38.121326+00:00"
+        "verified_at_utc": "2026-09-14T12:44:46.789563+00:00"
       }
     },
     {
@@ -774,9 +719,9 @@
         "transport": "intervals_icu",
         "source_hash": "b8617aa5915acd49350bdc68503a7c58f4be457b379a325c9b79bd2f08f23bd7",
         "device_delivery": "unverified",
-        "updated_at_utc": "2026-09-14T07:43:38.242174+00:00",
+        "updated_at_utc": "2026-09-14T12:44:46.967606+00:00",
         "provider_event_id": 135078982,
-        "verified_at_utc": "2026-09-14T07:43:38.242174+00:00"
+        "verified_at_utc": "2026-09-14T12:44:46.967606+00:00"
       }
     },
     {
@@ -977,9 +922,9 @@
         "transport": "intervals_icu",
         "source_hash": "880240979678aa1fd8eb1374a2c83823bc9a3be49d997ef05575bbe4595f8147",
         "device_delivery": "unverified",
-        "updated_at_utc": "2026-09-14T07:43:38.364711+00:00",
+        "updated_at_utc": "2026-09-14T12:44:47.145631+00:00",
         "provider_event_id": 135275790,
-        "verified_at_utc": "2026-09-14T07:43:38.364711+00:00"
+        "verified_at_utc": "2026-09-14T12:44:47.145631+00:00"
       }
     },
     {
@@ -1457,9 +1402,9 @@
         "transport": "intervals_icu",
         "source_hash": "96ff096994283fcf6db8dbd51bf9f4e0562a7433568527e707b7f052353bc988",
         "device_delivery": "unverified",
-        "updated_at_utc": "2026-09-14T07:43:38.487515+00:00",
+        "updated_at_utc": "2026-09-14T12:44:47.315508+00:00",
         "provider_event_id": 135486213,
-        "verified_at_utc": "2026-09-14T07:43:38.487515+00:00"
+        "verified_at_utc": "2026-09-14T12:44:47.315508+00:00"
       }
     },
     {
@@ -1908,9 +1853,9 @@
         "transport": "intervals_icu",
         "source_hash": "be9d1761e0c308fa21de98a0bdd657b35c17e11a343dff54f1e561a58f74ec71",
         "device_delivery": "unverified",
-        "updated_at_utc": "2026-09-14T07:43:38.611902+00:00",
+        "updated_at_utc": "2026-09-14T12:44:47.484586+00:00",
         "provider_event_id": 135973445,
-        "verified_at_utc": "2026-09-14T07:43:38.611902+00:00"
+        "verified_at_utc": "2026-09-14T12:44:47.484586+00:00"
       }
     }
   ],
