@@ -92,6 +92,7 @@ PAREN_WITH_STRUCTURE_RE = re.compile(
     re.IGNORECASE,
 )
 TOTAL_HILLS_RE = re.compile(r"\b\d+\s+backar\b", re.IGNORECASE)
+MTB_XC_EXPANSION_PATTERN = re.compile(r"\bMTB/XC(?:/XC)+\b", re.IGNORECASE)
 
 
 def load(path, fallback):
@@ -131,16 +132,31 @@ def strategy_visible_labels(strategy):
     return labels
 
 
+def _repair_public_label_expansion(text):
+    """Repair historical output from non-idempotent public-label replacement."""
+    return MTB_XC_EXPANSION_PATTERN.sub("MTB/XC", str(text or ""))
+
+
 def _replace_internal_identifier(text, labels):
     if not labels:
         return text
-    value = text
+    value = _repair_public_label_expansion(text)
     for key, label in sorted(labels.items(), key=lambda item: len(item[0]), reverse=True):
         pattern = re.compile(
             rf"(?<![A-Za-z0-9_-]){re.escape(key)}(?![A-Za-z0-9_-])",
             re.IGNORECASE,
         )
-        value = pattern.sub(label, value)
+        protected_spans = [
+            match.span()
+            for match in re.finditer(re.escape(label), value, flags=re.IGNORECASE)
+        ]
+
+        def replace(match):
+            if any(start <= match.start() and match.end() <= end for start, end in protected_spans):
+                return match.group(0)
+            return label
+
+        value = pattern.sub(replace, value)
     return value
 
 
@@ -356,6 +372,11 @@ def assert_no_forbidden_visible_terms(coach):
     if forbidden:
         raise RuntimeError(
             f"Coachspråk: förbjuden plattformsterm kvar i synlig analys: {forbidden.group(0)!r}"
+        )
+    expanded_label = MTB_XC_EXPANSION_PATTERN.search(raw)
+    if expanded_label:
+        raise RuntimeError(
+            f"Coachspråk: expanderad publik etikett kvar i synlig analys: {expanded_label.group(0)!r}"
         )
     for raw_label in PUBLIC_ACTIVITY_LABELS:
         provider_fact = re.search(rf"\b{re.escape(raw_label)}\s*:", raw, re.IGNORECASE)
