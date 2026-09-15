@@ -6,6 +6,7 @@ from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+from activity_labels import public_activity_label
 from coach_rules import matching_activity, planning_window
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -21,7 +22,10 @@ CSS = r'''
 .completed-session-with-icon{display:flex;align-items:center;gap:8px;min-width:0}
 .completed-session-with-icon .sport-icon{width:19px;height:19px;flex:0 0 auto;color:#64748b}
 .completed-session-with-icon .sport-icon.icon-swim,.completed-session-with-icon .sport-icon.icon-bike,.completed-session-with-icon .sport-icon.icon-enduro,.completed-session-with-icon .sport-icon.icon-strength{width:21px}
-@media(max-width:620px){.completed-session-with-icon .sport-icon{width:18px;height:18px}.completed-session-with-icon .sport-icon.icon-swim,.completed-session-with-icon .sport-icon.icon-bike,.completed-session-with-icon .sport-icon.icon-enduro,.completed-session-with-icon .sport-icon.icon-strength{width:20px}}
+.completed-activity-with-icon{display:flex;align-items:center;gap:8px;min-width:0}
+.completed-activity-with-icon .sport-icon{width:16px;height:16px;flex:0 0 auto;color:#64748b}
+.completed-activity-with-icon .sport-icon.icon-swim,.completed-activity-with-icon .sport-icon.icon-bike,.completed-activity-with-icon .sport-icon.icon-enduro,.completed-activity-with-icon .sport-icon.icon-strength{width:18px}
+@media(max-width:620px){.completed-session-with-icon .sport-icon{width:18px;height:18px}.completed-session-with-icon .sport-icon.icon-swim,.completed-session-with-icon .sport-icon.icon-bike,.completed-session-with-icon .sport-icon.icon-enduro,.completed-session-with-icon .sport-icon.icon-strength{width:20px}.completed-activity-with-icon .sport-icon{width:15px;height:15px}.completed-activity-with-icon .sport-icon.icon-swim,.completed-activity-with-icon .sport-icon.icon-bike,.completed-activity-with-icon .sport-icon.icon-enduro,.completed-activity-with-icon .sport-icon.icon-strength{width:17px}}
 '''.strip()
 
 PLAN_SPORT_ICON_KEYS = {
@@ -67,12 +71,54 @@ def local_date(activity):
     return value[:10] if len(value) >= 10 else ""
 
 
+def fmt_duration(sec):
+    if sec is None:
+        return ""
+    sec = int(sec)
+    h, rem = divmod(sec, 3600)
+    m, s = divmod(rem, 60)
+    return f"{h}:{m:02d}:{s:02d}" if h else f"{m}:{s:02d}"
+
+
+def fmt_activity(activity):
+    bits = []
+    if activity.get("distance_m"):
+        bits.append(f'{activity["distance_m"] / 1000:.2f} km'.replace(".", ","))
+    if activity.get("elapsed_time_s"):
+        bits.append(fmt_duration(activity["elapsed_time_s"]))
+    if activity.get("average_heartrate"):
+        bits.append(f'snittpuls {round(activity["average_heartrate"])}')
+    if activity.get("max_heartrate"):
+        bits.append(f'max {round(activity["max_heartrate"])}')
+    return " · ".join(bits)
+
+
 def icon_key(day, activity):
     plan_sport = str((day or {}).get("sport") or "").strip().lower()
     if plan_sport in PLAN_SPORT_ICON_KEYS:
         return PLAN_SPORT_ICON_KEYS[plan_sport]
     activity_sport = str((activity or {}).get("sport_type") or "").strip()
     return ACTIVITY_SPORT_ICON_KEYS.get(activity_sport, "activity")
+
+
+def activity_icon_key(activity):
+    activity_sport = str((activity or {}).get("sport_type") or "").strip()
+    mapped = ACTIVITY_SPORT_ICON_KEYS.get(activity_sport)
+    if mapped:
+        return mapped
+
+    label = public_activity_label(activity).lower()
+    if "enduro" in label:
+        return "enduro"
+    if "sim" in label:
+        return "swim"
+    if "mtb" in label or "cykel" in label or "bike" in label:
+        return "bike"
+    if "styrk" in label or "weight" in label:
+        return "strength"
+    if "löp" in label or "trail" in label or "run" in label:
+        return "run"
+    return "activity"
 
 
 def render_icon(name, icon_registry):
@@ -97,6 +143,87 @@ def add_css(page):
     if "</style>" not in page:
         raise RuntimeError("Genomfört-ikon: sidan saknar </style>")
     return page.replace("</style>", CSS + "\n</style>", 1)
+
+
+def plain_activity_row(activity):
+    label = public_activity_label(activity)
+    return (
+        f'<div><strong>{html.escape(label)}</strong> · '
+        f'{html.escape(fmt_activity(activity))}</div>'
+    )
+
+
+def decorated_activity_row(activity, icon_registry):
+    label = public_activity_label(activity)
+    key = activity_icon_key(activity)
+    activity_id = html.escape(str(activity.get("id") or ""))
+    return (
+        f'<div class="completed-activity-with-icon" data-completed-activity-id="{activity_id}" '
+        f'data-completed-sport-icon="{html.escape(key)}">'
+        f'{render_icon(key, icon_registry)}<span><strong>{html.escape(label)}</strong> · '
+        f'{html.escape(fmt_activity(activity))}</span></div>'
+    )
+
+
+def decorate_completed_week_activity_icons(page, activities_state, today, icon_registry):
+    same_day = [
+        activity
+        for activity in (activities_state.get("activities") or [])
+        if local_date(activity) == today
+    ]
+    if not same_day:
+        return page
+
+    marker = f'<div class="day" id="dag-{html.escape(today)}">'
+    card_start = page.find(marker)
+    if card_start < 0:
+        return page
+    card_end = page.find('<div class="day" id="dag-', card_start + len(marker))
+    if card_end < 0:
+        card_end = page.find('<h2 class="section">', card_start + len(marker))
+    if card_end < 0:
+        card_end = len(page)
+    card = page[card_start:card_end]
+
+    decorated_ids = []
+    for activity in same_day:
+        activity_id = html.escape(str(activity.get("id") or ""))
+        existing_token = f'data-completed-activity-id="{activity_id}"'
+        if activity_id and existing_token in card:
+            decorated_ids.append(activity_id)
+            continue
+
+        plain = plain_activity_row(activity)
+        if plain not in card:
+            raise RuntimeError(
+                f"Genomfört-ikon: aktivitetsrad saknas i veckoplanen för {activity.get('id')}"
+            )
+        replacement = decorated_activity_row(activity, icon_registry)
+        card = card.replace(plain, replacement, 1)
+        decorated_ids.append(activity_id)
+
+    page = page[:card_start] + card + page[card_end:]
+    page = add_css(page)
+
+    verify_start = page.find(marker)
+    verify_end = page.find('<div class="day" id="dag-', verify_start + len(marker))
+    if verify_end < 0:
+        verify_end = page.find('<h2 class="section">', verify_start + len(marker))
+    if verify_end < 0:
+        verify_end = len(page)
+    verify_card = page[verify_start:verify_end]
+    for activity in same_day:
+        key = activity_icon_key(activity)
+        activity_id = html.escape(str(activity.get("id") or ""))
+        if activity_id and f'data-completed-activity-id="{activity_id}"' not in verify_card:
+            raise RuntimeError(
+                f"Genomfört-ikon: aktivitetsraden verifierades inte för {activity.get('id')}"
+            )
+        if f'data-completed-sport-icon="{key}"' not in verify_card:
+            raise RuntimeError(
+                f"Genomfört-ikon: {key}-ikon saknas i veckoplanens genomförda aktivitetsrad"
+            )
+    return page
 
 
 def decorate_completed_today_icon(page, plan, upcoming, activities_state, today, icon_registry):
@@ -180,8 +307,16 @@ def main():
         today,
         icon_registry,
     )
+    rendered = decorate_completed_week_activity_icons(
+        rendered,
+        activities,
+        today,
+        icon_registry,
+    )
     INDEX_FILE.write_text(rendered, encoding="utf-8")
-    print("Genomfört-ikon OK: dagens genomförda pass använder samma grenikonmodell som planerade pass.")
+    print(
+        "Genomfört-ikon OK: efterpasskort och dagens faktiska veckoplansrader använder grenikoner."
+    )
     return 0
 
 
