@@ -4,7 +4,7 @@
       "activity_id": 20175536586,
       "activity_date": "2026-09-14",
       "activity_name": "Styrketräning på natten",
-      "generated_at_utc": "2026-09-15T04:53:09.699399+00:00",
+      "generated_at_utc": "2026-09-15T09:21:16.737450+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 2,
@@ -16,33 +16,33 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Kort kontrollerad styrka 34,8 min direkt efter endurokvällen; pulsnivåerna indikerar låg lokal belastning.",
-        "load_interpretation": "Samlad närbelastning de senaste 48 timmarna är hög p.g.a.",
+        "summary": "Genomfört styrkepass (34,8 min) direkt efter enduro; pulsnivåer och jämförelsen med planen visar kontrollerad styrka utan kardiovaskulär belastning.",
+        "load_interpretation": "Sammantaget ger måndagens långa enduro + kvällens ~35 min styrka en signifikant mekanisk/neuromuskulär närbelastning inför tisdagens löptröskel.",
         "confidence": "medium",
         "facts": [
           "Styrka: 34:49 · snittpuls 74,8 · maxpuls 109.",
           "Planstatus 2026-09-14: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Styrkepasset var kort och hade låg hjärtrespons och verkar inte ha orsakat hög kardiovaskulär stress utöver enduron.",
-          "Det faktiska externa enduroarbetet ger mekanisk/neuromuskulär belastning inför planerat tröskelpass i morgon; progression kräver absorberbar marginal."
+          "Styrkepasset genomfördes kontrollerat (låg snittpuls) och verkar ha hållits som planerat efter enduron, vilket bevarar styrkestimulus utan failure.",
+          "Den kombinerade mekaniska och neuromuskulära belastningen i de senaste 48–72 h ökar risken att tisdagens prioriterade kontrollerade tröskel blir svårare att utföra med avsedd jämnhet om…"
         ],
         "unknowns": [
-          "Användarens subjekta återhämtning idag/evening efter styrkan.",
-          "Detaljerad styrkeintensitet (set/reps/ failure) saknas och skulle påverka muskulär belastningsbedömning."
+          "Subjektiv återhämtning/benkänsla efter passen (ingen användarrapport).",
+          "Saknas direkt jämförbar tröskeldata för dagens kvällstillstånd—hur kontrollerad tröskelkapacitet påverkas är osäkert."
         ]
       },
       "plan_action": {
-        "action": "keep",
+        "action": "reduce",
         "target_date": "2026-09-15",
-        "reason": "Närbelastningen talar för att bibehålla planerad tröskeldos men inte öka den; dagens styrka var kontrollerad och inte överstigande.",
-        "recommendation": "Genomför planerat löp‑3×10 min kontrollerad tröskel som ordinerat; håll intensiteten strikt kontrollerad och prioritera noggrann uppvärmning och tidig stopp‑känsla om benen känns tunga.",
+        "reason": "Måndagens långa enduro plus efterföljande styrka ger ökad mekanisk/neuromuskulär närbelastning inför dagens prioriterade tröskel.",
+        "recommendation": "Följ det justerade passupplägget i planen.",
         "dose_option_id": "",
         "requires_approval": false
       },
       "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
+        "applied": true,
+        "note": "Konservativ ändring applicerad på 2026-09-15: reduce."
       }
     },
     {
@@ -1109,8 +1109,8 @@
       }
     }
   ],
-  "last_trigger_hash": "b23dae574bc269ebab30f1269e957517452768bc245da917047916ec1807635e",
-  "last_run_utc": "2026-09-15T04:53:09.699399+00:00",
+  "last_trigger_hash": "5ddcc8ab9edeec373643707be1256dbb06dd5165739f75944fd1272ae717e195",
+  "last_run_utc": "2026-09-15T09:21:16.737450+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 2
