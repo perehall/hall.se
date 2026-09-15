@@ -72,6 +72,21 @@ class PlanOverrideTests(unittest.TestCase):
         self.assertEqual(apply_overrides(self.document, self.config), 0)
         self.assertEqual(self.document, once)
 
+    def test_reapply_preserves_regenerated_session_derived_state(self):
+        self.assertEqual(apply_overrides(self.document, self.config), 1)
+        day = self.document["days"][0]
+        day["workout_design"] = {"selected_candidate_id": "current-session"}
+        day["device_workout"] = {"external_id": "hall-device:test"}
+        day["device_sync"] = {"status": "synced"}
+        self.config["overrides"][0]["remove_fields"].extend(
+            ["device_workout", "device_sync"]
+        )
+
+        self.assertEqual(apply_overrides(self.document, self.config), 0)
+        self.assertEqual(day["workout_design"]["selected_candidate_id"], "current-session")
+        self.assertEqual(day["device_workout"]["external_id"], "hall-device:test")
+        self.assertEqual(day["device_sync"]["status"], "synced")
+
     def test_completed_truth_is_not_rewritten(self):
         day = self.document["days"][0]
         day["status"] = "completed"
