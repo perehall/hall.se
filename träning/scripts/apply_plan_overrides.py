@@ -3,7 +3,7 @@
 
 The generated plan is allowed to evolve as activities and recovery are assessed,
 but a user-confirmed future commitment must survive both scheduled rebuilds and
-calendar rollover.  This small sidecar layer is deliberately deterministic: it
+calendar rollover. This small sidecar layer is deliberately deterministic: it
 only touches an explicitly named date, never rewrites completed truth, and
 removes derived workout state that belongs to the session being replaced.
 """
@@ -21,6 +21,15 @@ PLAN_FILES = (
     ROOT / "data" / "plan.json",
     ROOT / "data" / "upcoming_week.json",
 )
+
+# These fields are regenerated from the selected session later in the pipeline.
+# Clear them when an override actually replaces a session, but preserve the
+# newly generated state when the same override is re-applied during rendering.
+SESSION_DERIVED_FIELDS = {
+    "workout_design",
+    "device_workout",
+    "device_sync",
+}
 
 
 class PlanOverrideError(RuntimeError):
@@ -86,10 +95,17 @@ def apply_overrides(document: dict, config: dict) -> int:
 
         replacement_session = str(set_values.get("session") or "").strip()
         existing_session = str(day.get("session") or "").strip()
-        if replacement_session and existing_session and replacement_session != existing_session:
+        session_is_replaced = bool(replacement_session and replacement_session != existing_session)
+        if session_is_replaced and existing_session:
             day.setdefault("original_session", existing_session)
 
         for field in override.get("remove_fields") or []:
+            if (
+                field in SESSION_DERIVED_FIELDS
+                and replacement_session
+                and not session_is_replaced
+            ):
+                continue
             day.pop(field, None)
         day.update(set_values)
         day["manual_override"] = {
