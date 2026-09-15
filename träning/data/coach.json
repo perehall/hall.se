@@ -4,7 +4,7 @@
       "activity_id": 20188628588,
       "activity_date": "2026-09-15",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-09-15T17:52:08.172685+00:00",
+      "generated_at_utc": "2026-09-15T21:20:01.914336+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 2,
@@ -16,27 +16,27 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört 4×8 min tröskel ute — 13.13 km på 64 min med genomsnittspuls 143 och flera 1 km-intervaller runt 4:17–4:20, passet levererade planerat arbetsblock men varierande fart i…",
-        "load_interpretation": "Närbelastningen är förhöjd av måndagens enduro + styrka inom 24 h; mekanisk/neuromuskulär kostnad kvarstår inför kommande 1–2 dagar.",
+        "summary": "Genomfört 4×8 min tröskelutomhus, 13.13 km på 64 min med genomsnittspuls 143 bpm; passet innehöll upprepade 1 km-kalkyler från källvarv mellan ~4:17–5:33/km.",
+        "load_interpretation": "Närbelastningen de senaste 48 timmarna inkluderar lång Enduro + styrka och dagens tröskel; mekanisk/neuromuskulär kostnad är förhöjd inför kommande 24–72 h.",
         "confidence": "medium",
         "facts": [
           "Löpning: 13,13 km · 1:04:03 · 106 m+ · snittpuls 143,3 · maxpuls 163.",
           "Planstatus 2026-09-15: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Passet genomförde det planerade arbetsblocket och gav kontrollerad tröskelstimulans för mesocykeln.",
-          "Tidigare enduro + styrka ökar mekanisk/neuromuskulär kostnad; detta motiverar konservativ hantering av kommande stödpass."
+          "Passet visar att planens kontrollerade tröskel genomfördes med varierande fart men upprepade starka 1km-segment vilket indikerar genomfört kvalitetsarbete för dagens stimulus.",
+          "Kombinationen av måndagens långa enduro och efterföljande styrka ökar mekanisk/neuromuskulär belastning; därför bör närmaste pass övervägas konservativt för att skydda nästa prioriterade…"
         ],
         "unknowns": [
-          "Subjektiv återhämtning i natt (användarrapport saknas).",
-          "Detaljer om omedelbar benmuskulär lokal trötthet efter styrkan saknas."
+          "Subjektiv dagsform/ömhet finns ej i användarrapport för detta pass.",
+          "Exakt återhämtningsstatus natt efter pass är okänd (återhämtningsunderlaget ger kontext men inget avgörande)."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-09-16",
-        "reason": "Mikrocykeln prioriterar simning som flex/maintenance och aktuell närbelastning kräver ingen ytterligare reducering.",
-        "recommendation": "Behåll planerad simning 3 200 m i morgon; håll sessionen aerob/teknisk och undvik hård styrka eller plyometri samma dag. Om du känner ovanlig muskelsmärta eller trötthet imorgon morgon, vila simningen eller gör mycket lätt teknikpass istället.",
+        "reason": "Mikrocykelns simpass är flex/underhåll och planens närtidstagning förutsätter att dagens tröskel genomfördes utan skada.",
+        "recommendation": "Behåll planerat simpass 2026-09-16 (3 200 m aerob/teknik) som planerat; håll intensiteten lugn och prioritera teknisk kvalitet. Om du känner ovanlig lokal muskeltrötthet eller stelhet, ta simningen som mycket lugn återhämtning eller vila.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -1154,8 +1154,8 @@
       }
     }
   ],
-  "last_trigger_hash": "f15d235ad0242ee722aedef7158dafed05fc72af04116e7273d803323c825134",
-  "last_run_utc": "2026-09-15T17:52:08.172685+00:00",
+  "last_trigger_hash": "4db1baf4bfe6267350e34b4ed4c130920f4ace9f62fe2195f513ccfee1b53137",
+  "last_run_utc": "2026-09-15T21:20:01.914336+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 2
