@@ -1,6 +1,51 @@
 {
   "analyses": [
     {
+      "activity_id": 20188628588,
+      "activity_date": "2026-09-15",
+      "activity_name": "Löpning på kvällen",
+      "generated_at_utc": "2026-09-15T17:43:25.292138+00:00",
+      "model": "gpt-5-mini",
+      "analysis_contract": {
+        "pipeline_version": 2,
+        "workout_context_version": 3,
+        "plan_comparison_version": 1,
+        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
+        "analysis_code_sha256": "10e4515222f1f7936852f8a7fd62e9afd2eddb7e0f7693c636500142c97927a1"
+      },
+      "performance_marker_id": null,
+      "performance_protocol_key": null,
+      "assessment": {
+        "summary": "Genomförde 4×8 min-tröskel ute: 13.13 km på 64 min med snittpuls 143 och flera 1 km-intervaller runt 4:17–4:20, körda efter måndagens enduro+styrka.",
+        "load_interpretation": "Närbelastning (måndagens enduro + styrka inom 24 h) ökade mekanisk/neuromuskulär kostnad inför dagens tröskel; passet genomfördes men med variabel fart över blocken.",
+        "confidence": "medium",
+        "facts": [
+          "Löpning: 13,13 km · 1:04:03 · 106 m+ · snittpuls 143,3 · maxpuls 163.",
+          "Planstatus 2026-09-15: dagen är markerad genomförd i coachens beslutsunderlag."
+        ],
+        "interpretations": [
+          "Passet visar att användaren kunde genomföra dagens prioriterade tröskel men med tydlig fartvariation mellan segment, troligen påverkat av föregående enduro+styrka vilket ökar mekanisk…",
+          "För utvecklingen innebär detta ett genomfört anchor-stimulus (tröskel) utan tecken på klar överträdelse av planens intensitetsbegränsning; enda datapunkten räcker inte för progression"
+        ],
+        "unknowns": [
+          "Subjektiv återhämtning efter passet (användarrapport tom)",
+          "nästa 24–48 h återhämtningsstatus och planerad simning/MTB/XC påverkan"
+        ]
+      },
+      "plan_action": {
+        "action": "keep",
+        "target_date": "2026-09-16",
+        "reason": "Passet var genomfört och planens prioriterade tröskelstimulus är uppfyllt utan tydlig skaderisk eller behov av omedelbar vila.",
+        "recommendation": "Behåll onsdagens simning 3 200 m som planerat; håll den aerob/teknisk och mekanisk kostnad. Om du känner ovanlig stelhet eller lokal muskelsmärta imorgon: vila eller gör mycket lätt simning istället.",
+        "dose_option_id": "",
+        "requires_approval": false
+      },
+      "auto_apply": {
+        "applied": false,
+        "note": "Ingen automatisk planändring."
+      }
+    },
+    {
       "activity_id": 20175536586,
       "activity_date": "2026-09-14",
       "activity_name": "Styrketräning på natten",
@@ -1109,8 +1154,8 @@
       }
     }
   ],
-  "last_trigger_hash": "c409482cb22f363c5134def5bf4fa50ae2fb84baee37b5b0e7a7384b36c6f7cf",
-  "last_run_utc": "2026-09-15T16:59:09.225243+00:00",
+  "last_trigger_hash": "5c84a7e16320c5459aac6172c5704b1703ec178bb1a8d4876e00011b96d466eb",
+  "last_run_utc": "2026-09-15T17:43:25.292138+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 2
