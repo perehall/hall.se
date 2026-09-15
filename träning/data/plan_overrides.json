@@ -122,6 +122,42 @@
           "technical"
         ]
       }
+    },
+    {
+      "date": "2026-09-15",
+      "source": "user_confirmed",
+      "note": "Dagens prioriterade tröskelpass ändras före genomförandet från 3 × 10 min / 90 s till 4 × 8 min / 120 s utomhus. Åttaminutersblocken passar standardrundan bättre.",
+      "remove_fields": [
+        "dose_options",
+        "baseline_option_id",
+        "dose_open",
+        "dose_resolution",
+        "development_progression",
+        "development_step",
+        "workout_design",
+        "device_workout",
+        "device_sync",
+        "watch_workout",
+        "coach_adjustment"
+      ],
+      "set": {
+        "status": "planned",
+        "planning_status": "fixed",
+        "session": "Löpning utomhus · kontrollerad tröskel · 4 × 8 min / 120 s jogg",
+        "reason": "Användarbekräftad justering av dagens tröskelpass. 4 × 8 min ger 32 min kvalitetsarbete och väljs framför 3 × 10 min eftersom åttaminutersblocken passar standardrundan bättre; intensiteten ska inte höjas.",
+        "development_focus": "Jämnt tryck över alla fyra. Styr på kontrollerad tröskelansträngning snarare än exakt fart; backar, vind och svängar får påverka farten. Första två ska vara kontrollerade och den fjärde får kräva fokus utan att bli max.",
+        "sport": "run",
+        "classification": "training",
+        "manual_lock": true,
+        "priority_role": "anchor",
+        "stimuli": [
+          "run_threshold"
+        ],
+        "load_dimensions": [
+          "cardiovascular",
+          "mechanical"
+        ]
+      }
     }
   ]
 }
