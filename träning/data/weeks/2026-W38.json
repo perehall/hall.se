@@ -4,7 +4,7 @@
   "week_start": "2026-09-14",
   "week_end": "2026-09-20",
   "created_at_utc": "2026-09-13T23:09:46.558327+00:00",
-  "updated_at_utc": "2026-09-15T09:21:19.055224+00:00",
+  "updated_at_utc": "2026-09-15T09:24:00.992252+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -95,7 +95,82 @@
           "source": "user_confirmed",
           "note": "Styrka läggs direkt efter måndagens enduroskola."
         },
-        "activity_id": 20175917270
+        "activity_id": 20175917270,
+        "workout_design": {
+          "schema_version": 1,
+          "objective": {
+            "mesocycle_role": "protected_capacity",
+            "priority_role": "flex",
+            "stimuli": [
+              "enduro_technical",
+              "strength_unilateral",
+              "strength_core"
+            ],
+            "mesocycle_id": "run-threshold-hill-4w",
+            "microcycle_id": "run-threshold-hill-4w:mc4",
+            "microcycle_slot": ""
+          },
+          "near_term_context": {
+            "load_dimensions": [
+              "mechanical",
+              "neuromuscular",
+              "technical"
+            ],
+            "selection_uses_only_preapproved_doses": false
+          },
+          "progression_from_previous": {
+            "relation": "support",
+            "reason": "Användarbekräftad kombination: enduroskolan genomförs först och styrka/core direkt efter. Styrkan hålls kontrollerad utan failure; den samlade faktiska belastningen från enduro och styrka ska vägas in inför tisdagens prioriterade löptröskel.",
+            "demonstrated_floor_option_id": ""
+          },
+          "candidates": [
+            {
+              "id": "current-session",
+              "dose_option_id": "",
+              "session": "Enduroskola + styrka · styrkan efter enduron",
+              "intent": "Användarbekräftad kombination: enduroskolan genomförs först och styrka/core direkt efter. Styrkan hålls kontrollerad utan failure; den samlade faktiska belastningen från enduro och styrka ska vägas in inför tisdagens prioriterade löptröskel.",
+              "dose": {
+                "kind": "external",
+                "value": 1
+              },
+              "stimuli": [
+                "enduro_technical",
+                "strength_unilateral",
+                "strength_core"
+              ],
+              "prescription": {
+                "executable": true,
+                "completeness": "external",
+                "blocks": [
+                  {
+                    "name": "Fast/externt strukturerat pass",
+                    "work": {},
+                    "instruction": "Enduro: teknisk kvalitet och avslappnad körning. Styrka: kontrollerad unilateral styrka och bål med marginal i benen inför tisdagens löpning.",
+                    "intensity": "extern struktur"
+                  }
+                ],
+                "source": "external_commitment"
+              },
+              "score": {
+                "total": 65,
+                "breakdown": {
+                  "mesocycle_alignment": 30,
+                  "microcycle_alignment": 10,
+                  "progression_alignment": 15,
+                  "prescription_specificity": 10,
+                  "near_term_resolution": 0
+                },
+                "basis": "deterministic_constraint_alignment"
+              }
+            }
+          ],
+          "selected_candidate_id": "current-session",
+          "selection": {
+            "method": "deterministic_constraint_scoring",
+            "preferred_dose_option_id": "",
+            "reason_for_today": "Användarbekräftad kombination: enduroskolan genomförs först och styrka/core direkt efter. Styrkan hålls kontrollerad utan failure; den samlade faktiska belastningen från enduro och styrka ska vägas in inför tisdagens prioriterade löptröskel."
+          }
+        }
       },
       {
         "date": "2026-09-15",
@@ -130,6 +205,134 @@
           "action": "reduce",
           "reason": "Måndagens långa enduro plus efterföljande styrka ger ökad mekanisk/neuromuskulär närbelastning inför dagens prioriterade tröskel.",
           "applied_at_utc": "2026-09-15T09:21:16.735080+00:00"
+        },
+        "workout_design": {
+          "schema_version": 1,
+          "objective": {
+            "mesocycle_role": "primary",
+            "priority_role": "anchor",
+            "stimuli": [
+              "run_threshold"
+            ],
+            "mesocycle_id": "run-threshold-hill-4w",
+            "microcycle_id": "run-threshold-hill-4w:mc4",
+            "microcycle_slot": "run_threshold"
+          },
+          "near_term_context": {
+            "load_dimensions": [
+              "cardiovascular",
+              "mechanical"
+            ],
+            "selection_uses_only_preapproved_doses": false
+          },
+          "progression_from_previous": {
+            "relation": "support",
+            "reason": "Användarbekräftad justering av dagens tröskelpass. 4 × 8 min ger 32 min kvalitetsarbete och väljs framför 3 × 10 min eftersom åttaminutersblocken passar standardrundan bättre; intensiteten ska inte höjas.",
+            "demonstrated_floor_option_id": ""
+          },
+          "candidates": [
+            {
+              "id": "current-session",
+              "dose_option_id": "",
+              "session": "Löpning utomhus · kontrollerad tröskel · 4 × 8 min / 120 s jogg",
+              "intent": "Användarbekräftad justering av dagens tröskelpass. 4 × 8 min ger 32 min kvalitetsarbete och väljs framför 3 × 10 min eftersom åttaminutersblocken passar standardrundan bättre; intensiteten ska inte höjas.",
+              "dose": {
+                "kind": "structured",
+                "value": 1
+              },
+              "stimuli": [
+                "run_threshold"
+              ],
+              "prescription": {
+                "executable": true,
+                "completeness": "full",
+                "blocks": [
+                  {
+                    "name": "Arbetsdel",
+                    "work": {
+                      "repetitions": 4,
+                      "duration_s": 480,
+                      "total_work_s": 1920
+                    },
+                    "instruction": "Kontrollerad tröskel",
+                    "intensity": "kontrollerad tröskel",
+                    "recovery": {
+                      "duration_s": 120,
+                      "instruction": "Lugn jogg"
+                    }
+                  }
+                ],
+                "source": "structured_session"
+              },
+              "score": {
+                "total": 70,
+                "breakdown": {
+                  "mesocycle_alignment": 30,
+                  "microcycle_alignment": 10,
+                  "progression_alignment": 15,
+                  "prescription_specificity": 15,
+                  "near_term_resolution": 0
+                },
+                "basis": "deterministic_constraint_alignment"
+              }
+            }
+          ],
+          "selected_candidate_id": "current-session",
+          "selection": {
+            "method": "deterministic_constraint_scoring",
+            "preferred_dose_option_id": "",
+            "reason_for_today": "Användarbekräftad justering av dagens tröskelpass. 4 × 8 min ger 32 min kvalitetsarbete och väljs framför 3 × 10 min eftersom åttaminutersblocken passar standardrundan bättre; intensiteten ska inte höjas."
+          }
+        },
+        "device_workout": {
+          "schema_version": 1,
+          "external_id": "hall-device:2026-09-15:run:run_threshold",
+          "date": "2026-09-15",
+          "sport": "run",
+          "provider_type": "Run",
+          "name": "Löpning utomhus · kontrollerad tröskel · 4 × 8 min / 120 s jogg",
+          "source_candidate_id": "current-session",
+          "source_hash": "9da791792460827319dec791d4da7915a2c13e96fe106e85762c84beab57a846",
+          "blocks": [
+            {
+              "name": "Arbetsdel",
+              "sets": 1,
+              "repetitions_per_set": 4,
+              "steps": [
+                {
+                  "kind": "work",
+                  "duration": {
+                    "kind": "time",
+                    "seconds": 480
+                  },
+                  "instruction": "Kontrollerad tröskel",
+                  "intensity_class": "interval"
+                },
+                {
+                  "kind": "recovery",
+                  "duration": {
+                    "kind": "time",
+                    "seconds": 120
+                  },
+                  "instruction": "Lugn jogg",
+                  "intensity_class": "recovery",
+                  "press_lap": false,
+                  "transport_reference_only": false
+                }
+              ]
+            }
+          ],
+          "target_policy": "explicit_single_primary_only",
+          "transport": "intervals_icu"
+        },
+        "device_sync": {
+          "status": "synced",
+          "transport": "intervals_icu",
+          "source_hash": "9da791792460827319dec791d4da7915a2c13e96fe106e85762c84beab57a846",
+          "device_delivery": "unverified",
+          "updated_at_utc": "2026-09-15T09:23:59.606020+00:00",
+          "provider_event_id": 134978151,
+          "verified_at_utc": "2026-09-15T09:23:59.606020+00:00"
         }
       },
       {
@@ -510,9 +713,9 @@
           "transport": "intervals_icu",
           "source_hash": "b8617aa5915acd49350bdc68503a7c58f4be457b379a325c9b79bd2f08f23bd7",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-15T09:21:17.743957+00:00",
+          "updated_at_utc": "2026-09-15T09:23:59.745037+00:00",
           "provider_event_id": 135078982,
-          "verified_at_utc": "2026-09-15T09:21:17.743957+00:00"
+          "verified_at_utc": "2026-09-15T09:23:59.745037+00:00"
         }
       },
       {
@@ -713,9 +916,9 @@
           "transport": "intervals_icu",
           "source_hash": "880240979678aa1fd8eb1374a2c83823bc9a3be49d997ef05575bbe4595f8147",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-15T09:21:17.870003+00:00",
+          "updated_at_utc": "2026-09-15T09:23:59.882213+00:00",
           "provider_event_id": 135275790,
-          "verified_at_utc": "2026-09-15T09:21:17.870003+00:00"
+          "verified_at_utc": "2026-09-15T09:23:59.882213+00:00"
         }
       },
       {
@@ -1193,9 +1396,9 @@
           "transport": "intervals_icu",
           "source_hash": "96ff096994283fcf6db8dbd51bf9f4e0562a7433568527e707b7f052353bc988",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-15T09:21:17.997061+00:00",
+          "updated_at_utc": "2026-09-15T09:24:00.020541+00:00",
           "provider_event_id": 135486213,
-          "verified_at_utc": "2026-09-15T09:21:17.997061+00:00"
+          "verified_at_utc": "2026-09-15T09:24:00.020541+00:00"
         }
       },
       {
@@ -1644,9 +1847,9 @@
           "transport": "intervals_icu",
           "source_hash": "be9d1761e0c308fa21de98a0bdd657b35c17e11a343dff54f1e561a58f74ec71",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-15T09:21:18.131178+00:00",
+          "updated_at_utc": "2026-09-15T09:24:00.159740+00:00",
           "provider_event_id": 135973445,
-          "verified_at_utc": "2026-09-15T09:21:18.131178+00:00"
+          "verified_at_utc": "2026-09-15T09:24:00.159740+00:00"
         }
       }
     ],
@@ -1795,7 +1998,7 @@
       "activity_id": 20175536586,
       "activity_date": "2026-09-14",
       "activity_name": "Styrketräning på natten",
-      "generated_at_utc": "2026-09-15T09:21:16.737450+00:00",
+      "generated_at_utc": "2026-09-15T09:23:58.934080+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 2,
@@ -1807,33 +2010,33 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört styrkepass (34,8 min) direkt efter enduro; pulsnivåer och jämförelsen med planen visar kontrollerad styrka utan kardiovaskulär belastning.",
-        "load_interpretation": "Sammantaget ger måndagens långa enduro + kvällens ~35 min styrka en signifikant mekanisk/neuromuskulär närbelastning inför tisdagens löptröskel.",
+        "summary": "Genomförd styrketräning 34,8 min direkt efter måndagens enduro; puls och varaktighet visar kontrollerad styrkeexponering utan höga pulstoppar.",
+        "load_interpretation": "Kombinationen måndagens långa enduro + efterföljande ~35 min styrka ökar mekanisk/neuromuskulär närbelastning inför tisdagens prioriterade tröskelpass.",
         "confidence": "medium",
         "facts": [
           "Styrka: 34:49 · snittpuls 74,8 · maxpuls 109.",
           "Planstatus 2026-09-14: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Styrkepasset genomfördes kontrollerat (låg snittpuls) och verkar ha hållits som planerat efter enduron, vilket bevarar styrkestimulus utan failure.",
-          "Den kombinerade mekaniska och neuromuskulära belastningen i de senaste 48–72 h ökar risken att tisdagens prioriterade kontrollerade tröskel blir svårare att utföra med avsedd jämnhet om…"
+          "Styrkepasset var kontrollerat (låg genomsnittspuls, måttligt max), vilket sannolikt gav mekanisk/neuromuskulär belastning utan failure.",
+          "Den samlade närbelastningen motiverar fortsatt konservativ hantering av dagens (2026-09-15) tröskel — undvik att öka intensitet eller arbetsvolym jämfört med plan."
         ],
         "unknowns": [
-          "Subjektiv återhämtning/benkänsla efter passen (ingen användarrapport).",
-          "Saknas direkt jämförbar tröskeldata för dagens kvällstillstånd—hur kontrollerad tröskelkapacitet påverkas är osäkert."
+          "Subjektiv trötthet/benkänsla efter kvällspasset (användarrapport saknas).",
+          "Eventuell återhämtningsunderlaget/återhämtningsrespons under natten som påverkar dagens prestation."
         ]
       },
       "plan_action": {
-        "action": "reduce",
+        "action": "keep",
         "target_date": "2026-09-15",
-        "reason": "Måndagens långa enduro plus efterföljande styrka ger ökad mekanisk/neuromuskulär närbelastning inför dagens prioriterade tröskel.",
-        "recommendation": "Följ det justerade passupplägget i planen.",
+        "reason": "Närbelastningen från måndagens enduro + efterföljande styrka innebär ingen automatisk ökning av dagens plan; behåll den reducerade/träningsjusterade tröskeldosen.",
+        "recommendation": "Genomför planerat tröskelpass (4×8 min) i kontrollerad tröskelintensitet; prioritera jämn ansträngning och avsluta tidigare om benen känns tunga.",
         "dose_option_id": "",
         "requires_approval": false
       },
       "auto_apply": {
-        "applied": true,
-        "note": "Konservativ ändring applicerad på 2026-09-15: reduce."
+        "applied": false,
+        "note": "Ingen automatisk planändring."
       }
     },
     {
