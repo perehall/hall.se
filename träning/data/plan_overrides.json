@@ -128,6 +128,7 @@
       "source": "user_confirmed",
       "note": "Dagens prioriterade tröskelpass ändras före genomförandet från 3 × 10 min / 90 s till 4 × 8 min / 120 s utomhus. Åttaminutersblocken passar standardrundan bättre.",
       "remove_fields": [
+        "manual_lock",
         "dose_options",
         "baseline_option_id",
         "dose_open",
@@ -148,7 +149,6 @@
         "development_focus": "Jämnt tryck över alla fyra. Styr på kontrollerad tröskelansträngning snarare än exakt fart; backar, vind och svängar får påverka farten. Första två ska vara kontrollerade och den fjärde får kräva fokus utan att bli max.",
         "sport": "run",
         "classification": "training",
-        "manual_lock": true,
         "priority_role": "anchor",
         "stimuli": [
           "run_threshold"
