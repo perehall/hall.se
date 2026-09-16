@@ -1,6 +1,50 @@
 {
   "analyses": [
     {
+      "activity_id": 20203770266,
+      "activity_date": "2026-09-16",
+      "activity_name": "Simning på kvällen",
+      "generated_at_utc": "2026-09-16T18:10:58.909799+00:00",
+      "model": "gpt-5-mini",
+      "analysis_contract": {
+        "pipeline_version": 2,
+        "workout_context_version": 3,
+        "plan_comparison_version": 1,
+        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
+        "analysis_code_sha256": "10e4515222f1f7936852f8a7fd62e9afd2eddb7e0f7693c636500142c97927a1"
+      },
+      "performance_marker_id": null,
+      "performance_protocol_key": null,
+      "assessment": {
+        "summary": "Genomfört strukturerat simpass 3 500 m med tydlig setstruktur (24×100 + övriga), stabil tempovariation och hög maxpuls mot slutet.",
+        "load_interpretation": "Återhämtningen till nästa pass är ännu inte verifierad av samma-dagsdata.",
+        "confidence": "medium",
+        "facts": [
+          "Simning: 3,50 km · 1:12:03 · snittpuls 127,8 · maxpuls 171."
+        ],
+        "interpretations": [
+          "Passet levererade planerad aerob/teknikstruktur och visar god genomförbarhet av 3 200–3 500 m volym",
+          "Höga maxpulsvärden i senare set kan indikera lokala intensitetskänningar men ensamrt ej skäl för planändring"
+        ],
+        "unknowns": [
+          "Subjektiv trötthet/smärta efter pass (användarrapport är tom)",
+          "Hur simbelastningen påverkar fredagets prioriterade löp (mekanisk bentrötthet)"
+        ]
+      },
+      "plan_action": {
+        "action": "keep",
+        "target_date": "2026-09-16",
+        "reason": "Simningen matchar planens underhålls-/teknikstimulus och visar genomförbarhet utan bevis för att justera närmsta dagar.",
+        "recommendation": "Behåll planerad status; rapportera gärna subjektiv trötthet eller lokal muskelömhet om du vill överväga att korta torsdagens MTB/XC eller fredagens backpass.",
+        "dose_option_id": "",
+        "requires_approval": false
+      },
+      "auto_apply": {
+        "applied": false,
+        "note": "Ingen automatisk planändring."
+      }
+    },
+    {
       "activity_id": 20188628588,
       "activity_date": "2026-09-15",
       "activity_name": "Löpning på kvällen",
@@ -1154,8 +1198,8 @@
       }
     }
   ],
-  "last_trigger_hash": "270719e119d197a4f4afcd7c6bfd59e3d7070489f6968ceaaf8115503fd9d8e7",
-  "last_run_utc": "2026-09-16T16:54:09.193740+00:00",
+  "last_trigger_hash": "052f6d344abf9feb08439498355f24f2941fd094eb2925ce8633fbd7c4c75c79",
+  "last_run_utc": "2026-09-16T18:10:58.909799+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 2
