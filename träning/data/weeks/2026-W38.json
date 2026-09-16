@@ -4,7 +4,7 @@
   "week_start": "2026-09-14",
   "week_end": "2026-09-20",
   "created_at_utc": "2026-09-13T23:09:46.558327+00:00",
-  "updated_at_utc": "2026-09-15T21:20:04.478957+00:00",
+  "updated_at_utc": "2026-09-16T00:08:14.116152+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -283,56 +283,6 @@
             "preferred_dose_option_id": "",
             "reason_for_today": "Användarbekräftad justering av dagens tröskelpass. 4 × 8 min ger 32 min kvalitetsarbete och väljs framför 3 × 10 min eftersom åttaminutersblocken passar standardrundan bättre; intensiteten ska inte höjas."
           }
-        },
-        "device_workout": {
-          "schema_version": 1,
-          "external_id": "hall-device:2026-09-15:run:run_threshold",
-          "date": "2026-09-15",
-          "sport": "run",
-          "provider_type": "Run",
-          "name": "Löpning utomhus · kontrollerad tröskel · 4 × 8 min / 120 s jogg",
-          "source_candidate_id": "current-session",
-          "source_hash": "9da791792460827319dec791d4da7915a2c13e96fe106e85762c84beab57a846",
-          "blocks": [
-            {
-              "name": "Arbetsdel",
-              "sets": 1,
-              "repetitions_per_set": 4,
-              "steps": [
-                {
-                  "kind": "work",
-                  "duration": {
-                    "kind": "time",
-                    "seconds": 480
-                  },
-                  "instruction": "Kontrollerad tröskel",
-                  "intensity_class": "interval"
-                },
-                {
-                  "kind": "recovery",
-                  "duration": {
-                    "kind": "time",
-                    "seconds": 120
-                  },
-                  "instruction": "Lugn jogg",
-                  "intensity_class": "recovery",
-                  "press_lap": false,
-                  "transport_reference_only": false
-                }
-              ]
-            }
-          ],
-          "target_policy": "explicit_single_primary_only",
-          "transport": "intervals_icu"
-        },
-        "device_sync": {
-          "status": "synced",
-          "transport": "intervals_icu",
-          "source_hash": "9da791792460827319dec791d4da7915a2c13e96fe106e85762c84beab57a846",
-          "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-15T21:20:02.774340+00:00",
-          "provider_event_id": 134978151,
-          "verified_at_utc": "2026-09-15T21:20:02.774340+00:00"
         },
         "activity_id": 20188628588
       },
@@ -714,9 +664,9 @@
           "transport": "intervals_icu",
           "source_hash": "b8617aa5915acd49350bdc68503a7c58f4be457b379a325c9b79bd2f08f23bd7",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-15T21:20:02.974151+00:00",
+          "updated_at_utc": "2026-09-16T00:08:12.861908+00:00",
           "provider_event_id": 135078982,
-          "verified_at_utc": "2026-09-15T21:20:02.974151+00:00"
+          "verified_at_utc": "2026-09-16T00:08:12.861908+00:00"
         }
       },
       {
@@ -917,9 +867,9 @@
           "transport": "intervals_icu",
           "source_hash": "880240979678aa1fd8eb1374a2c83823bc9a3be49d997ef05575bbe4595f8147",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-15T21:20:03.181883+00:00",
+          "updated_at_utc": "2026-09-16T00:08:12.985576+00:00",
           "provider_event_id": 135275790,
-          "verified_at_utc": "2026-09-15T21:20:03.181883+00:00"
+          "verified_at_utc": "2026-09-16T00:08:12.985576+00:00"
         }
       },
       {
@@ -1397,9 +1347,9 @@
           "transport": "intervals_icu",
           "source_hash": "96ff096994283fcf6db8dbd51bf9f4e0562a7433568527e707b7f052353bc988",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-15T21:20:03.373373+00:00",
+          "updated_at_utc": "2026-09-16T00:08:13.118804+00:00",
           "provider_event_id": 135486213,
-          "verified_at_utc": "2026-09-15T21:20:03.373373+00:00"
+          "verified_at_utc": "2026-09-16T00:08:13.118804+00:00"
         }
       },
       {
@@ -1848,9 +1798,9 @@
           "transport": "intervals_icu",
           "source_hash": "be9d1761e0c308fa21de98a0bdd657b35c17e11a343dff54f1e561a58f74ec71",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-15T21:20:03.569629+00:00",
+          "updated_at_utc": "2026-09-16T00:08:13.240104+00:00",
           "provider_event_id": 135973445,
-          "verified_at_utc": "2026-09-15T21:20:03.569629+00:00"
+          "verified_at_utc": "2026-09-16T00:08:13.240104+00:00"
         }
       }
     ],
@@ -2376,7 +2326,7 @@
       "activity_id": 20188628588,
       "activity_date": "2026-09-15",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-09-15T21:20:01.914336+00:00",
+      "generated_at_utc": "2026-09-16T00:08:12.224292+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 2,
@@ -2388,27 +2338,27 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört 4×8 min tröskelutomhus, 13.13 km på 64 min med genomsnittspuls 143 bpm; passet innehöll upprepade 1 km-kalkyler från källvarv mellan ~4:17–5:33/km.",
-        "load_interpretation": "Närbelastningen de senaste 48 timmarna inkluderar lång Enduro + styrka och dagens tröskel; mekanisk/neuromuskulär kostnad är förhöjd inför kommande 24–72 h.",
+        "summary": "Du genomförde planerat tröskelpass (4×8 min) utomhus: 13.13 km på 64 min med genomsnittspuls 143 bpm och upprepade 1‑km-kilar mellan 4:17–5:33/km, inklusive snabba 1‑km‑segment…",
+        "load_interpretation": "Närbelastningen de senaste 2–3 dagarna inkluderar måndagens långa Enduro + styrka och tisdagens tröskel; mekanisk/neuromuskulär belastning är ackumulerad och kräver…",
         "confidence": "medium",
         "facts": [
           "Löpning: 13,13 km · 1:04:03 · 106 m+ · snittpuls 143,3 · maxpuls 163.",
           "Planstatus 2026-09-15: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Passet visar att planens kontrollerade tröskel genomfördes med varierande fart men upprepade starka 1km-segment vilket indikerar genomfört kvalitetsarbete för dagens stimulus.",
-          "Kombinationen av måndagens långa enduro och efterföljande styrka ökar mekanisk/neuromuskulär belastning; därför bör närmaste pass övervägas konservativt för att skydda nästa prioriterade…"
+          "Passet ger avsedd tröskelvolym (32 min arbetsdel) och innehöll upprepade snabba 1‑km‑segment som visar genomförd kvalitet i delar av passet.",
+          "Sammantaget ger måndagens Enduro + styrka plus dagens tröskel en förhöjd mekanisk/neuromuskulär belastning som talar för att kommande simpass bör hållas konservativt som planerat."
         ],
         "unknowns": [
-          "Subjektiv dagsform/ömhet finns ej i användarrapport för detta pass.",
-          "Exakt återhämtningsstatus natt efter pass är okänd (återhämtningsunderlaget ger kontext men inget avgörande)."
+          "Ingen subjektiv användarrapport från dagens pass (användarrapport tom) förträningskänsla eller lokal muskeltrötthet.",
+          "Detaljer om efterföljande dags återhämtningsunderlaget/återhämtning efter dagens pass saknas i beslutstiden."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-09-16",
-        "reason": "Mikrocykelns simpass är flex/underhåll och planens närtidstagning förutsätter att dagens tröskel genomfördes utan skada.",
-        "recommendation": "Behåll planerat simpass 2026-09-16 (3 200 m aerob/teknik) som planerat; håll intensiteten lugn och prioritera teknisk kvalitet. Om du känner ovanlig lokal muskeltrötthet eller stelhet, ta simningen som mycket lugn återhämtning eller vila.",
+        "reason": "Simningen är underhålld som flex‑stimulus och närbelastningen talar inte för att ta bort den men kräver konservativ utförande.",
+        "recommendation": "Håll dagens simning enligt plan (3 200 m aerob/teknik). Behåll avsedd mekanisk kostnad och prioritera teknik/avslappnad återhämtning; undvik extra kvalitet eller ytterligare styrka i dag.",
         "dose_option_id": "",
         "requires_approval": false
       },
