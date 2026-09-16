@@ -83,6 +83,130 @@ class WorkoutPlanContextTests(unittest.TestCase):
         self.assertFalse(context["plan_day_found"])
         self.assertEqual(plan_comparison_fact(context), "")
 
+    def test_swim_structure_detects_a_different_structured_session(self):
+        plan = {
+            "days": [
+                {
+                    "date": "2026-09-16",
+                    "session": "Simning · 3 200 m · aerob/teknik",
+                    "sport": "swim",
+                    "stimuli": ["swim_aerobic", "swim_technique"],
+                    "dose_resolution": {
+                        "kind": "structured",
+                        "value": 3200,
+                        "option_id": "swim-support-3200",
+                    },
+                    "watch_workout": {
+                        "planned_distance_m": 3200,
+                        "blocks": [
+                            {"name": "Insim", "steps": [{"kind": "swim", "distance_m": 400}]},
+                            {
+                                "name": "Teknik",
+                                "repeat": 6,
+                                "steps": [
+                                    {"kind": "swim", "distance_m": 50},
+                                    {"kind": "rest", "duration_s": 15},
+                                ],
+                            },
+                            {
+                                "name": "Aerob",
+                                "repeat": 4,
+                                "steps": [
+                                    {"kind": "swim", "distance_m": 500},
+                                    {"kind": "rest", "duration_s": 30},
+                                ],
+                            },
+                            {
+                                "name": "Frekvens",
+                                "repeat": 6,
+                                "steps": [
+                                    {"kind": "swim", "distance_m": 50},
+                                    {"kind": "rest", "duration_s": 15},
+                                ],
+                            },
+                            {"name": "Ned", "steps": [{"kind": "swim", "distance_m": 200}]},
+                        ],
+                    },
+                }
+            ]
+        }
+        activity = {
+            "distance_m": 3500,
+            "moving_time_s": 2896,
+            "workout_analysis_context": {
+                "swim": {
+                    "structure_signature": "1x200+4x50+1x150+24x100+3x50+1x400",
+                    "structure": [
+                        {"repetitions": 1, "distance_per_rep_m": 200},
+                        {"repetitions": 4, "distance_per_rep_m": 50},
+                        {"repetitions": 1, "distance_per_rep_m": 150},
+                        {"repetitions": 24, "distance_per_rep_m": 100},
+                        {"repetitions": 3, "distance_per_rep_m": 50},
+                        {"repetitions": 1, "distance_per_rep_m": 400},
+                    ],
+                }
+            },
+        }
+
+        context = build_plan_comparison(plan, activity, "2026-09-16")
+
+        self.assertEqual(context["planned_swim_distance_m"], 3200.0)
+        self.assertEqual(context["actual_swim_distance_m"], 3500.0)
+        self.assertEqual(context["swim_distance_delta_m"], 300.0)
+        self.assertEqual(context["swim_structure_relation"], "different_structured_session")
+        self.assertLess(context["swim_structure_overlap_ratio"], 0.5)
+        self.assertIn(
+            "ett annat strukturerat pass än planens setstruktur",
+            plan_comparison_fact(context),
+        )
+
+    def test_swim_structure_treats_small_omissions_as_modified_planned_structure(self):
+        plan = {
+            "days": [
+                {
+                    "date": "2026-09-16",
+                    "session": "Kontrollerad tröskel 3 600 m",
+                    "sport": "swim",
+                    "watch_workout": {
+                        "planned_distance_m": 3600,
+                        "blocks": [
+                            {"steps": [{"kind": "swim", "distance_m": 200}]},
+                            {"repeat": 4, "steps": [{"kind": "swim", "distance_m": 50}]},
+                            {"steps": [{"kind": "swim", "distance_m": 200}]},
+                            {"repeat": 24, "steps": [{"kind": "swim", "distance_m": 100}]},
+                            {"repeat": 4, "steps": [{"kind": "swim", "distance_m": 50}]},
+                            {"steps": [{"kind": "swim", "distance_m": 400}]},
+                        ],
+                    },
+                }
+            ]
+        }
+        activity = {
+            "distance_m": 3500,
+            "workout_analysis_context": {
+                "swim": {
+                    "structure_signature": "1x200+4x50+1x150+24x100+3x50+1x400",
+                    "structure": [
+                        {"repetitions": 1, "distance_per_rep_m": 200},
+                        {"repetitions": 4, "distance_per_rep_m": 50},
+                        {"repetitions": 1, "distance_per_rep_m": 150},
+                        {"repetitions": 24, "distance_per_rep_m": 100},
+                        {"repetitions": 3, "distance_per_rep_m": 50},
+                        {"repetitions": 1, "distance_per_rep_m": 400},
+                    ],
+                }
+            },
+        }
+
+        context = build_plan_comparison(plan, activity, "2026-09-16")
+
+        self.assertEqual(context["swim_structure_relation"], "modified_planned_structure")
+        self.assertGreaterEqual(context["swim_structure_overlap_ratio"], 0.9)
+        self.assertIn(
+            "motsvarar huvudsakligen planens struktur med mindre avvikelse",
+            plan_comparison_fact(context),
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
