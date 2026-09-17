@@ -4,7 +4,7 @@
       "activity_id": 20203770266,
       "activity_date": "2026-09-16",
       "activity_name": "Simning på kvällen",
-      "generated_at_utc": "2026-09-17T11:40:23.627054+00:00",
+      "generated_at_utc": "2026-09-17T16:59:23.575968+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 2,
@@ -16,27 +16,27 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört 3 500 m strukturerat simpass med stabil 24×100‑block och snabbare avslutande 100:or, visar god volym och teknisk/tempokontroll.",
-        "load_interpretation": "Simningen är en underhålls-/teknikexponering; den ökade volymen (+300 m) ger liten extra mekanisk belastning och påverkar löpplanen marginellt.",
+        "summary": "Genomfört simpass 3 500 m med tydlig setstruktur och stabila 100 m-serier; puls steg under passet mot högre värden i mitten/slutet.",
+        "load_interpretation": "Simningen är strukturerad aerob/teknik och ger mekanisk kostnad men adderar kardiovaskulär volym i mikrocykelfönstret.",
         "confidence": "medium",
         "facts": [
           "Simning: 3,50 km · 1:12:03 · snittpuls 127,8 · maxpuls 171.",
           "Planerat simpass 3200 m; genomfört 3500 m. Genomförd setstruktur är ett annat strukturerat pass än planens setstruktur."
         ],
         "interpretations": [
-          "Passet uppfyller sim‑underhåll och teknikstimulus och ger relevant volymökning utan att vara kvalitets‑höjande för löpningen.",
-          "Ingen indikation i sim‑data eller närbelastningen att dagens sim kräver reducering av kommande planerade MTB/XC eller fredagstempo"
+          "Passet fyllde sim‑underhållet och visar god volym- och pacestabilitet över 24×100‑setet, vilket stödjer planens aerob simning/stroke‑mål.",
+          "Ökad genomsnittlig och maxpuls i senare 100 m‑serier tyder på ackumulerad ansträngning trots mekanisk belastning; därför beakta total närbelastning från föregående enduro+styrka när du…"
         ],
         "unknowns": [
-          "Subjektiv återhämtningskänsla efter passet (användarrapport tom)",
-          "eventuella lokala muskelproblem eller stelhet som kan påverka fredagens backpass"
+          "Subjektiv trötthet/benkänsla efter passet (användarrapport saknas)",
+          "om nattsömn eller dagsvälbefinnande påverkar återhämtning nästa dag"
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-09-17",
-        "reason": "Simpasset var ett underhålls/teknikpass med hanterbar volymökning och påverkar inte planen för de närmaste dagarna.",
-        "recommendation": "Behåll planerad MTB/XC 60 min teknikpass i morgon; vila, hydrera och notera subjektiv känsla inför fredagens backkvalitet.",
+        "reason": "Simningen är ett planerat aerob/teknikpass med mekanisk kostnad och mikrocykeln kräver inte automatisk reduktion.",
+        "recommendation": "Behåll planerad MTB/XC 60 min i morgon men undvik intensitet; välj baseline‑dosen det valda passalternativet. Observera hur benen känns vid uppvärmning och korta till 45 min om lokal muskelttrötthet känns signifikant.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -1199,8 +1199,8 @@
       }
     }
   ],
-  "last_trigger_hash": "ec545eb42af4670c59c9d5b5c54d233614f774beef5d15f5563a0060c076ca92",
-  "last_run_utc": "2026-09-17T11:40:23.627054+00:00",
+  "last_trigger_hash": "9019c147bb6974240b002b12cdef283ccd65ed54106470509f5e2acb4e336881",
+  "last_run_utc": "2026-09-17T16:59:23.575968+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 2
