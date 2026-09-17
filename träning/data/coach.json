@@ -3,8 +3,8 @@
     {
       "activity_id": 20218282169,
       "activity_date": "2026-09-17",
-      "activity_name": "Evening Mountain Bike Ride",
-      "generated_at_utc": "2026-09-17T19:32:22.549768+00:00",
+      "activity_name": "Evening Stig Bike Ride",
+      "generated_at_utc": "2026-09-17T19:33:10.877747+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 2,
@@ -16,8 +16,8 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört MTB-pass var 75 min långt (18.05 km) med måttlig puls och watt; längre än planerad 60 min stödvariant.",
-        "load_interpretation": "Kardiovaskulär och teknisk stimulu accepterbara, men varaktigheten överskred godkänd dose och ökar närbelastning inför fredag.",
+        "summary": "75-min MTB/XC genomfört; längre än planerat (60 min) med måttlig puls och 162 W i snitt, tydlig extra varaktighet men utan användarrapport om upplevd trötthet.",
+        "load_interpretation": "Ökad mekanisk/neuromuskulär belastning mot planen (duration +25%), vilket motiverar konservativ justering av morgondagens löppass.",
         "confidence": "medium",
         "facts": [
           "MTB/XC: 18,05 km · 1:17:15 · 209 m+ · snittpuls 127,1 · maxpuls 152.",
@@ -25,12 +25,12 @@
           "Planerad tidsdos 60 min; faktisk rörelsetid 75.15 min (+15.15 min mot vald dos); över längsta godkända alternativet 60 min."
         ],
         "interpretations": [
-          "Passet visar att teknisk/aerob MTB/XC genomfördes men durationen ligger 15 min (25%) över godkända alternativ vilket ökar närbelastning mot fredag",
+          "Passet visar att teknisk/aerob MTB-exponering genomfördes men var längre än godkänd dos och ökar mekanisk/neuromuskulärt närbelastning inför fredag",
           "Tidsdosen blev 75.15 min mot valda 60 min och översteg även det längsta godkända alternativet 60 min."
         ],
         "unknowns": [
-          "Subjektiv trötthet eller bensmärta efter passet ej rapporterat",
-          "Exakt hur mycket extra varaktighet påverkar morgondagens löpprestation hos dig"
+          "Subjektiv återhämtning/benstatus efter passet (användarrapport saknas)",
+          "Eventuella planerade aktiviteter kvar samma dag (inget återstående)"
         ]
       },
       "plan_action": {
@@ -38,7 +38,7 @@
         "target_date": "2026-09-18",
         "reason": "Dagens MTB/XC var längre än godkänd dos och ökar mekanisk/neuromuskulär närbelastning inför fredagens prioriterade backpass.",
         "recommendation": "Följ det justerade passupplägget i planen.",
-        "dose_option_id": "run-hill-2x8x150",
+        "dose_option_id": "",
         "requires_approval": false
       },
       "auto_apply": {
@@ -1208,8 +1208,8 @@
       }
     }
   ],
-  "last_trigger_hash": "8d8c8c751ab1e6464ff00755125bf3aa5ed4df8725f6c2e24a0310b5e42d86f1",
-  "last_run_utc": "2026-09-17T19:32:22.549768+00:00",
+  "last_trigger_hash": "d0da6c272d8d1cc3fbc1641c381756a825ecb6832f11e61909b21ec70c81b226",
+  "last_run_utc": "2026-09-17T19:33:10.877747+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 2
