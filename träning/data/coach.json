@@ -1,6 +1,52 @@
 {
   "analyses": [
     {
+      "activity_id": 20218282169,
+      "activity_date": "2026-09-17",
+      "activity_name": "Evening Mountain Bike Ride",
+      "generated_at_utc": "2026-09-17T19:32:22.549768+00:00",
+      "model": "gpt-5-mini",
+      "analysis_contract": {
+        "pipeline_version": 2,
+        "workout_context_version": 3,
+        "plan_comparison_version": 2,
+        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
+        "analysis_code_sha256": "079470facd2bdc3de67f9bdf4948eca93a1f672b307efb63733705ce34a752d2"
+      },
+      "performance_marker_id": null,
+      "performance_protocol_key": null,
+      "assessment": {
+        "summary": "Genomfört MTB-pass var 75 min långt (18.05 km) med måttlig puls och watt; längre än planerad 60 min stödvariant.",
+        "load_interpretation": "Kardiovaskulär och teknisk stimulu accepterbara, men varaktigheten överskred godkänd dose och ökar närbelastning inför fredag.",
+        "confidence": "medium",
+        "facts": [
+          "MTB/XC: 18,05 km · 1:17:15 · 209 m+ · snittpuls 127,1 · maxpuls 152.",
+          "Planstatus 2026-09-17: dagen är markerad genomförd i coachens beslutsunderlag.",
+          "Planerad tidsdos 60 min; faktisk rörelsetid 75.15 min (+15.15 min mot vald dos); över längsta godkända alternativet 60 min."
+        ],
+        "interpretations": [
+          "Passet visar att teknisk/aerob MTB/XC genomfördes men durationen ligger 15 min (25%) över godkända alternativ vilket ökar närbelastning mot fredag",
+          "Tidsdosen blev 75.15 min mot valda 60 min och översteg även det längsta godkända alternativet 60 min."
+        ],
+        "unknowns": [
+          "Subjektiv trötthet eller bensmärta efter passet ej rapporterat",
+          "Exakt hur mycket extra varaktighet påverkar morgondagens löpprestation hos dig"
+        ]
+      },
+      "plan_action": {
+        "action": "reduce",
+        "target_date": "2026-09-18",
+        "reason": "Dagens MTB/XC var längre än godkänd dos och ökar mekanisk/neuromuskulär närbelastning inför fredagens prioriterade backpass.",
+        "recommendation": "Följ det justerade passupplägget i planen.",
+        "dose_option_id": "run-hill-2x8x150",
+        "requires_approval": false
+      },
+      "auto_apply": {
+        "applied": true,
+        "note": "Konservativ ändring applicerad på 2026-09-18: reduce."
+      }
+    },
+    {
       "activity_id": 20203770266,
       "activity_date": "2026-09-16",
       "activity_name": "Simning på kvällen",
@@ -1160,47 +1206,10 @@
         "applied": false,
         "note": "Ingen automatisk planändring."
       }
-    },
-    {
-      "activity_id": 19798624389,
-      "activity_date": "2026-08-18",
-      "activity_name": "Styrketräning på kvällen",
-      "generated_at_utc": "2026-08-19T09:28:57.169070+00:00",
-      "model": "gpt-5-mini",
-      "assessment": {
-        "summary": "Senaste aktivitet är ett kvällsstyrkepass 2026-08-18 (36 min, snittpuls 87, max 119).",
-        "load_interpretation": "Fakta: det finns tre genomförda pass de senaste tre dagarna: 2026-08-16 trail (långt), 2026-08-17 simning 3 200 m, 2026-08-18 styrketräning 35–36 min med låg snittpuls.",
-        "confidence": "medium",
-        "facts": [
-          "Styrka: 35:45 · snittpuls 87,3 · maxpuls 119.",
-          "2026-08-17: Simning 3200 m, rörelsetid 2786 s, snittpuls 127.1.",
-          "2026-08-18: Styrketräning 2145 s (35:45), snittpuls 87.3, maxpuls 119.",
-          "Planerad 2026-08-19: Swimrun · Jogersö Extreme · 1 varv (ersätter löptröskel om genomförd)."
-        ],
-        "interpretations": [
-          "Styrkepasset bedöms vara låg-kardiovaskulär och inte kräva extra återhämtning innan dagens Swimrun, utifrån tillgängliga pulsdata.",
-          "Osäkerhet kring swimrunets verkliga intensitet/varaktighet: kan vara högre än planerad löptröskel och påverka torsdagens simning och helgens kvalitetspass."
-        ],
-        "unknowns": [
-          "Aktuell subjektiv återhämtning/fatigue och sömn.",
-          "Exakt varaktighet och intensitet för planerade Swimrun (2026-08-19) om det genomförs."
-        ]
-      },
-      "plan_action": {
-        "action": "reduce",
-        "target_date": "2026-08-20",
-        "reason": "Onsdagens Swimrun kan vara högre belastning än planerad löptröskel; torsdagens simning bör konservativt skalas ner tills onsdagens faktiska belastning bekräftas.",
-        "recommendation": "Ersätt planerad 'Simning · aerob/teknik' 2026-08-20 med vila eller mycket lätt teknisk simning (kortare och lägre effort). Behåll övrig plan oförändrad.",
-        "requires_approval": false
-      },
-      "auto_apply": {
-        "applied": true,
-        "note": "Konservativ ändring applicerad på 2026-08-20: reduce."
-      }
     }
   ],
-  "last_trigger_hash": "9019c147bb6974240b002b12cdef283ccd65ed54106470509f5e2acb4e336881",
-  "last_run_utc": "2026-09-17T16:59:23.575968+00:00",
+  "last_trigger_hash": "8d8c8c751ab1e6464ff00755125bf3aa5ed4df8725f6c2e24a0310b5e42d86f1",
+  "last_run_utc": "2026-09-17T19:32:22.549768+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 2
