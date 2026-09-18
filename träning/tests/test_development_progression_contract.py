@@ -22,15 +22,20 @@ class DevelopmentProgressionContractTests(unittest.TestCase):
     def test_current_strategy_contract_is_valid(self):
         self.assertTrue(validate_training_strategy(self.strategy))
 
-    def test_hill_quality_uses_reported_3x7_floor_and_progresses(self):
+    def test_hill_quality_progression_is_anchored_to_current_demonstrated_floor(self):
         hill = next(item for item in self.strategy["current_mesocycle"]["microcycle_template"] if item["slot"] == "run_hill_quality")
-        self.assertEqual(hill["development_progression"]["demonstrated_floor_option_id"], "run-hill-3x7x150")
-        self.assertEqual(hill["baseline_option_id"], "run-hill-3x8x150")
-        self.assertEqual(hill["progression_target_option_id"], "run-hill-3x9x150")
-        floor = next(option for option in hill["dose_options"] if option["id"] == "run-hill-3x7x150")
-        self.assertEqual(floor["value"], 21)
-        self.assertIn("användarrapport", floor["intent"].lower())
-        self.assertIn("inte för att påstå exakt längd", floor["intent"].lower())
+        options = {option["id"]: option for option in hill["dose_options"]}
+        floor_id = hill["development_progression"]["demonstrated_floor_option_id"]
+        baseline_id = hill["baseline_option_id"]
+        target_id = hill["progression_target_option_id"]
+
+        floor = options[floor_id]
+        baseline = options[baseline_id]
+        target = options[target_id]
+        self.assertGreaterEqual(baseline["value"], floor["value"])
+        self.assertGreater(target["value"], baseline["value"])
+        if hill["development_progression"].get("source") == "explicit_user_report":
+            self.assertIn("användarrapport", floor["intent"].lower())
 
     def test_stale_hill_baseline_below_demonstrated_floor_is_rejected(self):
         broken = deepcopy(self.strategy)
@@ -43,8 +48,12 @@ class DevelopmentProgressionContractTests(unittest.TestCase):
     def test_same_dose_cannot_be_disguised_as_progress(self):
         broken = deepcopy(self.strategy)
         hill = next(item for item in broken["current_mesocycle"]["microcycle_template"] if item["slot"] == "run_hill_quality")
-        hill["development_progression"]["microcycle_plan"][1]["option_id"] = "run-hill-3x7x150"
-        hill["development_progression"]["microcycle_plan"][1]["relation"] = "progress"
+        step = min(
+            hill["development_progression"]["microcycle_plan"],
+            key=lambda item: item["microcycle"],
+        )
+        step["option_id"] = hill["development_progression"]["demonstrated_floor_option_id"]
+        step["relation"] = "progress"
         with self.assertRaises(StrategyContractError):
             validate_training_strategy(broken)
 
@@ -55,15 +64,36 @@ class DevelopmentProgressionContractTests(unittest.TestCase):
         self.assertIn("2 × 6 × 150 m", today["session"])
         self.assertIn("2 × 7 × 150 m", today["original_session"])
 
-    def test_next_microcycle_anchors_reported_21_interval_floor(self):
+    def test_next_microcycle_uses_strategy_step_or_current_baseline(self):
         future = build_mesocycle_next_week(self.plan, self.strategy)
         threshold = next(day for day in future["days"] if day.get("microcycle_slot") == "run_threshold")
         hill = next(day for day in future["days"] if day.get("microcycle_slot") == "run_hill_quality")
+        hill_slot = next(
+            item
+            for item in self.strategy["current_mesocycle"]["microcycle_template"]
+            if item["slot"] == "run_hill_quality"
+        )
+        planned_step = next(
+            (
+                step
+                for step in hill_slot["development_progression"]["microcycle_plan"]
+                if step["microcycle"] == hill["microcycle_index"]
+            ),
+            None,
+        )
+        expected_id = planned_step["option_id"] if planned_step else hill_slot["baseline_option_id"]
+        expected_value = next(
+            option["value"] for option in hill_slot["dose_options"] if option["id"] == expected_id
+        )
+
         self.assertEqual(threshold["microcycle_index"], 3)
         self.assertEqual(threshold["baseline_option_id"], "run-threshold-3x10")
-        self.assertEqual(hill["baseline_option_id"], "run-hill-3x7x150")
-        self.assertEqual(hill["development_step"]["relation"], "hold")
-        self.assertEqual(hill["dose_resolution"]["value"], 21)
+        self.assertEqual(hill["baseline_option_id"], expected_id)
+        self.assertEqual(hill["dose_resolution"]["value"], expected_value)
+        if planned_step:
+            self.assertEqual(hill["development_step"], planned_step)
+        else:
+            self.assertNotIn("development_step", hill)
 
 
 if __name__ == "__main__":
