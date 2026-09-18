@@ -4,7 +4,7 @@
   "week_start": "2026-09-14",
   "week_end": "2026-09-20",
   "created_at_utc": "2026-09-13T23:09:46.558327+00:00",
-  "updated_at_utc": "2026-09-18T11:13:26.673864+00:00",
+  "updated_at_utc": "2026-09-18T16:23:34.401511+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -1176,15 +1176,15 @@
           "transport": "intervals_icu",
           "source_hash": "6fdf691c6debacf10259942011966d82acb5aea788beec75623b89ec09b7e75c",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-18T11:13:25.633911+00:00",
+          "updated_at_utc": "2026-09-18T16:23:33.390792+00:00",
           "provider_event_id": 135486213,
-          "verified_at_utc": "2026-09-18T11:13:25.633911+00:00"
+          "verified_at_utc": "2026-09-18T16:23:33.390792+00:00"
         },
         "original_session": "Löpning · backkvalitet · 15 min lugnt + 3 × 8 × 150 m / lugn joggvila + 10 min lugnt",
         "auto_coach": {
           "action": "reduce",
-          "reason": "Torsdagens MTB-passet överskred godkänd varaktighet och ökade mekanisk/neuromuskulär närbelastning inför fredagens prioriterade backpass.",
-          "applied_at_utc": "2026-09-18T11:13:25.002573+00:00"
+          "reason": "MTB-passet översteg godkänd varaktighet och ökade mekanisk/neuromuskulär närbelastning inför fredagens prioriterade backpass.",
+          "applied_at_utc": "2026-09-18T16:23:32.407090+00:00"
         },
         "coach_adjustment": "Passet är nedjusterat från grundplanen. Följ passupplägget ovan."
       },
@@ -1634,9 +1634,9 @@
           "transport": "intervals_icu",
           "source_hash": "be9d1761e0c308fa21de98a0bdd657b35c17e11a343dff54f1e561a58f74ec71",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-18T11:13:25.757598+00:00",
+          "updated_at_utc": "2026-09-18T16:23:33.662363+00:00",
           "provider_event_id": 135973445,
-          "verified_at_utc": "2026-09-18T11:13:25.757598+00:00"
+          "verified_at_utc": "2026-09-18T16:23:33.662363+00:00"
         }
       }
     ],
@@ -4129,7 +4129,7 @@
       "activity_id": 20218282169,
       "activity_date": "2026-09-17",
       "activity_name": "Evening Stig Bike Ride",
-      "generated_at_utc": "2026-09-18T11:13:25.004602+00:00",
+      "generated_at_utc": "2026-09-18T16:23:32.408751+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 2,
@@ -4141,8 +4141,8 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "MTB-passet blev längre än godkänd dos (75 min vs 60±) med 18 km, 209 m och medelhjärtfrekvens 127 bpm; planen har därför reducerat fredagens backpass till 2×8×150 m.",
-        "load_interpretation": "Ökad mekanisk/neuromuskulär belastning från torsdagens MTB/XC (duration +) motiverar en konservativ nedskalning av fredagens löpstimulus inom närmsta 2–3 dagarna.",
+        "summary": "Torsdagens MTB/XC blev 75 min (18.05 km) med medelpuls 127 och watt ~162 — längre än planerad 60 min vilket ökade mekanisk/neuromuskulär närbelastning inför fredagens backpass.",
+        "load_interpretation": "Närbelastningen ökar framförallt mekaniskt/neuromuskulärt och kräver konservativ justering av fredagens backkvalitet inom 2–3 dagar.",
         "confidence": "medium",
         "facts": [
           "MTB/XC: 18,05 km · 1:17:15 · 209 m+ · snittpuls 127,1 · maxpuls 152.",
@@ -4150,18 +4150,18 @@
           "Planerad tidsdos 60 min; faktisk rörelsetid 75.15 min (+15.15 min mot vald dos); över längsta godkända alternativet 60 min."
         ],
         "interpretations": [
-          "Detta pass ökar främst mekanisk/neuromuskulär närbelastning inför fredagens prioriterade backpass och minskar marginalen för fullvolym backkvalitet.",
+          "Passet genomfördes men var längre än godkänd dos och ökar mekanisk/neuromuskulär kostnad inför morgondagens prioriterade backpass.",
           "Tidsdosen blev 75.15 min mot valda 60 min och översteg även det längsta godkända alternativet 60 min."
         ],
         "unknowns": [
-          "Användarens subjektiva trötthet/benstatus efter passet (användarrapport saknas)",
-          "Eventuella svåra tekniska incidenter eller fall under MTB/XC som påverkar lokal belastning"
+          "Användarens subjektiva trötthet eller muskelstatus efter MTB/XC (ingen användarrapport för senaste passet)",
+          "Eventuella senare dagsaktiviteter eller återhämtningsunderlaget/återhämtningseffekter som ändrar toleransen"
         ]
       },
       "plan_action": {
         "action": "reduce",
         "target_date": "2026-09-18",
-        "reason": "Torsdagens MTB-passet överskred godkänd varaktighet och ökade mekanisk/neuromuskulär närbelastning inför fredagens prioriterade backpass.",
+        "reason": "MTB-passet översteg godkänd varaktighet och ökade mekanisk/neuromuskulär närbelastning inför fredagens prioriterade backpass.",
         "recommendation": "Följ det justerade passupplägget i planen.",
         "dose_option_id": "",
         "requires_approval": false
