@@ -4,7 +4,7 @@
       "activity_id": 20229568713,
       "activity_date": "2026-09-18",
       "activity_name": "Löpning på eftermiddagen",
-      "generated_at_utc": "2026-09-18T18:25:35.186707+00:00",
+      "generated_at_utc": "2026-09-18T20:57:40.829505+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 2,
@@ -16,8 +16,8 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört: 3 × 8 backintervaller (24 totalt). Passet uppfyllde planens kvalitetsstimulus trots tidigare automatisk…",
-        "load_interpretation": "Närbelastningen ökar mekanisk/neuromuskulärt i mikrocykelfönstret (enduro + MTB/XC + dagens backpass); nära-term-plan kräver konservatism.",
+        "summary": "Genomfört: 3 × 8 backintervaller (24 totalt). Användaren kände sig “superpigg” under och efter passet",
+        "load_interpretation": "Passet ökar mekanisk och neuromuskulär närbelastning i mikrocykeln och motiverar konservativ reducering av nästa dags styrka/sim-kombination.",
         "confidence": "medium",
         "facts": [
           "Löpning · backintervaller: 15,01 km · 1:17:56 · 266 m+ · snittpuls 141,3 · maxpuls 163.",
@@ -25,12 +25,12 @@
           "Planstatus 2026-09-18: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Användarutförandet överstiger den AI-nedjusterade dosen och visar att önskad arbetsvolym (24) kunde genomföras med god känsla, vilket etablerar ett nytt demonstrerat volymgolv.",
-          "Trots pigg subjektiv känsla ökar kombinationen av senaste enduro/MTB-aktiviteter plus dagens backpass den mekaniska/neuromuskulära närbelastningen i de närmaste 48–72 timmarna."
+          "Att användaren var superpigg och fullföljde 24 backar visar att volymgolvet har höjts till minst 24 repetitioner vilket stödjer planens progressionstrend.",
+          "Påverkad närbelastning (sen MTB/XC + dagens backar) gör att nästa dagars styrka/sim bör hållas reducerad för att skydda mekanisk och neuromuskulär återhämtning."
         ],
         "unknowns": [
-          "Subjektiv återhämtning kommande 24–72 h (användarrapport finns bara samma dag).",
-          "Detaljer om lokal muskelömmhet eller sömnkompensation natten efter passet."
+          "Subjektiv trötthet nästa morgon och lokal muskelömhet i benen.",
+          "Eventuella akuta skador eller specifika besvär ej rapporterade."
         ]
       },
       "plan_action": {
@@ -38,7 +38,7 @@
         "target_date": "2026-09-19",
         "reason": "Backpasset genomfördes som 3 × 8 backintervaller (24 totalt), alltså över den planerade omfattningen före passet (16 arbetsintervaller).",
         "recommendation": "Följ det justerade passupplägget i planen.",
-        "dose_option_id": "strength-support-25",
+        "dose_option_id": "",
         "requires_approval": false
       },
       "auto_apply": {
@@ -1217,8 +1217,8 @@
       }
     }
   ],
-  "last_trigger_hash": "91a95a5ce893a7cd5e81e104ff2c14f7f0916cfd4976a37db1af68c789d55ea2",
-  "last_run_utc": "2026-09-18T18:25:35.186707+00:00",
+  "last_trigger_hash": "dab9d7883d99b0fdd053092bcff9ec3bf7a4112e5dd023a58c8d3a1a2758d4db",
+  "last_run_utc": "2026-09-18T20:57:40.829505+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 2
