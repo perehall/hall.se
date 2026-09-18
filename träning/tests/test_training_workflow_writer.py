@@ -15,12 +15,13 @@ class TrainingWorkflowWriterTests(unittest.TestCase):
         workflow = self.workflow_text()
         return workflow.split("  update:\n", 1)[1]
 
-    def test_writer_is_serialized_and_refreshes_from_current_main(self):
+    def test_writer_is_serialized_queued_and_refreshes_from_current_main(self):
         workflow = self.workflow_text()
         update = self.update_job_text()
 
         self.assertIn("group: training-pages", workflow)
-        self.assertIn("cancel-in-progress: false", workflow)
+        self.assertIn("queue: max", workflow)
+        self.assertNotIn("cancel-in-progress: true", workflow)
         self.assertIn("- name: Checkout current main", update)
         self.assertIn("ref: main", update)
         self.assertIn("- name: Pin writable base to latest main", update)
@@ -30,13 +31,20 @@ class TrainingWorkflowWriterTests(unittest.TestCase):
             update.index("- name: Run canonical training update pipeline"),
         )
 
-    def test_generated_snapshots_are_never_rebased(self):
+    def test_generated_snapshots_are_never_rebased_and_conflicts_retry_cleanly(self):
         update = self.update_job_text()
 
         self.assertNotIn("git pull --rebase", update)
         self.assertIn("git ls-remote origin refs/heads/main", update)
-        self.assertIn("Refusing to rebase generated training snapshots", update)
+        self.assertIn("Discarding this generated snapshot and queueing one clean retry", update)
+        self.assertIn("gh workflow run update-training.yml --ref main", update)
         self.assertIn("git push origin HEAD:main", update)
+
+    def test_pages_deploy_has_one_trigger_path(self):
+        workflow = self.workflow_text()
+
+        self.assertNotIn("gh workflow run deploy-pages.yml", workflow)
+        self.assertIn("Push to main triggers deploy-pages.yml automatically", workflow)
 
 
 if __name__ == "__main__":
