@@ -8,6 +8,7 @@ on:
       - ".github/workflows/test-training.yml"
       - ".github/workflows/deploy-pages.yml"
       - ".github/workflows/update-training.yml"
+      - ".github/workflows/refresh-training-day.yml"
 
 concurrency:
   group: test-training-${{ github.event.pull_request.number || github.ref }}
