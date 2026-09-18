@@ -4,7 +4,7 @@
   "week_start": "2026-09-14",
   "week_end": "2026-09-20",
   "created_at_utc": "2026-09-13T23:09:46.558327+00:00",
-  "updated_at_utc": "2026-09-18T00:04:05.954658+00:00",
+  "updated_at_utc": "2026-09-18T04:42:30.029612+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -1176,15 +1176,15 @@
           "transport": "intervals_icu",
           "source_hash": "6fdf691c6debacf10259942011966d82acb5aea788beec75623b89ec09b7e75c",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-18T00:04:04.816974+00:00",
+          "updated_at_utc": "2026-09-18T04:42:28.648979+00:00",
           "provider_event_id": 135486213,
-          "verified_at_utc": "2026-09-18T00:04:04.816974+00:00"
+          "verified_at_utc": "2026-09-18T04:42:28.648979+00:00"
         },
         "original_session": "Löpning · backkvalitet · 15 min lugnt + 3 × 8 × 150 m / lugn joggvila + 10 min lugnt",
         "auto_coach": {
           "action": "reduce",
           "reason": "MTB-passet överskred godkänd varaktighet och ökade mekanisk/neuromuskulär närbelastning inför fredagens prioriterade backpass.",
-          "applied_at_utc": "2026-09-18T00:04:04.167295+00:00"
+          "applied_at_utc": "2026-09-18T04:42:27.790212+00:00"
         },
         "coach_adjustment": "Passet är nedjusterat från grundplanen. Följ passupplägget ovan."
       },
@@ -1634,9 +1634,9 @@
           "transport": "intervals_icu",
           "source_hash": "be9d1761e0c308fa21de98a0bdd657b35c17e11a343dff54f1e561a58f74ec71",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-18T00:04:04.943657+00:00",
+          "updated_at_utc": "2026-09-18T04:42:28.864285+00:00",
           "provider_event_id": 135973445,
-          "verified_at_utc": "2026-09-18T00:04:04.943657+00:00"
+          "verified_at_utc": "2026-09-18T04:42:28.864285+00:00"
         }
       }
     ],
@@ -4129,7 +4129,7 @@
       "activity_id": 20218282169,
       "activity_date": "2026-09-17",
       "activity_name": "Evening Stig Bike Ride",
-      "generated_at_utc": "2026-09-18T00:04:04.169340+00:00",
+      "generated_at_utc": "2026-09-18T04:42:27.792180+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 2,
@@ -4141,8 +4141,8 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "MTB-passet blev längre än godkänd dos (75 min vs plan 60) med måttlig puls och stabil effekt, vilket ökade mekanisk/neuromuskulär närbelastning inför fredagens backpass.",
-        "load_interpretation": "Ökad mekanisk/neuromuskulär närbelastning de senaste 48 timmarna motiverar en konservativ dosjustering av fredagspasset.",
+        "summary": "MTB-passet blev längre än godkänd (75 vs 60 min) och ökade mekanisk/neuromuskulär belastning inför fredagens prioriterade backpass.",
+        "load_interpretation": "Närbelastningen ökar mekanisk/neuromuskulärt men visar inga direkta tecken på akut kardiovaskulär överbelastning (avg HR 127, max 152).",
         "confidence": "medium",
         "facts": [
           "MTB/XC: 18,05 km · 1:17:15 · 209 m+ · snittpuls 127,1 · maxpuls 152.",
@@ -4150,12 +4150,12 @@
           "Planerad tidsdos 60 min; faktisk rörelsetid 75.15 min (+15.15 min mot vald dos); över längsta godkända alternativet 60 min."
         ],
         "interpretations": [
-          "Detta pass visar att längre, teknisk MTB/XC genomfördes men i lägre intensitet; varaktigheten ökar mekanisk och neuromuskulär belastning inför fredagens prioriterade backkvalitet",
+          "Den förhöjda mekaniska/neuromuskulära kostnaden rättfärdigar den automatiska nedskalningen av fredagens backpass från 3×8×150 till 2×8×150.",
           "Tidsdosen blev 75.15 min mot valda 60 min och översteg även det längsta godkända alternativet 60 min."
         ],
         "unknowns": [
-          "Subjektiv återhämtning/bentrötthet efter MTB/XC (användarrapport saknas)",
-          "Eventuella planerade ändringar eller fasta åtaganden före/under fredag som påverkar genomförande"
+          "Subjektiv återhämtning/benstatus från användaren efter passet saknas.",
+          "Eventuella nattliga eller morgondagens återhämtningsunderlaget-signaler som kan påverka ytterligare reduktion."
         ]
       },
       "plan_action": {

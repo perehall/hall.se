@@ -4,7 +4,7 @@
       "activity_id": 20218282169,
       "activity_date": "2026-09-17",
       "activity_name": "Evening Stig Bike Ride",
-      "generated_at_utc": "2026-09-18T00:04:04.169340+00:00",
+      "generated_at_utc": "2026-09-18T04:42:27.792180+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 2,
@@ -16,8 +16,8 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "MTB-passet blev längre än godkänd dos (75 min vs plan 60) med måttlig puls och stabil effekt, vilket ökade mekanisk/neuromuskulär närbelastning inför fredagens backpass.",
-        "load_interpretation": "Ökad mekanisk/neuromuskulär närbelastning de senaste 48 timmarna motiverar en konservativ dosjustering av fredagspasset.",
+        "summary": "MTB-passet blev längre än godkänd (75 vs 60 min) och ökade mekanisk/neuromuskulär belastning inför fredagens prioriterade backpass.",
+        "load_interpretation": "Närbelastningen ökar mekanisk/neuromuskulärt men visar inga direkta tecken på akut kardiovaskulär överbelastning (avg HR 127, max 152).",
         "confidence": "medium",
         "facts": [
           "MTB/XC: 18,05 km · 1:17:15 · 209 m+ · snittpuls 127,1 · maxpuls 152.",
@@ -25,12 +25,12 @@
           "Planerad tidsdos 60 min; faktisk rörelsetid 75.15 min (+15.15 min mot vald dos); över längsta godkända alternativet 60 min."
         ],
         "interpretations": [
-          "Detta pass visar att längre, teknisk MTB/XC genomfördes men i lägre intensitet; varaktigheten ökar mekanisk och neuromuskulär belastning inför fredagens prioriterade backkvalitet",
+          "Den förhöjda mekaniska/neuromuskulära kostnaden rättfärdigar den automatiska nedskalningen av fredagens backpass från 3×8×150 till 2×8×150.",
           "Tidsdosen blev 75.15 min mot valda 60 min och översteg även det längsta godkända alternativet 60 min."
         ],
         "unknowns": [
-          "Subjektiv återhämtning/bentrötthet efter MTB/XC (användarrapport saknas)",
-          "Eventuella planerade ändringar eller fasta åtaganden före/under fredag som påverkar genomförande"
+          "Subjektiv återhämtning/benstatus från användaren efter passet saknas.",
+          "Eventuella nattliga eller morgondagens återhämtningsunderlaget-signaler som kan påverka ytterligare reduktion."
         ]
       },
       "plan_action": {
@@ -1208,8 +1208,8 @@
       }
     }
   ],
-  "last_trigger_hash": "8993e786b8aa3b59505736cfe5953855dcd9f646343ec4e9718f65d864ddca6a",
-  "last_run_utc": "2026-09-18T00:04:04.169340+00:00",
+  "last_trigger_hash": "4e261bc9436ed76a9cd89439d8ce5abe86a3c006613d1fd367e279d4592c26c8",
+  "last_run_utc": "2026-09-18T04:42:27.792180+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 2
