@@ -191,7 +191,6 @@ class WeeklyRolloverTests(unittest.TestCase):
             1: ("run-threshold-3x8", "3 × 8 min"),
             2: ("swim-support-3200", "3 200 m"),
             3: ("mtb-support-60", "60 min"),
-            4: ("run-hill-3x8x150", "3 × 8 × 150 m"),
             5: ("strength-support-35", "35 min"),
             6: ("run-easy-75", "75 min"),
         }
@@ -202,6 +201,30 @@ class WeeklyRolloverTests(unittest.TestCase):
             self.assertEqual(day["dose_resolution"]["state"], "baseline")
             self.assertIn(marker, day["session"])
             self.assertNotIn("dos öppen", day["session"].lower())
+
+        hill_day = future["days"][4]
+        hill_slot = next(
+            item
+            for item in STRATEGY["current_mesocycle"]["microcycle_template"]
+            if item["slot"] == "run_hill_quality"
+        )
+        planned_step = next(
+            (
+                step
+                for step in hill_slot["development_progression"]["microcycle_plan"]
+                if step["microcycle"] == hill_day["microcycle_index"]
+            ),
+            None,
+        )
+        expected_hill_id = planned_step["option_id"] if planned_step else hill_slot["baseline_option_id"]
+        expected_hill = next(
+            option for option in hill_slot["dose_options"] if option["id"] == expected_hill_id
+        )
+        self.assertEqual(hill_day["planning_status"], "preliminary")
+        self.assertEqual(hill_day["baseline_option_id"], expected_hill_id)
+        self.assertEqual(hill_day["dose_resolution"]["state"], "baseline")
+        self.assertEqual(hill_day["session"], expected_hill["session"])
+        self.assertNotIn("dos öppen", hill_day["session"].lower())
 
         strength_day = future["days"][5]
         self.assertEqual(strength_day["planning_status"], "preliminary")
