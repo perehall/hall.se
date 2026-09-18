@@ -1,6 +1,51 @@
 {
   "analyses": [
     {
+      "activity_id": 20229568713,
+      "activity_date": "2026-09-18",
+      "activity_name": "Löpning på eftermiddagen",
+      "generated_at_utc": "2026-09-18T16:53:29.384711+00:00",
+      "model": "gpt-5-mini",
+      "analysis_contract": {
+        "pipeline_version": 2,
+        "workout_context_version": 3,
+        "plan_comparison_version": 2,
+        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
+        "analysis_code_sha256": "079470facd2bdc3de67f9bdf4948eca93a1f672b307efb63733705ce34a752d2"
+      },
+      "performance_marker_id": null,
+      "performance_protocol_key": null,
+      "assessment": {
+        "summary": "Genomfört backkvalitetspass (15 km, 77.9 min) med 2×8×150-m dosen registrerad; puls och intervaller visar upprepade korta kraftinsatser och återkommande lugn mellan.",
+        "load_interpretation": "Närbelastningen är förhöjd mekaniskt/neuromuskulärt efter senaste MTB- och enduropassen; inga akuta tecken på överbelastning i subjektiv rapport finns.",
+        "confidence": "medium",
+        "facts": [
+          "Löpning: 15,01 km · 1:17:56 · 266 m+ · snittpuls 141,3 · maxpuls 163.",
+          "Planstatus 2026-09-18: dagen är markerad genomförd i coachens beslutsunderlag."
+        ],
+        "interpretations": [
+          "Passet fullföljde den av systemet valda reducerade dosen 2×8×150 istället för ursprunglig 3×8; visar att backkvalitetsstimulus genomfördes utan tidig hissning i puls över uppvärmning",
+          "Givet föregående MTB/XC (17/9) och enduro (14/9) ökar mekanisk/neuromuskulär närbelastning vilket motiverade den konservativa nedjusteringen och bör beaktas 48–72h"
+        ],
+        "unknowns": [
+          "Subjektiv återhämtning efter passet (användarrapport saknas)",
+          "Lokala muskelsymtom eller stelhet under kommande 24–72 h"
+        ]
+      },
+      "plan_action": {
+        "action": "keep",
+        "target_date": "2026-09-19",
+        "reason": "Dagens pass var genomfört enligt den konservativa dosen som redan applicerats på grund av tidigare MTB/XC/enduro-belastning.",
+        "recommendation": "Behåll lördagens planerade simning + styrka (2026-09-19) som preliminär; gör simningen aerob/teknisk och håll styrkan kontrollerad (35 min) om benen känns ok. Om du känner ovanlig lokal trötthet eller smärta, vila styrkan och gör endast lätt simning.",
+        "dose_option_id": "",
+        "requires_approval": false
+      },
+      "auto_apply": {
+        "applied": false,
+        "note": "Ingen automatisk planändring."
+      }
+    },
+    {
       "activity_id": 20218282169,
       "activity_date": "2026-09-17",
       "activity_name": "Evening Stig Bike Ride",
@@ -1169,47 +1214,10 @@
         "applied": false,
         "note": "Ingen automatisk planändring."
       }
-    },
-    {
-      "activity_id": 19827029587,
-      "activity_date": "2026-08-20",
-      "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-08-21T14:27:35.463943+00:00",
-      "model": "gpt-5-mini",
-      "assessment": {
-        "summary": "Passet var en kontrollerad löptröskel som bör tillåtas följas av planerat lugnt simpass i morgon.",
-        "load_interpretation": "Torsdagens tröskel (10,35 km, snittpuls 145, max 167) är den avgörande närbelastningen för beslutet.",
-        "confidence": "medium",
-        "facts": [
-          "Löpning: 10,35 km · 50:48 · 63 m+ · snittpuls 145,7 · maxpuls 167.",
-          "Onsdag: 6,94 km Swimrun 54:50, snittpuls 143, maxpuls 173, bedömd absorberad.",
-          "Fredag planerad: simning ~3 200 m aerob/teknik, syfte låg återhämtningskostnad.",
-          "Inga subjektiva återhämtningsdata (sömn/HRV/dagskänsla) i underlaget för fredag."
-        ],
-        "interpretations": [
-          "Torsdagspasset var kontrollerat men innehöll tröskelbelastning som ger viss kardiovaskulär och muskulär stress.",
-          "Det planerade simpasset är designat för låg kostnad och kan fungera som aktiv återhämtning om dagskänslan är normal."
-        ],
-        "unknowns": [
-          "Subjektiv dagskänsla för fredag (trötthet/smärta).",
-          "Sömn och HRV senaste natt som kan påverka återhämtningskapacitet."
-        ]
-      },
-      "plan_action": {
-        "action": "keep",
-        "target_date": "2026-08-21",
-        "reason": "Simpasset är lågkostnadsorienterat och matchar behovet av aktiv återhämtning efter gårdagens tröskel.",
-        "recommendation": "Behåll planerat simpass enligt struktur; håll intensiteten i de 600 m-blocken lätt (RPE 3–4) och kapa ett 600 m-block eller vila helt om du känner ovanlig trötthet eller lokal muskelstelhet före passet.",
-        "requires_approval": false
-      },
-      "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
-      }
     }
   ],
-  "last_trigger_hash": "ccf661adb895c66c1d90367ca6c5d82959a8d5645fa59dc6fefa220dda5b34e2",
-  "last_run_utc": "2026-09-18T16:23:32.408751+00:00",
+  "last_trigger_hash": "1653ea3934deb5c00e8ddccce4611c266bfd6f551cda25bae1a6344a1ac051f8",
+  "last_run_utc": "2026-09-18T16:53:29.384711+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 2
