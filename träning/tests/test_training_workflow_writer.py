@@ -40,11 +40,12 @@ class TrainingWorkflowWriterTests(unittest.TestCase):
         self.assertIn("gh workflow run update-training.yml --ref main", update)
         self.assertIn("git push origin HEAD:main", update)
 
-    def test_pages_deploy_has_one_trigger_path(self):
+    def test_generated_training_commit_dispatches_pages_explicitly(self):
         workflow = self.workflow_text()
 
-        self.assertNotIn("gh workflow run deploy-pages.yml", workflow)
-        self.assertIn("Push to main triggers deploy-pages.yml automatically", workflow)
+        self.assertIn("gh workflow run deploy-pages.yml --ref main", workflow)
+        self.assertIn("steps.commit_changes.outputs.changed == 'true'", workflow)
+        self.assertNotIn("Push to main triggers deploy-pages.yml automatically", workflow)
 
 
 if __name__ == "__main__":
