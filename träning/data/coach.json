@@ -4,7 +4,7 @@
       "activity_id": 20218282169,
       "activity_date": "2026-09-17",
       "activity_name": "Evening Stig Bike Ride",
-      "generated_at_utc": "2026-09-17T21:21:54.920474+00:00",
+      "generated_at_utc": "2026-09-18T00:04:04.169340+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 2,
@@ -16,8 +16,8 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "75 minuter MTB/XC genomfört med 18.05 km, 209 m stigning och genomsnittspuls 127 bpm; längre än planerad 60 min men utan extrem pulsökning.",
-        "load_interpretation": "Närbelastningen ökade framför kommande fredag—passet överskred godkänd varaktighet med ~15 min och adderar mekanisk/neuromuskulär kostnad.",
+        "summary": "MTB-passet blev längre än godkänd dos (75 min vs plan 60) med måttlig puls och stabil effekt, vilket ökade mekanisk/neuromuskulär närbelastning inför fredagens backpass.",
+        "load_interpretation": "Ökad mekanisk/neuromuskulär närbelastning de senaste 48 timmarna motiverar en konservativ dosjustering av fredagspasset.",
         "confidence": "medium",
         "facts": [
           "MTB/XC: 18,05 km · 1:17:15 · 209 m+ · snittpuls 127,1 · maxpuls 152.",
@@ -25,12 +25,12 @@
           "Planerad tidsdos 60 min; faktisk rörelsetid 75.15 min (+15.15 min mot vald dos); över längsta godkända alternativet 60 min."
         ],
         "interpretations": [
-          "Passet var längre än planerad stöddos vilket ökar mekanisk/neuromuskulär belastning inför fredagens prioriterade backpass.",
+          "Detta pass visar att längre, teknisk MTB/XC genomfördes men i lägre intensitet; varaktigheten ökar mekanisk och neuromuskulär belastning inför fredagens prioriterade backkvalitet",
           "Tidsdosen blev 75.15 min mot valda 60 min och översteg även det längsta godkända alternativet 60 min."
         ],
         "unknowns": [
-          "Subjektiv känsla/bentrötthet efter passet saknas i användarrapport",
-          "Eventuell återhämtning över natten och sömnkvalitet kan påverka fredagens tolerans"
+          "Subjektiv återhämtning/bentrötthet efter MTB/XC (användarrapport saknas)",
+          "Eventuella planerade ändringar eller fasta åtaganden före/under fredag som påverkar genomförande"
         ]
       },
       "plan_action": {
@@ -1208,8 +1208,8 @@
       }
     }
   ],
-  "last_trigger_hash": "43843be2374dfb36e229bd38acd65fe68ea9be80a4d817d3aa8ba381a600afb0",
-  "last_run_utc": "2026-09-17T21:21:54.920474+00:00",
+  "last_trigger_hash": "8993e786b8aa3b59505736cfe5953855dcd9f646343ec4e9718f65d864ddca6a",
+  "last_run_utc": "2026-09-18T00:04:04.169340+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 2
