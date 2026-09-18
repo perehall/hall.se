@@ -7,18 +7,16 @@ on:
       - strava-activity-event
   schedule:
     # Safety reconcile behålls tills Strava-webhooken är verifierad end-to-end.
+    # Veckorullning sker redan i den kanoniska pipelinen och den separata
+    # midnight-workflowen dispatchar samma pipeline en gång per lokal dag.
     - cron: "17 */3 * * *"
-    # Veckorullning 00:05 Europe/Stockholm. Två UTC-tider täcker CET/CEST;
-    # rollover_week.py använder lokal kalendervecka och är idempotent.
-    - cron: "5 22 * * 0"
-    - cron: "5 23 * * 0"
   push:
     paths:
       - "träning/data/manual-sync-trigger.txt"
 
 concurrency:
   group: training-pages
-  cancel-in-progress: false
+  queue: max
 
 permissions: {}
 
@@ -100,6 +98,8 @@ jobs:
 
       - name: Commit synced data, coach state and live page
         id: commit_changes
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           TRACKED=(
             "träning/data/activities.json"
@@ -122,6 +122,7 @@ jobs:
           )
           if [ -z "$(git status --porcelain -- "${TRACKED[@]}")" ]; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "retry=false" >> "$GITHUB_OUTPUT"
             echo "No repository changes."
           else
             git config user.name "training-bot"
@@ -136,22 +137,26 @@ jobs:
             BASE_SHA="${{ steps.training_base.outputs.sha }}"
             REMOTE_SHA="$(git ls-remote origin refs/heads/main | awk '{print $1}')"
             if [ "$REMOTE_SHA" != "$BASE_SHA" ]; then
-              echo "::error::main moved from $BASE_SHA to $REMOTE_SHA while the training pipeline was running. Refusing to rebase generated training snapshots; rerun the full pipeline from current main."
-              exit 1
+              echo "::notice::main moved from $BASE_SHA to $REMOTE_SHA while the training pipeline was running. Discarding this generated snapshot and queueing one clean retry from current main."
+              echo "changed=false" >> "$GITHUB_OUTPUT"
+              echo "retry=true" >> "$GITHUB_OUTPUT"
+              gh workflow run update-training.yml --ref main
+              exit 0
             fi
 
             git push origin HEAD:main
             echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "retry=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Dispatch canonical Pages deployment
+      - name: Confirm automatic Pages handoff
         if: steps.commit_changes.outputs.changed == 'true'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh workflow run deploy-pages.yml --ref main
-          echo "Published site changes handed off to the single canonical Pages deployer."
+        run: echo "Push to main triggers deploy-pages.yml automatically; no duplicate workflow_dispatch is needed."
+
+      - name: Confirm clean retry queued
+        if: steps.commit_changes.outputs.retry == 'true'
+        run: echo "Training update superseded by a newer main commit; a fresh serialized retry has been queued."
 
       - name: Confirm no deployment needed
-        if: steps.commit_changes.outputs.changed != 'true'
+        if: steps.commit_changes.outputs.changed != 'true' && steps.commit_changes.outputs.retry != 'true'
         run: echo "Training update complete; site content was unchanged, so no Pages deployment is needed."
