@@ -4,7 +4,7 @@
       "activity_id": 20229568713,
       "activity_date": "2026-09-18",
       "activity_name": "Löpning på eftermiddagen",
-      "generated_at_utc": "2026-09-18T20:57:40.829505+00:00",
+      "generated_at_utc": "2026-09-18T23:17:55.651500+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 2,
@@ -16,8 +16,8 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört: 3 × 8 backintervaller (24 totalt). Användaren kände sig “superpigg” under och efter passet",
-        "load_interpretation": "Passet ökar mekanisk och neuromuskulär närbelastning i mikrocykeln och motiverar konservativ reducering av nästa dags styrka/sim-kombination.",
+        "summary": "Genomfört: 3 × 8 backintervaller (24 totalt). Användaren rapporterar sig 'superpigg' under/efter passet",
+        "load_interpretation": "närbelastningen kan inte nivåklassas mot personlig baslinje mekanisk/neuromuskulär (många backrepetitioner + tidigare enduro/MTB/XC inom fönstret) även om subjektiv känsla…",
         "confidence": "medium",
         "facts": [
           "Löpning · backintervaller: 15,01 km · 1:17:56 · 266 m+ · snittpuls 141,3 · maxpuls 163.",
@@ -25,12 +25,12 @@
           "Planstatus 2026-09-18: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Att användaren var superpigg och fullföljde 24 backar visar att volymgolvet har höjts till minst 24 repetitioner vilket stödjer planens progressionstrend.",
-          "Påverkad närbelastning (sen MTB/XC + dagens backar) gör att nästa dagars styrka/sim bör hållas reducerad för att skydda mekanisk och neuromuskulär återhämtning."
+          "Att genomföra 24 backintervaller visar att arbetvolymen för backkvalitet höjts över tidigare golv och etablerar ett nytt volymreferensvärde för progression.",
+          "Trots subjektiv pigghet ökar kombinationen av enduro/MTB/XC + dagens backpass mekanisk/neuromuskulär belastning för de närmaste 48–72 h."
         ],
         "unknowns": [
-          "Subjektiv trötthet nästa morgon och lokal muskelömhet i benen.",
-          "Eventuella akuta skador eller specifika besvär ej rapporterade."
+          "Användarens muskelsmärta eller lokal trötthet efter passet (ej rapporterat).",
+          "återhämtningsunderlaget/återhämtningsrespons kommande 24–48 h (wellnessdata privat men ej avgörande)."
         ]
       },
       "plan_action": {
@@ -1217,8 +1217,8 @@
       }
     }
   ],
-  "last_trigger_hash": "dab9d7883d99b0fdd053092bcff9ec3bf7a4112e5dd023a58c8d3a1a2758d4db",
-  "last_run_utc": "2026-09-18T20:57:40.829505+00:00",
+  "last_trigger_hash": "65a4a1838c1dfad9769dd7d5edcbcd9373c2285242590f90fe5e4d1137fc83ce",
+  "last_run_utc": "2026-09-18T23:17:55.651500+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 2
