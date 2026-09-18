@@ -4,7 +4,7 @@
   "week_start": "2026-09-14",
   "week_end": "2026-09-20",
   "created_at_utc": "2026-09-13T23:09:46.558327+00:00",
-  "updated_at_utc": "2026-09-18T16:53:31.093746+00:00",
+  "updated_at_utc": "2026-09-18T17:05:01.975784+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -1176,9 +1176,9 @@
           "transport": "intervals_icu",
           "source_hash": "6fdf691c6debacf10259942011966d82acb5aea788beec75623b89ec09b7e75c",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-18T16:53:30.063200+00:00",
+          "updated_at_utc": "2026-09-18T17:05:01.147419+00:00",
           "provider_event_id": 135486213,
-          "verified_at_utc": "2026-09-18T16:53:30.063200+00:00"
+          "verified_at_utc": "2026-09-18T17:05:01.147419+00:00"
         },
         "original_session": "Löpning · backkvalitet · 15 min lugnt + 3 × 8 × 150 m / lugn joggvila + 10 min lugnt",
         "auto_coach": {
@@ -1635,9 +1635,9 @@
           "transport": "intervals_icu",
           "source_hash": "be9d1761e0c308fa21de98a0bdd657b35c17e11a343dff54f1e561a58f74ec71",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-18T16:53:30.194291+00:00",
+          "updated_at_utc": "2026-09-18T17:05:01.377881+00:00",
           "provider_event_id": 135973445,
-          "verified_at_utc": "2026-09-18T16:53:30.194291+00:00"
+          "verified_at_utc": "2026-09-18T17:05:01.377881+00:00"
         }
       }
     ],
@@ -1669,8 +1669,8 @@
       "weighted_average_watts": 289,
       "calories": 839.0,
       "device_name": "Garmin Forerunner 970",
-      "gear_id": null,
-      "gear_name": null,
+      "gear_id": "g33719877",
+      "gear_name": "Saucony Triumph 24",
       "source": "Strava API",
       "laps": [
         {
@@ -4919,7 +4919,7 @@
       "activity_id": 20229568713,
       "activity_date": "2026-09-18",
       "activity_name": "Löpning på eftermiddagen",
-      "generated_at_utc": "2026-09-18T16:53:29.384711+00:00",
+      "generated_at_utc": "2026-09-18T17:05:00.259059+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 2,
@@ -4931,27 +4931,27 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört backkvalitetspass (15 km, 77.9 min) med 2×8×150-m dosen registrerad; puls och intervaller visar upprepade korta kraftinsatser och återkommande lugn mellan.",
-        "load_interpretation": "Närbelastningen är förhöjd mekaniskt/neuromuskulärt efter senaste MTB- och enduropassen; inga akuta tecken på överbelastning i subjektiv rapport finns.",
+        "summary": "Genomfört backkvalitetspass modifierat till 2×8×150 m efter tidigare MTB/XC; 15,0 km med 266 m höjd visade god genomförbarhet.",
+        "load_interpretation": "Närbelastning visar ökad mekanisk/neuromuskulär belastning från MTB/XC dagen innan; passet genomfördes i reducerad dos enligt near-term beslut.",
         "confidence": "medium",
         "facts": [
           "Löpning: 15,01 km · 1:17:56 · 266 m+ · snittpuls 141,3 · maxpuls 163.",
           "Planstatus 2026-09-18: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Passet fullföljde den av systemet valda reducerade dosen 2×8×150 istället för ursprunglig 3×8; visar att backkvalitetsstimulus genomfördes utan tidig hissning i puls över uppvärmning",
-          "Givet föregående MTB/XC (17/9) och enduro (14/9) ökar mekanisk/neuromuskulär närbelastning vilket motiverade den konservativa nedjusteringen och bör beaktas 48–72h"
+          "Passet uppfyllde den justerade (reducerade) dosen 2×8×150 och visar att backstimulus kunde genomföras under ökade mekaniska krav.",
+          "Dagens utförande etablerar inte automatiskt högre volym; mesocykelkravet om volymgolv (minst 21) kvarstår för framtida progression."
         ],
         "unknowns": [
-          "Subjektiv återhämtning efter passet (användarrapport saknas)",
-          "Lokala muskelsymtom eller stelhet under kommande 24–72 h"
+          "Subjektiv återhämtning nästa 24–72 h (ingen användarrapport).",
+          "Detaljerad teknikbedömning per backintervall saknas i data."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-09-19",
-        "reason": "Dagens pass var genomfört enligt den konservativa dosen som redan applicerats på grund av tidigare MTB/XC/enduro-belastning.",
-        "recommendation": "Behåll lördagens planerade simning + styrka (2026-09-19) som preliminär; gör simningen aerob/teknisk och håll styrkan kontrollerad (35 min) om benen känns ok. Om du känner ovanlig lokal trötthet eller smärta, vila styrkan och gör endast lätt simning.",
+        "reason": "Dagens pass är en konservativt nedjusterad genomförd dos och inga tydliga tecken finns för ytterligare reduktion eller vila.",
+        "recommendation": "Följ planerad lördagsdos: Simning 3 200 m + styrka ~35 min som planerat; håll styrkan kontrollerad och undvik plyometri om benen känns tunga.",
         "dose_option_id": "",
         "requires_approval": false
       },
