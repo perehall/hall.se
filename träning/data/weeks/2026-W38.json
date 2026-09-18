@@ -4,7 +4,7 @@
   "week_start": "2026-09-14",
   "week_end": "2026-09-20",
   "created_at_utc": "2026-09-13T23:09:46.558327+00:00",
-  "updated_at_utc": "2026-09-18T18:24:58.859821+00:00",
+  "updated_at_utc": "2026-09-18T18:25:36.994648+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -1176,9 +1176,9 @@
           "transport": "intervals_icu",
           "source_hash": "6fdf691c6debacf10259942011966d82acb5aea788beec75623b89ec09b7e75c",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-18T18:24:57.808854+00:00",
+          "updated_at_utc": "2026-09-18T18:25:35.950682+00:00",
           "provider_event_id": 135486213,
-          "verified_at_utc": "2026-09-18T18:24:57.808854+00:00"
+          "verified_at_utc": "2026-09-18T18:25:35.950682+00:00"
         },
         "original_session": "Löpning · backkvalitet · 15 min lugnt + 3 × 8 × 150 m / lugn joggvila + 10 min lugnt",
         "auto_coach": {
@@ -1192,8 +1192,8 @@
       {
         "date": "2026-09-19",
         "label": "Lördag",
-        "status": "preliminary",
-        "session": "Simning · 3 200 m · aerob/teknik + styrka/core · ca 35 min · styrkemall",
+        "status": "conditional",
+        "session": "Simning · 3 200 m · aerob/teknik + styrka/core · 25 min · styrkemall",
         "reason": "Kombinerar mikrocykelns andra simexponering med skyddad styrka/core. Simningen är aerob/teknisk för låg mekanisk kostnad; styrkan förblir en egen skyddad kapacitet och reduceras eller flyttas om fredagens faktiska belastning motiverar det.",
         "development_focus": "Simning: teknisk kvalitet och stabil aerob rytm. Styrka: kontrollerad unilateral styrka, höftdominant arbete, drag/press och bål; plyometri endast när benen är mekaniskt fräscha.",
         "sport": "strength",
@@ -1238,10 +1238,13 @@
         "baseline_option_id": "strength-support-35",
         "dose_open": false,
         "dose_resolution": {
-          "state": "baseline",
+          "state": "resolved",
           "kind": "duration_minutes",
-          "value": 35,
-          "option_id": "strength-support-35"
+          "value": 25,
+          "source": "near_term_ai_revision",
+          "option_id": "strength-support-25",
+          "basis": "Kombinerad närbelastning från senaste enduro/MTB och dagens 24 backintervaller motiverar konservativ reducering av nästa dagars styrka/sim+styrka-kombination.",
+          "applied_at_utc": "2026-09-18T18:25:35.184667+00:00"
         },
         "workout_design": {
           "schema_version": 1,
@@ -1269,91 +1272,10 @@
           },
           "progression_from_previous": {
             "relation": "maintenance",
-            "reason": "Normal kort styrka/core-exponering, förankrad i nyligen genomförd cirka 36-minutersstyrka.",
+            "reason": "Kombinerad närbelastning från senaste enduro/MTB och dagens 24 backintervaller motiverar konservativ reducering av nästa dagars styrka/sim+styrka-kombination.",
             "demonstrated_floor_option_id": ""
           },
           "candidates": [
-            {
-              "id": "strength-support-35",
-              "dose_option_id": "strength-support-35",
-              "session": "Simning · 3 200 m · aerob/teknik + styrka/core · ca 35 min · styrkemall",
-              "intent": "Normal kort styrka/core-exponering, förankrad i nyligen genomförd cirka 36-minutersstyrka.",
-              "dose": {
-                "kind": "duration_minutes",
-                "value": 35
-              },
-              "stimuli": [
-                "strength_unilateral",
-                "strength_core",
-                "swim_aerobic",
-                "swim_technique"
-              ],
-              "prescription": {
-                "executable": true,
-                "completeness": "partial",
-                "blocks": [
-                  {
-                    "name": "Tidsram",
-                    "work": {
-                      "duration_s": 2100
-                    },
-                    "instruction": "Styrka/core inom vald tidsram",
-                    "intensity": "kontrollerad"
-                  },
-                  {
-                    "name": "Styrkemall",
-                    "work": {},
-                    "instruction": "Liten dos explosivitet/plyometri när omkringliggande belastning tillåter.",
-                    "intensity": "enligt styrkemall"
-                  },
-                  {
-                    "name": "Styrkemall",
-                    "work": {},
-                    "instruction": "Bulgarian split squat som huvudalternativ för unilateral benstyrka.",
-                    "intensity": "enligt styrkemall"
-                  },
-                  {
-                    "name": "Styrkemall",
-                    "work": {},
-                    "instruction": "Marklyft eller RDL som normal höftdominant huvudövning.",
-                    "intensity": "enligt styrkemall"
-                  },
-                  {
-                    "name": "Styrkemall",
-                    "work": {},
-                    "instruction": "Vad + soleus regelbundet.",
-                    "intensity": "enligt styrkemall"
-                  },
-                  {
-                    "name": "Styrkemall",
-                    "work": {},
-                    "instruction": "Enarmsrodd + press som huvuddrag/press.",
-                    "intensity": "enligt styrkemall"
-                  },
-                  {
-                    "name": "Styrkemall",
-                    "work": {},
-                    "instruction": "Välj två bålövningar; låt inte accessoarer tränga undan huvudstyrkan.",
-                    "intensity": "enligt styrkemall"
-                  }
-                ],
-                "missing": [
-                  "exercise_sets_reps_load"
-                ],
-                "source": "strength_template"
-              },
-              "score": {
-                "total": 85,
-                "breakdown": {
-                  "mesocycle_alignment": 30,
-                  "microcycle_alignment": 30,
-                  "progression_alignment": 15,
-                  "prescription_specificity": 0,
-                  "near_term_resolution": 10
-                },
-                "basis": "deterministic_constraint_alignment"
-              }
-            },
             {
               "id": "strength-support-25",
               "dose_option_id": "strength-support-25",
@@ -1424,6 +1346,87 @@
                 "source": "strength_template"
               },
               "score": {
+                "total": 85,
+                "breakdown": {
+                  "mesocycle_alignment": 30,
+                  "microcycle_alignment": 30,
+                  "progression_alignment": 15,
+                  "prescription_specificity": 0,
+                  "near_term_resolution": 10
+                },
+                "basis": "deterministic_constraint_alignment"
+              }
+            },
+            {
+              "id": "strength-support-35",
+              "dose_option_id": "strength-support-35",
+              "session": "Simning · 3 200 m · aerob/teknik + styrka/core · ca 35 min · styrkemall",
+              "intent": "Normal kort styrka/core-exponering, förankrad i nyligen genomförd cirka 36-minutersstyrka.",
+              "dose": {
+                "kind": "duration_minutes",
+                "value": 35
+              },
+              "stimuli": [
+                "strength_unilateral",
+                "strength_core",
+                "swim_aerobic",
+                "swim_technique"
+              ],
+              "prescription": {
+                "executable": true,
+                "completeness": "partial",
+                "blocks": [
+                  {
+                    "name": "Tidsram",
+                    "work": {
+                      "duration_s": 2100
+                    },
+                    "instruction": "Styrka/core inom vald tidsram",
+                    "intensity": "kontrollerad"
+                  },
+                  {
+                    "name": "Styrkemall",
+                    "work": {},
+                    "instruction": "Liten dos explosivitet/plyometri när omkringliggande belastning tillåter.",
+                    "intensity": "enligt styrkemall"
+                  },
+                  {
+                    "name": "Styrkemall",
+                    "work": {},
+                    "instruction": "Bulgarian split squat som huvudalternativ för unilateral benstyrka.",
+                    "intensity": "enligt styrkemall"
+                  },
+                  {
+                    "name": "Styrkemall",
+                    "work": {},
+                    "instruction": "Marklyft eller RDL som normal höftdominant huvudövning.",
+                    "intensity": "enligt styrkemall"
+                  },
+                  {
+                    "name": "Styrkemall",
+                    "work": {},
+                    "instruction": "Vad + soleus regelbundet.",
+                    "intensity": "enligt styrkemall"
+                  },
+                  {
+                    "name": "Styrkemall",
+                    "work": {},
+                    "instruction": "Enarmsrodd + press som huvuddrag/press.",
+                    "intensity": "enligt styrkemall"
+                  },
+                  {
+                    "name": "Styrkemall",
+                    "work": {},
+                    "instruction": "Välj två bålövningar; låt inte accessoarer tränga undan huvudstyrkan.",
+                    "intensity": "enligt styrkemall"
+                  }
+                ],
+                "missing": [
+                  "exercise_sets_reps_load"
+                ],
+                "source": "strength_template"
+              },
+              "score": {
                 "total": 55,
                 "breakdown": {
                   "mesocycle_alignment": 30,
@@ -1436,13 +1439,20 @@
               }
             }
           ],
-          "selected_candidate_id": "strength-support-35",
+          "selected_candidate_id": "strength-support-25",
           "selection": {
             "method": "deterministic_constraint_scoring",
-            "preferred_dose_option_id": "strength-support-35",
-            "reason_for_today": "Normal kort styrka/core-exponering, förankrad i nyligen genomförd cirka 36-minutersstyrka."
+            "preferred_dose_option_id": "strength-support-25",
+            "reason_for_today": "Kombinerad närbelastning från senaste enduro/MTB och dagens 24 backintervaller motiverar konservativ reducering av nästa dagars styrka/sim+styrka-kombination."
           }
-        }
+        },
+        "original_session": "Simning · 3 200 m · aerob/teknik + styrka/core · ca 35 min · styrkemall",
+        "auto_coach": {
+          "action": "reduce",
+          "reason": "Kombinerad närbelastning från senaste enduro/MTB och dagens 24 backintervaller motiverar konservativ reducering av nästa dagars styrka/sim+styrka-kombination.",
+          "applied_at_utc": "2026-09-18T18:25:35.184667+00:00"
+        },
+        "coach_adjustment": "Passet är nedjusterat från grundplanen. Följ passupplägget ovan."
       },
       {
         "date": "2026-09-20",
@@ -1635,9 +1645,9 @@
           "transport": "intervals_icu",
           "source_hash": "be9d1761e0c308fa21de98a0bdd657b35c17e11a343dff54f1e561a58f74ec71",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-18T18:24:57.945934+00:00",
+          "updated_at_utc": "2026-09-18T18:25:36.080196+00:00",
           "provider_event_id": 135973445,
-          "verified_at_utc": "2026-09-18T18:24:57.945934+00:00"
+          "verified_at_utc": "2026-09-18T18:25:36.080196+00:00"
         }
       }
     ],
@@ -2362,9 +2372,9 @@
         "contract_version": 3,
         "activity_id": 20229568713,
         "sport_type": "Run",
-        "display_label": "Run",
-        "classification": null,
-        "user_report": "",
+        "display_label": "Löpning · backintervaller",
+        "classification": "training",
+        "user_report": "3 × 8 backintervaller (24 backar totalt). Tre serier om åtta intervaller. Kände mig superpigg under och efter passet.",
         "total": {
           "distance_m": 15006.4,
           "distance_km": 15.006,
@@ -2440,7 +2450,12 @@
         "swim": null,
         "enduro": null,
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
-      }
+      },
+      "source_sport_type": "Run",
+      "classification": "training",
+      "display_label": "Löpning · backintervaller",
+      "user_report": "3 × 8 backintervaller (24 backar totalt). Tre serier om åtta intervaller. Kände mig superpigg under och efter passet.",
+      "classification_reason": "Explicit användarrapport fastställer kvällens faktiska intervallstruktur till 3 × 8 och den subjektiva känslan som superpigg. Den tidigare coachanalysens 2 × 8 kom från den nedjusterade planen och får inte användas som facit för faktiskt genomförande."
     },
     {
       "id": 20218282169,
@@ -4919,7 +4934,7 @@
       "activity_id": 20229568713,
       "activity_date": "2026-09-18",
       "activity_name": "Löpning på eftermiddagen",
-      "generated_at_utc": "2026-09-18T18:24:57.118769+00:00",
+      "generated_at_utc": "2026-09-18T18:25:35.186707+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 2,
@@ -4931,33 +4946,34 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört backpass (15 km, 266 hm, 5:12/km) följde den justerade planen 2×8×150 och visar god genomförbarhet men lägre snittpuls än tidigare tröskelpass.",
-        "load_interpretation": "Närbelastning: mekanisk/neuromuskulär och kardiovaskulär belastning i de senaste 2–3 dagarna är förhöjd och motiverade den tidigare dosreduktionen.",
+        "summary": "Genomfört: 3 × 8 backintervaller (24 totalt). Passet uppfyllde planens kvalitetsstimulus trots tidigare automatisk…",
+        "load_interpretation": "Närbelastningen ökar mekanisk/neuromuskulärt i mikrocykelfönstret (enduro + MTB/XC + dagens backpass); nära-term-plan kräver konservatism.",
         "confidence": "medium",
         "facts": [
-          "Löpning: 15,01 km · 1:17:56 · 266 m+ · snittpuls 141,3 · maxpuls 163.",
+          "Löpning · backintervaller: 15,01 km · 1:17:56 · 266 m+ · snittpuls 141,3 · maxpuls 163.",
+          "Användarrapport: 3 × 8 backintervaller (24 backar totalt). Tre serier om åtta intervaller. Kände mig superpigg under och efter passet.",
           "Planstatus 2026-09-18: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Passet visar att 2×8×150 genomfördes enligt den justerade ordinationen och bekräftar genomförbarhet av dagens dos.",
-          "Eftersom MTB/XC 17/9 var längre än godkänd dos har planen konservativt reducerats; dagens genomförande stödjer behållen reducerad dos snarare än omedelbar progression."
+          "Användarutförandet överstiger den AI-nedjusterade dosen och visar att önskad arbetsvolym (24) kunde genomföras med god känsla, vilket etablerar ett nytt demonstrerat volymgolv.",
+          "Trots pigg subjektiv känsla ökar kombinationen av senaste enduro/MTB-aktiviteter plus dagens backpass den mekaniska/neuromuskulära närbelastningen i de närmaste 48–72 timmarna."
         ],
         "unknowns": [
-          "Användarens subjektiva trötthet/benstatus efter passet (användarrapport saknas)",
-          "Hur morgondagens sim+styrka kommer tolereras ges inte av nuvarande data"
+          "Subjektiv återhämtning kommande 24–72 h (användarrapport finns bara samma dag).",
+          "Detaljer om lokal muskelömmhet eller sömnkompensation natten efter passet."
         ]
       },
       "plan_action": {
-        "action": "keep",
+        "action": "reduce",
         "target_date": "2026-09-19",
-        "reason": "Dagens faktiska genomförande tillsammans med föregående MTB-belastning motiverar ingen ytterligare reduktion eller vila för nästa dag.",
-        "recommendation": "Behåll planerad simning + styrka för 2026-09-19 enligt plan; välj normal styrkedos (35 min) om du känner rimlig benfräschhet, annars reducera till 25 min.",
-        "dose_option_id": "",
+        "reason": "Backpasset genomfördes som 3 × 8 backintervaller (24 totalt), alltså över den planerade omfattningen före passet (16 arbetsintervaller).",
+        "recommendation": "Följ det justerade passupplägget i planen.",
+        "dose_option_id": "strength-support-25",
         "requires_approval": false
       },
       "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
+        "applied": true,
+        "note": "Konservativ ändring applicerad på 2026-09-19: reduce."
       }
     },
     {
