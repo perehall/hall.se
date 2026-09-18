@@ -10,7 +10,7 @@ on:
 
 concurrency:
   group: training-pages
-  cancel-in-progress: false
+  queue: max
 
 permissions:
   contents: read
@@ -63,4 +63,4 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh workflow run update-training.yml --ref main
-          echo "Dispatched full training refresh so today's dose can mature before rendering."
+          echo "Dispatched the canonical training refresh so today's plan and date-dependent state can be updated before rendering."
