@@ -1,6 +1,51 @@
 {
   "analyses": [
     {
+      "activity_id": 20239623463,
+      "activity_date": "2026-09-19",
+      "activity_name": "Simning vid lunch",
+      "generated_at_utc": "2026-09-19T12:13:34.183628+00:00",
+      "model": "gpt-5-mini",
+      "analysis_contract": {
+        "pipeline_version": 2,
+        "workout_context_version": 3,
+        "plan_comparison_version": 2,
+        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
+        "analysis_code_sha256": "079470facd2bdc3de67f9bdf4948eca93a1f672b307efb63733705ce34a752d2"
+      },
+      "performance_marker_id": null,
+      "performance_protocol_key": null,
+      "assessment": {
+        "summary": "Genomfört 4 000 m simpass med strukturerad 1×400 + 4×50 + 17×200 och 56,6 min total tid; passet registrerar stabila 200 m-block med stigande puls mot slutet.",
+        "load_interpretation": "Simningen är ett lågmekaniskt underhållspass men ökad totalvaraktighet över godkänd styrkedos ökar närbelastningen för styrka samma dag eller nästa 24–48 timmar.",
+        "confidence": "medium",
+        "facts": [
+          "Simning: 4,00 km · 1:18:50 · snittpuls 130,1 · maxpuls 156.",
+          "Planerad tidsdos 25 min; faktisk rörelsetid 56.57 min (+31.57 min mot vald dos); över längsta godkända alternativet 35 min."
+        ],
+        "interpretations": [
+          "Passet motsvarar planens simstimulus men överstiger planens godkända styrkeduration (plan jämförde 25 min styrka; dagens faktiska kombination gav längre total aktivering).",
+          "Tidsdosen blev 56.57 min mot valda 25 min och översteg även det längsta godkända alternativet 35 min."
+        ],
+        "unknowns": [
+          "Subjektiv återhämtning efter passet (användarrapport tom)",
+          "Om användaren avsåg genomföra styrkedelen idag eller om den stod kvar ogjord"
+        ]
+      },
+      "plan_action": {
+        "action": "reduce",
+        "target_date": "2026-09-19",
+        "reason": "Den genomförda passdelen ska inte ordineras en gång till.",
+        "recommendation": "Följ det justerade passupplägget i planen.",
+        "dose_option_id": "",
+        "requires_approval": false
+      },
+      "auto_apply": {
+        "applied": true,
+        "note": "Konservativ ändring applicerad på 2026-09-19: reduce."
+      }
+    },
+    {
       "activity_id": 20229568713,
       "activity_date": "2026-09-18",
       "activity_name": "Löpning på eftermiddagen",
@@ -1182,43 +1227,10 @@
         "applied": false,
         "note": "Ingen automatisk planändring."
       }
-    },
-    {
-      "activity_id": 19839384290,
-      "activity_date": "2026-08-21",
-      "activity_name": "Simning på eftermiddagen",
-      "generated_at_utc": "2026-08-21T17:16:26.199780+00:00",
-      "model": "gpt-5-mini",
-      "assessment": {
-        "summary": "Simningen genomfördes: 3 200 m på 59:48.",
-        "load_interpretation": "Ingen setbaserad slutsats används för planändring.",
-        "confidence": "low",
-        "facts": [
-          "Simning: 3,20 km · 59:48 · snittpuls 127,4 · maxpuls 154.",
-          "Tor–ons: torsdagens kontrollerade tröskel (10,35 km, snittpuls 145,7) genomförd dagen före.",
-          "Tidigare vecka innehåller flera längre löp- och MTB-pass; dagens simning var planerad som lågkostnad.",
-          "Planerat lördag MTB-teknik och söndag lugn trail beroende på absorbering."
-        ],
-        "interpretations": [],
-        "unknowns": [
-          "Setstruktur kunde inte verifieras från passdata."
-        ]
-      },
-      "plan_action": {
-        "action": "keep",
-        "target_date": "2026-08-21",
-        "reason": "Passet matchade planens lågkostnad och visar inga tecken på överbelastning.",
-        "recommendation": "Följ planerat simpass/avslappning som planerat; håll lördagen som teknik-MTB (60–75 min) bara om du känner dig pigg, annars gör ett kort tekniskt set eller vila.",
-        "requires_approval": false
-      },
-      "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
-      }
     }
   ],
-  "last_trigger_hash": "b9226cb66c13dc02f7797bd228b5dd2fdc693bd9b5f0feb9eea6688ef01b71b9",
-  "last_run_utc": "2026-09-19T10:57:37.248423+00:00",
+  "last_trigger_hash": "6aaa6ff349c13cff2c3cb90682eb83dd4e63b364ade3349387a044b515a3ecb3",
+  "last_run_utc": "2026-09-19T12:13:34.183628+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 2
