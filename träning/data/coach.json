@@ -4,7 +4,7 @@
       "activity_id": 20229568713,
       "activity_date": "2026-09-18",
       "activity_name": "Löpning på eftermiddagen",
-      "generated_at_utc": "2026-09-19T04:36:22.405254+00:00",
+      "generated_at_utc": "2026-09-19T10:57:37.248423+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 2,
@@ -17,7 +17,7 @@
       "performance_protocol_key": null,
       "assessment": {
         "summary": "Genomfört: 3 × 8 backintervaller (24 totalt).",
-        "load_interpretation": "Dagens mekaniska/neuromuskulära belastning kan inte nivåklassas mot personlig baslinje i kombination med tidigare enduro/MTB/XC; närbelastningen motiverar konservativ…",
+        "load_interpretation": "Närbelastningen är ökande mekanisk/neuromuskulär (enduro + MTB/XC inom senaste 48 h plus dagens 24 backar) och motiverar fortsatt konservativ hantering de närmaste 48–72…",
         "confidence": "medium",
         "facts": [
           "Löpning · backintervaller: 15,01 km · 1:17:56 · 266 m+ · snittpuls 141,3 · maxpuls 163.",
@@ -25,19 +25,19 @@
           "Planstatus 2026-09-18: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Passet etablerar nytt volymgolv för backkvalitet (24 rep) vilket stödjer planerad progression, inte automatisk stor ökning.",
-          "I kombination med senaste enduro/MTB-pass ökar den samlade mekaniska kostnaden och talar för att morgondagens styrka/sim+styrka hålls reducerad."
+          "Passet betyder att det planerade volymgolvet för backintervaller är uppnått och att nästa utvecklingssteg bör vägas mot den akuta närbelastningen.",
+          "Kombinationen av senaste enduro/MTB/XC och dagens höga repetitionsvolym talar för att nästa dagars styrka/sim+styrka bör hållas i reducerad dos för marginal."
         ],
         "unknowns": [
-          "Detaljer om subjektiv bentrötthet nästa morgon",
-          "eventuella sena lokala smärt- eller stelhetsreaktioner som påverkar styrka"
+          "Användarens benstatus nästa morgon (lokal mech-trötthet) kan påverka om styrka/plyo är lämpligt.",
+          "Eventuella subjektiva återhämtningsrapporter efter 24–48 h (om de ändras) kan ändra rekommendationen."
         ]
       },
       "plan_action": {
         "action": "keep",
-        "target_date": "2026-09-19",
+        "target_date": "",
         "reason": "Backpasset genomfördes som 3 × 8 backintervaller (24 totalt), alltså över den planerade omfattningen före passet (16 arbetsintervaller).",
-        "recommendation": "Följ dagens automatiska reducering (styrka 25 min + planerad simstruktur) — inga ytterligare ändringar behövs; vila väl och värm ordentligt före styrkan.",
+        "recommendation": "Följ den redan applicerade reducerade dosen (det valda passalternativet) för 2026-09-19; undvik plyometri och håll styrkepasset kontrollerat. Ingen ytterligare ändring behövs nu.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -1217,8 +1217,8 @@
       }
     }
   ],
-  "last_trigger_hash": "ea6e71c89c07e6014697eeac5013c93dfd2819127f6b8563b5e74ffbfb8fed4a",
-  "last_run_utc": "2026-09-19T04:36:22.405254+00:00",
+  "last_trigger_hash": "b9226cb66c13dc02f7797bd228b5dd2fdc693bd9b5f0feb9eea6688ef01b71b9",
+  "last_run_utc": "2026-09-19T10:57:37.248423+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 2
