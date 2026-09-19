@@ -4,7 +4,7 @@
   "week_start": "2026-09-14",
   "week_end": "2026-09-20",
   "created_at_utc": "2026-09-13T23:09:46.558327+00:00",
-  "updated_at_utc": "2026-09-19T00:08:48.819602+00:00",
+  "updated_at_utc": "2026-09-19T04:36:23.740466+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -1563,9 +1563,9 @@
           "transport": "intervals_icu",
           "source_hash": "be9d1761e0c308fa21de98a0bdd657b35c17e11a343dff54f1e561a58f74ec71",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-19T00:08:47.888068+00:00",
+          "updated_at_utc": "2026-09-19T04:36:22.992382+00:00",
           "provider_event_id": 135973445,
-          "verified_at_utc": "2026-09-19T00:08:47.888068+00:00"
+          "verified_at_utc": "2026-09-19T04:36:22.992382+00:00"
         }
       }
     ],
@@ -4852,7 +4852,7 @@
       "activity_id": 20229568713,
       "activity_date": "2026-09-18",
       "activity_name": "Löpning på eftermiddagen",
-      "generated_at_utc": "2026-09-19T00:08:47.008762+00:00",
+      "generated_at_utc": "2026-09-19T04:36:22.405254+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 2,
@@ -4865,7 +4865,7 @@
       "performance_protocol_key": null,
       "assessment": {
         "summary": "Genomfört: 3 × 8 backintervaller (24 totalt).",
-        "load_interpretation": "Närbelastningen de senaste 2–3 dagarna innehåller enduro + MTB/XC + simning och dagens 24 backar; nära-term mekanisk/neuromuskulär belastning är förhöjd.",
+        "load_interpretation": "Dagens mekaniska/neuromuskulära belastning kan inte nivåklassas mot personlig baslinje i kombination med tidigare enduro/MTB/XC; närbelastningen motiverar konservativ…",
         "confidence": "medium",
         "facts": [
           "Löpning · backintervaller: 15,01 km · 1:17:56 · 266 m+ · snittpuls 141,3 · maxpuls 163.",
@@ -4873,25 +4873,25 @@
           "Planstatus 2026-09-18: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Passet etablerar ett nytt volymgolv för backarbete (24 repetitioner) vilket i planeringen motiverar att hålla eller progressa från detta nivå.",
-          "Kombinationen av senaste enduro/MTB/XC och dagens 24 backar ökar mekanisk/neuromuskulär närbelastning och talar för konservativ närmaste dagars styrke-/simdos."
+          "Passet etablerar nytt volymgolv för backkvalitet (24 rep) vilket stödjer planerad progression, inte automatisk stor ökning.",
+          "I kombination med senaste enduro/MTB-pass ökar den samlade mekaniska kostnaden och talar för att morgondagens styrka/sim+styrka hålls reducerad."
         ],
         "unknowns": [
-          "Subjektiv återhämtning natt till dagarna efter (utom 'superpigg' samma dag)",
-          "Specifik lokal bentrötthet eller ömhet som kan påverka styrkeprestation"
+          "Detaljer om subjektiv bentrötthet nästa morgon",
+          "eventuella sena lokala smärt- eller stelhetsreaktioner som påverkar styrka"
         ]
       },
       "plan_action": {
-        "action": "reduce",
+        "action": "keep",
         "target_date": "2026-09-19",
         "reason": "Backpasset genomfördes som 3 × 8 backintervaller (24 totalt), alltså över den planerade omfattningen före passet (16 arbetsintervaller).",
-        "recommendation": "Följ det justerade passupplägget i planen.",
+        "recommendation": "Följ dagens automatiska reducering (styrka 25 min + planerad simstruktur) — inga ytterligare ändringar behövs; vila väl och värm ordentligt före styrkan.",
         "dose_option_id": "",
         "requires_approval": false
       },
       "auto_apply": {
-        "applied": true,
-        "note": "Konservativ ändring applicerad på 2026-09-19: reduce."
+        "applied": false,
+        "note": "Ingen automatisk planändring."
       }
     },
     {
