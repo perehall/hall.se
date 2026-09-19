@@ -1368,7 +1368,7 @@
     {
       "date": "2026-09-20",
       "label": "Söndag",
-      "status": "preliminary",
+      "status": "conditional",
       "session": "Löpning · lugn distans · 75 min",
       "reason": "Mesocykelns tredje löpstimulus bygger tålighet och kontinuitet utan att bli ytterligare kvalitet. 75 minuter lugnt är grundplan; passet kortas, flyttas eller tas bort om föregående belastning motiverar det.",
       "development_focus": "Avslappnad rytm och jämn ansträngning.",
@@ -1556,10 +1556,17 @@
         "transport": "intervals_icu",
         "source_hash": "be9d1761e0c308fa21de98a0bdd657b35c17e11a343dff54f1e561a58f74ec71",
         "device_delivery": "unverified",
-        "updated_at_utc": "2026-09-19T20:39:10.177541+00:00",
+        "updated_at_utc": "2026-09-19T23:03:44.180389+00:00",
         "provider_event_id": 135973445,
-        "verified_at_utc": "2026-09-19T20:39:10.177541+00:00"
-      }
+        "verified_at_utc": "2026-09-19T23:03:44.180389+00:00"
+      },
+      "original_session": "Löpning · lugn distans · 75 min",
+      "auto_coach": {
+        "action": "reduce",
+        "reason": "Simningen översteg planerad varaktighet och ökar närbelastning inför planerad lugn löpdistans på söndag.",
+        "applied_at_utc": "2026-09-19T23:03:43.372981+00:00"
+      },
+      "coach_adjustment": "Passet är nedjusterat. Följ passupplägget ovan."
     }
   ],
   "strength_template": [

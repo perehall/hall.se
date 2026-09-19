@@ -4,7 +4,7 @@
   "week_start": "2026-09-14",
   "week_end": "2026-09-20",
   "created_at_utc": "2026-09-13T23:09:46.558327+00:00",
-  "updated_at_utc": "2026-09-19T20:39:11.122924+00:00",
+  "updated_at_utc": "2026-09-19T23:03:44.929880+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -1375,7 +1375,7 @@
       {
         "date": "2026-09-20",
         "label": "Söndag",
-        "status": "preliminary",
+        "status": "conditional",
         "session": "Löpning · lugn distans · 75 min",
         "reason": "Mesocykelns tredje löpstimulus bygger tålighet och kontinuitet utan att bli ytterligare kvalitet. 75 minuter lugnt är grundplan; passet kortas, flyttas eller tas bort om föregående belastning motiverar det.",
         "development_focus": "Avslappnad rytm och jämn ansträngning.",
@@ -1563,10 +1563,17 @@
           "transport": "intervals_icu",
           "source_hash": "be9d1761e0c308fa21de98a0bdd657b35c17e11a343dff54f1e561a58f74ec71",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-19T20:39:10.177541+00:00",
+          "updated_at_utc": "2026-09-19T23:03:44.180389+00:00",
           "provider_event_id": 135973445,
-          "verified_at_utc": "2026-09-19T20:39:10.177541+00:00"
-        }
+          "verified_at_utc": "2026-09-19T23:03:44.180389+00:00"
+        },
+        "original_session": "Löpning · lugn distans · 75 min",
+        "auto_coach": {
+          "action": "reduce",
+          "reason": "Simningen översteg planerad varaktighet och ökar närbelastning inför planerad lugn löpdistans på söndag.",
+          "applied_at_utc": "2026-09-19T23:03:43.372981+00:00"
+        },
+        "coach_adjustment": "Passet är nedjusterat. Följ passupplägget ovan."
       }
     ],
     "strength_template": [
@@ -6092,7 +6099,7 @@
       "activity_id": 20239623463,
       "activity_date": "2026-09-19",
       "activity_name": "Simning vid lunch",
-      "generated_at_utc": "2026-09-19T20:39:09.536535+00:00",
+      "generated_at_utc": "2026-09-19T23:03:43.374589+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 2,
@@ -6104,33 +6111,33 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomförd simning 4 000 m med strukturerade 50m/200m-set och hög totalvaraktighet; passet överskred planerad tidsram och inkluderade ett längre styrkeblock beslutet reducerat.",
-        "load_interpretation": "Kardiovaskulär och simteknisk exponering stor; kombinerat med senaste 2–3 dagars enduro/MTB/XC och 24 backintervaller ger det ökad närbelastning för styrke-/benfokuserade…",
+        "summary": "Genomfört 4 000 m simpass med strukturerad 1×400 + 4×50 + 17×200 och 56,6 min aktivitet; snitt-HR 130 bpm, max 156 bpm.",
+        "load_interpretation": "Simningen överskred planerad varaktighet och bidrog till ökad närbelastning mot styrke-/löpdelen de närmaste 48–72 timmarna.",
         "confidence": "medium",
         "facts": [
           "Simning: 4,00 km · 1:18:50 · snittpuls 130,1 · maxpuls 156.",
           "Planerad tidsdos 25 min; faktisk rörelsetid 56.57 min (+31.57 min mot vald dos); över längsta godkända alternativet 35 min."
         ],
         "interpretations": [
-          "Det långa simpasset genomfördes som strukturerat aerob/teknikpass men överskred godkänd varaktighet och ökar närbelastningen för efterföljande styrkepass.",
+          "Passet fyllde sim‑underhållet men var 21,6 min längre än planerad sim+styrka‑kombination vilket ökade mekanisk/neuromuskulär belastning inför kommande styrka/löpning.",
           "Tidsdosen blev 56.57 min mot valda 25 min och översteg även det längsta godkända alternativet 35 min."
         ],
         "unknowns": [
-          "Användarrapport om hur du känner benen senare samma dag (trötthet/smärta) kan ändra beslut om plyometri.",
-          "Eventuell kvällsåterhämtning eller sömnkvalitet efter passet kan påverka toleransen för styrka inom 24–48 h."
+          "Subjektiv återhämtning efter passet (användarrapport tom)",
+          "Eventuell lokal muskeltrötthet i benen efter sim+dagarnas tidigare enduro/MTB/XC som påverkar löpning"
         ]
       },
       "plan_action": {
         "action": "reduce",
-        "target_date": "2026-09-19",
-        "reason": "Den genomförda passdelen ska inte ordineras en gång till.",
+        "target_date": "2026-09-20",
+        "reason": "Simningen översteg planerad varaktighet och ökar närbelastning inför planerad lugn löpdistans på söndag.",
         "recommendation": "Följ det justerade passupplägget i planen.",
         "dose_option_id": "",
         "requires_approval": false
       },
       "auto_apply": {
         "applied": true,
-        "note": "Konservativ ändring applicerad på 2026-09-19: reduce."
+        "note": "Konservativ ändring applicerad på 2026-09-20: reduce."
       }
     },
     {
