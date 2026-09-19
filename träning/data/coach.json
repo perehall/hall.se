@@ -4,7 +4,7 @@
       "activity_id": 20239623463,
       "activity_date": "2026-09-19",
       "activity_name": "Simning vid lunch",
-      "generated_at_utc": "2026-09-19T12:13:34.183628+00:00",
+      "generated_at_utc": "2026-09-19T13:22:39.236731+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 2,
@@ -16,20 +16,20 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört 4 000 m simpass med strukturerad 1×400 + 4×50 + 17×200 och 56,6 min total tid; passet registrerar stabila 200 m-block med stigande puls mot slutet.",
-        "load_interpretation": "Simningen är ett lågmekaniskt underhållspass men ökad totalvaraktighet över godkänd styrkedos ökar närbelastningen för styrka samma dag eller nästa 24–48 timmar.",
+        "summary": "Genomförde 4 000 m strukturerad simning (1×400, 4×50, 17×200) med stabila 200 m-serier och stigande puls mot slutet; passet var längre än planerat.",
+        "load_interpretation": "Dagens sim + tidigare 24 backintervaller och nyligen genomförd enduro/MTB/XC ökar närbelastningen inför planerad skyddad styrka inom 24–48 timmar.",
         "confidence": "medium",
         "facts": [
           "Simning: 4,00 km · 1:18:50 · snittpuls 130,1 · maxpuls 156.",
           "Planerad tidsdos 25 min; faktisk rörelsetid 56.57 min (+31.57 min mot vald dos); över längsta godkända alternativet 35 min."
         ],
         "interpretations": [
-          "Passet motsvarar planens simstimulus men överstiger planens godkända styrkeduration (plan jämförde 25 min styrka; dagens faktiska kombination gav längre total aktivering).",
+          "Passet uppfyller en full simstruktur och visar uthållig kapacitet i 200 m-reps vilket bibehåller simteknik/aerob stimulus.",
           "Tidsdosen blev 56.57 min mot valda 25 min och översteg även det längsta godkända alternativet 35 min."
         ],
         "unknowns": [
-          "Subjektiv återhämtning efter passet (användarrapport tom)",
-          "Om användaren avsåg genomföra styrkedelen idag eller om den stod kvar ogjord"
+          "Subjektiv trötthet eller lokal muskelömhet efter simningen (användarrapport tom)",
+          "söndagens löpplan och återhämtning över natten; privat återhämtningsunderlaget ger kontext men inte avgörande bevis"
         ]
       },
       "plan_action": {
@@ -1229,8 +1229,8 @@
       }
     }
   ],
-  "last_trigger_hash": "6aaa6ff349c13cff2c3cb90682eb83dd4e63b364ade3349387a044b515a3ecb3",
-  "last_run_utc": "2026-09-19T12:13:34.183628+00:00",
+  "last_trigger_hash": "3a308a67bcb0f540c8649117c2ece8dee88c29550064ba41150c9fe440716c31",
+  "last_run_utc": "2026-09-19T13:22:39.236731+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 2
