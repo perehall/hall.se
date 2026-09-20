@@ -6,7 +6,10 @@ from pathlib import Path
 SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
-from coach_pipeline import normalize_invalid_dose_option_action  # noqa: E402
+from coach_pipeline import (  # noqa: E402
+    normalize_invalid_dose_option_action,
+    normalize_unapplicable_plan_action,
+)
 
 
 class InvalidDoseOptionGuardTests(unittest.TestCase):
@@ -52,6 +55,50 @@ class InvalidDoseOptionGuardTests(unittest.TestCase):
         self.assertFalse(normalized["requires_approval"])
         self.assertIn("matchar inte", normalized["reason"])
         self.assertIn("ingen automatisk ändring", normalized["recommendation"])
+
+    def test_missing_target_for_reduce_degrades_to_review(self):
+        action = {
+            "action": "reduce",
+            "target_date": "",
+            "reason": "Minska nästa pass.",
+            "recommendation": "Kör mindre.",
+            "dose_option_id": "",
+            "requires_approval": False,
+        }
+
+        normalized = normalize_unapplicable_plan_action(
+            action,
+            self.plan,
+            ready_dates=["2026-09-11"],
+            local_date="2026-09-10",
+        )
+
+        self.assertEqual(normalized["action"], "review")
+        self.assertEqual(normalized["target_date"], "")
+        self.assertEqual(normalized["dose_option_id"], "")
+        self.assertFalse(normalized["requires_approval"])
+        self.assertIn("ingen automatisk ändring", normalized["recommendation"])
+
+    def test_residual_invalid_option_degrades_to_review(self):
+        action = {
+            "action": "reduce",
+            "target_date": "2026-09-11",
+            "reason": "Konservativ justering.",
+            "recommendation": "Kör ett okänt alternativ.",
+            "dose_option_id": "invented-option",
+            "requires_approval": False,
+        }
+
+        normalized = normalize_unapplicable_plan_action(
+            action,
+            self.plan,
+            ready_dates=["2026-09-11"],
+            local_date="2026-09-10",
+        )
+
+        self.assertEqual(normalized["action"], "review")
+        self.assertEqual(normalized["target_date"], "")
+        self.assertEqual(normalized["dose_option_id"], "")
 
     def test_valid_same_day_option_is_preserved(self):
         action = {
