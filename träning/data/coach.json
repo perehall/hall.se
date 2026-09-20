@@ -1,6 +1,52 @@
 {
   "analyses": [
     {
+      "activity_id": 20254486837,
+      "activity_date": "2026-09-20",
+      "activity_name": "Löpning vid lunch",
+      "generated_at_utc": "2026-09-20T12:54:51.279694+00:00",
+      "model": "gpt-5-mini",
+      "analysis_contract": {
+        "pipeline_version": 3,
+        "workout_context_version": 3,
+        "plan_comparison_version": 2,
+        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
+        "analysis_code_sha256": "b2b605b727aaea5a4027070ea282ce432554fdd8a3f4f664cf37251ade67f342"
+      },
+      "performance_marker_id": null,
+      "performance_protocol_key": null,
+      "assessment": {
+        "summary": "Genomfört 22,46 km löppass (117,9 min) med genomsnittspuls 139 bpm och tempo ~5:15/km; längre än planerat (75 min).",
+        "load_interpretation": "Kombinationen av flera stora pass de senaste dagarna (enduro, MTB/XC, backintervaller, simning) ökar närbelastningen; dagens distans översteg godkänd dos och kräver…",
+        "confidence": "medium",
+        "facts": [
+          "Löpning: 22,46 km · 1:59:46 · 267 m+ · snittpuls 138,9 · maxpuls 158.",
+          "Planstatus 2026-09-20: dagen är markerad genomförd i coachens beslutsunderlag.",
+          "Planerad tidsdos 75 min; faktisk rörelsetid 117.9 min (+42.9 min mot vald dos); över längsta godkända alternativet 90 min."
+        ],
+        "interpretations": [
+          "Passet visar att du kunde genomföra längre lugn distans idag, men det ligger klart över godkänd planad dos och ökar mekanisk/kardiovaskulär belastning i mikrocykelfönstret.",
+          "Tidsdosen blev 117.9 min mot valda 75 min och översteg även det längsta godkända alternativet 90 min."
+        ],
+        "unknowns": [
+          "Subjektiv återhämtningskänsla efter passet (användarrapport saknas).",
+          "Eventuella skador eller lokal muskelömhet som kan påverka nästa pass."
+        ]
+      },
+      "plan_action": {
+        "action": "review",
+        "target_date": "",
+        "reason": "Den föreslagna automatiska planändringen kunde inte kopplas entydigt till ett tillåtet målpass.",
+        "recommendation": "Behåll nuvarande plan; ingen automatisk ändring görs. Bedöm nästa beslutsmogna pass när underlaget räcker.",
+        "dose_option_id": "",
+        "requires_approval": false
+      },
+      "auto_apply": {
+        "applied": false,
+        "note": "Ingen automatisk planändring."
+      }
+    },
+    {
       "activity_id": 20239623463,
       "activity_date": "2026-09-19",
       "activity_name": "Simning vid lunch",
@@ -1191,47 +1237,11 @@
         "applied": false,
         "note": "Ingen automatisk planändring."
       }
-    },
-    {
-      "activity_id": 19841136162,
-      "activity_date": "2026-08-21",
-      "activity_name": "Paddelsurfning på kvällen",
-      "generated_at_utc": "2026-08-22T13:53:59.996335+00:00",
-      "model": "gpt-5-mini",
-      "assessment": {
-        "summary": "SUP-passet var lågintensivt rekreation och påverkar inte behovet av vila före kvällens…",
-        "load_interpretation": "SUP var långvarigt men låg puls; det ger minimal akut muskel- eller kardiell belastning.",
-        "confidence": "medium",
-        "facts": [
-          "StandUpPaddling: 6,02 km · 1:12:40 · 42,8 m+ · snittpuls 89,7 · maxpuls 108.",
-          "Samma dag simning 3 200 m, 59:48, snittpuls 127,4 — total passtid fredag ~2:12:28.",
-          "Inga subjektiva trötthetsdata eller sömn rapporterade efter passen."
-        ],
-        "interpretations": [
-          "Fredagens dubbelpass ger ackumulerad tid men huvudsakligen låg till måttlig intensitet.",
-          "Benen bör främst påverkas av löp-/trailpassen tidigare i veckan, inte av SUP."
-        ],
-        "unknowns": [
-          "Subjektiv lokal muskeltrötthet i ben/axlar kväll 22/8.",
-          "Planerad intensitet/tid för kvällens…"
-        ]
-      },
-      "plan_action": {
-        "action": "keep",
-        "target_date": "2026-08-22",
-        "reason": "SUP var rekreationellt och simningen var redan planerad lågkostnad; inget som kräver nedskalning.",
-        "recommendation": "Behåll kvällens MTB/XC enligt plan; prioritera…",
-        "requires_approval": false
-      },
-      "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
-      }
     }
   ],
-  "last_trigger_hash": "a7eb765ceedb86566a5d45c100d744197719606331beaead5fd5d61cdbb17351",
-  "last_run_utc": "2026-09-20T11:21:55.078448+00:00",
+  "last_trigger_hash": "2241fbeae3fae7abf51c43ad9178e1dcc91b4601c7ce708f67e6521565e63d40",
+  "last_run_utc": "2026-09-20T12:54:51.279694+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
-  "pipeline_contract_version": 2
+  "pipeline_contract_version": 3
 }
