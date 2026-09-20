@@ -56,7 +56,9 @@ class TrainingJobRunnerTests(unittest.TestCase):
             {
                 "sync_performance_details",
                 "load_wellness_context",
+                "coach_analysis",
                 "sync_device_workouts",
+                "weekly_review",
             },
         )
 
@@ -70,6 +72,35 @@ class TrainingJobRunnerTests(unittest.TestCase):
     def test_optional_stage_reports_failure_without_aborting(self, mocked_run):
         mocked_run.return_value = SimpleNamespace(returncode=9)
         self.assertFalse(run_stage(Stage("optional", ("fake-command",), optional=True), 1, 1))
+
+    @patch("training_job_runner.subprocess.run")
+    def test_retryable_optional_stage_recovers_on_second_attempt(self, mocked_run):
+        mocked_run.side_effect = [
+            SimpleNamespace(returncode=9),
+            SimpleNamespace(returncode=0),
+        ]
+        stage = Stage("ai-enrichment", ("fake-command",), optional=True, attempts=2)
+
+        self.assertTrue(run_stage(stage, 1, 1))
+        self.assertEqual(mocked_run.call_count, 2)
+
+    @patch("training_job_runner.subprocess.run")
+    def test_retryable_optional_stage_degrades_after_final_failure(self, mocked_run):
+        mocked_run.side_effect = [
+            SimpleNamespace(returncode=9),
+            SimpleNamespace(returncode=9),
+        ]
+        stage = Stage("ai-enrichment", ("fake-command",), optional=True, attempts=2)
+
+        self.assertFalse(run_stage(stage, 1, 1))
+        self.assertEqual(mocked_run.call_count, 2)
+
+    def test_ai_enrichment_stages_retry_without_becoming_pipeline_requirements(self):
+        stages = {stage.key: stage for stage in build_stages("event")}
+        self.assertTrue(stages["coach_analysis"].optional)
+        self.assertEqual(stages["coach_analysis"].attempts, 2)
+        self.assertTrue(stages["weekly_review"].optional)
+        self.assertEqual(stages["weekly_review"].attempts, 2)
 
     def test_persist_token_requires_repository_at_execution_time(self):
         stage = next(
