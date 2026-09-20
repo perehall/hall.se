@@ -190,7 +190,7 @@ def visible_training_language(text, strategy_labels=None):
     # canonical labels; anything still remaining is neutralized rather than
     # allowed to abort publication merely because the model invented a new id.
     value = INTERNAL_IDENTIFIER_PATTERN.sub("planerat träningsinnehåll", value)
-    return re.sub(r"[ \\t]{2,}", " ", value).strip()
+    return re.sub(r"[ \t]{2,}", " ", value).strip()
 
 
 def explicit_interval_structure(user_report):
