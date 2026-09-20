@@ -4,7 +4,7 @@
       "activity_id": 20239623463,
       "activity_date": "2026-09-19",
       "activity_name": "Simning vid lunch",
-      "generated_at_utc": "2026-09-19T23:03:43.374589+00:00",
+      "generated_at_utc": "2026-09-20T00:04:18.740735+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 2,
@@ -16,26 +16,26 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört 4 000 m simpass med strukturerad 1×400 + 4×50 + 17×200 och 56,6 min aktivitet; snitt-HR 130 bpm, max 156 bpm.",
-        "load_interpretation": "Simningen överskred planerad varaktighet och bidrog till ökad närbelastning mot styrke-/löpdelen de närmaste 48–72 timmarna.",
+        "summary": "4 000 m simning genomförd; passet var strukturerat (1×400 + 4×50 + 17×200) och längre än planerat, med genomsnittspuls 130 och flera 200 m upprepningar kring 1:25–1:28/100m.",
+        "load_interpretation": "Närbelastningen ökar inför söndagens lugna löppass eftersom simningen översteg planerad varaktighet och tidigare dagar innehöll mekanisk belastning.",
         "confidence": "medium",
         "facts": [
           "Simning: 4,00 km · 1:18:50 · snittpuls 130,1 · maxpuls 156.",
           "Planerad tidsdos 25 min; faktisk rörelsetid 56.57 min (+31.57 min mot vald dos); över längsta godkända alternativet 35 min."
         ],
         "interpretations": [
-          "Passet fyllde sim‑underhållet men var 21,6 min längre än planerad sim+styrka‑kombination vilket ökade mekanisk/neuromuskulär belastning inför kommande styrka/löpning.",
+          "Genomfört simset uppfyller sim-underhåll/teknikstimulus men var längre än godkänd dos och ökar kardiovaskulär och total tidsbaserad belastning inför nästa 48 timmar.",
           "Tidsdosen blev 56.57 min mot valda 25 min och översteg även det längsta godkända alternativet 35 min."
         ],
         "unknowns": [
-          "Subjektiv återhämtning efter passet (användarrapport tom)",
-          "Eventuell lokal muskeltrötthet i benen efter sim+dagarnas tidigare enduro/MTB/XC som påverkar löpning"
+          "Användarens subjektiva återhämtning efter simningen (användarrapport tom)",
+          "eventuell kvällsstress, återhämtningsunderlaget eller lokal muskelömhet som påverkar morgondagens löpning"
         ]
       },
       "plan_action": {
         "action": "reduce",
         "target_date": "2026-09-20",
-        "reason": "Simningen översteg planerad varaktighet och ökar närbelastning inför planerad lugn löpdistans på söndag.",
+        "reason": "Simningen översteg planerad varaktighet och tillsammans med senaste dagarnas mekaniska belastning krävs konservativ marginal inför planerad lugn löpdistans.",
         "recommendation": "Följ det justerade passupplägget i planen.",
         "dose_option_id": "",
         "requires_approval": false
@@ -1229,8 +1229,8 @@
       }
     }
   ],
-  "last_trigger_hash": "f01d3e468381ff582c933d3ebbdd71e615cbbc5e331efd5f1cb53e82f68458cb",
-  "last_run_utc": "2026-09-19T23:03:43.374589+00:00",
+  "last_trigger_hash": "456a9f4b14ca109e09dc747ddd6711fb731a3956f3ab4f6035053eed0317ee21",
+  "last_run_utc": "2026-09-20T00:04:18.740735+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 2
