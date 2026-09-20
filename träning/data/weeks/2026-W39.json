@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "week_key": "2026-W39",
+  "week_start": "2026-09-21",
+  "week_end": "2026-09-27",
+  "created_at_utc": "2026-09-20T23:15:26.146433+00:00",
+  "updated_at_utc": "2026-09-20T23:15:26.146433+00:00",
+  "plan": {
+    "schema_version": 3,
+    "meta": {
+      "timezone": "Europe/Stockholm",
+      "week": 39,
+      "week_start": "2026-09-21",
+      "week_end": "2026-09-27",
+      "title": "Mesocykel avslutad · utvärdering krävs",
+      "principle": "Ingen ny utvecklingsriktning skapas automatiskt efter avslutad mesocykel. Fasta åtaganden kan ligga kvar, men nästa mesocykel ska väljas först efter utvärdering mot målbilden och faktisk respons.",
+      "mesocycle_id": "",
+      "microcycle_id": "",
+      "microcycle_index": null,
+      "microcycle_total": 4,
+      "microcycle_length_days": 7,
+      "calendar_week_is_presentation": true,
+      "requires_mesocycle_review": true,
+      "mesocycle_contract": {},
+      "capacity_protection": {}
+    },
+    "days": [
+      {
+        "date": "2026-09-21",
+        "label": "Måndag",
+        "status": "planned",
+        "planning_status": "fixed",
+        "session": "Enduroskola · fast tillfälle",
+        "reason": "Fast återkommande enduroskola, totalt åtta måndagar från 24/8. Enduron räknas som faktisk träningsbelastning; övrig träning runt dagen anpassas efter utfallet.",
+        "development_focus": "Teknisk kvalitet och avslappnad körning; faktisk belastning styr efterföljande pass.",
+        "sport": "enduro",
+        "classification": "training",
+        "manual_lock": true,
+        "priority_role": "flex",
+        "stimuli": [
+          "enduro_technical"
+        ],
+        "workout_design": {
+          "schema_version": 1,
+          "objective": {
+            "mesocycle_role": "external_load",
+            "priority_role": "flex",
+            "stimuli": [
+              "enduro_technical"
+            ],
+            "mesocycle_id": "",
+            "microcycle_id": "",
+            "microcycle_slot": ""
+          },
+          "near_term_context": {
+            "load_dimensions": [],
+            "selection_uses_only_preapproved_doses": false
+          },
+          "progression_from_previous": {
+            "relation": "support",
+            "reason": "Fast återkommande enduroskola, totalt åtta måndagar från 24/8. Enduron räknas som faktisk träningsbelastning; övrig träning runt dagen anpassas efter utfallet.",
+            "demonstrated_floor_option_id": ""
+          },
+          "candidates": [
+            {
+              "id": "current-session",
+              "dose_option_id": "",
+              "session": "Enduroskola · fast tillfälle",
+              "intent": "Fast återkommande enduroskola, totalt åtta måndagar från 24/8. Enduron räknas som faktisk träningsbelastning; övrig träning runt dagen anpassas efter utfallet.",
+              "dose": {
+                "kind": "external",
+                "value": 1
+              },
+              "stimuli": [
+                "enduro_technical"
+              ],
+              "prescription": {
+                "executable": true,
+                "completeness": "external",
+                "blocks": [
+                  {
+                    "name": "Fast/externt strukturerat pass",
+                    "work": {},
+                    "instruction": "Teknisk kvalitet och avslappnad körning; faktisk belastning styr efterföljande pass.",
+                    "intensity": "extern struktur"
+                  }
+                ],
+                "source": "external_commitment"
+              },
+              "score": {
+                "total": 65,
+                "breakdown": {
+                  "mesocycle_alignment": 30,
+                  "microcycle_alignment": 10,
+                  "progression_alignment": 15,
+                  "prescription_specificity": 10,
+                  "near_term_resolution": 0
+                },
+                "basis": "deterministic_constraint_alignment"
+              }
+            }
+          ],
+          "selected_candidate_id": "current-session",
+          "selection": {
+            "method": "deterministic_constraint_scoring",
+            "preferred_dose_option_id": "",
+            "reason_for_today": "Fast återkommande enduroskola, totalt åtta måndagar från 24/8. Enduron räknas som faktisk träningsbelastning; övrig träning runt dagen anpassas efter utfallet."
+          }
+        }
+      },
+      {
+        "date": "2026-09-22",
+        "label": "Tisdag",
+        "status": "open",
+        "session": "Ingen planerad träning",
+        "reason": "Ingen träning är planerad som standard på denna dag. En ledig dag är inte i sig skäl att lägga till ett pass; eventuell ändring ska tjäna mikrocykeln och bygga på faktisk information.",
+        "sport": "open"
+      },
+      {
+        "date": "2026-09-23",
+        "label": "Onsdag",
+        "status": "open",
+        "session": "Ingen planerad träning",
+        "reason": "Ingen träning är planerad som standard på denna dag. En ledig dag är inte i sig skäl att lägga till ett pass; eventuell ändring ska tjäna mikrocykeln och bygga på faktisk information.",
+        "sport": "open"
+      },
+      {
+        "date": "2026-09-24",
+        "label": "Torsdag",
+        "status": "open",
+        "session": "Ingen planerad träning",
+        "reason": "Ingen träning är planerad som standard på denna dag. En ledig dag är inte i sig skäl att lägga till ett pass; eventuell ändring ska tjäna mikrocykeln och bygga på faktisk information.",
+        "sport": "open"
+      },
+      {
+        "date": "2026-09-25",
+        "label": "Fredag",
+        "status": "open",
+        "session": "Ingen planerad träning",
+        "reason": "Ingen träning är planerad som standard på denna dag. En ledig dag är inte i sig skäl att lägga till ett pass; eventuell ändring ska tjäna mikrocykeln och bygga på faktisk information.",
+        "sport": "open"
+      },
+      {
+        "date": "2026-09-26",
+        "label": "Lördag",
+        "status": "open",
+        "session": "Ingen planerad träning",
+        "reason": "Ingen träning är planerad som standard på denna dag. En ledig dag är inte i sig skäl att lägga till ett pass; eventuell ändring ska tjäna mikrocykeln och bygga på faktisk information.",
+        "sport": "open"
+      },
+      {
+        "date": "2026-09-27",
+        "label": "Söndag",
+        "status": "open",
+        "session": "Ingen planerad träning",
+        "reason": "Ingen träning är planerad som standard på denna dag. En ledig dag är inte i sig skäl att lägga till ett pass; eventuell ändring ska tjäna mikrocykeln och bygga på faktisk information.",
+        "sport": "open"
+      }
+    ],
+    "strength_template": [
+      "Liten dos explosivitet/plyometri när omkringliggande belastning tillåter.",
+      "Bulgarian split squat som huvudalternativ för unilateral benstyrka.",
+      "Marklyft eller RDL som normal höftdominant huvudövning.",
+      "Vad + soleus regelbundet.",
+      "Enarmsrodd + press som huvuddrag/press.",
+      "Välj två bålövningar; låt inte accessoarer tränga undan huvudstyrkan."
+    ],
+    "workout_design_schema_version": 1,
+    "device_workout_schema_version": 1
+  },
+  "activities": [],
+  "coach_analyses": []
+}

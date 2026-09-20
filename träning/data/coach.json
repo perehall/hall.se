@@ -4,7 +4,7 @@
       "activity_id": 20254486837,
       "activity_date": "2026-09-20",
       "activity_name": "Löpning vid lunch",
-      "generated_at_utc": "2026-09-20T20:48:06.846823+00:00",
+      "generated_at_utc": "2026-09-20T23:15:17.851256+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 3,
@@ -16,28 +16,26 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Lång löpning 22.46 km (117.9 min) genomförd — betydligt längre än planerad 75 min och ovanligt snabbare sista 4 km med stigande puls.",
-        "load_interpretation": "Kardiovaskulärt stort arbetspass idag; mekanisk belastning är ökad jämfört med plan och adderar till senaste 2–3 dagars hårda jobb.",
+        "summary": "22.5 km löpning på 7 074 s med stabil kilometertakt runt 5:15–5:24, snabbare avslutande km indikerar sparad kapacitet mot slutet.",
+        "load_interpretation": "Passet är långt och ger betydande varaktighetsbelastning kardiovaskulärt och mekaniskt över de närmaste 48–72 timmarna.",
         "confidence": "medium",
         "facts": [
-          "Löpning: 22,46 km · 1:59:46 · 267 m+ · snittpuls 138,9 · maxpuls 158.",
-          "Planstatus 2026-09-20: dagen är markerad genomförd i coachens beslutsunderlag.",
-          "Planerad tidsdos 75 min; faktisk rörelsetid 117.9 min (+42.9 min mot vald dos); över längsta godkända alternativet 90 min."
+          "Löpning: 22,46 km · 1:59:46 · 267 m+ · snittpuls 138,9 · maxpuls 158."
         ],
         "interpretations": [
-          "Detta pass visar att en längre lugndistans genomfördes men med snabbare avslut och högre total varaktighet än godkänd dos, vilket ökar mekanisk/kardiovaskulär närbelastning i mikrocykeln.",
-          "Tidsdosen blev 117.9 min mot valda 75 min och översteg även det längsta godkända alternativet 90 min."
+          "Ett långt, genomfört distanspass visar god tolerans för volym men ökar mekanisk och kardiovaskulär återhämtningskostnad framför nästa 2–3 dagarna.",
+          "Snabbare kilometrar i slutet utan pulsöverdrift tyder på att passet inte var totalt utmattande och att kapacitet fanns kvar för kortare tekniskt arbete (t.ex."
         ],
         "unknowns": [
-          "Subjektiv återhämtning/benstatus efter dagens pass (användarrapport tom).",
-          "Planerad styrka/sim nästa dag – om användaren redan planerar vila eller lättare dag kan beslut ändras."
+          "Subjektiv återhämtning nästa dag (användarrapport saknas).",
+          "Planerat måndagsendurons belastningstidpunkt och intensitet är okänd inför beslut."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "",
-        "reason": "Närtidens plan skyddar måndagens fasta enduroskola och mikrocykelns prioriteringar; en konservativ ändring kräver subjektiv återhämtning eller ytterligare avvikelse.",
-        "recommendation": "Följ aktuell plan utan att lägga till extra kvalitet; prioritera återhämtningsunderlaget, näring och aktiv återhämtning idag. Rapportera hur benen känns imorgon morgon om du vill överväga att minska nästa icke-fast träning.",
+        "reason": "Inga planerade pass de kommande 2–3 dagarna kräver automatiskt skalning; måndagens enduroskola är ett fast åtagande och ska hållas enligt plan.",
+        "recommendation": "Behåll plan; vila/småaktiviteter tills måndagens enduroskola om du känner normal återhämtning. Rapportera morgondagens subjektiva trötthet eller smärta för ev.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -1239,8 +1237,8 @@
       }
     }
   ],
-  "last_trigger_hash": "74815b334c2596b040b6acc5cada64cfc8059d52d34f93f57f0aa39c70fd3802",
-  "last_run_utc": "2026-09-20T20:48:06.846823+00:00",
+  "last_trigger_hash": "e1ef852f5bdb1097dba135629838c7082d52c2b1f081e43d7b582f29297407bf",
+  "last_run_utc": "2026-09-20T23:15:17.851256+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 3
