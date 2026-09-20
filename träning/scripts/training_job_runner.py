@@ -27,6 +27,7 @@ class Stage:
     optional: bool = False
     stdin_file_env: str | None = None
     remove_stdin_on_success: bool = False
+    attempts: int = 1
 
 
 def python_stage(script: str, *args: str) -> tuple[str, ...]:
@@ -76,7 +77,12 @@ def build_stages(ingest_mode: str) -> list[Stage]:
             python_stage("wellness_context.py", "--days", "28"),
             optional=True,
         ),
-        Stage("coach_analysis", python_stage("coach_pipeline.py")),
+        Stage(
+            "coach_analysis",
+            python_stage("coach_pipeline.py"),
+            optional=True,
+            attempts=2,
+        ),
         Stage("materialize_workout_designs_post_coach", python_stage("materialize_workout_designs.py")),
         Stage("validate_workout_designs_post_coach", python_stage("validate_workout_designs.py")),
         Stage("materialize_device_workouts", python_stage("materialize_device_workouts.py")),
@@ -88,7 +94,12 @@ def build_stages(ingest_mode: str) -> list[Stage]:
         ),
         Stage("guard_coach_claims", python_stage("coach_output_guard.py")),
         Stage("validate_post_coach", python_stage("validate_training_data.py")),
-        Stage("weekly_review", python_stage("weekly_review.py")),
+        Stage(
+            "weekly_review",
+            python_stage("weekly_review.py"),
+            optional=True,
+            attempts=2,
+        ),
         Stage("validate_week_reviews", python_stage("check_week_reviews.py")),
         Stage("render_and_validate_site", python_stage("render_training_site.py")),
     ]
@@ -112,35 +123,56 @@ def run_stage(stage: Stage, position: int, total: int) -> bool:
     if stage.key == "persist_strava_refresh_token" and not os.environ.get("GITHUB_REPOSITORY"):
         raise RuntimeError("persist_strava_refresh_token: GITHUB_REPOSITORY is missing")
 
-    input_path = None
-    input_handle = None
-    try:
-        input_path, input_handle = _stdin_file(stage)
-        result = subprocess.run(
-            list(stage.command),
-            cwd=REPO_ROOT,
-            stdin=input_handle,
-            check=False,
-        )
-    finally:
-        if input_handle is not None:
-            input_handle.close()
+    attempts = max(1, int(stage.attempts))
+    last_returncode = None
+    for attempt in range(1, attempts + 1):
+        if attempts > 1:
+            print(
+                f"JOB_STAGE_ATTEMPT {position}/{total} {stage.key} {attempt}/{attempts}",
+                flush=True,
+            )
 
-    if result.returncode == 0:
-        if stage.remove_stdin_on_success and input_path is not None:
-            input_path.unlink(missing_ok=True)
-        print(f"JOB_STAGE_OK {position}/{total} {stage.key}", flush=True)
-        return True
+        input_path = None
+        input_handle = None
+        try:
+            input_path, input_handle = _stdin_file(stage)
+            result = subprocess.run(
+                list(stage.command),
+                cwd=REPO_ROOT,
+                stdin=input_handle,
+                check=False,
+            )
+        finally:
+            if input_handle is not None:
+                input_handle.close()
+
+        last_returncode = result.returncode
+        if result.returncode == 0:
+            if stage.remove_stdin_on_success and input_path is not None:
+                input_path.unlink(missing_ok=True)
+            print(f"JOB_STAGE_OK {position}/{total} {stage.key}", flush=True)
+            return True
+
+        if attempt < attempts:
+            print(
+                f"JOB_STAGE_RETRY {position}/{total} {stage.key} "
+                f"attempt={attempt}/{attempts} exit={result.returncode}",
+                file=sys.stderr,
+                flush=True,
+            )
 
     if stage.optional:
         print(
-            f"JOB_STAGE_OPTIONAL_FAILURE {position}/{total} {stage.key} exit={result.returncode}",
+            f"JOB_STAGE_OPTIONAL_FAILURE {position}/{total} {stage.key} "
+            f"attempts={attempts} exit={last_returncode}",
             file=sys.stderr,
             flush=True,
         )
         return False
 
-    raise RuntimeError(f"{stage.key} failed with exit code {result.returncode}")
+    raise RuntimeError(
+        f"{stage.key} failed after {attempts} attempt(s) with exit code {last_returncode}"
+    )
 
 
 def cleanup_private_context() -> None:

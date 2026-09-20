@@ -194,6 +194,16 @@ class NormalizeCoachLanguageTests(unittest.TestCase):
         )
         self.assertNotIn("run-threshold-3x8", normalized)
 
+    def test_unknown_model_identifier_is_neutralized_before_publication(self):
+        normalized = visible_training_language(
+            "Nästa steg vägs mot mtb_aerobic och device_workout."
+        )
+        self.assertEqual(
+            normalized,
+            "Nästa steg vägs mot planerat träningsinnehåll och planerat träningsinnehåll.",
+        )
+        self.assertNotIn("_", normalized)
+
     def test_visible_output_fails_closed_if_unknown_snake_case_remains(self):
         coach = {
             "analyses": [

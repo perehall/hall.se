@@ -24,7 +24,7 @@ from workout_plan_context import (
 )
 
 
-COACH_PIPELINE_CONTRACT_VERSION = 2
+COACH_PIPELINE_CONTRACT_VERSION = 3
 SCRIPTS = Path(__file__).resolve().parent
 ANALYSIS_CODE_FILES = (
     SCRIPTS / "coach_pipeline.py",
@@ -194,6 +194,43 @@ def normalize_invalid_dose_option_action(action, decision_plan):
     normalized["reason"] = "Det valda dosalternativet matchar inte det planerade passet."
     normalized["recommendation"] = "Behåll nuvarande plan; ingen automatisk ändring görs."
     normalized["requires_approval"] = False
+    return normalized
+
+
+def normalize_unapplicable_plan_action(action, decision_plan, ready_dates, local_date):
+    """Fail closed when model output cannot be applied safely.
+
+    Structured model output is untrusted until the deterministic plan validators
+    accept it. A semantically invalid automatic change must never abort activity
+    ingestion or publication; degrade only that action to a no-change review.
+    """
+    normalized = dict(action)
+    try:
+        legacy.validate_plan_action(normalized, ready_dates)
+        legacy.validate_dose_option_action(decision_plan, normalized, local_date)
+        return normalized
+    except RuntimeError as exc:
+        print(
+            f"AI coach: ogiltig automatisk planåtgärd neutraliserad: {exc}",
+            flush=True,
+        )
+
+    normalized["action"] = "review"
+    normalized["target_date"] = ""
+    normalized["dose_option_id"] = ""
+    normalized["reason"] = (
+        "Den föreslagna automatiska planändringen kunde inte kopplas entydigt "
+        "till ett tillåtet målpass."
+    )
+    normalized["recommendation"] = (
+        "Behåll nuvarande plan; ingen automatisk ändring görs. "
+        "Bedöm nästa beslutsmogna pass när underlaget räcker."
+    )
+    normalized["requires_approval"] = False
+
+    # The fallback itself is deterministic and must satisfy the same contracts.
+    legacy.validate_plan_action(normalized, ready_dates)
+    legacy.validate_dose_option_action(decision_plan, normalized, local_date)
     return normalized
 
 
@@ -376,6 +413,13 @@ def main():
         result["plan_action"],
         decision_plan,
     )
+    result["plan_action"] = normalize_unapplicable_plan_action(
+        result["plan_action"],
+        decision_plan,
+        ready_dates,
+        local_date,
+    )
+    # Keep the strict validators after normalization as an invariant check.
     legacy.validate_plan_action(result["plan_action"], ready_dates)
     legacy.validate_dose_option_action(decision_plan, result["plan_action"], local_date)
 
