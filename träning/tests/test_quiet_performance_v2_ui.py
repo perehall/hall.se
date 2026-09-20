@@ -77,6 +77,14 @@ body.quiet-performance.qp-current .brain-extra{
             CSS,
         )
 
+    def test_mobile_keeps_week_distribution_visible(self):
+        self.assertNotIn(
+            "body.quiet-performance.qp-current .dashboard-grid .dashboard-card:first-child{display:none}",
+            CSS,
+        )
+        rendered = apply_v2(self.sample_page(), current=True, today=date(2026, 9, 10))
+        self.assertIn('<div class="dashboard-title">Grenfördelning</div>', rendered)
+
     def test_history_keeps_structure_but_gets_history_class(self):
         rendered = apply_v2(self.sample_page(), current=False)
         validate_page(rendered, current=False, label="history")
