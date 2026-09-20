@@ -4,7 +4,7 @@
       "activity_id": 20254486837,
       "activity_date": "2026-09-20",
       "activity_name": "Löpning vid lunch",
-      "generated_at_utc": "2026-09-20T12:54:51.279694+00:00",
+      "generated_at_utc": "2026-09-20T13:00:28.183803+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 3,
@@ -16,8 +16,8 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört 22,46 km löppass (117,9 min) med genomsnittspuls 139 bpm och tempo ~5:15/km; längre än planerat (75 min).",
-        "load_interpretation": "Kombinationen av flera stora pass de senaste dagarna (enduro, MTB/XC, backintervaller, simning) ökar närbelastningen; dagens distans översteg godkänd dos och kräver…",
+        "summary": "117,9 min lugn långpass genomfört (22.46 km, 5:15/km) — avvikelse från plan: 75 min valdes men du körde betydligt längre.",
+        "load_interpretation": "Kardiovaskulärt långt pass; kombinerat med senaste 3–4 dagars mekanisk belastning kräver konservativ marginal för närmaste dagar.",
         "confidence": "medium",
         "facts": [
           "Löpning: 22,46 km · 1:59:46 · 267 m+ · snittpuls 138,9 · maxpuls 158.",
@@ -25,12 +25,12 @@
           "Planerad tidsdos 75 min; faktisk rörelsetid 117.9 min (+42.9 min mot vald dos); över längsta godkända alternativet 90 min."
         ],
         "interpretations": [
-          "Passet visar att du kunde genomföra längre lugn distans idag, men det ligger klart över godkänd planad dos och ökar mekanisk/kardiovaskulär belastning i mikrocykelfönstret.",
+          "Dagens långa genomförande visar att passet tolererades idag men ökar mekanisk och kardiovaskulär närbelastning för nästa 48–72 h.",
           "Tidsdosen blev 117.9 min mot valda 75 min och översteg även det längsta godkända alternativet 90 min."
         ],
         "unknowns": [
-          "Subjektiv återhämtningskänsla efter passet (användarrapport saknas).",
-          "Eventuella skador eller lokal muskelömhet som kan påverka nästa pass."
+          "Subjektiv återhämtningsskala efter passet (användarrapport tom).",
+          "Eventuella kommande fasta åtaganden eller känslor under nästa dag som kan påverka beslutet."
         ]
       },
       "plan_action": {
@@ -1239,8 +1239,8 @@
       }
     }
   ],
-  "last_trigger_hash": "2241fbeae3fae7abf51c43ad9178e1dcc91b4601c7ce708f67e6521565e63d40",
-  "last_run_utc": "2026-09-20T12:54:51.279694+00:00",
+  "last_trigger_hash": "14067310808d989da5501a399cb2fa26ecda7bf8a4a3b65f033c6096f05d406f",
+  "last_run_utc": "2026-09-20T13:00:28.183803+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 3
