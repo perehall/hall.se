@@ -4,7 +4,7 @@
   "week_start": "2026-09-14",
   "week_end": "2026-09-20",
   "created_at_utc": "2026-09-13T23:09:46.558327+00:00",
-  "updated_at_utc": "2026-09-20T16:05:07.994738+00:00",
+  "updated_at_utc": "2026-09-20T20:48:08.258716+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -1563,9 +1563,9 @@
           "transport": "intervals_icu",
           "source_hash": "be9d1761e0c308fa21de98a0bdd657b35c17e11a343dff54f1e561a58f74ec71",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-20T16:05:07.086458+00:00",
+          "updated_at_utc": "2026-09-20T20:48:07.625625+00:00",
           "provider_event_id": 135973445,
-          "verified_at_utc": "2026-09-20T16:05:07.086458+00:00"
+          "verified_at_utc": "2026-09-20T20:48:07.625625+00:00"
         },
         "original_session": "Löpning · lugn distans · 75 min",
         "auto_coach": {
@@ -6609,7 +6609,7 @@
       "activity_id": 20254486837,
       "activity_date": "2026-09-20",
       "activity_name": "Löpning vid lunch",
-      "generated_at_utc": "2026-09-20T16:05:06.409046+00:00",
+      "generated_at_utc": "2026-09-20T20:48:06.846823+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 3,
@@ -6621,8 +6621,8 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "117.9 min lugn långtur (22.46 km) genomförd — 42 min längre än planerad 75 min; sista 5–6 km tydligt snabbare med stigande puls.",
-        "load_interpretation": "närbelastningen de senaste dagarna (enduro, MTB/XC, backintervaller + 4 km simning dagen innan) kräver konservativ hantering de närmsta 48–72 timmarna.",
+        "summary": "Lång löpning 22.46 km (117.9 min) genomförd — betydligt längre än planerad 75 min och ovanligt snabbare sista 4 km med stigande puls.",
+        "load_interpretation": "Kardiovaskulärt stort arbetspass idag; mekanisk belastning är ökad jämfört med plan och adderar till senaste 2–3 dagars hårda jobb.",
         "confidence": "medium",
         "facts": [
           "Löpning: 22,46 km · 1:59:46 · 267 m+ · snittpuls 138,9 · maxpuls 158.",
@@ -6630,19 +6630,19 @@
           "Planerad tidsdos 75 min; faktisk rörelsetid 117.9 min (+42.9 min mot vald dos); över längsta godkända alternativet 90 min."
         ],
         "interpretations": [
-          "Passet visar att du kunde genomföra en betydligt längre lugn distans än planerat, men senare del ökade fart och puls vilket ökar mekanisk och neuromuskulär kostnad inför nästa mikrostimuli.",
+          "Detta pass visar att en längre lugndistans genomfördes men med snabbare avslut och högre total varaktighet än godkänd dos, vilket ökar mekanisk/kardiovaskulär närbelastning i mikrocykeln.",
           "Tidsdosen blev 117.9 min mot valda 75 min och översteg även det längsta godkända alternativet 90 min."
         ],
         "unknowns": [
-          "Ingen användarrapport för detta pass (subjektiv återhämtning okänd).",
-          "Detaljer om benkänsla eller lokal trötthet efter passet saknas."
+          "Subjektiv återhämtning/benstatus efter dagens pass (användarrapport tom).",
+          "Planerad styrka/sim nästa dag – om användaren redan planerar vila eller lättare dag kan beslut ändras."
         ]
       },
       "plan_action": {
-        "action": "review",
+        "action": "keep",
         "target_date": "",
-        "reason": "Den föreslagna automatiska planändringen kunde inte kopplas entydigt till ett tillåtet målpass.",
-        "recommendation": "Behåll nuvarande plan; ingen automatisk ändring görs. Bedöm nästa beslutsmogna pass när underlaget räcker.",
+        "reason": "Närtidens plan skyddar måndagens fasta enduroskola och mikrocykelns prioriteringar; en konservativ ändring kräver subjektiv återhämtning eller ytterligare avvikelse.",
+        "recommendation": "Följ aktuell plan utan att lägga till extra kvalitet; prioritera återhämtningsunderlaget, näring och aktiv återhämtning idag. Rapportera hur benen känns imorgon morgon om du vill överväga att minska nästa icke-fast träning.",
         "dose_option_id": "",
         "requires_approval": false
       },
