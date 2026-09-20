@@ -278,7 +278,7 @@ body.quiet-performance.qp-history .day.workout-card-v2.past-completed{
   body.quiet-performance.qp-current .metric strong{font-size:.88rem}
   body.quiet-performance.qp-current .metric span{font-size:.64rem}
   body.quiet-performance.qp-current .dashboard-grid{grid-template-columns:1fr;gap:13px}
-  body.quiet-performance.qp-current .dashboard-grid .dashboard-card:first-child{display:none}
+
   body.quiet-performance.qp-current .dashboard{padding:11px 0 13px}
 }
 '''.strip()
