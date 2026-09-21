@@ -321,7 +321,11 @@ class AdaptivePlanningTests(unittest.TestCase):
             if "run_threshold" in slot["stimuli"]
         )
         self.assertEqual(threshold["baseline_option_id"], "run-threshold-4x8")
-        self.assertIn("progression_ceiling_reason", threshold)
+        self.assertEqual(
+            threshold["progression_target_option_id"],
+            "run-threshold-4x9",
+        )
+        self.assertNotIn("progression_ceiling_reason", threshold)
 
         combined = next(
             slot
