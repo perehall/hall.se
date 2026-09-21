@@ -11,6 +11,7 @@ SCRIPTS = ROOT / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
 from adaptive_planner import (  # noqa: E402
+    MICRO_PLANNER_REVISION,
     choose_option,
     fallback_mesocycle,
     fallback_microcycle,
@@ -502,8 +503,9 @@ class AdaptivePlanningTests(unittest.TestCase):
             "end_date": "2026-10-18",
             "goal_hash": goal_hash(self.goal),
         }
+        self.assertEqual(MICRO_PLANNER_REVISION, 6)
         stale_micro = {
-            "planner_revision": 4,
+            "planner_revision": 5,
             "week_start": "2026-09-28",
             "mesocycle_id": "meso-live",
         }
