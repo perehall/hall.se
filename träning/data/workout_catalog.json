@@ -35,6 +35,13 @@
           "value": 32,
           "session": "Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg",
           "intent": "Alternativ struktur med något större total arbetstid; används bara när faktisk historik stödjer den."
+        },
+        {
+          "id": "run-threshold-4x9",
+          "kind": "structured",
+          "value": 36,
+          "session": "Löpning · kontrollerad tröskel · 4 × 9 min / 90 s jogg",
+          "intent": "Förgodkänt nästa arbetstidssteg från demonstrerade 4 × 8: fyra extra arbetsminuter med oförändrad kontrollerad intensitetsavsikt. Väljs endast när mesocykel/mikrocykel uttryckligen beslutar progression."
         }
       ]
     },
