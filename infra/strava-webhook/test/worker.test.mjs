@@ -185,3 +185,20 @@ test("training GUI input rejects operations outside the allowlist", async () => 
   });
   assert.equal(response.status, 400);
 });
+
+
+test("training GUI input rejects non-custom hostname before request processing", async () => {
+  const request = new Request("https://hall-se.per-e-hall.workers.dev/training-api/input", {
+    method: "POST",
+    headers: {"content-type": "application/json"},
+    body: JSON.stringify({
+      operation: "ADD_FEEDBACK",
+      activity_id: 789,
+      text: "Pigg.",
+    }),
+  });
+  const response = await handleRequest(request, env, async () => {
+    throw new Error("GitHub must not be called from an unapproved hostname");
+  });
+  assert.equal(response.status, 404);
+});
