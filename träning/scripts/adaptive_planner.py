@@ -806,24 +806,28 @@ def fallback_microcycle(meso, policy, catalog, target_start):
 
     # A race-relevant easy-distance exposure is useful when it fits safely, but
     # other secondary capabilities are deliberately not all forced into the week.
+    secondary_added = False
     if "run_easy_distance" in secondaries or "run_easy_distance" in primaries:
-        add_recipe(
+        secondary_added = add_recipe(
             "run_easy_distance",
             "Behåll lugn löptålighet med separation från löpkvalitet.",
             action="consolidate",
         )
 
-    # Only add one other secondary when there is still room and layout permits.
-    for cap in ("run_hill_quality", "mtb_technical", "mtb_aerobic"):
-        if cap not in secondaries:
-            continue
-        recipe = CAPABILITY_TO_RECIPE.get(cap)
-        if recipe and add_recipe(
-            recipe,
-            f"Vald sekundär exponering för {cap}; övriga sekundära kapaciteter behöver inte täckas varje mikrocykel.",
-            action="consolidate",
-        ):
-            break
+    # Add at most one secondary exposure in total. A free slot is not a reason
+    # to force MTB/hills into a week that already contains race-relevant
+    # secondary long-run work plus fixed Enduro.
+    if not secondary_added:
+        for cap in ("run_hill_quality", "mtb_technical", "mtb_aerobic"):
+            if cap not in secondaries:
+                continue
+            recipe = CAPABILITY_TO_RECIPE.get(cap)
+            if recipe and add_recipe(
+                recipe,
+                f"Vald sekundär exponering för {cap}; övriga sekundära kapaciteter behöver inte täckas varje mikrocykel.",
+                action="consolidate",
+            ):
+                break
 
     return {
         "rationale": (
@@ -864,6 +868,17 @@ def microcycle_layout_failures(rows, catalog, target_start):
                 "löptröskel/backkvalitet/lång löpdistans får inte staplas på två på varandra följande dagar"
             )
             break
+
+    for day, row in by_day.items():
+        if row["recipe_key"] != "run_easy_distance":
+            continue
+        for neighbor in (day - 1, day + 1):
+            neighbor_row = by_day.get(neighbor)
+            if neighbor_row and neighbor_row["recipe_key"] == "mtb_technical":
+                failures.append(
+                    "lång löpdistans får inte ligga direkt intill MTB/XC; den sekundära cykelexponeringen ska utgå eller flyttas"
+                )
+                break
 
     occupied = set(by_day)
     if fixed_enduro:
