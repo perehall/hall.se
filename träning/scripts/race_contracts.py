@@ -144,6 +144,26 @@ def build_competition_context(
             "swim_share_of_published_total": round(swim / total, 4),
             "published_component_delta_m": int(round(delta)),
         },
+        "course_requirement_mapping": [
+            {
+                "source_fact": "run_distance_m",
+                "published_value": int(run),
+                "mapped_capabilities": ["run_easy_distance", "run_threshold"],
+                "system_gap": None,
+            },
+            {
+                "source_fact": "swim_distance_m",
+                "published_value": int(swim),
+                "mapped_capabilities": ["swim_aerobic", "swim_threshold", "swim_technique"],
+                "system_gap": None,
+            },
+            {
+                "source_fact": "characteristics: många växlingar",
+                "published_value": "Många växlingar",
+                "mapped_capabilities": [],
+                "system_gap": "combined_swimrun_transition_durability",
+            },
+        ],
         "planning_implications": [
             "36,57 km publicerad löpdistans gör löptålighet över upprepade delsträckor till ett centralt tävlingskrav.",
             "9,96 km publicerad simdistans gör hög simuthållighet och bibehållen teknik under lång total simtid till ett centralt tävlingskrav.",
