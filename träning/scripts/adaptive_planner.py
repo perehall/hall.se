@@ -43,6 +43,7 @@ WEEKS_DIR = DATA / "weeks"
 MODEL = os.environ.get("OPENAI_MODEL", "gpt-5-mini")
 MESO_SCHEMA_VERSION = 1
 MICRO_SCHEMA_VERSION = 1
+PLANNER_REVISION = 3
 
 CAPABILITY_TO_RECIPE = {
     "run_threshold": "run_threshold",
@@ -507,6 +508,7 @@ def generate_mesocycle(goal, policy, athlete_state, previous, target_start, *, r
     result.update(
         {
             "schema_version": MESO_SCHEMA_VERSION,
+            "planner_revision": PLANNER_REVISION,
             "source": source,
             "source_hash": digest,
             "generated_at_utc": datetime.now(timezone.utc).isoformat(),
@@ -530,6 +532,7 @@ def mesocycle_is_valid(decision, goal, target_start):
     try:
         return (
             decision.get("schema_version") == MESO_SCHEMA_VERSION
+            and decision.get("planner_revision") == PLANNER_REVISION
             and decision.get("goal_hash") == goal_hash(goal)
             and iso(decision["start_date"]) <= target_start <= iso(decision["end_date"])
             and bool(decision.get("primary_capabilities"))
@@ -670,6 +673,15 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
             key: sorted(recipe_capabilities(value))
             for key, value in catalog["recipes"].items()
         },
+        "hard_requirements": {
+            "cover_all_primary_capabilities_directly": True,
+            "normal_swim_exposures": int(policy["microcycle_policy"].get("normal_swim_exposures", 2)),
+            "strength_core_exposures_min": 1 if policy["microcycle_policy"].get("protect_strength_core_each_microcycle") else 0,
+            "max_run_quality_exposures": int(policy["microcycle_policy"].get("max_run_quality_exposures", 2)),
+            "slot_count_min": 4,
+            "slot_count_max": 6,
+            "day_1_blocked_by_enduro": is_enduro_school_date(target_start),
+        },
     }
     digest = canonical_hash(source_payload)
     system = (
@@ -677,10 +689,13 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
         "Välj endast dag, stimulusrecept och åtgärden establish/progress/consolidate/reduce. "
         "Du får inte hitta på exakta farter, pulser, watt eller doser; deterministisk kod väljer sedan dos från observerad historik och receptkatalog. "
         "Föregående veckas schema ska inte kopieras av slentrian. Kontrollera konflikt mellan mekaniska/kardiovaskulära stimuli och fasta åtaganden. "
-        "Två simexponeringar är normal grundplan när absorberbart; styrka/core ska skyddas. "
+        "Output måste uppfylla hard_requirements i underlaget: alla primära kapaciteter ska täckas direkt, "
+        "normalantalet simexponeringar ska finnas, minst en styrka/core-exponering ska finnas när policyn kräver det, "
+        "och antalet löpkvalitetsexponeringar får inte överskrida maxgränsen. "
+        "Använd kombinationsreceptet swim_strength när det hjälper att uppfylla både sim- och styrkekrav utan en extra dag. "
         "Enduro dag 1 är faktisk belastning och blockerar annan planering den dagen. "
         "Progress får bara väljas för ett primärt mesocykelstimulus och ska ha stöd i athlete_state; annars välj consolidate/establish. "
-        "En ledig dag är inte ett skäl att fylla kalendern."
+        "En ledig dag är inte ett skäl att fylla kalendern. Kontrollera slutligen själv att varje hard_requirement är uppfyllt innan du svarar."
     )
     try:
         raw = call_structured(
@@ -702,6 +717,7 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
     normalized.update(
         {
             "schema_version": MICRO_SCHEMA_VERSION,
+            "planner_revision": PLANNER_REVISION,
             "source": source,
             "source_hash": digest,
             "generated_at_utc": datetime.now(timezone.utc).isoformat(),
@@ -718,6 +734,7 @@ def microcycle_is_valid(decision, meso, target_start, source_hash_value=None):
         return False
     return (
         decision.get("schema_version") == MICRO_SCHEMA_VERSION
+        and decision.get("planner_revision") == PLANNER_REVISION
         and decision.get("week_start") == target_start.isoformat()
         and decision.get("mesocycle_id") == meso.get("id")
         and bool(decision.get("slots"))
