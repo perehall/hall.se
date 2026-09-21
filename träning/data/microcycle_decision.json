@@ -1,85 +1,83 @@
 {
-  "rationale": "Följer mesocyklens prioritet att höja simningen konservativt samtidigt som kontrollerad löptröskel och löptålighet bibehålls. Dag 1 är blockerad av faktisk enduro; två simexponeringar ingår varav ena är kombinerad swim_strength för att säkra styrka/core utan extra benkvalitetspass. Max två löpkvaliteter hålls (tröskel + back). Totalt 6 slots (inom 4–6), alla primära kapaciteter täcks och minst en styrke/core-session finns.",
+  "rationale": "Ta bort träning från blockerade dag 1, flytta run_threshold från dag 1 till en annan dag och ändra swim_strength så den inte progressas. Endast ett primärt stimulus progressas (swim_aerobic/technique). Säkerställer två simexponeringar, minst en styrke/core-exponering, och högst två löpkvaliteter; totalt 6 slots (dagen 2–7).",
   "slots": [
     {
       "day_index": 2,
-      "recipe_key": "run_threshold",
-      "action": "consolidate",
-      "rationale": "Behålla nuvarande 4×8-tröskelkaraktär som baseline utan ökning; stöd av nyligt 4×8-pass och långpasset som återhämtning.",
+      "recipe_key": "swim_strength",
+      "action": "establish",
+      "rationale": "Kombinerar en simexponering med styrka/core utan att progressa; uppfyller styrke/core-kravet och en av två simpass.",
       "evidence_refs": [
-        "20092166843",
-        "20254486837"
+        "19946705399",
+        "20175536586"
       ]
     },
     {
       "day_index": 3,
-      "recipe_key": "swim_aerobic_technique",
-      "action": "progress",
-      "rationale": "Progression riktad mot sim_aerobic/technique (frekvens/setlängd) — motiverat av upprepade 4K/3.2K-sim och session_count.",
+      "recipe_key": "mtb_technical",
+      "action": "establish",
+      "rationale": "Bibehåller teknisk MTB-exponering i stödjande roll utan att tränga undan primära stimuli.",
       "evidence_refs": [
-        "19946705399",
-        "20239623463",
-        "20203770266"
+        "20024236347",
+        "20120769386"
       ]
     },
     {
       "day_index": 4,
-      "recipe_key": "swim_strength",
-      "action": "establish",
-      "rationale": "Kombinerad sim + styrka för att leverera andra simexponeringen och skydda styrke/core-kravet utan separat styrkepass.",
-      "evidence_refs": [
-        "20175536586",
-        "19946705399",
-        "20239623463"
-      ]
-    },
-    {
-      "day_index": 5,
       "recipe_key": "run_hill_quality",
-      "action": "consolidate",
-      "rationale": "Bibehålla backstyrka/neuromuskulär kvalitet som sekundärt fokus; hålls kontrollerat efter tröskelpass och enduro-belastning.",
+      "action": "establish",
+      "rationale": "Behåll ett kontrollerat backpass för neuromuskulär löpkapacitet (sekundärt stimulus).",
       "evidence_refs": [
         "20229568713",
         "20133500464"
       ]
     },
     {
-      "day_index": 6,
-      "recipe_key": "run_easy_distance",
-      "action": "establish",
-      "rationale": "Långt lugnt löppass (~90–120 min) för löptålighet enligt mesocykelns mål; planerat som huvudsaklig veckovolym för löpning.",
+      "day_index": 5,
+      "recipe_key": "swim_aerobic_technique",
+      "action": "progress",
+      "rationale": "Endast primärt stimulus som progressas: öka sammanhängande simset/teknisk kvalitet baserat på upprepade 3–4k-simpass.",
       "evidence_refs": [
-        "20254486837",
-        "20057585521"
+        "19946705399",
+        "20239623463",
+        "20106458579"
+      ]
+    },
+    {
+      "day_index": 6,
+      "recipe_key": "run_threshold",
+      "action": "consolidate",
+      "rationale": "Flyttat från blockerad dag 1; konsolidera den nuvarande 4×8-min-strukturen som baseline för tröskel.",
+      "evidence_refs": [
+        "20092166843",
+        "19897382163"
       ]
     },
     {
       "day_index": 7,
-      "recipe_key": "mtb_technical",
+      "recipe_key": "run_easy_distance",
       "action": "consolidate",
-      "rationale": "Lugn teknisk MTB som sekundär stimulans för teknisk kompetens utan att tränga undan primära sim-/löppass.",
+      "rationale": "Långt lugnt löppass för löptålighet (~90–120 min) som konsolidering efter kvaliteter.",
       "evidence_refs": [
-        "20024236347",
-        "20120769386"
+        "20254486837"
       ]
     }
   ],
   "schema_version": 1,
   "planner_revision": 4,
-  "source": "openai",
-  "source_hash": "7a9504edaad56b93a33ff6a55db4100f35ef05e46187a2ca242de8648a4ff0d2",
-  "generated_at_utc": "2026-09-21T09:59:09.837488+00:00",
-  "week_start": "2026-09-21",
-  "week_key": "2026-W39",
+  "source": "openai_repaired",
+  "source_hash": "19eb62b0b66fa47b64f9b902ca08b7a2aecd08771e504eee750987bf09a6ad41",
+  "generated_at_utc": "2026-09-21T12:47:29.460185+00:00",
+  "week_start": "2026-09-28",
+  "week_key": "2026-W40",
   "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
   "competition_context": {
     "available": true,
     "goal_id": "otillo-aland-2027-top10",
     "event": "ÖTILLÖ Åland World Series",
     "event_date": "2027-08-14",
-    "as_of": "2026-09-21",
-    "days_to_event": 327,
-    "weeks_to_event": 46.7,
+    "as_of": "2026-09-28",
+    "days_to_event": 320,
+    "weeks_to_event": 45.7,
     "horizon_stage": "foundation",
     "target": "Topp-10",
     "target_category": null,
@@ -142,5 +140,14 @@
       "391 höjdmeter ska vägas in, men systemet får inte hitta på en mer kuperad profil än den publicerade.",
       "Tävlingsdatumet styr när specificiteten ska omprövas; det får inte ensamt utlösa automatisk volym- eller intensitetsökning."
     ]
+  },
+  "guard_repair": {
+    "attempted": true,
+    "initial_failures": [
+      "dag 1 är blockerad av fast endurobelastning",
+      "swim_strength får inte progressas eftersom receptet inte realiserar ett direkt primärt stimulus",
+      "primära kapaciteter saknar direkt recept: run_threshold"
+    ],
+    "result": "accepted"
   }
 }
