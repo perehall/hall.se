@@ -44,7 +44,41 @@ jobs:
           node --check "infra/strava-webhook/src/worker.mjs"
           node --test "infra/strava-webhook/test/worker.test.mjs"
 
+      - name: Check generated planning freshness
+        id: planning_freshness
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import sys
+          from pathlib import Path
+
+          sys.path.insert(0, "träning/scripts")
+          from goal_contracts import planning_goal_hash
+
+          root = Path("träning/data")
+          goal = json.loads((root / "goal.json").read_text(encoding="utf-8"))
+          strategy = json.loads((root / "training_strategy.json").read_text(encoding="utf-8"))
+          digest = planning_goal_hash(goal)
+          stale = (
+              strategy.get("north_star") != str(goal.get("goal") or "").strip()
+              or (strategy.get("goal_contract") or {}).get("goal_hash") != digest
+              or (strategy.get("current_mesocycle") or {}).get("goal_basis_hash") != digest
+          )
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as handle:
+              handle.write(f"stale={'true' if stale else 'false'}\n")
+          if stale:
+              print(
+                  "::notice::Deployment deferred: canonical goal/race contract changed "
+                  "and generated planning state has not been regenerated yet."
+              )
+          else:
+              print("Generated planning state matches the canonical goal contract.")
+          PY
+
       - name: Normalize and materialize training data for render
+        if: steps.planning_freshness.outputs.stale != 'true'
         run: |
           python "träning/scripts/migrate_training_data_v3.py"
           python "träning/scripts/normalize_activity_semantics.py"
@@ -55,16 +89,24 @@ jobs:
           python "träning/scripts/validate_device_workouts.py"
 
       - name: Render and validate training site
+        if: steps.planning_freshness.outputs.stale != 'true'
         run: python "träning/scripts/render_training_site.py"
 
       - name: Configure GitHub Pages
+        if: steps.planning_freshness.outputs.stale != 'true'
         uses: actions/configure-pages@v5
 
       - name: Upload GitHub Pages artifact
+        if: steps.planning_freshness.outputs.stale != 'true'
         uses: actions/upload-pages-artifact@v4
         with:
           path: "."
 
       - name: Deploy to GitHub Pages
+        if: steps.planning_freshness.outputs.stale != 'true'
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Defer Pages until adaptive regeneration
+        if: steps.planning_freshness.outputs.stale == 'true'
+        run: echo "Pages deployment intentionally deferred; update-training will publish the regenerated canonical state."
