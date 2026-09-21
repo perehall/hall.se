@@ -540,9 +540,20 @@ def generate_mesocycle(goal, policy, athlete_state, previous, target_start, *, r
         primary = fallback["primary_capabilities"]
 
     secondary = []
+    protected_role_conflicts = []
     for key in result.get("secondary_capabilities") or []:
-        if key in allowed and key not in primary and key not in secondary:
-            secondary.append(key)
+        if key not in allowed or key in primary or key in secondary:
+            continue
+        if key in FIXED_PROTECTED_CAPACITY:
+            protected_role_conflicts.append(key)
+            continue
+        secondary.append(key)
+    if protected_role_conflicts:
+        result.setdefault("uncertainties", []).append(
+            "Kapaciteter med hårt skyddskrav flyttades från secondary till protected_capacity: "
+            + ", ".join(protected_role_conflicts)
+            + ". De ska finnas kvar varje mikrocykel men får inte byta semantisk roll bara för att modellen placerar dem sekundärt."
+        )
     result["primary_capabilities"] = primary
     result["secondary_capabilities"] = secondary[:4]
     result["duration_weeks"] = max(

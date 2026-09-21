@@ -14,6 +14,7 @@ from adaptive_planner import (  # noqa: E402
     choose_option,
     fallback_mesocycle,
     fallback_microcycle,
+    generate_mesocycle,
     generate_microcycle,
     materialize_strategy,
     mesocycle_schema,
@@ -118,6 +119,50 @@ class AdaptivePlanningTests(unittest.TestCase):
         self.assertNotIn("current_mesocycle", self.policy["strategy_base"])
         self.assertIn("mesocycle_policy", self.policy)
         self.assertIn("microcycle_policy", self.policy)
+
+    def test_model_cannot_reclassify_hard_protected_capacity_as_secondary(self):
+        payload = {
+            "decision": "modify",
+            "title": "test",
+            "duration_weeks": 4,
+            "goal_contribution": "test",
+            "hypothesis": "test",
+            "primary_capabilities": ["run_threshold", "mtb_technical"],
+            "secondary_capabilities": ["run_hill_quality", "strength_unilateral", "strength_core"],
+            "progression_axes": [
+                {"capability": "run_threshold", "axis": "work_duration", "objective": "test"}
+            ],
+            "success_signals": ["a", "b"],
+            "guardrails": ["a", "b"],
+            "evidence_refs": ["goal.goal"],
+            "uncertainties": [],
+        }
+
+        def fake_request(body):
+            return {
+                "status": "completed",
+                "output": [
+                    {
+                        "type": "message",
+                        "content": [
+                            {"type": "output_text", "text": json.dumps(payload, ensure_ascii=False)}
+                        ],
+                    }
+                ],
+            }
+
+        result = generate_mesocycle(
+            self.goal,
+            self.policy,
+            {"capability_facts": {}},
+            {},
+            date(2026, 9, 21),
+            request_fn=fake_request,
+        )
+        self.assertEqual(result["secondary_capabilities"], ["run_hill_quality"])
+        joined = " ".join(result["uncertainties"])
+        self.assertIn("strength_unilateral", joined)
+        self.assertIn("strength_core", joined)
 
     def test_fallback_does_not_promote_swim_maintenance_text_to_primary_focus(self):
         meso = fallback_mesocycle(self.goal, self.policy, {})
