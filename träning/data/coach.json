@@ -4,7 +4,7 @@
       "activity_id": 20254486837,
       "activity_date": "2026-09-20",
       "activity_name": "Löpning vid lunch",
-      "generated_at_utc": "2026-09-20T23:15:17.851256+00:00",
+      "generated_at_utc": "2026-09-21T04:54:22.674577+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 3,
@@ -16,26 +16,26 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "22.5 km löpning på 7 074 s med stabil kilometertakt runt 5:15–5:24, snabbare avslutande km indikerar sparad kapacitet mot slutet.",
-        "load_interpretation": "Passet är långt och ger betydande varaktighetsbelastning kardiovaskulärt och mekaniskt över de närmaste 48–72 timmarna.",
+        "summary": "22.46 km lugn/jobbig långrunda med stiginslag genomförd på ~7,1 h; stabil km‑intervaller med fartökning sista 5–6 km och maxpuls 158 bpm.",
+        "load_interpretation": "Passet ger totalkardiovaskulär och mekanisk belastning i närbelastningsfönstret och bör beaktas mot måndagens fasta enduroskola.",
         "confidence": "medium",
         "facts": [
           "Löpning: 22,46 km · 1:59:46 · 267 m+ · snittpuls 138,9 · maxpuls 158."
         ],
         "interpretations": [
-          "Ett långt, genomfört distanspass visar god tolerans för volym men ökar mekanisk och kardiovaskulär återhämtningskostnad framför nästa 2–3 dagarna.",
-          "Snabbare kilometrar i slutet utan pulsöverdrift tyder på att passet inte var totalt utmattande och att kapacitet fanns kvar för kortare tekniskt arbete (t.ex."
+          "Aktivt långt pass visar att du klarade lång varaktighet med stig/tempovariation — relevant för kardiovaskulär och mekanisk belastning.",
+          "Slag av fartökning sista delen med högre puls indikerar avslutande kvalitet som ökar närbelastningen jämfört med en ren lugn distans."
         ],
         "unknowns": [
-          "Subjektiv återhämtning nästa dag (användarrapport saknas).",
-          "Planerat måndagsendurons belastningstidpunkt och intensitet är okänd inför beslut."
+          "Subjektiv återhämtning efter passet (användarrapport tom)",
+          "Kommande dags återhämtningsunderlaget/återhämtningsdata påverkar tolerans för måndagens enduro"
         ]
       },
       "plan_action": {
-        "action": "keep",
+        "action": "review",
         "target_date": "",
-        "reason": "Inga planerade pass de kommande 2–3 dagarna kräver automatiskt skalning; måndagens enduroskola är ett fast åtagande och ska hållas enligt plan.",
-        "recommendation": "Behåll plan; vila/småaktiviteter tills måndagens enduroskola om du känner normal återhämtning. Rapportera morgondagens subjektiva trötthet eller smärta för ev.",
+        "reason": "Senaste passet var långt och innehöll kvalitet i slutet vilket ökar närbelastningen inför fasta enduroskolan nästa dag.",
+        "recommendation": "Bedöm hur du känner dig imorgon morgon; om du är trött eller stel: överväg att ta det lugnt under enduron eller be instruktörerna om reducerad körning. Om du känner dig fräsch: genomför enduroskolan men håll fokus på teknisk, avslappnad körning och undvik…",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -1237,8 +1237,8 @@
       }
     }
   ],
-  "last_trigger_hash": "e1ef852f5bdb1097dba135629838c7082d52c2b1f081e43d7b582f29297407bf",
-  "last_run_utc": "2026-09-20T23:15:17.851256+00:00",
+  "last_trigger_hash": "0bd6186ee76dd4cd7969388f58f2ecc0dd7d7c3169447a507452bdc33b529593",
+  "last_run_utc": "2026-09-21T04:54:22.674577+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 3
