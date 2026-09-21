@@ -21,8 +21,17 @@ ACTIVITY_API = "https://intervals.icu/api/v1/activity"
 SCHEMA_VERSION = 1
 RUN_TYPES = {"Run", "TrailRun", "VirtualRun"}
 SOURCE_PREFERENCE = {"GARMIN": 0, "COROS": 1, "SUUNTO": 2, "WAHOO": 3, "STRAVA": 8}
-EXPLICIT_3X8 = re.compile(r"\b3\s*[x×]\s*8(?:\s*min)?\b", re.IGNORECASE)
-EXPLICIT_3X10 = re.compile(r"\b3\s*[x×]\s*10(?:\s*min)?\b", re.IGNORECASE)
+EXPLICIT_THRESHOLD = re.compile(
+    r"\b(?P<count>[3-5])\s*[x×]\s*(?P<minutes>6|7|8|9|10|11|12)(?:\s*min)?\b",
+    re.IGNORECASE,
+)
+THRESHOLD_WORD = re.compile(r"\b(?:tröskel|threshold|tempo)\b", re.IGNORECASE)
+KNOWN_THRESHOLD_PROTOCOLS = (
+    (3, 8, 75.0),
+    (3, 10, 90.0),
+    (4, 8, 75.0),
+    (4, 9, 80.0),
+)
 
 
 def load_json(path, fallback):
@@ -174,50 +183,77 @@ def work_rows(detail):
     return result
 
 
-def infer_threshold_protocol(activity, detail):
+def explicit_threshold_shape(activity):
     report = str(activity.get("user_report") or "")
-    explicit = None
-    if EXPLICIT_3X8.search(report):
-        explicit = ("run_threshold:3x8:90s", 480.0, 100.0)
-    elif EXPLICIT_3X10.search(report):
-        explicit = ("run_threshold:3x10:90s", 600.0, 110.0)
-
-    candidates = [(seconds, row) for seconds, row in work_rows(detail) if 330 <= seconds <= 720]
-    if len(candidates) != 3:
+    if not THRESHOLD_WORD.search(report):
         return None
+    match = EXPLICIT_THRESHOLD.search(report)
+    if not match:
+        return None
+    return int(match.group("count")), int(match.group("minutes"))
 
-    protocols = [
-        ("run_threshold:3x8:90s", 480.0, 75.0),
-        ("run_threshold:3x10:90s", 600.0, 90.0),
-    ]
+
+def threshold_protocols(activity):
+    explicit = explicit_threshold_shape(activity)
+    protocols = []
     if explicit:
-        protocols = [explicit] + [item for item in protocols if item[0] != explicit[0]]
-
-    durations = [seconds for seconds, _ in candidates]
-    for key, target, tolerance in protocols:
-        if all(abs(seconds - target) <= tolerance for seconds in durations):
-            return {
-                "marker_id": "run-threshold-control",
-                "protocol_key": key,
-                "work_rows": [row for _, row in candidates],
+        count, minutes = explicit
+        protocols.append(
+            {
+                "count": count,
+                "minutes": minutes,
+                "target_s": float(minutes * 60),
+                "tolerance_s": max(75.0, float(minutes * 10)),
+                "explicit": True,
             }
+        )
+    for count, minutes, tolerance in KNOWN_THRESHOLD_PROTOCOLS:
+        if explicit == (count, minutes):
+            continue
+        protocols.append(
+            {
+                "count": count,
+                "minutes": minutes,
+                "target_s": float(minutes * 60),
+                "tolerance_s": tolerance,
+                "explicit": False,
+            }
+        )
+    return protocols
+
+
+def detect_threshold_rows(activity, rows):
+    for protocol in threshold_protocols(activity):
+        matching = [
+            (seconds, row)
+            for seconds, row in rows
+            if abs(seconds - protocol["target_s"]) <= protocol["tolerance_s"]
+        ]
+        if len(matching) != protocol["count"]:
+            continue
+        return {
+            "marker_id": "run-threshold-control",
+            "protocol_key": f"run_threshold:{protocol['count']}x{protocol['minutes']}",
+            "work_rows": [row for _, row in matching],
+        }
     return None
+
+
+def infer_threshold_protocol(activity, detail):
+    candidates = [
+        (seconds, row)
+        for seconds, row in work_rows(detail)
+        if 330 <= seconds <= 750
+    ]
+    if not candidates:
+        return None
+    return detect_threshold_rows(activity, candidates)
 
 
 def infer_threshold_from_laps(activity):
     laps = activity.get("laps") or []
     if not isinstance(laps, list):
         return None
-    report = str(activity.get("user_report") or "")
-    protocols = []
-    if EXPLICIT_3X8.search(report):
-        protocols.append(("run_threshold:3x8:90s", 480.0, 100.0))
-    if EXPLICIT_3X10.search(report):
-        protocols.append(("run_threshold:3x10:90s", 600.0, 110.0))
-    protocols.extend([
-        ("run_threshold:3x8:90s", 480.0, 75.0),
-        ("run_threshold:3x10:90s", 600.0, 90.0),
-    ])
 
     rows = []
     for lap in laps:
@@ -234,27 +270,11 @@ def infer_threshold_from_laps(activity):
             "average_cadence": lap.get("average_cadence"),
         }
         seconds = interval_duration(mapped)
-        if seconds is not None:
+        if seconds is not None and 330 <= seconds <= 750:
             rows.append((seconds, mapped))
 
-    seen = set()
-    for key, target, tolerance in protocols:
-        if key in seen:
-            continue
-        seen.add(key)
-        matching = [
-            (seconds, row)
-            for seconds, row in rows
-            if abs(seconds - target) <= tolerance
-        ]
-        if len(matching) == 3:
-            matching.sort(key=lambda item: rows.index(item))
-            return {
-                "marker_id": "run-threshold-control",
-                "protocol_key": key,
-                "work_rows": [row for _, row in matching],
-            }
-    return None
+    return detect_threshold_rows(activity, rows)
+
 
 
 def pace_s_per_km(row):

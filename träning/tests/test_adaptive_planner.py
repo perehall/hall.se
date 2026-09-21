@@ -127,8 +127,26 @@ class AdaptivePlanningTests(unittest.TestCase):
         )
         self.assertEqual(floor["id"], "run-threshold-4x8")
         self.assertEqual(selected["id"], "run-threshold-4x8")
-        self.assertIsNone(next_option)
+        self.assertEqual(next_option["id"], "run-threshold-4x9")
         self.assertEqual(relation, "hold")
+
+    def test_progression_can_move_beyond_demonstrated_four_by_eight(self):
+        state = {
+            "capability_facts": {
+                "run_threshold": {
+                    "evidence": [
+                        {"work_minutes": 32.0, "kind": "explicit_user_report"}
+                    ]
+                }
+            }
+        }
+        recipe = self.catalog["recipes"]["run_threshold"]
+        selected, floor, _, relation, _ = choose_option(
+            "run_threshold", recipe, "progress", state
+        )
+        self.assertEqual(floor["id"], "run-threshold-4x8")
+        self.assertEqual(selected["id"], "run-threshold-4x9")
+        self.assertEqual(relation, "progress")
 
     def test_progression_moves_one_catalog_step_from_observed_floor(self):
         state = {
@@ -303,7 +321,11 @@ class AdaptivePlanningTests(unittest.TestCase):
             if "run_threshold" in slot["stimuli"]
         )
         self.assertEqual(threshold["baseline_option_id"], "run-threshold-4x8")
-        self.assertIn("progression_ceiling_reason", threshold)
+        self.assertEqual(
+            threshold["progression_target_option_id"],
+            "run-threshold-4x9",
+        )
+        self.assertNotIn("progression_ceiling_reason", threshold)
 
         combined = next(
             slot

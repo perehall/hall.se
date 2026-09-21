@@ -69,7 +69,41 @@ class PerformanceDetailTests(unittest.TestCase):
         }
         detected = infer_threshold_protocol(activity, detail)
         self.assertEqual(detected["marker_id"], "run-threshold-control")
-        self.assertEqual(detected["protocol_key"], "run_threshold:3x8:90s")
+        self.assertEqual(detected["protocol_key"], "run_threshold:3x8")
+
+    def test_four_by_eight_threshold_is_fingerprinted_from_explicit_report(self):
+        activity = {
+            "sport_type": "Run",
+            "user_report": "4×8 min Tempo enligt Garmin. Kontrollerat.",
+        }
+        detail = {
+            "icu_intervals": [
+                interval(480, 2010, 150),
+                interval(481, 2020, 152),
+                interval(479, 2030, 154),
+                interval(482, 2040, 155),
+            ]
+        }
+        detected = infer_threshold_protocol(activity, detail)
+        self.assertEqual(detected["protocol_key"], "run_threshold:4x8")
+        self.assertEqual(len(detected["work_rows"]), 4)
+
+    def test_four_by_nine_threshold_is_supported_as_comparable_future_protocol(self):
+        activity = {
+            "sport_type": "Run",
+            "user_report": "4×9 min tröskel, fortsatt kontrollerat.",
+        }
+        detail = {
+            "icu_intervals": [
+                interval(540, 2200, 151),
+                interval(541, 2210, 153),
+                interval(539, 2220, 154),
+                interval(542, 2230, 156),
+            ]
+        }
+        detected = infer_threshold_protocol(activity, detail)
+        self.assertEqual(detected["protocol_key"], "run_threshold:4x9")
+        self.assertEqual(len(detected["work_rows"]), 4)
 
     def test_nonmatching_work_structure_is_not_invented(self):
         activity = {"sport_type": "Run", "user_report": ""}
@@ -113,7 +147,7 @@ class PerformanceDetailTests(unittest.TestCase):
         self.assertEqual((updated, skipped), (1, 0))
         entry = history["entries"][0]
         self.assertEqual(entry["source"], "Strava laps")
-        self.assertEqual(entry["protocol_key"], "run_threshold:3x8:90s")
+        self.assertEqual(entry["protocol_key"], "run_threshold:3x8")
         self.assertEqual(len(entry["work_intervals"]), 3)
 
     def test_same_protocol_comparison_keeps_raw_deltas(self):
@@ -121,7 +155,7 @@ class PerformanceDetailTests(unittest.TestCase):
             {
                 "activity_id": 1,
                 "activity_date": "2026-08-20",
-                "protocol_key": "run_threshold:3x8:90s",
+                "protocol_key": "run_threshold:3x8",
                 "summary": {
                     "mean_pace_s_per_km": 250.0,
                     "mean_heartrate": 151.0,
@@ -132,7 +166,7 @@ class PerformanceDetailTests(unittest.TestCase):
             {
                 "activity_id": 2,
                 "activity_date": "2026-08-25",
-                "protocol_key": "run_threshold:3x8:90s",
+                "protocol_key": "run_threshold:3x8",
                 "summary": {
                     "mean_pace_s_per_km": 247.0,
                     "mean_heartrate": 153.0,
@@ -232,7 +266,7 @@ class PerformanceDetailTests(unittest.TestCase):
         self.assertEqual(updated, 1)
         self.assertEqual(skipped, 0)
         entry = history["entries"][0]
-        self.assertEqual(entry["protocol_key"], "run_threshold:3x8:90s")
+        self.assertEqual(entry["protocol_key"], "run_threshold:3x8")
         self.assertEqual(len(entry["work_intervals"]), 3)
         self.assertNotIn("streams", entry)
         self.assertIsNotNone(entry["summary"]["mean_pace_s_per_km"])
