@@ -431,9 +431,14 @@ def fallback_mesocycle(goal, policy, previous):
 
     previous_primary = set(previous.get("protected_stimuli") or [])
     decision = "continue" if set(primary) == previous_primary else "modify"
+    fallback_secondary_candidates = (
+        ("run_hill_quality",)
+        if active_swimrun_goal
+        else ("run_hill_quality", "mtb_aerobic")
+    )
     secondary = [
         key
-        for key in ("run_hill_quality", "mtb_aerobic")
+        for key in fallback_secondary_candidates
         if key not in primary
     ]
     return {
