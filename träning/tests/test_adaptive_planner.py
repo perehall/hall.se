@@ -263,6 +263,45 @@ class AdaptivePlanningTests(unittest.TestCase):
         self.assertEqual(hills[0]["repetitions"], 24)
         self.assertEqual(hills[0]["protocol"], "3x8")
 
+    def test_athlete_state_extracts_explicit_swim_threshold_evidence(self):
+        activities = {
+            "activities": [
+                {
+                    "id": 10,
+                    "start_date_local": "2026-08-29T12:00:00",
+                    "sport_type": "Swim",
+                    "classification": "training",
+                    "elapsed_time_s": 4500,
+                    "distance_m": 4000,
+                    "user_report": "Spontant simpass: Aerob+tröskel 4K, 4 000 m.",
+                }
+            ]
+        }
+        state = build_state(activities, {"entries": []}, today=date(2026, 9, 21))
+        threshold = state["capability_facts"]["swim_threshold"]["evidence"]
+        self.assertEqual(len(threshold), 1)
+        self.assertEqual(threshold[0]["distance_m"], 4000)
+        self.assertEqual(threshold[0]["protocol"], "aerob+threshold")
+
+    def test_swim_threshold_recipe_uses_explicit_threshold_evidence(self):
+        state = {
+            "capability_facts": {
+                "swim_threshold": {
+                    "evidence": [
+                        {"distance_m": 4000, "kind": "explicit_user_report"}
+                    ]
+                }
+            }
+        }
+        recipe = self.catalog["recipes"]["swim_aerobic_threshold"]
+        selected, floor, next_option, relation, _ = choose_option(
+            "swim_aerobic_threshold", recipe, "consolidate", state
+        )
+        self.assertEqual(selected["id"], "swim-aerobic-threshold-4000")
+        self.assertEqual(floor["id"], "swim-aerobic-threshold-4000")
+        self.assertIsNone(next_option)
+        self.assertEqual(relation, "hold")
+
     def test_threshold_recipe_uses_observed_history_not_old_baseline(self):
         state = {
             "capability_facts": {
