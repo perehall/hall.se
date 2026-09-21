@@ -19,6 +19,7 @@ from adaptive_planner import (  # noqa: E402
     mesocycle_schema,
     microcycle_guard_failures,
     microcycle_is_valid,
+    resolve_planning_target,
     target_week,
     validate_and_normalize_micro,
 )
@@ -65,6 +66,52 @@ class AdaptivePlanningTests(unittest.TestCase):
         self.assertFalse(
             microcycle_is_valid(micro, meso, date(2026, 9, 28), source_hash_value="new")
         )
+
+    def test_later_conflicting_mesocycle_cannot_orphan_midflight_block(self):
+        plan = {
+            "meta": {
+                "week_start": "2026-09-21",
+                "week_end": "2026-09-27",
+                "mesocycle_id": "meso-live",
+                "microcycle_index": 1,
+                "microcycle_total": 4,
+                "requires_mesocycle_review": False,
+            }
+        }
+        upcoming = {"meta": {"week_start": "2026-09-28", "week_end": "2026-10-04"}}
+        later = {
+            "id": "meso-later",
+            "start_date": "2026-09-28",
+            "end_date": "2026-10-25",
+        }
+        target, active_replan = resolve_planning_target(
+            plan, upcoming, later, date(2026, 9, 21)
+        )
+        self.assertEqual(target, date(2026, 9, 21))
+        self.assertTrue(active_replan)
+
+    def test_completed_block_may_hand_authority_to_next_mesocycle(self):
+        plan = {
+            "meta": {
+                "week_start": "2026-09-21",
+                "week_end": "2026-09-27",
+                "mesocycle_id": "meso-live",
+                "microcycle_index": 4,
+                "microcycle_total": 4,
+                "requires_mesocycle_review": False,
+            }
+        }
+        upcoming = {"meta": {"week_start": "2026-09-28", "week_end": "2026-10-04"}}
+        later = {
+            "id": "meso-later",
+            "start_date": "2026-09-28",
+            "end_date": "2026-10-25",
+        }
+        target, active_replan = resolve_planning_target(
+            plan, upcoming, later, date(2026, 9, 21)
+        )
+        self.assertEqual(target, date(2026, 9, 28))
+        self.assertFalse(active_replan)
 
     def test_fixed_policy_contains_no_current_mesocycle(self):
         self.assertNotIn("current_mesocycle", self.policy)
