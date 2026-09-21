@@ -102,6 +102,22 @@ class RenderPipelineTests(unittest.TestCase):
         self.assertTrue(all(check is True for _, check, _ in calls))
         self.assertTrue(all(cwd == REPO_ROOT for _, _, cwd in calls))
 
+    def test_pages_deploy_defers_stale_goal_state_without_failure(self):
+        workflow = (REPO_ROOT / ".github" / "workflows" / "deploy-pages.yml").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("Check generated planning freshness", workflow)
+        self.assertIn("planning_goal_hash", workflow)
+        self.assertIn("Deployment deferred", workflow)
+        self.assertIn(
+            "if: steps.planning_freshness.outputs.stale != 'true'",
+            workflow,
+        )
+        self.assertIn(
+            "if: steps.planning_freshness.outputs.stale == 'true'",
+            workflow,
+        )
+
     def test_pages_deploy_builds_and_validates_before_upload(self):
         workflow = (REPO_ROOT / ".github" / "workflows" / "deploy-pages.yml").read_text(
             encoding="utf-8"
