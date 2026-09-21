@@ -363,6 +363,56 @@ def _strength_prescription(day: dict, option: dict, document: dict) -> dict:
     }
 
 
+def _swim_strength_prescription(day: dict, option: dict, document: dict) -> dict:
+    """Materialize a combined day as two explicit components.
+
+    The swim component comes only from a verified structured watch workout
+    attached by rollover_week. Strength keeps the existing qualitative template
+    and remains partial until sets/reps/load are explicitly encoded.
+    """
+    workout = day.get("watch_workout") or {}
+    planned_distance = workout.get("planned_distance_m")
+    swim_option = {
+        "id": "composite-swim",
+        "kind": "structured",
+        "value": planned_distance,
+        "session": f"Simning · {planned_distance} m" if planned_distance else "Simning",
+        "intent": "Verifierad simkomponent i kombinerad stödexponering.",
+    }
+    swim = _swim_prescription(day, swim_option)
+    strength = _strength_prescription(day, option, document)
+
+    blocks = []
+    for block in swim.get("blocks") or []:
+        copied = copy.deepcopy(block)
+        copied["component"] = "swim"
+        blocks.append(copied)
+    for block in strength.get("blocks") or []:
+        copied = copy.deepcopy(block)
+        copied["component"] = "strength"
+        blocks.append(copied)
+
+    missing = list(swim.get("missing") or []) + list(strength.get("missing") or [])
+    return {
+        "executable": swim.get("executable") is True and strength.get("executable") is True,
+        "completeness": "full" if not missing and swim.get("completeness") == "full" and strength.get("completeness") == "full" else "partial",
+        "blocks": blocks,
+        "missing": missing,
+        "components": {
+            "swim": {
+                "executable": swim.get("executable"),
+                "completeness": swim.get("completeness"),
+                "planned_distance_m": planned_distance,
+            },
+            "strength": {
+                "executable": strength.get("executable"),
+                "completeness": strength.get("completeness"),
+            },
+        },
+        "source": "composite_verified_swim_plus_strength_template",
+    }
+
+
 def _external_prescription(day: dict) -> dict:
     return {
         "executable": True,
@@ -382,6 +432,12 @@ def _external_prescription(day: dict) -> dict:
 def _prescription(day: dict, option: dict, document: dict) -> dict:
     if day.get("manual_lock") is True or day.get("classification") == "recreation":
         return _external_prescription(day)
+    stimuli = set(day.get("stimuli") or [])
+    if (
+        day.get("sport") == "strength"
+        and {"swim_aerobic", "strength_core"}.issubset(stimuli)
+    ):
+        return _swim_strength_prescription(day, option, document)
     sport = day.get("sport")
     if sport == "swim":
         return _swim_prescription(day, option)
