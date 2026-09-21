@@ -4,7 +4,7 @@
       "activity_id": 20254486837,
       "activity_date": "2026-09-20",
       "activity_name": "Löpning vid lunch",
-      "generated_at_utc": "2026-09-21T07:57:51.767676+00:00",
+      "generated_at_utc": "2026-09-21T08:02:26.263213+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 3,
@@ -16,19 +16,19 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "22.46 km lunchpass genomfört på 5:15/km snitt med stigande fart mot slutet; passet visar god kapacitet för längre löppass idag.",
-        "load_interpretation": "Passet var långt (22.5 km, 2h≈) (avg 138.9) och flera snabbare 1km-intervaller mot slutet — ökad närbelastning för löpning i de senaste dagarna.",
+        "summary": "22.46 km löpning på 7 074 s med stabil km-fördelning och stig/elev 267 m; passet genomfördes fullständigt utan användarrapport om problem.",
+        "load_interpretation": "Stort volympass i närbelastningsfönstret — beakta tidigare 3×8 backintervaller (18/9) och sim 4 000 m (19/9) vid beslut för nästa 48–72 h.",
         "confidence": "medium",
         "facts": [
           "Löpning: 22,46 km · 1:59:46 · 267 m+ · snittpuls 138,9 · maxpuls 158."
         ],
         "interpretations": [
-          "Ett enstaka långt, kontrollerat löppass visar att denna arbetsvolym tolererades idag och stärker förmåga att genomföra längre löppass.",
-          "Flera snabba kilometer i avslutningen indikerar kvarvarande kapacitet/finish-fart men ökar mekanisk och kardiovaskulär närbelastning inför kommande nyckelpass."
+          "Ett långt, genomfört löppass visar att dagens tid/volym tolererades men etablerar inte ensam ökad kapacitet för planerade tröskel- eller backpass.",
+          "Påverkan på kommande 2–3 dagar är materiell: tidigare 3×8 backar + sim + detta långpass ökar kumulativ belastning och riskerar att störa morgondagens planerade tröskel (4×8) om inget…"
         ],
         "unknowns": [
-          "Subjektiv återhämtning natt/timme efter passet (användarrapport tom)",
-          "Kommande fasta åtaganden eller smärta som kan påverka planen"
+          "Subjektiv återhämtning/nap/ätintag efter passet (användarrapport tom)",
+          "Specifik planerad intensitet för kommande pass ska jämföras mot faktisk trötthet morgon 22/09"
         ]
       },
       "plan_action": {
@@ -1237,8 +1237,8 @@
       }
     }
   ],
-  "last_trigger_hash": "dc2260517368e33de99361c295feb061aaace1d4e989dcbfd363b9f7cfec239e",
-  "last_run_utc": "2026-09-21T07:57:51.767676+00:00",
+  "last_trigger_hash": "88909d9bb8b2da1c2434d3c67d2bcc5dcc034ca17e7b4dbfb157a1f2a78c52cc",
+  "last_run_utc": "2026-09-21T08:02:26.263213+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 3
