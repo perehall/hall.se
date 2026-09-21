@@ -40,6 +40,17 @@ class TrainingWorkflowWriterTests(unittest.TestCase):
         self.assertIn("gh workflow run update-training.yml --ref main", update)
         self.assertIn("git push origin HEAD:main", update)
 
+    def test_planning_authority_changes_trigger_canonical_replan(self):
+        workflow = self.workflow_text()
+        for path in (
+            'träning/data/goal.json',
+            'träning/data/planning_policy.json',
+            'träning/data/workout_catalog.json',
+            'träning/scripts/adaptive_planner.py',
+            'träning/scripts/race_contracts.py',
+        ):
+            self.assertIn(path, workflow)
+
     def test_generated_training_commit_dispatches_pages_explicitly(self):
         workflow = self.workflow_text()
 
