@@ -236,10 +236,88 @@
           "kind": "structured",
           "value": 3200,
           "session": "Simning · 3 200 m · aerob/teknik",
-          "intent": "Kortare etablerad simexponering."
+          "intent": "Kortare etablerad simexponering.",
+          "watch_workout": {
+            "type": "Swim",
+            "equipment": [],
+            "name": "Aerob/teknik · kroppslinje och rotation · 3 200 m",
+            "planned_distance_m": 3200,
+            "blocks": [
+              {
+                "name": "Insim",
+                "steps": [
+                  {
+                    "kind": "swim",
+                    "text": "Lugn insim",
+                    "distance_m": 400,
+                    "intensity": "warmup"
+                  }
+                ]
+              },
+              {
+                "name": "Kroppslinje och rotation",
+                "repeat": 6,
+                "steps": [
+                  {
+                    "kind": "swim",
+                    "text": "Stabil linje, kontrollerad rotation",
+                    "distance_m": 50,
+                    "intensity": "active"
+                  },
+                  {
+                    "kind": "rest",
+                    "duration_s": 15
+                  }
+                ]
+              },
+              {
+                "name": "Aerob",
+                "repeat": 4,
+                "steps": [
+                  {
+                    "kind": "swim",
+                    "text": "Stadigt aerob med stabil kroppslinje",
+                    "distance_m": 500,
+                    "intensity": "active"
+                  },
+                  {
+                    "kind": "rest",
+                    "duration_s": 30
+                  }
+                ]
+              },
+              {
+                "name": "Frekvens",
+                "repeat": 6,
+                "steps": [
+                  {
+                    "kind": "swim",
+                    "text": "Avslappnad frekvens med bibehållen linje",
+                    "distance_m": 50,
+                    "intensity": "active"
+                  },
+                  {
+                    "kind": "rest",
+                    "duration_s": 15
+                  }
+                ]
+              },
+              {
+                "name": "Nedvarvning",
+                "steps": [
+                  {
+                    "kind": "swim",
+                    "text": "Mycket lugnt",
+                    "distance_m": 200,
+                    "intensity": "cooldown"
+                  }
+                ]
+              }
+            ]
+          }
         }
       ],
-      "catalog_note": "Katalogen innehåller tills vidare bara den fullt strukturerade 3 200 m-dosen. Längre simning får inte väljas förrän motsvarande körbara watch-block finns materialiserade; faktisk 4 000 m-historik ligger kvar i athlete_state som kapacitetsfakta."
+      "catalog_note": "Fullt exekverbart lågmekaniskt aerob/teknik-recept. Garmin/Intervals-transporten lägger automatiskt Press LAP-setvila mellan huvudblocken."
     },
     "strength_core": {
       "sport": "strength",
@@ -324,6 +402,112 @@
           "intent": "Utökad styrkeexponering när omgivande belastning stödjer den."
         }
       ]
+    },
+    "swim_aerobic_threshold": {
+      "sport": "swim",
+      "stimuli": [
+        "swim_aerobic",
+        "swim_threshold",
+        "swim_technique"
+      ],
+      "priority_role": "flex",
+      "load_dimensions": [
+        "cardiovascular",
+        "technical"
+      ],
+      "development_focus": "Bibehåll teknisk kvalitet genom ett längre aerobt pass med en avgränsad, kontrollerad tröskeldel; tröskeldelen ska inte bli maximal.",
+      "options": [
+        {
+          "id": "swim-aerobic-threshold-4000",
+          "kind": "structured",
+          "value": 4000,
+          "session": "Simning · 4 000 m · aerob + kontrollerad tröskel",
+          "intent": "Användarens etablerade 4 000 m-mall: aerob bas med 4 × 200 m kontrollerad tröskel med paddlar + dolme. Detta är ett separat kvalitetsrecept, inte en automatisk volymprogression från 3 200 m.",
+          "source_evidence": "Explicit användarmall och genomförd 4 000 m aerob+tröskel-simning.",
+          "watch_workout": {
+            "type": "Swim",
+            "equipment": [
+              "paddles",
+              "pull_buoy"
+            ],
+            "name": "Aerob + kontrollerad tröskel · 4 000 m",
+            "planned_distance_m": 4000,
+            "blocks": [
+              {
+                "name": "Insim + teknik",
+                "steps": [
+                  {
+                    "kind": "swim",
+                    "text": "Insim + teknik enligt etablerad rutin",
+                    "distance_m": 600,
+                    "intensity": "warmup"
+                  }
+                ]
+              },
+              {
+                "name": "Aerob 1",
+                "repeat": 6,
+                "steps": [
+                  {
+                    "kind": "swim",
+                    "text": "Aerobt, stabil teknik",
+                    "distance_m": 200,
+                    "intensity": "active"
+                  },
+                  {
+                    "kind": "rest",
+                    "duration_s": 20
+                  }
+                ]
+              },
+              {
+                "name": "Kontrollerad tröskel",
+                "repeat": 4,
+                "steps": [
+                  {
+                    "kind": "swim",
+                    "text": "Kontrollerad tröskel med paddlar + dolme",
+                    "distance_m": 200,
+                    "intensity": "active"
+                  },
+                  {
+                    "kind": "rest",
+                    "duration_s": 25
+                  }
+                ]
+              },
+              {
+                "name": "Aerob 2",
+                "repeat": 6,
+                "steps": [
+                  {
+                    "kind": "swim",
+                    "text": "Aerobt, återgå till stabil rytm och teknik",
+                    "distance_m": 200,
+                    "intensity": "active"
+                  },
+                  {
+                    "kind": "rest",
+                    "duration_s": 20
+                  }
+                ]
+              },
+              {
+                "name": "Avsim",
+                "steps": [
+                  {
+                    "kind": "swim",
+                    "text": "Mycket lugnt avsim",
+                    "distance_m": 200,
+                    "intensity": "cooldown"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "catalog_note": "Separat etablerat kvalitetsrecept. Det får väljas när mikrocykeln behöver swim_threshold; det ska inte behandlas som nästa linjära distanssteg från swim_aerobic_technique. Garmin/Intervals-transporten lägger Press LAP-setvila mellan huvudblocken."
     }
   }
 }
