@@ -1,47 +1,9 @@
 {
   "schema_version": 1,
-  "purpose": "Fast planeringspolicy. Innehåller mål-/säkerhets-/kapacitetsregler men ingen aktuell mesocykel, mikrocykel eller färdig träningsvecka.",
+  "purpose": "Fast planeringspolicy. Innehåller säkerhets-, kapacitets- och beslutsregler men ingen aktuell målbild, mesocykel, mikrocykel eller färdig träningsvecka.",
   "compatibility_strategy_schema_version": 5,
   "strategy_base": {
     "schema_version": 5,
-    "north_star": "Bygga en bred, hållbar allroundatlet med stark löpning, teknisk MTB/XC och bibehållen eller förbättrad simning. Relevant styrka, core, löpstyrka och plyometri. Flexibilitet att senare vässa mot trail/ultra, triathlon, swimrun eller cykling.",
-    "goal_contract": {
-      "source_file": "data/goal.json",
-      "source_schema_version": 2,
-      "goal_hash": "1162c643157c11ee354e73acb1cf94254611e8e8a7fd64d2c11d5140ef954569",
-      "goal_change_requires_mesocycle_review": true,
-      "principle": "Målbilden är kanonisk. Om den ändras måste aktuell mesocykel omprövas innan systemet fortsätter."
-    },
-    "current_priorities": [
-      {
-        "key": "run",
-        "label": "Löpning",
-        "mode": "develop",
-        "priority": 1,
-        "intent": "Utveckla fart, kontrollerad tröskel, löpekonomi och hållbar distanskapacitet."
-      },
-      {
-        "key": "mtb",
-        "label": "MTB/XC",
-        "mode": "develop",
-        "priority": 2,
-        "intent": "Utveckla teknisk fart, flyt på stig och cykelspecifik aerob kapacitet."
-      },
-      {
-        "key": "strength",
-        "label": "Styrka / core / plyo",
-        "mode": "develop",
-        "priority": 3,
-        "intent": "Bygg relevant unilateral benstyrka, höftstyrka, bålkapacitet och försiktig plyometrisk exponering."
-      },
-      {
-        "key": "swim",
-        "label": "Simning",
-        "mode": "maintain_develop",
-        "priority": 4,
-        "intent": "Bibehåll stark simkapacitet och utveckla teknik med normalt två simexponeringar per mikrocykel när de är absorberbara, utan att konkurrera onödigt med prioriterad löp- och MTB-belastning."
-      }
-    ],
     "capability_portfolio": [
       {
         "key": "run_threshold",
