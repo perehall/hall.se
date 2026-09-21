@@ -204,12 +204,18 @@
         "source": "athlete_state",
         "microcycle_plan": [
           {
-            "microcycle": 1,
+            "microcycle": 2,
             "option_id": "run-threshold-4x8",
             "relation": "hold",
             "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt."
           }
         ]
+      },
+      "development_step": {
+        "microcycle": 2,
+        "option_id": "run-threshold-4x8",
+        "relation": "hold",
+        "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt."
       },
       "baseline_option_id": "run-threshold-4x8",
       "dose_open": false,
@@ -239,8 +245,8 @@
           "selection_uses_only_preapproved_doses": true
         },
         "progression_from_previous": {
-          "relation": "support",
-          "reason": "Alternativ struktur med något större total arbetstid; används bara när faktisk historik stödjer den.",
+          "relation": "hold",
+          "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
           "demonstrated_floor_option_id": "run-threshold-4x8"
         },
         "candidates": [
@@ -323,11 +329,11 @@
               "source": "structured_session"
             },
             "score": {
-              "total": 70,
+              "total": 59,
               "breakdown": {
                 "mesocycle_alignment": 30,
                 "microcycle_alignment": 10,
-                "progression_alignment": 15,
+                "progression_alignment": 4,
                 "prescription_specificity": 15,
                 "near_term_resolution": 0
               },
@@ -368,11 +374,11 @@
               "source": "structured_session"
             },
             "score": {
-              "total": 70,
+              "total": 59,
               "breakdown": {
                 "mesocycle_alignment": 30,
                 "microcycle_alignment": 10,
-                "progression_alignment": 15,
+                "progression_alignment": 4,
                 "prescription_specificity": 15,
                 "near_term_resolution": 0
               },
@@ -384,7 +390,7 @@
         "selection": {
           "method": "deterministic_constraint_scoring",
           "preferred_dose_option_id": "run-threshold-4x8",
-          "reason_for_today": "Alternativ struktur med något större total arbetstid; används bara när faktisk historik stödjer den."
+          "reason_for_today": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt."
         }
       },
       "device_workout": {
@@ -681,7 +687,6 @@
         }
       },
       "activity_id": 20106458579,
-      "planning_status": "preliminary",
       "device_workout": {
         "schema_version": 1,
         "external_id": "hall-device:2026-09-30:swim:swim_aerobic_technique_2",
@@ -814,7 +819,8 @@
         "transport": "intervals_icu",
         "source_hash": "d02ab3f5e6bf2781cbef5590f428e44628dcc63439a8b47cd873677a521fec3b",
         "device_delivery": "unverified"
-      }
+      },
+      "planning_status": "preliminary"
     },
     {
       "date": "2026-10-01",
@@ -878,12 +884,18 @@
         "source": "athlete_state",
         "microcycle_plan": [
           {
-            "microcycle": 1,
+            "microcycle": 2,
             "option_id": "mtb-tech-90",
             "relation": "hold",
             "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt."
           }
         ]
+      },
+      "development_step": {
+        "microcycle": 2,
+        "option_id": "mtb-tech-90",
+        "relation": "hold",
+        "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt."
       },
       "baseline_option_id": "mtb-tech-90",
       "dose_open": false,
@@ -915,8 +927,8 @@
           "selection_uses_only_preapproved_doses": true
         },
         "progression_from_previous": {
-          "relation": "support",
-          "reason": "Längre teknisk/aerob exponering med krav på marginal till löpkvalitet.",
+          "relation": "hold",
+          "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
           "demonstrated_floor_option_id": "mtb-tech-90"
         },
         "candidates": [
@@ -989,11 +1001,11 @@
               "source": "duration_session"
             },
             "score": {
-              "total": 70,
+              "total": 59,
               "breakdown": {
                 "mesocycle_alignment": 30,
                 "microcycle_alignment": 10,
-                "progression_alignment": 15,
+                "progression_alignment": 4,
                 "prescription_specificity": 15,
                 "near_term_resolution": 0
               },
@@ -1029,11 +1041,11 @@
               "source": "duration_session"
             },
             "score": {
-              "total": 70,
+              "total": 59,
               "breakdown": {
                 "mesocycle_alignment": 30,
                 "microcycle_alignment": 10,
-                "progression_alignment": 15,
+                "progression_alignment": 4,
                 "prescription_specificity": 15,
                 "near_term_resolution": 0
               },
@@ -1069,11 +1081,11 @@
               "source": "duration_session"
             },
             "score": {
-              "total": 70,
+              "total": 59,
               "breakdown": {
                 "mesocycle_alignment": 30,
                 "microcycle_alignment": 10,
-                "progression_alignment": 15,
+                "progression_alignment": 4,
                 "prescription_specificity": 15,
                 "near_term_resolution": 0
               },
@@ -1085,7 +1097,7 @@
         "selection": {
           "method": "deterministic_constraint_scoring",
           "preferred_dose_option_id": "mtb-tech-90",
-          "reason_for_today": "Längre teknisk/aerob exponering med krav på marginal till löpkvalitet."
+          "reason_for_today": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt."
         }
       },
       "device_workout": {
@@ -2328,12 +2340,18 @@
         "source": "athlete_state",
         "microcycle_plan": [
           {
-            "microcycle": 1,
+            "microcycle": 2,
             "option_id": "run-easy-120",
             "relation": "hold",
             "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt."
           }
         ]
+      },
+      "development_step": {
+        "microcycle": 2,
+        "option_id": "run-easy-120",
+        "relation": "hold",
+        "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt."
       },
       "baseline_option_id": "run-easy-120",
       "dose_open": false,
@@ -2363,8 +2381,8 @@
           "selection_uses_only_preapproved_doses": true
         },
         "progression_from_previous": {
-          "relation": "support",
-          "reason": "Lång distansdos som kräver stöd i faktisk tålighet och närbelastning.",
+          "relation": "hold",
+          "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
           "demonstrated_floor_option_id": "run-easy-120"
         },
         "candidates": [
@@ -2435,11 +2453,11 @@
               "source": "duration_session"
             },
             "score": {
-              "total": 70,
+              "total": 59,
               "breakdown": {
                 "mesocycle_alignment": 30,
                 "microcycle_alignment": 10,
-                "progression_alignment": 15,
+                "progression_alignment": 4,
                 "prescription_specificity": 15,
                 "near_term_resolution": 0
               },
@@ -2474,11 +2492,11 @@
               "source": "duration_session"
             },
             "score": {
-              "total": 70,
+              "total": 59,
               "breakdown": {
                 "mesocycle_alignment": 30,
                 "microcycle_alignment": 10,
-                "progression_alignment": 15,
+                "progression_alignment": 4,
                 "prescription_specificity": 15,
                 "near_term_resolution": 0
               },
@@ -2513,11 +2531,11 @@
               "source": "duration_session"
             },
             "score": {
-              "total": 70,
+              "total": 59,
               "breakdown": {
                 "mesocycle_alignment": 30,
                 "microcycle_alignment": 10,
-                "progression_alignment": 15,
+                "progression_alignment": 4,
                 "prescription_specificity": 15,
                 "near_term_resolution": 0
               },
@@ -2529,7 +2547,7 @@
         "selection": {
           "method": "deterministic_constraint_scoring",
           "preferred_dose_option_id": "run-easy-120",
-          "reason_for_today": "Lång distansdos som kräver stöd i faktisk tålighet och närbelastning."
+          "reason_for_today": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt."
         }
       },
       "device_workout": {

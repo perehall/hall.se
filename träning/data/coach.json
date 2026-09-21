@@ -4,7 +4,7 @@
       "activity_id": 20254486837,
       "activity_date": "2026-09-20",
       "activity_name": "Löpning vid lunch",
-      "generated_at_utc": "2026-09-21T07:24:38.268235+00:00",
+      "generated_at_utc": "2026-09-21T07:54:35.315859+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 3,
@@ -16,26 +16,26 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "22.46 km löpning på 7 074 s med stabilt tempo och stigande intensitet mot slutet, genomfört utan användarrapport om känsla.",
-        "load_interpretation": "Passet ger betydande närbelastning de senaste 2–3 dagarna (flera långa löppass + simning); behåll konservativ planhantering de närmaste dagarna.",
+        "summary": "22.5 km löppass genomfört med stabilt tempo (5:15/km) och stigande intensitet mot slutet; inga subjektiva rapporter inskickade.",
+        "load_interpretation": "Passet ger närbelastningen senaste 24–72 h: långt distanspass (22.46 km, 7 074 s) med flera snabba kilometer mot slutet som ökar både kardiovaskulär och mekanisk…",
         "confidence": "medium",
         "facts": [
           "Löpning: 22,46 km · 1:59:46 · 267 m+ · snittpuls 138,9 · maxpuls 158."
         ],
         "interpretations": [
-          "Genomfört långt löppass visar att aktuell löpvolym tolererades idag men sista delen innehöll högre intensitet vilket ökar mekanisk/kardiovaskulär närbelastning.",
-          "Eftersom mesocykel och mikrocykel prioriterar kontrollerad tröskel och skyddad sim/styrka bör nästa sessions dos bara ändras konservativt baserat på fler observationer eller subjektiv…"
+          "Genomfört långt pass visar god tolerans för längre löptid idag men slutet innehöll högre intensitet vilket ökar återhämtningsbehovet nästa 48–72 timmar.",
+          "Eftersom användarrapport saknas måste vi väga detta mot mikrocykelns mål: planerad tröskel (tisdag) och MTB/XC (torsdag) bör skyddas men justeras om trötthet syns."
         ],
         "unknowns": [
-          "Användarrapport saknas för detta pass (subjektiv återhämtning/känsla).",
-          "Ingen explicit plan jämförelse för dagens pass i jämförelsen med planen (planerat träningsinnehåll=false) som påverkar dosval."
+          "Subjektiv trötthet/ömhet efter passet (användarrapport saknas)",
+          "Kommande aktivitetsutförande (enduro-planerad måndag nästa vecka påverkar ej de närmaste 2–3 dagarna)"
         ]
       },
       "plan_action": {
-        "action": "keep",
+        "action": "review",
         "target_date": "",
-        "reason": "Inget i nuvarande faktaunderlag motiverar konservativ ändring av planen de närmaste 2–3 dagarna.",
-        "recommendation": "Följ nästa planerade pass som är markerat (ingen automatisk reduktion). Rapportera hur du känner dig morgonen efter och före nästa pass; om trötthet, lokal muskelömhet eller ovanlig trötthet: be om reduktionsförslag.",
+        "reason": "Senaste passets längd och intensitetsökning i slutet kan påverka tisdagens kontrollerade tröskel och övrig mikrocykel; saknas subjektiv rapport för säker automatisk beslut.",
+        "recommendation": "Rapportera hur du känner dig idag och imorgon (trötthet/ömhet/återhämtningsunderlaget). Behåll planen tills jag fått din status; om du känner ovanlig trötthet eller benömhet: vila eller gör mycket lätt återhämtningsjogg istället för tröskel på tisdag.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -1237,8 +1237,8 @@
       }
     }
   ],
-  "last_trigger_hash": "d064263f74222627bb57ba3f068d947841e28d19bc28e0a68a0c7505bb16514a",
-  "last_run_utc": "2026-09-21T07:24:38.268235+00:00",
+  "last_trigger_hash": "eacb3595bb464d153d29d74d3c7d5a5be15d4c8f96813ee8ea4398b1902b047f",
+  "last_run_utc": "2026-09-21T07:54:35.315859+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 3
