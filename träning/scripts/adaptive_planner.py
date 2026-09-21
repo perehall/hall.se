@@ -54,6 +54,7 @@ CAPABILITY_TO_RECIPE = {
     "mtb_aerobic": "mtb_technical",
     "swim_aerobic": "swim_aerobic_technique",
     "swim_technique": "swim_aerobic_technique",
+    "swim_threshold": "swim_aerobic_threshold",
     "strength_unilateral": "swim_strength",
     "strength_core": "swim_strength",
     "plyometric": "swim_strength",
@@ -87,6 +88,7 @@ PRIMARY_CAPABILITIES_WITH_EXECUTABLE_RECIPES = {
     "mtb_aerobic",
     "swim_aerobic",
     "swim_technique",
+    "swim_threshold",
 }
 SUPPORT_ONLY_RECIPES = {"swim_strength"}
 
@@ -1179,7 +1181,7 @@ def materialize_template(meso, micro, policy, catalog, athlete_state):
 
 DISCIPLINE_CAPABILITIES = {
     "run": {"run_threshold", "run_hill_quality", "run_easy_distance"},
-    "swim": {"swim_aerobic", "swim_technique"},
+    "swim": {"swim_aerobic", "swim_technique", "swim_threshold"},
     "mtb": {"mtb_technical", "mtb_aerobic"},
     "strength": {"strength_unilateral", "strength_core", "plyometric"},
 }
@@ -1470,8 +1472,13 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
         "microcycle_policy": policy.get("microcycle_policy"),
         "decision_guards": policy.get("decision_guards"),
         "athlete_state": sanitize_athlete_state(athlete_state),
-        "recipe_capabilities": {
-            key: sorted(recipe_capabilities(value))
+        "recipe_profiles": {
+            key: {
+                "stimuli": sorted(recipe_capabilities(value)),
+                "load_dimensions": list(value.get("load_dimensions") or []),
+                "development_focus": value.get("development_focus"),
+                "option_ids": [item.get("id") for item in (value.get("options") or [])],
+            }
             for key, value in catalog["recipes"].items()
         },
         "fixed_enduro_day_1": is_enduro_school_date(target_start),
