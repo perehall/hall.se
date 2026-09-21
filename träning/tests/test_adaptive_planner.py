@@ -715,6 +715,70 @@ class AdaptivePlanningTests(unittest.TestCase):
         self.assertIn("swim_aerobic_technique", recipes)
         self.assertIn("swim_strength", recipes)
 
+    def test_completed_strength_satisfies_strategy_protection_without_future_strength_slot(self):
+        meso = {
+            "id": "completed-strength-test",
+            "title": "test",
+            "start_date": "2026-09-21",
+            "end_date": "2026-10-18",
+            "evaluation_date": "2026-10-19",
+            "goal_contribution": "test",
+            "hypothesis": "test",
+            "primary_capabilities": ["swim_aerobic", "swim_technique", "run_threshold"],
+            "secondary_capabilities": ["run_easy_distance"],
+            "success_signals": ["test"],
+            "guardrails": ["test"],
+            "source": "deterministic_test",
+            "source_hash": "a" * 64,
+        }
+        micro = fallback_microcycle(
+            meso,
+            self.policy,
+            self.catalog,
+            date(2026, 9, 21),
+            completed_context={"strength_exposures": 1, "swim_exposures": 0, "enduro_exposures": 1},
+        )
+        micro.update(
+            {
+                "schema_version": 1,
+                "planner_revision": MICRO_PLANNER_REVISION,
+                "source": "deterministic_test",
+                "source_hash": "b" * 64,
+                "generated_at_utc": "2026-09-21T21:00:00+00:00",
+                "week_start": "2026-09-21",
+                "week_key": "2026-W39",
+                "mesocycle_id": meso["id"],
+                "completed_microcycle_context": {
+                    "strength_exposures": 1,
+                    "swim_exposures": 0,
+                    "enduro_exposures": 1,
+                    "activity_refs": ["20271537143", "20272196080"],
+                    "evidence_note": "fact",
+                },
+            }
+        )
+        athlete = {
+            "capability_facts": {
+                "run_threshold": {"evidence": [{"work_minutes": 32.0}]},
+                "run_easy_distance": {"longest_duration": {"elapsed_time_s": 7186}},
+                "swim_aerobic": {"longest_distance": {"distance_m": 4000}},
+                "strength_unilateral": {"longest_duration": {"elapsed_time_s": 2014}},
+            }
+        }
+        strategy = materialize_strategy(
+            self.goal, self.policy, meso, micro, self.catalog, athlete
+        )
+        validate_training_strategy(strategy)
+        protection = strategy["current_mesocycle"]["capacity_protection"]
+        self.assertIn("strength_unilateral", protection["completed_current_microcycle"])
+        self.assertIn("strength_core", protection["completed_current_microcycle"])
+        self.assertFalse(
+            any(
+                "strength_core" in slot["stimuli"]
+                for slot in strategy["current_mesocycle"]["microcycle_template"]
+            )
+        )
+
     def test_generated_strategy_is_contract_valid_and_traceable(self):
         meso = fallback_mesocycle(self.goal, self.policy, {})
         meso.update(
