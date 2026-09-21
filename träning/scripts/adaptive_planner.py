@@ -19,6 +19,7 @@ from copy import deepcopy
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
+from goal_contracts import planning_goal_hash
 from rollover_week import (
     build_mesocycle_next_week,
     is_enduro_school_date,
@@ -107,11 +108,7 @@ def canonical_hash(payload) -> str:
 
 
 def goal_hash(goal) -> str:
-    # Must match validate_training_data.py: the canonical north-star string is
-    # the goal contract. Status labels/phases may change without silently
-    # redefining the long-term goal hash.
-    canonical_goal = str(goal.get("goal") or "").strip()
-    return hashlib.sha256(canonical_goal.encode("utf-8")).hexdigest()
+    return planning_goal_hash(goal)
 
 
 def sanitize_athlete_state(state):
@@ -396,22 +393,34 @@ def previous_mesocycle(strategy):
 def fallback_mesocycle(goal, policy, previous):
     primary = []
     refs = []
+
+    active_swimrun_goal = next(
+        (
+            item for item in (goal.get("performance_goals") or [])
+            if item.get("status") == "active"
+            and str(item.get("sport") or "").lower() == "swimrun"
+        ),
+        None,
+    )
+    if active_swimrun_goal:
+        primary.extend(["run_threshold", "swim_aerobic", "run_easy_distance"])
+        refs.append(f"goal.performance_goals[{active_swimrun_goal.get('id')}]")
+
     for index, text in enumerate(goal.get("next_steps") or []):
         lower = str(text).lower()
         candidate = None
         if "trösk" in lower:
             candidate = "run_threshold"
+        elif "sim" in lower or "swim" in lower:
+            candidate = "swim_aerobic"
         elif "mtb" in lower or "xc" in lower:
             candidate = "mtb_technical"
         elif "distans" in lower and "löp" in lower:
             candidate = "run_easy_distance"
-        # "Håll simningen frekvent och teknisk" is a protection/maintenance
-        # instruction in the current goal, not by itself evidence that swimming
-        # should displace a development focus in the next mesocycle.
-        if candidate and candidate not in primary:
+        if candidate and candidate not in primary and len(primary) < 3:
             primary.append(candidate)
             refs.append(f"goal.next_steps[{index}]")
-        if len(primary) == 3:
+        if len(primary) >= 3:
             break
     if "run_easy_distance" not in primary and len(primary) < 3:
         primary.append("run_easy_distance")
@@ -440,8 +449,8 @@ def fallback_mesocycle(goal, policy, previous):
         ),
         "duration_weeks": 4,
         "goal_contribution": (
-            "Föra målbilden framåt genom att utveckla de prioriterade kapaciteterna "
-            "utan att låsa träningen mot ett enskilt lopp och samtidigt skydda simning och styrka/core."
+            "Föra den kanoniska målbilden och dess aktiva prestationsmål framåt genom att utveckla "
+            "få tydliga kapaciteter samtidigt som övrig långsiktig allroundkapacitet skyddas."
         ),
         "hypothesis": (
             "Ett block med få tydliga utvecklingsområden och bibehållen bredd ger bättre möjlighet "
@@ -484,8 +493,10 @@ def generate_mesocycle(goal, policy, athlete_state, previous, target_start, *, r
             "mesocycle_policy": policy.get("mesocycle_policy"),
             "microcycle_policy": policy.get("microcycle_policy"),
             "decision_guards": policy.get("decision_guards"),
-            "capability_portfolio": policy["strategy_base"].get("capability_portfolio"),
-            "current_priorities": policy["strategy_base"].get("current_priorities"),
+            "available_capabilities": [
+                {"key": item.get("key"), "label": item.get("label")}
+                for item in (policy["strategy_base"].get("capability_portfolio") or [])
+            ],
         },
         "athlete_state": sanitize_athlete_state(athlete_state),
         "previous_mesocycle": previous,
@@ -495,7 +506,8 @@ def generate_mesocycle(goal, policy, athlete_state, previous, target_start, *, r
     system = (
         "Du är mesocykelplaneraren i ett uthållighets-/allroundsystem. "
         "Välj vad som ska utvecklas nu; skriv inte en veckoplan och ordinera inte exakta pass. "
-        "Utgå endast från målbild, athlete_state och policy i underlaget. Föregående veckomall är inte evidens i sig. "
+        "Målbildens aktiva performance_goals är överordnade planeringsmål och ska påverka specificitet över tid utan att du antar ett okänt tävlingsdatum. "
+        "Utgå endast från målbild, athlete_state och policy i underlaget. Föregående veckomall eller gamla prioriteringslistor är inte evidens i sig. "
         "Skilj observerade fakta från tolkning. Saknas stöd, välj konservativt och skriv osäkerheten. "
         "Kontinuitet, absorberbar belastning och kontrollerad kvalitet går före maximal träningsmängd. "
         "Enduro är faktisk belastning. Wellness får aldrig ensam motivera progression. "
@@ -1145,11 +1157,104 @@ def materialize_template(meso, micro, policy, catalog, athlete_state):
     return template, contract
 
 
+DISCIPLINE_CAPABILITIES = {
+    "run": {"run_threshold", "run_hill_quality", "run_easy_distance"},
+    "swim": {"swim_aerobic", "swim_technique"},
+    "mtb": {"mtb_technical", "mtb_aerobic"},
+    "strength": {"strength_unilateral", "strength_core", "plyometric"},
+}
+
+DISCIPLINE_LABELS = {
+    "run": "Löpning",
+    "swim": "Simning",
+    "mtb": "MTB/XC",
+    "strength": "Styrka / core / plyo",
+}
+
+
+def generated_current_priorities(meso):
+    primary = set(meso.get("primary_capabilities") or [])
+    secondary = set(meso.get("secondary_capabilities") or [])
+    rows = []
+    for key, caps in DISCIPLINE_CAPABILITIES.items():
+        if caps.intersection(primary):
+            rank = 0
+            mode = "develop"
+            intent = "Primärt utvecklingsområde i aktuell genererad mesocykel."
+        elif caps.intersection(secondary):
+            rank = 1
+            mode = "maintain_develop"
+            intent = "Sekundärt utvecklingsområde som stödjer aktuell mesocykel."
+        elif key in {"swim", "strength"}:
+            rank = 2
+            mode = "maintain_develop"
+            intent = "Skyddad kapacitet som ska finnas kvar utan att tränga undan mesocykelns primära stimuli."
+        else:
+            rank = 3
+            mode = "supporting"
+            intent = "Stödjande kapacitet; får plats när den är absorberbar och förenlig med målbilden."
+        rows.append((rank, key, mode, intent))
+
+    rows.sort(key=lambda row: (row[0], row[1]))
+    return [
+        {
+            "key": key,
+            "label": DISCIPLINE_LABELS[key],
+            "mode": mode,
+            "priority": index,
+            "intent": intent,
+        }
+        for index, (_, key, mode, intent) in enumerate(rows, start=1)
+    ]
+
+
+def generated_capability_portfolio(policy, meso):
+    primary = set(meso.get("primary_capabilities") or [])
+    secondary = set(meso.get("secondary_capabilities") or [])
+    result = deepcopy(policy["strategy_base"].get("capability_portfolio") or [])
+    for item in result:
+        key = item.get("key")
+        if key in primary:
+            item["mode"] = "develop"
+            item["priority"] = 1
+        elif key in secondary:
+            item["mode"] = "maintain_develop"
+            item["priority"] = 2
+        elif key == "plyometric":
+            item["mode"] = "develop_cautiously"
+            item["priority"] = 3
+        elif key in FIXED_PROTECTED_CAPACITY:
+            item["mode"] = "maintain_develop"
+            item["priority"] = 3
+        elif key in EXTERNAL_LOAD_CAPABILITIES:
+            item["mode"] = "supporting"
+            item["priority"] = 5
+        else:
+            item["mode"] = "supporting"
+            item["priority"] = 4
+    return result
+
+
+def generated_strategic_readiness(goal, policy):
+    rows = deepcopy(policy["strategy_base"].get("strategic_readiness") or [])
+    active_sports = {
+        str(item.get("sport") or "").lower()
+        for item in (goal.get("performance_goals") or [])
+        if item.get("status") == "active"
+    }
+    for row in rows:
+        row["state"] = "active_focus" if row.get("key") in active_sports else "keep_option_open"
+    return rows
+
+
 def materialize_strategy(goal, policy, meso, micro, catalog, athlete_state):
     strategy = deepcopy(policy["strategy_base"])
     strategy["schema_version"] = int(policy["compatibility_strategy_schema_version"])
     digest = goal_hash(goal)
     strategy["north_star"] = goal.get("goal") or strategy.get("north_star")
+    strategy["current_priorities"] = generated_current_priorities(meso)
+    strategy["capability_portfolio"] = generated_capability_portfolio(policy, meso)
+    strategy["strategic_readiness"] = generated_strategic_readiness(goal, policy)
     strategy["goal_contract"] = {
         "source_file": "data/goal.json",
         "source_schema_version": goal.get("schema_version"),
