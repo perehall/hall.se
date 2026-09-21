@@ -1,9 +1,9 @@
 {
   "decision": "modify",
-  "title": "Mesocykel · kontrollerad löptröskel + MTB-teknik + löptålighet",
+  "title": "Fortsatt byggblock — fokusera löptröskel + MTB-teknik med skyddad sim/styrka (konservativ dosjustering)",
   "duration_weeks": 4,
-  "goal_contribution": "Föra målbilden framåt genom att utveckla de prioriterade kapaciteterna utan att låsa träningen mot ett enskilt lopp och samtidigt skydda simning och styrka/core.",
-  "hypothesis": "Ett block med få tydliga utvecklingsområden och bibehållen bredd ger bättre möjlighet att skapa faktisk progression än att upprepa en färdig veckomall.",
+  "goal_contribution": "Föra målbilden framåt genom fortsatt utveckling av kontrollerad löptröskel, teknisk MTB och löptålighet samtidigt som simning och styrka/core skyddas för långsiktig allroundkapacitet.",
+  "hypothesis": "Aktuell respons visar absorberbar löpkapacitet och teknisk cykelbas; en fortsatt mesocykel med samma primära fokus men konservativ justering av MTB-dos och explicit krav på styrke- och simfrekvens ger bättre nettoprogression än oförändrad upprepning eller ett skifte av fokus. Minskad MTB-sessionstid när omfattande enduro finns i kalendern minskar risk för att löpkvalitet trampas undan.",
   "primary_capabilities": [
     "run_threshold",
     "mtb_technical",
@@ -11,53 +11,66 @@
   ],
   "secondary_capabilities": [
     "run_hill_quality",
-    "mtb_aerobic"
+    "mtb_aerobic",
+    "strength_unilateral",
+    "strength_core"
   ],
   "progression_axes": [
     {
       "capability": "run_threshold",
       "axis": "work_duration",
-      "objective": "Utveckla kapaciteten stegvis från observerad och absorberad träningsnivå."
+      "objective": "Behåll kontrollerad intensitet; öka total arbetstid gradvis (t.ex. från 4×8 → 3×10 eller 4×9) endast om upprepade sessioner visar stabil känsla/puls och närliggande belastning möjliggör det."
     },
     {
-      "capability": "mtb_technical",
-      "axis": "technical_quality",
-      "objective": "Utveckla kapaciteten stegvis från observerad och absorberad träningsnivå."
+      "capability": "run_hill_quality",
+      "axis": "repetitions",
+      "objective": "Konsolidera vid demonstrerat golv (3×8). Öka med en repetitionsetapp (t.ex. 3×9) först när mekanik, återhämtning och 2–3 efterföljande pass stödjer det."
     },
     {
       "capability": "run_easy_distance",
       "axis": "session_duration",
-      "objective": "Utveckla kapaciteten stegvis från observerad och absorberad träningsnivå."
+      "objective": "Behåll långdistans (baseline 120 min) som tålighetsstimulans; om veckobelastningen är hög (enduro nära) prioritera kvalitet framför distans och reducera med 15–30 min vid behov."
+    },
+    {
+      "capability": "mtb_technical",
+      "axis": "session_duration",
+      "objective": "Sänk rekommenderad ordinarie teknisk mtb-session från 90 min till 60–75 min när stora enduro-pass är planerade; prioritera teknisk kvalitet framför totaltid."
     }
   ],
   "success_signals": [
-    "Prioriterade stimuli kan genomföras återkommande utan att övriga skyddade kapaciteter systematiskt faller bort.",
-    "Jämförbara pass eller uttryckliga användarrapporter ger stöd för progression eller stabil konsolidering.",
-    "Mikrocyklerna kan absorberas utan att nyckelstimuli återkommande måste tas bort."
+    "Kontrollerade löptröskelpass genomförda upprepade gånger utan oproportionerlig trötthet eller bortfall av skyddad styrka/simning.",
+    "Backintervaller kan genomföras i planad volym (3×8) med bibehållen mekanik och god återhämtning i efterföljande dagar.",
+    "Lång distanspass (≈120 min) genomförs som plan eller reduceras med planerat skäl (enduro); simning och minst ett styrkepass per mikrocykel bibehålls.",
+    "MTB-tekniska sessioner genomförs med förbättrad teknisk kvalitet eller upplevd flyt snarare än ökande duration när endurobelastning är hög."
   ],
   "guardrails": [
-    "Ingen progression får motiveras enbart av wellness eller träningsberedskap.",
-    "Faktisk belastning föregående och kommande 2–3 dagar ska beaktas innan pass flyttas, läggs till eller görs hårdare.",
-    "Enduro är faktisk träningsbelastning och får ersätta annan träning.",
-    "Saknad evidens ska ge osäkerhet eller konservativt beslut, inte påhittade värden.",
-    "Utvecklingspass ska progressa, konsolideras, reduceras eller bytas med explicit skäl; de får inte upprepas mekaniskt."
+    "Ingen progression baseras enbart på wellness eller enstaka subjektivt bra dag.",
+    "Beakta faktisk belastning föregående och kommande 2–3 dagar innan dosökning eller flyttning av nyckelpass.",
+    "Enduro räknas som faktisk extern belastning och får ersätta eller kräva reduktion av andra cykel/benbelastande pass.",
+    "Behåll skyddade kapaciteter: minst en riktad styrke/core-session och normal simfrekvens varje mikrocykel; utebliven styrka kräver review och återställning i nästa absorberbara fönster.",
+    "Ändra inte flera belastningsvariabler samtidigt (t.ex. öka arbetstid och intensitet i samma steg).",
+    "Utvecklingspass ska antingen progressa, konsolideras eller motiveras om de upprepas; undvik mekanisk repetition utan skäl."
   ],
   "evidence_refs": [
-    "goal.next_steps[0]",
-    "goal.next_steps[2]",
-    "goal.goal"
+    "activity 20092166843 (2026-09-08) — 4×8 tempo, rapport: sista intervallen kräver mental ansträngning men genomförd",
+    "activity 20229568713 (2026-09-18) — 3×8 backintervaller, rapport: 'kände mig superpigg'",
+    "activity 20254486837 (2026-09-20) — lång distans 22.46 km, genomförd och kontrollerad",
+    "activity 20144331562 (2026-09-12) — lång enduro 13 578 s / 53.9 km, hög extern cykelbelastning",
+    "athlete_state.session_counts — sim 7 sessioner och styrka 5 sessioner under faktafönstret (behöver hållas som skyddad exponering)"
   ],
   "uncertainties": [
-    "Deterministisk fallback används eftersom ingen giltig modellbedömning fanns tillgänglig.",
-    "Planeringsmodellen misslyckades: HTTP Error 400: Bad Request"
+    "Subjektiva återhämtningsdata (sömn, kronisk trötthet) saknas för att exakt bedöma absorberbar ökning.",
+    "Detaljerad intensitetsfördelning i enduro- och MTB-pass (hur mycket anaerobt arbete) saknas; detta begränsar precision i dosjustering.",
+    "Styrketräningen är inte dokumenterad varje mikrocykel—osäkerhet kring hur väl skyddad styrka faktiskt bibehålls i rådande verklighet."
   ],
   "schema_version": 1,
-  "source": "deterministic_fallback",
-  "source_hash": "021fceee04892e5e6dbd9f5e331ac2037ab0a1377ac57577c5a3fa6878ee486f",
-  "generated_at_utc": "2026-09-21T07:24:03.370144+00:00",
+  "planner_revision": 3,
+  "source": "openai",
+  "source_hash": "bc594325d28b592809d359768e9cb7482a446557968566d61fb8410ad219bbcd",
+  "generated_at_utc": "2026-09-21T07:57:12.205623+00:00",
   "goal_hash": "1162c643157c11ee354e73acb1cf94254611e8e8a7fd64d2c11d5140ef954569",
-  "start_date": "2026-09-21",
-  "end_date": "2026-10-18",
-  "evaluation_date": "2026-10-19",
-  "id": "20260921-run_threshold-mtb_technical-run_easy_distance"
+  "start_date": "2026-09-28",
+  "end_date": "2026-10-25",
+  "evaluation_date": "2026-10-26",
+  "id": "20260928-run_threshold-mtb_technical-run_easy_distance"
 }

@@ -254,14 +254,14 @@
     ]
   },
   "current_mesocycle": {
-    "id": "20260921-run_threshold-mtb_technical-run_easy_distance",
-    "title": "Mesocykel · kontrollerad löptröskel + MTB-teknik + löptålighet",
-    "start_date": "2026-09-21",
-    "end_date": "2026-10-18",
-    "evaluation_date": "2026-10-19",
+    "id": "20260928-run_threshold-mtb_technical-run_easy_distance",
+    "title": "Fortsatt byggblock — fokusera löptröskel + MTB-teknik med skyddad sim/styrka (konservativ dosjustering)",
+    "start_date": "2026-09-28",
+    "end_date": "2026-10-25",
+    "evaluation_date": "2026-10-26",
     "goal_basis_hash": "1162c643157c11ee354e73acb1cf94254611e8e8a7fd64d2c11d5140ef954569",
-    "goal_contribution": "Föra målbilden framåt genom att utveckla de prioriterade kapaciteterna utan att låsa träningen mot ett enskilt lopp och samtidigt skydda simning och styrka/core.",
-    "hypothesis": "Ett block med få tydliga utvecklingsområden och bibehållen bredd ger bättre möjlighet att skapa faktisk progression än att upprepa en färdig veckomall.",
+    "goal_contribution": "Föra målbilden framåt genom fortsatt utveckling av kontrollerad löptröskel, teknisk MTB och löptålighet samtidigt som simning och styrka/core skyddas för långsiktig allroundkapacitet.",
+    "hypothesis": "Aktuell respons visar absorberbar löpkapacitet och teknisk cykelbas; en fortsatt mesocykel med samma primära fokus men konservativ justering av MTB-dos och explicit krav på styrke- och simfrekvens ger bättre nettoprogression än oförändrad upprepning eller ett skifte av fokus. Minskad MTB-sessionstid när omfattande enduro finns i kalendern minskar risk för att löpkvalitet trampas undan.",
     "protected_stimuli": [
       "run_threshold",
       "mtb_technical",
@@ -285,12 +285,12 @@
       ],
       "secondary": [
         "run_hill_quality",
-        "mtb_aerobic"
+        "mtb_aerobic",
+        "strength_unilateral",
+        "strength_core"
       ],
       "maintenance": [],
       "protected_capacity": [
-        "strength_unilateral",
-        "strength_core",
         "swim_aerobic",
         "swim_technique",
         "plyometric"
@@ -302,14 +302,10 @@
     },
     "capacity_protection": {
       "required_each_microcycle": [
-        "strength_unilateral",
-        "strength_core",
         "swim_aerobic",
         "swim_technique"
       ],
       "protected_across_mesocycle": [
-        "strength_unilateral",
-        "strength_core",
         "swim_aerobic",
         "swim_technique",
         "plyometric"
@@ -338,16 +334,18 @@
       "max_consecutive_development_repeats_without_reason": 1
     },
     "success_signals": [
-      "Prioriterade stimuli kan genomföras återkommande utan att övriga skyddade kapaciteter systematiskt faller bort.",
-      "Jämförbara pass eller uttryckliga användarrapporter ger stöd för progression eller stabil konsolidering.",
-      "Mikrocyklerna kan absorberas utan att nyckelstimuli återkommande måste tas bort."
+      "Kontrollerade löptröskelpass genomförda upprepade gånger utan oproportionerlig trötthet eller bortfall av skyddad styrka/simning.",
+      "Backintervaller kan genomföras i planad volym (3×8) med bibehållen mekanik och god återhämtning i efterföljande dagar.",
+      "Lång distanspass (≈120 min) genomförs som plan eller reduceras med planerat skäl (enduro); simning och minst ett styrkepass per mikrocykel bibehålls.",
+      "MTB-tekniska sessioner genomförs med förbättrad teknisk kvalitet eller upplevd flyt snarare än ökande duration när endurobelastning är hög."
     ],
     "guardrails": [
-      "Ingen progression får motiveras enbart av wellness eller träningsberedskap.",
-      "Faktisk belastning föregående och kommande 2–3 dagar ska beaktas innan pass flyttas, läggs till eller görs hårdare.",
-      "Enduro är faktisk träningsbelastning och får ersätta annan träning.",
-      "Saknad evidens ska ge osäkerhet eller konservativt beslut, inte påhittade värden.",
-      "Utvecklingspass ska progressa, konsolideras, reduceras eller bytas med explicit skäl; de får inte upprepas mekaniskt.",
+      "Ingen progression baseras enbart på wellness eller enstaka subjektivt bra dag.",
+      "Beakta faktisk belastning föregående och kommande 2–3 dagar innan dosökning eller flyttning av nyckelpass.",
+      "Enduro räknas som faktisk extern belastning och får ersätta eller kräva reduktion av andra cykel/benbelastande pass.",
+      "Behåll skyddade kapaciteter: minst en riktad styrke/core-session och normal simfrekvens varje mikrocykel; utebliven styrka kräver review och återställning i nästa absorberbara fönster.",
+      "Ändra inte flera belastningsvariabler samtidigt (t.ex. öka arbetstid och intensitet i samma steg).",
+      "Utvecklingspass ska antingen progressa, konsolideras eller motiveras om de upprepas; undvik mekanisk repetition utan skäl.",
       "Ingen progression får motiveras enbart av wellness eller träningsberedskap.",
       "Faktisk belastning föregående och kommande 2–3 dagar ska beaktas innan pass flyttas, läggs till eller görs hårdare.",
       "Enduro är faktisk träningsbelastning och får ersätta annan träning.",
@@ -418,7 +416,7 @@
           "source": "athlete_state",
           "microcycle_plan": [
             {
-              "microcycle": 2,
+              "microcycle": 1,
               "option_id": "run-threshold-4x8",
               "relation": "hold",
               "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt."
@@ -520,7 +518,7 @@
           "source": "athlete_state",
           "microcycle_plan": [
             {
-              "microcycle": 2,
+              "microcycle": 1,
               "option_id": "mtb-tech-90",
               "relation": "hold",
               "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt."
@@ -737,7 +735,7 @@
           "source": "athlete_state",
           "microcycle_plan": [
             {
-              "microcycle": 2,
+              "microcycle": 1,
               "option_id": "run-easy-120",
               "relation": "hold",
               "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt."
@@ -748,10 +746,10 @@
       }
     ],
     "decision_trace": {
-      "mesocycle_decision_source": "deterministic_fallback",
-      "mesocycle_source_hash": "021fceee04892e5e6dbd9f5e331ac2037ab0a1377ac57577c5a3fa6878ee486f",
+      "mesocycle_decision_source": "openai",
+      "mesocycle_source_hash": "bc594325d28b592809d359768e9cb7482a446557968566d61fb8410ad219bbcd",
       "microcycle_decision_source": "deterministic_fallback_after_guard",
-      "microcycle_source_hash": "48f7bbc8d5557795b5744e39c175efb19de39839c3344e84087cf2e58b6cb309",
+      "microcycle_source_hash": "f26600c3e8a81a6c3da52531eb0219059682dfcae64eea8c656710b5b3274c9c",
       "microcycle_week_key": "2026-W40"
     }
   },
