@@ -1,90 +1,75 @@
 {
-  "rationale": "Flyttade det progressade simpasset från dag 1 (blockerad av enduro) till en icke-blockerad dag så att alla guard_failures försvinner: två simexponeringar, primära kapaciteter täckta, minst en styrka/core och max två löpkvaliteter. Övriga val behålls som i ursprungsförslaget.",
+  "rationale": "Mikrocykeln följer mesocykelbeslutet att prioritera simutveckling samtidigt som kontrollerad löptröskel och styrka/core bibehålls. Dag 1 är blockerad av verifierad enduro; dag 2 hålls låg benbelastning (sim). Två simexponeringar inkl. ett kombinationspass (swim_strength) uppfyller normal swim‑exposure och säkerställer minst en styrke/core‑stimulans. Löpkvalitet hålls som konsolidering (inga progressbeslut för run_threshold denna mikrocykel). Minst en vilodag lämnas (dag 6). Besluten tar hänsyn till aktuell belastningshistorik och mesocykelns guardrails (enduro påverkar andra benbelastningar, endast en primär progression tillåten).",
   "slots": [
     {
       "day_index": 2,
-      "recipe_key": "run_hill_quality",
-      "action": "consolidate",
-      "rationale": "Bibehåll nyligen utvecklad backvolym och neuromuskulär kvalitet utan ytterligare progression nära övrig belastning.",
+      "recipe_key": "swim_aerobic_technique",
+      "action": "progress",
+      "rationale": "Progress för swim_aerobic/teknik: öka absorberbar aerob simstimulus på låg benbelastningsdag direkt efter enduro.",
       "evidence_refs": [
-        "20260921-swim_aerobic-swim_technique-run_threshold",
-        "20229568713",
-        "20133500464",
-        "20036445971"
+        "20239623463",
+        "20203770266",
+        "19946705399"
       ]
     },
     {
       "day_index": 3,
       "recipe_key": "swim_strength",
       "action": "establish",
-      "rationale": "Säkerställer andra simexponeringen samtidigt som styrka/core uppfylls utan extra benkvalitetspass; uppfyller krav på styrke/core.",
+      "rationale": "Etablera kombinerat sim+styrka för att uppfylla andra simexponeringen och säkerställa styrke/core‑stimulus utan extra benkvalitetspass.",
       "evidence_refs": [
-        "20260921-swim_aerobic-swim_technique-run_threshold",
-        "20175536586",
         "20272196080",
-        "19946705399"
+        "20175536586",
+        "20239623463"
       ]
     },
     {
       "day_index": 4,
-      "recipe_key": "run_threshold",
-      "action": "establish",
-      "rationale": "Behåll kontrollerad tröskel (4×8-bas) enligt mesocykeln; ingen progression denna mikrocykel för att begränsa variabler.",
-      "evidence_refs": [
-        "20260921-swim_aerobic-swim_technique-run_threshold",
-        "20092166843"
-      ]
-    },
-    {
-      "day_index": 5,
-      "recipe_key": "run_easy_distance",
-      "action": "consolidate",
-      "rationale": "Långt lugnt löppass för löptålighet (~90–120 min) som konsolidering snarare än ökning nära ackumulerad veckobelastning.",
-      "evidence_refs": [
-        "20260921-swim_aerobic-swim_technique-run_threshold",
-        "20254486837"
-      ]
-    },
-    {
-      "day_index": 6,
       "recipe_key": "mtb_technical",
       "action": "establish",
-      "rationale": "Underhåller MTB/enduro-färdighet och teknisk flyt som sekundär kapacitet utan att tränga undan primära swim/run-stimuli.",
+      "rationale": "Behåll MTB/teknik som sekundär kapacitet i kontrollerad dos så det inte tränger undan primära swim/run‑stimuli.",
       "evidence_refs": [
-        "20260921-swim_aerobic-swim_technique-run_threshold",
+        "20271537143",
         "20024236347",
         "20120769386"
       ]
     },
     {
-      "day_index": 7,
-      "recipe_key": "swim_aerobic_technique",
-      "action": "progress",
-      "rationale": "Flyttad från dag 1 till en icke-blockerad dag för att progressa mesocykelns simprioritet (konservativ ökning av aerob/teknisk setlängd) och uppnå två simexponeringar utan konflikt med enduro.",
+      "day_index": 5,
+      "recipe_key": "run_threshold",
+      "action": "consolidate",
+      "rationale": "Konsolidera befintlig run_threshold (4×8 baseline) utan ytterligare progression för att skydda återhämtning och styrka/core.",
       "evidence_refs": [
-        "20260921-swim_aerobic-swim_technique-run_threshold",
-        "19946705399",
-        "20239623463",
-        "20203770266"
+        "20092166843",
+        "20254486837"
+      ]
+    },
+    {
+      "day_index": 7,
+      "recipe_key": "run_easy_distance",
+      "action": "consolidate",
+      "rationale": "Lugn långt löppass för löptålighet; planerat efter minst en vilodag (dag 6) så att löpkvaliteten kan bibehållas.",
+      "evidence_refs": [
+        "20254486837"
       ]
     }
   ],
   "schema_version": 1,
-  "planner_revision": 4,
-  "source": "openai_repaired",
-  "source_hash": "c80ab8384a8ea0d9f4db38bff7dd56b4db3a0f189b2d3ad8b3f49341892a7aad",
-  "generated_at_utc": "2026-09-21T20:00:15.818752+00:00",
-  "week_start": "2026-09-28",
-  "week_key": "2026-W40",
+  "planner_revision": 5,
+  "source": "openai",
+  "source_hash": "a0305079a61d01eebab8e27b37a70629a55761235cd393b3236a1ad09b7a3884",
+  "generated_at_utc": "2026-09-21T21:14:29.696131+00:00",
+  "week_start": "2026-09-21",
+  "week_key": "2026-W39",
   "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
   "competition_context": {
     "available": true,
     "goal_id": "otillo-aland-2027-top10",
     "event": "ÖTILLÖ Åland World Series",
     "event_date": "2027-08-14",
-    "as_of": "2026-09-28",
-    "days_to_event": 320,
-    "weeks_to_event": 45.7,
+    "as_of": "2026-09-21",
+    "days_to_event": 327,
+    "weeks_to_event": 46.7,
     "horizon_stage": "foundation",
     "target": "Topp-10",
     "target_category": null,
@@ -147,14 +132,5 @@
       "391 höjdmeter ska vägas in, men systemet får inte hitta på en mer kuperad profil än den publicerade.",
       "Tävlingsdatumet styr när specificiteten ska omprövas; det får inte ensamt utlösa automatisk volym- eller intensitetsökning."
     ]
-  },
-  "guard_repair": {
-    "attempted": true,
-    "initial_failures": [
-      "dag 1 är blockerad av fast endurobelastning",
-      "primära kapaciteter saknar direkt recept: swim_aerobic, swim_technique",
-      "för få simexponeringar: 1 < 2"
-    ],
-    "result": "accepted"
   }
 }

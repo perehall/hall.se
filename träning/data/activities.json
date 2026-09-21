@@ -1,5 +1,5 @@
 {
-  "last_sync_utc": "2026-09-21T19:59:00.107332+00:00",
+  "last_sync_utc": "2026-09-21T21:13:41.855386+00:00",
   "activities": [
     {
       "id": 20272196080,
@@ -59,7 +59,7 @@
     {
       "id": 20271537143,
       "name": "Enduro på kvällen",
-      "sport_type": "Workout",
+      "sport_type": "Enduro",
       "start_date": "2026-09-21T15:44:36Z",
       "start_date_local": "2026-09-21T17:44:36Z",
       "distance_m": 12527.7,
@@ -92,9 +92,9 @@
       "workout_analysis_context": {
         "contract_version": 3,
         "activity_id": 20271537143,
-        "sport_type": "Workout",
-        "display_label": "Workout",
-        "classification": null,
+        "sport_type": "Enduro",
+        "display_label": "Enduro",
+        "classification": "training",
         "user_report": "",
         "total": {
           "distance_m": 12527.7,
@@ -107,8 +107,25 @@
         },
         "run": null,
         "swim": null,
-        "enduro": null,
+        "enduro": {
+          "session_duration_s": 5809.0,
+          "duration_basis": "elapsed_time_s",
+          "moving_time_s": 3817.0,
+          "non_moving_time_s": 1992.0,
+          "duration_note": "For Enduro, session_duration_s is the workout duration. Strava moving_time_s only describes time classified as moving and must not replace total session duration."
+        },
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+      },
+      "source_sport_type": "Workout",
+      "classification": "training",
+      "display_label": "Enduro",
+      "classification_reason": "Garmin/Strava exposed the Enduro recording as generic Workout, but the explicit activity name identifies actual Enduro training load.",
+      "sport_normalization": {
+        "rule": "workout-explicit-enduro-name-v1",
+        "evidence": [
+          "source_sport_type=Workout",
+          "explicit Enduro/Motocross activity name"
+        ]
       }
     },
     {
@@ -12358,7 +12375,7 @@
     "workout_analysis_contract_version": 3,
     "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
     "overrides_applied": 11,
-    "auto_rules_applied": 11,
+    "auto_rules_applied": 12,
     "override_ids_present": [
       "19852599244",
       "19862241646",
@@ -12372,7 +12389,9 @@
       "20133500464",
       "20229568713"
     ],
-    "changed_ids": []
+    "changed_ids": [
+      "20271537143"
+    ]
   },
   "schema_version": 2,
   "last_webhook_event": {

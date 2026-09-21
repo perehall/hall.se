@@ -1,6 +1,51 @@
 {
   "analyses": [
     {
+      "activity_id": 20271537143,
+      "activity_date": "2026-09-21",
+      "activity_name": "Enduro på kvällen",
+      "generated_at_utc": "2026-09-21T21:14:41.056359+00:00",
+      "model": "gpt-5-mini",
+      "analysis_contract": {
+        "pipeline_version": 3,
+        "workout_context_version": 3,
+        "plan_comparison_version": 2,
+        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
+        "analysis_code_sha256": "b2b605b727aaea5a4027070ea282ce432554fdd8a3f4f664cf37251ade67f342"
+      },
+      "performance_marker_id": null,
+      "performance_protocol_key": null,
+      "assessment": {
+        "summary": "Enduropasset omfattade 1:36:49 totalt och 392 m+; det räknas som faktisk teknisk och mekanisk träningsbelastning inför nästa prioriterade pass.",
+        "load_interpretation": "För Enduro används hela 1:36:49 som tidsomfattning; Stravas rörelsetid 1:03:37 och snittpuls 101 beskriver inte den tekniska/mekaniska belastningen ensamma.",
+        "confidence": "medium",
+        "facts": [
+          "Enduro: 12,53 km · 1:36:49 · 391,6 m+ · snittpuls 101,2 · maxpuls 150.",
+          "Planstatus 2026-09-21: dagen är markerad genomförd i coachens beslutsunderlag."
+        ],
+        "interpretations": [
+          "Passet är en verklig extern enduro‑belastning som enligt mesocykelkontraktet får påverka följande pass",
+          "Eftersom enduro är varaktigt (elapsed basis) bör morgondagens simning hållas eller reduceras endast om närbelastning indikerar konflikt med sim‑/styrke‑stimuli"
+        ],
+        "unknowns": [
+          "Användarrapport om subjektiv trötthet efter passet saknas",
+          "kommande 24‑72h subjektiv återhämtning och planerat styrkepassens genomförande"
+        ]
+      },
+      "plan_action": {
+        "action": "keep",
+        "target_date": "2026-09-22",
+        "reason": "Enduron är planerad extern belastning men mikrocykeln skyddar simningen; inga deterministiska skäl i närbelastningen kräver vila eller reduktion.",
+        "recommendation": "Behåll planerad simning 2026-09-22 (det valda passalternativet) som planerat; om du känner ovanlig trötthet eller lokal benpåverkan, välj att skjuta upp eller reducera styrkedelen nästa dag och rapportera hur du känner dig.",
+        "dose_option_id": "",
+        "requires_approval": false
+      },
+      "auto_apply": {
+        "applied": false,
+        "note": "Ingen automatisk planändring."
+      }
+    },
+    {
       "activity_id": 20272196080,
       "activity_date": "2026-09-21",
       "activity_name": "Styrketräning på kvällen",
@@ -1207,45 +1252,10 @@
         "applied": false,
         "note": "Ingen automatisk planändring."
       }
-    },
-    {
-      "activity_id": 19862241646,
-      "activity_date": "2026-08-23",
-      "activity_name": "Löpning på morgonen",
-      "generated_at_utc": "2026-08-24T13:53:36.353970+00:00",
-      "model": "gpt-5-mini",
-      "assessment": {
-        "summary": "Långt, aerobt löppass (17.2 km) på grus/asfalt—stor del av veckans löpvolym uppnådd; påverkar tisdagens kvalitet.",
-        "load_interpretation": "Dagens löppass lägger en betydande löpbelastning inför tisdagens tröskelpass.",
-        "confidence": "medium",
-        "facts": [
-          "Löpning · grus/asfalt: 17,16 km · 1:30:59 · 161 m+ · snittpuls 138,9 · maxpuls 157.",
-          "Användarrapport: Underlag: grus och asfalt; inte trail."
-        ],
-        "interpretations": [
-          "Passet var långvarigt och aerobt snarare än kort högintensivt; det ger både perifer och central trötthet relevant för löpning.",
-          "Eftersom enduron rapporterades lätt är den totala föregående belastningen måttlig men två dagars löpning nära inpå kräver konservativ hantering."
-        ],
-        "unknowns": [
-          "Subjektiv dagskänsla/benstatus efter passet saknas.",
-          "Sömn och återhämtning över natt saknas."
-        ]
-      },
-      "plan_action": {
-        "action": "keep",
-        "target_date": "",
-        "reason": "Basplanen behålls; dagens pass var lång aerobt och enduron var lätt, så tisdagens kvalitet står kvar.",
-        "recommendation": "Behåll tisdagens 3×10 min tröskel enligt plan; värm noggrant och skala första intervallen om benen känns tunga. Utvärdera subjektiv återhämtning före start.",
-        "requires_approval": false
-      },
-      "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
-      }
     }
   ],
-  "last_trigger_hash": "ad0510eaec985f4654249b186d8efd30f37dfb1c437e4f637fc0c6f301098fb4",
-  "last_run_utc": "2026-09-21T20:00:27.254349+00:00",
+  "last_trigger_hash": "4ce037b669effbafc7e3323b87e0fb73ecfbd90e079643fe44c5d26d72adc262",
+  "last_run_utc": "2026-09-21T21:14:41.056359+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 3
