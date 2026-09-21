@@ -448,6 +448,7 @@ def fallback_mesocycle(goal, policy, previous):
                 "run_threshold": "kontrollerad löptröskel",
                 "run_easy_distance": "löptålighet",
                 "mtb_technical": "MTB-teknik",
+                "swim_aerobic": "simkapacitet",
                 "swim_technique": "simteknik",
             }.get(key, key)
             for key in primary
@@ -471,6 +472,8 @@ def fallback_mesocycle(goal, policy, previous):
                     if key == "run_threshold"
                     else "technical_quality"
                     if key == "mtb_technical"
+                    else "consistency"
+                    if key in {"swim_aerobic", "swim_technique"}
                     else "session_duration"
                 ),
                 "objective": "Utveckla kapaciteten stegvis från observerad och absorberad träningsnivå.",
