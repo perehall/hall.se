@@ -109,7 +109,10 @@ def _candidate_options(day: dict) -> list[dict]:
 
 
 def _swim_prescription(day: dict, option: dict) -> dict:
-    workout = day.get("watch_workout") or {}
+    # Standalone swim recipes may own their exact executable structure. This
+    # lets the catalog carry distinct verified swim recipes without borrowing a
+    # stale watch_workout from another dose or another microcycle.
+    workout = option.get("watch_workout") or day.get("watch_workout") or {}
     planned_distance = workout.get("planned_distance_m")
     option_value = option.get("value")
 

@@ -69,6 +69,54 @@ class AdaptivePlanningTests(unittest.TestCase):
             microcycle_is_valid(micro, meso, date(2026, 9, 28), source_hash_value="new")
         )
 
+    def test_first_day_goal_change_replans_current_week(self):
+        plan = {
+            "meta": {
+                "week_start": "2026-09-21",
+                "week_end": "2026-09-27",
+                "mesocycle_id": "meso-live",
+                "microcycle_index": 1,
+                "microcycle_total": 4,
+                "requires_mesocycle_review": False,
+            }
+        }
+        upcoming = {"meta": {"week_start": "2026-09-28", "week_end": "2026-10-04"}}
+        stale = {
+            "id": "meso-live",
+            "start_date": "2026-09-21",
+            "end_date": "2026-10-18",
+            "goal_hash": "0" * 64,
+        }
+        target, active_replan = resolve_planning_target(
+            plan, upcoming, stale, date(2026, 9, 21), goal=self.goal
+        )
+        self.assertEqual(target, date(2026, 9, 21))
+        self.assertTrue(active_replan)
+
+    def test_midweek_goal_change_does_not_rewrite_elapsed_days(self):
+        plan = {
+            "meta": {
+                "week_start": "2026-09-21",
+                "week_end": "2026-09-27",
+                "mesocycle_id": "meso-live",
+                "microcycle_index": 1,
+                "microcycle_total": 4,
+                "requires_mesocycle_review": False,
+            }
+        }
+        upcoming = {"meta": {"week_start": "2026-09-28", "week_end": "2026-10-04"}}
+        stale = {
+            "id": "meso-live",
+            "start_date": "2026-09-21",
+            "end_date": "2026-10-18",
+            "goal_hash": "0" * 64,
+        }
+        target, active_replan = resolve_planning_target(
+            plan, upcoming, stale, date(2026, 9, 23), goal=self.goal
+        )
+        self.assertEqual(target, date(2026, 9, 28))
+        self.assertFalse(active_replan)
+
     def test_later_conflicting_mesocycle_cannot_orphan_midflight_block(self):
         plan = {
             "meta": {
@@ -214,6 +262,45 @@ class AdaptivePlanningTests(unittest.TestCase):
         self.assertEqual(threshold[0]["protocol"], "4x8min")
         self.assertEqual(hills[0]["repetitions"], 24)
         self.assertEqual(hills[0]["protocol"], "3x8")
+
+    def test_athlete_state_extracts_explicit_swim_threshold_evidence(self):
+        activities = {
+            "activities": [
+                {
+                    "id": 10,
+                    "start_date_local": "2026-08-29T12:00:00",
+                    "sport_type": "Swim",
+                    "classification": "training",
+                    "elapsed_time_s": 4500,
+                    "distance_m": 4000,
+                    "user_report": "Spontant simpass: Aerob+tröskel 4K, 4 000 m.",
+                }
+            ]
+        }
+        state = build_state(activities, {"entries": []}, today=date(2026, 9, 21))
+        threshold = state["capability_facts"]["swim_threshold"]["evidence"]
+        self.assertEqual(len(threshold), 1)
+        self.assertEqual(threshold[0]["distance_m"], 4000)
+        self.assertEqual(threshold[0]["protocol"], "aerob+threshold")
+
+    def test_swim_threshold_recipe_uses_explicit_threshold_evidence(self):
+        state = {
+            "capability_facts": {
+                "swim_threshold": {
+                    "evidence": [
+                        {"distance_m": 4000, "kind": "explicit_user_report"}
+                    ]
+                }
+            }
+        }
+        recipe = self.catalog["recipes"]["swim_aerobic_threshold"]
+        selected, floor, next_option, relation, _ = choose_option(
+            "swim_aerobic_threshold", recipe, "consolidate", state
+        )
+        self.assertEqual(selected["id"], "swim-aerobic-threshold-4000")
+        self.assertEqual(floor["id"], "swim-aerobic-threshold-4000")
+        self.assertIsNone(next_option)
+        self.assertEqual(relation, "hold")
 
     def test_threshold_recipe_uses_observed_history_not_old_baseline(self):
         state = {

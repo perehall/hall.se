@@ -54,6 +54,7 @@ CAPABILITY_TO_RECIPE = {
     "mtb_aerobic": "mtb_technical",
     "swim_aerobic": "swim_aerobic_technique",
     "swim_technique": "swim_aerobic_technique",
+    "swim_threshold": "swim_aerobic_threshold",
     "strength_unilateral": "swim_strength",
     "strength_core": "swim_strength",
     "plyometric": "swim_strength",
@@ -87,6 +88,7 @@ PRIMARY_CAPABILITIES_WITH_EXECUTABLE_RECIPES = {
     "mtb_aerobic",
     "swim_aerobic",
     "swim_technique",
+    "swim_threshold",
 }
 SUPPORT_ONLY_RECIPES = {"swim_strength"}
 
@@ -147,7 +149,7 @@ def target_week(plan, upcoming, today):
     return upcoming_start, False
 
 
-def resolve_planning_target(plan, upcoming, mesocycle_decision, today):
+def resolve_planning_target(plan, upcoming, mesocycle_decision, today, goal=None):
     """Choose the week the adaptive engine is allowed to plan.
 
     A generated mesocycle is authoritative for its full declared duration. If a
@@ -167,6 +169,18 @@ def resolve_planning_target(plan, upcoming, mesocycle_decision, today):
 
     current_id = str(meta.get("mesocycle_id") or "").strip()
     decision_id = str((mesocycle_decision or {}).get("id") or "").strip()
+
+    # A canonical goal change is the explicit exception to mesocycle authority.
+    # On the first day of the live microcycle we can rebuild the whole week
+    # without rewriting already-completed training. Midweek changes start with
+    # the upcoming week unless a separate near-term migration is implemented.
+    goal_changed = bool(
+        goal
+        and (mesocycle_decision or {}).get("goal_hash")
+        and (mesocycle_decision or {}).get("goal_hash") != goal_hash(goal)
+    )
+    if goal_changed and today == plan_start:
+        return plan_start, True
     decision_start = None
     try:
         if (mesocycle_decision or {}).get("start_date"):
@@ -830,6 +844,7 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
         "fixed_enduro_day_1": is_enduro_school_date(target_start),
         "goal": {
             "goal": goal.get("goal"),
+            "performance_goals": goal.get("performance_goals"),
             "current_phase": goal.get("current_phase"),
             "next_steps": goal.get("next_steps"),
         },
@@ -837,8 +852,13 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
         "microcycle_policy": policy.get("microcycle_policy"),
         "decision_guards": policy.get("decision_guards"),
         "athlete_state": sanitize_athlete_state(athlete_state),
-        "recipe_capabilities": {
-            key: sorted(recipe_capabilities(value))
+        "recipe_profiles": {
+            key: {
+                "stimuli": sorted(recipe_capabilities(value)),
+                "load_dimensions": list(value.get("load_dimensions") or []),
+                "development_focus": value.get("development_focus"),
+                "option_ids": [item.get("id") for item in (value.get("options") or [])],
+            }
             for key, value in catalog["recipes"].items()
         },
         "hard_requirements": {
@@ -861,6 +881,7 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
         "normalantalet simexponeringar ska finnas, minst en styrka/core-exponering ska finnas när policyn kräver det, "
         "och antalet löpkvalitetsexponeringar får inte överskrida maxgränsen. "
         "Använd kombinationsreceptet swim_strength när det hjälper att uppfylla både sim- och styrkekrav utan en extra dag. "
+        "Om swim_threshold behövs finns ett separat etablerat 4 000 m-recept; behandla det som kvalitetsrecept, inte som automatisk distansprogression från det aeroba 3 200 m-passet. "
         "Enduro dag 1 är faktisk belastning och blockerar annan planering den dagen. "
         "Progress får bara väljas för ett primärt mesocykelstimulus och ska ha stöd i athlete_state; annars välj consolidate/establish. "
         "En ledig dag är inte ett skäl att fylla kalendern. Kontrollera slutligen själv att varje hard_requirement är uppfyllt innan du svarar."
@@ -995,7 +1016,14 @@ def demonstrated_value(recipe_key, athlete_state):
         return float(value) / 60.0 if isinstance(value, (int, float)) else None
     if recipe_key == "swim_aerobic_technique":
         value = ((facts.get("swim_aerobic") or {}).get("longest_distance") or {}).get("distance_m")
-        return float(value) if isinstance(value, (int, float)) else None
+        return min(float(value), 3200.0) if isinstance(value, (int, float)) else None
+    if recipe_key == "swim_aerobic_threshold":
+        values = [
+            item.get("distance_m")
+            for item in (facts.get("swim_threshold") or {}).get("evidence") or []
+            if isinstance(item.get("distance_m"), (int, float))
+        ]
+        return max(values) if values else None
     if recipe_key in {"strength_core", "swim_strength"}:
         value = ((facts.get("strength_unilateral") or {}).get("longest_duration") or {}).get("elapsed_time_s")
         return float(value) / 60.0 if isinstance(value, (int, float)) else None
@@ -1167,7 +1195,7 @@ def materialize_template(meso, micro, policy, catalog, athlete_state):
 
 DISCIPLINE_CAPABILITIES = {
     "run": {"run_threshold", "run_hill_quality", "run_easy_distance"},
-    "swim": {"swim_aerobic", "swim_technique"},
+    "swim": {"swim_aerobic", "swim_technique", "swim_threshold"},
     "mtb": {"mtb_technical", "mtb_aerobic"},
     "strength": {"strength_unilateral", "strength_core", "plyometric"},
 }
@@ -1436,7 +1464,7 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
         today = iso(today)
     meso = load_json(MESO_FILE, {})
     target_start, active_replan = resolve_planning_target(
-        plan, upcoming, meso, today
+        plan, upcoming, meso, today, goal=goal
     )
 
     if not mesocycle_is_valid(meso, goal, target_start):
@@ -1458,8 +1486,13 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
         "microcycle_policy": policy.get("microcycle_policy"),
         "decision_guards": policy.get("decision_guards"),
         "athlete_state": sanitize_athlete_state(athlete_state),
-        "recipe_capabilities": {
-            key: sorted(recipe_capabilities(value))
+        "recipe_profiles": {
+            key: {
+                "stimuli": sorted(recipe_capabilities(value)),
+                "load_dimensions": list(value.get("load_dimensions") or []),
+                "development_focus": value.get("development_focus"),
+                "option_ids": [item.get("id") for item in (value.get("options") or [])],
+            }
             for key, value in catalog["recipes"].items()
         },
         "fixed_enduro_day_1": is_enduro_school_date(target_start),

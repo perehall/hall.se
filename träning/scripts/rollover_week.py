@@ -234,6 +234,31 @@ def promote_upcoming(upcoming):
     return seed_fixed_commitments(promoted)
 
 
+def apply_swim_option_structure(day, target_date, week_key_value):
+    """Materialize an exact catalog-authored swim structure for the selected option.
+
+    Returns True when the selected dose option owns a structured swim workout.
+    The reusable catalog template intentionally has no live id/sync state; those
+    are generated for the concrete calendar day here.
+    """
+    option = _option_by_id(day.get("dose_options") or [], day.get("baseline_option_id"))
+    template = deepcopy((option or {}).get("watch_workout") or {})
+    if not template:
+        return False
+    if template.get("type") != "Swim" or not template.get("blocks"):
+        raise RuntimeError(
+            f"Veckoplan: simalternativ {day.get('baseline_option_id')!r} saknar komplett watch_workout"
+        )
+
+    workout = template
+    workout["sync_enabled"] = False
+    workout.pop("external_id", None)
+    workout["id"] = f"swim-{week_key_value.lower()}-{target_date.isoformat()}-{day.get('baseline_option_id')}"
+    day["watch_workout"] = workout
+    day["swim_equipment"] = {"planned": deepcopy(workout.get("equipment") or [])}
+    return True
+
+
 def _clean_preview_swim(source, target_date, target_label, next_key, focus_index):
     workout = deepcopy(source.get("watch_workout") or {})
     if not workout or workout.get("planned_distance_m") is None or not workout.get("blocks"):
@@ -313,15 +338,33 @@ def seed_preliminary_swims(promoted, future):
         if day.get("sport") == "swim"
         or "swim_aerobic" in (day.get("stimuli") or [])
         or "swim_technique" in (day.get("stimuli") or [])
+        or "swim_threshold" in (day.get("stimuli") or [])
     ]
 
-    if targets and not sources:
+    # First materialize standalone catalog-authored swim recipes. They are a
+    # stronger source than copied previous-week structure because the selected
+    # dose and its executable blocks are versioned together.
+    self_contained = set()
+    for target_index, target in targets:
+        if target.get("sport") != "swim":
+            continue
+        target_date = date.fromisoformat(target["date"])
+        if apply_swim_option_structure(target, target_date, next_key):
+            future["days"][target_index] = target
+            sources.append(target)
+            self_contained.add(target_index)
+
+    unresolved = [
+        (index, day) for index, day in targets
+        if index not in self_contained
+    ]
+    if unresolved and not sources:
         # Preserve legacy/generic rollover behavior when no authored structure
         # exists. Downstream workout-design validation still fails closed if a
         # real published swim anchor would otherwise be non-executable.
         return future
 
-    for ordinal, (target_index, target) in enumerate(targets):
+    for ordinal, (target_index, target) in enumerate(unresolved):
         # One known executable structure may safely be reused for multiple
         # support exposures; that is continuity, not invented progression.
         source = sources[min(ordinal, len(sources) - 1)]
@@ -348,6 +391,7 @@ def seed_preliminary_swims(promoted, future):
                     raise RuntimeError(
                         f"Veckoskifte: simpass {target.get('date')} tappade baseline/dose_options vid strukturkopiering"
                     )
+                apply_swim_option_structure(copied, target_date, next_key)
             future["days"][target_index] = copied
             continue
 
@@ -589,6 +633,7 @@ def build_mesocycle_next_week(promoted, strategy):
         day.get("sport") == "swim"
         or "swim_aerobic" in (day.get("stimuli") or [])
         or "swim_technique" in (day.get("stimuli") or [])
+        or "swim_threshold" in (day.get("stimuli") or [])
         for day in future.get("days") or []
     ):
         future = seed_preliminary_swims(promoted, future)

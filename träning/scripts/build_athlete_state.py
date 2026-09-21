@@ -26,6 +26,7 @@ LOOKBACK_DAYS = 56
 
 INTERVAL_RE = re.compile(r"(?P<sets>\d+)\s*[x×]\s*(?P<minutes>\d+(?:[.,]\d+)?)\s*min", re.IGNORECASE)
 HILL_RE = re.compile(r"(?P<sets>\d+)\s*[x×]\s*(?P<reps>\d+)\s*(?:backar|backintervaller|intervaller)\b", re.IGNORECASE)
+SWIM_DISTANCE_RE = re.compile(r"(?P<distance>\d[\d ]*)\s*m\b|(?P<km>\d+(?:[.,]\d+)?)\s*k\b", re.IGNORECASE)
 
 
 def load_json(path: Path, fallback):
@@ -74,6 +75,26 @@ def explicit_report_evidence(activity):
                 "text": report,
             }
         )
+
+    sport = str(activity.get("sport_type") or activity.get("display_label") or "").lower()
+    if "swim" in sport or "sim" in sport:
+        if "trösk" in lower or "threshold" in lower:
+            distance_m = None
+            distance_match = SWIM_DISTANCE_RE.search(report)
+            if distance_match:
+                if distance_match.group("distance"):
+                    distance_m = int(distance_match.group("distance").replace(" ", ""))
+                elif distance_match.group("km"):
+                    distance_m = int(round(float(distance_match.group("km").replace(",", ".")) * 1000))
+            evidence.append(
+                {
+                    "capability": "swim_threshold",
+                    "kind": "explicit_user_report",
+                    "protocol": "aerob+threshold" if ("aerob" in lower or "aerobic" in lower) else "threshold",
+                    "distance_m": distance_m,
+                    "text": report,
+                }
+            )
 
     hill = HILL_RE.search(report)
     if hill and "back" in lower:
@@ -236,6 +257,9 @@ def build_state(activities_state, performance_history, *, today=None, lookback_d
         "swim_aerobic": {
             "longest_distance": max_fact(swim_sessions, "distance_m"),
             "session_count": len(swim_sessions),
+        },
+        "swim_threshold": {
+            "evidence": [item for item in evidence if item.get("capability") == "swim_threshold"],
         },
         "mtb_technical": {
             "longest_duration": max_fact(bike_sessions, "elapsed_time_s"),

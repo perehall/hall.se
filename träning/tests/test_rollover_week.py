@@ -11,6 +11,7 @@ sys.path.insert(0, str(SCRIPTS))
 STRATEGY = json.loads((ROOT / "data" / "training_strategy.json").read_text(encoding="utf-8"))
 
 from rollover_week import (  # noqa: E402
+    apply_swim_option_structure,
     build_open_next_week,
     is_enduro_school_date,
     repair_transition_week_from_previous,
@@ -212,6 +213,51 @@ class WeeklyRolloverTests(unittest.TestCase):
         self.assertEqual(strength_day["performance_marker_id"], "strength-repeatability")
         self.assertEqual(future["meta"]["missing_protected_capabilities"], [])
         self.assertFalse(future["meta"]["requires_mesocycle_review"])
+
+    def test_catalog_swim_option_materializes_exact_watch_structure(self):
+        day = {
+            "sport": "swim",
+            "baseline_option_id": "swim-4000",
+            "dose_options": [
+                {
+                    "id": "swim-4000",
+                    "kind": "structured",
+                    "value": 4000,
+                    "session": "Simning · 4 000 m",
+                    "intent": "test",
+                    "watch_workout": {
+                        "type": "Swim",
+                        "equipment": ["paddles", "pull_buoy"],
+                        "name": "4K",
+                        "planned_distance_m": 4000,
+                        "blocks": [
+                            {
+                                "name": "Main",
+                                "repeat": 20,
+                                "steps": [
+                                    {
+                                        "kind": "swim",
+                                        "text": "200",
+                                        "distance_m": 200,
+                                        "intensity": "active",
+                                    }
+                                ],
+                            }
+                        ],
+                    },
+                }
+            ],
+        }
+        applied = apply_swim_option_structure(
+            day, date(2026, 9, 23), "2026-W39"
+        )
+        self.assertTrue(applied)
+        self.assertEqual(day["watch_workout"]["planned_distance_m"], 4000)
+        self.assertEqual(
+            day["swim_equipment"]["planned"], ["paddles", "pull_buoy"]
+        )
+        self.assertFalse(day["watch_workout"]["sync_enabled"])
+        self.assertIn("swim-4000", day["watch_workout"]["id"])
 
     def test_structured_swim_is_carried_forward_without_volume_increase(self):
         upcoming = add_structured_swim(upcoming_w35())
