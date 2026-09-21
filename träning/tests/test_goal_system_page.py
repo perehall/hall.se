@@ -9,13 +9,22 @@ ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS = ROOT / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
-from build_home import LINK_CSS, render_decision_principles, render_hierarchy, render_mesocycle  # noqa: E402
+from build_home import LINK_CSS, render_decision_principles, render_hierarchy, render_mesocycle, render_performance_goals  # noqa: E402
 
 
 class GoalSystemPageTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.strategy = json.loads((ROOT / "data" / "training_strategy.json").read_text(encoding="utf-8"))
+        cls.goal = json.loads((ROOT / "data" / "goal.json").read_text(encoding="utf-8"))
+
+    def test_concrete_2027_performance_goal_is_visible(self):
+        rendered = render_performance_goals(self.goal)
+        self.assertIn('data-performance-goals="true"', rendered)
+        self.assertIn("ÖTILLÖ Åland", rendered)
+        self.assertIn("2027", rendered)
+        self.assertIn("Topp-10", rendered)
+        self.assertIn("SWIMRUN", rendered)
 
     def test_goal_hierarchy_matches_actual_planning_layers(self):
         rendered = render_hierarchy(self.strategy)

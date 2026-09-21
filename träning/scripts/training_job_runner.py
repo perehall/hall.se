@@ -56,7 +56,10 @@ def build_stages(ingest_mode: str) -> list[Stage]:
         ingest,
         Stage("normalize_activity_semantics", python_stage("normalize_activity_semantics.py")),
         Stage("migrate_typed_plan", python_stage("migrate_training_data_v3.py")),
-        Stage("validate_ingested_data", python_stage("validate_training_data.py")),
+        Stage(
+            "validate_ingested_data",
+            python_stage("validate_training_data.py", "--allow-stale-goal"),
+        ),
         persist_token,
         Stage(
             "sync_performance_details",

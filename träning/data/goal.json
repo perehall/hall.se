@@ -2,31 +2,43 @@
   "schema_version": 2,
   "title": "Målbild 2027",
   "subtitle": "Långsiktig riktning · status och periodisering",
-  "goal": "Bygga en bred, hållbar allroundatlet med stark löpning, teknisk MTB/XC och bibehållen eller förbättrad simning. Relevant styrka, core, löpstyrka och plyometri. Flexibilitet att senare vässa mot trail/ultra, triathlon, swimrun eller cykling.",
+  "goal": "Bygga en bred, hållbar allroundatlet med stark löpning, teknisk MTB/XC, hög simkapacitet och relevant styrka/core/plyometri, med ett konkret prestationsmål 2027: topp-10 på ÖTILLÖ Åland. Under 2027 ska träningen successivt prioritera de swimrun-specifika förmågor som krävs för målet, utan att i onödan offra långsiktig allroundkapacitet.",
+  "performance_goals": [
+    {
+      "id": "otillo-aland-2027-top10",
+      "event": "ÖTILLÖ Åland",
+      "year": 2027,
+      "sport": "swimrun",
+      "target": "Topp-10",
+      "role": "primary_performance_goal",
+      "status": "active",
+      "principle": "Prestationsmålet styr successivt specificiteten under 2027; allroundkapacitet behålls där den inte konkurrerar med målet."
+    }
+  ],
   "overall_status": "På rätt väg",
   "disciplines": [
     {
       "key": "run",
       "label": "Löpning",
-      "status": "uppåtgående",
+      "status": "primärt utvecklingsfokus",
       "level": 3
     },
     {
       "key": "mtb",
       "label": "MTB/XC",
-      "status": "utvecklingsfokus",
+      "status": "stödjande / bibehåll",
       "level": 3
     },
     {
       "key": "swim",
       "label": "Simning",
-      "status": "stark grund",
+      "status": "primärt utvecklingsfokus",
       "level": 4
     },
     {
       "key": "strength",
       "label": "Styrka / core / plyo",
-      "status": "byggs in",
+      "status": "stödjande kapacitet",
       "level": 3
     }
   ],
@@ -40,34 +52,36 @@
     {
       "number": 2,
       "name": "Bygg 1",
-      "description": "bas i löpning, simning och styrka"
+      "description": "bred bas med löpning, simning och styrka"
     },
     {
       "number": 3,
       "name": "Bygg 2",
-      "description": "mer specifik utveckling i löpning/MTB"
+      "description": "utveckla swimrun-relevant löp- och simkapacitet"
     },
     {
       "number": 4,
-      "name": "Riktningsval",
-      "description": "håll flera dörrar öppna"
+      "name": "Swimrun-specifik utveckling",
+      "description": "mer kombinerad och tävlingsnära tålighet när basen stödjer det"
     },
     {
       "number": 5,
-      "name": "Spetsning vid behov",
-      "description": "kan riktas mot lopp eller utmaning"
+      "name": "Åland-spetsning",
+      "description": "specificitet och formtoppning mot ÖTILLÖ Åland 2027"
     }
   ],
   "principles": [
     "Målbilden styr riktningen",
+    "ÖTILLÖ Åland 2027 topp-10 är det konkreta prestationsmålet",
     "Kontinuitet före maxvolym",
     "Kontrollerad kvalitet",
     "Återhämtning styr närbeslut",
-    "Rekreation får ta plats"
+    "Rekreation får ta plats när den inte tränger undan målets nyckelstimuli"
   ],
   "next_steps": [
-    "Bygg vidare på kontrollerad löptröskel",
-    "Håll simningen frekvent och teknisk",
-    "Utveckla MTB/XC med teknik först"
+    "Fortsätt utveckla kontrollerad löptröskel och löptålighet som central swimrun-kapacitet",
+    "Höj simningens strategiska prioritet från underhåll till utveckling med teknik och aerob kapacitet som bas",
+    "Låt kommande mesocykler successivt introducera mer swimrun-specifik kombinations- och tävlingstålighet när aktuell bas motiverar det",
+    "MTB/enduro får fortsatt plats men ska inte tränga undan swimrun-specifika nyckelstimuli när en prioriteringskonflikt uppstår"
   ]
 }

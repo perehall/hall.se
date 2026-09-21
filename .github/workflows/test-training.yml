@@ -41,7 +41,7 @@ jobs:
         run: |
           python "träning/scripts/migrate_training_data_v3.py"
           python "träning/scripts/normalize_activity_semantics.py"
-          python "träning/scripts/validate_training_data.py"
+          python "träning/scripts/validate_training_data.py" --allow-stale-goal
           python "träning/scripts/build_athlete_state.py"
           python "träning/scripts/adaptive_planner.py"
           python "träning/scripts/validate_training_data.py"
