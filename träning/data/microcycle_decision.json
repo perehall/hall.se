@@ -1,83 +1,146 @@
 {
-  "rationale": "Ta bort planering på dag 1 (blockerad av faktisk enduro-belastning) och behåll ursprunglig struktur som uppfyller alla hard_requirements: två simexponeringar (inkl. en kombinerad swim_strength för styrka/core), minst en styrke/core-exponering, alla primära kapaciteter täckta, max två löpkvaliteter, 4–6 slots. Enduro dag 1 bekräftas implicit och andra benintensiva pass sprids för återhämtning.",
+  "rationale": "Följer mesocyklens prioritet att höja simningen konservativt samtidigt som kontrollerad löptröskel och löptålighet bibehålls. Dag 1 är blockerad av faktisk enduro; två simexponeringar ingår varav ena är kombinerad swim_strength för att säkra styrka/core utan extra benkvalitetspass. Max två löpkvaliteter hålls (tröskel + back). Totalt 6 slots (inom 4–6), alla primära kapaciteter täcks och minst en styrke/core-session finns.",
   "slots": [
     {
       "day_index": 2,
-      "recipe_key": "swim_aerobic_technique",
-      "action": "progress",
-      "rationale": "Primär progression för höjd simfrekvens och teknisk fokus; stöds av upprepade 3 200–4 000 m-pass i evidenslagret.",
+      "recipe_key": "run_threshold",
+      "action": "consolidate",
+      "rationale": "Behålla nuvarande 4×8-tröskelkaraktär som baseline utan ökning; stöd av nyligt 4×8-pass och långpasset som återhämtning.",
       "evidence_refs": [
-        "activity_id:20239623463",
-        "activity_id:20047602146",
-        "activity_id:20106458579",
-        "activity_id:19946705399"
+        "20092166843",
+        "20254486837"
       ]
     },
     {
       "day_index": 3,
-      "recipe_key": "run_easy_distance",
-      "action": "establish",
-      "rationale": "Lugn, tålig distansdag för återhämtning efter enduro och förberedelse för kombinerat sim/styrka.",
+      "recipe_key": "swim_aerobic_technique",
+      "action": "progress",
+      "rationale": "Progression riktad mot sim_aerobic/technique (frekvens/setlängd) — motiverat av upprepade 4K/3.2K-sim och session_count.",
       "evidence_refs": [
-        "activity_id:20254486837",
-        "activity_id:20057585521"
+        "19946705399",
+        "20239623463",
+        "20203770266"
       ]
     },
     {
       "day_index": 4,
       "recipe_key": "swim_strength",
       "action": "establish",
-      "rationale": "Kombinerar aerob/teknisk sim med kontrollerad styrka/core för att uppfylla styrkekravet utan extra benkvalitetspass; planeras när benen relativt fräscha.",
+      "rationale": "Kombinerad sim + styrka för att leverera andra simexponeringen och skydda styrke/core-kravet utan separat styrkepass.",
       "evidence_refs": [
-        "activity_id:20239623463",
-        "activity_id:20175536586",
-        "activity_id:20079150228"
+        "20175536586",
+        "19946705399",
+        "20239623463"
       ]
     },
     {
       "day_index": 5,
-      "recipe_key": "run_threshold",
-      "action": "establish",
-      "rationale": "Bibehålla kontrollerad tröskel (ingen progression denna mikrocykel) för att skydda endast en primär progression (sim).",
+      "recipe_key": "run_hill_quality",
+      "action": "consolidate",
+      "rationale": "Bibehålla backstyrka/neuromuskulär kvalitet som sekundärt fokus; hålls kontrollerat efter tröskelpass och enduro-belastning.",
       "evidence_refs": [
-        "activity_id:20092166843",
-        "activity_id:19897382163"
+        "20229568713",
+        "20133500464"
       ]
     },
     {
       "day_index": 6,
-      "recipe_key": "run_hill_quality",
-      "action": "consolidate",
-      "rationale": "Konservera aktuell backkvalitet som kompletterande stimulus (ingen volymökning); placeras med respekt för föregående styrka/sim.",
+      "recipe_key": "run_easy_distance",
+      "action": "establish",
+      "rationale": "Långt lugnt löppass (~90–120 min) för löptålighet enligt mesocykelns mål; planerat som huvudsaklig veckovolym för löpning.",
       "evidence_refs": [
-        "activity_id:20229568713",
-        "activity_id:20133500464"
+        "20254486837",
+        "20057585521"
       ]
     },
     {
       "day_index": 7,
       "recipe_key": "mtb_technical",
       "action": "consolidate",
-      "rationale": "Lätt teknisk MTB-exponering som upprätthåller teknisk färdighet utan att tränga undan primära sim-/löpkvaliteter; undviker att dubbla benkvaliteter nära tunga kvalitetspass.",
+      "rationale": "Lugn teknisk MTB som sekundär stimulans för teknisk kompetens utan att tränga undan primära sim-/löppass.",
       "evidence_refs": [
-        "activity_id:20024236347",
-        "activity_id:20120769386"
+        "20024236347",
+        "20120769386"
       ]
     }
   ],
   "schema_version": 1,
-  "planner_revision": 3,
-  "source": "openai_repaired",
-  "source_hash": "2811f4b39287a882a40669cb5eb05f3b5fa7e16d37100b4c2dd914f3f4b7af12",
-  "generated_at_utc": "2026-09-21T09:37:16.308162+00:00",
+  "planner_revision": 4,
+  "source": "openai",
+  "source_hash": "7a9504edaad56b93a33ff6a55db4100f35ef05e46187a2ca242de8648a4ff0d2",
+  "generated_at_utc": "2026-09-21T09:59:09.837488+00:00",
   "week_start": "2026-09-21",
   "week_key": "2026-W39",
   "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
-  "guard_repair": {
-    "attempted": true,
-    "initial_failures": [
-      "dag 1 är blockerad av fast endurobelastning"
+  "competition_context": {
+    "available": true,
+    "goal_id": "otillo-aland-2027-top10",
+    "event": "ÖTILLÖ Åland World Series",
+    "event_date": "2027-08-14",
+    "as_of": "2026-09-21",
+    "days_to_event": 327,
+    "weeks_to_event": 46.7,
+    "horizon_stage": "foundation",
+    "target": "Topp-10",
+    "target_category": null,
+    "category_status": "unspecified",
+    "sport": "swimrun",
+    "race_profile": {
+      "total_distance_m": 46540,
+      "run_distance_m": 36570,
+      "swim_distance_m": 9960,
+      "elevation_gain_m": 391,
+      "avg_air_temp_c": 21,
+      "avg_water_temp_c": 17,
+      "characteristics": [
+        "Flera sim- och löpsektioner",
+        "Många växlingar",
+        "Åländsk skärgårdsmiljö"
+      ],
+      "source": {
+        "publisher": "ÖTILLÖ Swimrun",
+        "url": "https://otilloswimrun.com/races/aland/aland-world-series/",
+        "verified_on": "2026-09-21"
+      }
+    },
+    "derived": {
+      "run_share_of_published_total": 0.7858,
+      "swim_share_of_published_total": 0.214,
+      "published_component_delta_m": 10
+    },
+    "course_requirement_mapping": [
+      {
+        "source_fact": "run_distance_m",
+        "published_value": 36570,
+        "mapped_capabilities": [
+          "run_easy_distance",
+          "run_threshold"
+        ],
+        "system_gap": null
+      },
+      {
+        "source_fact": "swim_distance_m",
+        "published_value": 9960,
+        "mapped_capabilities": [
+          "swim_aerobic",
+          "swim_threshold",
+          "swim_technique"
+        ],
+        "system_gap": null
+      },
+      {
+        "source_fact": "characteristics: många växlingar",
+        "published_value": "Många växlingar",
+        "mapped_capabilities": [],
+        "system_gap": "combined_swimrun_transition_durability"
+      }
     ],
-    "result": "accepted"
+    "planning_implications": [
+      "36,57 km publicerad löpdistans gör löptålighet över upprepade delsträckor till ett centralt tävlingskrav.",
+      "9,96 km publicerad simdistans gör hög simuthållighet och bibehållen teknik under lång total simtid till ett centralt tävlingskrav.",
+      "Officiell banbeskrivning anger många växlingar; swimrun-specifik kombinationstålighet och övergångsvana behöver byggas innan tävlingsspecifika block.",
+      "391 höjdmeter ska vägas in, men systemet får inte hitta på en mer kuperad profil än den publicerade.",
+      "Tävlingsdatumet styr när specificiteten ska omprövas; det får inte ensamt utlösa automatisk volym- eller intensitetsökning."
+    ]
   }
 }

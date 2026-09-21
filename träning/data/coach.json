@@ -4,7 +4,7 @@
       "activity_id": 20254486837,
       "activity_date": "2026-09-20",
       "activity_name": "Löpning vid lunch",
-      "generated_at_utc": "2026-09-21T09:37:26.981720+00:00",
+      "generated_at_utc": "2026-09-21T09:59:18.476579+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 3,
@@ -16,26 +16,26 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "22.46 km löpning på 2h (5:15/km) med stigade slutsektioner upp mot tröskelpuls — lång genomförd distans som visar god kapacitet för dagens plan.",
-        "load_interpretation": "Kardiovaskulärt högvolympass genomfört (22.5 km, 7074 s); påverkar närbelastningen de kommande 48–72 timmarna och bör vägas mot planerade pass.",
+        "summary": "22,46 km löpning (5:15/km) med ökande tempo sista 4 km och maxpuls 158; genomfört långt uthållighetspass med kontrollerad pulsgenomföring.",
+        "load_interpretation": "Kardiovaskulärt och mekaniskt volym idag; detta ökar närbelastningen för de närmaste 48–72 timmarna jämfört med plan.",
         "confidence": "medium",
         "facts": [
           "Löpning: 22,46 km · 1:59:46 · 267 m+ · snittpuls 138,9 · maxpuls 158."
         ],
         "interpretations": [
-          "Passet visar att längre löppass och längre arbetstid absorberas bra idag och innehöll hårdare sektioner mot slutet som nådde tröskelnivåer.",
-          "Eftersom mikrocykeln planerar sim som primär progression och har flera krävande pass inom 2–3 dagar, behålls planen konservativ för att skydda sim- och styrkestimuli."
+          "Passet var ett långt, genomfört löppass som ökar veckovolymen mer än planerat långdistans (120 min planerat); visar att långtidstolerans finns för denna session.",
+          "Snabbare sluttande kilometer och maxpuls mot 154–158 indikerar högre avslutningsintensitet än jämnt lugnt långpass, vilket kan påverka återhämtning för kommande tröskelpass och styrka."
         ],
         "unknowns": [
-          "Subjektiv återhämtning efter passet (användarrapport tom)",
-          "Eventuella lokala muskelsmärtor eller skador som kan påverka kommande styrke-/backpass"
+          "Subjektiv återhämtning/benstatus efter passet (användarrapport tom)",
+          "Planerat styrke-/simpass kommande dagar eventuell konflikt med dagens ökade volym"
         ]
       },
       "plan_action": {
-        "action": "keep",
+        "action": "review",
         "target_date": "",
-        "reason": "Ingen entydig indikation i data eller återhämtningsunderlaget för att minska eller vila; planerade nära-dagspass skyddas enligt strategi.",
-        "recommendation": "Följ plan: håll kommande enduroskola (21/9) och behåll sim 3200 m (22/9) samt övriga planerade pass; rapportera subjektiv återhämtning och lokal trötthet före nästa pass.",
+        "reason": "Beslutet skjuts upp eftersom mellanliggande planerade dagar ännu inte har ett känt utfall.",
+        "recommendation": "Måndag: Enduroskola · fast tillfälle ligger kvar som plan. Tisdag: Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg bedöms efter den faktiska belastningen från måndag och återhämtningen därefter.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -1237,8 +1237,8 @@
       }
     }
   ],
-  "last_trigger_hash": "a600a1b8132e0546ed32b366078d0e0e4d28a06f0b07a4abda4dc0a6136c0763",
-  "last_run_utc": "2026-09-21T09:37:26.981720+00:00",
+  "last_trigger_hash": "71aec45637c8a920da9ae66dd9d31faa43f85ff9436ced80176c764315416994",
+  "last_run_utc": "2026-09-21T09:59:18.476579+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 3
