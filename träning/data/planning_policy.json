@@ -266,5 +266,23 @@
   "migration_seed": {
     "previous_mesocycle_id": "run-threshold-hill-4w",
     "previous_mesocycle_end_date": "2026-09-20"
+  },
+  "event_horizon_policy": {
+    "specificity_build_review_days": 168,
+    "race_specific_review_days": 84,
+    "taper_review_days": 21,
+    "principle": "Tidsfönstren är beslutspunkter för ökad specificitet, inte fasta träningsrecept eller fysiologiska trösklar. Faktisk kapacitet, absorption och tävlingsprofil avgör innehållet.",
+    "stages": {
+      "foundation": "Bygg de kapaciteter som loppet kräver utan att tidigt simulera tävlingen.",
+      "specificity_build": "Öka andelen swimrun-relevant kombination och tävlingsnära färdighet när faktalagret stödjer det.",
+      "race_specific": "Prioritera tävlingsspecifik kombinationstålighet, utrustning, övergångar och relevanta längre sammanhängande stimuli utan att automatiskt höja total belastning.",
+      "taper_review": "Ompröva belastning och specificitet mot loppet; taperdos måste härledas från faktisk träning och respons, inte från kalendern ensam."
+    },
+    "rules": [
+      "Aktivt A-lopp med verifierat datum och race_profile ska alltid följa med in i mesocykelbeslutet.",
+      "Tid kvar till loppet får ändra specificitetsprioritering men får inte ensam motivera mer träningsvolym, högre intensitet eller fler pass.",
+      "Banans publicerade löp-, sim- och höjddata ska användas som tävlingskrav utan att extrapoleras till oobserverade farter eller kapacitetsvärden.",
+      "När en tävlingsspecifik förmåga saknar exekverbart recept ska systemet markera kapacitetsgapet i stället för att hitta på ett pass."
+    ]
   }
 }
