@@ -1,54 +1,52 @@
 {
-  "rationale": "Mikrocykeln följer mesocykelbeslutet att prioritera simutveckling samtidigt som kontrollerad löptröskel och styrka/core bibehålls. Dag 1 är blockerad av verifierad enduro; dag 2 hålls låg benbelastning (sim). Två simexponeringar inkl. ett kombinationspass (swim_strength) uppfyller normal swim‑exposure och säkerställer minst en styrke/core‑stimulans. Löpkvalitet hålls som konsolidering (inga progressbeslut för run_threshold denna mikrocykel). Minst en vilodag lämnas (dag 6). Besluten tar hänsyn till aktuell belastningshistorik och mesocykelns guardrails (enduro påverkar andra benbelastningar, endast en primär progression tillåten).",
+  "rationale": "Prioritera sim (ökad frekvens/teknik) och bibehåll kontrollerad löptröskel + lång lugn löpning; använd swim_strength för att leverera styrka/core utan extra benkvalitet; respektera dag1 enduro och gör dag2 låg benbelastning; lämna en vilodag.",
   "slots": [
     {
       "day_index": 2,
       "recipe_key": "swim_aerobic_technique",
       "action": "progress",
-      "rationale": "Progress för swim_aerobic/teknik: öka absorberbar aerob simstimulus på låg benbelastningsdag direkt efter enduro.",
+      "rationale": "Ökar simfokus enligt mesocykel (frekvens/teknik). Låg benbelastning dag efter enduro.",
       "evidence_refs": [
+        "19946705399",
         "20239623463",
-        "20203770266",
-        "19946705399"
+        "20203770266"
       ]
     },
     {
       "day_index": 3,
-      "recipe_key": "swim_strength",
-      "action": "establish",
-      "rationale": "Etablera kombinerat sim+styrka för att uppfylla andra simexponeringen och säkerställa styrke/core‑stimulus utan extra benkvalitetspass.",
+      "recipe_key": "mtb_technical",
+      "action": "consolidate",
+      "rationale": "Bibehåll teknisk MTB utan att tränga undan primära swim/run-stimuli; inte intill löptröskel.",
       "evidence_refs": [
-        "20272196080",
-        "20175536586",
-        "20239623463"
+        "20024236347",
+        "20120769386"
       ]
     },
     {
       "day_index": 4,
-      "recipe_key": "mtb_technical",
-      "action": "establish",
-      "rationale": "Behåll MTB/teknik som sekundär kapacitet i kontrollerad dos så det inte tränger undan primära swim/run‑stimuli.",
+      "recipe_key": "swim_strength",
+      "action": "consolidate",
+      "rationale": "Kombinerar andra simexponeringen med nödvändig styrka/core för att uppfylla mesocykelkrav utan extra dag.",
       "evidence_refs": [
-        "20271537143",
-        "20024236347",
-        "20120769386"
+        "20175536586",
+        "20203770266"
       ]
     },
     {
       "day_index": 5,
       "recipe_key": "run_threshold",
       "action": "consolidate",
-      "rationale": "Konsolidera befintlig run_threshold (4×8 baseline) utan ytterligare progression för att skydda återhämtning och styrka/core.",
+      "rationale": "Bibehåller kontrollerad tröskel (4×8-bas) utan ytterligare progression denna mikrocykel.",
       "evidence_refs": [
         "20092166843",
-        "20254486837"
+        "19897382163"
       ]
     },
     {
       "day_index": 7,
       "recipe_key": "run_easy_distance",
       "action": "consolidate",
-      "rationale": "Lugn långt löppass för löptålighet; planerat efter minst en vilodag (dag 6) så att löpkvaliteten kan bibehållas.",
+      "rationale": "Veckans långa lugna löpning för tålighet; separerad från tröskel med vilodag emellan.",
       "evidence_refs": [
         "20254486837"
       ]
@@ -57,19 +55,19 @@
   "schema_version": 1,
   "planner_revision": 5,
   "source": "openai",
-  "source_hash": "a0305079a61d01eebab8e27b37a70629a55761235cd393b3236a1ad09b7a3884",
-  "generated_at_utc": "2026-09-21T21:14:29.696131+00:00",
-  "week_start": "2026-09-21",
-  "week_key": "2026-W39",
+  "source_hash": "65bcc08a2b93a961bf38d2f71a87d8178d7f75a2c1480bedb547113878e56df6",
+  "generated_at_utc": "2026-09-21T21:18:55.066547+00:00",
+  "week_start": "2026-09-28",
+  "week_key": "2026-W40",
   "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
   "competition_context": {
     "available": true,
     "goal_id": "otillo-aland-2027-top10",
     "event": "ÖTILLÖ Åland World Series",
     "event_date": "2027-08-14",
-    "as_of": "2026-09-21",
-    "days_to_event": 327,
-    "weeks_to_event": 46.7,
+    "as_of": "2026-09-28",
+    "days_to_event": 320,
+    "weeks_to_event": 45.7,
     "horizon_stage": "foundation",
     "target": "Topp-10",
     "target_category": null,

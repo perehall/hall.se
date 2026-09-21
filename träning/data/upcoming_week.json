@@ -155,7 +155,7 @@
       "status": "preliminary",
       "planning_status": "preliminary",
       "session": "Simning · 3 200 m · aerob/teknik",
-      "reason": "Progress för swim_aerobic/teknik: öka absorberbar aerob simstimulus på låg benbelastningsdag direkt efter enduro. Valet utgår från ett observerat värde 3200 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Katalogen innehåller inget högre verifierat steg, därför konsolideras dosen. Veckobeslut: progress; materialiserad relation: hold.",
+      "reason": "Ökar simfokus enligt mesocykel (frekvens/teknik). Låg benbelastning dag efter enduro. Valet utgår från ett observerat värde 3200 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Katalogen innehåller inget högre verifierat steg, därför konsolideras dosen. Veckobeslut: progress; materialiserad relation: hold.",
       "development_focus": "Teknisk kvalitet och stabil aerob rytm; simningen ska kunna stödja helheten med låg mekanisk kostnad för benen.",
       "sport": "swim",
       "priority_role": "anchor",
@@ -266,12 +266,18 @@
         "source": "athlete_state",
         "microcycle_plan": [
           {
-            "microcycle": 1,
+            "microcycle": 2,
             "option_id": "swim-3200",
             "relation": "hold",
             "reason": "Mikrocykelbeslutet valde progress och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt."
           }
         ]
+      },
+      "development_step": {
+        "microcycle": 2,
+        "option_id": "swim-3200",
+        "relation": "hold",
+        "reason": "Mikrocykelbeslutet valde progress och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt."
       },
       "baseline_option_id": "swim-3200",
       "dose_open": false,
@@ -385,8 +391,8 @@
           "selection_uses_only_preapproved_doses": true
         },
         "progression_from_previous": {
-          "relation": "support",
-          "reason": "Kortare etablerad simexponering.",
+          "relation": "hold",
+          "reason": "Mikrocykelbeslutet valde progress och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
           "demonstrated_floor_option_id": "swim-3200"
         },
         "candidates": [
@@ -487,7 +493,7 @@
         "selection": {
           "method": "deterministic_constraint_scoring",
           "preferred_dose_option_id": "swim-3200",
-          "reason_for_today": "Kortare etablerad simexponering."
+          "reason_for_today": "Mikrocykelbeslutet valde progress och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt."
         }
       },
       "device_workout": {
@@ -629,8 +635,303 @@
       "label": "Onsdag",
       "status": "preliminary",
       "planning_status": "preliminary",
+      "session": "MTB/XC · 90 min · teknik + lugn aerob stig",
+      "reason": "Bibehåll teknisk MTB utan att tränga undan primära swim/run-stimuli; inte intill löptröskel. Valet utgår från ett observerat värde 131.383 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
+      "development_focus": "Blick, linjeval, bromspunkter och flyt före segmentjakt.",
+      "sport": "bike",
+      "priority_role": "flex",
+      "stimuli": [
+        "mtb_technical",
+        "mtb_aerobic"
+      ],
+      "load_dimensions": [
+        "cardiovascular",
+        "neuromuscular",
+        "technical"
+      ],
+      "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
+      "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc2",
+      "microcycle_index": 2,
+      "microcycle_day": 3,
+      "microcycle_slot": "mtb_technical_2",
+      "performance_marker_id": "mtb-technical-repeat",
+      "dose_options": [
+        {
+          "id": "mtb-tech-45",
+          "kind": "duration_minutes",
+          "value": 45,
+          "session": "MTB/XC · 45 min · teknik + lugn aerob stig",
+          "intent": "Kort teknisk exponering."
+        },
+        {
+          "id": "mtb-tech-60",
+          "kind": "duration_minutes",
+          "value": 60,
+          "session": "MTB/XC · 60 min · teknik + lugn aerob stig",
+          "intent": "Normal teknisk/aerob exponering."
+        },
+        {
+          "id": "mtb-tech-75",
+          "kind": "duration_minutes",
+          "value": 75,
+          "session": "MTB/XC · 75 min · teknik + lugn aerob stig",
+          "intent": "Progressionsalternativ när cykelbelastningen absorberas."
+        },
+        {
+          "id": "mtb-tech-90",
+          "kind": "duration_minutes",
+          "value": 90,
+          "session": "MTB/XC · 90 min · teknik + lugn aerob stig",
+          "intent": "Längre teknisk/aerob exponering med krav på marginal till löpkvalitet."
+        }
+      ],
+      "baseline_option_id": "mtb-tech-90",
+      "dose_open": false,
+      "dose_resolution": {
+        "state": "baseline",
+        "kind": "duration_minutes",
+        "value": 90,
+        "option_id": "mtb-tech-90"
+      },
+      "workout_design": {
+        "schema_version": 1,
+        "objective": {
+          "mesocycle_role": "secondary",
+          "priority_role": "flex",
+          "stimuli": [
+            "mtb_technical",
+            "mtb_aerobic"
+          ],
+          "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
+          "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc2",
+          "microcycle_slot": "mtb_technical_2"
+        },
+        "near_term_context": {
+          "load_dimensions": [
+            "cardiovascular",
+            "neuromuscular",
+            "technical"
+          ],
+          "selection_uses_only_preapproved_doses": true
+        },
+        "progression_from_previous": {
+          "relation": "support",
+          "reason": "Längre teknisk/aerob exponering med krav på marginal till löpkvalitet.",
+          "demonstrated_floor_option_id": ""
+        },
+        "candidates": [
+          {
+            "id": "mtb-tech-90",
+            "dose_option_id": "mtb-tech-90",
+            "session": "MTB/XC · 90 min · teknik + lugn aerob stig",
+            "intent": "Längre teknisk/aerob exponering med krav på marginal till löpkvalitet.",
+            "dose": {
+              "kind": "duration_minutes",
+              "value": 90
+            },
+            "stimuli": [
+              "mtb_technical",
+              "mtb_aerobic"
+            ],
+            "prescription": {
+              "executable": true,
+              "completeness": "full",
+              "blocks": [
+                {
+                  "name": "MTB/XC",
+                  "work": {
+                    "duration_s": 5400
+                  },
+                  "instruction": "Blick, linjeval, bromspunkter och flyt före segmentjakt.",
+                  "intensity": "lugn aerob/teknisk"
+                }
+              ],
+              "source": "duration_session"
+            },
+            "score": {
+              "total": 100,
+              "breakdown": {
+                "mesocycle_alignment": 30,
+                "microcycle_alignment": 30,
+                "progression_alignment": 15,
+                "prescription_specificity": 15,
+                "near_term_resolution": 10
+              },
+              "basis": "deterministic_constraint_alignment"
+            }
+          },
+          {
+            "id": "mtb-tech-75",
+            "dose_option_id": "mtb-tech-75",
+            "session": "MTB/XC · 75 min · teknik + lugn aerob stig",
+            "intent": "Progressionsalternativ när cykelbelastningen absorberas.",
+            "dose": {
+              "kind": "duration_minutes",
+              "value": 75
+            },
+            "stimuli": [
+              "mtb_technical",
+              "mtb_aerobic"
+            ],
+            "prescription": {
+              "executable": true,
+              "completeness": "full",
+              "blocks": [
+                {
+                  "name": "MTB/XC",
+                  "work": {
+                    "duration_s": 4500
+                  },
+                  "instruction": "Blick, linjeval, bromspunkter och flyt före segmentjakt.",
+                  "intensity": "lugn aerob/teknisk"
+                }
+              ],
+              "source": "duration_session"
+            },
+            "score": {
+              "total": 70,
+              "breakdown": {
+                "mesocycle_alignment": 30,
+                "microcycle_alignment": 10,
+                "progression_alignment": 15,
+                "prescription_specificity": 15,
+                "near_term_resolution": 0
+              },
+              "basis": "deterministic_constraint_alignment"
+            }
+          },
+          {
+            "id": "mtb-tech-60",
+            "dose_option_id": "mtb-tech-60",
+            "session": "MTB/XC · 60 min · teknik + lugn aerob stig",
+            "intent": "Normal teknisk/aerob exponering.",
+            "dose": {
+              "kind": "duration_minutes",
+              "value": 60
+            },
+            "stimuli": [
+              "mtb_technical",
+              "mtb_aerobic"
+            ],
+            "prescription": {
+              "executable": true,
+              "completeness": "full",
+              "blocks": [
+                {
+                  "name": "MTB/XC",
+                  "work": {
+                    "duration_s": 3600
+                  },
+                  "instruction": "Blick, linjeval, bromspunkter och flyt före segmentjakt.",
+                  "intensity": "lugn aerob/teknisk"
+                }
+              ],
+              "source": "duration_session"
+            },
+            "score": {
+              "total": 70,
+              "breakdown": {
+                "mesocycle_alignment": 30,
+                "microcycle_alignment": 10,
+                "progression_alignment": 15,
+                "prescription_specificity": 15,
+                "near_term_resolution": 0
+              },
+              "basis": "deterministic_constraint_alignment"
+            }
+          },
+          {
+            "id": "mtb-tech-45",
+            "dose_option_id": "mtb-tech-45",
+            "session": "MTB/XC · 45 min · teknik + lugn aerob stig",
+            "intent": "Kort teknisk exponering.",
+            "dose": {
+              "kind": "duration_minutes",
+              "value": 45
+            },
+            "stimuli": [
+              "mtb_technical",
+              "mtb_aerobic"
+            ],
+            "prescription": {
+              "executable": true,
+              "completeness": "full",
+              "blocks": [
+                {
+                  "name": "MTB/XC",
+                  "work": {
+                    "duration_s": 2700
+                  },
+                  "instruction": "Blick, linjeval, bromspunkter och flyt före segmentjakt.",
+                  "intensity": "lugn aerob/teknisk"
+                }
+              ],
+              "source": "duration_session"
+            },
+            "score": {
+              "total": 70,
+              "breakdown": {
+                "mesocycle_alignment": 30,
+                "microcycle_alignment": 10,
+                "progression_alignment": 15,
+                "prescription_specificity": 15,
+                "near_term_resolution": 0
+              },
+              "basis": "deterministic_constraint_alignment"
+            }
+          }
+        ],
+        "selected_candidate_id": "mtb-tech-90",
+        "selection": {
+          "method": "deterministic_constraint_scoring",
+          "preferred_dose_option_id": "mtb-tech-90",
+          "reason_for_today": "Längre teknisk/aerob exponering med krav på marginal till löpkvalitet."
+        }
+      },
+      "device_workout": {
+        "schema_version": 1,
+        "external_id": "hall-device:2026-09-30:bike:mtb_technical_2",
+        "date": "2026-09-30",
+        "sport": "bike",
+        "provider_type": "Ride",
+        "name": "MTB/XC · 90 min · teknik + lugn aerob stig",
+        "source_candidate_id": "mtb-tech-90",
+        "source_hash": "0448a8b0e61fc707c6c92218af5f54857d26ad076947f2684c99eff035726a0d",
+        "blocks": [
+          {
+            "name": "MTB/XC",
+            "sets": 1,
+            "repetitions_per_set": 1,
+            "steps": [
+              {
+                "kind": "work",
+                "duration": {
+                  "kind": "time",
+                  "seconds": 5400
+                },
+                "instruction": "Blick, linjeval, bromspunkter och flyt före segmentjakt.",
+                "intensity_class": "active"
+              }
+            ]
+          }
+        ],
+        "target_policy": "explicit_single_primary_only",
+        "transport": "intervals_icu"
+      },
+      "device_sync": {
+        "status": "deferred",
+        "transport": "intervals_icu",
+        "source_hash": "0448a8b0e61fc707c6c92218af5f54857d26ad076947f2684c99eff035726a0d",
+        "device_delivery": "unverified"
+      }
+    },
+    {
+      "date": "2026-10-01",
+      "label": "Torsdag",
+      "status": "preliminary",
+      "planning_status": "preliminary",
       "session": "Simning · 3 200 m · aerob/teknik + styrka/core · ca 35 min · styrkemall",
-      "reason": "Etablera kombinerat sim+styrka för att uppfylla andra simexponeringen och säkerställa styrke/core‑stimulus utan extra benkvalitetspass. Valet utgår från ett observerat värde 36.0167 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
+      "reason": "Kombinerar andra simexponeringen med nödvändig styrka/core för att uppfylla mesocykelkrav utan extra dag. Valet utgår från ett observerat värde 36.0167 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
       "development_focus": "Andra simexponeringen hålls aerob/teknisk och kombineras med kontrollerad styrka/core för att skydda båda kapaciteterna utan ett extra benkvalitetspass.",
       "sport": "strength",
       "priority_role": "protected_support",
@@ -649,8 +950,8 @@
       "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
       "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc2",
       "microcycle_index": 2,
-      "microcycle_day": 3,
-      "microcycle_slot": "swim_strength_2",
+      "microcycle_day": 4,
+      "microcycle_slot": "swim_strength_3",
       "optional_stimuli": [
         "plyometric"
       ],
@@ -764,7 +1065,7 @@
           }
         ],
         "sync_enabled": false,
-        "id": "swim-2026-w40-2026-09-30-preview"
+        "id": "swim-2026-w40-2026-10-01-preview"
       },
       "swim_equipment": {
         "planned": []
@@ -787,7 +1088,7 @@
           ],
           "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
           "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc2",
-          "microcycle_slot": "swim_strength_2"
+          "microcycle_slot": "swim_strength_3"
         },
         "near_term_context": {
           "load_dimensions": [
@@ -1303,307 +1604,12 @@
       }
     },
     {
-      "date": "2026-10-01",
-      "label": "Torsdag",
-      "status": "preliminary",
-      "planning_status": "preliminary",
-      "session": "MTB/XC · 90 min · teknik + lugn aerob stig",
-      "reason": "Behåll MTB/teknik som sekundär kapacitet i kontrollerad dos så det inte tränger undan primära swim/run‑stimuli. Valet utgår från ett observerat värde 131.383 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
-      "development_focus": "Blick, linjeval, bromspunkter och flyt före segmentjakt.",
-      "sport": "bike",
-      "priority_role": "flex",
-      "stimuli": [
-        "mtb_technical",
-        "mtb_aerobic"
-      ],
-      "load_dimensions": [
-        "cardiovascular",
-        "neuromuscular",
-        "technical"
-      ],
-      "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
-      "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc2",
-      "microcycle_index": 2,
-      "microcycle_day": 4,
-      "microcycle_slot": "mtb_technical_3",
-      "performance_marker_id": "mtb-technical-repeat",
-      "dose_options": [
-        {
-          "id": "mtb-tech-45",
-          "kind": "duration_minutes",
-          "value": 45,
-          "session": "MTB/XC · 45 min · teknik + lugn aerob stig",
-          "intent": "Kort teknisk exponering."
-        },
-        {
-          "id": "mtb-tech-60",
-          "kind": "duration_minutes",
-          "value": 60,
-          "session": "MTB/XC · 60 min · teknik + lugn aerob stig",
-          "intent": "Normal teknisk/aerob exponering."
-        },
-        {
-          "id": "mtb-tech-75",
-          "kind": "duration_minutes",
-          "value": 75,
-          "session": "MTB/XC · 75 min · teknik + lugn aerob stig",
-          "intent": "Progressionsalternativ när cykelbelastningen absorberas."
-        },
-        {
-          "id": "mtb-tech-90",
-          "kind": "duration_minutes",
-          "value": 90,
-          "session": "MTB/XC · 90 min · teknik + lugn aerob stig",
-          "intent": "Längre teknisk/aerob exponering med krav på marginal till löpkvalitet."
-        }
-      ],
-      "baseline_option_id": "mtb-tech-90",
-      "dose_open": false,
-      "dose_resolution": {
-        "state": "baseline",
-        "kind": "duration_minutes",
-        "value": 90,
-        "option_id": "mtb-tech-90"
-      },
-      "workout_design": {
-        "schema_version": 1,
-        "objective": {
-          "mesocycle_role": "secondary",
-          "priority_role": "flex",
-          "stimuli": [
-            "mtb_technical",
-            "mtb_aerobic"
-          ],
-          "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
-          "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc2",
-          "microcycle_slot": "mtb_technical_3"
-        },
-        "near_term_context": {
-          "load_dimensions": [
-            "cardiovascular",
-            "neuromuscular",
-            "technical"
-          ],
-          "selection_uses_only_preapproved_doses": true
-        },
-        "progression_from_previous": {
-          "relation": "support",
-          "reason": "Längre teknisk/aerob exponering med krav på marginal till löpkvalitet.",
-          "demonstrated_floor_option_id": ""
-        },
-        "candidates": [
-          {
-            "id": "mtb-tech-90",
-            "dose_option_id": "mtb-tech-90",
-            "session": "MTB/XC · 90 min · teknik + lugn aerob stig",
-            "intent": "Längre teknisk/aerob exponering med krav på marginal till löpkvalitet.",
-            "dose": {
-              "kind": "duration_minutes",
-              "value": 90
-            },
-            "stimuli": [
-              "mtb_technical",
-              "mtb_aerobic"
-            ],
-            "prescription": {
-              "executable": true,
-              "completeness": "full",
-              "blocks": [
-                {
-                  "name": "MTB/XC",
-                  "work": {
-                    "duration_s": 5400
-                  },
-                  "instruction": "Blick, linjeval, bromspunkter och flyt före segmentjakt.",
-                  "intensity": "lugn aerob/teknisk"
-                }
-              ],
-              "source": "duration_session"
-            },
-            "score": {
-              "total": 100,
-              "breakdown": {
-                "mesocycle_alignment": 30,
-                "microcycle_alignment": 30,
-                "progression_alignment": 15,
-                "prescription_specificity": 15,
-                "near_term_resolution": 10
-              },
-              "basis": "deterministic_constraint_alignment"
-            }
-          },
-          {
-            "id": "mtb-tech-75",
-            "dose_option_id": "mtb-tech-75",
-            "session": "MTB/XC · 75 min · teknik + lugn aerob stig",
-            "intent": "Progressionsalternativ när cykelbelastningen absorberas.",
-            "dose": {
-              "kind": "duration_minutes",
-              "value": 75
-            },
-            "stimuli": [
-              "mtb_technical",
-              "mtb_aerobic"
-            ],
-            "prescription": {
-              "executable": true,
-              "completeness": "full",
-              "blocks": [
-                {
-                  "name": "MTB/XC",
-                  "work": {
-                    "duration_s": 4500
-                  },
-                  "instruction": "Blick, linjeval, bromspunkter och flyt före segmentjakt.",
-                  "intensity": "lugn aerob/teknisk"
-                }
-              ],
-              "source": "duration_session"
-            },
-            "score": {
-              "total": 70,
-              "breakdown": {
-                "mesocycle_alignment": 30,
-                "microcycle_alignment": 10,
-                "progression_alignment": 15,
-                "prescription_specificity": 15,
-                "near_term_resolution": 0
-              },
-              "basis": "deterministic_constraint_alignment"
-            }
-          },
-          {
-            "id": "mtb-tech-60",
-            "dose_option_id": "mtb-tech-60",
-            "session": "MTB/XC · 60 min · teknik + lugn aerob stig",
-            "intent": "Normal teknisk/aerob exponering.",
-            "dose": {
-              "kind": "duration_minutes",
-              "value": 60
-            },
-            "stimuli": [
-              "mtb_technical",
-              "mtb_aerobic"
-            ],
-            "prescription": {
-              "executable": true,
-              "completeness": "full",
-              "blocks": [
-                {
-                  "name": "MTB/XC",
-                  "work": {
-                    "duration_s": 3600
-                  },
-                  "instruction": "Blick, linjeval, bromspunkter och flyt före segmentjakt.",
-                  "intensity": "lugn aerob/teknisk"
-                }
-              ],
-              "source": "duration_session"
-            },
-            "score": {
-              "total": 70,
-              "breakdown": {
-                "mesocycle_alignment": 30,
-                "microcycle_alignment": 10,
-                "progression_alignment": 15,
-                "prescription_specificity": 15,
-                "near_term_resolution": 0
-              },
-              "basis": "deterministic_constraint_alignment"
-            }
-          },
-          {
-            "id": "mtb-tech-45",
-            "dose_option_id": "mtb-tech-45",
-            "session": "MTB/XC · 45 min · teknik + lugn aerob stig",
-            "intent": "Kort teknisk exponering.",
-            "dose": {
-              "kind": "duration_minutes",
-              "value": 45
-            },
-            "stimuli": [
-              "mtb_technical",
-              "mtb_aerobic"
-            ],
-            "prescription": {
-              "executable": true,
-              "completeness": "full",
-              "blocks": [
-                {
-                  "name": "MTB/XC",
-                  "work": {
-                    "duration_s": 2700
-                  },
-                  "instruction": "Blick, linjeval, bromspunkter och flyt före segmentjakt.",
-                  "intensity": "lugn aerob/teknisk"
-                }
-              ],
-              "source": "duration_session"
-            },
-            "score": {
-              "total": 70,
-              "breakdown": {
-                "mesocycle_alignment": 30,
-                "microcycle_alignment": 10,
-                "progression_alignment": 15,
-                "prescription_specificity": 15,
-                "near_term_resolution": 0
-              },
-              "basis": "deterministic_constraint_alignment"
-            }
-          }
-        ],
-        "selected_candidate_id": "mtb-tech-90",
-        "selection": {
-          "method": "deterministic_constraint_scoring",
-          "preferred_dose_option_id": "mtb-tech-90",
-          "reason_for_today": "Längre teknisk/aerob exponering med krav på marginal till löpkvalitet."
-        }
-      },
-      "device_workout": {
-        "schema_version": 1,
-        "external_id": "hall-device:2026-10-01:bike:mtb_technical_3",
-        "date": "2026-10-01",
-        "sport": "bike",
-        "provider_type": "Ride",
-        "name": "MTB/XC · 90 min · teknik + lugn aerob stig",
-        "source_candidate_id": "mtb-tech-90",
-        "source_hash": "3d94347c53c8ba48da5cdf55c6561b2eec113b7de3cb365e2b1e9056f5271c4f",
-        "blocks": [
-          {
-            "name": "MTB/XC",
-            "sets": 1,
-            "repetitions_per_set": 1,
-            "steps": [
-              {
-                "kind": "work",
-                "duration": {
-                  "kind": "time",
-                  "seconds": 5400
-                },
-                "instruction": "Blick, linjeval, bromspunkter och flyt före segmentjakt.",
-                "intensity_class": "active"
-              }
-            ]
-          }
-        ],
-        "target_policy": "explicit_single_primary_only",
-        "transport": "intervals_icu"
-      },
-      "device_sync": {
-        "status": "deferred",
-        "transport": "intervals_icu",
-        "source_hash": "3d94347c53c8ba48da5cdf55c6561b2eec113b7de3cb365e2b1e9056f5271c4f",
-        "device_delivery": "unverified"
-      }
-    },
-    {
       "date": "2026-10-02",
       "label": "Fredag",
       "status": "preliminary",
       "planning_status": "preliminary",
       "session": "Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg",
-      "reason": "Konsolidera befintlig run_threshold (4×8 baseline) utan ytterligare progression för att skydda återhämtning och styrka/core. Valet utgår från ett observerat värde 32 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
+      "reason": "Bibehåller kontrollerad tröskel (4×8-bas) utan ytterligare progression denna mikrocykel. Valet utgår från ett observerat värde 32 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
       "development_focus": "Jämn, kontrollerad tröskelkaraktär. Progression ska främst öka absorberbar arbetstid, inte jaga högre intensitet.",
       "sport": "run",
       "priority_role": "anchor",
@@ -1657,12 +1663,18 @@
         "source": "athlete_state",
         "microcycle_plan": [
           {
-            "microcycle": 1,
+            "microcycle": 2,
             "option_id": "run-threshold-4x8",
             "relation": "hold",
             "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt."
           }
         ]
+      },
+      "development_step": {
+        "microcycle": 2,
+        "option_id": "run-threshold-4x8",
+        "relation": "hold",
+        "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt."
       },
       "baseline_option_id": "run-threshold-4x8",
       "dose_open": false,
@@ -1692,8 +1704,8 @@
           "selection_uses_only_preapproved_doses": true
         },
         "progression_from_previous": {
-          "relation": "support",
-          "reason": "Alternativ struktur med något större total arbetstid; används bara när faktisk historik stödjer den.",
+          "relation": "hold",
+          "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
           "demonstrated_floor_option_id": "run-threshold-4x8"
         },
         "candidates": [
@@ -1776,11 +1788,11 @@
               "source": "structured_session"
             },
             "score": {
-              "total": 70,
+              "total": 59,
               "breakdown": {
                 "mesocycle_alignment": 30,
                 "microcycle_alignment": 10,
-                "progression_alignment": 15,
+                "progression_alignment": 4,
                 "prescription_specificity": 15,
                 "near_term_resolution": 0
               },
@@ -1821,11 +1833,11 @@
               "source": "structured_session"
             },
             "score": {
-              "total": 70,
+              "total": 59,
               "breakdown": {
                 "mesocycle_alignment": 30,
                 "microcycle_alignment": 10,
-                "progression_alignment": 15,
+                "progression_alignment": 4,
                 "prescription_specificity": 15,
                 "near_term_resolution": 0
               },
@@ -1866,11 +1878,11 @@
               "source": "structured_session"
             },
             "score": {
-              "total": 70,
+              "total": 59,
               "breakdown": {
                 "mesocycle_alignment": 30,
                 "microcycle_alignment": 10,
-                "progression_alignment": 15,
+                "progression_alignment": 4,
                 "prescription_specificity": 15,
                 "near_term_resolution": 0
               },
@@ -1882,7 +1894,7 @@
         "selection": {
           "method": "deterministic_constraint_scoring",
           "preferred_dose_option_id": "run-threshold-4x8",
-          "reason_for_today": "Alternativ struktur med något större total arbetstid; används bara när faktisk historik stödjer den."
+          "reason_for_today": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt."
         }
       },
       "device_workout": {
@@ -1948,7 +1960,7 @@
       "status": "preliminary",
       "planning_status": "preliminary",
       "session": "Löpning · lugn distans · 120 min",
-      "reason": "Lugn långt löppass för löptålighet; planerat efter minst en vilodag (dag 6) så att löpkvaliteten kan bibehållas. Valet utgår från ett observerat värde 119.767 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
+      "reason": "Veckans långa lugna löpning för tålighet; separerad från tröskel med vilodag emellan. Valet utgår från ett observerat värde 119.767 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
       "development_focus": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt.",
       "sport": "run",
       "priority_role": "flex",
