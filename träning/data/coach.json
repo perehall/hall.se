@@ -4,7 +4,7 @@
       "activity_id": 20254486837,
       "activity_date": "2026-09-20",
       "activity_name": "Löpning vid lunch",
-      "generated_at_utc": "2026-09-21T08:02:26.263213+00:00",
+      "generated_at_utc": "2026-09-21T08:07:17.686637+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 3,
@@ -16,28 +16,28 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "22.46 km löpning på 7 074 s med stabil km-fördelning och stig/elev 267 m; passet genomfördes fullständigt utan användarrapport om problem.",
-        "load_interpretation": "Stort volympass i närbelastningsfönstret — beakta tidigare 3×8 backintervaller (18/9) och sim 4 000 m (19/9) vid beslut för nästa 48–72 h.",
+        "summary": "22.46 km löpning på 2h–2h0m med 5:15/km snittpace och stigande fart sista 5 km; passet genomfört utan användarrapport om känsla.",
+        "load_interpretation": "Passet ger betydande närbelastning — kontrollera de föregående 2–3 dagarnas aktivitet innan du behåller planerade nyckelpass.",
         "confidence": "medium",
         "facts": [
           "Löpning: 22,46 km · 1:59:46 · 267 m+ · snittpuls 138,9 · maxpuls 158."
         ],
         "interpretations": [
-          "Ett långt, genomfört löppass visar att dagens tid/volym tolererades men etablerar inte ensam ökad kapacitet för planerade tröskel- eller backpass.",
-          "Påverkan på kommande 2–3 dagar är materiell: tidigare 3×8 backar + sim + detta långpass ökar kumulativ belastning och riskerar att störa morgondagens planerade tröskel (4×8) om inget…"
+          "Ett långt genomfört löppass visar god förmåga att genomföra längre arbetstid men etablerar inte automatiskt att nästa tröskelpass ska ökas.",
+          "Eftersom passen de senaste tre dagarna inkluderar intervaller (18/9 backar) och simning, krävs sammanvägd bedömning innan ändring av kommande nyckelpass."
         ],
         "unknowns": [
-          "Subjektiv återhämtning/nap/ätintag efter passet (användarrapport tom)",
-          "Specifik planerad intensitet för kommande pass ska jämföras mot faktisk trötthet morgon 22/09"
+          "Subjektiv återhämtning/benstatus efter passet saknas",
+          "Planerad närbelastning kommande 24–72 h kan ändra rekommendation"
         ]
       },
       "plan_action": {
         "action": "review",
         "target_date": "",
-        "reason": "Beslutet skjuts upp eftersom mellanliggande planerade dagar ännu inte har ett känt utfall.",
-        "recommendation": "Måndag: Enduroskola · fast tillfälle ligger kvar som plan. Tisdag: Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg bedöms efter den faktiska belastningen från måndag och återhämtningen därefter.",
+        "reason": "Faktisk längre löpning i dag förändrar närbelastningen mot mikrocykelns nyckelpass så beslut kräver manuell granskning.",
+        "recommendation": "Coach: granska senaste 2–3 dagarnas faktiska belastning (inkl. 18/9 backpass och simning) och användarens subjektiva återhämtning innan du bekräftar eller justerar tisdagens tröskel 4×8→4×9; om du vill ha kortare automatiskt alternativ, ange review istället…",
         "dose_option_id": "",
-        "requires_approval": false
+        "requires_approval": true
       },
       "auto_apply": {
         "applied": false,
@@ -1237,8 +1237,8 @@
       }
     }
   ],
-  "last_trigger_hash": "88909d9bb8b2da1c2434d3c67d2bcc5dcc034ca17e7b4dbfb157a1f2a78c52cc",
-  "last_run_utc": "2026-09-21T08:02:26.263213+00:00",
+  "last_trigger_hash": "fe42928e0396936222de87ad4129b2fd9f60ac16c6438a50b538426ba2b1152c",
+  "last_run_utc": "2026-09-21T08:07:17.686637+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 3
