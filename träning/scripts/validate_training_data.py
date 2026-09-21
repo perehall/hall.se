@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-import hashlib
+import argparse
 import json
 from pathlib import Path
 
 from activity_labels import public_activity_label
+from goal_contracts import planning_goal_hash
 from coach_rules import activity_local_date, canonical_activity_fact
 from strategy_contracts import StrategyContractError, validate_training_strategy
 from training_contracts import (
@@ -50,7 +51,14 @@ def legacy_provider_fact(activity, canonical_fact):
     return canonical_fact
 
 
-def main():
+def main(argv=None):
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--allow-stale-goal",
+        action="store_true",
+        help="Tillåt att genererad strategi ännu bygger på föregående målbild före adaptive_planning.",
+    )
+    args = parser.parse_args(argv)
     plan = load(PLAN_FILE)
     upcoming = load(UPCOMING_FILE)
     activities_state = load(ACTIVITIES_FILE)
@@ -70,19 +78,20 @@ def main():
     require(goal.get("schema_version") == 2, "målbild: schema_version måste vara 2")
     canonical_goal = str(goal.get("goal") or "").strip()
     require(bool(canonical_goal), "målbild: goal saknas")
-    require(
-        strategy.get("north_star") == canonical_goal,
-        "strategi: north_star avviker från kanonisk målbild; mesocykeln måste omprövas",
-    )
-    goal_hash = hashlib.sha256(canonical_goal.encode("utf-8")).hexdigest()
-    require(
-        (strategy.get("goal_contract") or {}).get("goal_hash") == goal_hash,
-        "strategi: målbilden har ändrats; goal_contract och mesocykel måste omprövas",
-    )
-    require(
-        (strategy.get("current_mesocycle") or {}).get("goal_basis_hash") == goal_hash,
-        "strategi: aktuell mesocykel bygger inte på nuvarande målbild",
-    )
+    goal_hash = planning_goal_hash(goal)
+    if not args.allow_stale_goal:
+        require(
+            strategy.get("north_star") == canonical_goal,
+            "strategi: north_star avviker från kanonisk målbild; mesocykeln måste omprövas",
+        )
+        require(
+            (strategy.get("goal_contract") or {}).get("goal_hash") == goal_hash,
+            "strategi: målbilden har ändrats; goal_contract och mesocykel måste omprövas",
+        )
+        require(
+            (strategy.get("current_mesocycle") or {}).get("goal_basis_hash") == goal_hash,
+            "strategi: aktuell mesocykel bygger inte på nuvarande målbild",
+        )
 
     activities = activities_state.get("activities") or []
     by_id = {str(activity.get("id")): activity for activity in activities if activity.get("id") is not None}
@@ -106,8 +115,10 @@ def main():
             "coach: första faktaraden avviker från canonical source fact",
         )
 
+    suffix = " (målbild får vara stale före adaptive_planning)" if args.allow_stale_goal else ""
     print(
         "Datakontrakt OK: plan v3, kommande vecka v3, aktiviteter v2, strategi v5, performance v1 och coach-state är konsistenta."
+        + suffix
     )
 
 
