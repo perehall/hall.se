@@ -1,0 +1,63 @@
+{
+  "decision": "modify",
+  "title": "Mesocykel · kontrollerad löptröskel + MTB-teknik + löptålighet",
+  "duration_weeks": 4,
+  "goal_contribution": "Föra målbilden framåt genom att utveckla de prioriterade kapaciteterna utan att låsa träningen mot ett enskilt lopp och samtidigt skydda simning och styrka/core.",
+  "hypothesis": "Ett block med få tydliga utvecklingsområden och bibehållen bredd ger bättre möjlighet att skapa faktisk progression än att upprepa en färdig veckomall.",
+  "primary_capabilities": [
+    "run_threshold",
+    "mtb_technical",
+    "run_easy_distance"
+  ],
+  "secondary_capabilities": [
+    "run_hill_quality",
+    "mtb_aerobic"
+  ],
+  "progression_axes": [
+    {
+      "capability": "run_threshold",
+      "axis": "work_duration",
+      "objective": "Utveckla kapaciteten stegvis från observerad och absorberad träningsnivå."
+    },
+    {
+      "capability": "mtb_technical",
+      "axis": "technical_quality",
+      "objective": "Utveckla kapaciteten stegvis från observerad och absorberad träningsnivå."
+    },
+    {
+      "capability": "run_easy_distance",
+      "axis": "session_duration",
+      "objective": "Utveckla kapaciteten stegvis från observerad och absorberad träningsnivå."
+    }
+  ],
+  "success_signals": [
+    "Prioriterade stimuli kan genomföras återkommande utan att övriga skyddade kapaciteter systematiskt faller bort.",
+    "Jämförbara pass eller uttryckliga användarrapporter ger stöd för progression eller stabil konsolidering.",
+    "Mikrocyklerna kan absorberas utan att nyckelstimuli återkommande måste tas bort."
+  ],
+  "guardrails": [
+    "Ingen progression får motiveras enbart av wellness eller träningsberedskap.",
+    "Faktisk belastning föregående och kommande 2–3 dagar ska beaktas innan pass flyttas, läggs till eller görs hårdare.",
+    "Enduro är faktisk träningsbelastning och får ersätta annan träning.",
+    "Saknad evidens ska ge osäkerhet eller konservativt beslut, inte påhittade värden.",
+    "Utvecklingspass ska progressa, konsolideras, reduceras eller bytas med explicit skäl; de får inte upprepas mekaniskt."
+  ],
+  "evidence_refs": [
+    "goal.next_steps[0]",
+    "goal.next_steps[2]",
+    "goal.goal"
+  ],
+  "uncertainties": [
+    "Deterministisk fallback används eftersom ingen giltig modellbedömning fanns tillgänglig.",
+    "Planeringsmodellen misslyckades: HTTP Error 400: Bad Request"
+  ],
+  "schema_version": 1,
+  "source": "deterministic_fallback",
+  "source_hash": "021fceee04892e5e6dbd9f5e331ac2037ab0a1377ac57577c5a3fa6878ee486f",
+  "generated_at_utc": "2026-09-21T07:24:03.370144+00:00",
+  "goal_hash": "1162c643157c11ee354e73acb1cf94254611e8e8a7fd64d2c11d5140ef954569",
+  "start_date": "2026-09-21",
+  "end_date": "2026-10-18",
+  "evaluation_date": "2026-10-19",
+  "id": "20260921-run_threshold-mtb_technical-run_easy_distance"
+}

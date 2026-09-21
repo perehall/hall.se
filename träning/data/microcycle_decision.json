@@ -1,0 +1,66 @@
+{
+  "rationale": "Deterministisk reservkomposition som realiserar mesocykelns valda stimuli utan att kopiera föregående vecka som beslutsgrund.",
+  "slots": [
+    {
+      "day_index": 2,
+      "recipe_key": "run_threshold",
+      "action": "consolidate",
+      "rationale": "Placera kontrollerad löpkvalitet med marginal efter mikrocykelstarten.",
+      "evidence_refs": [
+        "mesocycle.primary_capabilities"
+      ]
+    },
+    {
+      "day_index": 3,
+      "recipe_key": "swim_aerobic_technique",
+      "action": "establish",
+      "rationale": "Skydda simfrekvens med låg mekanisk benkostnad.",
+      "evidence_refs": [
+        "planning_policy.microcycle_policy"
+      ]
+    },
+    {
+      "day_index": 4,
+      "recipe_key": "mtb_technical",
+      "action": "consolidate",
+      "rationale": "Ge MTB/XC en egen teknisk/aerob exponering.",
+      "evidence_refs": [
+        "mesocycle.primary_capabilities"
+      ]
+    },
+    {
+      "day_index": 5,
+      "recipe_key": "run_hill_quality",
+      "action": "establish",
+      "rationale": "Separera mekanisk backkvalitet från tröskelstimuluset.",
+      "evidence_refs": [
+        "planning_policy.microcycle_policy"
+      ]
+    },
+    {
+      "day_index": 6,
+      "recipe_key": "swim_strength",
+      "action": "establish",
+      "rationale": "Kombinera andra simexponeringen med skyddad styrka/core.",
+      "evidence_refs": [
+        "planning_policy.microcycle_policy"
+      ]
+    },
+    {
+      "day_index": 7,
+      "recipe_key": "run_easy_distance",
+      "action": "consolidate",
+      "rationale": "Lägg lugn löptålighet sist i mikrocykeln.",
+      "evidence_refs": [
+        "mesocycle.primary_capabilities"
+      ]
+    }
+  ],
+  "schema_version": 1,
+  "source": "deterministic_fallback_after_guard",
+  "source_hash": "f5dc398fbc105205bf9b66f34789342050b2d97281949697c40151899c0c9f25",
+  "generated_at_utc": "2026-09-21T07:24:28.955037+00:00",
+  "week_start": "2026-09-21",
+  "week_key": "2026-W39",
+  "mesocycle_id": "20260921-run_threshold-mtb_technical-run_easy_distance"
+}
