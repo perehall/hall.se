@@ -880,6 +880,17 @@ def microcycle_layout_failures(rows, catalog, target_start):
                 )
                 break
 
+    for day, row in by_day.items():
+        if row["recipe_key"] not in {"run_threshold", "run_hill_quality"}:
+            continue
+        for neighbor in (day - 1, day + 1):
+            neighbor_row = by_day.get(neighbor)
+            if neighbor_row and neighbor_row["recipe_key"] == "mtb_technical":
+                failures.append(
+                    "MTB/XC får inte ligga direkt intill löpkvalitet; sekundär cykelbelastning ska inte kompromissa primärt löpstimulus"
+                )
+                break
+
     occupied = set(by_day)
     if fixed_enduro:
         occupied.add(1)
@@ -1105,7 +1116,8 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
         "och antalet löpkvalitetsexponeringar får inte överskrida maxgränsen. "
         "Sekundära kapaciteter är inte en checklista och behöver inte alla förekomma varje vecka. "
         "Lägg inte löptröskel, backkvalitet eller lång löpdistans två dagar i rad. När dag 1 är fast enduro ska dag 2 ha låg benbelastning; "
-        "lägg inte löp- eller MTB-belastning där innan faktiskt enduroutfall är känt. Lämna minst en kalenderdag utan planerad träning. "
+        "lägg inte löp- eller MTB-belastning där innan faktiskt enduroutfall är känt. MTB/XC får inte ligga direkt intill löptröskel eller backkvalitet; "
+        "sekundär cykelbelastning ska utgå hellre än att kompromissa ett primärt löpstimulus. Lämna minst en kalenderdag utan planerad träning. "
         "Använd kombinationsreceptet swim_strength när det hjälper att uppfylla både sim- och styrkekrav utan en extra dag. "
         "Om swim_threshold behövs finns ett separat etablerat 4 000 m-recept; behandla det som kvalitetsrecept, inte som automatisk distansprogression från det aeroba 3 200 m-passet. "
         "Enduro dag 1 är faktisk belastning och blockerar annan planering den dagen. "
