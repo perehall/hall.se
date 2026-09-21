@@ -231,15 +231,9 @@
           "value": 3200,
           "session": "Simning · 3 200 m · aerob/teknik",
           "intent": "Kortare etablerad simexponering."
-        },
-        {
-          "id": "swim-4000",
-          "kind": "structured",
-          "value": 4000,
-          "session": "Simning · 4 000 m · aerob + kontrollerad tröskel",
-          "intent": "Längre etablerad simexponering; struktur hämtas från verifierad simmall när tillgänglig."
         }
-      ]
+      ],
+      "catalog_note": "Katalogen innehåller tills vidare bara den fullt strukturerade 3 200 m-dosen. Längre simning får inte väljas förrän motsvarande körbara watch-block finns materialiserade; faktisk 4 000 m-historik ligger kvar i athlete_state som kapacitetsfakta."
     },
     "strength_core": {
       "sport": "strength",
