@@ -13,6 +13,7 @@ STRATEGY = json.loads((ROOT / "data" / "training_strategy.json").read_text(encod
 from rollover_week import (  # noqa: E402
     build_open_next_week,
     is_enduro_school_date,
+    repair_transition_week_from_previous,
     rollover_documents,
 )
 
@@ -235,7 +236,7 @@ class WeeklyRolloverTests(unittest.TestCase):
         self.assertEqual(target["dose_resolution"]["option_id"], "swim-support-3200")
         self.assertIn("swim-support-3200", {option["id"] for option in target["dose_options"]})
 
-    def test_mesocycle_end_requires_review_instead_of_inventing_next_direction(self):
+    def test_mesocycle_end_builds_concrete_nonprogressive_bridge_week(self):
         promoted = {
             "schema_version": 3,
             "meta": {
@@ -262,10 +263,84 @@ class WeeklyRolloverTests(unittest.TestCase):
         future = build_open_next_week(promoted, STRATEGY)
         self.assertTrue(future["meta"]["requires_mesocycle_review"])
         self.assertEqual(future["meta"]["mesocycle_id"], "")
-        self.assertIn("utvärdering krävs", future["meta"]["title"])
+        self.assertIn("mesocykelutvärdering", future["meta"]["title"])
         self.assertEqual(future["meta"]["microcycle_id"], "")
         self.assertEqual(future["days"][0]["sport"], "enduro")
-        self.assertTrue(all(day["sport"] == "open" for day in future["days"][1:]))
+        self.assertEqual(
+            [day["sport"] for day in future["days"][1:]],
+            ["run", "swim", "bike", "run", "strength", "run"],
+        )
+        self.assertEqual(future["days"][1]["baseline_option_id"], "run-threshold-3x8")
+        hill_slot = next(
+            slot
+            for slot in STRATEGY["current_mesocycle"]["microcycle_template"]
+            if slot["slot"] == "run_hill_quality"
+        )
+        self.assertEqual(
+            future["days"][4]["baseline_option_id"],
+            hill_slot["development_progression"]["demonstrated_floor_option_id"],
+        )
+        self.assertTrue(all(day.get("transition_review") is True for day in future["days"][1:]))
+        self.assertTrue(all(day.get("planning_status") == "preliminary" for day in future["days"][1:]))
+        self.assertIn("utan automatisk belastningsökning", future["meta"]["principle"])
+
+    def test_empty_promoted_review_week_is_repaired_from_previous_plan_on_monday(self):
+        previous = {
+            "schema_version": 3,
+            "meta": {
+                "timezone": "Europe/Stockholm",
+                "week": 38,
+                "week_start": "2026-09-14",
+                "week_end": "2026-09-20",
+                "title": "Mesocykel vecka 4",
+                "principle": "P",
+            },
+            "days": [
+                {
+                    "date": (date(2026, 9, 14) + timedelta(days=i)).isoformat(),
+                    "label": "Dag",
+                    "status": "open",
+                    "sport": "open",
+                    "session": "Öppet",
+                    "reason": "R",
+                }
+                for i in range(7)
+            ],
+            "strength_template": ["Styrka"],
+        }
+        current_preview = build_open_next_week(previous, STRATEGY)
+        current = {**current_preview}
+        current.pop("state", None)
+        current.pop("week_key", None)
+        current["days"] = [dict(day) for day in current_preview["days"]]
+        for day in current["days"]:
+            day.pop("planning_status", None)
+        # Simulera den gamla felaktiga produktionen: bara fast Enduro, resten öppet.
+        for index in range(1, 7):
+            current["days"][index] = {
+                "date": (date(2026, 9, 21) + timedelta(days=index)).isoformat(),
+                "label": "Dag",
+                "status": "open",
+                "sport": "open",
+                "session": "Ingen planerad träning",
+                "reason": "R",
+            }
+        repaired = repair_transition_week_from_previous(
+            current, previous, STRATEGY, date(2026, 9, 21)
+        )
+        self.assertIsNotNone(repaired)
+        self.assertEqual(repaired["meta"]["week_start"], "2026-09-21")
+        self.assertEqual(repaired["days"][1]["sport"], "run")
+        self.assertEqual(repaired["days"][1]["baseline_option_id"], "run-threshold-3x8")
+        hill_slot = next(
+            slot
+            for slot in STRATEGY["current_mesocycle"]["microcycle_template"]
+            if slot["slot"] == "run_hill_quality"
+        )
+        self.assertEqual(
+            repaired["days"][4]["baseline_option_id"],
+            hill_slot["development_progression"]["demonstrated_floor_option_id"],
+        )
 
 if __name__ == "__main__":
     unittest.main()
