@@ -19,12 +19,18 @@ class GoalSystemPageTests(unittest.TestCase):
         cls.goal = json.loads((ROOT / "data" / "goal.json").read_text(encoding="utf-8"))
 
     def test_concrete_2027_performance_goal_is_visible(self):
-        rendered = render_performance_goals(self.goal)
+        rendered = render_performance_goals(self.goal, date(2026, 9, 21))
         self.assertIn('data-performance-goals="true"', rendered)
-        self.assertIn("ÖTILLÖ Åland", rendered)
-        self.assertIn("2027", rendered)
+        self.assertIn("ÖTILLÖ Åland World Series", rendered)
+        self.assertIn("14 aug 2027", rendered)
         self.assertIn("Topp-10", rendered)
         self.assertIn("SWIMRUN", rendered)
+        self.assertIn("46,54 km", rendered)
+        self.assertIn("löp 36,57 km", rendered)
+        self.assertIn("sim 9,96 km", rendered)
+        self.assertIn("391 hm", rendered)
+        self.assertIn("327 dagar kvar", rendered)
+        self.assertIn("Solo/team: ej fastställt", rendered)
 
     def test_goal_hierarchy_matches_actual_planning_layers(self):
         rendered = render_hierarchy(self.strategy)

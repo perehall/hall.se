@@ -171,6 +171,7 @@ class AdaptivePlanningTests(unittest.TestCase):
         self.assertNotIn("current_priorities", self.policy["strategy_base"])
         self.assertIn("mesocycle_policy", self.policy)
         self.assertIn("microcycle_policy", self.policy)
+        self.assertIn("event_horizon_policy", self.policy)
 
     def test_model_cannot_reclassify_hard_protected_capacity_as_secondary(self):
         payload = {
@@ -231,6 +232,62 @@ class AdaptivePlanningTests(unittest.TestCase):
         altered = deepcopy(self.goal)
         altered["performance_goals"][0]["target"] = "Topp-5"
         self.assertNotEqual(goal_hash(self.goal), goal_hash(altered))
+
+    def test_race_date_or_profile_change_invalidates_goal_hash(self):
+        moved = deepcopy(self.goal)
+        moved["performance_goals"][0]["event_date"] = "2027-08-15"
+        self.assertNotEqual(goal_hash(self.goal), goal_hash(moved))
+
+        changed_course = deepcopy(self.goal)
+        changed_course["performance_goals"][0]["race_profile"]["swim_distance_m"] = 10000
+        self.assertNotEqual(goal_hash(self.goal), goal_hash(changed_course))
+
+    def test_generated_mesocycle_carries_verified_competition_context(self):
+        payload = {
+            "decision": "modify",
+            "title": "race aware",
+            "duration_weeks": 4,
+            "goal_contribution": "Bygger relevant kapacitet mot Åland.",
+            "hypothesis": "Kontrollerad utveckling.",
+            "primary_capabilities": ["swim_aerobic", "run_threshold", "run_easy_distance"],
+            "secondary_capabilities": ["run_hill_quality"],
+            "progression_axes": [
+                {"capability": "swim_aerobic", "axis": "consistency", "objective": "Bygg simuthållighet."}
+            ],
+            "success_signals": ["a", "b"],
+            "guardrails": ["a", "b"],
+            "evidence_refs": ["competition_context.race_profile", "athlete_state.capability_facts"],
+            "uncertainties": [],
+        }
+
+        def fake_request(body):
+            return {
+                "status": "completed",
+                "output": [
+                    {
+                        "type": "message",
+                        "content": [
+                            {"type": "output_text", "text": json.dumps(payload, ensure_ascii=False)}
+                        ],
+                    }
+                ],
+            }
+
+        result = generate_mesocycle(
+            self.goal,
+            self.policy,
+            {"capability_facts": {}},
+            {},
+            date(2026, 9, 21),
+            request_fn=fake_request,
+        )
+        context = result["competition_context"]
+        self.assertEqual(context["event_date"], "2027-08-14")
+        self.assertEqual(context["days_to_event"], 327)
+        self.assertEqual(context["race_profile"]["total_distance_m"], 46540)
+        self.assertEqual(context["race_profile"]["run_distance_m"], 36570)
+        self.assertEqual(context["race_profile"]["swim_distance_m"], 9960)
+        self.assertEqual(context["race_profile"]["elevation_gain_m"], 391)
 
     def test_athlete_state_extracts_explicit_threshold_and_hill_evidence(self):
         activities = {
