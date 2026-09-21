@@ -591,6 +591,97 @@ def fallback_microcycle(meso, policy, catalog, target_start):
     }
 
 
+def microcycle_guard_failures(result, meso, policy, catalog, target_start):
+    """Return explicit structural violations without silently repairing the model output."""
+    recipes = catalog["recipes"]
+    slots = result.get("slots") or []
+    failures = []
+    valid_rows = []
+    seen_days = set()
+    fixed_enduro = is_enduro_school_date(target_start)
+
+    for index, row in enumerate(slots):
+        if not isinstance(row, dict):
+            failures.append(f"slot[{index}] är inte ett objekt")
+            continue
+        day = row.get("day_index")
+        recipe_key = row.get("recipe_key")
+        if not isinstance(day, int) or not 1 <= day <= 7:
+            failures.append(f"slot[{index}] har ogiltig day_index")
+            continue
+        if fixed_enduro and day == 1:
+            failures.append("dag 1 är blockerad av fast endurobelastning")
+            continue
+        if day in seen_days:
+            failures.append(f"flera pass ligger på mikrocykeldag {day}")
+            continue
+        if recipe_key not in recipes:
+            failures.append(f"slot[{index}] använder okänt recipe_key {recipe_key!r}")
+            continue
+        seen_days.add(day)
+        valid_rows.append(row)
+
+    minimum = 4
+    maximum = 6
+    if len(valid_rows) < minimum:
+        failures.append(f"för få giltiga träningsslots: {len(valid_rows)} < {minimum}")
+    if len(valid_rows) > maximum:
+        failures.append(f"för många giltiga träningsslots: {len(valid_rows)} > {maximum}")
+
+    primaries = set(meso.get("primary_capabilities") or [])
+    direct_primary_caps = set()
+    swim_exposures = 0
+    strength_exposures = 0
+    run_quality = 0
+
+    for row in valid_rows:
+        recipe_key = row["recipe_key"]
+        caps = recipe_capabilities(recipes[recipe_key])
+        if recipe_key not in SUPPORT_ONLY_RECIPES:
+            direct_primary_caps |= caps
+        if "swim_aerobic" in caps:
+            swim_exposures += 1
+        if "strength_core" in caps:
+            strength_exposures += 1
+        if {"run_threshold", "run_hill_quality"}.intersection(caps):
+            run_quality += 1
+
+        if row.get("action") == "progress" and (
+            not caps.intersection(primaries) or recipe_key in SUPPORT_ONLY_RECIPES
+        ):
+            failures.append(
+                f"{recipe_key} får inte progressas eftersom receptet inte realiserar ett direkt primärt stimulus"
+            )
+
+    missing_primary = sorted(primaries - direct_primary_caps)
+    if missing_primary:
+        failures.append(
+            "primära kapaciteter saknar direkt recept: " + ", ".join(missing_primary)
+        )
+
+    required_swims = int(policy["microcycle_policy"].get("normal_swim_exposures", 2))
+    if swim_exposures < required_swims:
+        failures.append(
+            f"för få simexponeringar: {swim_exposures} < {required_swims}"
+        )
+
+    required_strength = (
+        1 if policy["microcycle_policy"].get("protect_strength_core_each_microcycle") else 0
+    )
+    if strength_exposures < required_strength:
+        failures.append(
+            f"för få styrka/core-exponeringar: {strength_exposures} < {required_strength}"
+        )
+
+    max_run_quality = int(policy["microcycle_policy"].get("max_run_quality_exposures", 2))
+    if run_quality > max_run_quality:
+        failures.append(
+            f"för många löpkvalitetsexponeringar: {run_quality} > {max_run_quality}"
+        )
+
+    return failures
+
+
 def validate_and_normalize_micro(result, meso, policy, catalog, target_start):
     recipes = catalog["recipes"]
     seen_days = set()
@@ -711,9 +802,68 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
         raw["rationale"] += f" Modellbedömning saknades: {str(exc)[:220]}"
         source = "deterministic_fallback"
 
+    repair_metadata = None
+    if source == "openai":
+        initial_failures = microcycle_guard_failures(
+            raw, meso, policy, catalog, target_start
+        )
+        if initial_failures:
+            repair_payload = deepcopy(source_payload)
+            repair_payload["rejected_proposal"] = raw
+            repair_payload["guard_failures"] = initial_failures
+            repair_payload["repair_instruction"] = (
+                "Reparera förslaget så att varje guard_failure försvinner. Behåll bra val där de inte "
+                "orsakar konflikt. Välj fortfarande bara day_index, recipe_key och action; hitta inte på dos."
+            )
+            try:
+                repaired = call_structured(
+                    system + " Detta är ett reparationsförsök efter deterministisk guard; varje angivet fel måste lösas.",
+                    repair_payload,
+                    microcycle_schema(sorted(catalog["recipes"])),
+                    "microcycle_decision_repair",
+                    request_fn=request_fn,
+                )
+                repaired_failures = microcycle_guard_failures(
+                    repaired, meso, policy, catalog, target_start
+                )
+                if not repaired_failures:
+                    raw = repaired
+                    source = "openai_repaired"
+                    repair_metadata = {
+                        "attempted": True,
+                        "initial_failures": initial_failures,
+                        "result": "accepted",
+                    }
+                else:
+                    source = "deterministic_fallback_after_repair_guard"
+                    repair_metadata = {
+                        "attempted": True,
+                        "initial_failures": initial_failures,
+                        "repair_failures": repaired_failures,
+                        "result": "fallback",
+                    }
+                    raw = fallback_microcycle(meso, policy, catalog, target_start)
+            except Exception as exc:
+                source = "deterministic_fallback_after_repair_error"
+                repair_metadata = {
+                    "attempted": True,
+                    "initial_failures": initial_failures,
+                    "repair_error": str(exc)[:400],
+                    "result": "fallback",
+                }
+                raw = fallback_microcycle(meso, policy, catalog, target_start)
+
     normalized, model_valid = validate_and_normalize_micro(raw, meso, policy, catalog, target_start)
-    if source == "openai" and not model_valid:
-        source = "deterministic_fallback_after_guard"
+    if source in {"openai", "openai_repaired"} and not model_valid:
+        # Defensive backstop. A proposal accepted above must still pass the
+        # normalizer used by publication.
+        source = "deterministic_fallback_after_normalization_guard"
+        normalized = fallback_microcycle(meso, policy, catalog, target_start)
+        repair_metadata = repair_metadata or {
+            "attempted": False,
+            "result": "fallback",
+        }
+        repair_metadata["normalization_guard_failed"] = True
     normalized.update(
         {
             "schema_version": MICRO_SCHEMA_VERSION,
@@ -726,6 +876,8 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
             "mesocycle_id": meso["id"],
         }
     )
+    if repair_metadata is not None:
+        normalized["guard_repair"] = repair_metadata
     return normalized
 
 
