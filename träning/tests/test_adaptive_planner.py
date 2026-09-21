@@ -435,6 +435,16 @@ class AdaptivePlanningTests(unittest.TestCase):
         )
         self.assertTrue(any("två på varandra följande dagar" in item for item in failures))
 
+    def test_long_run_cannot_be_adjacent_to_mtb(self):
+        rows = [
+            {"day_index": 6, "recipe_key": "mtb_technical"},
+            {"day_index": 7, "recipe_key": "run_easy_distance"},
+        ]
+        failures = microcycle_layout_failures(
+            rows, self.catalog, date(2026, 10, 5)
+        )
+        self.assertTrue(any("direkt intill MTB/XC" in item for item in failures))
+
     def test_fallback_with_fixed_enduro_leaves_recovery_room(self):
         meso = {
             "primary_capabilities": [
@@ -462,6 +472,7 @@ class AdaptivePlanningTests(unittest.TestCase):
         self.assertEqual(day2["recipe_key"], "swim_aerobic_technique")
         occupied = {1} | {row["day_index"] for row in slots}
         self.assertLess(len(occupied), 7)
+        self.assertNotIn("mtb_technical", [row["recipe_key"] for row in slots])
 
     def test_micro_planner_revision_can_rebuild_first_day_current_week(self):
         plan = {
