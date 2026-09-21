@@ -435,6 +435,16 @@ class AdaptivePlanningTests(unittest.TestCase):
         )
         self.assertTrue(any("två på varandra följande dagar" in item for item in failures))
 
+    def test_run_quality_cannot_be_adjacent_to_mtb(self):
+        rows = [
+            {"day_index": 4, "recipe_key": "mtb_technical"},
+            {"day_index": 5, "recipe_key": "run_threshold"},
+        ]
+        failures = microcycle_layout_failures(
+            rows, self.catalog, date(2026, 10, 5)
+        )
+        self.assertTrue(any("direkt intill löpkvalitet" in item for item in failures))
+
     def test_long_run_cannot_be_adjacent_to_mtb(self):
         rows = [
             {"day_index": 6, "recipe_key": "mtb_technical"},

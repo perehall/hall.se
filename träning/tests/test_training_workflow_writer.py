@@ -40,6 +40,12 @@ class TrainingWorkflowWriterTests(unittest.TestCase):
         self.assertIn("gh workflow run update-training.yml --ref main", update)
         self.assertIn("git push origin HEAD:main", update)
 
+    def test_push_trigger_is_restricted_to_main(self):
+        workflow = self.workflow_text()
+        push_block = workflow.split("  push:\n", 1)[1].split("\nconcurrency:", 1)[0]
+        self.assertIn("branches:", push_block)
+        self.assertIn("- main", push_block)
+
     def test_planning_authority_changes_trigger_canonical_replan(self):
         workflow = self.workflow_text()
         for path in (
