@@ -34,8 +34,15 @@ CSS = r'''
   --qp-surface:#FCFCFB;
   --qp-elevated:#FFFFFF;
   --qp-text:#171918;
-  --qp-secondary:#6C716D;
-  --qp-tertiary:#979C98;
+  --qp-secondary:#5E6661;
+  --qp-tertiary:#69706B;
+  --qp-label:var(--qp-tertiary);
+  --qp-text-primary:var(--qp-text);
+  --qp-text-secondary:var(--qp-secondary);
+  --qp-text-label:var(--qp-label);
+  --qp-surface-subtle:#FCFCFB;
+  --qp-surface-muted:#F6F7F5;
+  --qp-border-subtle:#E4E7E3;
   --qp-line:#E4E7E3;
   --qp-line-soft:#ECEEEB;
   --qp-accent:#5964E8;
@@ -95,8 +102,12 @@ body.quiet-performance .hero.week-focus-card{
 body.quiet-performance .hero h2,
 body.quiet-performance .week-focus-title{color:var(--qp-text);font-weight:600}
 body.quiet-performance .hero p,
-body.quiet-performance .week-focus-details p{color:var(--qp-secondary)!important}
-body.quiet-performance .week-focus-details>summary{color:var(--qp-tertiary)}
+body.quiet-performance .week-focus-details p{color:var(--qp-text-secondary)!important}
+body.quiet-performance .week-focus-details>summary{color:var(--qp-text-label)}
+body.quiet-performance .week-focus-mesocycle-idea strong{
+  color:var(--qp-text-label)!important;
+  font-weight:650;
+}
 
 /* Overview surfaces use hairlines and spacing instead of elevation. */
 body.quiet-performance .dashboard{gap:10px;margin-bottom:26px}
