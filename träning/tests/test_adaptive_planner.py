@@ -545,13 +545,12 @@ class AdaptivePlanningTests(unittest.TestCase):
             ],
         }
         repaired = {
-            "rationale": "reparerad mot alla hårda krav",
+            "rationale": "reparerad mot alla hårda krav och belastningsavstånd",
             "slots": [
-                {"day_index": 2, "recipe_key": "run_threshold", "action": "consolidate", "rationale": "threshold", "evidence_refs": []},
-                {"day_index": 3, "recipe_key": "swim_aerobic_technique", "action": "establish", "rationale": "swim", "evidence_refs": []},
-                {"day_index": 4, "recipe_key": "mtb_technical", "action": "consolidate", "rationale": "mtb", "evidence_refs": []},
-                {"day_index": 6, "recipe_key": "swim_strength", "action": "establish", "rationale": "swim+strength", "evidence_refs": []},
-                {"day_index": 7, "recipe_key": "run_easy_distance", "action": "consolidate", "rationale": "distance", "evidence_refs": []},
+                {"day_index": 2, "recipe_key": "swim_aerobic_technique", "action": "establish", "rationale": "låg benbelastning efter enduro", "evidence_refs": []},
+                {"day_index": 3, "recipe_key": "run_threshold", "action": "consolidate", "rationale": "threshold med marginal efter enduro", "evidence_refs": []},
+                {"day_index": 5, "recipe_key": "swim_strength", "action": "establish", "rationale": "swim+strength", "evidence_refs": []},
+                {"day_index": 7, "recipe_key": "run_easy_distance", "action": "consolidate", "rationale": "distance separerad från löpkvalitet", "evidence_refs": []},
             ],
         }
         replies = [invalid, repaired]
@@ -692,12 +691,13 @@ class AdaptivePlanningTests(unittest.TestCase):
         self.assertEqual(combined["priority_role"], "protected_support")
         self.assertNotIn("development_progression", combined)
 
-        hill = next(
-            slot
-            for slot in strategy["current_mesocycle"]["microcycle_template"]
-            if "run_hill_quality" in slot["stimuli"]
+        self.assertFalse(
+            any(
+                "run_hill_quality" in slot["stimuli"]
+                for slot in strategy["current_mesocycle"]["microcycle_template"]
+            ),
+            "Sekundär backkvalitet ska inte tvingas in när primära stimuli, skyddad kapacitet och återhämtningsutrymme redan fyller mikrocykeln.",
         )
-        self.assertEqual(hill["priority_role"], "flex")
 
 
 if __name__ == "__main__":
