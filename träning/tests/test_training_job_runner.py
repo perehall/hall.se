@@ -55,6 +55,13 @@ class TrainingJobRunnerTests(unittest.TestCase):
         self.assertLess(keys.index("sync_device_workouts"), keys.index("guard_coach_claims"))
         self.assertEqual(keys[-1], "render_and_validate_site")
 
+    def test_pre_adaptive_validation_allows_goal_replan_only(self):
+        stages = {stage.key: stage for stage in build_stages("event")}
+        pre = stages["validate_ingested_data"].command
+        post = stages["validate_adaptive_plan"].command
+        self.assertIn("--allow-stale-goal", pre)
+        self.assertNotIn("--allow-stale-goal", post)
+
     def test_only_resilient_enrichment_and_transport_stages_are_optional(self):
         optional = {stage.key for stage in build_stages("event") if stage.optional}
         self.assertEqual(
