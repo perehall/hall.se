@@ -14,8 +14,10 @@ from adaptive_planner import (  # noqa: E402
     choose_option,
     fallback_mesocycle,
     fallback_microcycle,
+    generate_microcycle,
     materialize_strategy,
     mesocycle_schema,
+    microcycle_guard_failures,
     microcycle_is_valid,
     target_week,
     validate_and_normalize_micro,
@@ -145,6 +147,90 @@ class AdaptivePlanningTests(unittest.TestCase):
         self.assertEqual(floor["id"], "run-threshold-3x8")
         self.assertEqual(selected["id"], "run-threshold-3x10")
         self.assertEqual(relation, "progress")
+
+    def test_microcycle_guard_explains_missing_protected_capacity(self):
+        meso = fallback_mesocycle(self.goal, self.policy, {})
+        bad = {
+            "rationale": "bad",
+            "slots": [
+                {"day_index": 2, "recipe_key": "run_threshold", "action": "consolidate", "rationale": "x", "evidence_refs": []},
+                {"day_index": 4, "recipe_key": "mtb_technical", "action": "consolidate", "rationale": "x", "evidence_refs": []},
+                {"day_index": 5, "recipe_key": "run_hill_quality", "action": "consolidate", "rationale": "x", "evidence_refs": []},
+                {"day_index": 7, "recipe_key": "run_easy_distance", "action": "consolidate", "rationale": "x", "evidence_refs": []},
+            ],
+        }
+        failures = microcycle_guard_failures(
+            bad, meso, self.policy, self.catalog, date(2026, 9, 28)
+        )
+        self.assertTrue(any("simexponeringar" in item for item in failures))
+        self.assertTrue(any("styrka/core" in item for item in failures))
+
+    def test_rejected_model_microcycle_is_repaired_before_fallback(self):
+        meso = fallback_mesocycle(self.goal, self.policy, {})
+        meso.update(
+            {
+                "id": "meso-repair",
+                "start_date": "2026-09-28",
+                "end_date": "2026-10-25",
+                "evaluation_date": "2026-10-26",
+            }
+        )
+        invalid = {
+            "rationale": "missar skyddad kapacitet",
+            "slots": [
+                {"day_index": 2, "recipe_key": "run_threshold", "action": "consolidate", "rationale": "threshold", "evidence_refs": []},
+                {"day_index": 4, "recipe_key": "mtb_technical", "action": "consolidate", "rationale": "mtb", "evidence_refs": []},
+                {"day_index": 5, "recipe_key": "run_hill_quality", "action": "consolidate", "rationale": "hill", "evidence_refs": []},
+                {"day_index": 7, "recipe_key": "run_easy_distance", "action": "consolidate", "rationale": "distance", "evidence_refs": []},
+            ],
+        }
+        repaired = {
+            "rationale": "reparerad mot alla hårda krav",
+            "slots": [
+                {"day_index": 2, "recipe_key": "run_threshold", "action": "consolidate", "rationale": "threshold", "evidence_refs": []},
+                {"day_index": 3, "recipe_key": "swim_aerobic_technique", "action": "establish", "rationale": "swim", "evidence_refs": []},
+                {"day_index": 4, "recipe_key": "mtb_technical", "action": "consolidate", "rationale": "mtb", "evidence_refs": []},
+                {"day_index": 6, "recipe_key": "swim_strength", "action": "establish", "rationale": "swim+strength", "evidence_refs": []},
+                {"day_index": 7, "recipe_key": "run_easy_distance", "action": "consolidate", "rationale": "distance", "evidence_refs": []},
+            ],
+        }
+        replies = [invalid, repaired]
+        calls = []
+
+        def fake_request(body):
+            calls.append(body)
+            payload = replies.pop(0)
+            return {
+                "status": "completed",
+                "output": [
+                    {
+                        "type": "message",
+                        "content": [
+                            {"type": "output_text", "text": json.dumps(payload, ensure_ascii=False)}
+                        ],
+                    }
+                ],
+            }
+
+        result = generate_microcycle(
+            meso,
+            self.goal,
+            self.policy,
+            self.catalog,
+            {"capability_facts": {}},
+            date(2026, 9, 28),
+            request_fn=fake_request,
+        )
+        self.assertEqual(len(calls), 2)
+        self.assertEqual(result["source"], "openai_repaired")
+        self.assertEqual(result["guard_repair"]["result"], "accepted")
+        self.assertTrue(result["guard_repair"]["initial_failures"])
+        self.assertEqual(result["rationale"], repaired["rationale"])
+        self.assertFalse(
+            microcycle_guard_failures(
+                result, meso, self.policy, self.catalog, date(2026, 9, 28)
+            )
+        )
 
     def test_microcycle_guard_rejects_calendar_fill_without_protected_capacity(self):
         meso = fallback_mesocycle(self.goal, self.policy, {})
