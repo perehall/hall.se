@@ -1,5 +1,9 @@
 const DEFAULT_REPOSITORY = "perehall/hall.se";
 const DEFAULT_EVENT_TYPE = "strava-activity-event";
+const DEFAULT_TRAINING_INPUT_EVENT_TYPE = "training-input-event";
+const TRAINING_INPUT_PATH = "/training-api/input";
+const TRAINING_INPUT_OPERATIONS = new Set(["ADD_FEEDBACK", "UPDATE_COMPLETED_WORKOUT", "ADD_SPONTANEOUS_WORKOUT", "REPORT_PAIN", "REPORT_FATIGUE", "NATURAL_LANGUAGE"]);
+const TRAINING_INPUT_FEELINGS = new Set(["fresh", "tired", "strong_legs", "heavy_legs", "pain", "could_do_more"]);
 const DEFAULT_GITHUB_API_VERSION = "2026-03-10";
 const DEFAULT_TIMEOUT_MS = 1500;
 
@@ -85,7 +89,7 @@ export function validateActivityEvent(payload, env) {
   };
 }
 
-export async function dispatchToGitHub(event, env, fetchImpl = fetch) {
+export async function dispatchToGitHub(event, env, fetchImpl = fetch, eventTypeOverride = null) {
   if (!configured(env.GITHUB_DISPATCH_TOKEN)) {
     throw new Error("GITHUB_DISPATCH_TOKEN is not configured");
   }
@@ -95,9 +99,11 @@ export async function dispatchToGitHub(event, env, fetchImpl = fetch) {
   if (!/^[^/]+\/[^/]+$/.test(repository)) {
     throw new Error("GITHUB_REPOSITORY must be owner/repo");
   }
-  const eventType = configured(env.DISPATCH_EVENT_TYPE)
-    ? env.DISPATCH_EVENT_TYPE.trim()
-    : DEFAULT_EVENT_TYPE;
+  const eventType = configured(eventTypeOverride)
+    ? eventTypeOverride.trim()
+    : configured(env.DISPATCH_EVENT_TYPE)
+      ? env.DISPATCH_EVENT_TYPE.trim()
+      : DEFAULT_EVENT_TYPE;
   const apiVersion = configured(env.GITHUB_API_VERSION)
     ? env.GITHUB_API_VERSION.trim()
     : DEFAULT_GITHUB_API_VERSION;
@@ -130,6 +136,120 @@ export async function dispatchToGitHub(event, env, fetchImpl = fetch) {
   }
 }
 
+
+export function validateTrainingInput(payload) {
+  if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
+    return { ok: false, status: 400, reason: "invalid_payload" };
+  }
+  const allowed = new Set(["operation", "activity_id", "text", "rpe", "feeling", "source"]);
+  const extra = Object.keys(payload).filter((key) => !allowed.has(key));
+  if (extra.length) return { ok: false, status: 400, reason: "unexpected_fields" };
+
+  const operation = typeof payload.operation === "string" ? payload.operation.trim().toUpperCase() : "";
+  if (!TRAINING_INPUT_OPERATIONS.has(operation)) {
+    return { ok: false, status: 400, reason: "invalid_operation" };
+  }
+  if (!Number.isInteger(payload.activity_id) || payload.activity_id <= 0) {
+    return { ok: false, status: 400, reason: "invalid_activity_id" };
+  }
+
+  const text = payload.text == null ? "" : payload.text;
+  if (typeof text !== "string" || text.length > 800) {
+    return { ok: false, status: 400, reason: "invalid_text" };
+  }
+  const normalizedText = text.trim();
+
+  const rpe = payload.rpe == null ? null : payload.rpe;
+  if (rpe !== null && (!Number.isInteger(rpe) || rpe < 1 || rpe > 10)) {
+    return { ok: false, status: 400, reason: "invalid_rpe" };
+  }
+
+  const feeling = payload.feeling == null ? [] : payload.feeling;
+  if (!Array.isArray(feeling) || feeling.length > 6) {
+    return { ok: false, status: 400, reason: "invalid_feeling" };
+  }
+  const normalizedFeeling = [];
+  for (const value of feeling) {
+    if (typeof value !== "string" || !TRAINING_INPUT_FEELINGS.has(value)) {
+      return { ok: false, status: 400, reason: "invalid_feeling" };
+    }
+    if (!normalizedFeeling.includes(value)) normalizedFeeling.push(value);
+  }
+
+  const source = payload.source == null ? "training-gui" : payload.source;
+  if (typeof source !== "string" || source.length > 64) {
+    return { ok: false, status: 400, reason: "invalid_source" };
+  }
+  if (!normalizedText && rpe === null && normalizedFeeling.length === 0) {
+    return { ok: false, status: 400, reason: "empty_input" };
+  }
+
+  return {
+    ok: true,
+    input: {
+      operation,
+      activity_id: payload.activity_id,
+      text: normalizedText,
+      rpe,
+      feeling: normalizedFeeling,
+      source: source.trim() || "training-gui",
+    },
+  };
+}
+
+async function handleTrainingInputRequest(request, env, fetchImpl) {
+  if (request.method !== "POST") {
+    return jsonResponse({ error: "method_not_allowed" }, 405);
+  }
+  if (!configured(request.headers.get("cf-access-jwt-assertion"))) {
+    return jsonResponse({ error: "access_required" }, 401);
+  }
+
+  let raw;
+  try {
+    raw = await request.text();
+  } catch {
+    return jsonResponse({ error: "invalid_body" }, 400);
+  }
+  if (raw.length > 4096) {
+    return jsonResponse({ error: "payload_too_large" }, 413);
+  }
+
+  let payload;
+  try {
+    payload = JSON.parse(raw);
+  } catch {
+    return jsonResponse({ error: "invalid_json" }, 400);
+  }
+
+  const validation = validateTrainingInput(payload);
+  if (!validation.ok) {
+    console.warn("TRAINING_INPUT_REJECTED", validation.reason);
+    return jsonResponse({ error: validation.reason }, validation.status);
+  }
+
+  const submittedAt = new Date().toISOString();
+  const digest = await sha256Hex(JSON.stringify(validation.input) + ":" + submittedAt);
+  const event = {
+    ...validation.input,
+    submitted_at: submittedAt,
+    event_key: "training-input:" + digest.slice(0, 24),
+  };
+
+  try {
+    const eventType = configured(env.TRAINING_INPUT_EVENT_TYPE)
+      ? env.TRAINING_INPUT_EVENT_TYPE.trim()
+      : DEFAULT_TRAINING_INPUT_EVENT_TYPE;
+    await dispatchToGitHub(event, env, fetchImpl, eventType);
+  } catch (error) {
+    console.error("TRAINING_INPUT_DISPATCH_FAILED", event.event_key, String(error));
+    return jsonResponse({ error: "dispatch_failed" }, 503);
+  }
+
+  console.log("TRAINING_INPUT_DISPATCHED", event.event_key, event.operation);
+  return jsonResponse({ status: "accepted", event_key: event.event_key });
+}
+
 export async function handleRequest(request, env, fetchImpl = fetch) {
   const url = new URL(request.url);
 
@@ -141,9 +261,14 @@ export async function handleRequest(request, env, fetchImpl = fetch) {
       owner_configured: configured(env.STRAVA_OWNER_ID),
       subscription_configured: configured(env.STRAVA_SUBSCRIPTION_ID),
       github_dispatch_configured: configured(env.GITHUB_DISPATCH_TOKEN),
+      training_input_endpoint: TRAINING_INPUT_PATH,
       webhook_path_fingerprint: await secretFingerprint(env.WEBHOOK_PATH_SECRET),
       verify_token_fingerprint: await secretFingerprint(env.STRAVA_VERIFY_TOKEN),
     });
+  }
+
+  if (url.pathname === TRAINING_INPUT_PATH) {
+    return handleTrainingInputRequest(request, env, fetchImpl);
   }
 
   const webhookPath = await expectedWebhookPath(env);
