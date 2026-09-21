@@ -15,6 +15,9 @@ from adaptive_planner import (  # noqa: E402
     fallback_mesocycle,
     fallback_microcycle,
     materialize_strategy,
+    mesocycle_schema,
+    microcycle_is_valid,
+    target_week,
     validate_and_normalize_micro,
 )
 from build_athlete_state import build_state  # noqa: E402
@@ -27,6 +30,39 @@ class AdaptivePlanningTests(unittest.TestCase):
         cls.goal = json.loads((ROOT / "data" / "goal.json").read_text(encoding="utf-8"))
         cls.policy = json.loads((ROOT / "data" / "planning_policy.json").read_text(encoding="utf-8"))
         cls.catalog = json.loads((ROOT / "data" / "workout_catalog.json").read_text(encoding="utf-8"))
+
+    def test_structured_output_schema_avoids_unsupported_unique_items_keyword(self):
+        schema = mesocycle_schema(
+            [item["key"] for item in self.policy["strategy_base"]["capability_portfolio"]]
+        )
+        encoded = json.dumps(schema, sort_keys=True)
+        self.assertNotIn("uniqueItems", encoded)
+
+    def test_active_mesocycle_targets_upcoming_week_not_current_copy(self):
+        plan = {
+            "meta": {
+                "week_start": "2026-09-21",
+                "week_end": "2026-09-27",
+                "mesocycle_id": "meso-live",
+                "requires_mesocycle_review": False,
+            }
+        }
+        upcoming = {"meta": {"week_start": "2026-09-28", "week_end": "2026-10-04"}}
+        target, active_replan = target_week(plan, upcoming, date(2026, 9, 21))
+        self.assertEqual(target, date(2026, 9, 28))
+        self.assertFalse(active_replan)
+
+        micro = {
+            "schema_version": 1,
+            "week_start": "2026-09-21",
+            "mesocycle_id": "meso-live",
+            "slots": [{"day_index": 2, "recipe_key": "run_threshold"}],
+            "source_hash": "old",
+        }
+        meso = {"id": "meso-live"}
+        self.assertFalse(
+            microcycle_is_valid(micro, meso, date(2026, 9, 28), source_hash_value="new")
+        )
 
     def test_fixed_policy_contains_no_current_mesocycle(self):
         self.assertNotIn("current_mesocycle", self.policy)

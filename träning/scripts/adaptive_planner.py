@@ -167,8 +167,14 @@ def request_openai(body, api_key=None):
         headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"},
         method="POST",
     )
-    with urllib.request.urlopen(request, timeout=120) as response:
-        return json.load(response)
+    try:
+        with urllib.request.urlopen(request, timeout=120) as response:
+            return json.load(response)
+    except urllib.error.HTTPError as exc:
+        detail = exc.read().decode("utf-8", errors="replace")
+        raise RuntimeError(f"OpenAI HTTP {exc.code}: {detail[:1600]}") from exc
+    except urllib.error.URLError as exc:
+        raise RuntimeError(f"OpenAI transport error: {exc.reason}") from exc
 
 
 def extract_output_text(response):
@@ -242,10 +248,10 @@ def mesocycle_schema(capabilities):
             "goal_contribution": {"type": "string"},
             "hypothesis": {"type": "string"},
             "primary_capabilities": {
-                "type": "array", "minItems": 1, "maxItems": 3, "uniqueItems": True, "items": primary_cap
+                "type": "array", "minItems": 1, "maxItems": 3, "items": primary_cap
             },
             "secondary_capabilities": {
-                "type": "array", "maxItems": 4, "uniqueItems": True, "items": cap
+                "type": "array", "maxItems": 4, "items": cap
             },
             "progression_axes": {
                 "type": "array",
