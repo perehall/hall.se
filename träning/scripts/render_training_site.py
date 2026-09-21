@@ -36,6 +36,7 @@ PIPELINE = (
     "finalize_user_report_ui.py",
     "finalize_week_status_ui.py",
     "finalize_post_workout_ui.py",
+    "finalize_training_input_ui.py",
     "finalize_human_training_language.py",
     "finalize_completed_workout_truth.py",
     "finalize_completed_sport_icon.py",
