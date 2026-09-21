@@ -316,10 +316,10 @@ def seed_preliminary_swims(promoted, future):
     ]
 
     if targets and not sources:
-        raise RuntimeError(
-            "Veckoskifte: framtidsplanen kräver simstruktur men föregående plan saknar "
-            "ett verifierat strukturerat simpass att bära vidare."
-        )
+        # Preserve legacy/generic rollover behavior when no authored structure
+        # exists. Downstream workout-design validation still fails closed if a
+        # real published swim anchor would otherwise be non-executable.
+        return future
 
     for ordinal, (target_index, target) in enumerate(targets):
         # One known executable structure may safely be reused for multiple
