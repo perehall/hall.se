@@ -50,6 +50,15 @@ class RaceContractTests(unittest.TestCase):
         self.assertEqual(context["derived"]["published_component_delta_m"], 10)
         self.assertEqual(context["race_profile"]["swim_distance_m"], 9960)
         self.assertEqual(context["category_status"], "unspecified")
+        transition = next(
+            row for row in context["course_requirement_mapping"]
+            if row["source_fact"] == "characteristics: många växlingar"
+        )
+        self.assertEqual(
+            transition["system_gap"],
+            "combined_swimrun_transition_durability",
+        )
+        self.assertEqual(transition["mapped_capabilities"], [])
 
     def test_review_windows_are_not_load_prescriptions(self):
         policy = self.policy["event_horizon_policy"]
