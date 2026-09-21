@@ -1,0 +1,231 @@
+#!/usr/bin/env python3
+"""Add a compact post-workout input surface to the generated training page."""
+
+from __future__ import annotations
+
+import html
+import json
+import re
+from datetime import datetime
+from pathlib import Path
+from zoneinfo import ZoneInfo
+
+from coach_rules import planning_window
+from finalize_post_workout_ui import local_date, matching_activity
+
+ROOT = Path(__file__).resolve().parents[1]
+INDEX_FILE = ROOT / "index.html"
+PLAN_FILE = ROOT / "data" / "plan.json"
+UPCOMING_FILE = ROOT / "data" / "upcoming_week.json"
+ACTIVITIES_FILE = ROOT / "data" / "activities.json"
+
+CSS_MARKER = "/* training-input-ui-v1 */"
+BLOCK_START = "<!-- training-input-ui-v1:start -->"
+BLOCK_END = "<!-- training-input-ui-v1:end -->"
+SCRIPT_MARKER = "/* training-input-ui-js-v1 */"
+
+CSS = r"""
+/* training-input-ui-v1 */
+.training-input{margin-top:16px;padding-top:15px;border-top:1px solid var(--qp-line,#e2e8f0)}
+.training-input h3{margin:0 0 5px;font-size:.95rem;color:var(--qp-text,#111827)}
+.training-input-intro{margin:0 0 12px;color:var(--qp-secondary,#5e6661);font-size:.8rem;line-height:1.4}
+.training-input-label{display:block;margin:10px 0 6px;color:var(--qp-text-label,#475569);font-size:.68rem;font-weight:850;letter-spacing:.055em;text-transform:uppercase}
+.training-input-options{display:flex;flex-wrap:wrap;gap:6px}
+.training-input-chip{appearance:none;border:1px solid var(--qp-line,#d9dedb);background:transparent;color:var(--qp-secondary,#5e6661);border-radius:999px;padding:7px 10px;font:inherit;font-size:.76rem;cursor:pointer}
+.training-input-chip[aria-pressed="true"]{border-color:var(--qp-accent,#5964e8);color:var(--qp-accent,#5964e8);box-shadow:inset 0 0 0 1px var(--qp-accent,#5964e8)}
+.training-input textarea{width:100%;min-height:72px;resize:vertical;border:1px solid var(--qp-line,#d9dedb);border-radius:10px;background:transparent;color:var(--qp-text,#111827);padding:9px 10px;font:inherit;font-size:.82rem;line-height:1.4}
+.training-input-actions{display:flex;align-items:center;gap:10px;margin-top:8px}
+.training-input-save{appearance:none;border:0;border-radius:9px;background:var(--qp-accent,#5964e8);color:#fff;padding:8px 12px;font:inherit;font-size:.78rem;font-weight:800;cursor:pointer}
+.training-input-save:disabled{opacity:.55;cursor:default}
+.training-input-status{color:var(--qp-secondary,#5e6661);font-size:.75rem}
+""".strip()
+
+JS = r"""
+/* training-input-ui-js-v1 */
+(() => {
+  const root = document.querySelector('[data-training-input]');
+  if (!root) return;
+
+  const rpeButtons = [...root.querySelectorAll('[data-rpe]')];
+  const feelingButtons = [...root.querySelectorAll('[data-feeling]')];
+  const text = root.querySelector('textarea');
+  const save = root.querySelector('[data-training-input-save]');
+  const status = root.querySelector('[data-training-input-status]');
+  let rpe = null;
+  const feelings = new Set();
+
+  const pressOne = (button) => {
+    rpeButtons.forEach((item) => item.setAttribute('aria-pressed', item === button ? 'true' : 'false'));
+    rpe = Number(button.dataset.rpe);
+  };
+
+  rpeButtons.forEach((button) => button.addEventListener('click', () => pressOne(button)));
+  feelingButtons.forEach((button) => button.addEventListener('click', () => {
+    const key = button.dataset.feeling;
+    if (feelings.has(key)) feelings.delete(key); else feelings.add(key);
+    button.setAttribute('aria-pressed', feelings.has(key) ? 'true' : 'false');
+  }));
+
+  save.addEventListener('click', async () => {
+    const note = text.value.trim();
+    if (!note && rpe === null && feelings.size === 0) {
+      status.textContent = 'Välj en känsla eller skriv en kort kommentar.';
+      return;
+    }
+
+    let operation = note ? 'NATURAL_LANGUAGE' : 'ADD_FEEDBACK';
+    if (!note && feelings.has('pain')) operation = 'REPORT_PAIN';
+    else if (!note && feelings.has('tired')) operation = 'REPORT_FATIGUE';
+
+    save.disabled = true;
+    status.textContent = 'Sparar…';
+    try {
+      const response = await fetch('/training-api/input', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {'content-type': 'application/json'},
+        body: JSON.stringify({
+          operation,
+          activity_id: Number(root.dataset.activityId),
+          text: note,
+          rpe,
+          feeling: [...feelings],
+          source: 'training-gui-v1'
+        })
+      });
+      const body = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(body.error || 'request_failed');
+      status.textContent = 'Mottaget. Systemet räknar om med din input.';
+      text.value = '';
+      rpe = null;
+      feelings.clear();
+      [...rpeButtons, ...feelingButtons].forEach((button) => button.setAttribute('aria-pressed', 'false'));
+    } catch (error) {
+      status.textContent = 'Kunde inte spara. Försök igen.';
+      console.error('TRAINING_INPUT_FAILED', error);
+    } finally {
+      save.disabled = false;
+    }
+  });
+})();
+""".strip()
+
+
+def load_json(path: Path, fallback: dict) -> dict:
+    if not path.exists():
+        return fallback
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def remove_existing(page: str) -> str:
+    page = re.sub(
+        re.escape(BLOCK_START) + r".*?" + re.escape(BLOCK_END),
+        "",
+        page,
+        flags=re.S,
+    )
+    page = re.sub(
+        r"/\* training-input-ui-v1 \*/.*?(?=(?:/\*|</style>))",
+        "",
+        page,
+        flags=re.S,
+    )
+    page = re.sub(
+        r"<script>\s*/\* training-input-ui-js-v1 \*/.*?</script>",
+        "",
+        page,
+        flags=re.S,
+    )
+    return page
+
+
+def render_block(activity_id: int) -> str:
+    rpe = [
+        (2, "Mycket lätt"),
+        (4, "Lätt"),
+        (6, "Lagom"),
+        (8, "Tungt"),
+        (10, "För tungt"),
+    ]
+    feelings = [
+        ("fresh", "Pigg"),
+        ("tired", "Trött"),
+        ("strong_legs", "Starka ben"),
+        ("heavy_legs", "Tunga ben"),
+        ("pain", "Smärta"),
+        ("could_do_more", "Kunde gjort mer"),
+    ]
+    rpe_html = "".join(
+        f'<button type="button" class="training-input-chip" data-rpe="{value}" aria-pressed="false">{html.escape(label)}</button>'
+        for value, label in rpe
+    )
+    feeling_html = "".join(
+        f'<button type="button" class="training-input-chip" data-feeling="{html.escape(key)}" aria-pressed="false">{html.escape(label)}</button>'
+        for key, label in feelings
+    )
+    return f"""{BLOCK_START}
+<section class="training-input" data-training-input data-activity-id="{activity_id}" aria-label="Feedback efter pass">
+  <h3>Hur kändes passet?</h3>
+  <p class="training-input-intro">Snabbval räcker. Fri text kan också korrigera vad du faktiskt gjorde; modellen får bara klassificera inputen, inte ändra planen direkt.</p>
+  <span class="training-input-label">Ansträngning</span>
+  <div class="training-input-options">{rpe_html}</div>
+  <span class="training-input-label">Känsla</span>
+  <div class="training-input-options">{feeling_html}</div>
+  <span class="training-input-label">Kommentar eller ändring</span>
+  <textarea maxlength="800" placeholder="T.ex. Blev 4 × 8 i stället för 3 × 10. Kändes kontrollerat och jag var pigg efteråt."></textarea>
+  <div class="training-input-actions">
+    <button type="button" class="training-input-save" data-training-input-save>Spara</button>
+    <span class="training-input-status" data-training-input-status aria-live="polite"></span>
+  </div>
+</section>
+{BLOCK_END}"""
+
+
+def apply_training_input_ui(page: str, plan: dict, activities_state: dict, today: str) -> str:
+    page = remove_existing(page)
+    if 'class="today-outcome"' not in page:
+        return page
+
+    day = next((item for item in plan.get("days") or [] if item.get("date") == today), None)
+    if not day:
+        return page
+    today_activities = [
+        activity
+        for activity in activities_state.get("activities") or []
+        if local_date(activity) == today
+    ]
+    activity = matching_activity(day, today_activities)
+    if not activity or not isinstance(activity.get("id"), int):
+        return page
+
+    link = '<a class="today-outcome-link"'
+    pos = page.find(link)
+    if pos < 0:
+        raise RuntimeError("Träningsinput UI: post-workout-länken saknas.")
+
+    page = page[:pos] + render_block(activity["id"]) + "\n" + page[pos:]
+    if "</style>" not in page:
+        raise RuntimeError("Träningsinput UI: </style> saknas.")
+    page = page.replace("</style>", CSS + "\n</style>", 1)
+    if "</body>" not in page:
+        raise RuntimeError("Träningsinput UI: </body> saknas.")
+    page = page.replace("</body>", "<script>\n" + JS + "\n</script>\n</body>", 1)
+    return page
+
+
+def main() -> int:
+    plan = load_json(PLAN_FILE, {"days": [], "meta": {}})
+    upcoming = load_json(UPCOMING_FILE, {"days": [], "meta": {}})
+    decision_plan = planning_window(plan, upcoming)
+    activities = load_json(ACTIVITIES_FILE, {"activities": []})
+    page = INDEX_FILE.read_text(encoding="utf-8")
+    tz = ZoneInfo(plan.get("meta", {}).get("timezone", "Europe/Stockholm"))
+    today = datetime.now(tz).date().isoformat()
+    rendered = apply_training_input_ui(page, decision_plan, activities, today)
+    INDEX_FILE.write_text(rendered, encoding="utf-8")
+    print("Träningsinput UI OK.")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
