@@ -46,6 +46,7 @@ MODEL = os.environ.get("OPENAI_MODEL", "gpt-5-mini")
 MESO_SCHEMA_VERSION = 1
 MICRO_SCHEMA_VERSION = 1
 PLANNER_REVISION = 4
+MICRO_PLANNER_REVISION = 5
 
 CAPABILITY_TO_RECIPE = {
     "run_threshold": "run_threshold",
@@ -92,6 +93,8 @@ PRIMARY_CAPABILITIES_WITH_EXECUTABLE_RECIPES = {
     "swim_threshold",
 }
 SUPPORT_ONLY_RECIPES = {"swim_strength"}
+RUN_STRESS_RECIPES = {"run_threshold", "run_hill_quality", "run_easy_distance"}
+DAY_AFTER_ENDURO_BLOCKED_RECIPES = RUN_STRESS_RECIPES | {"mtb_technical"}
 
 
 def load_json(path: Path, fallback):
@@ -150,7 +153,7 @@ def target_week(plan, upcoming, today):
     return upcoming_start, False
 
 
-def resolve_planning_target(plan, upcoming, mesocycle_decision, today, goal=None):
+def resolve_planning_target(plan, upcoming, mesocycle_decision, today, goal=None, microcycle_decision=None):
     """Choose the week the adaptive engine is allowed to plan.
 
     A generated mesocycle is authoritative for its full declared duration. If a
@@ -181,6 +184,13 @@ def resolve_planning_target(plan, upcoming, mesocycle_decision, today, goal=None
         and (mesocycle_decision or {}).get("goal_hash") != goal_hash(goal)
     )
     if goal_changed and today == plan_start:
+        return plan_start, True
+
+    micro_revision_changed = bool(
+        microcycle_decision
+        and microcycle_decision.get("planner_revision") != MICRO_PLANNER_REVISION
+    )
+    if micro_revision_changed and today == plan_start:
         return plan_start, True
     decision_start = None
     try:
@@ -681,53 +691,203 @@ def mesocycle_is_valid(decision, goal, target_start):
 
 
 def fallback_microcycle(meso, policy, catalog, target_start):
+    """Conservative composition from requirements, not from calendar fill.
+
+    Fixed Enduro consumes a real training day. Secondary capabilities are not a
+    checklist and may be omitted from an individual microcycle. The fallback
+    first covers direct primary stimuli and protected swim/strength, then adds
+    only a useful secondary exposure if there is a safe slot.
+    """
     primaries = set(meso.get("primary_capabilities") or [])
     secondaries = set(meso.get("secondary_capabilities") or [])
-    wanted = primaries | secondaries
+    fixed_enduro = is_enduro_school_date(target_start)
+    max_slots = 5 if fixed_enduro else 6
     slots = []
 
-    def add(day, recipe, rationale):
-        if recipe in catalog["recipes"] and not any(row["day_index"] == day for row in slots):
+    preferred_days = {
+        "swim_aerobic_technique": [2, 4, 6, 1, 5, 3, 7] if fixed_enduro else [1, 3, 5, 2, 4, 6, 7],
+        "swim_aerobic_threshold": [2, 4, 6, 5, 3, 7] if fixed_enduro else [1, 3, 5, 2, 4, 6, 7],
+        "run_threshold": [3, 4, 5, 6, 7] if fixed_enduro else [2, 3, 4, 5, 6, 7, 1],
+        "run_hill_quality": [5, 6, 7, 4, 3] if fixed_enduro else [4, 5, 6, 7, 3, 2, 1],
+        "run_easy_distance": [7, 6, 5, 4, 3] if fixed_enduro else [7, 6, 5, 4, 3, 2, 1],
+        "mtb_technical": [6, 7, 4, 5, 3] if fixed_enduro else [6, 7, 4, 5, 3, 2, 1],
+        "swim_strength": [5, 6, 4, 3, 7, 2] if fixed_enduro else [5, 6, 4, 3, 7, 2, 1],
+        "strength_core": [5, 6, 4, 3, 7, 2] if fixed_enduro else [5, 6, 4, 3, 7, 2, 1],
+    }
+
+    def candidate_rows(day, recipe):
+        return slots + [
+            {
+                "day_index": day,
+                "recipe_key": recipe,
+                "action": "consolidate",
+                "rationale": "",
+                "evidence_refs": [],
+            }
+        ]
+
+    def add_recipe(recipe, rationale, *, action=None):
+        if recipe not in catalog["recipes"] or len(slots) >= max_slots:
+            return False
+        if any(row["recipe_key"] == recipe for row in slots):
+            return True
+        for day in preferred_days.get(recipe, range(1, 8)):
+            if fixed_enduro and day == 1:
+                continue
+            if any(row["day_index"] == day for row in slots):
+                continue
+            conflicts = microcycle_layout_failures(
+                candidate_rows(day, recipe), catalog, target_start
+            )
+            if conflicts:
+                continue
             caps = recipe_capabilities(catalog["recipes"][recipe])
-            action = "consolidate" if caps.intersection(primaries) else "establish"
             slots.append(
                 {
                     "day_index": day,
                     "recipe_key": recipe,
-                    "action": action,
+                    "action": action or ("consolidate" if caps.intersection(primaries) else "establish"),
                     "rationale": rationale,
-                    "evidence_refs": ["mesocycle.primary_capabilities" if caps.intersection(primaries) else "planning_policy.microcycle_policy"],
+                    "evidence_refs": [
+                        "mesocycle.primary_capabilities"
+                        if caps.intersection(primaries)
+                        else "planning_policy.microcycle_policy"
+                    ],
                 }
             )
+            return True
+        return False
 
-    if "run_threshold" in wanted:
-        add(2, "run_threshold", "Placera kontrollerad löpkvalitet med marginal efter mikrocykelstarten.")
-    add(3, "swim_aerobic_technique", "Skydda simfrekvens med låg mekanisk benkostnad.")
-    if {"mtb_technical", "mtb_aerobic"}.intersection(wanted) or "mtb_technical" in primaries:
-        add(4, "mtb_technical", "Ge MTB/XC en egen teknisk/aerob exponering.")
-    if "run_hill_quality" in wanted:
-        add(5, "run_hill_quality", "Separera mekanisk backkvalitet från tröskelstimuluset.")
-    add(6, "swim_strength", "Kombinera andra simexponeringen med skyddad styrka/core.")
-    if "run_easy_distance" in wanted or "run_easy_distance" in primaries:
-        add(7, "run_easy_distance", "Lägg lugn löptålighet sist i mikrocykeln.")
+    # Low-mechanical swim is the conservative default immediately after fixed
+    # Enduro and directly covers both swim_aerobic and swim_technique.
+    if fixed_enduro and {"swim_aerobic", "swim_technique"}.intersection(primaries):
+        add_recipe(
+            "swim_aerobic_technique",
+            "Lågmekanisk simexponering dagen efter fast enduro ger konkret plan utan att anta att benen är redo för ny benkvalitet.",
+        )
 
-    used_caps = set()
-    for row in slots:
-        used_caps |= recipe_capabilities(catalog["recipes"][row["recipe_key"]])
-    free_days = [day for day in range(2 if is_enduro_school_date(target_start) else 1, 8) if day not in {r["day_index"] for r in slots}]
+    # Cover each primary with an executable direct recipe.
     for cap in meso.get("primary_capabilities") or []:
-        if cap in used_caps:
+        direct_recipe = CAPABILITY_TO_RECIPE.get(cap)
+        if not direct_recipe:
             continue
-        recipe = CAPABILITY_TO_RECIPE.get(cap)
-        if recipe and free_days and recipe in catalog["recipes"]:
-            day = free_days.pop(0)
-            add(day, recipe, f"Säkerställ mesocykelns primära stimulus {cap}.")
-            used_caps |= recipe_capabilities(catalog["recipes"][recipe])
+        if any(
+            cap in recipe_capabilities(catalog["recipes"][row["recipe_key"]])
+            and row["recipe_key"] not in SUPPORT_ONLY_RECIPES
+            for row in slots
+        ):
+            continue
+        add_recipe(
+            direct_recipe,
+            f"Realiserar mesocykelns primära kapacitet {cap} med säker separation från annan benbelastning.",
+        )
+
+    # Protect the second swim exposure and strength/core without treating a free
+    # day as a reason to add another independent session.
+    swim_count = sum(
+        "swim_aerobic" in recipe_capabilities(catalog["recipes"][row["recipe_key"]])
+        for row in slots
+    )
+    if swim_count < int(policy["microcycle_policy"].get("normal_swim_exposures", 2)):
+        add_recipe(
+            "swim_strength",
+            "Kombinera andra simexponeringen med skyddad styrka/core i stället för att fylla ytterligare en dag.",
+            action="establish",
+        )
+    if not any(
+        "strength_core" in recipe_capabilities(catalog["recipes"][row["recipe_key"]])
+        for row in slots
+    ):
+        add_recipe(
+            "swim_strength",
+            "Skydda styrka/core tillsammans med en redan motiverad simexponering.",
+            action="establish",
+        )
+
+    # A race-relevant easy-distance exposure is useful when it fits safely, but
+    # other secondary capabilities are deliberately not all forced into the week.
+    secondary_added = False
+    if "run_easy_distance" in secondaries or "run_easy_distance" in primaries:
+        secondary_added = add_recipe(
+            "run_easy_distance",
+            "Behåll lugn löptålighet med separation från löpkvalitet.",
+            action="consolidate",
+        )
+
+    # Add at most one secondary exposure in total. A free slot is not a reason
+    # to force MTB/hills into a week that already contains race-relevant
+    # secondary long-run work plus fixed Enduro.
+    if not secondary_added:
+        for cap in ("run_hill_quality", "mtb_technical", "mtb_aerobic"):
+            if cap not in secondaries:
+                continue
+            recipe = CAPABILITY_TO_RECIPE.get(cap)
+            if recipe and add_recipe(
+                recipe,
+                f"Vald sekundär exponering för {cap}; övriga sekundära kapaciteter behöver inte täckas varje mikrocykel.",
+                action="consolidate",
+            ):
+                break
 
     return {
-        "rationale": "Deterministisk reservkomposition som realiserar mesocykelns valda stimuli utan att kopiera föregående vecka som beslutsgrund.",
+        "rationale": (
+            "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, "
+            "respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern."
+        ),
         "slots": sorted(slots, key=lambda row: row["day_index"]),
     }
+
+
+def microcycle_layout_failures(rows, catalog, target_start):
+    """Hard scheduling guards for known planned load adjacency."""
+    failures = []
+    fixed_enduro = is_enduro_school_date(target_start)
+    by_day = {
+        row.get("day_index"): row
+        for row in rows
+        if isinstance(row, dict)
+        and isinstance(row.get("day_index"), int)
+        and row.get("recipe_key") in catalog["recipes"]
+    }
+
+    if fixed_enduro and 2 in by_day:
+        recipe = by_day[2]["recipe_key"]
+        if recipe in DAY_AFTER_ENDURO_BLOCKED_RECIPES:
+            failures.append(
+                f"{recipe} får inte ligga direkt dagen efter fast enduro när faktisk benbelastning ännu är okänd"
+            )
+
+    run_days = sorted(
+        day
+        for day, row in by_day.items()
+        if row["recipe_key"] in RUN_STRESS_RECIPES
+    )
+    for previous, current in zip(run_days, run_days[1:]):
+        if current - previous == 1:
+            failures.append(
+                "löptröskel/backkvalitet/lång löpdistans får inte staplas på två på varandra följande dagar"
+            )
+            break
+
+    for day, row in by_day.items():
+        if row["recipe_key"] != "run_easy_distance":
+            continue
+        for neighbor in (day - 1, day + 1):
+            neighbor_row = by_day.get(neighbor)
+            if neighbor_row and neighbor_row["recipe_key"] == "mtb_technical":
+                failures.append(
+                    "lång löpdistans får inte ligga direkt intill MTB/XC; den sekundära cykelexponeringen ska utgå eller flyttas"
+                )
+                break
+
+    occupied = set(by_day)
+    if fixed_enduro:
+        occupied.add(1)
+    if len(occupied) >= 7:
+        failures.append(
+            "mikrocykeln fyller alla sju dagar trots att ledig dag aldrig är ett eget skäl att lägga till träning"
+        )
+    return failures
 
 
 def microcycle_guard_failures(result, meso, policy, catalog, target_start):
@@ -761,11 +921,15 @@ def microcycle_guard_failures(result, meso, policy, catalog, target_start):
         valid_rows.append(row)
 
     minimum = 4
-    maximum = 6
+    maximum = 5 if fixed_enduro else 6
     if len(valid_rows) < minimum:
         failures.append(f"för få giltiga träningsslots: {len(valid_rows)} < {minimum}")
     if len(valid_rows) > maximum:
         failures.append(f"för många giltiga träningsslots: {len(valid_rows)} > {maximum}")
+
+    for failure in microcycle_layout_failures(valid_rows, catalog, target_start):
+        if failure not in failures:
+            failures.append(failure)
 
     primaries = set(meso.get("primary_capabilities") or [])
     direct_primary_caps = set()
@@ -879,7 +1043,8 @@ def validate_and_normalize_micro(result, meso, policy, catalog, target_start):
         and swim_exposures >= required_swims
         and (not policy["microcycle_policy"].get("protect_strength_core_each_microcycle") or strength_exposures >= 1)
         and run_quality <= int(policy["microcycle_policy"].get("max_run_quality_exposures", 2))
-        and 4 <= len(cleaned) <= 6
+        and 4 <= len(cleaned) <= (5 if fixed_enduro else 6)
+        and not microcycle_layout_failures(cleaned, catalog, target_start)
     )
     if not valid:
         return fallback_microcycle(meso, policy, catalog, target_start), False
@@ -921,8 +1086,11 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
             "strength_core_exposures_min": 1 if policy["microcycle_policy"].get("protect_strength_core_each_microcycle") else 0,
             "max_run_quality_exposures": int(policy["microcycle_policy"].get("max_run_quality_exposures", 2)),
             "slot_count_min": 4,
-            "slot_count_max": 6,
+            "slot_count_max": 5 if is_enduro_school_date(target_start) else 6,
             "day_1_blocked_by_enduro": is_enduro_school_date(target_start),
+            "day_after_fixed_enduro_requires_low_leg_load": is_enduro_school_date(target_start),
+            "adjacent_run_stressors_forbidden": True,
+            "at_least_one_calendar_day_without_planned_training": True,
         },
     }
     digest = canonical_hash(source_payload)
@@ -935,6 +1103,9 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
         "Output måste uppfylla hard_requirements i underlaget: alla primära kapaciteter ska täckas direkt, "
         "normalantalet simexponeringar ska finnas, minst en styrka/core-exponering ska finnas när policyn kräver det, "
         "och antalet löpkvalitetsexponeringar får inte överskrida maxgränsen. "
+        "Sekundära kapaciteter är inte en checklista och behöver inte alla förekomma varje vecka. "
+        "Lägg inte löptröskel, backkvalitet eller lång löpdistans två dagar i rad. När dag 1 är fast enduro ska dag 2 ha låg benbelastning; "
+        "lägg inte löp- eller MTB-belastning där innan faktiskt enduroutfall är känt. Lämna minst en kalenderdag utan planerad träning. "
         "Använd kombinationsreceptet swim_strength när det hjälper att uppfylla både sim- och styrkekrav utan en extra dag. "
         "Om swim_threshold behövs finns ett separat etablerat 4 000 m-recept; behandla det som kvalitetsrecept, inte som automatisk distansprogression från det aeroba 3 200 m-passet. "
         "Enduro dag 1 är faktisk belastning och blockerar annan planering den dagen. "
@@ -1020,7 +1191,7 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
     normalized.update(
         {
             "schema_version": MICRO_SCHEMA_VERSION,
-            "planner_revision": PLANNER_REVISION,
+            "planner_revision": MICRO_PLANNER_REVISION,
             "source": source,
             "source_hash": digest,
             "generated_at_utc": datetime.now(timezone.utc).isoformat(),
@@ -1040,7 +1211,7 @@ def microcycle_is_valid(decision, meso, target_start, source_hash_value=None):
         return False
     return (
         decision.get("schema_version") == MICRO_SCHEMA_VERSION
-        and decision.get("planner_revision") == PLANNER_REVISION
+        and decision.get("planner_revision") == MICRO_PLANNER_REVISION
         and decision.get("week_start") == target_start.isoformat()
         and decision.get("mesocycle_id") == meso.get("id")
         and bool(decision.get("slots"))
@@ -1521,8 +1692,9 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
     if isinstance(today, str):
         today = iso(today)
     meso = load_json(MESO_FILE, {})
+    micro = load_json(MICRO_FILE, {})
     target_start, active_replan = resolve_planning_target(
-        plan, upcoming, meso, today, goal=goal
+        plan, upcoming, meso, today, goal=goal, microcycle_decision=micro
     )
 
     if not mesocycle_is_valid(meso, goal, target_start):
@@ -1561,7 +1733,6 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
         "fixed_enduro_day_1": is_enduro_school_date(target_start),
     }
     micro_digest = canonical_hash(micro_source_payload)
-    micro = load_json(MICRO_FILE, {})
     if not microcycle_is_valid(micro, meso, target_start, micro_digest):
         micro = generate_microcycle(
             meso,

@@ -21,6 +21,7 @@ MTB_NAME_RE = re.compile(r"\b(?:mtb|xc|mountain\s*bike|cykel)\b", re.IGNORECASE)
 MOTORCYCLE_GEAR_RE = re.compile(r"\b(?:exc|tpi|te\s*\d{2,3}|ec\s*\d{2,3})\b", re.IGNORECASE)
 SWIMRUN_NAME_RE = re.compile(r"\bswim\s*-?\s*run\b|\bswimrun\b", re.IGNORECASE)
 ENDURO_NAME_RULE = "mountainbike-explicit-enduro-name-v1"
+ENDURO_WORKOUT_NAME_RULE = "workout-explicit-enduro-name-v1"
 ENDURO_EMTB_PROXY_RULE = "emountainbike-user-enduro-proxy-v1"
 ENDURO_RIDE_GEAR_RULE = "ride-explicit-enduro-motorcycle-gear-v1"
 SWIMRUN_NAME_RULE = "trailrun-explicit-swimrun-name-v1"
@@ -61,6 +62,23 @@ def coach_semantic_fingerprint(activity):
 def auto_enduro_candidate(activity):
     """Return True only for a strong, explicit Enduro/Motocross name signal."""
     if raw_sport(activity) != "MountainBikeRide":
+        return False
+    name = str(activity.get("name") or "").strip()
+    if not name or not ENDURO_NAME_RE.search(name):
+        return False
+    if MTB_NAME_RE.search(name):
+        return False
+    return True
+
+
+def auto_enduro_workout_candidate(activity):
+    """Recognize Garmin/Strava generic Workout when the activity name is explicit.
+
+    Workout is too generic to classify by sport alone, but an explicit
+    Enduro/Motocross activity name without MTB/cycling wording is strong source
+    evidence for the user's motorcycle Enduro convention.
+    """
+    if raw_sport(activity) != "Workout":
         return False
     name = str(activity.get("name") or "").strip()
     if not name or not ENDURO_NAME_RE.search(name):
@@ -121,6 +139,19 @@ def apply_auto_semantics(activity):
                 "user convention: Strava e-MTB represents Enduro",
             ],
             reason="User convention: Strava e-MTB represents Enduro; Enduro is actual training load.",
+        )
+
+    if auto_enduro_workout_candidate(activity):
+        original = raw_sport(activity)
+        return _apply_enduro(
+            activity,
+            original=original,
+            rule=ENDURO_WORKOUT_NAME_RULE,
+            evidence=[
+                "source_sport_type=Workout",
+                "explicit Enduro/Motocross activity name",
+            ],
+            reason="Garmin/Strava exposed the Enduro recording as generic Workout, but the explicit activity name identifies actual Enduro training load.",
         )
 
     if auto_enduro_ride_candidate(activity):
