@@ -7,6 +7,7 @@ SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
 from finalize_quiet_performance_ui import (  # noqa: E402
+    CSS,
     CSS_END,
     CSS_START,
     THEME_COLOR,
@@ -31,10 +32,17 @@ class QuietPerformanceUiTests(unittest.TestCase):
         self.assertIn('class="goal-page quiet-performance"', rendered)
         self.assertIn('--qp-surface:#FCFCFB', rendered)
         self.assertIn('--qp-text:#171918', rendered)
-        self.assertIn('--qp-secondary:#6C716D', rendered)
-        self.assertIn('--qp-tertiary:#979C98', rendered)
+        self.assertIn('--qp-secondary:#5E6661', rendered)
+        self.assertIn('--qp-tertiary:#69706B', rendered)
+        self.assertIn('--qp-text-label:var(--qp-label)', rendered)
         self.assertIn('--qp-line:#E4E7E3', rendered)
         self.assertIn('--qp-accent:#5964E8', rendered)
+
+    def test_small_text_tokens_keep_readable_contrast_on_light_surfaces(self):
+        self.assertIn('--qp-secondary:#5E6661', CSS)
+        self.assertIn('--qp-tertiary:#69706B', CSS)
+        self.assertIn('body.quiet-performance .week-focus-mesocycle-idea strong', CSS)
+        self.assertIn('color:var(--qp-text-label)!important', CSS)
 
     def test_visual_contract_keeps_cards_flat_and_today_subtle(self):
         rendered = apply_quiet_performance(self.sample_page())

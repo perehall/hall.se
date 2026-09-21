@@ -11,7 +11,7 @@ SCRIPTS = ROOT / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
 from coach_rules import planning_window  # noqa: E402
-from finalize_training_brain_ui import SECTION_START, apply_ui, decorate_focus_card, render_section  # noqa: E402
+from finalize_training_brain_ui import CSS as TRAINING_BRAIN_CSS, SECTION_START, apply_ui, decorate_focus_card, render_section  # noqa: E402
 from strategy_contracts import StrategyContractError, validate_training_strategy  # noqa: E402
 from training_brain import resolve_mesocycle, resolve_next_decision, resolve_today, resolve_weather_advice  # noqa: E402
 
@@ -21,6 +21,10 @@ class TrainingBrainTests(unittest.TestCase):
     def setUpClass(cls):
         cls.strategy = json.loads((ROOT / "data" / "training_strategy.json").read_text(encoding="utf-8"))
         cls.plan = json.loads((ROOT / "data" / "plan.json").read_text(encoding="utf-8"))
+
+    def test_week_focus_labels_never_use_white_on_light_surface(self):
+        self.assertNotIn('.week-focus-mesocycle-idea strong{color:#fff}', TRAINING_BRAIN_CSS)
+        self.assertIn('color:var(--qp-text-label,#475569)', TRAINING_BRAIN_CSS)
 
     def test_current_strategy_contract_is_valid(self):
         self.assertTrue(validate_training_strategy(self.strategy))
