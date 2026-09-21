@@ -13,6 +13,16 @@ on:
   push:
     paths:
       - "träning/data/manual-sync-trigger.txt"
+      - "träning/data/goal.json"
+      - "träning/data/planning_policy.json"
+      - "träning/data/workout_catalog.json"
+      - "träning/scripts/adaptive_planner.py"
+      - "träning/scripts/race_contracts.py"
+      - "träning/scripts/goal_contracts.py"
+      - "träning/scripts/build_athlete_state.py"
+      - "träning/scripts/rollover_week.py"
+      - "träning/scripts/workout_design.py"
+      - "träning/scripts/training_job_runner.py"
 
 concurrency:
   group: training-pages
