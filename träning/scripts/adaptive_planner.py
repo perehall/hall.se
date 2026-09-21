@@ -844,6 +844,7 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
         "fixed_enduro_day_1": is_enduro_school_date(target_start),
         "goal": {
             "goal": goal.get("goal"),
+            "performance_goals": goal.get("performance_goals"),
             "current_phase": goal.get("current_phase"),
             "next_steps": goal.get("next_steps"),
         },
@@ -851,8 +852,13 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
         "microcycle_policy": policy.get("microcycle_policy"),
         "decision_guards": policy.get("decision_guards"),
         "athlete_state": sanitize_athlete_state(athlete_state),
-        "recipe_capabilities": {
-            key: sorted(recipe_capabilities(value))
+        "recipe_profiles": {
+            key: {
+                "stimuli": sorted(recipe_capabilities(value)),
+                "load_dimensions": list(value.get("load_dimensions") or []),
+                "development_focus": value.get("development_focus"),
+                "option_ids": [item.get("id") for item in (value.get("options") or [])],
+            }
             for key, value in catalog["recipes"].items()
         },
         "hard_requirements": {
@@ -875,6 +881,7 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
         "normalantalet simexponeringar ska finnas, minst en styrka/core-exponering ska finnas när policyn kräver det, "
         "och antalet löpkvalitetsexponeringar får inte överskrida maxgränsen. "
         "Använd kombinationsreceptet swim_strength när det hjälper att uppfylla både sim- och styrkekrav utan en extra dag. "
+        "Om swim_threshold behövs finns ett separat etablerat 4 000 m-recept; behandla det som kvalitetsrecept, inte som automatisk distansprogression från det aeroba 3 200 m-passet. "
         "Enduro dag 1 är faktisk belastning och blockerar annan planering den dagen. "
         "Progress får bara väljas för ett primärt mesocykelstimulus och ska ha stöd i athlete_state; annars välj consolidate/establish. "
         "En ledig dag är inte ett skäl att fylla kalendern. Kontrollera slutligen själv att varje hard_requirement är uppfyllt innan du svarar."
