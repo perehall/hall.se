@@ -4,7 +4,7 @@
       "activity_id": 20272196080,
       "activity_date": "2026-09-21",
       "activity_name": "Styrketräning på kvällen",
-      "generated_at_utc": "2026-09-21T21:19:05.897834+00:00",
+      "generated_at_utc": "2026-09-21T21:23:37.402924+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 3,
@@ -16,27 +16,27 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört kvällens styrkepass (33,6 min) efter enduro‑session; pulsnivåer indikerar måttlig autonom belastning utan rapporterade problem.",
-        "load_interpretation": "Enduro-session (5809 s) plus styrka samma dag ökar mekanisk/neuromuskulär belastning för dygnet; simpass i morgon bör bevaras men ej intensifieras utan extra data.",
+        "summary": "Gjort: kvällens styrkepass (33,6 min) genomfört efter längre enduro- och enduro-pass tidigare samma dag; ingen användarrapport angiven.",
+        "load_interpretation": "Närbelastning de senaste 2–3 dagarna inkluderar ett långt enduropass (total passduration 5809 s) och ett enduro tidigare i veckan; styrkepasset är rimligen kompletterande…",
         "confidence": "medium",
         "facts": [
           "Styrka: 33:34 · snittpuls 79,3 · maxpuls 128.",
           "Planstatus 2026-09-21: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Dagens styrka fullbordar mikrocykelns skyddade styrke‑stimulus men ökar total ben/neuromuskulär belastning efter enduro.",
-          "Föreslagen simning imorgon bör hållas enligt plan (det valda passalternativet) utan att höja dos eller lägga till extra styrka; ingen progression rekommenderas nu."
+          "Styrkepasset genomfördes som planerat kvällstid och ger mekanisk/neuromuskulär stimulus utan körda löp-/simminuter, vilket stöder krav på styrka/core i mikrocykeln.",
+          "Givet dagens omfattande enduro-session bör styrkekomponenten morgondagens kombinerade sim/styrkepass hållas enligt plan (konservativ styrkedos) om ingen träningströtthet eller smärta…"
         ],
         "unknowns": [
-          "Användarrapport om hur du kände dig efter styrkepasset saknas.",
-          "Eventuell sen lokal muskeltrötthet eller skaderisk nästa dag kan inte bedömas utan subjektiv feedback."
+          "Subjektiv återhämtning nästa morgon (muskeltrötthet/ömhet)",
+          "Detaljer om styrkans innehåll (set/reps/tyngd) för att bedöma lokal belastning"
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-09-22",
-        "reason": "Planerat simpass är mesocykelprioriterat och dagens belastning stödjer inte automatisk reduktion eller vila.",
-        "recommendation": "Behåll planerat simpass 2026-09-22 (det valda passalternativet) oförändrat; genomför det lugnt enligt planerat träningsinnehåll och undvik extra benintensivt styrkearbete samma dag.",
+        "reason": "Inga data eller användarrapporter indikerar behov av reduktion och mikrocykeln skyddar styrka/core; morgondagens kombinerade sim+styrka är baseline.",
+        "recommendation": "Behåll plan: genomför Simning 3200 m enligt schema och välj planerad styrkedos (det valda passalternativet). Om du vaknar med markant ben- eller höftömhet, reducera styrkedelen till det valda passalternativet och meddela coachen.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -1255,8 +1255,8 @@
       }
     }
   ],
-  "last_trigger_hash": "5a42b8ffa5ee5a07ee62d348b24cf3472b19fec59a9c989efdeb4e23daa97e37",
-  "last_run_utc": "2026-09-21T21:19:05.897834+00:00",
+  "last_trigger_hash": "7221a497e350358e6f18c615ba04c171c6bb2bfb7a7e58063cc7d7ed364a4fdf",
+  "last_run_utc": "2026-09-21T21:23:37.402924+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 3
