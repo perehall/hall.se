@@ -40,6 +40,22 @@
       "source_hash": "f26600c3e8a81a6c3da52531eb0219059682dfcae64eea8c656710b5b3274c9c",
       "generated_at_utc": "2026-09-21T07:57:42.493738+00:00",
       "summary": "Deterministisk reservkomposition som realiserar mesocykelns valda stimuli utan att kopiera föregående vecka som beslutsgrund."
+    },
+    {
+      "kind": "mesocycle",
+      "decision_id": "20260921-run_threshold-mtb_technical-run_easy_distance",
+      "source": "openai",
+      "source_hash": "ef471301e891b08a912a9023fbfd5a232f55d236a382ae54ea8be54f150a8193",
+      "generated_at_utc": "2026-09-21T08:30:18.482433+00:00",
+      "summary": "Modifierat byggblock — prioritera löptröskel, skydda sim/styrka, begränsa MTB-duration nära enduro"
+    },
+    {
+      "kind": "microcycle",
+      "decision_id": "2026-W39",
+      "source": "openai_repaired",
+      "source_hash": "28b1725f2bea9826773305d34f4e5735f18a1cc78e9e0c5cfc0c0e21f76bb2ec",
+      "generated_at_utc": "2026-09-21T08:31:34.314777+00:00",
+      "summary": "Flyttade run_threshold bort från blockerade dag 1 till en absorberbar mittveckaplats och säkerställde två simexponeringar samt minst en styrke/core-exponering (via swim_strength). Höll max två löpkvaliteter och inkluderade mtb_technical + run_easy_distance så att alla primära kapaciteter täcks. Slot-count = 6 inom policy. Varje val motiveras med observerade evidenser."
     }
   ]
 }

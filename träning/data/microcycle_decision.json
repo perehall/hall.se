@@ -1,74 +1,84 @@
 {
-  "rationale": "Löser guard_failures genom att ta bort planerat pass på dag 1 (blockerad av enduro) och istället lägga simsessionen till en annan dag för att nå minst två simexponeringar. Behåller run_threshold-progression (endast primärt stimulus) och swim_strength för att skydda både sim- och styrke/core-exponering. MTB hålls konsoliderad och långdistans kvar senare i veckan. Alla hard_requirements är uppfyllda (inga slotar på dag 1, minst 2 sim, minst 1 styrke/core, alla primära kapaciteter täckta, max löpkvaliteter ≤2, 5 slotar).",
+  "rationale": "Flyttade run_threshold bort från blockerade dag 1 till en absorberbar mittveckaplats och säkerställde två simexponeringar samt minst en styrke/core-exponering (via swim_strength). Höll max två löpkvaliteter och inkluderade mtb_technical + run_easy_distance så att alla primära kapaciteter täcks. Slot-count = 6 inom policy. Varje val motiveras med observerade evidenser.",
   "slots": [
     {
       "day_index": 2,
-      "recipe_key": "run_threshold",
-      "action": "progress",
-      "rationale": "Progress för primärt mesocykelmål (run_threshold) med stöd i senaste 4×8-utförandet; placerat efter blockerad dag 1 för återhämtning.",
+      "recipe_key": "swim_strength",
+      "action": "consolidate",
+      "rationale": "Skyddar både sim- och styrke/core-exponering direkt efter måndagens enduro utan extra löpbelastning; konsolidering (inte progress) för att bevara styrka och teknik.",
       "evidence_refs": [
-        "activity 20092166843 (2026-09-08) — 4×8 tempo",
-        "activity 19897382163 (2026-08-25) — 3×8",
-        "capability_facts.run_threshold"
+        "activity:20047602146",
+        "activity:20175536586",
+        "capability_facts:swim_aerobic"
       ]
     },
     {
       "day_index": 3,
-      "recipe_key": "mtb_technical",
-      "action": "consolidate",
-      "rationale": "Bevara teknisk MTB-kvalitet utan dosökning nära enduro; prioritera teknik framför duration.",
+      "recipe_key": "run_threshold",
+      "action": "progress",
+      "rationale": "Konservativ progression av tröskelarbete (stöd i senaste 4×8); placerad mitt i veckan bort från måndagens enduro så närbelastning tillåter progress under förutsättning av absorberbarhet.",
       "evidence_refs": [
-        "activity 20120769386 (2026-09-10) — MTB/XC",
-        "activity 20024236347 (2026-09-03) — MountainBikeRide",
-        "activity 20144331562 (2026-09-12) — lång enduro"
+        "activity:20092166843",
+        "capability_facts:run_threshold"
       ]
     },
     {
       "day_index": 4,
-      "recipe_key": "swim_strength",
-      "action": "establish",
-      "rationale": "Kombinerat sim+styrka för att säkra normal simfrekvens och uppfylla styrke/core-kravet utan extra styrkedag.",
+      "recipe_key": "mtb_technical",
+      "action": "consolidate",
+      "rationale": "Prioriterar teknisk kvalitet framför duration nära veckans enduro; konsolidering för att undvika ökad varaktighet.",
       "evidence_refs": [
-        "activity 20239623463 (2026-09-19) — Swim",
-        "activity 20175536586 (2026-09-14) — WeightTraining",
-        "athlete_state.strength activity_count = 5"
+        "activity:20024236347",
+        "activity:20120769386",
+        "capability_facts:mtb_technical"
       ]
     },
     {
       "day_index": 5,
-      "recipe_key": "swim_aerobic_technique",
-      "action": "establish",
-      "rationale": "Extra lågmekanisk swim-session (flyttad från blockerad dag 1) för att nå normal simfrekvens (minst 2 exponeringsdagar).",
+      "recipe_key": "run_hill_quality",
+      "action": "consolidate",
+      "rationale": "Andra löpkvaliteten denna vecka; konsoliderar aktuell backvolym (senaste 3×8) utan ytterligare progression.",
       "evidence_refs": [
-        "activity 20106458579 (2026-09-09) — Swim 3200m",
-        "activity 20203770266 (2026-09-16) — Swim 3500m",
-        "athlete_state.swim session_count = 7"
+        "activity:20229568713",
+        "activity:20133500464",
+        "capability_facts:run_hill_quality"
       ]
     },
     {
       "day_index": 6,
+      "recipe_key": "swim_aerobic_technique",
+      "action": "establish",
+      "rationale": "Säkrar veckans andra simexponering och bibehåller teknisk simprofil enligt mesocykelmålet.",
+      "evidence_refs": [
+        "activity:20239623463",
+        "activity:20106458579",
+        "capability_facts:swim_aerobic"
+      ]
+    },
+    {
+      "day_index": 7,
       "recipe_key": "run_easy_distance",
       "action": "consolidate",
-      "rationale": "Behåll långdistans som tålighetsstimulans senare i veckan; reducera endast vid objektivt behov enligt guardrails (t.ex. enduro-nära).",
+      "rationale": "Bibehåller långdistanspasset som tolereras i nuläget; kan deterministiskt reduceras i dos om ackumulerad veckobelastning kräver det.",
       "evidence_refs": [
-        "activity 20254486837 (2026-09-20) — lång distans 22.46 km",
-        "capability_facts.run_easy_distance"
+        "activity:20254486837",
+        "capability_facts:run_easy_distance"
       ]
     }
   ],
   "schema_version": 1,
   "planner_revision": 3,
   "source": "openai_repaired",
-  "source_hash": "f26600c3e8a81a6c3da52531eb0219059682dfcae64eea8c656710b5b3274c9c",
-  "generated_at_utc": "2026-09-21T08:07:09.133802+00:00",
-  "week_start": "2026-09-28",
-  "week_key": "2026-W40",
-  "mesocycle_id": "20260928-run_threshold-mtb_technical-run_easy_distance",
+  "source_hash": "28b1725f2bea9826773305d34f4e5735f18a1cc78e9e0c5cfc0c0e21f76bb2ec",
+  "generated_at_utc": "2026-09-21T08:31:34.314777+00:00",
+  "week_start": "2026-09-21",
+  "week_key": "2026-W39",
+  "mesocycle_id": "20260921-run_threshold-mtb_technical-run_easy_distance",
   "guard_repair": {
     "attempted": true,
     "initial_failures": [
       "dag 1 är blockerad av fast endurobelastning",
-      "för få simexponeringar: 1 < 2"
+      "primära kapaciteter saknar direkt recept: run_threshold"
     ],
     "result": "accepted"
   }
