@@ -242,6 +242,76 @@ class WorkoutDesignTests(unittest.TestCase):
         self.assertEqual(prescription["blocks"][2]["work"]["distance_m"], 500)
         self.assertTrue(validate_workout_design(day, "simning"))
 
+    def test_swim_candidate_can_own_exact_4000m_structure(self):
+        day = swim_day()
+        option = {
+            "id": "swim-aerobic-threshold-4000",
+            "kind": "structured",
+            "value": 4000,
+            "session": "Simning · 4 000 m · aerob + kontrollerad tröskel",
+            "intent": "Etablerad 4K-mall.",
+            "watch_workout": {
+                "planned_distance_m": 4000,
+                "blocks": [
+                    {
+                        "name": "Insim + teknik",
+                        "steps": [
+                            {"kind": "swim", "text": "Insim + teknik", "distance_m": 600, "intensity": "warmup"}
+                        ],
+                    },
+                    {
+                        "name": "Aerob 1",
+                        "repeat": 6,
+                        "steps": [
+                            {"kind": "swim", "text": "Aerobt", "distance_m": 200, "intensity": "active"},
+                            {"kind": "rest", "duration_s": 20},
+                        ],
+                    },
+                    {
+                        "name": "Kontrollerad tröskel",
+                        "repeat": 4,
+                        "steps": [
+                            {"kind": "swim", "text": "Tröskel paddlar + dolme", "distance_m": 200, "intensity": "active"},
+                            {"kind": "rest", "duration_s": 25},
+                        ],
+                    },
+                    {
+                        "name": "Aerob 2",
+                        "repeat": 6,
+                        "steps": [
+                            {"kind": "swim", "text": "Aerobt", "distance_m": 200, "intensity": "active"},
+                            {"kind": "rest", "duration_s": 20},
+                        ],
+                    },
+                    {
+                        "name": "Avsim",
+                        "steps": [
+                            {"kind": "swim", "text": "Lugnt", "distance_m": 200, "intensity": "cooldown"}
+                        ],
+                    },
+                ],
+            },
+        }
+        day["stimuli"] = ["swim_aerobic", "swim_threshold", "swim_technique"]
+        day["dose_options"] = [option]
+        day["baseline_option_id"] = option["id"]
+        day["dose_resolution"] = {
+            "state": "baseline",
+            "kind": "structured",
+            "value": 4000,
+            "option_id": option["id"],
+        }
+        day["session"] = option["session"]
+
+        design = build_workout_design(day, {"days": [day]}, strategy())
+        day["workout_design"] = design
+        candidate = selected_candidate(day)
+
+        self.assertEqual(candidate["id"], option["id"])
+        self.assertEqual(candidate["prescription"]["total_distance_m"], 4000)
+        self.assertEqual(len(candidate["prescription"]["blocks"]), 5)
+        self.assertIn("paddlar", candidate["prescription"]["blocks"][2]["instruction"].lower())
+
     def test_threshold_progression_selects_current_microcycle_step(self):
         day = threshold_day()
         design = build_workout_design(day, {"days": [day]}, strategy())
