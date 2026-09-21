@@ -3,7 +3,6 @@ const DEFAULT_EVENT_TYPE = "strava-activity-event";
 const DEFAULT_TRAINING_INPUT_EVENT_TYPE = "training-input-event";
 const TRAINING_INPUT_PATH = "/training-api/input";
 const DEFAULT_TRAINING_INPUT_HOST = "xn--hll-qla.se";
-const DEFAULT_TRAINING_INPUT_HOST = "xn--hll-qla.se";
 const TRAINING_INPUT_OPERATIONS = new Set(["ADD_FEEDBACK", "UPDATE_COMPLETED_WORKOUT", "ADD_SPONTANEOUS_WORKOUT", "REPORT_PAIN", "REPORT_FATIGUE", "NATURAL_LANGUAGE"]);
 const TRAINING_INPUT_FEELINGS = new Set(["fresh", "tired", "strong_legs", "heavy_legs", "pain", "could_do_more"]);
 const DEFAULT_GITHUB_API_VERSION = "2026-03-10";
