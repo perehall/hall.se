@@ -12,6 +12,8 @@ on:
     # midnight-workflowen dispatchar samma pipeline en gång per lokal dag.
     - cron: "17 */3 * * *"
   push:
+    branches:
+      - main
     paths:
       - "träning/data/manual-sync-trigger.txt"
       - "träning/data/goal.json"
