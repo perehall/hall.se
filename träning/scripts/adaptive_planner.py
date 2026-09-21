@@ -90,8 +90,11 @@ def canonical_hash(payload) -> str:
 
 
 def goal_hash(goal) -> str:
-    raw = json.dumps(goal, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
-    return hashlib.sha256(raw.encode("utf-8")).hexdigest()
+    # Must match validate_training_data.py: the canonical north-star string is
+    # the goal contract. Status labels/phases may change without silently
+    # redefining the long-term goal hash.
+    canonical_goal = str(goal.get("goal") or "").strip()
+    return hashlib.sha256(canonical_goal.encode("utf-8")).hexdigest()
 
 
 def sanitize_athlete_state(state):
