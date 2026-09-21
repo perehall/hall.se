@@ -16,6 +16,7 @@ from adaptive_planner import (  # noqa: E402
     fallback_microcycle,
     generate_mesocycle,
     generate_microcycle,
+    goal_hash,
     materialize_strategy,
     mesocycle_schema,
     microcycle_guard_failures,
@@ -114,9 +115,12 @@ class AdaptivePlanningTests(unittest.TestCase):
         self.assertEqual(target, date(2026, 9, 28))
         self.assertFalse(active_replan)
 
-    def test_fixed_policy_contains_no_current_mesocycle(self):
+    def test_fixed_policy_contains_no_dynamic_goal_or_current_plan(self):
         self.assertNotIn("current_mesocycle", self.policy)
         self.assertNotIn("current_mesocycle", self.policy["strategy_base"])
+        self.assertNotIn("north_star", self.policy["strategy_base"])
+        self.assertNotIn("goal_contract", self.policy["strategy_base"])
+        self.assertNotIn("current_priorities", self.policy["strategy_base"])
         self.assertIn("mesocycle_policy", self.policy)
         self.assertIn("microcycle_policy", self.policy)
 
@@ -164,13 +168,21 @@ class AdaptivePlanningTests(unittest.TestCase):
         self.assertIn("strength_unilateral", joined)
         self.assertIn("strength_core", joined)
 
-    def test_fallback_does_not_promote_swim_maintenance_text_to_primary_focus(self):
+    def test_active_swimrun_goal_drives_deterministic_fallback(self):
         meso = fallback_mesocycle(self.goal, self.policy, {})
-        self.assertNotIn("swim_technique", meso["primary_capabilities"])
         self.assertEqual(
             meso["primary_capabilities"],
-            ["run_threshold", "mtb_technical", "run_easy_distance"],
+            ["run_threshold", "swim_aerobic", "run_easy_distance"],
         )
+        self.assertNotIn("mtb_technical", meso["primary_capabilities"])
+        self.assertTrue(
+            any("performance_goals" in ref for ref in meso["evidence_refs"])
+        )
+
+    def test_performance_goal_change_invalidates_goal_hash(self):
+        altered = deepcopy(self.goal)
+        altered["performance_goals"][0]["target"] = "Topp-5"
+        self.assertNotEqual(goal_hash(self.goal), goal_hash(altered))
 
     def test_athlete_state_extracts_explicit_threshold_and_hill_evidence(self):
         activities = {
@@ -402,6 +414,20 @@ class AdaptivePlanningTests(unittest.TestCase):
         self.assertEqual(
             strategy["generated_planning"]["source_mesocycle_decision"],
             "data/mesocycle_decision.json",
+        )
+        self.assertEqual(
+            next(
+                item["state"]
+                for item in strategy["strategic_readiness"]
+                if item["key"] == "swimrun"
+            ),
+            "active_focus",
+        )
+        priority_keys = [item["key"] for item in strategy["current_priorities"]]
+        self.assertEqual(len(priority_keys), len(set(priority_keys)))
+        self.assertNotEqual(
+            strategy["current_priorities"],
+            self.policy["strategy_base"].get("current_priorities"),
         )
         self.assertEqual(
             strategy["current_mesocycle"]["decision_trace"]["microcycle_week_key"],
