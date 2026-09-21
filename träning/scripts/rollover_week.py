@@ -325,6 +325,19 @@ def mesocycle_microcycle_state(mesocycle, cycle_start):
     return index, total_microcycles
 
 
+def transition_option_id(slot):
+    """Choose a concrete non-progressive dose for a mesocycle-review bridge week."""
+    options = slot.get("dose_options") or []
+    development = slot.get("development_progression") or {}
+    demonstrated = development.get("demonstrated_floor_option_id")
+    if demonstrated and _option_by_id(options, demonstrated):
+        return demonstrated
+    baseline = slot.get("baseline_option_id")
+    if baseline and _option_by_id(options, baseline):
+        return baseline
+    return None
+
+
 def build_mesocycle_next_week(promoted, strategy):
     validate_training_strategy(strategy)
     meta = promoted.get("meta") or {}
@@ -428,13 +441,69 @@ def build_mesocycle_next_week(promoted, strategy):
               "Styrka/core är skyddad kapacitet och får inte falla ur som restpost."
         )
     else:
-        title = "Mesocykel avslutad · utvärdering krävs"
+        # En avslutad mesocykel får aldrig lämna nästa träningsvecka tom.
+        # Bryggveckan återanvänder samma stimulusstruktur men väljer endast
+        # redan demonstrerad utvecklingsdos (eller befintlig basdos för
+        # stöd/underhåll). Den skapar alltså varken ny riktning eller progression.
+        for slot in mesocycle["microcycle_template"]:
+            offset = int(slot["day_index"]) - 1
+            day_date = next_start + timedelta(days=offset)
+            planned_day = {
+                "date": day_date.isoformat(),
+                "label": WEEKDAY_LABELS[offset],
+                "status": "preliminary",
+                "planning_status": "preliminary",
+                "session": slot["session"],
+                "reason": (
+                    "Mesocykeln är avslutad och utvärderas. Detta är en kontinuitetsvecka utan "
+                    "automatisk progression; passet hålls på redan demonstrerad eller etablerad nivå. "
+                    + slot["reason"]
+                ),
+                "development_focus": slot["development_focus"],
+                "sport": slot["sport"],
+                "priority_role": slot["priority_role"],
+                "stimuli": deepcopy(slot["stimuli"]),
+                "load_dimensions": deepcopy(slot.get("load_dimensions") or []),
+                "mesocycle_id": "",
+                "microcycle_id": "",
+                "microcycle_index": None,
+                "microcycle_day": int(slot["day_index"]),
+                "microcycle_slot": slot["slot"],
+                "transition_review": True,
+            }
+            if slot.get("optional_stimuli"):
+                planned_day["optional_stimuli"] = deepcopy(slot["optional_stimuli"])
+            if slot.get("performance_marker_id"):
+                planned_day["performance_marker_id"] = slot["performance_marker_id"]
+            if slot.get("dose_options"):
+                planned_day["dose_options"] = deepcopy(slot["dose_options"])
+                option_id = transition_option_id(slot)
+                if option_id is None:
+                    raise RuntimeError(
+                        f"Veckoplan: saknar verifierad bryggdos för {slot['slot']!r}"
+                    )
+                planned_day["baseline_option_id"] = option_id
+                development = slot.get("development_progression") or {}
+                if development:
+                    planned_day["development_progression"] = deepcopy(development)
+                if not apply_baseline_option(planned_day, option_id):
+                    raise RuntimeError(
+                        f"Veckoplan: bryggdos {option_id!r} saknas för {slot['slot']!r}"
+                    )
+            if slot["sport"] == "swim":
+                planned_day["swim_equipment"] = {"planned": "tbd"}
+            days[offset] = planned_day
+
+        title = "Övergångsmikrocykel · mesocykelutvärdering"
         principle = (
-            "Ingen ny utvecklingsriktning skapas automatiskt efter avslutad mesocykel. "
-            "Fasta åtaganden kan ligga kvar, men nästa mesocykel ska väljas först efter utvärdering mot målbilden och faktisk respons."
+            "Den avslutade mesocykeln ska utvärderas mot målbild och faktisk respons, men kontinuiteten "
+            "ska inte brytas av en tom kalendervecka. Därför används en konkret bryggvecka med redan "
+            "demonstrerade eller etablerade doser och utan automatisk belastningsökning."
         )
         preview_summary = (
-            "Övergångsperiod. Systemet väntar på mesocykelutvärdering innan en ny mikrocykel med utvecklingsstimuli planeras."
+            "Konkret kontinuitetsvecka medan nästa mesocykel utvärderas. Ingen ny utvecklingsriktning "
+            "eller progression skapas automatiskt; faktisk belastning de närmaste 2–3 dagarna kan fortfarande "
+            "motivera konservativ minskning, flytt eller borttag."
         )
 
     future = {
@@ -463,7 +532,7 @@ def build_mesocycle_next_week(promoted, strategy):
         "strength_template": deepcopy(promoted.get("strength_template") or []),
     }
 
-    if inside_mesocycle:
+    if any(day.get("sport") == "swim" for day in future.get("days") or []):
         future = seed_preliminary_swims(promoted, future)
 
     future = seed_fixed_commitments(future)
@@ -517,6 +586,41 @@ def build_open_next_week(promoted, strategy=None):
     return build_mesocycle_next_week(promoted, strategy)
 
 
+def repair_transition_week_from_previous(plan, previous_plan, strategy, today):
+    """Repair the one bad state where an already-promoted review week is empty.
+
+    This is deliberately narrow: only the first day of the week, only when the
+    plan explicitly requires mesocycle review, and only when no non-Enduro
+    training has been planned. The source must be the immediately preceding
+    archived plan, so no workout is invented from missing history.
+    """
+    meta = plan.get("meta") or {}
+    start, _ = validate_week_bounds(meta, "aktiv plan")
+    if today != start or meta.get("requires_mesocycle_review") is not True:
+        return None
+
+    meaningful = [
+        day
+        for day in (plan.get("days") or [])
+        if day.get("sport") not in {"open", "rest", "enduro"}
+    ]
+    if meaningful:
+        return None
+
+    previous_meta = previous_plan.get("meta") or {}
+    _, previous_end = validate_week_bounds(previous_meta, "föregående arkiverad plan")
+    if previous_end + timedelta(days=1) != start:
+        raise RuntimeError(
+            "Veckoskifte: föregående arkiverad plan ansluter inte till tom övergångsvecka"
+        )
+
+    rebuilt_preview = build_mesocycle_next_week(previous_plan, strategy)
+    rebuilt_start, _ = validate_week_bounds(rebuilt_preview.get("meta") or {}, "reparerad övergångsvecka")
+    if rebuilt_start != start:
+        raise RuntimeError("Veckoskifte: reparerad övergångsvecka fick fel startdatum")
+    return promote_upcoming(rebuilt_preview)
+
+
 def rollover_documents(plan, upcoming, today, strategy):
     plan_meta = plan.get("meta") or {}
     upcoming_meta = upcoming.get("meta") or {}
@@ -559,6 +663,20 @@ def main(*, today_local=None):
     result = rollover_documents(plan, upcoming, today, strategy)
     if result is None:
         start, _ = validate_week_bounds((plan.get("meta") or {}), "aktiv plan")
+        previous_key = week_key(start - timedelta(days=7))
+        previous_snapshot = load_json(WEEKS_DIR / f"{previous_key}.json", {})
+        previous_plan = previous_snapshot.get("plan") or {}
+        if previous_plan:
+            repaired = repair_transition_week_from_previous(plan, previous_plan, strategy, today)
+            if repaired is not None:
+                next_preview = build_mesocycle_next_week(repaired, strategy)
+                write_json(PLAN_FILE, repaired)
+                write_json(UPCOMING_FILE, next_preview)
+                print(
+                    f"Veckoskifte reparerat: {week_key(start)} fick konkret bryggvecka; "
+                    f"{next_preview['week_key']} byggdes om som preliminär kontinuitetsvecka."
+                )
+                return 0
         print(f"Veckoskifte: ingen ändring; {week_key(start)} är fortfarande aktuell.")
         return 0
 
