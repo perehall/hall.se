@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at_utc": "2026-09-21T12:46:33.784252+00:00",
+  "generated_at_utc": "2026-09-21T19:59:07.457651+00:00",
   "fact_window": {
     "start": "2026-07-28",
     "end": "2026-09-21",
@@ -32,10 +32,10 @@
       "active_days": 2
     },
     "strength": {
-      "activity_count": 5,
-      "time_s": 9799,
+      "activity_count": 6,
+      "time_s": 11813,
       "distance_m": 0.0,
-      "active_days": 5
+      "active_days": 6
     },
     "swim": {
       "activity_count": 7,
@@ -54,35 +54,15 @@
       "time_s": 23980,
       "distance_m": 8569.8,
       "active_days": 1
+    },
+    "workout": {
+      "activity_count": 1,
+      "time_s": 5809,
+      "distance_m": 12527.7,
+      "active_days": 1
     }
   },
   "recent_sessions": [
-    {
-      "id": 19980267962,
-      "date": "2026-08-31",
-      "family": "enduro",
-      "label": "Enduro",
-      "classification": "training",
-      "elapsed_time_s": 6024,
-      "distance_m": 23403.7,
-      "elevation_gain_m": 508.6,
-      "average_heartrate": 110.9,
-      "max_heartrate": 178,
-      "user_report": null
-    },
-    {
-      "id": 19994118756,
-      "date": "2026-09-01",
-      "family": "run",
-      "label": "Run",
-      "classification": "training",
-      "elapsed_time_s": 3029,
-      "distance_m": 10348.9,
-      "elevation_gain_m": 61,
-      "average_heartrate": 145.3,
-      "max_heartrate": 165,
-      "user_report": "Började segt och kände mig långsam i uppvärmningen. Gjorde 3 stegringslopp för att väcka kroppen. I 8-minutersintervallerna var känslan bättre: inga problem att hålla arbetstiden, och efter sista intervallen kändes kroppen riktigt pigg genom hela nedjoggen. Bedömning från användaren: hade definitivt kunnat köra ytterligare en 8-minutersintervall."
-    },
     {
       "id": 20008258969,
       "date": "2026-09-02",
@@ -368,6 +348,32 @@
       "average_heartrate": 138.9,
       "max_heartrate": 158.0,
       "user_report": null
+    },
+    {
+      "id": 20271537143,
+      "date": "2026-09-21",
+      "family": "workout",
+      "label": "Workout",
+      "classification": "training",
+      "elapsed_time_s": 5809,
+      "distance_m": 12527.7,
+      "elevation_gain_m": 391.6,
+      "average_heartrate": 101.2,
+      "max_heartrate": 150.0,
+      "user_report": null
+    },
+    {
+      "id": 20272196080,
+      "date": "2026-09-21",
+      "family": "strength",
+      "label": "WeightTraining",
+      "classification": "training",
+      "elapsed_time_s": 2014,
+      "distance_m": 0.0,
+      "elevation_gain_m": 0,
+      "average_heartrate": 79.3,
+      "max_heartrate": 128.0,
+      "user_report": null
     }
   ],
   "capability_facts": {
@@ -471,7 +477,7 @@
         "date": "2026-08-13",
         "elapsed_time_s": 2161
       },
-      "session_count": 5
+      "session_count": 6
     }
   },
   "performance_fingerprints": [],

@@ -120,6 +120,14 @@
       "source_hash": "19eb62b0b66fa47b64f9b902ca08b7a2aecd08771e504eee750987bf09a6ad41",
       "generated_at_utc": "2026-09-21T12:47:29.460185+00:00",
       "summary": "Ta bort träning från blockerade dag 1, flytta run_threshold från dag 1 till en annan dag och ändra swim_strength så den inte progressas. Endast ett primärt stimulus progressas (swim_aerobic/technique). Säkerställer två simexponeringar, minst en styrke/core-exponering, och högst två löpkvaliteter; totalt 6 slots (dagen 2–7)."
+    },
+    {
+      "kind": "microcycle",
+      "decision_id": "2026-W40",
+      "source": "openai_repaired",
+      "source_hash": "c80ab8384a8ea0d9f4db38bff7dd56b4db3a0f189b2d3ad8b3f49341892a7aad",
+      "generated_at_utc": "2026-09-21T20:00:15.818752+00:00",
+      "summary": "Flyttade det progressade simpasset från dag 1 (blockerad av enduro) till en icke-blockerad dag så att alla guard_failures försvinner: två simexponeringar, primära kapaciteter täckta, minst en styrka/core och max två löpkvaliteter. Övriga val behålls som i ursprungsförslaget."
     }
   ]
 }

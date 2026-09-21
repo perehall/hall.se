@@ -1,6 +1,50 @@
 {
   "analyses": [
     {
+      "activity_id": 20272196080,
+      "activity_date": "2026-09-21",
+      "activity_name": "Styrketräning på kvällen",
+      "generated_at_utc": "2026-09-21T20:00:27.254349+00:00",
+      "model": "gpt-5-mini",
+      "analysis_contract": {
+        "pipeline_version": 3,
+        "workout_context_version": 3,
+        "plan_comparison_version": 2,
+        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
+        "analysis_code_sha256": "b2b605b727aaea5a4027070ea282ce432554fdd8a3f4f664cf37251ade67f342"
+      },
+      "performance_marker_id": null,
+      "performance_protocol_key": null,
+      "assessment": {
+        "summary": "Genomfört styrkepass (33,6 min) efter ett långt enduropass; hjärtfrekvensen låg–måttlig under styrkan vilket tyder på begränsad kardiovaskulär belastning.",
+        "load_interpretation": "Enduro-pass (ca 1.6–1.7 h moving, 1.62 h session) samma dag plus 33,6 min styrka ger ackumulerad ben/neuromuskulär belastning som kan påverka morgondagens löptröskelpass.",
+        "confidence": "medium",
+        "facts": [
+          "Styrka: 33:34 · snittpuls 79,3 · maxpuls 128."
+        ],
+        "interpretations": [
+          "Styrkepasset var relativt lågintensivt kardiovaskulärt men bidrar lokal neuromuskulär/benbelastning efter dagens enduro.",
+          "Inget i datan pekar på akut skada; kombinationen ökar återhämtningsbehov inför planerat 4×8 tröskel i morgon och bör beaktas."
+        ],
+        "unknowns": [
+          "Subjektiv trötthet/benstatus efter kvällspassen (ingen användarrapport)",
+          "När nästa dags återhämtningsdata (återhämtningsunderlaget/återhämtningsunderlaget) visar om tröskelpass kan tas fullt ut"
+        ]
+      },
+      "plan_action": {
+        "action": "review",
+        "target_date": "",
+        "reason": "Beslutet skjuts upp eftersom mellanliggande planerade dagar ännu inte har ett känt utfall.",
+        "recommendation": "Måndag: Enduroskola · fast tillfälle ligger kvar som plan. Tisdag: Löpning · backkvalitet · 15 min lugnt + 3 × 8 × 150 m / lugn joggvila + 10 min lugnt bedöms efter den faktiska belastningen från måndag och återhämtningen därefter.",
+        "dose_option_id": "",
+        "requires_approval": false
+      },
+      "auto_apply": {
+        "applied": false,
+        "note": "Ingen automatisk planändring."
+      }
+    },
+    {
       "activity_id": 20254486837,
       "activity_date": "2026-09-20",
       "activity_name": "Löpning vid lunch",
@@ -1198,47 +1242,10 @@
         "applied": false,
         "note": "Ingen automatisk planändring."
       }
-    },
-    {
-      "activity_id": 19852599244,
-      "activity_date": "2026-08-22",
-      "activity_name": "Enduro vid lunch",
-      "generated_at_utc": "2026-08-23T07:09:03.677347+00:00",
-      "model": "gpt-5-mini",
-      "assessment": {
-        "summary": "Enduropasset omfattade 1:22:01 totalt och 512 m+; det räknas som faktisk teknisk och mekanisk träningsbelastning inför nästa prioriterade pass.",
-        "load_interpretation": "För Enduro används hela 1:22:01 som tidsomfattning; Stravas rörelsetid 1:05:40 och snittpuls 127 beskriver inte den tekniska/mekaniska belastningen ensamma.",
-        "confidence": "medium",
-        "facts": [
-          "Enduro: 23,89 km · 1:22:01 · 512,4 m+ · snittpuls 127 · maxpuls 152.",
-          "Användarrapport: \"Lätt och inte det minsta slitsamt.\"",
-          "Föregående 2 dagar: simning + SUP (sammanlagt ~2h12) och tidigare löpning/tröskel inom veckan.",
-          "Planerat för idag: lugn trail 50–70 min; lördagens enduro klassad som rekreation i planen."
-        ],
-        "interpretations": [
-          "Enduron bidrar marginellt till veckobelastningen och är absorberad som lågintensiv rekreation.",
-          "Ingen akut lokal trötthet rapporterad som skulle motivera vila i dag."
-        ],
-        "unknowns": [
-          "Eventuell fysisk belastning från sen kvällsarbete på tomten som inte kvantifierats.",
-          "Subjektiv dagskänsla i dag (muskulär lokal trötthet) kan ändra beslutet."
-        ]
-      },
-      "plan_action": {
-        "action": "keep",
-        "target_date": "2026-08-23",
-        "reason": "Enduron var lätt/rekreationell och tidigare pass veckans stabilitetsmål stöder kontinuitet.",
-        "recommendation": "Behåll dagens lugna trail 50–70 min som planerat; håll intensiteten låg och avboka eller gör passet kortare vid dagens trötthetsskala >4/10.",
-        "requires_approval": false
-      },
-      "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
-      }
     }
   ],
-  "last_trigger_hash": "0d70eff893f7c763c1bf6ad58ca35d1edf29c158e780c0882ffc5b895b0cccc1",
-  "last_run_utc": "2026-09-21T12:47:40.743359+00:00",
+  "last_trigger_hash": "ad0510eaec985f4654249b186d8efd30f37dfb1c437e4f637fc0c6f301098fb4",
+  "last_run_utc": "2026-09-21T20:00:27.254349+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 3
