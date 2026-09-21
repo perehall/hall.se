@@ -5,6 +5,7 @@ from pathlib import Path
 
 from activity_labels import public_activity_label
 from goal_contracts import planning_goal_hash
+from race_contracts import RaceContractError, validate_race_goal
 from coach_rules import activity_local_date, canonical_activity_fact
 from strategy_contracts import StrategyContractError, validate_training_strategy
 from training_contracts import (
@@ -76,6 +77,10 @@ def main(argv=None):
         raise ContractError(str(exc)) from exc
 
     require(goal.get("schema_version") == 2, "målbild: schema_version måste vara 2")
+    try:
+        validate_race_goal(goal)
+    except RaceContractError as exc:
+        raise ContractError(str(exc)) from exc
     canonical_goal = str(goal.get("goal") or "").strip()
     require(bool(canonical_goal), "målbild: goal saknas")
     goal_hash = planning_goal_hash(goal)
