@@ -1009,7 +1009,14 @@ def demonstrated_value(recipe_key, athlete_state):
         return float(value) / 60.0 if isinstance(value, (int, float)) else None
     if recipe_key == "swim_aerobic_technique":
         value = ((facts.get("swim_aerobic") or {}).get("longest_distance") or {}).get("distance_m")
-        return float(value) if isinstance(value, (int, float)) else None
+        return min(float(value), 3200.0) if isinstance(value, (int, float)) else None
+    if recipe_key == "swim_aerobic_threshold":
+        values = [
+            item.get("distance_m")
+            for item in (facts.get("swim_threshold") or {}).get("evidence") or []
+            if isinstance(item.get("distance_m"), (int, float))
+        ]
+        return max(values) if values else None
     if recipe_key in {"strength_core", "swim_strength"}:
         value = ((facts.get("strength_unilateral") or {}).get("longest_duration") or {}).get("elapsed_time_s")
         return float(value) / 60.0 if isinstance(value, (int, float)) else None
