@@ -8,6 +8,7 @@ from pathlib import Path
 SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
+from coach_rules import matching_activity  # noqa: E402
 from normalize_activity_semantics import (  # noqa: E402
     apply_semantics,
     auto_enduro_candidate,
@@ -63,6 +64,27 @@ class ActivitySemanticsTests(unittest.TestCase):
             activity["sport_normalization"]["rule"],
             "workout-explicit-enduro-name-v1",
         )
+
+    def test_normalized_generic_workout_fulfills_planned_enduro(self):
+        state = {
+            "activities": [
+                {
+                    "id": 20271537143,
+                    "name": "Enduro på kvällen",
+                    "sport_type": "Workout",
+                    "start_date_local": "2026-09-21T17:44:36Z",
+                }
+            ]
+        }
+        apply_semantics(state, {"schema_version": 1, "overrides": {}})
+        day = {
+            "date": "2026-09-21",
+            "sport": "enduro",
+            "session": "Enduroskola · fast tillfälle",
+        }
+        matched = matching_activity(day, state["activities"])
+        self.assertIsNotNone(matched)
+        self.assertEqual(matched["id"], 20271537143)
 
     def test_generic_workout_without_explicit_enduro_name_stays_generic(self):
         self.assertFalse(
