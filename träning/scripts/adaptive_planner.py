@@ -150,6 +150,52 @@ def target_week(plan, upcoming, today):
     return upcoming_start, False
 
 
+def resolve_planning_target(plan, upcoming, mesocycle_decision, today):
+    """Choose the week the adaptive engine is allowed to plan.
+
+    A generated mesocycle is authoritative for its full declared duration. If a
+    planner/schema revision has produced a decision file for a later week while
+    the live plan is still inside an earlier multi-week mesocycle, fail toward
+    the live week and rebuild it instead of silently orphaning the active block.
+    """
+    target_start, active_replan = target_week(plan, upcoming, today)
+    meta = plan.get("meta") or {}
+    try:
+        plan_start = iso(meta["week_start"])
+        plan_end = iso(meta["week_end"])
+        current_index = int(meta.get("microcycle_index") or 0)
+        total = int(meta.get("microcycle_total") or 0)
+    except (KeyError, TypeError, ValueError):
+        return target_start, active_replan
+
+    current_id = str(meta.get("mesocycle_id") or "").strip()
+    decision_id = str((mesocycle_decision or {}).get("id") or "").strip()
+    decision_start = None
+    try:
+        if (mesocycle_decision or {}).get("start_date"):
+            decision_start = iso(mesocycle_decision["start_date"])
+    except (TypeError, ValueError):
+        decision_start = None
+
+    live_block_is_midflight = (
+        plan_start <= today <= plan_end
+        and current_id
+        and current_index > 0
+        and total > 0
+        and current_index < total
+        and meta.get("requires_mesocycle_review") is not True
+    )
+    later_conflicting_decision = (
+        decision_id
+        and decision_id != current_id
+        and decision_start is not None
+        and decision_start > plan_start
+    )
+    if live_block_is_midflight and later_conflicting_decision:
+        return plan_start, True
+    return target_start, active_replan
+
+
 def capability_keys(policy):
     return [item["key"] for item in policy["strategy_base"]["capability_portfolio"]]
 
@@ -1264,9 +1310,11 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
     today = today_local or date.today()
     if isinstance(today, str):
         today = iso(today)
-    target_start, active_replan = target_week(plan, upcoming, today)
-
     meso = load_json(MESO_FILE, {})
+    target_start, active_replan = resolve_planning_target(
+        plan, upcoming, meso, today
+    )
+
     if not mesocycle_is_valid(meso, goal, target_start):
         meso = generate_mesocycle(
             goal,
