@@ -280,6 +280,50 @@
           "intent": "Utökad exponering när belastningen runt passet tillåter."
         }
       ]
+    },
+    "swim_strength": {
+      "sport": "strength",
+      "stimuli": [
+        "swim_aerobic",
+        "swim_technique",
+        "strength_unilateral",
+        "strength_core"
+      ],
+      "optional_stimuli": [
+        "plyometric"
+      ],
+      "priority_role": "protected_support",
+      "load_dimensions": [
+        "cardiovascular",
+        "technical",
+        "mechanical",
+        "neuromuscular"
+      ],
+      "performance_marker_id": "strength-repeatability",
+      "development_focus": "Andra simexponeringen hålls aerob/teknisk och kombineras med kontrollerad styrka/core för att skydda båda kapaciteterna utan ett extra benkvalitetspass.",
+      "options": [
+        {
+          "id": "swim-strength-25",
+          "kind": "structured",
+          "value": 25,
+          "session": "Simning · 3 200 m · aerob/teknik + styrka/core · 25 min · styrkemall",
+          "intent": "Reducerad styrkedos med bibehållen andra simexponering."
+        },
+        {
+          "id": "swim-strength-35",
+          "kind": "structured",
+          "value": 35,
+          "session": "Simning · 3 200 m · aerob/teknik + styrka/core · ca 35 min · styrkemall",
+          "intent": "Normal kombinerad skyddsexponering."
+        },
+        {
+          "id": "swim-strength-45",
+          "kind": "structured",
+          "value": 45,
+          "session": "Simning · 3 200 m · aerob/teknik + styrka/core · ca 45 min · styrkemall",
+          "intent": "Utökad styrkeexponering när omgivande belastning stödjer den."
+        }
+      ]
     }
   }
 }
