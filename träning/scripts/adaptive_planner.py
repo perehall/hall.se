@@ -427,8 +427,18 @@ def fallback_mesocycle(goal, policy, previous, target_start=None):
         None,
     )
     if active_swimrun_goal:
-        primary.extend(["run_threshold", "swim_aerobic", "run_easy_distance"])
-        refs.append(f"goal.performance_goals[{active_swimrun_goal.get('id')}]")
+        stage = competition_context.get("horizon_stage")
+        if stage in {"specificity_build", "race_specific", "taper_review"}:
+            primary.extend(["run_easy_distance", "swim_aerobic", "swim_threshold"])
+        else:
+            primary.extend(["run_threshold", "swim_aerobic", "run_easy_distance"])
+        refs.extend(
+            [
+                f"goal.performance_goals[{active_swimrun_goal.get('id')}]",
+                "competition_context.race_profile",
+                "competition_context.days_to_event",
+            ]
+        )
 
     for index, text in enumerate(goal.get("next_steps") or []):
         lower = str(text).lower()
