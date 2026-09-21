@@ -11,6 +11,7 @@ sys.path.insert(0, str(SCRIPTS))
 from normalize_activity_semantics import (  # noqa: E402
     apply_semantics,
     auto_enduro_candidate,
+    auto_enduro_workout_candidate,
     invalidate_coach_analyses,
 )
 
@@ -37,6 +38,38 @@ class ActivitySemanticsTests(unittest.TestCase):
         self.assertEqual(activity["display_label"], "Enduro")
         self.assertEqual(activity["sport_normalization"]["rule"], "mountainbike-explicit-enduro-name-v1")
         self.assertEqual(state["activity_semantics"]["changed_ids"], ["19882521682"])
+
+    def test_explicit_enduro_name_reclassifies_generic_workout(self):
+        state = {
+            "activities": [
+                {
+                    "id": 20271537143,
+                    "name": "Enduro på kvällen",
+                    "sport_type": "Workout",
+                    "start_date_local": "2026-09-21T17:44:36Z",
+                }
+            ]
+        }
+        override_count, auto_count, _ = apply_semantics(
+            state, {"schema_version": 1, "overrides": {}}
+        )
+        activity = state["activities"][0]
+        self.assertEqual((override_count, auto_count), (0, 1))
+        self.assertEqual(activity["source_sport_type"], "Workout")
+        self.assertEqual(activity["sport_type"], "Enduro")
+        self.assertEqual(activity["classification"], "training")
+        self.assertEqual(activity["display_label"], "Enduro")
+        self.assertEqual(
+            activity["sport_normalization"]["rule"],
+            "workout-explicit-enduro-name-v1",
+        )
+
+    def test_generic_workout_without_explicit_enduro_name_stays_generic(self):
+        self.assertFalse(
+            auto_enduro_workout_candidate(
+                {"name": "Kvällsträning", "sport_type": "Workout"}
+            )
+        )
 
     def test_motocross_name_is_equivalent_signal(self):
         activity = {"name": "Motocross kväll", "sport_type": "MountainBikeRide"}
