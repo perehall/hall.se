@@ -5,6 +5,7 @@ on:
   repository_dispatch:
     types:
       - strava-activity-event
+      - training-input-event
   schedule:
     # Safety reconcile behålls tills Strava-webhooken är verifierad end-to-end.
     # Veckorullning sker redan i den kanoniska pipelinen och den separata
@@ -98,8 +99,13 @@ jobs:
           WELLNESS_CONTEXT_FILE: /tmp/training_wellness_context.json
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_MODEL: gpt-5-mini
+          TRAINING_INPUT_MODEL: gpt-5-mini
+          TRAINING_INPUT_PAYLOAD: ${{ toJson(github.event.client_payload) }}
         run: |
-          if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
+          if [ "${{ github.event.action }}" = "training-input-event" ]; then
+            python "träning/scripts/training_input.py"
+          fi
+          if [ "${{ github.event.action }}" = "strava-activity-event" ]; then
             ingest_mode=event
           else
             ingest_mode=reconcile

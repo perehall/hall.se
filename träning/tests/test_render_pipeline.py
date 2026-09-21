@@ -37,6 +37,7 @@ EXPECTED_PIPELINE = (
     "finalize_user_report_ui.py",
     "finalize_week_status_ui.py",
     "finalize_post_workout_ui.py",
+    "finalize_training_input_ui.py",
     "finalize_human_training_language.py",
     "finalize_completed_workout_truth.py",
     "finalize_completed_sport_icon.py",
@@ -78,7 +79,8 @@ class RenderPipelineTests(unittest.TestCase):
         self.assertLess(PIPELINE.index("finalize_week_activity_insights.py"), PIPELINE.index("finalize_user_report_ui.py"))
         self.assertLess(PIPELINE.index("finalize_user_report_ui.py"), PIPELINE.index("finalize_week_status_ui.py"))
         self.assertLess(PIPELINE.index("finalize_week_status_ui.py"), PIPELINE.index("finalize_post_workout_ui.py"))
-        self.assertLess(PIPELINE.index("finalize_post_workout_ui.py"), PIPELINE.index("finalize_human_training_language.py"))
+        self.assertLess(PIPELINE.index("finalize_post_workout_ui.py"), PIPELINE.index("finalize_training_input_ui.py"))
+        self.assertLess(PIPELINE.index("finalize_training_input_ui.py"), PIPELINE.index("finalize_human_training_language.py"))
         self.assertLess(PIPELINE.index("finalize_human_training_language.py"), PIPELINE.index("finalize_completed_workout_truth.py"))
         self.assertLess(PIPELINE.index("finalize_completed_workout_truth.py"), PIPELINE.index("finalize_completed_sport_icon.py"))
         self.assertLess(PIPELINE.index("finalize_completed_sport_icon.py"), PIPELINE.index("finalize_coach_clarity_ui.py"))

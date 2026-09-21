@@ -6,5 +6,11 @@
   "compatibility_date": "2026-08-24",
   "observability": {
     "enabled": true
-  }
+  },
+  "routes": [
+    {
+      "pattern": "xn--hll-qla.se/training-api/*",
+      "zone_name": "xn--hll-qla.se"
+    }
+  ]
 }

@@ -119,3 +119,69 @@ test("athlete events are acknowledged without dispatch", async () => {
   assert.equal(response.status, 200);
   assert.deepEqual(await response.json(), { status: "ignored" });
 });
+
+
+test("authenticated training GUI input dispatches constrained repository event", async () => {
+  let requestBody;
+  const fakeFetch = async (url, init) => {
+    assert.equal(url, "https://api.github.com/repos/perehall/hall.se/dispatches");
+    requestBody = JSON.parse(init.body);
+    return new Response(null, { status: 204 });
+  };
+  const request = new Request("https://xn--hll-qla.se/training-api/input", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      "cf-access-jwt-assertion": "signed-access-jwt",
+    },
+    body: JSON.stringify({
+      operation: "NATURAL_LANGUAGE",
+      activity_id: 789,
+      text: "Blev 4 × 8 i stället för 3 × 10. Pigg efteråt.",
+      rpe: 6,
+      feeling: ["fresh", "could_do_more"],
+      source: "training-gui-v1",
+    }),
+  });
+  const response = await handleRequest(request, env, fakeFetch);
+  assert.equal(response.status, 200);
+  assert.equal(requestBody.event_type, "training-input-event");
+  assert.equal(requestBody.client_payload.activity_id, 789);
+  assert.equal(requestBody.client_payload.operation, "NATURAL_LANGUAGE");
+  assert.match(requestBody.client_payload.event_key, /^training-input:/);
+});
+
+test("training GUI input requires Cloudflare Access assertion", async () => {
+  const request = new Request("https://xn--hll-qla.se/training-api/input", {
+    method: "POST",
+    headers: {"content-type": "application/json"},
+    body: JSON.stringify({
+      operation: "ADD_FEEDBACK",
+      activity_id: 789,
+      text: "Pigg.",
+    }),
+  });
+  const response = await handleRequest(request, env, async () => {
+    throw new Error("GitHub must not be called without Access");
+  });
+  assert.equal(response.status, 401);
+});
+
+test("training GUI input rejects operations outside the allowlist", async () => {
+  const request = new Request("https://xn--hll-qla.se/training-api/input", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      "cf-access-jwt-assertion": "signed-access-jwt",
+    },
+    body: JSON.stringify({
+      operation: "WRITE_PLAN",
+      activity_id: 789,
+      text: "Make tomorrow harder.",
+    }),
+  });
+  const response = await handleRequest(request, env, async () => {
+    throw new Error("GitHub must not be called for invalid operation");
+  });
+  assert.equal(response.status, 400);
+});
