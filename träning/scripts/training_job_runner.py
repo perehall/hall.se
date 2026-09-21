@@ -53,25 +53,27 @@ def build_stages(ingest_mode: str) -> list[Stage]:
     )
 
     return [
-        Stage("sync_reported_progression_pre", python_stage("sync_user_reported_progression.py")),
         ingest,
         Stage("normalize_activity_semantics", python_stage("normalize_activity_semantics.py")),
-        Stage("sync_reported_progression_post", python_stage("sync_user_reported_progression.py")),
         Stage("migrate_typed_plan", python_stage("migrate_training_data_v3.py")),
-        Stage("validate_normalized_data", python_stage("validate_training_data.py")),
-        Stage("rollover_calendar", python_stage("rollover_week.py")),
-        Stage("apply_plan_overrides", python_stage("apply_plan_overrides.py")),
-        Stage("validate_rollover", python_stage("validate_training_data.py")),
-        Stage("materialize_workout_designs", python_stage("materialize_workout_designs.py")),
-        Stage("validate_workout_designs", python_stage("validate_workout_designs.py")),
+        Stage("validate_ingested_data", python_stage("validate_training_data.py")),
         persist_token,
-        Stage("sync_weather", python_stage("sync_weather.py")),
         Stage(
             "sync_performance_details",
             python_stage("sync_performance_details.py", "--days", "60"),
             optional=True,
         ),
-        Stage("validate_performance_data", python_stage("validate_training_data.py")),
+        Stage("weekly_review", python_stage("weekly_review.py"), optional=True, attempts=2),
+        Stage("validate_week_reviews", python_stage("check_week_reviews.py")),
+        Stage("build_athlete_state", python_stage("build_athlete_state.py")),
+        Stage("adaptive_planning", python_stage("adaptive_planner.py"), attempts=2),
+        Stage("validate_adaptive_plan", python_stage("validate_training_data.py")),
+        Stage("rollover_calendar", python_stage("rollover_week.py")),
+        Stage("apply_plan_overrides", python_stage("apply_plan_overrides.py")),
+        Stage("validate_rollover", python_stage("validate_training_data.py")),
+        Stage("materialize_workout_designs", python_stage("materialize_workout_designs.py")),
+        Stage("validate_workout_designs", python_stage("validate_workout_designs.py")),
+        Stage("sync_weather", python_stage("sync_weather.py")),
         Stage(
             "load_wellness_context",
             python_stage("wellness_context.py", "--days", "28"),
@@ -94,13 +96,6 @@ def build_stages(ingest_mode: str) -> list[Stage]:
         ),
         Stage("guard_coach_claims", python_stage("coach_output_guard.py")),
         Stage("validate_post_coach", python_stage("validate_training_data.py")),
-        Stage(
-            "weekly_review",
-            python_stage("weekly_review.py"),
-            optional=True,
-            attempts=2,
-        ),
-        Stage("validate_week_reviews", python_stage("check_week_reviews.py")),
         Stage("render_and_validate_site", python_stage("render_training_site.py")),
     ]
 

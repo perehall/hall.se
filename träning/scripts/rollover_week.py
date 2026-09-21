@@ -278,38 +278,91 @@ def _clean_preview_swim(source, target_date, target_label, next_key, focus_index
     return copied
 
 
+def _attach_swim_structure(source, target, target_date, next_key):
+    """Attach a known executable swim structure without changing target semantics."""
+    workout = deepcopy(source.get("watch_workout") or {})
+    if not workout or workout.get("planned_distance_m") is None or not workout.get("blocks"):
+        raise RuntimeError(
+            f"Veckoskifte: simkälla {source.get('date')} saknar strukturerat watch_workout"
+        )
+    equipment = deepcopy(source.get("swim_equipment") or {})
+    if "planned" not in equipment:
+        raise RuntimeError(
+            f"Veckoskifte: simkälla {source.get('date')} saknar swim_equipment.planned"
+        )
+    workout["sync_enabled"] = False
+    workout.pop("external_id", None)
+    workout["id"] = f"swim-{next_key.lower()}-{target_date.isoformat()}-preview"
+    target["watch_workout"] = workout
+    target["swim_equipment"] = equipment
+    return target
+
+
 def seed_preliminary_swims(promoted, future):
     next_start, _ = validate_week_bounds(future.get("meta") or {}, "framtidsplan")
     next_key = future["week_key"]
-    sources = [day for day in promoted.get("days") or [] if day.get("sport") == "swim"]
+    sources = [
+        day
+        for day in promoted.get("days") or []
+        if day.get("sport") == "swim"
+        and (day.get("watch_workout") or {}).get("blocks")
+    ]
     targets = [
         (index, day)
         for index, day in enumerate(future.get("days") or [])
         if day.get("sport") == "swim"
+        or "swim_aerobic" in (day.get("stimuli") or [])
+        or "swim_technique" in (day.get("stimuli") or [])
     ]
 
-    for ordinal, ((target_index, target), source) in enumerate(zip(targets, sources)):
+    if targets and not sources:
+        # Preserve legacy/generic rollover behavior when no authored structure
+        # exists. Downstream workout-design validation still fails closed if a
+        # real published swim anchor would otherwise be non-executable.
+        return future
+
+    for ordinal, (target_index, target) in enumerate(targets):
+        # One known executable structure may safely be reused for multiple
+        # support exposures; that is continuity, not invented progression.
+        source = sources[min(ordinal, len(sources) - 1)]
         target_date = date.fromisoformat(target["date"])
-        copied = _clean_preview_swim(
-            source,
-            target_date,
-            target.get("label") or WEEKDAY_LABELS[target_index],
-            next_key,
-            focus_index=next_start.isocalendar().week + ordinal,
-        )
-        copied["priority_role"] = target.get("priority_role") or copied.get("priority_role") or "flex"
-        copied["stimuli"] = deepcopy(target.get("stimuli") or copied.get("stimuli") or [])
-        copied["mesocycle_id"] = target.get("mesocycle_id")
-        copied["microcycle_id"] = target.get("microcycle_id")
-        copied["microcycle_index"] = target.get("microcycle_index")
-        copied["microcycle_slot"] = target.get("microcycle_slot")
-        if target.get("dose_options"):
-            copied["dose_options"] = deepcopy(target["dose_options"])
-            copied["baseline_option_id"] = target.get("baseline_option_id")
-            if not apply_baseline_option(copied, target.get("baseline_option_id")):
-                raise RuntimeError(
-                    f"Veckoskifte: simpass {target.get('date')} tappade baseline/dose_options vid strukturkopiering"
-                )
+
+        if target.get("sport") == "swim":
+            copied = _clean_preview_swim(
+                source,
+                target_date,
+                target.get("label") or WEEKDAY_LABELS[target_index],
+                next_key,
+                focus_index=next_start.isocalendar().week + ordinal,
+            )
+            copied["priority_role"] = target.get("priority_role") or copied.get("priority_role") or "flex"
+            copied["stimuli"] = deepcopy(target.get("stimuli") or copied.get("stimuli") or [])
+            copied["mesocycle_id"] = target.get("mesocycle_id")
+            copied["microcycle_id"] = target.get("microcycle_id")
+            copied["microcycle_index"] = target.get("microcycle_index")
+            copied["microcycle_slot"] = target.get("microcycle_slot")
+            if target.get("dose_options"):
+                copied["dose_options"] = deepcopy(target["dose_options"])
+                copied["baseline_option_id"] = target.get("baseline_option_id")
+                if not apply_baseline_option(copied, target.get("baseline_option_id")):
+                    raise RuntimeError(
+                        f"Veckoskifte: simpass {target.get('date')} tappade baseline/dose_options vid strukturkopiering"
+                    )
+            future["days"][target_index] = copied
+            continue
+
+        # Composite support day: retain strength/day semantics and attach the
+        # swim component as an independently executable sub-prescription.
+        copied = deepcopy(target)
+        _attach_swim_structure(source, copied, target_date, next_key)
+        copied["swim_component"] = {
+            "source": "verified_previous_watch_workout",
+            "planned_distance_m": copied["watch_workout"]["planned_distance_m"],
+            "principle": (
+                "Simdelen använder en redan exekverbar struktur. Den kombinerade dagen "
+                "får inte dölja simningen som text i ett styrkepass."
+            ),
+        }
         future["days"][target_index] = copied
     return future
 
@@ -532,7 +585,12 @@ def build_mesocycle_next_week(promoted, strategy):
         "strength_template": deepcopy(promoted.get("strength_template") or []),
     }
 
-    if any(day.get("sport") == "swim" for day in future.get("days") or []):
+    if any(
+        day.get("sport") == "swim"
+        or "swim_aerobic" in (day.get("stimuli") or [])
+        or "swim_technique" in (day.get("stimuli") or [])
+        for day in future.get("days") or []
+    ):
         future = seed_preliminary_swims(promoted, future)
 
     future = seed_fixed_commitments(future)

@@ -307,7 +307,7 @@ def validate_training_strategy(document):
                 option_id = step.get("option_id")
                 nonempty_string(option_id, f"{step_context}.option_id")
                 require(option_id in option_ids, f"{step_context}.option_id måste referera till dose_options")
-                require(step.get("relation") in {"progress", "hold", "establish"}, f"{step_context}.relation ogiltig")
+                require(step.get("relation") in {"progress", "hold", "establish", "reduce"}, f"{step_context}.relation ogiltig")
                 nonempty_string(step.get("reason"), f"{step_context}.reason")
             baseline_value = next(option["value"] for option in dose_options if option["id"] == baseline_option_id)
             floor_value = next(option["value"] for option in dose_options if option["id"] == floor_id)
@@ -317,20 +317,50 @@ def validate_training_strategy(document):
                 step_context = f"{context}.development_progression.microcycle_plan[{sequence_index}]"
                 step_value = option_values[step["option_id"]]
                 relation = step["relation"]
-                require(step_value >= floor_value, f"{step_context}: planerad utvecklingsdos får inte ligga under demonstrerat golv")
-                if relation == "establish":
-                    require(sequence_index == 0, f"{step_context}: establish får bara vara första utvecklingssteget")
-                elif step_value > previous_value:
-                    require(relation == "progress", f"{step_context}: högre dos måste markeras som progress")
-                elif step_value == previous_value:
-                    require(relation == "hold", f"{step_context}: samma utvecklingsdos måste markeras som hold och ha explicit skäl")
+                if relation == "reduce":
+                    require(
+                        step_value < previous_value or step_value < floor_value,
+                        f"{step_context}: reduce måste faktiskt sänka vald dosvariabel",
+                    )
                 else:
-                    require(False, f"{step_context}: planerad regression hör inte hemma i normal utvecklingslinje")
+                    require(
+                        step_value >= floor_value,
+                        f"{step_context}: normal utvecklingsdos får inte ligga under demonstrerat golv",
+                    )
+                    if relation == "establish":
+                        require(sequence_index == 0, f"{step_context}: establish får bara vara första utvecklingssteget")
+                    elif step_value > previous_value:
+                        require(relation == "progress", f"{step_context}: högre dos måste markeras som progress")
+                    elif step_value == previous_value:
+                        require(relation == "hold", f"{step_context}: samma utvecklingsdos måste markeras som hold och ha explicit skäl")
+                    else:
+                        require(False, f"{step_context}: lägre dos måste markeras som reduce")
                 previous_value = step_value
-            require(baseline_value >= floor_value, f"{context}: normal utvecklingsbaseline får inte ligga under demonstrerat kapacitetsgolv")
-            require(progression_target is not None, f"{context}: utvecklande nyckelpass måste ha progression_target_option_id")
-            target_value = next(option["value"] for option in dose_options if option["id"] == progression_target)
-            require(target_value > baseline_value, f"{context}: progression_target måste vara större än baseline i vald belastningsvariabel")
+
+            explicit_reduction = any(
+                step.get("relation") == "reduce" and step.get("option_id") == baseline_option_id
+                for step in plan_steps
+            )
+            require(
+                baseline_value >= floor_value or explicit_reduction,
+                f"{context}: baseline under demonstrerat kapacitetsgolv kräver explicit reduce-skäl",
+            )
+            if progression_target is None:
+                higher_options = [
+                    option for option in dose_options
+                    if option.get("value") > baseline_value
+                ]
+                require(
+                    not higher_options,
+                    f"{context}: progression_target saknas trots att högre förgodkänd dos finns",
+                )
+                nonempty_string(
+                    item.get("progression_ceiling_reason"),
+                    f"{context}.progression_ceiling_reason",
+                )
+            else:
+                target_value = next(option["value"] for option in dose_options if option["id"] == progression_target)
+                require(target_value > baseline_value, f"{context}: progression_target måste vara större än baseline i vald belastningsvariabel")
 
     missing_protected = [key for key in protected if key not in template_stimuli]
     require(
