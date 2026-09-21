@@ -4,7 +4,7 @@
       "activity_id": 20254486837,
       "activity_date": "2026-09-20",
       "activity_name": "Löpning vid lunch",
-      "generated_at_utc": "2026-09-21T08:31:43.685354+00:00",
+      "generated_at_utc": "2026-09-21T09:02:12.339073+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 3,
@@ -16,28 +16,28 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "22.46 km lugn långlöpningssession med stabila 1 km-intervaller och en tydlig avslutande fartökning; passet genomfördes utan användarrapport om problem.",
-        "load_interpretation": "Passet är ett långt aerobt löppass (22.5 km, 1:12–2:38 h:ss per km‑intervaller) som ökar veckans volym; påverkar närbelastning kommande 48–72 h.",
+        "summary": "22.46 km lugn långdistans (5:15/km) fullföljd utan användarrapport; fart steady med stigande puls mot slutet.",
+        "load_interpretation": "Passet visar en lång, genomförd löpbelastning som ökar kardiovaskulär och mekanisk stress de närmaste 48–72 timmarna.",
         "confidence": "medium",
         "facts": [
           "Löpning: 22,46 km · 1:59:46 · 267 m+ · snittpuls 138,9 · maxpuls 158."
         ],
         "interpretations": [
-          "Långt genomfört löppass visar godtolerans för >22 km löpning och ger reell volymökning för mikrocykeln.",
-          "Ökad volym och flera tidigare kvalitets‑pass (3×8 backar, sim, mm.) kräver att planens kommande prioriterade stimuli (tis‑sim+styrka, ons‑tröskel) beaktas för absorberbarhet."
+          "Ett långt genomfört distanspass demonstrerar att dagens löpvolym var absorberbar i sig; det innebär ökad närbelastning för kommande 2–3 dagar.",
+          "Fartprofil och stigande puls mot slutet tyder på ackumulerad trötthet eller progressiv intensitet i slutdelen, vilket kan påverka planerade tunga löppass och MTB-dos nästa dygn."
         ],
         "unknowns": [
-          "Subjektiv återhämtning efter passet (användarrapport tom) kan ändra rekommendation",
-          "Kommande måndags enduro/andra externa åtaganden påverkar absorberbarhet över 48–72 h"
+          "Subjektiv återhämtning/DOMS efter passet (användarrapport saknas).",
+          "Kommande enduro/skola eller andra aktiviteter idag eller imorgon som kan påverka tolerans."
         ]
       },
       "plan_action": {
         "action": "review",
         "target_date": "",
-        "reason": "Dagens långa löppass höjer närbelastningen och påverkar flera planerade nyckelpass i nästa 2–3 dagar; underlaget kräver manuell översyn för att bevara mesocykelns skyddade…",
-        "recommendation": "Coach: granska tisdagens sim+styrka och onsdagens planerade tröskel (4×9) innan automatisk bekräftelse; överväg att reducera styrkedelen eller byta tröskeldosen till 4×8 om subjektiv trötthet rapporteras. Om du känner dig pigg och inga fasta åtaganden finns…",
+        "reason": "Beslutet skjuts upp eftersom mellanliggande planerade dagar ännu inte har ett känt utfall.",
+        "recommendation": "Måndag: Enduroskola · fast tillfälle ligger kvar som plan. Tisdag: Simning · 3 200 m · aerob/teknik + styrka/core · ca 35 min · styrkemall bedöms efter den faktiska belastningen från måndag och återhämtningen därefter.",
         "dose_option_id": "",
-        "requires_approval": true
+        "requires_approval": false
       },
       "auto_apply": {
         "applied": false,
@@ -1237,8 +1237,8 @@
       }
     }
   ],
-  "last_trigger_hash": "2aa31fd414e0ca21d31243427573e035e9bde8ec9b9ae22b4f722ccf3e0e1ae4",
-  "last_run_utc": "2026-09-21T08:31:43.685354+00:00",
+  "last_trigger_hash": "ab8dd908620a469721908272a7bb5469288e0fdfcd517061a7a0512dc4dce252",
+  "last_run_utc": "2026-09-21T09:02:12.339073+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 3

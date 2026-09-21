@@ -56,6 +56,14 @@
       "source_hash": "28b1725f2bea9826773305d34f4e5735f18a1cc78e9e0c5cfc0c0e21f76bb2ec",
       "generated_at_utc": "2026-09-21T08:31:34.314777+00:00",
       "summary": "Flyttade run_threshold bort från blockerade dag 1 till en absorberbar mittveckaplats och säkerställde två simexponeringar samt minst en styrke/core-exponering (via swim_strength). Höll max två löpkvaliteter och inkluderade mtb_technical + run_easy_distance så att alla primära kapaciteter täcks. Slot-count = 6 inom policy. Varje val motiveras med observerade evidenser."
+    },
+    {
+      "kind": "microcycle",
+      "decision_id": "2026-W40",
+      "source": "openai_repaired",
+      "source_hash": "464c6678dc5249ea308cd6fdb20b14b19efba8bcae42540fb1969969e8b6eef7",
+      "generated_at_utc": "2026-09-21T09:02:02.579533+00:00",
+      "summary": "Åtgärdar att dag 1 är blockerad och säkerställer att alla primära kapaciteter täcks direkt. Flyttar löptröskelprogression bort från blockerad dag (en vilodag efter enduro före progress), bibehåller två simexponeringar varav en kombinerar styrka/core, och håller antalet löpkvaliteter ≤2. Totalt 6 slots (dag 1 är tom)."
     }
   ]
 }
