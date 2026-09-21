@@ -7,12 +7,12 @@
     "week": 40,
     "week_start": "2026-09-28",
     "week_end": "2026-10-04",
-    "title": "Modifierat byggblock — prioritera löptröskel, skydda sim/styrka, begränsa MTB-duration nära enduro · mikrocykel 2 av 4",
-    "principle": "Föra målbilden framåt genom kontrollerad progression av löptröskel, bibehållen långdistans-tålighet och fortsatt teknisk MTB-utveckling utan att låta frekvent enduro tränga undan skyddad sim- och styrkestimulans. Mikrocykeln är preliminär men konkret: varje planerat pass har en användbar grundplan. Faktisk belastning och återhämtning används för att behålla eller justera planen, inte för att skapa den i sista stund. Kalenderveckan är bara visningen.",
-    "preview_summary": "Mikrocykel 2 av 4 i aktuell mesocykel. Skyddade stimuli: run_threshold, mtb_technical, run_easy_distance. Grundpassen är konkreta och får inte ökas automatiskt; progression kräver explicita kriterier och justering kräver stöd i fler-dagars faktisk information. Styrka/core är skyddad kapacitet och får inte falla ur som restpost.",
-    "mesocycle_id": "20260921-run_threshold-mtb_technical-run_easy_distance",
-    "microcycle_id": "20260921-run_threshold-mtb_technical-run_easy_distance:mc2",
-    "microcycle_index": 2,
+    "title": "Modifierad byggcykel — höjd simprioritet, behåll löptröskel, minska MTB-duration · mikrocykel 1 av 4",
+    "principle": "Ökar swimrun-specifik kapacitet genom prioriterad utveckling av simning (aerobitet + teknik) samtidigt som löptröskel och långdistans-tålighet bibehålls; MTB-duration reduceras för att undvika att enduro belastar bort nyckelstimuli. Mikrocykeln är preliminär men konkret: varje planerat pass har en användbar grundplan. Faktisk belastning och återhämtning används för att behålla eller justera planen, inte för att skapa den i sista stund. Kalenderveckan är bara visningen.",
+    "preview_summary": "Mikrocykel 1 av 4 i aktuell mesocykel. Skyddade stimuli: run_threshold, swim_aerobic, swim_technique. Grundpassen är konkreta och får inte ökas automatiskt; progression kräver explicita kriterier och justering kräver stöd i fler-dagars faktisk information. Styrka/core är skyddad kapacitet och får inte falla ur som restpost.",
+    "mesocycle_id": "20260928-run_threshold-swim_aerobic-swim_technique",
+    "microcycle_id": "20260928-run_threshold-swim_aerobic-swim_technique:mc1",
+    "microcycle_index": 1,
     "microcycle_total": 4,
     "microcycle_length_days": 7,
     "calendar_week_is_presentation": true,
@@ -20,19 +20,19 @@
     "mesocycle_contract": {
       "primary": [
         "run_threshold",
-        "mtb_technical",
-        "run_easy_distance"
+        "swim_aerobic",
+        "swim_technique"
       ],
       "secondary": [
+        "run_easy_distance",
         "run_hill_quality",
+        "mtb_technical",
         "mtb_aerobic"
       ],
       "maintenance": [],
       "protected_capacity": [
         "strength_unilateral",
         "strength_core",
-        "swim_aerobic",
-        "swim_technique",
         "plyometric"
       ],
       "external_load": [
@@ -43,15 +43,11 @@
     "capacity_protection": {
       "required_each_microcycle": [
         "strength_unilateral",
-        "strength_core",
-        "swim_aerobic",
-        "swim_technique"
+        "strength_core"
       ],
       "protected_across_mesocycle": [
         "strength_unilateral",
         "strength_core",
-        "swim_aerobic",
-        "swim_technique",
         "plyometric"
       ],
       "missing_required_action": "review_and_restore_in_next_absorbable_window",
@@ -79,9 +75,9 @@
       "stimuli": [
         "enduro_technical"
       ],
-      "mesocycle_id": "20260921-run_threshold-mtb_technical-run_easy_distance",
-      "microcycle_id": "20260921-run_threshold-mtb_technical-run_easy_distance:mc2",
-      "microcycle_index": 2,
+      "mesocycle_id": "20260928-run_threshold-swim_aerobic-swim_technique",
+      "microcycle_id": "20260928-run_threshold-swim_aerobic-swim_technique:mc1",
+      "microcycle_index": 1,
       "microcycle_day": 1,
       "workout_design": {
         "schema_version": 1,
@@ -91,8 +87,8 @@
           "stimuli": [
             "enduro_technical"
           ],
-          "mesocycle_id": "20260921-run_threshold-mtb_technical-run_easy_distance",
-          "microcycle_id": "20260921-run_threshold-mtb_technical-run_easy_distance:mc2",
+          "mesocycle_id": "20260928-run_threshold-swim_aerobic-swim_technique",
+          "microcycle_id": "20260928-run_threshold-swim_aerobic-swim_technique:mc1",
           "microcycle_slot": ""
         },
         "near_term_context": {
@@ -242,14 +238,14 @@
         ]
       },
       "sport": "swim",
-      "priority_role": "protected_support",
+      "priority_role": "anchor",
       "stimuli": [
         "swim_aerobic",
         "swim_technique"
       ],
-      "mesocycle_id": "20260921-run_threshold-mtb_technical-run_easy_distance",
-      "microcycle_id": "20260921-run_threshold-mtb_technical-run_easy_distance:mc2",
-      "microcycle_index": 2,
+      "mesocycle_id": "20260928-run_threshold-swim_aerobic-swim_technique",
+      "microcycle_id": "20260928-run_threshold-swim_aerobic-swim_technique:mc1",
+      "microcycle_index": 1,
       "microcycle_day": 2,
       "alternative_sports": [
         "swimrun"
@@ -276,14 +272,14 @@
       "workout_design": {
         "schema_version": 1,
         "objective": {
-          "mesocycle_role": "protected_capacity",
-          "priority_role": "protected_support",
+          "mesocycle_role": "primary",
+          "priority_role": "anchor",
           "stimuli": [
             "swim_aerobic",
             "swim_technique"
           ],
-          "mesocycle_id": "20260921-run_threshold-mtb_technical-run_easy_distance",
-          "microcycle_id": "20260921-run_threshold-mtb_technical-run_easy_distance:mc2",
+          "mesocycle_id": "20260928-run_threshold-swim_aerobic-swim_technique",
+          "microcycle_id": "20260928-run_threshold-swim_aerobic-swim_technique:mc1",
           "microcycle_slot": "swim_aerobic_technique_1"
         },
         "near_term_context": {
@@ -538,7 +534,7 @@
       "status": "preliminary",
       "planning_status": "preliminary",
       "session": "Löpning · kontrollerad tröskel · 4 × 9 min / 90 s jogg",
-      "reason": "Konservativ progression av löptröskel (endast denna primära capability får progress och det finns stöd i historiken); placerad en dag efter enduro-blocket för bättre absorberbarhet. Valet utgår från ett observerat värde 32 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: progress; materialiserad relation: progress.",
+      "reason": "Konservativ progression av tröskel (enda primära progression denna mikrocykel) stödd av upprepade 3×/4×8-min-pass i historiken; placerad med ett lätt simpass före för bättre absorberbarhet. Valet utgår från ett observerat värde 32 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: progress; materialiserad relation: progress.",
       "development_focus": "Jämn, kontrollerad tröskelkaraktär. Progression ska främst öka absorberbar arbetstid, inte jaga högre intensitet.",
       "sport": "run",
       "priority_role": "anchor",
@@ -549,9 +545,9 @@
         "cardiovascular",
         "mechanical"
       ],
-      "mesocycle_id": "20260921-run_threshold-mtb_technical-run_easy_distance",
-      "microcycle_id": "20260921-run_threshold-mtb_technical-run_easy_distance:mc2",
-      "microcycle_index": 2,
+      "mesocycle_id": "20260928-run_threshold-swim_aerobic-swim_technique",
+      "microcycle_id": "20260928-run_threshold-swim_aerobic-swim_technique:mc1",
+      "microcycle_index": 1,
       "microcycle_day": 3,
       "microcycle_slot": "run_threshold_2",
       "performance_marker_id": "run-threshold-control",
@@ -592,7 +588,7 @@
         "source": "athlete_state",
         "microcycle_plan": [
           {
-            "microcycle": 2,
+            "microcycle": 1,
             "option_id": "run-threshold-4x9",
             "relation": "progress",
             "reason": "Mikrocykelbeslutet valde progress och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt."
@@ -600,7 +596,7 @@
         ]
       },
       "development_step": {
-        "microcycle": 2,
+        "microcycle": 1,
         "option_id": "run-threshold-4x9",
         "relation": "progress",
         "reason": "Mikrocykelbeslutet valde progress och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt."
@@ -621,8 +617,8 @@
           "stimuli": [
             "run_threshold"
           ],
-          "mesocycle_id": "20260921-run_threshold-mtb_technical-run_easy_distance",
-          "microcycle_id": "20260921-run_threshold-mtb_technical-run_easy_distance:mc2",
+          "mesocycle_id": "20260928-run_threshold-swim_aerobic-swim_technique",
+          "microcycle_id": "20260928-run_threshold-swim_aerobic-swim_technique:mc1",
           "microcycle_slot": "run_threshold_2"
         },
         "near_term_context": {
@@ -880,10 +876,10 @@
       "status": "preliminary",
       "planning_status": "preliminary",
       "session": "MTB/XC · 75 min · teknik + lugn aerob stig",
-      "reason": "Minska planerad MTB-duration p.g.a. verklig enduro-belastning samtidigt som teknisk kvalitet prioriteras. Valet utgår från ett observerat värde 131.383 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: reduce; materialiserad relation: reduce.",
+      "reason": "Reducerad, teknikorienterad MTB-session för att behålla teknisk stimulus utan lång duration som konkurrerar med swim/run-prioritering. Valet utgår från ett observerat värde 131.383 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: reduce; materialiserad relation: reduce.",
       "development_focus": "Blick, linjeval, bromspunkter och flyt före segmentjakt.",
       "sport": "bike",
-      "priority_role": "anchor",
+      "priority_role": "flex",
       "stimuli": [
         "mtb_technical",
         "mtb_aerobic"
@@ -893,9 +889,9 @@
         "neuromuscular",
         "technical"
       ],
-      "mesocycle_id": "20260921-run_threshold-mtb_technical-run_easy_distance",
-      "microcycle_id": "20260921-run_threshold-mtb_technical-run_easy_distance:mc2",
-      "microcycle_index": 2,
+      "mesocycle_id": "20260928-run_threshold-swim_aerobic-swim_technique",
+      "microcycle_id": "20260928-run_threshold-swim_aerobic-swim_technique:mc1",
+      "microcycle_index": 1,
       "microcycle_day": 4,
       "microcycle_slot": "mtb_technical_3",
       "performance_marker_id": "mtb-technical-repeat",
@@ -929,26 +925,6 @@
           "intent": "Längre teknisk/aerob exponering med krav på marginal till löpkvalitet."
         }
       ],
-      "development_progression": {
-        "mode": "develop",
-        "demonstrated_floor_option_id": "mtb-tech-90",
-        "same_dose_repeat_requires_reason": true,
-        "source": "athlete_state",
-        "microcycle_plan": [
-          {
-            "microcycle": 2,
-            "option_id": "mtb-tech-75",
-            "relation": "reduce",
-            "reason": "Mikrocykelbeslutet valde reduce och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt."
-          }
-        ]
-      },
-      "development_step": {
-        "microcycle": 2,
-        "option_id": "mtb-tech-75",
-        "relation": "reduce",
-        "reason": "Mikrocykelbeslutet valde reduce och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt."
-      },
       "baseline_option_id": "mtb-tech-75",
       "dose_open": false,
       "dose_resolution": {
@@ -960,14 +936,14 @@
       "workout_design": {
         "schema_version": 1,
         "objective": {
-          "mesocycle_role": "primary",
-          "priority_role": "anchor",
+          "mesocycle_role": "secondary",
+          "priority_role": "flex",
           "stimuli": [
             "mtb_technical",
             "mtb_aerobic"
           ],
-          "mesocycle_id": "20260921-run_threshold-mtb_technical-run_easy_distance",
-          "microcycle_id": "20260921-run_threshold-mtb_technical-run_easy_distance:mc2",
+          "mesocycle_id": "20260928-run_threshold-swim_aerobic-swim_technique",
+          "microcycle_id": "20260928-run_threshold-swim_aerobic-swim_technique:mc1",
           "microcycle_slot": "mtb_technical_3"
         },
         "near_term_context": {
@@ -979,9 +955,9 @@
           "selection_uses_only_preapproved_doses": true
         },
         "progression_from_previous": {
-          "relation": "reduce",
-          "reason": "Mikrocykelbeslutet valde reduce och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
-          "demonstrated_floor_option_id": "mtb-tech-90"
+          "relation": "support",
+          "reason": "Progressionsalternativ när cykelbelastningen absorberas.",
+          "demonstrated_floor_option_id": ""
         },
         "candidates": [
           {
@@ -1053,11 +1029,11 @@
               "source": "duration_session"
             },
             "score": {
-              "total": 59,
+              "total": 70,
               "breakdown": {
                 "mesocycle_alignment": 30,
                 "microcycle_alignment": 10,
-                "progression_alignment": 4,
+                "progression_alignment": 15,
                 "prescription_specificity": 15,
                 "near_term_resolution": 0
               },
@@ -1093,11 +1069,11 @@
               "source": "duration_session"
             },
             "score": {
-              "total": 63,
+              "total": 70,
               "breakdown": {
                 "mesocycle_alignment": 30,
                 "microcycle_alignment": 10,
-                "progression_alignment": 8,
+                "progression_alignment": 15,
                 "prescription_specificity": 15,
                 "near_term_resolution": 0
               },
@@ -1133,11 +1109,11 @@
               "source": "duration_session"
             },
             "score": {
-              "total": 59,
+              "total": 70,
               "breakdown": {
                 "mesocycle_alignment": 30,
                 "microcycle_alignment": 10,
-                "progression_alignment": 4,
+                "progression_alignment": 15,
                 "prescription_specificity": 15,
                 "near_term_resolution": 0
               },
@@ -1149,7 +1125,7 @@
         "selection": {
           "method": "deterministic_constraint_scoring",
           "preferred_dose_option_id": "mtb-tech-75",
-          "reason_for_today": "Mikrocykelbeslutet valde reduce och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt."
+          "reason_for_today": "Progressionsalternativ när cykelbelastningen absorberas."
         }
       },
       "device_workout": {
@@ -1195,7 +1171,7 @@
       "status": "preliminary",
       "planning_status": "preliminary",
       "session": "Löpning · backkvalitet · 15 min lugnt + 3 × 8 × 150 m / lugn joggvila + 10 min lugnt",
-      "reason": "Konsolidera backintervaller (behåll volym/teknik) utan progression nära enduro. Valet utgår från ett observerat värde 24 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
+      "reason": "Bibehåll backkvalitet som kompletterande löpstimulus utan progression denna cykel; håller max antal löpkvalitets-pass = 2 tillsammans med tröskel. Valet utgår från ett observerat värde 24 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
       "development_focus": "Kraftfull men kontrollerad löpning med bibehållen mekanik; ingen maximal sprint eller syrajakt.",
       "sport": "run",
       "priority_role": "flex",
@@ -1207,9 +1183,9 @@
         "neuromuscular",
         "cardiovascular"
       ],
-      "mesocycle_id": "20260921-run_threshold-mtb_technical-run_easy_distance",
-      "microcycle_id": "20260921-run_threshold-mtb_technical-run_easy_distance:mc2",
-      "microcycle_index": 2,
+      "mesocycle_id": "20260928-run_threshold-swim_aerobic-swim_technique",
+      "microcycle_id": "20260928-run_threshold-swim_aerobic-swim_technique:mc1",
+      "microcycle_index": 1,
       "microcycle_day": 5,
       "microcycle_slot": "run_hill_quality_4",
       "performance_marker_id": "run-hill-mechanics",
@@ -1294,8 +1270,8 @@
           "stimuli": [
             "run_hill_quality"
           ],
-          "mesocycle_id": "20260921-run_threshold-mtb_technical-run_easy_distance",
-          "microcycle_id": "20260921-run_threshold-mtb_technical-run_easy_distance:mc2",
+          "mesocycle_id": "20260928-run_threshold-swim_aerobic-swim_technique",
+          "microcycle_id": "20260928-run_threshold-swim_aerobic-swim_technique:mc1",
           "microcycle_slot": "run_hill_quality_4"
         },
         "near_term_context": {
@@ -1654,7 +1630,7 @@
       "status": "preliminary",
       "planning_status": "preliminary",
       "session": "Simning · 3 200 m · aerob/teknik + styrka/core · ca 35 min · styrkemall",
-      "reason": "Kombinerad sim- och styrke/core-session för att uppfylla både två simexponeringar och minimikrav på styrka/core utan extra dag. Valet utgår från ett observerat värde 36.0167 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
+      "reason": "Kombinerad sim+styrka för att uppfylla krav på minst en styrke/core-exponering och som andra simsession för veckan; konsoliderar teknisk sim och mekanisk stimulans utan extra dag. Valet utgår från ett observerat värde 36.0167 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
       "development_focus": "Andra simexponeringen hålls aerob/teknisk och kombineras med kontrollerad styrka/core för att skydda båda kapaciteterna utan ett extra benkvalitetspass.",
       "sport": "strength",
       "priority_role": "protected_support",
@@ -1670,9 +1646,9 @@
         "mechanical",
         "neuromuscular"
       ],
-      "mesocycle_id": "20260921-run_threshold-mtb_technical-run_easy_distance",
-      "microcycle_id": "20260921-run_threshold-mtb_technical-run_easy_distance:mc2",
-      "microcycle_index": 2,
+      "mesocycle_id": "20260928-run_threshold-swim_aerobic-swim_technique",
+      "microcycle_id": "20260928-run_threshold-swim_aerobic-swim_technique:mc1",
+      "microcycle_index": 1,
       "microcycle_day": 6,
       "microcycle_slot": "swim_strength_5",
       "optional_stimuli": [
@@ -1801,7 +1777,7 @@
       "workout_design": {
         "schema_version": 1,
         "objective": {
-          "mesocycle_role": "protected_capacity",
+          "mesocycle_role": "primary",
           "priority_role": "protected_support",
           "stimuli": [
             "swim_aerobic",
@@ -1809,8 +1785,8 @@
             "strength_unilateral",
             "strength_core"
           ],
-          "mesocycle_id": "20260921-run_threshold-mtb_technical-run_easy_distance",
-          "microcycle_id": "20260921-run_threshold-mtb_technical-run_easy_distance:mc2",
+          "mesocycle_id": "20260928-run_threshold-swim_aerobic-swim_technique",
+          "microcycle_id": "20260928-run_threshold-swim_aerobic-swim_technique:mc1",
           "microcycle_slot": "swim_strength_5"
         },
         "near_term_context": {
@@ -2332,10 +2308,10 @@
       "status": "preliminary",
       "planning_status": "preliminary",
       "session": "Löpning · lugn distans · 120 min",
-      "reason": "Långdistanspass konsolideras (behåll baseline med möjlighet till planerad reducering vid hög ackumulerad belastning). Valet utgår från ett observerat värde 119.767 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
+      "reason": "Etablera långt lugnt distanspass för löptålighet/kondition enligt mesocykelkravet; placeras avslutande i mikrocykeln för volymabsorption efter tidigare kvaliteter. Valet utgår från ett observerat värde 119.767 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
       "development_focus": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt.",
       "sport": "run",
-      "priority_role": "anchor",
+      "priority_role": "flex",
       "stimuli": [
         "run_easy_distance"
       ],
@@ -2343,9 +2319,9 @@
         "cardiovascular",
         "mechanical"
       ],
-      "mesocycle_id": "20260921-run_threshold-mtb_technical-run_easy_distance",
-      "microcycle_id": "20260921-run_threshold-mtb_technical-run_easy_distance:mc2",
-      "microcycle_index": 2,
+      "mesocycle_id": "20260928-run_threshold-swim_aerobic-swim_technique",
+      "microcycle_id": "20260928-run_threshold-swim_aerobic-swim_technique:mc1",
+      "microcycle_index": 1,
       "microcycle_day": 7,
       "microcycle_slot": "run_easy_distance_6",
       "dose_options": [
@@ -2385,26 +2361,6 @@
           "intent": "Lång distansdos som kräver stöd i faktisk tålighet och närbelastning."
         }
       ],
-      "development_progression": {
-        "mode": "develop",
-        "demonstrated_floor_option_id": "run-easy-120",
-        "same_dose_repeat_requires_reason": true,
-        "source": "athlete_state",
-        "microcycle_plan": [
-          {
-            "microcycle": 2,
-            "option_id": "run-easy-120",
-            "relation": "hold",
-            "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt."
-          }
-        ]
-      },
-      "development_step": {
-        "microcycle": 2,
-        "option_id": "run-easy-120",
-        "relation": "hold",
-        "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt."
-      },
       "baseline_option_id": "run-easy-120",
       "dose_open": false,
       "dose_resolution": {
@@ -2416,13 +2372,13 @@
       "workout_design": {
         "schema_version": 1,
         "objective": {
-          "mesocycle_role": "primary",
-          "priority_role": "anchor",
+          "mesocycle_role": "secondary",
+          "priority_role": "flex",
           "stimuli": [
             "run_easy_distance"
           ],
-          "mesocycle_id": "20260921-run_threshold-mtb_technical-run_easy_distance",
-          "microcycle_id": "20260921-run_threshold-mtb_technical-run_easy_distance:mc2",
+          "mesocycle_id": "20260928-run_threshold-swim_aerobic-swim_technique",
+          "microcycle_id": "20260928-run_threshold-swim_aerobic-swim_technique:mc1",
           "microcycle_slot": "run_easy_distance_6"
         },
         "near_term_context": {
@@ -2433,9 +2389,9 @@
           "selection_uses_only_preapproved_doses": true
         },
         "progression_from_previous": {
-          "relation": "hold",
-          "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
-          "demonstrated_floor_option_id": "run-easy-120"
+          "relation": "support",
+          "reason": "Lång distansdos som kräver stöd i faktisk tålighet och närbelastning.",
+          "demonstrated_floor_option_id": ""
         },
         "candidates": [
           {
@@ -2505,11 +2461,11 @@
               "source": "duration_session"
             },
             "score": {
-              "total": 59,
+              "total": 70,
               "breakdown": {
                 "mesocycle_alignment": 30,
                 "microcycle_alignment": 10,
-                "progression_alignment": 4,
+                "progression_alignment": 15,
                 "prescription_specificity": 15,
                 "near_term_resolution": 0
               },
@@ -2544,11 +2500,11 @@
               "source": "duration_session"
             },
             "score": {
-              "total": 59,
+              "total": 70,
               "breakdown": {
                 "mesocycle_alignment": 30,
                 "microcycle_alignment": 10,
-                "progression_alignment": 4,
+                "progression_alignment": 15,
                 "prescription_specificity": 15,
                 "near_term_resolution": 0
               },
@@ -2583,11 +2539,11 @@
               "source": "duration_session"
             },
             "score": {
-              "total": 59,
+              "total": 70,
               "breakdown": {
                 "mesocycle_alignment": 30,
                 "microcycle_alignment": 10,
-                "progression_alignment": 4,
+                "progression_alignment": 15,
                 "prescription_specificity": 15,
                 "near_term_resolution": 0
               },
@@ -2599,7 +2555,7 @@
         "selection": {
           "method": "deterministic_constraint_scoring",
           "preferred_dose_option_id": "run-easy-120",
-          "reason_for_today": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt."
+          "reason_for_today": "Lång distansdos som kräver stöd i faktisk tålighet och närbelastning."
         }
       },
       "device_workout": {

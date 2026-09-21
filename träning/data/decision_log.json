@@ -64,6 +64,22 @@
       "source_hash": "464c6678dc5249ea308cd6fdb20b14b19efba8bcae42540fb1969969e8b6eef7",
       "generated_at_utc": "2026-09-21T09:02:02.579533+00:00",
       "summary": "Åtgärdar att dag 1 är blockerad och säkerställer att alla primära kapaciteter täcks direkt. Flyttar löptröskelprogression bort från blockerad dag (en vilodag efter enduro före progress), bibehåller två simexponeringar varav en kombinerar styrka/core, och håller antalet löpkvaliteter ≤2. Totalt 6 slots (dag 1 är tom)."
+    },
+    {
+      "kind": "mesocycle",
+      "decision_id": "20260928-run_threshold-swim_aerobic-swim_technique",
+      "source": "openai",
+      "source_hash": "0d1649d0c5248b7d0331a1cdc2bcfceeeb08ff409314cc2fb9c5890c1b0cfb7f",
+      "generated_at_utc": "2026-09-21T09:20:17.389295+00:00",
+      "summary": "Modifierad byggcykel — höjd simprioritet, behåll löptröskel, minska MTB-duration"
+    },
+    {
+      "kind": "microcycle",
+      "decision_id": "2026-W40",
+      "source": "openai_repaired",
+      "source_hash": "363944be20f8a497b2c56bc41b5d992bf965425db2316e5ad72cbfbfcdde8b25",
+      "generated_at_utc": "2026-09-21T09:21:08.080473+00:00",
+      "summary": "Reparerar förslag: inga aktiviteter på dag 1 (enduro-blockerad), två simexponeringar inklusive en kombinerad sim+styrka för att uppfylla swim + strength-krav, endast en progression (run_threshold) som stöds av historik, max två löpkvaliteter hålls, totalt 6 slots (dag 2–7) inom tillåtna gränser. Alla primära kapaciteter täcks direkt och hard_requirements är uppfyllda."
     }
   ]
 }
