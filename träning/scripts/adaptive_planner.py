@@ -665,7 +665,6 @@ def generate_mesocycle(goal, policy, athlete_state, previous, target_start, *, r
             "end_date": end.isoformat(),
             "evaluation_date": (end + timedelta(days=1)).isoformat(),
             "competition_context": competition_context,
-            "completed_microcycle_context": completed_context,
         }
     )
     result["id"] = (
@@ -1298,6 +1297,7 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
             "week_key": week_key(target_start),
             "mesocycle_id": meso["id"],
             "competition_context": competition_context,
+            "completed_microcycle_context": completed_context,
         }
     )
     if repair_metadata is not None:
