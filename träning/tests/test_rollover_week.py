@@ -271,7 +271,15 @@ class WeeklyRolloverTests(unittest.TestCase):
             ["run", "swim", "bike", "run", "strength", "run"],
         )
         self.assertEqual(future["days"][1]["baseline_option_id"], "run-threshold-3x8")
-        self.assertEqual(future["days"][4]["baseline_option_id"], "run-hill-3x8x150")
+        hill_slot = next(
+            slot
+            for slot in STRATEGY["current_mesocycle"]["microcycle_template"]
+            if slot["slot"] == "run_hill_quality"
+        )
+        self.assertEqual(
+            future["days"][4]["baseline_option_id"],
+            hill_slot["development_progression"]["demonstrated_floor_option_id"],
+        )
         self.assertTrue(all(day.get("transition_review") is True for day in future["days"][1:]))
         self.assertTrue(all(day.get("planning_status") == "preliminary" for day in future["days"][1:]))
         self.assertIn("utan automatisk belastningsökning", future["meta"]["principle"])
@@ -301,7 +309,7 @@ class WeeklyRolloverTests(unittest.TestCase):
             "strength_template": ["Styrka"],
         }
         current_preview = build_open_next_week(previous, STRATEGY)
-        current = promote = {**current_preview}
+        current = {**current_preview}
         current.pop("state", None)
         current.pop("week_key", None)
         current["days"] = [dict(day) for day in current_preview["days"]]
@@ -324,7 +332,15 @@ class WeeklyRolloverTests(unittest.TestCase):
         self.assertEqual(repaired["meta"]["week_start"], "2026-09-21")
         self.assertEqual(repaired["days"][1]["sport"], "run")
         self.assertEqual(repaired["days"][1]["baseline_option_id"], "run-threshold-3x8")
-        self.assertEqual(repaired["days"][4]["baseline_option_id"], "run-hill-3x8x150")
+        hill_slot = next(
+            slot
+            for slot in STRATEGY["current_mesocycle"]["microcycle_template"]
+            if slot["slot"] == "run_hill_quality"
+        )
+        self.assertEqual(
+            repaired["days"][4]["baseline_option_id"],
+            hill_slot["development_progression"]["demonstrated_floor_option_id"],
+        )
 
 if __name__ == "__main__":
     unittest.main()
