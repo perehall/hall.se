@@ -854,7 +854,9 @@ def materialize_template(meso, micro, policy, catalog, athlete_state):
         elif caps.intersection(protected):
             role = "protected_support"
         else:
-            role = recipe.get("priority_role") or "flex"
+            # Recipe metadata describes what the workout *can* be. Mesocycle
+            # authority decides whether it is a development anchor in this block.
+            role = "flex"
 
         slot = {
             "slot": f"{recipe_key}_{ordinal}",
