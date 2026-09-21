@@ -147,7 +147,7 @@ def target_week(plan, upcoming, today):
     return upcoming_start, False
 
 
-def resolve_planning_target(plan, upcoming, mesocycle_decision, today):
+def resolve_planning_target(plan, upcoming, mesocycle_decision, today, goal=None):
     """Choose the week the adaptive engine is allowed to plan.
 
     A generated mesocycle is authoritative for its full declared duration. If a
@@ -167,6 +167,18 @@ def resolve_planning_target(plan, upcoming, mesocycle_decision, today):
 
     current_id = str(meta.get("mesocycle_id") or "").strip()
     decision_id = str((mesocycle_decision or {}).get("id") or "").strip()
+
+    # A canonical goal change is the explicit exception to mesocycle authority.
+    # On the first day of the live microcycle we can rebuild the whole week
+    # without rewriting already-completed training. Midweek changes start with
+    # the upcoming week unless a separate near-term migration is implemented.
+    goal_changed = bool(
+        goal
+        and (mesocycle_decision or {}).get("goal_hash")
+        and (mesocycle_decision or {}).get("goal_hash") != goal_hash(goal)
+    )
+    if goal_changed and today == plan_start:
+        return plan_start, True
     decision_start = None
     try:
         if (mesocycle_decision or {}).get("start_date"):
@@ -1436,7 +1448,7 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
         today = iso(today)
     meso = load_json(MESO_FILE, {})
     target_start, active_replan = resolve_planning_target(
-        plan, upcoming, meso, today
+        plan, upcoming, meso, today, goal=goal
     )
 
     if not mesocycle_is_valid(meso, goal, target_start):
