@@ -34,12 +34,18 @@ class TrainingJobRunnerTests(unittest.TestCase):
         self.assertEqual(
             keys[:4],
             [
-                "sync_reported_progression_pre",
                 "strava_event",
                 "normalize_activity_semantics",
-                "sync_reported_progression_post",
+                "migrate_typed_plan",
+                "validate_ingested_data",
             ],
         )
+        self.assertNotIn("sync_reported_progression_pre", keys)
+        self.assertNotIn("sync_reported_progression_post", keys)
+        self.assertLess(keys.index("sync_performance_details"), keys.index("build_athlete_state"))
+        self.assertLess(keys.index("weekly_review"), keys.index("build_athlete_state"))
+        self.assertLess(keys.index("build_athlete_state"), keys.index("adaptive_planning"))
+        self.assertLess(keys.index("adaptive_planning"), keys.index("rollover_calendar"))
         self.assertLess(keys.index("rollover_calendar"), keys.index("apply_plan_overrides"))
         self.assertLess(keys.index("apply_plan_overrides"), keys.index("validate_rollover"))
         self.assertLess(keys.index("rollover_calendar"), keys.index("sync_weather"))
