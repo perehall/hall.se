@@ -34,6 +34,14 @@ class AdaptivePlanningTests(unittest.TestCase):
         self.assertIn("mesocycle_policy", self.policy)
         self.assertIn("microcycle_policy", self.policy)
 
+    def test_fallback_does_not_promote_swim_maintenance_text_to_primary_focus(self):
+        meso = fallback_mesocycle(self.goal, self.policy, {})
+        self.assertNotIn("swim_technique", meso["primary_capabilities"])
+        self.assertEqual(
+            meso["primary_capabilities"],
+            ["run_threshold", "mtb_technical", "run_easy_distance"],
+        )
+
     def test_athlete_state_extracts_explicit_threshold_and_hill_evidence(self):
         activities = {
             "activities": [
@@ -174,6 +182,22 @@ class AdaptivePlanningTests(unittest.TestCase):
         )
         self.assertEqual(threshold["baseline_option_id"], "run-threshold-4x8")
         self.assertIn("progression_ceiling_reason", threshold)
+
+        combined = next(
+            slot
+            for slot in strategy["current_mesocycle"]["microcycle_template"]
+            if "swim_aerobic" in slot["stimuli"]
+            and "strength_core" in slot["stimuli"]
+        )
+        self.assertEqual(combined["priority_role"], "protected_support")
+        self.assertNotIn("development_progression", combined)
+
+        hill = next(
+            slot
+            for slot in strategy["current_mesocycle"]["microcycle_template"]
+            if "run_hill_quality" in slot["stimuli"]
+        )
+        self.assertEqual(hill["priority_role"], "flex")
 
 
 if __name__ == "__main__":
