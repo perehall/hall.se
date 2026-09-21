@@ -21,6 +21,7 @@ from adaptive_planner import (  # noqa: E402
     mesocycle_schema,
     microcycle_guard_failures,
     microcycle_is_valid,
+    microcycle_layout_failures,
     resolve_planning_target,
     target_week,
     validate_and_normalize_micro,
@@ -413,6 +414,88 @@ class AdaptivePlanningTests(unittest.TestCase):
         self.assertEqual(floor["id"], "run-threshold-3x8")
         self.assertEqual(selected["id"], "run-threshold-3x10")
         self.assertEqual(relation, "progress")
+
+    def test_day_after_fixed_enduro_rejects_run_or_mtb_load(self):
+        rows = [
+            {"day_index": 2, "recipe_key": "run_hill_quality"},
+            {"day_index": 4, "recipe_key": "swim_aerobic_technique"},
+        ]
+        failures = microcycle_layout_failures(
+            rows, self.catalog, date(2026, 9, 28)
+        )
+        self.assertTrue(any("dagen efter fast enduro" in item for item in failures))
+
+    def test_adjacent_run_stressors_are_rejected(self):
+        rows = [
+            {"day_index": 4, "recipe_key": "run_threshold"},
+            {"day_index": 5, "recipe_key": "run_easy_distance"},
+        ]
+        failures = microcycle_layout_failures(
+            rows, self.catalog, date(2026, 10, 5)
+        )
+        self.assertTrue(any("två på varandra följande dagar" in item for item in failures))
+
+    def test_fallback_with_fixed_enduro_leaves_recovery_room(self):
+        meso = {
+            "primary_capabilities": [
+                "swim_aerobic",
+                "swim_technique",
+                "run_threshold",
+            ],
+            "secondary_capabilities": [
+                "run_hill_quality",
+                "run_easy_distance",
+                "mtb_technical",
+            ],
+        }
+        result = fallback_microcycle(
+            meso, self.policy, self.catalog, date(2026, 9, 28)
+        )
+        slots = result["slots"]
+        self.assertLessEqual(len(slots), 5)
+        self.assertFalse(
+            microcycle_layout_failures(
+                slots, self.catalog, date(2026, 9, 28)
+            )
+        )
+        day2 = next(row for row in slots if row["day_index"] == 2)
+        self.assertEqual(day2["recipe_key"], "swim_aerobic_technique")
+        occupied = {1} | {row["day_index"] for row in slots}
+        self.assertLess(len(occupied), 7)
+
+    def test_micro_planner_revision_can_rebuild_first_day_current_week(self):
+        plan = {
+            "meta": {
+                "week_start": "2026-09-21",
+                "week_end": "2026-09-27",
+                "mesocycle_id": "meso-live",
+                "microcycle_index": 1,
+                "microcycle_total": 4,
+                "requires_mesocycle_review": False,
+            }
+        }
+        upcoming = {"meta": {"week_start": "2026-09-28", "week_end": "2026-10-04"}}
+        meso = {
+            "id": "meso-live",
+            "start_date": "2026-09-21",
+            "end_date": "2026-10-18",
+            "goal_hash": goal_hash(self.goal),
+        }
+        stale_micro = {
+            "planner_revision": 4,
+            "week_start": "2026-09-28",
+            "mesocycle_id": "meso-live",
+        }
+        target, active_replan = resolve_planning_target(
+            plan,
+            upcoming,
+            meso,
+            date(2026, 9, 21),
+            goal=self.goal,
+            microcycle_decision=stale_micro,
+        )
+        self.assertEqual(target, date(2026, 9, 21))
+        self.assertTrue(active_replan)
 
     def test_microcycle_guard_explains_missing_protected_capacity(self):
         meso = fallback_mesocycle(self.goal, self.policy, {})
