@@ -1,0 +1,302 @@
+{
+  "schema_version": 1,
+  "purpose": "Fast planeringspolicy. Innehåller mål-/säkerhets-/kapacitetsregler men ingen aktuell mesocykel, mikrocykel eller färdig träningsvecka.",
+  "compatibility_strategy_schema_version": 5,
+  "strategy_base": {
+    "schema_version": 5,
+    "north_star": "Bygga en bred, hållbar allroundatlet med stark löpning, teknisk MTB/XC och bibehållen eller förbättrad simning. Relevant styrka, core, löpstyrka och plyometri. Flexibilitet att senare vässa mot trail/ultra, triathlon, swimrun eller cykling.",
+    "goal_contract": {
+      "source_file": "data/goal.json",
+      "source_schema_version": 2,
+      "goal_hash": "1162c643157c11ee354e73acb1cf94254611e8e8a7fd64d2c11d5140ef954569",
+      "goal_change_requires_mesocycle_review": true,
+      "principle": "Målbilden är kanonisk. Om den ändras måste aktuell mesocykel omprövas innan systemet fortsätter."
+    },
+    "current_priorities": [
+      {
+        "key": "run",
+        "label": "Löpning",
+        "mode": "develop",
+        "priority": 1,
+        "intent": "Utveckla fart, kontrollerad tröskel, löpekonomi och hållbar distanskapacitet."
+      },
+      {
+        "key": "mtb",
+        "label": "MTB/XC",
+        "mode": "develop",
+        "priority": 2,
+        "intent": "Utveckla teknisk fart, flyt på stig och cykelspecifik aerob kapacitet."
+      },
+      {
+        "key": "strength",
+        "label": "Styrka / core / plyo",
+        "mode": "develop",
+        "priority": 3,
+        "intent": "Bygg relevant unilateral benstyrka, höftstyrka, bålkapacitet och försiktig plyometrisk exponering."
+      },
+      {
+        "key": "swim",
+        "label": "Simning",
+        "mode": "maintain_develop",
+        "priority": 4,
+        "intent": "Bibehåll stark simkapacitet och utveckla teknik med normalt två simexponeringar per mikrocykel när de är absorberbara, utan att konkurrera onödigt med prioriterad löp- och MTB-belastning."
+      }
+    ],
+    "capability_portfolio": [
+      {
+        "key": "run_threshold",
+        "label": "Kontrollerad löptröskel",
+        "mode": "develop",
+        "priority": 1
+      },
+      {
+        "key": "run_hill_quality",
+        "label": "Backstyrka / löpekonomi",
+        "mode": "develop",
+        "priority": 1
+      },
+      {
+        "key": "run_easy_distance",
+        "label": "Lugn löpdistans / tålighet",
+        "mode": "develop",
+        "priority": 1
+      },
+      {
+        "key": "mtb_technical",
+        "label": "MTB teknisk fart",
+        "mode": "develop",
+        "priority": 2
+      },
+      {
+        "key": "mtb_aerobic",
+        "label": "MTB/XC aerob kapacitet",
+        "mode": "develop",
+        "priority": 2
+      },
+      {
+        "key": "strength_unilateral",
+        "label": "Unilateral benstyrka",
+        "mode": "develop",
+        "priority": 3
+      },
+      {
+        "key": "strength_core",
+        "label": "Core",
+        "mode": "maintain_develop",
+        "priority": 3
+      },
+      {
+        "key": "plyometric",
+        "label": "Plyometrisk exponering",
+        "mode": "develop_cautiously",
+        "priority": 3
+      },
+      {
+        "key": "swim_aerobic",
+        "label": "Sim aerob kapacitet",
+        "mode": "maintain_develop",
+        "priority": 4
+      },
+      {
+        "key": "swim_technique",
+        "label": "Simteknik",
+        "mode": "maintain_develop",
+        "priority": 4
+      },
+      {
+        "key": "enduro_technical",
+        "label": "Enduroteknik",
+        "mode": "supporting",
+        "priority": 5
+      }
+    ],
+    "strategic_readiness": [
+      {
+        "key": "trail_ultra",
+        "label": "Trail / ultra",
+        "state": "keep_option_open"
+      },
+      {
+        "key": "bike_race",
+        "label": "Cykellopp",
+        "state": "keep_option_open"
+      },
+      {
+        "key": "swimrun",
+        "label": "Swimrun",
+        "state": "keep_option_open"
+      },
+      {
+        "key": "triathlon",
+        "label": "Triathlon",
+        "state": "keep_option_open"
+      }
+    ],
+    "decision_policy": {
+      "horizon_days": 3,
+      "default_action": "keep",
+      "free_day_is_not_training_reason": true,
+      "defer_open_dose_until_near_load_known": false,
+      "prioritize_continuity_over_max_content": true,
+      "long_term_goal_is_primary": true,
+      "near_term_changes_must_serve_long_term_direction": true,
+      "protect_mesocycle_stimuli_before_optional_training": true,
+      "same_day_open_dose_must_resolve_or_review": true,
+      "concrete_near_term_plan_by_default": true,
+      "adjust_planned_session_only_when_new_evidence_justifies": true,
+      "normal_variation_is_absorbed_by_plan": true,
+      "multi_day_context_required": true,
+      "development_goal_requires_progression": true,
+      "development_hold_or_regression_requires_reason": true,
+      "maintenance_repeat_is_separate_mode": true
+    },
+    "planning_hierarchy": {
+      "order": [
+        "north_star",
+        "mesocycle",
+        "microcycle",
+        "near_term",
+        "session"
+      ],
+      "north_star_role": "Den långsiktiga målbilden är överordnad och anger vilken atlet och vilka förmågor träningen ska utveckla över tid.",
+      "mesocycle_role": "Mesocykeln väljer ett avgränsat flerveckors utvecklingsfokus som för målbilden framåt och anger vilka stimuli som ska skyddas, stödjas och utvärderas.",
+      "microcycle_role": "Mikrocykeln är den korta operativa träningscykeln. Den organiserar mesocykelns stimuli till en absorberbar följd av konkreta grundpass som kan justeras när faktisk belastning, återhämtning eller fasta åtaganden ger sakliga skäl.",
+      "near_term_role": "De närmaste 2–3 dagarna ska normalt vara konkreta. Faktisk belastning, återhämtning, fasta åtaganden och andra rådande omständigheter används som kontrollpunkter för att behålla, minska, flytta eller ta bort ett redan planerat pass.",
+      "session_role": "Det enskilda passet verkställer ett definierat stimulus eller en uttryckligen stödjande/rekreativ roll inom mikrocykeln.",
+      "calendar_role": "Kalenderveckan är ett presentations- och navigeringslager. I nuvarande implementation är mikrocykeln sju dagar och visas måndag–söndag, men veckan är inte en egen planeringsnivå.",
+      "adaptation_rule": "När målbilden ändras ska mesocykeln omprövas. När närtidens omständigheter ändras ska mikrocykeln och enskilda pass justeras från en konkret grundplan, medan relevanta utvecklingsstimuli bevaras, flyttas eller återtas när det är absorberbart och fortfarande tjänar målbilden."
+    },
+    "load_model": {
+      "lookback_days": 3,
+      "lookahead_days": 3,
+      "dimensions": [
+        {
+          "key": "cardiovascular",
+          "label": "Kardiovaskulär",
+          "principle": "Bedöm från faktisk varaktighet/intensitetsdata och relevant subjektiv rapport; hitta inte på en nivå."
+        },
+        {
+          "key": "mechanical",
+          "label": "Mekanisk/muskulär",
+          "principle": "Bedöm främst från gren, struktur, terräng/styrkeinnehåll och lokal trötthet när den finns; puls ensam räcker inte."
+        },
+        {
+          "key": "neuromuscular",
+          "label": "Neuromuskulär",
+          "principle": "Beakta sprint, backkraft, teknisk fart, styrka och plyometri utan att översätta dem till ett ogrundat totalscore."
+        },
+        {
+          "key": "technical",
+          "label": "Teknisk",
+          "principle": "Beakta färdighetskrav i MTB, enduro och simning separat från metabol belastning."
+        }
+      ],
+      "rules": [
+        "Beslut ska väga samman föregående tre och kommande tre kalenderdagar när data finns, inte bara senaste passet.",
+        "Ingen syntetisk totalsiffra för belastning används utan validerad individuell modell.",
+        "Normal variation i ett enskilt pass ska normalt absorberas av grundplanen.",
+        "Planen ändras först när flera relevanta observationer eller en tydlig avvikelse ger sakliga skäl.",
+        "Enduro får inte ges en schablonmässig belastningsnivå; faktisk varaktighet, relevant intensitetsdata och användarrapport styr."
+      ]
+    },
+    "performance_marker_policy": {
+      "prefer_embedded_markers": true,
+      "standalone_max_tests_required": false,
+      "evaluate_at_mesocycle_review": true,
+      "comparison_requires_comparable_context": true,
+      "principle": "Prestationsutveckling följs främst genom återkommande jämförbara pass som redan hör hemma i träningen. Testpass läggs inte till enbart för mätning om samma information kan fås med lägre kostnad.",
+      "markers": [
+        {
+          "id": "run-threshold-control",
+          "capability": "run_threshold",
+          "source": "embedded_session",
+          "compare_when": "Samma eller tydligt jämförbar tröskelstruktur genomförs under kontrollerade förhållanden.",
+          "metrics": [
+            "fart/tempo när jämförbart",
+            "puls när tillförlitlig",
+            "subjektiv kontroll när rapporterad",
+            "genomförd arbetstid"
+          ],
+          "interpretation": "Förbättring kräver samstämmig eller åtminstone icke-konflikterande utveckling; en enskild snabbare dag räcker inte."
+        },
+        {
+          "id": "run-hill-mechanics",
+          "capability": "run_hill_quality",
+          "source": "embedded_session",
+          "compare_when": "Samma backe eller tydligt jämförbara repetitioner finns.",
+          "metrics": [
+            "repetitionstid när jämförbar",
+            "bibehållen mekanik enligt rapport",
+            "antal kvalitativa repetitioner"
+          ],
+          "interpretation": "Mer volym eller fart är inte framsteg om mekaniken försämras eller återhämtningskostnaden blir oproportionerlig."
+        },
+        {
+          "id": "mtb-technical-repeat",
+          "capability": "mtb_technical",
+          "source": "embedded_session",
+          "compare_when": "Samma tekniska slinga eller segment uttryckligen finns i data och förhållandena är rimligt jämförbara.",
+          "metrics": [
+            "segment-/slingtid",
+            "flyt/teknisk kontroll när rapporterad",
+            "antal tydliga misstag när rapporterat"
+          ],
+          "interpretation": "Teknisk utveckling ska inte reduceras till puls eller totaldistans."
+        },
+        {
+          "id": "strength-repeatability",
+          "capability": "strength_unilateral",
+          "source": "embedded_session",
+          "compare_when": "Samma huvudövning återkommer och belastning/repetitioner faktiskt är loggade.",
+          "metrics": [
+            "belastning",
+            "repetitioner",
+            "teknisk kvalitet när rapporterad"
+          ],
+          "interpretation": "Styrkeutveckling bedöms från jämförbara lyft, inte från puls eller kalorier."
+        }
+      ]
+    }
+  },
+  "mesocycle_policy": {
+    "min_weeks": 3,
+    "max_weeks": 5,
+    "primary_capability_min": 1,
+    "primary_capability_max": 3,
+    "require_goal_contribution": true,
+    "require_evidence_for_focus": true,
+    "require_review_on_expiry": true,
+    "allowed_decisions": [
+      "continue",
+      "modify",
+      "shift"
+    ],
+    "principle": "Mesocykeln är ett genererat beslut utifrån målbild, demonstrerad kapacitet, faktisk belastning och blockrespons. Föregående veckomall är inte beslutsunderlag i sig."
+  },
+  "microcycle_policy": {
+    "length_days": 7,
+    "calendar_alignment": "monday_sunday",
+    "normal_swim_exposures": 2,
+    "protect_strength_core_each_microcycle": true,
+    "max_run_quality_exposures": 2,
+    "preserve_stimulus_before_exact_session": true,
+    "progression_actions": [
+      "establish",
+      "progress",
+      "consolidate",
+      "reduce"
+    ],
+    "principle": "Mikrocykeln komponeras från mesocykelns kapacitetskrav och aktuell belastning. Ledig kalenderdag är aldrig ett eget skäl att lägga till träning."
+  },
+  "decision_guards": [
+    "Ingen progression får motiveras enbart av wellness eller träningsberedskap.",
+    "Faktisk belastning föregående och kommande 2–3 dagar ska beaktas innan pass flyttas, läggs till eller görs hårdare.",
+    "Enduro är faktisk träningsbelastning och får ersätta annan träning.",
+    "Saknad evidens ska ge osäkerhet eller konservativt beslut, inte påhittade värden.",
+    "Utvecklingspass ska progressa, konsolideras, reduceras eller bytas med explicit skäl; de får inte upprepas mekaniskt."
+  ],
+  "migration_seed": {
+    "previous_mesocycle_id": "run-threshold-hill-4w",
+    "previous_mesocycle_end_date": "2026-09-20"
+  }
+}
