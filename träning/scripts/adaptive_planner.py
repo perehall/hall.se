@@ -1635,6 +1635,15 @@ def materialize_strategy(goal, policy, meso, micro, catalog, athlete_state):
         x for x in FIXED_PROTECTED_CAPACITY
         if x in contract["protected_capacity"]
     ]
+    completed_context = micro.get("completed_microcycle_context") or {}
+    completed_capabilities = []
+    if int(completed_context.get("strength_exposures") or 0) > 0:
+        completed_capabilities.extend(["strength_unilateral", "strength_core"])
+    if int(completed_context.get("swim_exposures") or 0) > 0:
+        completed_capabilities.extend(["swim_aerobic", "swim_technique"])
+    if int(completed_context.get("enduro_exposures") or 0) > 0:
+        completed_capabilities.append("enduro_technical")
+    completed_capabilities = list(dict.fromkeys(completed_capabilities))
 
     strategy["current_mesocycle"] = {
         "id": meso["id"],
@@ -1654,6 +1663,8 @@ def materialize_strategy(goal, policy, meso, micro, catalog, athlete_state):
         "capacity_protection": {
             "required_each_microcycle": required_each,
             "protected_across_mesocycle": protected_across,
+            "completed_current_microcycle": completed_capabilities,
+            "completed_context": deepcopy(completed_context),
             "missing_required_action": "review_and_restore_in_next_absorbable_window",
             "rules": [
                 "Simning och styrka/core får inte försvinna som restpost när de är skyddad kapacitet.",
