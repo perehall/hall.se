@@ -72,6 +72,22 @@ REQUIRED_EACH_MICROCYCLE = (
 )
 EXTERNAL_LOAD_CAPABILITIES = ("enduro_technical",)
 
+# A capability may be important without being eligible as the primary development
+# target today. Primary status requires an executable direct recipe: the planner
+# must be able to turn the strategic choice into an inspectable workout without
+# inventing missing sets/reps/load. Strength/plyometry stay protected capacity
+# until that executable prescription layer exists.
+PRIMARY_CAPABILITIES_WITH_EXECUTABLE_RECIPES = {
+    "run_threshold",
+    "run_hill_quality",
+    "run_easy_distance",
+    "mtb_technical",
+    "mtb_aerobic",
+    "swim_aerobic",
+    "swim_technique",
+}
+SUPPORT_ONLY_RECIPES = {"swim_strength"}
+
 
 def load_json(path: Path, fallback):
     if not path.exists():
@@ -209,6 +225,13 @@ def call_structured(system_prompt, payload, schema, name, *, request_fn=None):
 
 def mesocycle_schema(capabilities):
     cap = {"type": "string", "enum": capabilities}
+    primary_cap = {
+        "type": "string",
+        "enum": [
+            key for key in capabilities
+            if key in PRIMARY_CAPABILITIES_WITH_EXECUTABLE_RECIPES
+        ],
+    }
     return {
         "type": "object",
         "additionalProperties": False,
@@ -219,7 +242,7 @@ def mesocycle_schema(capabilities):
             "goal_contribution": {"type": "string"},
             "hypothesis": {"type": "string"},
             "primary_capabilities": {
-                "type": "array", "minItems": 1, "maxItems": 3, "uniqueItems": True, "items": cap
+                "type": "array", "minItems": 1, "maxItems": 3, "uniqueItems": True, "items": primary_cap
             },
             "secondary_capabilities": {
                 "type": "array", "maxItems": 4, "uniqueItems": True, "items": cap
@@ -329,8 +352,9 @@ def fallback_mesocycle(goal, policy, previous):
             candidate = "mtb_technical"
         elif "distans" in lower and "löp" in lower:
             candidate = "run_easy_distance"
-        elif "sim" in lower:
-            candidate = "swim_technique"
+        # "Håll simningen frekvent och teknisk" is a protection/maintenance
+        # instruction in the current goal, not by itself evidence that swimming
+        # should displace a development focus in the next mesocycle.
         if candidate and candidate not in primary:
             primary.append(candidate)
             refs.append(f"goal.next_steps[{index}]")
@@ -440,10 +464,23 @@ def generate_mesocycle(goal, policy, athlete_state, previous, target_start, *, r
         result.setdefault("uncertainties", []).append(str(exc)[:400])
 
     allowed = set(caps)
+    eligible_primary = allowed.intersection(PRIMARY_CAPABILITIES_WITH_EXECUTABLE_RECIPES)
+    requested_primary = list(result.get("primary_capabilities") or [])
     primary = []
-    for key in result.get("primary_capabilities") or []:
-        if key in allowed and key not in primary:
+    for key in requested_primary:
+        if key in eligible_primary and key not in primary:
             primary.append(key)
+    rejected_primary = [
+        key for key in requested_primary
+        if key in allowed and key not in eligible_primary
+    ]
+    if rejected_primary:
+        result.setdefault("uncertainties", []).append(
+            "Följande kapaciteter valdes inte som primärt utvecklingsmål eftersom "
+            "systemet ännu saknar ett fullständigt exekverbart direktrecept: "
+            + ", ".join(rejected_primary)
+            + ". De kan fortfarande skyddas eller ligga sekundärt."
+        )
     primary = primary[: int(policy["mesocycle_policy"].get("primary_capability_max", 3))]
     if not primary:
         fallback = fallback_mesocycle(goal, policy, previous)
@@ -565,7 +602,9 @@ def validate_and_normalize_micro(result, meso, policy, catalog, target_start):
         if action not in {"establish", "progress", "consolidate", "reduce"}:
             action = "consolidate"
         caps = recipe_capabilities(recipes[recipe_key])
-        if action == "progress" and not caps.intersection(primaries):
+        if action == "progress" and (
+            not caps.intersection(primaries) or recipe_key in SUPPORT_ONLY_RECIPES
+        ):
             action = "consolidate"
         cleaned.append(
             {
@@ -579,12 +618,15 @@ def validate_and_normalize_micro(result, meso, policy, catalog, target_start):
         seen_days.add(day)
 
     used_caps = set()
+    direct_primary_caps = set()
     swim_exposures = 0
     strength_exposures = 0
     run_quality = 0
     for row in cleaned:
         caps = recipe_capabilities(recipes[row["recipe_key"]])
         used_caps |= caps
+        if row["recipe_key"] not in SUPPORT_ONLY_RECIPES:
+            direct_primary_caps |= caps
         if "swim_aerobic" in caps:
             swim_exposures += 1
         if "strength_core" in caps:
@@ -594,7 +636,7 @@ def validate_and_normalize_micro(result, meso, policy, catalog, target_start):
 
     required_swims = int(policy["microcycle_policy"].get("normal_swim_exposures", 2))
     valid = (
-        primaries.issubset(used_caps)
+        primaries.issubset(direct_primary_caps)
         and swim_exposures >= required_swims
         and (not policy["microcycle_policy"].get("protect_strength_core_each_microcycle") or strength_exposures >= 1)
         and run_quality <= int(policy["microcycle_policy"].get("max_run_quality_exposures", 2))
@@ -805,7 +847,9 @@ def materialize_template(meso, micro, policy, catalog, athlete_state):
             recipe_key, recipe, decision["action"], athlete_state
         )
 
-        if caps.intersection(primary):
+        if recipe_key in SUPPORT_ONLY_RECIPES:
+            role = "protected_support"
+        elif caps.intersection(primary):
             role = "anchor"
         elif caps.intersection(protected):
             role = "protected_support"
