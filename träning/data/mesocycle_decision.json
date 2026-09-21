@@ -1,79 +1,77 @@
 {
-  "decision": "modify",
-  "title": "Modifierad byggcykel — höjd simprioritet, behåll löptröskel, minska MTB-duration",
+  "decision": "continue",
+  "title": "Fortsatt modifierad byggcykel — höjd simprioritet, bibehållen kontrollerad löptröskel",
   "duration_weeks": 4,
-  "goal_contribution": "Ökar swimrun-specifik kapacitet genom prioriterad utveckling av simning (aerobitet + teknik) samtidigt som löptröskel och långdistans-tålighet bibehålls; MTB-duration reduceras för att undvika att enduro belastar bort nyckelstimuli.",
-  "hypothesis": "Atleten har upprepade, absorberbara löpkvaliteter och regelbunden simfrekvens (7 sessioner, upp till 4 000 m). Genom att byta ett MTB-primärt fokus mot simutveckling kan simkapaciteten förbättras utan att äventyra löputveckling, förutsatt att enduro-belastning kontrolleras och minst en styrke/core-session per mikrocykel bibehålls. Osäkerhet kring subjektiv återhämtning och framtida enduro-schema gör progression konservativ.",
+  "goal_contribution": "Bygger swimrun-relevant aerob simkapacitet och simteknik samtidigt som kontrollerad löptröskel och löptålighet bibehålls; stärker basen för senare swimrun-specifik kombinationstålighet mot ÖTILLÖ Åland 2027.",
+  "hypothesis": "Atleten visar upprepade absorberbara löpkvaliteter (tröskel och backserier) och regelbunden simfrekvens (7 pass, upp till 4 000 m). Genom att prioritera swim_aerobic + swim_technique och göra en konservativ tröskelprogression kan simkapaciteten förbättras utan att äventyra löputveckling, förutsatt att enduro-belastning kontrolleras och minst en styrke/core-session per mikrocykel dokumenteras. Osäkerhet kring subjektiv återhämtning och framtida enduro-schema motiverar konservativ progression.",
   "primary_capabilities": [
-    "run_threshold",
     "swim_aerobic",
-    "swim_technique"
+    "swim_technique",
+    "run_threshold"
   ],
   "secondary_capabilities": [
-    "run_easy_distance",
     "run_hill_quality",
-    "mtb_technical",
-    "mtb_aerobic"
+    "run_easy_distance",
+    "mtb_technical"
   ],
   "progression_axes": [
     {
       "capability": "run_threshold",
       "axis": "work_duration",
-      "objective": "Konservativ ökning av total arbetstid per session (t.ex. steg om ~4–6 min totalt) med bibehållen kontrollerad intensitet; endast ett belastningsvariabeländring åt gången."
+      "objective": "Stegring av absorberbar arbetstid i kontrollerad tröskel (konservativt steg från nyligen upprepade 3×/4×8–9-min-strukturer). Öka endast om följande 2–3 dagars belastning stödjer det."
     },
     {
       "capability": "swim_aerobic",
-      "axis": "session_duration",
-      "objective": "Öka andelen längre kontinuerliga simset (progressivt längre set upp till och över 4 000 m) och befästa två simexponeringar per mikrocykel."
+      "axis": "frequency",
+      "objective": "Bibehåll minst 2 simexponeringar per mikrocykel; öka fokuserad aerob/byggande volym före ökning i intensitet."
     },
     {
       "capability": "swim_technique",
       "axis": "technical_quality",
-      "objective": "Prioritera tekniska set (drills, fokus på effektiv takt/andning) och strukturera minst en session per vecka med explicit teknikmål och mätbar kvalitetsindikator."
+      "objective": "Öka dedikerad teknisk reps/relation i simpassen (fler tekniksegment, riktade drills/inslag) och mätbar teknikkänsla varje pass."
     },
     {
-      "capability": "run_easy_distance",
-      "axis": "consistency",
-      "objective": "Behåll minst ett långt lugnt pass (~90–120 min alternativen beroende på närbelastning); undvik samtidigt ökningar i hastighet som konkurrerar med tröskelprogression."
+      "capability": "run_hill_quality",
+      "axis": "repetitions",
+      "objective": "Hålla backkvalitet som kompletterande stimulus; konsolidera nuvarande volymer (3×8-serier) före volymstegring."
     }
   ],
   "success_signals": [
-    "Upprepade kontrollerade tröskelpass genomförda utan oproportionerlig trötthet eller bortfall av skyddad styrka/simning.",
-    "Minst 2 simexponeringar per mikrocykel med en tydlig ökning i sammanhängande setlängd eller förbättrad teknikkänsla.",
-    "Minst en riktad styrke/core-session per mikrocykel dokumenterad.",
-    "Långdistanspass (~90–120 min) genomförs eller planerat reduceras utan försämring i löpkvalitet.",
-    "MTB-sessions kortare och teknikorienterade; tekniska kvalitetsmarkörer eller subjektiv flyt förbättras snarare än ökad duration."
+    "Kontinuerad genomförbarhet av kontrollerade tröskelpass (utan oproportionerlig trötthet eller bortfall av skyddad styrka/simning).",
+    "Minst 2 simexponeringar per mikrocykel med dokumenterad ökning i sammanhängande setlängd eller förbättrad teknikkänsla.",
+    "Minst en riktad styrke/core-session per mikrocykel dokumenterad och genomförd med acceptabel återhämtning.",
+    "Långt lugnt löppass (~90–120 min) genomfört eller planerat reducerat utan försämring i efterföljande löpkvalitet.",
+    "MTB-sessioner reducerade i duration och fokuserade på teknik, utan att tränga undan de primära sim-/löpkvaliteterna."
   ],
   "guardrails": [
-    "Ingen progression motiveras enbart av wellness eller träningsberedskap.",
-    "Beakta faktisk belastning föregående och kommande 2–3 dagar innan ändring av nyckelpass.",
-    "Enduro räknas som faktisk extern belastning och kan kräva reduktion eller omlokalisering av andra benbelastande pass.",
+    "Ingen progression får motiveras enbart av wellness eller träningsberedskap.",
+    "Beakta faktisk belastning föregående och kommande 2–3 dagar innan ökning eller flytt av nyckelpass.",
+    "Enduro räknas som faktisk extern belastning och får ersätta eller kräva reducering av andra benbelastande pass.",
     "Säkerställ minst en styrke/core-session per mikrocykel; utebliven styrka kräver review och återställning i nästa absorberbara fönster.",
-    "Ändra inte flera belastningsvariabler samtidigt (t.ex. öka arbetstid och intensitet i samma steg).",
-    "Plyometri genomförs sparsamt och bara när den kan absorberas utan konflikt med löpkvalitet.",
-    "Missad skyddad stimuli kräver explicit review och plan för återställning."
+    "Ändra högst en belastningsvariabel åt gången (t.ex. arbetstid eller frekvens).",
+    "Missad skyddad stimulus kräver explicit review och plan för återställning."
   ],
   "evidence_refs": [
-    "athlete_state.capability_facts.run_threshold — dokumenterade 3×8 och 4×8 tröskelpass (aktivitet 20092166843, 2026-09-08).",
-    "athlete_state.capability_facts.swim_aerobic — 7 simsessioner i faktavyn, längst 4 000 m (aktivitet 19946705399, 2026-08-29).",
-    "athlete_state.capability_facts.run_easy_distance — långpass 22 463 m / ~120 min (aktivitet 20254486837, 2026-09-20).",
-    "athlete_state.recent_sessions — frekvent enduro/MTB-duration (flera pass >2 h, t.ex. aktivitet 20144331562 13 578 s, 2026-09-12) som faktiskt påverkar veckans benbelastning.",
-    "athlete_state.capability_facts.mtb_technical — regelbundna tekniska MTB-pass (session_count 6) men flera långa enduro-pass noterade."
+    "activity_id:19946705399 (Swim 4 000 m · 2026-08-29) — swim_aerobic/swim_threshold faktum",
+    "activity_id:20092166843 (Run 4×8 min tempo · 2026-09-08) — run_threshold repetition",
+    "activity_id:20229568713 (3×8 backintervaller · 2026-09-18) — run_hill_quality volym",
+    "activity_id:20144331562 (Enduro 13 578 s, 2026-09-12) — betydande extern enduro-belastning",
+    "activity_id:20175536586 & 20079150228 (styrkepass 2026-09-14 & 2026-09-07) — styrka dokumenterad men sporadisk"
   ],
   "uncertainties": [
-    "Subjektiv återhämtning/sömn och daglig beredskap saknas i faktaunderlaget — påverkar absorberbar progression.",
-    "Framtida schemaläggning och frekvens av stora enduro-pass är okänd och kan tvinga till reduktion av benbelastande stimuli.",
-    "Detaljer om simintensitetsstyrning (zonindelning) saknas — kräver konservativ teknisk/aerob progress.",
-    "Styrke/core-sessioner har ibland uteblivit i registreringar; konsekvent genomförande måste säkerställas för att behålla skyddad kapacitet."
+    "Subjektiv återhämtning/sömn och daglig RPE saknas och begränsar bedömning av absorberbar progression.",
+    "Framtida planerade enduro-/ride-pass är osäkra i timing och intensitet — kan kräva justering av tröskel- eller plyometribesked.",
+    "Detaljerad intensitetsfördelning i enduro- och vissa simpassen saknas (svårt att kvantifiera mekanisk/neuromuskulär kostnad).",
+    "Kapaciteter med hårt skyddskrav flyttades från secondary till protected_capacity: strength_core. De ska finnas kvar varje mikrocykel men får inte byta semantisk roll bara för att modellen placerar dem sekundärt."
   ],
   "schema_version": 1,
   "planner_revision": 3,
   "source": "openai",
-  "source_hash": "0d1649d0c5248b7d0331a1cdc2bcfceeeb08ff409314cc2fb9c5890c1b0cfb7f",
-  "generated_at_utc": "2026-09-21T09:20:17.389295+00:00",
+  "source_hash": "cd1d0a2b44bc720a5cd28770827b8bbbb070f177c608609c9d8c38adf748d2e8",
+  "generated_at_utc": "2026-09-21T09:35:39.939269+00:00",
   "goal_hash": "3358aa13fbb7f177d72f0014b1e338c40098f15c09bfdf3254de142ce22c002c",
-  "start_date": "2026-09-28",
-  "end_date": "2026-10-25",
-  "evaluation_date": "2026-10-26",
-  "id": "20260928-run_threshold-swim_aerobic-swim_technique"
+  "start_date": "2026-09-21",
+  "end_date": "2026-10-18",
+  "evaluation_date": "2026-10-19",
+  "id": "20260921-swim_aerobic-swim_technique-run_threshold"
 }

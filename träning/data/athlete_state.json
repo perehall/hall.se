@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at_utc": "2026-09-21T09:19:53.219547+00:00",
+  "generated_at_utc": "2026-09-21T09:35:11.933297+00:00",
   "fact_window": {
     "start": "2026-07-28",
     "end": "2026-09-21",
@@ -443,6 +443,19 @@
         "distance_m": 4000
       },
       "session_count": 7
+    },
+    "swim_threshold": {
+      "evidence": [
+        {
+          "capability": "swim_threshold",
+          "kind": "explicit_user_report",
+          "protocol": "aerob+threshold",
+          "distance_m": 4000,
+          "text": "Spontant simpass: Aerob+tröskel 4K, 4 000 m. Passet är separat från dagens planerade MTB-pass och ska räknas som faktisk träningsbelastning, inte som genomförande av dagens plan.",
+          "activity_id": 19946705399,
+          "date": "2026-08-29"
+        }
+      ]
     },
     "mtb_technical": {
       "longest_duration": {
