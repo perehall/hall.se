@@ -4,7 +4,7 @@
       "activity_id": 20272196080,
       "activity_date": "2026-09-21",
       "activity_name": "Styrketräning på kvällen",
-      "generated_at_utc": "2026-09-22T13:56:20.115672+00:00",
+      "generated_at_utc": "2026-09-22T16:58:34.752979+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 3,
@@ -16,27 +16,27 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Lätt styrkepass (33,6 min) rapporterat RPE 2/10–4/10 och registrerad puls låg (avg 79, max 128); genomfört samma dag som ett 5809 s enduropass.",
-        "load_interpretation": "Samma-dag Enduro + styrka ökar mekanisk/neuromuskulär närbelastning jämfört med ursprunglig plan; sim/styrkedosen reducerades tidigare av automatik.",
+        "summary": "Genomfört styrkepass (33,6 min) rapporterat RPE 2/10, pigg; låg Kardiovaskulär belastning (avg HR 79) och inga problem rapporterade.",
+        "load_interpretation": "Passet bidrar som skyddad styrka/core utan att kräva ändring i kommande 48–72 timmar.",
         "confidence": "medium",
         "facts": [
           "WeightTraining: 33:34 · snittpuls 79,3 · maxpuls 128.",
           "Användarrapport: RPE 2/10. Känsla: Pigg. Palloff press, latsdrag, bulgarian splits, atomic pushups med band, bänkrodd, dead bug, omvänd planka RPE 4/10."
         ],
         "interpretations": [
-          "Passet visar låg subjektiv och objektiv kostnad — genomförbart men bidrar till ökad mekanisk/neuromuskulär närbelastning efter Enduro samma dag.",
-          "För mikrocykeln betyder detta att auto‑reduktionen av styrkedosen (det valda passalternativet) var lämplig; ingen ytterligare nedskalning krävs i närtid."
+          "Styrkepasset var lätt till måttligt och uppfyller mikrocykelns krav på en styrka/core-session utan att öka benbelastning.",
+          "Ingen indikation i data eller användarrapport på att nästa planerade simning/styrka måste reduceras eller flyttas."
         ],
         "unknowns": [
-          "Om du upplever lokal muskelömhet senare 24–72 h efter passen.",
-          "Eventuella kvarstående planer eller fasta åtaganden som påverkar återhämtning i morgon."
+          "Subjektiv muskelsmärta eller fördröjd trötthet senare än samma dag.",
+          "Planerad sim+styrka nästa dag — exakt återhämtningskänsla morgonen efter."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-09-22",
-        "reason": "Passet tolererades väl enligt användarrapport och mätdata; redan applicerad konservativ dosreduktion skyddar nästa nyckelpass.",
-        "recommendation": "Följ dagens reviderade plan (det valda passalternativet) utan ytterligare ändring; prioritera vila/sömnhygien och lätt mobilitet i morgon. Om du känner ökad lokal trötthet eller smärta: vila helt och markera för review.",
+        "reason": "Passet var lätt, användarrapport pigg och uppfyller krav på skyddad styrka/core; planens sim+styrka kan genomföras som planerat.",
+        "recommendation": "Följ plan för 2026-09-22 (Simning 3 200 m + styrka/core enligt mall). Behåll normal styrkedos (det valda passalternativet).",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -1210,8 +1210,8 @@
       }
     }
   ],
-  "last_trigger_hash": "551dc937c8451765c9f4fa87930d99925090ad9d0d4b1ffc50fabc55522fd167",
-  "last_run_utc": "2026-09-22T13:56:20.115672+00:00",
+  "last_trigger_hash": "5503021b8748c8b46c897a8869018ae8ba011dc835e097ad6fc21e7398105729",
+  "last_run_utc": "2026-09-22T16:58:34.752979+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 3

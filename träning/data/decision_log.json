@@ -208,6 +208,22 @@
       "source_hash": "44613b31767abf22d805b9c492fcfa0393a55076224d3166785110487d1f628b",
       "generated_at_utc": "2026-09-22T13:56:08.545873+00:00",
       "summary": "Bevarar mesocykelns prioritering (sim aerob + teknik och kontrollerad tröskel) samtidigt som styrka/core skyddas och dag 2 hålls låg benbelastning efter fast enduro dag 1. Fyra slots valda för att uppfylla hårdkrav (minst 2 sim, styrka/core, max 2 löpkvaliteter) och lämna minst en vilodag."
+    },
+    {
+      "kind": "mesocycle",
+      "decision_id": "20260921-swim_aerobic-swim_technique-run_threshold",
+      "source": "openai",
+      "source_hash": "a8b5f8c55f665c67c8e4a949cf2aeb645712cef12ae5e5f25bb80cb04ccb4da4",
+      "generated_at_utc": "2026-09-22T16:57:18.179931+00:00",
+      "summary": "Fortsatt byggblock — prioritet sim + kontrollerad löptröskel"
+    },
+    {
+      "kind": "microcycle",
+      "decision_id": "2026-W39",
+      "source": "openai_repaired",
+      "source_hash": "6ec1d9e9bccabfcc62f809d06c6410fb97cfc6de6d240a41f3fb6b72906df862",
+      "generated_at_utc": "2026-09-22T16:58:24.591415+00:00",
+      "summary": "Avlägsnade planerat mtb_technical på dag 1 eftersom dag 1 är faktiskt blockerad av fast endurobelastning. Behåller swim+styrka dag 2 för låg benbelastning, gör endast en primär progression (swim), konsoliderar tröskel och etablerar långt lugnt löppass. Uppfyller alla hard_requirements (2 simexponeringar, minst 1 styrka/core, max 2 löpkvaliteter, minst 4 slots, dag utan träning)."
     }
   ]
 }
