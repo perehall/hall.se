@@ -12,6 +12,18 @@ from finalize_completed_day_summary_ui import simplify_completed_days  # noqa: E
 class CompletedDaySummaryUiTests(unittest.TestCase):
     def page(self):
         return """<html><head><style></style></head><body>
+<!-- training-input-ui-v1:start -->
+<section class="training-input" data-training-input data-activity-id="1" data-reviewed="true" data-processed-event-keys="training-input:aaaaaaaaaaaaaaaaaaaaaaaa">
+  <div class="training-input-compact"><div><div class="training-input-summary">Sparat · RPE 2 · Pigg</div></div><button type="button" class="training-input-toggle" data-training-input-toggle>Ändra</button></div>
+  <div class="training-input-editor" data-training-input-editor hidden><button type="button" data-training-input-save>Spara</button></div>
+</section>
+<!-- training-input-ui-v1:end -->
+<!-- training-input-ui-v1:start -->
+<section class="training-input" data-training-input data-activity-id="2" data-reviewed="true" data-processed-event-keys="training-input:bbbbbbbbbbbbbbbbbbbbbbbb">
+  <div class="training-input-compact"><div><div class="training-input-summary">Sparat · RPE 4 · Pigg</div></div><button type="button" class="training-input-toggle" data-training-input-toggle>Ändra</button></div>
+  <div class="training-input-editor" data-training-input-editor hidden><button type="button" data-training-input-save>Spara</button></div>
+</section>
+<!-- training-input-ui-v1:end -->
 <div class="day past-exception workout-card-v2" id="dag-2026-09-21">
   <div class="daytop"><div class="day-date-line"><span class="dow">Måndag</span><span class="date">21 sep</span></div><div class="badge fixed">Aktuell plan</div></div>
   <div class="session"><span class="session-text"><strong class="session-title">Enduroskola</strong><span class="session-meta">fast tillfälle</span></span></div>
@@ -85,6 +97,14 @@ class CompletedDaySummaryUiTests(unittest.TestCase):
         self.assertIn('<span class="completed-day-label">Din känsla</span>', rendered)
         self.assertIn("<strong>Enduro</strong><span> · RPE 4 · Pigg</span>", rendered)
         self.assertIn("<strong>Styrka</strong><span> · RPE 2 · Pigg</span>", rendered)
+        self.assertIn('data-feedback-activity-id="2"', rendered)
+        self.assertIn('data-feedback-activity-id="1"', rendered)
+        self.assertIn('class="training-input completed-day-inline-input"', rendered)
+        self.assertEqual(rendered.count('data-training-input '), 2)
+        self.assertEqual(rendered.count(">Ändra</button>"), 2)
+
+        day_pos = rendered.index('id="dag-2026-09-21"')
+        self.assertNotIn("training-input-ui-v1:start", rendered[:day_pos])
 
         self.assertIn('<span class="completed-day-label">Nästa</span>', rendered)
         self.assertIn("Genomför tisdagens simning lugnt och kontrollerat.", rendered)
@@ -106,6 +126,23 @@ class CompletedDaySummaryUiTests(unittest.TestCase):
         )
         self.assertEqual(changed, 0)
         self.assertEqual(rendered, self.page())
+
+    def test_unreviewed_recent_activity_is_kept_inside_feeling_section(self):
+        page = self.page().replace(
+            'data-activity-id="2" data-reviewed="true"',
+            'data-activity-id="2" data-reviewed="false"',
+        )
+        overrides = self.overrides()
+        del overrides["overrides"]["2"]
+        rendered, changed = simplify_completed_days(
+            page, self.activities(), overrides, "2026-09-22"
+        )
+        self.assertEqual(changed, 1)
+        self.assertIn(
+            '<strong>Enduro</strong><span> · Inte utvärderat</span>',
+            rendered,
+        )
+        self.assertIn(">Ändra</button>", rendered)
 
 
 if __name__ == "__main__":
