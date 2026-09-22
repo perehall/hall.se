@@ -286,7 +286,10 @@ def simplify_completed_days(page: str, activities_state: dict, overrides: dict, 
         opening = block[: block.find(">") + 1]
         if "completed-day-simplified" not in opening:
             opening = opening.replace('class="day', 'class="day completed-day-simplified', 1)
-        new_block = opening + block[block.find(">") + 1:session_start] + summary + '</div>'
+        # Keep the original session node in the DOM so sport-icon/accessibility
+        # contracts remain true. CSS hides only this direct child in the compact
+        # completed state; the outcome summary becomes the visible hierarchy.
+        new_block = opening + block[block.find(">") + 1:session_end] + summary + '</div>'
         page = page[:start] + new_block + page[end:]
         changed += 1
 
