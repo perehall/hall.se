@@ -1,62 +1,52 @@
 {
-  "rationale": "Reparerar förslaget för att uppfylla hard_requirements och ta bort konfliktorsaker: minskar till 5 planerade slots, tar bort MTB för att undvika närhet till löpkvaliteter, lämnar dag 4 som vilodag (ingen plan), säkerställer två simexponeringar varav en kombinerad swim+styrka för styrka/core-kravet, och håller endast en progress för ett primärt stimulus (sim). Alla primära kapaciteter täcks direkt och löpkvaliteter ligger inte intill varandra eller intill MTB.",
+  "rationale": "Mikrocykeln skyddar dag1 (fast enduro), följer krav på två simexponeringar och minst en styrka/core-exponering (kombinerad via swim_strength), täcker alla primära kapaciteter (swim_aerobic + swim_technique, run_threshold) och håller max två löpkvaliteter. En kalenderdag (dag 4) lämnas vilande; dag 2 är låg benbelastning efter enduro. Endast en primär progression valdes (swim_aerobic_technique).",
   "slots": [
     {
       "day_index": 2,
-      "recipe_key": "swim_strength",
-      "action": "establish",
-      "rationale": "Dag efter faktiskt enduro kräver låg benbelastning; kombinerat sim+styrka uppfyller både normal simfrekvens och styrka/core-kravet utan extra benbelastning.",
+      "recipe_key": "swim_aerobic_technique",
+      "action": "progress",
+      "rationale": "Låg benbelastning dag efter enduro; höjer simprioritet och teknisk fokus enligt mesocykel (endast primär progression denna mikrocykel).",
       "evidence_refs": [
+        "19946705399",
         "20239623463",
-        "20175536586",
-        "19946705399"
+        "20203770266"
       ]
     },
     {
       "day_index": 3,
       "recipe_key": "run_threshold",
       "action": "consolidate",
-      "rationale": "Bibehåller mesocykelns kontrollerade tröskel (4×8-bas) utan progression nära enduro-belastning.",
+      "rationale": "Bibehåller kontrollerad tröskel (4×8-bas) utan progression; placerad så att det inte hamnar intill långt löppass eller MTB.",
       "evidence_refs": [
         "20092166843",
-        "20254486837"
+        "19897382163"
       ]
     },
     {
       "day_index": 5,
-      "recipe_key": "run_hill_quality",
+      "recipe_key": "run_easy_distance",
       "action": "consolidate",
-      "rationale": "En backkvalitet senare i veckan för neuromuskulär kraftutveckling; placerad efter en vilodag för att undvika löpkvaliteter i följd.",
+      "rationale": "Veckans långt lugnt pass för löptålighet (~90–120 min) placerat minst en dag från tröskel för att undvika två tunga löpdagar i följd.",
       "evidence_refs": [
-        "20229568713",
-        "20133500464"
+        "20254486837"
       ]
     },
     {
       "day_index": 6,
-      "recipe_key": "swim_aerobic_technique",
-      "action": "progress",
-      "rationale": "Progress för primärt simstimulus (aerob+teknik) stödd av upprepade långa simpass i faktalagret; endast ett primärt stimulus får progress.",
-      "evidence_refs": [
-        "19946705399",
-        "20203770266"
-      ]
-    },
-    {
-      "day_index": 7,
-      "recipe_key": "run_easy_distance",
+      "recipe_key": "swim_strength",
       "action": "establish",
-      "rationale": "Långt lugnt löppass för löptålighet avslutar veckan; placerat efter sim för mekanisk återhämtning och utan att skapa två löpkvaliteter i följd.",
+      "rationale": "Kombinerar andra simexponeringen med styrka/core för att uppfylla styrkekrav utan extra benkvalitetspass; placerad efter återhämtningsdag för bättre mekanisk kvalitet.",
       "evidence_refs": [
-        "20254486837"
+        "20239623463",
+        "20175536586"
       ]
     }
   ],
   "schema_version": 1,
   "planner_revision": 6,
-  "source": "openai_repaired",
+  "source": "openai",
   "source_hash": "f20ae90689f6f30228417d423c888e4b2a55a5afccc1098e36a2a6657ac7b229",
-  "generated_at_utc": "2026-09-22T08:33:00.364134+00:00",
+  "generated_at_utc": "2026-09-22T08:37:28.892471+00:00",
   "week_start": "2026-09-28",
   "week_key": "2026-W40",
   "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
@@ -130,14 +120,5 @@
       "391 höjdmeter ska vägas in, men systemet får inte hitta på en mer kuperad profil än den publicerade.",
       "Tävlingsdatumet styr när specificiteten ska omprövas; det får inte ensamt utlösa automatisk volym- eller intensitetsökning."
     ]
-  },
-  "guard_repair": {
-    "attempted": true,
-    "initial_failures": [
-      "för många giltiga träningsslots: 6 > 5",
-      "MTB/XC får inte ligga direkt intill löpkvalitet; sekundär cykelbelastning ska inte kompromissa primärt löpstimulus",
-      "mikrocykeln fyller alla sju dagar trots att ledig dag aldrig är ett eget skäl att lägga till träning"
-    ],
-    "result": "accepted"
   }
 }
