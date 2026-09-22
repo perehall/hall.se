@@ -4,7 +4,7 @@
   "week_start": "2026-09-21",
   "week_end": "2026-09-27",
   "created_at_utc": "2026-09-20T23:15:26.146433+00:00",
-  "updated_at_utc": "2026-09-21T21:23:39.902806+00:00",
+  "updated_at_utc": "2026-09-22T00:09:12.958468+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -157,8 +157,8 @@
       {
         "date": "2026-09-22",
         "label": "Tisdag",
-        "status": "preliminary",
-        "session": "Simning · 3 200 m · aerob/teknik + styrka/core · ca 35 min · styrkemall",
+        "status": "conditional",
+        "session": "Simning · 3 200 m · aerob/teknik + styrka/core · 25 min · styrkemall",
         "reason": "Dag efter fixed enduro kräver låg benbelastning — kombinerat sim-/styrkepass ger andra simexponeringen och uppfyller styrke/core-kravet utan separat benkvalitetspass. Valet utgår från ett observerat värde 36.0167 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
         "development_focus": "Andra simexponeringen hålls aerob/teknisk och kombineras med kontrollerad styrka/core för att skydda båda kapaciteterna utan ett extra benkvalitetspass.",
         "sport": "strength",
@@ -210,10 +210,13 @@
         "baseline_option_id": "swim-strength-35",
         "dose_open": false,
         "dose_resolution": {
-          "state": "baseline",
+          "state": "resolved",
           "kind": "structured",
-          "value": 35,
-          "option_id": "swim-strength-35"
+          "value": 25,
+          "source": "near_term_ai_revision",
+          "option_id": "swim-strength-25",
+          "basis": "Enduro + genomförd styrka samma dag ökar mekanisk/neuromuskulär närbelastning; conservativ reduktion skyddar ben inför mikrocykelns nyckelpass.",
+          "applied_at_utc": "2026-09-22T00:09:11.229810+00:00"
         },
         "watch_workout": {
           "sync_enabled": false,
@@ -329,173 +332,10 @@
           },
           "progression_from_previous": {
             "relation": "support",
-            "reason": "Normal kombinerad skyddsexponering.",
+            "reason": "Enduro + genomförd styrka samma dag ökar mekanisk/neuromuskulär närbelastning; conservativ reduktion skyddar ben inför mikrocykelns nyckelpass.",
             "demonstrated_floor_option_id": ""
           },
           "candidates": [
-            {
-              "id": "swim-strength-35",
-              "dose_option_id": "swim-strength-35",
-              "session": "Simning · 3 200 m · aerob/teknik + styrka/core · ca 35 min · styrkemall",
-              "intent": "Normal kombinerad skyddsexponering.",
-              "dose": {
-                "kind": "structured",
-                "value": 35
-              },
-              "stimuli": [
-                "swim_aerobic",
-                "swim_technique",
-                "strength_unilateral",
-                "strength_core"
-              ],
-              "prescription": {
-                "executable": true,
-                "completeness": "partial",
-                "blocks": [
-                  {
-                    "name": "Insim",
-                    "work": {
-                      "repetitions": 1,
-                      "distance_m": 400,
-                      "total_distance_m": 400
-                    },
-                    "instruction": "Lugn insim",
-                    "intensity": "warmup",
-                    "component": "swim"
-                  },
-                  {
-                    "name": "Kroppslinje och rotation",
-                    "work": {
-                      "repetitions": 6,
-                      "distance_m": 50,
-                      "total_distance_m": 300
-                    },
-                    "instruction": "Stabil linje, kontrollerad rotation",
-                    "intensity": "active",
-                    "recovery": {
-                      "duration_s": 15
-                    },
-                    "component": "swim"
-                  },
-                  {
-                    "name": "Aerob",
-                    "work": {
-                      "repetitions": 4,
-                      "distance_m": 500,
-                      "total_distance_m": 2000
-                    },
-                    "instruction": "Stadigt aerob med stabil kroppslinje",
-                    "intensity": "active",
-                    "recovery": {
-                      "duration_s": 30
-                    },
-                    "component": "swim"
-                  },
-                  {
-                    "name": "Frekvens",
-                    "work": {
-                      "repetitions": 6,
-                      "distance_m": 50,
-                      "total_distance_m": 300
-                    },
-                    "instruction": "Avslappnad frekvens med bibehållen linje",
-                    "intensity": "active",
-                    "recovery": {
-                      "duration_s": 15
-                    },
-                    "component": "swim"
-                  },
-                  {
-                    "name": "Nedvarvning",
-                    "work": {
-                      "repetitions": 1,
-                      "distance_m": 200,
-                      "total_distance_m": 200
-                    },
-                    "instruction": "Mycket lugnt",
-                    "intensity": "cooldown",
-                    "component": "swim"
-                  },
-                  {
-                    "name": "Tidsram",
-                    "work": {
-                      "duration_s": 2100
-                    },
-                    "instruction": "Styrka/core inom vald tidsram",
-                    "intensity": "kontrollerad",
-                    "component": "strength"
-                  },
-                  {
-                    "name": "Styrkemall",
-                    "work": {},
-                    "instruction": "Liten dos explosivitet/plyometri när omkringliggande belastning tillåter.",
-                    "intensity": "enligt styrkemall",
-                    "component": "strength"
-                  },
-                  {
-                    "name": "Styrkemall",
-                    "work": {},
-                    "instruction": "Bulgarian split squat som huvudalternativ för unilateral benstyrka.",
-                    "intensity": "enligt styrkemall",
-                    "component": "strength"
-                  },
-                  {
-                    "name": "Styrkemall",
-                    "work": {},
-                    "instruction": "Marklyft eller RDL som normal höftdominant huvudövning.",
-                    "intensity": "enligt styrkemall",
-                    "component": "strength"
-                  },
-                  {
-                    "name": "Styrkemall",
-                    "work": {},
-                    "instruction": "Vad + soleus regelbundet.",
-                    "intensity": "enligt styrkemall",
-                    "component": "strength"
-                  },
-                  {
-                    "name": "Styrkemall",
-                    "work": {},
-                    "instruction": "Enarmsrodd + press som huvuddrag/press.",
-                    "intensity": "enligt styrkemall",
-                    "component": "strength"
-                  },
-                  {
-                    "name": "Styrkemall",
-                    "work": {},
-                    "instruction": "Välj två bålövningar; låt inte accessoarer tränga undan huvudstyrkan.",
-                    "intensity": "enligt styrkemall",
-                    "component": "strength"
-                  }
-                ],
-                "missing": [
-                  "exercise_sets_reps_load"
-                ],
-                "components": {
-                  "swim": {
-                    "executable": true,
-                    "completeness": "full",
-                    "planned_distance_m": 3200
-                  },
-                  "strength": {
-                    "executable": true,
-                    "completeness": "partial"
-                  }
-                },
-                "source": "composite_verified_swim_plus_strength_template"
-              },
-              "score": {
-                "total": 85,
-                "breakdown": {
-                  "mesocycle_alignment": 30,
-                  "microcycle_alignment": 30,
-                  "progression_alignment": 15,
-                  "prescription_specificity": 0,
-                  "near_term_resolution": 10
-                },
-                "basis": "deterministic_constraint_alignment"
-              }
-            },
             {
               "id": "swim-strength-25",
               "dose_option_id": "swim-strength-25",
@@ -583,6 +423,169 @@
                     "name": "Tidsram",
                     "work": {
                       "duration_s": 1500
+                    },
+                    "instruction": "Styrka/core inom vald tidsram",
+                    "intensity": "kontrollerad",
+                    "component": "strength"
+                  },
+                  {
+                    "name": "Styrkemall",
+                    "work": {},
+                    "instruction": "Liten dos explosivitet/plyometri när omkringliggande belastning tillåter.",
+                    "intensity": "enligt styrkemall",
+                    "component": "strength"
+                  },
+                  {
+                    "name": "Styrkemall",
+                    "work": {},
+                    "instruction": "Bulgarian split squat som huvudalternativ för unilateral benstyrka.",
+                    "intensity": "enligt styrkemall",
+                    "component": "strength"
+                  },
+                  {
+                    "name": "Styrkemall",
+                    "work": {},
+                    "instruction": "Marklyft eller RDL som normal höftdominant huvudövning.",
+                    "intensity": "enligt styrkemall",
+                    "component": "strength"
+                  },
+                  {
+                    "name": "Styrkemall",
+                    "work": {},
+                    "instruction": "Vad + soleus regelbundet.",
+                    "intensity": "enligt styrkemall",
+                    "component": "strength"
+                  },
+                  {
+                    "name": "Styrkemall",
+                    "work": {},
+                    "instruction": "Enarmsrodd + press som huvuddrag/press.",
+                    "intensity": "enligt styrkemall",
+                    "component": "strength"
+                  },
+                  {
+                    "name": "Styrkemall",
+                    "work": {},
+                    "instruction": "Välj två bålövningar; låt inte accessoarer tränga undan huvudstyrkan.",
+                    "intensity": "enligt styrkemall",
+                    "component": "strength"
+                  }
+                ],
+                "missing": [
+                  "exercise_sets_reps_load"
+                ],
+                "components": {
+                  "swim": {
+                    "executable": true,
+                    "completeness": "full",
+                    "planned_distance_m": 3200
+                  },
+                  "strength": {
+                    "executable": true,
+                    "completeness": "partial"
+                  }
+                },
+                "source": "composite_verified_swim_plus_strength_template"
+              },
+              "score": {
+                "total": 85,
+                "breakdown": {
+                  "mesocycle_alignment": 30,
+                  "microcycle_alignment": 30,
+                  "progression_alignment": 15,
+                  "prescription_specificity": 0,
+                  "near_term_resolution": 10
+                },
+                "basis": "deterministic_constraint_alignment"
+              }
+            },
+            {
+              "id": "swim-strength-35",
+              "dose_option_id": "swim-strength-35",
+              "session": "Simning · 3 200 m · aerob/teknik + styrka/core · ca 35 min · styrkemall",
+              "intent": "Normal kombinerad skyddsexponering.",
+              "dose": {
+                "kind": "structured",
+                "value": 35
+              },
+              "stimuli": [
+                "swim_aerobic",
+                "swim_technique",
+                "strength_unilateral",
+                "strength_core"
+              ],
+              "prescription": {
+                "executable": true,
+                "completeness": "partial",
+                "blocks": [
+                  {
+                    "name": "Insim",
+                    "work": {
+                      "repetitions": 1,
+                      "distance_m": 400,
+                      "total_distance_m": 400
+                    },
+                    "instruction": "Lugn insim",
+                    "intensity": "warmup",
+                    "component": "swim"
+                  },
+                  {
+                    "name": "Kroppslinje och rotation",
+                    "work": {
+                      "repetitions": 6,
+                      "distance_m": 50,
+                      "total_distance_m": 300
+                    },
+                    "instruction": "Stabil linje, kontrollerad rotation",
+                    "intensity": "active",
+                    "recovery": {
+                      "duration_s": 15
+                    },
+                    "component": "swim"
+                  },
+                  {
+                    "name": "Aerob",
+                    "work": {
+                      "repetitions": 4,
+                      "distance_m": 500,
+                      "total_distance_m": 2000
+                    },
+                    "instruction": "Stadigt aerob med stabil kroppslinje",
+                    "intensity": "active",
+                    "recovery": {
+                      "duration_s": 30
+                    },
+                    "component": "swim"
+                  },
+                  {
+                    "name": "Frekvens",
+                    "work": {
+                      "repetitions": 6,
+                      "distance_m": 50,
+                      "total_distance_m": 300
+                    },
+                    "instruction": "Avslappnad frekvens med bibehållen linje",
+                    "intensity": "active",
+                    "recovery": {
+                      "duration_s": 15
+                    },
+                    "component": "swim"
+                  },
+                  {
+                    "name": "Nedvarvning",
+                    "work": {
+                      "repetitions": 1,
+                      "distance_m": 200,
+                      "total_distance_m": 200
+                    },
+                    "instruction": "Mycket lugnt",
+                    "intensity": "cooldown",
+                    "component": "swim"
+                  },
+                  {
+                    "name": "Tidsram",
+                    "work": {
+                      "duration_s": 2100
                     },
                     "instruction": "Styrka/core inom vald tidsram",
                     "intensity": "kontrollerad",
@@ -823,13 +826,20 @@
               }
             }
           ],
-          "selected_candidate_id": "swim-strength-35",
+          "selected_candidate_id": "swim-strength-25",
           "selection": {
             "method": "deterministic_constraint_scoring",
-            "preferred_dose_option_id": "swim-strength-35",
-            "reason_for_today": "Normal kombinerad skyddsexponering."
+            "preferred_dose_option_id": "swim-strength-25",
+            "reason_for_today": "Enduro + genomförd styrka samma dag ökar mekanisk/neuromuskulär närbelastning; conservativ reduktion skyddar ben inför mikrocykelns nyckelpass."
           }
-        }
+        },
+        "original_session": "Simning · 3 200 m · aerob/teknik + styrka/core · ca 35 min · styrkemall",
+        "auto_coach": {
+          "action": "reduce",
+          "reason": "Enduro + genomförd styrka samma dag ökar mekanisk/neuromuskulär närbelastning; conservativ reduktion skyddar ben inför mikrocykelns nyckelpass.",
+          "applied_at_utc": "2026-09-22T00:09:11.229810+00:00"
+        },
+        "coach_adjustment": "Passet är nedjusterat från grundplanen. Följ passupplägget ovan."
       },
       {
         "date": "2026-09-23",
@@ -1178,9 +1188,9 @@
           "transport": "intervals_icu",
           "source_hash": "f0c4bb0552ced1137586036ac7d666750b0a04d7f28ecbfdad6d0940dbad0c8b",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-21T21:23:38.813992+00:00",
+          "updated_at_utc": "2026-09-22T00:09:11.906780+00:00",
           "provider_event_id": 137895892,
-          "verified_at_utc": "2026-09-21T21:23:38.813992+00:00"
+          "verified_at_utc": "2026-09-22T00:09:11.906780+00:00"
         }
       },
       {
@@ -1661,9 +1671,9 @@
           "transport": "intervals_icu",
           "source_hash": "0640f7dcd8b93ad3ad97da99693fea133ade7ccd7d3daac24e7244162992eecf",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-21T21:23:38.951123+00:00",
+          "updated_at_utc": "2026-09-22T00:09:12.032551+00:00",
           "provider_event_id": 137895893,
-          "verified_at_utc": "2026-09-21T21:23:38.951123+00:00"
+          "verified_at_utc": "2026-09-22T00:09:12.032551+00:00"
         }
       },
       {
@@ -1956,9 +1966,9 @@
           "transport": "intervals_icu",
           "source_hash": "b361e50eca79aa09578b362ba04bb6b3d74fb7f7d56226b0b2a23b497ff8766e",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-21T21:23:39.090803+00:00",
+          "updated_at_utc": "2026-09-22T00:09:12.160496+00:00",
           "provider_event_id": 137895894,
-          "verified_at_utc": "2026-09-21T21:23:39.090803+00:00"
+          "verified_at_utc": "2026-09-22T00:09:12.160496+00:00"
         }
       },
       {
@@ -2115,7 +2125,7 @@
       "activity_id": 20272196080,
       "activity_date": "2026-09-21",
       "activity_name": "Styrketräning på kvällen",
-      "generated_at_utc": "2026-09-21T21:23:37.402924+00:00",
+      "generated_at_utc": "2026-09-22T00:09:11.232257+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 3,
@@ -2127,33 +2137,33 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Gjort: kvällens styrkepass (33,6 min) genomfört efter längre enduro- och enduro-pass tidigare samma dag; ingen användarrapport angiven.",
-        "load_interpretation": "Närbelastning de senaste 2–3 dagarna inkluderar ett långt enduropass (total passduration 5809 s) och ett enduro tidigare i veckan; styrkepasset är rimligen kompletterande…",
+        "summary": "Genomförd kvällsstyrka (33,6 min) efter ett långt enduro‑pass indikerar att styrkesessionen blev kort och låg i puls; simning nästa dag kan behållas men styrkedelen bör vara…",
+        "load_interpretation": "Närbelastning: enduro 5809s (inkl.",
         "confidence": "medium",
         "facts": [
           "Styrka: 33:34 · snittpuls 79,3 · maxpuls 128.",
           "Planstatus 2026-09-21: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Styrkepasset genomfördes som planerat kvällstid och ger mekanisk/neuromuskulär stimulus utan körda löp-/simminuter, vilket stöder krav på styrka/core i mikrocykeln.",
-          "Givet dagens omfattande enduro-session bör styrkekomponenten morgondagens kombinerade sim/styrkepass hållas enligt plan (konservativ styrkedos) om ingen träningströtthet eller smärta…"
+          "Styrkepasset genomfördes samma dag som ett långt enduro‑pass och registrerad puls är relativt låg, vilket talar för kontrollerad styrka snarare än tung benexponering.",
+          "För mesocykelns skyddade styrka/core och dagens plan betyder detta att simdelen kan utföras som planerat men styrkedelen bör reduceras för att skydda benen och möjliggöra kvalitet i…"
         ],
         "unknowns": [
-          "Subjektiv återhämtning nästa morgon (muskeltrötthet/ömhet)",
-          "Detaljer om styrkans innehåll (set/reps/tyngd) för att bedöma lokal belastning"
+          "Användarrapport om känsla/benstatus saknas för senaste styrkepasset",
+          "Detaljer om vilka styrkeövningar och set/reps (styrkemall saknar konkreta set)"
         ]
       },
       "plan_action": {
-        "action": "keep",
+        "action": "reduce",
         "target_date": "2026-09-22",
-        "reason": "Inga data eller användarrapporter indikerar behov av reduktion och mikrocykeln skyddar styrka/core; morgondagens kombinerade sim+styrka är baseline.",
-        "recommendation": "Behåll plan: genomför Simning 3200 m enligt schema och välj planerad styrkedos (det valda passalternativet). Om du vaknar med markant ben- eller höftömhet, reducera styrkedelen till det valda passalternativet och meddela coachen.",
-        "dose_option_id": "",
+        "reason": "Enduro + genomförd styrka samma dag ökar mekanisk/neuromuskulär närbelastning; conservativ reduktion skyddar ben inför mikrocykelns nyckelpass.",
+        "recommendation": "Följ det justerade passupplägget i planen.",
+        "dose_option_id": "swim-strength-25",
         "requires_approval": false
       },
       "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
+        "applied": true,
+        "note": "Konservativ ändring applicerad på 2026-09-22: reduce."
       }
     },
     {
