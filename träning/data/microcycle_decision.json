@@ -1,48 +1,52 @@
 {
-  "rationale": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern.",
+  "rationale": "Reparerar förslaget så att dag 1 (enduro) hålls blockerad, minst två simexponeringar finns, primära kapaciteter täcks direkt, minst en styrka/core-exponering ingår (via kombinationsrecept), max två löpkvaliteter respekteras och minst en kalenderdag lämnas tom. Progress används endast för ett primärt simstimulus och stöds av historik.",
   "slots": [
     {
       "day_index": 2,
       "recipe_key": "swim_aerobic_technique",
-      "action": "consolidate",
-      "rationale": "Lågmekanisk simexponering dagen efter fast enduro ger konkret plan utan att anta att benen är redo för ny benkvalitet.",
+      "action": "progress",
+      "rationale": "Dag efter fast enduro kräver låg benbelastning; ökar simfrekvens och teknisk fokus som mesocykelns prioritet. Progress stödjs av upprepade 3–4k-simpass i faktalagret.",
       "evidence_refs": [
-        "mesocycle.primary_capabilities"
+        "19946705399",
+        "20203770266"
       ]
     },
     {
       "day_index": 3,
-      "recipe_key": "run_threshold",
-      "action": "consolidate",
-      "rationale": "Realiserar mesocykelns primära kapacitet run_threshold med säker separation från annan benbelastning.",
+      "recipe_key": "swim_strength",
+      "action": "establish",
+      "rationale": "Kombinerar andra simexponeringen med styrka/core för att uppfylla styrkekrav utan extra benkvalitetspass.",
       "evidence_refs": [
-        "mesocycle.primary_capabilities"
+        "20175536586",
+        "20239623463"
       ]
     },
     {
       "day_index": 5,
-      "recipe_key": "swim_strength",
-      "action": "establish",
-      "rationale": "Kombinera andra simexponeringen med skyddad styrka/core i stället för att fylla ytterligare en dag.",
+      "recipe_key": "run_threshold",
+      "action": "consolidate",
+      "rationale": "Bibehåller mesocykelns kontrollerade 4×8-tröskelstruktur utan progression denna mikrocykel; placerad med återhämtning före och efter.",
       "evidence_refs": [
-        "mesocycle.primary_capabilities"
+        "20092166843",
+        "20254486837"
       ]
     },
     {
       "day_index": 7,
-      "recipe_key": "run_easy_distance",
+      "recipe_key": "run_hill_quality",
       "action": "consolidate",
-      "rationale": "Behåll lugn löptålighet med separation från löpkvalitet.",
+      "rationale": "Underhåller backkvalitet som sekundärt stimulus; schemalagt icke-adjacent till annan löpkvalitet för att undvika två löpkvaliteter i följd.",
       "evidence_refs": [
-        "planning_policy.microcycle_policy"
+        "20229568713",
+        "20133500464"
       ]
     }
   ],
   "schema_version": 1,
   "planner_revision": 6,
-  "source": "deterministic_fallback_after_repair_guard",
-  "source_hash": "14aaf5fa213b06afcc6ed08fd59f0e21d07cdc00c9a425042b8d366d4744ee26",
-  "generated_at_utc": "2026-09-22T08:14:53.391297+00:00",
+  "source": "openai_repaired",
+  "source_hash": "f20ae90689f6f30228417d423c888e4b2a55a5afccc1098e36a2a6657ac7b229",
+  "generated_at_utc": "2026-09-22T08:16:31.301015+00:00",
   "week_start": "2026-09-28",
   "week_key": "2026-W40",
   "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
@@ -120,12 +124,11 @@
   "guard_repair": {
     "attempted": true,
     "initial_failures": [
-      "lång löpdistans får inte ligga direkt intill MTB/XC; den sekundära cykelexponeringen ska utgå eller flyttas"
+      "dag 1 är blockerad av fast endurobelastning",
+      "för få giltiga träningsslots: 3 < 4",
+      "primära kapaciteter saknar direkt recept: swim_aerobic, swim_technique",
+      "för få simexponeringar: 1 < 2"
     ],
-    "repair_failures": [
-      "för många giltiga träningsslots: 6 > 5",
-      "mikrocykeln fyller alla sju dagar trots att ledig dag aldrig är ett eget skäl att lägga till träning"
-    ],
-    "result": "fallback"
+    "result": "accepted"
   }
 }
