@@ -1,5 +1,5 @@
 {
-  "last_sync_utc": "2026-09-22T06:38:20.102724+00:00",
+  "last_sync_utc": "2026-09-22T06:45:51.166893+00:00",
   "activities": [
     {
       "id": 20272196080,
@@ -95,7 +95,7 @@
         "sport_type": "Enduro",
         "display_label": "Enduro",
         "classification": "training",
-        "user_report": "",
+        "user_report": "Teknisk körning, stenbacke och berghäll, kostnad för passet minimal RPE 4/10. Känsla: Pigg.",
         "total": {
           "distance_m": 12527.7,
           "distance_km": 12.528,
@@ -119,14 +119,8 @@
       "source_sport_type": "Workout",
       "classification": "training",
       "display_label": "Enduro",
-      "classification_reason": "Garmin/Strava exposed the Enduro recording as generic Workout, but the explicit activity name identifies actual Enduro training load.",
-      "sport_normalization": {
-        "rule": "workout-explicit-enduro-name-v1",
-        "evidence": [
-          "source_sport_type=Workout",
-          "explicit Enduro/Motocross activity name"
-        ]
-      }
+      "classification_reason": "Explicit GUI-input från användaren ska behandlas som förstaklassdata i analys och fortsatt planering.",
+      "user_report": "Teknisk körning, stenbacke och berghäll, kostnad för passet minimal RPE 4/10. Känsla: Pigg."
     },
     {
       "id": 20254486837,
@@ -12374,8 +12368,8 @@
     "schema_version": 1,
     "workout_analysis_contract_version": 3,
     "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
-    "overrides_applied": 11,
-    "auto_rules_applied": 12,
+    "overrides_applied": 12,
+    "auto_rules_applied": 11,
     "override_ids_present": [
       "19852599244",
       "19862241646",
@@ -12387,9 +12381,12 @@
       "20092166843",
       "20120769386",
       "20133500464",
-      "20229568713"
+      "20229568713",
+      "20271537143"
     ],
-    "changed_ids": []
+    "changed_ids": [
+      "20271537143"
+    ]
   },
   "schema_version": 2,
   "last_webhook_event": {
