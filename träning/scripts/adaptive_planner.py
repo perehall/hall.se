@@ -431,9 +431,50 @@ def previous_mesocycle(strategy):
     return deepcopy(current) if isinstance(current, dict) else {}
 
 
+def normalize_goal_contributions(goal_rows, provided, summary, competition_context):
+    supplied = {
+        str(item.get("goal_id") or "").strip(): item
+        for item in (provided or [])
+        if isinstance(item, dict) and str(item.get("goal_id") or "").strip()
+    }
+    normalized = []
+    stage = str((competition_context or {}).get("horizon_stage") or "unknown")
+    for goal_item in goal_rows:
+        goal_id = goal_item["id"]
+        current = supplied.get(goal_id) or {}
+        if goal_item["type"] == "development":
+            default_contribution = (
+                "Utveckla den aktuella mesocykelns prioriterade kapaciteter samtidigt som allroundprofilens "
+                "övriga discipliner behålls som aktiva utvecklings- eller underhållsspår över blocken."
+            )
+            default_tradeoff = (
+                "Det varaktiga allroundmålet får inte ersättas implicit av ett tävlingsmål; eventuell "
+                "tillfällig nedprioritering ska vara explicit, tidsbegränsad och omprövas."
+            )
+        else:
+            default_contribution = (
+                f"A-målet påverkar kapacitetsbetoning och specificitet i horizon_stage={stage}, men ska "
+                "inte ensamt styra träningsidentiteten eller fylla kalendern."
+            )
+            default_tradeoff = (
+                "Tävlingsspecificitet får öka när tidshorisont och faktisk kapacitet motiverar det, "
+                "men den får inte automatiskt tränga undan den varaktiga allroundutvecklingen."
+            )
+        normalized.append(
+            {
+                "goal_id": goal_id,
+                "goal_type": goal_item["type"],
+                "contribution": str(current.get("contribution") or default_contribution).strip(),
+                "tradeoff": str(current.get("tradeoff") or default_tradeoff).strip(),
+            }
+        )
+    return normalized
+
+
 def fallback_mesocycle(goal, policy, previous, target_start=None):
     primary = []
     refs = []
+    goal_rows = planning_goal_set(goal)
 
     competition_context = (
         build_competition_context(
@@ -491,11 +532,17 @@ def fallback_mesocycle(goal, policy, previous, target_start=None):
 
     previous_primary = set(previous.get("protected_stimuli") or [])
     decision = "continue" if set(primary) == previous_primary else "modify"
-    fallback_secondary_candidates = (
-        ("run_hill_quality",)
-        if active_swimrun_goal
-        else ("run_hill_quality", "mtb_aerobic")
-    )
+    enduring_disciplines = {
+        discipline
+        for item in goal_rows
+        if item.get("type") == "development"
+        for discipline in (item.get("disciplines") or [])
+    }
+    fallback_secondary_candidates = ["run_hill_quality"]
+    if "mtb" in enduring_disciplines:
+        fallback_secondary_candidates.extend(["mtb_technical", "mtb_aerobic"])
+    if not active_swimrun_goal and "swim" in enduring_disciplines:
+        fallback_secondary_candidates.append("swim_threshold")
     secondary = [
         key
         for key in fallback_secondary_candidates
@@ -524,6 +571,12 @@ def fallback_mesocycle(goal, policy, previous, target_start=None):
             else
             "Föra den kanoniska målbilden och dess aktiva prestationsmål framåt genom att utveckla "
             "få tydliga kapaciteter samtidigt som övrig långsiktig allroundkapacitet skyddas."
+        ),
+        "goal_contributions": normalize_goal_contributions(
+            goal_rows,
+            [],
+            "",
+            competition_context,
         ),
         "hypothesis": (
             "Ett block med få tydliga utvecklingsområden och bibehållen bredd ger bättre möjlighet "
