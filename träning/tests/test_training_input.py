@@ -175,6 +175,41 @@ class TrainingInputTests(unittest.TestCase):
         self.assertIn("RPE 8/10", report)
         self.assertIn("Trött", report)
 
+    def test_legacy_multiple_gui_submissions_replace_only_current_segment(self):
+        legacy = {
+            "schema_version": 1,
+            "overrides": {
+                "123": {
+                    "sport": "Run",
+                    "classification": "training",
+                    "display_label": "Löpning",
+                    "source_sport_type": "Run",
+                    "user_report": (
+                        "Första kommentaren. RPE 4/10. Känsla: Pigg. "
+                        "Senaste kommentaren. RPE 6/10."
+                    ),
+                    "last_training_input_event_key": "training-input:aaaaaaaaaaaaaaaaaaaaaaaa",
+                }
+            },
+        }
+        updated, _ = apply_to_documents(
+            {
+                "operation": "ADD_FEEDBACK",
+                "activity_id": 123,
+                "text": "Korrigerad senaste kommentar.",
+                "rpe": 8,
+                "feeling": ["tired"],
+                "event_key": "training-input:bbbbbbbbbbbbbbbbbbbbbbbb",
+            },
+            self.activities(),
+            legacy,
+        )
+        report = updated["overrides"]["123"]["user_report"]
+        self.assertIn("Första kommentaren.", report)
+        self.assertNotIn("Senaste kommentaren.", report)
+        self.assertIn("Korrigerad senaste kommentar.", report)
+        self.assertIn("RPE 8/10", report)
+
     def test_natural_language_can_only_choose_allowlisted_operation_and_raw_text_is_preserved(self):
         raw = "Blev 4 × 8 i stället för 3 × 10. Kändes kontrollerat."
         updated, operation = apply_to_documents(
