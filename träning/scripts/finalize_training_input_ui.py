@@ -27,19 +27,31 @@ SCRIPT_MARKER = "/* training-input-ui-js-v1 */"
 
 CSS = r"""
 /* training-input-ui-v1 */
-.training-input{margin-top:16px;padding-top:15px;border-top:1px solid var(--qp-line,#e2e8f0)}
-.training-input h3{margin:0 0 5px;font-size:.95rem;color:var(--qp-text,#111827)}
-.training-input-intro{margin:0 0 12px;color:var(--qp-secondary,#5e6661);font-size:.8rem;line-height:1.4}
-.training-input-label{display:block;margin:10px 0 6px;color:var(--qp-text-label,#475569);font-size:.68rem;font-weight:850;letter-spacing:.055em;text-transform:uppercase}
+.training-input{margin:0;padding:14px 0;border-top:1px solid var(--qp-line,#e2e8f0)}
+.training-input-compact{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:start}
+.training-input-title-row{display:flex;align-items:baseline;gap:8px;min-width:0}
+.training-input-title{font-size:.9rem;font-weight:800;color:var(--qp-text,#111827)}
+.training-input-date{font-size:.72rem;color:var(--qp-secondary,#64748b)}
+.training-input-summary{margin-top:3px;color:var(--qp-secondary,#5e6661);font-size:.8rem;line-height:1.35}
+.training-input[data-reviewed="true"] .training-input-summary{color:var(--qp-text,#111827);font-weight:700}
+.training-input-note{margin-top:3px;max-width:62ch;color:var(--qp-secondary,#64748b);font-size:.76rem;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.training-input-note:empty{display:none}
+.training-input-status{margin-top:3px;color:var(--qp-secondary,#64748b);font-size:.73rem;line-height:1.3}
+.training-input[data-submitting="true"] .training-input-status::before{content:"";display:inline-block;width:6px;height:6px;margin-right:6px;border-radius:50%;background:currentColor;vertical-align:1px;animation:training-input-pulse 1.2s ease-in-out infinite}
+@keyframes training-input-pulse{0%,100%{opacity:.25}50%{opacity:1}}
+.training-input-toggle,.training-input-cancel{appearance:none;border:0;background:transparent;color:var(--qp-accent,#5964e8);padding:3px 0;font:inherit;font-size:.78rem;font-weight:800;cursor:pointer}
+.training-input-editor{padding-top:14px;animation:training-input-open .16s ease-out}
+.training-input-editor[hidden]{display:none}
+@keyframes training-input-open{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:none}}
+.training-input-label{display:block;margin:10px 0 6px;color:var(--qp-text-label,#475569);font-size:.66rem;font-weight:850;letter-spacing:.055em;text-transform:uppercase}
 .training-input-options{display:flex;flex-wrap:wrap;gap:6px}
 .training-input-chip{appearance:none;border:1px solid var(--qp-line,#d9dedb);background:transparent;color:var(--qp-secondary,#5e6661);border-radius:999px;padding:7px 10px;font:inherit;font-size:.76rem;cursor:pointer}
 .training-input-chip[aria-pressed="true"]{border-color:var(--qp-accent,#5964e8);color:var(--qp-accent,#5964e8);box-shadow:inset 0 0 0 1px var(--qp-accent,#5964e8)}
-.training-input textarea{width:100%;min-height:72px;resize:vertical;border:1px solid var(--qp-line,#d9dedb);border-radius:10px;background:transparent;color:var(--qp-text,#111827);padding:9px 10px;font:inherit;font-size:.82rem;line-height:1.4}
-.training-input-actions{display:flex;align-items:center;gap:10px;margin-top:8px}
-.training-input-save{appearance:none;border:0;border-radius:9px;background:var(--qp-accent,#5964e8);color:#fff;padding:8px 12px;font:inherit;font-size:.78rem;font-weight:800;cursor:pointer}
+.training-input textarea{box-sizing:border-box;width:100%;min-height:68px;resize:vertical;border:1px solid var(--qp-line,#d9dedb);border-radius:10px;background:transparent;color:var(--qp-text,#111827);padding:9px 10px;font:inherit;font-size:.82rem;line-height:1.4}
+.training-input-actions{display:flex;align-items:center;gap:14px;margin-top:9px}
+.training-input-save{appearance:none;border:0;border-radius:9px;background:var(--qp-accent,#5964e8);color:#fff;padding:8px 13px;font:inherit;font-size:.78rem;font-weight:800;cursor:pointer}
 .training-input-save:disabled{opacity:.55;cursor:default}
-.training-input-status{color:var(--qp-secondary,#5e6661);font-size:.75rem}
-.training-input[data-submitting="true"] .training-input-status{font-weight:800;color:var(--qp-text,#111827)}
+@media (max-width:560px){.training-input-compact{grid-template-columns:minmax(0,1fr) auto;gap:10px}.training-input-note{max-width:42ch}}
 """.strip()
 
 JS = r"""
@@ -58,8 +70,8 @@ JS = r"""
 
   async function waitForProcessed(activityId, eventKey, onProgress) {
     for (let attempt = 0; attempt < 90; attempt += 1) {
-      if (attempt === 5) onProgress('Sparat ✓ · systemet bearbetar fortfarande…');
-      if (attempt === 15) onProgress('Sparat ✓ · väntar på färdig omräkning…');
+      if (attempt === 5) onProgress('Uppdaterar analys…');
+      if (attempt === 15) onProgress('Väntar på färdig omräkning…');
       await sleep(2000);
       try {
         const probe = new URL(window.location.href);
@@ -89,13 +101,81 @@ JS = r"""
   }
 
   roots.forEach((root) => {
+    const editor = root.querySelector('[data-training-input-editor]');
+    const toggle = root.querySelector('[data-training-input-toggle]');
+    const cancel = root.querySelector('[data-training-input-cancel]');
+    const summary = root.querySelector('[data-training-input-summary]');
+    const notePreview = root.querySelector('[data-training-input-note]');
     const rpeButtons = [...root.querySelectorAll('[data-rpe]')];
     const feelingButtons = [...root.querySelectorAll('[data-feeling]')];
     const text = root.querySelector('textarea');
     const save = root.querySelector('[data-training-input-save]');
     const status = root.querySelector('[data-training-input-status]');
+
     let rpe = null;
     const feelings = new Set();
+    const selectedRpe = rpeButtons.find((button) => button.getAttribute('aria-pressed') === 'true');
+    if (selectedRpe) rpe = Number(selectedRpe.dataset.rpe);
+    feelingButtons
+      .filter((button) => button.getAttribute('aria-pressed') === 'true')
+      .forEach((button) => feelings.add(button.dataset.feeling));
+
+    const snapshot = () => ({
+      rpe,
+      feelings: [...feelings],
+      text: text.value
+    });
+    let initial = snapshot();
+
+    const feelingLabel = (key) => {
+      const button = feelingButtons.find((item) => item.dataset.feeling === key);
+      return button ? button.textContent.trim() : key;
+    };
+
+    const compactSummary = () => {
+      const parts = ['Sparat'];
+      if (rpe !== null) parts.push(`RPE ${rpe}`);
+      [...feelings].forEach((key) => parts.push(feelingLabel(key)));
+      return parts.join(' · ');
+    };
+
+    const updateCompact = () => {
+      root.dataset.reviewed = 'true';
+      summary.textContent = compactSummary();
+      notePreview.textContent = text.value.trim();
+      toggle.textContent = 'Ändra';
+    };
+
+    const restore = (state) => {
+      rpe = state.rpe;
+      feelings.clear();
+      state.feelings.forEach((value) => feelings.add(value));
+      text.value = state.text;
+      rpeButtons.forEach((button) => {
+        button.setAttribute('aria-pressed', Number(button.dataset.rpe) === rpe ? 'true' : 'false');
+      });
+      feelingButtons.forEach((button) => {
+        button.setAttribute('aria-pressed', feelings.has(button.dataset.feeling) ? 'true' : 'false');
+      });
+    };
+
+    const openEditor = () => {
+      restore(initial);
+      editor.hidden = false;
+      toggle.hidden = true;
+      status.textContent = '';
+      text.focus({preventScroll: true});
+    };
+
+    const closeEditor = () => {
+      restore(initial);
+      editor.hidden = true;
+      toggle.hidden = false;
+      status.textContent = '';
+    };
+
+    toggle.addEventListener('click', openEditor);
+    cancel.addEventListener('click', closeEditor);
 
     const pressOne = (button) => {
       rpeButtons.forEach((item) => item.setAttribute('aria-pressed', item === button ? 'true' : 'false'));
@@ -110,19 +190,20 @@ JS = r"""
     }));
 
     save.addEventListener('click', async () => {
-      const note = text.value.trim();
-      if (!note && rpe === null && feelings.size === 0) {
+      const comment = text.value.trim();
+      if (!comment && rpe === null && feelings.size === 0) {
         status.textContent = 'Välj en känsla eller skriv en kort kommentar.';
         return;
       }
 
-      let operation = note ? 'NATURAL_LANGUAGE' : 'ADD_FEEDBACK';
-      if (!note && feelings.has('pain')) operation = 'REPORT_PAIN';
-      else if (!note && feelings.has('tired')) operation = 'REPORT_FATIGUE';
+      let operation = comment ? 'NATURAL_LANGUAGE' : 'ADD_FEEDBACK';
+      if (!comment && feelings.has('pain')) operation = 'REPORT_PAIN';
+      else if (!comment && feelings.has('tired')) operation = 'REPORT_FATIGUE';
 
       save.disabled = true;
       root.dataset.submitting = 'true';
       status.textContent = 'Sparar…';
+
       try {
         const response = await fetch('/träning/training-api/input', {
           method: 'POST',
@@ -131,7 +212,7 @@ JS = r"""
           body: JSON.stringify({
             operation,
             activity_id: Number(root.dataset.activityId),
-            text: note,
+            text: comment,
             rpe,
             feeling: [...feelings],
             source: 'training-gui-v1'
@@ -141,7 +222,11 @@ JS = r"""
         if (!response.ok) throw new Error(body.error || 'request_failed');
         if (!body.event_key) throw new Error('missing_event_key');
 
-        status.textContent = 'Sparat ✓ · feedback mottagen. Omräkning pågår…';
+        updateCompact();
+        initial = snapshot();
+        editor.hidden = true;
+        toggle.hidden = false;
+        status.textContent = 'Uppdaterar analys…';
 
         const processed = await waitForProcessed(
           root.dataset.activityId,
@@ -149,20 +234,22 @@ JS = r"""
           (message) => { status.textContent = message; }
         );
         if (processed) {
-          status.textContent = 'Klart. Uppdaterar…';
+          status.textContent = 'Klart';
           const next = new URL(window.location.href);
           next.searchParams.set('_feedback_done', String(Date.now()));
           window.location.replace(next.toString());
           return;
         }
 
-        status.textContent = 'Sparat ✓ · automatisk uppdatering kunde inte bekräftas.';
+        status.textContent = 'Sparat · automatisk uppdatering kunde inte bekräftas.';
         root.dataset.submitting = 'false';
         save.disabled = false;
       } catch (error) {
         status.textContent = `Kunde inte spara (${error.message}).`;
         root.dataset.submitting = 'false';
         save.disabled = false;
+        editor.hidden = false;
+        toggle.hidden = true;
         console.error('TRAINING_INPUT_FAILED', error);
       }
     });
@@ -199,17 +286,111 @@ def remove_existing(page: str) -> str:
     return page
 
 
-def render_block(activity: dict, processed_event_keys: list[str] | None = None) -> str:
+FEELING_LABELS = {
+    "fresh": "Pigg",
+    "tired": "Trött",
+    "strong_legs": "Starka ben",
+    "heavy_legs": "Tunga ben",
+    "pain": "Smärta",
+    "could_do_more": "Kunde gjort mer",
+}
+
+PROVIDER_LABELS = {
+    "WeightTraining": "Styrka",
+    "Run": "Löpning",
+    "TrailRun": "Traillöpning",
+    "Swim": "Simning",
+    "Ride": "Cykling",
+    "MountainBikeRide": "MTB",
+    "Workout": "Träning",
+}
+
+
+def human_activity_label(activity: dict) -> str:
+    candidate = (
+        str(activity.get("display_label") or "").strip()
+        or str(activity.get("sport_type") or "").strip()
+        or str(activity.get("name") or "").strip()
+        or "Genomfört pass"
+    )
+    return PROVIDER_LABELS.get(candidate, candidate)
+
+
+def feedback_from_override(override: dict) -> dict | None:
+    structured = override.get("training_feedback")
+    if isinstance(structured, dict):
+        feeling = [
+            value
+            for value in structured.get("feeling") or []
+            if value in FEELING_LABELS
+        ]
+        rpe = structured.get("rpe")
+        if not isinstance(rpe, int) or isinstance(rpe, bool) or not 1 <= rpe <= 10:
+            rpe = None
+        return {
+            "text": str(structured.get("text") or "").strip(),
+            "rpe": rpe,
+            "feeling": feeling,
+        }
+
+    event_key = str(override.get("last_training_input_event_key") or "").strip()
+    report = str(override.get("user_report") or "").strip()
+    if not event_key or not report:
+        return None
+
+    rpe_match = re.search(r"(?:^|\s)RPE\s+(\d+)/10\.\s*(?=Känsla:|$)", report)
+    rpe = int(rpe_match.group(1)) if rpe_match else None
+
+    reverse_feelings = {label: code for code, label in FEELING_LABELS.items()}
+    feeling = []
+    feeling_match = re.search(r"Känsla:\s*([^.]+)\.\s*$", report)
+    if feeling_match:
+        for label in (part.strip() for part in feeling_match.group(1).split(",")):
+            code = reverse_feelings.get(label)
+            if code and code not in feeling:
+                feeling.append(code)
+
+    text = report
+    if feeling_match:
+        text = text[: feeling_match.start()].rstrip()
+    if rpe_match:
+        # The GUI-generated RPE sentence sits immediately before the feeling
+        # sentence (or at the end when no feeling was selected).
+        rpe_sentence = re.compile(r"\s*RPE\s+\d+/10\.\s*$")
+        text = rpe_sentence.sub("", text).strip()
+
+    return {"text": text, "rpe": rpe, "feeling": feeling}
+
+
+def feedback_summary(feedback: dict | None) -> str:
+    if not feedback:
+        return "Hur kändes passet?"
+    parts = ["Sparat"]
+    if isinstance(feedback.get("rpe"), int):
+        parts.append(f"RPE {feedback['rpe']}")
+    for code in feedback.get("feeling") or []:
+        label = FEELING_LABELS.get(code)
+        if label:
+            parts.append(label)
+    return " · ".join(parts)
+
+
+def render_block(
+    activity: dict,
+    processed_event_keys: list[str] | None = None,
+    feedback: dict | None = None,
+) -> str:
     activity_id = int(activity["id"])
     processed_event_keys = processed_event_keys or []
     processed_event_keys_attr = ",".join(processed_event_keys)
-    activity_label = (
-        str(activity.get("display_label") or "").strip()
-        or str(activity.get("name") or "").strip()
-        or str(activity.get("sport_type") or "").strip()
-        or "Genomfört pass"
-    )
+    activity_label = human_activity_label(activity)
     activity_date = local_date(activity) or ""
+    reviewed = feedback is not None
+    summary = feedback_summary(feedback)
+    note = str((feedback or {}).get("text") or "").strip()
+    selected_rpe = (feedback or {}).get("rpe")
+    selected_feelings = set((feedback or {}).get("feeling") or [])
+
     rpe = [
         (2, "Mycket lätt"),
         (4, "Lätt"),
@@ -217,35 +398,41 @@ def render_block(activity: dict, processed_event_keys: list[str] | None = None) 
         (8, "Tungt"),
         (10, "För tungt"),
     ]
-    feelings = [
-        ("fresh", "Pigg"),
-        ("tired", "Trött"),
-        ("strong_legs", "Starka ben"),
-        ("heavy_legs", "Tunga ben"),
-        ("pain", "Smärta"),
-        ("could_do_more", "Kunde gjort mer"),
-    ]
+    feelings = list(FEELING_LABELS.items())
     rpe_html = "".join(
-        f'<button type="button" class="training-input-chip" data-rpe="{value}" aria-pressed="false">{html.escape(label)}</button>'
+        f'<button type="button" class="training-input-chip" data-rpe="{value}" aria-pressed="{"true" if value == selected_rpe else "false"}">{html.escape(label)}</button>'
         for value, label in rpe
     )
     feeling_html = "".join(
-        f'<button type="button" class="training-input-chip" data-feeling="{html.escape(key)}" aria-pressed="false">{html.escape(label)}</button>'
+        f'<button type="button" class="training-input-chip" data-feeling="{html.escape(key)}" aria-pressed="{"true" if key in selected_feelings else "false"}">{html.escape(label)}</button>'
         for key, label in feelings
     )
+
     return f"""{BLOCK_START}
-<section class="training-input" data-training-input data-activity-id="{activity_id}" data-processed-event-keys="{html.escape(processed_event_keys_attr, quote=True)}" aria-label="Feedback efter pass">
-  <h3>Feedback · {html.escape(activity_label)}</h3>
-  <p class="training-input-intro">{html.escape(activity_date)} · Snabbval räcker. Fri text kan också korrigera vad du faktiskt gjorde; modellen får bara klassificera inputen, inte ändra planen direkt.</p>
-  <span class="training-input-label">Ansträngning</span>
-  <div class="training-input-options">{rpe_html}</div>
-  <span class="training-input-label">Känsla</span>
-  <div class="training-input-options">{feeling_html}</div>
-  <span class="training-input-label">Kommentar eller ändring</span>
-  <textarea maxlength="800" placeholder="T.ex. Blev 4 × 8 i stället för 3 × 10. Kändes kontrollerat och jag var pigg efteråt."></textarea>
-  <div class="training-input-actions">
-    <button type="button" class="training-input-save" data-training-input-save>Spara</button>
-    <span class="training-input-status" data-training-input-status aria-live="polite"></span>
+<section class="training-input" data-training-input data-activity-id="{activity_id}" data-reviewed="{"true" if reviewed else "false"}" data-processed-event-keys="{html.escape(processed_event_keys_attr, quote=True)}" aria-label="Feedback efter pass">
+  <div class="training-input-compact">
+    <div>
+      <div class="training-input-title-row">
+        <span class="training-input-title">{html.escape(activity_label)}</span>
+        <span class="training-input-date">{html.escape(activity_date)}</span>
+      </div>
+      <div class="training-input-summary" data-training-input-summary>{html.escape(summary)}</div>
+      <div class="training-input-note" data-training-input-note>{html.escape(note)}</div>
+      <div class="training-input-status" data-training-input-status aria-live="polite"></div>
+    </div>
+    <button type="button" class="training-input-toggle" data-training-input-toggle>{"Ändra" if reviewed else "Utvärdera"}</button>
+  </div>
+  <div class="training-input-editor" data-training-input-editor hidden>
+    <span class="training-input-label">Ansträngning</span>
+    <div class="training-input-options">{rpe_html}</div>
+    <span class="training-input-label">Känsla</span>
+    <div class="training-input-options">{feeling_html}</div>
+    <span class="training-input-label">Kommentar eller ändring</span>
+    <textarea maxlength="800" placeholder="Kort kommentar om något är värt att fånga.">{html.escape(note)}</textarea>
+    <div class="training-input-actions">
+      <button type="button" class="training-input-save" data-training-input-save>Spara</button>
+      <button type="button" class="training-input-cancel" data-training-input-cancel>Avbryt</button>
+    </div>
   </div>
 </section>
 {BLOCK_END}"""
@@ -262,8 +449,11 @@ def apply_training_input_ui(
     today_date = datetime.strptime(today, "%Y-%m-%d").date()
     override_map = (overrides_state or {}).get("overrides") or {}
 
+    def override_for(activity: dict) -> dict:
+        return override_map.get(str(activity.get("id"))) or {}
+
     def processed_event_keys(activity: dict) -> list[str]:
-        row = override_map.get(str(activity.get("id"))) or {}
+        row = override_for(activity)
         values = row.get("training_input_event_keys") or []
         if not isinstance(values, list):
             values = []
@@ -310,7 +500,11 @@ def apply_training_input_ui(
         pos = page.find(link)
         if pos < 0:
             raise RuntimeError("Träningsinput UI: post-workout-länken saknas.")
-        page = page[:pos] + render_block(primary, processed_event_keys(primary)) + "\n" + page[pos:]
+        page = page[:pos] + render_block(
+            primary,
+            processed_event_keys(primary),
+            feedback_from_override(override_for(primary)),
+        ) + "\n" + page[pos:]
         rendered_ids.add(primary["id"])
 
     secondary = [
@@ -324,7 +518,11 @@ def apply_training_input_ui(
             raise RuntimeError("Träningsinput UI: träningshjärnans slutmarkör saknas.")
         pos += len(marker)
         blocks = "\n".join(
-            render_block(activity, processed_event_keys(activity))
+            render_block(
+                activity,
+                processed_event_keys(activity),
+                feedback_from_override(override_for(activity)),
+            )
             for activity in secondary
         )
         page = page[:pos] + "\n" + blocks + page[pos:]

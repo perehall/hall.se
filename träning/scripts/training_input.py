@@ -112,6 +112,10 @@ def validate_payload(payload: dict) -> dict:
     if event_key and not re.fullmatch(r"training-input:[0-9a-f]{24}", event_key):
         raise RuntimeError("event_key har ogiltigt format.")
 
+    submitted_at = str(payload.get("submitted_at") or "").strip()
+    if len(submitted_at) > 64:
+        raise RuntimeError("submitted_at är för långt.")
+
     return {
         "operation": operation,
         "activity_id": activity_id,
@@ -119,6 +123,7 @@ def validate_payload(payload: dict) -> dict:
         "rpe": rpe,
         "feeling": normalized_feeling,
         "event_key": event_key,
+        "submitted_at": submitted_at,
     }
 
 
@@ -257,6 +262,45 @@ def merge_report(existing: str, incoming: str) -> str:
     return existing.rstrip() + " " + incoming
 
 
+def legacy_feedback_from_override(override: dict) -> dict | None:
+    if isinstance(override.get("training_feedback"), dict):
+        return override["training_feedback"]
+    if not str(override.get("last_training_input_event_key") or "").strip():
+        return None
+
+    report = str(override.get("user_report") or "").strip()
+    if not report:
+        return None
+
+    rpe_match = re.search(r"(?:^|\s)RPE\s+(\d+)/10\.\s*(?=Känsla:|$)", report)
+    rpe = int(rpe_match.group(1)) if rpe_match else None
+
+    reverse_feelings = {label: code for code, label in FEELING_CODES.items()}
+    feeling = []
+    feeling_match = re.search(r"Känsla:\s*([^.]+)\.\s*$", report)
+    if feeling_match:
+        for label in (part.strip() for part in feeling_match.group(1).split(",")):
+            code = reverse_feelings.get(label)
+            if code and code not in feeling:
+                feeling.append(code)
+
+    text = report
+    if feeling_match:
+        text = text[: feeling_match.start()].rstrip()
+    text = re.sub(r"\s*RPE\s+\d+/10\.\s*$", "", text).strip()
+    return {"text": text, "rpe": rpe, "feeling": feeling}
+
+
+def strip_previous_gui_report(existing: str, previous_feedback: dict | None) -> str:
+    existing = str(existing or "").strip()
+    if not existing or not isinstance(previous_feedback, dict):
+        return existing
+    previous_report = compose_report(previous_feedback)
+    if previous_report and existing.endswith(previous_report):
+        return existing[: -len(previous_report)].rstrip()
+    return existing
+
+
 def activity_by_id(activities: dict, activity_id: int) -> dict:
     for activity in activities.get("activities") or []:
         if activity.get("id") == activity_id:
@@ -298,7 +342,18 @@ def apply_to_documents(payload: dict, activities: dict, overrides: dict, *, clas
     if raw_sport:
         override.setdefault("source_sport_type", raw_sport)
 
-    override["user_report"] = merge_report(override.get("user_report"), report)
+    previous_feedback = legacy_feedback_from_override(override)
+    base_report = strip_previous_gui_report(override.get("user_report"), previous_feedback)
+    override["user_report"] = merge_report(base_report, report)
+    override["training_feedback"] = {
+        "text": normalized.get("text") or "",
+        "rpe": normalized.get("rpe"),
+        "feeling": list(normalized.get("feeling") or []),
+        "operation": operation,
+        "event_key": normalized.get("event_key") or "",
+        "submitted_at": normalized.get("submitted_at") or "",
+    }
+
     if normalized.get("event_key"):
         event_key = normalized["event_key"]
         previous_keys = override.get("training_input_event_keys") or []

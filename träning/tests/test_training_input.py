@@ -58,6 +58,17 @@ class TrainingInputTests(unittest.TestCase):
             override["training_input_event_keys"],
             ["training-input:0123456789abcdef01234567"],
         )
+        self.assertEqual(
+            override["training_feedback"],
+            {
+                "text": "",
+                "rpe": 6,
+                "feeling": ["fresh", "could_do_more"],
+                "operation": "ADD_FEEDBACK",
+                "event_key": "training-input:0123456789abcdef01234567",
+                "submitted_at": "",
+            },
+        )
 
         # Regression: the GUI-generated override must be directly consumable by
         # the canonical semantic normalizer; this is the next pipeline stage.
@@ -98,6 +109,71 @@ class TrainingInputTests(unittest.TestCase):
                 "training-input:bbbbbbbbbbbbbbbbbbbbbbbb",
             ],
         )
+
+    def test_edit_replaces_previous_gui_feedback_in_user_report(self):
+        first, _ = apply_to_documents(
+            {
+                "operation": "ADD_FEEDBACK",
+                "activity_id": 123,
+                "text": "Första kommentaren.",
+                "rpe": 4,
+                "feeling": ["fresh"],
+                "event_key": "training-input:aaaaaaaaaaaaaaaaaaaaaaaa",
+            },
+            self.activities(),
+            {"schema_version": 1, "overrides": {}},
+        )
+        second, _ = apply_to_documents(
+            {
+                "operation": "ADD_FEEDBACK",
+                "activity_id": 123,
+                "text": "Korrigerad kommentar.",
+                "rpe": 6,
+                "feeling": ["heavy_legs"],
+                "event_key": "training-input:bbbbbbbbbbbbbbbbbbbbbbbb",
+            },
+            self.activities(),
+            first,
+        )
+        report = second["overrides"]["123"]["user_report"]
+        self.assertNotIn("Första kommentaren.", report)
+        self.assertNotIn("RPE 4/10", report)
+        self.assertIn("Korrigerad kommentar.", report)
+        self.assertIn("RPE 6/10", report)
+        self.assertIn("Tunga ben", report)
+
+    def test_legacy_gui_feedback_is_replaced_on_first_edit(self):
+        legacy = {
+            "schema_version": 1,
+            "overrides": {
+                "123": {
+                    "sport": "Run",
+                    "classification": "training",
+                    "display_label": "Löpning",
+                    "source_sport_type": "Run",
+                    "user_report": "Gamla kommentaren. RPE 4/10. Känsla: Pigg.",
+                    "last_training_input_event_key": "training-input:aaaaaaaaaaaaaaaaaaaaaaaa",
+                }
+            },
+        }
+        updated, _ = apply_to_documents(
+            {
+                "operation": "ADD_FEEDBACK",
+                "activity_id": 123,
+                "text": "Ny kommentar.",
+                "rpe": 8,
+                "feeling": ["tired"],
+                "event_key": "training-input:bbbbbbbbbbbbbbbbbbbbbbbb",
+            },
+            self.activities(),
+            legacy,
+        )
+        report = updated["overrides"]["123"]["user_report"]
+        self.assertNotIn("Gamla kommentaren.", report)
+        self.assertNotIn("RPE 4/10", report)
+        self.assertIn("Ny kommentar.", report)
+        self.assertIn("RPE 8/10", report)
+        self.assertIn("Trött", report)
 
     def test_natural_language_can_only_choose_allowlisted_operation_and_raw_text_is_preserved(self):
         raw = "Blev 4 × 8 i stället för 3 × 10. Kändes kontrollerat."
