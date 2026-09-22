@@ -4,7 +4,7 @@
       "activity_id": 20272196080,
       "activity_date": "2026-09-21",
       "activity_name": "Styrketräning på kvällen",
-      "generated_at_utc": "2026-09-22T11:52:08.885047+00:00",
+      "generated_at_utc": "2026-09-22T13:56:20.115672+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 3,
@@ -16,27 +16,27 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört kvällens styrkepass (33,6 min) rapporterat RPE 2–4/10 och kändes pigg; samma dag innehöll också ett 97 min Enduro-pass med låg subjektiv kostnad.",
-        "load_interpretation": "Närbelastning: Enduro (5809 s total passduration) + styrka idag ökar mekanisk/neuromuskulär belastning och stödjer konservativ reduktion av morgondagens styrkedel.",
+        "summary": "Lätt styrkepass (33,6 min) rapporterat RPE 2/10–4/10 och registrerad puls låg (avg 79, max 128); genomfört samma dag som ett 5809 s enduropass.",
+        "load_interpretation": "Samma-dag Enduro + styrka ökar mekanisk/neuromuskulär närbelastning jämfört med ursprunglig plan; sim/styrkedosen reducerades tidigare av automatik.",
         "confidence": "medium",
         "facts": [
           "WeightTraining: 33:34 · snittpuls 79,3 · maxpuls 128.",
           "Användarrapport: RPE 2/10. Känsla: Pigg. Palloff press, latsdrag, bulgarian splits, atomic pushups med band, bänkrodd, dead bug, omvänd planka RPE 4/10."
         ],
         "interpretations": [
-          "Detta styrkepass var lågintensivt subjektivt och genomfört — men tillsammans med dagens Enduro ökar den totala benrelaterade närbelastningen för mikrocykeln.",
-          "Valet att reducera styrkedelen för morgondagens kombinerade sim+styrka (det valda passalternativet) är konservativt och lämpligt baserat på dagens samlade belastning."
+          "Passet visar låg subjektiv och objektiv kostnad — genomförbart men bidrar till ökad mekanisk/neuromuskulär närbelastning efter Enduro samma dag.",
+          "För mikrocykeln betyder detta att auto‑reduktionen av styrkedosen (det valda passalternativet) var lämplig; ingen ytterligare nedskalning krävs i närtid."
         ],
         "unknowns": [
-          "Hur du känner dig nästa morgon (24–48h återhämtning) kan påverka toleransen för styrkevolym.",
-          "Eventuell planerad plyometri i styrkemallen och dess faktiska genomförande är inte specificerat och påverkar lokal belastning."
+          "Om du upplever lokal muskelömhet senare 24–72 h efter passen.",
+          "Eventuella kvarstående planer eller fasta åtaganden som påverkar återhämtning i morgon."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-09-22",
-        "reason": "Planen har redan automatiskt reducerat styrkedosen till det valda passalternativet efter dagens Enduro + styrka; beslutet skyddar ben inför mikrocykelns nyckelpass.",
-        "recommendation": "Följ dagens planerade reducerade variant (det valda passalternativet): genomför simdelen enligt planerat träningsinnehåll och håll styrka inom 25 min tidsram, undvik plyometri; återrapportera RPE nästa morgon om avvikelse.",
+        "reason": "Passet tolererades väl enligt användarrapport och mätdata; redan applicerad konservativ dosreduktion skyddar nästa nyckelpass.",
+        "recommendation": "Följ dagens reviderade plan (det valda passalternativet) utan ytterligare ändring; prioritera vila/sömnhygien och lätt mobilitet i morgon. Om du känner ökad lokal trötthet eller smärta: vila helt och markera för review.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -1210,8 +1210,8 @@
       }
     }
   ],
-  "last_trigger_hash": "6157985f64a53f2df176fb4b26b02b0a42474187145b459605d67c1fac19d43e",
-  "last_run_utc": "2026-09-22T11:52:08.885047+00:00",
+  "last_trigger_hash": "551dc937c8451765c9f4fa87930d99925090ad9d0d4b1ffc50fabc55522fd167",
+  "last_run_utc": "2026-09-22T13:56:20.115672+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 3
