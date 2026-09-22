@@ -1615,13 +1615,19 @@ def materialize_strategy(goal, policy, meso, micro, catalog, athlete_state):
     strategy["current_priorities"] = generated_current_priorities(meso)
     strategy["capability_portfolio"] = generated_capability_portfolio(policy, meso)
     strategy["strategic_readiness"] = generated_strategic_readiness(goal, policy)
+    goal_rows = planning_goal_set(goal)
     strategy["goal_contract"] = {
         "source_file": "data/goal.json",
         "source_schema_version": goal.get("schema_version"),
         "goal_hash": digest,
         "goal_change_requires_mesocycle_review": True,
+        "goal_set": deepcopy(goal_rows),
         "competition_context": deepcopy(meso.get("competition_context") or {}),
-        "principle": "Målbilden och verifierad tävlingsprofil är kanoniska. Ändring kräver nytt genererat mesocykelbeslut innan planeringen fortsätter.",
+        "principle": (
+            "Målportföljen är kanonisk: varaktiga utvecklingsmål anger vilken atlet som byggs och "
+            "tidsatta prestationsmål lägger till prioritering/specificitet. Ett A-mål får inte implicit "
+            "ersätta den varaktiga målbilden. Ändring kräver nytt genererat mesocykelbeslut."
+        ),
     }
 
     template, contract = materialize_template(meso, micro, policy, catalog, athlete_state)
@@ -1642,6 +1648,7 @@ def materialize_strategy(goal, policy, meso, micro, catalog, athlete_state):
         "evaluation_date": meso["evaluation_date"],
         "goal_basis_hash": digest,
         "goal_contribution": meso["goal_contribution"],
+        "goal_contributions": deepcopy(meso.get("goal_contributions") or []),
         "hypothesis": meso["hypothesis"],
         "protected_stimuli": list(contract["primary"]),
         "supporting_stimuli": [
