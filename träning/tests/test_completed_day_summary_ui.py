@@ -87,8 +87,12 @@ class CompletedDaySummaryUiTests(unittest.TestCase):
         self.assertEqual(changed, 1)
         self.assertIn("completed-day-simplified", rendered)
         self.assertIn('<span class="completed-day-kicker">Genomfört</span>', rendered)
-        self.assertIn("Enduro + Styrka", rendered)
         self.assertIn("Enduro 1:36:49 · Styrka 33:34", rendered)
+        self.assertIn('data-visible-sport-icons="enduro,strength"', rendered)
+        self.assertIn('data-visible-sport-icon="enduro"', rendered)
+        self.assertIn('data-visible-sport-icon="strength"', rendered)
+        self.assertIn('class="sport-icon icon-enduro"', rendered)
+        self.assertIn('class="sport-icon icon-strength"', rendered)
 
         self.assertIn('<span class="completed-day-label">Planpåverkan</span>', rendered)
         self.assertIn("<strong>Planen ligger kvar</strong>", rendered)

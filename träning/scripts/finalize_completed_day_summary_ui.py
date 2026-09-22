@@ -17,12 +17,14 @@ from zoneinfo import ZoneInfo
 
 from finalize_post_workout_ui import SPORT_LABELS, fmt_duration, local_date
 from finalize_training_input_ui import FEELING_LABELS, feedback_from_override
+from finalize_completed_sport_icon import activity_icon_key, render_icon
 
 ROOT = Path(__file__).resolve().parents[1]
 INDEX_FILE = ROOT / "index.html"
 PLAN_FILE = ROOT / "data" / "plan.json"
 ACTIVITIES_FILE = ROOT / "data" / "activities.json"
 OVERRIDES_FILE = ROOT / "data" / "activity_overrides.json"
+ICON_FILE = ROOT / "data" / "sport_icons.json"
 
 CSS_MARKER = "/* completed-day-summary-v1 */"
 DAY_RE = re.compile(
@@ -43,7 +45,11 @@ CSS = r"""
 .completed-day-simplified>.session{display:none}
 .completed-day-summary{margin-top:2px}
 .completed-day-kicker{font-size:.66rem;font-weight:800;letter-spacing:.055em;text-transform:uppercase;color:var(--qp-tertiary,#64748b)}
-.completed-day-title{margin:2px 0 1px;font-size:1.05rem;font-weight:800;letter-spacing:-.012em;color:var(--qp-text,#111827)}
+.completed-day-title{display:flex;align-items:center;flex-wrap:wrap;gap:7px;margin:2px 0 1px;font-size:1.05rem;font-weight:800;letter-spacing:-.012em;color:var(--qp-text,#111827)}
+.completed-day-title .completed-day-title-sport{display:inline-flex;align-items:center;gap:6px}
+.completed-day-title .sport-icon{width:18px;height:18px;flex:0 0 auto;color:var(--qp-secondary,#64748b)}
+.completed-day-title .icon-swim,.completed-day-title .icon-bike,.completed-day-title .icon-enduro,.completed-day-title .icon-strength{width:20px}
+.completed-day-title-sep{color:var(--qp-tertiary,#94a3b8);font-weight:600}
 .completed-day-meta{color:var(--qp-secondary,#64748b);font-size:.8rem;line-height:1.4;font-variant-numeric:tabular-nums}
 .completed-day-section{margin-top:12px;padding-top:11px;border-top:1px solid var(--qp-line-soft,#eef2f4)}
 .completed-day-section:first-of-type{margin-top:13px}
@@ -157,6 +163,27 @@ def performed_title(activities: list[dict]) -> str:
     return " + ".join(labels)
 
 
+def performed_title_html(activities: list[dict], icon_registry: dict) -> tuple[str, list[str]]:
+    seen = set()
+    parts = []
+    icon_keys = []
+    for activity in activities:
+        label = activity_label(activity)
+        key = activity_icon_key(activity)
+        identity = (key, label)
+        if identity in seen:
+            continue
+        seen.add(identity)
+        icon_keys.append(key)
+        parts.append(
+            f'<span class="completed-day-title-sport" data-visible-sport-icon="{html.escape(key)}">'
+            f'{render_icon(key, icon_registry)}<span>{html.escape(label)}</span></span>'
+        )
+    if not parts:
+        return html.escape("Genomfört pass"), []
+    return '<span class="completed-day-title-sep">+</span>'.join(parts), icon_keys
+
+
 def performed_meta(activities: list[dict]) -> str:
     parts = []
     for activity in activities:
@@ -251,6 +278,7 @@ def render_summary(
     rest: str,
     input_blocks: dict[int, dict[str, str]] | None = None,
     consumed_input_ids: set[int] | None = None,
+    icon_registry: dict | None = None,
 ) -> str:
     decision = extract(r'class="coach-decision".*?<strong>(.*?)</strong>', block)
     coach_summary = extract(r'class="coach-summary">(.*?)</div>', block)
@@ -266,6 +294,8 @@ def render_summary(
         consumed_input_ids=consumed_input_ids,
     )
     planned = planned_copy(block)
+    title_html, visible_icon_keys = performed_title_html(activities, icon_registry or {})
+    visible_icons_attr = ",".join(visible_icon_keys)
 
     feedback_html = ""
     if feedback:
@@ -292,9 +322,9 @@ def render_summary(
     )
 
     return (
-        '<div class="completed-day-summary">'
+        f'<div class="completed-day-summary" data-visible-sport-icons="{html.escape(visible_icons_attr)}">'
         '<span class="completed-day-kicker">Genomfört</span>'
-        f'<div class="completed-day-title">{html.escape(performed_title(activities))}</div>'
+        f'<div class="completed-day-title">{title_html}</div>'
         f'<div class="completed-day-meta">{html.escape(performed_meta(activities))}</div>'
         '<div class="completed-day-section">'
         '<span class="completed-day-label">Planpåverkan</span>'
@@ -311,7 +341,13 @@ def render_summary(
     )
 
 
-def simplify_completed_days(page: str, activities_state: dict, overrides: dict, today: str) -> tuple[str, int]:
+def simplify_completed_days(
+    page: str,
+    activities_state: dict,
+    overrides: dict,
+    today: str,
+    icon_registry: dict | None = None,
+) -> tuple[str, int]:
     input_blocks = training_input_blocks(page)
     consumed_input_ids: set[int] = set()
     grouped: dict[str, list[dict]] = {}
@@ -348,6 +384,7 @@ def simplify_completed_days(page: str, activities_state: dict, overrides: dict, 
             rest,
             input_blocks=input_blocks,
             consumed_input_ids=consumed_input_ids,
+            icon_registry=icon_registry or {},
         )
 
         opening = block[: block.find(">") + 1]
@@ -373,10 +410,17 @@ def main() -> int:
     plan = load_json(PLAN_FILE, {"meta": {}})
     activities = load_json(ACTIVITIES_FILE, {"activities": []})
     overrides = load_json(OVERRIDES_FILE, {"schema_version": 1, "overrides": {}})
+    icon_registry = load_json(ICON_FILE, {"icons": {}}).get("icons") or {}
     tz = ZoneInfo((plan.get("meta") or {}).get("timezone", "Europe/Stockholm"))
     today = datetime.now(tz).date().isoformat()
 
-    page, changed = simplify_completed_days(page, activities, overrides, today)
+    page, changed = simplify_completed_days(
+        page,
+        activities,
+        overrides,
+        today,
+        icon_registry=icon_registry,
+    )
     if changed:
         if CSS_MARKER not in page:
             if "</style>" not in page:
