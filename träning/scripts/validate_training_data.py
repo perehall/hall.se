@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 
 from activity_labels import public_activity_label
-from goal_contracts import planning_goal_hash
+from goal_contracts import GoalContractError, planning_goal_hash, validate_goal_portfolio
 from race_contracts import RaceContractError, validate_race_goal
 from coach_rules import activity_local_date, canonical_activity_fact
 from strategy_contracts import StrategyContractError, validate_training_strategy
@@ -76,10 +76,10 @@ def main(argv=None):
     except StrategyContractError as exc:
         raise ContractError(str(exc)) from exc
 
-    require(goal.get("schema_version") == 2, "målbild: schema_version måste vara 2")
     try:
+        validate_goal_portfolio(goal)
         validate_race_goal(goal)
-    except RaceContractError as exc:
+    except (GoalContractError, RaceContractError) as exc:
         raise ContractError(str(exc)) from exc
     canonical_goal = str(goal.get("goal") or "").strip()
     require(bool(canonical_goal), "målbild: goal saknas")
@@ -122,7 +122,7 @@ def main(argv=None):
 
     suffix = " (målbild får vara stale före adaptive_planning)" if args.allow_stale_goal else ""
     print(
-        "Datakontrakt OK: plan v3, kommande vecka v3, aktiviteter v2, strategi v5, performance v1 och coach-state är konsistenta."
+        "Datakontrakt OK: plan v3, kommande vecka v3, aktiviteter v2, målportfölj v3, strategi v5, performance v1 och coach-state är konsistenta."
         + suffix
     )
 

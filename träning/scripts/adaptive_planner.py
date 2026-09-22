@@ -19,7 +19,7 @@ from copy import deepcopy
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
-from goal_contracts import planning_goal_hash
+from goal_contracts import planning_goal_hash, planning_goal_set
 from race_contracts import build_competition_context
 from rollover_week import (
     build_mesocycle_next_week,
@@ -45,8 +45,8 @@ WEEKS_DIR = DATA / "weeks"
 MODEL = os.environ.get("OPENAI_MODEL", "gpt-5-mini")
 MESO_SCHEMA_VERSION = 1
 MICRO_SCHEMA_VERSION = 1
-PLANNER_REVISION = 4
-MICRO_PLANNER_REVISION = 6
+PLANNER_REVISION = 5
+MICRO_PLANNER_REVISION = 7
 
 CAPABILITY_TO_RECIPE = {
     "run_threshold": "run_threshold",
@@ -314,6 +314,22 @@ def mesocycle_schema(capabilities):
             "title": {"type": "string"},
             "duration_weeks": {"type": "integer", "minimum": 3, "maximum": 5},
             "goal_contribution": {"type": "string"},
+            "goal_contributions": {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 8,
+                "items": {
+                    "type": "object",
+                    "additionalProperties": False,
+                    "properties": {
+                        "goal_id": {"type": "string"},
+                        "goal_type": {"type": "string", "enum": ["development", "performance"]},
+                        "contribution": {"type": "string"},
+                        "tradeoff": {"type": "string"},
+                    },
+                    "required": ["goal_id", "goal_type", "contribution", "tradeoff"],
+                },
+            },
             "hypothesis": {"type": "string"},
             "primary_capabilities": {
                 "type": "array", "minItems": 1, "maxItems": 3, "items": primary_cap
@@ -364,6 +380,7 @@ def mesocycle_schema(capabilities):
             "title",
             "duration_weeks",
             "goal_contribution",
+            "goal_contributions",
             "hypothesis",
             "primary_capabilities",
             "secondary_capabilities",
@@ -414,9 +431,50 @@ def previous_mesocycle(strategy):
     return deepcopy(current) if isinstance(current, dict) else {}
 
 
+def normalize_goal_contributions(goal_rows, provided, summary, competition_context):
+    supplied = {
+        str(item.get("goal_id") or "").strip(): item
+        for item in (provided or [])
+        if isinstance(item, dict) and str(item.get("goal_id") or "").strip()
+    }
+    normalized = []
+    stage = str((competition_context or {}).get("horizon_stage") or "unknown")
+    for goal_item in goal_rows:
+        goal_id = goal_item["id"]
+        current = supplied.get(goal_id) or {}
+        if goal_item["type"] == "development":
+            default_contribution = (
+                "Utveckla den aktuella mesocykelns prioriterade kapaciteter samtidigt som allroundprofilens "
+                "övriga discipliner behålls som aktiva utvecklings- eller underhållsspår över blocken."
+            )
+            default_tradeoff = (
+                "Det varaktiga allroundmålet får inte ersättas implicit av ett tävlingsmål; eventuell "
+                "tillfällig nedprioritering ska vara explicit, tidsbegränsad och omprövas."
+            )
+        else:
+            default_contribution = (
+                f"A-målet påverkar kapacitetsbetoning och specificitet i horizon_stage={stage}, men ska "
+                "inte ensamt styra träningsidentiteten eller fylla kalendern."
+            )
+            default_tradeoff = (
+                "Tävlingsspecificitet får öka när tidshorisont och faktisk kapacitet motiverar det, "
+                "men den får inte automatiskt tränga undan den varaktiga allroundutvecklingen."
+            )
+        normalized.append(
+            {
+                "goal_id": goal_id,
+                "goal_type": goal_item["type"],
+                "contribution": str(current.get("contribution") or default_contribution).strip(),
+                "tradeoff": str(current.get("tradeoff") or default_tradeoff).strip(),
+            }
+        )
+    return normalized
+
+
 def fallback_mesocycle(goal, policy, previous, target_start=None):
     primary = []
     refs = []
+    goal_rows = planning_goal_set(goal)
 
     competition_context = (
         build_competition_context(
@@ -474,11 +532,17 @@ def fallback_mesocycle(goal, policy, previous, target_start=None):
 
     previous_primary = set(previous.get("protected_stimuli") or [])
     decision = "continue" if set(primary) == previous_primary else "modify"
-    fallback_secondary_candidates = (
-        ("run_hill_quality",)
-        if active_swimrun_goal
-        else ("run_hill_quality", "mtb_aerobic")
-    )
+    enduring_disciplines = {
+        discipline
+        for item in goal_rows
+        if item.get("type") == "development"
+        for discipline in (item.get("disciplines") or [])
+    }
+    fallback_secondary_candidates = ["run_hill_quality"]
+    if "mtb" in enduring_disciplines:
+        fallback_secondary_candidates.extend(["mtb_technical", "mtb_aerobic"])
+    if not active_swimrun_goal and "swim" in enduring_disciplines:
+        fallback_secondary_candidates.append("swim_threshold")
     secondary = [
         key
         for key in fallback_secondary_candidates
@@ -507,6 +571,12 @@ def fallback_mesocycle(goal, policy, previous, target_start=None):
             else
             "Föra den kanoniska målbilden och dess aktiva prestationsmål framåt genom att utveckla "
             "få tydliga kapaciteter samtidigt som övrig långsiktig allroundkapacitet skyddas."
+        ),
+        "goal_contributions": normalize_goal_contributions(
+            goal_rows,
+            [],
+            "",
+            competition_context,
         ),
         "hypothesis": (
             "Ett block med få tydliga utvecklingsområden och bibehållen bredd ger bättre möjlighet "
@@ -558,14 +628,17 @@ def generate_mesocycle(goal, policy, athlete_state, previous, target_start, *, r
         target_start,
         policy.get("event_horizon_policy"),
     )
+    goal_rows = planning_goal_set(goal)
     source_payload = {
         "goal": goal,
+        "goal_set": goal_rows,
         "competition_context": competition_context,
         "policy": {
             "mesocycle_policy": policy.get("mesocycle_policy"),
             "microcycle_policy": policy.get("microcycle_policy"),
             "decision_guards": policy.get("decision_guards"),
             "event_horizon_policy": policy.get("event_horizon_policy"),
+            "multi_goal_policy": policy.get("multi_goal_policy"),
             "available_capabilities": [
                 {"key": item.get("key"), "label": item.get("label")}
                 for item in (policy["strategy_base"].get("capability_portfolio") or [])
@@ -579,10 +652,12 @@ def generate_mesocycle(goal, policy, athlete_state, previous, target_start, *, r
     system = (
         "Du är mesocykelplaneraren i ett uthållighets-/allroundsystem. "
         "Välj vad som ska utvecklas nu; skriv inte en veckoplan och ordinera inte exakta pass. "
-        "Målbildens aktiva performance_goals är överordnade planeringsmål. competition_context innehåller verifierat tävlingsdatum, "
-        "publicerad banprofil och exakt tid kvar till loppet; dessa fakta ska användas när du väljer vad som behöver utvecklas nu. "
-        "Horizon_stage är en planerings-/reviewpolicy, inte en fysiologisk sanning eller automatisk dosregel. Långt från loppet byggs underliggande "
-        "kapaciteter; när loppet närmar sig ska stimulusvalet bli mer tävlingsspecifikt när athlete_state stödjer det. "
+        "Planeringsauktoriteten är goal_set som en samtidig målportfölj. Aktiva development-goals med role=enduring anger vilken atlet som byggs och får inte ersättas implicit av ett prestationsmål. "
+        "Aktiva performance-goals, inklusive A-mål, får styra betoning, konfliktlösning och successivt ökande specificitet men läggs ovanpå den varaktiga målbilden. "
+        "Du måste fylla goal_contributions för varje aktivt mål och beskriva eventuell trade-off uttryckligen. "
+        "competition_context innehåller verifierat tävlingsdatum, publicerad banprofil och exakt tid kvar till loppet; dessa fakta ska användas när du väljer vad som behöver utvecklas nu. "
+        "Horizon_stage är en planerings-/reviewpolicy, inte en fysiologisk sanning eller automatisk dosregel. I foundation ska A-målet främst påverka betoning inom en fortsatt bred allroundutveckling. "
+        "När loppet närmar sig får stimulusvalet bli mer tävlingsspecifikt när athlete_state stödjer det, men en sådan trade-off mot allroundbredd ska vara explicit och tidsbegränsad. "
         "Tid till loppet får aldrig ensam motivera mer volym, högre intensitet eller fler pass. Hitta inte på tävlingsfart, övergångsantal eller banfakta som saknas. "
         "Om en nödvändig tävlingsspecifik förmåga saknar exekverbart recept ska det anges som osäkerhet/gap, inte fyllas med ett påhittat pass. "
         "Utgå endast från målbild, competition_context, athlete_state och policy i underlaget. Föregående veckomall eller gamla prioriteringslistor är inte evidens i sig. "
@@ -646,6 +721,12 @@ def generate_mesocycle(goal, policy, athlete_state, previous, target_start, *, r
         )
     result["primary_capabilities"] = primary
     result["secondary_capabilities"] = secondary[:4]
+    result["goal_contributions"] = normalize_goal_contributions(
+        goal_rows,
+        result.get("goal_contributions"),
+        result.get("goal_contribution"),
+        competition_context,
+    )
     result["duration_weeks"] = max(
         int(policy["mesocycle_policy"]["min_weeks"]),
         min(int(result.get("duration_weeks") or 4), int(policy["mesocycle_policy"]["max_weeks"])),
@@ -1073,10 +1154,13 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
         "fixed_enduro_day_1": is_enduro_school_date(target_start),
         "goal": {
             "goal": goal.get("goal"),
+            "development_goals": goal.get("development_goals"),
             "performance_goals": goal.get("performance_goals"),
             "current_phase": goal.get("current_phase"),
             "next_steps": goal.get("next_steps"),
         },
+        "goal_set": planning_goal_set(goal),
+        "multi_goal_policy": policy.get("multi_goal_policy"),
         "mesocycle": meso,
         "microcycle_policy": policy.get("microcycle_policy"),
         "decision_guards": policy.get("decision_guards"),
@@ -1106,6 +1190,8 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
     digest = canonical_hash(source_payload)
     system = (
         "Du komponerar en sjudagars mikrocykel från ett redan fattat mesocykelbeslut. "
+        "Mesocykeln har redan vägt hela goal_set; mikrocykeln får inte omtolka A-målet som enda mål. "
+        "Ett enskilt sjudagarsfönster behöver inte uttrycka varje mål eller disciplin, men det får inte systematiskt radera kapaciteter som mesocykeln håller sekundära, underhållna eller skyddade. "
         "competition_context beskriver det verifierade A-loppet och tid kvar. Den får påverka specificitet inom mesocykelns beslut men är aldrig i sig skäl att lägga till träning eller öka dos. "
         "Välj endast dag, stimulusrecept och åtgärden establish/progress/consolidate/reduce. "
         "Du får inte hitta på exakta farter, pulser, watt eller doser; deterministisk kod väljer sedan dos från observerad historik och receptkatalog. "
@@ -1529,13 +1615,25 @@ def materialize_strategy(goal, policy, meso, micro, catalog, athlete_state):
     strategy["current_priorities"] = generated_current_priorities(meso)
     strategy["capability_portfolio"] = generated_capability_portfolio(policy, meso)
     strategy["strategic_readiness"] = generated_strategic_readiness(goal, policy)
+    goal_rows = planning_goal_set(goal)
+    normalized_contributions = normalize_goal_contributions(
+        goal_rows,
+        meso.get("goal_contributions"),
+        meso.get("goal_contribution"),
+        meso.get("competition_context") or {},
+    )
     strategy["goal_contract"] = {
         "source_file": "data/goal.json",
         "source_schema_version": goal.get("schema_version"),
         "goal_hash": digest,
         "goal_change_requires_mesocycle_review": True,
+        "goal_set": deepcopy(goal_rows),
         "competition_context": deepcopy(meso.get("competition_context") or {}),
-        "principle": "Målbilden och verifierad tävlingsprofil är kanoniska. Ändring kräver nytt genererat mesocykelbeslut innan planeringen fortsätter.",
+        "principle": (
+            "Målportföljen är kanonisk: varaktiga utvecklingsmål anger vilken atlet som byggs och "
+            "tidsatta prestationsmål lägger till prioritering/specificitet. Ett A-mål får inte implicit "
+            "ersätta den varaktiga målbilden. Ändring kräver nytt genererat mesocykelbeslut."
+        ),
     }
 
     template, contract = materialize_template(meso, micro, policy, catalog, athlete_state)
@@ -1556,6 +1654,7 @@ def materialize_strategy(goal, policy, meso, micro, catalog, athlete_state):
         "evaluation_date": meso["evaluation_date"],
         "goal_basis_hash": digest,
         "goal_contribution": meso["goal_contribution"],
+        "goal_contributions": deepcopy(normalized_contributions),
         "hypothesis": meso["hypothesis"],
         "protected_stimuli": list(contract["primary"]),
         "supporting_stimuli": [
@@ -1729,6 +1828,8 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
         ),
         "mesocycle": meso,
         "goal": goal,
+        "goal_set": planning_goal_set(goal),
+        "multi_goal_policy": policy.get("multi_goal_policy"),
         "microcycle_policy": policy.get("microcycle_policy"),
         "decision_guards": policy.get("decision_guards"),
         "athlete_state": sanitize_athlete_state(athlete_state),

@@ -40,12 +40,29 @@ def validate_training_strategy(document):
     goal_contract = document.get("goal_contract")
     require(isinstance(goal_contract, dict), "strategi.goal_contract saknas")
     require(goal_contract.get("source_file") == "data/goal.json", "strategi.goal_contract.source_file måste vara data/goal.json")
-    require(goal_contract.get("source_schema_version") == 2, "strategi.goal_contract.source_schema_version måste vara 2")
+    source_goal_schema = goal_contract.get("source_schema_version")
+    require(source_goal_schema in {2, 3}, "strategi.goal_contract.source_schema_version måste vara 2 eller 3")
     goal_hash = goal_contract.get("goal_hash")
     nonempty_string(goal_hash, "strategi.goal_contract.goal_hash")
     require(len(goal_hash) == 64, "strategi.goal_contract.goal_hash måste vara sha256")
     require(goal_contract.get("goal_change_requires_mesocycle_review") is True, "strategi: måländring måste kräva mesocykelomprövning")
     nonempty_string(goal_contract.get("principle"), "strategi.goal_contract.principle")
+    if source_goal_schema >= 3:
+        goal_set = goal_contract.get("goal_set")
+        require(isinstance(goal_set, list) and len(goal_set) >= 2, "strategi.goal_contract.goal_set måste innehålla samtidiga mål")
+        goal_ids = set()
+        goal_types = set()
+        for index, item in enumerate(goal_set):
+            context = f"strategi.goal_contract.goal_set[{index}]"
+            require(isinstance(item, dict), f"{context}: måste vara objekt")
+            goal_id = item.get("id")
+            nonempty_string(goal_id, f"{context}.id")
+            require(goal_id not in goal_ids, f"{context}: dubblerat id")
+            goal_ids.add(goal_id)
+            goal_type = item.get("type")
+            require(goal_type in {"development", "performance"}, f"{context}.type ogiltig")
+            goal_types.add(goal_type)
+        require({"development", "performance"}.issubset(goal_types), "strategi.goal_contract.goal_set måste innehålla development + performance")
 
     hierarchy = document.get("planning_hierarchy")
     require(isinstance(hierarchy, dict), "strategi.planning_hierarchy saknas")
@@ -156,6 +173,20 @@ def validate_training_strategy(document):
     evaluation = iso_date(mesocycle.get("evaluation_date"), "strategi.current_mesocycle.evaluation_date")
     require(start <= end < evaluation, "strategi.current_mesocycle: datumordning måste vara start <= end < evaluation")
     nonempty_string(mesocycle.get("goal_contribution"), "strategi.current_mesocycle.goal_contribution")
+    if source_goal_schema >= 3:
+        contributions = mesocycle.get("goal_contributions")
+        require(isinstance(contributions, list) and contributions, "strategi.current_mesocycle.goal_contributions saknas")
+        contribution_ids = set()
+        for index, item in enumerate(contributions):
+            context = f"strategi.current_mesocycle.goal_contributions[{index}]"
+            require(isinstance(item, dict), f"{context}: måste vara objekt")
+            goal_id = item.get("goal_id")
+            nonempty_string(goal_id, f"{context}.goal_id")
+            require(goal_id not in contribution_ids, f"{context}: dubblerat goal_id")
+            contribution_ids.add(goal_id)
+            require(item.get("goal_type") in {"development", "performance"}, f"{context}.goal_type ogiltig")
+            nonempty_string(item.get("contribution"), f"{context}.contribution")
+        require(contribution_ids == goal_ids, "strategi.current_mesocycle.goal_contributions måste täcka hela goal_set")
     require(mesocycle.get("goal_basis_hash") == goal_hash, "strategi.current_mesocycle.goal_basis_hash måste matcha aktuell målbild")
     nonempty_string(mesocycle.get("hypothesis"), "strategi.current_mesocycle.hypothesis")
 
