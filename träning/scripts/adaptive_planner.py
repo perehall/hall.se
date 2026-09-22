@@ -94,7 +94,7 @@ PRIMARY_CAPABILITIES_WITH_EXECUTABLE_RECIPES = {
 }
 SUPPORT_ONLY_RECIPES = {"swim_strength"}
 RUN_STRESS_RECIPES = {"run_threshold", "run_hill_quality", "run_easy_distance"}
-DAY_AFTER_ENDURO_BLOCKED_RECIPES = RUN_STRESS_RECIPES | {"mtb_technical"}
+DAY_AFTER_ENDURO_BLOCKED_RECIPES = RUN_STRESS_RECIPES | {"mtb_technical", "swim_strength", "strength_core"}
 
 
 def load_json(path: Path, fallback):
@@ -745,6 +745,7 @@ def generate_mesocycle(goal, policy, athlete_state, previous, target_start, *, r
             "end_date": end.isoformat(),
             "evaluation_date": (end + timedelta(days=1)).isoformat(),
             "competition_context": competition_context,
+            "completed_microcycle_context": completed_context,
         }
     )
     result["id"] = (
@@ -770,7 +771,79 @@ def mesocycle_is_valid(decision, goal, target_start):
         return False
 
 
-def fallback_microcycle(meso, policy, catalog, target_start):
+def completed_microcycle_context(athlete_state, target_start):
+    """Summarize only factual training already completed inside the target microcycle.
+
+    Session-family counts are used for exposure requirements. Direct capability
+    credit is stricter: a capability is credited only when athlete_state carries
+    dated evidence for that capability in this exact microcycle. This prevents a
+    generic run from being silently treated as threshold work.
+    """
+    end = target_start + timedelta(days=6)
+    rows = []
+    for session in (athlete_state.get("recent_sessions") or []):
+        try:
+            session_date = iso(session.get("date"))
+        except (TypeError, ValueError):
+            continue
+        if not target_start <= session_date <= end:
+            continue
+        if session.get("classification") == "recreation":
+            continue
+        rows.append(session)
+
+    activity_ids = {
+        str(row.get("id"))
+        for row in rows
+        if row.get("id") is not None
+    }
+    direct_capabilities = set()
+    capability_refs = {}
+    for capability, facts in (athlete_state.get("capability_facts") or {}).items():
+        if not isinstance(facts, dict):
+            continue
+        evidence_rows = list(facts.get("evidence") or [])
+        for field in ("longest_distance", "longest_duration"):
+            item = facts.get(field)
+            if isinstance(item, dict):
+                evidence_rows.append(item)
+        for item in evidence_rows:
+            if not isinstance(item, dict):
+                continue
+            try:
+                evidence_date = iso(item.get("date"))
+            except (TypeError, ValueError):
+                continue
+            activity_id = str(item.get("activity_id") or "")
+            if target_start <= evidence_date <= end and activity_id in activity_ids:
+                direct_capabilities.add(capability)
+                capability_refs.setdefault(capability, []).append(activity_id)
+
+    fixed_enduro = is_enduro_school_date(target_start)
+    completed_slot_dates = {
+        str(row.get("date"))
+        for row in rows
+        if not (fixed_enduro and str(row.get("date")) == target_start.isoformat())
+    }
+    strength_rows = [row for row in rows if row.get("family") == "strength"]
+    swim_rows = [row for row in rows if row.get("family") == "swim"]
+    enduro_rows = [row for row in rows if row.get("family") == "enduro"]
+    return {
+        "strength_exposures": len(strength_rows),
+        "swim_exposures": len(swim_rows),
+        "enduro_exposures": len(enduro_rows),
+        "completed_slot_days": len(completed_slot_dates),
+        "direct_capabilities": sorted(direct_capabilities),
+        "capability_refs": capability_refs,
+        "activity_refs": sorted(activity_ids),
+        "evidence_note": (
+            "Familjeexponeringar kommer från faktiskt registrerade aktiviteter i målveckan. "
+            "Direkt kapabilitetskredit kräver daterad athlete_state-evidens från samma aktivitet."
+        ),
+    }
+
+
+def fallback_microcycle(meso, policy, catalog, target_start, completed_context=None):
     """Conservative composition from requirements, not from calendar fill.
 
     Fixed Enduro consumes a real training day. Secondary capabilities are not a
@@ -781,6 +854,10 @@ def fallback_microcycle(meso, policy, catalog, target_start):
     primaries = set(meso.get("primary_capabilities") or [])
     secondaries = set(meso.get("secondary_capabilities") or [])
     fixed_enduro = is_enduro_school_date(target_start)
+    completed_context = completed_context or {}
+    completed_swims = int(completed_context.get("swim_exposures") or 0)
+    completed_strength = int(completed_context.get("strength_exposures") or 0)
+    completed_direct = set(completed_context.get("direct_capabilities") or [])
     max_slots = 5 if fixed_enduro else 6
     slots = []
 
@@ -806,10 +883,10 @@ def fallback_microcycle(meso, policy, catalog, target_start):
             }
         ]
 
-    def add_recipe(recipe, rationale, *, action=None):
+    def add_recipe(recipe, rationale, *, action=None, allow_repeat=False):
         if recipe not in catalog["recipes"] or len(slots) >= max_slots:
             return False
-        if any(row["recipe_key"] == recipe for row in slots):
+        if not allow_repeat and any(row["recipe_key"] == recipe for row in slots):
             return True
         for day in preferred_days.get(recipe, range(1, 8)):
             if fixed_enduro and day == 1:
@@ -848,6 +925,8 @@ def fallback_microcycle(meso, policy, catalog, target_start):
 
     # Cover each primary with an executable direct recipe.
     for cap in meso.get("primary_capabilities") or []:
+        if cap in completed_direct:
+            continue
         direct_recipe = CAPABILITY_TO_RECIPE.get(cap)
         if not direct_recipe:
             continue
@@ -862,22 +941,39 @@ def fallback_microcycle(meso, policy, catalog, target_start):
             f"Realiserar mesocykelns primära kapacitet {cap} med säker separation från annan benbelastning.",
         )
 
-    # Protect the second swim exposure and strength/core without treating a free
-    # day as a reason to add another independent session.
-    swim_count = sum(
+    # Credit already completed swim and strength before adding future protected work.
+    swim_count = completed_swims + sum(
         "swim_aerobic" in recipe_capabilities(catalog["recipes"][row["recipe_key"]])
         for row in slots
     )
-    if swim_count < int(policy["microcycle_policy"].get("normal_swim_exposures", 2)):
-        add_recipe(
-            "swim_strength",
-            "Kombinera andra simexponeringen med skyddad styrka/core i stället för att fylla ytterligare en dag.",
-            action="establish",
-        )
-    if not any(
+    required_swims = int(policy["microcycle_policy"].get("normal_swim_exposures", 2))
+    planned_strength = any(
         "strength_core" in recipe_capabilities(catalog["recipes"][row["recipe_key"]])
         for row in slots
-    ):
+    )
+    strength_needed = (
+        policy["microcycle_policy"].get("protect_strength_core_each_microcycle")
+        and completed_strength < 1
+        and not planned_strength
+    )
+    while swim_count < required_swims:
+        recipe = "swim_strength" if strength_needed else "swim_aerobic_technique"
+        if not add_recipe(
+            recipe,
+            (
+                "Kombinera en nödvändig simexponering med ännu ej uppfylld styrka/core."
+                if recipe == "swim_strength"
+                else "Lägg en ren lågmekanisk simexponering; styrka/core är redan faktiskt genomförd eller planerad."
+            ),
+            action="establish",
+            allow_repeat=(recipe == "swim_aerobic_technique"),
+        ):
+            break
+        swim_count += 1
+        if recipe == "swim_strength":
+            strength_needed = False
+
+    if strength_needed:
         add_recipe(
             "swim_strength",
             "Skydda styrka/core tillsammans med en redan motiverad simexponering.",
@@ -981,7 +1077,7 @@ def microcycle_layout_failures(rows, catalog, target_start):
     return failures
 
 
-def microcycle_guard_failures(result, meso, policy, catalog, target_start):
+def microcycle_guard_failures(result, meso, policy, catalog, target_start, completed_context=None):
     """Return explicit structural violations without silently repairing the model output."""
     recipes = catalog["recipes"]
     slots = result.get("slots") or []
@@ -989,6 +1085,11 @@ def microcycle_guard_failures(result, meso, policy, catalog, target_start):
     valid_rows = []
     seen_days = set()
     fixed_enduro = is_enduro_school_date(target_start)
+    completed_context = completed_context or {}
+    completed_swims = int(completed_context.get("swim_exposures") or 0)
+    completed_strength = int(completed_context.get("strength_exposures") or 0)
+    completed_slot_days = int(completed_context.get("completed_slot_days") or 0)
+    completed_direct = set(completed_context.get("direct_capabilities") or [])
 
     for index, row in enumerate(slots):
         if not isinstance(row, dict):
@@ -1011,7 +1112,7 @@ def microcycle_guard_failures(result, meso, policy, catalog, target_start):
         seen_days.add(day)
         valid_rows.append(row)
 
-    minimum = 4
+    minimum = max(0, 4 - completed_slot_days)
     maximum = 5 if fixed_enduro else 6
     if len(valid_rows) < minimum:
         failures.append(f"för få giltiga träningsslots: {len(valid_rows)} < {minimum}")
@@ -1047,36 +1148,55 @@ def microcycle_guard_failures(result, meso, policy, catalog, target_start):
                 f"{recipe_key} får inte progressas eftersom receptet inte realiserar ett direkt primärt stimulus"
             )
 
-    missing_primary = sorted(primaries - direct_primary_caps)
+        completed_overlap = caps.intersection(primaries).intersection(completed_direct)
+        if recipe_key not in SUPPORT_ONLY_RECIPES and completed_overlap:
+            failures.append(
+                f"{recipe_key} är redundant: primärt stimulus är redan faktiskt genomfört i mikrocykeln "
+                + ", ".join(sorted(completed_overlap))
+            )
+        if (
+            completed_strength >= 1
+            and recipe_key in {"swim_strength", "strength_core"}
+            and not {"strength_unilateral", "strength_core"}.intersection(primaries)
+        ):
+            failures.append(
+                f"{recipe_key} är redundant: styrka/core är redan faktiskt genomförd i mikrocykeln"
+            )
+
+    missing_primary = sorted(primaries - direct_primary_caps - completed_direct)
     if missing_primary:
         failures.append(
             "primära kapaciteter saknar direkt recept: " + ", ".join(missing_primary)
         )
 
     required_swims = int(policy["microcycle_policy"].get("normal_swim_exposures", 2))
-    if swim_exposures < required_swims:
+    total_swims = completed_swims + swim_exposures
+    if total_swims < required_swims:
         failures.append(
-            f"för få simexponeringar: {swim_exposures} < {required_swims}"
+            f"för få simexponeringar inklusive faktiskt genomförda: {total_swims} < {required_swims}"
         )
 
     required_strength = (
         1 if policy["microcycle_policy"].get("protect_strength_core_each_microcycle") else 0
     )
-    if strength_exposures < required_strength:
+    total_strength = completed_strength + strength_exposures
+    if total_strength < required_strength:
         failures.append(
-            f"för få styrka/core-exponeringar: {strength_exposures} < {required_strength}"
+            f"för få styrka/core-exponeringar inklusive faktiskt genomförda: {total_strength} < {required_strength}"
         )
 
     max_run_quality = int(policy["microcycle_policy"].get("max_run_quality_exposures", 2))
-    if run_quality > max_run_quality:
+    completed_run_quality = len(completed_direct.intersection({"run_threshold", "run_hill_quality"}))
+    total_run_quality = completed_run_quality + run_quality
+    if total_run_quality > max_run_quality:
         failures.append(
-            f"för många löpkvalitetsexponeringar: {run_quality} > {max_run_quality}"
+            f"för många löpkvalitetsexponeringar inklusive faktiskt genomförda: {total_run_quality} > {max_run_quality}"
         )
 
     return failures
 
 
-def validate_and_normalize_micro(result, meso, policy, catalog, target_start):
+def validate_and_normalize_micro(result, meso, policy, catalog, target_start, completed_context=None):
     recipes = catalog["recipes"]
     seen_days = set()
     cleaned = []
@@ -1128,21 +1248,21 @@ def validate_and_normalize_micro(result, meso, policy, catalog, target_start):
         if {"run_threshold", "run_hill_quality"}.intersection(caps):
             run_quality += 1
 
-    required_swims = int(policy["microcycle_policy"].get("normal_swim_exposures", 2))
-    valid = (
-        primaries.issubset(direct_primary_caps)
-        and swim_exposures >= required_swims
-        and (not policy["microcycle_policy"].get("protect_strength_core_each_microcycle") or strength_exposures >= 1)
-        and run_quality <= int(policy["microcycle_policy"].get("max_run_quality_exposures", 2))
-        and 4 <= len(cleaned) <= (5 if fixed_enduro else 6)
-        and not microcycle_layout_failures(cleaned, catalog, target_start)
+    valid = not microcycle_guard_failures(
+        {"rationale": result.get("rationale"), "slots": cleaned},
+        meso,
+        policy,
+        catalog,
+        target_start,
+        completed_context=completed_context,
     )
     if not valid:
-        return fallback_microcycle(meso, policy, catalog, target_start), False
+        return fallback_microcycle(meso, policy, catalog, target_start, completed_context=completed_context), False
     return {"rationale": str(result.get("rationale") or "").strip(), "slots": sorted(cleaned, key=lambda x: x["day_index"])}, True
 
 
 def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start, *, request_fn=None):
+    completed_context = completed_microcycle_context(athlete_state, target_start)
     competition_context = build_competition_context(
         goal,
         target_start,
@@ -1151,6 +1271,7 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
     source_payload = {
         "week_start": target_start.isoformat(),
         "competition_context": competition_context,
+        "completed_microcycle_context": completed_context,
         "fixed_enduro_day_1": is_enduro_school_date(target_start),
         "goal": {
             "goal": goal.get("goal"),
@@ -1177,7 +1298,10 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
         "hard_requirements": {
             "cover_all_primary_capabilities_directly": True,
             "normal_swim_exposures": int(policy["microcycle_policy"].get("normal_swim_exposures", 2)),
+            "completed_swim_exposures": int(completed_context.get("swim_exposures") or 0),
             "strength_core_exposures_min": 1 if policy["microcycle_policy"].get("protect_strength_core_each_microcycle") else 0,
+            "completed_strength_exposures": int(completed_context.get("strength_exposures") or 0),
+            "completed_direct_capabilities": list(completed_context.get("direct_capabilities") or []),
             "max_run_quality_exposures": int(policy["microcycle_policy"].get("max_run_quality_exposures", 2)),
             "slot_count_min": 4,
             "slot_count_max": 5 if is_enduro_school_date(target_start) else 6,
@@ -1200,6 +1324,8 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
         "normalantalet simexponeringar ska finnas, minst en styrka/core-exponering ska finnas när policyn kräver det, "
         "och antalet löpkvalitetsexponeringar får inte överskrida maxgränsen. "
         "Sekundära kapaciteter är inte en checklista och behöver inte alla förekomma varje vecka. "
+        "completed_microcycle_context är faktisk träning i målveckan och ska krediteras mot krav och primära stimuli när direkt evidens finns. "
+        "Planera inte om samma primära stimulus en gång till bara för att den ursprungliga kalenderdagen låg senare i veckan. "
         "Lägg inte löptröskel, backkvalitet eller lång löpdistans två dagar i rad. När dag 1 är fast enduro ska dag 2 ha låg benbelastning; "
         "lägg inte löp- eller MTB-belastning där innan faktiskt enduroutfall är känt. MTB/XC får inte ligga direkt intill löptröskel eller backkvalitet; "
         "sekundär cykelbelastning ska utgå hellre än att kompromissa ett primärt löpstimulus. Lämna minst en kalenderdag utan planerad träning. "
@@ -1219,14 +1345,14 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
         )
         source = "openai"
     except Exception as exc:
-        raw = fallback_microcycle(meso, policy, catalog, target_start)
+        raw = fallback_microcycle(meso, policy, catalog, target_start, completed_context=completed_context)
         raw["rationale"] += f" Modellbedömning saknades: {str(exc)[:220]}"
         source = "deterministic_fallback"
 
     repair_metadata = None
     if source == "openai":
         initial_failures = microcycle_guard_failures(
-            raw, meso, policy, catalog, target_start
+            raw, meso, policy, catalog, target_start, completed_context=completed_context
         )
         if initial_failures:
             repair_payload = deepcopy(source_payload)
@@ -1245,7 +1371,7 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
                     request_fn=request_fn,
                 )
                 repaired_failures = microcycle_guard_failures(
-                    repaired, meso, policy, catalog, target_start
+                    repaired, meso, policy, catalog, target_start, completed_context=completed_context
                 )
                 if not repaired_failures:
                     raw = repaired
@@ -1263,7 +1389,7 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
                         "repair_failures": repaired_failures,
                         "result": "fallback",
                     }
-                    raw = fallback_microcycle(meso, policy, catalog, target_start)
+                    raw = fallback_microcycle(meso, policy, catalog, target_start, completed_context=completed_context)
             except Exception as exc:
                 source = "deterministic_fallback_after_repair_error"
                 repair_metadata = {
@@ -1272,14 +1398,16 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
                     "repair_error": str(exc)[:400],
                     "result": "fallback",
                 }
-                raw = fallback_microcycle(meso, policy, catalog, target_start)
+                raw = fallback_microcycle(meso, policy, catalog, target_start, completed_context=completed_context)
 
-    normalized, model_valid = validate_and_normalize_micro(raw, meso, policy, catalog, target_start)
+    normalized, model_valid = validate_and_normalize_micro(
+        raw, meso, policy, catalog, target_start, completed_context=completed_context
+    )
     if source in {"openai", "openai_repaired"} and not model_valid:
         # Defensive backstop. A proposal accepted above must still pass the
         # normalizer used by publication.
         source = "deterministic_fallback_after_normalization_guard"
-        normalized = fallback_microcycle(meso, policy, catalog, target_start)
+        normalized = fallback_microcycle(meso, policy, catalog, target_start, completed_context=completed_context)
         repair_metadata = repair_metadata or {
             "attempted": False,
             "result": "fallback",
@@ -1645,6 +1773,15 @@ def materialize_strategy(goal, policy, meso, micro, catalog, athlete_state):
         x for x in FIXED_PROTECTED_CAPACITY
         if x in contract["protected_capacity"]
     ]
+    completed_context = micro.get("completed_microcycle_context") or {}
+    completed_capabilities = list(completed_context.get("direct_capabilities") or [])
+    if int(completed_context.get("strength_exposures") or 0) > 0:
+        completed_capabilities.extend(["strength_unilateral", "strength_core"])
+    if int(completed_context.get("swim_exposures") or 0) > 0:
+        completed_capabilities.extend(["swim_aerobic"])
+    if int(completed_context.get("enduro_exposures") or 0) > 0:
+        completed_capabilities.append("enduro_technical")
+    completed_capabilities = list(dict.fromkeys(completed_capabilities))
 
     strategy["current_mesocycle"] = {
         "id": meso["id"],
@@ -1665,6 +1802,8 @@ def materialize_strategy(goal, policy, meso, micro, catalog, athlete_state):
         "capacity_protection": {
             "required_each_microcycle": required_each,
             "protected_across_mesocycle": protected_across,
+            "completed_current_microcycle": completed_capabilities,
+            "completed_context": deepcopy(completed_context),
             "missing_required_action": "review_and_restore_in_next_absorbable_window",
             "rules": [
                 "Simning och styrka/core får inte försvinna som restpost när de är skyddad kapacitet.",
@@ -1819,8 +1958,10 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
         write_json(MESO_FILE, meso)
         append_decision_log("mesocycle", meso)
 
+    completed_context = completed_microcycle_context(athlete_state, target_start)
     micro_source_payload = {
         "week_start": target_start.isoformat(),
+        "completed_microcycle_context": completed_context,
         "competition_context": build_competition_context(
             goal,
             target_start,
