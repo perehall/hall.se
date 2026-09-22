@@ -19,6 +19,20 @@ VALID_STATUSES = {"completed", "planned", "preliminary", "conditional", "open"}
 VALID_MANUAL_STATUSES = {"completed"}
 VALID_CLASSIFICATIONS = {"training", "recreation"}
 REQUIRED_ICON_KEYS = {"run", "swim", "bike", "enduro", "strength"}
+ACTIVITY_SPORT_ICON_KEYS = {
+    "Run": "run",
+    "TrailRun": "run",
+    "VirtualRun": "run",
+    "Swim": "swim",
+    "Swimrun": "run",
+    "Ride": "bike",
+    "VirtualRide": "bike",
+    "MountainBikeRide": "bike",
+    "Enduro": "enduro",
+    "WeightTraining": "strength",
+    "StrengthTraining": "strength",
+}
+
 SPORT_ICON_KEYS = {
     "run": "run",
     "running": "run",
@@ -69,11 +83,20 @@ def main() -> None:
         require(bool(icons[key].get("path")), f"Preflight: {key}-ikon saknar path")
 
     activities_state = json.loads(ACTIVITIES.read_text(encoding="utf-8"))
+    activities = activities_state.get("activities", [])
     activities_by_id = {
         str(activity.get("id")): activity
-        for activity in activities_state.get("activities", [])
+        for activity in activities
         if activity.get("id") is not None
     }
+    activities_by_date = {}
+    for activity in activities:
+        value = str(activity.get("start_date_local") or activity.get("start_date") or "")
+        if len(value) < 10:
+            continue
+        key = ACTIVITY_SPORT_ICON_KEYS.get(str(activity.get("sport_type") or ""))
+        if key:
+            activities_by_date.setdefault(value[:10], set()).add(key)
     override_data = json.loads(OVERRIDES.read_text(encoding="utf-8"))
     overrides = override_data.get("overrides") or {}
     for activity_id, override in overrides.items():
@@ -205,6 +228,31 @@ def main() -> None:
             f'icon-{icon_key}' in index[start:end],
             f"Preflight: explicit sportikon {icon_key!r} saknas för {day_date}",
         )
+
+    # Completed-day UI has its own compact primary hierarchy. Icons hidden in
+    # the legacy/planned session node do not count: every actual sport shown in
+    # the completed summary must carry a visible SVG icon in the primary layer.
+    for day_date, (start, end) in day_ranges.items():
+        block = index[start:end]
+        summary_start = block.find('<div class="completed-day-summary"')
+        if summary_start < 0:
+            continue
+        details_start = block.find('<details class="completed-day-details"', summary_start)
+        primary = block[summary_start:details_start if details_start >= 0 else len(block)]
+        expected_keys = activities_by_date.get(day_date, set())
+        require(
+            'data-visible-sport-icons="' in primary,
+            f"Preflight: synligt ikonkontrakt saknas i genomförd huvudvy för {day_date}",
+        )
+        for icon_key in sorted(expected_keys):
+            require(
+                f'data-visible-sport-icon="{icon_key}"' in primary,
+                f"Preflight: synlig {icon_key}-ikon saknas i genomförd huvudvy för {day_date}",
+            )
+            require(
+                f'class="sport-icon icon-{icon_key}"' in primary,
+                f"Preflight: SVG för synlig {icon_key}-ikon saknas i genomförd huvudvy för {day_date}",
+            )
 
     canonical = GOAL.read_text(encoding="utf-8")
     mirror = GOAL_MIRROR.read_text(encoding="utf-8")
