@@ -1,5 +1,5 @@
 {
-  "last_sync_utc": "2026-09-22T20:06:24.202597+00:00",
+  "last_sync_utc": "2026-09-22T20:14:11.241199+00:00",
   "activities": [
     {
       "id": 20284663236,
@@ -278,9 +278,9 @@
         "contract_version": 3,
         "activity_id": 20284663236,
         "sport_type": "Run",
-        "display_label": "Run",
-        "classification": null,
-        "user_report": "",
+        "display_label": "Löpning · tröskel",
+        "classification": "training",
+        "user_report": "4 × 8 min tröskel. Garmin träningseffekt 4,2 ”Tröskel”. Känslan var riktigt bra och jag kände mig stark. Ökade lite på sista intervallen och hade mycket kraft kvar. Av praktiska skäl blev det löpning i stället för planerad simning; simningen flyttas till 2026-09-23.",
         "total": {
           "distance_m": 12897.3,
           "distance_km": 12.897,
@@ -380,7 +380,12 @@
         "swim": null,
         "enduro": null,
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
-      }
+      },
+      "source_sport_type": "Run",
+      "classification": "training",
+      "display_label": "Löpning · tröskel",
+      "user_report": "4 × 8 min tröskel. Garmin träningseffekt 4,2 ”Tröskel”. Känslan var riktigt bra och jag kände mig stark. Ökade lite på sista intervallen och hade mycket kraft kvar. Av praktiska skäl blev det löpning i stället för planerad simning; simningen flyttas till 2026-09-23.",
+      "classification_reason": "Explicit användarrapport beskriver faktisk intervallstruktur, Garmin-klassning, passkänsla och att löpningen ersatte dagens planerade simning. Uppgifterna ska vara förstaklassdata i analys och fortsatt planering."
     },
     {
       "id": 20272196080,
@@ -12755,7 +12760,7 @@
     "schema_version": 1,
     "workout_analysis_contract_version": 3,
     "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
-    "overrides_applied": 13,
+    "overrides_applied": 14,
     "auto_rules_applied": 11,
     "override_ids_present": [
       "19852599244",
@@ -12770,9 +12775,12 @@
       "20133500464",
       "20229568713",
       "20271537143",
-      "20272196080"
+      "20272196080",
+      "20284663236"
     ],
-    "changed_ids": []
+    "changed_ids": [
+      "20284663236"
+    ]
   },
   "schema_version": 2,
   "last_webhook_event": {

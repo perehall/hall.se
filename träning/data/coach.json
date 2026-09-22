@@ -4,7 +4,7 @@
       "activity_id": 20284663236,
       "activity_date": "2026-09-22",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-09-22T20:08:45.269020+00:00",
+      "generated_at_utc": "2026-09-22T20:15:58.610134+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 3,
@@ -16,26 +16,27 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "12.9 km löpning på 3:47–5:31/km med höga 1‑km‑splitar (flera 4:10–4:20/km) och maxpuls 165 visar ett starkt genomfört kvalitetspass med stigande belastning mot slutet.",
-        "load_interpretation": "Kardiovaskulärt och neuromuskulärt krav är tydligt ökat jämfört med tidigare dagars sim/styrka; inga subjektiva varningar rapporterade.",
+        "summary": "Genomfört 4×8 min tröskelpass (12.9 km) med god känsla och tydlig sista ökning; användarrapport och återhämtningsunderlaget TE bekräftar att intervallerna var kontrollerade och…",
+        "load_interpretation": "Kardiovaskulär belastning idag var hög för löpning; inga rapporterade smärtor och pigg-känsla i användarrapport tyder på god tolerans samma dag.",
         "confidence": "medium",
         "facts": [
-          "Löpning: 12,90 km · 1:01:27 · 105 m+ · snittpuls 145,4 · maxpuls 165."
+          "Löpning · tröskel: 12,90 km · 1:01:27 · 105 m+ · snittpuls 145,4 · maxpuls 165.",
+          "Användarrapport: 4 × 8 min tröskel. Garmin träningseffekt 4,2 ”Tröskel”. Känslan var riktigt bra och jag kände mig stark. Ökade lite på sista intervallen och hade mycket kraft kvar. Av praktiska skäl blev det löpning i stället för planerad simning; simningen flyttas till 2026-09-23."
         ],
         "interpretations": [
-          "Passet visar förmåga att genomföra längre fartvariationer och innehåller flera snabbare block som ökar neuromuskulär och mekanisk belastning för benen.",
-          "Återhämtningen till nästa pass är ännu inte verifierad av samma-dagsdata."
+          "Passet visar att kontrollerad tröskelstruktur kunde genomföras väl och att sista intervallet ökades utan subjektiv utmattning, vilket stödjer bevarad tröskelkontroll.",
+          "Eftersom löpningen ersatte planerad simning påverkas mikrocykelns simstimuli; simningen är explicit omplanerad till 2026-09-23 och ska räknas som utförd då."
         ],
         "unknowns": [
-          "Användarrapport saknas för dagens RPE/känsla vilket kan påverka återhämtningsbedömning",
-          "Exakt hur mycket av snabbare 1‑km‑splits var avsiktlig kvalitet kontra fartvariation pga terräng/ändringar"
+          "Subjektiv återhämtning kommande 24–72 h okänd trots pigg-känsla nu",
+          "Detaljerad styrke-/benstatus efter dagens löpning inte rapporterad och kan påverka styrkekomponenten 2026-09-23"
         ]
       },
       "plan_action": {
-        "action": "keep",
+        "action": "review",
         "target_date": "",
-        "reason": "Mikrocykelns plan och närliggande 2–3 dagars belastning stöds av detta genomförda pass och kräver ingen automatisk reduktion eller vila.",
-        "recommendation": "Följ plan: håll onsdagens sim (3 200 m) och fredagens tröskel som planerat; rapportera RPE/känsla för dagens pass och eventuella lokala benbesvär före nästa huvudpass.",
+        "reason": "Beslutet skjuts upp eftersom mellanliggande planerade dagar ännu inte har ett känt utfall.",
+        "recommendation": "Måndag: Enduroskola · fast tillfälle ligger kvar som plan. Tisdag: Simning · 4 000 m · aerob + kontrollerad tröskel bedöms efter den faktiska belastningen från måndag och återhämtningen därefter.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -1254,8 +1255,8 @@
       }
     }
   ],
-  "last_trigger_hash": "127967655d1d1d71109562464554268846d443cefc8f2ccf28bdf451d0305105",
-  "last_run_utc": "2026-09-22T20:08:45.269020+00:00",
+  "last_trigger_hash": "811f2a0e30ce6d2194c1a6a75ead8c1f2dcdb8a7772741cc40bd1e3ed7258afe",
+  "last_run_utc": "2026-09-22T20:15:58.610134+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 3

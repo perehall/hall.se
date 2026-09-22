@@ -4,7 +4,7 @@
   "week_start": "2026-09-21",
   "week_end": "2026-09-27",
   "created_at_utc": "2026-09-20T23:15:26.146433+00:00",
-  "updated_at_utc": "2026-09-22T20:08:47.817150+00:00",
+  "updated_at_utc": "2026-09-22T20:16:01.805234+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -1308,9 +1308,9 @@
           "transport": "intervals_icu",
           "source_hash": "933fd53bcd5115ce663040a681763bd5077223486cf932d94064753f3170d24b",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-22T20:08:46.464510+00:00",
+          "updated_at_utc": "2026-09-22T20:15:59.398563+00:00",
           "provider_event_id": 138097033,
-          "verified_at_utc": "2026-09-22T20:08:46.464510+00:00"
+          "verified_at_utc": "2026-09-22T20:15:59.398563+00:00"
         }
       },
       {
@@ -1660,9 +1660,9 @@
           "transport": "intervals_icu",
           "source_hash": "bde7e079a7b779ee8e526041dac7f215def350cc265c3eb1597bacb8fd7e258a",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-22T20:08:46.609947+00:00",
+          "updated_at_utc": "2026-09-22T20:15:59.586594+00:00",
           "provider_event_id": 138097034,
-          "verified_at_utc": "2026-09-22T20:08:46.609947+00:00"
+          "verified_at_utc": "2026-09-22T20:15:59.586594+00:00"
         }
       },
       {
@@ -1963,9 +1963,9 @@
           "transport": "intervals_icu",
           "source_hash": "9dc12d3e522e49454af7c6ffe216ee9ba323186427181ac1e1ae64a8d6009578",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-22T20:08:46.954930+00:00",
+          "updated_at_utc": "2026-09-22T20:16:01.111413+00:00",
           "provider_event_id": 138097036,
-          "verified_at_utc": "2026-09-22T20:08:46.954930+00:00"
+          "verified_at_utc": "2026-09-22T20:16:01.111413+00:00"
         }
       }
     ],
@@ -2258,9 +2258,9 @@
         "contract_version": 3,
         "activity_id": 20284663236,
         "sport_type": "Run",
-        "display_label": "Run",
-        "classification": null,
-        "user_report": "",
+        "display_label": "Löpning · tröskel",
+        "classification": "training",
+        "user_report": "4 × 8 min tröskel. Garmin träningseffekt 4,2 ”Tröskel”. Känslan var riktigt bra och jag kände mig stark. Ökade lite på sista intervallen och hade mycket kraft kvar. Av praktiska skäl blev det löpning i stället för planerad simning; simningen flyttas till 2026-09-23.",
         "total": {
           "distance_m": 12897.3,
           "distance_km": 12.897,
@@ -2360,7 +2360,12 @@
         "swim": null,
         "enduro": null,
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
-      }
+      },
+      "source_sport_type": "Run",
+      "classification": "training",
+      "display_label": "Löpning · tröskel",
+      "user_report": "4 × 8 min tröskel. Garmin träningseffekt 4,2 ”Tröskel”. Känslan var riktigt bra och jag kände mig stark. Ökade lite på sista intervallen och hade mycket kraft kvar. Av praktiska skäl blev det löpning i stället för planerad simning; simningen flyttas till 2026-09-23.",
+      "classification_reason": "Explicit användarrapport beskriver faktisk intervallstruktur, Garmin-klassning, passkänsla och att löpningen ersatte dagens planerade simning. Uppgifterna ska vara förstaklassdata i analys och fortsatt planering."
     },
     {
       "id": 20272196080,
@@ -2495,7 +2500,7 @@
       "activity_id": 20284663236,
       "activity_date": "2026-09-22",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-09-22T20:08:45.269020+00:00",
+      "generated_at_utc": "2026-09-22T20:15:58.610134+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 3,
@@ -2507,26 +2512,27 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "12.9 km löpning på 3:47–5:31/km med höga 1‑km‑splitar (flera 4:10–4:20/km) och maxpuls 165 visar ett starkt genomfört kvalitetspass med stigande belastning mot slutet.",
-        "load_interpretation": "Kardiovaskulärt och neuromuskulärt krav är tydligt ökat jämfört med tidigare dagars sim/styrka; inga subjektiva varningar rapporterade.",
+        "summary": "Genomfört 4×8 min tröskelpass (12.9 km) med god känsla och tydlig sista ökning; användarrapport och återhämtningsunderlaget TE bekräftar att intervallerna var kontrollerade och…",
+        "load_interpretation": "Kardiovaskulär belastning idag var hög för löpning; inga rapporterade smärtor och pigg-känsla i användarrapport tyder på god tolerans samma dag.",
         "confidence": "medium",
         "facts": [
-          "Löpning: 12,90 km · 1:01:27 · 105 m+ · snittpuls 145,4 · maxpuls 165."
+          "Löpning · tröskel: 12,90 km · 1:01:27 · 105 m+ · snittpuls 145,4 · maxpuls 165.",
+          "Användarrapport: 4 × 8 min tröskel. Garmin träningseffekt 4,2 ”Tröskel”. Känslan var riktigt bra och jag kände mig stark. Ökade lite på sista intervallen och hade mycket kraft kvar. Av praktiska skäl blev det löpning i stället för planerad simning; simningen flyttas till 2026-09-23."
         ],
         "interpretations": [
-          "Passet visar förmåga att genomföra längre fartvariationer och innehåller flera snabbare block som ökar neuromuskulär och mekanisk belastning för benen.",
-          "Återhämtningen till nästa pass är ännu inte verifierad av samma-dagsdata."
+          "Passet visar att kontrollerad tröskelstruktur kunde genomföras väl och att sista intervallet ökades utan subjektiv utmattning, vilket stödjer bevarad tröskelkontroll.",
+          "Eftersom löpningen ersatte planerad simning påverkas mikrocykelns simstimuli; simningen är explicit omplanerad till 2026-09-23 och ska räknas som utförd då."
         ],
         "unknowns": [
-          "Användarrapport saknas för dagens RPE/känsla vilket kan påverka återhämtningsbedömning",
-          "Exakt hur mycket av snabbare 1‑km‑splits var avsiktlig kvalitet kontra fartvariation pga terräng/ändringar"
+          "Subjektiv återhämtning kommande 24–72 h okänd trots pigg-känsla nu",
+          "Detaljerad styrke-/benstatus efter dagens löpning inte rapporterad och kan påverka styrkekomponenten 2026-09-23"
         ]
       },
       "plan_action": {
-        "action": "keep",
+        "action": "review",
         "target_date": "",
-        "reason": "Mikrocykelns plan och närliggande 2–3 dagars belastning stöds av detta genomförda pass och kräver ingen automatisk reduktion eller vila.",
-        "recommendation": "Följ plan: håll onsdagens sim (3 200 m) och fredagens tröskel som planerat; rapportera RPE/känsla för dagens pass och eventuella lokala benbesvär före nästa huvudpass.",
+        "reason": "Beslutet skjuts upp eftersom mellanliggande planerade dagar ännu inte har ett känt utfall.",
+        "recommendation": "Måndag: Enduroskola · fast tillfälle ligger kvar som plan. Tisdag: Simning · 4 000 m · aerob + kontrollerad tröskel bedöms efter den faktiska belastningen från måndag och återhämtningen därefter.",
         "dose_option_id": "",
         "requires_approval": false
       },
