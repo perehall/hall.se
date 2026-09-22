@@ -4,7 +4,7 @@
       "activity_id": 20272196080,
       "activity_date": "2026-09-21",
       "activity_name": "Styrketräning på kvällen",
-      "generated_at_utc": "2026-09-22T06:24:42.489663+00:00",
+      "generated_at_utc": "2026-09-22T06:40:18.950867+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 3,
@@ -16,27 +16,27 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört styrkepass (33,6 min) samma dag som ett 96,8 min Enduro-pass; mätdata visar måttlig pulsökning under styrkan (avg HR 79, max 128).",
-        "load_interpretation": "Närbelastning de närmaste 48–72 timmarna ökar mekanisk/neuromuskulär belastning och motiverade redan en konservativ reduktion av dagens kombinerade sim+styrka-pass.",
+        "summary": "Genomförd styrketräning (33,6 min) efter ett långt enduropass samma dag — mekanisk/neuromuskulär närbelastning är högre än om styrkan gjorts separat.",
+        "load_interpretation": "Styrka samma dag som 1) 97 min enduro moving + 96,8 min non-moving (session 5809s) ökar närbelastningen; konservativ planreduktion var därför rimlig.",
         "confidence": "medium",
         "facts": [
           "Styrka: 33:34 · snittpuls 79,3 · maxpuls 128.",
           "Planstatus 2026-09-21: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Styrkepasset dokumenterar ytterligare mekanisk/neuromuskulär stress efter enduron och stödjer det automatiska beslutet att reducera styrkedosen i dagens plan.",
-          "Detta enstaka styrkepass visar tolerans för sessionen men räcker inte för att återställa full återhämtning inför planerade nyckelpass utan fortsatt observation."
+          "Passet genomfördes efter ett långt Enduro-pass samma dag vilket adderar mekanisk/neuromuskulär belastning för mikrocykeln.",
+          "Det valda automatbeslutet att reducera styrkedosen för dagens kombopass (det valda passalternativet) är förenligt med faktisk närbelastning."
         ],
         "unknowns": [
-          "Subjektiv återhämtning/ben- och lokal trötthet rapporterad efter passen (användarrapport saknas).",
-          "Eventuella kommande ändringar i närbelastningen under nästa 48–72 h (nya aktiviteter)."
+          "Subjektiv trötthet/benstatus efter passen (användarrapport saknas)",
+          "hur väl styrkepasset matchade styrkemallen (sets/reps/load saknas)"
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-09-22",
-        "reason": "Planen har redan automatiskt blivit konservativt reducerad (det valda passalternativet) med hänsyn till dagens enduro + styrka; inga ytterligare ändringar nödvändiga.",
-        "recommendation": "Följ dagens reducerade dos det valda passalternativet: genomför simdelen enligt planerat träningsinnehåll och håll styrkedelen kort (≈25 min) fokuserad på core och unilateral kontroll; rapportera subjektiv bentrötthet efter passet om den påverkar morgondagens träning.",
+        "reason": "Planen hade redan konservativt reducerat dagens kombinationsdos baserat på samma-dags enduro + styrka; ingen ytterligare automatiskt nödvändig ändring.",
+        "recommendation": "Följ dagens reducerade plan (det valda passalternativet): genomför simdelen enligt watch-workout och håll styrka till ~25 min kontrollerad core/unilateral utan tunga benserier. Rapportera eventuell ovanlig lokal smärta eller uttalad bentrötthet innan…",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -1255,8 +1255,8 @@
       }
     }
   ],
-  "last_trigger_hash": "7bf1c8c71dde4fbcfb1bcec1f504f404e298265c1c917e88a560c3df3f6b30f2",
-  "last_run_utc": "2026-09-22T06:24:42.489663+00:00",
+  "last_trigger_hash": "86ec990f1ce123f5354b221ecc5d78bae9ef458b47a84eee272c56603f51c199",
+  "last_run_utc": "2026-09-22T06:40:18.950867+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 3

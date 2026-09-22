@@ -988,7 +988,7 @@ body.quiet-performance.qp-current .week-timeline .feedback-loop{
 </style>
 </head>
 <body class="quiet-performance qp-current"><div class="wrap">
-<header><div class="eyebrow">Träningsplan</div><h1>Vecka 39</h1><div class="sub header-meta-line"><span class="week-period">21–27 sep</span><span>·</span><span class="header-updated">uppdaterad 22 sep 08:24</span></div></header>
+<header><div class="eyebrow">Träningsplan</div><h1>Vecka 39</h1><div class="sub header-meta-line"><span class="week-period">21–27 sep</span><span>·</span><span class="header-updated">uppdaterad 22 sep 08:40</span></div></header>
 
 <div class="goal-page-link"><a href="/träning/malbild-2027/">Målbild 2027 <span>→</span></a></div>
 <nav class="week-nav" aria-label="Veckonavigering"><a class="prev" href="/träning/vecka/2026-W38/">← Vecka 38</a><div class="week-nav-center"><strong>Vecka 39</strong><span>AKTUELL</span></div><a class="next" href="/träning/vecka/2026-W40/">Vecka 40 →</a></nav>
@@ -1108,9 +1108,9 @@ body.quiet-performance.qp-current .week-timeline .feedback-loop{
   <div class="week-activity-insight-kicker">Passinsikt</div>
   <h3>Styrkepasset krävde ingen planändring</h3>
   <div class="week-activity-metrics">33:34 · snittpuls 79</div>
-  <p class="week-activity-insight-copy">Styrkepasset dokumenterar ytterligare mekanisk/neuromuskulär stress efter enduron och stödjer det automatiska beslutet att reducera styrkedosen i dagens plan.</p>
+  <p class="week-activity-insight-copy">Passet genomfördes efter ett långt Enduro-pass samma dag vilket adderar mekanisk/neuromuskulär belastning för mikrocykeln.</p>
   <div class="week-activity-plan-impact"><span>Planpåverkan</span><strong>Ingen ändring</strong></div>
-  <details class="week-activity-evidence"><summary>Visa underlag</summary><div class="week-activity-evidence-body"><div class="week-activity-evidence-block"><strong>Fakta</strong><ul><li>Styrka: 33:34 · snittpuls 79,3 · maxpuls 128.</li><li>Planstatus 2026-09-21: dagen är markerad genomförd i coachens beslutsunderlag.</li></ul></div><div class="week-activity-evidence-block"><strong>Tolkning</strong><ul><li>Styrkepasset dokumenterar ytterligare mekanisk/neuromuskulär stress efter enduron och stödjer det automatiska beslutet att reducera styrkedosen i dagens plan.</li><li>Detta enstaka styrkepass visar tolerans för sessionen men räcker inte för att återställa full återhämtning inför planerade nyckelpass utan fortsatt observation.</li></ul></div><div class="week-activity-evidence-block"><strong>Osäkerhet</strong><ul><li>Subjektiv återhämtning/ben- och lokal trötthet rapporterad efter passen (användarrapport saknas).</li><li>Eventuella kommande ändringar i närbelastningen under nästa 48–72 h (nya aktiviteter).</li></ul></div></div></details>
+  <details class="week-activity-evidence"><summary>Visa underlag</summary><div class="week-activity-evidence-body"><div class="week-activity-evidence-block"><strong>Fakta</strong><ul><li>Styrka: 33:34 · snittpuls 79,3 · maxpuls 128.</li><li>Planstatus 2026-09-21: dagen är markerad genomförd i coachens beslutsunderlag.</li></ul></div><div class="week-activity-evidence-block"><strong>Tolkning</strong><ul><li>Passet genomfördes efter ett långt Enduro-pass samma dag vilket adderar mekanisk/neuromuskulär belastning för mikrocykeln.</li><li>Det valda automatbeslutet att reducera styrkedosen för dagens kombopass (det valda passalternativet) är förenligt med faktisk närbelastning.</li></ul></div><div class="week-activity-evidence-block"><strong>Osäkerhet</strong><ul><li>Subjektiv trötthet/benstatus efter passen (användarrapport saknas)</li><li>hur väl styrkepasset matchade styrkemallen (sets/reps/load saknas)</li></ul></div></div></details>
 </section><div class="card-v2-footer"><details class="day-why"><summary>Motivering</summary><div class="reason">Fast återkommande enduroskola, totalt åtta måndagar från 24/8.</div></details></div></div><div class="day decision-horizon workout-card-v2 card-v2-today" id="dag-2026-09-22">
   <div class="daytop"><div class="day-date-line"><span class="dow">Tisdag</span><span class="date">22 sep</span></div><div class="badge conditional">Kan ändras</div></div>
   <div class="session session-with-icon"><svg class="sport-icon icon-strength" aria-hidden="true" viewBox="0 0 640 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M96 64c0-17.7 14.3-32 32-32h32c17.7 0 32 14.3 32 32v160 64 160c0 17.7-14.3 32-32 32h-32c-17.7 0-32-14.3-32-32v-64H64c-17.7 0-32-14.3-32-32v-64c-17.7 0-32-14.3-32-32s14.3-32 32-32v-64c0-17.7 14.3-32 32-32h32V64zm448 0v64h32c17.7 0 32 14.3 32 32v64c17.7 0 32 14.3 32 32s-14.3 32-32 32v64c0 17.7-14.3 32-32 32h-32v64c0 17.7-14.3 32-32 32h-32c-17.7 0-32-14.3-32-32V288 224 64c0-17.7 14.3-32 32-32h32c17.7 0 32 14.3 32 32zM416 224v64H224v-64h192z"/></svg><span class="session-text"><strong class="session-title">Simning + styrka/core</strong><span class="session-meta">3 200 m aerob/teknik · styrka 25 min · styrkemall</span></span></div>
@@ -1334,7 +1334,7 @@ window.addEventListener("pageshow", (event) => {
       save.disabled = true;
       status.textContent = 'Sparar…';
       try {
-        const response = await fetch('/training-api/input', {
+        const response = await fetch('/träning/training-api/input', {
           method: 'POST',
           credentials: 'same-origin',
           headers: {'content-type': 'application/json'},
@@ -1355,7 +1355,7 @@ window.addEventListener("pageshow", (event) => {
         feelings.clear();
         [...rpeButtons, ...feelingButtons].forEach((button) => button.setAttribute('aria-pressed', 'false'));
       } catch (error) {
-        status.textContent = 'Kunde inte spara. Försök igen.';
+        status.textContent = `Kunde inte spara (${error.message}).`;
         console.error('TRAINING_INPUT_FAILED', error);
       } finally {
         save.disabled = false;

@@ -1,54 +1,48 @@
 {
-  "rationale": "Komponerad för att uppfylla mesocykelns prioriteringar (2 simexponeringar + styrka/core + löptröskel) samtidigt som dag 1 är blockad av faktisk enduro och dag 2 hålls låg benbelastning; en vilodag lämnas. Endast en primär progression (swim_aerobic/teknik) valdes och stödjs av tidigare simexponeringar.",
+  "rationale": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern.",
   "slots": [
     {
       "day_index": 2,
-      "recipe_key": "swim_strength",
+      "recipe_key": "swim_aerobic_technique",
       "action": "consolidate",
-      "rationale": "Kombinerar andra simexponeringen med styrka/core på den dag som kräver låg benbelastning efter enduro; uppfyller styrkekravet utan extra benbelastning.",
+      "rationale": "Lågmekanisk simexponering dagen efter fast enduro ger konkret plan utan att anta att benen är redo för ny benkvalitet.",
       "evidence_refs": [
-        "activity_id:19946705399",
-        "activity_id:20175536586",
-        "mesocycle:20260921-swim_aerobic-swim_technique-run_threshold"
+        "mesocycle.primary_capabilities"
       ]
     },
     {
       "day_index": 3,
       "recipe_key": "run_threshold",
       "action": "consolidate",
-      "rationale": "Bibehåller mesocykelns kontrollerade tröskelbaseline (4×8) efter återhämtning från dag 2; ingen progression eftersom endast en primär får progressas.",
+      "rationale": "Realiserar mesocykelns primära kapacitet run_threshold med säker separation från annan benbelastning.",
       "evidence_refs": [
-        "activity_id:20092166843",
-        "capability_facts.run_threshold"
+        "mesocycle.primary_capabilities"
       ]
     },
     {
       "day_index": 5,
-      "recipe_key": "swim_aerobic_technique",
-      "action": "progress",
-      "rationale": "Prioriterad progression för simens aerob/teknik (enda primära progressionen denna mikrocykel) baserat på hög simfrekvens och tidigare 4 000 m-exponeringar.",
+      "recipe_key": "swim_strength",
+      "action": "establish",
+      "rationale": "Kombinera andra simexponeringen med skyddad styrka/core i stället för att fylla ytterligare en dag.",
       "evidence_refs": [
-        "activity_id:19946705399",
-        "capability_facts.swim_aerobic",
-        "mesocycle:20260921-swim_aerobic-swim_technique-run_threshold"
+        "mesocycle.primary_capabilities"
       ]
     },
     {
-      "day_index": 6,
-      "recipe_key": "mtb_technical",
-      "action": "establish",
-      "rationale": "Behåller sekundär MTB-tekniksexponering utan att ligga intill tröskel eller backkvalitet; prioriteringens sekundära stimulus hålls aktivt men inte i konflikt med primära löpstimuli.",
+      "day_index": 7,
+      "recipe_key": "run_easy_distance",
+      "action": "consolidate",
+      "rationale": "Behåll lugn löptålighet med separation från löpkvalitet.",
       "evidence_refs": [
-        "activity_id:20024236347",
-        "capability_facts.mtb_technical"
+        "planning_policy.microcycle_policy"
       ]
     }
   ],
   "schema_version": 1,
   "planner_revision": 6,
-  "source": "openai",
+  "source": "deterministic_fallback_after_repair_guard",
   "source_hash": "9cc53a89d060d6ef686a630c6c89b1882a8fb3a37d6ff26c81c858b45332a689",
-  "generated_at_utc": "2026-09-22T06:24:32.846823+00:00",
+  "generated_at_utc": "2026-09-22T06:40:10.201457+00:00",
   "week_start": "2026-09-28",
   "week_key": "2026-W40",
   "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
@@ -122,5 +116,16 @@
       "391 höjdmeter ska vägas in, men systemet får inte hitta på en mer kuperad profil än den publicerade.",
       "Tävlingsdatumet styr när specificiteten ska omprövas; det får inte ensamt utlösa automatisk volym- eller intensitetsökning."
     ]
+  },
+  "guard_repair": {
+    "attempted": true,
+    "initial_failures": [
+      "dag 1 är blockerad av fast endurobelastning",
+      "swim_strength får inte progressas eftersom receptet inte realiserar ett direkt primärt stimulus"
+    ],
+    "repair_failures": [
+      "dag 1 är blockerad av fast endurobelastning"
+    ],
+    "result": "fallback"
   }
 }
