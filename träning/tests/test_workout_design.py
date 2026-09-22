@@ -329,6 +329,29 @@ class WorkoutDesignTests(unittest.TestCase):
         )
         self.assertTrue(validate_workout_design(day, "tröskel"))
 
+    def test_user_confirmed_threshold_without_rest_keeps_work_structure(self):
+        day = threshold_day()
+        day["session"] = "Löpning · tröskel · 4 × 8 min"
+        day["dose_options"] = []
+        day["manual_lock"] = True
+        day.pop("dose_resolution", None)
+        day.pop("development_step", None)
+        day.pop("development_progression", None)
+
+        design = build_workout_design(day, {"days": [day]}, strategy())
+        day["workout_design"] = design
+        candidate = selected_candidate(day)
+        prescription = candidate["prescription"]
+        work = prescription["blocks"][0]["work"]
+
+        self.assertEqual(candidate["id"], "current-session")
+        self.assertEqual(work["repetitions"], 4)
+        self.assertEqual(work["duration_s"], 480)
+        self.assertEqual(work["total_work_s"], 1920)
+        self.assertNotIn("recovery", prescription["blocks"][0])
+        self.assertEqual(prescription["source"], "user_confirmed_structure")
+        self.assertTrue(validate_workout_design(day, "bekräftad tröskel"))
+
     def test_hill_quality_is_executable_not_just_a_focus_sentence(self):
         day = hill_day()
         design = build_workout_design(day, {"days": [day]}, strategy())
