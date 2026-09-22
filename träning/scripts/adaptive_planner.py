@@ -1616,6 +1616,12 @@ def materialize_strategy(goal, policy, meso, micro, catalog, athlete_state):
     strategy["capability_portfolio"] = generated_capability_portfolio(policy, meso)
     strategy["strategic_readiness"] = generated_strategic_readiness(goal, policy)
     goal_rows = planning_goal_set(goal)
+    normalized_contributions = normalize_goal_contributions(
+        goal_rows,
+        meso.get("goal_contributions"),
+        meso.get("goal_contribution"),
+        meso.get("competition_context") or {},
+    )
     strategy["goal_contract"] = {
         "source_file": "data/goal.json",
         "source_schema_version": goal.get("schema_version"),
@@ -1648,7 +1654,7 @@ def materialize_strategy(goal, policy, meso, micro, catalog, athlete_state):
         "evaluation_date": meso["evaluation_date"],
         "goal_basis_hash": digest,
         "goal_contribution": meso["goal_contribution"],
-        "goal_contributions": deepcopy(meso.get("goal_contributions") or []),
+        "goal_contributions": deepcopy(normalized_contributions),
         "hypothesis": meso["hypothesis"],
         "protected_stimuli": list(contract["primary"]),
         "supporting_stimuli": [
