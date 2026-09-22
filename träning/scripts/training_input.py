@@ -112,6 +112,10 @@ def validate_payload(payload: dict) -> dict:
     if event_key and not re.fullmatch(r"training-input:[0-9a-f]{24}", event_key):
         raise RuntimeError("event_key har ogiltigt format.")
 
+    submitted_at = str(payload.get("submitted_at") or "").strip()
+    if len(submitted_at) > 64:
+        raise RuntimeError("submitted_at är för långt.")
+
     return {
         "operation": operation,
         "activity_id": activity_id,
@@ -119,6 +123,7 @@ def validate_payload(payload: dict) -> dict:
         "rpe": rpe,
         "feeling": normalized_feeling,
         "event_key": event_key,
+        "submitted_at": submitted_at,
     }
 
 
@@ -257,6 +262,16 @@ def merge_report(existing: str, incoming: str) -> str:
     return existing.rstrip() + " " + incoming
 
 
+def strip_previous_gui_report(existing: str, previous_feedback: dict | None) -> str:
+    existing = str(existing or "").strip()
+    if not existing or not isinstance(previous_feedback, dict):
+        return existing
+    previous_report = compose_report(previous_feedback)
+    if previous_report and existing.endswith(previous_report):
+        return existing[: -len(previous_report)].rstrip()
+    return existing
+
+
 def activity_by_id(activities: dict, activity_id: int) -> dict:
     for activity in activities.get("activities") or []:
         if activity.get("id") == activity_id:
@@ -298,7 +313,18 @@ def apply_to_documents(payload: dict, activities: dict, overrides: dict, *, clas
     if raw_sport:
         override.setdefault("source_sport_type", raw_sport)
 
-    override["user_report"] = merge_report(override.get("user_report"), report)
+    previous_feedback = override.get("training_feedback")
+    base_report = strip_previous_gui_report(override.get("user_report"), previous_feedback)
+    override["user_report"] = merge_report(base_report, report)
+    override["training_feedback"] = {
+        "text": normalized.get("text") or "",
+        "rpe": normalized.get("rpe"),
+        "feeling": list(normalized.get("feeling") or []),
+        "operation": operation,
+        "event_key": normalized.get("event_key") or "",
+        "submitted_at": normalized.get("submitted_at") or "",
+    }
+
     if normalized.get("event_key"):
         event_key = normalized["event_key"]
         previous_keys = override.get("training_input_event_keys") or []
