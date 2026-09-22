@@ -1,42 +1,41 @@
 {
-  "rationale": "Åtgärd: ändrar swim_strength från 'progress' till 'establish' för att eliminera guard-fel (progress får endast användas när receptet realiserar ett direkt primärt stimulus med stöd). Behåller övriga val; alla hard_requirements kontrollerade och uppfyllda (två simexponeringar, minst en styrka/core, primära kapaciteter täckta, max löpkvaliteter ok, dag 1 fri p.g.a. enduro, dag 2 låg benbelastning, minst en vilodag kvar).",
+  "rationale": "Begränsa benbelastning direkt efter fast enduro (dag 1), säkerställ två simexponeringar inklusive ett kombinerat swim+styrkepass för att täcka swim_aerobic, swim_technique och strength_core, och progressa endast ett primärt stimulus (run_threshold) med stöd i senaste evidens. Lämna en vilodag (minst en kalenderdag utan planering).",
   "slots": [
     {
       "day_index": 2,
-      "recipe_key": "swim_strength",
-      "action": "establish",
-      "rationale": "Efter enduro (dag 1) hålls dag 2 med låg benbelastning; kombinerar simteknik/aerobt arbete med styrka/core utan att göra en otillåten progression.",
-      "evidence_refs": [
-        "20271537143",
-        "19946705399",
-        "20175536586"
-      ]
-    },
-    {
-      "day_index": 4,
-      "recipe_key": "run_threshold",
-      "action": "consolidate",
-      "rationale": "Bibehåller mesocykelns kontrollerade tröskel (4×8-bas) utan samtidig progression av andra primära stimuli.",
-      "evidence_refs": [
-        "20092166843",
-        "19897382163"
-      ]
-    },
-    {
-      "day_index": 5,
       "recipe_key": "swim_aerobic_technique",
       "action": "establish",
-      "rationale": "Teknisk, aerob simexponering som kompletterar swim_strength och säkerställer två simpass denna mikrocykel.",
+      "rationale": "Låg benbelastning dag efter enduro; etablera teknisk aerob simexponering som mesocykelns frekvensstöd.",
       "evidence_refs": [
         "20239623463",
         "20203770266"
       ]
     },
     {
+      "day_index": 3,
+      "recipe_key": "run_threshold",
+      "action": "progress",
+      "rationale": "Primärt löpstimulus väljs för en enstaka, konservativ progression (stöd: upprepad 4×8-min och god långdistanskapacitet).",
+      "evidence_refs": [
+        "20092166843",
+        "20254486837"
+      ]
+    },
+    {
+      "day_index": 4,
+      "recipe_key": "swim_strength",
+      "action": "establish",
+      "rationale": "Kombinerar andra simexponeringen med styrka/core för att uppfylla styrkekrav utan extra benkvalitetspass.",
+      "evidence_refs": [
+        "19946705399",
+        "20175536586"
+      ]
+    },
+    {
       "day_index": 6,
       "recipe_key": "run_easy_distance",
-      "action": "establish",
-      "rationale": "Lugn långt löppass för löptålighet (~90–120 min) planerat med tidsmarginal från tröskelpass för att undvika intilliggande löppåfrestning.",
+      "action": "consolidate",
+      "rationale": "Veckans lugna långpass för löptålighet; placeras med tillräcklig återhämtning efter tröskel och styrka.",
       "evidence_refs": [
         "20254486837"
       ]
@@ -44,9 +43,9 @@
   ],
   "schema_version": 1,
   "planner_revision": 6,
-  "source": "openai_repaired",
+  "source": "openai",
   "source_hash": "88a9aa914f870e6b89fd0a4beb9cc54435b1e6282c60ca078efc7a6fa1c7ab7c",
-  "generated_at_utc": "2026-09-22T06:59:20.951342+00:00",
+  "generated_at_utc": "2026-09-22T07:00:43.556252+00:00",
   "week_start": "2026-09-28",
   "week_key": "2026-W40",
   "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
@@ -120,12 +119,5 @@
       "391 höjdmeter ska vägas in, men systemet får inte hitta på en mer kuperad profil än den publicerade.",
       "Tävlingsdatumet styr när specificiteten ska omprövas; det får inte ensamt utlösa automatisk volym- eller intensitetsökning."
     ]
-  },
-  "guard_repair": {
-    "attempted": true,
-    "initial_failures": [
-      "swim_strength får inte progressas eftersom receptet inte realiserar ett direkt primärt stimulus"
-    ],
-    "result": "accepted"
   }
 }

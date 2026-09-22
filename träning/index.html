@@ -147,6 +147,7 @@ body{line-height:1.42}.wrap{width:min(100%,720px)}
 .training-input-save{appearance:none;border:0;border-radius:9px;background:var(--qp-accent,#5964e8);color:#fff;padding:8px 12px;font:inherit;font-size:.78rem;font-weight:800;cursor:pointer}
 .training-input-save:disabled{opacity:.55;cursor:default}
 .training-input-status{color:var(--qp-secondary,#5e6661);font-size:.75rem}
+.training-input[data-submitting="true"] .training-input-status{font-weight:800;color:var(--qp-text,#111827)}
 /* workout-card-v2 */
 .day.workout-card-v2{border-radius:15px;border-color:#e5eaf1;padding:16px 17px;box-shadow:0 1px 2px rgba(15,23,42,.035),0 6px 16px rgba(15,23,42,.025)}
 .day.workout-card-v2.card-v2-today{border-color:#bfdbfe;box-shadow:inset 3px 0 0 #2563eb,0 1px 2px rgba(15,23,42,.035),0 6px 16px rgba(15,23,42,.025)}
@@ -988,7 +989,7 @@ body.quiet-performance.qp-current .week-timeline .feedback-loop{
 </style>
 </head>
 <body class="quiet-performance qp-current"><div class="wrap">
-<header><div class="eyebrow">Träningsplan</div><h1>Vecka 39</h1><div class="sub header-meta-line"><span class="week-period">21–27 sep</span><span>·</span><span class="header-updated">uppdaterad 22 sep 08:59</span></div></header>
+<header><div class="eyebrow">Träningsplan</div><h1>Vecka 39</h1><div class="sub header-meta-line"><span class="week-period">21–27 sep</span><span>·</span><span class="header-updated">uppdaterad 22 sep 09:00</span></div></header>
 
 <div class="goal-page-link"><a href="/träning/malbild-2027/">Målbild 2027 <span>→</span></a></div>
 <nav class="week-nav" aria-label="Veckonavigering"><a class="prev" href="/träning/vecka/2026-W38/">← Vecka 38</a><div class="week-nav-center"><strong>Vecka 39</strong><span>AKTUELL</span></div><a class="next" href="/träning/vecka/2026-W40/">Vecka 40 →</a></nav>
@@ -1012,7 +1013,7 @@ body.quiet-performance.qp-current .week-timeline .feedback-loop{
 <div class="hero week-focus-card"><h2 class="week-focus-title">Fortsatt byggblock — höjd simprioritet, bibehållen kontrollerad löptröskel</h2><div class="week-focus-mesocycle-meta">Fortsatt byggblock — höjd simprioritet, bibehållen kontrollerad löptröskel · mikrocykel 1 av 4</div><details class="week-focus-details"><summary>Planidé</summary><p>Utveckla swimrun-relevant aerob simkapacitet och teknik samtidigt som kontrollerad löptröskel och löptålighet bibehålls för att bygga bas mot ÖTILLÖ Åland 2027. Mikrocykeln är preliminär men konkret: varje planerat pass har en användbar grundplan. Faktisk belastning och återhämtning används för att behålla eller justera planen, inte för att skapa den i sista stund. Kalenderveckan är bara visningen.</p><p class="week-focus-mesocycle-idea"><strong>Mesocykelhypotes:</strong> Atleten har upprepade simexponeringar (7 pass, upp till 4 000 m) och demonstrerad löpkapacitet (långa distanspass + upprepade tröskel- och backserier) vilket tillåter en fortsatt konservativ simprioritering utan att äventyra löputveckling, förutsatt att enduro-belastning kontrolleras och styrka/core bibehålls.</p><p class="week-focus-mesocycle-idea"><strong>Primärt:</strong> Sim aerob kapacitet, Simteknik, Kontrollerad löptröskel · <strong>Sekundärt:</strong> Backstyrka / löpekonomi, Lugn löpdistans / tålighet, MTB teknisk fart · <strong>Underhåll:</strong> MTB/XC aerob kapacitet, Kontrollerad simtröskel · <strong>Skyddad kapacitet:</strong> Unilateral benstyrka, Core, Plyometrisk exponering</p></details></div>
 
 <!-- training-input-ui-v1:start -->
-<section class="training-input" data-training-input data-activity-id="20272196080" data-processed-event-key="training-input:9affe121bb2cdb815f03070b" aria-label="Feedback efter pass">
+<section class="training-input" data-training-input data-activity-id="20272196080" data-processed-event-keys="training-input:9affe121bb2cdb815f03070b" aria-label="Feedback efter pass">
   <h3>Feedback · WeightTraining</h3>
   <p class="training-input-intro">2026-09-21 · Snabbval räcker. Fri text kan också korrigera vad du faktiskt gjorde; modellen får bara klassificera inputen, inte ändra planen direkt.</p>
   <span class="training-input-label">Ansträngning</span>
@@ -1028,7 +1029,7 @@ body.quiet-performance.qp-current .week-timeline .feedback-loop{
 </section>
 <!-- training-input-ui-v1:end -->
 <!-- training-input-ui-v1:start -->
-<section class="training-input" data-training-input data-activity-id="20271537143" data-processed-event-key="training-input:554fa446d087c3dfb5cfa790" aria-label="Feedback efter pass">
+<section class="training-input" data-training-input data-activity-id="20271537143" data-processed-event-keys="training-input:554fa446d087c3dfb5cfa790" aria-label="Feedback efter pass">
   <h3>Feedback · Enduro</h3>
   <p class="training-input-intro">2026-09-21 · Snabbval räcker. Fri text kan också korrigera vad du faktiskt gjorde; modellen får bara klassificera inputen, inte ändra planen direkt.</p>
   <span class="training-input-label">Ansträngning</span>
@@ -1111,9 +1112,9 @@ body.quiet-performance.qp-current .week-timeline .feedback-loop{
   <div class="week-activity-insight-kicker">Passinsikt</div>
   <h3>Styrkepasset krävde ingen planändring</h3>
   <div class="week-activity-metrics">33:34 · snittpuls 79</div>
-  <p class="week-activity-insight-copy">Detta styrkepass visar att den planerade, reducerade styrkedosen hölls lätt och tolererades samma dag.</p>
+  <p class="week-activity-insight-copy">Passet bekräftar att styrkepasset tolererades mycket lätt (RPE 2) och genomfördes som planerat.</p>
   <div class="week-activity-plan-impact"><span>Planpåverkan</span><strong>Ingen ändring</strong></div>
-  <details class="week-activity-evidence"><summary>Visa underlag</summary><div class="week-activity-evidence-body"><div class="week-activity-evidence-block"><strong>Fakta</strong><ul><li>WeightTraining: 33:34 · snittpuls 79,3 · maxpuls 128.</li><li>Användarrapport: RPE 2/10. Känsla: Pigg.</li><li>Planstatus 2026-09-21: dagen är markerad genomförd i coachens beslutsunderlag.</li></ul></div><div class="week-activity-evidence-block"><strong>Tolkning</strong><ul><li>Detta styrkepass visar att den planerade, reducerade styrkedosen hölls lätt och tolererades samma dag.</li><li>Kombinationen enduro + styrka samma dag ökade mekanisk/neuromuskulär belastning och motiverade att behålla dagens reducering av morgondagens styrkedel.</li></ul></div><div class="week-activity-evidence-block"><strong>Osäkerhet</strong><ul><li>Subjektiv återhämtning nästa 24–72 h okänd trots pigg samma dag.</li><li>Detaljer om exakta styrkeset/last (sets/reps/loads) saknas för att bedöma styrkeprogression.</li></ul></div></div></details>
+  <details class="week-activity-evidence"><summary>Visa underlag</summary><div class="week-activity-evidence-body"><div class="week-activity-evidence-block"><strong>Fakta</strong><ul><li>WeightTraining: 33:34 · snittpuls 79,3 · maxpuls 128.</li><li>Användarrapport: RPE 2/10. Känsla: Pigg.</li><li>Planstatus 2026-09-21: dagen är markerad genomförd i coachens beslutsunderlag.</li></ul></div><div class="week-activity-evidence-block"><strong>Tolkning</strong><ul><li>Passet bekräftar att styrkepasset tolererades mycket lätt (RPE 2) och genomfördes som planerat.</li><li>Givet dagens sammanlagda belastning är det rimligt att behålla den redan applicerade konservativa reduktionen av styrkedelen för morgondagens kombinerade sim-/styrkepass.</li></ul></div><div class="week-activity-evidence-block"><strong>Osäkerhet</strong><ul><li>Användarens lokaltrötthet i ben nästa morgon (kan påverka styrkekapacitet).</li><li>Eventuella subjektiva förändringar (återhämtningsunderlaget/utmattning) före morgondagens pass.</li></ul></div></div></details>
 <!-- explicit-user-report-v1:20272196080:start -->
 <div class="week-activity-user-report"><span>Din kommentar</span><p>RPE 2/10. Känsla: Pigg.</p></div>
 <!-- explicit-user-report-v1:20272196080:end -->
@@ -1313,8 +1314,10 @@ window.addEventListener("pageshow", (event) => {
 
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-  async function waitForProcessed(activityId, eventKey) {
+  async function waitForProcessed(activityId, eventKey, onProgress) {
     for (let attempt = 0; attempt < 90; attempt += 1) {
+      if (attempt === 5) onProgress('Sparat ✓ · systemet bearbetar fortfarande…');
+      if (attempt === 15) onProgress('Sparat ✓ · väntar på färdig omräkning…');
       await sleep(2000);
       try {
         const probe = new URL(window.location.href);
@@ -1329,7 +1332,13 @@ window.addEventListener("pageshow", (event) => {
         const doc = new DOMParser().parseFromString(source, 'text/html');
         const fresh = [...doc.querySelectorAll('[data-training-input]')]
           .find((item) => item.dataset.activityId === String(activityId));
-        if (fresh && fresh.dataset.processedEventKey === eventKey) return true;
+        if (fresh) {
+          const processedKeys = (fresh.dataset.processedEventKeys || '')
+            .split(',')
+            .map((value) => value.trim())
+            .filter(Boolean);
+          if (processedKeys.includes(eventKey)) return true;
+        }
       } catch (error) {
         console.debug('TRAINING_INPUT_POLL_RETRY', error);
       }
@@ -1370,6 +1379,7 @@ window.addEventListener("pageshow", (event) => {
       else if (!note && feelings.has('tired')) operation = 'REPORT_FATIGUE';
 
       save.disabled = true;
+      root.dataset.submitting = 'true';
       status.textContent = 'Sparar…';
       try {
         const response = await fetch('/träning/training-api/input', {
@@ -1389,13 +1399,13 @@ window.addEventListener("pageshow", (event) => {
         if (!response.ok) throw new Error(body.error || 'request_failed');
         if (!body.event_key) throw new Error('missing_event_key');
 
-        status.textContent = 'Mottaget. Bearbetar…';
-        text.value = '';
-        rpe = null;
-        feelings.clear();
-        [...rpeButtons, ...feelingButtons].forEach((button) => button.setAttribute('aria-pressed', 'false'));
+        status.textContent = 'Sparat ✓ · feedback mottagen. Omräkning pågår…';
 
-        const processed = await waitForProcessed(root.dataset.activityId, body.event_key);
+        const processed = await waitForProcessed(
+          root.dataset.activityId,
+          body.event_key,
+          (message) => { status.textContent = message; }
+        );
         if (processed) {
           status.textContent = 'Klart. Uppdaterar…';
           const next = new URL(window.location.href);
@@ -1404,10 +1414,12 @@ window.addEventListener("pageshow", (event) => {
           return;
         }
 
-        status.textContent = 'Sparat. Automatisk uppdatering kunde inte bekräftas.';
+        status.textContent = 'Sparat ✓ · automatisk uppdatering kunde inte bekräftas.';
+        root.dataset.submitting = 'false';
         save.disabled = false;
       } catch (error) {
         status.textContent = `Kunde inte spara (${error.message}).`;
+        root.dataset.submitting = 'false';
         save.disabled = false;
         console.error('TRAINING_INPUT_FAILED', error);
       }
