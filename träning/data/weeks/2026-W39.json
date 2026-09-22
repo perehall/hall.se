@@ -4,7 +4,7 @@
   "week_start": "2026-09-21",
   "week_end": "2026-09-27",
   "created_at_utc": "2026-09-20T23:15:26.146433+00:00",
-  "updated_at_utc": "2026-09-22T00:09:12.958468+00:00",
+  "updated_at_utc": "2026-09-22T00:45:07.314471+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -1188,9 +1188,9 @@
           "transport": "intervals_icu",
           "source_hash": "f0c4bb0552ced1137586036ac7d666750b0a04d7f28ecbfdad6d0940dbad0c8b",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-22T00:09:11.906780+00:00",
+          "updated_at_utc": "2026-09-22T00:45:05.924560+00:00",
           "provider_event_id": 137895892,
-          "verified_at_utc": "2026-09-22T00:09:11.906780+00:00"
+          "verified_at_utc": "2026-09-22T00:45:05.924560+00:00"
         }
       },
       {
@@ -1671,9 +1671,9 @@
           "transport": "intervals_icu",
           "source_hash": "0640f7dcd8b93ad3ad97da99693fea133ade7ccd7d3daac24e7244162992eecf",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-22T00:09:12.032551+00:00",
+          "updated_at_utc": "2026-09-22T00:45:06.461790+00:00",
           "provider_event_id": 137895893,
-          "verified_at_utc": "2026-09-22T00:09:12.032551+00:00"
+          "verified_at_utc": "2026-09-22T00:45:06.461790+00:00"
         }
       },
       {
@@ -1966,9 +1966,9 @@
           "transport": "intervals_icu",
           "source_hash": "b361e50eca79aa09578b362ba04bb6b3d74fb7f7d56226b0b2a23b497ff8766e",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-22T00:09:12.160496+00:00",
+          "updated_at_utc": "2026-09-22T00:45:06.665414+00:00",
           "provider_event_id": 137895894,
-          "verified_at_utc": "2026-09-22T00:09:12.160496+00:00"
+          "verified_at_utc": "2026-09-22T00:45:06.665414+00:00"
         }
       },
       {
@@ -2125,7 +2125,7 @@
       "activity_id": 20272196080,
       "activity_date": "2026-09-21",
       "activity_name": "Styrketräning på kvällen",
-      "generated_at_utc": "2026-09-22T00:09:11.232257+00:00",
+      "generated_at_utc": "2026-09-22T00:45:04.783757+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 3,
@@ -2137,33 +2137,33 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomförd kvällsstyrka (33,6 min) efter ett långt enduro‑pass indikerar att styrkesessionen blev kort och låg i puls; simning nästa dag kan behållas men styrkedelen bör vara…",
-        "load_interpretation": "Närbelastning: enduro 5809s (inkl.",
+        "summary": "Genomfört styrkepass (33,6 min) följde samma dags enduro; pulsmedel 79 bpm, max 128 bpm indikerar kontrollerad styrka utan subjektiv rapport.",
+        "load_interpretation": "Närbelastning: enduro + styrka samma dag ökar mekanisk/neuromuskulär belastning för de närmaste 48–72 timmarna.",
         "confidence": "medium",
         "facts": [
           "Styrka: 33:34 · snittpuls 79,3 · maxpuls 128.",
           "Planstatus 2026-09-21: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Styrkepasset genomfördes samma dag som ett långt enduro‑pass och registrerad puls är relativt låg, vilket talar för kontrollerad styrka snarare än tung benexponering.",
-          "För mesocykelns skyddade styrka/core och dagens plan betyder detta att simdelen kan utföras som planerat men styrkedelen bör reduceras för att skydda benen och möjliggöra kvalitet i…"
+          "Utfallet bekräftar att dagens styrka genomfördes och motiverade redan vald konservativ reduktion av styrkedosen för morgondagens kombinerade sim/styrkepass.",
+          "Den kombinerade närbelastningen (enduro + styrka) gör att bibehållen reducerad styrkedos är lämplig för att skydda ben inför mikrocykelns nyckelpass."
         ],
         "unknowns": [
-          "Användarrapport om känsla/benstatus saknas för senaste styrkepasset",
-          "Detaljer om vilka styrkeövningar och set/reps (styrkemall saknar konkreta set)"
+          "Subjektiv återhämtning nästa morgon (ingen användarrapport).",
+          "Eventuella lokala muskelsmärtor eller stelhet efter kvällspasset som kan påverka morgondagens styrkeval."
         ]
       },
       "plan_action": {
-        "action": "reduce",
+        "action": "keep",
         "target_date": "2026-09-22",
-        "reason": "Enduro + genomförd styrka samma dag ökar mekanisk/neuromuskulär närbelastning; conservativ reduktion skyddar ben inför mikrocykelns nyckelpass.",
-        "recommendation": "Följ det justerade passupplägget i planen.",
-        "dose_option_id": "swim-strength-25",
+        "reason": "Passet tolererades och planen har redan konservativt reducerats (det valda passalternativet) baserat på samma dags enduro + styrka.",
+        "recommendation": "Behåll det redan valda alternativet det valda passalternativet för 2026-09-22; utför simdelen enligt plan och håll styrkedosen reducerad (fokusera core/unilateral, undvik tunga benmaxlyft).",
+        "dose_option_id": "",
         "requires_approval": false
       },
       "auto_apply": {
-        "applied": true,
-        "note": "Konservativ ändring applicerad på 2026-09-22: reduce."
+        "applied": false,
+        "note": "Ingen automatisk planändring."
       }
     },
     {
