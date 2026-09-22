@@ -300,7 +300,19 @@ def apply_to_documents(payload: dict, activities: dict, overrides: dict, *, clas
 
     override["user_report"] = merge_report(override.get("user_report"), report)
     if normalized.get("event_key"):
-        override["last_training_input_event_key"] = normalized["event_key"]
+        event_key = normalized["event_key"]
+        previous_keys = override.get("training_input_event_keys") or []
+        if not isinstance(previous_keys, list):
+            previous_keys = []
+        processed_keys = [
+            str(value).strip()
+            for value in previous_keys
+            if re.fullmatch(r"training-input:[0-9a-f]{24}", str(value).strip())
+        ]
+        if event_key not in processed_keys:
+            processed_keys.append(event_key)
+        override["training_input_event_keys"] = processed_keys[-8:]
+        override["last_training_input_event_key"] = event_key
 
     if operation == "ADD_SPONTANEOUS_WORKOUT":
         override["plan_relation"] = "separate"
