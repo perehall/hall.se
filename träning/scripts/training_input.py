@@ -272,22 +272,35 @@ def legacy_feedback_from_override(override: dict) -> dict | None:
     if not report:
         return None
 
-    rpe_match = re.search(r"(?:^|\s)RPE\s+(\d+)/10\.\s*(?=Känsla:|$)", report)
-    rpe = int(rpe_match.group(1)) if rpe_match else None
+    groups = list(
+        re.finditer(
+            r"RPE\s+(\d+)/10\.\s*(?:Känsla:\s*([^.]+)\.\s*)?",
+            report,
+        )
+    )
+    if groups:
+        current = groups[-1]
+        segment_start = groups[-2].end() if len(groups) > 1 else 0
+        segment = report[segment_start:].strip()
+        rpe = int(current.group(1))
+        feeling_text = current.group(2) or ""
+    else:
+        segment = report
+        rpe = None
+        feeling_text = ""
 
     reverse_feelings = {label: code for code, label in FEELING_CODES.items()}
     feeling = []
-    feeling_match = re.search(r"Känsla:\s*([^.]+)\.\s*$", report)
-    if feeling_match:
-        for label in (part.strip() for part in feeling_match.group(1).split(",")):
-            code = reverse_feelings.get(label)
-            if code and code not in feeling:
-                feeling.append(code)
+    for label in (part.strip() for part in feeling_text.split(",") if part.strip()):
+        code = reverse_feelings.get(label)
+        if code and code not in feeling:
+            feeling.append(code)
 
-    text = report
-    if feeling_match:
-        text = text[: feeling_match.start()].rstrip()
-    text = re.sub(r"\s*RPE\s+\d+/10\.\s*$", "", text).strip()
+    text = re.sub(
+        r"\s*RPE\s+\d+/10\.\s*(?:Känsla:\s*[^.]+\.\s*)?$",
+        "",
+        segment,
+    ).strip()
     return {"text": text, "rpe": rpe, "feeling": feeling}
 
 
