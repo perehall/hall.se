@@ -1,48 +1,64 @@
 {
-  "rationale": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern.",
+  "rationale": "Dag 1 är blockerad av redan planerat enduro (räknas som faktisk belastning) och togs bort från schemaläggning. Reparerar tidigare förslag genom att planera 4–5 giltiga slots (dag 1 ej planerad), täcka alla primära kapaciteter (swim_aerobic, swim_technique, run_threshold), säkerställa två simexponeringar, uppfylla minst en styrka/core‑exponering och hålla max en löpkvalitet (≤2). Dag 2 är låg benbelastning (teknisk aerob sim). Swim_strength ändrades från progress → establish för att undvika otillåten progress; run_threshold konsolideras enligt mesocykelbeslut. Minst en kalenderdag (dag 7) lämnas utan planerad träning.",
   "slots": [
     {
       "day_index": 2,
       "recipe_key": "swim_aerobic_technique",
       "action": "consolidate",
-      "rationale": "Lågmekanisk simexponering dagen efter fast enduro ger konkret plan utan att anta att benen är redo för ny benkvalitet.",
+      "rationale": "Dag efter fast enduro kräver låg benbelastning; teknisk aerob sim uppfyller swim_aerobic + swim_technique utan att stressa benen.",
       "evidence_refs": [
-        "mesocycle.primary_capabilities"
+        "20239623463",
+        "20203770266",
+        "20106458579"
       ]
     },
     {
       "day_index": 3,
       "recipe_key": "run_threshold",
       "action": "consolidate",
-      "rationale": "Realiserar mesocykelns primära kapacitet run_threshold med säker separation från annan benbelastning.",
+      "rationale": "Behåll nuvarande 4×8‑struktur och konsolidera tröskelkapacitet; placering ger ≥48 h från tunga långpass och undviker konflikt med enduro/MTB.",
       "evidence_refs": [
-        "mesocycle.primary_capabilities"
+        "20284663236",
+        "20092166843"
+      ]
+    },
+    {
+      "day_index": 4,
+      "recipe_key": "swim_strength",
+      "action": "establish",
+      "rationale": "Introducerar en kombinerad sim+styrka‑exponering för att uppfylla simkravet (andra simpassen) och säkerställa minst en styrke/core‑stimulans utan extra benkvalitet. Åtgärden sätts som etablera (inte progress) för att följa progression‑guardrails.",
+      "evidence_refs": [
+        "20239623463",
+        "20272196080",
+        "20175536586"
       ]
     },
     {
       "day_index": 5,
-      "recipe_key": "swim_strength",
+      "recipe_key": "run_easy_distance",
       "action": "establish",
-      "rationale": "Kombinera en nödvändig simexponering med ännu ej uppfylld styrka/core.",
+      "rationale": "Lång lugn löpning (~90–120 min) för löptålighet; placerad ≥48 h från tröskel och undviker att ligga intill tekniska MTB‑pass.",
       "evidence_refs": [
-        "mesocycle.primary_capabilities"
+        "20254486837",
+        "20271537143"
       ]
     },
     {
-      "day_index": 7,
-      "recipe_key": "run_easy_distance",
+      "day_index": 6,
+      "recipe_key": "strength_core",
       "action": "consolidate",
-      "rationale": "Behåll lugn löptålighet med separation från löpkvalitet.",
+      "rationale": "Ytterligare kort styrke/core‑session för att skydda mekanisk/neuromuskulär bas; konsolidering efter kombinerad sim+styrka för att begränsa variabler.",
       "evidence_refs": [
-        "planning_policy.microcycle_policy"
+        "20272196080",
+        "20175536586"
       ]
     }
   ],
   "schema_version": 1,
   "planner_revision": 7,
-  "source": "deterministic_fallback_after_repair_guard",
+  "source": "openai_repaired",
   "source_hash": "4b0941a381ab96f16b72ed2cc3772554657b6e0858e660113fc9ac0f4d587b77",
-  "generated_at_utc": "2026-09-22T20:27:56.717289+00:00",
+  "generated_at_utc": "2026-09-22T20:30:47.911634+00:00",
   "week_start": "2026-09-28",
   "week_key": "2026-W40",
   "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
@@ -132,12 +148,8 @@
     "initial_failures": [
       "dag 1 är blockerad av fast endurobelastning",
       "för få giltiga träningsslots: 3 < 4",
-      "för få simexponeringar inklusive faktiskt genomförda: 1 < 2",
-      "för få styrka/core-exponeringar inklusive faktiskt genomförda: 0 < 1"
+      "swim_strength får inte progressas eftersom receptet inte realiserar ett direkt primärt stimulus"
     ],
-    "repair_failures": [
-      "swim_strength får inte ligga direkt dagen efter fast enduro när faktisk benbelastning ännu är okänd"
-    ],
-    "result": "fallback"
+    "result": "accepted"
   }
 }

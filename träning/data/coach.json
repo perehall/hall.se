@@ -4,7 +4,7 @@
       "activity_id": 20284663236,
       "activity_date": "2026-09-22",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-09-22T20:28:07.642589+00:00",
+      "generated_at_utc": "2026-09-22T20:30:59.570116+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 3,
@@ -16,8 +16,8 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört 4×8 min tröskelpass, känd struktur och stark subjektiv respons; sista intervallet ökade och känslan var stark.",
-        "load_interpretation": "Passet levererade avsett tröskelstimulus; inget i närbelastningen (föregående 3 dgr) kräver omedelbar reduktion.",
+        "summary": "Genomfört 4×8 min tröskelpass — kontrollerat, stark känsla och kvarvarande kraft enligt användarrapport.",
+        "load_interpretation": "Passet ger det planerade tröskelstimulus; inga omedelbara reduktioner krävs utifrån data och rapport.",
         "confidence": "medium",
         "facts": [
           "Löpning · tröskel: 12,90 km · 1:01:27 · 105 m+ · snittpuls 145,4 · maxpuls 165.",
@@ -25,19 +25,19 @@
           "Planstatus 2026-09-22: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Passet uppfyller mikrocykelns planerade kontrollerad löptröskel‑stimulus och kan räknas som genomfört för veckans progression.",
-          "Eftersom användaren var stark och tidigare dagar innehåller sim + enduro snarare än extra löpkvalitet, behövs ingen planändring för de närmaste 48–72 timmarna."
+          "Genomfört tröskelstimulus kan räknas som mikrocykelns löptröskelbidrag för utveckling.",
+          "Givet närbelastningen (enduro + långpass tidigare i fönstret) är bevarad plan (sim 23/9 som flytt) lämplig; inget tecken på akut överbelastning."
         ],
         "unknowns": [
-          "Subjektiv återhämtning nästa morgon (24–72 h) kan påverka tyngre löp-/styrkepass",
-          "Detaljer om eventuell lokal muskeltrötthet i benen saknas"
+          "Subjektiv återhämtning nästa 24–72 h (användarrapport gäller samma dag).",
+          "Specifik lokal muskulär trötthet i benen efter enduro + långpass inte kvantifierat"
         ]
       },
       "plan_action": {
         "action": "keep",
-        "target_date": "",
-        "reason": "Tröskelstimulus är genomfört enligt plan, användarrapport visar god tolerans och närbelastningen stödjer ingen ändring.",
-        "recommendation": "Följ plan: genomför simning 2026-09-23 som flyttats in; undvik nytt tungt löparpass inom 48 timmar och håll styrkepasset enligt schema.",
+        "target_date": "2026-09-23",
+        "reason": "Simningen var planerad flytt till 2026-09-23 och tröskelstimulus är redan levererat, så planen behålls konservativt.",
+        "recommendation": "Behåll planerad simning 2026-09-23 (3 200 m enligt schema). Vila/aktiv återhämtning om du känner ovanlig lokal trötthet; rapportera RPE eller smärta innan omplanering.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -1256,8 +1256,8 @@
       }
     }
   ],
-  "last_trigger_hash": "bd0f3b65fe0f52190200de7231d9d683d409b8f6397deb24c565c51e9f2210f0",
-  "last_run_utc": "2026-09-22T20:28:07.642589+00:00",
+  "last_trigger_hash": "99f087348ee7f408d8c9677a0041f3053846fc9553ebd1354733eee2027de479",
+  "last_run_utc": "2026-09-22T20:30:59.570116+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 3
