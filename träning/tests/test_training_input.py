@@ -54,6 +54,10 @@ class TrainingInputTests(unittest.TestCase):
             override["last_training_input_event_key"],
             "training-input:0123456789abcdef01234567",
         )
+        self.assertEqual(
+            override["training_input_event_keys"],
+            ["training-input:0123456789abcdef01234567"],
+        )
 
         # Regression: the GUI-generated override must be directly consumable by
         # the canonical semantic normalizer; this is the next pipeline stage.
@@ -62,6 +66,38 @@ class TrainingInputTests(unittest.TestCase):
         activity = state["activities"][0]
         self.assertEqual(activity["classification"], "training")
         self.assertEqual(activity["user_report"], report)
+
+    def test_feedback_event_history_keeps_recent_keys_without_duplicates(self):
+        overrides = {
+            "schema_version": 1,
+            "overrides": {
+                "123": {
+                    "training_input_event_keys": [
+                        "training-input:aaaaaaaaaaaaaaaaaaaaaaaa"
+                    ],
+                    "last_training_input_event_key": "training-input:aaaaaaaaaaaaaaaaaaaaaaaa",
+                }
+            },
+        }
+        updated, _ = apply_to_documents(
+            {
+                "operation": "ADD_FEEDBACK",
+                "activity_id": 123,
+                "text": "Ny feedback.",
+                "rpe": None,
+                "feeling": [],
+                "event_key": "training-input:bbbbbbbbbbbbbbbbbbbbbbbb",
+            },
+            self.activities(),
+            overrides,
+        )
+        self.assertEqual(
+            updated["overrides"]["123"]["training_input_event_keys"],
+            [
+                "training-input:aaaaaaaaaaaaaaaaaaaaaaaa",
+                "training-input:bbbbbbbbbbbbbbbbbbbbbbbb",
+            ],
+        )
 
     def test_natural_language_can_only_choose_allowlisted_operation_and_raw_text_is_preserved(self):
         raw = "Blev 4 × 8 i stället för 3 × 10. Kändes kontrollerat."

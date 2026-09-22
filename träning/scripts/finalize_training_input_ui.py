@@ -39,6 +39,7 @@ CSS = r"""
 .training-input-save{appearance:none;border:0;border-radius:9px;background:var(--qp-accent,#5964e8);color:#fff;padding:8px 12px;font:inherit;font-size:.78rem;font-weight:800;cursor:pointer}
 .training-input-save:disabled{opacity:.55;cursor:default}
 .training-input-status{color:var(--qp-secondary,#5e6661);font-size:.75rem}
+.training-input[data-submitting="true"] .training-input-status{font-weight:800;color:var(--qp-text,#111827)}
 """.strip()
 
 JS = r"""
@@ -55,8 +56,10 @@ JS = r"""
 
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-  async function waitForProcessed(activityId, eventKey) {
+  async function waitForProcessed(activityId, eventKey, onProgress) {
     for (let attempt = 0; attempt < 90; attempt += 1) {
+      if (attempt === 5) onProgress('Sparat ✓ · systemet bearbetar fortfarande…');
+      if (attempt === 15) onProgress('Sparat ✓ · väntar på färdig omräkning…');
       await sleep(2000);
       try {
         const probe = new URL(window.location.href);
@@ -71,7 +74,13 @@ JS = r"""
         const doc = new DOMParser().parseFromString(source, 'text/html');
         const fresh = [...doc.querySelectorAll('[data-training-input]')]
           .find((item) => item.dataset.activityId === String(activityId));
-        if (fresh && fresh.dataset.processedEventKey === eventKey) return true;
+        if (fresh) {
+          const processedKeys = (fresh.dataset.processedEventKeys || '')
+            .split(',')
+            .map((value) => value.trim())
+            .filter(Boolean);
+          if (processedKeys.includes(eventKey)) return true;
+        }
       } catch (error) {
         console.debug('TRAINING_INPUT_POLL_RETRY', error);
       }
@@ -112,6 +121,7 @@ JS = r"""
       else if (!note && feelings.has('tired')) operation = 'REPORT_FATIGUE';
 
       save.disabled = true;
+      root.dataset.submitting = 'true';
       status.textContent = 'Sparar…';
       try {
         const response = await fetch('/träning/training-api/input', {
@@ -131,13 +141,13 @@ JS = r"""
         if (!response.ok) throw new Error(body.error || 'request_failed');
         if (!body.event_key) throw new Error('missing_event_key');
 
-        status.textContent = 'Mottaget. Bearbetar…';
-        text.value = '';
-        rpe = null;
-        feelings.clear();
-        [...rpeButtons, ...feelingButtons].forEach((button) => button.setAttribute('aria-pressed', 'false'));
+        status.textContent = 'Sparat ✓ · feedback mottagen. Omräkning pågår…';
 
-        const processed = await waitForProcessed(root.dataset.activityId, body.event_key);
+        const processed = await waitForProcessed(
+          root.dataset.activityId,
+          body.event_key,
+          (message) => { status.textContent = message; }
+        );
         if (processed) {
           status.textContent = 'Klart. Uppdaterar…';
           const next = new URL(window.location.href);
@@ -146,10 +156,12 @@ JS = r"""
           return;
         }
 
-        status.textContent = 'Sparat. Automatisk uppdatering kunde inte bekräftas.';
+        status.textContent = 'Sparat ✓ · automatisk uppdatering kunde inte bekräftas.';
+        root.dataset.submitting = 'false';
         save.disabled = false;
       } catch (error) {
         status.textContent = `Kunde inte spara (${error.message}).`;
+        root.dataset.submitting = 'false';
         save.disabled = false;
         console.error('TRAINING_INPUT_FAILED', error);
       }
@@ -187,8 +199,10 @@ def remove_existing(page: str) -> str:
     return page
 
 
-def render_block(activity: dict, processed_event_key: str = "") -> str:
+def render_block(activity: dict, processed_event_keys: list[str] | None = None) -> str:
     activity_id = int(activity["id"])
+    processed_event_keys = processed_event_keys or []
+    processed_event_keys_attr = ",".join(processed_event_keys)
     activity_label = (
         str(activity.get("display_label") or "").strip()
         or str(activity.get("name") or "").strip()
@@ -220,7 +234,7 @@ def render_block(activity: dict, processed_event_key: str = "") -> str:
         for key, label in feelings
     )
     return f"""{BLOCK_START}
-<section class="training-input" data-training-input data-activity-id="{activity_id}" data-processed-event-key="{html.escape(processed_event_key, quote=True)}" aria-label="Feedback efter pass">
+<section class="training-input" data-training-input data-activity-id="{activity_id}" data-processed-event-keys="{html.escape(processed_event_keys_attr, quote=True)}" aria-label="Feedback efter pass">
   <h3>Feedback · {html.escape(activity_label)}</h3>
   <p class="training-input-intro">{html.escape(activity_date)} · Snabbval räcker. Fri text kan också korrigera vad du faktiskt gjorde; modellen får bara klassificera inputen, inte ändra planen direkt.</p>
   <span class="training-input-label">Ansträngning</span>
@@ -248,9 +262,20 @@ def apply_training_input_ui(
     today_date = datetime.strptime(today, "%Y-%m-%d").date()
     override_map = (overrides_state or {}).get("overrides") or {}
 
-    def processed_event_key(activity: dict) -> str:
+    def processed_event_keys(activity: dict) -> list[str]:
         row = override_map.get(str(activity.get("id"))) or {}
-        return str(row.get("last_training_input_event_key") or "").strip()
+        values = row.get("training_input_event_keys") or []
+        if not isinstance(values, list):
+            values = []
+        keys = [
+            str(value).strip()
+            for value in values
+            if re.fullmatch(r"training-input:[0-9a-f]{24}", str(value).strip())
+        ]
+        legacy = str(row.get("last_training_input_event_key") or "").strip()
+        if re.fullmatch(r"training-input:[0-9a-f]{24}", legacy) and legacy not in keys:
+            keys.append(legacy)
+        return keys[-8:]
 
     recent = []
     for activity in activities_state.get("activities") or []:
@@ -285,7 +310,7 @@ def apply_training_input_ui(
         pos = page.find(link)
         if pos < 0:
             raise RuntimeError("Träningsinput UI: post-workout-länken saknas.")
-        page = page[:pos] + render_block(primary, processed_event_key(primary)) + "\n" + page[pos:]
+        page = page[:pos] + render_block(primary, processed_event_keys(primary)) + "\n" + page[pos:]
         rendered_ids.add(primary["id"])
 
     secondary = [
@@ -299,7 +324,7 @@ def apply_training_input_ui(
             raise RuntimeError("Träningsinput UI: träningshjärnans slutmarkör saknas.")
         pos += len(marker)
         blocks = "\n".join(
-            render_block(activity, processed_event_key(activity))
+            render_block(activity, processed_event_keys(activity))
             for activity in secondary
         )
         page = page[:pos] + "\n" + blocks + page[pos:]

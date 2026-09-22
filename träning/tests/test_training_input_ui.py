@@ -36,7 +36,11 @@ class TrainingInputUiTests(unittest.TestCase):
             "schema_version": 1,
             "overrides": {
                 "123": {
-                    "last_training_input_event_key": "training-input:0123456789abcdef01234567"
+                    "training_input_event_keys": [
+                        "training-input:aaaaaaaaaaaaaaaaaaaaaaaa",
+                        "training-input:0123456789abcdef01234567",
+                    ],
+                    "last_training_input_event_key": "training-input:0123456789abcdef01234567",
                 }
             },
         }
@@ -50,7 +54,7 @@ class TrainingInputUiTests(unittest.TestCase):
         self.assertIn('data-training-input', rendered)
         self.assertIn('data-activity-id="123"', rendered)
         self.assertIn(
-            'data-processed-event-key="training-input:0123456789abcdef01234567"',
+            'data-processed-event-keys="training-input:aaaaaaaaaaaaaaaaaaaaaaaa,training-input:0123456789abcdef01234567"',
             rendered,
         )
         self.assertIn("Mycket lätt", rendered)
@@ -61,6 +65,8 @@ class TrainingInputUiTests(unittest.TestCase):
         self.assertIn("waitForProcessed", rendered)
         self.assertIn("cache: 'no-store'", rendered)
         self.assertIn("window.location.replace", rendered)
+        self.assertIn("Sparat ✓ · feedback mottagen", rendered)
+        self.assertIn("processedKeys.includes(eventKey)", rendered)
 
     def test_previous_day_activities_remain_open_for_feedback_after_midnight(self):
         page = """<html><head><style></style></head><body>
