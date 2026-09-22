@@ -29,6 +29,13 @@ DAY_RE = re.compile(
     r'<div class="day(?P<classes>[^"]*)" id="dag-(?P<date>\d{4}-\d{2}-\d{2})">'
 )
 DIV_RE = re.compile(r"<div\b[^>]*>|</div>", re.I)
+TRAINING_INPUT_BLOCK_RE = re.compile(
+    r'<!-- training-input-ui-v1:start -->\s*'
+    r'(?P<section><section class="training-input"(?P<attrs>[^>]*)>.*?</section>)\s*'
+    r'<!-- training-input-ui-v1:end -->',
+    re.S,
+)
+ACTIVITY_ID_RE = re.compile(r'data-activity-id="(?P<id>\d+)"')
 
 CSS = r"""
 /* completed-day-summary-v1 */
@@ -43,9 +50,15 @@ CSS = r"""
 .completed-day-label{display:block;margin-bottom:3px;color:var(--qp-tertiary,#64748b);font-size:.65rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase}
 .completed-day-section strong{display:block;color:var(--qp-text,#111827);font-size:.92rem;line-height:1.35}
 .completed-day-section p{margin:3px 0 0;color:var(--qp-secondary,#5e6661);font-size:.82rem;line-height:1.42}
-.completed-day-feedback-list{display:grid;gap:3px;margin-top:2px}
-.completed-day-feedback-row{color:var(--qp-text,#111827);font-size:.82rem;line-height:1.4}
+.completed-day-feedback-list{display:grid;gap:7px;margin-top:2px}
+.completed-day-feedback-row{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:12px;align-items:start;color:var(--qp-text,#111827);font-size:.82rem;line-height:1.4}
+.completed-day-feedback-main{min-width:0}
 .completed-day-feedback-row span{color:var(--qp-secondary,#64748b)}
+.completed-day-feedback-row .completed-day-inline-input{display:contents}
+.completed-day-feedback-row .completed-day-inline-input>.training-input-compact{display:contents}
+.completed-day-feedback-row .completed-day-inline-input>.training-input-compact>div:first-child{display:none}
+.completed-day-feedback-row .completed-day-inline-input .training-input-toggle{grid-column:2;grid-row:1;margin:0;padding:0;align-self:start}
+.completed-day-feedback-row .completed-day-inline-input .training-input-editor{grid-column:1/-1;margin-top:7px;padding-top:10px;border-top:1px solid var(--qp-line-soft,#eef2f4)}
 .completed-day-next{margin-top:11px}
 .completed-day-details{margin-top:13px;border-top:1px solid var(--qp-line-soft,#eef2f4)}
 .completed-day-details>summary{cursor:pointer;list-style:none;padding:10px 0 1px;color:var(--qp-tertiary,#64748b);font-size:.76rem;font-weight:700}
@@ -113,6 +126,26 @@ def activity_label(activity: dict) -> str:
     return PROVIDER_LABELS.get(candidate, SPORT_LABELS.get(candidate, candidate))
 
 
+def training_input_blocks(page: str) -> dict[int, dict[str, str]]:
+    blocks: dict[int, dict[str, str]] = {}
+    for match in TRAINING_INPUT_BLOCK_RE.finditer(page):
+        section = match.group("section")
+        activity_match = ACTIVITY_ID_RE.search(section)
+        if not activity_match:
+            continue
+        activity_id = int(activity_match.group("id"))
+        embedded = section.replace(
+            '<section class="training-input"',
+            '<section class="training-input completed-day-inline-input"',
+            1,
+        )
+        blocks[activity_id] = {
+            "full": match.group(0),
+            "section": embedded,
+        }
+    return blocks
+
+
 def performed_title(activities: list[dict]) -> str:
     labels = []
     for activity in activities:
@@ -133,26 +166,44 @@ def performed_meta(activities: list[dict]) -> str:
     return " · ".join(parts)
 
 
-def feedback_rows(activities: list[dict], overrides: dict) -> list[str]:
+def feedback_rows(
+    activities: list[dict],
+    overrides: dict,
+    input_blocks: dict[int, dict[str, str]] | None = None,
+    consumed_input_ids: set[int] | None = None,
+) -> list[str]:
     rows = []
     mapping = overrides.get("overrides") or {}
+    input_blocks = input_blocks or {}
+    consumed_input_ids = consumed_input_ids if consumed_input_ids is not None else set()
+
     for activity in activities:
-        override = mapping.get(str(activity.get("id"))) or {}
+        activity_id = activity.get("id")
+        override = mapping.get(str(activity_id)) or {}
         feedback = feedback_from_override(override)
-        if not feedback:
+        input_block = input_blocks.get(activity_id) if isinstance(activity_id, int) else None
+        if not feedback and not input_block:
             continue
+
         bits = []
-        if isinstance(feedback.get("rpe"), int):
+        if feedback and isinstance(feedback.get("rpe"), int):
             bits.append(f"RPE {feedback['rpe']}")
-        for code in feedback.get("feeling") or []:
-            label = FEELING_LABELS.get(code)
-            if label and label not in bits:
-                bits.append(label)
-        if not bits:
-            continue
+        if feedback:
+            for code in feedback.get("feeling") or []:
+                label = FEELING_LABELS.get(code)
+                if label and label not in bits:
+                    bits.append(label)
+
+        status = " · ".join(bits) if bits else "Inte utvärderat"
+        editor = ""
+        if input_block and isinstance(activity_id, int):
+            editor = input_block["section"]
+            consumed_input_ids.add(activity_id)
+
         rows.append(
-            f'<div class="completed-day-feedback-row"><strong>{html.escape(activity_label(activity))}</strong>'
-            f'<span> · {html.escape(" · ".join(bits))}</span></div>'
+            f'<div class="completed-day-feedback-row" data-feedback-activity-id="{html.escape(str(activity_id))}">'
+            f'<div class="completed-day-feedback-main"><strong>{html.escape(activity_label(activity))}</strong>'
+            f'<span> · {html.escape(status)}</span></div>{editor}</div>'
         )
     return rows
 
@@ -198,6 +249,8 @@ def render_summary(
     activities: list[dict],
     overrides: dict,
     rest: str,
+    input_blocks: dict[int, dict[str, str]] | None = None,
+    consumed_input_ids: set[int] | None = None,
 ) -> str:
     decision = extract(r'class="coach-decision".*?<strong>(.*?)</strong>', block)
     coach_summary = extract(r'class="coach-summary">(.*?)</div>', block)
@@ -206,7 +259,12 @@ def render_summary(
     plan_title = normalize_decision(decision)
     plan_reason = compact_text(coach_summary, 180)
     next_copy = compact_text(next_step, 180)
-    feedback = feedback_rows(activities, overrides)
+    feedback = feedback_rows(
+        activities,
+        overrides,
+        input_blocks=input_blocks,
+        consumed_input_ids=consumed_input_ids,
+    )
     planned = planned_copy(block)
 
     feedback_html = ""
@@ -254,6 +312,8 @@ def render_summary(
 
 
 def simplify_completed_days(page: str, activities_state: dict, overrides: dict, today: str) -> tuple[str, int]:
+    input_blocks = training_input_blocks(page)
+    consumed_input_ids: set[int] = set()
     grouped: dict[str, list[dict]] = {}
     for activity in activities_state.get("activities") or []:
         day = local_date(activity)
@@ -281,7 +341,14 @@ def simplify_completed_days(page: str, activities_state: dict, overrides: dict, 
             continue
         session_end = balanced_div_end(block, session_start)
         rest = block[session_end:-6]  # keep the day-card closing </div> outside details
-        summary = render_summary(block, activities, overrides, rest)
+        summary = render_summary(
+            block,
+            activities,
+            overrides,
+            rest,
+            input_blocks=input_blocks,
+            consumed_input_ids=consumed_input_ids,
+        )
 
         opening = block[: block.find(">") + 1]
         if "completed-day-simplified" not in opening:
@@ -292,6 +359,11 @@ def simplify_completed_days(page: str, activities_state: dict, overrides: dict, 
         new_block = opening + block[block.find(">") + 1:session_end] + summary + '</div>'
         page = page[:start] + new_block + page[end:]
         changed += 1
+
+    for activity_id in consumed_input_ids:
+        source = input_blocks.get(activity_id)
+        if source:
+            page = page.replace(source["full"], "", 1)
 
     return page, changed
 
