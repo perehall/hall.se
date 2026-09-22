@@ -1,44 +1,54 @@
 {
-  "rationale": "Reparerar förslaget så att dag 1 (enduro) hålls blockerad, minst två simexponeringar finns, primära kapaciteter täcks direkt, minst en styrka/core-exponering ingår (via kombinationsrecept), max två löpkvaliteter respekteras och minst en kalenderdag lämnas tom. Progress används endast för ett primärt simstimulus och stöds av historik.",
+  "rationale": "Reparerar förslaget för att uppfylla hard_requirements och ta bort konfliktorsaker: minskar till 5 planerade slots, tar bort MTB för att undvika närhet till löpkvaliteter, lämnar dag 4 som vilodag (ingen plan), säkerställer två simexponeringar varav en kombinerad swim+styrka för styrka/core-kravet, och håller endast en progress för ett primärt stimulus (sim). Alla primära kapaciteter täcks direkt och löpkvaliteter ligger inte intill varandra eller intill MTB.",
   "slots": [
     {
       "day_index": 2,
-      "recipe_key": "swim_aerobic_technique",
-      "action": "progress",
-      "rationale": "Dag efter fast enduro kräver låg benbelastning; ökar simfrekvens och teknisk fokus som mesocykelns prioritet. Progress stödjs av upprepade 3–4k-simpass i faktalagret.",
+      "recipe_key": "swim_strength",
+      "action": "establish",
+      "rationale": "Dag efter faktiskt enduro kräver låg benbelastning; kombinerat sim+styrka uppfyller både normal simfrekvens och styrka/core-kravet utan extra benbelastning.",
       "evidence_refs": [
-        "19946705399",
-        "20203770266"
+        "20239623463",
+        "20175536586",
+        "19946705399"
       ]
     },
     {
       "day_index": 3,
-      "recipe_key": "swim_strength",
-      "action": "establish",
-      "rationale": "Kombinerar andra simexponeringen med styrka/core för att uppfylla styrkekrav utan extra benkvalitetspass.",
-      "evidence_refs": [
-        "20175536586",
-        "20239623463"
-      ]
-    },
-    {
-      "day_index": 5,
       "recipe_key": "run_threshold",
       "action": "consolidate",
-      "rationale": "Bibehåller mesocykelns kontrollerade 4×8-tröskelstruktur utan progression denna mikrocykel; placerad med återhämtning före och efter.",
+      "rationale": "Bibehåller mesocykelns kontrollerade tröskel (4×8-bas) utan progression nära enduro-belastning.",
       "evidence_refs": [
         "20092166843",
         "20254486837"
       ]
     },
     {
-      "day_index": 7,
+      "day_index": 5,
       "recipe_key": "run_hill_quality",
       "action": "consolidate",
-      "rationale": "Underhåller backkvalitet som sekundärt stimulus; schemalagt icke-adjacent till annan löpkvalitet för att undvika två löpkvaliteter i följd.",
+      "rationale": "En backkvalitet senare i veckan för neuromuskulär kraftutveckling; placerad efter en vilodag för att undvika löpkvaliteter i följd.",
       "evidence_refs": [
         "20229568713",
         "20133500464"
+      ]
+    },
+    {
+      "day_index": 6,
+      "recipe_key": "swim_aerobic_technique",
+      "action": "progress",
+      "rationale": "Progress för primärt simstimulus (aerob+teknik) stödd av upprepade långa simpass i faktalagret; endast ett primärt stimulus får progress.",
+      "evidence_refs": [
+        "19946705399",
+        "20203770266"
+      ]
+    },
+    {
+      "day_index": 7,
+      "recipe_key": "run_easy_distance",
+      "action": "establish",
+      "rationale": "Långt lugnt löppass för löptålighet avslutar veckan; placerat efter sim för mekanisk återhämtning och utan att skapa två löpkvaliteter i följd.",
+      "evidence_refs": [
+        "20254486837"
       ]
     }
   ],
@@ -46,7 +56,7 @@
   "planner_revision": 6,
   "source": "openai_repaired",
   "source_hash": "f20ae90689f6f30228417d423c888e4b2a55a5afccc1098e36a2a6657ac7b229",
-  "generated_at_utc": "2026-09-22T08:16:31.301015+00:00",
+  "generated_at_utc": "2026-09-22T08:33:00.364134+00:00",
   "week_start": "2026-09-28",
   "week_key": "2026-W40",
   "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
@@ -124,10 +134,9 @@
   "guard_repair": {
     "attempted": true,
     "initial_failures": [
-      "dag 1 är blockerad av fast endurobelastning",
-      "för få giltiga träningsslots: 3 < 4",
-      "primära kapaciteter saknar direkt recept: swim_aerobic, swim_technique",
-      "för få simexponeringar: 1 < 2"
+      "för många giltiga träningsslots: 6 > 5",
+      "MTB/XC får inte ligga direkt intill löpkvalitet; sekundär cykelbelastning ska inte kompromissa primärt löpstimulus",
+      "mikrocykeln fyller alla sju dagar trots att ledig dag aldrig är ett eget skäl att lägga till träning"
     ],
     "result": "accepted"
   }

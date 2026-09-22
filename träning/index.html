@@ -135,19 +135,31 @@ body{line-height:1.42}.wrap{width:min(100%,720px)}
 @media (max-width:620px){.week-status-expander .dashboard-grid{grid-template-columns:1fr}}
 
 /* training-input-ui-v1 */
-.training-input{margin-top:16px;padding-top:15px;border-top:1px solid var(--qp-line,#e2e8f0)}
-.training-input h3{margin:0 0 5px;font-size:.95rem;color:var(--qp-text,#111827)}
-.training-input-intro{margin:0 0 12px;color:var(--qp-secondary,#5e6661);font-size:.8rem;line-height:1.4}
-.training-input-label{display:block;margin:10px 0 6px;color:var(--qp-text-label,#475569);font-size:.68rem;font-weight:850;letter-spacing:.055em;text-transform:uppercase}
+.training-input{margin:0;padding:14px 0;border-top:1px solid var(--qp-line,#e2e8f0)}
+.training-input-compact{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:start}
+.training-input-title-row{display:flex;align-items:baseline;gap:8px;min-width:0}
+.training-input-title{font-size:.9rem;font-weight:800;color:var(--qp-text,#111827)}
+.training-input-date{font-size:.72rem;color:var(--qp-secondary,#64748b)}
+.training-input-summary{margin-top:3px;color:var(--qp-secondary,#5e6661);font-size:.8rem;line-height:1.35}
+.training-input[data-reviewed="true"] .training-input-summary{color:var(--qp-text,#111827);font-weight:700}
+.training-input-note{margin-top:3px;max-width:62ch;color:var(--qp-secondary,#64748b);font-size:.76rem;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.training-input-note:empty{display:none}
+.training-input-status{margin-top:3px;color:var(--qp-secondary,#64748b);font-size:.73rem;line-height:1.3}
+.training-input[data-submitting="true"] .training-input-status::before{content:"";display:inline-block;width:6px;height:6px;margin-right:6px;border-radius:50%;background:currentColor;vertical-align:1px;animation:training-input-pulse 1.2s ease-in-out infinite}
+@keyframes training-input-pulse{0%,100%{opacity:.25}50%{opacity:1}}
+.training-input-toggle,.training-input-cancel{appearance:none;border:0;background:transparent;color:var(--qp-accent,#5964e8);padding:3px 0;font:inherit;font-size:.78rem;font-weight:800;cursor:pointer}
+.training-input-editor{padding-top:14px;animation:training-input-open .16s ease-out}
+.training-input-editor[hidden]{display:none}
+@keyframes training-input-open{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:none}}
+.training-input-label{display:block;margin:10px 0 6px;color:var(--qp-text-label,#475569);font-size:.66rem;font-weight:850;letter-spacing:.055em;text-transform:uppercase}
 .training-input-options{display:flex;flex-wrap:wrap;gap:6px}
 .training-input-chip{appearance:none;border:1px solid var(--qp-line,#d9dedb);background:transparent;color:var(--qp-secondary,#5e6661);border-radius:999px;padding:7px 10px;font:inherit;font-size:.76rem;cursor:pointer}
 .training-input-chip[aria-pressed="true"]{border-color:var(--qp-accent,#5964e8);color:var(--qp-accent,#5964e8);box-shadow:inset 0 0 0 1px var(--qp-accent,#5964e8)}
-.training-input textarea{width:100%;min-height:72px;resize:vertical;border:1px solid var(--qp-line,#d9dedb);border-radius:10px;background:transparent;color:var(--qp-text,#111827);padding:9px 10px;font:inherit;font-size:.82rem;line-height:1.4}
-.training-input-actions{display:flex;align-items:center;gap:10px;margin-top:8px}
-.training-input-save{appearance:none;border:0;border-radius:9px;background:var(--qp-accent,#5964e8);color:#fff;padding:8px 12px;font:inherit;font-size:.78rem;font-weight:800;cursor:pointer}
+.training-input textarea{box-sizing:border-box;width:100%;min-height:68px;resize:vertical;border:1px solid var(--qp-line,#d9dedb);border-radius:10px;background:transparent;color:var(--qp-text,#111827);padding:9px 10px;font:inherit;font-size:.82rem;line-height:1.4}
+.training-input-actions{display:flex;align-items:center;gap:14px;margin-top:9px}
+.training-input-save{appearance:none;border:0;border-radius:9px;background:var(--qp-accent,#5964e8);color:#fff;padding:8px 13px;font:inherit;font-size:.78rem;font-weight:800;cursor:pointer}
 .training-input-save:disabled{opacity:.55;cursor:default}
-.training-input-status{color:var(--qp-secondary,#5e6661);font-size:.75rem}
-.training-input[data-submitting="true"] .training-input-status{font-weight:800;color:var(--qp-text,#111827)}
+@media (max-width:560px){.training-input-compact{grid-template-columns:minmax(0,1fr) auto;gap:10px}.training-input-note{max-width:42ch}}
 /* workout-card-v2 */
 .day.workout-card-v2{border-radius:15px;border-color:#e5eaf1;padding:16px 17px;box-shadow:0 1px 2px rgba(15,23,42,.035),0 6px 16px rgba(15,23,42,.025)}
 .day.workout-card-v2.card-v2-today{border-color:#bfdbfe;box-shadow:inset 3px 0 0 #2563eb,0 1px 2px rgba(15,23,42,.035),0 6px 16px rgba(15,23,42,.025)}
@@ -989,7 +1001,7 @@ body.quiet-performance.qp-current .week-timeline .feedback-loop{
 </style>
 </head>
 <body class="quiet-performance qp-current"><div class="wrap">
-<header><div class="eyebrow">Träningsplan</div><h1>Vecka 39</h1><div class="sub header-meta-line"><span class="week-period">21–27 sep</span><span>·</span><span class="header-updated">uppdaterad 22 sep 10:16</span></div></header>
+<header><div class="eyebrow">Träningsplan</div><h1>Vecka 39</h1><div class="sub header-meta-line"><span class="week-period">21–27 sep</span><span>·</span><span class="header-updated">uppdaterad 22 sep 10:33</span></div></header>
 
 <div class="goal-page-link"><a href="/träning/malbild-2027/">Målbild 2027 <span>→</span></a></div>
 <nav class="week-nav" aria-label="Veckonavigering"><a class="prev" href="/träning/vecka/2026-W38/">← Vecka 38</a><div class="week-nav-center"><strong>Vecka 39</strong><span>AKTUELL</span></div><a class="next" href="/träning/vecka/2026-W40/">Vecka 40 →</a></nav>
@@ -1013,34 +1025,58 @@ body.quiet-performance.qp-current .week-timeline .feedback-loop{
 <div class="hero week-focus-card"><h2 class="week-focus-title">Fortsatt byggblock — höjd simprioritet, bibehållen kontrollerad löptröskel</h2><div class="week-focus-mesocycle-meta">Fortsatt byggblock — höjd simprioritet, bibehållen kontrollerad löptröskel · mikrocykel 1 av 4</div><details class="week-focus-details"><summary>Planidé</summary><p>Utveckla swimrun-relevant aerob simkapacitet och teknik samtidigt som kontrollerad löptröskel och löptålighet bibehålls för att bygga bas mot ÖTILLÖ Åland 2027. Mikrocykeln är preliminär men konkret: varje planerat pass har en användbar grundplan. Faktisk belastning och återhämtning används för att behålla eller justera planen, inte för att skapa den i sista stund. Kalenderveckan är bara visningen.</p><p class="week-focus-mesocycle-idea"><strong>Mesocykelhypotes:</strong> Atleten har upprepade simexponeringar (7 pass, upp till 4 000 m) och demonstrerad löpkapacitet (långa distanspass + upprepade tröskel- och backserier) vilket tillåter en fortsatt konservativ simprioritering utan att äventyra löputveckling, förutsatt att enduro-belastning kontrolleras och styrka/core bibehålls.</p><p class="week-focus-mesocycle-idea"><strong>Primärt:</strong> Sim aerob kapacitet, Simteknik, Kontrollerad löptröskel · <strong>Sekundärt:</strong> Backstyrka / löpekonomi, Lugn löpdistans / tålighet, MTB teknisk fart · <strong>Underhåll:</strong> MTB/XC aerob kapacitet, Kontrollerad simtröskel · <strong>Skyddad kapacitet:</strong> Unilateral benstyrka, Core, Plyometrisk exponering</p></details></div>
 
 <!-- training-input-ui-v1:start -->
-<section class="training-input" data-training-input data-activity-id="20272196080" data-processed-event-keys="training-input:47386e175c12e0de4bce7738" aria-label="Feedback efter pass">
-  <h3>Feedback · WeightTraining</h3>
-  <p class="training-input-intro">2026-09-21 · Snabbval räcker. Fri text kan också korrigera vad du faktiskt gjorde; modellen får bara klassificera inputen, inte ändra planen direkt.</p>
-  <span class="training-input-label">Ansträngning</span>
-  <div class="training-input-options"><button type="button" class="training-input-chip" data-rpe="2" aria-pressed="false">Mycket lätt</button><button type="button" class="training-input-chip" data-rpe="4" aria-pressed="false">Lätt</button><button type="button" class="training-input-chip" data-rpe="6" aria-pressed="false">Lagom</button><button type="button" class="training-input-chip" data-rpe="8" aria-pressed="false">Tungt</button><button type="button" class="training-input-chip" data-rpe="10" aria-pressed="false">För tungt</button></div>
-  <span class="training-input-label">Känsla</span>
-  <div class="training-input-options"><button type="button" class="training-input-chip" data-feeling="fresh" aria-pressed="false">Pigg</button><button type="button" class="training-input-chip" data-feeling="tired" aria-pressed="false">Trött</button><button type="button" class="training-input-chip" data-feeling="strong_legs" aria-pressed="false">Starka ben</button><button type="button" class="training-input-chip" data-feeling="heavy_legs" aria-pressed="false">Tunga ben</button><button type="button" class="training-input-chip" data-feeling="pain" aria-pressed="false">Smärta</button><button type="button" class="training-input-chip" data-feeling="could_do_more" aria-pressed="false">Kunde gjort mer</button></div>
-  <span class="training-input-label">Kommentar eller ändring</span>
-  <textarea maxlength="800" placeholder="T.ex. Blev 4 × 8 i stället för 3 × 10. Kändes kontrollerat och jag var pigg efteråt."></textarea>
-  <div class="training-input-actions">
-    <button type="button" class="training-input-save" data-training-input-save>Spara</button>
-    <span class="training-input-status" data-training-input-status aria-live="polite"></span>
+<section class="training-input" data-training-input data-activity-id="20272196080" data-reviewed="true" data-processed-event-keys="training-input:47386e175c12e0de4bce7738" aria-label="Feedback efter pass">
+  <div class="training-input-compact">
+    <div>
+      <div class="training-input-title-row">
+        <span class="training-input-title">Styrka</span>
+        <span class="training-input-date">2026-09-21</span>
+      </div>
+      <div class="training-input-summary" data-training-input-summary>Sparat · RPE 2</div>
+      <div class="training-input-note" data-training-input-note>RPE 2/10. Känsla: Pigg.</div>
+      <div class="training-input-status" data-training-input-status aria-live="polite"></div>
+    </div>
+    <button type="button" class="training-input-toggle" data-training-input-toggle>Ändra</button>
+  </div>
+  <div class="training-input-editor" data-training-input-editor hidden>
+    <span class="training-input-label">Ansträngning</span>
+    <div class="training-input-options"><button type="button" class="training-input-chip" data-rpe="2" aria-pressed="true">Mycket lätt</button><button type="button" class="training-input-chip" data-rpe="4" aria-pressed="false">Lätt</button><button type="button" class="training-input-chip" data-rpe="6" aria-pressed="false">Lagom</button><button type="button" class="training-input-chip" data-rpe="8" aria-pressed="false">Tungt</button><button type="button" class="training-input-chip" data-rpe="10" aria-pressed="false">För tungt</button></div>
+    <span class="training-input-label">Känsla</span>
+    <div class="training-input-options"><button type="button" class="training-input-chip" data-feeling="fresh" aria-pressed="false">Pigg</button><button type="button" class="training-input-chip" data-feeling="tired" aria-pressed="false">Trött</button><button type="button" class="training-input-chip" data-feeling="strong_legs" aria-pressed="false">Starka ben</button><button type="button" class="training-input-chip" data-feeling="heavy_legs" aria-pressed="false">Tunga ben</button><button type="button" class="training-input-chip" data-feeling="pain" aria-pressed="false">Smärta</button><button type="button" class="training-input-chip" data-feeling="could_do_more" aria-pressed="false">Kunde gjort mer</button></div>
+    <span class="training-input-label">Kommentar eller ändring</span>
+    <textarea maxlength="800" placeholder="Kort kommentar om något är värt att fånga.">RPE 2/10. Känsla: Pigg.</textarea>
+    <div class="training-input-actions">
+      <button type="button" class="training-input-save" data-training-input-save>Spara</button>
+      <button type="button" class="training-input-cancel" data-training-input-cancel>Avbryt</button>
+    </div>
   </div>
 </section>
 <!-- training-input-ui-v1:end -->
 <!-- training-input-ui-v1:start -->
-<section class="training-input" data-training-input data-activity-id="20271537143" data-processed-event-keys="training-input:3b12cd42b4a49c62750efa06" aria-label="Feedback efter pass">
-  <h3>Feedback · Enduro</h3>
-  <p class="training-input-intro">2026-09-21 · Snabbval räcker. Fri text kan också korrigera vad du faktiskt gjorde; modellen får bara klassificera inputen, inte ändra planen direkt.</p>
-  <span class="training-input-label">Ansträngning</span>
-  <div class="training-input-options"><button type="button" class="training-input-chip" data-rpe="2" aria-pressed="false">Mycket lätt</button><button type="button" class="training-input-chip" data-rpe="4" aria-pressed="false">Lätt</button><button type="button" class="training-input-chip" data-rpe="6" aria-pressed="false">Lagom</button><button type="button" class="training-input-chip" data-rpe="8" aria-pressed="false">Tungt</button><button type="button" class="training-input-chip" data-rpe="10" aria-pressed="false">För tungt</button></div>
-  <span class="training-input-label">Känsla</span>
-  <div class="training-input-options"><button type="button" class="training-input-chip" data-feeling="fresh" aria-pressed="false">Pigg</button><button type="button" class="training-input-chip" data-feeling="tired" aria-pressed="false">Trött</button><button type="button" class="training-input-chip" data-feeling="strong_legs" aria-pressed="false">Starka ben</button><button type="button" class="training-input-chip" data-feeling="heavy_legs" aria-pressed="false">Tunga ben</button><button type="button" class="training-input-chip" data-feeling="pain" aria-pressed="false">Smärta</button><button type="button" class="training-input-chip" data-feeling="could_do_more" aria-pressed="false">Kunde gjort mer</button></div>
-  <span class="training-input-label">Kommentar eller ändring</span>
-  <textarea maxlength="800" placeholder="T.ex. Blev 4 × 8 i stället för 3 × 10. Kändes kontrollerat och jag var pigg efteråt."></textarea>
-  <div class="training-input-actions">
-    <button type="button" class="training-input-save" data-training-input-save>Spara</button>
-    <span class="training-input-status" data-training-input-status aria-live="polite"></span>
+<section class="training-input" data-training-input data-activity-id="20271537143" data-reviewed="true" data-processed-event-keys="training-input:3b12cd42b4a49c62750efa06" aria-label="Feedback efter pass">
+  <div class="training-input-compact">
+    <div>
+      <div class="training-input-title-row">
+        <span class="training-input-title">Enduro</span>
+        <span class="training-input-date">2026-09-21</span>
+      </div>
+      <div class="training-input-summary" data-training-input-summary>Sparat · RPE 4</div>
+      <div class="training-input-note" data-training-input-note>Teknisk körning, stenbacke och berghäll, kostnad för passet minimal RPE 4/10. Känsla: Pigg. Lätt teknik, stenbackar och berghällar</div>
+      <div class="training-input-status" data-training-input-status aria-live="polite"></div>
+    </div>
+    <button type="button" class="training-input-toggle" data-training-input-toggle>Ändra</button>
+  </div>
+  <div class="training-input-editor" data-training-input-editor hidden>
+    <span class="training-input-label">Ansträngning</span>
+    <div class="training-input-options"><button type="button" class="training-input-chip" data-rpe="2" aria-pressed="false">Mycket lätt</button><button type="button" class="training-input-chip" data-rpe="4" aria-pressed="true">Lätt</button><button type="button" class="training-input-chip" data-rpe="6" aria-pressed="false">Lagom</button><button type="button" class="training-input-chip" data-rpe="8" aria-pressed="false">Tungt</button><button type="button" class="training-input-chip" data-rpe="10" aria-pressed="false">För tungt</button></div>
+    <span class="training-input-label">Känsla</span>
+    <div class="training-input-options"><button type="button" class="training-input-chip" data-feeling="fresh" aria-pressed="false">Pigg</button><button type="button" class="training-input-chip" data-feeling="tired" aria-pressed="false">Trött</button><button type="button" class="training-input-chip" data-feeling="strong_legs" aria-pressed="false">Starka ben</button><button type="button" class="training-input-chip" data-feeling="heavy_legs" aria-pressed="false">Tunga ben</button><button type="button" class="training-input-chip" data-feeling="pain" aria-pressed="false">Smärta</button><button type="button" class="training-input-chip" data-feeling="could_do_more" aria-pressed="false">Kunde gjort mer</button></div>
+    <span class="training-input-label">Kommentar eller ändring</span>
+    <textarea maxlength="800" placeholder="Kort kommentar om något är värt att fånga.">Teknisk körning, stenbacke och berghäll, kostnad för passet minimal RPE 4/10. Känsla: Pigg. Lätt teknik, stenbackar och berghällar</textarea>
+    <div class="training-input-actions">
+      <button type="button" class="training-input-save" data-training-input-save>Spara</button>
+      <button type="button" class="training-input-cancel" data-training-input-cancel>Avbryt</button>
+    </div>
   </div>
 </section>
 <!-- training-input-ui-v1:end -->
@@ -1100,18 +1136,18 @@ body.quiet-performance.qp-current .week-timeline .feedback-loop{
   <div class="pass"><div class="pass-title">Automatiskt från Strava</div><div><strong>WeightTraining</strong> · 33:34 · snittpuls 79 · max 128</div><div><strong>Enduro</strong> · 12,53 km · 1:36:49 · snittpuls 101 · max 150</div></div><div class="coach yoda-v2">
   <div class="coach-title">Tränings-Yoda (AI)</div>
   <div class="coach-decision"><span>Beslut</span><strong>Behåll planen</strong><span class="coach-target">2026-09-22</span></div>
-  <div class="coach-summary">Genomfört styrkepass (33,6 min) rapporterat RPE 2–4/10 och kändes piggt; kombinerades samma dag med ett 1h36min enduro-pass tidigare.</div>
-  <div class="coach-next"><span class="coach-next-label">Nästa steg</span><div>Följ det nu valda alternativet det valda passalternativet (sim 3 200 m + reducerad styrkedos).</div></div>
+  <div class="coach-summary">Genomfört styrkepass (~33,6 min) samma kväll som ett 5809 s enduro-pass; användaren rapporterar låg RPE (2–4/10) och pigg känsla.</div>
+  <div class="coach-next"><span class="coach-next-label">Nästa steg</span><div>Följ den valda dosen det valda passalternativet: genomför simdelen (3 200 m) och håll styrka/core inom ~25 min med kontrollerade…</div></div>
   <details class="coach-why"><summary>Motivering</summary>
     <div class="coach-why-body">
-      <div class="coach-full-summary"><strong>Bedömning</strong><span>Genomfört styrkepass (33,6 min) rapporterat RPE 2–4/10 och kändes piggt; kombinerades samma dag med ett 1h36min enduro-pass tidigare.</span></div>
-      <div class="coach-load">Närbelastning de senaste 2–3 dagarna: enduro-session + styrka ökar mekanisk/neuromuskulär belastning och motiverade redan planerad reduktion av morgondagens styrkedel.</div>
-      <div class="coach-reason"><strong>Motivering</strong><span>Planen har redan konservativt reducerat styrkedosen för 2026-09-22 baserat på dagens enduro + genomförd styrka.</span></div>
+      <div class="coach-full-summary"><strong>Bedömning</strong><span>Genomfört styrkepass (~33,6 min) samma kväll som ett 5809 s enduro-pass; användaren rapporterar låg RPE (2–4/10) och pigg känsla.</span></div>
+      <div class="coach-load">Närbelastningen visar ökad mekanisk/neuromuskulär belastning samma dag (enduro + styrka); kardiovaskulärt verkar användaren välfungerande enligt RPE och pulsdata.</div>
+      <div class="coach-reason"><strong>Motivering</strong><span>Planen har redan automatiskt reducerat styrkedosen till det valda passalternativet för att skydda ben efter enduro + genomförd styrka.</span></div>
       <details class="coach-details"><summary>Fakta, tolkning och osäkerhet</summary>
     <div class="coach-grid">
       <div><strong>Fakta</strong><ul><li>WeightTraining: 33:34 · snittpuls 79,3 · maxpuls 128.</li><li>Användarrapport: RPE 2/10. Känsla: Pigg. RPE 4/10.</li></ul></div>
-      <div><strong>Tolkning</strong><ul><li>Detta styrkepass tolererades väl samma kväll och bekräftar användarrapport om låg RPE.</li><li>Kombinationen med dagens enduro ger ökad mekanisk/neuromuskulär närbelastning och stödjer det konservativa beslutet att reducera styrkedosen nästa dag.</li></ul></div>
-      <div><strong>Osäkert/saknas</strong><ul><li>Detaljerat innehåll i styrkepasset (set/reps/loads) saknas vilket påverkar styrke-specifik bedömning.</li><li>Subjektiv återhämtning nästa 24–72 h är okänd trots pigg känsla nu.</li></ul></div>
+      <div><strong>Tolkning</strong><ul><li>Passet genomfördes lätt subjektivt (RPE 2–4) och registrerade HR-nivåer stödjer låg intern belastning för styrkedel.</li><li>Kombinationen av ett långt enduro-pass tidigare samma dag och genomförd styrka ökar mekanisk/neuromuskulär närbelastning; nuvarande plan valde därför konservativt att reducera styrkedosen…</li></ul></div>
+      <div><strong>Osäkert/saknas</strong><ul><li>Detaljer om styrkeövningar/lyft (sets/reps/load) saknas och påverkar exakt lokal muskellast.</li><li>Ingen senare daglig subjektiv återrapport (24–72 h) finns för att bedöma återhämtning efter kombinationsdagen.</li></ul></div>
     </div>
       </details>
     </div>
@@ -1132,9 +1168,9 @@ body.quiet-performance.qp-current .week-timeline .feedback-loop{
   <div class="week-activity-insight-kicker">Passinsikt</div>
   <h3>Styrkepasset krävde ingen planändring</h3>
   <div class="week-activity-metrics">33:34 · snittpuls 79</div>
-  <p class="week-activity-insight-copy">Detta styrkepass tolererades väl samma kväll och bekräftar användarrapport om låg RPE.</p>
+  <p class="week-activity-insight-copy">Passet genomfördes lätt subjektivt (RPE 2–4) och registrerade HR-nivåer stödjer låg intern belastning för styrkedel.</p>
   <div class="week-activity-plan-impact"><span>Planpåverkan</span><strong>Ingen ändring</strong></div>
-  <details class="week-activity-evidence"><summary>Visa underlag</summary><div class="week-activity-evidence-body"><div class="week-activity-evidence-block"><strong>Fakta</strong><ul><li>WeightTraining: 33:34 · snittpuls 79,3 · maxpuls 128.</li><li>Användarrapport: RPE 2/10. Känsla: Pigg. RPE 4/10.</li></ul></div><div class="week-activity-evidence-block"><strong>Tolkning</strong><ul><li>Detta styrkepass tolererades väl samma kväll och bekräftar användarrapport om låg RPE.</li><li>Kombinationen med dagens enduro ger ökad mekanisk/neuromuskulär närbelastning och stödjer det konservativa beslutet att reducera styrkedosen nästa dag.</li></ul></div><div class="week-activity-evidence-block"><strong>Osäkerhet</strong><ul><li>Detaljerat innehåll i styrkepasset (set/reps/loads) saknas vilket påverkar styrke-specifik bedömning.</li><li>Subjektiv återhämtning nästa 24–72 h är okänd trots pigg känsla nu.</li></ul></div></div></details>
+  <details class="week-activity-evidence"><summary>Visa underlag</summary><div class="week-activity-evidence-body"><div class="week-activity-evidence-block"><strong>Fakta</strong><ul><li>WeightTraining: 33:34 · snittpuls 79,3 · maxpuls 128.</li><li>Användarrapport: RPE 2/10. Känsla: Pigg. RPE 4/10.</li></ul></div><div class="week-activity-evidence-block"><strong>Tolkning</strong><ul><li>Passet genomfördes lätt subjektivt (RPE 2–4) och registrerade HR-nivåer stödjer låg intern belastning för styrkedel.</li><li>Kombinationen av ett långt enduro-pass tidigare samma dag och genomförd styrka ökar mekanisk/neuromuskulär närbelastning; nuvarande plan valde därför konservativt att reducera styrkedosen…</li></ul></div><div class="week-activity-evidence-block"><strong>Osäkerhet</strong><ul><li>Detaljer om styrkeövningar/lyft (sets/reps/load) saknas och påverkar exakt lokal muskellast.</li><li>Ingen senare daglig subjektiv återrapport (24–72 h) finns för att bedöma återhämtning efter kombinationsdagen.</li></ul></div></div></details>
 <!-- explicit-user-report-v1:20272196080:start -->
 <div class="week-activity-user-report"><span>Din kommentar</span><p>RPE 2/10. Känsla: Pigg. RPE 4/10.</p></div>
 <!-- explicit-user-report-v1:20272196080:end -->
@@ -1336,8 +1372,8 @@ window.addEventListener("pageshow", (event) => {
 
   async function waitForProcessed(activityId, eventKey, onProgress) {
     for (let attempt = 0; attempt < 90; attempt += 1) {
-      if (attempt === 5) onProgress('Sparat ✓ · systemet bearbetar fortfarande…');
-      if (attempt === 15) onProgress('Sparat ✓ · väntar på färdig omräkning…');
+      if (attempt === 5) onProgress('Uppdaterar analys…');
+      if (attempt === 15) onProgress('Väntar på färdig omräkning…');
       await sleep(2000);
       try {
         const probe = new URL(window.location.href);
@@ -1367,13 +1403,81 @@ window.addEventListener("pageshow", (event) => {
   }
 
   roots.forEach((root) => {
+    const editor = root.querySelector('[data-training-input-editor]');
+    const toggle = root.querySelector('[data-training-input-toggle]');
+    const cancel = root.querySelector('[data-training-input-cancel]');
+    const summary = root.querySelector('[data-training-input-summary]');
+    const notePreview = root.querySelector('[data-training-input-note]');
     const rpeButtons = [...root.querySelectorAll('[data-rpe]')];
     const feelingButtons = [...root.querySelectorAll('[data-feeling]')];
     const text = root.querySelector('textarea');
     const save = root.querySelector('[data-training-input-save]');
     const status = root.querySelector('[data-training-input-status]');
+
     let rpe = null;
     const feelings = new Set();
+    const selectedRpe = rpeButtons.find((button) => button.getAttribute('aria-pressed') === 'true');
+    if (selectedRpe) rpe = Number(selectedRpe.dataset.rpe);
+    feelingButtons
+      .filter((button) => button.getAttribute('aria-pressed') === 'true')
+      .forEach((button) => feelings.add(button.dataset.feeling));
+
+    const snapshot = () => ({
+      rpe,
+      feelings: [...feelings],
+      text: text.value
+    });
+    let initial = snapshot();
+
+    const feelingLabel = (key) => {
+      const button = feelingButtons.find((item) => item.dataset.feeling === key);
+      return button ? button.textContent.trim() : key;
+    };
+
+    const compactSummary = () => {
+      const parts = ['Sparat'];
+      if (rpe !== null) parts.push(`RPE ${rpe}`);
+      [...feelings].forEach((key) => parts.push(feelingLabel(key)));
+      return parts.join(' · ');
+    };
+
+    const updateCompact = () => {
+      root.dataset.reviewed = 'true';
+      summary.textContent = compactSummary();
+      notePreview.textContent = text.value.trim();
+      toggle.textContent = 'Ändra';
+    };
+
+    const restore = (state) => {
+      rpe = state.rpe;
+      feelings.clear();
+      state.feelings.forEach((value) => feelings.add(value));
+      text.value = state.text;
+      rpeButtons.forEach((button) => {
+        button.setAttribute('aria-pressed', Number(button.dataset.rpe) === rpe ? 'true' : 'false');
+      });
+      feelingButtons.forEach((button) => {
+        button.setAttribute('aria-pressed', feelings.has(button.dataset.feeling) ? 'true' : 'false');
+      });
+    };
+
+    const openEditor = () => {
+      restore(initial);
+      editor.hidden = false;
+      toggle.hidden = true;
+      status.textContent = '';
+      text.focus({preventScroll: true});
+    };
+
+    const closeEditor = () => {
+      restore(initial);
+      editor.hidden = true;
+      toggle.hidden = false;
+      status.textContent = '';
+    };
+
+    toggle.addEventListener('click', openEditor);
+    cancel.addEventListener('click', closeEditor);
 
     const pressOne = (button) => {
       rpeButtons.forEach((item) => item.setAttribute('aria-pressed', item === button ? 'true' : 'false'));
@@ -1388,19 +1492,20 @@ window.addEventListener("pageshow", (event) => {
     }));
 
     save.addEventListener('click', async () => {
-      const note = text.value.trim();
-      if (!note && rpe === null && feelings.size === 0) {
+      const comment = text.value.trim();
+      if (!comment && rpe === null && feelings.size === 0) {
         status.textContent = 'Välj en känsla eller skriv en kort kommentar.';
         return;
       }
 
-      let operation = note ? 'NATURAL_LANGUAGE' : 'ADD_FEEDBACK';
-      if (!note && feelings.has('pain')) operation = 'REPORT_PAIN';
-      else if (!note && feelings.has('tired')) operation = 'REPORT_FATIGUE';
+      let operation = comment ? 'NATURAL_LANGUAGE' : 'ADD_FEEDBACK';
+      if (!comment && feelings.has('pain')) operation = 'REPORT_PAIN';
+      else if (!comment && feelings.has('tired')) operation = 'REPORT_FATIGUE';
 
       save.disabled = true;
       root.dataset.submitting = 'true';
       status.textContent = 'Sparar…';
+
       try {
         const response = await fetch('/träning/training-api/input', {
           method: 'POST',
@@ -1409,7 +1514,7 @@ window.addEventListener("pageshow", (event) => {
           body: JSON.stringify({
             operation,
             activity_id: Number(root.dataset.activityId),
-            text: note,
+            text: comment,
             rpe,
             feeling: [...feelings],
             source: 'training-gui-v1'
@@ -1419,7 +1524,11 @@ window.addEventListener("pageshow", (event) => {
         if (!response.ok) throw new Error(body.error || 'request_failed');
         if (!body.event_key) throw new Error('missing_event_key');
 
-        status.textContent = 'Sparat ✓ · feedback mottagen. Omräkning pågår…';
+        updateCompact();
+        initial = snapshot();
+        editor.hidden = true;
+        toggle.hidden = false;
+        status.textContent = 'Uppdaterar analys…';
 
         const processed = await waitForProcessed(
           root.dataset.activityId,
@@ -1427,20 +1536,22 @@ window.addEventListener("pageshow", (event) => {
           (message) => { status.textContent = message; }
         );
         if (processed) {
-          status.textContent = 'Klart. Uppdaterar…';
+          status.textContent = 'Klart';
           const next = new URL(window.location.href);
           next.searchParams.set('_feedback_done', String(Date.now()));
           window.location.replace(next.toString());
           return;
         }
 
-        status.textContent = 'Sparat ✓ · automatisk uppdatering kunde inte bekräftas.';
+        status.textContent = 'Sparat · automatisk uppdatering kunde inte bekräftas.';
         root.dataset.submitting = 'false';
         save.disabled = false;
       } catch (error) {
         status.textContent = `Kunde inte spara (${error.message}).`;
         root.dataset.submitting = 'false';
         save.disabled = false;
+        editor.hidden = false;
+        toggle.hidden = true;
         console.error('TRAINING_INPUT_FAILED', error);
       }
     });
