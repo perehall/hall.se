@@ -190,6 +190,11 @@ def validate_training_strategy(document):
     require(isinstance(capacity, dict), "strategi.current_mesocycle.capacity_protection saknas")
     required_each = capacity.get("required_each_microcycle")
     protected_across = capacity.get("protected_across_mesocycle")
+    completed_current = capacity.get("completed_current_microcycle") or []
+    require(isinstance(completed_current, list), "strategi.current_mesocycle.capacity_protection.completed_current_microcycle måste vara lista")
+    require(len(completed_current) == len(set(completed_current)), "strategi.current_mesocycle.capacity_protection.completed_current_microcycle innehåller dubbletter")
+    for key in completed_current:
+        require(key in capability_keys, f"strategi.current_mesocycle.capacity_protection.completed_current_microcycle: okänd capability {key!r}")
     require(isinstance(required_each, list) and required_each, "strategi.current_mesocycle.capacity_protection.required_each_microcycle saknas")
     require(isinstance(protected_across, list) and protected_across, "strategi.current_mesocycle.capacity_protection.protected_across_mesocycle saknas")
     for key in required_each + protected_across:
@@ -367,10 +372,12 @@ def validate_training_strategy(document):
         not missing_protected,
         f"strategi.current_mesocycle.microcycle_template saknar protected stimuli {missing_protected!r}",
     )
-    missing_capacity = [key for key in required_each if key not in template_stimuli]
+    covered_capacity = template_stimuli | set(completed_current)
+    missing_capacity = [key for key in required_each if key not in covered_capacity]
     require(
         not missing_capacity,
-        f"strategi.current_mesocycle.microcycle_template saknar obligatorisk kapacitet {missing_capacity!r}",
+        "strategi.current_mesocycle saknar obligatorisk kapacitet i både faktiskt genomfört och kvarvarande plan "
+        f"{missing_capacity!r}",
     )
 
     progression = mesocycle.get("progression_policy")
