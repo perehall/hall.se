@@ -15,6 +15,8 @@ class HumanTrainingLanguageTests(unittest.TestCase):
 <div class="badge planned">PLANERAT</div>
 <div class="badge conditional">VILLKORAT</div>
 <div class="badge open">ÖPPET</div>
+<div class="session">Ingen planerad träning</div>
+<div class="brain-next"><strong>Onsdag · Ingen planerad träning</strong></div>
 <div class="dashboard-legend">✓ genomfört · ● planerat · ◐ preliminärt/villkorat · · öppet</div>
 <section data-post-workout-state="completed">
   <div class="today-outcome-compare">
@@ -29,6 +31,9 @@ class HumanTrainingLanguageTests(unittest.TestCase):
         self.assertIn(">AKTUELL PLAN<", rendered)
         self.assertIn(">KAN ÄNDRAS<", rendered)
         self.assertIn(">INTE BESTÄMT<", rendered)
+        self.assertIn('<div class="session">Vilodag</div>', rendered)
+        self.assertIn("<strong>Onsdag · Vilodag</strong>", rendered)
+        self.assertNotIn(">Ingen planerad träning<", rendered)
         self.assertIn("Aktuell plan = passet du utgår från", rendered)
         self.assertIn("Plan före passet", rendered)
         self.assertIn("Genomfört", rendered)
