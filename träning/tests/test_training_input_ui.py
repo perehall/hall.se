@@ -138,6 +138,42 @@ class TrainingInputUiTests(unittest.TestCase):
         self.assertIn("Sparat · RPE 2 · Pigg", rendered)
         self.assertIn(">Ändra</button>", rendered)
 
+    def test_legacy_multiple_submissions_show_latest_receipt_only(self):
+        page = """<html><head><style></style></head><body>
+<!-- training-brain-v1:start --><section>Idag</section><!-- training-brain-v1:end -->
+</body></html>"""
+        activities = {
+            "activities": [
+                {
+                    "id": 402,
+                    "sport_type": "Enduro",
+                    "start_date_local": "2026-09-21T18:00:00+02:00",
+                }
+            ]
+        }
+        overrides = {
+            "schema_version": 1,
+            "overrides": {
+                "402": {
+                    "user_report": (
+                        "Första kommentaren. RPE 4/10. Känsla: Pigg. "
+                        "Senaste kommentaren. RPE 6/10."
+                    ),
+                    "last_training_input_event_key": "training-input:aaaaaaaaaaaaaaaaaaaaaaaa",
+                }
+            },
+        }
+        rendered = apply_training_input_ui(
+            page,
+            {"days": []},
+            activities,
+            "2026-09-22",
+            overrides_state=overrides,
+        )
+        self.assertIn("Sparat · RPE 6", rendered)
+        self.assertIn("Senaste kommentaren.", rendered)
+        self.assertNotIn("Första kommentaren.", rendered)
+
     def test_no_recent_activity_means_no_input_surface(self):
         page = """<html><head><style></style></head><body>
 <!-- training-brain-v1:start --><section>Idag</section><!-- training-brain-v1:end -->
