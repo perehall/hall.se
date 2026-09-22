@@ -1,52 +1,54 @@
 {
-  "rationale": "Reparerar förslaget så att dag 1 förblir blockerad av enduro, dag 2 blir låg benbelastning med kombinerad sim+styrka, minst två simexponeringar och minst en styrke/core-exponering finns, löpkvaliteter inte ligger intill varandra och minst en vilodag finns. Endast en primär stimulus progressas (simteknik/aerob).",
+  "rationale": "Mikrocykeln prioriterar sim (2 exponeringar, teknisk/aerob progression) och bibehåller tröskel samt minst en styrka/core-exponering. Dag 1 är blockad av enduro; dag 2 hålls låg benbelastning (kombinationspass swim_strength). En kalenderdag är vilodag. Löppass placeras med minst en dags mellanrum och antal kvalitetspass hålls ≤ max. Valen följer mesocykelns guardrails och athlete_state-evidens.",
   "slots": [
     {
       "day_index": 2,
       "recipe_key": "swim_strength",
       "action": "establish",
-      "rationale": "Dag 2 måste vara låg benbelastning efter fast enduro på dag 1; swim_strength ger både en andra simexponering och säkerställer minst en styrke/core-session utan extra benstress.",
+      "rationale": "Låg benbelastning dag efter enduro; kombinerar andra simexponeringen med obligatorisk styrka/core utan extra benstress.",
       "evidence_refs": [
+        "19946705399",
         "20239623463",
-        "20203770266",
         "20175536586"
       ]
     },
     {
       "day_index": 4,
-      "recipe_key": "swim_aerobic_technique",
-      "action": "progress",
-      "rationale": "Prioriterad simprogression (frekvens/teknisk kvalitet) stöds av upprepade långa simpass; endast ett primärt stimulus ges progression.",
-      "evidence_refs": [
-        "20203770266",
-        "20239623463"
-      ]
-    },
-    {
-      "day_index": 5,
       "recipe_key": "run_threshold",
       "action": "consolidate",
-      "rationale": "Bibehåller mesocykelns 4×8-min tröskelbaseline utan extra progression nära enduro; konsolidering stödjs av tidigare 4×8-min-pass.",
+      "rationale": "Bibehålla kontrollerad tröskel (4×8-bas) utan progression denna mikrocykel för att säkerställa återhämtning efter enduro och kombipass.",
       "evidence_refs": [
         "20092166843",
         "19897382163"
       ]
     },
     {
-      "day_index": 7,
-      "recipe_key": "run_easy_distance",
-      "action": "establish",
-      "rationale": "Långt lugnt löppass för löptålighet planerat med minst ett dagsgap från andra löppass för att undvika två löpstressorer i följd och säkra återhämtningstid.",
+      "day_index": 5,
+      "recipe_key": "swim_aerobic_technique",
+      "action": "progress",
+      "rationale": "Primärt simstimulus progressas (högre teknisk/aerob belastning) — stöd i upprepad simexponering och 4 000 m-bevis.",
       "evidence_refs": [
-        "20254486837"
+        "19946705399",
+        "20203770266",
+        "20106458579"
+      ]
+    },
+    {
+      "day_index": 6,
+      "recipe_key": "run_easy_distance",
+      "action": "consolidate",
+      "rationale": "Lugn långt pass för löptålighet enligt mesocykelens målsättning; placeras 48+ timmar från tröskelpass.",
+      "evidence_refs": [
+        "20254486837",
+        "20157600319"
       ]
     }
   ],
   "schema_version": 1,
   "planner_revision": 6,
-  "source": "openai_repaired",
-  "source_hash": "f20ae90689f6f30228417d423c888e4b2a55a5afccc1098e36a2a6657ac7b229",
-  "generated_at_utc": "2026-09-22T11:38:20.638746+00:00",
+  "source": "openai",
+  "source_hash": "c56153e5c278bc285c0ffda265b1313e792b12cddd4c2f86fd5c1aea1fb1c296",
+  "generated_at_utc": "2026-09-22T11:51:57.166523+00:00",
   "week_start": "2026-09-28",
   "week_key": "2026-W40",
   "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
@@ -120,15 +122,5 @@
       "391 höjdmeter ska vägas in, men systemet får inte hitta på en mer kuperad profil än den publicerade.",
       "Tävlingsdatumet styr när specificiteten ska omprövas; det får inte ensamt utlösa automatisk volym- eller intensitetsökning."
     ]
-  },
-  "guard_repair": {
-    "attempted": true,
-    "initial_failures": [
-      "dag 1 är blockerad av fast endurobelastning",
-      "run_threshold får inte ligga direkt dagen efter fast enduro när faktisk benbelastning ännu är okänd",
-      "för få simexponeringar: 1 < 2",
-      "för få styrka/core-exponeringar: 0 < 1"
-    ],
-    "result": "accepted"
   }
 }

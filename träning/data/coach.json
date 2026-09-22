@@ -4,7 +4,7 @@
       "activity_id": 20272196080,
       "activity_date": "2026-09-21",
       "activity_name": "Styrketräning på kvällen",
-      "generated_at_utc": "2026-09-22T11:38:30.614647+00:00",
+      "generated_at_utc": "2026-09-22T11:52:08.885047+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 3,
@@ -16,27 +16,27 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört styrkepass 33,6 min samma dag som ett 5809s enduro-pass—subjektiv RPE låg (2–4/10) och du rapporterar pigg.",
-        "load_interpretation": "Närbelastning: enduro-sessionens långa elapsed-duration + dagens styrka ökar mekanisk/neuromuskulär närbelastning för de närmaste 48–72 timmar.",
+        "summary": "Genomfört kvällens styrkepass (33,6 min) rapporterat RPE 2–4/10 och kändes pigg; samma dag innehöll också ett 97 min Enduro-pass med låg subjektiv kostnad.",
+        "load_interpretation": "Närbelastning: Enduro (5809 s total passduration) + styrka idag ökar mekanisk/neuromuskulär belastning och stödjer konservativ reduktion av morgondagens styrkedel.",
         "confidence": "medium",
         "facts": [
           "WeightTraining: 33:34 · snittpuls 79,3 · maxpuls 128.",
-          "Användarrapport: RPE 2/10. Känsla: Pigg. RPE 4/10."
+          "Användarrapport: RPE 2/10. Känsla: Pigg. Palloff press, latsdrag, bulgarian splits, atomic pushups med band, bänkrodd, dead bug, omvänd planka RPE 4/10."
         ],
         "interpretations": [
-          "Låg subjektiv RPE indikerar att styrkepasset tolererades bra samma dag men ändrar inte det faktum att mekanisk/neuromuskulär belastning ackumulerats efter enduro.",
-          "Vald konservativ reduktion av morgondagens kombinerade sim+styrka (det valda passalternativet) är lämplig för att skydda ben inför mikrocykelns nyckelpass."
+          "Detta styrkepass var lågintensivt subjektivt och genomfört — men tillsammans med dagens Enduro ökar den totala benrelaterade närbelastningen för mikrocykeln.",
+          "Valet att reducera styrkedelen för morgondagens kombinerade sim+styrka (det valda passalternativet) är konservativt och lämpligt baserat på dagens samlade belastning."
         ],
         "unknowns": [
-          "Eventuell lokal muskeltrötthet eller nattlig återhämtning (ingen explicit rapport).",
-          "Subsequent perceived readiness eller morgondagens planerade genomförandestid/struktur för styrkedelen."
+          "Hur du känner dig nästa morgon (24–48h återhämtning) kan påverka toleransen för styrkevolym.",
+          "Eventuell planerad plyometri i styrkemallen och dess faktiska genomförande är inte specificerat och påverkar lokal belastning."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-09-22",
-        "reason": "Auto-coach har redan reducerat morgondagens kombinerade sim+styrka till det valda passalternativet för att konservativt hantera enduro + genomförd styrka.",
-        "recommendation": "Följ dagens reduktion: genomför simdelen enligt watch-workout och håll styrkedelen kort (det valda passalternativet). Avstå från extra benbelastning i övrigt och rapportera RPE/känsla efter morgondagens pass.",
+        "reason": "Planen har redan automatiskt reducerat styrkedosen till det valda passalternativet efter dagens Enduro + styrka; beslutet skyddar ben inför mikrocykelns nyckelpass.",
+        "recommendation": "Följ dagens planerade reducerade variant (det valda passalternativet): genomför simdelen enligt planerat träningsinnehåll och håll styrka inom 25 min tidsram, undvik plyometri; återrapportera RPE nästa morgon om avvikelse.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -1210,8 +1210,8 @@
       }
     }
   ],
-  "last_trigger_hash": "73bae114382b65dbbde37cb5668f0f63a1e3edb2dabaf7b66d48cfd7935c9d03",
-  "last_run_utc": "2026-09-22T11:38:30.614647+00:00",
+  "last_trigger_hash": "6157985f64a53f2df176fb4b26b02b0a42474187145b459605d67c1fac19d43e",
+  "last_run_utc": "2026-09-22T11:52:08.885047+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 3
