@@ -82,6 +82,8 @@ def replace_exact_element_text(page, old, new):
 
 def humanize_statuses(page):
     page = page.replace(OLD_LEGEND, NEW_LEGEND)
+    page = page.replace(">Ingen planerad träning<", ">Vilodag<")
+    page = page.replace(" · Ingen planerad träning</strong>", " · Vilodag</strong>")
     for old, new in STATUS_TEXT_REPLACEMENTS.items():
         page = replace_exact_element_text(page, old, new)
     return page
