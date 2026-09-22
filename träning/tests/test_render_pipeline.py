@@ -50,6 +50,7 @@ EXPECTED_PIPELINE = (
     "finalize_quiet_performance_ui.py",
     "finalize_quiet_performance_v2_ui.py",
     "finalize_completed_day_summary_ui.py",
+    "finalize_rest_day_language.py",
     "finalize_training_timeline_ui.py",
     "finalize_generated_whitespace.py",
     "check_week_reviews.py",
@@ -91,7 +92,8 @@ class RenderPipelineTests(unittest.TestCase):
         self.assertLess(PIPELINE.index("finalize_week_shell_ui.py"), PIPELINE.index("finalize_quiet_performance_ui.py"))
         self.assertLess(PIPELINE.index("finalize_quiet_performance_ui.py"), PIPELINE.index("finalize_quiet_performance_v2_ui.py"))
         self.assertLess(PIPELINE.index("finalize_quiet_performance_v2_ui.py"), PIPELINE.index("finalize_completed_day_summary_ui.py"))
-        self.assertLess(PIPELINE.index("finalize_completed_day_summary_ui.py"), PIPELINE.index("finalize_training_timeline_ui.py"))
+        self.assertLess(PIPELINE.index("finalize_completed_day_summary_ui.py"), PIPELINE.index("finalize_rest_day_language.py"))
+        self.assertLess(PIPELINE.index("finalize_rest_day_language.py"), PIPELINE.index("finalize_training_timeline_ui.py"))
         self.assertLess(PIPELINE.index("finalize_training_timeline_ui.py"), PIPELINE.index("finalize_generated_whitespace.py"))
         self.assertLess(PIPELINE.index("finalize_generated_whitespace.py"), PIPELINE.index("validate_site_contracts.py"))
 
