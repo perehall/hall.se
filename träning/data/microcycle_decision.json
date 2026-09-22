@@ -1,54 +1,48 @@
 {
-  "rationale": "Reparerar förslaget så att dag 1 (fast enduro) lämnas blockerad och swim_strength inte progressas. Behåller två simexponeringar (en teknisk aerob dag 2 efter enduro + en kombinerad sim+styrka dag 5), bevarar kontrollerad tröskel och ett långt lugnt löppass, inkluderar minst en styrke/core-exponering och lämnar minst en vilodag (dag 4). Ingen progression används för primärt stimulus denna mikrocykel för att följa guardrails.",
+  "rationale": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern.",
   "slots": [
     {
       "day_index": 2,
       "recipe_key": "swim_aerobic_technique",
-      "action": "establish",
-      "rationale": "Dag efter fast enduro kräver låg benbelastning — etablera tekniskt aerob simpass för swim_aerobic och swim_technique utan mekanisk benstress.",
+      "action": "consolidate",
+      "rationale": "Lågmekanisk simexponering dagen efter fast enduro ger konkret plan utan att anta att benen är redo för ny benkvalitet.",
       "evidence_refs": [
-        "activity:20272196080 (Enduro, 2026-09-21)",
-        "activity:20239623463 (Swim 4000 m, 2026-09-19)",
-        "mesocycle:swim_aerobic objective (session_count=7)"
+        "mesocycle.primary_capabilities"
       ]
     },
     {
       "day_index": 3,
       "recipe_key": "run_threshold",
       "action": "consolidate",
-      "rationale": "Behåll kontrollerad tröskel (4×8-bas) som mesocykelns primära löpkvalitet utan progression denna mikrocykel.",
+      "rationale": "Realiserar mesocykelns primära kapacitet run_threshold med säker separation från annan benbelastning.",
       "evidence_refs": [
-        "activity:20092166843 (Run 4×8 min, 2026-09-08)",
-        "capability:run_threshold.recent_evidence"
+        "mesocycle.primary_capabilities"
       ]
     },
     {
       "day_index": 5,
       "recipe_key": "swim_strength",
       "action": "establish",
-      "rationale": "Kombinerad sim+styrka etableras för att säkerställa båda krav (swim_aerobic/technique + strength_core) utan ett separat benstyrkepass eller extra löpbelastning.",
+      "rationale": "Kombinera andra simexponeringen med skyddad styrka/core i stället för att fylla ytterligare en dag.",
       "evidence_refs": [
-        "activity:19946705399 (Swim 4000 m, 2026-08-29)",
-        "activity:20175536586 (Strength, 2026-09-14)",
-        "mesocycle:priority to increase swim_aerobic frequency"
+        "mesocycle.primary_capabilities"
       ]
     },
     {
-      "day_index": 6,
+      "day_index": 7,
       "recipe_key": "run_easy_distance",
-      "action": "establish",
-      "rationale": "Veckans långa lugna löp etableras för löptålighet (~90–120 min) placerad så att den inte ligger direkt efter tröskel eller backkvalitet.",
+      "action": "consolidate",
+      "rationale": "Behåll lugn löptålighet med separation från löpkvalitet.",
       "evidence_refs": [
-        "activity:20254486837 (Long run 22463 m, 2026-09-20)",
-        "mesocycle:run_easy_distance.objective"
+        "planning_policy.microcycle_policy"
       ]
     }
   ],
   "schema_version": 1,
   "planner_revision": 6,
-  "source": "openai_repaired",
+  "source": "deterministic_fallback_after_repair_guard",
   "source_hash": "6756ba63e139a6a32a1b26e55900153577454b36d45a588d23b8746f4111e7eb",
-  "generated_at_utc": "2026-09-22T06:53:23.200406+00:00",
+  "generated_at_utc": "2026-09-22T06:57:12.187464+00:00",
   "week_start": "2026-09-28",
   "week_key": "2026-W40",
   "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
@@ -129,6 +123,9 @@
       "dag 1 är blockerad av fast endurobelastning",
       "swim_strength får inte progressas eftersom receptet inte realiserar ett direkt primärt stimulus"
     ],
-    "result": "accepted"
+    "repair_failures": [
+      "dag 1 är blockerad av fast endurobelastning"
+    ],
+    "result": "fallback"
   }
 }
