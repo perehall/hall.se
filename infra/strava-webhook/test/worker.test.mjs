@@ -128,7 +128,7 @@ test("authenticated training GUI input dispatches constrained repository event",
     requestBody = JSON.parse(init.body);
     return new Response(null, { status: 204 });
   };
-  const request = new Request("https://xn--hll-qla.se/training-api/input", {
+  const request = new Request("https://xn--hll-qla.se/träning/training-api/input", {
     method: "POST",
     headers: {
       "content-type": "application/json",
@@ -152,7 +152,7 @@ test("authenticated training GUI input dispatches constrained repository event",
 });
 
 test("training GUI input requires Cloudflare Access assertion", async () => {
-  const request = new Request("https://xn--hll-qla.se/training-api/input", {
+  const request = new Request("https://xn--hll-qla.se/träning/training-api/input", {
     method: "POST",
     headers: {"content-type": "application/json"},
     body: JSON.stringify({
@@ -168,7 +168,7 @@ test("training GUI input requires Cloudflare Access assertion", async () => {
 });
 
 test("training GUI input rejects operations outside the allowlist", async () => {
-  const request = new Request("https://xn--hll-qla.se/training-api/input", {
+  const request = new Request("https://xn--hll-qla.se/träning/training-api/input", {
     method: "POST",
     headers: {
       "content-type": "application/json",
@@ -188,7 +188,7 @@ test("training GUI input rejects operations outside the allowlist", async () => 
 
 
 test("training GUI input rejects non-custom hostname before request processing", async () => {
-  const request = new Request("https://hall-se.per-e-hall.workers.dev/training-api/input", {
+  const request = new Request("https://hall-se.per-e-hall.workers.dev/träning/training-api/input", {
     method: "POST",
     headers: {"content-type": "application/json"},
     body: JSON.stringify({
