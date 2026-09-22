@@ -36,6 +36,7 @@ class TrainingInputTests(unittest.TestCase):
                 "text": "",
                 "rpe": 6,
                 "feeling": ["fresh", "could_do_more"],
+                "event_key": "training-input:0123456789abcdef01234567",
             },
             self.activities(),
             overrides,
@@ -49,6 +50,10 @@ class TrainingInputTests(unittest.TestCase):
         self.assertEqual(override["sport"], "Run")
         self.assertEqual(override["classification"], "training")
         self.assertEqual(override["source_sport_type"], "Run")
+        self.assertEqual(
+            override["last_training_input_event_key"],
+            "training-input:0123456789abcdef01234567",
+        )
 
         # Regression: the GUI-generated override must be directly consumable by
         # the canonical semantic normalizer; this is the next pipeline stage.
@@ -117,6 +122,19 @@ class TrainingInputTests(unittest.TestCase):
             deterministic_operation({"text": "Blev 4x8 i stället för 3x10", "feeling": []}),
             "UPDATE_COMPLETED_WORKOUT",
         )
+
+    def test_payload_rejects_malformed_event_key(self):
+        with self.assertRaises(RuntimeError):
+            validate_payload(
+                {
+                    "operation": "ADD_FEEDBACK",
+                    "activity_id": 123,
+                    "text": "Bra.",
+                    "rpe": 5,
+                    "feeling": [],
+                    "event_key": "training-input:not-a-valid-key",
+                }
+            )
 
     def test_payload_rejects_unknown_fields(self):
         with self.assertRaises(RuntimeError):

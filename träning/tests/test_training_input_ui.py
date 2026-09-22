@@ -32,14 +32,35 @@ class TrainingInputUiTests(unittest.TestCase):
                 }
             ]
         }
-        rendered = apply_training_input_ui(page, plan, activities, "2026-09-21")
+        overrides = {
+            "schema_version": 1,
+            "overrides": {
+                "123": {
+                    "last_training_input_event_key": "training-input:0123456789abcdef01234567"
+                }
+            },
+        }
+        rendered = apply_training_input_ui(
+            page,
+            plan,
+            activities,
+            "2026-09-21",
+            overrides_state=overrides,
+        )
         self.assertIn('data-training-input', rendered)
         self.assertIn('data-activity-id="123"', rendered)
+        self.assertIn(
+            'data-processed-event-key="training-input:0123456789abcdef01234567"',
+            rendered,
+        )
         self.assertIn("Mycket lätt", rendered)
         self.assertIn("Kunde gjort mer", rendered)
         self.assertIn("Blev 4 × 8", rendered)
         self.assertIn("fetch('/träning/training-api/input'", rendered)
         self.assertIn("NATURAL_LANGUAGE", rendered)
+        self.assertIn("waitForProcessed", rendered)
+        self.assertIn("cache: 'no-store'", rendered)
+        self.assertIn("window.location.replace", rendered)
 
     def test_previous_day_activities_remain_open_for_feedback_after_midnight(self):
         page = """<html><head><style></style></head><body>

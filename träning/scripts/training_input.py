@@ -108,12 +108,17 @@ def validate_payload(payload: dict) -> dict:
     if not text and rpe is None and not normalized_feeling:
         raise RuntimeError("Träningsinput saknar innehåll.")
 
+    event_key = str(payload.get("event_key") or "").strip()
+    if event_key and not re.fullmatch(r"training-input:[0-9a-f]{24}", event_key):
+        raise RuntimeError("event_key har ogiltigt format.")
+
     return {
         "operation": operation,
         "activity_id": activity_id,
         "text": text,
         "rpe": rpe,
         "feeling": normalized_feeling,
+        "event_key": event_key,
     }
 
 
@@ -294,6 +299,9 @@ def apply_to_documents(payload: dict, activities: dict, overrides: dict, *, clas
         override.setdefault("source_sport_type", raw_sport)
 
     override["user_report"] = merge_report(override.get("user_report"), report)
+    if normalized.get("event_key"):
+        override["last_training_input_event_key"] = normalized["event_key"]
+
     if operation == "ADD_SPONTANEOUS_WORKOUT":
         override["plan_relation"] = "separate"
         override.setdefault(
