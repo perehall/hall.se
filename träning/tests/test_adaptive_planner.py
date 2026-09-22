@@ -13,6 +13,7 @@ sys.path.insert(0, str(SCRIPTS))
 from adaptive_planner import (  # noqa: E402
     MICRO_PLANNER_REVISION,
     choose_option,
+    completed_microcycle_context,
     fallback_mesocycle,
     fallback_microcycle,
     generate_mesocycle,
@@ -436,6 +437,122 @@ class AdaptivePlanningTests(unittest.TestCase):
         self.assertEqual(floor["id"], "run-threshold-3x8")
         self.assertEqual(selected["id"], "run-threshold-3x10")
         self.assertEqual(relation, "progress")
+
+    def test_completed_threshold_is_credited_only_from_dated_capability_evidence(self):
+        state = {
+            "recent_sessions": [
+                {
+                    "id": 20284663236,
+                    "date": "2026-09-22",
+                    "family": "run",
+                    "classification": "training",
+                },
+                {
+                    "id": 20272196080,
+                    "date": "2026-09-21",
+                    "family": "strength",
+                    "classification": "training",
+                },
+            ],
+            "capability_facts": {
+                "run_threshold": {
+                    "evidence": [
+                        {
+                            "activity_id": 20284663236,
+                            "date": "2026-09-22",
+                            "work_minutes": 32,
+                        }
+                    ]
+                }
+            },
+        }
+        context = completed_microcycle_context(state, date(2026, 9, 21))
+        self.assertEqual(context["strength_exposures"], 1)
+        self.assertEqual(context["completed_slot_days"], 1)
+        self.assertIn("run_threshold", context["direct_capabilities"])
+        self.assertEqual(
+            context["capability_refs"]["run_threshold"],
+            ["20284663236"],
+        )
+
+    def test_generic_run_without_capability_evidence_is_not_credited_as_threshold(self):
+        state = {
+            "recent_sessions": [
+                {
+                    "id": 7,
+                    "date": "2026-09-22",
+                    "family": "run",
+                    "classification": "training",
+                }
+            ],
+            "capability_facts": {},
+        }
+        context = completed_microcycle_context(state, date(2026, 9, 21))
+        self.assertNotIn("run_threshold", context["direct_capabilities"])
+
+    def test_completed_threshold_blocks_redundant_future_threshold(self):
+        meso = {
+            "primary_capabilities": ["swim_aerobic", "swim_technique", "run_threshold"],
+            "secondary_capabilities": ["run_easy_distance"],
+        }
+        proposal = {
+            "rationale": "duplicate threshold",
+            "slots": [
+                {"day_index": 3, "recipe_key": "swim_aerobic_technique", "action": "consolidate", "rationale": "swim", "evidence_refs": []},
+                {"day_index": 5, "recipe_key": "run_threshold", "action": "consolidate", "rationale": "threshold", "evidence_refs": []},
+                {"day_index": 6, "recipe_key": "swim_aerobic_technique", "action": "consolidate", "rationale": "swim", "evidence_refs": []},
+                {"day_index": 7, "recipe_key": "run_easy_distance", "action": "consolidate", "rationale": "distance", "evidence_refs": []},
+            ],
+        }
+        failures = microcycle_guard_failures(
+            proposal,
+            meso,
+            self.policy,
+            self.catalog,
+            date(2026, 9, 21),
+            completed_context={
+                "strength_exposures": 1,
+                "swim_exposures": 0,
+                "completed_slot_days": 1,
+                "direct_capabilities": ["run_threshold"],
+            },
+        )
+        self.assertTrue(any("redundant" in item and "run_threshold" in item for item in failures))
+
+    def test_fallback_credits_completed_threshold_and_strength(self):
+        meso = {
+            "primary_capabilities": ["swim_aerobic", "swim_technique", "run_threshold"],
+            "secondary_capabilities": ["run_easy_distance"],
+        }
+        context = {
+            "strength_exposures": 1,
+            "swim_exposures": 0,
+            "enduro_exposures": 1,
+            "completed_slot_days": 1,
+            "direct_capabilities": ["run_threshold"],
+        }
+        result = fallback_microcycle(
+            meso,
+            self.policy,
+            self.catalog,
+            date(2026, 9, 21),
+            completed_context=context,
+        )
+        recipes = [row["recipe_key"] for row in result["slots"]]
+        self.assertNotIn("run_threshold", recipes)
+        self.assertNotIn("swim_strength", recipes)
+        self.assertEqual(recipes.count("swim_aerobic_technique"), 2)
+        self.assertIn("run_easy_distance", recipes)
+        self.assertFalse(
+            microcycle_guard_failures(
+                result,
+                meso,
+                self.policy,
+                self.catalog,
+                date(2026, 9, 21),
+                completed_context=context,
+            )
+        )
 
     def test_day_after_fixed_enduro_rejects_run_or_mtb_load(self):
         rows = [

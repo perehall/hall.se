@@ -32,6 +32,10 @@ THRESHOLD_RE = re.compile(
     r"(?P<reps>\d+)\s*[×x]\s*(?P<minutes>\d+)\s*min\s*/\s*(?P<rest>\d+)\s*s",
     re.IGNORECASE,
 )
+THRESHOLD_NO_REST_RE = re.compile(
+    r"(?P<reps>\d+)\s*[×x]\s*(?P<minutes>\d+)\s*min\b",
+    re.IGNORECASE,
+)
 HILL_NESTED_RE = re.compile(
     r"(?P<sets>\d+)\s*[×x]\s*(?P<reps>\d+)\s*[×x]\s*(?P<meters>\d+)\s*m",
     re.IGNORECASE,
@@ -212,6 +216,31 @@ def _run_prescription(day: dict, option: dict) -> dict:
             "completeness": "full",
             "blocks": blocks,
             "source": "structured_session",
+        }
+
+    # User-confirmed completed threshold work may omit the exact recovery.
+    # Preserve the known work structure without inventing a rest duration.
+    threshold_no_rest = THRESHOLD_NO_REST_RE.search(session)
+    if threshold_no_rest:
+        reps = int(threshold_no_rest.group("reps"))
+        minutes = int(threshold_no_rest.group("minutes"))
+        blocks.append(
+            {
+                "name": "Arbetsdel",
+                "work": {
+                    "repetitions": reps,
+                    "duration_s": minutes * 60,
+                    "total_work_s": reps * minutes * 60,
+                },
+                "instruction": "Kontrollerad tröskel",
+                "intensity": "kontrollerad tröskel",
+            }
+        )
+        return {
+            "executable": True,
+            "completeness": "full",
+            "blocks": blocks,
+            "source": "user_confirmed_structure",
         }
 
     nested = HILL_NESTED_RE.search(session)
