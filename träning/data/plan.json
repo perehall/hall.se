@@ -176,6 +176,76 @@
       "manual_override": {
         "source": "user_confirmed",
         "note": "2026-09-22 genomfördes 4 × 8 min tröskel i stället för planerad simning. Simningen flyttades till 2026-09-23."
+      },
+      "workout_design": {
+        "schema_version": 1,
+        "objective": {
+          "mesocycle_role": "primary",
+          "priority_role": "flex",
+          "stimuli": [
+            "run_threshold"
+          ],
+          "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
+          "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc1",
+          "microcycle_slot": "run_threshold_actual"
+        },
+        "near_term_context": {
+          "load_dimensions": [
+            "cardiovascular",
+            "mechanical"
+          ],
+          "selection_uses_only_preapproved_doses": false
+        },
+        "progression_from_previous": {
+          "relation": "support",
+          "reason": "Faktiskt genomfört pass enligt användarrapport: 4 × 8 min tröskel. Löpningen ersatte dagens planerade simning av praktiska skäl; tröskelstimulus räknas därför som genomfört i mikrocykeln.",
+          "demonstrated_floor_option_id": ""
+        },
+        "candidates": [
+          {
+            "id": "current-session",
+            "dose_option_id": "",
+            "session": "Löpning · tröskel · 4 × 8 min",
+            "intent": "Faktiskt genomfört pass enligt användarrapport: 4 × 8 min tröskel. Löpningen ersatte dagens planerade simning av praktiska skäl; tröskelstimulus räknas därför som genomfört i mikrocykeln.",
+            "dose": {
+              "kind": "external",
+              "value": 1
+            },
+            "stimuli": [
+              "run_threshold"
+            ],
+            "prescription": {
+              "executable": true,
+              "completeness": "external",
+              "blocks": [
+                {
+                  "name": "Fast/externt strukturerat pass",
+                  "work": {},
+                  "instruction": "Genomfört kontrollerat tröskelstimulus. Användarrapport: stark känsla, liten ökning på sista intervallen och tydlig kraft kvar.",
+                  "intensity": "extern struktur"
+                }
+              ],
+              "source": "external_commitment"
+            },
+            "score": {
+              "total": 65,
+              "breakdown": {
+                "mesocycle_alignment": 30,
+                "microcycle_alignment": 10,
+                "progression_alignment": 15,
+                "prescription_specificity": 10,
+                "near_term_resolution": 0
+              },
+              "basis": "deterministic_constraint_alignment"
+            }
+          }
+        ],
+        "selected_candidate_id": "current-session",
+        "selection": {
+          "method": "deterministic_constraint_scoring",
+          "preferred_dose_option_id": "",
+          "reason_for_today": "Faktiskt genomfört pass enligt användarrapport: 4 × 8 min tröskel. Löpningen ersatte dagens planerade simning av praktiska skäl; tröskelstimulus räknas därför som genomfört i mikrocykeln."
+        }
       }
     },
     {
@@ -656,9 +726,9 @@
         "transport": "intervals_icu",
         "source_hash": "933fd53bcd5115ce663040a681763bd5077223486cf932d94064753f3170d24b",
         "device_delivery": "unverified",
-        "updated_at_utc": "2026-09-22T20:15:59.398563+00:00",
+        "updated_at_utc": "2026-09-22T20:28:08.709304+00:00",
         "provider_event_id": 138097033,
-        "verified_at_utc": "2026-09-22T20:15:59.398563+00:00"
+        "verified_at_utc": "2026-09-22T20:28:08.709304+00:00"
       }
     },
     {
@@ -883,6 +953,270 @@
       "manual_override": {
         "source": "coach_replan_after_actual",
         "note": "Fredagens tidigare 4 × 8 löptröskel ersätts efter att samma tröskelstimulus genomfördes tisdag 2026-09-22. Andra simexponeringen bevaras."
+      },
+      "workout_design": {
+        "schema_version": 1,
+        "objective": {
+          "mesocycle_role": "primary",
+          "priority_role": "flex",
+          "stimuli": [
+            "swim_aerobic",
+            "swim_threshold",
+            "swim_technique"
+          ],
+          "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
+          "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc1",
+          "microcycle_slot": "swim_aerobic_threshold_3"
+        },
+        "near_term_context": {
+          "load_dimensions": [
+            "cardiovascular",
+            "technical"
+          ],
+          "selection_uses_only_preapproved_doses": true
+        },
+        "progression_from_previous": {
+          "relation": "support",
+          "reason": "Användarens etablerade 4 000 m-mall: aerob bas med 4 × 200 m kontrollerad tröskel med paddlar + dolme. Detta är ett separat kvalitetsrecept, inte en automatisk volymprogression från 3 200 m.",
+          "demonstrated_floor_option_id": ""
+        },
+        "candidates": [
+          {
+            "id": "swim-aerobic-threshold-4000",
+            "dose_option_id": "swim-aerobic-threshold-4000",
+            "session": "Simning · 4 000 m · aerob + kontrollerad tröskel",
+            "intent": "Användarens etablerade 4 000 m-mall: aerob bas med 4 × 200 m kontrollerad tröskel med paddlar + dolme. Detta är ett separat kvalitetsrecept, inte en automatisk volymprogression från 3 200 m.",
+            "dose": {
+              "kind": "structured",
+              "value": 4000
+            },
+            "stimuli": [
+              "swim_aerobic",
+              "swim_threshold",
+              "swim_technique"
+            ],
+            "prescription": {
+              "executable": true,
+              "completeness": "full",
+              "total_distance_m": 4000,
+              "blocks": [
+                {
+                  "name": "Insim + teknik",
+                  "work": {
+                    "repetitions": 1,
+                    "distance_m": 600,
+                    "total_distance_m": 600
+                  },
+                  "instruction": "Insim + teknik enligt etablerad rutin",
+                  "intensity": "warmup"
+                },
+                {
+                  "name": "Aerob 1",
+                  "work": {
+                    "repetitions": 6,
+                    "distance_m": 200,
+                    "total_distance_m": 1200
+                  },
+                  "instruction": "Aerobt, stabil teknik",
+                  "intensity": "active",
+                  "recovery": {
+                    "duration_s": 20
+                  }
+                },
+                {
+                  "name": "Kontrollerad tröskel",
+                  "work": {
+                    "repetitions": 4,
+                    "distance_m": 200,
+                    "total_distance_m": 800
+                  },
+                  "instruction": "Kontrollerad tröskel med paddlar + dolme",
+                  "intensity": "active",
+                  "recovery": {
+                    "duration_s": 25
+                  }
+                },
+                {
+                  "name": "Aerob 2",
+                  "work": {
+                    "repetitions": 6,
+                    "distance_m": 200,
+                    "total_distance_m": 1200
+                  },
+                  "instruction": "Aerobt, återgå till stabil rytm och teknik",
+                  "intensity": "active",
+                  "recovery": {
+                    "duration_s": 20
+                  }
+                },
+                {
+                  "name": "Avsim",
+                  "work": {
+                    "repetitions": 1,
+                    "distance_m": 200,
+                    "total_distance_m": 200
+                  },
+                  "instruction": "Mycket lugnt avsim",
+                  "intensity": "cooldown"
+                }
+              ],
+              "source": "watch_workout"
+            },
+            "score": {
+              "total": 100,
+              "breakdown": {
+                "mesocycle_alignment": 30,
+                "microcycle_alignment": 30,
+                "progression_alignment": 15,
+                "prescription_specificity": 15,
+                "near_term_resolution": 10
+              },
+              "basis": "deterministic_constraint_alignment"
+            }
+          }
+        ],
+        "selected_candidate_id": "swim-aerobic-threshold-4000",
+        "selection": {
+          "method": "deterministic_constraint_scoring",
+          "preferred_dose_option_id": "swim-aerobic-threshold-4000",
+          "reason_for_today": "Användarens etablerade 4 000 m-mall: aerob bas med 4 × 200 m kontrollerad tröskel med paddlar + dolme. Detta är ett separat kvalitetsrecept, inte en automatisk volymprogression från 3 200 m."
+        }
+      },
+      "device_workout": {
+        "schema_version": 1,
+        "external_id": "hall-device:2026-09-25:swim:swim_aerobic_threshold_3",
+        "date": "2026-09-25",
+        "sport": "swim",
+        "provider_type": "Swim",
+        "name": "Simning · 4 000 m · aerob + kontrollerad tröskel",
+        "source_candidate_id": "swim-aerobic-threshold-4000",
+        "source_hash": "d1730f8e6f06d9307ab6d3d47951a346c56484d2581ef54eae0b023420cac6c8",
+        "blocks": [
+          {
+            "name": "Insim + teknik",
+            "sets": 1,
+            "repetitions_per_set": 1,
+            "steps": [
+              {
+                "kind": "work",
+                "duration": {
+                  "kind": "distance",
+                  "meters": 600
+                },
+                "instruction": "Insim + teknik enligt etablerad rutin",
+                "intensity_class": "warmup"
+              }
+            ]
+          },
+          {
+            "name": "Aerob 1",
+            "sets": 1,
+            "repetitions_per_set": 6,
+            "steps": [
+              {
+                "kind": "work",
+                "duration": {
+                  "kind": "distance",
+                  "meters": 200
+                },
+                "instruction": "Aerobt, stabil teknik",
+                "intensity_class": "interval"
+              },
+              {
+                "kind": "recovery",
+                "duration": {
+                  "kind": "time",
+                  "seconds": 20
+                },
+                "instruction": "Vila",
+                "intensity_class": "recovery",
+                "press_lap": false,
+                "transport_reference_only": false
+              }
+            ]
+          },
+          {
+            "name": "Kontrollerad tröskel",
+            "sets": 1,
+            "repetitions_per_set": 4,
+            "steps": [
+              {
+                "kind": "work",
+                "duration": {
+                  "kind": "distance",
+                  "meters": 200
+                },
+                "instruction": "Kontrollerad tröskel med paddlar + dolme",
+                "intensity_class": "interval"
+              },
+              {
+                "kind": "recovery",
+                "duration": {
+                  "kind": "time",
+                  "seconds": 25
+                },
+                "instruction": "Vila",
+                "intensity_class": "recovery",
+                "press_lap": false,
+                "transport_reference_only": false
+              }
+            ]
+          },
+          {
+            "name": "Aerob 2",
+            "sets": 1,
+            "repetitions_per_set": 6,
+            "steps": [
+              {
+                "kind": "work",
+                "duration": {
+                  "kind": "distance",
+                  "meters": 200
+                },
+                "instruction": "Aerobt, återgå till stabil rytm och teknik",
+                "intensity_class": "interval"
+              },
+              {
+                "kind": "recovery",
+                "duration": {
+                  "kind": "time",
+                  "seconds": 20
+                },
+                "instruction": "Vila",
+                "intensity_class": "recovery",
+                "press_lap": false,
+                "transport_reference_only": false
+              }
+            ]
+          },
+          {
+            "name": "Avsim",
+            "sets": 1,
+            "repetitions_per_set": 1,
+            "steps": [
+              {
+                "kind": "work",
+                "duration": {
+                  "kind": "distance",
+                  "meters": 200
+                },
+                "instruction": "Mycket lugnt avsim",
+                "intensity_class": "cooldown"
+              }
+            ]
+          }
+        ],
+        "target_policy": "explicit_single_primary_only",
+        "transport": "intervals_icu"
+      },
+      "device_sync": {
+        "status": "synced",
+        "transport": "intervals_icu",
+        "source_hash": "d1730f8e6f06d9307ab6d3d47951a346c56484d2581ef54eae0b023420cac6c8",
+        "device_delivery": "unverified",
+        "updated_at_utc": "2026-09-22T20:28:09.023367+00:00",
+        "provider_event_id": 138142476,
+        "verified_at_utc": "2026-09-22T20:28:09.023367+00:00"
       }
     },
     {
@@ -1183,9 +1517,9 @@
         "transport": "intervals_icu",
         "source_hash": "9dc12d3e522e49454af7c6ffe216ee9ba323186427181ac1e1ae64a8d6009578",
         "device_delivery": "unverified",
-        "updated_at_utc": "2026-09-22T20:16:01.111413+00:00",
+        "updated_at_utc": "2026-09-22T20:28:09.146573+00:00",
         "provider_event_id": 138097036,
-        "verified_at_utc": "2026-09-22T20:16:01.111413+00:00"
+        "verified_at_utc": "2026-09-22T20:28:09.146573+00:00"
       }
     }
   ],

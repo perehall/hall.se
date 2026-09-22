@@ -4,7 +4,7 @@
       "activity_id": 20284663236,
       "activity_date": "2026-09-22",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-09-22T20:15:58.610134+00:00",
+      "generated_at_utc": "2026-09-22T20:28:07.642589+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 3,
@@ -16,27 +16,28 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört 4×8 min tröskelpass (12.9 km) med god känsla och tydlig sista ökning; användarrapport och återhämtningsunderlaget TE bekräftar att intervallerna var kontrollerade och…",
-        "load_interpretation": "Kardiovaskulär belastning idag var hög för löpning; inga rapporterade smärtor och pigg-känsla i användarrapport tyder på god tolerans samma dag.",
+        "summary": "Genomfört 4×8 min tröskelpass, känd struktur och stark subjektiv respons; sista intervallet ökade och känslan var stark.",
+        "load_interpretation": "Passet levererade avsett tröskelstimulus; inget i närbelastningen (föregående 3 dgr) kräver omedelbar reduktion.",
         "confidence": "medium",
         "facts": [
           "Löpning · tröskel: 12,90 km · 1:01:27 · 105 m+ · snittpuls 145,4 · maxpuls 165.",
-          "Användarrapport: 4 × 8 min tröskel. Garmin träningseffekt 4,2 ”Tröskel”. Känslan var riktigt bra och jag kände mig stark. Ökade lite på sista intervallen och hade mycket kraft kvar. Av praktiska skäl blev det löpning i stället för planerad simning; simningen flyttas till 2026-09-23."
+          "Användarrapport: 4 × 8 min tröskel. Garmin träningseffekt 4,2 ”Tröskel”. Känslan var riktigt bra och jag kände mig stark. Ökade lite på sista intervallen och hade mycket kraft kvar. Av praktiska skäl blev det löpning i stället för planerad simning; simningen flyttas till 2026-09-23.",
+          "Planstatus 2026-09-22: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Passet visar att kontrollerad tröskelstruktur kunde genomföras väl och att sista intervallet ökades utan subjektiv utmattning, vilket stödjer bevarad tröskelkontroll.",
-          "Eftersom löpningen ersatte planerad simning påverkas mikrocykelns simstimuli; simningen är explicit omplanerad till 2026-09-23 och ska räknas som utförd då."
+          "Passet uppfyller mikrocykelns planerade kontrollerad löptröskel‑stimulus och kan räknas som genomfört för veckans progression.",
+          "Eftersom användaren var stark och tidigare dagar innehåller sim + enduro snarare än extra löpkvalitet, behövs ingen planändring för de närmaste 48–72 timmarna."
         ],
         "unknowns": [
-          "Subjektiv återhämtning kommande 24–72 h okänd trots pigg-känsla nu",
-          "Detaljerad styrke-/benstatus efter dagens löpning inte rapporterad och kan påverka styrkekomponenten 2026-09-23"
+          "Subjektiv återhämtning nästa morgon (24–72 h) kan påverka tyngre löp-/styrkepass",
+          "Detaljer om eventuell lokal muskeltrötthet i benen saknas"
         ]
       },
       "plan_action": {
-        "action": "review",
+        "action": "keep",
         "target_date": "",
-        "reason": "Beslutet skjuts upp eftersom mellanliggande planerade dagar ännu inte har ett känt utfall.",
-        "recommendation": "Måndag: Enduroskola · fast tillfälle ligger kvar som plan. Tisdag: Simning · 4 000 m · aerob + kontrollerad tröskel bedöms efter den faktiska belastningen från måndag och återhämtningen därefter.",
+        "reason": "Tröskelstimulus är genomfört enligt plan, användarrapport visar god tolerans och närbelastningen stödjer ingen ändring.",
+        "recommendation": "Följ plan: genomför simning 2026-09-23 som flyttats in; undvik nytt tungt löparpass inom 48 timmar och håll styrkepasset enligt schema.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -1255,8 +1256,8 @@
       }
     }
   ],
-  "last_trigger_hash": "811f2a0e30ce6d2194c1a6a75ead8c1f2dcdb8a7772741cc40bd1e3ed7258afe",
-  "last_run_utc": "2026-09-22T20:15:58.610134+00:00",
+  "last_trigger_hash": "bd0f3b65fe0f52190200de7231d9d683d409b8f6397deb24c565c51e9f2210f0",
+  "last_run_utc": "2026-09-22T20:28:07.642589+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 3
