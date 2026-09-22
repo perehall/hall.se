@@ -1,8 +1,8 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "title": "Målbild 2027",
   "subtitle": "Långsiktig riktning · status och periodisering",
-  "goal": "Bygga en bred, hållbar allroundatlet med stark löpning, teknisk MTB/XC, hög simkapacitet och relevant styrka/core/plyometri, med ett konkret prestationsmål 2027: topp-10 på ÖTILLÖ Åland. Under 2027 ska träningen successivt prioritera de swimrun-specifika förmågor som krävs för målet, utan att i onödan offra långsiktig allroundkapacitet.",
+  "goal": "Bygga en bred, hållbar allroundatlet med stark löpning, teknisk MTB/XC, hög simkapacitet och relevant styrka/core/plyometri. Målbilden är varaktig och ska inte ersättas av ett enskilt tävlingsmål.",
   "performance_goals": [
     {
       "id": "otillo-aland-2027-top10",
@@ -12,7 +12,7 @@
       "target": "Topp-10",
       "role": "primary_performance_goal",
       "status": "active",
-      "principle": "Prestationsmålet styr successivt specificiteten mot loppets verifierade datum och banprofil; tid till loppet får aldrig ensam utlösa automatisk belastningsökning.",
+      "principle": "A-målet styr successivt specificiteten mot loppets verifierade datum och banprofil. Det läggs ovanpå det varaktiga allroundmålet; långt från loppet ska det främst påverka kapacitetsbetoning, inte ersätta övrig allroundutveckling. Tid till loppet får aldrig ensam utlösa automatisk belastningsökning.",
       "event_date": "2027-08-14",
       "target_category": null,
       "race_profile": {
@@ -32,7 +32,8 @@
           "url": "https://otilloswimrun.com/races/aland/aland-world-series/",
           "verified_on": "2026-09-21"
         }
-      }
+      },
+      "priority_class": "A"
     }
   ],
   "overall_status": "På rätt väg",
@@ -91,17 +92,36 @@
     }
   ],
   "principles": [
-    "Målbilden styr riktningen",
-    "ÖTILLÖ Åland 2027 topp-10 är det konkreta prestationsmålet",
+    "Allroundatleten är det varaktiga utvecklingsmålet och ligger kvar över enskilda tävlingssatsningar",
+    "ÖTILLÖ Åland 2027 topp-10 är ett tidsatt A-mål som successivt ökar specificiteten",
+    "A-mål får prioritera om mellan kapaciteter men får inte implicit radera allroundkapacitet",
     "Kontinuitet före maxvolym",
     "Kontrollerad kvalitet",
     "Återhämtning styr närbeslut",
-    "Rekreation får ta plats när den inte tränger undan målets nyckelstimuli"
+    "Rekreation och andra grenar får ta plats när de är förenliga med aktuell mesocykel och målportföljen"
   ],
   "next_steps": [
-    "Fortsätt utveckla kontrollerad löptröskel och löptålighet som central swimrun-kapacitet",
-    "Höj simningens strategiska prioritet från underhåll till utveckling med teknik och aerob kapacitet som bas",
-    "Låt kommande mesocykler successivt introducera mer swimrun-specifik kombinations- och tävlingstålighet när aktuell bas motiverar det",
-    "MTB/enduro får fortsatt plats men ska inte tränga undan swimrun-specifika nyckelstimuli när en prioriteringskonflikt uppstår"
+    "Fortsätt utveckla kontrollerad löptröskel, backstyrka/löpekonomi och löptålighet som både allround- och swimrun-kapacitet",
+    "Utveckla simningens teknik, aeroba kapacitet och tröskelförmåga utan att göra simrunmålet till systemets enda identitet",
+    "Behåll MTB/XC och styrka/core/plyometri som verkliga allroundkapaciteter över mesocyklerna, även när de inte är primärt fokus varje vecka",
+    "Låt kommande mesocykler successivt introducera mer swimrun-specifik kombinations- och tävlingstålighet när närheten till Åland och faktisk kapacitet motiverar det"
+  ],
+  "development_goals": [
+    {
+      "id": "allround-athlete",
+      "label": "Allroundatleten",
+      "type": "development",
+      "role": "enduring",
+      "status": "active",
+      "horizon": "ongoing",
+      "objective": "Utveckla och långsiktigt behålla en bred kapacitetsprofil inom löpning, MTB/XC, simning och styrka/core/plyometri.",
+      "disciplines": [
+        "run",
+        "mtb",
+        "swim",
+        "strength"
+      ],
+      "principle": "Tidsatta prestationsmål får styra betoning och specificitet men får inte implicit ersätta allroundmålet. Tillfälliga trade-offs ska vara explicita och tidsbegränsade."
+    }
   ]
 }
