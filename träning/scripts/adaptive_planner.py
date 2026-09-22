@@ -745,7 +745,6 @@ def generate_mesocycle(goal, policy, athlete_state, previous, target_start, *, r
             "end_date": end.isoformat(),
             "evaluation_date": (end + timedelta(days=1)).isoformat(),
             "competition_context": competition_context,
-            "completed_microcycle_context": completed_context,
         }
     )
     result["id"] = (
