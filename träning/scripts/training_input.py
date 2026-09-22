@@ -280,6 +280,19 @@ def apply_to_documents(payload: dict, activities: dict, overrides: dict, *, clas
     key = str(normalized["activity_id"])
     override = dict(mapping.get(key) or {})
 
+    # activity_overrides.json is also consumed by the semantic normalizer.
+    # A report-only record must therefore remain a complete semantic override;
+    # otherwise the first real GUI feedback would fail normalization.
+    effective_sport = str(activity.get("sport_type") or "").strip()
+    raw_sport = str(activity.get("source_sport_type") or effective_sport).strip()
+    if not effective_sport:
+        raise RuntimeError("Aktiviteten saknar sport och kan inte ta emot GUI-feedback.")
+    override.setdefault("sport", effective_sport)
+    override.setdefault("classification", activity.get("classification") or "training")
+    override.setdefault("display_label", activity.get("display_label") or effective_sport)
+    if raw_sport:
+        override.setdefault("source_sport_type", raw_sport)
+
     override["user_report"] = merge_report(override.get("user_report"), report)
     if operation == "ADD_SPONTANEOUS_WORKOUT":
         override["plan_relation"] = "separate"

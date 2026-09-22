@@ -6,7 +6,7 @@ from __future__ import annotations
 import html
 import json
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -43,69 +43,71 @@ CSS = r"""
 JS = r"""
 /* training-input-ui-js-v1 */
 (() => {
-  const root = document.querySelector('[data-training-input]');
-  if (!root) return;
+  const roots = [...document.querySelectorAll('[data-training-input]')];
+  if (!roots.length) return;
 
-  const rpeButtons = [...root.querySelectorAll('[data-rpe]')];
-  const feelingButtons = [...root.querySelectorAll('[data-feeling]')];
-  const text = root.querySelector('textarea');
-  const save = root.querySelector('[data-training-input-save]');
-  const status = root.querySelector('[data-training-input-status]');
-  let rpe = null;
-  const feelings = new Set();
+  roots.forEach((root) => {
+    const rpeButtons = [...root.querySelectorAll('[data-rpe]')];
+    const feelingButtons = [...root.querySelectorAll('[data-feeling]')];
+    const text = root.querySelector('textarea');
+    const save = root.querySelector('[data-training-input-save]');
+    const status = root.querySelector('[data-training-input-status]');
+    let rpe = null;
+    const feelings = new Set();
 
-  const pressOne = (button) => {
-    rpeButtons.forEach((item) => item.setAttribute('aria-pressed', item === button ? 'true' : 'false'));
-    rpe = Number(button.dataset.rpe);
-  };
+    const pressOne = (button) => {
+      rpeButtons.forEach((item) => item.setAttribute('aria-pressed', item === button ? 'true' : 'false'));
+      rpe = Number(button.dataset.rpe);
+    };
 
-  rpeButtons.forEach((button) => button.addEventListener('click', () => pressOne(button)));
-  feelingButtons.forEach((button) => button.addEventListener('click', () => {
-    const key = button.dataset.feeling;
-    if (feelings.has(key)) feelings.delete(key); else feelings.add(key);
-    button.setAttribute('aria-pressed', feelings.has(key) ? 'true' : 'false');
-  }));
+    rpeButtons.forEach((button) => button.addEventListener('click', () => pressOne(button)));
+    feelingButtons.forEach((button) => button.addEventListener('click', () => {
+      const key = button.dataset.feeling;
+      if (feelings.has(key)) feelings.delete(key); else feelings.add(key);
+      button.setAttribute('aria-pressed', feelings.has(key) ? 'true' : 'false');
+    }));
 
-  save.addEventListener('click', async () => {
-    const note = text.value.trim();
-    if (!note && rpe === null && feelings.size === 0) {
-      status.textContent = 'Välj en känsla eller skriv en kort kommentar.';
-      return;
-    }
+    save.addEventListener('click', async () => {
+      const note = text.value.trim();
+      if (!note && rpe === null && feelings.size === 0) {
+        status.textContent = 'Välj en känsla eller skriv en kort kommentar.';
+        return;
+      }
 
-    let operation = note ? 'NATURAL_LANGUAGE' : 'ADD_FEEDBACK';
-    if (!note && feelings.has('pain')) operation = 'REPORT_PAIN';
-    else if (!note && feelings.has('tired')) operation = 'REPORT_FATIGUE';
+      let operation = note ? 'NATURAL_LANGUAGE' : 'ADD_FEEDBACK';
+      if (!note && feelings.has('pain')) operation = 'REPORT_PAIN';
+      else if (!note && feelings.has('tired')) operation = 'REPORT_FATIGUE';
 
-    save.disabled = true;
-    status.textContent = 'Sparar…';
-    try {
-      const response = await fetch('/training-api/input', {
-        method: 'POST',
-        credentials: 'same-origin',
-        headers: {'content-type': 'application/json'},
-        body: JSON.stringify({
-          operation,
-          activity_id: Number(root.dataset.activityId),
-          text: note,
-          rpe,
-          feeling: [...feelings],
-          source: 'training-gui-v1'
-        })
-      });
-      const body = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(body.error || 'request_failed');
-      status.textContent = 'Mottaget. Systemet räknar om med din input.';
-      text.value = '';
-      rpe = null;
-      feelings.clear();
-      [...rpeButtons, ...feelingButtons].forEach((button) => button.setAttribute('aria-pressed', 'false'));
-    } catch (error) {
-      status.textContent = 'Kunde inte spara. Försök igen.';
-      console.error('TRAINING_INPUT_FAILED', error);
-    } finally {
-      save.disabled = false;
-    }
+      save.disabled = true;
+      status.textContent = 'Sparar…';
+      try {
+        const response = await fetch('/training-api/input', {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: {'content-type': 'application/json'},
+          body: JSON.stringify({
+            operation,
+            activity_id: Number(root.dataset.activityId),
+            text: note,
+            rpe,
+            feeling: [...feelings],
+            source: 'training-gui-v1'
+          })
+        });
+        const body = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(body.error || 'request_failed');
+        status.textContent = 'Mottaget. Systemet räknar om med din input.';
+        text.value = '';
+        rpe = null;
+        feelings.clear();
+        [...rpeButtons, ...feelingButtons].forEach((button) => button.setAttribute('aria-pressed', 'false'));
+      } catch (error) {
+        status.textContent = 'Kunde inte spara. Försök igen.';
+        console.error('TRAINING_INPUT_FAILED', error);
+      } finally {
+        save.disabled = false;
+      }
+    });
   });
 })();
 """.strip()
@@ -139,7 +141,15 @@ def remove_existing(page: str) -> str:
     return page
 
 
-def render_block(activity_id: int) -> str:
+def render_block(activity: dict) -> str:
+    activity_id = int(activity["id"])
+    activity_label = (
+        str(activity.get("display_label") or "").strip()
+        or str(activity.get("name") or "").strip()
+        or str(activity.get("sport_type") or "").strip()
+        or "Genomfört pass"
+    )
+    activity_date = local_date(activity) or ""
     rpe = [
         (2, "Mycket lätt"),
         (4, "Lätt"),
@@ -165,8 +175,8 @@ def render_block(activity_id: int) -> str:
     )
     return f"""{BLOCK_START}
 <section class="training-input" data-training-input data-activity-id="{activity_id}" aria-label="Feedback efter pass">
-  <h3>Hur kändes passet?</h3>
-  <p class="training-input-intro">Snabbval räcker. Fri text kan också korrigera vad du faktiskt gjorde; modellen får bara klassificera inputen, inte ändra planen direkt.</p>
+  <h3>Feedback · {html.escape(activity_label)}</h3>
+  <p class="training-input-intro">{html.escape(activity_date)} · Snabbval räcker. Fri text kan också korrigera vad du faktiskt gjorde; modellen får bara klassificera inputen, inte ändra planen direkt.</p>
   <span class="training-input-label">Ansträngning</span>
   <div class="training-input-options">{rpe_html}</div>
   <span class="training-input-label">Känsla</span>
@@ -183,27 +193,60 @@ def render_block(activity_id: int) -> str:
 
 def apply_training_input_ui(page: str, plan: dict, activities_state: dict, today: str) -> str:
     page = remove_existing(page)
-    if 'class="today-outcome"' not in page:
+    today_date = datetime.strptime(today, "%Y-%m-%d").date()
+
+    recent = []
+    for activity in activities_state.get("activities") or []:
+        if not isinstance(activity.get("id"), int):
+            continue
+        value = local_date(activity)
+        if not value:
+            continue
+        try:
+            activity_date = datetime.strptime(value, "%Y-%m-%d").date()
+        except ValueError:
+            continue
+        age_days = (today_date - activity_date).days
+        if 0 <= age_days <= 1:
+            recent.append(activity)
+    recent.sort(key=lambda activity: str(activity.get("start_date_local") or ""), reverse=True)
+
+    primary = None
+    if 'class="today-outcome"' in page:
+        day = next((item for item in plan.get("days") or [] if item.get("date") == today), None)
+        if day:
+            today_activities = [
+                activity
+                for activity in recent
+                if local_date(activity) == today
+            ]
+            primary = matching_activity(day, today_activities)
+
+    rendered_ids = set()
+    if primary and isinstance(primary.get("id"), int):
+        link = '<a class="today-outcome-link"'
+        pos = page.find(link)
+        if pos < 0:
+            raise RuntimeError("Träningsinput UI: post-workout-länken saknas.")
+        page = page[:pos] + render_block(primary) + "\n" + page[pos:]
+        rendered_ids.add(primary["id"])
+
+    secondary = [
+        activity for activity in recent
+        if activity.get("id") not in rendered_ids
+    ][:3]
+    if secondary:
+        marker = "<!-- training-brain-v1:end -->"
+        pos = page.find(marker)
+        if pos < 0:
+            raise RuntimeError("Träningsinput UI: träningshjärnans slutmarkör saknas.")
+        pos += len(marker)
+        blocks = "\n".join(render_block(activity) for activity in secondary)
+        page = page[:pos] + "\n" + blocks + page[pos:]
+
+    if not rendered_ids and not secondary:
         return page
 
-    day = next((item for item in plan.get("days") or [] if item.get("date") == today), None)
-    if not day:
-        return page
-    today_activities = [
-        activity
-        for activity in activities_state.get("activities") or []
-        if local_date(activity) == today
-    ]
-    activity = matching_activity(day, today_activities)
-    if not activity or not isinstance(activity.get("id"), int):
-        return page
-
-    link = '<a class="today-outcome-link"'
-    pos = page.find(link)
-    if pos < 0:
-        raise RuntimeError("Träningsinput UI: post-workout-länken saknas.")
-
-    page = page[:pos] + render_block(activity["id"]) + "\n" + page[pos:]
     if "</style>" not in page:
         raise RuntimeError("Träningsinput UI: </style> saknas.")
     page = page.replace("</style>", CSS + "\n</style>", 1)

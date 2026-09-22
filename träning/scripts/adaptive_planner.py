@@ -156,10 +156,12 @@ def target_week(plan, upcoming, today):
 def resolve_planning_target(plan, upcoming, mesocycle_decision, today, goal=None, microcycle_decision=None):
     """Choose the week the adaptive engine is allowed to plan.
 
-    A generated mesocycle is authoritative for its full declared duration. If a
-    planner/schema revision has produced a decision file for a later week while
-    the live plan is still inside an earlier multi-week mesocycle, fail toward
-    the live week and rebuild it instead of silently orphaning the active block.
+    A generated mesocycle is authoritative for its full declared duration.
+    Once a live microcycle has started, planner/schema revisions are not allowed
+    to reshuffle that active week. Such revisions apply to the upcoming
+    microcycle; near-term coaching and explicit user input own changes inside the
+    live week. This keeps planning architecture changes from masquerading as
+    athlete-driven adaptation.
     """
     target_start, active_replan = target_week(plan, upcoming, today)
     meta = plan.get("meta") or {}
@@ -186,12 +188,9 @@ def resolve_planning_target(plan, upcoming, mesocycle_decision, today, goal=None
     if goal_changed and today == plan_start:
         return plan_start, True
 
-    micro_revision_changed = bool(
-        microcycle_decision
-        and microcycle_decision.get("planner_revision") != MICRO_PLANNER_REVISION
-    )
-    if micro_revision_changed and today == plan_start:
-        return plan_start, True
+    # Planner revisions are implementation changes, not new athlete evidence.
+    # Never rebuild an already-started live week solely because code/schema
+    # changed; generate the upcoming week with the new revision instead.
     decision_start = None
     try:
         if (mesocycle_decision or {}).get("start_date"):

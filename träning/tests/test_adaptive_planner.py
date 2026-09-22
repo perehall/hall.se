@@ -485,7 +485,7 @@ class AdaptivePlanningTests(unittest.TestCase):
         self.assertLess(len(occupied), 7)
         self.assertNotIn("mtb_technical", [row["recipe_key"] for row in slots])
 
-    def test_micro_planner_revision_can_rebuild_first_day_current_week(self):
+    def test_micro_planner_revision_does_not_rebuild_started_current_week(self):
         plan = {
             "meta": {
                 "week_start": "2026-09-21",
@@ -517,8 +517,8 @@ class AdaptivePlanningTests(unittest.TestCase):
             goal=self.goal,
             microcycle_decision=stale_micro,
         )
-        self.assertEqual(target, date(2026, 9, 21))
-        self.assertTrue(active_replan)
+        self.assertEqual(target, date(2026, 9, 28))
+        self.assertFalse(active_replan)
 
     def test_microcycle_guard_explains_missing_protected_capacity(self):
         meso = fallback_mesocycle(self.goal, self.policy, {})
