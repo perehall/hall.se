@@ -628,14 +628,17 @@ def generate_mesocycle(goal, policy, athlete_state, previous, target_start, *, r
         target_start,
         policy.get("event_horizon_policy"),
     )
+    goal_rows = planning_goal_set(goal)
     source_payload = {
         "goal": goal,
+        "goal_set": goal_rows,
         "competition_context": competition_context,
         "policy": {
             "mesocycle_policy": policy.get("mesocycle_policy"),
             "microcycle_policy": policy.get("microcycle_policy"),
             "decision_guards": policy.get("decision_guards"),
             "event_horizon_policy": policy.get("event_horizon_policy"),
+            "multi_goal_policy": policy.get("multi_goal_policy"),
             "available_capabilities": [
                 {"key": item.get("key"), "label": item.get("label")}
                 for item in (policy["strategy_base"].get("capability_portfolio") or [])
@@ -649,10 +652,12 @@ def generate_mesocycle(goal, policy, athlete_state, previous, target_start, *, r
     system = (
         "Du är mesocykelplaneraren i ett uthållighets-/allroundsystem. "
         "Välj vad som ska utvecklas nu; skriv inte en veckoplan och ordinera inte exakta pass. "
-        "Målbildens aktiva performance_goals är överordnade planeringsmål. competition_context innehåller verifierat tävlingsdatum, "
-        "publicerad banprofil och exakt tid kvar till loppet; dessa fakta ska användas när du väljer vad som behöver utvecklas nu. "
-        "Horizon_stage är en planerings-/reviewpolicy, inte en fysiologisk sanning eller automatisk dosregel. Långt från loppet byggs underliggande "
-        "kapaciteter; när loppet närmar sig ska stimulusvalet bli mer tävlingsspecifikt när athlete_state stödjer det. "
+        "Planeringsauktoriteten är goal_set som en samtidig målportfölj. Aktiva development-goals med role=enduring anger vilken atlet som byggs och får inte ersättas implicit av ett prestationsmål. "
+        "Aktiva performance-goals, inklusive A-mål, får styra betoning, konfliktlösning och successivt ökande specificitet men läggs ovanpå den varaktiga målbilden. "
+        "Du måste fylla goal_contributions för varje aktivt mål och beskriva eventuell trade-off uttryckligen. "
+        "competition_context innehåller verifierat tävlingsdatum, publicerad banprofil och exakt tid kvar till loppet; dessa fakta ska användas när du väljer vad som behöver utvecklas nu. "
+        "Horizon_stage är en planerings-/reviewpolicy, inte en fysiologisk sanning eller automatisk dosregel. I foundation ska A-målet främst påverka betoning inom en fortsatt bred allroundutveckling. "
+        "När loppet närmar sig får stimulusvalet bli mer tävlingsspecifikt när athlete_state stödjer det, men en sådan trade-off mot allroundbredd ska vara explicit och tidsbegränsad. "
         "Tid till loppet får aldrig ensam motivera mer volym, högre intensitet eller fler pass. Hitta inte på tävlingsfart, övergångsantal eller banfakta som saknas. "
         "Om en nödvändig tävlingsspecifik förmåga saknar exekverbart recept ska det anges som osäkerhet/gap, inte fyllas med ett påhittat pass. "
         "Utgå endast från målbild, competition_context, athlete_state och policy i underlaget. Föregående veckomall eller gamla prioriteringslistor är inte evidens i sig. "
@@ -716,6 +721,12 @@ def generate_mesocycle(goal, policy, athlete_state, previous, target_start, *, r
         )
     result["primary_capabilities"] = primary
     result["secondary_capabilities"] = secondary[:4]
+    result["goal_contributions"] = normalize_goal_contributions(
+        goal_rows,
+        result.get("goal_contributions"),
+        result.get("goal_contribution"),
+        competition_context,
+    )
     result["duration_weeks"] = max(
         int(policy["mesocycle_policy"]["min_weeks"]),
         min(int(result.get("duration_weeks") or 4), int(policy["mesocycle_policy"]["max_weeks"])),
