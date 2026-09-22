@@ -333,7 +333,6 @@ class WorkoutDesignTests(unittest.TestCase):
         day = threshold_day()
         day["session"] = "Löpning · tröskel · 4 × 8 min"
         day["dose_options"] = []
-        day["manual_lock"] = True
         day.pop("dose_resolution", None)
         day.pop("development_step", None)
         day.pop("development_progression", None)
