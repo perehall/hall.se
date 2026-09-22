@@ -4,7 +4,7 @@
       "activity_id": 20272196080,
       "activity_date": "2026-09-21",
       "activity_name": "Styrketräning på kvällen",
-      "generated_at_utc": "2026-09-22T06:48:01.761408+00:00",
+      "generated_at_utc": "2026-09-22T06:53:31.748455+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 3,
@@ -16,33 +16,33 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört styrkepass (33,6 min) direkt efter ett tekniskt enduropass samma dag; pulsnivåer är måttliga och användarrapport för enduro var RPE 4/10, pigg.",
-        "load_interpretation": "Närbelastning: kombination av lång enduro (total passduration 5809s) + styrka ökar mekanisk/neuromuskulär belastning för dagen; sim/styrkepasset 2026-09-22 är redan…",
+        "summary": "Genomfört styrkepass 33,6 min kvällens efter enduro visar extra mekanisk/neuromuskulär närbelastning; planen har redan reducerat morgondagens styrkedel.",
+        "load_interpretation": "Samma dags enduro (total passduration 5809s) + styrka (total tid 2014s) ökar mekanisk/neuromuskulär närbelastning för närmaste 48–72 h.",
         "confidence": "medium",
         "facts": [
           "Styrka: 33:34 · snittpuls 79,3 · maxpuls 128.",
           "Planstatus 2026-09-21: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Kombinationen av ett fullvaraktigt enduropass och efterföljande styrka ökar mekanisk/neuromuskulär närbelastning och motiverade den automatiska reduktionen av styrkedosen i dagens plan.",
-          "Det genomförda styrkepasset visar att träningen tolererades samma dag (måttlig puls och ingen användarrapport om trötthet), men detta bevisar inte full återhämtning för kommande nyckelpass…"
+          "Genomfört styrkepass adderar mekanisk/neuromuskulär kostnad utöver dagens enduro och motiverade redan en konservativ reduktion i morgondagens styrkedos.",
+          "Ingen subjektiv rapport från styrkepasset finns; kombinationen av faktiska sessionstider och användarrapport för enduro stödjer ett konservativt beslut om reducerad styrka nästa dag."
         ],
         "unknowns": [
-          "Användarrapport för styrkepasset saknas (subjektiv trötthet efter passet).",
-          "Ingen objektiv mätning av styrkevolym/intensitet (sets/reps/load) finns i styrkepasset och påverkar bedömning av lokal muskulär belastning."
+          "Hur du känner dig nästa morgon (2026-09-22) efter dubbelbelastningen",
+          "Exakt innehåll/volym i genomförd styrke-session (sets/reps/load)"
         ]
       },
       "plan_action": {
-        "action": "keep",
+        "action": "reduce",
         "target_date": "2026-09-22",
-        "reason": "Dagens plan är redan konservativt reducerad med hänsyn till enduro + genomförd styrka; ingen ytterligare ändring krävs.",
-        "recommendation": "Följ den valda dosen 'det valda passalternativet' (reducerad styrkedos) och genomför simdelen som planerat; rapportera hur benen känns efter sim+styrka för eventuellt återbesök innan torsdagen.",
+        "reason": "Enduro + genomförd styrka samma dag ökar mekanisk/neuromuskulär närbelastning; konservativ reduktion skyddar ben inför mikrocykelns nyckelpass.",
+        "recommendation": "Följ det justerade passupplägget i planen.",
         "dose_option_id": "",
         "requires_approval": false
       },
       "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
+        "applied": true,
+        "note": "Konservativ ändring applicerad på 2026-09-22: reduce."
       }
     },
     {
@@ -1210,8 +1210,8 @@
       }
     }
   ],
-  "last_trigger_hash": "3943c7ec221189700ad6048cb2281b5057cd1046efa8a770b630da1160d88045",
-  "last_run_utc": "2026-09-22T06:48:01.761408+00:00",
+  "last_trigger_hash": "c9398ce401afbf1cda22a50efdf9dc9dac6e721d94153a74de2afeb8851bb474",
+  "last_run_utc": "2026-09-22T06:53:31.748455+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 3
