@@ -126,13 +126,13 @@
         "near_term",
         "session"
       ],
-      "north_star_role": "Den långsiktiga målbilden är överordnad och anger vilken atlet och vilka förmågor träningen ska utveckla över tid.",
-      "mesocycle_role": "Mesocykeln väljer ett avgränsat flerveckors utvecklingsfokus som för målbilden framåt och anger vilka stimuli som ska skyddas, stödjas och utvärderas.",
+      "north_star_role": "Den långsiktiga målportföljen är överordnad: varaktiga utvecklingsmål anger vilken atlet som ska byggas, medan tidsatta prestationsmål lägger till prioritering och specificitet.",
+      "mesocycle_role": "Mesocykeln väljer ett avgränsat flerveckors utvecklingsfokus som för hela målportföljen framåt. Den ska redovisa bidrag till varje aktivt mål och göra eventuella trade-offs explicita.",
       "microcycle_role": "Mikrocykeln är den korta operativa träningscykeln. Den organiserar mesocykelns stimuli till en absorberbar följd av konkreta grundpass som kan justeras när faktisk belastning, återhämtning eller fasta åtaganden ger sakliga skäl.",
       "near_term_role": "De närmaste 2–3 dagarna ska normalt vara konkreta. Faktisk belastning, återhämtning, fasta åtaganden och andra rådande omständigheter används som kontrollpunkter för att behålla, minska, flytta eller ta bort ett redan planerat pass.",
       "session_role": "Det enskilda passet verkställer ett definierat stimulus eller en uttryckligen stödjande/rekreativ roll inom mikrocykeln.",
       "calendar_role": "Kalenderveckan är ett presentations- och navigeringslager. I nuvarande implementation är mikrocykeln sju dagar och visas måndag–söndag, men veckan är inte en egen planeringsnivå.",
-      "adaptation_rule": "När målbilden ändras ska mesocykeln omprövas. När närtidens omständigheter ändras ska mikrocykeln och enskilda pass justeras från en konkret grundplan, medan relevanta utvecklingsstimuli bevaras, flyttas eller återtas när det är absorberbart och fortfarande tjänar målbilden."
+      "adaptation_rule": "När målportföljen ändras ska mesocykeln omprövas. Tidsatta A-mål får successivt öka specificiteten men får inte implicit ersätta varaktiga utvecklingsmål. När närtidens omständigheter ändras ska konkreta pass justeras utan att målportföljens relevanta kapaciteter tappas bort."
     },
     "load_model": {
       "lookback_days": 3,
@@ -284,5 +284,14 @@
       "Banans publicerade löp-, sim- och höjddata ska användas som tävlingskrav utan att extrapoleras till oobserverade farter eller kapacitetsvärden.",
       "När en tävlingsspecifik förmåga saknar exekverbart recept ska systemet markera kapacitetsgapet i stället för att hitta på ett pass."
     ]
+  },
+  "multi_goal_policy": {
+    "enduring_development_goals_always_active": true,
+    "performance_goals_add_specificity_not_identity": true,
+    "foundation_preserves_allround_breadth": true,
+    "event_specific_tradeoffs_must_be_explicit": true,
+    "mesocycle_must_cover_every_active_goal": true,
+    "microcycle_need_not_express_every_goal_every_week": true,
+    "principle": "Planeringen optimerar en målportfölj. Varaktiga utvecklingsmål anger vilken atlet som byggs; tidsatta prestationsmål ändrar betoning och specificitet. Ett A-mål får inte implicit ersätta den varaktiga målbilden."
   }
 }
