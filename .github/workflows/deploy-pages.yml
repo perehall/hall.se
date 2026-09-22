@@ -7,7 +7,7 @@ on:
       - main
     # Canonical training-data writes are published only after update-training
     # has normalized/materialized the full state and explicitly dispatches Pages.
-    # Deploying raw intermediate data commits creates false failure notifications.
+    # Deploying raw intermediate data commits creates false failure notifications; publish only canonical state.
     paths-ignore:
       - "träning/data/**"
 
