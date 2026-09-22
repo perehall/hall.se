@@ -338,27 +338,38 @@ def feedback_from_override(override: dict) -> dict | None:
     if not event_key or not report:
         return None
 
-    rpe_match = re.search(r"(?:^|\s)RPE\s+(\d+)/10\.\s*(?=Känsla:|$)", report)
-    rpe = int(rpe_match.group(1)) if rpe_match else None
+    # Legacy GUI reports were appended before structured feedback existed.
+    # Treat the last RPE(+optional feeling) group as the current feedback and
+    # start after the preceding GUI group when several test submissions exist.
+    groups = list(
+        re.finditer(
+            r"RPE\s+(\d+)/10\.\s*(?:Känsla:\s*([^.]+)\.\s*)?",
+            report,
+        )
+    )
+    if groups:
+        current = groups[-1]
+        segment_start = groups[-2].end() if len(groups) > 1 else 0
+        segment = report[segment_start:].strip()
+        rpe = int(current.group(1))
+        feeling_text = current.group(2) or ""
+    else:
+        segment = report
+        rpe = None
+        feeling_text = ""
 
     reverse_feelings = {label: code for code, label in FEELING_LABELS.items()}
     feeling = []
-    feeling_match = re.search(r"Känsla:\s*([^.]+)\.\s*$", report)
-    if feeling_match:
-        for label in (part.strip() for part in feeling_match.group(1).split(",")):
-            code = reverse_feelings.get(label)
-            if code and code not in feeling:
-                feeling.append(code)
+    for label in (part.strip() for part in feeling_text.split(",") if part.strip()):
+        code = reverse_feelings.get(label)
+        if code and code not in feeling:
+            feeling.append(code)
 
-    text = report
-    if feeling_match:
-        text = text[: feeling_match.start()].rstrip()
-    if rpe_match:
-        # The GUI-generated RPE sentence sits immediately before the feeling
-        # sentence (or at the end when no feeling was selected).
-        rpe_sentence = re.compile(r"\s*RPE\s+\d+/10\.\s*$")
-        text = rpe_sentence.sub("", text).strip()
-
+    text = re.sub(
+        r"\s*RPE\s+\d+/10\.\s*(?:Känsla:\s*[^.]+\.\s*)?$",
+        "",
+        segment,
+    ).strip()
     return {"text": text, "rpe": rpe, "feeling": feeling}
 
 
