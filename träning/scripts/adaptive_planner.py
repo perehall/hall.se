@@ -1154,10 +1154,13 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
         "fixed_enduro_day_1": is_enduro_school_date(target_start),
         "goal": {
             "goal": goal.get("goal"),
+            "development_goals": goal.get("development_goals"),
             "performance_goals": goal.get("performance_goals"),
             "current_phase": goal.get("current_phase"),
             "next_steps": goal.get("next_steps"),
         },
+        "goal_set": planning_goal_set(goal),
+        "multi_goal_policy": policy.get("multi_goal_policy"),
         "mesocycle": meso,
         "microcycle_policy": policy.get("microcycle_policy"),
         "decision_guards": policy.get("decision_guards"),
@@ -1187,6 +1190,8 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
     digest = canonical_hash(source_payload)
     system = (
         "Du komponerar en sjudagars mikrocykel från ett redan fattat mesocykelbeslut. "
+        "Mesocykeln har redan vägt hela goal_set; mikrocykeln får inte omtolka A-målet som enda mål. "
+        "Ett enskilt sjudagarsfönster behöver inte uttrycka varje mål eller disciplin, men det får inte systematiskt radera kapaciteter som mesocykeln håller sekundära, underhållna eller skyddade. "
         "competition_context beskriver det verifierade A-loppet och tid kvar. Den får påverka specificitet inom mesocykelns beslut men är aldrig i sig skäl att lägga till träning eller öka dos. "
         "Välj endast dag, stimulusrecept och åtgärden establish/progress/consolidate/reduce. "
         "Du får inte hitta på exakta farter, pulser, watt eller doser; deterministisk kod väljer sedan dos från observerad historik och receptkatalog. "
@@ -1810,6 +1815,8 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
         ),
         "mesocycle": meso,
         "goal": goal,
+        "goal_set": planning_goal_set(goal),
+        "multi_goal_policy": policy.get("multi_goal_policy"),
         "microcycle_policy": policy.get("microcycle_policy"),
         "decision_guards": policy.get("decision_guards"),
         "athlete_state": sanitize_athlete_state(athlete_state),
