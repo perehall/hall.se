@@ -28,6 +28,7 @@ from adaptive_planner import (  # noqa: E402
     validate_and_normalize_micro,
 )
 from build_athlete_state import build_state  # noqa: E402
+from goal_contracts import planning_goal_set  # noqa: E402
 from strategy_contracts import validate_training_strategy  # noqa: E402
 
 
@@ -44,6 +45,7 @@ class AdaptivePlanningTests(unittest.TestCase):
         )
         encoded = json.dumps(schema, sort_keys=True)
         self.assertNotIn("uniqueItems", encoded)
+        self.assertIn('"goal_contributions"', encoded)
 
     def test_active_mesocycle_targets_upcoming_week_not_current_copy(self):
         plan = {
@@ -219,15 +221,30 @@ class AdaptivePlanningTests(unittest.TestCase):
         self.assertIn("strength_unilateral", joined)
         self.assertIn("strength_core", joined)
 
-    def test_active_swimrun_goal_drives_deterministic_fallback(self):
-        meso = fallback_mesocycle(self.goal, self.policy, {})
+    def test_goal_portfolio_keeps_allround_identity_separate_from_a_goal(self):
+        rows = planning_goal_set(self.goal)
+        by_id = {row["id"]: row for row in rows}
+        self.assertEqual(by_id["allround-athlete"]["type"], "development")
+        self.assertEqual(by_id["allround-athlete"]["role"], "enduring")
+        self.assertEqual(by_id["otillo-aland-2027-top10"]["type"], "performance")
+        self.assertEqual(by_id["otillo-aland-2027-top10"]["priority_class"], "A")
+
+    def test_active_swimrun_goal_biases_fallback_without_erasing_allround_goal(self):
+        meso = fallback_mesocycle(self.goal, self.policy, {}, date(2026, 9, 21))
         self.assertEqual(
             meso["primary_capabilities"],
             ["run_threshold", "swim_aerobic", "run_easy_distance"],
         )
         self.assertNotIn("mtb_technical", meso["primary_capabilities"])
         self.assertTrue(
+            {"mtb_technical", "mtb_aerobic"}.intersection(meso["secondary_capabilities"])
+        )
+        self.assertTrue(
             any("performance_goals" in ref for ref in meso["evidence_refs"])
+        )
+        self.assertEqual(
+            {row["goal_id"] for row in meso["goal_contributions"]},
+            {"allround-athlete", "otillo-aland-2027-top10"},
         )
 
     def test_performance_goal_change_invalidates_goal_hash(self):
@@ -284,6 +301,10 @@ class AdaptivePlanningTests(unittest.TestCase):
             request_fn=fake_request,
         )
         context = result["competition_context"]
+        self.assertEqual(
+            {row["goal_id"] for row in result["goal_contributions"]},
+            {"allround-athlete", "otillo-aland-2027-top10"},
+        )
         self.assertEqual(context["event_date"], "2027-08-14")
         self.assertEqual(context["days_to_event"], 327)
         self.assertEqual(context["race_profile"]["total_distance_m"], 46540)
@@ -503,9 +524,9 @@ class AdaptivePlanningTests(unittest.TestCase):
             "end_date": "2026-10-18",
             "goal_hash": goal_hash(self.goal),
         }
-        self.assertEqual(MICRO_PLANNER_REVISION, 6)
+        self.assertEqual(MICRO_PLANNER_REVISION, 7)
         stale_micro = {
-            "planner_revision": 5,
+            "planner_revision": 6,
             "week_start": "2026-09-28",
             "mesocycle_id": "meso-live",
         }
