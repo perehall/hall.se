@@ -4,7 +4,7 @@
   "week_start": "2026-09-21",
   "week_end": "2026-09-27",
   "created_at_utc": "2026-09-20T23:15:26.146433+00:00",
-  "updated_at_utc": "2026-09-22T20:31:01.795268+00:00",
+  "updated_at_utc": "2026-09-22T21:19:52.862588+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -733,9 +733,9 @@
           "transport": "intervals_icu",
           "source_hash": "933fd53bcd5115ce663040a681763bd5077223486cf932d94064753f3170d24b",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-22T20:31:00.710576+00:00",
+          "updated_at_utc": "2026-09-22T21:19:51.649419+00:00",
           "provider_event_id": 138097033,
-          "verified_at_utc": "2026-09-22T20:31:00.710576+00:00"
+          "verified_at_utc": "2026-09-22T21:19:51.649419+00:00"
         }
       },
       {
@@ -1221,9 +1221,9 @@
           "transport": "intervals_icu",
           "source_hash": "d1730f8e6f06d9307ab6d3d47951a346c56484d2581ef54eae0b023420cac6c8",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-22T20:31:00.841777+00:00",
+          "updated_at_utc": "2026-09-22T21:19:51.855484+00:00",
           "provider_event_id": 138142476,
-          "verified_at_utc": "2026-09-22T20:31:00.841777+00:00"
+          "verified_at_utc": "2026-09-22T21:19:51.855484+00:00"
         }
       },
       {
@@ -1524,9 +1524,9 @@
           "transport": "intervals_icu",
           "source_hash": "9dc12d3e522e49454af7c6ffe216ee9ba323186427181ac1e1ae64a8d6009578",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-22T20:31:00.974312+00:00",
+          "updated_at_utc": "2026-09-22T21:19:52.066424+00:00",
           "provider_event_id": 138097036,
-          "verified_at_utc": "2026-09-22T20:31:00.974312+00:00"
+          "verified_at_utc": "2026-09-22T21:19:52.066424+00:00"
         }
       }
     ],
@@ -2061,7 +2061,7 @@
       "activity_id": 20284663236,
       "activity_date": "2026-09-22",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-09-22T20:30:59.570116+00:00",
+      "generated_at_utc": "2026-09-22T21:19:50.490310+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 3,
@@ -2073,8 +2073,8 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört 4×8 min tröskelpass — kontrollerat, stark känsla och kvarvarande kraft enligt användarrapport.",
-        "load_interpretation": "Passet ger det planerade tröskelstimulus; inga omedelbara reduktioner krävs utifrån data och rapport.",
+        "summary": "Genomfört 4×8 min tröskelpass (12.9 km, snittpuls 145 bpm); användarrapport anger stark känsla och ökning sista intervallen.",
+        "load_interpretation": "Passet fullföljde planerat tröskelstimulus och ger kardiovaskulär/mekanisk belastning som räknas i mikrocykeln.",
         "confidence": "medium",
         "facts": [
           "Löpning · tröskel: 12,90 km · 1:01:27 · 105 m+ · snittpuls 145,4 · maxpuls 165.",
@@ -2082,19 +2082,19 @@
           "Planstatus 2026-09-22: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Genomfört tröskelstimulus kan räknas som mikrocykelns löptröskelbidrag för utveckling.",
-          "Givet närbelastningen (enduro + långpass tidigare i fönstret) är bevarad plan (sim 23/9 som flytt) lämplig; inget tecken på akut överbelastning."
+          "Passet demonstrerar genomförd kontrollerad tröskelstimulus som stödjer mikrocykelns löpstimulus",
+          "Eftersom simningen flyttades till 2026-09-23 räknas tröskelstimulus som uppfyllt och simpasset bör genomföras enligt plan"
         ],
         "unknowns": [
-          "Subjektiv återhämtning nästa 24–72 h (användarrapport gäller samma dag).",
-          "Specifik lokal muskulär trötthet i benen efter enduro + långpass inte kvantifierat"
+          "Hur du känner dig nästa 24–48 timmar efter dagens tröskel",
+          "Eventuella lokal muskulära belastningar från kvällens pass som påverkar morgondagens simning"
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-09-23",
-        "reason": "Simningen var planerad flytt till 2026-09-23 och tröskelstimulus är redan levererat, så planen behålls konservativt.",
-        "recommendation": "Behåll planerad simning 2026-09-23 (3 200 m enligt schema). Vila/aktiv återhämtning om du känner ovanlig lokal trötthet; rapportera RPE eller smärta innan omplanering.",
+        "reason": "Tröskelstimulus är genomfört och simningen redan omplanerad till 2026-09-23 enligt användarrapport och plan.",
+        "recommendation": "Behåll plan: genomför simning 2026-09-23 (3 200 m aerob/teknik) som planerat; vila lätt eller aktiv återhämtning i morgon morgon om du känner stelhet före simningen.",
         "dose_option_id": "",
         "requires_approval": false
       },
