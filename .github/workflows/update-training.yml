@@ -26,6 +26,8 @@ on:
       - "träning/scripts/rollover_week.py"
       - "träning/scripts/workout_design.py"
       - "träning/scripts/training_job_runner.py"
+      - "träning/scripts/training_input.py"
+      - "träning/scripts/finalize_training_input_ui.py"
 
 concurrency:
   group: training-pages
