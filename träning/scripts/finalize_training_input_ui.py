@@ -18,6 +18,7 @@ INDEX_FILE = ROOT / "index.html"
 PLAN_FILE = ROOT / "data" / "plan.json"
 UPCOMING_FILE = ROOT / "data" / "upcoming_week.json"
 ACTIVITIES_FILE = ROOT / "data" / "activities.json"
+OVERRIDES_FILE = ROOT / "data" / "activity_overrides.json"
 
 CSS_MARKER = "/* training-input-ui-v1 */"
 BLOCK_START = "<!-- training-input-ui-v1:start -->"
@@ -45,6 +46,38 @@ JS = r"""
 (() => {
   const roots = [...document.querySelectorAll('[data-training-input]')];
   if (!roots.length) return;
+
+  const pageUrl = new URL(window.location.href);
+  if (pageUrl.searchParams.has('_feedback_done')) {
+    pageUrl.searchParams.delete('_feedback_done');
+    history.replaceState(null, '', pageUrl.toString());
+  }
+
+  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  async function waitForProcessed(activityId, eventKey) {
+    for (let attempt = 0; attempt < 90; attempt += 1) {
+      await sleep(2000);
+      try {
+        const probe = new URL(window.location.href);
+        probe.searchParams.set('_feedback_sync', String(Date.now()));
+        const response = await fetch(probe.toString(), {
+          method: 'GET',
+          credentials: 'same-origin',
+          cache: 'no-store'
+        });
+        if (!response.ok) continue;
+        const source = await response.text();
+        const doc = new DOMParser().parseFromString(source, 'text/html');
+        const fresh = [...doc.querySelectorAll('[data-training-input]')]
+          .find((item) => item.dataset.activityId === String(activityId));
+        if (fresh && fresh.dataset.processedEventKey === eventKey) return true;
+      } catch (error) {
+        console.debug('TRAINING_INPUT_POLL_RETRY', error);
+      }
+    }
+    return false;
+  }
 
   roots.forEach((root) => {
     const rpeButtons = [...root.querySelectorAll('[data-rpe]')];
@@ -96,16 +129,29 @@ JS = r"""
         });
         const body = await response.json().catch(() => ({}));
         if (!response.ok) throw new Error(body.error || 'request_failed');
-        status.textContent = 'Mottaget. Systemet räknar om med din input.';
+        if (!body.event_key) throw new Error('missing_event_key');
+
+        status.textContent = 'Mottaget. Bearbetar…';
         text.value = '';
         rpe = null;
         feelings.clear();
         [...rpeButtons, ...feelingButtons].forEach((button) => button.setAttribute('aria-pressed', 'false'));
+
+        const processed = await waitForProcessed(root.dataset.activityId, body.event_key);
+        if (processed) {
+          status.textContent = 'Klart. Uppdaterar…';
+          const next = new URL(window.location.href);
+          next.searchParams.set('_feedback_done', String(Date.now()));
+          window.location.replace(next.toString());
+          return;
+        }
+
+        status.textContent = 'Sparat. Automatisk uppdatering kunde inte bekräftas.';
+        save.disabled = false;
       } catch (error) {
         status.textContent = `Kunde inte spara (${error.message}).`;
-        console.error('TRAINING_INPUT_FAILED', error);
-      } finally {
         save.disabled = false;
+        console.error('TRAINING_INPUT_FAILED', error);
       }
     });
   });
@@ -141,7 +187,7 @@ def remove_existing(page: str) -> str:
     return page
 
 
-def render_block(activity: dict) -> str:
+def render_block(activity: dict, processed_event_key: str = "") -> str:
     activity_id = int(activity["id"])
     activity_label = (
         str(activity.get("display_label") or "").strip()
@@ -174,7 +220,7 @@ def render_block(activity: dict) -> str:
         for key, label in feelings
     )
     return f"""{BLOCK_START}
-<section class="training-input" data-training-input data-activity-id="{activity_id}" aria-label="Feedback efter pass">
+<section class="training-input" data-training-input data-activity-id="{activity_id}" data-processed-event-key="{html.escape(processed_event_key, quote=True)}" aria-label="Feedback efter pass">
   <h3>Feedback · {html.escape(activity_label)}</h3>
   <p class="training-input-intro">{html.escape(activity_date)} · Snabbval räcker. Fri text kan också korrigera vad du faktiskt gjorde; modellen får bara klassificera inputen, inte ändra planen direkt.</p>
   <span class="training-input-label">Ansträngning</span>
@@ -191,9 +237,20 @@ def render_block(activity: dict) -> str:
 {BLOCK_END}"""
 
 
-def apply_training_input_ui(page: str, plan: dict, activities_state: dict, today: str) -> str:
+def apply_training_input_ui(
+    page: str,
+    plan: dict,
+    activities_state: dict,
+    today: str,
+    overrides_state: dict | None = None,
+) -> str:
     page = remove_existing(page)
     today_date = datetime.strptime(today, "%Y-%m-%d").date()
+    override_map = (overrides_state or {}).get("overrides") or {}
+
+    def processed_event_key(activity: dict) -> str:
+        row = override_map.get(str(activity.get("id"))) or {}
+        return str(row.get("last_training_input_event_key") or "").strip()
 
     recent = []
     for activity in activities_state.get("activities") or []:
@@ -228,7 +285,7 @@ def apply_training_input_ui(page: str, plan: dict, activities_state: dict, today
         pos = page.find(link)
         if pos < 0:
             raise RuntimeError("Träningsinput UI: post-workout-länken saknas.")
-        page = page[:pos] + render_block(primary) + "\n" + page[pos:]
+        page = page[:pos] + render_block(primary, processed_event_key(primary)) + "\n" + page[pos:]
         rendered_ids.add(primary["id"])
 
     secondary = [
@@ -241,7 +298,10 @@ def apply_training_input_ui(page: str, plan: dict, activities_state: dict, today
         if pos < 0:
             raise RuntimeError("Träningsinput UI: träningshjärnans slutmarkör saknas.")
         pos += len(marker)
-        blocks = "\n".join(render_block(activity) for activity in secondary)
+        blocks = "\n".join(
+            render_block(activity, processed_event_key(activity))
+            for activity in secondary
+        )
         page = page[:pos] + "\n" + blocks + page[pos:]
 
     if not rendered_ids and not secondary:
@@ -261,10 +321,17 @@ def main() -> int:
     upcoming = load_json(UPCOMING_FILE, {"days": [], "meta": {}})
     decision_plan = planning_window(plan, upcoming)
     activities = load_json(ACTIVITIES_FILE, {"activities": []})
+    overrides = load_json(OVERRIDES_FILE, {"schema_version": 1, "overrides": {}})
     page = INDEX_FILE.read_text(encoding="utf-8")
     tz = ZoneInfo(plan.get("meta", {}).get("timezone", "Europe/Stockholm"))
     today = datetime.now(tz).date().isoformat()
-    rendered = apply_training_input_ui(page, decision_plan, activities, today)
+    rendered = apply_training_input_ui(
+        page,
+        decision_plan,
+        activities,
+        today,
+        overrides_state=overrides,
+    )
     INDEX_FILE.write_text(rendered, encoding="utf-8")
     print("Träningsinput UI OK.")
     return 0
