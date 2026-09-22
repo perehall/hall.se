@@ -1,5 +1,5 @@
 {
-  "last_sync_utc": "2026-09-22T06:55:30.747840+00:00",
+  "last_sync_utc": "2026-09-22T06:57:47.345550+00:00",
   "activities": [
     {
       "id": 20272196080,
@@ -39,8 +39,8 @@
         "activity_id": 20272196080,
         "sport_type": "WeightTraining",
         "display_label": "WeightTraining",
-        "classification": null,
-        "user_report": "",
+        "classification": "training",
+        "user_report": "RPE 2/10. Känsla: Pigg.",
         "total": {
           "distance_m": null,
           "distance_km": null,
@@ -54,7 +54,12 @@
         "swim": null,
         "enduro": null,
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
-      }
+      },
+      "source_sport_type": "WeightTraining",
+      "classification": "training",
+      "display_label": "WeightTraining",
+      "user_report": "RPE 2/10. Känsla: Pigg.",
+      "classification_reason": "Explicit GUI-input från användaren ska behandlas som förstaklassdata i analys och fortsatt planering."
     },
     {
       "id": 20271537143,
@@ -12368,7 +12373,7 @@
     "schema_version": 1,
     "workout_analysis_contract_version": 3,
     "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
-    "overrides_applied": 12,
+    "overrides_applied": 13,
     "auto_rules_applied": 11,
     "override_ids_present": [
       "19852599244",
@@ -12382,9 +12387,12 @@
       "20120769386",
       "20133500464",
       "20229568713",
-      "20271537143"
+      "20271537143",
+      "20272196080"
     ],
-    "changed_ids": []
+    "changed_ids": [
+      "20272196080"
+    ]
   },
   "schema_version": 2,
   "last_webhook_event": {

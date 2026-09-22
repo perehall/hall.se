@@ -4,7 +4,7 @@
   "week_start": "2026-09-21",
   "week_end": "2026-09-27",
   "created_at_utc": "2026-09-20T23:15:26.146433+00:00",
-  "updated_at_utc": "2026-09-22T06:57:22.455758+00:00",
+  "updated_at_utc": "2026-09-22T06:59:32.664565+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -1188,9 +1188,9 @@
           "transport": "intervals_icu",
           "source_hash": "f0c4bb0552ced1137586036ac7d666750b0a04d7f28ecbfdad6d0940dbad0c8b",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-22T06:57:21.190663+00:00",
+          "updated_at_utc": "2026-09-22T06:59:31.748214+00:00",
           "provider_event_id": 137895892,
-          "verified_at_utc": "2026-09-22T06:57:21.190663+00:00"
+          "verified_at_utc": "2026-09-22T06:59:31.748214+00:00"
         }
       },
       {
@@ -1671,9 +1671,9 @@
           "transport": "intervals_icu",
           "source_hash": "0640f7dcd8b93ad3ad97da99693fea133ade7ccd7d3daac24e7244162992eecf",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-22T06:57:21.319729+00:00",
+          "updated_at_utc": "2026-09-22T06:59:31.883732+00:00",
           "provider_event_id": 137895893,
-          "verified_at_utc": "2026-09-22T06:57:21.319729+00:00"
+          "verified_at_utc": "2026-09-22T06:59:31.883732+00:00"
         }
       },
       {
@@ -1966,9 +1966,9 @@
           "transport": "intervals_icu",
           "source_hash": "b361e50eca79aa09578b362ba04bb6b3d74fb7f7d56226b0b2a23b497ff8766e",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-22T06:57:21.649890+00:00",
+          "updated_at_utc": "2026-09-22T06:59:32.016312+00:00",
           "provider_event_id": 137895894,
-          "verified_at_utc": "2026-09-22T06:57:21.649890+00:00"
+          "verified_at_utc": "2026-09-22T06:59:32.016312+00:00"
         }
       },
       {
@@ -2030,8 +2030,8 @@
         "activity_id": 20272196080,
         "sport_type": "WeightTraining",
         "display_label": "WeightTraining",
-        "classification": null,
-        "user_report": "",
+        "classification": "training",
+        "user_report": "RPE 2/10. Känsla: Pigg.",
         "total": {
           "distance_m": null,
           "distance_km": null,
@@ -2045,7 +2045,12 @@
         "swim": null,
         "enduro": null,
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
-      }
+      },
+      "source_sport_type": "WeightTraining",
+      "classification": "training",
+      "display_label": "WeightTraining",
+      "user_report": "RPE 2/10. Känsla: Pigg.",
+      "classification_reason": "Explicit GUI-input från användaren ska behandlas som förstaklassdata i analys och fortsatt planering."
     },
     {
       "id": 20271537143,
@@ -2119,7 +2124,7 @@
       "activity_id": 20272196080,
       "activity_date": "2026-09-21",
       "activity_name": "Styrketräning på kvällen",
-      "generated_at_utc": "2026-09-22T06:57:20.339701+00:00",
+      "generated_at_utc": "2026-09-22T06:59:30.696372+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 3,
@@ -2131,27 +2136,28 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört styrkepass (33,6 min) efter ett tekniskt enduro-pass samma dag; kombinerad närbelastning motiverade reduktion av morgondagens styrke‑dos i planen.",
-        "load_interpretation": "Mekanisk/neuromuskulär närbelastning ackumulerad samma dag (enduro + styrka); inga tecken på akut överbelastning i subjektiv rapporter.",
+        "summary": "Genomfört styrkepass (2014 s) rapporterat RPE 2/10 och känsla pigg; det bekräftar att kvällens styrka tolererades utan tydlig omedelbar trötthet.",
+        "load_interpretation": "Samma dags styrka lägger mekanisk/neuromuskulär närbelastning ovanpå tidigare enduro; konservativ planreduktion för nästa dag var motiverad.",
         "confidence": "medium",
         "facts": [
-          "Styrka: 33:34 · snittpuls 79,3 · maxpuls 128.",
+          "WeightTraining: 33:34 · snittpuls 79,3 · maxpuls 128.",
+          "Användarrapport: RPE 2/10. Känsla: Pigg.",
           "Planstatus 2026-09-21: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Detta styrkepass bekräftar att styrka/core-session genomfördes—systemets konservativa reduktion (det valda passalternativet) kvarstår mot bakgrund av dagens enduro.",
-          "Eftersom användarrapport för enduro var låg RPE och 'pigg' finns inget entydigt skäl att vila helt; beslut bör vara konservativt och skydda ben inför mikrocykelns löpkvalitet."
+          "Detta styrkepass visar att den planerade, reducerade styrkedosen hölls lätt och tolererades samma dag.",
+          "Kombinationen enduro + styrka samma dag ökade mekanisk/neuromuskulär belastning och motiverade att behålla dagens reducering av morgondagens styrkedel."
         ],
         "unknowns": [
-          "Användarens subjektiva känsla efter styrkepasset (ingen användarrapport)",
-          "eventuella muskel-/lokala trötthetssignaler följande 24–48 h"
+          "Subjektiv återhämtning nästa 24–72 h okänd trots pigg samma dag.",
+          "Detaljer om exakta styrkeset/last (sets/reps/loads) saknas för att bedöma styrkeprogression."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-09-22",
-        "reason": "Planen har redan konservativt reducerats (det valda passalternativet) med hänsyn till dagens enduro + genomförd styrka.",
-        "recommendation": "Följ dagens reducerade plan: genomför simdelen (3 200 m) och håll styrkedelen inom den valda 25‑minutsramen; undvik tyngre benkvalitet eller plyometri idag.",
+        "reason": "Passet tolererades väl same-day och planen är redan konservativt nedjusterad (det valda passalternativet).",
+        "recommendation": "Följ redan valda reducerade dagspasset (det valda passalternativet) imorgon; rapportera om ben-, höft- eller CNS-trötthet före passet.",
         "dose_option_id": "",
         "requires_approval": false
       },
