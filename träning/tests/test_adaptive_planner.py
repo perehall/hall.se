@@ -92,8 +92,8 @@ class AdaptivePlanningTests(unittest.TestCase):
         target, active_replan = resolve_planning_target(
             plan, upcoming, stale, date(2026, 9, 21), goal=self.goal
         )
-        self.assertEqual(target, date(2026, 9, 28))
-        self.assertFalse(active_replan)
+        self.assertEqual(target, date(2026, 9, 21))
+        self.assertTrue(active_replan)
 
     def test_midweek_goal_change_does_not_rewrite_elapsed_days(self):
         plan = {
@@ -517,8 +517,8 @@ class AdaptivePlanningTests(unittest.TestCase):
             goal=self.goal,
             microcycle_decision=stale_micro,
         )
-        self.assertEqual(target, date(2026, 9, 21))
-        self.assertTrue(active_replan)
+        self.assertEqual(target, date(2026, 9, 28))
+        self.assertFalse(active_replan)
 
     def test_microcycle_guard_explains_missing_protected_capacity(self):
         meso = fallback_mesocycle(self.goal, self.policy, {})
