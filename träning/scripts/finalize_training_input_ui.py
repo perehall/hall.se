@@ -81,7 +81,7 @@ JS = r"""
       save.disabled = true;
       status.textContent = 'Sparar…';
       try {
-        const response = await fetch('/training-api/input', {
+        const response = await fetch('/träning/training-api/input', {
           method: 'POST',
           credentials: 'same-origin',
           headers: {'content-type': 'application/json'},
@@ -102,7 +102,7 @@ JS = r"""
         feelings.clear();
         [...rpeButtons, ...feelingButtons].forEach((button) => button.setAttribute('aria-pressed', 'false'));
       } catch (error) {
-        status.textContent = 'Kunde inte spara. Försök igen.';
+        status.textContent = `Kunde inte spara (${error.message}).`;
         console.error('TRAINING_INPUT_FAILED', error);
       } finally {
         save.disabled = false;

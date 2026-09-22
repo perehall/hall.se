@@ -38,7 +38,7 @@ class TrainingInputUiTests(unittest.TestCase):
         self.assertIn("Mycket lätt", rendered)
         self.assertIn("Kunde gjort mer", rendered)
         self.assertIn("Blev 4 × 8", rendered)
-        self.assertIn("fetch('/training-api/input'", rendered)
+        self.assertIn("fetch('/träning/training-api/input'", rendered)
         self.assertIn("NATURAL_LANGUAGE", rendered)
 
     def test_previous_day_activities_remain_open_for_feedback_after_midnight(self):
