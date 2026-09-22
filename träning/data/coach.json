@@ -4,7 +4,7 @@
       "activity_id": 20272196080,
       "activity_date": "2026-09-21",
       "activity_name": "Styrketräning på kvällen",
-      "generated_at_utc": "2026-09-22T00:45:04.783757+00:00",
+      "generated_at_utc": "2026-09-22T04:54:44.335721+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 3,
@@ -16,27 +16,27 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört styrkepass (33,6 min) följde samma dags enduro; pulsmedel 79 bpm, max 128 bpm indikerar kontrollerad styrka utan subjektiv rapport.",
-        "load_interpretation": "Närbelastning: enduro + styrka samma dag ökar mekanisk/neuromuskulär belastning för de närmaste 48–72 timmarna.",
+        "summary": "Genomförd styrketräning (33,6 min) samma dag som 1) enduro-session (total passduration 5809 s) ökar mekanisk/neuromuskulär närbelastning; inga subjektiva rapporter angivna.",
+        "load_interpretation": "Närbelastningen föregående 2–3 dagar visar enduro + styrka; konservativ skyddsåtgärd mot benbelastning är rimlig för kommande dag.",
         "confidence": "medium",
         "facts": [
           "Styrka: 33:34 · snittpuls 79,3 · maxpuls 128.",
           "Planstatus 2026-09-21: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Utfallet bekräftar att dagens styrka genomfördes och motiverade redan vald konservativ reduktion av styrkedosen för morgondagens kombinerade sim/styrkepass.",
-          "Den kombinerade närbelastningen (enduro + styrka) gör att bibehållen reducerad styrkedos är lämplig för att skydda ben inför mikrocykelns nyckelpass."
+          "Genomfört styrkepass efter enduro bekräftar ökad mekanisk/neuromuskulär närbelastning för mikrocykelns närtid.",
+          "Automatisk reduktion av styrkedelen för 2026-09-22 (det valda passalternativet) är välmotiverad och bör behållas."
         ],
         "unknowns": [
-          "Subjektiv återhämtning nästa morgon (ingen användarrapport).",
-          "Eventuella lokala muskelsmärtor eller stelhet efter kvällspasset som kan påverka morgondagens styrkeval."
+          "Subjektiv återhämtning efter passen (användarrapport tom) kan förändra beslut.",
+          "Eventuella kvällssymptom eller lokal muskelstelhet som inte är rapporterade."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-09-22",
-        "reason": "Passet tolererades och planen har redan konservativt reducerats (det valda passalternativet) baserat på samma dags enduro + styrka.",
-        "recommendation": "Behåll det redan valda alternativet det valda passalternativet för 2026-09-22; utför simdelen enligt plan och håll styrkedosen reducerad (fokusera core/unilateral, undvik tunga benmaxlyft).",
+        "reason": "Reduktionen det valda passalternativet valdes konservativt med hänsyn till dagens enduro + genomförd styrka och skyddar mikrocykelns nyckelpass.",
+        "recommendation": "Följ dagens plan: sim 3 200 m enligt struktur och begränsa styrkedelen till det valda passalternativet. Rapportera eventuell lokal trötthet eller smärta före morgondagens aktivitet.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -1255,8 +1255,8 @@
       }
     }
   ],
-  "last_trigger_hash": "309e80d2118df863b33265411071fc8aebeee45f58e1e93e3bf0a8ac71f7c147",
-  "last_run_utc": "2026-09-22T00:45:04.783757+00:00",
+  "last_trigger_hash": "9bb5014e28dcd7ba90c71b8981d23a85818b03aca4a3b4ac74e16733423f3614",
+  "last_run_utc": "2026-09-22T04:54:44.335721+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 3
