@@ -6,6 +6,7 @@ from pathlib import Path
 SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
+from normalize_activity_semantics import apply_semantics  # noqa: E402
 from training_input import (  # noqa: E402
     apply_to_documents,
     deterministic_operation,
@@ -40,10 +41,22 @@ class TrainingInputTests(unittest.TestCase):
             overrides,
         )
         self.assertEqual(operation, "ADD_FEEDBACK")
-        report = updated["overrides"]["123"]["user_report"]
+        override = updated["overrides"]["123"]
+        report = override["user_report"]
         self.assertIn("RPE 6/10", report)
         self.assertIn("Pigg", report)
         self.assertIn("Kunde gjort mer", report)
+        self.assertEqual(override["sport"], "Run")
+        self.assertEqual(override["classification"], "training")
+        self.assertEqual(override["source_sport_type"], "Run")
+
+        # Regression: the GUI-generated override must be directly consumable by
+        # the canonical semantic normalizer; this is the next pipeline stage.
+        state = self.activities()
+        apply_semantics(state, updated, prompt_signature="x" * 64)
+        activity = state["activities"][0]
+        self.assertEqual(activity["classification"], "training")
+        self.assertEqual(activity["user_report"], report)
 
     def test_natural_language_can_only_choose_allowlisted_operation_and_raw_text_is_preserved(self):
         raw = "Blev 4 × 8 i stället för 3 × 10. Kändes kontrollerat."
