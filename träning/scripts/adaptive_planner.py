@@ -19,7 +19,7 @@ from copy import deepcopy
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
-from goal_contracts import planning_goal_hash
+from goal_contracts import planning_goal_hash, planning_goal_set
 from race_contracts import build_competition_context
 from rollover_week import (
     build_mesocycle_next_week,
@@ -45,8 +45,8 @@ WEEKS_DIR = DATA / "weeks"
 MODEL = os.environ.get("OPENAI_MODEL", "gpt-5-mini")
 MESO_SCHEMA_VERSION = 1
 MICRO_SCHEMA_VERSION = 1
-PLANNER_REVISION = 4
-MICRO_PLANNER_REVISION = 6
+PLANNER_REVISION = 5
+MICRO_PLANNER_REVISION = 7
 
 CAPABILITY_TO_RECIPE = {
     "run_threshold": "run_threshold",
@@ -314,6 +314,22 @@ def mesocycle_schema(capabilities):
             "title": {"type": "string"},
             "duration_weeks": {"type": "integer", "minimum": 3, "maximum": 5},
             "goal_contribution": {"type": "string"},
+            "goal_contributions": {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 8,
+                "items": {
+                    "type": "object",
+                    "additionalProperties": False,
+                    "properties": {
+                        "goal_id": {"type": "string"},
+                        "goal_type": {"type": "string", "enum": ["development", "performance"]},
+                        "contribution": {"type": "string"},
+                        "tradeoff": {"type": "string"},
+                    },
+                    "required": ["goal_id", "goal_type", "contribution", "tradeoff"],
+                },
+            },
             "hypothesis": {"type": "string"},
             "primary_capabilities": {
                 "type": "array", "minItems": 1, "maxItems": 3, "items": primary_cap
@@ -364,6 +380,7 @@ def mesocycle_schema(capabilities):
             "title",
             "duration_weeks",
             "goal_contribution",
+            "goal_contributions",
             "hypothesis",
             "primary_capabilities",
             "secondary_capabilities",
