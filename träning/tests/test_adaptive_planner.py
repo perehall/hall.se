@@ -681,6 +681,15 @@ class AdaptivePlanningTests(unittest.TestCase):
             self.goal, self.policy, meso, micro, self.catalog, athlete
         )
         validate_training_strategy(strategy)
+        self.assertEqual(strategy["goal_contract"]["source_schema_version"], 3)
+        self.assertEqual(
+            {row["id"] for row in strategy["goal_contract"]["goal_set"]},
+            {"allround-athlete", "otillo-aland-2027-top10"},
+        )
+        self.assertEqual(
+            {row["goal_id"] for row in strategy["current_mesocycle"]["goal_contributions"]},
+            {"allround-athlete", "otillo-aland-2027-top10"},
+        )
         self.assertEqual(
             strategy["generated_planning"]["source_mesocycle_decision"],
             "data/mesocycle_decision.json",
