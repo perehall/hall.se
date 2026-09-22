@@ -1,6 +1,50 @@
 {
   "analyses": [
     {
+      "activity_id": 20284663236,
+      "activity_date": "2026-09-22",
+      "activity_name": "Löpning på kvällen",
+      "generated_at_utc": "2026-09-22T20:08:45.269020+00:00",
+      "model": "gpt-5-mini",
+      "analysis_contract": {
+        "pipeline_version": 3,
+        "workout_context_version": 3,
+        "plan_comparison_version": 2,
+        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
+        "analysis_code_sha256": "b2b605b727aaea5a4027070ea282ce432554fdd8a3f4f664cf37251ade67f342"
+      },
+      "performance_marker_id": null,
+      "performance_protocol_key": null,
+      "assessment": {
+        "summary": "12.9 km löpning på 3:47–5:31/km med höga 1‑km‑splitar (flera 4:10–4:20/km) och maxpuls 165 visar ett starkt genomfört kvalitetspass med stigande belastning mot slutet.",
+        "load_interpretation": "Kardiovaskulärt och neuromuskulärt krav är tydligt ökat jämfört med tidigare dagars sim/styrka; inga subjektiva varningar rapporterade.",
+        "confidence": "medium",
+        "facts": [
+          "Löpning: 12,90 km · 1:01:27 · 105 m+ · snittpuls 145,4 · maxpuls 165."
+        ],
+        "interpretations": [
+          "Passet visar förmåga att genomföra längre fartvariationer och innehåller flera snabbare block som ökar neuromuskulär och mekanisk belastning för benen.",
+          "Återhämtningen till nästa pass är ännu inte verifierad av samma-dagsdata."
+        ],
+        "unknowns": [
+          "Användarrapport saknas för dagens RPE/känsla vilket kan påverka återhämtningsbedömning",
+          "Exakt hur mycket av snabbare 1‑km‑splits var avsiktlig kvalitet kontra fartvariation pga terräng/ändringar"
+        ]
+      },
+      "plan_action": {
+        "action": "keep",
+        "target_date": "",
+        "reason": "Mikrocykelns plan och närliggande 2–3 dagars belastning stöds av detta genomförda pass och kräver ingen automatisk reduktion eller vila.",
+        "recommendation": "Följ plan: håll onsdagens sim (3 200 m) och fredagens tröskel som planerat; rapportera RPE/känsla för dagens pass och eventuella lokala benbesvär före nästa huvudpass.",
+        "dose_option_id": "",
+        "requires_approval": false
+      },
+      "auto_apply": {
+        "applied": false,
+        "note": "Ingen automatisk planändring."
+      }
+    },
+    {
       "activity_id": 20272196080,
       "activity_date": "2026-09-21",
       "activity_name": "Styrketräning på kvällen",
@@ -1210,8 +1254,8 @@
       }
     }
   ],
-  "last_trigger_hash": "5503021b8748c8b46c897a8869018ae8ba011dc835e097ad6fc21e7398105729",
-  "last_run_utc": "2026-09-22T16:58:34.752979+00:00",
+  "last_trigger_hash": "127967655d1d1d71109562464554268846d443cefc8f2ccf28bdf451d0305105",
+  "last_run_utc": "2026-09-22T20:08:45.269020+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 3
