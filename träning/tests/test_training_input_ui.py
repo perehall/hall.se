@@ -41,6 +41,11 @@ class TrainingInputUiTests(unittest.TestCase):
                         "training-input:0123456789abcdef01234567",
                     ],
                     "last_training_input_event_key": "training-input:0123456789abcdef01234567",
+                    "training_feedback": {
+                        "text": "Kändes kontrollerat.",
+                        "rpe": 6,
+                        "feeling": ["fresh", "could_do_more"],
+                    },
                 }
             },
         }
@@ -57,15 +62,18 @@ class TrainingInputUiTests(unittest.TestCase):
             'data-processed-event-keys="training-input:aaaaaaaaaaaaaaaaaaaaaaaa,training-input:0123456789abcdef01234567"',
             rendered,
         )
+        self.assertIn('data-reviewed="true"', rendered)
+        self.assertIn("Sparat · RPE 6 · Pigg · Kunde gjort mer", rendered)
+        self.assertIn("Kändes kontrollerat.", rendered)
+        self.assertIn(">Ändra</button>", rendered)
         self.assertIn("Mycket lätt", rendered)
         self.assertIn("Kunde gjort mer", rendered)
-        self.assertIn("Blev 4 × 8", rendered)
         self.assertIn("fetch('/träning/training-api/input'", rendered)
         self.assertIn("NATURAL_LANGUAGE", rendered)
         self.assertIn("waitForProcessed", rendered)
         self.assertIn("cache: 'no-store'", rendered)
         self.assertIn("window.location.replace", rendered)
-        self.assertIn("Sparat ✓ · feedback mottagen", rendered)
+        self.assertIn("Uppdaterar analys…", rendered)
         self.assertIn("processedKeys.includes(eventKey)", rendered)
 
     def test_previous_day_activities_remain_open_for_feedback_after_midnight(self):
@@ -92,9 +100,43 @@ class TrainingInputUiTests(unittest.TestCase):
         rendered = apply_training_input_ui(page, {"days": []}, activities, "2026-09-22")
         self.assertIn('data-activity-id="201"', rendered)
         self.assertIn('data-activity-id="202"', rendered)
-        self.assertIn("Feedback · Enduro", rendered)
-        self.assertIn("Feedback · Styrketräning på kvällen", rendered)
+        self.assertIn(">Enduro</span>", rendered)
+        self.assertIn(">Styrka</span>", rendered)
+        self.assertIn(">Utvärdera</button>", rendered)
         self.assertIn("querySelectorAll('[data-training-input]')", rendered)
+
+    def test_legacy_saved_feedback_renders_as_compact_receipt(self):
+        page = """<html><head><style></style></head><body>
+<!-- training-brain-v1:start --><section>Idag</section><!-- training-brain-v1:end -->
+</body></html>"""
+        activities = {
+            "activities": [
+                {
+                    "id": 401,
+                    "sport_type": "WeightTraining",
+                    "start_date_local": "2026-09-21T20:00:00+02:00",
+                }
+            ]
+        }
+        overrides = {
+            "schema_version": 1,
+            "overrides": {
+                "401": {
+                    "user_report": "RPE 2/10. Känsla: Pigg.",
+                    "last_training_input_event_key": "training-input:aaaaaaaaaaaaaaaaaaaaaaaa",
+                }
+            },
+        }
+        rendered = apply_training_input_ui(
+            page,
+            {"days": []},
+            activities,
+            "2026-09-22",
+            overrides_state=overrides,
+        )
+        self.assertIn(">Styrka</span>", rendered)
+        self.assertIn("Sparat · RPE 2 · Pigg", rendered)
+        self.assertIn(">Ändra</button>", rendered)
 
     def test_no_recent_activity_means_no_input_surface(self):
         page = """<html><head><style></style></head><body>
