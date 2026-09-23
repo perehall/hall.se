@@ -290,7 +290,8 @@
                     "kind": "swim",
                     "text": "Lugn insim",
                     "distance_m": 400,
-                    "intensity": "warmup"
+                    "intensity": "warmup",
+                    "equipment": []
                   }
                 ]
               },
@@ -302,7 +303,8 @@
                     "kind": "swim",
                     "text": "Stabil linje, kontrollerad rotation",
                     "distance_m": 50,
-                    "intensity": "active"
+                    "intensity": "active",
+                    "equipment": []
                   },
                   {
                     "kind": "rest",
@@ -318,7 +320,8 @@
                     "kind": "swim",
                     "text": "Stadigt aerob med stabil kroppslinje",
                     "distance_m": 500,
-                    "intensity": "active"
+                    "intensity": "active",
+                    "equipment": []
                   },
                   {
                     "kind": "rest",
@@ -334,7 +337,8 @@
                     "kind": "swim",
                     "text": "Avslappnad frekvens med bibehållen linje",
                     "distance_m": 50,
-                    "intensity": "active"
+                    "intensity": "active",
+                    "equipment": []
                   },
                   {
                     "kind": "rest",
@@ -343,13 +347,14 @@
                 ]
               },
               {
-                "name": "Nedvarvning",
+                "name": "Avsim",
                 "steps": [
                   {
                     "kind": "swim",
-                    "text": "Mycket lugnt",
+                    "text": "Mycket lugnt avsim",
                     "distance_m": 200,
-                    "intensity": "cooldown"
+                    "intensity": "cooldown",
+                    "equipment": []
                   }
                 ]
               }
@@ -401,7 +406,8 @@
                 "kind": "swim",
                 "text": "Lugn insim",
                 "distance_m": 400,
-                "intensity": "warmup"
+                "intensity": "warmup",
+                "equipment": []
               }
             ]
           },
@@ -413,7 +419,8 @@
                 "kind": "swim",
                 "text": "Stabil linje, kontrollerad rotation",
                 "distance_m": 50,
-                "intensity": "active"
+                "intensity": "active",
+                "equipment": []
               },
               {
                 "kind": "rest",
@@ -429,7 +436,8 @@
                 "kind": "swim",
                 "text": "Stadigt aerob med stabil kroppslinje",
                 "distance_m": 500,
-                "intensity": "active"
+                "intensity": "active",
+                "equipment": []
               },
               {
                 "kind": "rest",
@@ -445,7 +453,8 @@
                 "kind": "swim",
                 "text": "Avslappnad frekvens med bibehållen linje",
                 "distance_m": 50,
-                "intensity": "active"
+                "intensity": "active",
+                "equipment": []
               },
               {
                 "kind": "rest",
@@ -454,19 +463,20 @@
             ]
           },
           {
-            "name": "Nedvarvning",
+            "name": "Avsim",
             "steps": [
               {
                 "kind": "swim",
-                "text": "Mycket lugnt",
+                "text": "Mycket lugnt avsim",
                 "distance_m": 200,
-                "intensity": "cooldown"
+                "intensity": "cooldown",
+                "equipment": []
               }
             ]
           }
         ],
-        "sync_enabled": false,
-        "id": "swim-2026-w39-2026-09-23-swim-3200"
+        "id": "swim-2026-w39-2026-09-23-swim-3200",
+        "sync_enabled": false
       },
       "workout_design": {
         "schema_version": 1,
@@ -520,7 +530,8 @@
                     "total_distance_m": 400
                   },
                   "instruction": "Lugn insim",
-                  "intensity": "warmup"
+                  "intensity": "warmup",
+                  "equipment": []
                 },
                 {
                   "name": "Kroppslinje och rotation",
@@ -531,6 +542,7 @@
                   },
                   "instruction": "Stabil linje, kontrollerad rotation",
                   "intensity": "active",
+                  "equipment": [],
                   "recovery": {
                     "duration_s": 15
                   }
@@ -544,6 +556,7 @@
                   },
                   "instruction": "Stadigt aerob med stabil kroppslinje",
                   "intensity": "active",
+                  "equipment": [],
                   "recovery": {
                     "duration_s": 30
                   }
@@ -557,19 +570,21 @@
                   },
                   "instruction": "Avslappnad frekvens med bibehållen linje",
                   "intensity": "active",
+                  "equipment": [],
                   "recovery": {
                     "duration_s": 15
                   }
                 },
                 {
-                  "name": "Nedvarvning",
+                  "name": "Avsim",
                   "work": {
                     "repetitions": 1,
                     "distance_m": 200,
                     "total_distance_m": 200
                   },
-                  "instruction": "Mycket lugnt",
-                  "intensity": "cooldown"
+                  "instruction": "Mycket lugnt avsim",
+                  "intensity": "cooldown",
+                  "equipment": []
                 }
               ],
               "source": "watch_workout"
@@ -602,7 +617,7 @@
         "provider_type": "Swim",
         "name": "Simning · 3 200 m · aerob/teknik",
         "source_candidate_id": "swim-3200",
-        "source_hash": "933fd53bcd5115ce663040a681763bd5077223486cf932d94064753f3170d24b",
+        "source_hash": "25ef40763b340adec8eca33e5150bb8a61359ba1616b46ddda3f0b8b840d95f2",
         "blocks": [
           {
             "name": "Insim",
@@ -615,7 +630,7 @@
                   "kind": "distance",
                   "meters": 400
                 },
-                "instruction": "Lugn insim",
+                "instruction": "Lugn insim · utan redskap",
                 "intensity_class": "warmup"
               }
             ]
@@ -631,7 +646,7 @@
                   "kind": "distance",
                   "meters": 50
                 },
-                "instruction": "Stabil linje, kontrollerad rotation",
+                "instruction": "Stabil linje, kontrollerad rotation · utan redskap",
                 "intensity_class": "interval"
               },
               {
@@ -658,7 +673,7 @@
                   "kind": "distance",
                   "meters": 500
                 },
-                "instruction": "Stadigt aerob med stabil kroppslinje",
+                "instruction": "Stadigt aerob med stabil kroppslinje · utan redskap",
                 "intensity_class": "interval"
               },
               {
@@ -685,7 +700,7 @@
                   "kind": "distance",
                   "meters": 50
                 },
-                "instruction": "Avslappnad frekvens med bibehållen linje",
+                "instruction": "Avslappnad frekvens med bibehållen linje · utan redskap",
                 "intensity_class": "interval"
               },
               {
@@ -702,7 +717,7 @@
             ]
           },
           {
-            "name": "Nedvarvning",
+            "name": "Avsim",
             "sets": 1,
             "repetitions_per_set": 1,
             "steps": [
@@ -712,7 +727,7 @@
                   "kind": "distance",
                   "meters": 200
                 },
-                "instruction": "Mycket lugnt",
+                "instruction": "Mycket lugnt avsim · utan redskap",
                 "intensity_class": "cooldown"
               }
             ]
@@ -724,11 +739,11 @@
       "device_sync": {
         "status": "synced",
         "transport": "intervals_icu",
-        "source_hash": "933fd53bcd5115ce663040a681763bd5077223486cf932d94064753f3170d24b",
+        "source_hash": "25ef40763b340adec8eca33e5150bb8a61359ba1616b46ddda3f0b8b840d95f2",
         "device_delivery": "unverified",
-        "updated_at_utc": "2026-09-23T11:42:35.393873+00:00",
+        "updated_at_utc": "2026-09-23T13:48:01.014476+00:00",
         "provider_event_id": 138097033,
-        "verified_at_utc": "2026-09-23T11:42:35.393873+00:00"
+        "verified_at_utc": "2026-09-23T13:48:01.014476+00:00"
       }
     },
     {
@@ -786,7 +801,8 @@
                     "kind": "swim",
                     "text": "Insim + teknik enligt etablerad rutin",
                     "distance_m": 600,
-                    "intensity": "warmup"
+                    "intensity": "warmup",
+                    "equipment": []
                   }
                 ]
               },
@@ -798,7 +814,8 @@
                     "kind": "swim",
                     "text": "Aerobt, stabil teknik",
                     "distance_m": 200,
-                    "intensity": "active"
+                    "intensity": "active",
+                    "equipment": []
                   },
                   {
                     "kind": "rest",
@@ -812,9 +829,13 @@
                 "steps": [
                   {
                     "kind": "swim",
-                    "text": "Kontrollerad tröskel med paddlar + dolme",
+                    "text": "Kontrollerad tröskel",
                     "distance_m": 200,
-                    "intensity": "active"
+                    "intensity": "active",
+                    "equipment": [
+                      "paddles",
+                      "pull_buoy"
+                    ]
                   },
                   {
                     "kind": "rest",
@@ -830,7 +851,8 @@
                     "kind": "swim",
                     "text": "Aerobt, återgå till stabil rytm och teknik",
                     "distance_m": 200,
-                    "intensity": "active"
+                    "intensity": "active",
+                    "equipment": []
                   },
                   {
                     "kind": "rest",
@@ -845,7 +867,8 @@
                     "kind": "swim",
                     "text": "Mycket lugnt avsim",
                     "distance_m": 200,
-                    "intensity": "cooldown"
+                    "intensity": "cooldown",
+                    "equipment": []
                   }
                 ]
               }
@@ -877,7 +900,8 @@
                 "kind": "swim",
                 "text": "Insim + teknik enligt etablerad rutin",
                 "distance_m": 600,
-                "intensity": "warmup"
+                "intensity": "warmup",
+                "equipment": []
               }
             ]
           },
@@ -889,7 +913,8 @@
                 "kind": "swim",
                 "text": "Aerobt, stabil teknik",
                 "distance_m": 200,
-                "intensity": "active"
+                "intensity": "active",
+                "equipment": []
               },
               {
                 "kind": "rest",
@@ -903,9 +928,13 @@
             "steps": [
               {
                 "kind": "swim",
-                "text": "Kontrollerad tröskel med paddlar + dolme",
+                "text": "Kontrollerad tröskel",
                 "distance_m": 200,
-                "intensity": "active"
+                "intensity": "active",
+                "equipment": [
+                  "paddles",
+                  "pull_buoy"
+                ]
               },
               {
                 "kind": "rest",
@@ -921,7 +950,8 @@
                 "kind": "swim",
                 "text": "Aerobt, återgå till stabil rytm och teknik",
                 "distance_m": 200,
-                "intensity": "active"
+                "intensity": "active",
+                "equipment": []
               },
               {
                 "kind": "rest",
@@ -936,13 +966,14 @@
                 "kind": "swim",
                 "text": "Mycket lugnt avsim",
                 "distance_m": 200,
-                "intensity": "cooldown"
+                "intensity": "cooldown",
+                "equipment": []
               }
             ]
           }
         ],
-        "sync_enabled": false,
-        "id": "swim-2026-w39-2026-09-25-aerob-threshold-4000"
+        "id": "swim-2026-w39-2026-09-25-aerob-threshold-4000",
+        "sync_enabled": false
       },
       "swim_equipment": {
         "planned": [
@@ -1008,7 +1039,8 @@
                     "total_distance_m": 600
                   },
                   "instruction": "Insim + teknik enligt etablerad rutin",
-                  "intensity": "warmup"
+                  "intensity": "warmup",
+                  "equipment": []
                 },
                 {
                   "name": "Aerob 1",
@@ -1019,6 +1051,7 @@
                   },
                   "instruction": "Aerobt, stabil teknik",
                   "intensity": "active",
+                  "equipment": [],
                   "recovery": {
                     "duration_s": 20
                   }
@@ -1030,8 +1063,12 @@
                     "distance_m": 200,
                     "total_distance_m": 800
                   },
-                  "instruction": "Kontrollerad tröskel med paddlar + dolme",
+                  "instruction": "Kontrollerad tröskel",
                   "intensity": "active",
+                  "equipment": [
+                    "paddles",
+                    "pull_buoy"
+                  ],
                   "recovery": {
                     "duration_s": 25
                   }
@@ -1045,6 +1082,7 @@
                   },
                   "instruction": "Aerobt, återgå till stabil rytm och teknik",
                   "intensity": "active",
+                  "equipment": [],
                   "recovery": {
                     "duration_s": 20
                   }
@@ -1057,7 +1095,8 @@
                     "total_distance_m": 200
                   },
                   "instruction": "Mycket lugnt avsim",
-                  "intensity": "cooldown"
+                  "intensity": "cooldown",
+                  "equipment": []
                 }
               ],
               "source": "watch_workout"
@@ -1090,7 +1129,7 @@
         "provider_type": "Swim",
         "name": "Simning · 4 000 m · aerob + kontrollerad tröskel",
         "source_candidate_id": "swim-aerobic-threshold-4000",
-        "source_hash": "d1730f8e6f06d9307ab6d3d47951a346c56484d2581ef54eae0b023420cac6c8",
+        "source_hash": "9fcd60c075496d2ba5301ad8c850ecb2ec0dd8430864ecc062e85a53774b9e24",
         "blocks": [
           {
             "name": "Insim + teknik",
@@ -1103,7 +1142,7 @@
                   "kind": "distance",
                   "meters": 600
                 },
-                "instruction": "Insim + teknik enligt etablerad rutin",
+                "instruction": "Insim + teknik enligt etablerad rutin · utan redskap",
                 "intensity_class": "warmup"
               }
             ]
@@ -1119,7 +1158,7 @@
                   "kind": "distance",
                   "meters": 200
                 },
-                "instruction": "Aerobt, stabil teknik",
+                "instruction": "Aerobt, stabil teknik · utan redskap",
                 "intensity_class": "interval"
               },
               {
@@ -1146,7 +1185,7 @@
                   "kind": "distance",
                   "meters": 200
                 },
-                "instruction": "Kontrollerad tröskel med paddlar + dolme",
+                "instruction": "Kontrollerad tröskel · paddlar + dolme",
                 "intensity_class": "interval"
               },
               {
@@ -1173,7 +1212,7 @@
                   "kind": "distance",
                   "meters": 200
                 },
-                "instruction": "Aerobt, återgå till stabil rytm och teknik",
+                "instruction": "Aerobt, återgå till stabil rytm och teknik · utan redskap",
                 "intensity_class": "interval"
               },
               {
@@ -1200,7 +1239,7 @@
                   "kind": "distance",
                   "meters": 200
                 },
-                "instruction": "Mycket lugnt avsim",
+                "instruction": "Mycket lugnt avsim · utan redskap",
                 "intensity_class": "cooldown"
               }
             ]
@@ -1212,11 +1251,11 @@
       "device_sync": {
         "status": "synced",
         "transport": "intervals_icu",
-        "source_hash": "d1730f8e6f06d9307ab6d3d47951a346c56484d2581ef54eae0b023420cac6c8",
+        "source_hash": "9fcd60c075496d2ba5301ad8c850ecb2ec0dd8430864ecc062e85a53774b9e24",
         "device_delivery": "unverified",
-        "updated_at_utc": "2026-09-23T11:42:35.902937+00:00",
+        "updated_at_utc": "2026-09-23T13:48:01.205277+00:00",
         "provider_event_id": 138142476,
-        "verified_at_utc": "2026-09-23T11:42:35.902937+00:00"
+        "verified_at_utc": "2026-09-23T13:48:01.205277+00:00"
       }
     },
     {
@@ -1517,9 +1556,9 @@
         "transport": "intervals_icu",
         "source_hash": "9dc12d3e522e49454af7c6ffe216ee9ba323186427181ac1e1ae64a8d6009578",
         "device_delivery": "unverified",
-        "updated_at_utc": "2026-09-23T11:42:36.107987+00:00",
+        "updated_at_utc": "2026-09-23T13:48:01.392314+00:00",
         "provider_event_id": 138097036,
-        "verified_at_utc": "2026-09-23T11:42:36.107987+00:00"
+        "verified_at_utc": "2026-09-23T13:48:01.392314+00:00"
       }
     }
   ],
