@@ -16,6 +16,8 @@ import copy
 import re
 from typing import Any
 
+from swim_lingo import SwimEquipmentError, normalize_equipment
+
 
 WORKOUT_DESIGN_SCHEMA_VERSION = 1
 MAX_CANDIDATES = 4
@@ -158,6 +160,29 @@ def _swim_prescription(day: dict, option: dict) -> dict:
                 continue
             total = repeat * distance_m
             total_distance += total
+            try:
+                if "equipment" in step:
+                    equipment = normalize_equipment(step.get("equipment"))
+                elif not (workout.get("equipment") or []):
+                    # Legacy no-equipment recipes are unambiguous: an empty
+                    # workout-level equipment list means every set is without
+                    # redskap. Tool-using recipes must be explicit per set.
+                    equipment = []
+                else:
+                    return {
+                        "executable": False,
+                        "completeness": "partial",
+                        "blocks": blocks,
+                        "missing": ["swim_step_equipment"],
+                    }
+            except SwimEquipmentError:
+                return {
+                    "executable": False,
+                    "completeness": "partial",
+                    "blocks": blocks,
+                    "missing": ["valid_swim_step_equipment"],
+                }
+
             block = {
                 "name": _text(source_block.get("name")) or "Simning",
                 "work": {
@@ -167,6 +192,7 @@ def _swim_prescription(day: dict, option: dict) -> dict:
                 },
                 "instruction": _text(step.get("text")) or _text(source_block.get("name")),
                 "intensity": _text(step.get("intensity")) or "unspecified",
+                "equipment": equipment,
             }
             if rest_s is not None:
                 block["recovery"] = {"duration_s": rest_s}
