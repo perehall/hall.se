@@ -76,7 +76,7 @@ class TrainingInputUiTests(unittest.TestCase):
         self.assertIn("Uppdaterar analys…", rendered)
         self.assertIn("processedKeys.includes(eventKey)", rendered)
 
-    def test_previous_day_activities_remain_open_for_feedback_after_midnight(self):
+    def test_current_week_activities_remain_open_for_feedback(self):
         page = """<html><head><style></style></head><body>
 <!-- training-brain-v1:start --><section>Idag</section><!-- training-brain-v1:end -->
 </body></html>"""
@@ -97,7 +97,7 @@ class TrainingInputUiTests(unittest.TestCase):
                 },
             ]
         }
-        rendered = apply_training_input_ui(page, {"days": []}, activities, "2026-09-22")
+        rendered = apply_training_input_ui(page, {"days": []}, activities, "2026-09-23")
         self.assertIn('data-activity-id="201"', rendered)
         self.assertIn('data-activity-id="202"', rendered)
         self.assertIn(">Enduro</span>", rendered)
@@ -174,7 +174,26 @@ class TrainingInputUiTests(unittest.TestCase):
         self.assertIn("Senaste kommentaren.", rendered)
         self.assertNotIn("Första kommentaren.", rendered)
 
-    def test_no_recent_activity_means_no_input_surface(self):
+    def test_all_current_week_activities_are_editable_without_three_item_cap(self):
+        page = """<html><head><style></style></head><body>
+<!-- training-brain-v1:start --><section>Idag</section><!-- training-brain-v1:end -->
+</body></html>"""
+        activities = {
+            "activities": [
+                {
+                    "id": 501 + index,
+                    "sport_type": "WeightTraining" if index % 2 else "Enduro",
+                    "start_date_local": f"2026-09-{21 + (index // 2):02d}T{8 + index:02d}:00:00+02:00",
+                }
+                for index in range(5)
+            ]
+        }
+        rendered = apply_training_input_ui(page, {"days": []}, activities, "2026-09-23")
+        for activity_id in range(501, 506):
+            self.assertIn(f'data-activity-id="{activity_id}"', rendered)
+
+
+    def test_previous_week_activity_has_no_input_surface(self):
         page = """<html><head><style></style></head><body>
 <!-- training-brain-v1:start --><section>Idag</section><!-- training-brain-v1:end -->
 </body></html>"""
@@ -183,11 +202,11 @@ class TrainingInputUiTests(unittest.TestCase):
                 {
                     "id": 301,
                     "sport_type": "Run",
-                    "start_date_local": "2026-09-19T12:00:00+02:00",
+                    "start_date_local": "2026-09-20T12:00:00+02:00",
                 }
             ]
         }
-        rendered = apply_training_input_ui(page, {"days": []}, activities, "2026-09-22")
+        rendered = apply_training_input_ui(page, {"days": []}, activities, "2026-09-23")
         self.assertNotIn("data-training-input", rendered)
 
 
