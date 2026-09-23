@@ -4,7 +4,7 @@
       "activity_id": 20284663236,
       "activity_date": "2026-09-22",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-09-23T00:17:53.024782+00:00",
+      "generated_at_utc": "2026-09-23T04:46:26.967142+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 3,
@@ -16,8 +16,8 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört 4×8 min tröskelpass (löpning); användarrapport: stark känsla och kvarvarande kraft indikerar god tolerans.",
-        "load_interpretation": "Kardiovaskulär belastning från tisdagens tröskel plus senaste 3 dagars längre löpningar och enduro ger sammanhängande stimulus men inga entydiga varningssignaler.",
+        "summary": "Genomfört 4×8 min tröskelpass med god känsla; sista intervallen var snabbare och du hade kraft kvar.",
+        "load_interpretation": "Passet realiserar mikrocykelns löptröskelstimulus och ökar den närbelastning som planeringen redan räknat med.",
         "confidence": "medium",
         "facts": [
           "Löpning · tröskel: 12,90 km · 1:01:27 · 105 m+ · snittpuls 145,4 · maxpuls 165.",
@@ -25,19 +25,19 @@
           "Planstatus 2026-09-22: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Detta pass uppfyller mikrocykelns kontrollerad löptröskel‑stimulus utan indikation på överdrivet uttröttande genomförande.",
-          "Eftersom simningen flyttades till 2026-09-23 och dagen efter tröskel är planerad simning, är fortsatt plan oförändrad om du känner dig fräsch imorgon."
+          "Passet betyder att planerad löptröskelstimulus för mikrocykeln är uppfylld och bör räknas som genomfört för progressed/hold‑beslut.",
+          "Eftersom simningen redan flyttats till 2026-09-23 och närbelastningen ökar, bör närmaste dagarnas simplan bekräftas mot aktuell återhämtning."
         ],
         "unknowns": [
-          "Hur du känner dig nästa morgon (24–48 h återhämtningsstatus).",
-          "Eventuella lokal muskeltröttheter eller stelhet efter enduro + tröskel som kan påverka simstyrka/teknik."
+          "Hur du känner dig nästa 24–48 h (subjektiv återhämtning)",
+          "om du vill behålla simningen 2026-09-23 eller justera den baserat på dagskänsla"
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-09-23",
-        "reason": "Simningen var redan omplanerad till 2026-09-23 och tröskelpasset genomförde mikrocykelns löpstimulus utan tecken på problem.",
-        "recommendation": "Behåll planerad simning 2026-09-23 (Simning · 3 200 m · aerob/teknik). Om du vaknar med ovanlig trötthet eller lokal smärta, vila simningen och rapportera känsla så återplanerar vi.",
+        "reason": "Mikrocykeln räknar tröskelstimulus som genomfört och simningen var avsedd att flyttas till 2026-09-23.",
+        "recommendation": "Behåll planerad simning 2026-09-23 (Simning · 3 200 m · aerob/teknik). Rapportera hur benen känns morgonen efter för eventuell konservativ justering.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -1256,8 +1256,8 @@
       }
     }
   ],
-  "last_trigger_hash": "276dedbddf2383fd40f8cc8a2a74ba4906071a10495e8548427d4258bfd66ea5",
-  "last_run_utc": "2026-09-23T00:17:53.024782+00:00",
+  "last_trigger_hash": "d91371c76aa27594b95fcae5f1afc89de029274abb11e05da255d4163dbc1ea7",
+  "last_run_utc": "2026-09-23T04:46:26.967142+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 3
