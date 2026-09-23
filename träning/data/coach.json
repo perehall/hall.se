@@ -1,6 +1,52 @@
 {
   "analyses": [
     {
+      "activity_id": 20300494236,
+      "activity_date": "2026-09-23",
+      "activity_name": "Simning på kvällen",
+      "generated_at_utc": "2026-09-23T21:31:20.529289+00:00",
+      "model": "gpt-5-mini",
+      "analysis_contract": {
+        "pipeline_version": 3,
+        "workout_context_version": 3,
+        "plan_comparison_version": 2,
+        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
+        "analysis_code_sha256": "b2b605b727aaea5a4027070ea282ce432554fdd8a3f4f664cf37251ade67f342"
+      },
+      "performance_marker_id": null,
+      "performance_protocol_key": null,
+      "assessment": {
+        "summary": "Genomförd 3 200 m simning matchade planerat struktur och dos; stabila 500 m‑set och snabbare 50:or i slutet indikerar god genomförandekvalitet.",
+        "load_interpretation": "Kardiovaskulärt och tekniskt stimulus för sim är levererat idag; inga uppenbara negativa efterverkningar rapporterade samma dag.",
+        "confidence": "medium",
+        "facts": [
+          "Simning: 3,20 km · 58:57 · snittpuls 133,5 · maxpuls 152.",
+          "Planstatus 2026-09-23: dagen är markerad genomförd i coachens beslutsunderlag.",
+          "Planerat simpass 3200 m; genomfört 3200 m. Genomförd setstruktur matchar planens struktur."
+        ],
+        "interpretations": [
+          "Passet fullföljde det planerade teknisk/aeroba receptet och visar förmåga att genomföra 3,2k med bibehållen fartstabilitet i 500 m‑seten.",
+          "Avslutande snabba 50:or tyder på kvarvarande kapacitet och att sessionen tolererades väl i simkomponenten."
+        ],
+        "unknowns": [
+          "Subjektiv återhämtning nästa 24–72 h (ingen användarrapport idag)",
+          "Eventuell lokal muskeltrötthet från föregående dagars löpning/enduro som påverkar kommande pass"
+        ]
+      },
+      "plan_action": {
+        "action": "keep",
+        "target_date": "",
+        "reason": "Passet fullföljde det planerade sim‑aerob/teknik‑receptet exakt och levererade avsett stimulus, så ingen ändring behövs de närmaste 2–3 dagarna.",
+        "recommendation": "Fortsätt enligt nuvarande mikrocykel; vila/återhämta normalt och genomför planerat styrke‑ eller vilopass nästa dag enligt schema.",
+        "dose_option_id": "",
+        "requires_approval": false
+      },
+      "auto_apply": {
+        "applied": false,
+        "note": "Ingen automatisk planändring."
+      }
+    },
+    {
       "activity_id": 20284663236,
       "activity_date": "2026-09-22",
       "activity_name": "Löpning på kvällen",
@@ -1219,45 +1265,10 @@
         "applied": false,
         "note": "Ingen automatisk planändring."
       }
-    },
-    {
-      "activity_id": 19883021281,
-      "activity_date": "2026-08-24",
-      "activity_name": "Styrketräning på natten",
-      "generated_at_utc": "2026-08-24T22:01:44.909901+00:00",
-      "model": "gpt-5-mini",
-      "assessment": {
-        "summary": "Styrkepasset efter kvällens enduro ger ackumulerad närbelastning; tisdagens löpkvalitet bör reduceras enligt tidigare villkor.",
-        "load_interpretation": "Enduro + efterföljande styrka samma dag ökade samlad lokal och kardiovaskulär belastning inför tisdag.",
-        "confidence": "medium",
-        "facts": [
-          "Styrka: 29:05 · snittpuls 84 · maxpuls 108.",
-          "Planstatus 2026-08-24: dagens planerade pass är genomfört i coachens beslutsunderlag."
-        ],
-        "interpretations": [
-          "Kombinationen av långt enduropass och efterföljande styrka minskar marginalen för ett planerat tröskelpass nästa dag.",
-          "coachen har redan föreslagit nedskalning till 3×8 min; dagens data stödjer den konservativa justeringen."
-        ],
-        "unknowns": [
-          "Subjektiv dagskänsla, sömn och lokal bentrötthet inför tisdag morgon.",
-          "Detaljer om styrkepassets belastningsnivå (set/reps/failure) saknas."
-        ]
-      },
-      "plan_action": {
-        "action": "keep",
-        "target_date": "2026-08-25",
-        "reason": "Tidigare auto-beslut att skala ner bygger på dagens faktiska dubbla pass och är redan konservativt formulerat.",
-        "recommendation": "Behåll den villkorade nedskalningen till 3×8 min/90 s jogg för tisdag; om subjektiv dagskänsla tisdag morgon är klart god kan ursprungliga 3×10 min återställas efter bedömning.",
-        "requires_approval": false
-      },
-      "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
-      }
     }
   ],
-  "last_trigger_hash": "18cc73a687c59763a71e3262fa0e2b567eae6356aa412c62765b99ca5db78352",
-  "last_run_utc": "2026-09-23T16:59:35.637501+00:00",
+  "last_trigger_hash": "821ad434196798449feb31a89e77ee01e7ff6eba5aa6c6deaa32ec9a155c9dfe",
+  "last_run_utc": "2026-09-23T21:31:20.529289+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 3
