@@ -3,6 +3,8 @@ import html
 import json
 from pathlib import Path
 
+from swim_lingo import equipment_lingo
+
 ROOT = Path(__file__).resolve().parents[1]
 PLAN_FILE = ROOT / "data" / "plan.json"
 UPCOMING_FILE = ROOT / "data" / "upcoming_week.json"
@@ -90,13 +92,13 @@ def _work_dose(work):
     return ""
 
 
-def _recovery_text(recovery):
+def _recovery_text(recovery, *, swim=False):
     recovery = recovery or {}
     parts = []
     duration = _duration(recovery.get("duration_s"))
     instruction = str(recovery.get("instruction") or "").strip()
     if duration:
-        parts.append(f"vila {duration}")
+        parts.append(f"v {duration}" if swim else f"vila {duration}")
     if instruction:
         parts.append(instruction)
     return " · ".join(parts)
@@ -115,7 +117,11 @@ def prescription_html(day):
     for block in blocks:
         dose = _work_dose(block.get("work"))
         instruction = str(block.get("instruction") or block.get("name") or "").strip()
-        recovery = _recovery_text(block.get("recovery"))
+        is_swim = "equipment" in block or block.get("component") == "swim"
+        if "equipment" in block:
+            equipment = equipment_lingo(block.get("equipment"))
+            instruction = f"{instruction} · {equipment}" if instruction else equipment
+        recovery = _recovery_text(block.get("recovery"), swim=is_swim)
         if recovery:
             instruction = (
                 f"{instruction} · {recovery}"
