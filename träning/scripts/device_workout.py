@@ -15,6 +15,8 @@ import json
 import re
 from typing import Any
 
+from swim_lingo import equipment_lingo
+
 
 DEVICE_WORKOUT_SCHEMA_VERSION = 1
 SUPPORTED_SPORTS = {"swim": "Swim", "run": "Run", "bike": "Ride"}
@@ -100,10 +102,14 @@ def _work_step(block: dict) -> dict:
             f"device_workout: block {_text(block.get('name'))!r} saknar tid eller distans"
         )
 
+    instruction = _text(block.get("instruction")) or _text(block.get("name"))
+    if "equipment" in block:
+        instruction = f"{instruction} · {equipment_lingo(block.get('equipment'))}"
+
     step = {
         "kind": "work",
         "duration": duration,
-        "instruction": _text(block.get("instruction")) or _text(block.get("name")),
+        "instruction": instruction,
         "intensity_class": _intensity_class(block),
     }
     target = _primary_target(block)
