@@ -6,6 +6,7 @@ from datetime import date, timedelta
 from pathlib import Path
 
 from finalize_signal_ui import strength_sheet
+from swim_lingo import equipment_lingo
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "data"
@@ -42,19 +43,6 @@ STATUS_UI = {
     "open": ("open", "ÖPPET"),
 }
 
-EQUIPMENT_LABELS = {
-    "paddles": "paddlar",
-    "paddlar": "paddlar",
-    "pull_buoy": "dolme",
-    "dolme": "dolme",
-    "fins": "fenor",
-    "fenor": "fenor",
-    "snorkel": "snorkel",
-    "kickboard": "platta",
-    "platta": "platta",
-}
-
-
 def load_json(path, fallback=None):
     if not path.exists():
         return {} if fallback is None else fallback
@@ -86,17 +74,12 @@ def add_css(style_text):
 def fmt_equipment(value):
     if value is None:
         return "ej registrerat"
-    if value in ("none", "inga"):
-        return "inga"
-    if isinstance(value, str):
-        if value in ("tbd", "to_be_determined"):
-            return "fastställs med exakt pass"
-        return EQUIPMENT_LABELS.get(value, value)
-    if isinstance(value, list):
-        if not value:
-            return "inga"
-        return " + ".join(EQUIPMENT_LABELS.get(str(item), str(item)) for item in value)
-    raise RuntimeError(f"Kommande vecka: ogiltigt hjälpmedelsvärde {value!r}")
+    if isinstance(value, str) and value in ("tbd", "to_be_determined"):
+        return "fastställs med exakt pass"
+    try:
+        return equipment_lingo(value)
+    except ValueError as exc:
+        raise RuntimeError(f"Kommande vecka: ogiltigt redskapsvärde {value!r}") from exc
 
 
 def swim_equipment_html(day):
@@ -108,7 +91,7 @@ def swim_equipment_html(day):
             f"Kommande vecka: simpass {day.get('date')} saknar swim_equipment.planned"
         )
     return (
-        '<div class="swim-equipment-line"><strong>Hjälpmedel:</strong> '
+        '<div class="swim-equipment-line"><strong>Redskap:</strong> '
         + html.escape(fmt_equipment(config.get("planned")))
         + '</div>'
     )
@@ -248,7 +231,7 @@ def render_preview(upcoming, current_key, upcoming_key):
     for day in days:
         required.append(f'id="dag-{day["date"]}"')
         if day.get("sport") == "swim":
-            required.append("Hjälpmedel:")
+            required.append("Redskap:")
     required.extend([
         'class="reference-chip"',
         'id="strengthSheet"',
