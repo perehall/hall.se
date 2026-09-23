@@ -54,6 +54,7 @@ def swim_day():
                             "text": "Lugn insim",
                             "distance_m": 400,
                             "intensity": "warmup",
+                            "equipment": [],
                         }
                     ],
                 },
@@ -66,6 +67,7 @@ def swim_day():
                             "text": "Stabil linje, kontrollerad rotation",
                             "distance_m": 50,
                             "intensity": "active",
+                            "equipment": [],
                         },
                         {"kind": "rest", "duration_s": 15},
                     ],
@@ -79,6 +81,7 @@ def swim_day():
                             "text": "Stadigt aerob med stabil kroppslinje",
                             "distance_m": 500,
                             "intensity": "active",
+                            "equipment": [],
                         },
                         {"kind": "rest", "duration_s": 30},
                     ],
@@ -104,6 +107,7 @@ def swim_day():
                             "text": "Mycket lugnt",
                             "distance_m": 200,
                             "intensity": "cooldown",
+                            "equipment": [],
                         }
                     ],
                 },
@@ -240,6 +244,7 @@ class WorkoutDesignTests(unittest.TestCase):
         self.assertEqual(prescription["blocks"][1]["work"]["distance_m"], 50)
         self.assertEqual(prescription["blocks"][2]["work"]["repetitions"], 4)
         self.assertEqual(prescription["blocks"][2]["work"]["distance_m"], 500)
+        self.assertTrue(all(block["equipment"] == [] for block in prescription["blocks"]))
         self.assertTrue(validate_workout_design(day, "simning"))
 
     def test_swim_candidate_can_own_exact_4000m_structure(self):
@@ -256,14 +261,14 @@ class WorkoutDesignTests(unittest.TestCase):
                     {
                         "name": "Insim + teknik",
                         "steps": [
-                            {"kind": "swim", "text": "Insim + teknik", "distance_m": 600, "intensity": "warmup"}
+                            {"kind": "swim", "text": "Insim + teknik", "distance_m": 600, "intensity": "warmup", "equipment": []}
                         ],
                     },
                     {
                         "name": "Aerob 1",
                         "repeat": 6,
                         "steps": [
-                            {"kind": "swim", "text": "Aerobt", "distance_m": 200, "intensity": "active"},
+                            {"kind": "swim", "text": "Aerobt", "distance_m": 200, "intensity": "active", "equipment": []},
                             {"kind": "rest", "duration_s": 20},
                         ],
                     },
@@ -271,7 +276,7 @@ class WorkoutDesignTests(unittest.TestCase):
                         "name": "Kontrollerad tröskel",
                         "repeat": 4,
                         "steps": [
-                            {"kind": "swim", "text": "Tröskel paddlar + dolme", "distance_m": 200, "intensity": "active"},
+                            {"kind": "swim", "text": "Kontrollerad tröskel", "distance_m": 200, "intensity": "active", "equipment": ["paddles", "pull_buoy"]},
                             {"kind": "rest", "duration_s": 25},
                         ],
                     },
@@ -286,7 +291,7 @@ class WorkoutDesignTests(unittest.TestCase):
                     {
                         "name": "Avsim",
                         "steps": [
-                            {"kind": "swim", "text": "Lugnt", "distance_m": 200, "intensity": "cooldown"}
+                            {"kind": "swim", "text": "Avsim", "distance_m": 200, "intensity": "cooldown", "equipment": []}
                         ],
                     },
                 ],
@@ -310,7 +315,20 @@ class WorkoutDesignTests(unittest.TestCase):
         self.assertEqual(candidate["id"], option["id"])
         self.assertEqual(candidate["prescription"]["total_distance_m"], 4000)
         self.assertEqual(len(candidate["prescription"]["blocks"]), 5)
-        self.assertIn("paddlar", candidate["prescription"]["blocks"][2]["instruction"].lower())
+        self.assertEqual(candidate["prescription"]["blocks"][2]["instruction"], "Kontrollerad tröskel")
+        self.assertEqual(candidate["prescription"]["blocks"][2]["equipment"], ["paddles", "pull_buoy"])
+        self.assertTrue(all(block["equipment"] == [] for i, block in enumerate(candidate["prescription"]["blocks"]) if i != 2))
+
+    def test_tool_using_swim_recipe_requires_equipment_per_set(self):
+        day = swim_day()
+        day["watch_workout"]["equipment"] = ["paddles"]
+        day["watch_workout"]["blocks"][1]["steps"][0].pop("equipment", None)
+        day["dose_options"][0]["watch_workout"] = day["watch_workout"]
+
+        design = build_workout_design(day, {"days": [day]}, strategy())
+        candidate = design["candidates"][0]
+        self.assertFalse(candidate["prescription"]["executable"])
+        self.assertIn("swim_step_equipment", candidate["prescription"]["missing"])
 
     def test_threshold_progression_selects_current_microcycle_step(self):
         day = threshold_day()
