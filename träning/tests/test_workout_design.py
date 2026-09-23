@@ -95,6 +95,7 @@ def swim_day():
                             "text": "Avslappnad frekvens med bibehållen linje",
                             "distance_m": 50,
                             "intensity": "active",
+                            "equipment": [],
                         },
                         {"kind": "rest", "duration_s": 15},
                     ],
@@ -284,7 +285,7 @@ class WorkoutDesignTests(unittest.TestCase):
                         "name": "Aerob 2",
                         "repeat": 6,
                         "steps": [
-                            {"kind": "swim", "text": "Aerobt", "distance_m": 200, "intensity": "active"},
+                            {"kind": "swim", "text": "Aerobt", "distance_m": 200, "intensity": "active", "equipment": []},
                             {"kind": "rest", "duration_s": 20},
                         ],
                     },
