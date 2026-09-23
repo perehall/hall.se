@@ -4,7 +4,7 @@
       "activity_id": 20284663236,
       "activity_date": "2026-09-22",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-09-23T13:47:59.689044+00:00",
+      "generated_at_utc": "2026-09-23T16:59:35.637501+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 3,
@@ -16,8 +16,8 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "4×8 min tröskel genomfört med god kontroll; användarrapport och mätdata visar stark känsla och kvarvarande kraft.",
-        "load_interpretation": "Närbelastning: krävande tröskelpass utfört i en mikrocykel med lång distans och enduro; inga direkta varningssignaler i återhämtningsunderlaget eller rapport.",
+        "summary": "Genomfört 4×8 min tröskel med god kontroll; användarrapport och pulsfakta visar kontrollerad genomföring och kraft kvar på sista intervallen.",
+        "load_interpretation": "Passet ger planerat tröskelstimulus och kräver ingen omedelbar reduktion utifrån de närmaste 2–3 dagarnas faktiska belastning.",
         "confidence": "medium",
         "facts": [
           "Löpning · tröskel: 12,90 km · 1:01:27 · 105 m+ · snittpuls 145,4 · maxpuls 165.",
@@ -25,19 +25,19 @@
           "Planstatus 2026-09-22: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
         "interpretations": [
-          "Passet levererar mikrocykelns löptröskelstimulus utan tecken på överbelastning; god kontroll och kvarvarande kraft talar för att planens simexponering kan behållas nästa dag.",
-          "Givet föregående långpass och enduro räcker närbelastningen för att motivera att hålla simningen som planerad men inte att öka nästa nyckeldos."
+          "Passet levererade avsett kontrollerad löptröskel‑stimulus och sista intervallen ökades vilket indikerar absorberbar arbetskapacitet idag.",
+          "Givet närbelastningen finns inga föregående 2–3 dagars pass som tvingar reducering; kommande simning 2026-09-23 är planerad och bör kunna behållas."
         ],
         "unknowns": [
-          "Subjektiv återhämtning under kommande 24–48 h (förutom dagens återhämtningsunderlaget trend).",
-          "Detaljer om benlokal trötthet/ömhet som kan påverka sim‑styrka‑kombination nästa dag."
+          "Subjektiv återhämtning kommande 24–72 h (användarrapport säger pigg idag men framtida respons okänd).",
+          "Detaljer om eventuell lokal muskulär trötthet i benen före simningen imorgon saknas."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "2026-09-23",
-        "reason": "Tröskelstimulus genomförd kontrollerat och närbelastningen stödjer att simningen kan genomföras som planerat.",
-        "recommendation": "Behåll simningen 2026-09-23 enligt plan (Simning · 3 200 m · aerob/teknik). Om du känner ovanlig lokal bentrötthet på morgonen, minska styrkedelen eller välj lättare styrkevariant.",
+        "reason": "Tröskelstimulus är genomfört kontrollerat och närbelastningen föregående/kommande dagar tillåter att planerad simning behålls.",
+        "recommendation": "Behåll planerad simning 2026-09-23 (Simning · 3 200 m · aerob/teknik). Om du känner ovanlig ben-/muskeltrötthet imorgon, överväg att minska simintensiteten till teknikorienterat lugnt arbete.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -1256,8 +1256,8 @@
       }
     }
   ],
-  "last_trigger_hash": "48f9197f989be9061591806ed5a736923bed16cf436864a5daaa945731e48667",
-  "last_run_utc": "2026-09-23T13:47:59.689044+00:00",
+  "last_trigger_hash": "18cc73a687c59763a71e3262fa0e2b567eae6356aa412c62765b99ca5db78352",
+  "last_run_utc": "2026-09-23T16:59:35.637501+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 3
