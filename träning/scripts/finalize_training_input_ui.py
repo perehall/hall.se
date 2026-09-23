@@ -475,7 +475,8 @@ def apply_training_input_ui(
             keys.append(legacy)
         return keys[-8:]
 
-    recent = []
+    week_start = today_date - timedelta(days=today_date.weekday())
+    current_week = []
     for activity in activities_state.get("activities") or []:
         if not isinstance(activity.get("id"), int):
             continue
@@ -486,10 +487,12 @@ def apply_training_input_ui(
             activity_date = datetime.strptime(value, "%Y-%m-%d").date()
         except ValueError:
             continue
-        age_days = (today_date - activity_date).days
-        if 0 <= age_days <= 1:
-            recent.append(activity)
-    recent.sort(key=lambda activity: str(activity.get("start_date_local") or ""), reverse=True)
+        if week_start <= activity_date <= today_date:
+            current_week.append(activity)
+    current_week.sort(
+        key=lambda activity: str(activity.get("start_date_local") or ""),
+        reverse=True,
+    )
 
     primary = None
     if 'class="today-outcome"' in page:
@@ -497,7 +500,7 @@ def apply_training_input_ui(
         if day:
             today_activities = [
                 activity
-                for activity in recent
+                for activity in current_week
                 if local_date(activity) == today
             ]
             primary = matching_activity(day, today_activities)
@@ -516,9 +519,9 @@ def apply_training_input_ui(
         rendered_ids.add(primary["id"])
 
     secondary = [
-        activity for activity in recent
+        activity for activity in current_week
         if activity.get("id") not in rendered_ids
-    ][:3]
+    ]
     if secondary:
         marker = "<!-- training-brain-v1:end -->"
         pos = page.find(marker)
