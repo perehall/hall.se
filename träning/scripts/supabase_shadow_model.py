@@ -113,6 +113,7 @@ def activity_records(activities_doc: dict[str, Any]) -> tuple[list[dict[str, Any
                 {
                     "provider": "strava",
                     "provider_activity_id": source_id,
+                    "lap_ordinal": index + 1,
                     "lap_index": int(lap.get("lap_index", index)),
                     "name": lap.get("name"),
                     "elapsed_time_s": lap.get("elapsed_time_s"),
