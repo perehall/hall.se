@@ -1,0 +1,109 @@
+name: Verify Strava webhook runtime
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "infra/strava-webhook/**"
+      - ".github/workflows/verify-strava-webhook.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    env:
+      CALLBACK_ORIGIN: https://hall-se.per-e-hall.workers.dev
+      CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
+      CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
+      VERIFY_TOKEN: ${{ secrets.STRAVA_WEBHOOK_VERIFY_TOKEN }}
+      PATH_SECRET: ${{ secrets.STRAVA_WEBHOOK_PATH_SECRET }}
+    steps:
+      - name: Verify live callback and Strava subscription
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          for name in CLIENT_ID CLIENT_SECRET VERIFY_TOKEN PATH_SECRET; do
+            if [ -z "${!name:-}" ]; then
+              echo "::error::Required secret $name is not configured."
+              exit 1
+            fi
+          done
+
+          health_file=$(mktemp)
+          live=0
+          for attempt in 1 2 3 4 5 6 7 8 9 10 11 12; do
+            status=$(curl --silent --show-error --max-time 5               --output "$health_file"               --write-out '%{http_code}'               "$CALLBACK_ORIGIN/healthz" || true)
+            if [ "$status" = "200" ]; then
+              live=1
+              break
+            fi
+            sleep 10
+          done
+          if [ "$live" != "1" ]; then
+            echo "::error::Strava webhook workers.dev route is not live."
+            exit 1
+          fi
+
+          expected_path_fp=$(python -c 'import hashlib,os; print(hashlib.sha256(os.environ["PATH_SECRET"].strip().encode()).hexdigest()[:12])')
+          expected_verify_fp=$(python -c 'import hashlib,os; print(hashlib.sha256(os.environ["VERIFY_TOKEN"].strip().encode()).hexdigest()[:12])')
+          python - "$health_file" "$expected_path_fp" "$expected_verify_fp" <<'PY'
+          import json, sys
+          path, expected_path, expected_verify = sys.argv[1:]
+          with open(path, encoding="utf-8") as fh:
+              data = json.load(fh)
+          required_true = (
+              "owner_configured",
+              "subscription_configured",
+              "github_dispatch_configured",
+          )
+          missing = [key for key in required_true if data.get(key) is not True]
+          if missing:
+              raise SystemExit("Worker runtime binding missing: " + ", ".join(missing))
+          if data.get("webhook_path_fingerprint") != expected_path:
+              raise SystemExit("WEBHOOK_PATH_SECRET differs between GitHub and Worker runtime")
+          if data.get("verify_token_fingerprint") != expected_verify:
+              raise SystemExit("STRAVA verify token differs between GitHub and Worker runtime")
+          PY
+
+          path_token=$(python -c 'import hashlib,os; print(hashlib.sha256(os.environ["PATH_SECRET"].strip().encode()).hexdigest()[:32])')
+          callback_url="$CALLBACK_ORIGIN/strava/$path_token"
+          challenge="github-runtime-check"
+
+          challenge_file=$(mktemp)
+          status=$(curl --silent --show-error --max-time 5             --get             --output "$challenge_file"             --write-out '%{http_code}'             --data-urlencode "hub.mode=subscribe"             --data-urlencode "hub.challenge=$challenge"             --data-urlencode "hub.verify_token=$VERIFY_TOKEN"             "$callback_url")
+          if [ "$status" != "200" ]; then
+            echo "::error::Strava callback challenge returned HTTP $status."
+            exit 1
+          fi
+          python - "$challenge_file" "$challenge" <<'PY'
+          import json, sys
+          path, expected = sys.argv[1:]
+          with open(path, encoding="utf-8") as fh:
+              body = json.load(fh)
+          if body.get("hub.challenge") != expected:
+              raise SystemExit("Callback did not echo the expected hub.challenge")
+          PY
+
+          subscriptions_file=$(mktemp)
+          curl --silent --show-error --fail --max-time 10             --get             --output "$subscriptions_file"             --data-urlencode "client_id=$CLIENT_ID"             --data-urlencode "client_secret=$CLIENT_SECRET"             "https://www.strava.com/api/v3/push_subscriptions"
+
+          CALLBACK_URL="$callback_url" python - "$subscriptions_file" <<'PY'
+          import json, os, sys
+          with open(sys.argv[1], encoding="utf-8") as fh:
+              subscriptions = json.load(fh)
+          if not isinstance(subscriptions, list):
+              raise SystemExit("Unexpected Strava subscription response")
+          if len(subscriptions) != 1:
+              raise SystemExit(f"Expected exactly one Strava subscription, got {len(subscriptions)}")
+          actual = subscriptions[0].get("callback_url")
+          expected = os.environ["CALLBACK_URL"]
+          if actual != expected:
+              raise SystemExit("Registered Strava callback URL does not match the live Worker callback")
+          print("Strava webhook runtime and subscription verified.")
+          PY
