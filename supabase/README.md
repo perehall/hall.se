@@ -74,7 +74,7 @@ Before any live consumer is allowed to read from Supabase, every automatic shado
 The canary verifies:
 
 - the committed source hash and count manifest for the current canonical snapshot;
-- exact natural-key sets for activities, laps, overrides, feedback, goals, state documents, mesocycles, microcycles, planned workouts and coach evaluations;
+- exact natural-key sets for mutable current-state entities and presence of all canonical keys in append-retained history entities;
 - every persisted `state_documents.payload` by recomputing its canonical hash from the database value.
 
 This catches missing rows, stale/extra rows and persisted document drift that an in-transaction writer verification alone cannot prove.
@@ -86,3 +86,17 @@ The manual `Supabase shadow import` workflow therefore exposes three modes:
 - `audit`: read-only comparison of the already persisted shadow against current canonical JSON.
 
 A canary failure remains non-blocking for the canonical training update. Supabase is still not a source of truth and no planner, coach or frontend reads from it.
+
+
+## Current plan versus retained history
+
+The first read-back canary exposed an important distinction: replanning can change a future workout key, so simple upserts leave older plan rows behind.
+
+`training.planned_workouts` therefore carries explicit snapshot currentness:
+
+- `is_current = true` identifies only workouts in the latest canonical plan snapshot;
+- `last_seen_source_hash` records the canonical snapshot that last activated the row;
+- each shadow write clears previous current flags and activates the new set in the same transaction;
+- older workout rows are retained for history instead of being destructively deleted.
+
+The read-back canary requires an exact match for the current planned-workout set. Historical entities such as activities, feedback and coach evaluations are append-retained; for them the canary requires all canonical rows to be present but permits older database history.
