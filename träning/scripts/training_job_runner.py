@@ -60,6 +60,10 @@ def build_stages(ingest_mode: str) -> list[Stage]:
             "validate_ingested_data",
             python_stage("validate_training_data.py", "--allow-stale-goal"),
         ),
+        Stage(
+            "promote_activity_backend",
+            python_stage("supabase_activity_backend.py", "--mode", "promote"),
+        ),
         persist_token,
         Stage(
             "sync_performance_details",
