@@ -100,6 +100,18 @@ def assert_schema(cur: psycopg.Cursor[Any]) -> None:
         select count(*)
         from information_schema.columns
         where table_schema = 'training'
+          and table_name = 'activity_laps'
+          and column_name = 'lap_ordinal'
+        """
+    )
+    if cur.fetchone()[0] != 1:
+        raise RuntimeError("Supabase activity_laps lap_ordinal migration is not deployed")
+
+    cur.execute(
+        """
+        select count(*)
+        from information_schema.columns
+        where table_schema = 'training'
           and table_name = 'planned_workouts'
           and column_name in ('is_current', 'last_seen_source_hash')
         """
@@ -201,7 +213,7 @@ def import_payload(cur: psycopg.Cursor[Any], payload: dict[str, Any]) -> dict[tu
         row["activity_id"] = require_activity_id(
             activity_ids, provider, provider_activity_id
         )
-        upsert(cur, "activity_laps", row, ("activity_id", "lap_index"))
+        upsert(cur, "activity_laps", row, ("activity_id", "lap_ordinal"))
 
     # Overrides are current semantic state, not append history.
     cur.execute(
@@ -339,7 +351,7 @@ def verify_payload(
             require_activity_id(
                 activity_ids, row["provider"], row["provider_activity_id"]
             ),
-            int(row["lap_index"]),
+            int(row["lap_ordinal"]),
         )
         for row in payload["activity_laps"]
     }
@@ -347,14 +359,14 @@ def verify_payload(
         activity_uuid_values = sorted({str(key[0]) for key in source_lap_keys})
         cur.execute(
             """
-            select activity_id::text, lap_index
+            select activity_id::text, lap_ordinal
             from training.activity_laps
             where activity_id::text = any(%s)
             """,
             (activity_uuid_values,),
         )
         db_lap_keys = {(row[0], int(row[1])) for row in cur.fetchall()}
-        normalized_source = {(str(activity_id), lap_index) for activity_id, lap_index in source_lap_keys}
+        normalized_source = {(str(activity_id), lap_ordinal) for activity_id, lap_ordinal in source_lap_keys}
         missing_laps = normalized_source - db_lap_keys
         if missing_laps:
             raise RuntimeError(
