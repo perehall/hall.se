@@ -84,11 +84,16 @@ def assert_schema(cur: psycopg.Cursor[Any]) -> None:
         from information_schema.columns
         where table_schema = 'training'
           and table_name = 'activities'
-          and column_name in ('provider', 'provider_activity_id', 'raw')
+          and column_name in (
+            'provider', 'provider_activity_id', 'raw',
+            'is_current', 'last_seen_source_hash'
+          )
         """
     )
-    if cur.fetchone()[0] != 3:
-        raise RuntimeError("Supabase training.activities contract does not match backend v1")
+    if cur.fetchone()[0] != 5:
+        raise RuntimeError(
+            "Supabase training.activities currentness contract does not match promoted backend"
+        )
 
     cur.execute(
         """
@@ -162,8 +167,16 @@ def require_activity_id(
 def import_payload(cur: psycopg.Cursor[Any], payload: dict[str, Any]) -> dict[tuple[str, str], Any]:
     activity_ids: dict[tuple[str, str], Any] = {}
 
+    # Activities are now an explicit current snapshot. Historical rows are
+    # retained but cannot feed athlete-state/planning once absent from source.
+    cur.execute(
+        "update training.activities set is_current = false where provider = 'strava' and is_current"
+    )
+
     for source in payload["activities"]:
         row = dict(source)
+        row["is_current"] = True
+        row["last_seen_source_hash"] = payload["source_hash"]
         activity_id = upsert(
             cur,
             "activities",
@@ -290,13 +303,18 @@ def verify_payload(
         "activities",
         "provider_activity_id",
         activity_source_ids,
-        extra_sql="provider = %s",
+        extra_sql="provider = %s and is_current = true",
         extra_params=("strava",),
     )
     if activity_count != len(activity_source_ids):
         raise RuntimeError(
             f"activities verification mismatch: source={len(activity_source_ids)} db={activity_count}"
         )
+    cur.execute(
+        "select count(*) from training.activities where provider = 'strava' and is_current"
+    )
+    if int(cur.fetchone()[0]) != len(activity_source_ids):
+        raise RuntimeError("activities current snapshot contains stale/extra rows")
 
     source_lap_keys = {
         (
