@@ -78,16 +78,16 @@ def build_stages(ingest_mode: str) -> list[Stage]:
             python_stage("supabase_runtime_state.py", "--scope", "athlete"),
         ),
         Stage("adaptive_planning", python_stage("adaptive_planner.py"), attempts=2),
-        Stage(
-            "commit_planning_runtime_backend",
-            python_stage("supabase_runtime_state.py", "--scope", "planning"),
-        ),
         Stage("validate_adaptive_plan", python_stage("validate_training_data.py")),
         Stage("rollover_calendar", python_stage("rollover_week.py")),
         Stage("apply_plan_overrides", python_stage("apply_plan_overrides.py")),
         Stage("validate_rollover", python_stage("validate_training_data.py")),
         Stage("materialize_workout_designs", python_stage("materialize_workout_designs.py")),
         Stage("validate_workout_designs", python_stage("validate_workout_designs.py")),
+        Stage(
+            "commit_planning_runtime_backend",
+            python_stage("supabase_runtime_state.py", "--scope", "planning"),
+        ),
         Stage("sync_weather", python_stage("sync_weather.py")),
         Stage(
             "load_wellness_context",
