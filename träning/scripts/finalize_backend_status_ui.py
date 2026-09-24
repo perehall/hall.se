@@ -39,7 +39,7 @@ def page_paths() -> list[Path]:
 
 def remove_existing(page: str) -> str:
     return re.sub(
-        re.escape(START) + r".*?" + re.escape(END),
+        r"[ \\t]*" + re.escape(START) + r".*?" + re.escape(END) + r"[ \\t]*\\n?",
         "",
         page,
         flags=re.S,
@@ -133,12 +133,16 @@ def patch_page(page: str, publishable_key: str) -> str:
         raise RuntimeError("Backendstatus: systemlistan saknas")
 
     row, script = status_markup(publishable_key)
+    list_prefix = block[: list_match.start(1)]
+    list_body = list_match.group(1).rstrip()
+    list_suffix = block[list_match.start(2) :]
     patched_block = (
-        block[: list_match.end(1)]
+        list_prefix
+        + list_body
         + "\n      "
         + row
         + "\n    "
-        + block[list_match.start(2) :]
+        + list_suffix
     )
 
     page = page[: dialog.start()] + patched_block + script + page[dialog.end() :]
