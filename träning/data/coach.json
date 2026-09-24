@@ -4,7 +4,7 @@
       "activity_id": 20300494236,
       "activity_date": "2026-09-23",
       "activity_name": "Simning på kvällen",
-      "generated_at_utc": "2026-09-24T07:50:17.801575+00:00",
+      "generated_at_utc": "2026-09-24T11:46:04.260730+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 3,
@@ -16,8 +16,8 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomförd 3 200 m simning enligt plan med stabil huvudserie (4×500 m på ~1:28/100m) och kontrollerad RPE 6/10.",
-        "load_interpretation": "Passet ger sim‑aerob och teknikstimulus som planerat och är förenligt med mikrocykelns avsikt; inget akut återhämtningsproblem rapporterat.",
+        "summary": "Genomfört 3 200 m simpass följt planmallen med stabil 500 m‑serie (~1:28/100 m) och kontrollerade 50:or; användaren rapporterar bra kontroll och RPE 6/10.",
+        "load_interpretation": "Passet kompletterar mikrocykeln som sim‑anchor utan att öka närbelastningen för de kommande 48–72 timmarna.",
         "confidence": "medium",
         "facts": [
           "Swim: 3,20 km · 58:57 · snittpuls 133,5 · maxpuls 152.",
@@ -26,19 +26,19 @@
           "Planerat simpass 3200 m; genomfört 3200 m. Genomförd setstruktur matchar planens struktur."
         ],
         "interpretations": [
-          "Stabilitet i 4×500 visar att aktuell aerob/teknisk dos absorberades utan prekänt trötthetstecken.",
-          "Passet stödjer planens fortsatta simprogression mot 4 000 m‑mallen men ensam prestation räcker inte för automatisk upptrappning."
+          "Passet levererade önskat simstimulus och bekräftar absorberbar 3.2k‑exponering för mikrocykeln.",
+          "Trots subjektiv möjlighet till mer var pulsnivå och stabilitet i 500:orna inte entydigt underlag för automatisk dosökning."
         ],
         "unknowns": [
-          "Subsequent 24–72h recovery response (användarrapport var samma dag).",
-          "Eventuella lokal muskeltröskor eller ömhet efter passet som kan påverka styrka/löpning"
+          "Hur återhämtningen utvecklas de kommande 24–72 h (subjektivt/trötthet)",
+          "Om fredagens planerade 4 000 m med paddlar+dolme fortfarande ska hållas oförändrad om användaren hade känt sig betydligt piggare"
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "",
-        "reason": "Passet genomfördes som planerat och absorberades väl enligt data och användarrapport.",
-        "recommendation": "Behåll nuvarande plan; utför planerat vila eller lätt dag 2026-09-24 och genomför det föreslagna 4 000 m‑passet den 2026-09-25 som planerat.",
+        "reason": "Passet fullföljer mikrocykelns sim‑anchor och ger inget sakligt skäl att skala upp eller ersätta kommande planerade pass.",
+        "recommendation": "Behåll nuvarande plan utan ändring; vila/återhämta ordentligt idag och rapportera hur du känner dig imorgon kväll inför fredagens 4 000 m.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -1268,8 +1268,8 @@
       }
     }
   ],
-  "last_trigger_hash": "e90956ba28d43ad24e6ea3cb001b1390e8d84ec8c0df516fdb8cf621c95776de",
-  "last_run_utc": "2026-09-24T07:50:17.801575+00:00",
+  "last_trigger_hash": "19fd09a9bdb7dd4bbc5ac2389546879717a03294225d1d6b69d28e833ee998ab",
+  "last_run_utc": "2026-09-24T11:46:04.260730+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 3

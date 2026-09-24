@@ -166,7 +166,7 @@
       "status": "preliminary",
       "planning_status": "preliminary",
       "session": "Simning · 3 200 m · aerob/teknik",
-      "reason": "Primärt simstimulus — konservativ progression av sammanhängande setlängd och teknikkvalitet; placerad dag 2 för låg benbelastning efter fast Enduro dag 1. Valet utgår från ett observerat värde 3200 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Katalogen innehåller inget högre verifierat steg, därför konsolideras dosen. Veckobeslut: progress; materialiserad relation: hold.",
+      "reason": "Låg benbelastningsdag efter fixed enduro: teknisk aerob sim (≥3 200 m) uppfyller ett av två simkrav utan att belasta benen. Valet utgår från ett observerat värde 3200 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
       "development_focus": "Teknisk kvalitet och stabil aerob rytm; simningen ska kunna stödja helheten med låg mekanisk kostnad för benen.",
       "sport": "swim",
       "priority_role": "anchor",
@@ -285,7 +285,7 @@
             "microcycle": 2,
             "option_id": "swim-3200",
             "relation": "hold",
-            "reason": "Mikrocykelbeslutet valde progress och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt."
+            "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt."
           }
         ]
       },
@@ -293,7 +293,7 @@
         "microcycle": 2,
         "option_id": "swim-3200",
         "relation": "hold",
-        "reason": "Mikrocykelbeslutet valde progress och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt."
+        "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt."
       },
       "baseline_option_id": "swim-3200",
       "dose_open": false,
@@ -413,7 +413,7 @@
         },
         "progression_from_previous": {
           "relation": "hold",
-          "reason": "Mikrocykelbeslutet valde progress och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
+          "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
           "demonstrated_floor_option_id": "swim-3200"
         },
         "candidates": [
@@ -519,7 +519,7 @@
         "selection": {
           "method": "deterministic_constraint_scoring",
           "preferred_dose_option_id": "swim-3200",
-          "reason_for_today": "Mikrocykelbeslutet valde progress och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt."
+          "reason_for_today": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt."
         }
       },
       "device_workout": {
@@ -654,18 +654,27 @@
         "transport": "intervals_icu",
         "source_hash": "3e28b92276f557f857920a9f9bf78b32cfe7b8299094f25f6c47132994cd4be2",
         "device_delivery": "unverified",
-        "updated_at_utc": "2026-09-24T07:50:19.660255+00:00",
+        "updated_at_utc": "2026-09-24T11:46:06.012805+00:00",
         "provider_event_id": 138167834,
-        "verified_at_utc": "2026-09-24T07:50:19.660255+00:00"
+        "verified_at_utc": "2026-09-24T11:46:06.012805+00:00"
       }
     },
     {
       "date": "2026-09-30",
       "label": "Onsdag",
+      "status": "open",
+      "planning_status": "open",
+      "session": "Ingen planerad träning",
+      "reason": "Ingen träning är planerad som standard på denna dag. En ledig dag är inte i sig skäl att lägga till ett pass; eventuell ändring ska tjäna mikrocykeln och bygga på faktisk information.",
+      "sport": "open"
+    },
+    {
+      "date": "2026-10-01",
+      "label": "Torsdag",
       "status": "preliminary",
       "planning_status": "preliminary",
       "session": "Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg",
-      "reason": "Behåller kontrollerad 4×8‑struktur som demonstrationströskel; nylig 4×8 visar god kontroll och kräver konsolidering innan eventuell progression. Valet utgår från ett observerat värde 32 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
+      "reason": "Bibehålla kontrollerad tröskel (4×8‑struktur) enligt mesocykelbeslut; ingen progression denna mikrocykel utan absorberbarhetsindikator. Valet utgår från ett observerat värde 32 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
       "development_focus": "Jämn, kontrollerad tröskelkaraktär. Progression ska främst öka absorberbar arbetstid, inte jaga högre intensitet.",
       "sport": "run",
       "priority_role": "anchor",
@@ -679,7 +688,7 @@
       "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
       "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc2",
       "microcycle_index": 2,
-      "microcycle_day": 3,
+      "microcycle_day": 4,
       "microcycle_slot": "run_threshold_2",
       "performance_marker_id": "run-threshold-control",
       "dose_options": [
@@ -955,13 +964,13 @@
       },
       "device_workout": {
         "schema_version": 1,
-        "external_id": "hall-device:2026-09-30:run:run_threshold_2",
-        "date": "2026-09-30",
+        "external_id": "hall-device:2026-10-01:run:run_threshold_2",
+        "date": "2026-10-01",
         "sport": "run",
         "provider_type": "Run",
         "name": "Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg",
         "source_candidate_id": "run-threshold-4x8",
-        "source_hash": "8823720772feaa90f87477a0a0839c160b4a14fd61ca3333ff3a74a4c9925344",
+        "source_hash": "d442103aed3e399bc60c0503d661493c51af65db24bab21e0ff45f2760a296e1",
         "blocks": [
           {
             "name": "Arbetsdel",
@@ -995,22 +1004,19 @@
         "transport": "intervals_icu"
       },
       "device_sync": {
-        "status": "synced",
+        "status": "deferred",
         "transport": "intervals_icu",
-        "source_hash": "8823720772feaa90f87477a0a0839c160b4a14fd61ca3333ff3a74a4c9925344",
-        "device_delivery": "unverified",
-        "updated_at_utc": "2026-09-24T07:50:20.123291+00:00",
-        "provider_event_id": 138404295,
-        "verified_at_utc": "2026-09-24T07:50:20.123291+00:00"
+        "source_hash": "d442103aed3e399bc60c0503d661493c51af65db24bab21e0ff45f2760a296e1",
+        "device_delivery": "unverified"
       }
     },
     {
-      "date": "2026-10-01",
-      "label": "Torsdag",
+      "date": "2026-10-02",
+      "label": "Fredag",
       "status": "preliminary",
       "planning_status": "preliminary",
       "session": "Simning · 3 200 m · aerob/teknik + styrka/core · ca 35 min · styrkemall",
-      "reason": "Andra simexponeringen kombineras med styrka/core för att säkra styrkekravet utan extra ren styrkedag; placerad med lämpligt avstånd från löpkvalitet. Valet utgår från ett observerat värde 36.0167 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
+      "reason": "Kombinerar andra simexponeringen med styrka/core för att uppfylla both swim och strength_core‑kraven utan ett extra benbelastande pass; placeras inte dag‑efter‑enduro och ligger mellan tröskel och långt pass för återhämtning. Valet utgår från ett observerat värde 36.0167 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
       "development_focus": "Andra simexponeringen hålls aerob/teknisk och kombineras med kontrollerad styrka/core för att skydda båda kapaciteterna utan ett extra benkvalitetspass.",
       "sport": "strength",
       "priority_role": "protected_support",
@@ -1029,7 +1035,7 @@
       "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
       "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc2",
       "microcycle_index": 2,
-      "microcycle_day": 4,
+      "microcycle_day": 5,
       "microcycle_slot": "swim_strength_3",
       "optional_stimuli": [
         "plyometric"
@@ -1148,7 +1154,7 @@
             ]
           }
         ],
-        "id": "swim-2026-w40-2026-10-01-preview",
+        "id": "swim-2026-w40-2026-10-02-preview",
         "sync_enabled": false
       },
       "swim_equipment": {
@@ -1703,21 +1709,12 @@
       }
     },
     {
-      "date": "2026-10-02",
-      "label": "Fredag",
-      "status": "open",
-      "planning_status": "open",
-      "session": "Ingen planerad träning",
-      "reason": "Ingen träning är planerad som standard på denna dag. En ledig dag är inte i sig skäl att lägga till ett pass; eventuell ändring ska tjäna mikrocykeln och bygga på faktisk information.",
-      "sport": "open"
-    },
-    {
       "date": "2026-10-03",
       "label": "Lördag",
       "status": "preliminary",
       "planning_status": "preliminary",
       "session": "Löpning · lugn distans · 120 min",
-      "reason": "Långt lugnt löppass för löptålighet (~90–120 min) placerat ≥48 h efter tröskel för återhämtning och absorbering; uppfyller mesocykelns tålighetsmål. Valet utgår från ett observerat värde 119.767 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
+      "reason": "Långt lugnt löppass (~90–120 min) placerat ≥48 h från tröskel för löptålighet och återhämtning. Valet utgår från ett observerat värde 119.767 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
       "development_focus": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt.",
       "sport": "run",
       "priority_role": "flex",
