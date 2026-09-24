@@ -4,7 +4,7 @@
       "activity_id": 20300494236,
       "activity_date": "2026-09-23",
       "activity_name": "Simning på kvällen",
-      "generated_at_utc": "2026-09-24T14:27:42.712071+00:00",
+      "generated_at_utc": "2026-09-24T14:37:15.774348+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 3,
@@ -16,8 +16,8 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Stabilt genomfört 3 200 m simpass med kontrollerad huvudserie (4×500m) och god subjektiv kontroll; RPE 6/10.",
-        "load_interpretation": "Passet är ett aerob/teknikstimulus som kompletterar mikrocykeln utan att kräva omedelbar reduktion eller vila.",
+        "summary": "Genomfört strukturerat 3 200 m simpass med stabila 4×500m i 1:28‑tempo och kontrollerade 50‑serier; användaren rapporterar RPE 6/10 och att det fanns mer capacity.",
+        "load_interpretation": "Passet ger avsedd sim‑aerob och teknisk stimulus och ligger i linje med mikrocykelns plan; ingen akut återhämtningsvarning i närbelastningen.",
         "confidence": "medium",
         "facts": [
           "Swim: 3,20 km · 58:57 · snittpuls 133,5 · maxpuls 152.",
@@ -26,19 +26,19 @@
           "Planerat simpass 3200 m; genomfört 3200 m. Genomförd setstruktur matchar planens struktur."
         ],
         "interpretations": [
-          "Stabilitet i 4×500 (pace delta 0.2s) visar god genomförbar aerob kapacitet för dosen.",
-          "Subjektiv känsla att mer fanns kvar indikerar möjlighet att bibehålla plan utan reduktion; en progression kräver dock explicita kriterier och är inte automatisk."
+          "Passet bekräftar att 3.2k‑mallen absorberades väl och levererade planerat aerob/tekniskt stimulus för simningen.",
+          "Subjektiv rapport + stabila 500m‑serier tyder på att progression mot 4k med kontrollerad tröskel (planerat 2026-09-25) kan genomföras men kräver fortsatt observation i 48–72h."
         ],
         "unknowns": [
-          "Nästa 2–3 dagars faktiska återhämtning/aktivitet (närbelastningen) kan påverka val för kommande högre dos.",
-          "Teknisk detaljer i simsättet (stroke) saknas för att bedöma om tröskel i sim kan säkras vid snabbare tempon."
+          "Hur benen/lokal mekanisk trötthet svarar inför kommande löppass",
+          "Eventuella sena dags‑/nattreaktioner som påverkar nästa 24–72h"
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "",
-        "reason": "Passet uppfyllde planens anchor‑stimulus och togs väl emot (RPE 6/10) utan tecken på överbelastning.",
-        "recommendation": "Fortsätt enligt befintlig plan; håll fredagens 4 000 m‑session oförändrad och prioritera paddlar/dolme på tröskeldelen enligt recept. Ingen extra vila eller reduktion behövs.",
+        "reason": "Senaste simpasset matchar mikrocykelns stimulus och användaren kände kapacitet kvar; inga defensiva ändringar behövs.",
+        "recommendation": "Följ plan: behåll fredagens 4 000 m‑session enligt plan; observera subjektiv återhämtning och rapportera om ökad trötthet eller smärta inom 48–72 timmar.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -1268,8 +1268,8 @@
       }
     }
   ],
-  "last_trigger_hash": "66efee677d6e3d618af13e3cdf3721015e1366cedfaef290ecf162623efb7152",
-  "last_run_utc": "2026-09-24T14:27:42.712071+00:00",
+  "last_trigger_hash": "7b9d4b591b8ee55c830dcfa8631168cae22acefd2df437ba4d8335a824089021",
+  "last_run_utc": "2026-09-24T14:37:15.774348+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 3
