@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 
 import { handleRequest, webhookPathTokenFromSecret } from "../src/worker.mjs";
 
@@ -201,4 +202,11 @@ test("training GUI input rejects non-custom hostname before request processing",
     throw new Error("GitHub must not be called from an unapproved hostname");
   });
   assert.equal(response.status, 404);
+});
+
+
+test("Wrangler keeps workers.dev enabled for the registered Strava callback", () => {
+  const config = readFileSync(new URL("../wrangler.jsonc", import.meta.url), "utf8");
+  assert.match(config, /"workers_dev"\s*:\s*true/);
+  assert.match(config, /"name"\s*:\s*"hall-se"/);
 });
