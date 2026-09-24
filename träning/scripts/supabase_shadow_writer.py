@@ -90,6 +90,20 @@ def assert_schema(cur: psycopg.Cursor[Any]) -> None:
     if cur.fetchone()[0] != 3:
         raise RuntimeError("Supabase training.activities contract does not match backend v1")
 
+    cur.execute(
+        """
+        select count(*)
+        from information_schema.columns
+        where table_schema = 'training'
+          and table_name = 'planned_workouts'
+          and column_name in ('is_current', 'last_seen_source_hash')
+        """
+    )
+    if cur.fetchone()[0] != 2:
+        raise RuntimeError(
+            "Supabase planned_workouts currentness migration is not deployed"
+        )
+
 
 def upsert(
     cur: psycopg.Cursor[Any],
@@ -206,6 +220,12 @@ def import_payload(cur: psycopg.Cursor[Any], payload: dict[str, Any]) -> dict[tu
     for row in payload["microcycles"]:
         upsert(cur, "microcycles", dict(row), ("id",))
 
+    # Current plan state is a snapshot, while previous workout rows are retained
+    # as history. Flip currentness transactionally before activating this snapshot.
+    cur.execute(
+        "update training.planned_workouts set is_current = false where is_current"
+    )
+
     for source in payload["planned_workouts"]:
         row = dict(source)
         linked_provider = row.pop("linked_provider")
@@ -217,6 +237,8 @@ def import_payload(cur: psycopg.Cursor[Any], payload: dict[str, Any]) -> dict[tu
             if linked_provider and linked_provider_activity_id
             else None
         )
+        row["is_current"] = True
+        row["last_seen_source_hash"] = payload["source_hash"]
         upsert(cur, "planned_workouts", row, ("workout_key",))
 
     for source in payload["coach_evaluations"]:
@@ -318,9 +340,21 @@ def verify_payload(
 
     workout_keys = [row["workout_key"] for row in payload["planned_workouts"]]
     if count_matching(
-        cur, "planned_workouts", "workout_key", workout_keys
+        cur,
+        "planned_workouts",
+        "workout_key",
+        workout_keys,
+        extra_sql="is_current = true",
     ) != len(workout_keys):
         raise RuntimeError("planned_workouts verification mismatch")
+
+    cur.execute("select count(*) from training.planned_workouts where is_current")
+    current_workout_count = int(cur.fetchone()[0])
+    if current_workout_count != len(workout_keys):
+        raise RuntimeError(
+            "planned_workouts current snapshot mismatch: "
+            f"source={len(workout_keys)} db={current_workout_count}"
+        )
 
     document_rows = payload["state_documents"]
     document_keys = [row["document_key"] for row in document_rows]
