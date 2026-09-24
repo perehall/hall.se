@@ -37,13 +37,20 @@ def page_paths() -> list[Path]:
     return unique
 
 
-def remove_existing(page: str) -> str:
-    return re.sub(
-        r"[ \\t]*" + re.escape(START) + r".*?" + re.escape(END) + r"[ \\t]*\\n?",
-        "",
-        page,
+def replace_existing(page: str, row: str, script: str) -> str | None:
+    pattern = re.compile(
+        re.escape(START) + r".*?" + re.escape(END),
         flags=re.S,
     )
+    matches = list(pattern.finditer(page))
+    if not matches:
+        return None
+    if len(matches) != 2:
+        raise RuntimeError(
+            f"Backendstatus: väntade 2 markerade block, hittade {len(matches)}"
+        )
+    replacements = iter((row, script))
+    return pattern.sub(lambda _match: next(replacements), page, count=2)
 
 
 def status_markup(publishable_key: str) -> tuple[str, str]:
@@ -117,7 +124,10 @@ def status_markup(publishable_key: str) -> tuple[str, str]:
 
 
 def patch_page(page: str, publishable_key: str) -> str:
-    page = remove_existing(page)
+    row, script = status_markup(publishable_key)
+    existing = replace_existing(page, row, script)
+    if existing is not None:
+        return existing
 
     dialog = re.search(
         r'(<dialog id="trainingSystemSheet"(?:\s[^>]*)?>.*?</dialog>)',
@@ -132,7 +142,6 @@ def patch_page(page: str, publishable_key: str) -> str:
     if not list_match:
         raise RuntimeError("Backendstatus: systemlistan saknas")
 
-    row, script = status_markup(publishable_key)
     list_prefix = block[: list_match.start(1)]
     list_body = list_match.group(1).rstrip()
     list_suffix = block[list_match.start(2) :]
