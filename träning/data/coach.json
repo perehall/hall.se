@@ -4,7 +4,7 @@
       "activity_id": 20314473143,
       "activity_date": "2026-09-24",
       "activity_name": "Evening Mountain Bike Ride",
-      "generated_at_utc": "2026-09-24T18:51:06.367148+00:00",
+      "generated_at_utc": "2026-09-24T19:15:18.653077+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 3,
@@ -16,27 +16,27 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "80 min spontan lugn stig‑MTB/XC genomförd på vilodag — 19.0 km, 207 m höjd, snittpuls 126 bpm; registreras som separat träning.",
-        "load_interpretation": "Passet ökar närbelastning senaste 2–3 dagarna som extra MTB/XC‑/mekanisk exponering utan att ersätta planerade pass.",
+        "summary": "80 min spontan lugn stig‑MTB/XC (19.0 km, 207 m höjd) genomförd på planerad vilodag; passet räknas som faktisk belastning.",
+        "load_interpretation": "Passet adderar en ytterligare låg‑intensiv MTB/XC‑exponering i senaste 2–3 dagars fönster och påverkar närbelastningsbedömningen konservativt.",
         "confidence": "medium",
         "facts": [
           "MTB/XC: 19,04 km · 1:22:56 · 207 m+ · snittpuls 126,4 · maxpuls 149.",
           "Användarrapport: Cirka 80 min lugn stig-MTB. Dagen var planerad som vilodag."
         ],
         "interpretations": [
-          "Teknisk/neuromuskulär och mekanisk belastning adderas; passet var lugnt enligt användaren men räknas som faktisk träning för microcykeln.",
-          "Ingen av de planerade framtida passen (följande 2–3 d) bör automatiskt upptrappas — ändring kräver övervägande av total närbelastning."
+          "Genomfört pass var låg‑intensivt MTB/XC/tekniskt och visar god tolerans för en spontan 80‑minuters stigtur utan rapporterad trötthet",
+          "Eftersom det var vilodag och räknas som separat träning bör kommande 2–3 dagars plan bedömas mot ökad faktisk närbelastning (enduro+MTB/XC+sim/​löpning)"
         ],
         "unknowns": [
-          "Subjektiv återhämtning nästa 24–72 h (användarrapport var för samma dag)",
-          "Detaljerad lokal muskeltrötthet eller skador efter stigkörning"
+          "Subjektiv återhämtning nästa 24–72 h (användarrapport saknar senare uppföljning)",
+          "Detaljerad lokal muskulär trötthet i ben efter teknisk stigkörning saknas"
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "",
-        "reason": "Passet är en separat lugn MTB/XC‑exponering och kräver ingen automatisk reduktion eller vila i planens närmaste 2–3 dagar.",
-        "recommendation": "Behåll nuvarande plan oförändrad; ta en lugn dag eller aktiv återhämtning i morgon om du känner lokal trötthet. Rapportera om ovanlig stelhet/smärta.",
+        "reason": "Passet var lågintensivt, planens närmaste dagar innehåller skyddade sim‑ och löppass och ingen omedelbar reduktion krävs.",
+        "recommendation": "Behåll nuvarande plan oförändrad; observera självkänsla och benstatus imorgon och rapportera om trötthet eller lokal smärta.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -1277,8 +1277,8 @@
       }
     }
   ],
-  "last_trigger_hash": "d5720c80b16cc667d0176f3dc369bcf169a3568667bd753a4cbc16004d73fcc8",
-  "last_run_utc": "2026-09-24T18:51:06.367148+00:00",
+  "last_trigger_hash": "5c67d2cb97ce5e49a3853de51f387ce0f98fa8562f1a0bc5ef24182afe67ccd4",
+  "last_run_utc": "2026-09-24T19:15:18.653077+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 3
