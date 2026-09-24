@@ -60,6 +60,15 @@ def write_json(path: Path, value: dict[str, Any]) -> None:
     )
 
 
+def safe_error_detail(exc: Exception) -> str:
+    # RuntimeError messages in this module are explicit contract failures and
+    # contain no credentials. Driver/network exceptions may include connection
+    # metadata, so only their type is logged.
+    if type(exc) is RuntimeError:
+        return f"RuntimeError:{exc}"
+    return type(exc).__name__
+
+
 def build_activity_snapshot(
     data_dir: Path = DATA,
 ) -> dict[str, Any]:
@@ -630,13 +639,13 @@ def main(argv: list[str] | None = None) -> int:
                 last_error = exc
                 print(
                     "SUPABASE_ACTIVITY_PROMOTE_RETRY "
-                    f"attempt={attempt}/3 error={type(exc).__name__}"
+                    f"attempt={attempt}/3 error={safe_error_detail(exc)}"
                 )
                 if attempt < 3:
                     time.sleep(attempt * 5)
         print(
             "SUPABASE_ACTIVITY_BACKEND_FAILED "
-            f"{type(last_error).__name__}"
+            f"{safe_error_detail(last_error)}"
         )
         return 1
 
@@ -649,7 +658,7 @@ def main(argv: list[str] | None = None) -> int:
         )
     except Exception as exc:
         print(
-            f"SUPABASE_ACTIVITY_BACKEND_FAILED {type(exc).__name__}"
+            f"SUPABASE_ACTIVITY_BACKEND_FAILED {safe_error_detail(exc)}"
         )
         return 1
     return 0
