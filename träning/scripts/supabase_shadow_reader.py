@@ -15,7 +15,6 @@ import os
 from datetime import datetime, timezone
 from typing import Any
 
-import psycopg
 
 from supabase_shadow_model import build_shadow_payload, canonical_hash
 
@@ -97,7 +96,7 @@ def expected_key_sets(payload: dict[str, Any]) -> dict[str, set[Any]]:
     }
 
 
-def fetch_actual_key_sets(cur: psycopg.Cursor[Any]) -> dict[str, set[Any]]:
+def fetch_actual_key_sets(cur: Any) -> dict[str, set[Any]]:
     cur.execute("select provider, provider_activity_id from training.activities")
     activities = {(row[0], row[1]) for row in cur.fetchall()}
 
@@ -163,7 +162,7 @@ def fetch_actual_key_sets(cur: psycopg.Cursor[Any]) -> dict[str, set[Any]]:
     }
 
 
-def verify_state_documents(cur: psycopg.Cursor[Any], payload: dict[str, Any]) -> None:
+def verify_state_documents(cur: Any, payload: dict[str, Any]) -> None:
     expected = {
         row["document_key"]: {
             "source_hash": row["source_hash"],
@@ -200,7 +199,7 @@ def verify_state_documents(cur: psycopg.Cursor[Any], payload: dict[str, Any]) ->
         )
 
 
-def verify_manifest(cur: psycopg.Cursor[Any], payload: dict[str, Any]) -> None:
+def verify_manifest(cur: Any, payload: dict[str, Any]) -> None:
     key = f"supabase-shadow:{payload['source_hash']}"
     cur.execute(
         """
@@ -230,6 +229,10 @@ def verify_manifest(cur: psycopg.Cursor[Any], payload: dict[str, Any]) -> None:
 
 
 def audit() -> dict[str, Any]:
+    # Keep the database driver out of the normal training/test dependency graph.
+    # Only the dedicated backend workflow installs and imports psycopg.
+    import psycopg
+
     payload = build_shadow_payload()
     expected = expected_key_sets(payload)
 
