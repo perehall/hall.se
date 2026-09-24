@@ -25,11 +25,19 @@ class SupabaseShadowReaderTests(unittest.TestCase):
 
     def test_compare_key_sets_rejects_stale_rows(self):
         with self.assertRaisesRegex(RuntimeError, "extra=.*stale"):
-            compare_key_sets("activities", {"wanted"}, {"wanted", "stale"})
+            compare_key_sets("activities", {"wanted"}, {"wanted", "stale"}, exact=True)
+
+    def test_compare_key_sets_allows_historical_extra_rows_when_not_exact(self):
+        compare_key_sets(
+            "activities",
+            {"wanted"},
+            {"wanted", "historical"},
+            exact=False,
+        )
 
     def test_compare_key_sets_rejects_missing_rows(self):
         with self.assertRaisesRegex(RuntimeError, "missing=.*wanted"):
-            compare_key_sets("activities", {"wanted"}, set())
+            compare_key_sets("activities", {"wanted"}, set(), exact=False)
 
     def test_expected_keys_use_external_activity_identity(self):
         payload = {
