@@ -45,6 +45,10 @@ class TrainingWorkflowWriterTests(unittest.TestCase):
         )
         self.assertIn("promote_activity_backend", runner)
         self.assertIn("supabase_activity_backend.py", runner)
+        self.assertIn("commit_athlete_runtime_backend", runner)
+        self.assertIn("commit_planning_runtime_backend", runner)
+        self.assertIn("commit_final_runtime_backend", runner)
+        self.assertIn("supabase_runtime_state.py", runner)
 
     def test_generated_snapshots_are_never_rebased_and_conflicts_retry_cleanly(self):
         update = self.update_job_text()
@@ -68,6 +72,7 @@ class TrainingWorkflowWriterTests(unittest.TestCase):
             'träning/data/planning_policy.json',
             'träning/data/workout_catalog.json',
             'träning/scripts/adaptive_planner.py',
+            'träning/scripts/supabase_runtime_state.py',
             'träning/scripts/race_contracts.py',
         ):
             self.assertIn(path, workflow)
