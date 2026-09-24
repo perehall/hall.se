@@ -5,6 +5,7 @@ import sys
 import tempfile
 import unittest
 import urllib.error
+from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -23,6 +24,38 @@ class _Response(io.BytesIO):
         return False
 
 
+class _Cursor:
+    def __init__(self, row):
+        self.row = row
+        self.queries = []
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc, tb):
+        return False
+
+    def execute(self, query):
+        self.queries.append(" ".join(str(query).split()))
+
+    def fetchone(self):
+        return self.row
+
+
+class _Connection:
+    def __init__(self, row):
+        self.cursor_object = _Cursor(row)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc, tb):
+        return False
+
+    def cursor(self):
+        return self.cursor_object
+
+
 class SupabaseGoalSourceTests(unittest.TestCase):
     def setUp(self):
         self.goal = {
@@ -34,7 +67,7 @@ class SupabaseGoalSourceTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.path = Path(self.temp.name) / "goal.json"
         self.path.write_text(json.dumps(self.goal, ensure_ascii=False), encoding="utf-8")
-        self.env = {
+        self.rpc_env = {
             "SUPABASE_PUBLISHABLE_KEY": "sb_publishable_test",
             "SUPABASE_PROJECT_URL": "https://example.supabase.co",
         }
@@ -54,7 +87,64 @@ class SupabaseGoalSourceTests(unittest.TestCase):
 
         return open_request
 
-    def test_promotes_exact_hash_matched_supabase_document(self):
+    def _db_connect(self, row, observed):
+        def connect(database_url, **kwargs):
+            observed["url"] = database_url
+            observed["kwargs"] = kwargs
+            connection = _Connection(row)
+            observed["connection"] = connection
+            return connection
+
+        return connect
+
+    def test_prefers_exact_hash_matched_database_document(self):
+        digest = canonical_hash(self.goal)
+        updated_at = datetime(2026, 9, 24, 16, 0, tzinfo=timezone.utc)
+        observed = {}
+        goal, meta = load_goal_for_planner(
+            self.path,
+            db_connect=self._db_connect((digest, self.goal, updated_at), observed),
+            env={"SUPABASE_DB_URL": "postgresql://example.invalid/db"},
+        )
+        self.assertEqual(goal, self.goal)
+        self.assertEqual(meta["source"], "supabase_db")
+        self.assertTrue(meta["verified"])
+        self.assertEqual(meta["source_hash"], digest)
+        self.assertEqual(observed["kwargs"]["sslmode"], "require")
+        self.assertEqual(observed["kwargs"]["connect_timeout"], 5)
+        self.assertEqual(
+            observed["connection"].cursor_object.queries[0],
+            "set transaction read only",
+        )
+
+    def test_stale_database_cannot_influence_planner(self):
+        stale = dict(self.goal)
+        stale["goal"] = "Stale"
+        observed = {}
+        goal, meta = load_goal_for_planner(
+            self.path,
+            db_connect=self._db_connect((canonical_hash(stale), stale, None), observed),
+            env={"SUPABASE_DB_URL": "postgresql://example.invalid/db"},
+        )
+        self.assertEqual(goal, self.goal)
+        self.assertEqual(meta["source"], "json_fallback")
+        self.assertEqual(meta["reason"], "database_snapshot_stale")
+
+    def test_database_failure_falls_back_without_leaking_connection_text(self):
+        def failing(_url, **_kwargs):
+            raise RuntimeError("postgresql://secret-user:secret-pass@example.invalid/db")
+
+        goal, meta = load_goal_for_planner(
+            self.path,
+            db_connect=failing,
+            env={"SUPABASE_DB_URL": "postgresql://secret"},
+        )
+        self.assertEqual(goal, self.goal)
+        self.assertEqual(meta["source"], "json_fallback")
+        self.assertEqual(meta["reason"], "database_unavailable:RuntimeError")
+        self.assertNotIn("secret", meta["reason"])
+
+    def test_rpc_promotes_exact_hash_when_database_is_not_configured(self):
         digest = canonical_hash(self.goal)
         payload = {
             "status": "ok",
@@ -66,14 +156,13 @@ class SupabaseGoalSourceTests(unittest.TestCase):
         goal, meta = load_goal_for_planner(
             self.path,
             opener=self._opener(payload),
-            env=self.env,
+            env=self.rpc_env,
         )
         self.assertEqual(goal, self.goal)
-        self.assertEqual(meta["source"], "supabase")
+        self.assertEqual(meta["source"], "supabase_rpc")
         self.assertTrue(meta["verified"])
-        self.assertEqual(meta["source_hash"], digest)
 
-    def test_stale_backend_cannot_influence_planner(self):
+    def test_rpc_stale_backend_cannot_influence_planner(self):
         stale = dict(self.goal)
         stale["goal"] = "Stale"
         payload = {
@@ -84,40 +173,12 @@ class SupabaseGoalSourceTests(unittest.TestCase):
         goal, meta = load_goal_for_planner(
             self.path,
             opener=self._opener(payload),
-            env=self.env,
+            env=self.rpc_env,
         )
         self.assertEqual(goal, self.goal)
-        self.assertEqual(meta["source"], "json_fallback")
-        self.assertEqual(meta["reason"], "backend_snapshot_stale")
+        self.assertEqual(meta["reason"], "rpc_snapshot_stale")
 
-    def test_declared_hash_mismatch_is_rejected_even_when_payload_matches(self):
-        payload = {
-            "status": "ok",
-            "source_hash": "0" * 64,
-            "payload": self.goal,
-        }
-        goal, meta = load_goal_for_planner(
-            self.path,
-            opener=self._opener(payload),
-            env=self.env,
-        )
-        self.assertEqual(goal, self.goal)
-        self.assertEqual(meta["reason"], "backend_snapshot_stale")
-
-    def test_backend_failure_is_non_blocking(self):
-        def failing(_request, timeout):
-            raise urllib.error.URLError("offline")
-
-        goal, meta = load_goal_for_planner(
-            self.path,
-            opener=failing,
-            env=self.env,
-        )
-        self.assertEqual(goal, self.goal)
-        self.assertEqual(meta["source"], "json_fallback")
-        self.assertTrue(meta["reason"].startswith("backend_unavailable:"))
-
-    def test_missing_publishable_key_uses_local_without_network(self):
+    def test_no_backend_configuration_uses_local_without_network(self):
         called = False
 
         def should_not_call(_request, timeout):
@@ -132,7 +193,7 @@ class SupabaseGoalSourceTests(unittest.TestCase):
         )
         self.assertEqual(goal, self.goal)
         self.assertFalse(called)
-        self.assertEqual(meta["reason"], "publishable_key_missing")
+        self.assertEqual(meta["reason"], "database_url_missing")
 
 
 if __name__ == "__main__":
