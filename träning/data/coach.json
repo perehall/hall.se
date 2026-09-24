@@ -4,7 +4,7 @@
       "activity_id": 20300494236,
       "activity_date": "2026-09-23",
       "activity_name": "Simning på kvällen",
-      "generated_at_utc": "2026-09-24T17:18:54.410293+00:00",
+      "generated_at_utc": "2026-09-24T17:25:16.678762+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 3,
@@ -16,8 +16,8 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört 3 200 m simpass följde planens struktur och huvudserien hölls stadigt runt 1:28 med god kontroll enligt användarrapport.",
-        "load_interpretation": "Passet ger önskat sim‑aerobt/tekniskt stimulus och tolererades väl (RPE 6); det förändrar inte planerade närbelastningsåtgärder de kommande 2–3 dagarna.",
+        "summary": "Genomfört 3 200 m simpass matchar planens struktur och visar stabilitet i huvudserien med snitt 1:28/100 m och RPE 6/10.",
+        "load_interpretation": "Senaste 48–72 t innehåller tung löptröskel (4×8) och enduro + lätt styrka; simpasset är teknisk/aerob och kräver ingen automatisk reduktion.",
         "confidence": "medium",
         "facts": [
           "Swim: 3,20 km · 58:57 · snittpuls 133,5 · maxpuls 152.",
@@ -26,19 +26,19 @@
           "Planerat simpass 3200 m; genomfört 3200 m. Genomförd setstruktur matchar planens struktur."
         ],
         "interpretations": [
-          "Stabilitet i 4×500 (planerat träningsinnehåll 0.2 s/100m) visar att passet var genomfört med konsistent kontroll och stödjer simteknik/aerob‑progressionen.",
-          "Att användaren kände sig såpass stark (kunde gjort mer) indikerar att nästa planerade 4 000 m‑session inte behöver reduceras av återhämtningsskäl."
+          "Passet konsoliderar planens sim‑stimulus och visar stabil aerob rytm i 4×500‑setet, vilket stödjer planerat 4 000 m‑steg.",
+          "Givet föregående 48–72 t (4×8 tröskel + enduro + lätt styrka) är aktuell närbelastning multifasetterad; simningen ger mekanisk kostnad och kan behållas utan skalning."
         ],
         "unknowns": [
-          "Subsequent 24–72h subjektiv återhämtning och eventuell lokal muskeltrötthet",
-          "exakt påverkan på planerad styrka/core‑session om den läggs nära i tid"
+          "Subsequent-day subjective recovery (24–72h) är okänd trots god samma‑dagsrapport.",
+          "Teknisk detalj kring stroke (som kan påverka progression under 1:25) saknas i objektiva setmått."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "",
-        "reason": "Passet matchade planerat innehåll och tolererades väl, så ingen konservativ förändring krävs.",
-        "recommendation": "Fortsätt enligt nuvarande plan; genomför planerat vilodag/ledigt den 2026-09-24 utan extra benbelastning och håll fredagens 4 000 m‑session enligt mikrocykelbeslut.",
+        "reason": "Simpasset uppfyllde planens sim‑stimulus och ligger väl i mikrocykelns närbelastningskontext.",
+        "recommendation": "Behåll kommande plan (ingen ändring). Fortsätt jobba mot <1:25/100 m i kommande planerade simpass enligt mesocykelreceptet.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -1268,8 +1268,8 @@
       }
     }
   ],
-  "last_trigger_hash": "b2257599ce2f473ef383d2f77e5a53ad1099492a43b0124ae6e36897fbee3e14",
-  "last_run_utc": "2026-09-24T17:18:54.410293+00:00",
+  "last_trigger_hash": "9c718ba26495060d89efe47be70338b5ace232f342bcabe2ca914f599e75da0e",
+  "last_run_utc": "2026-09-24T17:25:16.678762+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 3
