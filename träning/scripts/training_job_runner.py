@@ -73,7 +73,15 @@ def build_stages(ingest_mode: str) -> list[Stage]:
         Stage("weekly_review", python_stage("weekly_review.py"), optional=True, attempts=2),
         Stage("validate_week_reviews", python_stage("check_week_reviews.py")),
         Stage("build_athlete_state", python_stage("build_athlete_state.py")),
+        Stage(
+            "commit_athlete_runtime_backend",
+            python_stage("supabase_runtime_state.py", "--scope", "athlete"),
+        ),
         Stage("adaptive_planning", python_stage("adaptive_planner.py"), attempts=2),
+        Stage(
+            "commit_planning_runtime_backend",
+            python_stage("supabase_runtime_state.py", "--scope", "planning"),
+        ),
         Stage("validate_adaptive_plan", python_stage("validate_training_data.py")),
         Stage("rollover_calendar", python_stage("rollover_week.py")),
         Stage("apply_plan_overrides", python_stage("apply_plan_overrides.py")),
@@ -103,6 +111,10 @@ def build_stages(ingest_mode: str) -> list[Stage]:
         ),
         Stage("guard_coach_claims", python_stage("coach_output_guard.py")),
         Stage("validate_post_coach", python_stage("validate_training_data.py")),
+        Stage(
+            "commit_final_runtime_backend",
+            python_stage("supabase_runtime_state.py", "--scope", "final"),
+        ),
         Stage("render_and_validate_site", python_stage("render_training_site.py")),
     ]
 
