@@ -48,6 +48,7 @@ class SupabaseShadowReaderTests(unittest.TestCase):
                 {
                     "provider": "strava",
                     "provider_activity_id": "123",
+                    "lap_ordinal": 1,
                     "lap_index": 2,
                 }
             ],
@@ -70,7 +71,7 @@ class SupabaseShadowReaderTests(unittest.TestCase):
         }
         keys = expected_key_sets(payload)
         self.assertEqual(keys["activities"], {("strava", "123")})
-        self.assertEqual(keys["activity_laps"], {("strava", "123", 2)})
+        self.assertEqual(keys["activity_laps"], {("strava", "123", 1)})
         self.assertEqual(
             keys["coach_evaluations"],
             {("strava", "123", "2026-09-24T12:34:56.000000+00:00")},
