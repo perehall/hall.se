@@ -36,3 +36,17 @@ After this schema is deployed:
 3. compare source counts/keys and selected records;
 4. run the shadow path for several updates;
 5. only then promote individual entities to database source-of-truth.
+
+
+## Manual shadow import
+
+Database writes are intentionally not part of the normal training pipeline yet.
+
+The workflow `.github/workflows/supabase-shadow-import.yml` is manual-only and has two modes:
+
+- `check` validates the database connection, schema contract and deterministic source payload without writing rows.
+- `write` performs the full shadow import in one PostgreSQL transaction, verifies the imported natural keys and document hashes, and commits only after verification succeeds.
+
+The workflow reads the database connection only from the GitHub Actions secret `SUPABASE_DB_URL`. It never prints that value.
+
+A successful `write` records an idempotent `supabase_shadow_import` job in `training.job_runs`, keyed by the canonical source hash. Re-running the same source snapshot must not create duplicate domain rows.
