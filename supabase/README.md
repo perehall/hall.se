@@ -114,7 +114,7 @@ Security boundaries:
 - the response contains technical health metadata only: status, last shadow write time, short snapshot id and structural counts;
 - database passwords, secret/service-role keys and training content never enter browser HTML.
 
-The UI hides the backend row when `SUPABASE_PUBLISHABLE_KEY` is absent, so deployment remains safe during configuration. Planner, coach, ingest and workout rendering still use canonical GitHub JSON.
+The UI hides the backend row when `SUPABASE_PUBLISHABLE_KEY` is absent. The browser status RPC is optional; server-side goal and activity runtime reads use the database connection. Domains not yet promoted still use the compatibility JSON pipeline.
 
 
 ## First promoted planner read: goal portfolio
@@ -129,3 +129,24 @@ The adaptive planner now has a verified Supabase read path for the goal portfoli
 - The generated strategy records whether the runtime goal source was verified Supabase or JSON fallback.
 
 This is deliberately a read promotion, not yet a write promotion. `data/goal.json` remains the write authority/freshness oracle during this migration step. Activities and athlete state stay on the existing path until ingestion can write the database before downstream planning, avoiding one-run-old training state.
+
+
+## Promoted activity and feedback runtime
+
+Activity state is now promoted before any athlete-state or planning consumer runs.
+
+Production order:
+
+1. Strava event/reconcile writes the transient repository ingestion buffer.
+2. Activity semantics and GUI feedback are normalized.
+3. `supabase_activity_backend.py --mode promote` transactionally writes the normalized activity snapshot, laps, current overrides and append-retained feedback to Supabase.
+4. A fresh read-only connection reconstructs the activity and override documents from relational rows and verifies their hashes against the persisted state-document contract.
+5. Only after that verification succeeds are the JSON files materialized again as compatibility caches.
+6. `build_athlete_state.py` reads its activity facts directly from the verified Supabase runtime source when `SUPABASE_DB_URL` is configured.
+7. Adaptive planning therefore consumes an athlete-state built from database-backed activity facts.
+
+This promoted path is **required** in the production update job. A database failure stops that update before athlete-state/planning; the already-published site remains intact. This is safer than silently planning from an unpersisted or stale post-ingest snapshot.
+
+`training.activities.is_current` defines the exact latest Strava snapshot. Removed provider activities are retained historically with `is_current=false`, so they cannot reappear in athlete-state. Laps and current semantic overrides are exact-snapshot state; `activity_feedback` remains append-retained history.
+
+The later non-blocking full shadow sync remains in place for domains not yet promoted and as an independent whole-system reconciliation layer.

@@ -32,12 +32,14 @@ class TrainingJobRunnerTests(unittest.TestCase):
     def test_pipeline_order_is_explicit_and_stable(self):
         keys = self.stage_keys("event")
         self.assertEqual(
-            keys[:4],
+            keys[:6],
             [
                 "strava_event",
+                "persist_strava_refresh_token",
                 "normalize_activity_semantics",
                 "migrate_typed_plan",
                 "validate_ingested_data",
+                "promote_activity_backend",
             ],
         )
         self.assertNotIn("sync_reported_progression_pre", keys)
@@ -54,6 +56,24 @@ class TrainingJobRunnerTests(unittest.TestCase):
         self.assertLess(keys.index("validate_device_workouts"), keys.index("sync_device_workouts"))
         self.assertLess(keys.index("sync_device_workouts"), keys.index("guard_coach_claims"))
         self.assertEqual(keys[-1], "render_and_validate_site")
+
+    def test_rotated_strava_token_is_persisted_before_backend_gate(self):
+        keys = self.stage_keys("event")
+        self.assertLess(
+            keys.index("persist_strava_refresh_token"),
+            keys.index("promote_activity_backend"),
+        )
+
+    def test_activity_backend_is_required_before_fact_consumers(self):
+        stages = {stage.key: stage for stage in build_stages("event")}
+        keys = self.stage_keys("event")
+        promoted = stages["promote_activity_backend"]
+        self.assertFalse(promoted.optional)
+        self.assertLess(keys.index("normalize_activity_semantics"), keys.index("promote_activity_backend"))
+        self.assertLess(keys.index("promote_activity_backend"), keys.index("sync_performance_details"))
+        self.assertLess(keys.index("promote_activity_backend"), keys.index("weekly_review"))
+        self.assertLess(keys.index("promote_activity_backend"), keys.index("build_athlete_state"))
+        self.assertLess(keys.index("build_athlete_state"), keys.index("adaptive_planning"))
 
     def test_pre_adaptive_validation_allows_goal_replan_only(self):
         stages = {stage.key: stage for stage in build_stages("event")}

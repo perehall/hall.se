@@ -31,6 +31,21 @@ class TrainingWorkflowWriterTests(unittest.TestCase):
             update.index("- name: Run canonical training update pipeline"),
         )
 
+    def test_promoted_activity_backend_dependency_is_required_in_update_job(self):
+        update = self.update_job_text()
+        self.assertIn("- name: Install Supabase backend dependency", update)
+        dependency_block = update.split("- name: Install Supabase backend dependency", 1)[1].split(
+            "- name: Run canonical training update pipeline", 1
+        )[0]
+        self.assertNotIn("continue-on-error: true", dependency_block)
+        self.assertIn("SUPABASE_DB_URL:", update)
+
+        runner = (REPO_ROOT / "träning" / "scripts" / "training_job_runner.py").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("promote_activity_backend", runner)
+        self.assertIn("supabase_activity_backend.py", runner)
+
     def test_generated_snapshots_are_never_rebased_and_conflicts_retry_cleanly(self):
         update = self.update_job_text()
 
