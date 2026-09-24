@@ -4,13 +4,14 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "Check connection/schema or write the canonical JSON shadow"
+        description: "Check schema, write+audit the shadow, or audit existing shadow"
         required: true
         default: check
         type: choice
         options:
           - check
           - write
+          - audit
 
 permissions:
   contents: read
@@ -43,7 +44,24 @@ jobs:
       - name: Run deterministic training regression suite
         run: python "träning/scripts/run_regression_tests.py"
 
-      - name: Check or write Supabase shadow
+      - name: Check, write or audit Supabase shadow
         env:
           SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
-        run: python "träning/scripts/supabase_shadow_writer.py" --mode "${{ inputs.mode }}"
+        shell: bash
+        run: |
+          case "${{ inputs.mode }}" in
+            check)
+              python "träning/scripts/supabase_shadow_writer.py" --mode check
+              ;;
+            write)
+              python "träning/scripts/supabase_shadow_writer.py" --mode write
+              python "träning/scripts/supabase_shadow_reader.py"
+              ;;
+            audit)
+              python "träning/scripts/supabase_shadow_reader.py"
+              ;;
+            *)
+              echo "::error::Unsupported shadow mode"
+              exit 2
+              ;;
+          esac
