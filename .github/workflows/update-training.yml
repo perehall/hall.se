@@ -220,16 +220,20 @@ jobs:
         run: |
           set +e
           for attempt in 1 2 3; do
-            echo "Supabase shadow sync attempt $attempt/3"
+            echo "Supabase shadow sync + readback attempt $attempt/3"
             python "träning/scripts/supabase_shadow_writer.py" --mode write
             status=$?
             if [ "$status" -eq 0 ]; then
-              echo "Supabase shadow sync completed."
+              python "träning/scripts/supabase_shadow_reader.py"
+              status=$?
+            fi
+            if [ "$status" -eq 0 ]; then
+              echo "Supabase shadow sync and independent readback completed."
               exit 0
             fi
             if [ "$attempt" -lt 3 ]; then
               sleep $((attempt * 5))
             fi
           done
-          echo "::warning::Supabase shadow sync failed after 3 attempts. Canonical training update and site publication remain valid; shadow state will retry on the next training run."
+          echo "::warning::Supabase shadow sync/readback failed after 3 attempts. Canonical training update and site publication remain valid; shadow state will retry on the next training run."
           exit 1

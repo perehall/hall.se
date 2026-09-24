@@ -65,3 +65,24 @@ The automatic shadow sync is deliberately a separate non-blocking job:
 - a later scheduled/webhook/manual training run retries the complete idempotent shadow write, making the mirror self-healing.
 
 Supabase remains secondary during this phase. The frontend, planner, Strava ingest and coach do not read from it yet.
+
+
+## Independent read-back canary
+
+Before any live consumer is allowed to read from Supabase, every automatic shadow write is followed by a second process that opens a fresh PostgreSQL connection and sets the transaction read-only.
+
+The canary verifies:
+
+- the committed source hash and count manifest for the current canonical snapshot;
+- exact natural-key sets for activities, laps, overrides, feedback, goals, state documents, mesocycles, microcycles, planned workouts and coach evaluations;
+- every persisted `state_documents.payload` by recomputing its canonical hash from the database value.
+
+This catches missing rows, stale/extra rows and persisted document drift that an in-transaction writer verification alone cannot prove.
+
+The manual `Supabase shadow import` workflow therefore exposes three modes:
+
+- `check`: connection and schema only, no write;
+- `write`: transactional write followed by independent read-back;
+- `audit`: read-only comparison of the already persisted shadow against current canonical JSON.
+
+A canary failure remains non-blocking for the canonical training update. Supabase is still not a source of truth and no planner, coach or frontend reads from it.

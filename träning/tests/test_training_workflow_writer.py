@@ -75,6 +75,11 @@ class TrainingWorkflowWriterTests(unittest.TestCase):
         self.assertIn("- name: Checkout latest canonical main", shadow)
         self.assertIn("ref: main", shadow)
         self.assertIn('python "träning/scripts/supabase_shadow_writer.py" --mode write', shadow)
+        self.assertIn('python "träning/scripts/supabase_shadow_reader.py"', shadow)
+        self.assertLess(
+            shadow.index('python "träning/scripts/supabase_shadow_writer.py" --mode write'),
+            shadow.index('python "träning/scripts/supabase_shadow_reader.py"'),
+        )
         self.assertIn("for attempt in 1 2 3", shadow)
         self.assertIn("shadow state will retry on the next training run", shadow)
         self.assertGreater(
@@ -87,6 +92,7 @@ class TrainingWorkflowWriterTests(unittest.TestCase):
             encoding="utf-8"
         )
         self.assertNotIn("supabase_shadow_writer", runner)
+        self.assertNotIn("supabase_shadow_reader", runner)
 
 
 if __name__ == "__main__":
