@@ -16,6 +16,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import time
 from copy import deepcopy
 from pathlib import Path
 from typing import Any, Callable
@@ -614,21 +615,38 @@ def main(argv: list[str] | None = None) -> int:
         default="promote",
     )
     args = parser.parse_args(argv)
+    if args.mode == "promote":
+        last_error = None
+        for attempt in range(1, 4):
+            try:
+                result = promote_and_materialize()
+                print(
+                    "SUPABASE_ACTIVITY_PROMOTE_OK "
+                    f"source={result['source']} source_hash={result['source_hash']} "
+                    f"counts={result['counts']}"
+                )
+                return 0
+            except Exception as exc:
+                last_error = exc
+                print(
+                    "SUPABASE_ACTIVITY_PROMOTE_RETRY "
+                    f"attempt={attempt}/3 error={type(exc).__name__}"
+                )
+                if attempt < 3:
+                    time.sleep(attempt * 5)
+        print(
+            "SUPABASE_ACTIVITY_BACKEND_FAILED "
+            f"{type(last_error).__name__}: {last_error}"
+        )
+        return 1
+
     try:
-        if args.mode == "promote":
-            result = promote_and_materialize()
-            print(
-                "SUPABASE_ACTIVITY_PROMOTE_OK "
-                f"source={result['source']} source_hash={result['source_hash']} "
-                f"counts={result['counts']}"
-            )
-        else:
-            activities, overrides, result = read_backend_documents()
-            print(
-                "SUPABASE_ACTIVITY_READBACK_OK "
-                f"source={result['source']} activities={len(activities.get('activities') or [])} "
-                f"overrides={len(overrides.get('overrides') or {})}"
-            )
+        activities, overrides, result = read_backend_documents()
+        print(
+            "SUPABASE_ACTIVITY_READBACK_OK "
+            f"source={result['source']} activities={len(activities.get('activities') or [])} "
+            f"overrides={len(overrides.get('overrides') or {})}"
+        )
     except Exception as exc:
         print(
             f"SUPABASE_ACTIVITY_BACKEND_FAILED {type(exc).__name__}: {exc}"
