@@ -42,11 +42,17 @@ def normalize_timestamp(value: Any) -> str:
     return parsed.astimezone(timezone.utc).isoformat(timespec="microseconds")
 
 
-def compare_key_sets(label: str, expected: set[Any], actual: set[Any]) -> None:
-    if expected == actual:
-        return
+def compare_key_sets(
+    label: str,
+    expected: set[Any],
+    actual: set[Any],
+    *,
+    exact: bool,
+) -> None:
     missing = sorted(expected - actual, key=str)
-    extra = sorted(actual - expected, key=str)
+    extra = sorted(actual - expected, key=str) if exact else []
+    if not missing and not extra:
+        return
     raise RuntimeError(
         f"{label} key-set mismatch: expected={len(expected)} actual={len(actual)} "
         f"missing={missing[:5]} extra={extra[:5]}"
@@ -133,7 +139,9 @@ def fetch_actual_key_sets(cur: Any) -> dict[str, set[Any]]:
     cur.execute("select id from training.microcycles")
     microcycles = {row[0] for row in cur.fetchall()}
 
-    cur.execute("select workout_key from training.planned_workouts")
+    cur.execute(
+        "select workout_key from training.planned_workouts where is_current"
+    )
     planned_workouts = {row[0] for row in cur.fetchall()}
 
     cur.execute(
@@ -247,8 +255,23 @@ def audit() -> dict[str, Any]:
             cur.execute("set transaction read only")
 
             actual = fetch_actual_key_sets(cur)
+
+            # Mutable current-state tables must match the canonical snapshot
+            # exactly. Historical tables are append-retained: current canonical
+            # rows may not be missing, but older rows are allowed to remain.
+            exact_tables = {
+                "activity_overrides",
+                "training_goals",
+                "state_documents",
+                "planned_workouts",
+            }
             for label, expected_keys in expected.items():
-                compare_key_sets(label, expected_keys, actual[label])
+                compare_key_sets(
+                    label,
+                    expected_keys,
+                    actual[label],
+                    exact=label in exact_tables,
+                )
 
             verify_state_documents(cur, payload)
             verify_manifest(cur, payload)
