@@ -64,6 +64,30 @@ class TrainingWorkflowWriterTests(unittest.TestCase):
         self.assertIn("steps.commit_changes.outputs.changed == 'true'", workflow)
         self.assertNotIn("Push to main triggers deploy-pages.yml automatically", workflow)
 
+    def test_supabase_shadow_sync_is_post_update_non_blocking_and_self_healing(self):
+        workflow = self.workflow_text()
+
+        self.assertIn("  shadow_sync:\n", workflow)
+        shadow = workflow.split("  shadow_sync:\n", 1)[1]
+        self.assertIn("needs: update", shadow)
+        self.assertIn("needs.update.result == 'success'", shadow)
+        self.assertIn("continue-on-error: true", shadow)
+        self.assertIn("- name: Checkout latest canonical main", shadow)
+        self.assertIn("ref: main", shadow)
+        self.assertIn('python "träning/scripts/supabase_shadow_writer.py" --mode write', shadow)
+        self.assertIn("for attempt in 1 2 3", shadow)
+        self.assertIn("shadow state will retry on the next training run", shadow)
+        self.assertGreater(
+            workflow.index("  shadow_sync:\n"),
+            workflow.index("  update:\n"),
+        )
+
+    def test_supabase_shadow_sync_is_not_part_of_critical_training_runner(self):
+        runner = (REPO_ROOT / "träning" / "scripts" / "training_job_runner.py").read_text(
+            encoding="utf-8"
+        )
+        self.assertNotIn("supabase_shadow_writer", runner)
+
 
 if __name__ == "__main__":
     unittest.main()
