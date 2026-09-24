@@ -15,6 +15,7 @@ from supabase_activity_backend import (  # noqa: E402
     canonical_hash,
     load_activities_for_runtime,
     safe_error_detail,
+    strict_structure_difference,
 )
 
 
@@ -200,6 +201,16 @@ class SupabaseActivityBackendModelTests(unittest.TestCase):
             self.assertEqual(loaded, document)
             self.assertEqual(meta["source"], "json_local_dev")
             self.assertFalse(meta["verified"])
+
+    def test_strict_structure_difference_reports_path_and_types_only(self):
+        detail = strict_structure_difference(
+            {"activities": [{"distance_m": 1000.0}]},
+            {"activities": [{"distance_m": 1000}]},
+        )
+        self.assertEqual(
+            detail,
+            "$.activities[0].distance_m: expected_type=float actual_type=int",
+        )
 
     def test_safe_error_detail_logs_contracts_but_not_driver_messages(self):
         self.assertEqual(

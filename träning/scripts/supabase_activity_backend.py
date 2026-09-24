@@ -69,6 +69,45 @@ def safe_error_detail(exc: Exception) -> str:
     return type(exc).__name__
 
 
+def strict_structure_difference(expected: Any, actual: Any, path: str = "$") -> str | None:
+    if type(expected) is not type(actual):
+        return (
+            f"{path}: expected_type={type(expected).__name__} "
+            f"actual_type={type(actual).__name__}"
+        )
+    if isinstance(expected, dict):
+        expected_keys = set(expected)
+        actual_keys = set(actual)
+        if expected_keys != actual_keys:
+            missing = sorted(expected_keys - actual_keys)
+            extra = sorted(actual_keys - expected_keys)
+            return f"{path}: key_mismatch missing={missing[:3]} extra={extra[:3]}"
+        for key in expected:
+            difference = strict_structure_difference(
+                expected[key],
+                actual[key],
+                f"{path}.{key}",
+            )
+            if difference:
+                return difference
+        return None
+    if isinstance(expected, list):
+        if len(expected) != len(actual):
+            return f"{path}: length expected={len(expected)} actual={len(actual)}"
+        for index, (expected_item, actual_item) in enumerate(zip(expected, actual)):
+            difference = strict_structure_difference(
+                expected_item,
+                actual_item,
+                f"{path}[{index}]",
+            )
+            if difference:
+                return difference
+        return None
+    if expected != actual:
+        return f"{path}: scalar_mismatch type={type(expected).__name__}"
+    return None
+
+
 def build_activity_snapshot(
     data_dir: Path = DATA,
 ) -> dict[str, Any]:
@@ -533,9 +572,17 @@ def _documents_from_relational_cursor(cur: Any) -> tuple[dict[str, Any], dict[st
     }
 
     if canonical_hash(rebuilt_activities) != documents["activities"]["source_hash"]:
-        raise RuntimeError("Relational activity payload hash does not match promoted document")
+        difference = strict_structure_difference(activity_template, rebuilt_activities)
+        raise RuntimeError(
+            "Relational activity payload hash does not match promoted document"
+            + (f"; first_difference={difference}" if difference else "")
+        )
     if canonical_hash(rebuilt_overrides) != documents["activity_overrides"]["source_hash"]:
-        raise RuntimeError("Relational override payload hash does not match promoted document")
+        difference = strict_structure_difference(override_template, rebuilt_overrides)
+        raise RuntimeError(
+            "Relational override payload hash does not match promoted document"
+            + (f"; first_difference={difference}" if difference else "")
+        )
 
     return rebuilt_activities, rebuilt_overrides, {
         "source": "supabase_db",
