@@ -173,6 +173,26 @@ Detta är verifierat med flera efterföljande workflow-körningar.
 - `träning/index.html` – live-sidan
 - `träning/index.manual-backup.html` – engångsbackup av tidigare live-sida
 
+## Backendmigration – Supabase shadow mode
+
+Backendmigrationen startade 2026-09-24 med ett versionshanterat Supabase/PostgreSQL-schema under:
+
+`supabase/`
+
+Under shadow-fasen gäller:
+
+- befintliga JSON-filer i `träning/data/` är fortsatt kanonisk source-of-truth
+- nuvarande GitHub Actions-pipeline fortsätter oförändrad
+- Supabase får endast en parallell kopia tills import och jämförelser är verifierade
+- frontend läser inte från Supabase
+- inga klientpolicies finns; databasen är initialt backend-only
+- schemaändringar görs som migrationsfiler, inte manuellt i Supabase Dashboard
+
+Första schemafasen modellerar stabila kärnobjekt relationellt: aktiviteter, varv, feedback, semantiska korrigeringar, mål, meso-/mikrocykler, planerade pass och revisionshistorik, coachbedömningar samt integrations- och jobbhistorik. Snabbt föränderliga härledda dokument kan under övergången speglas i `training.state_documents` som JSONB.
+
+Supabase får inte göras till source-of-truth förrän shadow-importen är idempotent och verifierad mot samma kanoniska JSON-data över flera uppdateringscykler.
+
+
 ## Designprincip
 
 Systemet ska vara enkelt och underhållssnålt.
