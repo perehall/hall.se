@@ -120,7 +120,7 @@ def patch_page(page: str, publishable_key: str) -> str:
     page = remove_existing(page)
 
     dialog = re.search(
-        r'(<dialog id="trainingSystemSheet"\b.*?</dialog>)',
+        r'(<dialog id="trainingSystemSheet"(?:\s[^>]*)?>.*?</dialog>)',
         page,
         flags=re.S,
     )
