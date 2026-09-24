@@ -247,6 +247,18 @@ def assert_activity_schema(cur: Any) -> None:
             f"present={sorted(present)}"
         )
 
+    cur.execute(
+        """
+        select count(*)
+        from information_schema.columns
+        where table_schema = 'training'
+          and table_name = 'activity_laps'
+          and column_name = 'lap_ordinal'
+        """
+    )
+    if int(cur.fetchone()[0]) != 1:
+        raise RuntimeError("Supabase activity lap-ordinal migration is incomplete")
+
 
 def _activity_id_map(cur: Any, snapshot: dict[str, Any]) -> dict[str, Any]:
     result: dict[str, Any] = {}
@@ -282,7 +294,7 @@ def _replace_current_laps(
         if provider != "strava" or source_id not in activity_ids:
             raise RuntimeError(f"Activity lap has unknown parent {provider}:{source_id}")
         row["activity_id"] = activity_ids[source_id]
-        _upsert(cur, "activity_laps", row, ("activity_id", "lap_index"))
+        _upsert(cur, "activity_laps", row, ("activity_id", "lap_ordinal"))
 
 
 def _replace_current_overrides(
@@ -385,12 +397,12 @@ def _verify_write(
         )
 
     expected_laps = {
-        (str(row["provider_activity_id"]), int(row["lap_index"]))
+        (str(row["provider_activity_id"]), int(row["lap_ordinal"]))
         for row in snapshot["activity_laps"]
     }
     cur.execute(
         """
-        select a.provider_activity_id, l.lap_index
+        select a.provider_activity_id, l.lap_ordinal
         from training.activity_laps l
         join training.activities a on a.id = l.activity_id
         where a.provider = 'strava'
@@ -509,17 +521,17 @@ def _documents_from_relational_cursor(cur: Any) -> tuple[dict[str, Any], dict[st
 
     cur.execute(
         """
-        select a.provider_activity_id, l.lap_index, l.raw
+        select a.provider_activity_id, l.lap_ordinal, l.raw
         from training.activity_laps l
         join training.activities a on a.id = l.activity_id
         where a.provider = 'strava'
           and a.is_current
-        order by a.provider_activity_id, l.lap_index
+        order by a.provider_activity_id, l.lap_ordinal
         """
     )
     laps: dict[str, list[tuple[int, dict[str, Any]]]] = {}
-    for source_id, lap_index, raw in cur.fetchall():
-        laps.setdefault(str(source_id), []).append((int(lap_index), dict(raw or {})))
+    for source_id, lap_ordinal, raw in cur.fetchall():
+        laps.setdefault(str(source_id), []).append((int(lap_ordinal), dict(raw or {})))
 
     template_rows = activity_template.get("activities") or []
     template_ids = [str(row.get("id")) for row in template_rows]

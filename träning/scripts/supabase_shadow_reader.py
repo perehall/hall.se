@@ -66,7 +66,7 @@ def expected_key_sets(payload: dict[str, Any]) -> dict[str, set[Any]]:
             for row in payload["activities"]
         },
         "activity_laps": {
-            (row["provider"], row["provider_activity_id"], int(row["lap_index"]))
+            (row["provider"], row["provider_activity_id"], int(row["lap_ordinal"]))
             for row in payload["activity_laps"]
         },
         "activity_overrides": {
@@ -110,7 +110,7 @@ def fetch_actual_key_sets(cur: Any) -> dict[str, set[Any]]:
 
     cur.execute(
         """
-        select a.provider, a.provider_activity_id, l.lap_index
+        select a.provider, a.provider_activity_id, l.lap_ordinal
         from training.activity_laps l
         join training.activities a on a.id = l.activity_id
         where a.is_current

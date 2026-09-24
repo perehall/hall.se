@@ -147,6 +147,6 @@ Production order:
 
 This promoted path is **required** in the production update job. A database failure stops that update before athlete-state/planning; the already-published site remains intact. This is safer than silently planning from an unpersisted or stale post-ingest snapshot.
 
-`training.activities.is_current` defines the exact latest Strava snapshot. Removed provider activities are retained historically with `is_current=false`, so they cannot reappear in athlete-state. Laps and current semantic overrides are exact-snapshot state; `activity_feedback` remains append-retained history.
+`training.activities.is_current` defines the exact latest Strava snapshot. Removed provider activities are retained historically with `is_current=false`, so they cannot reappear in athlete-state. Laps and current semantic overrides are exact-snapshot state; `activity_feedback` remains append-retained history. `training.activity_laps.lap_ordinal` is the relational identity for list position, while the original `lap_index` is preserved as source data and is allowed to duplicate in historical imports.
 
 The later non-blocking full shadow sync remains in place for domains not yet promoted and as an independent whole-system reconciliation layer.
