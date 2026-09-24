@@ -4,7 +4,7 @@
   "week_start": "2026-09-21",
   "week_end": "2026-09-27",
   "created_at_utc": "2026-09-20T23:15:26.146433+00:00",
-  "updated_at_utc": "2026-09-24T04:50:37.899958+00:00",
+  "updated_at_utc": "2026-09-24T07:50:20.861104+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -1125,9 +1125,9 @@
           "transport": "intervals_icu",
           "source_hash": "9fcd60c075496d2ba5301ad8c850ecb2ec0dd8430864ecc062e85a53774b9e24",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-24T04:50:36.316105+00:00",
+          "updated_at_utc": "2026-09-24T07:50:18.941559+00:00",
           "provider_event_id": 138142476,
-          "verified_at_utc": "2026-09-24T04:50:36.316105+00:00"
+          "verified_at_utc": "2026-09-24T07:50:18.941559+00:00"
         }
       },
       {
@@ -1428,9 +1428,9 @@
           "transport": "intervals_icu",
           "source_hash": "9dc12d3e522e49454af7c6ffe216ee9ba323186427181ac1e1ae64a8d6009578",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-24T04:50:36.440456+00:00",
+          "updated_at_utc": "2026-09-24T07:50:19.430605+00:00",
           "provider_event_id": 138097036,
-          "verified_at_utc": "2026-09-24T04:50:36.440456+00:00"
+          "verified_at_utc": "2026-09-24T07:50:19.430605+00:00"
         }
       }
     ],
@@ -1916,8 +1916,8 @@
         "activity_id": 20300494236,
         "sport_type": "Swim",
         "display_label": "Swim",
-        "classification": null,
-        "user_report": "",
+        "classification": "training",
+        "user_report": "Väldigt bra kontroll genom huvudserien, höll ihop tempot och låg på stadigt på 1:28. Skulle dock vilja komma ner under 1:25 per 100m med samma känsla. RPE 6/10. Känsla: Kunde gjort mer.",
         "total": {
           "distance_m": 3200.0,
           "distance_km": 3.2,
@@ -2458,7 +2458,12 @@
         },
         "enduro": null,
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
-      }
+      },
+      "source_sport_type": "Swim",
+      "classification": "training",
+      "display_label": "Swim",
+      "user_report": "Väldigt bra kontroll genom huvudserien, höll ihop tempot och låg på stadigt på 1:28. Skulle dock vilja komma ner under 1:25 per 100m med samma känsla. RPE 6/10. Känsla: Kunde gjort mer.",
+      "classification_reason": "Explicit GUI-input från användaren ska behandlas som förstaklassdata i analys och fortsatt planering."
     },
     {
       "id": 20284663236,
@@ -2979,7 +2984,7 @@
       "activity_id": 20300494236,
       "activity_date": "2026-09-23",
       "activity_name": "Simning på kvällen",
-      "generated_at_utc": "2026-09-24T04:50:35.466178+00:00",
+      "generated_at_utc": "2026-09-24T07:50:17.801575+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 3,
@@ -2991,28 +2996,29 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört simpass 3 200 m med identifierad struktur (1×400+6×50+4×500+6×50+1×200); passet matchar planens struktur exakt.",
-        "load_interpretation": "Passet ger sim‑aerob och tekniskt stimulus och är inte i konflikt med de senaste 2–3 dagarnas genomförda träning.",
+        "summary": "Genomförd 3 200 m simning enligt plan med stabil huvudserie (4×500 m på ~1:28/100m) och kontrollerad RPE 6/10.",
+        "load_interpretation": "Passet ger sim‑aerob och teknikstimulus som planerat och är förenligt med mikrocykelns avsikt; inget akut återhämtningsproblem rapporterat.",
         "confidence": "medium",
         "facts": [
-          "Simning: 3,20 km · 58:57 · snittpuls 133,5 · maxpuls 152.",
+          "Swim: 3,20 km · 58:57 · snittpuls 133,5 · maxpuls 152.",
+          "Användarrapport: Väldigt bra kontroll genom huvudserien, höll ihop tempot och låg på stadigt på 1:28. Skulle dock vilja komma ner under 1:25 per 100m med samma känsla. RPE 6/10. Känsla: Kunde gjort mer.",
           "Planstatus 2026-09-23: dagen är markerad genomförd i coachens beslutsunderlag.",
           "Planerat simpass 3200 m; genomfört 3200 m. Genomförd setstruktur matchar planens struktur."
         ],
         "interpretations": [
-          "Passet levererar avsett aerob/teknikstimulus för mesocykeln och konsoliderar nuvarande dos (3200 m).",
-          "Givet att tisdagens löptröskel redan genomförts och närbelastningen visar inga inkommande konflikter, passet kräver ingen konservativ reduktion."
+          "Stabilitet i 4×500 visar att aktuell aerob/teknisk dos absorberades utan prekänt trötthetstecken.",
+          "Passet stödjer planens fortsatta simprogression mot 4 000 m‑mallen men ensam prestation räcker inte för automatisk upptrappning."
         ],
         "unknowns": [
-          "Subjektiv återhämtning kommande 24–72 h (ingen användarrapport för detta pass)",
-          "Eventuella lokalbeneffekter från föregående enduro som kan påverka framtida löppass"
+          "Subsequent 24–72h recovery response (användarrapport var samma dag).",
+          "Eventuella lokal muskeltröskor eller ömhet efter passet som kan påverka styrka/löpning"
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "",
-        "reason": "Passet matchar planerad simstruktur och skapar ingen närbelastningskonflikt de närmaste 2–3 dagarna.",
-        "recommendation": "Fortsätt enligt nuvarande plan; ingen ändring behövs för kommande planerade dagar.",
+        "reason": "Passet genomfördes som planerat och absorberades väl enligt data och användarrapport.",
+        "recommendation": "Behåll nuvarande plan; utför planerat vila eller lätt dag 2026-09-24 och genomför det föreslagna 4 000 m‑passet den 2026-09-25 som planerat.",
         "dose_option_id": "",
         "requires_approval": false
       },

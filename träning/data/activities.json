@@ -1,5 +1,5 @@
 {
-  "last_sync_utc": "2026-09-24T04:48:42.344891+00:00",
+  "last_sync_utc": "2026-09-24T07:48:17.575464+00:00",
   "activities": [
     {
       "id": 20300494236,
@@ -471,8 +471,8 @@
         "activity_id": 20300494236,
         "sport_type": "Swim",
         "display_label": "Swim",
-        "classification": null,
-        "user_report": "",
+        "classification": "training",
+        "user_report": "Väldigt bra kontroll genom huvudserien, höll ihop tempot och låg på stadigt på 1:28. Skulle dock vilja komma ner under 1:25 per 100m med samma känsla. RPE 6/10. Känsla: Kunde gjort mer.",
         "total": {
           "distance_m": 3200.0,
           "distance_km": 3.2,
@@ -1013,7 +1013,12 @@
         },
         "enduro": null,
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
-      }
+      },
+      "source_sport_type": "Swim",
+      "classification": "training",
+      "display_label": "Swim",
+      "user_report": "Väldigt bra kontroll genom huvudserien, höll ihop tempot och låg på stadigt på 1:28. Skulle dock vilja komma ner under 1:25 per 100m med samma känsla. RPE 6/10. Känsla: Kunde gjort mer.",
+      "classification_reason": "Explicit GUI-input från användaren ska behandlas som förstaklassdata i analys och fortsatt planering."
     },
     {
       "id": 20284663236,
@@ -13774,7 +13779,7 @@
     "schema_version": 1,
     "workout_analysis_contract_version": 3,
     "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
-    "overrides_applied": 14,
+    "overrides_applied": 15,
     "auto_rules_applied": 11,
     "override_ids_present": [
       "19852599244",
@@ -13790,9 +13795,12 @@
       "20229568713",
       "20271537143",
       "20272196080",
-      "20284663236"
+      "20284663236",
+      "20300494236"
     ],
-    "changed_ids": []
+    "changed_ids": [
+      "20300494236"
+    ]
   },
   "schema_version": 2,
   "last_webhook_event": {

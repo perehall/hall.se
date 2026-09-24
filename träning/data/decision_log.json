@@ -280,6 +280,14 @@
       "source_hash": "b67f3ebaea485c972802971b3421ea24ba133acaffb7a88a13692e2776dab710",
       "generated_at_utc": "2026-09-24T00:24:44.017967+00:00",
       "summary": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern."
+    },
+    {
+      "kind": "microcycle",
+      "decision_id": "2026-W40",
+      "source": "openai_repaired",
+      "source_hash": "c15e5b787bb30db83ce13e460b8e089584bd35a874bbf3f443b7876e5e731a7c",
+      "generated_at_utc": "2026-09-24T07:50:08.235067+00:00",
+      "summary": "Tar bort planerat MTB-slot på dag 1 eftersom dag 1 är blockad av faktisk Enduro; behåller övriga val men justerar så att alla hard_requirements uppfylls (två simexponeringar varav en kombinerad med styrka, minst en styrke/core, bibehållen tröskel och ett långt lugnt löppass, dag 2 låg benbelastning, minst en vilodag). Endast dag_index, recipe_key och action anges per instruktion."
     }
   ]
 }
