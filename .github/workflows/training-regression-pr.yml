@@ -26,5 +26,8 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Validate Supabase shadow model against live canonical data
+        run: python "träning/scripts/supabase_shadow_model.py"
+
       - name: Run deterministic training regression suite
         run: python "träning/scripts/run_regression_tests.py"
