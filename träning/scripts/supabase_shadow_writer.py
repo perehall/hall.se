@@ -186,6 +186,14 @@ def import_payload(cur: psycopg.Cursor[Any], payload: dict[str, Any]) -> dict[tu
         )
         activity_ids[(row["provider"], row["provider_activity_id"])] = activity_id
 
+    # Laps for current activities are mutable detail state. Replace them
+    # exactly so provider updates/removals cannot leave stale intervals behind.
+    for activity_id in activity_ids.values():
+        cur.execute(
+            "delete from training.activity_laps where activity_id = %s",
+            (activity_id,),
+        )
+
     for source in payload["activity_laps"]:
         row = dict(source)
         provider = row.pop("provider")
@@ -194,6 +202,16 @@ def import_payload(cur: psycopg.Cursor[Any], payload: dict[str, Any]) -> dict[tu
             activity_ids, provider, provider_activity_id
         )
         upsert(cur, "activity_laps", row, ("activity_id", "lap_index"))
+
+    # Overrides are current semantic state, not append history.
+    cur.execute(
+        """
+        delete from training.activity_overrides o
+        using training.activities a
+        where o.activity_id = a.id
+          and a.provider = 'strava'
+        """
+    )
 
     for source in payload["activity_overrides"]:
         row = dict(source)
