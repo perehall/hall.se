@@ -4,7 +4,7 @@
       "activity_id": 20300494236,
       "activity_date": "2026-09-23",
       "activity_name": "Simning på kvällen",
-      "generated_at_utc": "2026-09-24T16:38:46.402395+00:00",
+      "generated_at_utc": "2026-09-24T16:43:18.368379+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 3,
@@ -16,8 +16,8 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört 3 200 m simpass matchade planens struktur med stabil 500 m‑serie runt 1:28 och kontrollerade 50/200‑serier; användaren rapporterar god kontroll och RPE 6/10.",
-        "load_interpretation": "Kardiovaskulär belastning motsvarar ett kontrollerat aerob/teknikpass; ingen indikation i data eller användarrapport på överbelastning i närbelastningsfönstret.",
+        "summary": "Genomförd 3 200 m simning med planerat strukturerat innehåll; huvudserien hölls stadigt runt 1:28 enligt användarrapport.",
+        "load_interpretation": "Passet levererade avsett simstimulus utan extra mekanisk benbelastning; RPE 6/10 indikerar god tolerans samma dag.",
         "confidence": "medium",
         "facts": [
           "Swim: 3,20 km · 58:57 · snittpuls 133,5 · maxpuls 152.",
@@ -26,19 +26,19 @@
           "Planerat simpass 3200 m; genomfört 3200 m. Genomförd setstruktur matchar planens struktur."
         ],
         "interpretations": [
-          "Passet validerar planens simstimulus och tekniska fokus — genomfört som avsett för utveckling.",
-          "Subjektivt utrymme för mer intensitet finns, men ingen data motiverar automatisk ökning inom 2–3 dagar."
+          "Passet konsoliderar sim-aerob/teknikstimulus i mikrocykeln och visar att 3 200 m-dosen är absorberad.",
+          "Ingen indikation i data eller rapport att kommande plan (ledig torsdag, 4 000 m fredag) måste reduceras av återhämtningsskäl."
         ],
         "unknowns": [
-          "Eventuell lokal muskeltrötthet nästa dag (ingen specifik rapport).",
-          "Hur användaren vill prioritera att försöka snabbare 100m‑fart i kommande simpass kontra bibehållen teknikkvalitet."
+          "Subsequent 24–72h känsla/recovery",
+          "särskild lokal muskeltrötthet i ben efter tidigare enduro som kan påverka framtida löpning"
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "",
-        "reason": "Passet uppfyllde planens simstimulus och det finns ingen saklig indikation för att skala ner eller vila de närmaste 2–3 dagarna.",
-        "recommendation": "Fortsätt enligt nuvarande plan; håll fredagens 4 000 m‑session oförändrad och använd paddlar/dolme på tröskeldelen som planerat. Försök korta, kontrollerade fartökningar först i uppvärmning eller mindre set innan du höjer huvudserien.",
+        "reason": "Passet matchade planerat siminnehåll och användarrapport visar god tolerans; inget i närbelastningen kräver reduktion.",
+        "recommendation": "Fortsätt enligt plan: behåll fri torsdag och genomför planerat 4 000 m-pass fredag som preliminerat. Fyll i subjektiv återhämtning morgonen efter om du upplever ovanlig trötthet.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -1268,8 +1268,8 @@
       }
     }
   ],
-  "last_trigger_hash": "c99bb233578ba2b44e501ef9dc81ae39c09b8faac36859a14f83fe7217adeedb",
-  "last_run_utc": "2026-09-24T16:38:46.402395+00:00",
+  "last_trigger_hash": "f7a3895ad8f75f876f15feb70a29e230470b78fb2bfafffe958fa196b66c9a5f",
+  "last_run_utc": "2026-09-24T16:43:18.368379+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 3
