@@ -272,6 +272,14 @@
       "source_hash": "88dde9b7e3a0a452e955e19b0e5cd9e55a92e8cd753f4d61031f7dafb438b4cc",
       "generated_at_utc": "2026-09-23T21:31:10.427191+00:00",
       "summary": "Tar bort planerat slot på dag 1 (faktiskt Enduro blockerar dag 1). Bevarar de fyra återstående slots från tidigare förslag så alla primära kapaciteter täcks (2 sim, 1 tröskel, 1 långt lugnt) och minst ett styrke/core‑stimulus finns (kombinerat med andra simpass). Alla hard_requirements efterlevs: dag‑2 är låg benbelastning (sim), max två löpkvaliteter respekteras, minst en vilodag lämnas (dag 6–7 möjliga), och progression väljs endast för ett primärtstimulus med stöd i athlete_state."
+    },
+    {
+      "kind": "microcycle",
+      "decision_id": "2026-W40",
+      "source": "deterministic_fallback_after_repair_guard",
+      "source_hash": "b67f3ebaea485c972802971b3421ea24ba133acaffb7a88a13692e2776dab710",
+      "generated_at_utc": "2026-09-24T00:24:44.017967+00:00",
+      "summary": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern."
     }
   ]
 }

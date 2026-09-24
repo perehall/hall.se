@@ -4,7 +4,7 @@
   "week_start": "2026-09-21",
   "week_end": "2026-09-27",
   "created_at_utc": "2026-09-20T23:15:26.146433+00:00",
-  "updated_at_utc": "2026-09-23T21:31:22.356340+00:00",
+  "updated_at_utc": "2026-09-24T00:24:57.284943+00:00",
   "plan": {
     "schema_version": 3,
     "meta": {
@@ -616,142 +616,6 @@
             "reason_for_today": "Mikrocykelbeslutet valde progress och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt."
           }
         },
-        "device_workout": {
-          "schema_version": 1,
-          "external_id": "hall-device:2026-09-23:swim:swim_aerobic_technique_2",
-          "date": "2026-09-23",
-          "sport": "swim",
-          "provider_type": "Swim",
-          "name": "Simning · 3 200 m · aerob/teknik",
-          "source_candidate_id": "swim-3200",
-          "source_hash": "25ef40763b340adec8eca33e5150bb8a61359ba1616b46ddda3f0b8b840d95f2",
-          "blocks": [
-            {
-              "name": "Insim",
-              "sets": 1,
-              "repetitions_per_set": 1,
-              "steps": [
-                {
-                  "kind": "work",
-                  "duration": {
-                    "kind": "distance",
-                    "meters": 400
-                  },
-                  "instruction": "Lugn insim · utan redskap",
-                  "intensity_class": "warmup"
-                }
-              ]
-            },
-            {
-              "name": "Kroppslinje och rotation",
-              "sets": 1,
-              "repetitions_per_set": 6,
-              "steps": [
-                {
-                  "kind": "work",
-                  "duration": {
-                    "kind": "distance",
-                    "meters": 50
-                  },
-                  "instruction": "Stabil linje, kontrollerad rotation · utan redskap",
-                  "intensity_class": "interval"
-                },
-                {
-                  "kind": "recovery",
-                  "duration": {
-                    "kind": "time",
-                    "seconds": 15
-                  },
-                  "instruction": "Vila",
-                  "intensity_class": "recovery",
-                  "press_lap": false,
-                  "transport_reference_only": false
-                }
-              ]
-            },
-            {
-              "name": "Aerob",
-              "sets": 1,
-              "repetitions_per_set": 4,
-              "steps": [
-                {
-                  "kind": "work",
-                  "duration": {
-                    "kind": "distance",
-                    "meters": 500
-                  },
-                  "instruction": "Stadigt aerob med stabil kroppslinje · utan redskap",
-                  "intensity_class": "interval"
-                },
-                {
-                  "kind": "recovery",
-                  "duration": {
-                    "kind": "time",
-                    "seconds": 30
-                  },
-                  "instruction": "Vila",
-                  "intensity_class": "recovery",
-                  "press_lap": false,
-                  "transport_reference_only": false
-                }
-              ]
-            },
-            {
-              "name": "Frekvens",
-              "sets": 1,
-              "repetitions_per_set": 6,
-              "steps": [
-                {
-                  "kind": "work",
-                  "duration": {
-                    "kind": "distance",
-                    "meters": 50
-                  },
-                  "instruction": "Avslappnad frekvens med bibehållen linje · utan redskap",
-                  "intensity_class": "interval"
-                },
-                {
-                  "kind": "recovery",
-                  "duration": {
-                    "kind": "time",
-                    "seconds": 15
-                  },
-                  "instruction": "Vila",
-                  "intensity_class": "recovery",
-                  "press_lap": false,
-                  "transport_reference_only": false
-                }
-              ]
-            },
-            {
-              "name": "Avsim",
-              "sets": 1,
-              "repetitions_per_set": 1,
-              "steps": [
-                {
-                  "kind": "work",
-                  "duration": {
-                    "kind": "distance",
-                    "meters": 200
-                  },
-                  "instruction": "Mycket lugnt avsim · utan redskap",
-                  "intensity_class": "cooldown"
-                }
-              ]
-            }
-          ],
-          "target_policy": "explicit_single_primary_only",
-          "transport": "intervals_icu"
-        },
-        "device_sync": {
-          "status": "synced",
-          "transport": "intervals_icu",
-          "source_hash": "25ef40763b340adec8eca33e5150bb8a61359ba1616b46ddda3f0b8b840d95f2",
-          "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-23T21:31:21.187544+00:00",
-          "provider_event_id": 138097033,
-          "verified_at_utc": "2026-09-23T21:31:21.187544+00:00"
-        },
         "activity_id": 20300494236
       },
       {
@@ -1261,9 +1125,9 @@
           "transport": "intervals_icu",
           "source_hash": "9fcd60c075496d2ba5301ad8c850ecb2ec0dd8430864ecc062e85a53774b9e24",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-23T21:31:21.321755+00:00",
+          "updated_at_utc": "2026-09-24T00:24:55.308887+00:00",
           "provider_event_id": 138142476,
-          "verified_at_utc": "2026-09-23T21:31:21.321755+00:00"
+          "verified_at_utc": "2026-09-24T00:24:55.308887+00:00"
         }
       },
       {
@@ -1564,9 +1428,9 @@
           "transport": "intervals_icu",
           "source_hash": "9dc12d3e522e49454af7c6ffe216ee9ba323186427181ac1e1ae64a8d6009578",
           "device_delivery": "unverified",
-          "updated_at_utc": "2026-09-23T21:31:21.446584+00:00",
+          "updated_at_utc": "2026-09-24T00:24:55.799105+00:00",
           "provider_event_id": 138097036,
-          "verified_at_utc": "2026-09-23T21:31:21.446584+00:00"
+          "verified_at_utc": "2026-09-24T00:24:55.799105+00:00"
         }
       }
     ],
@@ -3115,7 +2979,7 @@
       "activity_id": 20300494236,
       "activity_date": "2026-09-23",
       "activity_name": "Simning på kvällen",
-      "generated_at_utc": "2026-09-23T21:31:20.529289+00:00",
+      "generated_at_utc": "2026-09-24T00:24:53.885402+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 3,
@@ -3127,8 +2991,8 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomförd 3 200 m simning matchade planerat struktur och dos; stabila 500 m‑set och snabbare 50:or i slutet indikerar god genomförandekvalitet.",
-        "load_interpretation": "Kardiovaskulärt och tekniskt stimulus för sim är levererat idag; inga uppenbara negativa efterverkningar rapporterade samma dag.",
+        "summary": "Genomfört simpass 3 200 m matchade planens struktur och visar god genomförbarhet av mikrocykelns simstimulus.",
+        "load_interpretation": "Senaste 48–72 h innehåller tung löptröskel (4×8) + enduro + styrka; därför bevara planen utan ökning nästa 2–3 dagar.",
         "confidence": "medium",
         "facts": [
           "Simning: 3,20 km · 58:57 · snittpuls 133,5 · maxpuls 152.",
@@ -3136,19 +3000,19 @@
           "Planerat simpass 3200 m; genomfört 3200 m. Genomförd setstruktur matchar planens struktur."
         ],
         "interpretations": [
-          "Passet fullföljde det planerade teknisk/aeroba receptet och visar förmåga att genomföra 3,2k med bibehållen fartstabilitet i 500 m‑seten.",
-          "Avslutande snabba 50:or tyder på kvarvarande kapacitet och att sessionen tolererades väl i simkomponenten."
+          "Passet konsoliderar sim‑aerob/teknik‑stimulus och visar att 3 200 m‑dosen är absorberbar i nuvarande kontext.",
+          "Kombinationen av tisdagens 4×8 tröskel och måndagens enduro/styrka ökar närbelastningen; det stödjer att hålla, inte öka, kommande doser."
         ],
         "unknowns": [
-          "Subjektiv återhämtning nästa 24–72 h (ingen användarrapport idag)",
-          "Eventuell lokal muskeltrötthet från föregående dagars löpning/enduro som påverkar kommande pass"
+          "Subjektiv återhämtningsstatus efter kvällen (användarrapport tom).",
+          "Eventuell lokal muskulär trötthet i benen inför veckans långa löppass"
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "",
-        "reason": "Passet fullföljde det planerade sim‑aerob/teknik‑receptet exakt och levererade avsett stimulus, så ingen ändring behövs de närmaste 2–3 dagarna.",
-        "recommendation": "Fortsätt enligt nuvarande mikrocykel; vila/återhämta normalt och genomför planerat styrke‑ eller vilopass nästa dag enligt schema.",
+        "reason": "Mikrocykelns sim‑stimulus är uppfyllt och närbelastningen från löpning + enduro/styrka talar för att behålla planerade doser.",
+        "recommendation": "Behåll planerad träning oförändrad; vila/återhämtningsrutiner som vanligt och rapportera om du känner ovanlig ben- eller generell trötthet inför helgens längre löppass.",
         "dose_option_id": "",
         "requires_approval": false
       },
