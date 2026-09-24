@@ -14,6 +14,7 @@ from supabase_activity_backend import (  # noqa: E402
     build_activity_snapshot,
     canonical_hash,
     load_activities_for_runtime,
+    safe_error_detail,
 )
 
 
@@ -199,6 +200,21 @@ class SupabaseActivityBackendModelTests(unittest.TestCase):
             self.assertEqual(loaded, document)
             self.assertEqual(meta["source"], "json_local_dev")
             self.assertFalse(meta["verified"])
+
+    def test_safe_error_detail_logs_contracts_but_not_driver_messages(self):
+        self.assertEqual(
+            safe_error_detail(RuntimeError("Current activity key-set mismatch")),
+            "RuntimeError:Current activity key-set mismatch",
+        )
+
+        class DriverError(Exception):
+            pass
+
+        detail = safe_error_detail(
+            DriverError("postgresql://user:secret@example.invalid/db")
+        )
+        self.assertEqual(detail, "DriverError")
+        self.assertNotIn("secret", detail)
 
     def test_snapshot_rejects_override_for_missing_activity(self):
         with tempfile.TemporaryDirectory() as raw:
