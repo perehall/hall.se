@@ -21,6 +21,7 @@ on:
       - "träning/data/workout_catalog.json"
       - "träning/scripts/adaptive_planner.py"
       - "träning/scripts/supabase_goal_source.py"
+      - "träning/scripts/supabase_activity_backend.py"
       - "träning/scripts/race_contracts.py"
       - "träning/scripts/goal_contracts.py"
       - "träning/scripts/build_athlete_state.py"
@@ -88,8 +89,7 @@ jobs:
             cp "träning/index.html" "träning/index.manual-backup.html"
           fi
 
-      - name: Install optional Supabase planner dependency
-        continue-on-error: true
+      - name: Install Supabase backend dependency
         run: python -m pip install --disable-pip-version-check "psycopg[binary]>=3.2,<4"
 
       - name: Run canonical training update pipeline
