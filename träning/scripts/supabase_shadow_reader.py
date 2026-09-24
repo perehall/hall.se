@@ -103,7 +103,9 @@ def expected_key_sets(payload: dict[str, Any]) -> dict[str, set[Any]]:
 
 
 def fetch_actual_key_sets(cur: Any) -> dict[str, set[Any]]:
-    cur.execute("select provider, provider_activity_id from training.activities")
+    cur.execute(
+        "select provider, provider_activity_id from training.activities where is_current"
+    )
     activities = {(row[0], row[1]) for row in cur.fetchall()}
 
     cur.execute(
@@ -111,6 +113,7 @@ def fetch_actual_key_sets(cur: Any) -> dict[str, set[Any]]:
         select a.provider, a.provider_activity_id, l.lap_index
         from training.activity_laps l
         join training.activities a on a.id = l.activity_id
+        where a.is_current
         """
     )
     activity_laps = {(row[0], row[1], int(row[2])) for row in cur.fetchall()}
@@ -260,6 +263,8 @@ def audit() -> dict[str, Any]:
             # exactly. Historical tables are append-retained: current canonical
             # rows may not be missing, but older rows are allowed to remain.
             exact_tables = {
+                "activities",
+                "activity_laps",
                 "activity_overrides",
                 "training_goals",
                 "state_documents",
