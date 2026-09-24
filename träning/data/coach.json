@@ -4,7 +4,7 @@
       "activity_id": 20300494236,
       "activity_date": "2026-09-23",
       "activity_name": "Simning på kvällen",
-      "generated_at_utc": "2026-09-24T14:16:55.275263+00:00",
+      "generated_at_utc": "2026-09-24T14:27:42.712071+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 3,
@@ -16,8 +16,8 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört simpass 3 200 m med stabil huvudserie (4×500 @ ~1:28/100 m) och snabba 50‑repriser; användaren rapporterar god kontroll och RPE 6/10.",
-        "load_interpretation": "Passet är en absorberbar simexponering som kompletterar mikrocykelns prioritet utan att kräva kortsiktiga reduktioner.",
+        "summary": "Stabilt genomfört 3 200 m simpass med kontrollerad huvudserie (4×500m) och god subjektiv kontroll; RPE 6/10.",
+        "load_interpretation": "Passet är ett aerob/teknikstimulus som kompletterar mikrocykeln utan att kräva omedelbar reduktion eller vila.",
         "confidence": "medium",
         "facts": [
           "Swim: 3,20 km · 58:57 · snittpuls 133,5 · maxpuls 152.",
@@ -26,19 +26,19 @@
           "Planerat simpass 3200 m; genomfört 3200 m. Genomförd setstruktur matchar planens struktur."
         ],
         "interpretations": [
-          "Passet fyllde planerat simstimulus och visar god genomförbar aerob kontroll i 500‑serien vilket stödjer fortsatt simprogression på mikrocykelnivå.",
-          "Snabba 50‑serierna visar kapacitet för högre fart, men enstaka bra rep räcker inte som automatisk progression till hårdare dos."
+          "Stabilitet i 4×500 (pace delta 0.2s) visar god genomförbar aerob kapacitet för dosen.",
+          "Subjektiv känsla att mer fanns kvar indikerar möjlighet att bibehålla plan utan reduktion; en progression kräver dock explicita kriterier och är inte automatisk."
         ],
         "unknowns": [
-          "Hur benen/neuromuskulaturen svarar kommande 48–72 h efter tidigare enduro+styrka",
-          "Om användaren vill att fredagens 4 000 m‑session ska hållas som plan eller skalas beroende på känsla"
+          "Nästa 2–3 dagars faktiska återhämtning/aktivitet (närbelastningen) kan påverka val för kommande högre dos.",
+          "Teknisk detaljer i simsättet (stroke) saknas för att bedöma om tröskel i sim kan säkras vid snabbare tempon."
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "",
-        "reason": "Passet matchar planens simstimulus och användarrapport indikerar tolerans och möjlighet för fortsatt plan utan akut ändring.",
-        "recommendation": "Fortsätt enligt aktuell mikrocykel; vila eller lätt aktivitet i dag om du känner lokal trötthet, annars följ plan för torsdag som vilodag och genomför planerad 4 000 m på fredag enligt schema.",
+        "reason": "Passet uppfyllde planens anchor‑stimulus och togs väl emot (RPE 6/10) utan tecken på överbelastning.",
+        "recommendation": "Fortsätt enligt befintlig plan; håll fredagens 4 000 m‑session oförändrad och prioritera paddlar/dolme på tröskeldelen enligt recept. Ingen extra vila eller reduktion behövs.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -1268,8 +1268,8 @@
       }
     }
   ],
-  "last_trigger_hash": "5f8da6e8a098f07c2a47f2d40e2b4ffb73fef49e5d3d5148210cd522c48fe891",
-  "last_run_utc": "2026-09-24T14:16:55.275263+00:00",
+  "last_trigger_hash": "66efee677d6e3d618af13e3cdf3721015e1366cedfaef290ecf162623efb7152",
+  "last_run_utc": "2026-09-24T14:27:42.712071+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 3
