@@ -27,6 +27,7 @@ from rollover_week import (
     promote_upcoming,
 )
 from strategy_contracts import validate_training_strategy
+from supabase_goal_source import load_goal_for_planner
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
@@ -1735,7 +1736,7 @@ def generated_strategic_readiness(goal, policy):
     return rows
 
 
-def materialize_strategy(goal, policy, meso, micro, catalog, athlete_state):
+def materialize_strategy(goal, policy, meso, micro, catalog, athlete_state, goal_runtime_source=None):
     strategy = deepcopy(policy["strategy_base"])
     strategy["schema_version"] = int(policy["compatibility_strategy_schema_version"])
     digest = goal_hash(goal)
@@ -1750,8 +1751,18 @@ def materialize_strategy(goal, policy, meso, micro, catalog, athlete_state):
         meso.get("goal_contribution"),
         meso.get("competition_context") or {},
     )
+    runtime_source = goal_runtime_source or {
+        "source": "json_fallback",
+        "verified": False,
+        "reason": "not_supplied",
+        "source_hash": digest,
+    }
     strategy["goal_contract"] = {
         "source_file": "data/goal.json",
+        "runtime_source": runtime_source.get("source"),
+        "runtime_source_verified": bool(runtime_source.get("verified")),
+        "runtime_source_reason": runtime_source.get("reason"),
+        "runtime_source_hash": runtime_source.get("source_hash"),
         "source_schema_version": goal.get("schema_version"),
         "goal_hash": digest,
         "goal_change_requires_mesocycle_review": True,
@@ -1855,7 +1866,11 @@ def materialize_strategy(goal, policy, meso, micro, catalog, athlete_state):
     }
     strategy["generated_planning"] = {
         "source_policy": "data/planning_policy.json",
-        "source_goal": "data/goal.json",
+        "source_goal": (
+            "supabase:training_goal_document"
+            if runtime_source.get("source") == "supabase"
+            else "data/goal.json"
+        ),
         "source_athlete_state": "data/athlete_state.json",
         "source_mesocycle_decision": "data/mesocycle_decision.json",
         "source_microcycle_decision": "data/microcycle_decision.json",
@@ -1926,7 +1941,7 @@ def rebuild_calendar(plan, strategy, target_start, active_replan):
 
 
 def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
-    goal = load_json(GOAL_FILE, {})
+    goal, goal_runtime_source = load_goal_for_planner(GOAL_FILE)
     policy = load_json(POLICY_FILE, {})
     catalog = load_json(CATALOG_FILE, {})
     athlete_state = load_json(ATHLETE_STATE_FILE, {})
@@ -1999,7 +2014,15 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
         write_json(MICRO_FILE, micro)
         append_decision_log("microcycle", micro)
 
-    strategy = materialize_strategy(goal, policy, meso, micro, catalog, athlete_state)
+    strategy = materialize_strategy(
+        goal,
+        policy,
+        meso,
+        micro,
+        catalog,
+        athlete_state,
+        goal_runtime_source=goal_runtime_source,
+    )
     write_json(STRATEGY_FILE, strategy)
     scope = rebuild_calendar(plan, strategy, target_start, active_replan)
 
@@ -2007,6 +2030,7 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
         "Adaptive planning OK: "
         f"mesocycle={meso['id']} source={meso['source']} "
         f"microcycle={micro['week_key']} source={micro['source']} "
+        f"goal_source={goal_runtime_source['source']} "
         f"calendar={scope}."
     )
     return 0
