@@ -1,10 +1,12 @@
 {
-  "last_sync_utc": "2026-09-24T18:39:25.359968+00:00",
+  "last_sync_utc": "2026-09-24T18:47:06.697968+00:00",
   "schema_version": 2,
   "activity_semantics": {
-    "changed_ids": [],
+    "changed_ids": [
+      "20314473143"
+    ],
     "schema_version": 1,
-    "overrides_applied": 15,
+    "overrides_applied": 16,
     "auto_rules_applied": 11,
     "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
     "override_ids_present": [
@@ -22,7 +24,8 @@
       "20271537143",
       "20272196080",
       "20284663236",
-      "20300494236"
+      "20300494236",
+      "20314473143"
     ],
     "workout_analysis_contract_version": 3
   },
@@ -45,12 +48,18 @@
       "sport_type": "MountainBikeRide",
       "start_date": "2026-09-24T17:01:58Z",
       "device_name": "Garmin Forerunner 970",
+      "user_report": "Cirka 80 min lugn stig-MTB. Dagen var planerad som vilodag.",
       "average_watts": 125.7,
+      "display_label": "MTB/XC",
       "max_heartrate": 149.0,
       "moving_time_s": 4690,
+      "plan_relation": "separate",
+      "classification": "training",
       "elapsed_time_s": 4976,
       "start_date_local": "2026-09-24T19:01:58Z",
       "average_heartrate": 126.4,
+      "source_sport_type": "MountainBikeRide",
+      "classification_reason": "Explicit användarrapport anger att detta var ett spontant lugnt stig-MTB-pass på en dag som i planen var vilodag. Passet ska registreras separat som faktisk träningsbelastning och får inte skrivas om till ett planerat pass.",
       "total_elevation_gain_m": 207.0,
       "weighted_average_watts": null,
       "workout_analysis_context": {
@@ -68,9 +77,9 @@
         "enduro": null,
         "sport_type": "MountainBikeRide",
         "activity_id": 20314473143,
-        "user_report": "",
-        "display_label": "MountainBikeRide",
-        "classification": null,
+        "user_report": "Cirka 80 min lugn stig-MTB. Dagen var planerad som vilodag.",
+        "display_label": "MTB/XC",
+        "classification": "training",
         "contract_version": 3,
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
       },
