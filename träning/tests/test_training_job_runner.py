@@ -46,7 +46,10 @@ class TrainingJobRunnerTests(unittest.TestCase):
         self.assertNotIn("sync_reported_progression_post", keys)
         self.assertLess(keys.index("sync_performance_details"), keys.index("build_athlete_state"))
         self.assertLess(keys.index("weekly_review"), keys.index("build_athlete_state"))
-        self.assertLess(keys.index("build_athlete_state"), keys.index("adaptive_planning"))
+        self.assertLess(keys.index("build_athlete_state"), keys.index("commit_athlete_runtime_backend"))
+        self.assertLess(keys.index("commit_athlete_runtime_backend"), keys.index("adaptive_planning"))
+        self.assertLess(keys.index("adaptive_planning"), keys.index("commit_planning_runtime_backend"))
+        self.assertLess(keys.index("commit_planning_runtime_backend"), keys.index("validate_adaptive_plan"))
         self.assertLess(keys.index("adaptive_planning"), keys.index("rollover_calendar"))
         self.assertLess(keys.index("rollover_calendar"), keys.index("apply_plan_overrides"))
         self.assertLess(keys.index("apply_plan_overrides"), keys.index("validate_rollover"))
@@ -55,7 +58,21 @@ class TrainingJobRunnerTests(unittest.TestCase):
         self.assertLess(keys.index("materialize_device_workouts"), keys.index("validate_device_workouts"))
         self.assertLess(keys.index("validate_device_workouts"), keys.index("sync_device_workouts"))
         self.assertLess(keys.index("sync_device_workouts"), keys.index("guard_coach_claims"))
+        self.assertLess(keys.index("validate_post_coach"), keys.index("commit_final_runtime_backend"))
+        self.assertLess(keys.index("commit_final_runtime_backend"), keys.index("render_and_validate_site"))
         self.assertEqual(keys[-1], "render_and_validate_site")
+
+    def test_runtime_backend_commit_points_are_required(self):
+        stages = {stage.key: stage for stage in build_stages("event")}
+        for key, scope in (
+            ("commit_athlete_runtime_backend", "athlete"),
+            ("commit_planning_runtime_backend", "planning"),
+            ("commit_final_runtime_backend", "final"),
+        ):
+            stage = stages[key]
+            self.assertFalse(stage.optional)
+            self.assertIn("supabase_runtime_state.py", stage.command[1])
+            self.assertEqual(stage.command[-2:], ("--scope", scope))
 
     def test_rotated_strava_token_is_persisted_before_backend_gate(self):
         keys = self.stage_keys("event")
