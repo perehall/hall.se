@@ -54,6 +54,7 @@ def build_stages(ingest_mode: str) -> list[Stage]:
 
     return [
         ingest,
+        persist_token,
         Stage("normalize_activity_semantics", python_stage("normalize_activity_semantics.py")),
         Stage("migrate_typed_plan", python_stage("migrate_training_data_v3.py")),
         Stage(
@@ -64,7 +65,6 @@ def build_stages(ingest_mode: str) -> list[Stage]:
             "promote_activity_backend",
             python_stage("supabase_activity_backend.py", "--mode", "promote"),
         ),
-        persist_token,
         Stage(
             "sync_performance_details",
             python_stage("sync_performance_details.py", "--days", "60"),
