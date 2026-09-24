@@ -3,142 +3,142 @@
   "overrides": {
     "19852599244": {
       "sport": "Enduro",
-      "classification": "recreation",
-      "display_label": "Enduro",
-      "source_sport_type": "MountainBikeRide",
-      "garmin_activity_type": "Motocross",
+      "reason": "Strava saknar enduro som aktivitetstyp och exponerar därför passet som MountainBikeRide. Garmin Connect klassar originalaktiviteten som Motocross.",
       "user_report": "Lätt och inte det minsta slitsamt.",
-      "reason": "Strava saknar enduro som aktivitetstyp och exponerar därför passet som MountainBikeRide. Garmin Connect klassar originalaktiviteten som Motocross."
+      "display_label": "Enduro",
+      "classification": "recreation",
+      "source_sport_type": "MountainBikeRide",
+      "garmin_activity_type": "Motocross"
     },
     "19862241646": {
       "sport": "Run",
-      "classification": "training",
-      "display_label": "Löpning · grus/asfalt",
-      "source_sport_type": "Run",
+      "reason": "Explicit användarrapport korrigerar underlaget till grus/asfalt. Aktiviteten är fortsatt vanlig löpning, inte TrailRun.",
       "user_report": "Underlag: grus och asfalt; inte trail.",
-      "reason": "Explicit användarrapport korrigerar underlaget till grus/asfalt. Aktiviteten är fortsatt vanlig löpning, inte TrailRun."
+      "display_label": "Löpning · grus/asfalt",
+      "classification": "training",
+      "source_sport_type": "Run"
     },
     "19897382163": {
       "sport": "Run",
-      "classification": "training",
-      "source_sport_type": "Run",
+      "reason": "Explicit användarrapport beskriver passets faktiska struktur och upplevda utfall och ska användas i fortsatt löpplanering.",
       "user_report": "3×8 min tröskel. Motsvarande känsla som föregående vecka, lite sämre tempo och ingen känsla av att vara starkare.",
-      "reason": "Explicit användarrapport beskriver passets faktiska struktur och upplevda utfall och ska användas i fortsatt löpplanering."
+      "classification": "training",
+      "source_sport_type": "Run"
     },
     "19911120461": {
       "sport": "Swimrun",
-      "classification": "training",
-      "display_label": "Swimrun · Jogersö Extreme",
-      "source_sport_type": "TrailRun",
+      "reason": "Aktivitetsnamnet identifierar passet som swimrun. Användarrapporten anger dessutom ett tydligt pulsbortfall, så registrerad pulszonsfördelning och snittpuls ska inte användas som fullgod intensitetsbeskrivning för passet.",
       "user_report": "Ett varv på Jogersö Extreme. Pulsmätningen tappades under cirka 2 km där ansträngningen gick rätt hårt; registrerad Z1 på den delen är felaktig och faktisk intensitet bedöms av användaren som minst Z3.",
-      "reason": "Aktivitetsnamnet identifierar passet som swimrun. Användarrapporten anger dessutom ett tydligt pulsbortfall, så registrerad pulszonsfördelning och snittpuls ska inte användas som fullgod intensitetsbeskrivning för passet."
+      "display_label": "Swimrun · Jogersö Extreme",
+      "classification": "training",
+      "source_sport_type": "TrailRun"
     },
     "19946705399": {
       "sport": "Swim",
-      "classification": "training",
-      "display_label": "Simning · aerob + tröskel",
-      "source_sport_type": "Swim",
+      "reason": "Användaren anger explicit att simpasset var spontant och ska registreras som ett eget pass, inte kopplas till dagens planerade MTB-pass.",
       "user_report": "Spontant simpass: Aerob+tröskel 4K, 4 000 m. Passet är separat från dagens planerade MTB-pass och ska räknas som faktisk träningsbelastning, inte som genomförande av dagens plan.",
+      "display_label": "Simning · aerob + tröskel",
       "plan_relation": "separate",
-      "reason": "Användaren anger explicit att simpasset var spontant och ska registreras som ett eget pass, inte kopplas till dagens planerade MTB-pass."
+      "classification": "training",
+      "source_sport_type": "Swim"
     },
     "20036445971": {
       "sport": "Run",
-      "classification": "training",
-      "display_label": "Löpning · backintervaller",
-      "source_sport_type": "Run",
+      "reason": "Explicit användarrapport korrigerar passets faktiska intervallstruktur. Garmin/Strava-varv får inte överskriva användarens rapporterade 3 × 6-struktur.",
       "user_report": "3 × 6 backintervaller (18 backar totalt). Tre serier om sex intervaller; arbetsdelarna ska beskrivas som intervaller.",
-      "reason": "Explicit användarrapport korrigerar passets faktiska intervallstruktur. Garmin/Strava-varv får inte överskriva användarens rapporterade 3 × 6-struktur."
+      "display_label": "Löpning · backintervaller",
+      "classification": "training",
+      "source_sport_type": "Run"
     },
     "20057585521": {
       "sport": "Run",
-      "classification": "training",
-      "display_label": "Löpning · distans",
-      "source_sport_type": "Run",
+      "reason": "Explicit användarrapport beskriver passkänsla, energiintag, sen fartökning, pulsrespons och respons efter passet. Dessa uppgifter ska vara förstaklassunderlag i coachanalysen.",
       "user_report": "Kände mig stark hela passet och höll ett kontrollerat tempo. Tog en gel efter cirka en timme. Testade en tempoökning kring km 20–21, cirka 4:25/km, vilket fungerade bra. Pulsen gick upp i fartökningen. Pigg resten av dagen och inte ont någonstans.",
-      "reason": "Explicit användarrapport beskriver passkänsla, energiintag, sen fartökning, pulsrespons och respons efter passet. Dessa uppgifter ska vara förstaklassunderlag i coachanalysen."
+      "display_label": "Löpning · distans",
+      "classification": "training",
+      "source_sport_type": "Run"
     },
     "20092166843": {
       "sport": "Run",
-      "classification": "training",
-      "display_label": "Löpband · 4 × 8 min Tempo",
-      "source_sport_type": "Run",
+      "reason": "Explicit användarrapport korrigerar tisdagens faktiska passstruktur till 4 × 8 min på löpband och bevarar den subjektiva utvärderingen som förstaklassunderlag i coachanalysen.",
       "user_report": "Löpband 4 × 8 min Tempo enligt Garmin. Sista intervallen krävde lite mental ansträngning trots att pulsen bara låg runt 162 bpm i slutet.",
-      "reason": "Explicit användarrapport korrigerar tisdagens faktiska passstruktur till 4 × 8 min på löpband och bevarar den subjektiva utvärderingen som förstaklassunderlag i coachanalysen."
+      "display_label": "Löpband · 4 × 8 min Tempo",
+      "classification": "training",
+      "source_sport_type": "Run"
     },
     "20120769386": {
       "sport": "MountainBikeRide",
-      "classification": "training",
-      "display_label": "MTB/XC",
-      "source_sport_type": "MountainBikeRide",
+      "reason": "Explicit användarrapport förklarar att den längre varaktigheten inte speglar en avsiktlig belastningsökning: mörkret sänkte farten och gjorde passet lugnare samtidigt som tiden blev längre. Detta ska vägas in vid bedömning av närbelastning inför nästa löppass.",
       "user_report": "Passet blev lite lugnare och längre på grund av mörkret.",
-      "reason": "Explicit användarrapport förklarar att den längre varaktigheten inte speglar en avsiktlig belastningsökning: mörkret sänkte farten och gjorde passet lugnare samtidigt som tiden blev längre. Detta ska vägas in vid bedömning av närbelastning inför nästa löppass."
+      "display_label": "MTB/XC",
+      "classification": "training",
+      "source_sport_type": "MountainBikeRide"
     },
     "20133500464": {
       "sport": "Run",
-      "classification": "training",
-      "display_label": "Löpning · backintervaller",
-      "source_sport_type": "Run",
+      "reason": "Explicit användarrapport korrigerar dagens faktiska intervallstruktur till 3 × 7. Garmin/Strava-varv och den planerade 3 × 6-dosen får inte överskriva användarens rapporterade genomförande.",
       "user_report": "3 × 7 backintervaller (21 backar totalt). Tre serier om sju intervaller; arbetsdelarna ska beskrivas som intervaller.",
-      "reason": "Explicit användarrapport korrigerar dagens faktiska intervallstruktur till 3 × 7. Garmin/Strava-varv och den planerade 3 × 6-dosen får inte överskriva användarens rapporterade genomförande."
+      "display_label": "Löpning · backintervaller",
+      "classification": "training",
+      "source_sport_type": "Run"
     },
     "20229568713": {
       "sport": "Run",
-      "classification": "training",
-      "display_label": "Löpning · backintervaller",
-      "source_sport_type": "Run",
+      "reason": "Explicit användarrapport fastställer kvällens faktiska intervallstruktur till 3 × 8 och den subjektiva känslan som superpigg. Den tidigare coachanalysens 2 × 8 kom från den nedjusterade planen och får inte användas som facit för faktiskt genomförande.",
       "user_report": "3 × 8 backintervaller (24 backar totalt). Tre serier om åtta intervaller. Kände mig superpigg under och efter passet.",
-      "reason": "Explicit användarrapport fastställer kvällens faktiska intervallstruktur till 3 × 8 och den subjektiva känslan som superpigg. Den tidigare coachanalysens 2 × 8 kom från den nedjusterade planen och får inte användas som facit för faktiskt genomförande."
+      "display_label": "Löpning · backintervaller",
+      "classification": "training",
+      "source_sport_type": "Run"
     },
     "20271537143": {
       "sport": "Enduro",
-      "classification": "training",
-      "display_label": "Enduro",
-      "source_sport_type": "Workout",
-      "user_report": "Teknisk körning, stenbacke och berghäll, kostnad för passet minimal RPE 4/10. Känsla: Pigg. Lätt teknik, stenbackar och berghällar RPE 4/10.",
       "reason": "Explicit GUI-input från användaren ska behandlas som förstaklassdata i analys och fortsatt planering.",
-      "last_training_input_event_key": "training-input:3b12cd42b4a49c62750efa06",
+      "user_report": "Teknisk körning, stenbacke och berghäll, kostnad för passet minimal RPE 4/10. Känsla: Pigg. Lätt teknik, stenbackar och berghällar RPE 4/10.",
+      "display_label": "Enduro",
+      "plan_relation": "separate",
+      "classification": "training",
+      "source_sport_type": "Workout",
       "training_input_event_keys": [
         "training-input:3b12cd42b4a49c62750efa06"
       ],
-      "plan_relation": "separate"
+      "last_training_input_event_key": "training-input:3b12cd42b4a49c62750efa06"
     },
     "20272196080": {
       "sport": "WeightTraining",
-      "classification": "training",
-      "display_label": "WeightTraining",
-      "source_sport_type": "WeightTraining",
-      "user_report": "RPE 2/10. Känsla: Pigg. Palloff press, latsdrag, bulgarian splits, atomic pushups med band, bänkrodd, dead bug, omvänd planka RPE 4/10.",
-      "last_training_input_event_key": "training-input:e01b39e8427dc0fbdeb670f5",
       "reason": "Explicit GUI-input från användaren ska behandlas som förstaklassdata i analys och fortsatt planering.",
+      "user_report": "RPE 2/10. Känsla: Pigg. Palloff press, latsdrag, bulgarian splits, atomic pushups med band, bänkrodd, dead bug, omvänd planka RPE 4/10.",
+      "display_label": "WeightTraining",
+      "classification": "training",
+      "source_sport_type": "WeightTraining",
+      "training_feedback": {
+        "rpe": 4,
+        "text": "Palloff press, latsdrag, bulgarian splits, atomic pushups med band, bänkrodd, dead bug, omvänd planka",
+        "feeling": [],
+        "event_key": "training-input:e01b39e8427dc0fbdeb670f5",
+        "operation": "UPDATE_COMPLETED_WORKOUT",
+        "submitted_at": "2026-09-22T11:50:24.540Z"
+      },
       "training_input_event_keys": [
         "training-input:47386e175c12e0de4bce7738",
         "training-input:e01b39e8427dc0fbdeb670f5"
       ],
-      "training_feedback": {
-        "text": "Palloff press, latsdrag, bulgarian splits, atomic pushups med band, bänkrodd, dead bug, omvänd planka",
-        "rpe": 4,
-        "feeling": [],
-        "operation": "UPDATE_COMPLETED_WORKOUT",
-        "event_key": "training-input:e01b39e8427dc0fbdeb670f5",
-        "submitted_at": "2026-09-22T11:50:24.540Z"
-      }
+      "last_training_input_event_key": "training-input:e01b39e8427dc0fbdeb670f5"
     },
     "20284663236": {
       "sport": "Run",
-      "classification": "training",
-      "display_label": "Löpning · tröskel",
-      "source_sport_type": "Run",
-      "user_report": "4 × 8 min tröskel. Garmin träningseffekt 4,2 ”Tröskel”. Känslan var riktigt bra och jag kände mig stark. Ökade lite på sista intervallen och hade mycket kraft kvar. Av praktiska skäl blev det löpning i stället för planerad simning; simningen flyttas till 2026-09-23. 4x8min med god kontroll. RPE 6/10. Känsla: Kunde gjort mer.",
       "reason": "Explicit användarrapport beskriver faktisk intervallstruktur, Garmin-klassning, passkänsla och att löpningen ersatte dagens planerade simning. Uppgifterna ska vara förstaklassdata i analys och fortsatt planering.",
+      "user_report": "4 × 8 min tröskel. Garmin träningseffekt 4,2 ”Tröskel”. Känslan var riktigt bra och jag kände mig stark. Ökade lite på sista intervallen och hade mycket kraft kvar. Av praktiska skäl blev det löpning i stället för planerad simning; simningen flyttas till 2026-09-23. 4x8min med god kontroll. RPE 6/10. Känsla: Kunde gjort mer.",
+      "display_label": "Löpning · tröskel",
+      "classification": "training",
+      "source_sport_type": "Run",
       "training_feedback": {
-        "text": "4x8min med god kontroll.",
         "rpe": 6,
+        "text": "4x8min med god kontroll.",
         "feeling": [
           "could_do_more"
         ],
-        "operation": "ADD_FEEDBACK",
         "event_key": "training-input:1d7f6604de1624c2cf093df4",
+        "operation": "ADD_FEEDBACK",
         "submitted_at": "2026-09-23T05:45:48.434Z"
       },
       "training_input_event_keys": [
@@ -148,25 +148,25 @@
     },
     "20300494236": {
       "sport": "Swim",
-      "classification": "training",
-      "display_label": "Swim",
-      "source_sport_type": "Swim",
+      "reason": "Explicit GUI-input från användaren ska behandlas som förstaklassdata i analys och fortsatt planering.",
       "user_report": "Väldigt bra kontroll genom huvudserien, höll ihop tempot och låg på stadigt på 1:28. Skulle dock vilja komma ner under 1:25 per 100m med samma känsla. RPE 6/10. Känsla: Kunde gjort mer.",
+      "display_label": "Swim",
+      "classification": "training",
+      "source_sport_type": "Swim",
       "training_feedback": {
-        "text": "Väldigt bra kontroll genom huvudserien, höll ihop tempot och låg på stadigt på 1:28. Skulle dock vilja komma ner under 1:25 per 100m med samma känsla.",
         "rpe": 6,
+        "text": "Väldigt bra kontroll genom huvudserien, höll ihop tempot och låg på stadigt på 1:28. Skulle dock vilja komma ner under 1:25 per 100m med samma känsla.",
         "feeling": [
           "could_do_more"
         ],
-        "operation": "ADD_FEEDBACK",
         "event_key": "training-input:01778cc39134eb5553cb8eb3",
+        "operation": "ADD_FEEDBACK",
         "submitted_at": "2026-09-24T07:47:55.469Z"
       },
       "training_input_event_keys": [
         "training-input:01778cc39134eb5553cb8eb3"
       ],
-      "last_training_input_event_key": "training-input:01778cc39134eb5553cb8eb3",
-      "reason": "Explicit GUI-input från användaren ska behandlas som förstaklassdata i analys och fortsatt planering."
+      "last_training_input_event_key": "training-input:01778cc39134eb5553cb8eb3"
     }
   }
 }

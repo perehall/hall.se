@@ -42,7 +42,7 @@
   "planner_revision": 7,
   "source": "deterministic_fallback_after_repair_guard",
   "source_hash": "c15e5b787bb30db83ce13e460b8e089584bd35a874bbf3f443b7876e5e731a7c",
-  "generated_at_utc": "2026-09-24T16:43:08.749201+00:00",
+  "generated_at_utc": "2026-09-24T17:18:44.671973+00:00",
   "week_start": "2026-09-28",
   "week_key": "2026-W40",
   "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
@@ -131,9 +131,11 @@
     "attempted": true,
     "initial_failures": [
       "dag 1 är blockerad av fast endurobelastning",
-      "swim_strength får inte ligga direkt dagen efter fast enduro när faktisk benbelastning ännu är okänd"
+      "swim_strength får inte ligga direkt dagen efter fast enduro när faktisk benbelastning ännu är okänd",
+      "löptröskel/backkvalitet/lång löpdistans får inte staplas på två på varandra följande dagar"
     ],
     "repair_failures": [
+      "dag 1 är blockerad av fast endurobelastning",
       "swim_strength får inte progressas eftersom receptet inte realiserar ett direkt primärt stimulus"
     ],
     "result": "fallback"
