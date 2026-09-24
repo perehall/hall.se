@@ -222,21 +222,24 @@ def _verify_transaction(
             )
 
     if scope == "final":
-        expected_coach = {
-            (str(row["provider_activity_id"]), str(row["generated_at"]))
-            for row in payload.get("coach_evaluations") or []
-        }
-        if expected_coach:
+        for row in payload.get("coach_evaluations") or []:
             cur.execute(
                 """
-                select a.provider_activity_id, c.generated_at::text
+                select 1
                 from training.coach_evaluations c
                 join training.activities a on a.id = c.activity_id
-                where a.provider = 'strava'
-                """
+                where a.provider = %s
+                  and a.provider_activity_id = %s
+                  and c.generated_at = %s::timestamptz
+                limit 1
+                """,
+                (
+                    row["provider"],
+                    str(row["provider_activity_id"]),
+                    row["generated_at"],
+                ),
             )
-            actual_coach = {(str(a), str(g)) for a, g in cur.fetchall()}
-            if not expected_coach.issubset(actual_coach):
+            if cur.fetchone() is None:
                 raise RuntimeError("Runtime coach evaluation verification mismatch")
 
 
