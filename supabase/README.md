@@ -4,12 +4,12 @@ This directory contains the version-controlled database contract for the trainin
 
 ## Migration status
 
-Phase 1 is deliberately **shadow mode**:
+Supabase started in **shadow mode**. The migration has now promoted selected production domains to required runtime authority while retaining the original shadow/reconciliation layer for remaining domains and audit.
 
-- GitHub JSON remains the source of truth.
-- The existing training pipeline and GitHub Pages rendering are unchanged.
-- Supabase receives a relational copy only after the schema has been deployed and the importer has been verified.
-- No browser/client access is granted in the initial migration.
+- Activities/feedback, athlete-state, planning state and coach state use verified Supabase runtime commit/readback paths.
+- JSON files for promoted domains are compatibility caches/audit artifacts after successful database readback.
+- The existing static GitHub Pages renderer remains in place and consumes those verified compatibility caches.
+- No direct browser access to private training tables is granted; only explicitly defined sanitized RPCs are exposed.
 
 The first schema separates stable domain entities (activities, feedback, plans, goals and job history) from fast-changing generated documents. Generated/derived documents can initially be mirrored in `training.state_documents` as JSONB while their long-term relational model is validated.
 
@@ -25,7 +25,7 @@ Do not commit Supabase keys, database passwords or access tokens.
 
 The Supabase GitHub integration watches `supabase/migrations/`. With production deployment enabled, pending migrations merged to the configured production branch are applied to the `hall-training` project.
 
-The existing training application does not depend on this database yet. A migration failure therefore cannot break the live training site.
+Promoted production domains now depend on this database during update execution. A runtime database failure fails the new update closed before publication; the previously published site remains intact.
 
 ## Next migration step
 
@@ -150,3 +150,41 @@ This promoted path is **required** in the production update job. A database fail
 `training.activities.is_current` defines the exact latest Strava snapshot. Removed provider activities are retained historically with `is_current=false`, so they cannot reappear in athlete-state. Laps and current semantic overrides are exact-snapshot state; `activity_feedback` remains append-retained history. `training.activity_laps.lap_ordinal` is the relational identity for list position, while the original `lap_index` is preserved as source data and is allowed to duplicate in historical imports.
 
 The later non-blocking full shadow sync remains in place for domains not yet promoted and as an independent whole-system reconciliation layer.
+
+
+## Runtime authority cutover
+
+Generated training runtime state now uses Supabase as the required commit point in
+the canonical production pipeline.
+
+The authoritative sequence is:
+
+1. normalized activities/feedback are promoted to Supabase and independently
+   read back before athlete-state is built;
+2. `athlete_state` is transactionally persisted to `training.state_documents`
+   and freshly read back before adaptive planning;
+3. after adaptive planning, rollover, overrides and workout-design validation,
+   the executable planning snapshot is written to Supabase, including
+   `training_strategy`, mesocycle/microcycle documents and the current
+   relational `planned_workouts` snapshot;
+4. only the freshly read-back database payload is materialized to JSON for
+   compatibility consumers before coach analysis;
+5. after coach/device/guard processing, the final plan and coach document are
+   persisted again together with relational coach evaluations;
+6. rendering/publication runs from JSON compatibility caches that were
+   materialized from that verified final database readback.
+
+These runtime promotion stages are required, not best-effort. A database write,
+schema, transaction verification or fresh readback failure stops the update
+before the affected downstream consumer or publication step. The previously
+published site remains intact.
+
+GitHub JSON is therefore no longer the runtime source of truth for promoted
+activity, athlete-state, planning or coach domains. It remains versioned as a
+compatibility cache/audit artifact and as a local-development fallback where
+explicitly documented.
+
+The post-update full shadow sync remains intentionally non-blocking. Its role is
+whole-system reconciliation for domains that are not yet promoted and an
+independent consistency layer; it is no longer the mechanism that makes the
+promoted runtime state authoritative.
