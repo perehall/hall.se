@@ -14,6 +14,7 @@ from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 from coach_rules import activity_family, activity_local_date
+from supabase_activity_backend import load_activities_for_runtime
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
@@ -292,14 +293,16 @@ def build_state(activities_state, performance_history, *, today=None, lookback_d
 
 
 def main():
-    activities = load_json(ACTIVITIES_FILE, {"activities": []})
+    activities, activity_source = load_activities_for_runtime(ACTIVITIES_FILE)
     performance = load_json(PERFORMANCE_FILE, {"entries": []})
     state = build_state(activities, performance)
     write_json(OUTPUT_FILE, state)
     print(
         "Athlete state OK: "
         f"window={state['fact_window']['start']}..{state['fact_window']['end']} "
-        f"sessions={len(state['recent_sessions'])}."
+        f"sessions={len(state['recent_sessions'])} "
+        f"activities_source={activity_source['source']} "
+        f"verified={bool(activity_source.get('verified'))}."
     )
     return 0
 
