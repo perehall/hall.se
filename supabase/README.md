@@ -50,3 +50,18 @@ The workflow `.github/workflows/supabase-shadow-import.yml` is manual-only and h
 The workflow reads the database connection only from the GitHub Actions secret `SUPABASE_DB_URL`. It never prints that value.
 
 A successful `write` records an idempotent `supabase_shadow_import` job in `training.job_runs`, keyed by the canonical source hash. Re-running the same source snapshot must not create duplicate domain rows.
+
+
+## Automatic shadow sync
+
+After the manual import and repeated-write idempotency checks succeeded, the normal training workflow mirrors canonical state to Supabase after the critical update job has completed successfully.
+
+The automatic shadow sync is deliberately a separate non-blocking job:
+
+- it depends on the canonical `update` job succeeding;
+- it checks out current `main` after the writer has finished, so it mirrors the canonical committed snapshot rather than an in-memory intermediate state;
+- it retries transient failures up to three times;
+- `continue-on-error: true` prevents a Supabase outage or importer defect from failing the canonical training workflow or blocking site publication;
+- a later scheduled/webhook/manual training run retries the complete idempotent shadow write, making the mirror self-healing.
+
+Supabase remains secondary during this phase. The frontend, planner, Strava ingest and coach do not read from it yet.
