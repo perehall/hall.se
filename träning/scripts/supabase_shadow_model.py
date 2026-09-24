@@ -306,10 +306,11 @@ def microcycle_records(
     return rows
 
 
-def workout_key(day: dict[str, Any]) -> str:
-    microcycle_id = str(day.get("microcycle_id") or "").strip()
+def workout_key(day: dict[str, Any], meta: dict[str, Any] | None = None) -> str:
+    meta = meta or {}
+    microcycle_id = str(day.get("microcycle_id") or meta.get("microcycle_id") or "").strip()
     if not microcycle_id:
-        raise RuntimeError(f"Planned day {day.get('date')}: microcycle_id missing")
+        raise RuntimeError(f"Planned day {day.get('date')}: microcycle_id missing in day and plan meta")
     slot = str(day.get("microcycle_slot") or "").strip()
     if not slot:
         slot = f"day-{day.get('microcycle_day') or day.get('date')}"
@@ -319,12 +320,19 @@ def workout_key(day: dict[str, Any]) -> str:
 def workout_records(*plans: dict[str, Any]) -> list[dict[str, Any]]:
     rows: dict[str, dict[str, Any]] = {}
     for plan in plans:
+        meta = plan.get("meta") or {}
         for day in plan.get("days") or []:
-            key = workout_key(day)
+            key = workout_key(day, meta)
+            mesocycle_id = day.get("mesocycle_id") or meta.get("mesocycle_id")
+            microcycle_id = day.get("microcycle_id") or meta.get("microcycle_id")
+            if not mesocycle_id or not microcycle_id:
+                raise RuntimeError(
+                    f"Planned day {day.get('date')}: mesocycle/microcycle context missing"
+                )
             rows[key] = {
                 "workout_key": key,
-                "mesocycle_id": day.get("mesocycle_id"),
-                "microcycle_id": day.get("microcycle_id"),
+                "mesocycle_id": mesocycle_id,
+                "microcycle_id": microcycle_id,
                 "scheduled_date": day["date"],
                 "microcycle_day": day.get("microcycle_day"),
                 "slot_key": day.get("microcycle_slot"),
