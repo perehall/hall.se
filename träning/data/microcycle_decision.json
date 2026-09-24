@@ -1,51 +1,48 @@
 {
-  "rationale": "Ta bort konflikt mot fast enduro dag 1 och undvik hög benbelastning dag 2. Flytta/ändra swim_strength så den inte ligger omedelbart efter det fasta enduroutfallet och välj konservativa åtgärder (establish/consolidate) enligt mesocykelguardrails. Behåll två simexponeringar, minst ett styrke/core‑stimulus, och consolidera tröskel samt ett långt lugnt löppass ≥48 h efter tröskel. Lämna minst en hel vilodag (dag 3).",
+  "rationale": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern.",
   "slots": [
     {
       "day_index": 2,
       "recipe_key": "swim_aerobic_technique",
-      "action": "establish",
-      "rationale": "Lågmekanisk dag direkt efter fast enduro — teknisk/aerob simning utan extra benbelastning uppfyller krav på låg belastning dag 2 och bidrar till simkapacitet.",
+      "action": "consolidate",
+      "rationale": "Lågmekanisk simexponering dagen efter fast enduro ger konkret plan utan att anta att benen är redo för ny benkvalitet.",
       "evidence_refs": [
-        "activity_id 20239623463 2026-09-19 4000 m",
-        "activity_id 20203770266 2026-09-16 3500 m"
+        "mesocycle.primary_capabilities"
       ]
     },
     {
-      "day_index": 4,
+      "day_index": 3,
       "recipe_key": "run_threshold",
       "action": "consolidate",
-      "rationale": "Behåll aktuell 4×8‑struktur (ingen progression denna mikrocykel) enligt mesocykelens guardrail om endast en primär progression tillåts; placering möjliggör ≥48 h till långt pass.",
+      "rationale": "Realiserar mesocykelns primära kapacitet run_threshold med säker separation från annan benbelastning.",
       "evidence_refs": [
-        "activity_id 20284663236 2026-09-22 4×8 tröskel",
-        "mesocycle decision 2026-09-21"
+        "mesocycle.primary_capabilities"
       ]
     },
     {
       "day_index": 5,
       "recipe_key": "swim_strength",
       "action": "establish",
-      "rationale": "Andra simexponeringen kombineras med ett skyddat styrke/core‑stimulus för att uppfylla styrkekravet utan att lägga ett extra benkvalitetspass; placerad en dag efter tröskel (inte omedelbart efter enduro).",
+      "rationale": "Kombinera en nödvändig simexponering med ännu ej uppfylld styrka/core.",
       "evidence_refs": [
-        "activity_id 20272196080 2026-09-21 strength session",
-        "activity_id 20239623463 2026-09-19 swim 4000 m"
+        "mesocycle.primary_capabilities"
       ]
     },
     {
-      "day_index": 6,
+      "day_index": 7,
       "recipe_key": "run_easy_distance",
-      "action": "establish",
-      "rationale": "Långt lugnt löppass placerat ≥48 h efter tröskel för löptålighet och återhämtning; konsoliderande under mesocykelns principer.",
+      "action": "consolidate",
+      "rationale": "Behåll lugn löptålighet med separation från löpkvalitet.",
       "evidence_refs": [
-        "activity_id 20254486837 2026-09-20 ~22.4 km long run"
+        "planning_policy.microcycle_policy"
       ]
     }
   ],
   "schema_version": 1,
   "planner_revision": 7,
-  "source": "openai_repaired",
-  "source_hash": "c15e5b787bb30db83ce13e460b8e089584bd35a874bbf3f443b7876e5e731a7c",
-  "generated_at_utc": "2026-09-24T17:25:06.348462+00:00",
+  "source": "deterministic_fallback_after_repair_guard",
+  "source_hash": "e654379e869cdba545bc7ef9c97e6494cf303f402d5062339718dd08eb6dd5fc",
+  "generated_at_utc": "2026-09-24T18:43:14.158747+00:00",
   "week_start": "2026-09-28",
   "week_key": "2026-W40",
   "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
@@ -133,10 +130,11 @@
   "guard_repair": {
     "attempted": true,
     "initial_failures": [
-      "dag 1 är blockerad av fast endurobelastning",
-      "swim_strength får inte ligga direkt dagen efter fast enduro när faktisk benbelastning ännu är okänd",
-      "swim_strength får inte progressas eftersom receptet inte realiserar ett direkt primärt stimulus"
+      "dag 1 är blockerad av fast endurobelastning"
     ],
-    "result": "accepted"
+    "repair_failures": [
+      "dag 1 är blockerad av fast endurobelastning"
+    ],
+    "result": "fallback"
   }
 }

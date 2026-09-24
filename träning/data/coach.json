@@ -1,6 +1,50 @@
 {
   "analyses": [
     {
+      "activity_id": 20314473143,
+      "activity_date": "2026-09-24",
+      "activity_name": "Evening Mountain Bike Ride",
+      "generated_at_utc": "2026-09-24T18:43:24.957614+00:00",
+      "model": "gpt-5-mini",
+      "analysis_contract": {
+        "pipeline_version": 3,
+        "workout_context_version": 3,
+        "plan_comparison_version": 2,
+        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
+        "analysis_code_sha256": "b2b605b727aaea5a4027070ea282ce432554fdd8a3f4f664cf37251ade67f342"
+      },
+      "performance_marker_id": null,
+      "performance_protocol_key": null,
+      "assessment": {
+        "summary": "78‑min mountainbike med 19.0 km, 207 m höjd och genomsnittspuls 126 visar ett långt underhållspass utan rapporterad trötthet.",
+        "load_interpretation": "Passet ger främst aerob/teknisk MTB/XC‑exponering; det kräver inga omedelbara justeringar i de kommande 48–72 timmarna.",
+        "confidence": "medium",
+        "facts": [
+          "MTB/XC: 19,04 km · 1:22:56 · 207 m+ · snittpuls 126,4 · maxpuls 149."
+        ],
+        "interpretations": [
+          "Passet är ett långt, jämnt MTB/XC‑pass som fungerar som underhålls/external load för mikrocykeln och stöder mesocykelns sekundära MTB/XC‑stimuli.",
+          "I närbelastningsfönstret finns redan enduro (21/9) och sim + tröskel tidigare i veckan; inget i dessa data indikerar behov av att minska eller ersätta planerade sim‑ eller löppass."
+        ],
+        "unknowns": [
+          "Subjektiv RPE/känsla efter passet saknas",
+          "Terrängspecifika tekniska krav under passet (var det mycket intensiv teknisk körning?)"
+        ]
+      },
+      "plan_action": {
+        "action": "keep",
+        "target_date": "",
+        "reason": "Senaste MTB/XC‑passet är underhållande och inga negativa signaler i 2–3‑dagarskontexten motiverar förändring.",
+        "recommendation": "Fortsätt enligt plan; inga ändringar behövs för de närmaste 48–72 timmarna.",
+        "dose_option_id": "",
+        "requires_approval": false
+      },
+      "auto_apply": {
+        "applied": false,
+        "note": "Ingen automatisk planändring."
+      }
+    },
+    {
       "activity_id": 20300494236,
       "activity_date": "2026-09-23",
       "activity_name": "Simning på kvällen",
@@ -1230,46 +1274,10 @@
         "applied": false,
         "note": "Ingen automatisk planändring."
       }
-    },
-    {
-      "activity_id": 19897382163,
-      "activity_date": "2026-08-25",
-      "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-08-26T14:48:04.184409+00:00",
-      "model": "gpt-5-mini",
-      "assessment": {
-        "summary": "Genomfört tröskelpass skalat enligt coachens ändring; påverkar nästa planade simdag måttligt.",
-        "load_interpretation": "Två hårda löppass (23/8 och 25/8) plus enduro och styrka ger samlad närbelastning som motiverade nedskalning idag.",
-        "confidence": "medium",
-        "facts": [
-          "Run: 10,34 km · 51:34 · 75 m+ · snittpuls 144,8 · maxpuls 165.",
-          "Användarrapport: 3×8 min tröskel. Motsvarande känsla som föregående vecka, lite sämre tempo och ingen känsla av att vara starkare.",
-          "Planstatus 2026-08-25: dagens planerade pass är genomfört i coachens beslutsunderlag."
-        ],
-        "interpretations": [
-          "Genomfört pass motsvarar coachens redan applicerade reduktion (3×8 min) och behöver inte ytterligare skalas.",
-          "Planerad simdag 26/8 är lämplig som lågmekanisk aerob dag om användaren känner sig ok."
-        ],
-        "unknowns": [
-          "Subjektiv dagskänsla i dag (26/8) kan påverka om sim eller helt vilodag är bäst.",
-          "Exakt lokal bentrötthet före fredagens backpass okänt utan morgonrapport."
-        ]
-      },
-      "plan_action": {
-        "action": "keep",
-        "target_date": "2026-08-26",
-        "reason": "Dagens simdag är lågmekanisk och blockets löpstimuli skyddas utan att öka belastningen.",
-        "recommendation": "Behåll simning (~60 min lugn teknik/aerob) som planerat; välj Swimrun endast om löpningen hålls mycket lätt och kontrollerad. Skicka morgonrapport om lokal bentrötthet innan torsdagens…",
-        "requires_approval": false
-      },
-      "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
-      }
     }
   ],
-  "last_trigger_hash": "9c718ba26495060d89efe47be70338b5ace232f342bcabe2ca914f599e75da0e",
-  "last_run_utc": "2026-09-24T17:25:16.678762+00:00",
+  "last_trigger_hash": "d84250fa723f75d69c604e70efb2b05181e202457f850d92dc04a762a220f705",
+  "last_run_utc": "2026-09-24T18:43:24.957614+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 3

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at_utc": "2026-09-24T17:22:54.686543+00:00",
+  "generated_at_utc": "2026-09-24T18:41:09.337678+00:00",
   "fact_window": {
     "start": "2026-07-31",
     "end": "2026-09-24",
@@ -8,10 +8,10 @@
   },
   "by_family": {
     "bike": {
-      "activity_count": 6,
-      "time_s": 27753,
-      "distance_m": 106056.5,
-      "active_days": 6
+      "activity_count": 7,
+      "time_s": 32729,
+      "distance_m": 125096.4,
+      "active_days": 7
     },
     "enduro": {
       "activity_count": 7,
@@ -57,19 +57,6 @@
     }
   },
   "recent_sessions": [
-    {
-      "id": 20036445971,
-      "date": "2026-09-04",
-      "family": "run",
-      "label": "Löpning · backintervaller",
-      "classification": "training",
-      "elapsed_time_s": 3988,
-      "distance_m": 12681.6,
-      "elevation_gain_m": 243.0,
-      "average_heartrate": 142.4,
-      "max_heartrate": 167.0,
-      "user_report": "3 × 6 backintervaller (18 backar totalt). Tre serier om sex intervaller; arbetsdelarna ska beskrivas som intervaller."
-    },
     {
       "id": 20047602146,
       "date": "2026-09-05",
@@ -368,6 +355,19 @@
       "average_heartrate": 133.5,
       "max_heartrate": 152.0,
       "user_report": "Väldigt bra kontroll genom huvudserien, höll ihop tempot och låg på stadigt på 1:28. Skulle dock vilja komma ner under 1:25 per 100m med samma känsla. RPE 6/10. Känsla: Kunde gjort mer."
+    },
+    {
+      "id": 20314473143,
+      "date": "2026-09-24",
+      "family": "bike",
+      "label": "MountainBikeRide",
+      "classification": "training",
+      "elapsed_time_s": 4976,
+      "distance_m": 19039.9,
+      "elevation_gain_m": 207.0,
+      "average_heartrate": 126.4,
+      "max_heartrate": 149.0,
+      "user_report": null
     }
   ],
   "capability_facts": {
@@ -472,7 +472,7 @@
         "date": "2026-09-03",
         "elapsed_time_s": 7883
       },
-      "session_count": 6
+      "session_count": 7
     },
     "strength_unilateral": {
       "longest_duration": {
