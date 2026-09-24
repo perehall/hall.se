@@ -1,0 +1,49 @@
+name: Supabase shadow import
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Check connection/schema or write the canonical JSON shadow"
+        required: true
+        default: check
+        type: choice
+        options:
+          - check
+          - write
+
+permissions:
+  contents: read
+
+concurrency:
+  group: supabase-training-shadow-import
+  cancel-in-progress: false
+
+jobs:
+  shadow-import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout current main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install PostgreSQL client dependency
+        run: python -m pip install --disable-pip-version-check "psycopg[binary]>=3.2,<4"
+
+      - name: Validate deterministic shadow model
+        run: python "träning/scripts/supabase_shadow_model.py"
+
+      - name: Run deterministic training regression suite
+        run: python "träning/scripts/run_regression_tests.py"
+
+      - name: Check or write Supabase shadow
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: python "träning/scripts/supabase_shadow_writer.py" --mode "${{ inputs.mode }}"
