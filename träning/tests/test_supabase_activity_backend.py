@@ -10,9 +10,23 @@ SCRIPTS = ROOT / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
 from supabase_activity_backend import (  # noqa: E402
+    _documents_from_relational_cursor,
     build_activity_snapshot,
     canonical_hash,
+    load_activities_for_runtime,
 )
+
+
+class _SequencedCursor:
+    def __init__(self, result_sets):
+        self.result_sets = list(result_sets)
+        self.index = -1
+
+    def execute(self, _query, _params=None):
+        self.index += 1
+
+    def fetchall(self):
+        return self.result_sets[self.index]
 
 
 class SupabaseActivityBackendModelTests(unittest.TestCase):
@@ -114,6 +128,77 @@ class SupabaseActivityBackendModelTests(unittest.TestCase):
                 docs["activity_overrides"]["source_hash"],
                 canonical_hash(overrides),
             )
+
+    def test_relational_readback_reconstructs_exact_promoted_documents(self):
+        activity = {
+            "id": 123,
+            "name": "Run",
+            "sport_type": "Run",
+            "start_date": "2026-09-24T14:00:00Z",
+            "start_date_local": "2026-09-24T16:00:00Z",
+            "moving_time_s": 1800,
+            "elapsed_time_s": 1800,
+            "laps": [
+                {
+                    "lap_index": 1,
+                    "name": "Lap 1",
+                    "elapsed_time_s": 1800,
+                    "moving_time_s": 1800,
+                    "distance_m": 5000.0,
+                }
+            ],
+        }
+        activity_raw = dict(activity)
+        laps = activity_raw.pop("laps")
+        activities_doc = {
+            "schema_version": 4,
+            "last_sync_utc": "2026-09-24T16:00:00+00:00",
+            "activities": [activity],
+        }
+        overrides_doc = {
+            "schema_version": 1,
+            "overrides": {
+                "123": {
+                    "sport": "Run",
+                    "classification": "training",
+                    "display_label": "Löpning",
+                    "source_sport_type": "Run",
+                    "user_report": "Kontrollerat.",
+                }
+            },
+        }
+        cursor = _SequencedCursor(
+            [
+                [
+                    ("activities", canonical_hash(activities_doc), activities_doc),
+                    (
+                        "activity_overrides",
+                        canonical_hash(overrides_doc),
+                        overrides_doc,
+                    ),
+                ],
+                [("123", activity_raw)],
+                [("123", 1, laps[0])],
+                [("123", overrides_doc["overrides"]["123"])],
+            ]
+        )
+
+        activities, overrides, meta = _documents_from_relational_cursor(cursor)
+
+        self.assertEqual(activities, activities_doc)
+        self.assertEqual(overrides, overrides_doc)
+        self.assertEqual(meta["source"], "supabase_db")
+        self.assertTrue(meta["verified"])
+
+    def test_runtime_loader_uses_local_only_without_database_configuration(self):
+        with tempfile.TemporaryDirectory() as raw:
+            path = Path(raw) / "activities.json"
+            document = {"activities": [{"id": 1}]}
+            path.write_text(json.dumps(document), encoding="utf-8")
+            loaded, meta = load_activities_for_runtime(path, env={})
+            self.assertEqual(loaded, document)
+            self.assertEqual(meta["source"], "json_local_dev")
+            self.assertFalse(meta["verified"])
 
     def test_snapshot_rejects_override_for_missing_activity(self):
         with tempfile.TemporaryDirectory() as raw:
