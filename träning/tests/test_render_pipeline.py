@@ -47,6 +47,7 @@ EXPECTED_PIPELINE = (
     "finalize_goal_link_layout.py",
     "publish_goal_cache_bypass.py",
     "finalize_week_shell_ui.py",
+    "finalize_backend_status_ui.py",
     "finalize_quiet_performance_ui.py",
     "finalize_quiet_performance_v2_ui.py",
     "finalize_completed_day_summary_ui.py",
@@ -89,7 +90,8 @@ class RenderPipelineTests(unittest.TestCase):
         self.assertLess(PIPELINE.index("finalize_coach_clarity_ui.py"), PIPELINE.index("finalize_card_v2_ui.py"))
         self.assertLess(PIPELINE.index("finalize_card_v2_ui.py"), PIPELINE.index("build_home.py"))
         self.assertLess(PIPELINE.index("publish_goal_cache_bypass.py"), PIPELINE.index("finalize_week_shell_ui.py"))
-        self.assertLess(PIPELINE.index("finalize_week_shell_ui.py"), PIPELINE.index("finalize_quiet_performance_ui.py"))
+        self.assertLess(PIPELINE.index("finalize_week_shell_ui.py"), PIPELINE.index("finalize_backend_status_ui.py"))
+        self.assertLess(PIPELINE.index("finalize_backend_status_ui.py"), PIPELINE.index("finalize_quiet_performance_ui.py"))
         self.assertLess(PIPELINE.index("finalize_quiet_performance_ui.py"), PIPELINE.index("finalize_quiet_performance_v2_ui.py"))
         self.assertLess(PIPELINE.index("finalize_quiet_performance_v2_ui.py"), PIPELINE.index("finalize_completed_day_summary_ui.py"))
         self.assertLess(PIPELINE.index("finalize_completed_day_summary_ui.py"), PIPELINE.index("finalize_rest_day_language.py"))
@@ -136,6 +138,7 @@ class RenderPipelineTests(unittest.TestCase):
         self.assertIn(deploy, workflow)
         self.assertLess(workflow.index(render), workflow.index(upload))
         self.assertLess(workflow.index(upload), workflow.index(deploy))
+        self.assertIn("SUPABASE_PUBLISHABLE_KEY: ${{ vars.SUPABASE_PUBLISHABLE_KEY }}", workflow)
 
 
 if __name__ == "__main__":
