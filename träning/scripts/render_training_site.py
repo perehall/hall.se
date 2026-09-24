@@ -46,6 +46,7 @@ PIPELINE = (
     "finalize_goal_link_layout.py",
     "publish_goal_cache_bypass.py",
     "finalize_week_shell_ui.py",
+    "finalize_backend_status_ui.py",
     "finalize_quiet_performance_ui.py",
     "finalize_quiet_performance_v2_ui.py",
     "finalize_completed_day_summary_ui.py",

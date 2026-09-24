@@ -92,6 +92,8 @@ jobs:
 
       - name: Render and validate training site
         if: steps.planning_freshness.outputs.stale != 'true'
+        env:
+          SUPABASE_PUBLISHABLE_KEY: ${{ vars.SUPABASE_PUBLISHABLE_KEY }}
         run: python "träning/scripts/render_training_site.py"
 
       - name: Configure GitHub Pages

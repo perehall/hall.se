@@ -100,3 +100,18 @@ The first read-back canary exposed an important distinction: replanning can chan
 - older workout rows are retained for history instead of being destructively deleted.
 
 The read-back canary requires an exact match for the current planned-workout set. Historical entities such as activities, feedback and coach evaluations are append-retained; for them the canary requires all canonical rows to be present but permits older database history.
+
+
+## First live consumer: backend status
+
+The first production read path is deliberately non-critical. The training site's system-info dialog can call a single sanitized RPC, `public.training_backend_status()`, using the project's browser-safe publishable key.
+
+Security boundaries:
+
+- no table in the `training` schema is granted to `anon` or `authenticated`;
+- the RPC is `SECURITY DEFINER` with an empty `search_path` and uses fully qualified table names;
+- only `EXECUTE` on this one function is granted to browser roles;
+- the response contains technical health metadata only: status, last shadow write time, short snapshot id and structural counts;
+- database passwords, secret/service-role keys and training content never enter browser HTML.
+
+The UI hides the backend row when `SUPABASE_PUBLISHABLE_KEY` is absent, so deployment remains safe during configuration. Planner, coach, ingest and workout rendering still use canonical GitHub JSON.
