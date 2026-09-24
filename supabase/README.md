@@ -115,3 +115,16 @@ Security boundaries:
 - database passwords, secret/service-role keys and training content never enter browser HTML.
 
 The UI hides the backend row when `SUPABASE_PUBLISHABLE_KEY` is absent, so deployment remains safe during configuration. Planner, coach, ingest and workout rendering still use canonical GitHub JSON.
+
+
+## First promoted planner read: goal portfolio
+
+The adaptive planner now has a verified Supabase read path for the goal portfolio.
+
+- `public.training_goal_document()` exposes only the goal document that is already published on the public goal page.
+- The planner calls that RPC with the browser-safe publishable key; no database password or service-role secret is required in the critical update job.
+- Supabase is allowed to influence planning only when both the persisted `source_hash` and a fresh canonical hash of the returned payload exactly match the repository `data/goal.json` fallback.
+- Missing configuration, network failure, an undeployed migration or a stale database snapshot falls back to JSON without failing the training update.
+- The generated strategy records whether the runtime goal source was verified Supabase or JSON fallback.
+
+This is deliberately a read promotion, not yet a write promotion. `data/goal.json` remains the write authority/freshness oracle during this migration step. Activities and athlete state stay on the existing path until ingestion can write the database before downstream planning, avoiding one-run-old training state.
