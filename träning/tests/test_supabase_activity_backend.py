@@ -131,6 +131,45 @@ class SupabaseActivityBackendModelTests(unittest.TestCase):
                 canonical_hash(overrides),
             )
 
+    def test_duplicate_source_lap_indexes_get_unique_ordinals(self):
+        with tempfile.TemporaryDirectory() as raw:
+            data = Path(raw)
+            activities = {
+                "activities": [
+                    {
+                        "id": 123,
+                        "name": "Historical run",
+                        "sport_type": "Run",
+                        "start_date": "2026-09-24T14:00:00Z",
+                        "start_date_local": "2026-09-24T16:00:00Z",
+                        "laps": [
+                            {"lap_index": 1, "distance_m": 1000.0},
+                            {"lap_index": 1, "distance_m": 2000.0},
+                            {"lap_index": 2, "distance_m": 3000.0},
+                        ],
+                    }
+                ]
+            }
+            (data / "activities.json").write_text(
+                json.dumps(activities),
+                encoding="utf-8",
+            )
+            (data / "activity_overrides.json").write_text(
+                json.dumps({"schema_version": 1, "overrides": {}}),
+                encoding="utf-8",
+            )
+
+            snapshot = build_activity_snapshot(data)
+
+            self.assertEqual(
+                [row["lap_ordinal"] for row in snapshot["activity_laps"]],
+                [1, 2, 3],
+            )
+            self.assertEqual(
+                [row["lap_index"] for row in snapshot["activity_laps"]],
+                [1, 1, 2],
+            )
+
     def test_relational_readback_reconstructs_exact_promoted_documents(self):
         activity = {
             "id": 123,
