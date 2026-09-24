@@ -1,0 +1,30 @@
+name: Training regression PR
+
+on:
+  pull_request:
+    paths:
+      - "träning/**"
+      - "supabase/**"
+      - ".github/workflows/training-regression-pr.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: training-regression-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run deterministic training regression suite
+        run: python "träning/scripts/run_regression_tests.py"
