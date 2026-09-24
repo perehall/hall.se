@@ -140,6 +140,30 @@ class SupabaseShadowModelTests(unittest.TestCase):
             "m1:mc1:2026-09-22:run_threshold",
         )
 
+    def test_workout_inherits_cycle_context_from_plan_meta(self):
+        plan = {
+            "meta": {
+                "mesocycle_id": "m1",
+                "microcycle_id": "m1:mc1",
+            },
+            "days": [
+                {
+                    "date": "2026-09-24",
+                    "session": "Vilodag",
+                    "sport": "rest",
+                    "microcycle_day": 4,
+                    "stimuli": [],
+                }
+            ],
+        }
+        rows = workout_records(plan)
+        self.assertEqual(rows[0]["mesocycle_id"], "m1")
+        self.assertEqual(rows[0]["microcycle_id"], "m1:mc1")
+        self.assertEqual(
+            rows[0]["workout_key"],
+            "m1:mc1:2026-09-24:day-4",
+        )
+
     def test_canonical_hash_is_order_independent_for_objects(self):
         self.assertEqual(canonical_hash({"a": 1, "b": 2}), canonical_hash({"b": 2, "a": 1}))
 
