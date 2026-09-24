@@ -19,6 +19,7 @@ from adaptive_planner import (  # noqa: E402
     generate_mesocycle,
     generate_microcycle,
     goal_hash,
+    goal_runtime_source_label,
     materialize_strategy,
     mesocycle_schema,
     microcycle_guard_failures,
@@ -39,6 +40,20 @@ class AdaptivePlanningTests(unittest.TestCase):
         cls.goal = json.loads((ROOT / "data" / "goal.json").read_text(encoding="utf-8"))
         cls.policy = json.loads((ROOT / "data" / "planning_policy.json").read_text(encoding="utf-8"))
         cls.catalog = json.loads((ROOT / "data" / "workout_catalog.json").read_text(encoding="utf-8"))
+
+    def test_goal_runtime_source_label_tracks_all_supabase_read_paths(self):
+        self.assertEqual(
+            goal_runtime_source_label({"source": "supabase_db"}),
+            "supabase:training_goal_document",
+        )
+        self.assertEqual(
+            goal_runtime_source_label({"source": "supabase_rpc"}),
+            "supabase:training_goal_document",
+        )
+        self.assertEqual(
+            goal_runtime_source_label({"source": "json_fallback"}),
+            "data/goal.json",
+        )
 
     def test_structured_output_schema_avoids_unsupported_unique_items_keyword(self):
         schema = mesocycle_schema(
