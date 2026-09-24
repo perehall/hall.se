@@ -4,7 +4,7 @@
       "activity_id": 20300494236,
       "activity_date": "2026-09-23",
       "activity_name": "Simning på kvällen",
-      "generated_at_utc": "2026-09-24T00:24:53.885402+00:00",
+      "generated_at_utc": "2026-09-24T04:50:35.466178+00:00",
       "model": "gpt-5-mini",
       "analysis_contract": {
         "pipeline_version": 3,
@@ -16,8 +16,8 @@
       "performance_marker_id": null,
       "performance_protocol_key": null,
       "assessment": {
-        "summary": "Genomfört simpass 3 200 m matchade planens struktur och visar god genomförbarhet av mikrocykelns simstimulus.",
-        "load_interpretation": "Senaste 48–72 h innehåller tung löptröskel (4×8) + enduro + styrka; därför bevara planen utan ökning nästa 2–3 dagar.",
+        "summary": "Genomfört simpass 3 200 m med identifierad struktur (1×400+6×50+4×500+6×50+1×200); passet matchar planens struktur exakt.",
+        "load_interpretation": "Passet ger sim‑aerob och tekniskt stimulus och är inte i konflikt med de senaste 2–3 dagarnas genomförda träning.",
         "confidence": "medium",
         "facts": [
           "Simning: 3,20 km · 58:57 · snittpuls 133,5 · maxpuls 152.",
@@ -25,19 +25,19 @@
           "Planerat simpass 3200 m; genomfört 3200 m. Genomförd setstruktur matchar planens struktur."
         ],
         "interpretations": [
-          "Passet konsoliderar sim‑aerob/teknik‑stimulus och visar att 3 200 m‑dosen är absorberbar i nuvarande kontext.",
-          "Kombinationen av tisdagens 4×8 tröskel och måndagens enduro/styrka ökar närbelastningen; det stödjer att hålla, inte öka, kommande doser."
+          "Passet levererar avsett aerob/teknikstimulus för mesocykeln och konsoliderar nuvarande dos (3200 m).",
+          "Givet att tisdagens löptröskel redan genomförts och närbelastningen visar inga inkommande konflikter, passet kräver ingen konservativ reduktion."
         ],
         "unknowns": [
-          "Subjektiv återhämtningsstatus efter kvällen (användarrapport tom).",
-          "Eventuell lokal muskulär trötthet i benen inför veckans långa löppass"
+          "Subjektiv återhämtning kommande 24–72 h (ingen användarrapport för detta pass)",
+          "Eventuella lokalbeneffekter från föregående enduro som kan påverka framtida löppass"
         ]
       },
       "plan_action": {
         "action": "keep",
         "target_date": "",
-        "reason": "Mikrocykelns sim‑stimulus är uppfyllt och närbelastningen från löpning + enduro/styrka talar för att behålla planerade doser.",
-        "recommendation": "Behåll planerad träning oförändrad; vila/återhämtningsrutiner som vanligt och rapportera om du känner ovanlig ben- eller generell trötthet inför helgens längre löppass.",
+        "reason": "Passet matchar planerad simstruktur och skapar ingen närbelastningskonflikt de närmaste 2–3 dagarna.",
+        "recommendation": "Fortsätt enligt nuvarande plan; ingen ändring behövs för kommande planerade dagar.",
         "dose_option_id": "",
         "requires_approval": false
       },
@@ -1267,8 +1267,8 @@
       }
     }
   ],
-  "last_trigger_hash": "728404f03f7d55ed5c7511e236b9151a4f7daa427e23560d52ce6ef36e559e11",
-  "last_run_utc": "2026-09-24T00:24:53.885402+00:00",
+  "last_trigger_hash": "1b9ae1da98ab30c56cf1417dcc4e2b7e73af32dbe496181a27bfb38e4ec96c49",
+  "last_run_utc": "2026-09-24T04:50:35.466178+00:00",
   "contract_version": 15,
   "output_contract_version": 19,
   "pipeline_contract_version": 3
