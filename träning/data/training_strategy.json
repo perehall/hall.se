@@ -281,7 +281,7 @@
       "mesocycle_source_hash": "a8b5f8c55f665c67c8e4a949cf2aeb645712cef12ae5e5f25bb80cb04ccb4da4",
       "microcycle_source_hash": "a7de3931a05a769bd30ce06a01d66e1a582b12328df63a2556ac3935712b1700",
       "mesocycle_decision_source": "openai",
-      "microcycle_decision_source": "deterministic_fallback_after_repair_guard"
+      "microcycle_decision_source": "openai_repaired"
     },
     "evaluation_date": "2026-10-19",
     "goal_basis_hash": "30201a00f8ff4f10c913b8fbf2d31052418d4e0d3812c799ca49b56a38accdf9",
@@ -377,7 +377,7 @@
       {
         "slot": "swim_aerobic_technique_1",
         "sport": "swim",
-        "reason": "Lågmekanisk simexponering dagen efter fast enduro ger konkret plan utan att anta att benen är redo för ny benkvalitet. Valet utgår från ett observerat värde 3200 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
+        "reason": "Låg benbelastning dagen efter fast enduro — teknisk/aerob simexp. uppfyller ett av veckans två simkrav utan att öka benstress. Valet utgår från ett observerat värde 3200 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
         "session": "Simning · 3 200 m · aerob/teknik",
         "stimuli": [
           "swim_aerobic",
@@ -493,7 +493,7 @@
           "source": "athlete_state",
           "microcycle_plan": [
             {
-              "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
+              "reason": "Mikrocykelbeslutet valde establish och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
               "relation": "hold",
               "option_id": "swim-3200",
               "microcycle": 2
@@ -505,14 +505,73 @@
         "progression_ceiling_reason": "Ingen högre förgodkänd dos finns i receptkatalogen. Fortsatt utveckling kräver nytt recept eller annan progressionsaxel, inte automatisk extrapolering."
       },
       {
-        "slot": "run_threshold_2",
+        "slot": "run_easy_distance_2",
         "sport": "run",
-        "reason": "Realiserar mesocykelns primära kapacitet run_threshold med säker separation från annan benbelastning. Valet utgår från ett observerat värde 32 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
+        "reason": "Underhåll lång lugn löpning för löptålighet, placerad ≥48 h från planerat tröskelpass för återhämtning. Valet utgår från ett observerat värde 119.767 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
+        "session": "Löpning · lugn distans · 120 min",
+        "stimuli": [
+          "run_easy_distance"
+        ],
+        "day_index": 3,
+        "dose_options": [
+          {
+            "id": "run-easy-60",
+            "kind": "duration_minutes",
+            "value": 60,
+            "intent": "Reducerad/etablerande distansdos.",
+            "session": "Löpning · lugn distans · 60 min"
+          },
+          {
+            "id": "run-easy-75",
+            "kind": "duration_minutes",
+            "value": 75,
+            "intent": "Normal kontrollerad distansdos.",
+            "session": "Löpning · lugn distans · 75 min"
+          },
+          {
+            "id": "run-easy-90",
+            "kind": "duration_minutes",
+            "value": 90,
+            "intent": "Progressionsalternativ när 75 min absorberats.",
+            "session": "Löpning · lugn distans · 90 min"
+          },
+          {
+            "id": "run-easy-105",
+            "kind": "duration_minutes",
+            "value": 105,
+            "intent": "Längre distansalternativ när historiken stödjer det.",
+            "session": "Löpning · lugn distans · 105 min"
+          },
+          {
+            "id": "run-easy-120",
+            "kind": "duration_minutes",
+            "value": 120,
+            "intent": "Lång distansdos som kräver stöd i faktisk tålighet och närbelastning.",
+            "session": "Löpning · lugn distans · 120 min"
+          }
+        ],
+        "priority_role": "flex",
+        "load_dimensions": [
+          "cardiovascular",
+          "mechanical"
+        ],
+        "development_focus": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt.",
+        "baseline_option_id": "run-easy-120",
+        "progression_criteria": [
+          "Ändra bara dos när faktisk träningsrespons eller mesocykelns progressionsbeslut ger sakligt stöd.",
+          "Wellness eller en enskild bra dag får inte ensam motivera belastningsökning.",
+          "Närliggande 2–3 dagars faktisk belastning ska kunna motivera hold, reduktion eller flytt."
+        ]
+      },
+      {
+        "slot": "run_threshold_3",
+        "sport": "run",
+        "reason": "Konserverande tröskel (bibehåll 4×8‑struktur) placerad med ≥48 h separation från långpass; ingen ytterligare progress pga behov av absorberbarhetsindikationer. Valet utgår från ett observerat värde 32 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
         "session": "Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg",
         "stimuli": [
           "run_threshold"
         ],
-        "day_index": 3,
+        "day_index": 5,
         "dose_options": [
           {
             "id": "run-threshold-3x8",
@@ -573,9 +632,9 @@
         "progression_target_option_id": "run-threshold-4x9"
       },
       {
-        "slot": "swim_strength_3",
+        "slot": "swim_strength_4",
         "sport": "strength",
-        "reason": "Kombinera en nödvändig simexponering med ännu ej uppfylld styrka/core. Valet utgår från ett observerat värde 36.0167 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
+        "reason": "Ger andra simexponeringen samtidigt som minst en styrka/core‑session uppfylls utan att lägga ett separat benintensivt pass; placerad efter tröskel och ej dag‑2 för att undvika förhöjd benstress direkt efter enduro. Valet utgår från ett observerat värde 36.0167 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
         "session": "Simning · 3 200 m · aerob/teknik + styrka/core · ca 35 min · styrkemall",
         "stimuli": [
           "swim_aerobic",
@@ -583,7 +642,7 @@
           "strength_unilateral",
           "strength_core"
         ],
-        "day_index": 5,
+        "day_index": 6,
         "dose_options": [
           {
             "id": "swim-strength-25",
@@ -625,65 +684,6 @@
           "Närliggande 2–3 dagars faktisk belastning ska kunna motivera hold, reduktion eller flytt."
         ],
         "performance_marker_id": "strength-repeatability"
-      },
-      {
-        "slot": "run_easy_distance_4",
-        "sport": "run",
-        "reason": "Behåll lugn löptålighet med separation från löpkvalitet. Valet utgår från ett observerat värde 119.767 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
-        "session": "Löpning · lugn distans · 120 min",
-        "stimuli": [
-          "run_easy_distance"
-        ],
-        "day_index": 7,
-        "dose_options": [
-          {
-            "id": "run-easy-60",
-            "kind": "duration_minutes",
-            "value": 60,
-            "intent": "Reducerad/etablerande distansdos.",
-            "session": "Löpning · lugn distans · 60 min"
-          },
-          {
-            "id": "run-easy-75",
-            "kind": "duration_minutes",
-            "value": 75,
-            "intent": "Normal kontrollerad distansdos.",
-            "session": "Löpning · lugn distans · 75 min"
-          },
-          {
-            "id": "run-easy-90",
-            "kind": "duration_minutes",
-            "value": 90,
-            "intent": "Progressionsalternativ när 75 min absorberats.",
-            "session": "Löpning · lugn distans · 90 min"
-          },
-          {
-            "id": "run-easy-105",
-            "kind": "duration_minutes",
-            "value": 105,
-            "intent": "Längre distansalternativ när historiken stödjer det.",
-            "session": "Löpning · lugn distans · 105 min"
-          },
-          {
-            "id": "run-easy-120",
-            "kind": "duration_minutes",
-            "value": 120,
-            "intent": "Lång distansdos som kräver stöd i faktisk tålighet och närbelastning.",
-            "session": "Löpning · lugn distans · 120 min"
-          }
-        ],
-        "priority_role": "flex",
-        "load_dimensions": [
-          "cardiovascular",
-          "mechanical"
-        ],
-        "development_focus": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt.",
-        "baseline_option_id": "run-easy-120",
-        "progression_criteria": [
-          "Ändra bara dos när faktisk träningsrespons eller mesocykelns progressionsbeslut ger sakligt stöd.",
-          "Wellness eller en enskild bra dag får inte ensam motivera belastningsökning.",
-          "Närliggande 2–3 dagars faktisk belastning ska kunna motivera hold, reduktion eller flytt."
-        ]
       }
     ],
     "microcycle_structure": {
