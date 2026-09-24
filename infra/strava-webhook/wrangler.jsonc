@@ -1,9 +1,11 @@
-// Redeploy marker: webhook fingerprint diagnostics v3 after subscription secret
+// Keep workers.dev explicitly enabled: Strava's registered callback uses
+// https://hall-se.per-e-hall.workers.dev/...
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "hall-se",
   "main": "src/worker.mjs",
   "compatibility_date": "2026-08-24",
+  "workers_dev": true,
   "observability": {
     "enabled": true
   },
