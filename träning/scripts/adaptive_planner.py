@@ -1736,6 +1736,15 @@ def generated_strategic_readiness(goal, policy):
     return rows
 
 
+def goal_runtime_source_label(runtime_source):
+    source = str((runtime_source or {}).get("source") or "")
+    return (
+        "supabase:training_goal_document"
+        if source.startswith("supabase")
+        else "data/goal.json"
+    )
+
+
 def materialize_strategy(goal, policy, meso, micro, catalog, athlete_state, goal_runtime_source=None):
     strategy = deepcopy(policy["strategy_base"])
     strategy["schema_version"] = int(policy["compatibility_strategy_schema_version"])
@@ -1866,11 +1875,7 @@ def materialize_strategy(goal, policy, meso, micro, catalog, athlete_state, goal
     }
     strategy["generated_planning"] = {
         "source_policy": "data/planning_policy.json",
-        "source_goal": (
-            "supabase:training_goal_document"
-            if runtime_source.get("source") == "supabase"
-            else "data/goal.json"
-        ),
+        "source_goal": goal_runtime_source_label(runtime_source),
         "source_athlete_state": "data/athlete_state.json",
         "source_mesocycle_decision": "data/mesocycle_decision.json",
         "source_microcycle_decision": "data/microcycle_decision.json",
