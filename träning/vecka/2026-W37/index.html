@@ -954,9 +954,70 @@ function openStrengthWindow() {
       <li><strong>Pass:</strong> det enskilda passet verkställer ett tydligt stimulus eller en stödjande roll. Om passet ändras skyddas i första hand stimuluset, inte exakt passform eller veckodag.</li>
       <li><strong>Återkoppling:</strong> faktisk respons går tillbaka uppåt. Mikrocykeln justeras löpande och mesocykeln utvärderas mot målbilden.</li>
       <li><strong>Data:</strong> Strava ger genomförd träning, Garmin via Intervals.icu privat återhämtningskontext och SMHI väder.</li>
+      <!-- backend-status-ui-v1:start -->
+<li class="backend-status-row" data-backend-status-row>
+  <strong>Backend:</strong> <span data-training-backend-status>Kontrollerar Supabase…</span>
+</li>
+<!-- backend-status-ui-v1:end -->
     </ul>
   </div>
-</dialog>
+</dialog><!-- backend-status-ui-v1:start -->
+<script>
+(function() {
+  const row = document.querySelector('[data-backend-status-row]');
+  const target = document.querySelector('[data-training-backend-status]');
+  if (!row || !target) return;
+
+  const publishableKey = "";
+  const endpoint = "https://izzevnhgtsvffpkccoai.supabase.co/rest/v1/rpc/training_backend_status";
+  if (!publishableKey) {
+    row.hidden = true;
+    return;
+  }
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 5000);
+
+  fetch(endpoint, {
+    method: 'POST',
+    headers: {
+      'apikey': publishableKey,
+      'Content-Type': 'application/json'
+    },
+    body: '{}',
+    cache: 'no-store',
+    signal: controller.signal
+  })
+    .then((response) => {
+      if (!response.ok) throw new Error('HTTP ' + response.status);
+      return response.json();
+    })
+    .then((data) => {
+      if (!data || data.status !== 'ok') {
+        target.textContent = 'Supabase · avvikelse';
+        return;
+      }
+      target.textContent = 'Supabase · OK';
+      const details = [];
+      if (Number.isInteger(data.current_workouts)) {
+        details.push(data.current_workouts + ' aktuella pass');
+      }
+      if (data.snapshot) details.push('snapshot ' + data.snapshot);
+      if (data.last_sync_at) {
+        const when = new Date(data.last_sync_at);
+        if (!Number.isNaN(when.getTime())) {
+          details.push('synkad ' + when.toLocaleString('sv-SE'));
+        }
+      }
+      if (details.length) target.title = details.join(' · ');
+    })
+    .catch(() => {
+      target.textContent = 'Supabase · status ej tillgänglig';
+    })
+    .finally(() => clearTimeout(timeout));
+})();
+</script>
+<!-- backend-status-ui-v1:end -->
 <script>
 function openTrainingSystemInfo() {
   const dialog = document.getElementById('trainingSystemSheet');
