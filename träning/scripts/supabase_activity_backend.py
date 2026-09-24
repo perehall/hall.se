@@ -636,7 +636,7 @@ def main(argv: list[str] | None = None) -> int:
                     time.sleep(attempt * 5)
         print(
             "SUPABASE_ACTIVITY_BACKEND_FAILED "
-            f"{type(last_error).__name__}: {last_error}"
+            f"{type(last_error).__name__}"
         )
         return 1
 
@@ -649,7 +649,7 @@ def main(argv: list[str] | None = None) -> int:
         )
     except Exception as exc:
         print(
-            f"SUPABASE_ACTIVITY_BACKEND_FAILED {type(exc).__name__}: {exc}"
+            f"SUPABASE_ACTIVITY_BACKEND_FAILED {type(exc).__name__}"
         )
         return 1
     return 0
