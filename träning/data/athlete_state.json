@@ -1,560 +1,560 @@
 {
-  "schema_version": 1,
-  "generated_at_utc": "2026-09-24T19:13:24.487846+00:00",
-  "fact_window": {
-    "start": "2026-07-31",
-    "end": "2026-09-24",
-    "lookback_days": 56
-  },
   "by_family": {
-    "bike": {
-      "activity_count": 7,
-      "time_s": 32729,
-      "distance_m": 125096.4,
-      "active_days": 7
-    },
-    "enduro": {
-      "activity_count": 7,
-      "time_s": 47235,
-      "distance_m": 169478.3,
-      "active_days": 7
-    },
     "run": {
-      "activity_count": 20,
       "time_s": 86297,
       "distance_m": 271920.9,
-      "active_days": 20
+      "active_days": 20,
+      "activity_count": 20
     },
-    "standuppaddling": {
-      "activity_count": 2,
-      "time_s": 8747,
-      "distance_m": 8648.1,
-      "active_days": 2
-    },
-    "strength": {
-      "activity_count": 6,
-      "time_s": 11813,
-      "distance_m": 0.0,
-      "active_days": 6
+    "bike": {
+      "time_s": 32729,
+      "distance_m": 125096.4,
+      "active_days": 7,
+      "activity_count": 7
     },
     "swim": {
-      "activity_count": 8,
       "time_s": 32477,
       "distance_m": 28300.0,
-      "active_days": 8
-    },
-    "swimrun": {
-      "activity_count": 5,
-      "time_s": 23987,
-      "distance_m": 51177.4,
-      "active_days": 5
+      "active_days": 8,
+      "activity_count": 8
     },
     "walk": {
-      "activity_count": 1,
       "time_s": 23980,
       "distance_m": 8569.8,
-      "active_days": 1
+      "active_days": 1,
+      "activity_count": 1
+    },
+    "enduro": {
+      "time_s": 47235,
+      "distance_m": 169478.3,
+      "active_days": 7,
+      "activity_count": 7
+    },
+    "swimrun": {
+      "time_s": 23987,
+      "distance_m": 51177.4,
+      "active_days": 5,
+      "activity_count": 5
+    },
+    "strength": {
+      "time_s": 11813,
+      "distance_m": 0.0,
+      "active_days": 6,
+      "activity_count": 6
+    },
+    "standuppaddling": {
+      "time_s": 8747,
+      "distance_m": 8648.1,
+      "active_days": 2,
+      "activity_count": 2
     }
   },
+  "fact_window": {
+    "end": "2026-09-24",
+    "start": "2026-07-31",
+    "lookback_days": 56
+  },
+  "schema_version": 1,
   "recent_sessions": [
     {
       "id": 20047602146,
       "date": "2026-09-05",
-      "family": "swim",
       "label": "Swim",
+      "family": "swim",
+      "distance_m": 4000.0,
+      "user_report": null,
+      "max_heartrate": 153.0,
       "classification": "training",
       "elapsed_time_s": 4433,
-      "distance_m": 4000.0,
       "elevation_gain_m": 0,
-      "average_heartrate": 128.5,
-      "max_heartrate": 153.0,
-      "user_report": null
+      "average_heartrate": 128.5
     },
     {
       "id": 20057585521,
       "date": "2026-09-06",
-      "family": "run",
       "label": "Löpning · distans",
+      "family": "run",
+      "distance_m": 22001.5,
+      "user_report": "Kände mig stark hela passet och höll ett kontrollerat tempo. Tog en gel efter cirka en timme. Testade en tempoökning kring km 20–21, cirka 4:25/km, vilket fungerade bra. Pulsen gick upp i fartökningen. Pigg resten av dagen och inte ont någonstans.",
+      "max_heartrate": 164.0,
       "classification": "training",
       "elapsed_time_s": 6960,
-      "distance_m": 22001.5,
       "elevation_gain_m": 219.0,
-      "average_heartrate": 139.0,
-      "max_heartrate": 164.0,
-      "user_report": "Kände mig stark hela passet och höll ett kontrollerat tempo. Tog en gel efter cirka en timme. Testade en tempoökning kring km 20–21, cirka 4:25/km, vilket fungerade bra. Pulsen gick upp i fartökningen. Pigg resten av dagen och inte ont någonstans."
+      "average_heartrate": 139.0
     },
     {
       "id": 20078705519,
       "date": "2026-09-07",
-      "family": "enduro",
       "label": "Enduro",
+      "family": "enduro",
+      "distance_m": 14637.8,
+      "user_report": null,
+      "max_heartrate": 168.0,
       "classification": "training",
       "elapsed_time_s": 5718,
-      "distance_m": 14637.8,
       "elevation_gain_m": 508.4,
-      "average_heartrate": 106.7,
-      "max_heartrate": 168.0,
-      "user_report": null
+      "average_heartrate": 106.7
     },
     {
       "id": 20079150228,
       "date": "2026-09-07",
-      "family": "strength",
       "label": "WeightTraining",
+      "family": "strength",
+      "distance_m": 0.0,
+      "user_report": null,
+      "max_heartrate": 112.0,
       "classification": "training",
       "elapsed_time_s": 1659,
-      "distance_m": 0.0,
       "elevation_gain_m": 0,
-      "average_heartrate": 75.7,
-      "max_heartrate": 112.0,
-      "user_report": null
+      "average_heartrate": 75.7
     },
     {
       "id": 20092166843,
       "date": "2026-09-08",
-      "family": "run",
       "label": "Löpband · 4 × 8 min Tempo",
+      "family": "run",
+      "distance_m": 13143.4,
+      "user_report": "Löpband 4 × 8 min Tempo enligt Garmin. Sista intervallen krävde lite mental ansträngning trots att pulsen bara låg runt 162 bpm i slutet.",
+      "max_heartrate": 163.0,
       "classification": "training",
       "elapsed_time_s": 3740,
-      "distance_m": 13143.4,
       "elevation_gain_m": 0,
-      "average_heartrate": 137.3,
-      "max_heartrate": 163.0,
-      "user_report": "Löpband 4 × 8 min Tempo enligt Garmin. Sista intervallen krävde lite mental ansträngning trots att pulsen bara låg runt 162 bpm i slutet."
+      "average_heartrate": 137.3
     },
     {
       "id": 20106458579,
       "date": "2026-09-09",
-      "family": "swim",
       "label": "Swim",
+      "family": "swim",
+      "distance_m": 3200.0,
+      "user_report": null,
+      "max_heartrate": 157.0,
       "classification": "training",
       "elapsed_time_s": 3518,
-      "distance_m": 3200.0,
       "elevation_gain_m": 0,
-      "average_heartrate": 128.4,
-      "max_heartrate": 157.0,
-      "user_report": null
+      "average_heartrate": 128.4
     },
     {
       "id": 20120769386,
       "date": "2026-09-10",
-      "family": "bike",
       "label": "MTB/XC",
+      "family": "bike",
+      "distance_m": 17118.2,
+      "user_report": "Passet blev lite lugnare och längre på grund av mörkret.",
+      "max_heartrate": 147.0,
       "classification": "training",
       "elapsed_time_s": 4394,
-      "distance_m": 17118.2,
       "elevation_gain_m": 183.0,
-      "average_heartrate": 125.5,
-      "max_heartrate": 147.0,
-      "user_report": "Passet blev lite lugnare och längre på grund av mörkret."
+      "average_heartrate": 125.5
     },
     {
       "id": 20133500464,
       "date": "2026-09-11",
-      "family": "run",
       "label": "Löpning · backintervaller",
+      "family": "run",
+      "distance_m": 13667.0,
+      "user_report": "3 × 7 backintervaller (21 backar totalt). Tre serier om sju intervaller; arbetsdelarna ska beskrivas som intervaller.",
+      "max_heartrate": 169.0,
       "classification": "training",
       "elapsed_time_s": 4300,
-      "distance_m": 13667.0,
       "elevation_gain_m": 264.0,
-      "average_heartrate": 144.3,
-      "max_heartrate": 169.0,
-      "user_report": "3 × 7 backintervaller (21 backar totalt). Tre serier om sju intervaller; arbetsdelarna ska beskrivas som intervaller."
+      "average_heartrate": 144.3
     },
     {
       "id": 20144331562,
       "date": "2026-09-12",
-      "family": "enduro",
       "label": "Enduro",
+      "family": "enduro",
+      "distance_m": 53916.2,
+      "user_report": null,
+      "max_heartrate": 154.0,
       "classification": "training",
       "elapsed_time_s": 13578,
-      "distance_m": 53916.2,
       "elevation_gain_m": 1490.4,
-      "average_heartrate": 124.9,
-      "max_heartrate": 154.0,
-      "user_report": null
+      "average_heartrate": 124.9
     },
     {
       "id": 20153873263,
       "date": "2026-09-13",
-      "family": "bike",
       "label": "Ride",
+      "family": "bike",
+      "distance_m": 4562.8,
+      "user_report": null,
+      "max_heartrate": 108.0,
       "classification": "training",
       "elapsed_time_s": 1854,
-      "distance_m": 4562.8,
       "elevation_gain_m": 41.0,
-      "average_heartrate": 82.4,
-      "max_heartrate": 108.0,
-      "user_report": null
+      "average_heartrate": 82.4
     },
     {
       "id": 20157600319,
       "date": "2026-09-13",
-      "family": "run",
       "label": "TrailRun",
+      "family": "run",
+      "distance_m": 18746.1,
+      "user_report": null,
+      "max_heartrate": 150.0,
       "classification": "training",
       "elapsed_time_s": 6462,
-      "distance_m": 18746.1,
       "elevation_gain_m": 237.0,
-      "average_heartrate": 137.2,
-      "max_heartrate": 150.0,
-      "user_report": null
+      "average_heartrate": 137.2
     },
     {
       "id": 20175536586,
       "date": "2026-09-14",
-      "family": "strength",
       "label": "WeightTraining",
+      "family": "strength",
+      "distance_m": 0.0,
+      "user_report": null,
+      "max_heartrate": 109.0,
       "classification": "training",
       "elapsed_time_s": 2089,
-      "distance_m": 0.0,
       "elevation_gain_m": 0,
-      "average_heartrate": 74.8,
-      "max_heartrate": 109.0,
-      "user_report": null
+      "average_heartrate": 74.8
     },
     {
       "id": 20175917270,
       "date": "2026-09-14",
-      "family": "enduro",
       "label": "Enduro",
+      "family": "enduro",
+      "distance_m": 13929.8,
+      "user_report": null,
+      "max_heartrate": 166.0,
       "classification": "training",
       "elapsed_time_s": 5344,
-      "distance_m": 13929.8,
       "elevation_gain_m": 222.2,
-      "average_heartrate": 107.0,
-      "max_heartrate": 166.0,
-      "user_report": null
+      "average_heartrate": 107.0
     },
     {
       "id": 20188628588,
       "date": "2026-09-15",
-      "family": "run",
       "label": "Run",
+      "family": "run",
+      "distance_m": 13128.5,
+      "user_report": null,
+      "max_heartrate": 163.0,
       "classification": "training",
       "elapsed_time_s": 3843,
-      "distance_m": 13128.5,
       "elevation_gain_m": 106.0,
-      "average_heartrate": 143.3,
-      "max_heartrate": 163.0,
-      "user_report": null
+      "average_heartrate": 143.3
     },
     {
       "id": 20203770266,
       "date": "2026-09-16",
-      "family": "swim",
       "label": "Swim",
+      "family": "swim",
+      "distance_m": 3500.0,
+      "user_report": null,
+      "max_heartrate": 171.0,
       "classification": "training",
       "elapsed_time_s": 4323,
-      "distance_m": 3500.0,
       "elevation_gain_m": 0,
-      "average_heartrate": 127.8,
-      "max_heartrate": 171.0,
-      "user_report": null
+      "average_heartrate": 127.8
     },
     {
       "id": 20218282169,
       "date": "2026-09-17",
-      "family": "bike",
       "label": "MountainBikeRide",
+      "family": "bike",
+      "distance_m": 18051.8,
+      "user_report": null,
+      "max_heartrate": 152.0,
       "classification": "training",
       "elapsed_time_s": 4635,
-      "distance_m": 18051.8,
       "elevation_gain_m": 209.0,
-      "average_heartrate": 127.1,
-      "max_heartrate": 152.0,
-      "user_report": null
+      "average_heartrate": 127.1
     },
     {
       "id": 20229568713,
       "date": "2026-09-18",
-      "family": "run",
       "label": "Löpning · backintervaller",
+      "family": "run",
+      "distance_m": 15006.4,
+      "user_report": "3 × 8 backintervaller (24 backar totalt). Tre serier om åtta intervaller. Kände mig superpigg under och efter passet.",
+      "max_heartrate": 163.0,
       "classification": "training",
       "elapsed_time_s": 4676,
-      "distance_m": 15006.4,
       "elevation_gain_m": 266.0,
-      "average_heartrate": 141.3,
-      "max_heartrate": 163.0,
-      "user_report": "3 × 8 backintervaller (24 backar totalt). Tre serier om åtta intervaller. Kände mig superpigg under och efter passet."
+      "average_heartrate": 141.3
     },
     {
       "id": 20239623463,
       "date": "2026-09-19",
-      "family": "swim",
       "label": "Swim",
+      "family": "swim",
+      "distance_m": 4000.0,
+      "user_report": null,
+      "max_heartrate": 156.0,
       "classification": "training",
       "elapsed_time_s": 4730,
-      "distance_m": 4000.0,
       "elevation_gain_m": 0,
-      "average_heartrate": 130.1,
-      "max_heartrate": 156.0,
-      "user_report": null
+      "average_heartrate": 130.1
     },
     {
       "id": 20254486837,
       "date": "2026-09-20",
-      "family": "run",
       "label": "Run",
+      "family": "run",
+      "distance_m": 22463.4,
+      "user_report": null,
+      "max_heartrate": 158.0,
       "classification": "training",
       "elapsed_time_s": 7186,
-      "distance_m": 22463.4,
       "elevation_gain_m": 267.0,
-      "average_heartrate": 138.9,
-      "max_heartrate": 158.0,
-      "user_report": null
+      "average_heartrate": 138.9
     },
     {
       "id": 20271537143,
       "date": "2026-09-21",
-      "family": "enduro",
       "label": "Enduro",
+      "family": "enduro",
+      "distance_m": 12527.7,
+      "user_report": "Teknisk körning, stenbacke och berghäll, kostnad för passet minimal RPE 4/10. Känsla: Pigg. Lätt teknik, stenbackar och berghällar RPE 4/10.",
+      "max_heartrate": 150.0,
       "classification": "training",
       "elapsed_time_s": 5809,
-      "distance_m": 12527.7,
       "elevation_gain_m": 391.6,
-      "average_heartrate": 101.2,
-      "max_heartrate": 150.0,
-      "user_report": "Teknisk körning, stenbacke och berghäll, kostnad för passet minimal RPE 4/10. Känsla: Pigg. Lätt teknik, stenbackar och berghällar RPE 4/10."
+      "average_heartrate": 101.2
     },
     {
       "id": 20272196080,
       "date": "2026-09-21",
-      "family": "strength",
       "label": "WeightTraining",
+      "family": "strength",
+      "distance_m": 0.0,
+      "user_report": "RPE 2/10. Känsla: Pigg. Palloff press, latsdrag, bulgarian splits, atomic pushups med band, bänkrodd, dead bug, omvänd planka RPE 4/10.",
+      "max_heartrate": 128.0,
       "classification": "training",
       "elapsed_time_s": 2014,
-      "distance_m": 0.0,
       "elevation_gain_m": 0,
-      "average_heartrate": 79.3,
-      "max_heartrate": 128.0,
-      "user_report": "RPE 2/10. Känsla: Pigg. Palloff press, latsdrag, bulgarian splits, atomic pushups med band, bänkrodd, dead bug, omvänd planka RPE 4/10."
+      "average_heartrate": 79.3
     },
     {
       "id": 20284663236,
       "date": "2026-09-22",
-      "family": "run",
       "label": "Löpning · tröskel",
+      "family": "run",
+      "distance_m": 12897.3,
+      "user_report": "4 × 8 min tröskel. Garmin träningseffekt 4,2 ”Tröskel”. Känslan var riktigt bra och jag kände mig stark. Ökade lite på sista intervallen och hade mycket kraft kvar. Av praktiska skäl blev det löpning i stället för planerad simning; simningen flyttas till 2026-09-23. 4x8min med god kontroll. RPE 6/10. Känsla: Kunde gjort mer.",
+      "max_heartrate": 165.0,
       "classification": "training",
       "elapsed_time_s": 3687,
-      "distance_m": 12897.3,
       "elevation_gain_m": 105.0,
-      "average_heartrate": 145.4,
-      "max_heartrate": 165.0,
-      "user_report": "4 × 8 min tröskel. Garmin träningseffekt 4,2 ”Tröskel”. Känslan var riktigt bra och jag kände mig stark. Ökade lite på sista intervallen och hade mycket kraft kvar. Av praktiska skäl blev det löpning i stället för planerad simning; simningen flyttas till 2026-09-23. 4x8min med god kontroll. RPE 6/10. Känsla: Kunde gjort mer."
+      "average_heartrate": 145.4
     },
     {
       "id": 20300494236,
       "date": "2026-09-23",
-      "family": "swim",
       "label": "Swim",
+      "family": "swim",
+      "distance_m": 3200.0,
+      "user_report": "Väldigt bra kontroll genom huvudserien, höll ihop tempot och låg på stadigt på 1:28. Skulle dock vilja komma ner under 1:25 per 100m med samma känsla. RPE 6/10. Känsla: Kunde gjort mer.",
+      "max_heartrate": 152.0,
       "classification": "training",
       "elapsed_time_s": 3537,
-      "distance_m": 3200.0,
       "elevation_gain_m": 0,
-      "average_heartrate": 133.5,
-      "max_heartrate": 152.0,
-      "user_report": "Väldigt bra kontroll genom huvudserien, höll ihop tempot och låg på stadigt på 1:28. Skulle dock vilja komma ner under 1:25 per 100m med samma känsla. RPE 6/10. Känsla: Kunde gjort mer."
+      "average_heartrate": 133.5
     },
     {
       "id": 20314473143,
       "date": "2026-09-24",
-      "family": "bike",
       "label": "MTB/XC",
+      "family": "bike",
+      "distance_m": 19039.9,
+      "user_report": "Cirka 80 min lugn stig-MTB. Dagen var planerad som vilodag.",
+      "max_heartrate": 149.0,
       "classification": "training",
       "elapsed_time_s": 4976,
-      "distance_m": 19039.9,
       "elevation_gain_m": 207.0,
-      "average_heartrate": 126.4,
-      "max_heartrate": 149.0,
-      "user_report": "Cirka 80 min lugn stig-MTB. Dagen var planerad som vilodag."
+      "average_heartrate": 126.4
     }
   ],
   "capability_facts": {
+    "swim_aerobic": {
+      "session_count": 8,
+      "longest_distance": {
+        "date": "2026-08-29",
+        "distance_m": 4000,
+        "activity_id": 19946705399
+      }
+    },
+    "mtb_technical": {
+      "session_count": 7,
+      "longest_duration": {
+        "date": "2026-09-03",
+        "activity_id": 20024236347,
+        "elapsed_time_s": 7883
+      }
+    },
     "run_threshold": {
       "evidence": [
         {
-          "capability": "run_threshold",
+          "date": "2026-08-25",
           "kind": "explicit_user_report",
-          "protocol": "3x8min",
-          "work_minutes": 24.0,
           "text": "3×8 min tröskel. Motsvarande känsla som föregående vecka, lite sämre tempo och ingen känsla av att vara starkare.",
+          "protocol": "3x8min",
+          "capability": "run_threshold",
           "activity_id": 19897382163,
-          "date": "2026-08-25"
+          "work_minutes": 24.0
         },
         {
-          "capability": "run_threshold",
+          "date": "2026-09-08",
           "kind": "explicit_user_report",
-          "protocol": "4x8min",
-          "work_minutes": 32.0,
           "text": "Löpband 4 × 8 min Tempo enligt Garmin. Sista intervallen krävde lite mental ansträngning trots att pulsen bara låg runt 162 bpm i slutet.",
+          "protocol": "4x8min",
+          "capability": "run_threshold",
           "activity_id": 20092166843,
-          "date": "2026-09-08"
+          "work_minutes": 32.0
         },
         {
-          "capability": "run_threshold",
+          "date": "2026-09-22",
           "kind": "explicit_user_report",
-          "protocol": "4x8min",
-          "work_minutes": 32.0,
           "text": "4 × 8 min tröskel. Garmin träningseffekt 4,2 ”Tröskel”. Känslan var riktigt bra och jag kände mig stark. Ökade lite på sista intervallen och hade mycket kraft kvar. Av praktiska skäl blev det löpning i stället för planerad simning; simningen flyttas till 2026-09-23. 4x8min med god kontroll. RPE 6/10. Känsla: Kunde gjort mer.",
+          "protocol": "4x8min",
+          "capability": "run_threshold",
           "activity_id": 20284663236,
-          "date": "2026-09-22"
+          "work_minutes": 32.0
+        }
+      ]
+    },
+    "swim_threshold": {
+      "evidence": [
+        {
+          "date": "2026-08-29",
+          "kind": "explicit_user_report",
+          "text": "Spontant simpass: Aerob+tröskel 4K, 4 000 m. Passet är separat från dagens planerade MTB-pass och ska räknas som faktisk träningsbelastning, inte som genomförande av dagens plan.",
+          "protocol": "aerob+threshold",
+          "capability": "swim_threshold",
+          "distance_m": 4000,
+          "activity_id": 19946705399
         }
       ]
     },
     "run_hill_quality": {
       "evidence": [
         {
-          "capability": "run_hill_quality",
+          "date": "2026-09-04",
           "kind": "explicit_user_report",
-          "protocol": "3x6",
-          "repetitions": 18,
           "text": "3 × 6 backintervaller (18 backar totalt). Tre serier om sex intervaller; arbetsdelarna ska beskrivas som intervaller.",
+          "protocol": "3x6",
+          "capability": "run_hill_quality",
           "activity_id": 20036445971,
-          "date": "2026-09-04"
+          "repetitions": 18
         },
         {
-          "capability": "run_hill_quality",
+          "date": "2026-09-11",
           "kind": "explicit_user_report",
-          "protocol": "3x7",
-          "repetitions": 21,
           "text": "3 × 7 backintervaller (21 backar totalt). Tre serier om sju intervaller; arbetsdelarna ska beskrivas som intervaller.",
+          "protocol": "3x7",
+          "capability": "run_hill_quality",
           "activity_id": 20133500464,
-          "date": "2026-09-11"
+          "repetitions": 21
         },
         {
-          "capability": "run_hill_quality",
+          "date": "2026-09-18",
           "kind": "explicit_user_report",
-          "protocol": "3x8",
-          "repetitions": 24,
           "text": "3 × 8 backintervaller (24 backar totalt). Tre serier om åtta intervaller. Kände mig superpigg under och efter passet.",
+          "protocol": "3x8",
+          "capability": "run_hill_quality",
           "activity_id": 20229568713,
-          "date": "2026-09-18"
+          "repetitions": 24
         }
       ]
     },
     "run_easy_distance": {
       "longest_distance": {
-        "activity_id": 20254486837,
         "date": "2026-09-20",
-        "distance_m": 22463.4
+        "distance_m": 22463.4,
+        "activity_id": 20254486837
       },
       "longest_duration": {
-        "activity_id": 20254486837,
         "date": "2026-09-20",
+        "activity_id": 20254486837,
         "elapsed_time_s": 7186
       }
     },
-    "swim_aerobic": {
-      "longest_distance": {
-        "activity_id": 19946705399,
-        "date": "2026-08-29",
-        "distance_m": 4000
-      },
-      "session_count": 8
-    },
-    "swim_threshold": {
-      "evidence": [
-        {
-          "capability": "swim_threshold",
-          "kind": "explicit_user_report",
-          "protocol": "aerob+threshold",
-          "distance_m": 4000,
-          "text": "Spontant simpass: Aerob+tröskel 4K, 4 000 m. Passet är separat från dagens planerade MTB-pass och ska räknas som faktisk träningsbelastning, inte som genomförande av dagens plan.",
-          "activity_id": 19946705399,
-          "date": "2026-08-29"
-        }
-      ]
-    },
-    "mtb_technical": {
-      "longest_duration": {
-        "activity_id": 20024236347,
-        "date": "2026-09-03",
-        "elapsed_time_s": 7883
-      },
-      "session_count": 7
-    },
     "strength_unilateral": {
+      "session_count": 6,
       "longest_duration": {
-        "activity_id": 19729740029,
         "date": "2026-08-13",
+        "activity_id": 19729740029,
         "elapsed_time_s": 2161
-      },
-      "session_count": 6
+      }
     }
   },
-  "performance_fingerprints": [],
+  "generated_at_utc": "2026-09-24T19:29:39.286681+00:00",
   "recent_week_reviews": [
     {
-      "week_key": "2026-W38",
-      "week_start": "2026-09-14",
-      "week_end": "2026-09-20",
       "summary": "Veckan innehöll konsekvent träning med fokus på löpkvalitet (tröskel och backintervaller) kompletterat av simning, MTB/Enduro och ett styrkepass; alla planerade löppass genomfördes och ett styrkepass flyttades/utelämnades i planutfallet.",
-      "load_continuity": "Träningsveckan visar daglig träning utan större gap: tre löppass fördelade under veckan med sim- och cykelexponering samt ett styrkepass ger en jämn närbelastning över mikrocykeln.",
+      "week_end": "2026-09-20",
+      "week_key": "2026-W38",
       "key_lesson": "Prioritera löpkvaliteten samtidigt som kompletterande sporter hålls aktiva genom kontrollerad dosering och planerade nedjusteringar.",
-      "next_week_implication": "Behåll prioriteringen av löppassen och använd faktiska närliggande belastningar (särskilt kombinationer måndag/tisdag och fredagens backvolym) för att avgöra om styrka eller cykel ska reduceras eller flyttas, inte som utgångspunkt för att öka löpintensitet.",
+      "week_start": "2026-09-14",
       "uncertainties": [
         "Subjektiv återhämtning/sömn och eventuell upplevd trötthet saknas och begränsar bedömning av absorberbar belastning.",
         "Detaljer om intensitetsstyrning (zonindelning) för sim- och cykelpass saknas.",
         "Eventuella skador eller muskelsmärta rapporterades inte och är därför okända."
-      ]
+      ],
+      "load_continuity": "Träningsveckan visar daglig träning utan större gap: tre löppass fördelade under veckan med sim- och cykelexponering samt ett styrkepass ger en jämn närbelastning över mikrocykeln.",
+      "next_week_implication": "Behåll prioriteringen av löppassen och använd faktiska närliggande belastningar (särskilt kombinationer måndag/tisdag och fredagens backvolym) för att avgöra om styrka eller cykel ska reduceras eller flyttas, inte som utgångspunkt för att öka löpintensitet."
     },
     {
-      "week_key": "2026-W37",
-      "week_start": "2026-09-07",
-      "week_end": "2026-09-13",
       "summary": "Veckan innehöll en full träningsvecka med sju aktiva dagar, många långa enduro-/ride-pass och tre prioriterade löpstimuli (tempointervaller, backintervaller, lugn distans) som genomfördes enligt det faktiska utfallet.",
-      "load_continuity": "Veckan visar kontinuerlig daglig belastning med ackumulering av längre tekniska cykelpass (enduro) samt tre separata löpstimuli spridda över veckan, vilket ger närbelastning på löpning och cykel i följd.",
+      "week_end": "2026-09-13",
+      "week_key": "2026-W37",
       "key_lesson": "Stora enduro-pass ändrar veckans modalfördelning och måste vägas mot löpstimuli för att behålla avsedd löputveckling.",
-      "next_week_implication": "Planera för återhämtning eller reducerad löpvolym nära omfattande enduro-/ride-pass när de är schemalagda, så att prioriterade löpkvaliteter bibehåller specificitet och absorberbar belastning.",
+      "week_start": "2026-09-07",
       "uncertainties": [
         "Subjektiv återhämtning/upplevd ansträngning saknas (user_report endast för vissa pass).",
         "Detaljer om intensitetsfördelning inom enduro- och ride-passen (t.ex. intervallkaraktär) saknas.",
         "Eventuella sömn- eller nutritionfaktorer som påverkar återhämtning och följande sessions kvalitet saknas."
-      ]
+      ],
+      "load_continuity": "Veckan visar kontinuerlig daglig belastning med ackumulering av längre tekniska cykelpass (enduro) samt tre separata löpstimuli spridda över veckan, vilket ger närbelastning på löpning och cykel i följd.",
+      "next_week_implication": "Planera för återhämtning eller reducerad löpvolym nära omfattande enduro-/ride-pass när de är schemalagda, så att prioriterade löpkvaliteter bibehåller specificitet och absorberbar belastning."
     },
     {
-      "week_key": "2026-W36",
-      "week_start": "2026-08-31",
-      "week_end": "2026-09-06",
       "summary": "Full träningsvecka med alla planerade sessioner genomförda; löpkvaliteter och distans löpning genomförda som prioriterat, MTB och simning genomförda i stödjande roller.",
-      "load_continuity": "Veckan visar kontinuerlig daglig belastning med prioriterade löppass spridda och kompletterande MTB/sim utan vilodagar; närbelastningen är ackumulerad men distribuerad över olika modaliteter.",
+      "week_end": "2026-09-06",
+      "week_key": "2026-W36",
       "key_lesson": "Prioriterade löpstimuli hölls intakta genom veckan trots kompletterande MTB/sim, men planerad styrkekomponent uteblev i registreringen.",
-      "next_week_implication": "Behåll prioriteringsordningen (löpkvalitet + distans) och säkerställ att planerad styrka faktiskt genomförs eller dokumenteras för att upprätthålla mekanisk och neuromuskulär stimulans.",
+      "week_start": "2026-08-31",
       "uncertainties": [
         "Ingen registrering av styrkedel som fanns i plan — påverkar bedömning av total mekanisk belastning.",
         "Ingen användarrapport för MTB, swimrun eller simpass vilket begränsar tolkning av subjektiv ansträngning och återhämtning.",
         "Detaljer om intensitet eller innehåll för MTB och sim (t.ex. teknisk vs. kraft) saknas bortom källans korta kontext."
-      ]
+      ],
+      "load_continuity": "Veckan visar kontinuerlig daglig belastning med prioriterade löppass spridda och kompletterande MTB/sim utan vilodagar; närbelastningen är ackumulerad men distribuerad över olika modaliteter.",
+      "next_week_implication": "Behåll prioriteringsordningen (löpkvalitet + distans) och säkerställ att planerad styrka faktiskt genomförs eller dokumenteras för att upprätthålla mekanisk och neuromuskulär stimulans."
     },
     {
-      "week_key": "2026-W35",
-      "week_start": "2026-08-24",
-      "week_end": "2026-08-30",
       "summary": "Veckan genomfördes med alla planerade löppass och kompletterande simning, MTB och styrka; ett planerat MTB-pass byttes mot ett separat simpass. Aktivitet genomfördes alla sju dagar.",
-      "load_continuity": "Veckan visar konsekvent daglig belastning med tre prioriterade löpstimuli spridda över veckan och kompletterande cykel-, sim- och styrkepass nära i tid; den samlade närbelastningen är ackumulerad snarare än fragmenterad.",
+      "week_end": "2026-08-30",
+      "week_key": "2026-W35",
       "key_lesson": "När subjektiva rapporter (känsla, upplevd intensitet) och pulsmätning divergerar måste planjusteringar och belastningsbedömning baseras på användarens observationer i kombination med aktiviteternas tidsmässiga fördelning.",
-      "next_week_implication": "Planera nästa veckas dosering utifrån den verkliga ackumulerade belastningen denna vecka — särskilt med tanke på högre backvolym fredag och extra simpass istället för MTB; prioritera återhämtning eller reducerad volym för att bibehålla kvalitet i kommande prioriterade löppass.",
+      "week_start": "2026-08-24",
       "uncertainties": [
         "Exakt subjektiv återhämtning/dagskänsla efter veckans sammanlagda belastning saknas.",
         "Detaljer om intensitetsfördelning under delar av swimrun (pulsbortfall) begränsar precis tolkning av intensiv belastning.",
         "Ingen användarrapport för flera aktiviteter (särskilt MTB-pass och söndagens långa löp) försvårar full bedömning av upplevd ansträngning."
-      ]
+      ],
+      "load_continuity": "Veckan visar konsekvent daglig belastning med tre prioriterade löpstimuli spridda över veckan och kompletterande cykel-, sim- och styrkepass nära i tid; den samlade närbelastningen är ackumulerad snarare än fragmenterad.",
+      "next_week_implication": "Planera nästa veckas dosering utifrån den verkliga ackumulerade belastningen denna vecka — särskilt med tanke på högre backvolym fredag och extra simpass istället för MTB; prioritera återhämtning eller reducerad volym för att bibehålla kvalitet i kommande prioriterade löppass."
     },
     {
-      "week_key": "2026-W34",
-      "week_start": "2026-08-17",
-      "week_end": "2026-08-23",
       "summary": "Veckan visar kontinuerlig mångsidig träning med fullföljda planerade pass i simning, löpning, swimrun och styrka samt lågintensiva kompletteringar (SUP) och en rekreationsenduro.",
-      "load_continuity": "Träningsbelastningen är jämnt fördelad över veckan med aktiviteter nästan varje dag; kvalitetspass ligger nära varandra men följdes av avsiktligt lågintensiva sessioner för återhämtning.",
+      "week_end": "2026-08-23",
+      "week_key": "2026-W34",
       "key_lesson": "Planens prioritering av kontrollerade kvalitetspass plus aktiv återhämtning fungerade praktiskt och blev absorberad utan indikation på överbelastning i faktalagret.",
-      "next_week_implication": "Fortsätt principen: placera kvalitetspass där återhämtning mellan dem är möjlig och använd lågintensiva kompletteringar för volym utan att anta extra belastning från aktiviteter klassificerade som rekreation.",
+      "week_start": "2026-08-17",
       "uncertainties": [
         "Ej kvantifierad fysisk belastning från tomtarbete efter enduro.",
         "Exakta ändringar i simpassen (vilolängder och vilka repetitioner som kortades) saknas i datalagret.",
         "Söndagens pass är preliminärt och dess slutliga status beror på okvantifierad dagskänsla och eventuell oregistrerad belastning."
-      ]
+      ],
+      "load_continuity": "Träningsbelastningen är jämnt fördelad över veckan med aktiviteter nästan varje dag; kvalitetspass ligger nära varandra men följdes av avsiktligt lågintensiva sessioner för återhämtning.",
+      "next_week_implication": "Fortsätt principen: placera kvalitetspass där återhämtning mellan dem är möjlig och använd lågintensiva kompletteringar för volym utan att anta extra belastning från aktiviteter klassificerade som rekreation."
     }
   ],
-  "interpretation_boundary": "Dokumentet innehåller observerade fakta och uttryckliga användarrapporter. Det anger inte optimal belastning, återhämtning, skaderisk eller framtida träningsdos."
+  "interpretation_boundary": "Dokumentet innehåller observerade fakta och uttryckliga användarrapporter. Det anger inte optimal belastning, återhämtning, skaderisk eller framtida träningsdos.",
+  "performance_fingerprints": []
 }

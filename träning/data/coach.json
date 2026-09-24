@@ -1,1285 +1,1285 @@
 {
   "analyses": [
     {
-      "activity_id": 20314473143,
-      "activity_date": "2026-09-24",
-      "activity_name": "Evening Mountain Bike Ride",
-      "generated_at_utc": "2026-09-24T19:15:18.653077+00:00",
       "model": "gpt-5-mini",
-      "analysis_contract": {
-        "pipeline_version": 3,
-        "workout_context_version": 3,
-        "plan_comparison_version": 2,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
-        "analysis_code_sha256": "b2b605b727aaea5a4027070ea282ce432554fdd8a3f4f664cf37251ade67f342"
-      },
-      "performance_marker_id": null,
-      "performance_protocol_key": null,
       "assessment": {
-        "summary": "80 min spontan lugn stig‑MTB/XC (19.0 km, 207 m höjd) genomförd på planerad vilodag; passet räknas som faktisk belastning.",
-        "load_interpretation": "Passet adderar en ytterligare låg‑intensiv MTB/XC‑exponering i senaste 2–3 dagars fönster och påverkar närbelastningsbedömningen konservativt.",
-        "confidence": "medium",
         "facts": [
           "MTB/XC: 19,04 km · 1:22:56 · 207 m+ · snittpuls 126,4 · maxpuls 149.",
           "Användarrapport: Cirka 80 min lugn stig-MTB. Dagen var planerad som vilodag."
         ],
-        "interpretations": [
-          "Genomfört pass var låg‑intensivt MTB/XC/tekniskt och visar god tolerans för en spontan 80‑minuters stigtur utan rapporterad trötthet",
-          "Eftersom det var vilodag och räknas som separat träning bör kommande 2–3 dagars plan bedömas mot ökad faktisk närbelastning (enduro+MTB/XC+sim/​löpning)"
-        ],
+        "summary": "Genomfört spontant lugnt stig‑MTB/XC 80 min (19.0 km, ≈4 690 s moving) på planerad vilodag – låg mekanisk och kardiovaskulär kostnad enligt användarrapport och mätdata.",
         "unknowns": [
-          "Subjektiv återhämtning nästa 24–72 h (användarrapport saknar senare uppföljning)",
-          "Detaljerad lokal muskulär trötthet i ben efter teknisk stigkörning saknas"
-        ]
-      },
-      "plan_action": {
-        "action": "keep",
-        "target_date": "",
-        "reason": "Passet var lågintensivt, planens närmaste dagar innehåller skyddade sim‑ och löppass och ingen omedelbar reduktion krävs.",
-        "recommendation": "Behåll nuvarande plan oförändrad; observera självkänsla och benstatus imorgon och rapportera om trötthet eller lokal smärta.",
-        "dose_option_id": "",
-        "requires_approval": false
+          "Subjektiv återhämtning nästa 24–72 h (användarrapporten var samma dag)",
+          "Detaljer om tekniska krascher eller lokala muskeltröttheter som kan påverka benkvalitet"
+        ],
+        "confidence": "medium",
+        "interpretations": [
+          "Belastningen kan inte nivåklassas mot personlig baslinje för kardiovaskulär dimension och mekanisk kostnad för planens löp‑/styrkemål; det hotar inte sim‑ eller tröskelstimuli.",
+          "Eftersom passet var oplanerat på vilodag behövs ingen planändring om du känner dig pigg imorgon, men beakta ackumulerad närbelastning inför söndagens långa löpning."
+        ],
+        "load_interpretation": "Passet lägger till en extra, lågintensiv MTB/XC‑exponering i närbelastningen men saknar bevis för att påverka planens primära stimulin (sim + Löpning)."
       },
       "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
-      }
-    },
-    {
-      "activity_id": 20300494236,
-      "activity_date": "2026-09-23",
-      "activity_name": "Simning på kvällen",
-      "generated_at_utc": "2026-09-24T17:25:16.678762+00:00",
-      "model": "gpt-5-mini",
+        "note": "Ingen automatisk planändring.",
+        "applied": false
+      },
+      "activity_id": 20314473143,
+      "plan_action": {
+        "action": "keep",
+        "reason": "Passet var lugnt, lågmekaniskt och integreras som separat faktisk belastning utan att ändra mikrocykelns primära stimulin.",
+        "target_date": "",
+        "dose_option_id": "",
+        "recommendation": "Behåll nuvarande plan; vila/återhämtningsfokus imorgon om du känner ovanlig trötthet. Rapportera om ben‑ eller lokal trötthet inför kommande planerade pass så omprövar vi.",
+        "requires_approval": false
+      },
+      "activity_date": "2026-09-24",
+      "activity_name": "Evening Mountain Bike Ride",
+      "generated_at_utc": "2026-09-24T19:31:55.871650+00:00",
       "analysis_contract": {
         "pipeline_version": 3,
-        "workout_context_version": 3,
-        "plan_comparison_version": 2,
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
-        "analysis_code_sha256": "b2b605b727aaea5a4027070ea282ce432554fdd8a3f4f664cf37251ade67f342"
+        "analysis_code_sha256": "b2b605b727aaea5a4027070ea282ce432554fdd8a3f4f664cf37251ade67f342",
+        "plan_comparison_version": 2,
+        "workout_context_version": 3
       },
       "performance_marker_id": null,
-      "performance_protocol_key": null,
+      "performance_protocol_key": null
+    },
+    {
+      "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Genomfört 3 200 m simpass matchar planens struktur och visar stabilitet i huvudserien med snitt 1:28/100 m och RPE 6/10.",
-        "load_interpretation": "Senaste 48–72 t innehåller tung löptröskel (4×8) och enduro + lätt styrka; simpasset är teknisk/aerob och kräver ingen automatisk reduktion.",
-        "confidence": "medium",
         "facts": [
           "Swim: 3,20 km · 58:57 · snittpuls 133,5 · maxpuls 152.",
           "Användarrapport: Väldigt bra kontroll genom huvudserien, höll ihop tempot och låg på stadigt på 1:28. Skulle dock vilja komma ner under 1:25 per 100m med samma känsla. RPE 6/10. Känsla: Kunde gjort mer.",
           "Planstatus 2026-09-23: dagen är markerad genomförd i coachens beslutsunderlag.",
           "Planerat simpass 3200 m; genomfört 3200 m. Genomförd setstruktur matchar planens struktur."
         ],
+        "summary": "Genomfört 3 200 m simpass matchar planens struktur och visar stabilitet i huvudserien med snitt 1:28/100 m och RPE 6/10.",
+        "unknowns": [
+          "Subsequent-day subjective recovery (24–72h) är okänd trots god samma‑dagsrapport.",
+          "Teknisk detalj kring stroke (som kan påverka progression under 1:25) saknas i objektiva setmått."
+        ],
+        "confidence": "medium",
         "interpretations": [
           "Passet konsoliderar planens sim‑stimulus och visar stabil aerob rytm i 4×500‑setet, vilket stödjer planerat 4 000 m‑steg.",
           "Givet föregående 48–72 t (4×8 tröskel + enduro + lätt styrka) är aktuell närbelastning multifasetterad; simningen ger mekanisk kostnad och kan behållas utan skalning."
         ],
-        "unknowns": [
-          "Subsequent-day subjective recovery (24–72h) är okänd trots god samma‑dagsrapport.",
-          "Teknisk detalj kring stroke (som kan påverka progression under 1:25) saknas i objektiva setmått."
-        ]
-      },
-      "plan_action": {
-        "action": "keep",
-        "target_date": "",
-        "reason": "Simpasset uppfyllde planens sim‑stimulus och ligger väl i mikrocykelns närbelastningskontext.",
-        "recommendation": "Behåll kommande plan (ingen ändring). Fortsätt jobba mot <1:25/100 m i kommande planerade simpass enligt mesocykelreceptet.",
-        "dose_option_id": "",
-        "requires_approval": false
+        "load_interpretation": "Senaste 48–72 t innehåller tung löptröskel (4×8) och enduro + lätt styrka; simpasset är teknisk/aerob och kräver ingen automatisk reduktion."
       },
       "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
-      }
-    },
-    {
-      "activity_id": 20284663236,
-      "activity_date": "2026-09-22",
-      "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-09-23T16:59:35.637501+00:00",
-      "model": "gpt-5-mini",
+        "note": "Ingen automatisk planändring.",
+        "applied": false
+      },
+      "activity_id": 20300494236,
+      "plan_action": {
+        "action": "keep",
+        "reason": "Simpasset uppfyllde planens sim‑stimulus och ligger väl i mikrocykelns närbelastningskontext.",
+        "target_date": "",
+        "dose_option_id": "",
+        "recommendation": "Behåll kommande plan (ingen ändring). Fortsätt jobba mot <1:25/100 m i kommande planerade simpass enligt mesocykelreceptet.",
+        "requires_approval": false
+      },
+      "activity_date": "2026-09-23",
+      "activity_name": "Simning på kvällen",
+      "generated_at_utc": "2026-09-24T17:25:16.678762+00:00",
       "analysis_contract": {
         "pipeline_version": 3,
-        "workout_context_version": 3,
-        "plan_comparison_version": 2,
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
-        "analysis_code_sha256": "b2b605b727aaea5a4027070ea282ce432554fdd8a3f4f664cf37251ade67f342"
+        "analysis_code_sha256": "b2b605b727aaea5a4027070ea282ce432554fdd8a3f4f664cf37251ade67f342",
+        "plan_comparison_version": 2,
+        "workout_context_version": 3
       },
       "performance_marker_id": null,
-      "performance_protocol_key": null,
+      "performance_protocol_key": null
+    },
+    {
+      "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Genomfört 4×8 min tröskel med god kontroll; användarrapport och pulsfakta visar kontrollerad genomföring och kraft kvar på sista intervallen.",
-        "load_interpretation": "Passet ger planerat tröskelstimulus och kräver ingen omedelbar reduktion utifrån de närmaste 2–3 dagarnas faktiska belastning.",
-        "confidence": "medium",
         "facts": [
           "Löpning · tröskel: 12,90 km · 1:01:27 · 105 m+ · snittpuls 145,4 · maxpuls 165.",
           "Användarrapport: 4 × 8 min tröskel. Garmin träningseffekt 4,2 ”Tröskel”. Känslan var riktigt bra och jag kände mig stark. Ökade lite på sista intervallen och hade mycket kraft kvar. Av praktiska skäl blev det löpning i stället för planerad simning; simningen flyttas till 2026-09-23. 4x8min med god kontroll. RPE 6/10. Känsla: Kunde gjort mer.",
           "Planstatus 2026-09-22: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
+        "summary": "Genomfört 4×8 min tröskel med god kontroll; användarrapport och pulsfakta visar kontrollerad genomföring och kraft kvar på sista intervallen.",
+        "unknowns": [
+          "Subjektiv återhämtning kommande 24–72 h (användarrapport säger pigg idag men framtida respons okänd).",
+          "Detaljer om eventuell lokal muskulär trötthet i benen före simningen imorgon saknas."
+        ],
+        "confidence": "medium",
         "interpretations": [
           "Passet levererade avsett kontrollerad löptröskel‑stimulus och sista intervallen ökades vilket indikerar absorberbar arbetskapacitet idag.",
           "Givet närbelastningen finns inga föregående 2–3 dagars pass som tvingar reducering; kommande simning 2026-09-23 är planerad och bör kunna behållas."
         ],
-        "unknowns": [
-          "Subjektiv återhämtning kommande 24–72 h (användarrapport säger pigg idag men framtida respons okänd).",
-          "Detaljer om eventuell lokal muskulär trötthet i benen före simningen imorgon saknas."
-        ]
-      },
-      "plan_action": {
-        "action": "keep",
-        "target_date": "2026-09-23",
-        "reason": "Tröskelstimulus är genomfört kontrollerat och närbelastningen föregående/kommande dagar tillåter att planerad simning behålls.",
-        "recommendation": "Behåll planerad simning 2026-09-23 (Simning · 3 200 m · aerob/teknik). Om du känner ovanlig ben-/muskeltrötthet imorgon, överväg att minska simintensiteten till teknikorienterat lugnt arbete.",
-        "dose_option_id": "",
-        "requires_approval": false
+        "load_interpretation": "Passet ger planerat tröskelstimulus och kräver ingen omedelbar reduktion utifrån de närmaste 2–3 dagarnas faktiska belastning."
       },
       "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
-      }
-    },
-    {
-      "activity_id": 20272196080,
-      "activity_date": "2026-09-21",
-      "activity_name": "Styrketräning på kvällen",
-      "generated_at_utc": "2026-09-22T16:58:34.752979+00:00",
-      "model": "gpt-5-mini",
+        "note": "Ingen automatisk planändring.",
+        "applied": false
+      },
+      "activity_id": 20284663236,
+      "plan_action": {
+        "action": "keep",
+        "reason": "Tröskelstimulus är genomfört kontrollerat och närbelastningen föregående/kommande dagar tillåter att planerad simning behålls.",
+        "target_date": "2026-09-23",
+        "dose_option_id": "",
+        "recommendation": "Behåll planerad simning 2026-09-23 (Simning · 3 200 m · aerob/teknik). Om du känner ovanlig ben-/muskeltrötthet imorgon, överväg att minska simintensiteten till teknikorienterat lugnt arbete.",
+        "requires_approval": false
+      },
+      "activity_date": "2026-09-22",
+      "activity_name": "Löpning på kvällen",
+      "generated_at_utc": "2026-09-23T16:59:35.637501+00:00",
       "analysis_contract": {
         "pipeline_version": 3,
-        "workout_context_version": 3,
-        "plan_comparison_version": 2,
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
-        "analysis_code_sha256": "b2b605b727aaea5a4027070ea282ce432554fdd8a3f4f664cf37251ade67f342"
+        "analysis_code_sha256": "b2b605b727aaea5a4027070ea282ce432554fdd8a3f4f664cf37251ade67f342",
+        "plan_comparison_version": 2,
+        "workout_context_version": 3
       },
       "performance_marker_id": null,
-      "performance_protocol_key": null,
+      "performance_protocol_key": null
+    },
+    {
+      "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Genomfört styrkepass (33,6 min) rapporterat RPE 2/10, pigg; låg Kardiovaskulär belastning (avg HR 79) och inga problem rapporterade.",
-        "load_interpretation": "Passet bidrar som skyddad styrka/core utan att kräva ändring i kommande 48–72 timmar.",
-        "confidence": "medium",
         "facts": [
           "WeightTraining: 33:34 · snittpuls 79,3 · maxpuls 128.",
           "Användarrapport: RPE 2/10. Känsla: Pigg. Palloff press, latsdrag, bulgarian splits, atomic pushups med band, bänkrodd, dead bug, omvänd planka RPE 4/10."
         ],
+        "summary": "Genomfört styrkepass (33,6 min) rapporterat RPE 2/10, pigg; låg Kardiovaskulär belastning (avg HR 79) och inga problem rapporterade.",
+        "unknowns": [
+          "Subjektiv muskelsmärta eller fördröjd trötthet senare än samma dag.",
+          "Planerad sim+styrka nästa dag — exakt återhämtningskänsla morgonen efter."
+        ],
+        "confidence": "medium",
         "interpretations": [
           "Styrkepasset var lätt till måttligt och uppfyller mikrocykelns krav på en styrka/core-session utan att öka benbelastning.",
           "Ingen indikation i data eller användarrapport på att nästa planerade simning/styrka måste reduceras eller flyttas."
         ],
-        "unknowns": [
-          "Subjektiv muskelsmärta eller fördröjd trötthet senare än samma dag.",
-          "Planerad sim+styrka nästa dag — exakt återhämtningskänsla morgonen efter."
-        ]
-      },
-      "plan_action": {
-        "action": "keep",
-        "target_date": "2026-09-22",
-        "reason": "Passet var lätt, användarrapport pigg och uppfyller krav på skyddad styrka/core; planens sim+styrka kan genomföras som planerat.",
-        "recommendation": "Följ plan för 2026-09-22 (Simning 3 200 m + styrka/core enligt mall). Behåll normal styrkedos (det valda passalternativet).",
-        "dose_option_id": "",
-        "requires_approval": false
+        "load_interpretation": "Passet bidrar som skyddad styrka/core utan att kräva ändring i kommande 48–72 timmar."
       },
       "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
-      }
-    },
-    {
-      "activity_id": 20254486837,
-      "activity_date": "2026-09-20",
-      "activity_name": "Löpning vid lunch",
-      "generated_at_utc": "2026-09-21T12:47:40.743359+00:00",
-      "model": "gpt-5-mini",
+        "note": "Ingen automatisk planändring.",
+        "applied": false
+      },
+      "activity_id": 20272196080,
+      "plan_action": {
+        "action": "keep",
+        "reason": "Passet var lätt, användarrapport pigg och uppfyller krav på skyddad styrka/core; planens sim+styrka kan genomföras som planerat.",
+        "target_date": "2026-09-22",
+        "dose_option_id": "",
+        "recommendation": "Följ plan för 2026-09-22 (Simning 3 200 m + styrka/core enligt mall). Behåll normal styrkedos (det valda passalternativet).",
+        "requires_approval": false
+      },
+      "activity_date": "2026-09-21",
+      "activity_name": "Styrketräning på kvällen",
+      "generated_at_utc": "2026-09-22T16:58:34.752979+00:00",
       "analysis_contract": {
         "pipeline_version": 3,
-        "workout_context_version": 3,
-        "plan_comparison_version": 2,
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
-        "analysis_code_sha256": "b2b605b727aaea5a4027070ea282ce432554fdd8a3f4f664cf37251ade67f342"
+        "analysis_code_sha256": "b2b605b727aaea5a4027070ea282ce432554fdd8a3f4f664cf37251ade67f342",
+        "plan_comparison_version": 2,
+        "workout_context_version": 3
       },
       "performance_marker_id": null,
-      "performance_protocol_key": null,
+      "performance_protocol_key": null
+    },
+    {
+      "model": "gpt-5-mini",
       "assessment": {
-        "summary": "22,46 km löppass på 7h18 med varierande km‑intervaller och stiginslag genomfört utan subjektiv rapport om problem.",
-        "load_interpretation": "Passet adderar långvarig kardio- och mekanisk belastning i de senaste 2–3 dagarna och bör beaktas innan nästa nyckelpass.",
-        "confidence": "medium",
         "facts": [
           "Löpning: 22,46 km · 1:59:46 · 267 m+ · snittpuls 138,9 · maxpuls 158."
         ],
+        "summary": "22,46 km löppass på 7h18 med varierande km‑intervaller och stiginslag genomfört utan subjektiv rapport om problem.",
+        "unknowns": [
+          "Subjektiv återhämtning efter passet (användarrapport tom)",
+          "Kommande dags exakta planerade utföranden/åtaganden samma dag som enduro"
+        ],
+        "confidence": "medium",
         "interpretations": [
           "Ett långt genomfört löppass visar kapacitet för långvarig löpbelastning men innehåller variation i tempo vilket indikerar blandad ansträngningsprofil.",
           "Eftersom mikrocykeln planerar enduro måndag och tröskel + sim de följande dagarna bör den faktiska långa löpbelastningen beakta kommande 48–72 h innan hårda nyckelpass genomförs."
         ],
-        "unknowns": [
-          "Subjektiv återhämtning efter passet (användarrapport tom)",
-          "Kommande dags exakta planerade utföranden/åtaganden samma dag som enduro"
-        ]
-      },
-      "plan_action": {
-        "action": "review",
-        "target_date": "",
-        "reason": "Beslutet skjuts upp eftersom mellanliggande planerade dagar ännu inte har ett känt utfall.",
-        "recommendation": "Måndag: Enduroskola · fast tillfälle ligger kvar som plan. Tisdag: Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg bedöms efter den faktiska belastningen från måndag och återhämtningen därefter.",
-        "dose_option_id": "",
-        "requires_approval": false
+        "load_interpretation": "Passet adderar långvarig kardio- och mekanisk belastning i de senaste 2–3 dagarna och bör beaktas innan nästa nyckelpass."
       },
       "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
-      }
-    },
-    {
-      "activity_id": 20239623463,
-      "activity_date": "2026-09-19",
-      "activity_name": "Simning vid lunch",
-      "generated_at_utc": "2026-09-20T11:21:55.078448+00:00",
-      "model": "gpt-5-mini",
+        "note": "Ingen automatisk planändring.",
+        "applied": false
+      },
+      "activity_id": 20254486837,
+      "plan_action": {
+        "action": "review",
+        "reason": "Beslutet skjuts upp eftersom mellanliggande planerade dagar ännu inte har ett känt utfall.",
+        "target_date": "",
+        "dose_option_id": "",
+        "recommendation": "Måndag: Enduroskola · fast tillfälle ligger kvar som plan. Tisdag: Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg bedöms efter den faktiska belastningen från måndag och återhämtningen därefter.",
+        "requires_approval": false
+      },
+      "activity_date": "2026-09-20",
+      "activity_name": "Löpning vid lunch",
+      "generated_at_utc": "2026-09-21T12:47:40.743359+00:00",
       "analysis_contract": {
-        "pipeline_version": 2,
-        "workout_context_version": 3,
-        "plan_comparison_version": 2,
+        "pipeline_version": 3,
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
-        "analysis_code_sha256": "079470facd2bdc3de67f9bdf4948eca93a1f672b307efb63733705ce34a752d2"
+        "analysis_code_sha256": "b2b605b727aaea5a4027070ea282ce432554fdd8a3f4f664cf37251ade67f342",
+        "plan_comparison_version": 2,
+        "workout_context_version": 3
       },
       "performance_marker_id": null,
-      "performance_protocol_key": null,
+      "performance_protocol_key": null
+    },
+    {
+      "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Genomförd simning 4 000 m var betydligt längre än planerat 3 200 m och inkluderade stabilt 17×200 + snabba 50 m, vilket ökade dagens totala närbelastning.",
-        "load_interpretation": "Kombinationen av längre simning tillsammans med senaste MTB/XC/Enduro och 24 backintervaller ökar mekanisk/neuromuskulär och kardiovaskulär närbelastning för de närmaste…",
-        "confidence": "medium",
         "facts": [
           "Simning: 4,00 km · 1:18:50 · snittpuls 130,1 · maxpuls 156.",
           "Planerad tidsdos 25 min; faktisk rörelsetid 56.57 min (+31.57 min mot vald dos); över längsta godkända alternativet 35 min."
         ],
+        "summary": "Genomförd simning 4 000 m var betydligt längre än planerat 3 200 m och inkluderade stabilt 17×200 + snabba 50 m, vilket ökade dagens totala närbelastning.",
+        "unknowns": [
+          "Subjektiv återhämtning efter simningen (användarrapport är tom).",
+          "Eventuell lokal muskeltrötthet i ben/core som skulle påverka löpning i morgon."
+        ],
+        "confidence": "medium",
         "interpretations": [
           "Detta pass visar att simningen fungerade som ett långt aerob/teknikpass men översteg den godkända tidsdosen och ökar samlad närbelastning inför planerad lugn löpning.",
           "Tidsdosen blev 56.57 min mot valda 25 min och översteg även det längsta godkända alternativet 35 min."
         ],
-        "unknowns": [
-          "Subjektiv återhämtning efter simningen (användarrapport är tom).",
-          "Eventuell lokal muskeltrötthet i ben/core som skulle påverka löpning i morgon."
-        ]
-      },
-      "plan_action": {
-        "action": "reduce",
-        "target_date": "2026-09-20",
-        "reason": "Simningen översteg planerad volym och tillsammans med senaste dagarnas mekaniska belastning krävs konservativ marginal inför planerad lugn löpdistans.",
-        "recommendation": "Följ det justerade passupplägget i planen.",
-        "dose_option_id": "",
-        "requires_approval": false
+        "load_interpretation": "Kombinationen av längre simning tillsammans med senaste MTB/XC/Enduro och 24 backintervaller ökar mekanisk/neuromuskulär och kardiovaskulär närbelastning för de närmaste…"
       },
       "auto_apply": {
-        "applied": true,
-        "note": "Konservativ ändring applicerad på 2026-09-20: reduce."
-      }
-    },
-    {
-      "activity_id": 20229568713,
-      "activity_date": "2026-09-18",
-      "activity_name": "Löpning på eftermiddagen",
-      "generated_at_utc": "2026-09-19T10:57:37.248423+00:00",
-      "model": "gpt-5-mini",
+        "note": "Konservativ ändring applicerad på 2026-09-20: reduce.",
+        "applied": true
+      },
+      "activity_id": 20239623463,
+      "plan_action": {
+        "action": "reduce",
+        "reason": "Simningen översteg planerad volym och tillsammans med senaste dagarnas mekaniska belastning krävs konservativ marginal inför planerad lugn löpdistans.",
+        "target_date": "2026-09-20",
+        "dose_option_id": "",
+        "recommendation": "Följ det justerade passupplägget i planen.",
+        "requires_approval": false
+      },
+      "activity_date": "2026-09-19",
+      "activity_name": "Simning vid lunch",
+      "generated_at_utc": "2026-09-20T11:21:55.078448+00:00",
       "analysis_contract": {
         "pipeline_version": 2,
-        "workout_context_version": 3,
-        "plan_comparison_version": 2,
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
-        "analysis_code_sha256": "079470facd2bdc3de67f9bdf4948eca93a1f672b307efb63733705ce34a752d2"
+        "analysis_code_sha256": "079470facd2bdc3de67f9bdf4948eca93a1f672b307efb63733705ce34a752d2",
+        "plan_comparison_version": 2,
+        "workout_context_version": 3
       },
       "performance_marker_id": null,
-      "performance_protocol_key": null,
+      "performance_protocol_key": null
+    },
+    {
+      "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Genomfört: 3 × 8 backintervaller (24 totalt).",
-        "load_interpretation": "Närbelastningen är ökande mekanisk/neuromuskulär (enduro + MTB/XC inom senaste 48 h plus dagens 24 backar) och motiverar fortsatt konservativ hantering de närmaste 48–72…",
-        "confidence": "medium",
         "facts": [
           "Löpning · backintervaller: 15,01 km · 1:17:56 · 266 m+ · snittpuls 141,3 · maxpuls 163.",
           "Användarrapport: 3 × 8 backintervaller (24 backar totalt). Tre serier om åtta intervaller. Kände mig superpigg under och efter passet.",
           "Planstatus 2026-09-18: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
+        "summary": "Genomfört: 3 × 8 backintervaller (24 totalt).",
+        "unknowns": [
+          "Användarens benstatus nästa morgon (lokal mech-trötthet) kan påverka om styrka/plyo är lämpligt.",
+          "Eventuella subjektiva återhämtningsrapporter efter 24–48 h (om de ändras) kan ändra rekommendationen."
+        ],
+        "confidence": "medium",
         "interpretations": [
           "Passet betyder att det planerade volymgolvet för backintervaller är uppnått och att nästa utvecklingssteg bör vägas mot den akuta närbelastningen.",
           "Kombinationen av senaste enduro/MTB/XC och dagens höga repetitionsvolym talar för att nästa dagars styrka/sim+styrka bör hållas i reducerad dos för marginal."
         ],
-        "unknowns": [
-          "Användarens benstatus nästa morgon (lokal mech-trötthet) kan påverka om styrka/plyo är lämpligt.",
-          "Eventuella subjektiva återhämtningsrapporter efter 24–48 h (om de ändras) kan ändra rekommendationen."
-        ]
-      },
-      "plan_action": {
-        "action": "keep",
-        "target_date": "",
-        "reason": "Backpasset genomfördes som 3 × 8 backintervaller (24 totalt), alltså över den planerade omfattningen före passet (16 arbetsintervaller).",
-        "recommendation": "Följ den redan applicerade reducerade dosen (det valda passalternativet) för 2026-09-19; undvik plyometri och håll styrkepasset kontrollerat. Ingen ytterligare ändring behövs nu.",
-        "dose_option_id": "",
-        "requires_approval": false
+        "load_interpretation": "Närbelastningen är ökande mekanisk/neuromuskulär (enduro + MTB/XC inom senaste 48 h plus dagens 24 backar) och motiverar fortsatt konservativ hantering de närmaste 48–72…"
       },
       "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
-      }
-    },
-    {
-      "activity_id": 20218282169,
-      "activity_date": "2026-09-17",
-      "activity_name": "Evening Stig Bike Ride",
-      "generated_at_utc": "2026-09-18T16:23:32.408751+00:00",
-      "model": "gpt-5-mini",
+        "note": "Ingen automatisk planändring.",
+        "applied": false
+      },
+      "activity_id": 20229568713,
+      "plan_action": {
+        "action": "keep",
+        "reason": "Backpasset genomfördes som 3 × 8 backintervaller (24 totalt), alltså över den planerade omfattningen före passet (16 arbetsintervaller).",
+        "target_date": "",
+        "dose_option_id": "",
+        "recommendation": "Följ den redan applicerade reducerade dosen (det valda passalternativet) för 2026-09-19; undvik plyometri och håll styrkepasset kontrollerat. Ingen ytterligare ändring behövs nu.",
+        "requires_approval": false
+      },
+      "activity_date": "2026-09-18",
+      "activity_name": "Löpning på eftermiddagen",
+      "generated_at_utc": "2026-09-19T10:57:37.248423+00:00",
       "analysis_contract": {
         "pipeline_version": 2,
-        "workout_context_version": 3,
-        "plan_comparison_version": 2,
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
-        "analysis_code_sha256": "079470facd2bdc3de67f9bdf4948eca93a1f672b307efb63733705ce34a752d2"
+        "analysis_code_sha256": "079470facd2bdc3de67f9bdf4948eca93a1f672b307efb63733705ce34a752d2",
+        "plan_comparison_version": 2,
+        "workout_context_version": 3
       },
       "performance_marker_id": null,
-      "performance_protocol_key": null,
+      "performance_protocol_key": null
+    },
+    {
+      "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Torsdagens MTB/XC blev 75 min (18.05 km) med medelpuls 127 och watt ~162 — längre än planerad 60 min vilket ökade mekanisk/neuromuskulär närbelastning inför fredagens backpass.",
-        "load_interpretation": "Närbelastningen ökar framförallt mekaniskt/neuromuskulärt och kräver konservativ justering av fredagens backkvalitet inom 2–3 dagar.",
-        "confidence": "medium",
         "facts": [
           "MTB/XC: 18,05 km · 1:17:15 · 209 m+ · snittpuls 127,1 · maxpuls 152.",
           "Planstatus 2026-09-17: dagen är markerad genomförd i coachens beslutsunderlag.",
           "Planerad tidsdos 60 min; faktisk rörelsetid 75.15 min (+15.15 min mot vald dos); över längsta godkända alternativet 60 min."
         ],
+        "summary": "Torsdagens MTB/XC blev 75 min (18.05 km) med medelpuls 127 och watt ~162 — längre än planerad 60 min vilket ökade mekanisk/neuromuskulär närbelastning inför fredagens backpass.",
+        "unknowns": [
+          "Användarens subjektiva trötthet eller muskelstatus efter MTB/XC (ingen användarrapport för senaste passet)",
+          "Eventuella senare dagsaktiviteter eller återhämtningsunderlaget/återhämtningseffekter som ändrar toleransen"
+        ],
+        "confidence": "medium",
         "interpretations": [
           "Passet genomfördes men var längre än godkänd dos och ökar mekanisk/neuromuskulär kostnad inför morgondagens prioriterade backpass.",
           "Tidsdosen blev 75.15 min mot valda 60 min och översteg även det längsta godkända alternativet 60 min."
         ],
-        "unknowns": [
-          "Användarens subjektiva trötthet eller muskelstatus efter MTB/XC (ingen användarrapport för senaste passet)",
-          "Eventuella senare dagsaktiviteter eller återhämtningsunderlaget/återhämtningseffekter som ändrar toleransen"
-        ]
-      },
-      "plan_action": {
-        "action": "reduce",
-        "target_date": "2026-09-18",
-        "reason": "MTB-passet översteg godkänd varaktighet och ökade mekanisk/neuromuskulär närbelastning inför fredagens prioriterade backpass.",
-        "recommendation": "Följ det justerade passupplägget i planen.",
-        "dose_option_id": "",
-        "requires_approval": false
+        "load_interpretation": "Närbelastningen ökar framförallt mekaniskt/neuromuskulärt och kräver konservativ justering av fredagens backkvalitet inom 2–3 dagar."
       },
       "auto_apply": {
-        "applied": true,
-        "note": "Konservativ ändring applicerad på 2026-09-18: reduce."
-      }
-    },
-    {
-      "activity_id": 20203770266,
-      "activity_date": "2026-09-16",
-      "activity_name": "Simning på kvällen",
-      "generated_at_utc": "2026-09-17T16:59:23.575968+00:00",
-      "model": "gpt-5-mini",
+        "note": "Konservativ ändring applicerad på 2026-09-18: reduce.",
+        "applied": true
+      },
+      "activity_id": 20218282169,
+      "plan_action": {
+        "action": "reduce",
+        "reason": "MTB-passet översteg godkänd varaktighet och ökade mekanisk/neuromuskulär närbelastning inför fredagens prioriterade backpass.",
+        "target_date": "2026-09-18",
+        "dose_option_id": "",
+        "recommendation": "Följ det justerade passupplägget i planen.",
+        "requires_approval": false
+      },
+      "activity_date": "2026-09-17",
+      "activity_name": "Evening Stig Bike Ride",
+      "generated_at_utc": "2026-09-18T16:23:32.408751+00:00",
       "analysis_contract": {
         "pipeline_version": 2,
-        "workout_context_version": 3,
-        "plan_comparison_version": 2,
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
-        "analysis_code_sha256": "079470facd2bdc3de67f9bdf4948eca93a1f672b307efb63733705ce34a752d2"
+        "analysis_code_sha256": "079470facd2bdc3de67f9bdf4948eca93a1f672b307efb63733705ce34a752d2",
+        "plan_comparison_version": 2,
+        "workout_context_version": 3
       },
       "performance_marker_id": null,
-      "performance_protocol_key": null,
+      "performance_protocol_key": null
+    },
+    {
+      "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Genomfört simpass 3 500 m med tydlig setstruktur och stabila 100 m-serier; puls steg under passet mot högre värden i mitten/slutet.",
-        "load_interpretation": "Simningen är strukturerad aerob/teknik och ger mekanisk kostnad men adderar kardiovaskulär volym i mikrocykelfönstret.",
-        "confidence": "medium",
         "facts": [
           "Simning: 3,50 km · 1:12:03 · snittpuls 127,8 · maxpuls 171.",
           "Planerat simpass 3200 m; genomfört 3500 m. Genomförd setstruktur är ett annat strukturerat pass än planens setstruktur."
         ],
+        "summary": "Genomfört simpass 3 500 m med tydlig setstruktur och stabila 100 m-serier; puls steg under passet mot högre värden i mitten/slutet.",
+        "unknowns": [
+          "Subjektiv trötthet/benkänsla efter passet (användarrapport saknas)",
+          "om nattsömn eller dagsvälbefinnande påverkar återhämtning nästa dag"
+        ],
+        "confidence": "medium",
         "interpretations": [
           "Passet fyllde sim‑underhållet och visar god volym- och pacestabilitet över 24×100‑setet, vilket stödjer planens aerob simning/stroke‑mål.",
           "Ökad genomsnittlig och maxpuls i senare 100 m‑serier tyder på ackumulerad ansträngning trots mekanisk belastning; därför beakta total närbelastning från föregående enduro+styrka när du…"
         ],
-        "unknowns": [
-          "Subjektiv trötthet/benkänsla efter passet (användarrapport saknas)",
-          "om nattsömn eller dagsvälbefinnande påverkar återhämtning nästa dag"
-        ]
-      },
-      "plan_action": {
-        "action": "keep",
-        "target_date": "2026-09-17",
-        "reason": "Simningen är ett planerat aerob/teknikpass med mekanisk kostnad och mikrocykeln kräver inte automatisk reduktion.",
-        "recommendation": "Behåll planerad MTB/XC 60 min i morgon men undvik intensitet; välj baseline‑dosen det valda passalternativet. Observera hur benen känns vid uppvärmning och korta till 45 min om lokal muskelttrötthet känns signifikant.",
-        "dose_option_id": "",
-        "requires_approval": false
+        "load_interpretation": "Simningen är strukturerad aerob/teknik och ger mekanisk kostnad men adderar kardiovaskulär volym i mikrocykelfönstret."
       },
       "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
-      }
-    },
-    {
-      "activity_id": 20188628588,
-      "activity_date": "2026-09-15",
-      "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-09-16T16:54:09.193740+00:00",
-      "model": "gpt-5-mini",
+        "note": "Ingen automatisk planändring.",
+        "applied": false
+      },
+      "activity_id": 20203770266,
+      "plan_action": {
+        "action": "keep",
+        "reason": "Simningen är ett planerat aerob/teknikpass med mekanisk kostnad och mikrocykeln kräver inte automatisk reduktion.",
+        "target_date": "2026-09-17",
+        "dose_option_id": "",
+        "recommendation": "Behåll planerad MTB/XC 60 min i morgon men undvik intensitet; välj baseline‑dosen det valda passalternativet. Observera hur benen känns vid uppvärmning och korta till 45 min om lokal muskelttrötthet känns signifikant.",
+        "requires_approval": false
+      },
+      "activity_date": "2026-09-16",
+      "activity_name": "Simning på kvällen",
+      "generated_at_utc": "2026-09-17T16:59:23.575968+00:00",
       "analysis_contract": {
         "pipeline_version": 2,
-        "workout_context_version": 3,
-        "plan_comparison_version": 1,
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
-        "analysis_code_sha256": "10e4515222f1f7936852f8a7fd62e9afd2eddb7e0f7693c636500142c97927a1"
+        "analysis_code_sha256": "079470facd2bdc3de67f9bdf4948eca93a1f672b307efb63733705ce34a752d2",
+        "plan_comparison_version": 2,
+        "workout_context_version": 3
       },
       "performance_marker_id": null,
-      "performance_protocol_key": null,
+      "performance_protocol_key": null
+    },
+    {
+      "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Kontrollerat tröskelpass (4×8 min) genomfört — stabilt utförande med varierande 1‑km-intervaller och toppfart 4:17/km indikerar växlingar i intensitet under passet.",
-        "load_interpretation": "Närbelastningen (måndagens enduro+styrka + tisdagens tröskel) ger förhöjd mekanisk/neuromuskulär kostnad som påverkar de kommande 48–72 timmarna.",
-        "confidence": "medium",
         "facts": [
           "Löpning: 13,13 km · 1:04:03 · 106 m+ · snittpuls 143,3 · maxpuls 163.",
           "Planstatus 2026-09-15: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
+        "summary": "Kontrollerat tröskelpass (4×8 min) genomfört — stabilt utförande med varierande 1‑km-intervaller och toppfart 4:17/km indikerar växlingar i intensitet under passet.",
+        "unknowns": [
+          "Subjektiv återhämtningskänsla efter passet (användarrapport tom).",
+          "Eventuella lokalben- eller senbesvär efter enduron/styrkan som kan påverka fredagets backkvalitet."
+        ],
+        "confidence": "medium",
         "interpretations": [
           "Passet levererade kontrollerad tröskelvolym (32 min arbetsdel) och visar genomförbarhet av dagens stimulus för utveckling.",
           "Kombinationen med föregående enduro+styrka ökar mekanisk/neuromuskulär närbelastning och talar för konservativ hantering av nästa 2–3 dagars plan."
         ],
-        "unknowns": [
-          "Subjektiv återhämtningskänsla efter passet (användarrapport tom).",
-          "Eventuella lokalben- eller senbesvär efter enduron/styrkan som kan påverka fredagets backkvalitet."
-        ]
-      },
-      "plan_action": {
-        "action": "keep",
-        "target_date": "2026-09-16",
-        "reason": "Mikrocykelns simpass är underhållsteknik med mekanisk kostnad och bör kunna genomföras trots ökad närbelastning.",
-        "recommendation": "Behåll simningen 2026-09-16 enligt plan (3 200 m aerob/teknik). Undvik att lägga till ytterligare benkvalitet eller styrka de närmaste 48 timmarna; rapportera om benen känns oväntat tunga eller smärtsamma.",
-        "dose_option_id": "",
-        "requires_approval": false
+        "load_interpretation": "Närbelastningen (måndagens enduro+styrka + tisdagens tröskel) ger förhöjd mekanisk/neuromuskulär kostnad som påverkar de kommande 48–72 timmarna."
       },
       "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
-      }
-    },
-    {
-      "activity_id": 20175536586,
-      "activity_date": "2026-09-14",
-      "activity_name": "Styrketräning på natten",
-      "generated_at_utc": "2026-09-15T16:59:09.225243+00:00",
-      "model": "gpt-5-mini",
+        "note": "Ingen automatisk planändring.",
+        "applied": false
+      },
+      "activity_id": 20188628588,
+      "plan_action": {
+        "action": "keep",
+        "reason": "Mikrocykelns simpass är underhållsteknik med mekanisk kostnad och bör kunna genomföras trots ökad närbelastning.",
+        "target_date": "2026-09-16",
+        "dose_option_id": "",
+        "recommendation": "Behåll simningen 2026-09-16 enligt plan (3 200 m aerob/teknik). Undvik att lägga till ytterligare benkvalitet eller styrka de närmaste 48 timmarna; rapportera om benen känns oväntat tunga eller smärtsamma.",
+        "requires_approval": false
+      },
+      "activity_date": "2026-09-15",
+      "activity_name": "Löpning på kvällen",
+      "generated_at_utc": "2026-09-16T16:54:09.193740+00:00",
       "analysis_contract": {
         "pipeline_version": 2,
-        "workout_context_version": 3,
-        "plan_comparison_version": 1,
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
-        "analysis_code_sha256": "10e4515222f1f7936852f8a7fd62e9afd2eddb7e0f7693c636500142c97927a1"
+        "analysis_code_sha256": "10e4515222f1f7936852f8a7fd62e9afd2eddb7e0f7693c636500142c97927a1",
+        "plan_comparison_version": 1,
+        "workout_context_version": 3
       },
       "performance_marker_id": null,
-      "performance_protocol_key": null,
+      "performance_protocol_key": null
+    },
+    {
+      "model": "gpt-5-mini",
       "assessment": {
-        "summary": "36‑minuter styrkepass registrerat efter måndagens enduro; genomsnittspuls 75 bpm, max 109 bpm indikerar låg–måttlig intern belastning från styrkan.",
-        "load_interpretation": "Närbelastningen de senaste 2–3 dagarna inkluderar två enduropass (12–13/9 och 14/9) plus kvällsstyrka; det ökar mekanisk/neuromuskulär belastning inför tisdagens tröskel.",
-        "confidence": "medium",
         "facts": [
           "Styrka: 34:49 · snittpuls 74,8 · maxpuls 109.",
           "Planstatus 2026-09-14: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
+        "summary": "36‑minuter styrkepass registrerat efter måndagens enduro; genomsnittspuls 75 bpm, max 109 bpm indikerar låg–måttlig intern belastning från styrkan.",
+        "unknowns": [
+          "Användarens subjektiva känsla efter styrkan saknas (användarrapport är tom).",
+          "Detaljer om styrkeinnehåll och om set utfördes nära failure saknas."
+        ],
+        "confidence": "medium",
         "interpretations": [
           "Styrkepasset var relativt lågintensivt kardiovaskulärt men bidrar mekaniskt/neuromuskulärt eftersom det följde enduro.",
           "Det samlade närbelastningsmönstret motiverar fortsatt konservatism inför dagens prioriterade 4×8‑tröskel; full dos bör reduceras om risk för försämrad kvalitet finns."
         ],
-        "unknowns": [
-          "Användarens subjektiva känsla efter styrkan saknas (användarrapport är tom).",
-          "Detaljer om styrkeinnehåll och om set utfördes nära failure saknas."
-        ]
-      },
-      "plan_action": {
-        "action": "reduce",
-        "target_date": "2026-09-15",
-        "reason": "Aktuell närbelastning (enduro + styrka inom 24 h) ökar mekanisk/neuromuskulär kostnad inför dagens prioriterade tröskel.",
-        "recommendation": "Följ det justerade passupplägget i planen.",
-        "dose_option_id": "",
-        "requires_approval": false
+        "load_interpretation": "Närbelastningen de senaste 2–3 dagarna inkluderar två enduropass (12–13/9 och 14/9) plus kvällsstyrka; det ökar mekanisk/neuromuskulär belastning inför tisdagens tröskel."
       },
       "auto_apply": {
-        "applied": true,
-        "note": "Konservativ ändring applicerad på 2026-09-15: reduce."
-      }
-    },
-    {
-      "activity_id": 20175917270,
+        "note": "Konservativ ändring applicerad på 2026-09-15: reduce.",
+        "applied": true
+      },
+      "activity_id": 20175536586,
+      "plan_action": {
+        "action": "reduce",
+        "reason": "Aktuell närbelastning (enduro + styrka inom 24 h) ökar mekanisk/neuromuskulär kostnad inför dagens prioriterade tröskel.",
+        "target_date": "2026-09-15",
+        "dose_option_id": "",
+        "recommendation": "Följ det justerade passupplägget i planen.",
+        "requires_approval": false
+      },
       "activity_date": "2026-09-14",
-      "activity_name": "Enduro på kvällen",
-      "generated_at_utc": "2026-09-14T20:20:21.867054+00:00",
-      "model": "gpt-5-mini",
+      "activity_name": "Styrketräning på natten",
+      "generated_at_utc": "2026-09-15T16:59:09.225243+00:00",
       "analysis_contract": {
         "pipeline_version": 2,
-        "workout_context_version": 3,
-        "plan_comparison_version": 1,
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
-        "analysis_code_sha256": "10e4515222f1f7936852f8a7fd62e9afd2eddb7e0f7693c636500142c97927a1"
+        "analysis_code_sha256": "10e4515222f1f7936852f8a7fd62e9afd2eddb7e0f7693c636500142c97927a1",
+        "plan_comparison_version": 1,
+        "workout_context_version": 3
       },
       "performance_marker_id": null,
-      "performance_protocol_key": null,
+      "performance_protocol_key": null
+    },
+    {
+      "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Enduropasset omfattade 1:29:04 totalt och 222 m+; det räknas som faktisk teknisk och mekanisk träningsbelastning inför nästa prioriterade pass.",
-        "load_interpretation": "För Enduro används hela 1:29:04 som tidsomfattning; Stravas rörelsetid 1:00:12 och snittpuls 107 beskriver inte den tekniska/mekaniska belastningen ensamma.",
-        "confidence": "medium",
         "facts": [
           "Enduro: 13,93 km · 1:29:04 · 222,2 m+ · snittpuls 107 · maxpuls 166.",
           "Planstatus 2026-09-14: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
+        "summary": "Enduropasset omfattade 1:29:04 totalt och 222 m+; det räknas som faktisk teknisk och mekanisk träningsbelastning inför nästa prioriterade pass.",
+        "unknowns": [
+          "Subjektiv återhämtning/benkänsla efter passen (användarrapport tom)",
+          "Exakt styrkeintensitet/antal set/reps från kvällspasset"
+        ],
+        "confidence": "medium",
         "interpretations": [
           "Dagens kombination levererade teknisk enduro + kontrollerad styrka som planen krävde; detta ökar mekanisk/neuromuskulär närbelastning inför tisdagens löpning.",
           "Inget i data motsäger att löpningen i morgon bör behållas men närbelastningen talar för att vi beaktar marginaler (kortare alternativ) om du känner lokal bentrötthet eller stelhet)."
         ],
-        "unknowns": [
-          "Subjektiv återhämtning/benkänsla efter passen (användarrapport tom)",
-          "Exakt styrkeintensitet/antal set/reps från kvällspasset"
-        ]
-      },
-      "plan_action": {
-        "action": "keep",
-        "target_date": "2026-09-15",
-        "reason": "Närbelastningen från enduro + styrka är uppenbar men inte starkt avvikande; planens prioriterade löppass bör skyddas om du känner dig fräsch.",
-        "recommendation": "Behåll planerad 3×10 min tröskel imorgon; om du upplever lokal bentrötthet eller nedsatt teknik, välj reducerad dos det valda passalternativet eller kortare jogg som uppvärmning. Om du har smärta eller markant stelhet: vila och anmäl för review.",
-        "dose_option_id": "",
-        "requires_approval": false
+        "load_interpretation": "För Enduro används hela 1:29:04 som tidsomfattning; Stravas rörelsetid 1:00:12 och snittpuls 107 beskriver inte den tekniska/mekaniska belastningen ensamma."
       },
       "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
-      }
-    },
-    {
-      "activity_id": 20157600319,
-      "activity_date": "2026-09-13",
-      "activity_name": "Stiglöpning vid lunch",
-      "generated_at_utc": "2026-09-14T12:44:46.072545+00:00",
-      "model": "gpt-5-mini",
+        "note": "Ingen automatisk planändring.",
+        "applied": false
+      },
+      "activity_id": 20175917270,
+      "plan_action": {
+        "action": "keep",
+        "reason": "Närbelastningen från enduro + styrka är uppenbar men inte starkt avvikande; planens prioriterade löppass bör skyddas om du känner dig fräsch.",
+        "target_date": "2026-09-15",
+        "dose_option_id": "",
+        "recommendation": "Behåll planerad 3×10 min tröskel imorgon; om du upplever lokal bentrötthet eller nedsatt teknik, välj reducerad dos det valda passalternativet eller kortare jogg som uppvärmning. Om du har smärta eller markant stelhet: vila och anmäl för review.",
+        "requires_approval": false
+      },
+      "activity_date": "2026-09-14",
+      "activity_name": "Enduro på kvällen",
+      "generated_at_utc": "2026-09-14T20:20:21.867054+00:00",
       "analysis_contract": {
         "pipeline_version": 2,
-        "workout_context_version": 3,
-        "plan_comparison_version": 1,
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
-        "analysis_code_sha256": "10e4515222f1f7936852f8a7fd62e9afd2eddb7e0f7693c636500142c97927a1"
+        "analysis_code_sha256": "10e4515222f1f7936852f8a7fd62e9afd2eddb7e0f7693c636500142c97927a1",
+        "plan_comparison_version": 1,
+        "workout_context_version": 3
       },
       "performance_marker_id": null,
-      "performance_protocol_key": null,
+      "performance_protocol_key": null
+    },
+    {
+      "model": "gpt-5-mini",
       "assessment": {
-        "summary": "18.7 km trailstigning utan användarrapport; genomfört pass visar långvarig mekanisk/kardiovaskulär exponering med upprepade 1 km-sektioner runt 5:30–6:30/km och ett snabbare 1 km…",
-        "load_interpretation": "Inget subjektivt rapporterat obehag och mångsidig närbelastning senaste 3 dagar (endo­ru + MTB/XC + backintervaller) talar för konservativ hantering inför morgondagens…",
-        "confidence": "medium",
         "facts": [
           "Löpning: 18,75 km · 1:47:42 · 237 m+ · snittpuls 137,2 · maxpuls 150."
         ],
+        "summary": "18.7 km trailstigning utan användarrapport; genomfört pass visar långvarig mekanisk/kardiovaskulär exponering med upprepade 1 km-sektioner runt 5:30–6:30/km och ett snabbare 1 km…",
+        "unknowns": [
+          "Subjektiv återhämtningskänsla efter passet (användarrapport tom).",
+          "Detaljer kring styrkans intensitet efter måndagens enduro som påverkar benen."
+        ],
+        "confidence": "medium",
         "interpretations": [
           "Passet etablerar att du kunde genomföra en lång teknisk trail‑session med varierad intensitet vilket ökar mekanisk/neuromuskulär kostnad inför löptröskeln.",
           "Givet ackumulerad närbelastning rekommenderas konservativt tillvägagångssätt för morgondagens planerade 3×10 min tröskel för att skydda kvaliteten."
         ],
-        "unknowns": [
-          "Subjektiv återhämtningskänsla efter passet (användarrapport tom).",
-          "Detaljer kring styrkans intensitet efter måndagens enduro som påverkar benen."
-        ]
-      },
-      "plan_action": {
-        "action": "review",
-        "target_date": "",
-        "reason": "Beslutet skjuts upp eftersom mellanliggande planerade dagar ännu inte har ett känt utfall.",
-        "recommendation": "Måndag: Enduroskola + styrka · styrkan efter enduron ligger kvar som plan. Tisdag: Löpning · kontrollerad tröskel · 3 × 10 min / 90 s jogg bedöms efter den faktiska belastningen från måndag och återhämtningen därefter.",
-        "dose_option_id": "",
-        "requires_approval": false
+        "load_interpretation": "Inget subjektivt rapporterat obehag och mångsidig närbelastning senaste 3 dagar (endo­ru + MTB/XC + backintervaller) talar för konservativ hantering inför morgondagens…"
       },
       "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
-      }
-    },
-    {
-      "activity_id": 20153873263,
+        "note": "Ingen automatisk planändring.",
+        "applied": false
+      },
+      "activity_id": 20157600319,
+      "plan_action": {
+        "action": "review",
+        "reason": "Beslutet skjuts upp eftersom mellanliggande planerade dagar ännu inte har ett känt utfall.",
+        "target_date": "",
+        "dose_option_id": "",
+        "recommendation": "Måndag: Enduroskola + styrka · styrkan efter enduron ligger kvar som plan. Tisdag: Löpning · kontrollerad tröskel · 3 × 10 min / 90 s jogg bedöms efter den faktiska belastningen från måndag och återhämtningen därefter.",
+        "requires_approval": false
+      },
       "activity_date": "2026-09-13",
-      "activity_name": "Val 2026",
-      "generated_at_utc": "2026-09-13T11:50:18.944002+00:00",
-      "model": "gpt-5-mini",
+      "activity_name": "Stiglöpning vid lunch",
+      "generated_at_utc": "2026-09-14T12:44:46.072545+00:00",
       "analysis_contract": {
         "pipeline_version": 2,
-        "workout_context_version": 3,
-        "plan_comparison_version": 1,
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
-        "analysis_code_sha256": "10e4515222f1f7936852f8a7fd62e9afd2eddb7e0f7693c636500142c97927a1"
+        "analysis_code_sha256": "10e4515222f1f7936852f8a7fd62e9afd2eddb7e0f7693c636500142c97927a1",
+        "plan_comparison_version": 1,
+        "workout_context_version": 3
       },
       "performance_marker_id": null,
-      "performance_protocol_key": null,
+      "performance_protocol_key": null
+    },
+    {
+      "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Kort, lågintensiv Ride på 4.56 km med mycket låg puls och effekt genomförd istället för planerad 75 min lugn löpning; passet avvecklar inte lördagens tunga Enduro-belastning.",
-        "load_interpretation": "Fyra timmars Enduro föregående dag är huvudbelastningen; dagens korta Ride ger ingen återhämtande marginal för planerad 75‑min löpning.",
-        "confidence": "medium",
         "facts": [
           "Cykel: 4,56 km · 30:54 · 41 m+ · snittpuls 82,4 · maxpuls 108.",
           "Planerad tidsdos 75 min; faktisk rörelsetid 22 min (-53 min mot vald dos); under kortaste godkända alternativet 75 min."
         ],
+        "summary": "Kort, lågintensiv Ride på 4.56 km med mycket låg puls och effekt genomförd istället för planerad 75 min lugn löpning; passet avvecklar inte lördagens tunga Enduro-belastning.",
+        "unknowns": [
+          "Subjektiv återhämtning från användaren efter dagens Ride/eftermiddagen.",
+          "Om användaren avser genomföra löpningen senare idag istället för Ride."
+        ],
+        "confidence": "medium",
         "interpretations": [
           "Full återhämtning från dagens pass är ännu inte verifierad.",
           "Tidsdosen blev 22 min mot valda 75 min och understeg det kortaste godkända alternativet 75 min."
         ],
-        "unknowns": [
-          "Subjektiv återhämtning från användaren efter dagens Ride/eftermiddagen.",
-          "Om användaren avser genomföra löpningen senare idag istället för Ride."
-        ]
-      },
-      "plan_action": {
-        "action": "reduce",
-        "target_date": "2026-09-13",
-        "reason": "Fyra timmars Enduro dagen innan är huvudbelastningen och kort lågintensiv Ride ändrar inte behovet av marginal inför löppasset.",
-        "recommendation": "Följ det justerade passupplägget i planen.",
-        "dose_option_id": "",
-        "requires_approval": false
+        "load_interpretation": "Fyra timmars Enduro föregående dag är huvudbelastningen; dagens korta Ride ger ingen återhämtande marginal för planerad 75‑min löpning."
       },
       "auto_apply": {
-        "applied": true,
-        "note": "Konservativ ändring applicerad på 2026-09-13: reduce."
-      }
-    },
-    {
-      "activity_id": 20144331562,
-      "activity_date": "2026-09-12",
-      "activity_name": "Träningspass på morgonen",
-      "generated_at_utc": "2026-09-13T04:46:04.488124+00:00",
-      "model": "gpt-5-mini",
+        "note": "Konservativ ändring applicerad på 2026-09-13: reduce.",
+        "applied": true
+      },
+      "activity_id": 20153873263,
+      "plan_action": {
+        "action": "reduce",
+        "reason": "Fyra timmars Enduro dagen innan är huvudbelastningen och kort lågintensiv Ride ändrar inte behovet av marginal inför löppasset.",
+        "target_date": "2026-09-13",
+        "dose_option_id": "",
+        "recommendation": "Följ det justerade passupplägget i planen.",
+        "requires_approval": false
+      },
+      "activity_date": "2026-09-13",
+      "activity_name": "Val 2026",
+      "generated_at_utc": "2026-09-13T11:50:18.944002+00:00",
       "analysis_contract": {
         "pipeline_version": 2,
-        "workout_context_version": 3,
-        "plan_comparison_version": 1,
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
-        "analysis_code_sha256": "10e4515222f1f7936852f8a7fd62e9afd2eddb7e0f7693c636500142c97927a1"
+        "analysis_code_sha256": "10e4515222f1f7936852f8a7fd62e9afd2eddb7e0f7693c636500142c97927a1",
+        "plan_comparison_version": 1,
+        "workout_context_version": 3
       },
       "performance_marker_id": null,
-      "performance_protocol_key": null,
+      "performance_protocol_key": null
+    },
+    {
+      "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Enduropasset omfattade 3:46:18 totalt och 1490 m+; det räknas som faktisk teknisk och mekanisk träningsbelastning inför nästa prioriterade pass.",
-        "load_interpretation": "För Enduro används hela 3:46:18 som tidsomfattning; Stravas rörelsetid 2:15:27 och snittpuls 125 beskriver inte den tekniska/mekaniska belastningen ensamma.",
-        "confidence": "medium",
         "facts": [
           "Enduro: 53,92 km · 3:46:18 · 1490,4 m+ · snittpuls 124,9 · maxpuls 154.",
           "Planstatus 2026-09-12: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
+        "summary": "Enduropasset omfattade 3:46:18 totalt och 1490 m+; det räknas som faktisk teknisk och mekanisk träningsbelastning inför nästa prioriterade pass.",
+        "unknowns": [
+          "Subjektiv dagskänsla/bentrötthet efter enduro (användarrapport tom)",
+          "Specifik plan för dagens reducerade löpning om användaren vill korta mer än baseline"
+        ],
+        "confidence": "medium",
         "interpretations": [
           "Detta pass utgör ett fullt externt endurostimulus som ersatte lördagens simning+styrka och motiverade att söndagens löpning skalas ned",
           "Eftersom systemet redan gjort en konservativ 'reduce' rekommenderas att den justeringen behålls för 2026-09-13 och inga nya kvalitetspass läggs till"
         ],
-        "unknowns": [
-          "Subjektiv dagskänsla/bentrötthet efter enduro (användarrapport tom)",
-          "Specifik plan för dagens reducerade löpning om användaren vill korta mer än baseline"
-        ]
-      },
-      "plan_action": {
-        "action": "keep",
-        "target_date": "2026-09-13",
-        "reason": "coachen har redan nedjusterat söndagens 75 min lugn löpning p.g.a.",
-        "recommendation": "Följ den nu nedjusterade ordinationen (reducerad/keep enligt coachen). Undvik att lägga till kvalitet eller styrka samma dag; rapportera hur benen känns för vidare justering.",
-        "dose_option_id": "",
-        "requires_approval": false
+        "load_interpretation": "För Enduro används hela 3:46:18 som tidsomfattning; Stravas rörelsetid 2:15:27 och snittpuls 125 beskriver inte den tekniska/mekaniska belastningen ensamma."
       },
       "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
-      }
-    },
-    {
-      "activity_id": 20133500464,
-      "activity_date": "2026-09-11",
-      "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-09-12T10:44:43.657026+00:00",
-      "model": "gpt-5-mini",
+        "note": "Ingen automatisk planändring.",
+        "applied": false
+      },
+      "activity_id": 20144331562,
+      "plan_action": {
+        "action": "keep",
+        "reason": "coachen har redan nedjusterat söndagens 75 min lugn löpning p.g.a.",
+        "target_date": "2026-09-13",
+        "dose_option_id": "",
+        "recommendation": "Följ den nu nedjusterade ordinationen (reducerad/keep enligt coachen). Undvik att lägga till kvalitet eller styrka samma dag; rapportera hur benen känns för vidare justering.",
+        "requires_approval": false
+      },
+      "activity_date": "2026-09-12",
+      "activity_name": "Träningspass på morgonen",
+      "generated_at_utc": "2026-09-13T04:46:04.488124+00:00",
       "analysis_contract": {
         "pipeline_version": 2,
-        "workout_context_version": 3,
-        "plan_comparison_version": 1,
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
-        "analysis_code_sha256": "10e4515222f1f7936852f8a7fd62e9afd2eddb7e0f7693c636500142c97927a1"
+        "analysis_code_sha256": "10e4515222f1f7936852f8a7fd62e9afd2eddb7e0f7693c636500142c97927a1",
+        "plan_comparison_version": 1,
+        "workout_context_version": 3
       },
       "performance_marker_id": null,
-      "performance_protocol_key": null,
+      "performance_protocol_key": null
+    },
+    {
+      "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Genomfört: 3 × 7 backintervaller (21 totalt).",
-        "load_interpretation": "Passet är ett tydligt backkvalitetspass med mekanisk/neuromuskulär belastning som påverkar nästa 48–72 timmar.",
-        "confidence": "medium",
         "facts": [
           "Löpning · backintervaller: 13,67 km · 1:11:40 · 264 m+ · snittpuls 144,3 · maxpuls 169.",
           "Användarrapport: 3 × 7 backintervaller (21 backar totalt). Tre serier om sju intervaller; arbetsdelarna ska beskrivas som intervaller.",
           "Planstatus 2026-09-11: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
+        "summary": "Genomfört: 3 × 7 backintervaller (21 totalt).",
+        "unknowns": [
+          "Subjektiv återhämtning efter passet (samtidig rapport om pigg/utmattad saknas).",
+          "Detaljerad lokal muskeltrötthet eller eventuella ömheter som kan påverka söndagens distans."
+        ],
+        "confidence": "medium",
         "interpretations": [
           "Användarens genomförande visar att 21 backar kunde genomföras — det etablerar ett volymgolv för backkvalitet i mikrocykeln.",
           "Givet föregående MTB- och simbelastning är mekanisk och neuromuskulär stress hög; detta kan minska marginalen för nästa planerade löppass de närmaste 2–3 dagarna."
         ],
-        "unknowns": [
-          "Subjektiv återhämtning efter passet (samtidig rapport om pigg/utmattad saknas).",
-          "Detaljerad lokal muskeltrötthet eller eventuella ömheter som kan påverka söndagens distans."
-        ]
-      },
-      "plan_action": {
-        "action": "keep",
-        "target_date": "",
-        "reason": "Backpasset genomfördes som 3 × 7 backintervaller (21 totalt), alltså över den planerade omfattningen före passet (18 arbetsintervaller).",
-        "recommendation": "Följ planen utan att lägga till extra kvalitet: håll söndagens 75 min lugn distans som preliminär; avvakta subjektiv återhämtning nästa morgon och rapportera om ömhet eller ovanlig trötthet.",
-        "dose_option_id": "",
-        "requires_approval": false
+        "load_interpretation": "Passet är ett tydligt backkvalitetspass med mekanisk/neuromuskulär belastning som påverkar nästa 48–72 timmar."
       },
       "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
-      }
-    },
-    {
-      "activity_id": 20120769386,
-      "activity_date": "2026-09-10",
-      "activity_name": "Evening Mountain Bike Ride",
-      "generated_at_utc": "2026-09-11T16:27:47.540783+00:00",
-      "model": "gpt-5-mini",
+        "note": "Ingen automatisk planändring.",
+        "applied": false
+      },
+      "activity_id": 20133500464,
+      "plan_action": {
+        "action": "keep",
+        "reason": "Backpasset genomfördes som 3 × 7 backintervaller (21 totalt), alltså över den planerade omfattningen före passet (18 arbetsintervaller).",
+        "target_date": "",
+        "dose_option_id": "",
+        "recommendation": "Följ planen utan att lägga till extra kvalitet: håll söndagens 75 min lugn distans som preliminär; avvakta subjektiv återhämtning nästa morgon och rapportera om ömhet eller ovanlig trötthet.",
+        "requires_approval": false
+      },
+      "activity_date": "2026-09-11",
+      "activity_name": "Löpning på kvällen",
+      "generated_at_utc": "2026-09-12T10:44:43.657026+00:00",
       "analysis_contract": {
         "pipeline_version": 2,
-        "workout_context_version": 3,
-        "plan_comparison_version": 1,
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
-        "analysis_code_sha256": "10e4515222f1f7936852f8a7fd62e9afd2eddb7e0f7693c636500142c97927a1"
+        "analysis_code_sha256": "10e4515222f1f7936852f8a7fd62e9afd2eddb7e0f7693c636500142c97927a1",
+        "plan_comparison_version": 1,
+        "workout_context_version": 3
       },
       "performance_marker_id": null,
-      "performance_protocol_key": null,
+      "performance_protocol_key": null
+    },
+    {
+      "model": "gpt-5-mini",
       "assessment": {
-        "summary": "71,8 min MTB/XC visade längre varaktighet men lägre intensiv karaktär enligt…",
-        "load_interpretation": "Varaktighet över godkänd range (+11,8 min) men användarrapport anger lugnare tempo, så närbelastningsmarginalen mot fredag minskar måttligt.",
-        "confidence": "medium",
         "facts": [
           "MTB/XC: 17,12 km · 1:13:14 · 183 m+ · snittpuls 125,5 · maxpuls 147.",
           "Användarrapport: Passet blev lite lugnare och längre på grund av mörkret.",
           "Planstatus 2026-09-10: dagen är markerad genomförd i coachens beslutsunderlag.",
           "Planerad tidsdos 60 min; faktisk rörelsetid 71.8 min (+11.8 min mot vald dos); över längsta godkända alternativet 60 min."
         ],
+        "summary": "71,8 min MTB/XC visade längre varaktighet men lägre intensiv karaktär enligt…",
+        "unknowns": [
+          "Hur du subjektivt känner dig nästa morgon före fredagens pass",
+          "Eventuell planerad återhämtningsunderlaget/återhämtning eller morgonaktivitet innan fredag"
+        ],
+        "confidence": "medium",
         "interpretations": [
           "Det längre MTB-passet var främst tidsökning, inte högre intensitet enligt avg‑HR och användarrapport, men ökad duration minskar säkerhetsmarginalen inför fredagens prioriterade backkvalitet.",
           "Tidsdosen blev 71.8 min mot valda 60 min och översteg även det längsta godkända alternativet 60 min."
         ],
-        "unknowns": [
-          "Hur du subjektivt känner dig nästa morgon före fredagens pass",
-          "Eventuell planerad återhämtningsunderlaget/återhämtning eller morgonaktivitet innan fredag"
-        ]
-      },
-      "plan_action": {
-        "action": "keep",
-        "target_date": "2026-09-11",
-        "reason": "Systemet har redan konservativt reducerat fredagens backpass baserat på MTB/XC‑passets ökade…",
-        "recommendation": "Följ den redan applicerade reducerade ordinationen för 2026-09-11 (3×6×150). Om du känner dig ovanligt trött eller stel imorgon, avboka och meddela coach för review.",
-        "dose_option_id": "",
-        "requires_approval": false
+        "load_interpretation": "Varaktighet över godkänd range (+11,8 min) men användarrapport anger lugnare tempo, så närbelastningsmarginalen mot fredag minskar måttligt."
       },
       "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
-      }
-    },
-    {
-      "activity_id": 20106458579,
-      "activity_date": "2026-09-09",
-      "activity_name": "Simning på kvällen",
-      "generated_at_utc": "2026-09-10T16:23:29.841094+00:00",
-      "model": "gpt-5-mini",
+        "note": "Ingen automatisk planändring.",
+        "applied": false
+      },
+      "activity_id": 20120769386,
+      "plan_action": {
+        "action": "keep",
+        "reason": "Systemet har redan konservativt reducerat fredagens backpass baserat på MTB/XC‑passets ökade…",
+        "target_date": "2026-09-11",
+        "dose_option_id": "",
+        "recommendation": "Följ den redan applicerade reducerade ordinationen för 2026-09-11 (3×6×150). Om du känner dig ovanligt trött eller stel imorgon, avboka och meddela coach för review.",
+        "requires_approval": false
+      },
+      "activity_date": "2026-09-10",
+      "activity_name": "Evening Mountain Bike Ride",
+      "generated_at_utc": "2026-09-11T16:27:47.540783+00:00",
       "analysis_contract": {
-        "pipeline_version": 1,
-        "workout_context_version": 3,
-        "plan_comparison_version": 1,
+        "pipeline_version": 2,
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
-        "analysis_code_sha256": "7f516df31a5e82dd8cab3dc218fb5637f38c55d89cdf66aa63f9e81b72369f28"
+        "analysis_code_sha256": "10e4515222f1f7936852f8a7fd62e9afd2eddb7e0f7693c636500142c97927a1",
+        "plan_comparison_version": 1,
+        "workout_context_version": 3
       },
       "performance_marker_id": null,
-      "performance_protocol_key": null,
+      "performance_protocol_key": null
+    },
+    {
+      "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Genomfört simpass 3 200 m med strukturerad serie (1×400, 6×50, 4×500, 6×50, 1×200) och uppvisar stabila 500 m-block och snabbare 50:or mot slutet.",
-        "load_interpretation": "Simningen var ett tekniskt/aerobt underhållspass som inte indikerar behov av att ändra närmaste träning i sig.",
-        "confidence": "medium",
         "facts": [
           "Simning: 3,20 km · 58:38 · snittpuls 128,4 · maxpuls 157.",
           "Planstatus 2026-09-09: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
+        "summary": "Genomfört simpass 3 200 m med strukturerad serie (1×400, 6×50, 4×500, 6×50, 1×200) och uppvisar stabila 500 m-block och snabbare 50:or mot slutet.",
+        "unknowns": [
+          "Subjektiv känsla efter passet saknas i användarrapport vilket kan ändra återhämtningsbedömning",
+          "kommande enduro-planerat pass (lördag) ännu ej genomfört och kan påverka söndagens distansbeslut"
+        ],
+        "confidence": "medium",
         "interpretations": [
           "Passet visar väl genomförd simstruktur och bibehållen teknisk/aerob kapacitet — 500 m-seten var stabila vilket talar för absorberbar simdos",
           "Ingen indikation i dessa data eller användarrapport att simpasset kräver reducering av kommande prioriterade löppass"
         ],
-        "unknowns": [
-          "Subjektiv känsla efter passet saknas i användarrapport vilket kan ändra återhämtningsbedömning",
-          "kommande enduro-planerat pass (lördag) ännu ej genomfört och kan påverka söndagens distansbeslut"
-        ]
-      },
-      "plan_action": {
-        "action": "keep",
-        "target_date": "2026-09-10",
-        "reason": "Simpasset var underhåll/teknikorienterat och visar inga tecken som kräver kortsiktig nedskalning av planerad MTB-stöddos.",
-        "recommendation": "Behåll planerad MTB/XC 60 min…",
-        "dose_option_id": "",
-        "requires_approval": false
+        "load_interpretation": "Simningen var ett tekniskt/aerobt underhållspass som inte indikerar behov av att ändra närmaste träning i sig."
       },
       "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
-      }
-    },
-    {
-      "activity_id": 20079150228,
-      "activity_date": "2026-09-07",
-      "activity_name": "Styrketräning på natten",
-      "generated_at_utc": "2026-09-08T13:05:34.738291+00:00",
-      "model": "gpt-5-mini",
+        "note": "Ingen automatisk planändring.",
+        "applied": false
+      },
+      "activity_id": 20106458579,
+      "plan_action": {
+        "action": "keep",
+        "reason": "Simpasset var underhåll/teknikorienterat och visar inga tecken som kräver kortsiktig nedskalning av planerad MTB-stöddos.",
+        "target_date": "2026-09-10",
+        "dose_option_id": "",
+        "recommendation": "Behåll planerad MTB/XC 60 min…",
+        "requires_approval": false
+      },
+      "activity_date": "2026-09-09",
+      "activity_name": "Simning på kvällen",
+      "generated_at_utc": "2026-09-10T16:23:29.841094+00:00",
       "analysis_contract": {
         "pipeline_version": 1,
-        "workout_context_version": 2,
-        "plan_comparison_version": 1,
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
-        "analysis_code_sha256": "eca5b921283f06098c0bca80840d04f9fbc044dacc81a9084774be7dfe2f724d"
+        "analysis_code_sha256": "7f516df31a5e82dd8cab3dc218fb5637f38c55d89cdf66aa63f9e81b72369f28",
+        "plan_comparison_version": 1,
+        "workout_context_version": 3
       },
       "performance_marker_id": null,
-      "performance_protocol_key": null,
+      "performance_protocol_key": null
+    },
+    {
+      "model": "gpt-5-mini",
       "assessment": {
-        "summary": "36 minuter styrketräning (1659 s) registrerat efter dagens enduro; pulsnivå låg–måttlig (avg 75.7, max 112) vilket tyder på låg metabol belastning från styrkepasset.",
-        "load_interpretation": "I närbelastningsfönstret finns dessutom en lång endurosession (elapsed 5718 s) och en 22 km löpning två dagar tidigare; dagens styrka ger liten extra kardiovaskulär…",
-        "confidence": "medium",
         "facts": [
           "Styrka: 27:39 · snittpuls 75,7 · maxpuls 112.",
           "Planstatus 2026-09-07: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
+        "summary": "36 minuter styrketräning (1659 s) registrerat efter dagens enduro; pulsnivå låg–måttlig (avg 75.7, max 112) vilket tyder på låg metabol belastning från styrkepasset.",
+        "unknowns": [
+          "Användarrapport för styrkepasset saknas (subjektiv trötthet/ömhet)",
+          "Eventuell lokal muskeltrötthet från endurons mekaniska krav är okänt utan subjektiv input"
+        ],
+        "confidence": "medium",
         "interpretations": [
           "Styrkepasset var lågintensivt kardiovaskulärt men representerar konkret mekanisk/neuromuskulär exponering som skyddad styrka/core.",
           "Ingen signal i puls eller närbelastningsmönster talar för att skydda eller reducera morgondagens planerade löptröskel; planen kan hållas om subjektiv återhämtning är OK."
         ],
-        "unknowns": [
-          "Användarrapport för styrkepasset saknas (subjektiv trötthet/ömhet)",
-          "Eventuell lokal muskeltrötthet från endurons mekaniska krav är okänt utan subjektiv input"
-        ]
-      },
-      "plan_action": {
-        "action": "keep",
-        "target_date": "2026-09-08",
-        "reason": "Närbelastningen visar absorberbar styrka efter enduro utan tydlig återhämtningssignal som skulle kräva reduktion.",
-        "recommendation": "Behåll planerat tröskelpass 3×10 min i dag; vila/avstå endast om du känner ovanlig trötthet eller lokal muskelsmärta. Rapportera hur benen känns före uppvärmning om något avviker.",
-        "dose_option_id": "",
-        "requires_approval": false
+        "load_interpretation": "I närbelastningsfönstret finns dessutom en lång endurosession (elapsed 5718 s) och en 22 km löpning två dagar tidigare; dagens styrka ger liten extra kardiovaskulär…"
       },
       "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
-      }
-    },
-    {
-      "activity_id": 20078705519,
+        "note": "Ingen automatisk planändring.",
+        "applied": false
+      },
+      "activity_id": 20079150228,
+      "plan_action": {
+        "action": "keep",
+        "reason": "Närbelastningen visar absorberbar styrka efter enduro utan tydlig återhämtningssignal som skulle kräva reduktion.",
+        "target_date": "2026-09-08",
+        "dose_option_id": "",
+        "recommendation": "Behåll planerat tröskelpass 3×10 min i dag; vila/avstå endast om du känner ovanlig trötthet eller lokal muskelsmärta. Rapportera hur benen känns före uppvärmning om något avviker.",
+        "requires_approval": false
+      },
       "activity_date": "2026-09-07",
-      "activity_name": "Enduro på kvällen",
-      "generated_at_utc": "2026-09-07T20:21:37.047095+00:00",
-      "model": "gpt-5-mini",
+      "activity_name": "Styrketräning på natten",
+      "generated_at_utc": "2026-09-08T13:05:34.738291+00:00",
       "analysis_contract": {
         "pipeline_version": 1,
-        "workout_context_version": 2,
-        "plan_comparison_version": 1,
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
-        "analysis_code_sha256": "fa594b640d55a1bf2ac4080c6e3b3eca18c47af8939c66055482726b5159b48d"
+        "analysis_code_sha256": "eca5b921283f06098c0bca80840d04f9fbc044dacc81a9084774be7dfe2f724d",
+        "plan_comparison_version": 1,
+        "workout_context_version": 2
       },
       "performance_marker_id": null,
-      "performance_protocol_key": null,
+      "performance_protocol_key": null
+    },
+    {
+      "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Enduropasset omfattade 1:35:18 totalt och 508 m+; det räknas som faktisk teknisk och mekanisk träningsbelastning inför nästa prioriterade pass.",
-        "load_interpretation": "För Enduro används hela 1:35:18 som tidsomfattning; Stravas rörelsetid 48:35 och snittpuls 107 beskriver inte den tekniska/mekaniska belastningen ensamma.",
-        "confidence": "medium",
         "facts": [
           "Enduro: 14,64 km · 1:35:18 · 508,4 m+ · snittpuls 106,7 · maxpuls 168.",
           "Planstatus 2026-09-07: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
+        "summary": "Enduropasset omfattade 1:35:18 totalt och 508 m+; det räknas som faktisk teknisk och mekanisk träningsbelastning inför nästa prioriterade pass.",
+        "unknowns": [
+          "Subjektiv återhämtning/benstatus efter passet (ingen användarrapport)",
+          "Detaljerad intensitet under körningens tekniska sekvenser och om de tröttade benen mekaniskt"
+        ],
+        "confidence": "medium",
         "interpretations": [
           "Enduropasset är en del av veckans träningsbelastning.",
           "Strava klassade 48:35 av totalt 1:35:18 som rörelsetid; rörelsetiden används därför inte som total passduration."
         ],
-        "unknowns": [
-          "Subjektiv återhämtning/benstatus efter passet (ingen användarrapport)",
-          "Detaljerad intensitet under körningens tekniska sekvenser och om de tröttade benen mekaniskt"
-        ]
-      },
-      "plan_action": {
-        "action": "keep",
-        "target_date": "2026-09-08",
-        "reason": "Ingen uppenbar akut överbelastning i de närmaste 2–3 dagarna och mikrocykelns prioriterade löppass ska skyddas om inte tydliga signalskäl finns.",
-        "recommendation": "Behåll tisdagens planerade 3×10 min tröskel som prioritet; om du känner ovanlig bentrötthet eller ofräschhet morgonen efter, skala ner till 3×8 (alternativ Löpning · kontrollerad tröskel · 3 × 8 min / 90 s jogg).",
-        "dose_option_id": "",
-        "requires_approval": false
+        "load_interpretation": "För Enduro används hela 1:35:18 som tidsomfattning; Stravas rörelsetid 48:35 och snittpuls 107 beskriver inte den tekniska/mekaniska belastningen ensamma."
       },
       "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
-      }
-    },
-    {
-      "activity_id": 20057585521,
-      "activity_date": "2026-09-06",
-      "activity_name": "Löpning på morgonen",
-      "generated_at_utc": "2026-09-06T22:19:28.457293+00:00",
-      "model": "gpt-5-mini",
+        "note": "Ingen automatisk planändring.",
+        "applied": false
+      },
+      "activity_id": 20078705519,
+      "plan_action": {
+        "action": "keep",
+        "reason": "Ingen uppenbar akut överbelastning i de närmaste 2–3 dagarna och mikrocykelns prioriterade löppass ska skyddas om inte tydliga signalskäl finns.",
+        "target_date": "2026-09-08",
+        "dose_option_id": "",
+        "recommendation": "Behåll tisdagens planerade 3×10 min tröskel som prioritet; om du känner ovanlig bentrötthet eller ofräschhet morgonen efter, skala ner till 3×8 (alternativ Löpning · kontrollerad tröskel · 3 × 8 min / 90 s jogg).",
+        "requires_approval": false
+      },
+      "activity_date": "2026-09-07",
+      "activity_name": "Enduro på kvällen",
+      "generated_at_utc": "2026-09-07T20:21:37.047095+00:00",
       "analysis_contract": {
         "pipeline_version": 1,
-        "workout_context_version": 1,
+        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
+        "analysis_code_sha256": "fa594b640d55a1bf2ac4080c6e3b3eca18c47af8939c66055482726b5159b48d",
         "plan_comparison_version": 1,
-        "coach_prompt_sha256": "da2ef602289127ad2c0438bfa5d9356a109494ca3832020780357ab5b639444f",
-        "analysis_code_sha256": "9683a484ae915f4799de23b72cde0fe2e485f72509c02c11752b6d99d3bfaf13"
+        "workout_context_version": 2
       },
       "performance_marker_id": null,
-      "performance_protocol_key": null,
+      "performance_protocol_key": null
+    },
+    {
+      "model": "gpt-5-mini",
       "assessment": {
-        "summary": "22 km distanslöpning genomförd kontrollerat (5:16/km snitt) med en lyckad tempoökning vid km 20–21 och god subjektiv återkoppling.",
-        "load_interpretation": "Passet ger kardiovaskulär och mekanisk belastning inom de senaste 2–3 dagarna men visar god tolerans enligt användarrapport.",
-        "confidence": "medium",
         "facts": [
           "Löpning · distans: 22,00 km · 1:56:00 · 219 m+ · snittpuls 139 · maxpuls 164.",
           "Användarrapport: Kände mig stark hela passet och höll ett kontrollerat tempo. Tog en gel efter cirka en timme. Testade en tempoökning kring km 20–21, cirka 4:25/km, vilket fungerade bra. Pulsen gick upp i fartökningen. Pigg resten av dagen och inte ont någonstans."
         ],
+        "summary": "22 km distanslöpning genomförd kontrollerat (5:16/km snitt) med en lyckad tempoökning vid km 20–21 och god subjektiv återkoppling.",
+        "unknowns": [
+          "Hur benen känns nästa morgon inför inplanerad enduro/skola",
+          "Detaljerad återhämtningseffekt på tisdagens kontrollerade tröskelpass"
+        ],
+        "confidence": "medium",
         "interpretations": [
           "Stabil genomförd distans med kapacitet för en avslutande tempoökning utan tydlig försämring under passet.",
           "Resultatet talar för att planerad progression i mikrocykeln (3×10 min tröskel på tisdag) inte automatiskt behöver reduceras om inga nya negativa signaler uppstår."
         ],
-        "unknowns": [
-          "Hur benen känns nästa morgon inför inplanerad enduro/skola",
-          "Detaljerad återhämtningseffekt på tisdagens kontrollerade tröskelpass"
-        ]
-      },
-      "plan_action": {
-        "action": "keep",
-        "target_date": "",
-        "reason": "Passet tolererades väl och saknar signaler som kräver omedelbar nedskalning eller vila de närmaste 2–3 dagarna.",
-        "recommendation": "Följ nuvarande plan; genomför tisdagens 3×10 min tröskel enligt mikrocykel om morgondagens upplevda fräschhet är normal. Rapportera morgonstatus (ben, återhämtningsunderlaget, energi) om något känns avvikande innan tröskelpasset.",
-        "dose_option_id": "",
-        "requires_approval": false
+        "load_interpretation": "Passet ger kardiovaskulär och mekanisk belastning inom de senaste 2–3 dagarna men visar god tolerans enligt användarrapport."
       },
       "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
-      }
+        "note": "Ingen automatisk planändring.",
+        "applied": false
+      },
+      "activity_id": 20057585521,
+      "plan_action": {
+        "action": "keep",
+        "reason": "Passet tolererades väl och saknar signaler som kräver omedelbar nedskalning eller vila de närmaste 2–3 dagarna.",
+        "target_date": "",
+        "dose_option_id": "",
+        "recommendation": "Följ nuvarande plan; genomför tisdagens 3×10 min tröskel enligt mikrocykel om morgondagens upplevda fräschhet är normal. Rapportera morgonstatus (ben, återhämtningsunderlaget, energi) om något känns avvikande innan tröskelpasset.",
+        "requires_approval": false
+      },
+      "activity_date": "2026-09-06",
+      "activity_name": "Löpning på morgonen",
+      "generated_at_utc": "2026-09-06T22:19:28.457293+00:00",
+      "analysis_contract": {
+        "pipeline_version": 1,
+        "coach_prompt_sha256": "da2ef602289127ad2c0438bfa5d9356a109494ca3832020780357ab5b639444f",
+        "analysis_code_sha256": "9683a484ae915f4799de23b72cde0fe2e485f72509c02c11752b6d99d3bfaf13",
+        "plan_comparison_version": 1,
+        "workout_context_version": 1
+      },
+      "performance_marker_id": null,
+      "performance_protocol_key": null
     },
     {
-      "activity_id": 20047602146,
-      "activity_date": "2026-09-05",
-      "activity_name": "Simning på eftermiddagen",
-      "generated_at_utc": "2026-09-05T22:54:32.006236+00:00",
       "model": "gpt-5-mini",
-      "performance_marker_id": null,
-      "performance_protocol_key": null,
       "assessment": {
-        "summary": "Simningen genomfördes: 4 000 m på 1:13:53.",
-        "load_interpretation": "Set-/intervallnivå saknas i det strukturerade analyslagret; teknik, fartstabilitet och intensitetsutveckling går därför inte att bedöma säkert.",
-        "confidence": "low",
         "facts": [
           "Simning: 4,00 km · 1:13:53 · snittpuls 128,5 · maxpuls 153."
         ],
-        "interpretations": [],
+        "summary": "Simningen genomfördes: 4 000 m på 1:13:53.",
         "unknowns": [
           "Set-/intervallstruktur och subjektiv känsla efter simningen saknas."
-        ]
-      },
-      "plan_action": {
-        "action": "keep",
-        "target_date": "2026-09-06",
-        "reason": "Simpasset är dokumenterat, har mekanisk kostnad och passar som planerad stödexponering inför söndagens lugna löp.",
-        "recommendation": "Behåll söndagens löppass enligt plan (Löpning · lugn distans · 75 min). Inget ytterligare styrke-/simarbete krävs i dag; vila eller lätt aktivitet tills löppasset om du känner ovanlig trötthet.",
-        "dose_option_id": "",
-        "requires_approval": false
+        ],
+        "confidence": "low",
+        "interpretations": [],
+        "load_interpretation": "Set-/intervallnivå saknas i det strukturerade analyslagret; teknik, fartstabilitet och intensitetsutveckling går därför inte att bedöma säkert."
       },
       "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
-      }
+        "note": "Ingen automatisk planändring.",
+        "applied": false
+      },
+      "activity_id": 20047602146,
+      "plan_action": {
+        "action": "keep",
+        "reason": "Simpasset är dokumenterat, har mekanisk kostnad och passar som planerad stödexponering inför söndagens lugna löp.",
+        "target_date": "2026-09-06",
+        "dose_option_id": "",
+        "recommendation": "Behåll söndagens löppass enligt plan (Löpning · lugn distans · 75 min). Inget ytterligare styrke-/simarbete krävs i dag; vila eller lätt aktivitet tills löppasset om du känner ovanlig trötthet.",
+        "requires_approval": false
+      },
+      "activity_date": "2026-09-05",
+      "activity_name": "Simning på eftermiddagen",
+      "generated_at_utc": "2026-09-05T22:54:32.006236+00:00",
+      "performance_marker_id": null,
+      "performance_protocol_key": null
     },
     {
-      "activity_id": 20024236347,
-      "activity_date": "2026-09-03",
-      "activity_name": "Mountainbiketur på kvällen",
-      "generated_at_utc": "2026-09-04T16:20:45.372573+00:00",
       "model": "gpt-5-mini",
-      "performance_marker_id": null,
-      "performance_protocol_key": null,
       "assessment": {
-        "summary": "Lugn, lång…",
-        "load_interpretation": "MTB-passet bidrar främst teknisk och kardiovaskulär belastning; mekanisk/neuromuskulär belastning kan inte nivåklassas mot personlig baslinje.",
-        "confidence": "medium",
         "facts": [
           "MTB/XC: 31,47 km · 2:11:23 · 318 m+ · snittpuls 114 · maxpuls 139.",
           "Planstatus 2026-09-03: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
+        "summary": "Lugn, lång…",
+        "unknowns": [
+          "Subjektiv lokal bentrötthet efter…",
+          "Detaljer om terrängintensiva korta ryck/tekniska fall som skulle öka neuromuskulär kostnad saknas."
+        ],
+        "confidence": "medium",
         "interpretations": [
           "Passet var kontrollerat och tekniskt; ingen indikation på akut överbelastning eller oförmåga att genomföra plan.",
           "Kardiovaskulär kostnad adderar till redan ackumulerad tre-dagarsbelastning men ligger inom skäl för i förväg beslutad regression."
         ],
-        "unknowns": [
-          "Subjektiv lokal bentrötthet efter…",
-          "Detaljer om terrängintensiva korta ryck/tekniska fall som skulle öka neuromuskulär kostnad saknas."
-        ]
-      },
-      "plan_action": {
-        "action": "keep",
-        "target_date": "2026-09-04",
-        "reason": "Aktuell mikrocykel har redan konservativt reducerat fredagens backpass baserat på ackumulerad närbelastning och MTB-passet bekräftar ingen extra risk.",
-        "recommendation": "Behåll dagens planade backkvalitet som reducerad dos: 2 × 6 × 150 m enligt redan applicerat valt dosalternativ; förbered uppvärmning och bedöm benkänslan före passet.",
-        "dose_option_id": "",
-        "requires_approval": false
+        "load_interpretation": "MTB-passet bidrar främst teknisk och kardiovaskulär belastning; mekanisk/neuromuskulär belastning kan inte nivåklassas mot personlig baslinje."
       },
       "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
-      }
+        "note": "Ingen automatisk planändring.",
+        "applied": false
+      },
+      "activity_id": 20024236347,
+      "plan_action": {
+        "action": "keep",
+        "reason": "Aktuell mikrocykel har redan konservativt reducerat fredagens backpass baserat på ackumulerad närbelastning och MTB-passet bekräftar ingen extra risk.",
+        "target_date": "2026-09-04",
+        "dose_option_id": "",
+        "recommendation": "Behåll dagens planade backkvalitet som reducerad dos: 2 × 6 × 150 m enligt redan applicerat valt dosalternativ; förbered uppvärmning och bedöm benkänslan före passet.",
+        "requires_approval": false
+      },
+      "activity_date": "2026-09-03",
+      "activity_name": "Mountainbiketur på kvällen",
+      "generated_at_utc": "2026-09-04T16:20:45.372573+00:00",
+      "performance_marker_id": null,
+      "performance_protocol_key": null
     },
     {
-      "activity_id": 20008258969,
-      "activity_date": "2026-09-02",
-      "activity_name": "SLK Swimrun Jogersö Extreme",
-      "generated_at_utc": "2026-09-03T16:24:58.462418+00:00",
       "model": "gpt-5-mini",
-      "performance_marker_id": null,
-      "performance_protocol_key": null,
       "assessment": {
-        "summary": "Jogget igenom ett hårt men kontrollerat Swimrun-varv (≈3,100–3,300 s) med stigande puls och höga arbetswatt i senare löpblock; passet är kompatibelt med veckans plan men adderar…",
-        "load_interpretation": "Närbelastningen: kardiovaskulär volym + måttlig–mekanisk/neuromuskulär belastning från löp-/byten under Swimrun.",
-        "confidence": "medium",
         "facts": [
           "Swimrun: 6,89 km · 54:25 · 104,3 m+ · snittpuls 135,4 · maxpuls 158.",
           "Planstatus 2026-09-02: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
+        "summary": "Jogget igenom ett hårt men kontrollerat Swimrun-varv (≈3,100–3,300 s) med stigande puls och höga arbetswatt i senare löpblock; passet är kompatibelt med veckans plan men adderar…",
+        "unknowns": [
+          "Subjektiv dagskänsla efter passet (benkänsla) saknas och kan ändra beslut.",
+          "Exakt andel sim vs löp i varje lap (hur mycket mekanisk belastning per del) saknas som kan finjustera skalning."
+        ],
+        "confidence": "medium",
         "interpretations": [
           "Swimrun ersatte planerad simning och gav både aerob träning och mekanisk löpbelastning som ökar veckans totala benkostnad.",
           "Belastningsmönstret tre dagar i följd (enduro, tröskel, Swimrun) talar för konservativ justering av dagens…"
         ],
-        "unknowns": [
-          "Subjektiv dagskänsla efter passet (benkänsla) saknas och kan ändra beslut.",
-          "Exakt andel sim vs löp i varje lap (hur mycket mekanisk belastning per del) saknas som kan finjustera skalning."
-        ]
-      },
-      "plan_action": {
-        "action": "reduce",
-        "target_date": "2026-09-03",
-        "reason": "Skydda fredagens prioriterade backkvalitet efter tre dagars ackumulerad belastning.",
-        "recommendation": "Gör dagens MTB/XC som ordinerat men i förkortad dos…",
-        "dose_option_id": "",
-        "requires_approval": false
+        "load_interpretation": "Närbelastningen: kardiovaskulär volym + måttlig–mekanisk/neuromuskulär belastning från löp-/byten under Swimrun."
       },
       "auto_apply": {
-        "applied": true,
-        "note": "Konservativ ändring applicerad på 2026-09-03: reduce."
-      }
+        "note": "Konservativ ändring applicerad på 2026-09-03: reduce.",
+        "applied": true
+      },
+      "activity_id": 20008258969,
+      "plan_action": {
+        "action": "reduce",
+        "reason": "Skydda fredagens prioriterade backkvalitet efter tre dagars ackumulerad belastning.",
+        "target_date": "2026-09-03",
+        "dose_option_id": "",
+        "recommendation": "Gör dagens MTB/XC som ordinerat men i förkortad dos…",
+        "requires_approval": false
+      },
+      "activity_date": "2026-09-02",
+      "activity_name": "SLK Swimrun Jogersö Extreme",
+      "generated_at_utc": "2026-09-03T16:24:58.462418+00:00",
+      "performance_marker_id": null,
+      "performance_protocol_key": null
     },
     {
-      "activity_id": 19994118756,
-      "activity_date": "2026-09-01",
-      "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-09-02T09:26:31.400560+00:00",
       "model": "gpt-5-mini",
-      "performance_marker_id": null,
-      "performance_protocol_key": null,
       "assessment": {
-        "summary": "3×8 min tröskel genomfört bra; kroppen pigg efter sista intervallen — behåll plan.",
-        "load_interpretation": "Tidigare enduro + 18–19 km och sim 4K ger mångdagars belastning men inget som talar för nedskalning.",
-        "confidence": "medium",
         "facts": [
           "Löpning: 10,35 km · 50:29 · 61 m+ · snittpuls 145,3 · maxpuls 165.",
           "Användarrapport: Började segt och kände mig långsam i uppvärmningen. Gjorde 3 stegringslopp för att väcka kroppen. I 8-minutersintervallerna var känslan bättre: inga problem att hålla arbetstiden, och efter sista intervallen kändes kroppen riktigt pigg genom hela nedjoggen. Bedömning från användaren: hade definitivt kunnat köra ytterligare en 8-minutersintervall.",
           "Planstatus 2026-09-01: dagens planerade pass är genomfört i coachens beslutsunderlag."
         ],
+        "summary": "3×8 min tröskel genomfört bra; kroppen pigg efter sista intervallen — behåll plan.",
+        "unknowns": [
+          "Exakt lokal ben-/muskeltrötthet kväll/nästa förmiddag (användarrapport indikerar pigg känsla efter pass).",
+          "Om användaren väljer att göra Jogersö Swimrun i stället för simning: faktisk mekanisk belastning från det varvet."
+        ],
+        "confidence": "medium",
         "interpretations": [
           "Tröskelpasset hölls kontrollerat och tekniken/energin förbättrades genom passet — ingen omedelbar återhämtningsrisk.",
           "Ingen enstaka dag i närbelastningen motiverar att ta bort eller vila bort onsdagens simning; simningen är lågmekanisk och absorberbar."
         ],
-        "unknowns": [
-          "Exakt lokal ben-/muskeltrötthet kväll/nästa förmiddag (användarrapport indikerar pigg känsla efter pass).",
-          "Om användaren väljer att göra Jogersö Swimrun i stället för simning: faktisk mekanisk belastning från det varvet."
-        ]
-      },
-      "plan_action": {
-        "action": "keep",
-        "target_date": "2026-09-02",
-        "reason": "Passet var kontrollerat och absorberbart; simningen är lågmekanisk och stöder mesocykeln.",
-        "recommendation": "Behåll dagens simpass enligt plan (3 200 m) eller ersätt med ett kontrollerat ettvarvs Swimrun utan segmentjakt; räkna ersättningen som dagens belastning inför torsdagens…",
-        "dose_option_id": "",
-        "requires_approval": false
+        "load_interpretation": "Tidigare enduro + 18–19 km och sim 4K ger mångdagars belastning men inget som talar för nedskalning."
       },
       "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
-      }
+        "note": "Ingen automatisk planändring.",
+        "applied": false
+      },
+      "activity_id": 19994118756,
+      "plan_action": {
+        "action": "keep",
+        "reason": "Passet var kontrollerat och absorberbart; simningen är lågmekanisk och stöder mesocykeln.",
+        "target_date": "2026-09-02",
+        "dose_option_id": "",
+        "recommendation": "Behåll dagens simpass enligt plan (3 200 m) eller ersätt med ett kontrollerat ettvarvs Swimrun utan segmentjakt; räkna ersättningen som dagens belastning inför torsdagens…",
+        "requires_approval": false
+      },
+      "activity_date": "2026-09-01",
+      "activity_name": "Löpning på kvällen",
+      "generated_at_utc": "2026-09-02T09:26:31.400560+00:00",
+      "performance_marker_id": null,
+      "performance_protocol_key": null
     },
     {
-      "activity_id": 19960743008,
-      "activity_date": "2026-08-30",
-      "activity_name": "Löpning på morgonen",
-      "generated_at_utc": "2026-08-31T18:10:59.820818+00:00",
       "model": "gpt-5-mini",
-      "performance_marker_id": null,
-      "performance_protocol_key": null,
       "assessment": {
-        "summary": "Inga ändringar av kortsiktiga planen behövs baserat på senaste tre dagarnas belastning.",
-        "load_interpretation": "Två längre löppass + ett långt simpass ger kardiovaskulär volym men ingen isolerad mekanisk skada; måndagens enduroskola avgör teknisk/neuromuskulär kostnad.",
-        "confidence": "medium",
         "facts": [
           "Löpning: 18,88 km · 1:43:14 · 184 m+ · snittpuls 139,3 · maxpuls 153."
         ],
+        "summary": "Inga ändringar av kortsiktiga planen behövs baserat på senaste tre dagarnas belastning.",
+        "unknowns": [
+          "Måndagens (31 aug) faktiska enduroskolas intensitet och mekaniska belastning.",
+          "Subjektiv dagskänsla/ lokal muskeltrötthet efter måndagens enduro."
+        ],
+        "confidence": "medium",
         "interpretations": [
           "Kardiovaskulär belastning är ackumulerad men absorberbar; inga tydliga tecken på överbelastning i återhämtningsunderlaget-serien.",
           "Enduro-dagens faktiska mekaniska/tekniska belastning är okänd och är den avgörande variabeln för att justera tisdagens tröskelpass."
         ],
-        "unknowns": [
-          "Måndagens (31 aug) faktiska enduroskolas intensitet och mekaniska belastning.",
-          "Subjektiv dagskänsla/ lokal muskeltrötthet efter måndagens enduro."
-        ]
-      },
-      "plan_action": {
-        "action": "keep",
-        "target_date": "",
-        "reason": "Närbelastningen är absorberbar och enduroskolans faktiska belastning saknas ännu.",
-        "recommendation": "Behåll grundplanen; genomför enduroskolan som planerat och fatta beslut om tisdagens tröskel efter måndagens faktiska belastning. Om enduron blir ovanligt slitsam, skala ner eller flytta tröskelpass konservativt.",
-        "dose_option_id": "",
-        "requires_approval": false
+        "load_interpretation": "Två längre löppass + ett långt simpass ger kardiovaskulär volym men ingen isolerad mekanisk skada; måndagens enduroskola avgör teknisk/neuromuskulär kostnad."
       },
       "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
-      }
+        "note": "Ingen automatisk planändring.",
+        "applied": false
+      },
+      "activity_id": 19960743008,
+      "plan_action": {
+        "action": "keep",
+        "reason": "Närbelastningen är absorberbar och enduroskolans faktiska belastning saknas ännu.",
+        "target_date": "",
+        "dose_option_id": "",
+        "recommendation": "Behåll grundplanen; genomför enduroskolan som planerat och fatta beslut om tisdagens tröskel efter måndagens faktiska belastning. Om enduron blir ovanligt slitsam, skala ner eller flytta tröskelpass konservativt.",
+        "requires_approval": false
+      },
+      "activity_date": "2026-08-30",
+      "activity_name": "Löpning på morgonen",
+      "generated_at_utc": "2026-08-31T18:10:59.820818+00:00",
+      "performance_marker_id": null,
+      "performance_protocol_key": null
     },
     {
-      "activity_id": 19946705399,
-      "activity_date": "2026-08-29",
-      "activity_name": "Simning vid lunch",
-      "generated_at_utc": "2026-08-30T09:19:51.776072+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Simningen genomfördes: 4 000 m på 1:14:59.",
-        "load_interpretation": "Ingen setbaserad slutsats används för planändring.",
-        "confidence": "medium",
         "facts": [
           "Simning · aerob + tröskel: 4,00 km · 1:14:59 · snittpuls 129,7 · maxpuls 157.",
           "Användarrapport: Spontant simpass: Aerob+tröskel 4K, 4 000 m. Passet är separat från dagens planerade MTB-pass och ska räknas som faktisk träningsbelastning, inte som genomförande av dagens plan."
         ],
-        "interpretations": [],
+        "summary": "Simningen genomfördes: 4 000 m på 1:14:59.",
         "unknowns": [
           "Setstruktur kunde inte verifieras från passdata."
-        ]
-      },
-      "plan_action": {
-        "action": "keep",
-        "target_date": "2026-08-30",
-        "reason": "Veckan absorberas bäst genom att behålla söndagens lugna löp enligt mikrocykel och skydda mesocykelns löpstimulus.",
-        "recommendation": "Gör Löpning · lugn distans · 75 min: 75 min lugn distans; håll intensiteten lätt och avbryt eller korta ner om benen känns tunga.",
-        "dose_option_id": "",
-        "requires_approval": false
+        ],
+        "confidence": "medium",
+        "interpretations": [],
+        "load_interpretation": "Ingen setbaserad slutsats används för planändring."
       },
       "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
-      }
+        "note": "Ingen automatisk planändring.",
+        "applied": false
+      },
+      "activity_id": 19946705399,
+      "plan_action": {
+        "action": "keep",
+        "reason": "Veckan absorberas bäst genom att behålla söndagens lugna löp enligt mikrocykel och skydda mesocykelns löpstimulus.",
+        "target_date": "2026-08-30",
+        "dose_option_id": "",
+        "recommendation": "Gör Löpning · lugn distans · 75 min: 75 min lugn distans; håll intensiteten lätt och avbryt eller korta ner om benen känns tunga.",
+        "requires_approval": false
+      },
+      "activity_date": "2026-08-29",
+      "activity_name": "Simning vid lunch",
+      "generated_at_utc": "2026-08-30T09:19:51.776072+00:00"
     },
     {
-      "activity_id": 19939732259,
-      "activity_date": "2026-08-28",
-      "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-08-29T09:19:56.366468+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Fredagens backpass blev längre än ordination och ökar veckobelastningen; lördagens…",
-        "load_interpretation": "Närbelastning: 12 backreps + Swimrun och…",
-        "confidence": "medium",
         "facts": [
           "Löpning: 9,67 km · 50:36 · 182 m+ · snittpuls 145,1 · maxpuls 169.",
           "Planstatus 2026-08-28: dagens planerade pass är genomfört i coachens beslutsunderlag."
         ],
+        "summary": "Fredagens backpass blev längre än ordination och ökar veckobelastningen; lördagens…",
+        "unknowns": [
+          "Subjektivt dagskänsla (ben-/lokal trötthet) efter fredagens pass saknas.",
+          "Exakt intensitetsfördelning i swimrunets pulsbortfallzon — påverkar marginalen något."
+        ],
+        "confidence": "medium",
         "interpretations": [
           "Den faktiska backvolymen (12 reps) är en tydlig ökning jämfört med ursprunglig dos och kräver extra absorption innan längre cykeldistans.",
           "Veckans kombination av Swimrun + flera cykel- och löppass talar för konservativ hantering av dagens…"
         ],
-        "unknowns": [
-          "Subjektivt dagskänsla (ben-/lokal trötthet) efter fredagens pass saknas.",
-          "Exakt intensitetsfördelning i swimrunets pulsbortfallzon — påverkar marginalen något."
-        ]
-      },
-      "plan_action": {
-        "action": "reduce",
-        "target_date": "2026-08-29",
-        "reason": "Säkra absorption efter högre backvolym och veckans ackumulerade belastning.",
-        "recommendation": "Skala ner dagens MTB-distans till mtb-distance-75 (75 min lugn körning); håll det huvudsakligen lugnt, undvik upprepade hårda stigningar och avbryt om benen känns tunga.",
-        "dose_option_id": "",
-        "requires_approval": false
+        "load_interpretation": "Närbelastning: 12 backreps + Swimrun och…"
       },
       "auto_apply": {
-        "applied": true,
-        "note": "Konservativ ändring applicerad på 2026-08-29: reduce."
-      }
+        "note": "Konservativ ändring applicerad på 2026-08-29: reduce.",
+        "applied": true
+      },
+      "activity_id": 19939732259,
+      "plan_action": {
+        "action": "reduce",
+        "reason": "Säkra absorption efter högre backvolym och veckans ackumulerade belastning.",
+        "target_date": "2026-08-29",
+        "dose_option_id": "",
+        "recommendation": "Skala ner dagens MTB-distans till mtb-distance-75 (75 min lugn körning); håll det huvudsakligen lugnt, undvik upprepade hårda stigningar och avbryt om benen känns tunga.",
+        "requires_approval": false
+      },
+      "activity_date": "2026-08-28",
+      "activity_name": "Löpning på kvällen",
+      "generated_at_utc": "2026-08-29T09:19:56.366468+00:00"
     },
     {
-      "activity_id": 19926277295,
-      "activity_date": "2026-08-27",
-      "activity_name": "Evening Stigrull",
-      "generated_at_utc": "2026-08-28T01:05:04.449248+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "MTB/XC/X…",
-        "load_interpretation": "De senaste fyra dagarna innehåller 3 tunga/medeltunga pass; dagens…",
-        "confidence": "medium",
         "facts": [
           "MTB/XC: 18,13 km · 1:10:48 · 210 m+ · snittpuls 128,3 · maxpuls 147.",
           "Planstatus 2026-08-27: dagens planerade pass är genomfört i coachens beslutsunderlag."
         ],
+        "summary": "MTB/XC/X…",
+        "unknowns": [
+          "Subjektiv dagskänsla i dag (fredag) och lokal bentrötthet.",
+          "Exakt planerad mängd repetitioner för dagens backpass (dose öppen)."
+        ],
+        "confidence": "medium",
         "interpretations": [
           "Veckans samlade belastning är absorberbar men lämnar mindre marginal för i daglig högdos backkvalitet.",
           "MTB-passets karaktär (teknik + lugn) minskar risken för att backpasset blir överbelastande om dos väljs konservativt."
         ],
-        "unknowns": [
-          "Subjektiv dagskänsla i dag (fredag) och lokal bentrötthet.",
-          "Exakt planerad mängd repetitioner för dagens backpass (dose öppen)."
-        ]
-      },
-      "plan_action": {
-        "action": "keep",
-        "target_date": "2026-08-28",
-        "reason": "Närbelastningen från måndag–torsdag går ihop med mesocykelns prioritering och dagens…",
-        "recommendation": "Behåll dagens backkvalitet enligt plan men välj en konservativ dos i linje med mesocykeln: start med ett måttligt antal repetitioner och prioritera mekanisk kvalitet framför volym; avbryt eller korta ner om lokal trötthet upplevs vid uppvärmning.",
-        "dose_option_id": "",
-        "requires_approval": false
+        "load_interpretation": "De senaste fyra dagarna innehåller 3 tunga/medeltunga pass; dagens…"
       },
       "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
-      }
+        "note": "Ingen automatisk planändring.",
+        "applied": false
+      },
+      "activity_id": 19926277295,
+      "plan_action": {
+        "action": "keep",
+        "reason": "Närbelastningen från måndag–torsdag går ihop med mesocykelns prioritering och dagens…",
+        "target_date": "2026-08-28",
+        "dose_option_id": "",
+        "recommendation": "Behåll dagens backkvalitet enligt plan men välj en konservativ dos i linje med mesocykeln: start med ett måttligt antal repetitioner och prioritera mekanisk kvalitet framför volym; avbryt eller korta ner om lokal trötthet upplevs vid uppvärmning.",
+        "requires_approval": false
+      },
+      "activity_date": "2026-08-27",
+      "activity_name": "Evening Stigrull",
+      "generated_at_utc": "2026-08-28T01:05:04.449248+00:00"
     },
     {
-      "activity_id": 19911120461,
-      "activity_date": "2026-08-26",
-      "activity_name": "SLK Swimrun Jogersö Extreme",
-      "generated_at_utc": "2026-08-27T13:22:06.233402+00:00",
       "model": "gpt-5-mini",
       "assessment": {
-        "summary": "Onsdagens Swimrun var mer belastande än pulsdatan visar och ökar veckobelastningen; torsdags-MTB bör hållas teknisk och lugn.",
-        "load_interpretation": "Det närbelastande swimrunpasset innehöll åtminstone en period motsvarande minst Z3 och höjer behovet av absorbering före ny kvalitet.",
-        "confidence": "medium",
         "facts": [
           "Swimrun · Jogersö Extreme: 6,80 km · 56:25 · 102,2 m+ · snittpuls 131,9 · maxpuls 164.",
           "Användarrapport: Ett varv på Jogersö Extreme. Pulsmätningen tappades under cirka 2 km där ansträngningen gick rätt hårt; registrerad Z1 på den delen är felaktig och faktisk intensitet bedöms av användaren som minst Z3.",
           "Planstatus 2026-08-26: dagens planerade pass är genomfört i coachens beslutsunderlag."
         ],
+        "summary": "Onsdagens Swimrun var mer belastande än pulsdatan visar och ökar veckobelastningen; torsdags-MTB bör hållas teknisk och lugn.",
+        "unknowns": [
+          "Subjektiv dagskänsla torsdag morgon (kan motivera återställning).",
+          "Exakt intensitet under swimrunens pulsbortfall strax över Z3 (påverkar hur mycket…"
+        ],
+        "confidence": "medium",
         "interpretations": [
           "Samlad belastning mån–ons ökar risken att lägga ny hård kvalitet utan extra absorption.",
           "Dagens…"
         ],
-        "unknowns": [
-          "Subjektiv dagskänsla torsdag morgon (kan motivera återställning).",
-          "Exakt intensitet under swimrunens pulsbortfall strax över Z3 (påverkar hur mycket…"
-        ]
+        "load_interpretation": "Det närbelastande swimrunpasset innehöll åtminstone en period motsvarande minst Z3 och höjer behovet av absorbering före ny kvalitet."
       },
+      "auto_apply": {
+        "note": "Ingen automatisk planändring.",
+        "applied": false
+      },
+      "activity_id": 19911120461,
       "plan_action": {
         "action": "keep",
-        "target_date": "2026-08-27",
         "reason": "Planen redan villkorat skalat ned…",
+        "target_date": "2026-08-27",
         "recommendation": "Behåll dagens ordination: MTB/XC teknik + aerob stig…",
         "requires_approval": false
       },
-      "auto_apply": {
-        "applied": false,
-        "note": "Ingen automatisk planändring."
-      }
+      "activity_date": "2026-08-26",
+      "activity_name": "SLK Swimrun Jogersö Extreme",
+      "generated_at_utc": "2026-08-27T13:22:06.233402+00:00"
     }
   ],
-  "last_trigger_hash": "5c67d2cb97ce5e49a3853de51f387ce0f98fa8562f1a0bc5ef24182afe67ccd4",
-  "last_run_utc": "2026-09-24T19:15:18.653077+00:00",
+  "last_run_utc": "2026-09-24T19:31:55.871650+00:00",
   "contract_version": 15,
+  "last_trigger_hash": "175529254d738163191743042ff0d631c2e4ffb811680405b84be4cf19cd3a85",
   "output_contract_version": 19,
   "pipeline_contract_version": 3
 }

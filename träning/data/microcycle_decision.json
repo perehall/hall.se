@@ -1,79 +1,74 @@
 {
-  "rationale": "Åtgärdar tidigare guard_failures: flyttar det kombinerade styrke+sim‑passet bort från dagen efter fast Enduro, gör endast ett primärt swim‑stimulus till 'progress' med stöd i nyliga 4k/3.2k‑pass, och sätter övriga swim/run/strength‑slots som consolidate/establish. Behåller minst två simexponeringar, en styrke/core‑exponering (via swim_strength), max två löpkvaliteter, ≥4 ≤5 slots och minst en kalenderdag utan planerad träning (dag 6).",
   "slots": [
     {
+      "action": "consolidate",
       "day_index": 2,
+      "rationale": "Lågmekanisk simexponering dagen efter fast enduro ger konkret plan utan att anta att benen är redo för ny benkvalitet.",
       "recipe_key": "swim_aerobic_technique",
-      "action": "progress",
-      "rationale": "Ger låg benbelastning dag‑efter‑Enduro och progresserar sim‑sessionen som enda primära stimulus med stöd i nyliga 4k/3.2k‑pass; följer mesocykelns teknik‑ och duration‑axis.",
       "evidence_refs": [
-        "20239623463",
-        "20300494236",
-        "20203770266"
+        "mesocycle.primary_capabilities"
       ]
     },
     {
+      "action": "consolidate",
       "day_index": 3,
-      "recipe_key": "run_hill_quality",
-      "action": "establish",
-      "rationale": "Etablerar backstyrka som sekundär kapacitet placerad ≥48 h från Enduro och inte intill tröskel; underhåll av tidigare backserier.",
-      "evidence_refs": [
-        "20229568713",
-        "20133500464"
-      ]
-    },
-    {
-      "day_index": 4,
-      "recipe_key": "swim_strength",
-      "action": "consolidate",
-      "rationale": "Kombinerar andra simexponeringen med skyddad styrka/core utan att progressa; uppfyller krav på minst en styrke/core‑session per mikrocykel.",
-      "evidence_refs": [
-        "20203770266",
-        "20272196080"
-      ]
-    },
-    {
-      "day_index": 5,
+      "rationale": "Realiserar mesocykelns primära kapacitet run_threshold med säker separation från annan benbelastning.",
       "recipe_key": "run_threshold",
-      "action": "consolidate",
-      "rationale": "Bibehåller 4×8‑struktur som primärt löpstimulus utan progression tills absorberingsindikatorer finns; placerad så återhämtning möjlig före långpass.",
       "evidence_refs": [
-        "20284663236",
-        "20092166843"
+        "mesocycle.primary_capabilities"
       ]
     },
     {
-      "day_index": 7,
-      "recipe_key": "run_easy_distance",
       "action": "establish",
-      "rationale": "Långt lugnt löppass för löptålighet placerat ≥48 h efter tröskel; stödjer mesocykelns tålighetsmål och avslutar veckan med vila dag 6 före.",
+      "day_index": 5,
+      "rationale": "Kombinera en nödvändig simexponering med ännu ej uppfylld styrka/core.",
+      "recipe_key": "swim_strength",
       "evidence_refs": [
-        "20254486837",
-        "20057585521"
+        "mesocycle.primary_capabilities"
+      ]
+    },
+    {
+      "action": "consolidate",
+      "day_index": 7,
+      "rationale": "Behåll lugn löptålighet med separation från löpkvalitet.",
+      "recipe_key": "run_easy_distance",
+      "evidence_refs": [
+        "planning_policy.microcycle_policy"
       ]
     }
   ],
-  "schema_version": 1,
-  "planner_revision": 7,
-  "source": "openai_repaired",
-  "source_hash": "a7de3931a05a769bd30ce06a01d66e1a582b12328df63a2556ac3935712b1700",
-  "generated_at_utc": "2026-09-24T19:15:10.775696+00:00",
-  "week_start": "2026-09-28",
+  "source": "deterministic_fallback_after_repair_guard",
   "week_key": "2026-W40",
+  "rationale": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern.",
+  "week_start": "2026-09-28",
+  "source_hash": "a7de3931a05a769bd30ce06a01d66e1a582b12328df63a2556ac3935712b1700",
+  "guard_repair": {
+    "result": "fallback",
+    "attempted": true,
+    "repair_failures": [
+      "swim_strength får inte progressas eftersom receptet inte realiserar ett direkt primärt stimulus"
+    ],
+    "initial_failures": [
+      "swim_strength får inte ligga direkt dagen efter fast enduro när faktisk benbelastning ännu är okänd"
+    ]
+  },
   "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
+  "schema_version": 1,
+  "generated_at_utc": "2026-09-24T19:31:35.470572+00:00",
+  "planner_revision": 7,
   "competition_context": {
-    "available": true,
-    "goal_id": "otillo-aland-2027-top10",
-    "event": "ÖTILLÖ Åland World Series",
-    "event_date": "2027-08-14",
     "as_of": "2026-09-28",
-    "days_to_event": 320,
-    "weeks_to_event": 45.7,
-    "horizon_stage": "foundation",
-    "target": "Topp-10",
-    "target_category": null,
-    "category_status": "unspecified",
+    "event": "ÖTILLÖ Åland World Series",
     "sport": "swimrun",
+    "target": "Topp-10",
+    "derived": {
+      "published_component_delta_m": 10,
+      "run_share_of_published_total": 0.7858,
+      "swim_share_of_published_total": 0.214
+    },
+    "goal_id": "otillo-aland-2027-top10",
+    "available": true,
+    "event_date": "2027-08-14",
     "race_profile": {
       "source": {
         "url": "https://otilloswimrun.com/races/aland/aland-world-series/",
@@ -92,62 +87,54 @@
       "elevation_gain_m": 391,
       "total_distance_m": 46540
     },
-    "derived": {
-      "run_share_of_published_total": 0.7858,
-      "swim_share_of_published_total": 0.214,
-      "published_component_delta_m": 10
-    },
-    "course_requirement_mapping": [
-      {
-        "source_fact": "run_distance_m",
-        "published_value": 36570,
-        "mapped_capabilities": [
-          "run_easy_distance",
-          "run_threshold"
-        ],
-        "system_gap": null
-      },
-      {
-        "source_fact": "swim_distance_m",
-        "published_value": 9960,
-        "mapped_capabilities": [
-          "swim_aerobic",
-          "swim_threshold",
-          "swim_technique"
-        ],
-        "system_gap": null
-      },
-      {
-        "source_fact": "characteristics: många växlingar",
-        "published_value": "Många växlingar",
-        "mapped_capabilities": [],
-        "system_gap": "combined_swimrun_transition_durability"
-      }
-    ],
+    "days_to_event": 320,
+    "horizon_stage": "foundation",
+    "weeks_to_event": 45.7,
+    "category_status": "unspecified",
+    "target_category": null,
     "planning_implications": [
       "36,57 km publicerad löpdistans gör löptålighet över upprepade delsträckor till ett centralt tävlingskrav.",
       "9,96 km publicerad simdistans gör hög simuthållighet och bibehållen teknik under lång total simtid till ett centralt tävlingskrav.",
       "Officiell banbeskrivning anger många växlingar; swimrun-specifik kombinationstålighet och övergångsvana behöver byggas innan tävlingsspecifika block.",
       "391 höjdmeter ska vägas in, men systemet får inte hitta på en mer kuperad profil än den publicerade.",
       "Tävlingsdatumet styr när specificiteten ska omprövas; det får inte ensamt utlösa automatisk volym- eller intensitetsökning."
+    ],
+    "course_requirement_mapping": [
+      {
+        "system_gap": null,
+        "source_fact": "run_distance_m",
+        "published_value": 36570,
+        "mapped_capabilities": [
+          "run_easy_distance",
+          "run_threshold"
+        ]
+      },
+      {
+        "system_gap": null,
+        "source_fact": "swim_distance_m",
+        "published_value": 9960,
+        "mapped_capabilities": [
+          "swim_aerobic",
+          "swim_threshold",
+          "swim_technique"
+        ]
+      },
+      {
+        "system_gap": "combined_swimrun_transition_durability",
+        "source_fact": "characteristics: många växlingar",
+        "published_value": "Många växlingar",
+        "mapped_capabilities": []
+      }
     ]
   },
   "completed_microcycle_context": {
-    "strength_exposures": 0,
-    "swim_exposures": 0,
-    "enduro_exposures": 0,
-    "completed_slot_days": 0,
-    "direct_capabilities": [],
-    "capability_refs": {},
     "activity_refs": [],
-    "evidence_note": "Familjeexponeringar kommer från faktiskt registrerade aktiviteter i målveckan. Direkt kapabilitetskredit kräver daterad athlete_state-evidens från samma aktivitet."
-  },
-  "guard_repair": {
-    "attempted": true,
-    "initial_failures": [
-      "swim_strength får inte ligga direkt dagen efter fast enduro när faktisk benbelastning ännu är okänd",
-      "swim_strength får inte progressas eftersom receptet inte realiserar ett direkt primärt stimulus"
-    ],
-    "result": "accepted"
+    "evidence_note": "Familjeexponeringar kommer från faktiskt registrerade aktiviteter i målveckan. Direkt kapabilitetskredit kräver daterad athlete_state-evidens från samma aktivitet.",
+    "swim_exposures": 0,
+    "capability_refs": {},
+    "enduro_exposures": 0,
+    "strength_exposures": 0,
+    "completed_slot_days": 0,
+    "direct_capabilities": []
   }
 }
