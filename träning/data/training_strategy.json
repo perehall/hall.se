@@ -506,7 +506,7 @@
           "swim_technique"
         ],
         "session": "Simning · 3 200 m · aerob/teknik",
-        "reason": "Låg benbelastningsdag efter fixed enduro: teknisk aerob sim (≥3 200 m) uppfyller ett av två simkrav utan att belasta benen. Valet utgår från ett observerat värde 3200 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
+        "reason": "Lågmekanisk simexponering dagen efter fast enduro ger konkret plan utan att anta att benen är redo för ny benkvalitet. Valet utgår från ett observerat värde 3200 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
         "development_focus": "Teknisk kvalitet och stabil aerob rytm; simningen ska kunna stödja helheten med låg mekanisk kostnad för benen.",
         "day_index": 2,
         "dose_options": [
@@ -635,9 +635,9 @@
           "run_threshold"
         ],
         "session": "Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg",
-        "reason": "Bibehålla kontrollerad tröskel (4×8‑struktur) enligt mesocykelbeslut; ingen progression denna mikrocykel utan absorberbarhetsindikator. Valet utgår från ett observerat värde 32 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
+        "reason": "Realiserar mesocykelns primära kapacitet run_threshold med säker separation från annan benbelastning. Valet utgår från ett observerat värde 32 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
         "development_focus": "Jämn, kontrollerad tröskelkaraktär. Progression ska främst öka absorberbar arbetstid, inte jaga högre intensitet.",
-        "day_index": 4,
+        "day_index": 3,
         "dose_options": [
           {
             "id": "run-threshold-3x8",
@@ -706,7 +706,7 @@
           "strength_core"
         ],
         "session": "Simning · 3 200 m · aerob/teknik + styrka/core · ca 35 min · styrkemall",
-        "reason": "Kombinerar andra simexponeringen med styrka/core för att uppfylla both swim och strength_core‑kraven utan ett extra benbelastande pass; placeras inte dag‑efter‑enduro och ligger mellan tröskel och långt pass för återhämtning. Valet utgår från ett observerat värde 36.0167 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
+        "reason": "Kombinera en nödvändig simexponering med ännu ej uppfylld styrka/core. Valet utgår från ett observerat värde 36.0167 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
         "development_focus": "Andra simexponeringen hålls aerob/teknisk och kombineras med kontrollerad styrka/core för att skydda båda kapaciteterna utan ett extra benkvalitetspass.",
         "day_index": 5,
         "dose_options": [
@@ -757,9 +757,9 @@
           "run_easy_distance"
         ],
         "session": "Löpning · lugn distans · 120 min",
-        "reason": "Långt lugnt löppass (~90–120 min) placerat ≥48 h från tröskel för löptålighet och återhämtning. Valet utgår från ett observerat värde 119.767 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
+        "reason": "Behåll lugn löptålighet med separation från löpkvalitet. Valet utgår från ett observerat värde 119.767 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
         "development_focus": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt.",
-        "day_index": 6,
+        "day_index": 7,
         "dose_options": [
           {
             "id": "run-easy-60",
@@ -812,7 +812,7 @@
     "decision_trace": {
       "mesocycle_decision_source": "openai",
       "mesocycle_source_hash": "a8b5f8c55f665c67c8e4a949cf2aeb645712cef12ae5e5f25bb80cb04ccb4da4",
-      "microcycle_decision_source": "openai_repaired",
+      "microcycle_decision_source": "deterministic_fallback_after_repair_guard",
       "microcycle_source_hash": "c15e5b787bb30db83ce13e460b8e089584bd35a874bbf3f443b7876e5e731a7c",
       "microcycle_week_key": "2026-W40",
       "competition_context": {
