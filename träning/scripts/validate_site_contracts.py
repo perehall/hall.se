@@ -225,7 +225,7 @@ def main() -> None:
             "Preflight: exakt en sammanhållen toppöversikt krävs",
         )
         require(
-            len(re.findall(r'class="[^"]*\\bcurrent-week-header\\b[^"]*"', index)) == 1,
+            len(re.findall(r'class="[^"]*\bcurrent-week-header\b[^"]*"', index)) == 1,
             "Preflight: exakt ett sammanhållet huvud för Aktuell vecka krävs",
         )
         require(
