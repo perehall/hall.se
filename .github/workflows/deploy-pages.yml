@@ -118,11 +118,7 @@ jobs:
           set -euo pipefail
           url="https://xn--hll-qla.se/tr%C3%A4ning/?deploy=${GITHUB_SHA}"
           for attempt in $(seq 1 18); do
-            html="$(curl --fail --silent --show-error --location \\
-              --max-time 20 \\
-              -H 'Cache-Control: no-cache' \\
-              -H 'Pragma: no-cache' \\
-              "${url}&attempt=${attempt}" || true)"
+            html="$(curl --fail --silent --show-error --location --max-time 20 -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "${url}&attempt=${attempt}" || true)"
             if grep -Fq 'class="top-overview"' <<<"$html"; then
               if grep -Fq 'class="top-week-nav"' <<<"$html" && grep -Fq 'class="top-today"' <<<"$html"; then
                 echo "PUBLIC_TRAINING_PAGE_OK attempt=${attempt}"
