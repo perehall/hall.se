@@ -167,7 +167,7 @@ test("authenticated training GUI input returns after persistence without waiting
       activity_id: 789,
       text: "Blev 4 × 8 i stället för 3 × 10. Pigg efteråt.",
       rpe: 6,
-      feeling: ["fresh", "could_do_more"],
+      feeling: ["fresh"],
       source: "training-gui-v1",
     }),
   });
@@ -185,7 +185,7 @@ test("authenticated training GUI input returns after persistence without waiting
   assert.equal(persistBody.p_provider_activity_id, "789");
   assert.equal(persistBody.p_operation, "NATURAL_LANGUAGE");
   assert.equal(persistBody.p_rpe, 6);
-  assert.deepEqual(persistBody.p_feeling, ["fresh", "could_do_more"]);
+  assert.deepEqual(persistBody.p_feeling, ["fresh"]);
   assert.equal(dispatchBody.event_type, "training-input-event");
   assert.equal(dispatchBody.client_payload.activity_id, 789);
   assert.match(dispatchBody.client_payload.event_key, /^training-input:/);
@@ -290,6 +290,27 @@ test("training GUI input keeps dispatch-only fallback until Supabase secret is c
   assert.equal(body.status, "accepted");
   assert.equal(body.persistence, "dispatch");
   assert.equal(requestBody.event_type, "training-input-event");
+});
+
+test("training GUI input rejects multiple feelings", async () => {
+  const request = new Request("https://xn--hll-qla.se/träning/training-api/input", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      "cf-access-jwt-assertion": "signed-access-jwt",
+    },
+    body: JSON.stringify({
+      operation: "ADD_FEEDBACK",
+      activity_id: 789,
+      rpe: 6,
+      feeling: ["fresh", "could_do_more"],
+    }),
+  });
+  const response = await handleRequest(request, env, async () => {
+    throw new Error("Rejected input must not call external services");
+  });
+  assert.equal(response.status, 400);
+  assert.deepEqual(await response.json(), { error: "invalid_feeling" });
 });
 
 test("training GUI input requires Cloudflare Access assertion", async () => {
