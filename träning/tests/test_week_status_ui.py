@@ -31,7 +31,7 @@ class WeekStatusUiTests(unittest.TestCase):
         self.assertNotIn('class="week-state"', rendered)
         self.assertNotIn('<summary>Veckoläge</summary>', rendered)
         self.assertNotIn('class="week-overview"', rendered)
-        self.assertIn('<summary>Veckostatus · 3 pass · 2:58 · 2 dagar</summary>', rendered)
+        self.assertIn('<summary>3 pass · 2:58 · 2 träningsdagar</summary>', rendered)
         self.assertIn('.week-status-expander>summary:after{content:" +"}', rendered)
         self.assertIn('.week-status-expander[open]>summary:after{content:" −"}', rendered)
         self.assertIn('.week-status-expander .dashboard>.dashboard-card:last-child{display:none}', rendered)
@@ -42,7 +42,7 @@ class WeekStatusUiTests(unittest.TestCase):
     def test_singular_day_is_used_when_needed(self):
         page = '''<html><style></style><body><h2 class="section">Aktuell vecka</h2><div class="day">Dag</div><details class="week-state"><summary>Veckoläge</summary><section class="dashboard" aria-label="Veckoöversikt"><div class="metrics"><div class="metric"><strong>1</strong><span>pass</span></div><div class="metric"><strong>45:00</strong><span>passtid</span></div><div class="metric"><strong>1</strong><span>träningsdagar</span></div></div></section></details></body></html>'''
         rendered = promote_week_status(page)
-        self.assertIn('Veckostatus · 1 pass · 45:00 · 1 dag', rendered)
+        self.assertIn('1 pass · 45:00 · 1 träningsdag', rendered)
 
     def test_transform_is_idempotent(self):
         page = '''<html><style></style><body><h2 class="section">Aktuell vecka</h2><div class="day">Dag</div><details class="week-state"><summary>Veckoläge</summary><section class="dashboard" aria-label="Veckoöversikt"><div class="metrics"><div class="metric"><strong>0</strong><span>pass</span></div><div class="metric"><strong>0:00</strong><span>passtid</span></div><div class="metric"><strong>0</strong><span>träningsdagar</span></div></div></section></details></body></html>'''

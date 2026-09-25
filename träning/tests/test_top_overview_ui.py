@@ -137,6 +137,13 @@ class TopOverviewUiTests(unittest.TestCase):
         self.assertIn("Primärt:", rendered)
         self.assertIn("Skyddat:", rendered)
 
+        # Visual priority: Today is the only surfaced primary block; focus is
+        # quieter and Aktuell vecka starts after a deliberate whitespace break.
+        self.assertIn("border-radius:18px", rendered)
+        self.assertIn("background:rgba(255,255,255,.74)", rendered)
+        self.assertIn("margin-top:42px", rendered)
+        self.assertIn(".top-week-focus{\n  margin-top:15px;", rendered)
+
         current = rendered.index('<h2 class="section">Aktuell vecka</h2>')
         prefix = rendered[:current]
         self.assertNotIn("<header>", prefix)

@@ -127,8 +127,12 @@ body.quiet-performance.qp-current .top-meta a{
 }
 body.quiet-performance.qp-current .top-meta-sep{color:var(--qp-line,#cbd5e1)}
 body.quiet-performance.qp-current .top-today{
-  padding:22px 0 20px;
-  border-bottom:1px solid var(--qp-line,#e2e8f0);
+  margin-top:18px;
+  padding:18px 20px 17px;
+  border:1px solid var(--qp-line,#e2e8f0);
+  border-radius:18px;
+  background:rgba(255,255,255,.74);
+  box-shadow:0 8px 24px rgba(15,23,42,.045);
 }
 body.quiet-performance.qp-current .top-today-kicker{
   display:flex;
@@ -153,11 +157,11 @@ body.quiet-performance.qp-current .top-status{
 body.quiet-performance.qp-current .top-today-title{
   display:flex;
   align-items:center;
-  gap:8px;
-  font-size:1.19rem;
-  font-weight:720;
-  line-height:1.3;
-  letter-spacing:-.018em;
+  gap:9px;
+  font-size:1.28rem;
+  font-weight:760;
+  line-height:1.28;
+  letter-spacing:-.022em;
 }
 body.quiet-performance.qp-current .top-today-title .sport-icon{
   width:20px;
@@ -209,16 +213,16 @@ body.quiet-performance.qp-current .top-details-body{
 body.quiet-performance.qp-current .top-details-body p{margin:0}
 body.quiet-performance.qp-current .top-details-body p+p{margin-top:8px}
 body.quiet-performance.qp-current .top-week-focus{
-  padding:18px 0 20px;
-  border-bottom:1px solid var(--qp-line,#e2e8f0);
+  margin-top:15px;
+  padding:13px 3px 0;
 }
 body.quiet-performance.qp-current .top-focus-title{
   display:block;
-  margin-top:5px;
-  font-size:1rem;
-  font-weight:690;
-  line-height:1.38;
-  letter-spacing:-.012em;
+  margin-top:4px;
+  font-size:.94rem;
+  font-weight:670;
+  line-height:1.4;
+  letter-spacing:-.008em;
 }
 body.quiet-performance.qp-current .top-focus-meta{
   margin-top:4px;
@@ -226,7 +230,12 @@ body.quiet-performance.qp-current .top-focus-meta{
   font-size:.72rem;
 }
 body.quiet-performance.qp-current .top-week-focus .top-details{margin-top:9px}
-body.quiet-performance.qp-current .top-overview + .section{margin-top:25px}
+body.quiet-performance.qp-current .top-overview + .section{
+  margin-top:42px;
+  margin-bottom:7px;
+  font-size:1.24rem;
+  letter-spacing:-.018em;
+}
 @media(max-width:620px){
   body.quiet-performance.qp-current .top-week-nav{gap:8px}
   body.quiet-performance.qp-current .top-week-link{font-size:.72rem}
@@ -234,10 +243,10 @@ body.quiet-performance.qp-current .top-overview + .section{margin-top:25px}
   body.quiet-performance.qp-current .top-week-current strong{font-size:.86rem}
   body.quiet-performance.qp-current .top-week-current span{font-size:.67rem}
   body.quiet-performance.qp-current .top-meta{font-size:.64rem}
-  body.quiet-performance.qp-current .top-today{padding:19px 0 18px}
-  body.quiet-performance.qp-current .top-today-title{font-size:1.1rem}
+  body.quiet-performance.qp-current .top-today{margin-top:15px;padding:16px 15px 15px;border-radius:16px}
+  body.quiet-performance.qp-current .top-today-title{font-size:1.16rem}
   body.quiet-performance.qp-current .top-today-meta{margin-left:29px;font-size:.76rem}
-  body.quiet-performance.qp-current .top-week-focus{padding:16px 0 18px}
+  body.quiet-performance.qp-current .top-week-focus{margin-top:12px;padding:12px 2px 0}
 }
 """.strip()
 
