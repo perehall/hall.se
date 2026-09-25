@@ -4,7 +4,7 @@
   "week_start": "2026-09-21",
   "week_end": "2026-09-27",
   "created_at_utc": "2026-09-20T23:15:26.146433+00:00",
-  "updated_at_utc": "2026-09-25T20:43:12.145345+00:00",
+  "updated_at_utc": "2026-09-25T20:58:14.281065+00:00",
   "plan": {
     "days": [
       {
@@ -1056,9 +1056,9 @@
           "status": "synced",
           "transport": "intervals_icu",
           "source_hash": "9dc12d3e522e49454af7c6ffe216ee9ba323186427181ac1e1ae64a8d6009578",
-          "updated_at_utc": "2026-09-25T20:42:52.415432+00:00",
+          "updated_at_utc": "2026-09-25T20:57:52.732348+00:00",
           "device_delivery": "unverified",
-          "verified_at_utc": "2026-09-25T20:42:52.415432+00:00",
+          "verified_at_utc": "2026-09-25T20:57:52.732348+00:00",
           "provider_event_id": 138097036
         },
         "dose_options": [
@@ -1419,7 +1419,7 @@
       "sport_type": "Run",
       "start_date": "2026-09-25T16:20:41Z",
       "device_name": "Garmin Forerunner 970",
-      "user_report": "3 × 8 backintervaller (24 × 150 m totalt). Garmin klassade passet som Tempo. Passet genomfördes av praktiska skäl i stället för dagens planerade simning; simningen flyttas till 2026-09-26. Före passet rapporterade Garmin allt grönt och hög träningsberedskap. Relativt bra kontroll. Ingen fartjakt uppför RPE 6/10. Känsla: Pigg.",
+      "user_report": "3 × 8 backintervaller (24 × 150 m totalt). Garmin klassade passet som Tempo. Passet genomfördes av praktiska skäl i stället för dagens planerade simning; simningen flyttas till 2026-09-26. Före passet rapporterade Garmin allt grönt och hög träningsberedskap. RPE 6/10. Känsla: Starka ben.",
       "average_watts": 279.3,
       "display_label": "Löpning · backintervaller",
       "max_heartrate": 165.0,
@@ -1816,7 +1816,7 @@
         "enduro": null,
         "sport_type": "Run",
         "activity_id": 20326850936,
-        "user_report": "3 × 8 backintervaller (24 × 150 m totalt). Garmin klassade passet som Tempo. Passet genomfördes av praktiska skäl i stället för dagens planerade simning; simningen flyttas till 2026-09-26. Före passet rapporterade Garmin allt grönt och hög träningsberedskap. Relativt bra kontroll. Ingen fartjakt uppför RPE 6/10. Känsla: Pigg.",
+        "user_report": "3 × 8 backintervaller (24 × 150 m totalt). Garmin klassade passet som Tempo. Passet genomfördes av praktiska skäl i stället för dagens planerade simning; simningen flyttas till 2026-09-26. Före passet rapporterade Garmin allt grönt och hög träningsberedskap. RPE 6/10. Känsla: Starka ben.",
         "display_label": "Löpning · backintervaller",
         "classification": "training",
         "contract_version": 3,
@@ -4148,20 +4148,20 @@
       "assessment": {
         "facts": [
           "Löpning · backintervaller: 14,83 km · 1:16:07 · 277 m+ · snittpuls 141,6 · maxpuls 165.",
-          "Användarrapport: 3 × 8 backintervaller (24 × 150 m totalt). Garmin klassade passet som Tempo. Passet genomfördes av praktiska skäl i stället för dagens planerade simning; simningen flyttas till 2026-09-26. Före passet rapporterade Garmin allt grönt och hög träningsberedskap. Relativt bra kontroll. Ingen fartjakt uppför RPE 6/10. Känsla: Pigg.",
+          "Användarrapport: 3 × 8 backintervaller (24 × 150 m totalt). Garmin klassade passet som Tempo. Passet genomfördes av praktiska skäl i stället för dagens planerade simning; simningen flyttas till 2026-09-26. Före passet rapporterade Garmin allt grönt och hög träningsberedskap. RPE 6/10. Känsla: Starka ben.",
           "Planstatus 2026-09-25: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
-        "summary": "Genomfört: 3 × 8 backintervaller (24 totalt). Känsla pigg RPE 6/10",
+        "summary": "Genomfört: 3 × 8 backintervaller (24 totalt). Återhämtningsunderlaget noterade Tempo men strukturen bevisar korta arbetsrep",
         "unknowns": [
-          "Hur användarens återhämtning utvecklas kommande 24–72 h trots pigg känsla.",
-          "Eventuella lokala muskelspänningar eller ömhet som kan påverka styrke- eller långpassdos."
+          "Subsequent 24–72 h recovery (benlokal trötthet) beyond same‑day strong feeling",
+          "Eventual subjective soreness or återhämtningsunderlaget/återhämtningsunderlaget next mornings"
         ],
         "confidence": "medium",
         "interpretations": [
-          "Genomfört backkvalitet levererar avsett backstyrka/löpekonomi‑stimulus och räknas i mikrocykelns belastning.",
-          "Eftersom användaren var pigg och rapporterade kontrollerad insats finns inget skäl att automatiskt vila nästa dag, men närbelastning (senaste 3 dagar) bör beaktas inför långpass på söndag."
+          "Passet uppfyller mikrocykelns backstyrka/löpekonomi‑stimulus och räknas som genomfört för veckan.",
+          "Ingen omedelbar reduktion krävs; planerad simning kan hållas flyttad till 2026-09-26 som beslutat."
         ],
-        "load_interpretation": "Passet ger mekanisk, neuromuskulär och kardiovaskulär stimulans från 24 korta arbetsrep; inga tecken på överdriven ansträngning i rapporten."
+        "load_interpretation": "Passet gav mekanisk, neuromuskulär och kardiovaskulär löpbelastning motsvarande 24×150 m; tolererades väl (RPE 6/10, hög readiness före)."
       },
       "auto_apply": {
         "note": "Ingen automatisk planändring.",
@@ -4170,15 +4170,15 @@
       "activity_id": 20326850936,
       "plan_action": {
         "action": "keep",
-        "reason": "Passet genomfördes som planerat och simningen flyttades av användaren till 2026-09-26.",
+        "reason": "Passet var användarbekräftat, strukturerat och tolererades väl; simningen är redan flyttad till 2026-09-26 i planen.",
         "target_date": "2026-09-26",
         "dose_option_id": "",
-        "recommendation": "Behåll planerad simning 2026-09-26 enligt tidigare flytt; ingen ändring av kommande söndags långa lugna löpning föreslås nu. Om du känner ovanlig stelhet eller trötthet morgonen efter, meddela så justerar vi söndagens dos.",
+        "recommendation": "Behåll plan: genomför simning 2026-09-26 enligt vald 4 000 m‑mall. Notera återhämtning nästa morgon; om benighet/återhämtningsunderlaget/återhämtningsunderlaget indikerar problem, återkom för reduktion.",
         "requires_approval": false
       },
       "activity_date": "2026-09-25",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-09-25T20:42:50.166150+00:00",
+      "generated_at_utc": "2026-09-25T20:57:51.107253+00:00",
       "analysis_contract": {
         "pipeline_version": 3,
         "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
