@@ -113,7 +113,7 @@ class TrainingInputUiTests(unittest.TestCase):
         self.assertIn('data-activity-id="202"', rendered)
         self.assertIn(">Enduro</span>", rendered)
         self.assertIn(">Styrka</span>", rendered)
-        self.assertIn(">Utvärdera</button>", rendered)
+        self.assertNotIn(">Utvärdera</button>", rendered)\n        self.assertEqual(rendered.count(">Ändra</button>"), 2)\n        self.assertIn("Kommentar eller korrigering av passet", rendered)\n        self.assertIn("korrigera vad som faktiskt genomfördes", rendered)
         self.assertIn("querySelectorAll('[data-training-input]')", rendered)
 
     def test_legacy_saved_feedback_renders_as_compact_receipt(self):
@@ -202,6 +202,8 @@ class TrainingInputUiTests(unittest.TestCase):
         rendered = apply_training_input_ui(page, {"days": []}, activities, "2026-09-23")
         for activity_id in range(501, 506):
             self.assertIn(f'data-activity-id="{activity_id}"', rendered)
+        self.assertEqual(rendered.count(">Ändra</button>"), 5)
+        self.assertNotIn(">Utvärdera</button>", rendered)
 
 
     def test_previous_week_activity_has_no_input_surface(self):
