@@ -7,17 +7,17 @@
           "Löpning: 14,83 km · 1:16:07 · 277 m+ · snittpuls 141,6 · maxpuls 165.",
           "Planerat simpass 4000 m; genomfört 14829.5 m."
         ],
-        "summary": "Genomfört långt löppass 14,83 km på 76 min med genomsnittspuls 142 och flera 1 km-kontroller; visar genomförd aerob/me­ka­nisk belastning men ingen simning utförd enligt plan.",
+        "summary": "Genomfört långt terränglöpning 14.8 km på 76 min med stabil snittpuls 142 och flera 1‑km‑segment runt 5:08/km; passet ersatte planerad simning.",
         "unknowns": [
-          "Subjektiv känsla efter passet saknas i användarrapporten",
-          "Återhämtningen till nästa pass är ännu inte verifierad av samma-dagsdata."
+          "Subjektiv återhämtning efter passet (användarrapport tom)",
+          "Planerad sims exakta tidpunkt och om användaren redan genomfört simdelen idag"
         ],
         "confidence": "medium",
         "interpretations": [
-          "Detta pass ersatte den planerade simningen och levererar löptröskel-/aerobt stimulus som redan finns i mikrocykeln.",
-          "Eftersom mikrocykeln redan innehåller flera löpstimuli (inkl."
+          "Ett långt löppass genomfört idag ger kardiovaskulär och mekanisk belastning som konkurrerar med dagens planerade simstimulus.",
+          "Eftersom mikrocykeln redan innehåller flera löp- och Simning‑exponeringar betyder detta utförande att simningen för 2026-09-25 inte matchar faktisk aktivitet och bör inte läggas ovanpå utan…"
         ],
-        "load_interpretation": "Passet ger ytterligare kardiovaskulär och mekanisk belastning nära andra hårda löppass denna mikrocykel; påverkar kommande 48–72 h återhämtning för löpning."
+        "load_interpretation": "Passet är ett betydande löpstimulus i närbelastningsfönstret och påverkar återstående mikrocykel (särskilt planerad sim samma dag)."
       },
       "auto_apply": {
         "note": "Ingen automatisk planändring.",
@@ -25,16 +25,16 @@
       },
       "activity_id": 20326850936,
       "plan_action": {
-        "action": "keep",
-        "reason": "Passet är en faktisk löpbelastning som ligger inom mikrocykelns avsedda stimuli och inga nära‑tidskonflikter motiverar automatisk reduktion.",
-        "target_date": "",
+        "action": "review",
+        "reason": "Dagens faktiska långa löppass ger närbelastning som krockar med planerad 4 000 m‑simning och kräver coachbedömning.",
+        "target_date": "2026-09-25",
         "dose_option_id": "",
-        "recommendation": "Behåll nuvarande plan; undvik extra benkrävande löpning de närmaste 48–72 timmar och håll planerade sim‑ och styrkepass oförändrade. Om du känner ovanlig trötthet eller lokal muskelvärk imorgon, meddela så reducerar jag kommande löppass.",
-        "requires_approval": false
+        "recommendation": "Granska dagens planerade simpass innan utförande; överväg att flytta simningen till annan dag eller reducera dosen (ej automatisk ökning). Ange om du kände dig pigg eller trött efter löpningen så jag kan föreslå konkret alternativ.",
+        "requires_approval": true
       },
       "activity_date": "2026-09-25",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-09-25T17:43:53.565929+00:00",
+      "generated_at_utc": "2026-09-25T17:52:17.543803+00:00",
       "analysis_contract": {
         "pipeline_version": 3,
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
@@ -1286,9 +1286,9 @@
       "generated_at_utc": "2026-08-28T01:05:04.449248+00:00"
     }
   ],
-  "last_run_utc": "2026-09-25T17:43:53.565929+00:00",
+  "last_run_utc": "2026-09-25T17:52:17.543803+00:00",
   "contract_version": 15,
-  "last_trigger_hash": "eaff91b1ae5be59ad301e93a9fede7e9153162f0128aa2b8bd5f3e3440f24774",
+  "last_trigger_hash": "4572ebbace75026a86ebdf01618295f033785be2fa0c9d2dd4d47fa5cc2c7688",
   "output_contract_version": 19,
   "pipeline_contract_version": 3
 }
