@@ -136,7 +136,10 @@ def main() -> int:
         encoding="utf-8",
     )
     invalidated = invalidate_coach_analyses(COACH_FILE, changed_ids)
-    print(\n        f"ACTIVITY_DIRECTIVES_OK applied={applied} skipped_missing={skipped} "\n        f"changed={len(changed_ids)} coach_invalidated={invalidated}"\n    )
+    print(
+        f"ACTIVITY_DIRECTIVES_OK applied={applied} skipped_missing={skipped} "
+        f"changed={len(changed_ids)} coach_invalidated={invalidated}"
+    )
     return 0
 
 
