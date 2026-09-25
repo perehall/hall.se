@@ -4,7 +4,7 @@
   "week_start": "2026-09-21",
   "week_end": "2026-09-27",
   "created_at_utc": "2026-09-20T23:15:26.146433+00:00",
-  "updated_at_utc": "2026-09-25T19:39:40.604915+00:00",
+  "updated_at_utc": "2026-09-25T20:04:04.265118+00:00",
   "plan": {
     "days": [
       {
@@ -1056,9 +1056,9 @@
           "status": "synced",
           "transport": "intervals_icu",
           "source_hash": "9dc12d3e522e49454af7c6ffe216ee9ba323186427181ac1e1ae64a8d6009578",
-          "updated_at_utc": "2026-09-25T19:39:27.010787+00:00",
+          "updated_at_utc": "2026-09-25T20:03:45.008141+00:00",
           "device_delivery": "unverified",
-          "verified_at_utc": "2026-09-25T19:39:27.010787+00:00",
+          "verified_at_utc": "2026-09-25T20:03:45.008141+00:00",
           "provider_event_id": 138097036
         },
         "dose_options": [
@@ -4151,17 +4151,17 @@
           "Användarrapport: 3 × 8 backintervaller (24 × 150 m totalt). Garmin klassade passet som Tempo. Passet genomfördes av praktiska skäl i stället för dagens planerade simning; simningen flyttas till 2026-09-26. Före passet rapporterade Garmin allt grönt och hög träningsberedskap.",
           "Planstatus 2026-09-25: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
-        "summary": "Genomfört: 3 × 8 backintervaller (24 totalt). Passet ger förväntad mekanisk, neuromuskulär och kardiovaskulär löpbelastning",
+        "summary": "Genomfört: 3 × 8 backintervaller (24 totalt).",
         "unknowns": [
-          "Subjektiv trötthet efter passet under nästa 24–48 h",
-          "Detaljerad lokal muskeltrötthet eller små skador som kan påverka simteknik"
+          "Subjektiv återhämtning natt efter passet (för nästa dags tolerans).",
+          "Detaljer om lokal muskulär trötthet i ben som kan påverka exakt styrkeval."
         ],
         "confidence": "medium",
         "interpretations": [
-          "Passet levererade det planerade backstimuluset och räknas som mekanisk/neuromuskulär belastning för mikrocykeln",
-          "Eftersom simningen redan flyttats till 2026-09-26 måste närbelastningen inför den dagens simpass beaktas (tröskel + backserier inom 72 h)"
+          "Genomfört dos matchar planerat backstyrka/löpekonomi och räknas som gjort i mikrocykeln.",
+          "Fysiska krav är mekanisk/neuromuskulär + kardiovaskulär; planens lördags‑simning ska inte läggas ovanpå idag utan är redan flyttad."
         ],
-        "load_interpretation": "Närbelastningen föregående 2–3 dagar visar tröskel (4×8) + lugn MTB/XC; dagens backserie adderar kort, högaktiverande löpbelastning som kräver konservativ hantering inför…"
+        "load_interpretation": "Passet läggs in i närbelastningen; inga data talar för omedelbar reducering eller vila de kommande 48–72 timmarna."
       },
       "auto_apply": {
         "note": "Ingen automatisk planändring.",
@@ -4170,15 +4170,15 @@
       "activity_id": 20326850936,
       "plan_action": {
         "action": "keep",
-        "reason": "Simningen är redan planerad flyttad till 2026-09-26 som användaren angett och planens nära‑term‑kontext beaktar dagens backserie.",
+        "reason": "Passet genomfördes som planerat för hill‑stimulus och simningen har redan flyttats till 2026-09-26.",
         "target_date": "2026-09-26",
         "dose_option_id": "",
-        "recommendation": "Behåll planerad simning 2026-09-26 men håll den programmerade 4 000 m‑sessionen konservativ: undvik maximal tröskelinsats i tröskelblocket och prioritera teknik; om du känner ovanlig lokal bentrötthet morgonen efter, välj att reducera eller flytta simningen.",
+        "recommendation": "Behåll den planerade simningen 2026-09-26 (4 000 m mall) och genomför som plan; undvik extra benkrävande styrka före söndagens långa löpning.",
         "requires_approval": false
       },
       "activity_date": "2026-09-25",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-09-25T19:39:25.985601+00:00",
+      "generated_at_utc": "2026-09-25T20:03:42.466137+00:00",
       "analysis_contract": {
         "pipeline_version": 3,
         "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
