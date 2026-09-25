@@ -232,6 +232,8 @@ JS = r"""
       restore(initial);
       editor.hidden = false;
       toggle.hidden = true;
+      root.dataset.submitting = 'false';
+      save.disabled = false;
       status.textContent = '';
       text.focus({preventScroll: true});
     };
