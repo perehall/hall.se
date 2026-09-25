@@ -1,12 +1,18 @@
 #!/usr/bin/env python3
+import json
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
 SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
-from apply_activity_directives import apply_directives, ActivityDirectiveError  # noqa: E402
+from apply_activity_directives import (  # noqa: E402
+    ActivityDirectiveError,
+    apply_directives,
+    invalidate_coach_analyses,
+)
 
 
 class ActivityDirectiveTests(unittest.TestCase):
@@ -44,6 +50,43 @@ class ActivityDirectiveTests(unittest.TestCase):
         self.assertEqual(merged["user_report"], "3 × 8 backintervaller.")
         self.assertEqual(merged["training_feedback"], {"text": "Pigg", "rpe": 5})
         self.assertEqual(merged["sport"], "Run")
+
+    def test_changed_directive_ids_are_reported_only_for_real_changes(self):
+        activities = {"activities": [{"id": 7, "sport_type": "Run"}]}
+        overrides = {
+            "schema_version": 1,
+            "overrides": {"7": {"sport": "Run", "classification": "training"}},
+        }
+        config = {
+            "schema_version": 1,
+            "directives": [{
+                "activity_id": "7",
+                "set": {"sport": "Run", "classification": "training"},
+            }],
+        }
+        changed = set()
+        self.assertEqual(apply_directives(activities, overrides, config, changed), (1, 0))
+        self.assertEqual(changed, set())
+
+        config["directives"][0]["set"]["display_label"] = "Löpning · backintervaller"
+        self.assertEqual(apply_directives(activities, overrides, config, changed), (1, 0))
+        self.assertEqual(changed, {"7"})
+
+    def test_stale_coach_analysis_is_removed_for_changed_activity(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            path = Path(temp_dir) / "coach.json"
+            path.write_text(json.dumps({
+                "last_trigger_hash": "old",
+                "analyses": [
+                    {"activity_id": 7, "assessment": {"facts": ["old"]}},
+                    {"activity_id": 8, "assessment": {"facts": ["keep"]}},
+                ],
+            }), encoding="utf-8")
+            removed = invalidate_coach_analyses(path, {"7"})
+            self.assertEqual(removed, 1)
+            coach = json.loads(path.read_text(encoding="utf-8"))
+            self.assertEqual([row["activity_id"] for row in coach["analyses"]], [8])
+            self.assertIsNone(coach["last_trigger_hash"])
 
     def test_missing_historical_activity_is_skipped_without_breaking_pipeline(self):
         activities = {"activities": [{"id": 1, "sport_type": "Run"}]}
