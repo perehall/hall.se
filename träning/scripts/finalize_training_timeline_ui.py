@@ -275,7 +275,11 @@ JS = r'''
     active.classList.add('timeline-active');
     const dow=clean(active.querySelector('.dow')?.textContent);
     const date=compactDate(active.querySelector('.date')?.textContent);
-    const session=clean(active.querySelector('.session')?.textContent);
+    const session=clean(
+      active.querySelector('.future-workout-title-text')?.textContent ||
+      active.querySelector('.session')?.textContent ||
+      active.querySelector('.swim-session-head strong')?.textContent
+    );
     dayLabel.textContent=clean(dow+' '+date);
     sessionLabel.textContent=session||'Planerad träningsdag';
   };

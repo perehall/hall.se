@@ -49,6 +49,7 @@ PIPELINE = (
     "finalize_backend_status_ui.py",
     "finalize_quiet_performance_ui.py",
     "finalize_quiet_performance_v2_ui.py",
+    "finalize_upcoming_workout_shell_ui.py",
     "finalize_completed_day_summary_ui.py",
     "finalize_rest_day_language.py",
     "finalize_training_timeline_ui.py",
