@@ -25,6 +25,15 @@ ENDURO_WORKOUT_NAME_RULE = "workout-explicit-enduro-name-v1"
 ENDURO_EMTB_PROXY_RULE = "emountainbike-user-enduro-proxy-v1"
 ENDURO_RIDE_GEAR_RULE = "ride-explicit-enduro-motorcycle-gear-v1"
 SWIMRUN_NAME_RULE = "trailrun-explicit-swimrun-name-v1"
+FEEDBACK_LABELS = {
+    "fresh": "Pigg",
+    "tired": "Trött",
+    "strong_legs": "Starka ben",
+    "heavy_legs": "Tunga ben",
+    "pain": "Smärta",
+    "could_do_more": "Kunde gjort mer",
+}
+
 COACH_SEMANTIC_FIELDS = (
     "sport_type",
     "display_label",
@@ -192,6 +201,37 @@ def apply_auto_semantics(activity):
     return False
 
 
+def effective_user_report(override):
+    base = str(override.get("user_report") or "").strip()
+    feedback = override.get("training_feedback")
+    if not isinstance(feedback, dict):
+        return base
+
+    parts = []
+    text = str(feedback.get("text") or "").strip()
+    if text:
+        parts.append(text.rstrip())
+    rpe = feedback.get("rpe")
+    if isinstance(rpe, int) and not isinstance(rpe, bool) and 1 <= rpe <= 10:
+        parts.append(f"RPE {rpe}/10.")
+    feelings = [
+        FEEDBACK_LABELS[code]
+        for code in feedback.get("feeling") or []
+        if code in FEEDBACK_LABELS
+    ]
+    if feelings:
+        parts.append("Känsla: " + ", ".join(feelings) + ".")
+    latest = " ".join(parts).strip()
+
+    if not latest:
+        return base
+    if not base:
+        return latest
+    if latest in base:
+        return base
+    return base.rstrip() + " " + latest
+
+
 def apply_override(activity, override, key):
     original = raw_sport(activity)
     expected_raw = override.get("source_sport_type") or ""
@@ -217,8 +257,9 @@ def apply_override(activity, override, key):
     activity.pop("sport_normalization", None)
     if override.get("garmin_activity_type"):
         activity["garmin_activity_type"] = override["garmin_activity_type"]
-    if override.get("user_report"):
-        activity["user_report"] = override["user_report"]
+    user_report = effective_user_report(override)
+    if user_report:
+        activity["user_report"] = user_report
     if override.get("reason"):
         activity["classification_reason"] = override["reason"]
     if "plan_relation" in override:
