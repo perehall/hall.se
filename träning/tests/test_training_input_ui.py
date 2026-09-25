@@ -69,7 +69,7 @@ class TrainingInputUiTests(unittest.TestCase):
         self.assertIn("Mycket lätt", rendered)
         self.assertIn("Kunde gjort mer", rendered)
         self.assertIn("fetch('/träning/training-api/input'", rendered)
-        self.assertIn("NATURAL_LANGUAGE", rendered)
+        self.assertIn("UPDATE_COMPLETED_WORKOUT", rendered)
         self.assertIn("waitForProcessed", rendered)
         self.assertIn("cache: 'no-store'", rendered)
         self.assertIn("window.location.replace", rendered)
@@ -86,6 +86,9 @@ class TrainingInputUiTests(unittest.TestCase):
         self.assertIn("Sparat · analysen uppdateras senare.", rendered)
         self.assertIn("durable: Boolean(durable)", rendered)
         self.assertIn("attempt < 240", rendered)
+        self.assertIn("let feeling = null", rendered)
+        self.assertIn("item === button ? 'true' : 'false'", rendered)
+        self.assertNotIn("const feelings = new Set()", rendered)
 
     def test_current_week_activities_remain_open_for_feedback(self):
         page = """<html><head><style></style></head><body>
