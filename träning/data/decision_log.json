@@ -328,6 +328,14 @@
       "source_hash": "f6a0b629de4d0e2940d64bbb78f94ab0546fbfa5b112c0e022658c342cdd8256",
       "generated_at_utc": "2026-09-25T06:42:45.406929+00:00",
       "summary": "Mikrocykeln följer mesocykelns prioritering (sim + kontrollerad löptröskel) samtidigt som enduro dag 1 respekteras. Två simexponeringar bibehålls (varav en kombinerad med styrka för att uppfylla styrkekravet). Ett tröskelpass progressas konservativt med stöd i senaste 4×8‑evidensen; lång lugn löp placeras separat från tröskeln. Minst en kalenderdag lämnas utan plan; dag 2 är låg benbelastning efter enduro."
+    },
+    {
+      "kind": "microcycle",
+      "decision_id": "2026-W40",
+      "source": "openai_repaired",
+      "source_hash": "7abaa480b46f344c1cc4338e9a16f50157107072576384b9839a2a74e38502fc",
+      "generated_at_utc": "2026-09-25T06:49:09.689186+00:00",
+      "summary": "Reparerar guard-fel genom att flytta enda progressbeslutet till ett direkt primärt simstimulus (swim_aerobic_technique) som stöds av athlete_state; swim_strength ändras till consolidate så att kombinationsreceptet inte progressas som obligatoriskt icke-primärt stimulus. Behåller övriga val (styrka/core, tröskel, MTB) och sparar en vilodag i slutet av veckan. Alla hard_requirements verifierade: två simexponeringar, minst en styrke/core, primära kapaciteter täckta, max run-quality ≤2, dag 1 blockerad, dag 2 låg benbelastning, minst en kalenderdag utan träning, 4–5 slots."
     }
   ]
 }
