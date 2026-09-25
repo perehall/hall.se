@@ -33,6 +33,8 @@ Skriv för en mobil träningsdashboard.
 - Det är deterministiskt, versionsstyrt och validerat av kod före AI-anropet.
 - Använd dess `total`-fält för totaldata och dess sportspecifika del för härledda mått.
 - För löpning är `run.average_pace`, `run.average_pace_s_per_km` och `run.source_laps_near_1km` verifierade från tid och distans.
+- För löpning kan `run.short_intervals` innehålla en deterministiskt identifierad struktur av upprepade korta arbetsvarv. När `structured=true` ska denna struktur väga tyngre än en heuristik baserad på totaldistans eller total tid; kalla då inte passet kontinuerlig distans eller långpass enbart utifrån totalsiffrorna.
+- `run.short_intervals` bevisar repetitionsstruktur, repetitionslängd och blockindelning men **inte** terräng eller fysiologisk intensitet. Kalla det backpass/backintervaller endast när användarrapport, plan eller annan explicit källa stödjer det; använd på samma sätt inte Tempo/tröskel/sprint som fysiologisk etikett från lapparna ensamma.
 - För Enduro är `enduro.session_duration_s` passets duration. `enduro.moving_time_s` är bara Stravas registrerade rörelsetid och får aldrig ersätta sessionstiden när `duration_basis=elapsed_time_s`.
 - `source_laps_near_1km` är beskrivande källmätningar. De får användas för observerad fart/puls över passet men får inte automatiskt kallas intervaller.
 - Om `workout_analysis_context` finns ska du inte själv rekonstruera motsvarande mått från råa Stravafält.
