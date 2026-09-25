@@ -91,6 +91,8 @@ class TrainingInputUiTests(unittest.TestCase):
         self.assertIn("let feeling = null", rendered)
         self.assertIn("item === button ? 'true' : 'false'", rendered)
         self.assertNotIn("const feelings = new Set()", rendered)
+        self.assertIn("save.disabled = false", rendered)
+        self.assertIn("root.dataset.submitting = 'false'", rendered)
 
     def test_current_week_activities_remain_open_for_feedback(self):
         page = """<html><head><style></style></head><body>
