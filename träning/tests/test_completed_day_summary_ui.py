@@ -224,7 +224,7 @@ class CompletedDaySummaryUiTests(unittest.TestCase):
         )
         self.assertEqual(changed, 1)
         self.assertIn(
-            '<strong>Enduro</strong><span> · Inte utvärderat</span>',
+            '<strong>Enduro</strong><span>Inte utvärderat</span>',
             rendered,
         )
         self.assertIn(">Ändra</button>", rendered)
