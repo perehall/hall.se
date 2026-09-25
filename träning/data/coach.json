@@ -8,17 +8,17 @@
           "Användarrapport: 3 × 8 backintervaller (24 × 150 m totalt). Garmin klassade passet som Tempo. Passet genomfördes av praktiska skäl i stället för dagens planerade simning; simningen flyttas till 2026-09-26. Före passet rapporterade Garmin allt grönt och hög träningsberedskap.",
           "Planstatus 2026-09-25: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
-        "summary": "Genomfört: 3 × 8 backintervaller (24 totalt).",
+        "summary": "Genomfört: 3 × 8 backintervaller (24 totalt). Struktur med 24 repetitioner och planerat träningsinnehåll 904 s",
         "unknowns": [
-          "Subjektiv återhämtning natt efter passet (för nästa dags tolerans).",
-          "Detaljer om lokal muskulär trötthet i ben som kan påverka exakt styrkeval."
+          "Subjektiv återhämtning kommande 24–72 h (användarrapport visar grönt innan pass).",
+          "Eventuella lokala muskulära symptom eller ömhet som kan påverka styrke-/långpassplanering."
         ],
         "confidence": "medium",
         "interpretations": [
-          "Genomfört dos matchar planerat backstyrka/löpekonomi och räknas som gjort i mikrocykeln.",
-          "Fysiska krav är mekanisk/neuromuskulär + kardiovaskulär; planens lördags‑simning ska inte läggas ovanpå idag utan är redan flyttad."
+          "Genomförandet bekräftar måluppfyllelse för 'backstyrka/löpekonomi' i mikrocykeln och räknas som veckans benbelastande kvalitetspass.",
+          "Eftersom simningen redan flyttats i planen påverkar inte detta extra daglig dos—simningen är planerad 2026-09-26 och ska inte läggas ovanpå dagens pass."
         ],
-        "load_interpretation": "Passet läggs in i närbelastningen; inga data talar för omedelbar reducering eller vila de kommande 48–72 timmarna."
+        "load_interpretation": "Passet ger mekanisk, neuromuskulär och kardiovaskulär löpbelastning som räknas in i närbelastningen de närmaste 2–3 dagarna."
       },
       "auto_apply": {
         "note": "Ingen automatisk planändring.",
@@ -27,15 +27,15 @@
       "activity_id": 20326850936,
       "plan_action": {
         "action": "keep",
-        "reason": "Passet genomfördes som planerat för hill‑stimulus och simningen har redan flyttats till 2026-09-26.",
-        "target_date": "2026-09-26",
+        "reason": "Passet matchar användarens och planens avsikt (3×8×150 m) och simningen är redan flyttad till 2026-09-26.",
+        "target_date": "",
         "dose_option_id": "",
-        "recommendation": "Behåll den planerade simningen 2026-09-26 (4 000 m mall) och genomför som plan; undvik extra benkrävande styrka före söndagens långa löpning.",
+        "recommendation": "Behåll resterande mikrocykel som planerat; genomför simning 2026-09-26 enligt vald 4 000 m‑mall. Observera subjektiv återhämtning och justera styrke-/långpass om lokal trötthet uppstår.",
         "requires_approval": false
       },
       "activity_date": "2026-09-25",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-09-25T20:03:42.466137+00:00",
+      "generated_at_utc": "2026-09-25T20:15:38.793419+00:00",
       "analysis_contract": {
         "pipeline_version": 3,
         "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
@@ -1287,9 +1287,9 @@
       "generated_at_utc": "2026-08-28T01:05:04.449248+00:00"
     }
   ],
-  "last_run_utc": "2026-09-25T20:03:42.466137+00:00",
+  "last_run_utc": "2026-09-25T20:15:38.793419+00:00",
   "contract_version": 15,
-  "last_trigger_hash": "b24d78e50b922aaff19cdb158219b7bc7b3737b678ec6469bf3c3dfa0bfd109f",
+  "last_trigger_hash": "e567728b1f3bf3557829df9150884da9a56d790d281f67605f1515000d9535e4",
   "output_contract_version": 19,
   "pipeline_contract_version": 3
 }
