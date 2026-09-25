@@ -74,7 +74,13 @@ class TrainingInputUiTests(unittest.TestCase):
         self.assertIn("cache: 'no-store'", rendered)
         self.assertIn("window.location.replace", rendered)
         self.assertIn("Uppdaterar analys…", rendered)
-        self.assertIn("processedKeys.includes(eventKey)", rendered)
+        self.assertIn("freshProcessedKeys.includes(eventKey)", rendered)
+        self.assertIn("training-input-pending-v1:", rendered)
+        self.assertIn("localStorage.setItem", rendered)
+        self.assertIn("localStorage.removeItem", rendered)
+        self.assertIn("Mottaget · bearbetas", rendered)
+        self.assertIn("Mottaget · väntar på publicering.", rendered)
+        self.assertIn("attempt < 240", rendered)
 
     def test_current_week_activities_remain_open_for_feedback(self):
         page = """<html><head><style></style></head><body>
