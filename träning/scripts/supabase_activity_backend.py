@@ -33,6 +33,15 @@ DATA = ROOT / "data"
 ACTIVITIES_FILE = DATA / "activities.json"
 OVERRIDES_FILE = DATA / "activity_overrides.json"
 
+FEELING_LABELS = {
+    "fresh": "Pigg",
+    "tired": "Trött",
+    "strong_legs": "Starka ben",
+    "heavy_legs": "Tunga ben",
+    "pain": "Smärta",
+    "could_do_more": "Kunde gjort mer",
+}
+
 
 def database_url(env: dict[str, str] | None = None) -> str:
     environment = env if env is not None else os.environ
@@ -483,7 +492,162 @@ def promote_snapshot(
             conn.commit()
 
 
-def _documents_from_relational_cursor(cur: Any) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
+def _feedback_report(feedback: dict[str, Any]) -> str:
+    parts: list[str] = []
+    text = str(feedback.get("text") or "").strip()
+    if text:
+        parts.append(text.rstrip())
+    rpe = feedback.get("rpe")
+    if isinstance(rpe, int) and not isinstance(rpe, bool):
+        parts.append(f"RPE {rpe}/10.")
+    feelings = [
+        FEELING_LABELS[code]
+        for code in feedback.get("feeling") or []
+        if code in FEELING_LABELS
+    ]
+    if feelings:
+        parts.append("Känsla: " + ", ".join(feelings) + ".")
+    return " ".join(parts).strip()
+
+
+def _iso_timestamp(value: Any) -> str:
+    if value is None:
+        return ""
+    isoformat = getattr(value, "isoformat", None)
+    if callable(isoformat):
+        return isoformat()
+    return str(value)
+
+
+def overlay_feedback_document(
+    activities: dict[str, Any],
+    overrides: dict[str, Any],
+    feedback_rows: list[dict[str, Any]],
+) -> dict[str, Any]:
+    """Overlay append-only DB feedback onto the current override projection.
+
+    This deliberately happens after the persisted state-document hash has been
+    verified. activity_feedback is a newer append-only authority and may contain
+    input accepted by the Worker after the last generated JSON snapshot.
+    """
+    result = deepcopy(overrides)
+    mapping = result.setdefault("overrides", {})
+    activities_by_id = {
+        str(row.get("id")): row
+        for row in activities.get("activities") or []
+        if row.get("id") is not None
+    }
+
+    grouped: dict[str, list[dict[str, Any]]] = {}
+    for source in feedback_rows:
+        source_id = str(source.get("provider_activity_id") or "").strip()
+        event_key = str(source.get("event_key") or "").strip()
+        if not source_id or not event_key.startswith("training-input:"):
+            continue
+        grouped.setdefault(source_id, []).append(source)
+
+    for source_id, rows in grouped.items():
+        activity = activities_by_id.get(source_id)
+        if activity is None:
+            continue
+        rows = sorted(
+            rows,
+            key=lambda row: (
+                str(row.get("submitted_at") or ""),
+                str(row.get("created_at") or ""),
+                str(row.get("event_key") or ""),
+            ),
+        )
+        latest = rows[-1]
+        current = deepcopy(mapping.get(source_id) or {})
+        effective_sport = (
+            str(current.get("sport") or "").strip()
+            or str(activity.get("sport_type") or "").strip()
+        )
+        source_sport = (
+            str(current.get("source_sport_type") or "").strip()
+            or str(activity.get("source_sport_type") or "").strip()
+            or effective_sport
+        )
+        if not effective_sport:
+            raise RuntimeError(
+                f"Feedback overlay cannot infer sport for activity {source_id}"
+            )
+
+        current.setdefault("sport", effective_sport)
+        current.setdefault("classification", activity.get("classification") or "training")
+        current.setdefault("display_label", activity.get("display_label") or effective_sport)
+        current.setdefault("source_sport_type", source_sport)
+        current.setdefault(
+            "reason",
+            "Direkt användarfeedback är beständig förstaklassdata från Supabase.",
+        )
+
+        structured = {
+            "text": str(latest.get("feedback_text") or ""),
+            "rpe": latest.get("rpe"),
+            "feeling": list(latest.get("feeling") or []),
+            "operation": latest.get("operation"),
+            "event_key": str(latest.get("event_key") or ""),
+            "submitted_at": _iso_timestamp(latest.get("submitted_at")),
+        }
+        current["training_feedback"] = structured
+        event_keys = [
+            str(row.get("event_key"))
+            for row in rows
+            if str(row.get("event_key") or "").startswith("training-input:")
+        ][-8:]
+        current["training_input_event_keys"] = event_keys
+        current["last_training_input_event_key"] = structured["event_key"]
+        mapping[source_id] = current
+
+    return result
+
+
+def _feedback_rows_from_cursor(cur: Any) -> list[dict[str, Any]]:
+    cur.execute(
+        """
+        select
+          a.provider_activity_id,
+          f.operation,
+          f.feedback_text,
+          f.rpe,
+          f.feeling,
+          f.event_key,
+          f.submitted_at,
+          f.created_at
+        from training.activity_feedback f
+        join training.activities a on a.id = f.activity_id
+        where a.provider = 'strava'
+          and a.is_current
+          and f.event_key like 'training-input:%'
+        order by
+          a.provider_activity_id,
+          coalesce(f.submitted_at, f.created_at),
+          f.created_at,
+          f.event_key
+        """
+    )
+    return [
+        {
+            "provider_activity_id": str(row[0]),
+            "operation": row[1],
+            "feedback_text": row[2],
+            "rpe": row[3],
+            "feeling": list(row[4] or []),
+            "event_key": row[5],
+            "submitted_at": _iso_timestamp(row[6]),
+            "created_at": _iso_timestamp(row[7]),
+        }
+        for row in cur.fetchall()
+    ]
+
+
+def _documents_from_relational_cursor(
+    cur: Any,
+    *,
+    include_feedback_overlay: bool = True,
+) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
     cur.execute(
         """
         select document_key, source_hash, payload
@@ -596,11 +760,28 @@ def _documents_from_relational_cursor(cur: Any) -> tuple[dict[str, Any], dict[st
             + (f"; first_difference={difference}" if difference else "")
         )
 
+    feedback_overlay_count = 0
+    if include_feedback_overlay:
+        feedback_rows = _feedback_rows_from_cursor(cur)
+        rebuilt_overrides = overlay_feedback_document(
+            rebuilt_activities,
+            rebuilt_overrides,
+            feedback_rows,
+        )
+        feedback_overlay_count = len(
+            {
+                str(row.get("provider_activity_id"))
+                for row in feedback_rows
+                if str(row.get("event_key") or "").startswith("training-input:")
+            }
+        )
+
     return rebuilt_activities, rebuilt_overrides, {
         "source": "supabase_db",
         "verified": True,
         "activities_hash": documents["activities"]["source_hash"],
         "overrides_hash": documents["activity_overrides"]["source_hash"],
+        "feedback_overlay_count": feedback_overlay_count,
     }
 
 
@@ -608,6 +789,7 @@ def read_backend_documents(
     *,
     connection_factory: Callable[..., Any] | None = None,
     env: dict[str, str] | None = None,
+    include_feedback_overlay: bool = True,
 ) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
     psycopg, _sql, _Jsonb = _driver()
     connect = connection_factory or psycopg.connect
@@ -618,7 +800,10 @@ def read_backend_documents(
     ) as conn:
         with conn.cursor() as cur:
             cur.execute("set transaction read only")
-            activities, overrides, metadata = _documents_from_relational_cursor(cur)
+            activities, overrides, metadata = _documents_from_relational_cursor(
+                cur,
+                include_feedback_overlay=include_feedback_overlay,
+            )
             conn.rollback()
     return activities, overrides, metadata
 
@@ -656,20 +841,30 @@ def promote_and_materialize(
         connection_factory=connection_factory,
         env=env,
     )
-    activities, overrides, metadata = read_backend_documents(
+    verified_activities, verified_overrides, metadata = read_backend_documents(
         connection_factory=connection_factory,
         env=env,
+        include_feedback_overlay=False,
     )
 
-    if canonical_hash(activities) != canonical_hash(snapshot["activities_document"]):
+    if canonical_hash(verified_activities) != canonical_hash(snapshot["activities_document"]):
         raise RuntimeError("Independent backend activity readback differs from ingest snapshot")
-    if canonical_hash(overrides) != canonical_hash(snapshot["overrides_document"]):
+    if canonical_hash(verified_overrides) != canonical_hash(snapshot["overrides_document"]):
         raise RuntimeError("Independent backend override readback differs from ingest snapshot")
 
+    # A Worker may have appended feedback after this snapshot was built. Re-read
+    # the effective projection so the compatibility cache cannot overwrite or
+    # hide that newer durable input.
+    activities, overrides, effective_metadata = read_backend_documents(
+        connection_factory=connection_factory,
+        env=env,
+        include_feedback_overlay=True,
+    )
     write_json(data_dir / "activities.json", activities)
     write_json(data_dir / "activity_overrides.json", overrides)
     return {
         **metadata,
+        **effective_metadata,
         "source_hash": snapshot["source_hash"],
         "counts": snapshot["counts"],
     }
@@ -679,7 +874,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--mode",
-        choices=("promote", "readback"),
+        choices=("promote", "readback", "hydrate"),
         default="promote",
     )
     args = parser.parse_args(argv)
@@ -710,10 +905,21 @@ def main(argv: list[str] | None = None) -> int:
 
     try:
         activities, overrides, result = read_backend_documents()
+        if args.mode == "hydrate":
+            write_json(ACTIVITIES_FILE, activities)
+            write_json(OVERRIDES_FILE, overrides)
+            print(
+                "SUPABASE_ACTIVITY_HYDRATE_OK "
+                f"source={result['source']} activities={len(activities.get('activities') or [])} "
+                f"overrides={len(overrides.get('overrides') or {})} "
+                f"feedback_overlay={result.get('feedback_overlay_count', 0)}"
+            )
+            return 0
         print(
             "SUPABASE_ACTIVITY_READBACK_OK "
             f"source={result['source']} activities={len(activities.get('activities') or [])} "
-            f"overrides={len(overrides.get('overrides') or {})}"
+            f"overrides={len(overrides.get('overrides') or {})} "
+            f"feedback_overlay={result.get('feedback_overlay_count', 0)}"
         )
     except Exception as exc:
         print(
