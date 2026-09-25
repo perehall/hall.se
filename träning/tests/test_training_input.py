@@ -35,7 +35,7 @@ class TrainingInputTests(unittest.TestCase):
                 "activity_id": 123,
                 "text": "",
                 "rpe": 6,
-                "feeling": ["fresh", "could_do_more"],
+                "feeling": ["fresh"],
                 "event_key": "training-input:0123456789abcdef01234567",
             },
             self.activities(),
@@ -46,7 +46,6 @@ class TrainingInputTests(unittest.TestCase):
         report = override["user_report"]
         self.assertIn("RPE 6/10", report)
         self.assertIn("Pigg", report)
-        self.assertIn("Kunde gjort mer", report)
         self.assertEqual(override["sport"], "Run")
         self.assertEqual(override["classification"], "training")
         self.assertEqual(override["source_sport_type"], "Run")
@@ -63,7 +62,7 @@ class TrainingInputTests(unittest.TestCase):
             {
                 "text": "",
                 "rpe": 6,
-                "feeling": ["fresh", "could_do_more"],
+                "feeling": ["fresh"],
                 "operation": "ADD_FEEDBACK",
                 "event_key": "training-input:0123456789abcdef01234567",
                 "submitted_at": "",
@@ -269,6 +268,18 @@ class TrainingInputTests(unittest.TestCase):
             deterministic_operation({"text": "Blev 4x8 i stället för 3x10", "feeling": []}),
             "UPDATE_COMPLETED_WORKOUT",
         )
+
+    def test_payload_rejects_multiple_feelings(self):
+        with self.assertRaisesRegex(RuntimeError, "högst ett värde"):
+            validate_payload(
+                {
+                    "operation": "ADD_FEEDBACK",
+                    "activity_id": 123,
+                    "text": "",
+                    "rpe": 6,
+                    "feeling": ["fresh", "could_do_more"],
+                }
+            )
 
     def test_payload_rejects_malformed_event_key(self):
         with self.assertRaises(RuntimeError):
