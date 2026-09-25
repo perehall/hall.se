@@ -329,4 +329,5 @@ test("Wrangler keeps workers.dev enabled for the registered Strava callback", ()
   const config = readFileSync(new URL("../wrangler.jsonc", import.meta.url), "utf8");
   assert.match(config, /"workers_dev"\s*:\s*true/);
   assert.match(config, /"name"\s*:\s*"hall-se"/);
+  assert.match(config, /"SUPABASE_PROJECT_URL"\s*:\s*"https:\/\/izzevnhgtsvffpkccoai\.supabase\.co"/);
 });
