@@ -7,17 +7,17 @@
           "MTB/XC: 19,04 km · 1:22:56 · 207 m+ · snittpuls 126,4 · maxpuls 149.",
           "Användarrapport: Cirka 80 min lugn stig-MTB. Dagen var planerad som vilodag."
         ],
-        "summary": "Spontant lugnt stig‑MTB-pass (~80 min, 19.0 km, snittpuls 126) genomfört på planerad vilodag; registreras som separat belastning.",
+        "summary": "Spontant lugnt stig‑MTB/XC på vilodag (≈19.0 km, 78 min, avgHR 126) genomfört — låg mekanisk/neuromuskulär observation men räknas som faktisk belastning.",
         "unknowns": [
-          "Subjektiv återhämtning nästa 24–72 h (användarrapport var samma dag endast)",
-          "Eventuella lokala muskelsmärtor eller småskador efter stigkörning som kan påverka löpning"
+          "Subjektiv återhämtning nästa 24–72 h (användarrapport endast för genomförandedagen)",
+          "Eventuella lokala muskelbesvär eller ömhet efter MTB/XC som kan påverka styrka/löpning"
         ],
         "confidence": "medium",
         "interpretations": [
-          "Passet bryter vilodagen men var subjektivt lugnt och pulsmässigt måttligt, så det utgör främst underhåll/aktiv återhämtning för benen.",
-          "Givet mikrocykelns prioriteringar påverkar detta främst den närbelastning som planerar söndagens långa lugna löpning; sim‑ och tröskelplaner står kvar."
+          "Aktiviteten var ett låg‑ till måttligt krävande MTB/XC‑pass som ersätter vilodagen och bidrar mekanisk + kardiovaskulär belastning i mikrocykeln.",
+          "Eftersom löp- och sim‑nyckelpass finns i närtid bör kommande benbelastande pass beaktas och inte ökas utan ny bedömning."
         ],
-        "load_interpretation": "Passet ger en kardiovaskulär exponering och mekanisk/neuromuskulär kostnad jämfört med planerade utvecklingsstimuli."
+        "load_interpretation": "Passet ökar närbelastningen i de senaste 2–3 dagarna; det är inte ett högintensivt jobb men ska räknas mot kommande benbelastning."
       },
       "auto_apply": {
         "note": "Ingen automatisk planändring.",
@@ -26,15 +26,15 @@
       "activity_id": 20314473143,
       "plan_action": {
         "action": "keep",
-        "reason": "Passet var lugnt, kardiovaskulär exponering och mikrocykelns sim‑ och tröskelstimuli bör skyddas.",
-        "target_date": "2026-09-25",
+        "reason": "Passet tolererades som lugnt och ger inget tydligt skäl att automatiskt reducera eller vila de kommande 2–3 dagarna.",
+        "target_date": "",
         "dose_option_id": "",
-        "recommendation": "Behåll fredagens planerade simning 4 000 m enligt mikrocykel; utför planerad träning som planerat. Om du känner atypisk lokal trötthet eller smärta imorgon, avboka eller reducera simningen och avisera coachen.",
+        "recommendation": "Behåll planerade pass; undvik att öka benkvalitet eller lägga till extra hårda löp/ben‑styrkepass inom 48 timmar. Rapportera om lokal stelhet eller trötthet så omprövar vi.",
         "requires_approval": false
       },
       "activity_date": "2026-09-24",
       "activity_name": "Evening Mountain Bike Ride",
-      "generated_at_utc": "2026-09-25T00:30:00.632799+00:00",
+      "generated_at_utc": "2026-09-25T05:00:15.211611+00:00",
       "analysis_contract": {
         "pipeline_version": 3,
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
@@ -1277,9 +1277,9 @@
       "generated_at_utc": "2026-08-27T13:22:06.233402+00:00"
     }
   ],
-  "last_run_utc": "2026-09-25T00:30:00.632799+00:00",
+  "last_run_utc": "2026-09-25T05:00:15.211611+00:00",
   "contract_version": 15,
-  "last_trigger_hash": "6e081f98c9ee82e5b723a28efe788c37360ce670d32fa5c7465d195415abce85",
+  "last_trigger_hash": "4bb975c908ba61dc9312ca135d4053478b68ceb0e5bad998cb92610cb35520f5",
   "output_contract_version": 19,
   "pipeline_contract_version": 3
 }
