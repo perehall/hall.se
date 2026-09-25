@@ -367,7 +367,10 @@ def apply_shell(
 
         shell = render_shell(day, block, registry)
         new_block = opening + block[opening_end:]
-        insert_at = len(opening) + len(daytop)
+        daytop_pos = new_block.find(daytop, len(opening))
+        if daytop_pos < 0:
+            raise RuntimeError(f"Future workout shell: daytop kunde inte placeras för {day_date}")
+        insert_at = daytop_pos + len(daytop)
         new_block = new_block[:insert_at] + shell + new_block[insert_at:]
 
         page = page[:start] + new_block + page[end:]
