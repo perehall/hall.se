@@ -4,7 +4,7 @@
 The generated header/navigation/training-brain/week-focus components are useful
 upstream inputs, but the final current page should expose only one hierarchy:
 
-  orientation -> today -> week focus -> current week
+  orientation -> today -> current week context
 
 The full workout prescription remains exclusively in "Aktuell vecka".
 """
@@ -212,29 +212,39 @@ body.quiet-performance.qp-current .top-details-body{
 }
 body.quiet-performance.qp-current .top-details-body p{margin:0}
 body.quiet-performance.qp-current .top-details-body p+p{margin-top:8px}
-body.quiet-performance.qp-current .top-week-focus{
-  margin-top:15px;
-  padding:13px 3px 0;
+body.quiet-performance.qp-current .current-week-header{
+  margin-top:42px;
+  padding:0 2px 2px;
 }
-body.quiet-performance.qp-current .top-focus-title{
+body.quiet-performance.qp-current .current-week-header .section{
+  margin:0;
+  font-size:1.24rem;
+  letter-spacing:-.018em;
+}
+body.quiet-performance.qp-current .current-week-focus{
   display:block;
-  margin-top:4px;
+  margin-top:6px;
   font-size:.94rem;
   font-weight:670;
   line-height:1.4;
   letter-spacing:-.008em;
 }
-body.quiet-performance.qp-current .top-focus-meta{
+body.quiet-performance.qp-current .current-week-meta{
   margin-top:4px;
   color:var(--qp-tertiary,#64748b);
   font-size:.72rem;
+  line-height:1.4;
 }
-body.quiet-performance.qp-current .top-week-focus .top-details{margin-top:9px}
-body.quiet-performance.qp-current .top-overview + .section{
-  margin-top:42px;
-  margin-bottom:7px;
-  font-size:1.24rem;
-  letter-spacing:-.018em;
+body.quiet-performance.qp-current .current-week-header .top-details{margin-top:8px}
+body.quiet-performance.qp-current .current-week-header + .week-status-expander{
+  margin-top:2px;
+  margin-bottom:20px;
+}
+body.quiet-performance.qp-current .current-week-header + .week-status-expander>summary{
+  color:var(--qp-tertiary,#64748b);
+  font-size:.7rem;
+  font-weight:620;
+  padding:3px 0;
 }
 @media(max-width:620px){
   body.quiet-performance.qp-current .top-week-nav{gap:8px}
@@ -246,7 +256,7 @@ body.quiet-performance.qp-current .top-overview + .section{
   body.quiet-performance.qp-current .top-today{margin-top:15px;padding:16px 15px 15px;border-radius:16px}
   body.quiet-performance.qp-current .top-today-title{font-size:1.16rem}
   body.quiet-performance.qp-current .top-today-meta{margin-left:29px;font-size:.76rem}
-  body.quiet-performance.qp-current .top-week-focus{margin-top:12px;padding:12px 2px 0}
+  body.quiet-performance.qp-current .current-week-header{margin-top:34px;padding:0 1px 2px}
 }
 """.strip()
 
@@ -537,21 +547,6 @@ def build_top(
             f'<strong>{html.escape(next_value)}</strong></div>'
         )
 
-    focus = focus_title(meta)
-    micro_index = meta.get("microcycle_index")
-    micro_total = meta.get("microcycle_total")
-    focus_meta_bits = [block_label(meta)]
-    if micro_index and micro_total:
-        focus_meta_bits.append(f"mikrocykel {micro_index} av {micro_total}")
-    focus_meta_text = " · ".join(focus_meta_bits)
-    details_body = focus_details(meta, strategy)
-    focus_details_html = ""
-    if details_body:
-        focus_details_html = (
-            '<details class="top-details"><summary>Planidé</summary>'
-            f'<div class="top-details-body">{details_body}</div></details>'
-        )
-
     today_meta_html = (
         f'<div class="top-today-meta">{html.escape(today_meta)}</div>'
         if today_meta
@@ -580,13 +575,57 @@ def build_top(
         + next_html_row
         + today_details
         + '</section>'
-        '<section class="top-week-focus" aria-label="Veckofokus">'
-        '<span class="top-kicker">Veckofokus</span>'
-        f'<strong class="top-focus-title">{html.escape(focus)}</strong>'
-        f'<div class="top-focus-meta">{html.escape(focus_meta_text)}</div>'
-        + focus_details_html
-        + '</section>'
         '</section>'
+    )
+
+
+def week_status_summary(page: str) -> str:
+    match = re.search(
+        r'<details class="week-status-expander"><summary>(.*?)</summary>',
+        page,
+        re.S | re.I,
+    )
+    return strip_tags(match.group(1)) if match else ""
+
+
+def build_current_week_header(plan: dict, strategy: dict, page: str) -> str:
+    meta = plan.get("meta") or {}
+    focus = focus_title(meta)
+    micro_index = meta.get("microcycle_index")
+    micro_total = meta.get("microcycle_total")
+
+    meta_bits = [block_label(meta)]
+    if micro_index and micro_total:
+        meta_bits.append(f"mikrocykel {micro_index} av {micro_total}")
+    status = week_status_summary(page)
+    if status:
+        meta_bits.append(status)
+
+    details_body = focus_details(meta, strategy)
+    details = ""
+    if details_body:
+        details = (
+            '<details class="top-details current-week-plan"><summary>Planidé</summary>'
+            f'<div class="top-details-body">{details_body}</div></details>'
+        )
+
+    return (
+        '<section class="current-week-header" aria-label="Aktuell veckas fokus">'
+        + CURRENT_WEEK_HEADING
+        + f'<strong class="current-week-focus">{html.escape(focus)}</strong>'
+        + f'<div class="current-week-meta">{html.escape(" · ".join(meta_bits))}</div>'
+        + details
+        + '</section>'
+    )
+
+
+def normalize_week_status_action(week_region: str) -> str:
+    return re.sub(
+        r'(<details class="week-status-expander"><summary>).*?(</summary>)',
+        r'\1Veckostatus\2',
+        week_region,
+        count=1,
+        flags=re.S | re.I,
     )
 
 
@@ -627,7 +666,10 @@ def apply_top_overview(
         registry,
         today=today,
     )
-    rendered = page[:header_start] + replacement + "\n\n" + page[week_start:]
+    current_week_header = build_current_week_header(plan, strategy, week_region)
+    week_region = normalize_week_status_action(week_region)
+    week_region = week_region.replace(CURRENT_WEEK_HEADING, current_week_header, 1)
+    rendered = page[:header_start] + replacement + "\n\n" + week_region
     return add_css(rendered)
 
 
@@ -637,7 +679,9 @@ def validate_page(page: str) -> None:
         'class="top-overview"',
         'class="top-week-nav"',
         'class="top-today"',
-        'class="top-week-focus"',
+        'class="current-week-header"',
+        'class="current-week-focus"',
+        'class="current-week-meta"',
         CURRENT_WEEK_HEADING,
         ">Plan och motivering</summary>",
         ">Planidé</summary>",
@@ -660,8 +704,13 @@ def validate_page(page: str) -> None:
     if present:
         raise RuntimeError(f"Crisp top: gamla parallella topplager finns kvar: {present!r}")
 
+    if 'class="top-week-focus"' in page:
+        raise RuntimeError("Crisp top: Veckofokus får inte ligga som ett eget topplager.")
+
     if page.count('class="top-overview"') != 1:
         raise RuntimeError("Crisp top: top-overview måste finnas exakt en gång.")
+    if page.count('class="current-week-header"') != 1:
+        raise RuntimeError("Crisp top: current-week-header måste finnas exakt en gång.")
 
 
 def main() -> int:
@@ -683,7 +732,7 @@ def main() -> int:
     )
     validate_page(rendered)
     INDEX_FILE.write_text(rendered, encoding="utf-8")
-    print("Crisp top OK: orientering, Idag och veckofokus använder en gemensam topphierarki.")
+    print("Crisp top OK: toppen visar orientering + Idag; veckofokus ligger i Aktuell vecka.")
     return 0
 
 
