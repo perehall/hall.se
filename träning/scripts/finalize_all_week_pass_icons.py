@@ -162,6 +162,7 @@ def visible_target_has_icon(block: str) -> bool:
     targets = (
         r'<div class="completed-day-title">(.*?)</div>',
         r'<div class="future-workout-title">(.*?)</div>',
+        r'<div class="swim-session-head">.*?<strong[^>]*>(.*?)</strong>',
         r'<div class="session(?: [^"]*)?">(.*?)</div>',
     )
     for pattern in targets:
@@ -169,6 +170,49 @@ def visible_target_has_icon(block: str) -> bool:
         if match:
             return 'class="sport-icon ' in match.group(1)
     return False
+
+
+def decorate_swim_session(block: str, keys: list[str], registry: dict) -> str:
+    head = re.search(
+        r'<div class="swim-session-head">(?P<body>.*?)</div>',
+        block,
+        re.S | re.I,
+    )
+    if not head:
+        return block
+
+    head_body = head.group("body")
+    strong = re.search(
+        r'<strong(?P<attrs>[^>]*)>(?P<body>.*?)</strong>',
+        head_body,
+        re.S | re.I,
+    )
+    if not strong or 'class="sport-icon ' in strong.group("body"):
+        return block
+
+    attrs = strong.group("attrs")
+    class_match = re.search(r'class="([^"]*)"', attrs, re.I)
+    classes = class_match.group(1).split() if class_match else []
+    for token in ("session-with-icon", "week-pass-session"):
+        if token not in classes:
+            classes.append(token)
+    if class_match:
+        attrs = (
+            attrs[:class_match.start()]
+            + f'class="{html.escape(" ".join(classes))}"'
+            + attrs[class_match.end():]
+        )
+    else:
+        attrs = f' class="{html.escape(" ".join(classes))}"' + attrs
+
+    replacement = (
+        f'<strong{attrs}>'
+        + render_icon_group(keys, registry)
+        + f'<span class="week-pass-session-text">{strong.group("body")}</span></strong>'
+    )
+    new_head_body = head_body[:strong.start()] + replacement + head_body[strong.end():]
+    new_head = '<div class="swim-session-head">' + new_head_body + '</div>'
+    return block[:head.start()] + new_head + block[head.end():]
 
 
 def decorate_raw_session(block: str, keys: list[str], registry: dict) -> str:
@@ -202,7 +246,13 @@ def decorate_visible_title(block: str, keys: list[str], registry: dict) -> str:
     if visible_target_has_icon(block):
         return block
 
-    # History and the standalone upcoming-week preview use a plain .session.
+    # Older archived swim cards use swim-workout/swim-session-head rather
+    # than the generic session row.
+    decorated = decorate_swim_session(block, keys, registry)
+    if decorated != block:
+        return decorated
+
+    # History and the standalone upcoming-week preview otherwise use .session.
     decorated = decorate_raw_session(block, keys, registry)
     if decorated != block:
         return decorated
