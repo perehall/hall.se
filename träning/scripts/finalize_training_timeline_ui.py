@@ -83,7 +83,7 @@ body.quiet-performance.qp-current .week-timeline>.day.workout-card-v2.card-v2-to
   border-radius:0!important;
   background:transparent!important;
   box-shadow:none!important;
-  scroll-margin-top:54px;
+  scroll-margin-top:22px;
 }
 body.quiet-performance.qp-current .week-timeline>.day+.day{
   border-top:1px solid var(--qp-line-soft)!important;
@@ -103,7 +103,7 @@ body.quiet-performance.qp-current .week-timeline>.day:last-of-type::before{botto
 
 body.quiet-performance.qp-current .week-timeline>.day>.daytop{
   position:sticky;
-  top:50px;
+  top:10px;
   z-index:3;
   grid-column:1;
   grid-row:1;
@@ -234,10 +234,10 @@ body.quiet-performance.qp-current .week-timeline .feedback-loop{
     grid-template-columns:72px minmax(0,1fr);
     column-gap:12px;
     padding:20px 0 24px!important;
-    scroll-margin-top:50px;
+    scroll-margin-top:20px;
   }
   body.quiet-performance.qp-current .week-timeline>.day::before{left:64px}
-  body.quiet-performance.qp-current .week-timeline>.day>.daytop{top:47px;padding-right:15px}
+  body.quiet-performance.qp-current .week-timeline>.day>.daytop{top:8px;padding-right:15px}
   body.quiet-performance.qp-current .week-timeline>.day>.daytop::after{right:4px}
   body.quiet-performance.qp-current .week-timeline>.day>.daytop .dow{font-size:.64rem}
   body.quiet-performance.qp-current .week-timeline>.day>.daytop .date{font-size:.61rem}
@@ -349,13 +349,7 @@ def wrap_current_week(page: str) -> str:
     if has_start:
         return page
     start, end = current_day_span(page)
-    context = (
-        '<section class="week-timeline" aria-label="Aktuell veckas pass">'
-        '<div class="timeline-scroll-context" aria-hidden="true">'
-        '<span class="timeline-context-day">Aktuell vecka</span>'
-        '<span class="timeline-context-session">Träningsplan</span>'
-        '</div>'
-    )
+    context = '<section class="week-timeline" aria-label="Aktuell veckas pass">'
     return page[:start] + WRAP_START + "\n" + context + "\n" + page[start:end] + "\n</section>\n" + WRAP_END + page[end:]
 
 
@@ -401,8 +395,7 @@ def apply_timeline(page: str) -> str:
         if "qp-current" not in page or "quiet-performance" not in page:
             raise RuntimeError("Training timeline: Quiet Performance current-page-klasser saknas")
     page = wrap_current_week(page)
-    page = add_css(page)
-    return add_js(page)
+    return add_css(page)
 
 
 def validate_page(page: str) -> None:
@@ -411,23 +404,19 @@ def validate_page(page: str) -> None:
         WRAP_END,
         CSS_START,
         CSS_END,
-        JS_START,
-        JS_END,
         'class="week-timeline"',
-        'class="timeline-scroll-context"',
         "position:sticky;",
         "grid-template-columns:92px minmax(0,1fr)",
         "background:transparent!important;",
         "border-radius:0!important;",
         "box-shadow:none!important;",
-        "timeline-active",
         ".daytop .day-date-line",
         ".day.completed-day .workout-prescription{display:none!important}",
     ]
     missing = [value for value in required if value not in page]
     if missing:
         raise RuntimeError(f"Training timeline: saknar {missing!r}")
-    for start, end in ((WRAP_START, WRAP_END), (CSS_START, CSS_END), (JS_START, JS_END)):
+    for start, end in ((WRAP_START, WRAP_END), (CSS_START, CSS_END)):
         if page.count(start) != 1 or page.count(end) != 1:
             raise RuntimeError(f"Training timeline: duplicerad marker {start}")
     wrapper_start = page.find(WRAP_START)
