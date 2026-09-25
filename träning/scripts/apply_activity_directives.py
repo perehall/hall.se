@@ -21,6 +21,7 @@ DATA = ROOT / "data"
 ACTIVITIES_FILE = DATA / "activities.json"
 OVERRIDES_FILE = DATA / "activity_overrides.json"
 DIRECTIVES_FILE = DATA / "activity_directives.json"
+COACH_FILE = DATA / "coach.json"
 
 
 class ActivityDirectiveError(RuntimeError):
@@ -38,7 +39,7 @@ def load_json(path: Path, fallback: dict | None = None) -> dict:
     return value
 
 
-def apply_directives(activities: dict, overrides: dict, config: dict) -> tuple[int, int]:
+def apply_directives(activities: dict, overrides: dict, config: dict, changed_ids: set[str] | None = None) -> tuple[int, int]:
     if config.get("schema_version") != 1:
         raise ActivityDirectiveError("activity directives: schema_version måste vara 1")
     directives = config.get("directives")
@@ -87,10 +88,34 @@ def apply_directives(activities: dict, overrides: dict, config: dict) -> tuple[i
         for field in remove_fields:
             current.pop(field, None)
         current.update(deepcopy(set_values))
+        previous = mapping.get(activity_id) or {}
         mapping[activity_id] = current
+        if changed_ids is not None and previous != current:
+            changed_ids.add(activity_id)
         applied += 1
 
     return applied, skipped
+
+
+def invalidate_coach_analyses(path: Path, changed_ids: set[str]) -> int:
+    if not changed_ids or not path.exists():
+        return 0
+    coach = load_json(path, {"analyses": []})
+    analyses = coach.get("analyses") or []
+    kept = [
+        entry
+        for entry in analyses
+        if str(entry.get("activity_id") or "") not in changed_ids
+    ]
+    removed = len(analyses) - len(kept)
+    if removed:
+        coach["analyses"] = kept
+        coach["last_trigger_hash"] = None
+        path.write_text(
+            json.dumps(coach, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+    return removed
 
 
 def main() -> int:
@@ -104,12 +129,14 @@ def main() -> int:
         {"schema_version": 1, "overrides": {}},
     )
     config = load_json(DIRECTIVES_FILE)
-    applied, skipped = apply_directives(activities, overrides, config)
+    changed_ids: set[str] = set()
+    applied, skipped = apply_directives(activities, overrides, config, changed_ids)
     OVERRIDES_FILE.write_text(
         json.dumps(overrides, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
-    print(f"ACTIVITY_DIRECTIVES_OK applied={applied} skipped_missing={skipped}")
+    invalidated = invalidate_coach_analyses(COACH_FILE, changed_ids)
+    print(\n        f"ACTIVITY_DIRECTIVES_OK applied={applied} skipped_missing={skipped} "\n        f"changed={len(changed_ids)} coach_invalidated={invalidated}"\n    )
     return 0
 
 
