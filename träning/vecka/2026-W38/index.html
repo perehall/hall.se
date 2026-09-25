@@ -657,11 +657,48 @@ body.quiet-performance.qp-history .day.workout-card-v2.past-completed{
   body.quiet-performance.qp-current .dashboard{padding:11px 0 13px}
 }
 /* quiet-performance-v2:end */
+/* unified-week-navigation-v1 */
+.top-week-nav{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+  align-items:center;
+  gap:14px;
+  margin:0;
+  padding:2px 0 12px;
+  border-bottom:1px solid var(--qp-line,#e2e8f0);
+}
+.top-week-link{
+  color:var(--qp-secondary,#59636f);
+  font-size:.78rem;
+  font-weight:650;
+  text-decoration:none;
+  white-space:nowrap;
+}
+.top-week-link.next{text-align:right}
+.top-week-link:hover{color:var(--qp-text,#111827)}
+.top-week-link.disabled{color:var(--qp-tertiary,#94a3b8);font-weight:550}
+.top-week-current{
+  display:flex;
+  align-items:baseline;
+  justify-content:center;
+  gap:6px;
+  min-width:0;
+  text-align:center;
+}
+.top-week-current strong{font-size:.92rem;font-weight:780;letter-spacing:-.01em}
+.top-week-current span{color:var(--qp-tertiary,#64748b);font-size:.73rem;white-space:nowrap}
+@media(max-width:620px){
+  .top-week-nav{gap:8px}
+  .top-week-link{font-size:.72rem}
+  .top-week-current{display:grid;gap:0}
+  .top-week-current strong{font-size:.86rem}
+  .top-week-current span{font-size:.67rem}
+}
 </style>
 </head>
 <body class="quiet-performance qp-history"><div class="wrap">
 <header><div class="eyebrow">Träningsplan</div><h1>Vecka 38</h1><div class="sub header-meta-line"><span class="week-period">14–20 sep</span><span>·</span><span class="header-status">Historik · data sparad 2026-09-21 01:14</span></div></header>
-<nav class="week-nav" aria-label="Veckohistorik"><a class="prev" href="/träning/vecka/2026-W37/">← Vecka 37</a><div class="week-nav-center"><strong>Vecka 38</strong><span>HISTORIK</span></div><a class="next" href="/träning/">Vecka 39 →</a></nav>
+<nav class="top-week-nav" aria-label="Veckonavigering"><a class="top-week-link prev" href="/träning/vecka/2026-W37/">‹ Vecka 37</a><div class="top-week-current"><strong>Vecka 38</strong><span>14–20 sep · historik</span></div><a class="top-week-link next" href="/träning/">Vecka 39 ›</a></nav>
 <div class="hero week-focus-card"><h2 class="week-focus-title">Mesocykel · löptröskel + backkvalitet · mikrocykel 4 av 4</h2><details class="week-focus-details"><summary>Planidé</summary><p>Flytta den prioriterade löpförmågan framåt genom kontrollerad tröskel, löpekonomi/backstyrka och lugn tålighet, samtidigt som MTB/XC och simning hålls aktiva utan att tränga undan löputvecklingen. Mikrocykeln är preliminär men konkret: varje planerat pass har en användbar grundplan. Faktisk belastning och återhämtning används för att behålla eller justera planen, inte för att skapa den i sista stund. Kalenderveckan är bara visningen.</p></details></div>
 <section class="dashboard" aria-label="Veckoöversikt">
   <div class="metrics">

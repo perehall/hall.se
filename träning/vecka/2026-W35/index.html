@@ -657,11 +657,48 @@ body.quiet-performance.qp-history .day.workout-card-v2.past-completed{
   body.quiet-performance.qp-current .dashboard{padding:11px 0 13px}
 }
 /* quiet-performance-v2:end */
+/* unified-week-navigation-v1 */
+.top-week-nav{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+  align-items:center;
+  gap:14px;
+  margin:0;
+  padding:2px 0 12px;
+  border-bottom:1px solid var(--qp-line,#e2e8f0);
+}
+.top-week-link{
+  color:var(--qp-secondary,#59636f);
+  font-size:.78rem;
+  font-weight:650;
+  text-decoration:none;
+  white-space:nowrap;
+}
+.top-week-link.next{text-align:right}
+.top-week-link:hover{color:var(--qp-text,#111827)}
+.top-week-link.disabled{color:var(--qp-tertiary,#94a3b8);font-weight:550}
+.top-week-current{
+  display:flex;
+  align-items:baseline;
+  justify-content:center;
+  gap:6px;
+  min-width:0;
+  text-align:center;
+}
+.top-week-current strong{font-size:.92rem;font-weight:780;letter-spacing:-.01em}
+.top-week-current span{color:var(--qp-tertiary,#64748b);font-size:.73rem;white-space:nowrap}
+@media(max-width:620px){
+  .top-week-nav{gap:8px}
+  .top-week-link{font-size:.72rem}
+  .top-week-current{display:grid;gap:0}
+  .top-week-current strong{font-size:.86rem}
+  .top-week-current span{font-size:.67rem}
+}
 </style>
 </head>
 <body class="quiet-performance qp-history"><div class="wrap">
 <header><div class="eyebrow">Träningsplan</div><h1>Vecka 35</h1><div class="sub header-meta-line"><span class="week-period">24–30 aug</span><span>·</span><span class="header-status">Historik · data sparad 2026-08-31 00:09</span></div></header>
-<nav class="week-nav" aria-label="Veckohistorik"><a class="prev" href="/träning/vecka/2026-W34/">← Vecka 34</a><div class="week-nav-center"><strong>Vecka 35</strong><span>HISTORIK</span></div><a class="next" href="/träning/vecka/2026-W36/">Vecka 36 →</a></nav>
+<nav class="top-week-nav" aria-label="Veckonavigering"><a class="top-week-link prev" href="/träning/vecka/2026-W34/">‹ Vecka 34</a><div class="top-week-current"><strong>Vecka 35</strong><span>24–30 aug · historik</span></div><a class="top-week-link next" href="/träning/vecka/2026-W36/">Vecka 36 ›</a></nav>
 <div class="hero week-focus-card"><h2 class="week-focus-title">Löpningen prioriteras – tröskel + backkvalitet + distans.</h2><details class="week-focus-details"><summary>Planidé</summary><p>Löpningen får tre tydliga stimuli: ett kontrollerat tröskelpass, ett separat backkvalitetspass och lugn distans. Backkvaliteten testas som andra löpkvalitet i ett fyra veckor lång mesocykel och utvärderas därefter mot faktisk fart, känsla, återhämtning och kontinuitet. Exakt dos justeras efter närbelastningen och låses inte i förväg.</p></details></div>
 <section class="dashboard" aria-label="Veckoöversikt">
   <div class="metrics">

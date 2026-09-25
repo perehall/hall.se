@@ -4,7 +4,7 @@
   "week_start": "2026-09-21",
   "week_end": "2026-09-27",
   "created_at_utc": "2026-09-20T23:15:26.146433+00:00",
-  "updated_at_utc": "2026-09-25T06:49:36.340084+00:00",
+  "updated_at_utc": "2026-09-25T08:51:58.187970+00:00",
   "plan": {
     "days": [
       {
@@ -584,9 +584,9 @@
           "status": "synced",
           "transport": "intervals_icu",
           "source_hash": "9fcd60c075496d2ba5301ad8c850ecb2ec0dd8430864ecc062e85a53774b9e24",
-          "updated_at_utc": "2026-09-25T06:49:24.220989+00:00",
+          "updated_at_utc": "2026-09-25T08:51:40.321378+00:00",
           "device_delivery": "unverified",
-          "verified_at_utc": "2026-09-25T06:49:24.220989+00:00",
+          "verified_at_utc": "2026-09-25T08:51:40.321378+00:00",
           "provider_event_id": 138142476
         },
         "dose_options": [
@@ -1094,9 +1094,9 @@
           "status": "synced",
           "transport": "intervals_icu",
           "source_hash": "9dc12d3e522e49454af7c6ffe216ee9ba323186427181ac1e1ae64a8d6009578",
-          "updated_at_utc": "2026-09-25T06:49:24.342822+00:00",
+          "updated_at_utc": "2026-09-25T08:51:40.485664+00:00",
           "device_delivery": "unverified",
-          "verified_at_utc": "2026-09-25T06:49:24.342822+00:00",
+          "verified_at_utc": "2026-09-25T08:51:40.485664+00:00",
           "provider_event_id": 138097036
         },
         "dose_options": [
@@ -3084,17 +3084,17 @@
           "MTB/XC: 19,04 km · 1:22:56 · 207 m+ · snittpuls 126,4 · maxpuls 149.",
           "Användarrapport: Cirka 80 min lugn stig-MTB. Dagen var planerad som vilodag. Fint pass med bra flyt. Ingen fartjakt. Lättare att hålla ner farten när man kör med lampa RPE 6/10. Känsla: Pigg. Fint pass med bra flyt. Ingen fartjakt. Lättare att hålla ner farten när man kör med lampa RPE 4/10. Känsla: Pigg."
         ],
-        "summary": "Genomfört spontant lugnt stig‑MTB/XC‑pass (≈78 min, 19.0 km) på planerad vilodag med pigg subjektiv känsla; passet var tydligt återhämtningsorienterat.",
+        "summary": "80 min spontan lugn stig‑MTB/XC genomförd på vilodag; användaren rapporterar pigg känsla och kontrollerad ansträngning.",
         "unknowns": [
-          "Eventuell lokal muskulär trötthet i ben eller småskador efter teknisk stigkörning.",
-          "Senare samma‑dag eller morgondagens subjektiva återhämtningsrapport (återhämtningsunderlaget/ömhet)."
+          "Eventuell lokal muskulär trötthet i ben som kan påverka kommande löppass",
+          "Subjektiv återhämtning under kommande 24–48 h (endast dagsrapport finns)"
         ],
         "confidence": "medium",
         "interpretations": [
-          "Passet var en lågkostnads, teknisk/aerob MTB/XC‑exponering som inte ersatte något planerat primärt stimulus.",
-          "Givet varaktighet, puls och användarrapport finns inga tecken på ackumulerad trötthet som skulle sabotera kommande simpass eller planerad långlöpning."
+          "Passet var ett låg‑till‑moderat belastande MTB/XC‑pass som genomfördes istället för planerad vilodag och tolererades väl enligt subjektiv rapport.",
+          "Eftersom passet är separat från planen och mikrocykeln prioriterar sim/tröskel, bör nästa 2–3 dagars planhållning bevara planerade sim‑ och löppass om inga negativa signaler uppstår."
         ],
-        "load_interpretation": "Kardiovaskulärt och mekaniskt låg–belastning i närbelastningsfönstret; inget som omedelbart kräver reduktion av planerade pass."
+        "load_interpretation": "Kardiovaskulär varaktighet ~78 min och genomsnittspuls 126 bpm visar måttlig kardiovaskulär stimulans; mekanisk/teknisk belastning i MTB/XC noteras men inte överdrivet hög…"
       },
       "auto_apply": {
         "note": "Ingen automatisk planändring.",
@@ -3103,15 +3103,15 @@
       "activity_id": 20314473143,
       "plan_action": {
         "action": "keep",
-        "reason": "Passet var lugnt, rapporterat som piggt och ligger inom mikrocykelns tolerans utan att tränga undan prioriterade stimuli.",
+        "reason": "Spontant lugnt MTB/XC‑pass gav belastning och användaren rapporterar pigg känsla; inget i närbelastningen kräver ändring.",
         "target_date": "",
         "dose_option_id": "",
-        "recommendation": "Behåll nuvarande plan oförändrad; genomför fredagens simning som planerat och söndagens lugna långpass enligt mikrocykeln.",
+        "recommendation": "Behåll planerade pass oförändrade; observera subjektiv återhämtning och knacka tillbaka om du känner ovanlig lokal trötthet i benen.",
         "requires_approval": false
       },
       "activity_date": "2026-09-24",
       "activity_name": "Evening Mountain Bike Ride",
-      "generated_at_utc": "2026-09-25T06:49:23.374805+00:00",
+      "generated_at_utc": "2026-09-25T08:51:39.391120+00:00",
       "analysis_contract": {
         "pipeline_version": 3,
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
