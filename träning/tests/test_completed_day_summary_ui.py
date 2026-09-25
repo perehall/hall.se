@@ -313,6 +313,36 @@ class CompletedDaySummaryUiTests(unittest.TestCase):
         self.assertNotIn("Automatiskt från Strava", rendered)
         self.assertNotIn("Passinsikt", rendered)
 
+    def test_text_only_feedback_is_shown_as_saved_not_unreviewed(self):
+        page = self.page()
+        activities = {
+            "activities": [{
+                "id": 2,
+                "sport_type": "Enduro",
+                "display_label": "Enduro",
+                "start_date_local": "2026-09-21T17:44:36Z",
+                "elapsed_time_s": 5809,
+            }]
+        }
+        overrides = {
+            "schema_version": 1,
+            "overrides": {
+                "2": {
+                    "training_feedback": {
+                        "text": "Korrigerad beskrivning av passet.",
+                        "rpe": None,
+                        "feeling": [],
+                    }
+                }
+            },
+        }
+        rendered, changed = simplify_completed_days(
+            page, activities, overrides, "2026-09-22"
+        )
+        self.assertEqual(changed, 1)
+        self.assertIn("<strong>Sparat</strong>", rendered)
+        self.assertNotIn("<strong>Inte utvärderat</strong>", rendered)
+
     def test_unreviewed_recent_activity_is_kept_inside_feeling_section(self):
         page = self.page().replace(
             'data-activity-id="2" data-reviewed="true"',
