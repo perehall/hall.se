@@ -126,6 +126,15 @@ class DeviceWorkoutTests(unittest.TestCase):
         changed = materialize_day(changed, in_horizon=True)
         self.assertEqual(changed["device_sync"]["status"], "pending")
 
+    def test_sync_disabled_watch_workout_is_not_materialized(self):
+        day = base_day()
+        day["watch_workout"] = {"sync_enabled": False}
+        day["device_workout"] = {"stale": True}
+        day["device_sync"] = {"status": "synced"}
+        materialized = materialize_day(day, in_horizon=True)
+        self.assertNotIn("device_workout", materialized)
+        self.assertNotIn("device_sync", materialized)
+
     def test_strength_is_not_silently_compiled(self):
         with self.assertRaises(DeviceWorkoutError):
             compile_device_workout(base_day(sport="strength"))
