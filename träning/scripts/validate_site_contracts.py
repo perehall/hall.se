@@ -210,9 +210,29 @@ def main() -> None:
                 f"Preflight: {page_path} länkar till duplicerad aktuell vecka i stället för /träning/",
             )
 
-    require(index.count('class="goal-page-link"') == 1, "Preflight: exakt en Målbild-länk krävs")
-    require('href="/träning/malbild-2027/"' in index, "Preflight: Målbild-länk pekar fel")
-    require('<nav class="week-nav"' in index, "Preflight: veckonavigering saknas")
+    require(
+        index.count('href="/träning/malbild-2027/"') == 1,
+        "Preflight: exakt en Målbild-länk krävs",
+    )
+    has_current_nav = (
+        '<nav class="top-week-nav"' in index
+        or '<nav class="week-nav"' in index
+    )
+    require(has_current_nav, "Preflight: veckonavigering saknas")
+    if 'class="top-overview"' in index:
+        require(
+            index.count('class="top-overview"') == 1,
+            "Preflight: exakt en sammanhållen toppöversikt krävs",
+        )
+        current_week_pos = index.find('<h2 class="section">Aktuell vecka</h2>')
+        require(current_week_pos > 0, "Preflight: Aktuell vecka-rubrik saknas")
+        prefix = index[:current_week_pos]
+        require(
+            'class="training-brain"' not in prefix
+            and 'class="hero week-focus-card"' not in prefix
+            and 'class="goal-page-link"' not in prefix,
+            "Preflight: gammal parallell toppstruktur finns kvar",
+        )
     require(
         index.count('class="manual-activity"') == expected_manual,
         "Preflight: renderade manuella aktiviteter matchar inte plan.json",
