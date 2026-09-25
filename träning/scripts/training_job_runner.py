@@ -66,6 +66,7 @@ def build_stages(ingest_mode: str) -> list[Stage]:
         persist_token,
         Stage("apply_activity_directives", python_stage("apply_activity_directives.py")),
         Stage("normalize_activity_semantics", python_stage("normalize_activity_semantics.py")),
+        Stage("canonicalize_coach_source_facts", python_stage("finalize_canonical_coach_facts.py")),
         Stage("migrate_typed_plan", python_stage("migrate_training_data_v3.py")),
         Stage(
             "validate_ingested_data",
