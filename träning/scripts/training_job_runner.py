@@ -64,6 +64,7 @@ def build_stages(ingest_mode: str) -> list[Stage]:
     stages.extend([
         ingest,
         persist_token,
+        Stage("apply_activity_directives", python_stage("apply_activity_directives.py")),
         Stage("normalize_activity_semantics", python_stage("normalize_activity_semantics.py")),
         Stage("migrate_typed_plan", python_stage("migrate_training_data_v3.py")),
         Stage(
