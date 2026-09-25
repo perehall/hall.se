@@ -14,6 +14,7 @@ from supabase_activity_backend import (  # noqa: E402
     build_activity_snapshot,
     canonical_hash,
     load_activities_for_runtime,
+    overlay_feedback_document,
     safe_error_detail,
     strict_structure_difference,
 )
@@ -224,12 +225,69 @@ class SupabaseActivityBackendModelTests(unittest.TestCase):
             ]
         )
 
-        activities, overrides, meta = _documents_from_relational_cursor(cursor)
+        activities, overrides, meta = _documents_from_relational_cursor(
+            cursor,
+            include_feedback_overlay=False,
+        )
 
         self.assertEqual(activities, activities_doc)
         self.assertEqual(overrides, overrides_doc)
         self.assertEqual(meta["source"], "supabase_db")
         self.assertTrue(meta["verified"])
+
+    def test_append_only_feedback_overlays_stale_override_projection(self):
+        activities = {
+            "activities": [
+                {
+                    "id": 123,
+                    "sport_type": "Run",
+                    "source_sport_type": "Run",
+                    "display_label": "Löpning",
+                    "classification": "training",
+                }
+            ]
+        }
+        overrides = {"schema_version": 1, "overrides": {}}
+        feedback_rows = [
+            {
+                "provider_activity_id": "123",
+                "operation": "ADD_FEEDBACK",
+                "feedback_text": "Första.",
+                "rpe": 6,
+                "feeling": ["fresh"],
+                "event_key": "training-input:" + "a" * 24,
+                "submitted_at": "2026-09-25T05:00:00+00:00",
+                "created_at": "2026-09-25T05:00:01+00:00",
+            },
+            {
+                "provider_activity_id": "123",
+                "operation": "ADD_FEEDBACK",
+                "feedback_text": "Senaste.",
+                "rpe": 4,
+                "feeling": ["fresh", "could_do_more"],
+                "event_key": "training-input:" + "b" * 24,
+                "submitted_at": "2026-09-25T05:10:00+00:00",
+                "created_at": "2026-09-25T05:10:01+00:00",
+            },
+        ]
+
+        effective = overlay_feedback_document(activities, overrides, feedback_rows)
+        row = effective["overrides"]["123"]
+        self.assertEqual(row["sport"], "Run")
+        self.assertEqual(row["classification"], "training")
+        self.assertEqual(row["training_feedback"]["text"], "Senaste.")
+        self.assertEqual(row["training_feedback"]["rpe"], 4)
+        self.assertEqual(
+            row["training_input_event_keys"],
+            [
+                "training-input:" + "a" * 24,
+                "training-input:" + "b" * 24,
+            ],
+        )
+        self.assertEqual(
+            row["last_training_input_event_key"],
+            "training-input:" + "b" * 24,
+        )
 
     def test_runtime_loader_uses_local_only_without_database_configuration(self):
         with tempfile.TemporaryDirectory() as raw:
