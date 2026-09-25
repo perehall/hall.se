@@ -188,3 +188,34 @@ The post-update full shadow sync remains intentionally non-blocking. Its role is
 whole-system reconciliation for domains that are not yet promoted and an
 independent consistency layer; it is no longer the mechanism that makes the
 promoted runtime state authoritative.
+
+## Direct training-feedback write path
+
+Interactive post-workout feedback must not wait for the full GitHub Actions / coach /
+Pages pipeline. The production write path is therefore split into two phases:
+
+1. the Access-protected Cloudflare Worker validates the browser payload and creates
+   the deterministic `training-input:<id>` event key;
+2. when `SUPABASE_SECRET_KEY` (or the legacy `SUPABASE_SERVICE_ROLE_KEY`) is
+   configured on the Worker, it calls the backend-only
+   `public.training_submit_activity_feedback` RPC and waits only for that
+   transaction to commit;
+3. only after the database acknowledges the append does the Worker dispatch the
+   slower `training-input-event` to GitHub Actions for intent classification,
+   coach analysis, replanning, rendering and publication;
+4. if GitHub dispatch fails after the database commit, the API still returns a
+   saved/deferred acknowledgement. A later scheduled training run hydrates the
+   append-only database feedback and resumes downstream processing.
+
+The RPC is not granted to `anon` or `authenticated`. It is callable only through
+the backend Supabase secret/service role. The secret stays in Cloudflare Worker
+secret storage and must never be rendered into the site or committed to this
+repository.
+
+Every canonical training run now hydrates activities/overrides from Supabase
+before Strava ingest or training-input processing. The readback first verifies
+the persisted state-document hashes, then overlays newer append-only
+`training.activity_feedback` events. This prevents an older generated JSON
+snapshot from erasing or hiding feedback that arrived while another pipeline
+run was in progress.
+
