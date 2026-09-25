@@ -64,7 +64,6 @@ jobs:
           ! grep -Fq 'class="hero week-focus-card"' "träning/index.html"
           grep -Fq 'Kalendervecka:' "träning/index.html"
           grep -Fq 'class="week-status-expander"' "träning/index.html"
-          grep -Fq 'class="week-status-expander"' "träning/index.html"
           grep -Fq 'träningsdagar' "träning/index.html"
           grep -Fq 'Garmin via Intervals.icu används som privat återhämtningskontext' "träning/index.html"
           grep -Fq 'Väderprognos:' "träning/index.html"
