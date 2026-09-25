@@ -305,7 +305,7 @@ def feedback_rows(
                 if label and label not in bits:
                     bits.append(label)
 
-        status = " · ".join(bits) if bits else "Inte utvärderat"
+        status = " · ".join(bits) if bits else ("Sparat" if feedback else "Inte utvärderat")
         if show_sport:
             feedback_main = (
                 f'<strong>{html.escape(activity_label(activity))}</strong>'
