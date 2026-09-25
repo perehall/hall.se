@@ -227,7 +227,7 @@ export function validateTrainingInput(payload) {
   }
 
   const feeling = payload.feeling == null ? [] : payload.feeling;
-  if (!Array.isArray(feeling) || feeling.length > 6) {
+  if (!Array.isArray(feeling) || feeling.length > 1) {
     return { ok: false, status: 400, reason: "invalid_feeling" };
   }
   const normalizedFeeling = [];
