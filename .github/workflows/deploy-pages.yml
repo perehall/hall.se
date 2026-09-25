@@ -111,6 +111,30 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
+      - name: Verify public training page matches deployed UI
+        if: steps.planning_freshness.outputs.stale != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          url="https://xn--hll-qla.se/tr%C3%A4ning/?deploy=${GITHUB_SHA}"
+          for attempt in $(seq 1 18); do
+            html="$(curl --fail --silent --show-error --location \\
+              --max-time 20 \\
+              -H 'Cache-Control: no-cache' \\
+              -H 'Pragma: no-cache' \\
+              "${url}&attempt=${attempt}" || true)"
+            if grep -Fq 'class="top-overview"' <<<"$html" \\
+              && grep -Fq 'class="top-week-nav"' <<<"$html" \\
+              && grep -Fq 'class="top-today"' <<<"$html"; then
+              echo "PUBLIC_TRAINING_PAGE_OK attempt=${attempt}"
+              exit 0
+            fi
+            echo "Public page not updated yet (attempt ${attempt}/18); retrying..."
+            sleep 10
+          done
+          echo "::error::Public training page did not expose the deployed crisp-top UI within 3 minutes."
+          exit 1
+
       - name: Defer Pages until adaptive regeneration
         if: steps.planning_freshness.outputs.stale == 'true'
         run: echo "Pages deployment intentionally deferred; update-training will publish the regenerated canonical state."
