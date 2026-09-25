@@ -212,6 +212,72 @@ class CompletedDaySummaryUiTests(unittest.TestCase):
         self.assertIn("Fint pass med bra flyt. Ingen fartjakt.", rendered)
         self.assertIn("<summary>Motivering</summary>", rendered)
 
+    def test_completed_swim_uses_same_summary_contract_without_session_node(self):
+        page = """<html><head><style></style></head><body>
+<!-- training-input-ui-v1:start -->
+<section class="training-input" data-training-input data-activity-id="23" data-reviewed="true" data-processed-event-keys="training-input:dddddddddddddddddddddddd">
+  <div class="training-input-compact"><div><div class="training-input-summary">Sparat · RPE 6 · Kunde gjort mer</div></div><button type="button" class="training-input-toggle" data-training-input-toggle>Ändra</button></div>
+  <div class="training-input-editor" data-training-input-editor hidden><button type="button" data-training-input-save>Spara</button></div>
+</section>
+<!-- training-input-ui-v1:end -->
+<div class="day past-completed completed-day workout-card-v2" id="dag-2026-09-23">
+  <div class="daytop"><div class="day-date-line"><span class="dow">Onsdag</span><span class="date">23 sep</span></div><div class="badge fixed">Genomfört</div></div>
+  <div class="swim-workout"><div class="swim-session-head"><strong class="session-with-icon">Simning · 3 200 m</strong><span class="swim-meta">aerob/teknik</span></div></div>
+  <div class="workout-prescription"><div class="workout-prescription-head">Passupplägg</div><div class="workout-prescription-row"><span class="workout-prescription-dose">4×500 m</span></div></div>
+  <div class="pass"><div class="pass-title">Automatiskt från Strava</div><div><strong>Swim</strong> · 3,20 km · 58:57 · snittpuls 134 · max 152</div></div>
+  <section class="week-activity-insight" data-week-activity-insight="23">
+    <div class="week-activity-insight-kicker">Passinsikt</div>
+    <h3>4×500 låg inom 0,4 s/100 m</h3>
+    <div class="week-activity-metrics">3 200 m · 58:57 · snittpuls 134</div>
+    <p class="week-activity-insight-copy">Snitt 1:28,5/100 m; snabbast 1:28,2/100 m och långsammast 1:28,6/100 m.</p>
+    <div class="week-activity-plan-impact"><span>Planpåverkan</span><strong>Ingen ändring</strong></div>
+    <details class="week-activity-evidence"><summary>Visa underlag</summary><div class="week-activity-evidence-body"><div class="week-activity-evidence-block"><strong>Fakta</strong><ul><li>Swim: 3,20 km · 58:57.</li></ul></div></div></details>
+  </section>
+</div>
+</body></html>"""
+        activities = {
+            "activities": [{
+                "id": 23,
+                "sport_type": "Swim",
+                "display_label": "Swim",
+                "start_date_local": "2026-09-23T19:12:15+02:00",
+                "elapsed_time_s": 3537,
+                "distance_m": 3200,
+                "average_heartrate": 133.5,
+                "max_heartrate": 152,
+            }]
+        }
+        overrides = {
+            "schema_version": 1,
+            "overrides": {
+                "23": {
+                    "training_feedback": {
+                        "text": "Väldigt bra kontroll genom huvudserien.",
+                        "rpe": 6,
+                        "feeling": ["could_do_more"],
+                    }
+                }
+            },
+        }
+
+        rendered, changed = simplify_completed_days(page, activities, overrides, "2026-09-25")
+        self.assertEqual(changed, 1)
+        self.assertIn('data-visible-sport-icons="swim"', rendered)
+        self.assertIn('data-visible-sport-icon="swim"', rendered)
+        self.assertIn("<span>Simning</span>", rendered)
+        self.assertIn("58:57 · 3 200 m", rendered)
+        self.assertIn("<strong>Planen ligger kvar</strong>", rendered)
+        self.assertIn("Snitt 1:28,5/100 m", rendered)
+        self.assertIn("<strong>RPE 6 · Kunde gjort mer</strong>", rendered)
+        self.assertIn("<span>Snittpuls</span><strong>134</strong>", rendered)
+        self.assertIn("<span>Maxpuls</span><strong>152</strong>", rendered)
+        self.assertIn("<strong>Simning · 3 200 m · aerob/teknik</strong>", rendered)
+        self.assertIn("Väldigt bra kontroll genom huvudserien.", rendered)
+        self.assertIn("<summary>Motivering</summary>", rendered)
+        self.assertNotIn("Planbeslut saknas", rendered)
+        self.assertNotIn("Automatiskt från Strava", rendered)
+        self.assertNotIn("Passinsikt", rendered)
+
     def test_unreviewed_recent_activity_is_kept_inside_feeling_section(self):
         page = self.page().replace(
             'data-activity-id="2" data-reviewed="true"',
