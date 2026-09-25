@@ -4,7 +4,7 @@
   "week_start": "2026-09-21",
   "week_end": "2026-09-27",
   "created_at_utc": "2026-09-20T23:15:26.146433+00:00",
-  "updated_at_utc": "2026-09-25T11:54:35.449818+00:00",
+  "updated_at_utc": "2026-09-25T17:13:28.484534+00:00",
   "plan": {
     "days": [
       {
@@ -584,9 +584,9 @@
           "status": "synced",
           "transport": "intervals_icu",
           "source_hash": "9fcd60c075496d2ba5301ad8c850ecb2ec0dd8430864ecc062e85a53774b9e24",
-          "updated_at_utc": "2026-09-25T11:54:13.478761+00:00",
+          "updated_at_utc": "2026-09-25T17:13:11.212153+00:00",
           "device_delivery": "unverified",
-          "verified_at_utc": "2026-09-25T11:54:13.478761+00:00",
+          "verified_at_utc": "2026-09-25T17:13:11.212153+00:00",
           "provider_event_id": 138142476
         },
         "dose_options": [
@@ -1094,9 +1094,9 @@
           "status": "synced",
           "transport": "intervals_icu",
           "source_hash": "9dc12d3e522e49454af7c6ffe216ee9ba323186427181ac1e1ae64a8d6009578",
-          "updated_at_utc": "2026-09-25T11:54:13.959904+00:00",
+          "updated_at_utc": "2026-09-25T17:13:11.415834+00:00",
           "device_delivery": "unverified",
-          "verified_at_utc": "2026-09-25T11:54:13.959904+00:00",
+          "verified_at_utc": "2026-09-25T17:13:11.415834+00:00",
           "provider_event_id": 138097036
         },
         "dose_options": [
@@ -3084,17 +3084,17 @@
           "MTB/XC: 19,04 km · 1:22:56 · 207 m+ · snittpuls 126,4 · maxpuls 149.",
           "Användarrapport: Cirka 80 min lugn stig-MTB. Dagen var planerad som vilodag. Fint pass med bra flyt. Ingen fartjakt. Lättare att hålla ner farten när man kör med lampa RPE 6/10. Känsla: Pigg. Fint pass med bra flyt. Ingen fartjakt. Lättare att hålla ner farten när man kör med lampa RPE 4/10. Känsla: Pigg."
         ],
-        "summary": "Cirka 80 min lugn stig‑MTB/XC genomfört på planerad vilodag; användaren rapporterar pigg känsla och kontrollerad RPE utan fartjakt.",
+        "summary": "Spontant 80 min lugnt stig‑MTB/XC genomfört på vilodag med användarrapport om pigg känsla.",
         "unknowns": [
-          "Subjektiv lokal muskeltrötthet i benen nästa 24–48 h (användarrapport saknar detta)",
-          "Eventuella transport-/sömnpåverkningar efter nattens återhämtning som kan påverka morgondagens fokuspass"
+          "Eventuell lokal muskeltilltäppthet eller natt‑till‑natt återhämtning",
+          "Subjektiv känsla nästa dag som kan påverka planerade pass"
         ],
         "confidence": "medium",
         "interpretations": [
-          "Passet visar att en lugn teknisk MTB/XC‑exponering genomfördes utan subjektiv trötthet och med måttlig puls, vilket är kompatibelt med underhåll av MTB/XC/enduro‑stimulit.",
-          "Det finns inget i dessa data som ensam motiverar att ändra planens primära sim‑ eller löpkvalitetspass de närmaste 2–3 dagarna."
+          "Passet var kontrollerat och matchar beskrivningen som lugn stig‑MTB/XC; det adderar mekanisk och kardiovaskulär belastning dagarna runt utan intervallstimulus.",
+          "Eftersom mikrocykeln redan har genomfört tröskel (22/9) och två simexponeringar planerade, finns inget skäl att öka planerade primära doser; passet absorberas av planen."
         ],
-        "load_interpretation": "Kardiovaskulärt och mekaniskt är passet ett måttligt extra stimuli (≈78 min MTB/XC, snittpuls 126); det ändrar inte primära mikrocykel‑stimuli automatiskt."
+        "load_interpretation": "Kardiovaskulär varaktighet och medelpuls indikerar ett återhämtningsvänligt MTB/XC‑pass som läggs till närbelastningen utan att samexisterande nyckelstimuli påverkas."
       },
       "auto_apply": {
         "note": "Ingen automatisk planändring.",
@@ -3103,15 +3103,15 @@
       "activity_id": 20314473143,
       "plan_action": {
         "action": "keep",
-        "reason": "Passet var en kontrollerad, låg‑till‑måttlig MTB/XC‑exponering med pigg användarrapport och ändrar inte mikrocykelns prioriterade stimuli.",
+        "reason": "Passet var lugnt, väl tolererat och passar inom mikrocykelns belastningsbild utan att kräva reduktion.",
         "target_date": "",
         "dose_option_id": "",
-        "recommendation": "Behåll kommande plan (inkl. sim 2026‑09‑25 enligt plan).",
+        "recommendation": "Behåll kommande plan oförändrad; gör inget extra idag och notera om du känner ovanlig trötthet nästa dag.",
         "requires_approval": false
       },
       "activity_date": "2026-09-24",
       "activity_name": "Evening Mountain Bike Ride",
-      "generated_at_utc": "2026-09-25T11:54:11.865930+00:00",
+      "generated_at_utc": "2026-09-25T17:13:09.390193+00:00",
       "analysis_contract": {
         "pipeline_version": 3,
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",

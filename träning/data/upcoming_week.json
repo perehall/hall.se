@@ -91,93 +91,97 @@
       "date": "2026-09-29",
       "label": "Tisdag",
       "sport": "swim",
-      "reason": "Låg benbelastning dag efter enduro; etablerar teknikdrivet aerobsim som första simexponering och uppfyller mesocykelns swim_technique‑mål. Valet utgår från ett observerat värde 3200 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
+      "reason": "Progress för swim_aerobic (konservativ steg till 4 000 m) utnyttjar stabilt 3–4k‑mönster och hålls som låg mekanisk belastning dag efter enduro. Valet utgår från ett observerat värde 4000 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Katalogen innehåller inget högre verifierat steg, därför konsolideras dosen. Veckobeslut: progress; materialiserad relation: hold.",
       "status": "preliminary",
-      "session": "Simning · 3 200 m · aerob/teknik",
+      "session": "Simning · 4 000 m · aerob + kontrollerad tröskel",
       "stimuli": [
         "swim_aerobic",
+        "swim_threshold",
         "swim_technique"
       ],
       "dose_open": false,
       "device_sync": {
         "status": "synced",
         "transport": "intervals_icu",
-        "source_hash": "3e28b92276f557f857920a9f9bf78b32cfe7b8299094f25f6c47132994cd4be2",
-        "updated_at_utc": "2026-09-25T11:54:14.138702+00:00",
+        "source_hash": "7652848ffdc9ede1bca627f831e597b8930feba6552d6513f6ab27efc8fcc71c",
+        "updated_at_utc": "2026-09-25T17:13:11.608756+00:00",
         "device_delivery": "unverified",
-        "verified_at_utc": "2026-09-25T11:54:14.138702+00:00",
-        "provider_event_id": 138167834
+        "verified_at_utc": "2026-09-25T17:13:11.608756+00:00",
+        "provider_event_id": 138766324
       },
       "dose_options": [
         {
-          "id": "swim-3200",
+          "id": "swim-aerobic-threshold-4000",
           "kind": "structured",
-          "value": 3200,
-          "intent": "Kortare etablerad simexponering.",
-          "session": "Simning · 3 200 m · aerob/teknik",
+          "value": 4000,
+          "intent": "Användarens etablerade 4 000 m-mall: aerob bas med 4 × 200 m kontrollerad tröskel med paddlar + dolme. Detta är ett separat kvalitetsrecept, inte en automatisk volymprogression från 3 200 m.",
+          "session": "Simning · 4 000 m · aerob + kontrollerad tröskel",
           "watch_workout": {
-            "name": "Aerob/teknik · kroppslinje och rotation · 3 200 m",
+            "name": "Aerob + kontrollerad tröskel · 4 000 m",
             "type": "Swim",
             "blocks": [
               {
-                "name": "Insim",
+                "name": "Insim + teknik",
                 "steps": [
                   {
                     "kind": "swim",
-                    "text": "Lugn insim",
+                    "text": "Insim + teknik enligt etablerad rutin",
                     "equipment": [],
                     "intensity": "warmup",
-                    "distance_m": 400
+                    "distance_m": 600
                   }
                 ]
               },
               {
-                "name": "Kroppslinje och rotation",
+                "name": "Aerob 1",
                 "steps": [
                   {
                     "kind": "swim",
-                    "text": "Stabil linje, kontrollerad rotation",
+                    "text": "Aerobt, stabil teknik",
                     "equipment": [],
                     "intensity": "active",
-                    "distance_m": 50
+                    "distance_m": 200
                   },
                   {
                     "kind": "rest",
-                    "duration_s": 15
+                    "duration_s": 20
                   }
                 ],
                 "repeat": 6
               },
               {
-                "name": "Aerob",
+                "name": "Kontrollerad tröskel",
                 "steps": [
                   {
                     "kind": "swim",
-                    "text": "Stadigt aerob med stabil kroppslinje",
-                    "equipment": [],
+                    "text": "Kontrollerad tröskel",
+                    "equipment": [
+                      "paddles",
+                      "pull_buoy"
+                    ],
                     "intensity": "active",
-                    "distance_m": 500
+                    "distance_m": 200
                   },
                   {
                     "kind": "rest",
-                    "duration_s": 30
+                    "duration_s": 25
                   }
                 ],
                 "repeat": 4
               },
               {
-                "name": "Frekvens",
+                "name": "Aerob 2",
                 "steps": [
                   {
                     "kind": "swim",
-                    "text": "Avslappnad frekvens med bibehållen linje",
+                    "text": "Aerobt, återgå till stabil rytm och teknik",
                     "equipment": [],
                     "intensity": "active",
-                    "distance_m": 50
+                    "distance_m": 200
                   },
                   {
                     "kind": "rest",
-                    "duration_s": 15
+                    "duration_s": 20
                   }
                 ],
                 "repeat": 6
@@ -195,78 +199,85 @@
                 ]
               }
             ],
-            "equipment": [],
-            "planned_distance_m": 3200
-          }
+            "equipment": [
+              "paddles",
+              "pull_buoy"
+            ],
+            "planned_distance_m": 4000
+          },
+          "source_evidence": "Explicit användarmall och genomförd 4 000 m aerob+tröskel-simning."
         }
       ],
       "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
       "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc2",
       "priority_role": "anchor",
       "watch_workout": {
-        "id": "swim-2026-w40-2026-09-29-swim-3200",
-        "name": "Aerob/teknik · kroppslinje och rotation · 3 200 m",
+        "id": "swim-2026-w40-2026-09-29-swim-aerobic-threshold-4000",
+        "name": "Aerob + kontrollerad tröskel · 4 000 m",
         "type": "Swim",
         "blocks": [
           {
-            "name": "Insim",
+            "name": "Insim + teknik",
             "steps": [
               {
                 "kind": "swim",
-                "text": "Lugn insim",
+                "text": "Insim + teknik enligt etablerad rutin",
                 "equipment": [],
                 "intensity": "warmup",
-                "distance_m": 400
+                "distance_m": 600
               }
             ]
           },
           {
-            "name": "Kroppslinje och rotation",
+            "name": "Aerob 1",
             "steps": [
               {
                 "kind": "swim",
-                "text": "Stabil linje, kontrollerad rotation",
+                "text": "Aerobt, stabil teknik",
                 "equipment": [],
                 "intensity": "active",
-                "distance_m": 50
+                "distance_m": 200
               },
               {
                 "kind": "rest",
-                "duration_s": 15
+                "duration_s": 20
               }
             ],
             "repeat": 6
           },
           {
-            "name": "Aerob",
+            "name": "Kontrollerad tröskel",
             "steps": [
               {
                 "kind": "swim",
-                "text": "Stadigt aerob med stabil kroppslinje",
-                "equipment": [],
+                "text": "Kontrollerad tröskel",
+                "equipment": [
+                  "paddles",
+                  "pull_buoy"
+                ],
                 "intensity": "active",
-                "distance_m": 500
+                "distance_m": 200
               },
               {
                 "kind": "rest",
-                "duration_s": 30
+                "duration_s": 25
               }
             ],
             "repeat": 4
           },
           {
-            "name": "Frekvens",
+            "name": "Aerob 2",
             "steps": [
               {
                 "kind": "swim",
-                "text": "Avslappnad frekvens med bibehållen linje",
+                "text": "Aerobt, återgå till stabil rytm och teknik",
                 "equipment": [],
                 "intensity": "active",
-                "distance_m": 50
+                "distance_m": 200
               },
               {
                 "kind": "rest",
-                "duration_s": 15
+                "duration_s": 20
               }
             ],
             "repeat": 6
@@ -284,49 +295,52 @@
             ]
           }
         ],
-        "equipment": [],
+        "equipment": [
+          "paddles",
+          "pull_buoy"
+        ],
         "sync_enabled": false,
-        "planned_distance_m": 3200
+        "planned_distance_m": 4000
       },
       "device_workout": {
         "date": "2026-09-29",
-        "name": "Simning · 3 200 m · aerob/teknik",
+        "name": "Simning · 4 000 m · aerob + kontrollerad tröskel",
         "sport": "swim",
         "blocks": [
           {
-            "name": "Insim",
+            "name": "Insim + teknik",
             "sets": 1,
             "steps": [
               {
                 "kind": "work",
                 "duration": {
                   "kind": "distance",
-                  "meters": 400
+                  "meters": 600
                 },
-                "instruction": "Lugn insim · utan redskap",
+                "instruction": "Insim + teknik enligt etablerad rutin · utan redskap",
                 "intensity_class": "warmup"
               }
             ],
             "repetitions_per_set": 1
           },
           {
-            "name": "Kroppslinje och rotation",
+            "name": "Aerob 1",
             "sets": 1,
             "steps": [
               {
                 "kind": "work",
                 "duration": {
                   "kind": "distance",
-                  "meters": 50
+                  "meters": 200
                 },
-                "instruction": "Stabil linje, kontrollerad rotation · utan redskap",
+                "instruction": "Aerobt, stabil teknik · utan redskap",
                 "intensity_class": "interval"
               },
               {
                 "kind": "recovery",
                 "duration": {
                   "kind": "time",
-                  "seconds": 15
+                  "seconds": 20
                 },
                 "press_lap": false,
                 "instruction": "Vila",
@@ -337,23 +351,23 @@
             "repetitions_per_set": 6
           },
           {
-            "name": "Aerob",
+            "name": "Kontrollerad tröskel",
             "sets": 1,
             "steps": [
               {
                 "kind": "work",
                 "duration": {
                   "kind": "distance",
-                  "meters": 500
+                  "meters": 200
                 },
-                "instruction": "Stadigt aerob med stabil kroppslinje · utan redskap",
+                "instruction": "Kontrollerad tröskel · paddlar + dolme",
                 "intensity_class": "interval"
               },
               {
                 "kind": "recovery",
                 "duration": {
                   "kind": "time",
-                  "seconds": 30
+                  "seconds": 25
                 },
                 "press_lap": false,
                 "instruction": "Vila",
@@ -364,23 +378,23 @@
             "repetitions_per_set": 4
           },
           {
-            "name": "Frekvens",
+            "name": "Aerob 2",
             "sets": 1,
             "steps": [
               {
                 "kind": "work",
                 "duration": {
                   "kind": "distance",
-                  "meters": 50
+                  "meters": 200
                 },
-                "instruction": "Avslappnad frekvens med bibehållen linje · utan redskap",
+                "instruction": "Aerobt, återgå till stabil rytm och teknik · utan redskap",
                 "intensity_class": "interval"
               },
               {
                 "kind": "recovery",
                 "duration": {
                   "kind": "time",
-                  "seconds": 15
+                  "seconds": 20
                 },
                 "press_lap": false,
                 "instruction": "Vila",
@@ -408,40 +422,44 @@
           }
         ],
         "transport": "intervals_icu",
-        "external_id": "hall-device:2026-09-29:swim:swim_aerobic_technique_1",
-        "source_hash": "3e28b92276f557f857920a9f9bf78b32cfe7b8299094f25f6c47132994cd4be2",
+        "external_id": "hall-device:2026-09-29:swim:swim_aerobic_threshold_1",
+        "source_hash": "7652848ffdc9ede1bca627f831e597b8930feba6552d6513f6ab27efc8fcc71c",
         "provider_type": "Swim",
         "target_policy": "explicit_single_primary_only",
         "schema_version": 1,
-        "source_candidate_id": "swim-3200"
+        "source_candidate_id": "swim-aerobic-threshold-4000"
       },
       "microcycle_day": 2,
       "swim_equipment": {
-        "planned": []
+        "planned": [
+          "paddles",
+          "pull_buoy"
+        ]
       },
       "workout_design": {
         "objective": {
           "stimuli": [
             "swim_aerobic",
+            "swim_threshold",
             "swim_technique"
           ],
           "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
           "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc2",
           "priority_role": "anchor",
           "mesocycle_role": "primary",
-          "microcycle_slot": "swim_aerobic_technique_1"
+          "microcycle_slot": "swim_aerobic_threshold_1"
         },
         "selection": {
           "method": "deterministic_constraint_scoring",
-          "reason_for_today": "Mikrocykelbeslutet valde establish och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
-          "preferred_dose_option_id": "swim-3200"
+          "reason_for_today": "Mikrocykelbeslutet valde progress och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
+          "preferred_dose_option_id": "swim-aerobic-threshold-4000"
         },
         "candidates": [
           {
-            "id": "swim-3200",
+            "id": "swim-aerobic-threshold-4000",
             "dose": {
               "kind": "structured",
-              "value": 3200
+              "value": 4000
             },
             "score": {
               "basis": "deterministic_constraint_alignment",
@@ -454,66 +472,70 @@
                 "prescription_specificity": 15
               }
             },
-            "intent": "Kortare etablerad simexponering.",
-            "session": "Simning · 3 200 m · aerob/teknik",
+            "intent": "Användarens etablerade 4 000 m-mall: aerob bas med 4 × 200 m kontrollerad tröskel med paddlar + dolme. Detta är ett separat kvalitetsrecept, inte en automatisk volymprogression från 3 200 m.",
+            "session": "Simning · 4 000 m · aerob + kontrollerad tröskel",
             "stimuli": [
               "swim_aerobic",
+              "swim_threshold",
               "swim_technique"
             ],
             "prescription": {
               "blocks": [
                 {
-                  "name": "Insim",
+                  "name": "Insim + teknik",
                   "work": {
-                    "distance_m": 400,
+                    "distance_m": 600,
                     "repetitions": 1,
-                    "total_distance_m": 400
+                    "total_distance_m": 600
                   },
                   "equipment": [],
                   "intensity": "warmup",
-                  "instruction": "Lugn insim"
+                  "instruction": "Insim + teknik enligt etablerad rutin"
                 },
                 {
-                  "name": "Kroppslinje och rotation",
+                  "name": "Aerob 1",
                   "work": {
-                    "distance_m": 50,
+                    "distance_m": 200,
                     "repetitions": 6,
-                    "total_distance_m": 300
+                    "total_distance_m": 1200
                   },
                   "recovery": {
-                    "duration_s": 15
+                    "duration_s": 20
                   },
                   "equipment": [],
                   "intensity": "active",
-                  "instruction": "Stabil linje, kontrollerad rotation"
+                  "instruction": "Aerobt, stabil teknik"
                 },
                 {
-                  "name": "Aerob",
+                  "name": "Kontrollerad tröskel",
                   "work": {
-                    "distance_m": 500,
+                    "distance_m": 200,
                     "repetitions": 4,
-                    "total_distance_m": 2000
+                    "total_distance_m": 800
                   },
                   "recovery": {
-                    "duration_s": 30
+                    "duration_s": 25
                   },
-                  "equipment": [],
+                  "equipment": [
+                    "paddles",
+                    "pull_buoy"
+                  ],
                   "intensity": "active",
-                  "instruction": "Stadigt aerob med stabil kroppslinje"
+                  "instruction": "Kontrollerad tröskel"
                 },
                 {
-                  "name": "Frekvens",
+                  "name": "Aerob 2",
                   "work": {
-                    "distance_m": 50,
+                    "distance_m": 200,
                     "repetitions": 6,
-                    "total_distance_m": 300
+                    "total_distance_m": 1200
                   },
                   "recovery": {
-                    "duration_s": 15
+                    "duration_s": 20
                   },
                   "equipment": [],
                   "intensity": "active",
-                  "instruction": "Avslappnad frekvens med bibehållen linje"
+                  "instruction": "Aerobt, återgå till stabil rytm och teknik"
                 },
                 {
                   "name": "Avsim",
@@ -530,9 +552,9 @@
               "source": "watch_workout",
               "executable": true,
               "completeness": "full",
-              "total_distance_m": 3200
+              "total_distance_m": 4000
             },
-            "dose_option_id": "swim-3200"
+            "dose_option_id": "swim-aerobic-threshold-4000"
           }
         ],
         "schema_version": 1,
@@ -543,46 +565,46 @@
           ],
           "selection_uses_only_preapproved_doses": true
         },
-        "selected_candidate_id": "swim-3200",
+        "selected_candidate_id": "swim-aerobic-threshold-4000",
         "progression_from_previous": {
-          "reason": "Mikrocykelbeslutet valde establish och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
+          "reason": "Mikrocykelbeslutet valde progress och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
           "relation": "hold",
-          "demonstrated_floor_option_id": "swim-3200"
+          "demonstrated_floor_option_id": "swim-aerobic-threshold-4000"
         }
       },
       "dose_resolution": {
         "kind": "structured",
         "state": "baseline",
-        "value": 3200,
-        "option_id": "swim-3200"
+        "value": 4000,
+        "option_id": "swim-aerobic-threshold-4000"
       },
       "load_dimensions": [
         "cardiovascular",
         "technical"
       ],
-      "microcycle_slot": "swim_aerobic_technique_1",
+      "microcycle_slot": "swim_aerobic_threshold_1",
       "planning_status": "preliminary",
       "development_step": {
-        "reason": "Mikrocykelbeslutet valde establish och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
+        "reason": "Mikrocykelbeslutet valde progress och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
         "relation": "hold",
-        "option_id": "swim-3200",
+        "option_id": "swim-aerobic-threshold-4000",
         "microcycle": 2
       },
       "microcycle_index": 2,
-      "development_focus": "Teknisk kvalitet och stabil aerob rytm; simningen ska kunna stödja helheten med låg mekanisk kostnad för benen.",
-      "baseline_option_id": "swim-3200",
+      "development_focus": "Bibehåll teknisk kvalitet genom ett längre aerobt pass med en avgränsad, kontrollerad tröskeldel; tröskeldelen ska inte bli maximal.",
+      "baseline_option_id": "swim-aerobic-threshold-4000",
       "development_progression": {
         "mode": "develop",
         "source": "athlete_state",
         "microcycle_plan": [
           {
-            "reason": "Mikrocykelbeslutet valde establish och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
+            "reason": "Mikrocykelbeslutet valde progress och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
             "relation": "hold",
-            "option_id": "swim-3200",
+            "option_id": "swim-aerobic-threshold-4000",
             "microcycle": 2
           }
         ],
-        "demonstrated_floor_option_id": "swim-3200",
+        "demonstrated_floor_option_id": "swim-aerobic-threshold-4000",
         "same_dose_repeat_requires_reason": true
       }
     },
@@ -590,332 +612,21 @@
       "date": "2026-09-30",
       "label": "Onsdag",
       "sport": "run",
-      "reason": "Lång lugn löpning för löptålighet; placerad ≥48 h före tröskel (dag 6) enligt mesocycle‑guardrail och undviker tvådagars närhet till tröskel/back. Valet utgår från ett observerat värde 119.767 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
+      "reason": "Bibehåll kontrollerad tröskel (4×8‑struktur) med bevisad absorberbarhet; inget progressionssteg då senaste 4×8 visade god kontroll. Valet utgår från ett observerat värde 32 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
       "status": "preliminary",
-      "session": "Löpning · lugn distans · 120 min",
-      "stimuli": [
-        "run_easy_distance"
-      ],
-      "dose_open": false,
-      "device_sync": {
-        "status": "synced",
-        "transport": "intervals_icu",
-        "source_hash": "5484c3187154e1a42e497ee301fa951ebb50ad8c454e24e963230a586243a687",
-        "updated_at_utc": "2026-09-25T11:54:14.322932+00:00",
-        "device_delivery": "unverified",
-        "verified_at_utc": "2026-09-25T11:54:14.322932+00:00",
-        "provider_event_id": 138710831
-      },
-      "dose_options": [
-        {
-          "id": "run-easy-60",
-          "kind": "duration_minutes",
-          "value": 60,
-          "intent": "Reducerad/etablerande distansdos.",
-          "session": "Löpning · lugn distans · 60 min"
-        },
-        {
-          "id": "run-easy-75",
-          "kind": "duration_minutes",
-          "value": 75,
-          "intent": "Normal kontrollerad distansdos.",
-          "session": "Löpning · lugn distans · 75 min"
-        },
-        {
-          "id": "run-easy-90",
-          "kind": "duration_minutes",
-          "value": 90,
-          "intent": "Progressionsalternativ när 75 min absorberats.",
-          "session": "Löpning · lugn distans · 90 min"
-        },
-        {
-          "id": "run-easy-105",
-          "kind": "duration_minutes",
-          "value": 105,
-          "intent": "Längre distansalternativ när historiken stödjer det.",
-          "session": "Löpning · lugn distans · 105 min"
-        },
-        {
-          "id": "run-easy-120",
-          "kind": "duration_minutes",
-          "value": 120,
-          "intent": "Lång distansdos som kräver stöd i faktisk tålighet och närbelastning.",
-          "session": "Löpning · lugn distans · 120 min"
-        }
-      ],
-      "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
-      "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc2",
-      "priority_role": "flex",
-      "device_workout": {
-        "date": "2026-09-30",
-        "name": "Löpning · lugn distans · 120 min",
-        "sport": "run",
-        "blocks": [
-          {
-            "name": "Pass",
-            "sets": 1,
-            "steps": [
-              {
-                "kind": "work",
-                "duration": {
-                  "kind": "time",
-                  "seconds": 7200
-                },
-                "instruction": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt.",
-                "intensity_class": "active"
-              }
-            ],
-            "repetitions_per_set": 1
-          }
-        ],
-        "transport": "intervals_icu",
-        "external_id": "hall-device:2026-09-30:run:run_easy_distance_2",
-        "source_hash": "5484c3187154e1a42e497ee301fa951ebb50ad8c454e24e963230a586243a687",
-        "provider_type": "Run",
-        "target_policy": "explicit_single_primary_only",
-        "schema_version": 1,
-        "source_candidate_id": "run-easy-120"
-      },
-      "microcycle_day": 3,
-      "workout_design": {
-        "objective": {
-          "stimuli": [
-            "run_easy_distance"
-          ],
-          "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
-          "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc2",
-          "priority_role": "flex",
-          "mesocycle_role": "secondary",
-          "microcycle_slot": "run_easy_distance_2"
-        },
-        "selection": {
-          "method": "deterministic_constraint_scoring",
-          "reason_for_today": "Lång distansdos som kräver stöd i faktisk tålighet och närbelastning.",
-          "preferred_dose_option_id": "run-easy-120"
-        },
-        "candidates": [
-          {
-            "id": "run-easy-120",
-            "dose": {
-              "kind": "duration_minutes",
-              "value": 120
-            },
-            "score": {
-              "basis": "deterministic_constraint_alignment",
-              "total": 100,
-              "breakdown": {
-                "mesocycle_alignment": 30,
-                "microcycle_alignment": 30,
-                "near_term_resolution": 10,
-                "progression_alignment": 15,
-                "prescription_specificity": 15
-              }
-            },
-            "intent": "Lång distansdos som kräver stöd i faktisk tålighet och närbelastning.",
-            "session": "Löpning · lugn distans · 120 min",
-            "stimuli": [
-              "run_easy_distance"
-            ],
-            "prescription": {
-              "blocks": [
-                {
-                  "name": "Pass",
-                  "work": {
-                    "duration_s": 7200
-                  },
-                  "intensity": "lugn",
-                  "instruction": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt."
-                }
-              ],
-              "source": "duration_session",
-              "executable": true,
-              "completeness": "full"
-            },
-            "dose_option_id": "run-easy-120"
-          },
-          {
-            "id": "run-easy-105",
-            "dose": {
-              "kind": "duration_minutes",
-              "value": 105
-            },
-            "score": {
-              "basis": "deterministic_constraint_alignment",
-              "total": 70,
-              "breakdown": {
-                "mesocycle_alignment": 30,
-                "microcycle_alignment": 10,
-                "near_term_resolution": 0,
-                "progression_alignment": 15,
-                "prescription_specificity": 15
-              }
-            },
-            "intent": "Längre distansalternativ när historiken stödjer det.",
-            "session": "Löpning · lugn distans · 105 min",
-            "stimuli": [
-              "run_easy_distance"
-            ],
-            "prescription": {
-              "blocks": [
-                {
-                  "name": "Pass",
-                  "work": {
-                    "duration_s": 6300
-                  },
-                  "intensity": "lugn",
-                  "instruction": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt."
-                }
-              ],
-              "source": "duration_session",
-              "executable": true,
-              "completeness": "full"
-            },
-            "dose_option_id": "run-easy-105"
-          },
-          {
-            "id": "run-easy-90",
-            "dose": {
-              "kind": "duration_minutes",
-              "value": 90
-            },
-            "score": {
-              "basis": "deterministic_constraint_alignment",
-              "total": 70,
-              "breakdown": {
-                "mesocycle_alignment": 30,
-                "microcycle_alignment": 10,
-                "near_term_resolution": 0,
-                "progression_alignment": 15,
-                "prescription_specificity": 15
-              }
-            },
-            "intent": "Progressionsalternativ när 75 min absorberats.",
-            "session": "Löpning · lugn distans · 90 min",
-            "stimuli": [
-              "run_easy_distance"
-            ],
-            "prescription": {
-              "blocks": [
-                {
-                  "name": "Pass",
-                  "work": {
-                    "duration_s": 5400
-                  },
-                  "intensity": "lugn",
-                  "instruction": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt."
-                }
-              ],
-              "source": "duration_session",
-              "executable": true,
-              "completeness": "full"
-            },
-            "dose_option_id": "run-easy-90"
-          },
-          {
-            "id": "run-easy-75",
-            "dose": {
-              "kind": "duration_minutes",
-              "value": 75
-            },
-            "score": {
-              "basis": "deterministic_constraint_alignment",
-              "total": 70,
-              "breakdown": {
-                "mesocycle_alignment": 30,
-                "microcycle_alignment": 10,
-                "near_term_resolution": 0,
-                "progression_alignment": 15,
-                "prescription_specificity": 15
-              }
-            },
-            "intent": "Normal kontrollerad distansdos.",
-            "session": "Löpning · lugn distans · 75 min",
-            "stimuli": [
-              "run_easy_distance"
-            ],
-            "prescription": {
-              "blocks": [
-                {
-                  "name": "Pass",
-                  "work": {
-                    "duration_s": 4500
-                  },
-                  "intensity": "lugn",
-                  "instruction": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt."
-                }
-              ],
-              "source": "duration_session",
-              "executable": true,
-              "completeness": "full"
-            },
-            "dose_option_id": "run-easy-75"
-          }
-        ],
-        "schema_version": 1,
-        "near_term_context": {
-          "load_dimensions": [
-            "cardiovascular",
-            "mechanical"
-          ],
-          "selection_uses_only_preapproved_doses": true
-        },
-        "selected_candidate_id": "run-easy-120",
-        "progression_from_previous": {
-          "reason": "Lång distansdos som kräver stöd i faktisk tålighet och närbelastning.",
-          "relation": "support",
-          "demonstrated_floor_option_id": ""
-        }
-      },
-      "dose_resolution": {
-        "kind": "duration_minutes",
-        "state": "baseline",
-        "value": 120,
-        "option_id": "run-easy-120"
-      },
-      "load_dimensions": [
-        "cardiovascular",
-        "mechanical"
-      ],
-      "microcycle_slot": "run_easy_distance_2",
-      "planning_status": "preliminary",
-      "microcycle_index": 2,
-      "development_focus": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt.",
-      "baseline_option_id": "run-easy-120"
-    },
-    {
-      "date": "2026-10-01",
-      "label": "Torsdag",
-      "sport": "open",
-      "reason": "Ingen träning är planerad som standard på denna dag. En ledig dag är inte i sig skäl att lägga till ett pass; eventuell ändring ska tjäna mikrocykeln och bygga på faktisk information.",
-      "status": "open",
-      "session": "Ingen planerad träning",
-      "planning_status": "open"
-    },
-    {
-      "date": "2026-10-02",
-      "label": "Fredag",
-      "sport": "open",
-      "reason": "Ingen träning är planerad som standard på denna dag. En ledig dag är inte i sig skäl att lägga till ett pass; eventuell ändring ska tjäna mikrocykeln och bygga på faktisk information.",
-      "status": "open",
-      "session": "Ingen planerad träning",
-      "planning_status": "open"
-    },
-    {
-      "date": "2026-10-03",
-      "label": "Lördag",
-      "sport": "run",
-      "reason": "Endast ett primärt stimulus progressas (tröskel) — stöd i senaste 4×8‑evidens visar absorberbarhet; konservativ progression i linje med mesocykelbeslut. Valet utgår från ett observerat värde 32 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: progress; materialiserad relation: progress.",
-      "status": "preliminary",
-      "session": "Löpning · kontrollerad tröskel · 4 × 9 min / 90 s jogg",
+      "session": "Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg",
       "stimuli": [
         "run_threshold"
       ],
       "dose_open": false,
       "device_sync": {
-        "status": "deferred",
+        "status": "synced",
         "transport": "intervals_icu",
-        "source_hash": "f6af3c984be461f1fe3377243bb90a1d1be27ea98b0d45f37a768402b0f5db7d",
-        "device_delivery": "unverified"
+        "source_hash": "8823720772feaa90f87477a0a0839c160b4a14fd61ca3333ff3a74a4c9925344",
+        "updated_at_utc": "2026-09-25T17:13:11.832987+00:00",
+        "device_delivery": "unverified",
+        "verified_at_utc": "2026-09-25T17:13:11.832987+00:00",
+        "provider_event_id": 138766325
       },
       "dose_options": [
         {
@@ -951,8 +662,8 @@
       "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc2",
       "priority_role": "anchor",
       "device_workout": {
-        "date": "2026-10-03",
-        "name": "Löpning · kontrollerad tröskel · 4 × 9 min / 90 s jogg",
+        "date": "2026-09-30",
+        "name": "Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg",
         "sport": "run",
         "blocks": [
           {
@@ -963,7 +674,7 @@
                 "kind": "work",
                 "duration": {
                   "kind": "time",
-                  "seconds": 540
+                  "seconds": 480
                 },
                 "instruction": "Kontrollerad tröskel",
                 "intensity_class": "interval"
@@ -984,14 +695,14 @@
           }
         ],
         "transport": "intervals_icu",
-        "external_id": "hall-device:2026-10-03:run:run_threshold_3",
-        "source_hash": "f6af3c984be461f1fe3377243bb90a1d1be27ea98b0d45f37a768402b0f5db7d",
+        "external_id": "hall-device:2026-09-30:run:run_threshold_2",
+        "source_hash": "8823720772feaa90f87477a0a0839c160b4a14fd61ca3333ff3a74a4c9925344",
         "provider_type": "Run",
         "target_policy": "explicit_single_primary_only",
         "schema_version": 1,
-        "source_candidate_id": "run-threshold-4x9"
+        "source_candidate_id": "run-threshold-4x8"
       },
-      "microcycle_day": 6,
+      "microcycle_day": 3,
       "workout_design": {
         "objective": {
           "stimuli": [
@@ -1001,19 +712,19 @@
           "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc2",
           "priority_role": "anchor",
           "mesocycle_role": "primary",
-          "microcycle_slot": "run_threshold_3"
+          "microcycle_slot": "run_threshold_2"
         },
         "selection": {
           "method": "deterministic_constraint_scoring",
-          "reason_for_today": "Mikrocykelbeslutet valde progress och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
-          "preferred_dose_option_id": "run-threshold-4x9"
+          "reason_for_today": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
+          "preferred_dose_option_id": "run-threshold-4x8"
         },
         "candidates": [
           {
-            "id": "run-threshold-4x9",
+            "id": "run-threshold-4x8",
             "dose": {
               "kind": "structured",
-              "value": 36
+              "value": 32
             },
             "score": {
               "basis": "deterministic_constraint_alignment",
@@ -1023,51 +734,6 @@
                 "microcycle_alignment": 30,
                 "near_term_resolution": 10,
                 "progression_alignment": 15,
-                "prescription_specificity": 15
-              }
-            },
-            "intent": "Förgodkänt nästa arbetstidssteg från demonstrerade 4 × 8: fyra extra arbetsminuter med oförändrad kontrollerad intensitetsavsikt. Väljs endast när mesocykel/mikrocykel uttryckligen beslutar progression.",
-            "session": "Löpning · kontrollerad tröskel · 4 × 9 min / 90 s jogg",
-            "stimuli": [
-              "run_threshold"
-            ],
-            "prescription": {
-              "blocks": [
-                {
-                  "name": "Arbetsdel",
-                  "work": {
-                    "duration_s": 540,
-                    "repetitions": 4,
-                    "total_work_s": 2160
-                  },
-                  "recovery": {
-                    "duration_s": 90,
-                    "instruction": "Lugn jogg"
-                  },
-                  "intensity": "kontrollerad tröskel",
-                  "instruction": "Kontrollerad tröskel"
-                }
-              ],
-              "source": "structured_session",
-              "executable": true,
-              "completeness": "full"
-            },
-            "dose_option_id": "run-threshold-4x9"
-          },
-          {
-            "id": "run-threshold-4x8",
-            "dose": {
-              "kind": "structured",
-              "value": 32
-            },
-            "score": {
-              "basis": "deterministic_constraint_alignment",
-              "total": 63,
-              "breakdown": {
-                "mesocycle_alignment": 30,
-                "microcycle_alignment": 10,
-                "near_term_resolution": 0,
-                "progression_alignment": 8,
                 "prescription_specificity": 15
               }
             },
@@ -1145,6 +811,51 @@
             "dose_option_id": "run-threshold-3x10"
           },
           {
+            "id": "run-threshold-4x9",
+            "dose": {
+              "kind": "structured",
+              "value": 36
+            },
+            "score": {
+              "basis": "deterministic_constraint_alignment",
+              "total": 59,
+              "breakdown": {
+                "mesocycle_alignment": 30,
+                "microcycle_alignment": 10,
+                "near_term_resolution": 0,
+                "progression_alignment": 4,
+                "prescription_specificity": 15
+              }
+            },
+            "intent": "Förgodkänt nästa arbetstidssteg från demonstrerade 4 × 8: fyra extra arbetsminuter med oförändrad kontrollerad intensitetsavsikt. Väljs endast när mesocykel/mikrocykel uttryckligen beslutar progression.",
+            "session": "Löpning · kontrollerad tröskel · 4 × 9 min / 90 s jogg",
+            "stimuli": [
+              "run_threshold"
+            ],
+            "prescription": {
+              "blocks": [
+                {
+                  "name": "Arbetsdel",
+                  "work": {
+                    "duration_s": 540,
+                    "repetitions": 4,
+                    "total_work_s": 2160
+                  },
+                  "recovery": {
+                    "duration_s": 90,
+                    "instruction": "Lugn jogg"
+                  },
+                  "intensity": "kontrollerad tröskel",
+                  "instruction": "Kontrollerad tröskel"
+                }
+              ],
+              "source": "structured_session",
+              "executable": true,
+              "completeness": "full"
+            },
+            "dose_option_id": "run-threshold-4x9"
+          },
+          {
             "id": "run-threshold-3x8",
             "dose": {
               "kind": "structured",
@@ -1198,43 +909,43 @@
           ],
           "selection_uses_only_preapproved_doses": true
         },
-        "selected_candidate_id": "run-threshold-4x9",
+        "selected_candidate_id": "run-threshold-4x8",
         "progression_from_previous": {
-          "reason": "Mikrocykelbeslutet valde progress och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
-          "relation": "progress",
+          "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
+          "relation": "hold",
           "demonstrated_floor_option_id": "run-threshold-4x8"
         }
       },
       "dose_resolution": {
         "kind": "structured",
         "state": "baseline",
-        "value": 36,
-        "option_id": "run-threshold-4x9"
+        "value": 32,
+        "option_id": "run-threshold-4x8"
       },
       "load_dimensions": [
         "cardiovascular",
         "mechanical"
       ],
-      "microcycle_slot": "run_threshold_3",
+      "microcycle_slot": "run_threshold_2",
       "planning_status": "preliminary",
       "development_step": {
-        "reason": "Mikrocykelbeslutet valde progress och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
-        "relation": "progress",
-        "option_id": "run-threshold-4x9",
+        "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
+        "relation": "hold",
+        "option_id": "run-threshold-4x8",
         "microcycle": 2
       },
       "microcycle_index": 2,
       "development_focus": "Jämn, kontrollerad tröskelkaraktär. Progression ska främst öka absorberbar arbetstid, inte jaga högre intensitet.",
-      "baseline_option_id": "run-threshold-4x9",
+      "baseline_option_id": "run-threshold-4x8",
       "performance_marker_id": "run-threshold-control",
       "development_progression": {
         "mode": "develop",
         "source": "athlete_state",
         "microcycle_plan": [
           {
-            "reason": "Mikrocykelbeslutet valde progress och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
-            "relation": "progress",
-            "option_id": "run-threshold-4x9",
+            "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
+            "relation": "hold",
+            "option_id": "run-threshold-4x8",
             "microcycle": 2
           }
         ],
@@ -1243,10 +954,10 @@
       }
     },
     {
-      "date": "2026-10-04",
-      "label": "Söndag",
+      "date": "2026-10-01",
+      "label": "Torsdag",
       "sport": "strength",
-      "reason": "Andra simexponeringen kombinerad med styrka/core för att uppfylla styrke‑kravet utan extra benkvalitet; placerad efter tröskel för att undvika att tynga benen före kvalitetspasset och inte ligga direkt efter enduro. Valet utgår från ett observerat värde 36.0167 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
+      "reason": "Andra simexponeringen kombineras med styrka/core för att uppfylla styrkekrav utan extra benkvalitetspass; placeras mellan tröskel och långt löppass för återhämtning. Valet utgår från ett observerat värde 36.0167 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
       "status": "preliminary",
       "session": "Simning · 3 200 m · aerob/teknik + styrka/core · ca 35 min · styrkemall",
       "stimuli": [
@@ -1283,7 +994,7 @@
       "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc2",
       "priority_role": "protected_support",
       "watch_workout": {
-        "id": "swim-2026-w40-2026-10-04-preview",
+        "id": "swim-2026-w40-2026-10-01-preview",
         "name": "Aerob/teknik · kroppslinje och rotation · 3 200 m",
         "type": "Swim",
         "blocks": [
@@ -1367,7 +1078,7 @@
         "sync_enabled": false,
         "planned_distance_m": 3200
       },
-      "microcycle_day": 7,
+      "microcycle_day": 4,
       "swim_component": {
         "source": "verified_previous_watch_workout",
         "principle": "Simdelen använder en redan exekverbar struktur. Den kombinerade dagen får inte dölja simningen som text i ett styrkepass.",
@@ -1388,7 +1099,7 @@
           "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc2",
           "priority_role": "protected_support",
           "mesocycle_role": "primary",
-          "microcycle_slot": "swim_strength_4"
+          "microcycle_slot": "swim_strength_3"
         },
         "selection": {
           "method": "deterministic_constraint_scoring",
@@ -1930,7 +1641,7 @@
         "mechanical",
         "neuromuscular"
       ],
-      "microcycle_slot": "swim_strength_4",
+      "microcycle_slot": "swim_strength_3",
       "planning_status": "preliminary",
       "microcycle_index": 2,
       "optional_stimuli": [
@@ -1939,6 +1650,317 @@
       "development_focus": "Andra simexponeringen hålls aerob/teknisk och kombineras med kontrollerad styrka/core för att skydda båda kapaciteterna utan ett extra benkvalitetspass.",
       "baseline_option_id": "swim-strength-35",
       "performance_marker_id": "strength-repeatability"
+    },
+    {
+      "date": "2026-10-02",
+      "label": "Fredag",
+      "sport": "run",
+      "reason": "Lugn långt löppass (~90–120 min) för löptålighet, placerat ≥48 h efter tröskel för absorberbarhet och mesocykelns tålighetsmål. Valet utgår från ett observerat värde 119.767 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
+      "status": "preliminary",
+      "session": "Löpning · lugn distans · 120 min",
+      "stimuli": [
+        "run_easy_distance"
+      ],
+      "dose_open": false,
+      "device_sync": {
+        "status": "deferred",
+        "transport": "intervals_icu",
+        "source_hash": "4aba4e85f723ad39fb470e1a68795a67b37efdfee1de28c37acee8b717be1262",
+        "device_delivery": "unverified"
+      },
+      "dose_options": [
+        {
+          "id": "run-easy-60",
+          "kind": "duration_minutes",
+          "value": 60,
+          "intent": "Reducerad/etablerande distansdos.",
+          "session": "Löpning · lugn distans · 60 min"
+        },
+        {
+          "id": "run-easy-75",
+          "kind": "duration_minutes",
+          "value": 75,
+          "intent": "Normal kontrollerad distansdos.",
+          "session": "Löpning · lugn distans · 75 min"
+        },
+        {
+          "id": "run-easy-90",
+          "kind": "duration_minutes",
+          "value": 90,
+          "intent": "Progressionsalternativ när 75 min absorberats.",
+          "session": "Löpning · lugn distans · 90 min"
+        },
+        {
+          "id": "run-easy-105",
+          "kind": "duration_minutes",
+          "value": 105,
+          "intent": "Längre distansalternativ när historiken stödjer det.",
+          "session": "Löpning · lugn distans · 105 min"
+        },
+        {
+          "id": "run-easy-120",
+          "kind": "duration_minutes",
+          "value": 120,
+          "intent": "Lång distansdos som kräver stöd i faktisk tålighet och närbelastning.",
+          "session": "Löpning · lugn distans · 120 min"
+        }
+      ],
+      "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
+      "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc2",
+      "priority_role": "flex",
+      "device_workout": {
+        "date": "2026-10-02",
+        "name": "Löpning · lugn distans · 120 min",
+        "sport": "run",
+        "blocks": [
+          {
+            "name": "Pass",
+            "sets": 1,
+            "steps": [
+              {
+                "kind": "work",
+                "duration": {
+                  "kind": "time",
+                  "seconds": 7200
+                },
+                "instruction": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt.",
+                "intensity_class": "active"
+              }
+            ],
+            "repetitions_per_set": 1
+          }
+        ],
+        "transport": "intervals_icu",
+        "external_id": "hall-device:2026-10-02:run:run_easy_distance_4",
+        "source_hash": "4aba4e85f723ad39fb470e1a68795a67b37efdfee1de28c37acee8b717be1262",
+        "provider_type": "Run",
+        "target_policy": "explicit_single_primary_only",
+        "schema_version": 1,
+        "source_candidate_id": "run-easy-120"
+      },
+      "microcycle_day": 5,
+      "workout_design": {
+        "objective": {
+          "stimuli": [
+            "run_easy_distance"
+          ],
+          "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
+          "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc2",
+          "priority_role": "flex",
+          "mesocycle_role": "secondary",
+          "microcycle_slot": "run_easy_distance_4"
+        },
+        "selection": {
+          "method": "deterministic_constraint_scoring",
+          "reason_for_today": "Lång distansdos som kräver stöd i faktisk tålighet och närbelastning.",
+          "preferred_dose_option_id": "run-easy-120"
+        },
+        "candidates": [
+          {
+            "id": "run-easy-120",
+            "dose": {
+              "kind": "duration_minutes",
+              "value": 120
+            },
+            "score": {
+              "basis": "deterministic_constraint_alignment",
+              "total": 100,
+              "breakdown": {
+                "mesocycle_alignment": 30,
+                "microcycle_alignment": 30,
+                "near_term_resolution": 10,
+                "progression_alignment": 15,
+                "prescription_specificity": 15
+              }
+            },
+            "intent": "Lång distansdos som kräver stöd i faktisk tålighet och närbelastning.",
+            "session": "Löpning · lugn distans · 120 min",
+            "stimuli": [
+              "run_easy_distance"
+            ],
+            "prescription": {
+              "blocks": [
+                {
+                  "name": "Pass",
+                  "work": {
+                    "duration_s": 7200
+                  },
+                  "intensity": "lugn",
+                  "instruction": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt."
+                }
+              ],
+              "source": "duration_session",
+              "executable": true,
+              "completeness": "full"
+            },
+            "dose_option_id": "run-easy-120"
+          },
+          {
+            "id": "run-easy-105",
+            "dose": {
+              "kind": "duration_minutes",
+              "value": 105
+            },
+            "score": {
+              "basis": "deterministic_constraint_alignment",
+              "total": 70,
+              "breakdown": {
+                "mesocycle_alignment": 30,
+                "microcycle_alignment": 10,
+                "near_term_resolution": 0,
+                "progression_alignment": 15,
+                "prescription_specificity": 15
+              }
+            },
+            "intent": "Längre distansalternativ när historiken stödjer det.",
+            "session": "Löpning · lugn distans · 105 min",
+            "stimuli": [
+              "run_easy_distance"
+            ],
+            "prescription": {
+              "blocks": [
+                {
+                  "name": "Pass",
+                  "work": {
+                    "duration_s": 6300
+                  },
+                  "intensity": "lugn",
+                  "instruction": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt."
+                }
+              ],
+              "source": "duration_session",
+              "executable": true,
+              "completeness": "full"
+            },
+            "dose_option_id": "run-easy-105"
+          },
+          {
+            "id": "run-easy-90",
+            "dose": {
+              "kind": "duration_minutes",
+              "value": 90
+            },
+            "score": {
+              "basis": "deterministic_constraint_alignment",
+              "total": 70,
+              "breakdown": {
+                "mesocycle_alignment": 30,
+                "microcycle_alignment": 10,
+                "near_term_resolution": 0,
+                "progression_alignment": 15,
+                "prescription_specificity": 15
+              }
+            },
+            "intent": "Progressionsalternativ när 75 min absorberats.",
+            "session": "Löpning · lugn distans · 90 min",
+            "stimuli": [
+              "run_easy_distance"
+            ],
+            "prescription": {
+              "blocks": [
+                {
+                  "name": "Pass",
+                  "work": {
+                    "duration_s": 5400
+                  },
+                  "intensity": "lugn",
+                  "instruction": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt."
+                }
+              ],
+              "source": "duration_session",
+              "executable": true,
+              "completeness": "full"
+            },
+            "dose_option_id": "run-easy-90"
+          },
+          {
+            "id": "run-easy-75",
+            "dose": {
+              "kind": "duration_minutes",
+              "value": 75
+            },
+            "score": {
+              "basis": "deterministic_constraint_alignment",
+              "total": 70,
+              "breakdown": {
+                "mesocycle_alignment": 30,
+                "microcycle_alignment": 10,
+                "near_term_resolution": 0,
+                "progression_alignment": 15,
+                "prescription_specificity": 15
+              }
+            },
+            "intent": "Normal kontrollerad distansdos.",
+            "session": "Löpning · lugn distans · 75 min",
+            "stimuli": [
+              "run_easy_distance"
+            ],
+            "prescription": {
+              "blocks": [
+                {
+                  "name": "Pass",
+                  "work": {
+                    "duration_s": 4500
+                  },
+                  "intensity": "lugn",
+                  "instruction": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt."
+                }
+              ],
+              "source": "duration_session",
+              "executable": true,
+              "completeness": "full"
+            },
+            "dose_option_id": "run-easy-75"
+          }
+        ],
+        "schema_version": 1,
+        "near_term_context": {
+          "load_dimensions": [
+            "cardiovascular",
+            "mechanical"
+          ],
+          "selection_uses_only_preapproved_doses": true
+        },
+        "selected_candidate_id": "run-easy-120",
+        "progression_from_previous": {
+          "reason": "Lång distansdos som kräver stöd i faktisk tålighet och närbelastning.",
+          "relation": "support",
+          "demonstrated_floor_option_id": ""
+        }
+      },
+      "dose_resolution": {
+        "kind": "duration_minutes",
+        "state": "baseline",
+        "value": 120,
+        "option_id": "run-easy-120"
+      },
+      "load_dimensions": [
+        "cardiovascular",
+        "mechanical"
+      ],
+      "microcycle_slot": "run_easy_distance_4",
+      "planning_status": "preliminary",
+      "microcycle_index": 2,
+      "development_focus": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt.",
+      "baseline_option_id": "run-easy-120"
+    },
+    {
+      "date": "2026-10-03",
+      "label": "Lördag",
+      "sport": "open",
+      "reason": "Ingen träning är planerad som standard på denna dag. En ledig dag är inte i sig skäl att lägga till ett pass; eventuell ändring ska tjäna mikrocykeln och bygga på faktisk information.",
+      "status": "open",
+      "session": "Ingen planerad träning",
+      "planning_status": "open"
+    },
+    {
+      "date": "2026-10-04",
+      "label": "Söndag",
+      "sport": "open",
+      "reason": "Ingen träning är planerad som standard på denna dag. En ledig dag är inte i sig skäl att lägga till ett pass; eventuell ändring ska tjäna mikrocykeln och bygga på faktisk information.",
+      "status": "open",
+      "session": "Ingen planerad träning",
+      "planning_status": "open"
     }
   ],
   "meta": {
