@@ -117,18 +117,34 @@ jobs:
         run: |
           set -euo pipefail
           url="https://xn--hll-qla.se/tr%C3%A4ning/?deploy=${GITHUB_SHA}"
+          body="$(mktemp)"
+          headers="$(mktemp)"
+          trap 'rm -f "$body" "$headers"' EXIT
           for attempt in $(seq 1 18); do
-            html="$(curl --fail --silent --show-error --location --max-time 20 -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "${url}&attempt=${attempt}" || true)"
-            if grep -Fq 'class="top-overview"' <<<"$html"; then
-              if grep -Fq 'class="top-week-nav"' <<<"$html" && grep -Fq 'class="top-today"' <<<"$html"; then
-                echo "PUBLIC_TRAINING_PAGE_OK attempt=${attempt}"
-                exit 0
-              fi
+            : >"$body"
+            : >"$headers"
+            curl --silent --show-error --max-time 20 \
+              -D "$headers" -o "$body" \
+              -H 'Cache-Control: no-cache' \
+              -H 'Pragma: no-cache' \
+              "${url}&attempt=${attempt}" || true
+
+            if grep -Fqi 'cloudflareaccess.com' "$headers"; then
+              echo "::warning::Public custom-domain verification is protected by Cloudflare Access; GitHub Pages deployment itself succeeded."
+              exit 0
             fi
+
+            if grep -Fq 'class="top-overview"' "$body" \
+              && grep -Fq 'class="top-today"' "$body" \
+              && grep -Fq 'class="current-week-header"' "$body"; then
+              echo "PUBLIC_TRAINING_PAGE_OK attempt=${attempt}"
+              exit 0
+            fi
+
             echo "Public page not updated yet (attempt ${attempt}/18); retrying..."
             sleep 10
           done
-          echo "::error::Public training page did not expose the deployed crisp-top UI within 3 minutes."
+          echo "::error::Public training page did not expose the deployed current UI within 3 minutes."
           exit 1
 
       - name: Defer Pages until adaptive regeneration
