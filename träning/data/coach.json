@@ -7,17 +7,17 @@
           "MTB/XC: 19,04 km · 1:22:56 · 207 m+ · snittpuls 126,4 · maxpuls 149.",
           "Användarrapport: Cirka 80 min lugn stig-MTB. Dagen var planerad som vilodag. Fint pass med bra flyt. Ingen fartjakt. Lättare att hålla ner farten när man kör med lampa RPE 4/10. Känsla: Pigg."
         ],
-        "summary": "Genomfört: 80 min lugn stig‑MTB/XC (19,0 km, +207 m) med RPE ~4 och användarrapport 'pigg' — ett lågintensivt spontant pass på planerad vilodag.",
+        "summary": "80 min lugn stig-MTB körd på en planerad vilodag; användaren rapporterar RPE 4/10 och pigg känsla.",
         "unknowns": [
-          "Hur du känner dig nästa morgon (möjlig lokal muskeltrötthet i ben/överkropp)",
-          "Eventuell påverkan på söndagens planerade långpass-absorbering"
+          "Användarens subjektiva återhämtning nästa 24–72 h",
+          "Eventuella lokaliserade muskelbesvär efter enduro/MTB/XC som skulle påverka löp-/styrkepass"
         ],
         "confidence": "medium",
         "interpretations": [
-          "Passet var genomförbart och låg i avsedd lugn teknisk/aerob zon; bidrar inte som ersättning för planerad sim eller löptröskel.",
-          "Eftersom passet var spontant på en vilodag bör kommande 48–72 h bedömas konservativt för benbelastande träning (särskilt löpning)."
+          "Passet visar genomförd lågintensiv teknisk/stig‑MTB/XC som ger mekanisk och kardiovaskulär belastning men låg lokal benstress enligt RPE",
+          "För mikrocykeln betyder detta att planerad sim på 2026-09-25 och andra dagar bör behållas om inga negativa återhämtningssignaler uppstår, eftersom detta inte ersätter huvudstimuli…"
         ],
-        "load_interpretation": "Kardiovaskulär belastning låg–måttlig (4690 s, snittHR 126); mekanisk/teknisk belastning finns från stigkörning men inget indikerar neuromuskulär kostnad."
+        "load_interpretation": "Cardiovaskulärt och mekaniskt tillförde passet en måttlig MTB-stimulus (≈80 min, 207 m höjd); det var inte en högintensiv belastning enligt användarrapport och…"
       },
       "auto_apply": {
         "note": "Ingen automatisk planändring.",
@@ -26,15 +26,15 @@
       "activity_id": 20314473143,
       "plan_action": {
         "action": "keep",
-        "reason": "Spontant lugnt MTB/XC‑pass tolererades väl och ger ingen saklig anledning att ändra den närmaste planen.",
-        "target_date": "",
+        "reason": "Lugnt MTB-pass var lågintensivt och rapporterades tolereras väl, så planerad simning nästa dag behöver inte ändras.",
+        "target_date": "2026-09-25",
         "dose_option_id": "",
-        "recommendation": "Behåll nuvarande plan; gör inga ändringar för kommande dagar men undvik hårda löp‑/styrkepass i morgon om du känner lokal trötthet. Rapportera om du känner ovanlig stelhet eller trötthet innan nästa planerade nyckelpass.",
+        "recommendation": "Behåll simningen 2026-09-25 enligt plan; vila/återhämta som vanligt och avvakta subjektiv respons nästa dag. Om du känner ovanlig stelhet eller trötthet, skriv en snabb rapport så justerar vi.",
         "requires_approval": false
       },
       "activity_date": "2026-09-24",
       "activity_name": "Evening Mountain Bike Ride",
-      "generated_at_utc": "2026-09-25T06:15:38.291617+00:00",
+      "generated_at_utc": "2026-09-25T06:27:37.472487+00:00",
       "analysis_contract": {
         "pipeline_version": 3,
         "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
@@ -1277,9 +1277,9 @@
       "generated_at_utc": "2026-08-27T13:22:06.233402+00:00"
     }
   ],
-  "last_run_utc": "2026-09-25T06:15:38.291617+00:00",
+  "last_run_utc": "2026-09-25T06:27:37.472487+00:00",
   "contract_version": 15,
-  "last_trigger_hash": "fb836b6b70290aadfd2a69ce5d6f23242f9eef4109799dc2244ac14239919435",
+  "last_trigger_hash": "a7a9ea5052c95f9f1e965a4d4cbf6f6c6b00e0e2308cbc603e32f9559793f959",
   "output_contract_version": 19,
   "pipeline_contract_version": 3
 }
