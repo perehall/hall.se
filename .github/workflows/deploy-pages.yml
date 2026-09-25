@@ -136,7 +136,7 @@ jobs:
 
             if grep -Fq 'class="top-overview"' "$body" \
               && grep -Fq 'class="top-today"' "$body" \
-              && grep -Fq 'class="current-week-header"' "$body"; then
+              && grep -Eq 'class="[^"]*week-context-header[^"]*"' "$body"; then
               echo "PUBLIC_TRAINING_PAGE_OK attempt=${attempt}"
               exit 0
             fi
