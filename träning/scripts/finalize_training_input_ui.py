@@ -166,16 +166,15 @@ JS = r"""
     const status = root.querySelector('[data-training-input-status]');
 
     let rpe = null;
-    const feelings = new Set();
+    let feeling = null;
     const selectedRpe = rpeButtons.find((button) => button.getAttribute('aria-pressed') === 'true');
     if (selectedRpe) rpe = Number(selectedRpe.dataset.rpe);
-    feelingButtons
-      .filter((button) => button.getAttribute('aria-pressed') === 'true')
-      .forEach((button) => feelings.add(button.dataset.feeling));
+    const selectedFeeling = feelingButtons.find((button) => button.getAttribute('aria-pressed') === 'true');
+    if (selectedFeeling) feeling = selectedFeeling.dataset.feeling;
 
     const snapshot = () => ({
       rpe,
-      feelings: [...feelings],
+      feelings: feeling ? [feeling] : [],
       text: text.value
     });
     let initial = snapshot();
@@ -188,7 +187,7 @@ JS = r"""
     const compactSummary = (stateLabel = 'Sparat') => {
       const parts = [stateLabel];
       if (rpe !== null) parts.push(`RPE ${rpe}`);
-      [...feelings].forEach((key) => parts.push(feelingLabel(key)));
+      if (feeling) parts.push(feelingLabel(feeling));
       return parts.join(' · ');
     };
 
@@ -201,14 +200,13 @@ JS = r"""
 
     const restore = (state) => {
       rpe = state.rpe;
-      feelings.clear();
-      state.feelings.forEach((value) => feelings.add(value));
+      feeling = Array.isArray(state.feelings) && state.feelings.length ? state.feelings[0] : null;
       text.value = state.text;
       rpeButtons.forEach((button) => {
         button.setAttribute('aria-pressed', Number(button.dataset.rpe) === rpe ? 'true' : 'false');
       });
       feelingButtons.forEach((button) => {
-        button.setAttribute('aria-pressed', feelings.has(button.dataset.feeling) ? 'true' : 'false');
+        button.setAttribute('aria-pressed', button.dataset.feeling === feeling ? 'true' : 'false');
       });
     };
 
@@ -280,21 +278,22 @@ JS = r"""
 
     rpeButtons.forEach((button) => button.addEventListener('click', () => pressOne(button)));
     feelingButtons.forEach((button) => button.addEventListener('click', () => {
-      const key = button.dataset.feeling;
-      if (feelings.has(key)) feelings.delete(key); else feelings.add(key);
-      button.setAttribute('aria-pressed', feelings.has(key) ? 'true' : 'false');
+      feeling = button.dataset.feeling;
+      feelingButtons.forEach((item) => {
+        item.setAttribute('aria-pressed', item === button ? 'true' : 'false');
+      });
     }));
 
     save.addEventListener('click', async () => {
       const comment = text.value.trim();
-      if (!comment && rpe === null && feelings.size === 0) {
+      if (!comment && rpe === null && feeling === null) {
         status.textContent = 'Välj en känsla eller skriv en kort kommentar.';
         return;
       }
 
-      let operation = comment ? 'NATURAL_LANGUAGE' : 'ADD_FEEDBACK';
-      if (!comment && feelings.has('pain')) operation = 'REPORT_PAIN';
-      else if (!comment && feelings.has('tired')) operation = 'REPORT_FATIGUE';
+      let operation = comment ? 'UPDATE_COMPLETED_WORKOUT' : 'ADD_FEEDBACK';
+      if (!comment && feeling === 'pain') operation = 'REPORT_PAIN';
+      else if (!comment && feeling === 'tired') operation = 'REPORT_FATIGUE';
 
       save.disabled = true;
       root.dataset.submitting = 'true';
@@ -310,7 +309,7 @@ JS = r"""
             activity_id: Number(root.dataset.activityId),
             text: comment,
             rpe,
-            feeling: [...feelings],
+            feeling: feeling ? [feeling] : [],
             source: 'training-gui-v1'
           })
         });
