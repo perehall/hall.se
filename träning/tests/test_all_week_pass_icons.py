@@ -31,6 +31,10 @@ class AllWeekPassIconsTests(unittest.TestCase):
 </div>
 <div class="day workout-card-v2">
   <div class="daytop"></div>
+  <div class="swim-workout"><div class="swim-session-head"><strong>Simning · 3 200 m</strong><span class="swim-meta">aerob/teknik</span></div></div>
+</div>
+<div class="day workout-card-v2">
+  <div class="daytop"></div>
   <div class="session">Vilodag</div>
 </div>
 </body></html>"""
@@ -49,6 +53,11 @@ class AllWeekPassIconsTests(unittest.TestCase):
             },
             {
                 "date": "2026-09-16",
+                "sport": "swim",
+                "session": "Simning · 3 200 m · aerob/teknik",
+            },
+            {
+                "date": "2026-09-17",
                 "sport": "open",
                 "session": "Vilodag",
             },
@@ -112,11 +121,13 @@ class AllWeekPassIconsTests(unittest.TestCase):
         )
         verify_page(rendered, self.history_days())
 
-        self.assertEqual(changed, 2)
+        self.assertEqual(changed, 3)
         self.assertIn('data-week-pass-icons="enduro,strength"', rendered)
         self.assertIn('class="sport-icon icon-enduro"', rendered)
         self.assertIn('class="sport-icon icon-strength"', rendered)
         self.assertIn('data-week-pass-icons="run"', rendered)
+        self.assertIn('data-week-pass-icons="swim"', rendered)
+        self.assertIn('class="swim-session-head"', rendered)
         self.assertNotIn('data-week-pass-icons="open"', rendered)
         self.assertIn("all-week-pass-icons-v1", rendered)
 
@@ -155,7 +166,7 @@ class AllWeekPassIconsTests(unittest.TestCase):
             self.history_days(),
             self.registry(),
         )
-        self.assertEqual(changed, 2)
+        self.assertEqual(changed, 3)
         self.assertEqual(changed_again, 0)
         self.assertEqual(once, twice)
 
