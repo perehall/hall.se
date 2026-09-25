@@ -84,28 +84,16 @@ class TrainingWorkflowWriterTests(unittest.TestCase):
         self.assertIn("steps.commit_changes.outputs.changed == 'true'", workflow)
         self.assertNotIn("Push to main triggers deploy-pages.yml automatically", workflow)
 
-    def test_supabase_shadow_sync_is_post_update_non_blocking_and_self_healing(self):
+    def test_obsolete_shadow_sync_cannot_block_or_overwrite_live_input(self):
         workflow = self.workflow_text()
+        update = self.update_job_text()
 
-        self.assertIn("  shadow_sync:\n", workflow)
-        shadow = workflow.split("  shadow_sync:\n", 1)[1]
-        self.assertIn("needs: update", shadow)
-        self.assertIn("needs.update.result == 'success'", shadow)
-        self.assertIn("continue-on-error: true", shadow)
-        self.assertIn("- name: Checkout latest canonical main", shadow)
-        self.assertIn("ref: main", shadow)
-        self.assertIn('python "träning/scripts/supabase_shadow_writer.py" --mode write', shadow)
-        self.assertIn('python "träning/scripts/supabase_shadow_reader.py"', shadow)
-        self.assertLess(
-            shadow.index('python "träning/scripts/supabase_shadow_writer.py" --mode write'),
-            shadow.index('python "träning/scripts/supabase_shadow_reader.py"'),
-        )
-        self.assertIn("for attempt in 1 2 3", shadow)
-        self.assertIn("shadow state will retry on the next training run", shadow)
-        self.assertGreater(
-            workflow.index("  shadow_sync:\n"),
-            workflow.index("  update:\n"),
-        )
+        self.assertNotIn("  shadow_sync:\n", workflow)
+        self.assertNotIn("supabase_shadow_writer.py", workflow)
+        self.assertNotIn("supabase_shadow_reader.py", workflow)
+        self.assertIn("    concurrency:\n      group: training-pages\n      queue: max", update)
+        prefix = workflow.split("jobs:\n", 1)[0]
+        self.assertNotIn("concurrency:", prefix)
 
     def test_supabase_shadow_sync_is_not_part_of_critical_training_runner(self):
         runner = (REPO_ROOT / "träning" / "scripts" / "training_job_runner.py").read_text(
