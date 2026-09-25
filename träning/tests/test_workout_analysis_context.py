@@ -208,5 +208,77 @@ class WorkoutAnalysisContextTests(unittest.TestCase):
         self.assertEqual(fmt_swim_pace(None), "")
 
 
+
+    def test_run_detects_three_blocks_of_eight_short_repetitions(self):
+        laps = [
+            {"lap_index": 1, "distance_m": 1000.0, "moving_time_s": 320},
+            {"lap_index": 2, "distance_m": 500.0, "moving_time_s": 170},
+        ]
+        lap_index = 3
+        for block in range(3):
+            for rep in range(8):
+                laps.append(
+                    {
+                        "lap_index": lap_index,
+                        "distance_m": 150.0,
+                        "moving_time_s": 38 + (rep % 2),
+                        "average_heartrate": 145.0 + rep,
+                    }
+                )
+                lap_index += 1
+                if rep < 7:
+                    laps.append(
+                        {
+                            "lap_index": lap_index,
+                            "distance_m": 190.0,
+                            "moving_time_s": 64,
+                            "average_heartrate": 142.0,
+                        }
+                    )
+                    lap_index += 1
+            if block < 2:
+                laps.append({"lap_index": lap_index, "distance_m": 1000.0, "moving_time_s": 330})
+                lap_index += 1
+                laps.append({"lap_index": lap_index, "distance_m": 90.0, "moving_time_s": 30})
+                lap_index += 1
+        laps.append({"lap_index": lap_index, "distance_m": 1000.0, "moving_time_s": 315})
+
+        activity = {
+            "id": 20326850936,
+            "sport_type": "Run",
+            "distance_m": sum(lap["distance_m"] for lap in laps),
+            "moving_time_s": sum(lap["moving_time_s"] for lap in laps),
+            "elapsed_time_s": sum(lap["moving_time_s"] for lap in laps),
+            "laps": laps,
+        }
+
+        context = build_workout_analysis_context(activity)
+        short = context["run"]["short_intervals"]
+        self.assertTrue(short["structured"])
+        self.assertEqual(short["repetition_count"], 24)
+        self.assertEqual(short["block_repetition_counts"], [8, 8, 8])
+        self.assertEqual(short["structure_signature"], "3x8x150m")
+        self.assertEqual(short["representative_distance_m"], 150.0)
+        self.assertGreater(
+            short["mean_rep_speed_m_s"],
+            short["mean_single_lap_recovery_speed_m_s"] * 1.10,
+        )
+
+    def test_run_does_not_call_ordinary_kilometre_autolaps_short_intervals(self):
+        laps = [
+            {"lap_index": index + 1, "distance_m": 1000.0, "moving_time_s": 300 + index}
+            for index in range(12)
+        ]
+        activity = {
+            "id": 7,
+            "sport_type": "Run",
+            "distance_m": 12000.0,
+            "moving_time_s": sum(lap["moving_time_s"] for lap in laps),
+            "elapsed_time_s": sum(lap["moving_time_s"] for lap in laps),
+            "laps": laps,
+        }
+        context = build_workout_analysis_context(activity)
+        self.assertFalse(context["run"]["short_intervals"]["structured"])
+
 if __name__ == "__main__":
     unittest.main()
