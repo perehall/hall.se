@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Collapse completed-day implementation detail into one calm outcome summary.
+"""Render completed days as one calm, outcome-first surface.
 
-This is a presentation-only finalizer. Canonical plan, activity, coach and
-feedback data remain untouched; the verbose generated blocks are preserved
-behind "Visa detaljer".
+Presentation only. Canonical plan, activity, coach and feedback state remain
+untouched. The primary layer shows only what matters after a workout:
+what happened, whether the plan changes, the athlete's feeling and what comes
+next. Deeper analysis is available in one collapsed section.
 """
 
 from __future__ import annotations
@@ -15,7 +16,13 @@ from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-from finalize_post_workout_ui import SPORT_LABELS, fmt_duration, local_date
+from finalize_post_workout_ui import (
+    SPORT_LABELS,
+    fmt_distance,
+    fmt_duration,
+    fmt_hr,
+    local_date,
+)
 from finalize_training_input_ui import FEELING_LABELS, feedback_from_override
 from finalize_completed_sport_icon import activity_icon_key, render_icon
 
@@ -26,7 +33,7 @@ ACTIVITIES_FILE = ROOT / "data" / "activities.json"
 OVERRIDES_FILE = ROOT / "data" / "activity_overrides.json"
 ICON_FILE = ROOT / "data" / "sport_icons.json"
 
-CSS_MARKER = "/* completed-day-summary-v1 */"
+CSS_MARKER = "/* completed-day-summary-v2 */"
 DAY_RE = re.compile(
     r'<div class="day(?P<classes>[^"]*)" id="dag-(?P<date>\d{4}-\d{2}-\d{2})">'
 )
@@ -40,42 +47,76 @@ TRAINING_INPUT_BLOCK_RE = re.compile(
 ACTIVITY_ID_RE = re.compile(r'data-activity-id="(?P<id>\d+)"')
 
 CSS = r"""
-/* completed-day-summary-v1 */
-.day.completed-day-simplified{padding-top:13px;padding-bottom:13px}
+/* completed-day-summary-v2 */
+.day.completed-day-simplified{padding-top:14px;padding-bottom:16px}
 .completed-day-simplified>.session{display:none}
-.completed-day-summary{margin-top:2px}
-.completed-day-kicker{font-size:.66rem;font-weight:800;letter-spacing:.055em;text-transform:uppercase;color:var(--qp-tertiary,#64748b)}
-.completed-day-title{display:flex;align-items:center;flex-wrap:wrap;gap:7px;margin:2px 0 1px;font-size:1.05rem;font-weight:800;letter-spacing:-.012em;color:var(--qp-text,#111827)}
-.completed-day-title .completed-day-title-sport{display:inline-flex;align-items:center;gap:6px}
-.completed-day-title .sport-icon{width:18px;height:18px;flex:0 0 auto;color:var(--qp-secondary,#64748b)}
-.completed-day-title .icon-swim,.completed-day-title .icon-bike,.completed-day-title .icon-enduro,.completed-day-title .icon-strength{width:20px}
-.completed-day-title-sep{color:var(--qp-tertiary,#94a3b8);font-weight:600}
-.completed-day-meta{color:var(--qp-secondary,#64748b);font-size:.8rem;line-height:1.4;font-variant-numeric:tabular-nums}
-.completed-day-section{margin-top:12px;padding-top:11px;border-top:1px solid var(--qp-line-soft,#eef2f4)}
-.completed-day-section:first-of-type{margin-top:13px}
-.completed-day-label{display:block;margin-bottom:3px;color:var(--qp-tertiary,#64748b);font-size:.65rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase}
-.completed-day-section strong{display:block;color:var(--qp-text,#111827);font-size:.92rem;line-height:1.35}
-.completed-day-section p{margin:3px 0 0;color:var(--qp-secondary,#5e6661);font-size:.82rem;line-height:1.42}
-.completed-day-feedback-list{display:grid;gap:7px;margin-top:2px}
-.completed-day-feedback-row{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:12px;align-items:start;color:var(--qp-text,#111827);font-size:.82rem;line-height:1.4}
+.completed-day-summary{margin-top:1px;color:var(--qp-text,#111827)}
+.completed-day-kicker{display:block;margin-bottom:5px;color:var(--qp-tertiary,#64748b);font-size:.64rem;font-weight:850;letter-spacing:.075em;text-transform:uppercase}
+.completed-day-title{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:0;font-size:1.08rem;font-weight:850;letter-spacing:-.018em;line-height:1.28}
+.completed-day-title-sport{display:inline-flex;align-items:center;gap:7px}
+.completed-day-title .sport-icon{width:19px;height:19px;flex:0 0 auto;color:var(--qp-secondary,#59636f)}
+.completed-day-title .icon-swim,.completed-day-title .icon-bike,.completed-day-title .icon-enduro,.completed-day-title .icon-strength{width:21px}
+.completed-day-title-sep{color:var(--qp-tertiary,#94a3b8);font-weight:550}
+.completed-day-meta{margin-top:3px;color:var(--qp-secondary,#64748b);font-size:.81rem;line-height:1.4;font-variant-numeric:tabular-nums}
+.completed-day-summary-panel{margin-top:13px;border:1px solid var(--qp-line,#e2e8f0);border-radius:15px;background:rgba(255,255,255,.72);overflow:hidden}
+.completed-day-summary-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;padding:12px 13px}
+.completed-day-summary-row+.completed-day-summary-row{border-top:1px solid var(--qp-line-soft,#eef2f4)}
+.completed-day-summary-copy{min-width:0}
+.completed-day-label{display:block;margin-bottom:3px;color:var(--qp-tertiary,#64748b);font-size:.63rem;font-weight:850;letter-spacing:.065em;text-transform:uppercase}
+.completed-day-summary-row strong{display:block;color:var(--qp-text,#111827);font-size:.93rem;line-height:1.35}
+.completed-day-summary-row p{margin:3px 0 0;color:var(--qp-secondary,#5e6661);font-size:.8rem;line-height:1.42}
+.completed-day-feedback-list{display:grid;gap:6px}
+.completed-day-feedback-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:start}
 .completed-day-feedback-main{min-width:0}
-.completed-day-feedback-row span{color:var(--qp-secondary,#64748b)}
+.completed-day-feedback-main strong{display:inline;font-size:.9rem}
+.completed-day-feedback-main span{display:inline;margin-left:5px;color:var(--qp-secondary,#64748b);font-size:.8rem}
 .completed-day-feedback-row .completed-day-inline-input{display:contents}
 .completed-day-feedback-row .completed-day-inline-input>.training-input-compact{display:contents}
 .completed-day-feedback-row .completed-day-inline-input>.training-input-compact>div:first-child{display:none}
-.completed-day-feedback-row .completed-day-inline-input .training-input-toggle{grid-column:2;grid-row:1;margin:0;padding:0;align-self:start}
+.completed-day-feedback-row .completed-day-inline-input .training-input-toggle{grid-column:2;grid-row:1;margin:0;padding:1px 0 0;align-self:start;font-size:.76rem}
 .completed-day-feedback-row .completed-day-inline-input .training-input-editor{grid-column:1/-1;margin-top:7px;padding-top:10px;border-top:1px solid var(--qp-line-soft,#eef2f4)}
-.completed-day-next{margin-top:11px}
-.completed-day-details{margin-top:13px;border-top:1px solid var(--qp-line-soft,#eef2f4)}
-.completed-day-details>summary{cursor:pointer;list-style:none;padding:10px 0 1px;color:var(--qp-tertiary,#64748b);font-size:.76rem;font-weight:700}
+.completed-day-passdata{margin-top:12px;padding:11px 13px 12px;border:1px solid var(--qp-line,#e2e8f0);border-radius:15px;background:rgba(255,255,255,.62)}
+.completed-day-passdata-title{display:block;margin-bottom:8px;color:var(--qp-tertiary,#64748b);font-size:.63rem;font-weight:850;letter-spacing:.065em;text-transform:uppercase}
+.completed-day-passdata-group+.completed-day-passdata-group{margin-top:10px;padding-top:10px;border-top:1px solid var(--qp-line-soft,#eef2f4)}
+.completed-day-passdata-sport{display:block;margin:0 0 7px;color:var(--qp-secondary,#475569);font-size:.73rem;font-weight:800}
+.completed-day-passdata-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0}
+.completed-day-metric{min-width:0;padding:0 10px;border-left:1px solid var(--qp-line-soft,#eef2f4)}
+.completed-day-metric:first-child{padding-left:0;border-left:0}
+.completed-day-metric:last-child{padding-right:0}
+.completed-day-metric span{display:block;color:var(--qp-tertiary,#64748b);font-size:.67rem;line-height:1.25}
+.completed-day-metric strong{display:block;margin-top:2px;color:var(--qp-text,#111827);font-size:.9rem;line-height:1.3;font-variant-numeric:tabular-nums;white-space:nowrap}
+.completed-day-details{margin-top:12px;border:1px solid var(--qp-line,#e2e8f0);border-radius:15px;background:rgba(255,255,255,.55)}
+.completed-day-details>summary{position:relative;cursor:pointer;list-style:none;padding:12px 38px 12px 13px}
 .completed-day-details>summary::-webkit-details-marker{display:none}
-.completed-day-details>summary:after{content:" +"}
-.completed-day-details[open]>summary:after{content:" −"}
-.completed-day-details-inner{padding:9px 0 2px}
-.completed-day-planned{margin:0 0 10px;padding:9px 10px;border-radius:10px;background:var(--qp-surface-soft,#f8fafc);color:var(--qp-secondary,#5e6661);font-size:.78rem;line-height:1.4}
-.completed-day-planned strong{color:var(--qp-text,#111827)}
-.completed-day-details .coach-title,.completed-day-details .pass-title{font-size:.7rem}
-.completed-day-details .week-activity-insight{margin-top:10px}
+.completed-day-details>summary:after{content:"⌄";position:absolute;right:14px;top:50%;transform:translateY(-53%);color:var(--qp-tertiary,#64748b);font-size:1rem}
+.completed-day-details[open]>summary:after{content:"⌃"}
+.completed-day-details-title{display:block;color:var(--qp-text,#111827);font-size:.84rem;font-weight:820}
+.completed-day-details-subtitle{display:block;margin-top:2px;color:var(--qp-tertiary,#64748b);font-size:.72rem;font-weight:500}
+.completed-day-details-inner{padding:0 13px 13px;border-top:1px solid var(--qp-line-soft,#eef2f4)}
+.completed-day-detail-block{padding-top:11px}
+.completed-day-detail-block+.completed-day-detail-block{margin-top:10px;border-top:1px solid var(--qp-line-soft,#eef2f4)}
+.completed-day-detail-block>span{display:block;margin-bottom:4px;color:var(--qp-tertiary,#64748b);font-size:.63rem;font-weight:850;letter-spacing:.065em;text-transform:uppercase}
+.completed-day-detail-block p{margin:0;color:var(--qp-secondary,#475569);font-size:.79rem;line-height:1.46}
+.completed-day-detail-line{display:flex;gap:5px;align-items:baseline;color:var(--qp-secondary,#475569);font-size:.78rem;line-height:1.4}
+.completed-day-detail-line strong{color:var(--qp-text,#111827)}
+.completed-day-analysis-item+.completed-day-analysis-item{margin-top:8px}
+.completed-day-analysis-item>strong{display:block;margin-bottom:2px;color:var(--qp-text,#111827);font-size:.76rem}
+.completed-day-evidence{margin-top:9px}
+.completed-day-evidence>summary{cursor:pointer;list-style:none;color:var(--qp-secondary,#59636f);font-size:.75rem;font-weight:780}
+.completed-day-evidence>summary::-webkit-details-marker{display:none}
+.completed-day-evidence>summary:after{content:" +"}
+.completed-day-evidence[open]>summary:after{content:" −"}
+.completed-day-evidence-body{display:grid;gap:9px;margin-top:8px;padding:10px;border-radius:11px;background:var(--qp-surface-soft,#f8fafc)}
+.completed-day-evidence-block+.completed-day-evidence-block{padding-top:8px;border-top:1px solid var(--qp-line-soft,#e2e8f0)}
+.completed-day-evidence-block>strong{display:block;margin-bottom:4px;color:var(--qp-secondary,#475569);font-size:.65rem;text-transform:uppercase;letter-spacing:.055em}
+.completed-day-evidence-block ul{margin:0;padding-left:17px;color:var(--qp-secondary,#475569);font-size:.75rem;line-height:1.43}
+.completed-day-evidence-block li+li{margin-top:3px}
+@media(max-width:620px){
+  .completed-day-summary-panel,.completed-day-passdata,.completed-day-details{border-radius:13px}
+  .completed-day-passdata-grid{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:9px}
+  .completed-day-metric:nth-child(3){padding-left:0;border-left:0}
+  .completed-day-summary-row{padding:11px 12px}
+}
 """.strip()
 
 PROVIDER_LABELS = {
@@ -114,7 +155,7 @@ def strip_tags(value: str) -> str:
     return html.unescape(re.sub(r"\s+", " ", value)).strip()
 
 
-def compact_text(value: str, max_chars: int = 170) -> str:
+def compact_text(value: str, max_chars: int = 150) -> str:
     plain = strip_tags(value)
     if len(plain) <= max_chars:
         return plain
@@ -152,17 +193,6 @@ def training_input_blocks(page: str) -> dict[int, dict[str, str]]:
     return blocks
 
 
-def performed_title(activities: list[dict]) -> str:
-    labels = []
-    for activity in activities:
-        label = activity_label(activity)
-        if label not in labels:
-            labels.append(label)
-    if not labels:
-        return "Genomfört pass"
-    return " + ".join(labels)
-
-
 def performed_title_html(activities: list[dict], icon_registry: dict) -> tuple[str, list[str]]:
     seen = set()
     parts = []
@@ -185,11 +215,15 @@ def performed_title_html(activities: list[dict], icon_registry: dict) -> tuple[s
 
 
 def performed_meta(activities: list[dict]) -> str:
+    if len(activities) == 1:
+        activity = activities[0]
+        parts = [fmt_duration(activity.get("elapsed_time_s")), fmt_distance(activity)]
+        return " · ".join(value for value in parts if value and value != "—")
+
     parts = []
     for activity in activities:
-        label = activity_label(activity)
         duration = fmt_duration(activity.get("elapsed_time_s"))
-        parts.append(f"{label} {duration}")
+        parts.append(f"{activity_label(activity)} {duration}")
     return " · ".join(parts)
 
 
@@ -203,6 +237,7 @@ def feedback_rows(
     mapping = overrides.get("overrides") or {}
     input_blocks = input_blocks or {}
     consumed_input_ids = consumed_input_ids if consumed_input_ids is not None else set()
+    show_sport = len(activities) > 1
 
     for activity in activities:
         activity_id = activity.get("id")
@@ -222,6 +257,14 @@ def feedback_rows(
                     bits.append(label)
 
         status = " · ".join(bits) if bits else "Inte utvärderat"
+        if show_sport:
+            feedback_main = (
+                f'<strong>{html.escape(activity_label(activity))}</strong>'
+                f'<span>{html.escape(status)}</span>'
+            )
+        else:
+            feedback_main = f'<strong>{html.escape(status)}</strong>'
+
         editor = ""
         if input_block and isinstance(activity_id, int):
             editor = input_block["section"]
@@ -229,10 +272,20 @@ def feedback_rows(
 
         rows.append(
             f'<div class="completed-day-feedback-row" data-feedback-activity-id="{html.escape(str(activity_id))}">'
-            f'<div class="completed-day-feedback-main"><strong>{html.escape(activity_label(activity))}</strong>'
-            f'<span> · {html.escape(status)}</span></div>{editor}</div>'
+            f'<div class="completed-day-feedback-main">{feedback_main}</div>{editor}</div>'
         )
     return rows
+
+
+def feedback_comments(activities: list[dict], overrides: dict) -> list[tuple[str, str]]:
+    mapping = overrides.get("overrides") or {}
+    comments = []
+    for activity in activities:
+        feedback = feedback_from_override(mapping.get(str(activity.get("id"))) or {})
+        text = str((feedback or {}).get("text") or "").strip()
+        if text:
+            comments.append((activity_label(activity), text))
+    return comments
 
 
 def normalize_decision(value: str) -> str:
@@ -259,16 +312,205 @@ def planned_copy(block: str) -> str:
     meta = strip_tags(meta)
     if meta:
         result += f" · {meta}"
+    if result.lower() == "ingen planerad träning":
+        return "Vilodag"
     return result
 
 
-def detail_copy(value: str) -> str:
-    value = value.replace("Automatiskt från Strava", "Passdata")
-    value = value.replace("Tränings-Yoda (AI)", "Analys")
-    value = value.replace("WeightTraining", "Styrka")
-    value = value.replace("MountainBikeRide", "MTB")
-    value = value.replace(">Passinsikt<", ">Passanalys<")
-    return value
+def summary_reason(value: str) -> str:
+    plain = strip_tags(value)
+    if not plain:
+        return ""
+    clauses = [
+        clause.strip()
+        for clause in re.split(r";|(?<=[.!?])\s+", plain)
+        if clause.strip()
+    ]
+    feedback_tokens = (
+        "användaren rapporterar",
+        "du rapporterar",
+        "rpe ",
+        "pigg känsla",
+        "trött känsla",
+        "subjektiv känsla",
+    )
+    for clause in clauses:
+        lower = clause.lower()
+        if any(token in lower for token in feedback_tokens):
+            continue
+        return compact_text(clause, 135)
+    return ""
+
+
+def clean_next_step(value: str, plan_title: str) -> str:
+    plain = strip_tags(value)
+    if not plain:
+        return ""
+    plain = re.sub(r"\b20\d{2}-\d{2}-\d{2}\b", "", plain)
+    plain = re.sub(r"\s+", " ", plain).strip()
+    if plan_title == "Planen ligger kvar" and ";" in plain:
+        plain = plain.split(";", 1)[0].strip()
+    if plain and plain[-1] not in ".!?":
+        plain += "."
+    return compact_text(plain, 145)
+
+
+def max_hr(activity: dict) -> str:
+    value = activity.get("max_heartrate")
+    return str(round(float(value))) if value else "—"
+
+
+def passdata_html(activities: list[dict]) -> str:
+    groups = []
+    show_sport = len(activities) > 1
+    for activity in activities:
+        metrics = [
+            ("Distans", fmt_distance(activity)),
+            ("Tid", fmt_duration(activity.get("elapsed_time_s"))),
+            ("Snittpuls", fmt_hr(activity)),
+            ("Maxpuls", max_hr(activity)),
+        ]
+        metrics = [(label, value) for label, value in metrics if value and value != "—"]
+        if not metrics:
+            continue
+        cells = "".join(
+            '<div class="completed-day-metric">'
+            f'<span>{html.escape(label)}</span><strong>{html.escape(value)}</strong>'
+            '</div>'
+            for label, value in metrics
+        )
+        sport = (
+            f'<strong class="completed-day-passdata-sport">{html.escape(activity_label(activity))}</strong>'
+            if show_sport
+            else ""
+        )
+        groups.append(
+            '<div class="completed-day-passdata-group">'
+            + sport
+            + f'<div class="completed-day-passdata-grid">{cells}</div>'
+            + '</div>'
+        )
+    if not groups:
+        return ""
+    return (
+        '<div class="completed-day-passdata">'
+        '<span class="completed-day-passdata-title">Passdata</span>'
+        + "".join(groups)
+        + '</div>'
+    )
+
+
+def insight_copy(rest: str, activity_id: object) -> str:
+    if activity_id is None:
+        return ""
+    match = re.search(
+        rf'<section class="week-activity-insight" data-week-activity-insight="{re.escape(str(activity_id))}">(.*?)</section>',
+        rest,
+        re.S | re.I,
+    )
+    if not match:
+        return ""
+    return compact_text(
+        extract(r'class="week-activity-insight-copy">(.*?)</p>', match.group(1)),
+        260,
+    )
+
+
+def evidence_blocks(rest: str) -> list[str]:
+    blocks = []
+    for raw in re.findall(
+        r'<div class="week-activity-evidence-block">(.*?)</div>',
+        rest,
+        re.S | re.I,
+    ):
+        clean = raw.strip()
+        if clean:
+            blocks.append(
+                '<div class="completed-day-evidence-block">' + clean + '</div>'
+            )
+    return blocks
+
+
+def details_html(
+    block: str,
+    rest: str,
+    activities: list[dict],
+    overrides: dict,
+    coach_summary: str,
+) -> str:
+    planned = planned_copy(block)
+    analysis_items = []
+    for activity in activities:
+        copy = insight_copy(rest, activity.get("id"))
+        if copy:
+            label = (
+                f'<strong>{html.escape(activity_label(activity))}</strong>'
+                if len(activities) > 1
+                else ""
+            )
+            analysis_items.append(
+                f'<div class="completed-day-analysis-item">{label}<p>{html.escape(copy)}</p></div>'
+            )
+    if not analysis_items and coach_summary:
+        analysis_items.append(
+            '<div class="completed-day-analysis-item">'
+            f'<p>{html.escape(compact_text(coach_summary, 260))}</p></div>'
+        )
+
+    comments = feedback_comments(activities, overrides)
+    evidence = evidence_blocks(rest)
+
+    body = []
+    if planned:
+        body.append(
+            '<div class="completed-day-detail-block">'
+            '<span>Ursprungsplan</span>'
+            f'<div class="completed-day-detail-line"><strong>{html.escape(planned)}</strong></div>'
+            '</div>'
+        )
+    if analysis_items:
+        body.append(
+            '<div class="completed-day-detail-block">'
+            '<span>Passets effekt</span>'
+            + "".join(analysis_items)
+            + '</div>'
+        )
+    if comments:
+        comment_html = "".join(
+            (
+                f'<div class="completed-day-analysis-item"><strong>{html.escape(label)}</strong>'
+                f'<p>{html.escape(text)}</p></div>'
+                if len(comments) > 1
+                else f'<div class="completed-day-analysis-item"><p>{html.escape(text)}</p></div>'
+            )
+            for label, text in comments
+        )
+        body.append(
+            '<div class="completed-day-detail-block">'
+            '<span>Din kommentar</span>'
+            + comment_html
+            + '</div>'
+        )
+    if evidence:
+        body.append(
+            '<div class="completed-day-detail-block">'
+            '<details class="completed-day-evidence"><summary>Motivering</summary>'
+            '<div class="completed-day-evidence-body">'
+            + "".join(evidence)
+            + '</div></details></div>'
+        )
+
+    if not body:
+        return ""
+
+    return (
+        '<details class="completed-day-details">'
+        '<summary><span class="completed-day-details-title">Analys och motivering</span>'
+        '<span class="completed-day-details-subtitle">Passets effekt, kommentar och underlag</span></summary>'
+        '<div class="completed-day-details-inner">'
+        + "".join(body)
+        + '</div></details>'
+    )
 
 
 def render_summary(
@@ -285,59 +527,61 @@ def render_summary(
     next_step = extract(r'class="coach-next".*?<div>(.*?)</div>\s*</div>', block)
 
     plan_title = normalize_decision(decision)
-    plan_reason = compact_text(coach_summary, 180)
-    next_copy = compact_text(next_step, 180)
+    plan_reason = summary_reason(coach_summary)
+    next_copy = clean_next_step(next_step, plan_title)
     feedback = feedback_rows(
         activities,
         overrides,
         input_blocks=input_blocks,
         consumed_input_ids=consumed_input_ids,
     )
-    planned = planned_copy(block)
     title_html, visible_icon_keys = performed_title_html(activities, icon_registry or {})
     visible_icons_attr = ",".join(visible_icon_keys)
 
-    feedback_html = ""
+    plan_row = (
+        '<div class="completed-day-summary-row">'
+        '<div class="completed-day-summary-copy">'
+        '<span class="completed-day-label">Sammanfattning</span>'
+        f'<strong>{html.escape(plan_title)}</strong>'
+        + (f'<p>{html.escape(plan_reason)}</p>' if plan_reason else "")
+        + '</div></div>'
+    )
+
+    feedback_row = ""
     if feedback:
-        feedback_html = (
-            '<div class="completed-day-section">'
+        feedback_row = (
+            '<div class="completed-day-summary-row">'
+            '<div class="completed-day-summary-copy">'
             '<span class="completed-day-label">Din känsla</span>'
             f'<div class="completed-day-feedback-list">{"".join(feedback)}</div>'
-            '</div>'
+            '</div></div>'
         )
 
-    next_html = ""
+    next_row = ""
     if next_copy:
-        next_html = (
-            '<div class="completed-day-section completed-day-next">'
-            '<span class="completed-day-label">Nästa</span>'
+        next_row = (
+            '<div class="completed-day-summary-row">'
+            '<div class="completed-day-summary-copy">'
+            '<span class="completed-day-label">Nästa steg</span>'
             f'<p>{html.escape(next_copy)}</p>'
-            '</div>'
+            '</div></div>'
         )
 
-    planned_html = (
-        f'<div class="completed-day-planned"><strong>Planerat</strong> · {html.escape(planned)}</div>'
-        if planned
-        else ""
-    )
+    details = details_html(block, rest, activities, overrides, coach_summary)
 
     return (
         f'<div class="completed-day-summary" data-visible-sport-icons="{html.escape(visible_icons_attr)}">'
         '<span class="completed-day-kicker">Genomfört</span>'
         f'<div class="completed-day-title">{title_html}</div>'
         f'<div class="completed-day-meta">{html.escape(performed_meta(activities))}</div>'
-        '<div class="completed-day-section">'
-        '<span class="completed-day-label">Planpåverkan</span>'
-        f'<strong>{html.escape(plan_title)}</strong>'
-        + (f'<p>{html.escape(plan_reason)}</p>' if plan_reason else "")
+        '<div class="completed-day-summary-panel">'
+        + plan_row
+        + feedback_row
+        + next_row
         + '</div>'
-        + feedback_html
-        + next_html
-        + '<details class="completed-day-details"><summary>Visa detaljer</summary>'
-        '<div class="completed-day-details-inner">'
-        + planned_html
-        + detail_copy(rest)
-        + '</div></details></div>'
+        + passdata_html(activities)
+        + details
+        + '</div>'
     )
 
 
@@ -376,7 +620,7 @@ def simplify_completed_days(
         if session_start < 0:
             continue
         session_end = balanced_div_end(block, session_start)
-        rest = block[session_end:-6]  # keep the day-card closing </div> outside details
+        rest = block[session_end:-6]
         summary = render_summary(
             block,
             activities,
@@ -390,9 +634,8 @@ def simplify_completed_days(
         opening = block[: block.find(">") + 1]
         if "completed-day-simplified" not in opening:
             opening = opening.replace('class="day', 'class="day completed-day-simplified', 1)
-        # Keep the original session node in the DOM so sport-icon/accessibility
-        # contracts remain true. CSS hides only this direct child in the compact
-        # completed state; the outcome summary becomes the visible hierarchy.
+        # Keep the original session in the DOM for accessibility/icon contracts;
+        # CSS hides it in the compact completed state.
         new_block = opening + block[block.find(">") + 1:session_end] + summary + '</div>'
         page = page[:start] + new_block + page[end:]
         changed += 1
@@ -403,6 +646,20 @@ def simplify_completed_days(
             page = page.replace(source["full"], "", 1)
 
     return page, changed
+
+
+def install_css(page: str) -> str:
+    page = re.sub(
+        r'/\* completed-day-summary-v1 \*/.*?(?=(?:/\*|</style>))',
+        "",
+        page,
+        flags=re.S,
+    )
+    if CSS_MARKER in page:
+        return page
+    if "</style>" not in page:
+        raise RuntimeError("Completed-day summary: </style> saknas.")
+    return page.replace("</style>", CSS + "\n</style>", 1)
 
 
 def main() -> int:
@@ -422,13 +679,10 @@ def main() -> int:
         icon_registry=icon_registry,
     )
     if changed:
-        if CSS_MARKER not in page:
-            if "</style>" not in page:
-                raise RuntimeError("Completed-day summary: </style> saknas.")
-            page = page.replace("</style>", CSS + "\n</style>", 1)
+        page = install_css(page)
 
     INDEX_FILE.write_text(page, encoding="utf-8")
-    print(f"Completed-day summary OK: {changed} genomförd(a) dag(ar) förenklade.")
+    print(f"Completed-day summary v2 OK: {changed} genomförd(a) dag(ar) förenklade.")
     return 0
 
 
