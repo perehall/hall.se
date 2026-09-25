@@ -35,16 +35,16 @@ ICON_FILE = ROOT / "data" / "sport_icons.json"
 
 CSS_MARKER = "/* completed-day-summary-v2 */"
 DAY_RE = re.compile(
-    r'<div class="day(?P<classes>[^"]*)" id="dag-(?P<date>\\d{4}-\\d{2}-\\d{2})">'
+    r'<div class="day(?P<classes>[^"]*)" id="dag-(?P<date>\d{4}-\d{2}-\d{2})">'
 )
-DIV_RE = re.compile(r"<div\\b[^>]*>|</div>", re.I)
+DIV_RE = re.compile(r"<div\b[^>]*>|</div>", re.I)
 TRAINING_INPUT_BLOCK_RE = re.compile(
-    r'<!-- training-input-ui-v1:start -->\\s*'
-    r'(?P<section><section class="training-input"(?P<attrs>[^>]*)>.*?</section>)\\s*'
+    r'<!-- training-input-ui-v1:start -->\s*'
+    r'(?P<section><section class="training-input"(?P<attrs>[^>]*)>.*?</section>)\s*'
     r'<!-- training-input-ui-v1:end -->',
     re.S,
 )
-ACTIVITY_ID_RE = re.compile(r'data-activity-id="(?P<id>\\d+)"')
+ACTIVITY_ID_RE = re.compile(r'data-activity-id="(?P<id>\d+)"')
 
 CSS = r"""
 /* completed-day-summary-v2 */
@@ -152,14 +152,14 @@ def balanced_div_end(text: str, start: int) -> int:
 
 def strip_tags(value: str) -> str:
     value = re.sub(r"<[^>]+>", " ", value or "")
-    return html.unescape(re.sub(r"\\s+", " ", value)).strip()
+    return html.unescape(re.sub(r"\s+", " ", value)).strip()
 
 
 def compact_text(value: str, max_chars: int = 150) -> str:
     plain = strip_tags(value)
     if len(plain) <= max_chars:
         return plain
-    sentences = re.split(r"(?<=[.!?])\\s+", plain)
+    sentences = re.split(r"(?<=[.!?])\s+", plain)
     if sentences and len(sentences[0]) <= max_chars:
         return sentences[0]
     clipped = plain[: max_chars - 1].rstrip()
@@ -323,7 +323,7 @@ def summary_reason(value: str) -> str:
         return ""
     clauses = [
         clause.strip()
-        for clause in re.split(r";|(?<=[.!?])\\s+", plain)
+        for clause in re.split(r";|(?<=[.!?])\s+", plain)
         if clause.strip()
     ]
     feedback_tokens = (
@@ -346,8 +346,8 @@ def clean_next_step(value: str, plan_title: str) -> str:
     plain = strip_tags(value)
     if not plain:
         return ""
-    plain = re.sub(r"\\b20\\d{2}-\\d{2}-\\d{2}\\b", "", plain)
-    plain = re.sub(r"\\s+", " ", plain).strip()
+    plain = re.sub(r"\b20\d{2}-\d{2}-\d{2}\b", "", plain)
+    plain = re.sub(r"\s+", " ", plain).strip()
     if plan_title == "Planen ligger kvar" and ";" in plain:
         plain = plain.split(";", 1)[0].strip()
     if plain and plain[-1] not in ".!?":
@@ -524,7 +524,7 @@ def render_summary(
 ) -> str:
     decision = extract(r'class="coach-decision".*?<strong>(.*?)</strong>', block)
     coach_summary = extract(r'class="coach-summary">(.*?)</div>', block)
-    next_step = extract(r'class="coach-next".*?<div>(.*?)</div>\\s*</div>', block)
+    next_step = extract(r'class="coach-next".*?<div>(.*?)</div>\s*</div>', block)
 
     plan_title = normalize_decision(decision)
     plan_reason = summary_reason(coach_summary)
@@ -650,7 +650,7 @@ def simplify_completed_days(
 
 def install_css(page: str) -> str:
     page = re.sub(
-        r'/\\* completed-day-summary-v1 \\*/.*?(?=(?:/\\*|</style>))',
+        r'/\* completed-day-summary-v1 \*/.*?(?=(?:/\*|</style>))',
         "",
         page,
         flags=re.S,
