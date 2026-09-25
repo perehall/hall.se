@@ -216,7 +216,7 @@ def ensure_activity_input_blocks(
     mapping = overrides.get("overrides") or {}
     for activity in activities_state.get("activities") or []:
         activity_id = activity.get("id")
-        if not isinstance(activity_id, int) or activity_id in input_blocks:
+        if not isinstance(activity_id, int):
             continue
         override = mapping.get(str(activity_id)) or {}
         rendered = render_block(
