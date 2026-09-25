@@ -304,6 +304,14 @@
       "source_hash": "a7de3931a05a769bd30ce06a01d66e1a582b12328df63a2556ac3935712b1700",
       "generated_at_utc": "2026-09-24T18:50:56.444923+00:00",
       "summary": "Removed swim_strength from dag 2 (dagen efter fast Enduro) och ersatte med ett lågbenigt sim/teknik‑pass. Progress valdes endast för ett primärt stimulus (sim_aerobic/teknik) med stöd i senaste 3–4k‑pass. Swim_strength flyttades till senare i veckan och valdes som consolidate för att kreditera både styrka/core och en andra simexponering utan att öka mekanisk benbelastning direkt efter Enduro. Tröskel behålls som consolidate. Ett långt lugnt löppass etableras med ≥48 h från tröskel. En kalenderdag hålls utan planering (ingen slot). Alla hard_requirements kontrollerade och uppfyllda."
+    },
+    {
+      "kind": "microcycle",
+      "decision_id": "2026-W40",
+      "source": "openai_repaired",
+      "source_hash": "02a929a2817044155cff4595e2b58cf7ae1311a9878ef88a48419d24a97f8478",
+      "generated_at_utc": "2026-09-25T00:29:44.209478+00:00",
+      "summary": "Reparerar konflikt där lång lugn löpning lades direkt intill MTB/XC genom att ta bort mtb_technical‑slotet (sekundär exponering) och behålla de fyra nödvändiga sloten: två sim (en progress), en kombinerad sim+styrka och kontrollerad tröskel samt långt lugnt löppass. Detta uppfyller alla hard_requirements (alla primära kapaciteter täckta, 2 simexponeringar, minst 1 styrka/core, max run‑quality ≤2, minst en vilodag — dag 3 — och dag 2 låg benbelastning efter enduro dag 1)."
     }
   ]
 }
