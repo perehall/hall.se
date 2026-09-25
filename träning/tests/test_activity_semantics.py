@@ -279,6 +279,50 @@ class ActivitySemanticsTests(unittest.TestCase):
         self.assertNotEqual(first, second)
         self.assertEqual(state["activity_semantics"]["changed_ids"], [])
 
+
+    def test_structured_feedback_becomes_effective_user_report(self):
+        state = {
+            "activities": [
+                {
+                    "id": 1234,
+                    "name": "Kvällspass",
+                    "sport_type": "Run",
+                    "start_date_local": "2026-09-24T18:00:00Z",
+                }
+            ]
+        }
+        config = {
+            "schema_version": 1,
+            "overrides": {
+                "1234": {
+                    "sport": "Run",
+                    "classification": "training",
+                    "display_label": "Löpning",
+                    "source_sport_type": "Run",
+                    "user_report": "Tidigare faktarad.",
+                    "training_feedback": {
+                        "text": "Kontrollerat och piggt.",
+                        "rpe": 4,
+                        "feeling": ["fresh"],
+                        "event_key": "training-input:aaaaaaaaaaaaaaaaaaaaaaaa",
+                    },
+                }
+            },
+        }
+
+        apply_semantics(state, config)
+        report = state["activities"][0]["user_report"]
+        self.assertEqual(
+            report,
+            "Tidigare faktarad. Kontrollerat och piggt. RPE 4/10. Känsla: Pigg.",
+        )
+
+        apply_semantics(state, config)
+        self.assertEqual(
+            state["activities"][0]["user_report"],
+            "Tidigare faktarad. Kontrollerat och piggt. RPE 4/10. Känsla: Pigg.",
+        )
+
     def test_semantic_change_invalidates_only_matching_coach_analysis(self):
         with tempfile.TemporaryDirectory() as temp_dir:
             path = Path(temp_dir) / "coach.json"
