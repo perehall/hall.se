@@ -9,8 +9,6 @@ sys.path.insert(0, str(SCRIPTS))
 from finalize_training_timeline_ui import (  # noqa: E402
     CSS_END,
     CSS_START,
-    JS_END,
-    JS_START,
     WRAP_END,
     WRAP_START,
     apply_timeline,
@@ -42,7 +40,7 @@ class TrainingTimelineUiTests(unittest.TestCase):
 
     def test_contract_is_flat_and_sticky_not_card_based(self):
         rendered = apply_timeline(self.sample_page())
-        self.assertIn('class="timeline-scroll-context"', rendered)
+        self.assertNotIn('class="timeline-scroll-context"', rendered)
         self.assertIn('position:sticky;', rendered)
         self.assertIn('grid-template-columns:92px minmax(0,1fr)', rendered)
         self.assertIn('background:transparent!important;', rendered)
@@ -65,16 +63,12 @@ class TrainingTimelineUiTests(unittest.TestCase):
             rendered,
         )
 
-    def test_scroll_context_updates_day_and_session(self):
+    def test_no_duplicate_sticky_context_row_or_js_is_rendered(self):
         rendered = apply_timeline(self.sample_page())
-        self.assertIn(JS_START, rendered)
-        self.assertIn(JS_END, rendered)
-        self.assertIn("active.querySelector('.dow')", rendered)
-        self.assertIn("active.querySelector('.date')", rendered)
-        self.assertIn("active.querySelector('.future-workout-title-text')", rendered)
-        self.assertIn("active.querySelector('.session')", rendered)
-        self.assertIn("classList.add('timeline-active')", rendered)
-        self.assertIn("addEventListener('scroll',schedule,{passive:true})", rendered)
+        self.assertNotIn('class="timeline-scroll-context"', rendered)
+        self.assertNotIn('training-timeline-js-v1:start', rendered)
+        self.assertIn('.week-timeline>.day>.daytop{', rendered)
+        self.assertIn('top:10px;', rendered)
 
     def test_transform_is_idempotent(self):
         once = apply_timeline(self.sample_page())
@@ -82,8 +76,6 @@ class TrainingTimelineUiTests(unittest.TestCase):
         self.assertEqual(once, twice)
         self.assertEqual(twice.count(CSS_START), 1)
         self.assertEqual(twice.count(CSS_END), 1)
-        self.assertEqual(twice.count(JS_START), 1)
-        self.assertEqual(twice.count(JS_END), 1)
 
     def test_requires_quiet_performance_current_page(self):
         with self.assertRaises(RuntimeError):
