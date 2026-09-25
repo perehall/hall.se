@@ -100,7 +100,7 @@ def main():
     required = [
         CSS_MARKER,
         'class="week-status-expander"',
-        'class="week-status-expander"',
+        'träningsdag',
         '<section class="dashboard" aria-label="Veckoöversikt">',
         '.week-status-expander .dashboard>.dashboard-card:last-child{display:none}',
         '.week-status-expander>summary:after{content:" +"}',
