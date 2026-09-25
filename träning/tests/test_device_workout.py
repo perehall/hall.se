@@ -135,6 +135,20 @@ class DeviceWorkoutTests(unittest.TestCase):
         self.assertNotIn("device_workout", materialized)
         self.assertNotIn("device_sync", materialized)
 
+    def test_incomplete_selected_candidate_does_not_block_materialization(self):
+        day = base_day()
+        selected = day["workout_design"]["candidates"][0]
+        selected["prescription"] = {
+            "executable": False,
+            "completeness": "partial",
+            "blocks": [],
+        }
+        day["device_workout"] = {"stale": True}
+        day["device_sync"] = {"status": "synced"}
+        materialized = materialize_day(day, in_horizon=True)
+        self.assertNotIn("device_workout", materialized)
+        self.assertNotIn("device_sync", materialized)
+
     def test_strength_is_not_silently_compiled(self):
         with self.assertRaises(DeviceWorkoutError):
             compile_device_workout(base_day(sport="strength"))
