@@ -694,13 +694,95 @@ body.quiet-performance.qp-history .day.workout-card-v2.past-completed{
   .top-week-current strong{font-size:.86rem}
   .top-week-current span{font-size:.67rem}
 }
+/* unified-week-page-shell-v1 */
+.week-context-header{
+  margin-top:38px;
+  padding:0 2px 2px;
+}
+.week-context-header .section{
+  margin:0;
+  font-size:1.24rem;
+  letter-spacing:-.018em;
+}
+.week-context-focus{
+  display:block;
+  margin-top:6px;
+  font-size:.94rem;
+  font-weight:670;
+  line-height:1.4;
+  letter-spacing:-.008em;
+}
+.week-context-meta{
+  margin-top:4px;
+  color:var(--qp-tertiary,#64748b);
+  font-size:.72rem;
+  line-height:1.4;
+}
+.week-context-header .top-details{margin-top:8px}
+.week-context-header + .week-status-expander{
+  margin-top:2px;
+  margin-bottom:20px;
+}
+.week-status-expander{
+  margin:2px 0 20px;
+}
+.week-status-expander>summary{
+  cursor:pointer;
+  list-style:none;
+  color:var(--qp-tertiary,#64748b);
+  font-size:.7rem;
+  font-weight:620;
+  padding:3px 0;
+  line-height:1.35;
+}
+.week-status-expander>summary::-webkit-details-marker{display:none}
+.week-status-expander>summary:after{content:" +"}
+.week-status-expander[open]>summary:after{content:" −"}
+.week-status-body{margin-top:8px}
+.week-status-expander .dashboard{margin:0}
+.week-page-history>.week-review{margin-top:8px}
+@media(max-width:620px){
+  .week-context-header{margin-top:32px;padding:0 1px 2px}
+  .week-context-header .section{font-size:1.16rem}
+  .week-context-focus{font-size:.9rem}
+}
+/* all-week-pass-icons-v1 */
+.week-pass-session{
+  display:flex!important;
+  align-items:flex-start!important;
+  gap:8px!important;
+}
+.week-pass-icon-group{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  flex:0 0 auto;
+  padding-top:1px;
+  color:var(--qp-secondary,#64748b);
+}
+.week-pass-icon-group .sport-icon{
+  width:19px;
+  height:19px;
+  flex:0 0 auto;
+}
+.week-pass-icon-group .icon-swim,
+.week-pass-icon-group .icon-bike,
+.week-pass-icon-group .icon-enduro,
+.week-pass-icon-group .icon-strength{width:21px}
+.week-pass-session-text{min-width:0}
+@media(max-width:620px){
+  .week-pass-icon-group .sport-icon{width:18px;height:18px}
+  .week-pass-icon-group .icon-swim,
+  .week-pass-icon-group .icon-bike,
+  .week-pass-icon-group .icon-enduro,
+  .week-pass-icon-group .icon-strength{width:20px}
+}
 </style>
 </head>
-<body class="quiet-performance qp-history"><div class="wrap">
-<header><div class="eyebrow">Träningsplan</div><h1>Vecka 38</h1><div class="sub header-meta-line"><span class="week-period">14–20 sep</span><span>·</span><span class="header-status">Historik · data sparad 2026-09-21 01:14</span></div></header>
+<body class="quiet-performance qp-history week-page-history"><div class="wrap">
 <nav class="top-week-nav" aria-label="Veckonavigering"><a class="top-week-link prev" href="/träning/vecka/2026-W37/">‹ Vecka 37</a><div class="top-week-current"><strong>Vecka 38</strong><span>14–20 sep · historik</span></div><a class="top-week-link next" href="/träning/">Vecka 39 ›</a></nav>
-<div class="hero week-focus-card"><h2 class="week-focus-title">Mesocykel · löptröskel + backkvalitet · mikrocykel 4 av 4</h2><details class="week-focus-details"><summary>Planidé</summary><p>Flytta den prioriterade löpförmågan framåt genom kontrollerad tröskel, löpekonomi/backstyrka och lugn tålighet, samtidigt som MTB/XC och simning hålls aktiva utan att tränga undan löputvecklingen. Mikrocykeln är preliminär men konkret: varje planerat pass har en användbar grundplan. Faktisk belastning och återhämtning används för att behålla eller justera planen, inte för att skapa den i sista stund. Kalenderveckan är bara visningen.</p></details></div>
-<section class="dashboard" aria-label="Veckoöversikt">
+<section class="week-context-header"><h2 class="section">Historisk vecka</h2><strong class="week-context-focus">löptröskel + backkvalitet</strong><div class="week-context-meta">Historik · mikrocykel 4 av 4 · 8 pass · 10:13:46 passtid · 7 träningsdagar</div><details class="top-details week-context-plan"><summary>Planidé</summary><div class="top-details-body"><p>Flytta den prioriterade löpförmågan framåt genom kontrollerad tröskel, löpekonomi/backstyrka och lugn tålighet, samtidigt som MTB/XC och simning hålls aktiva utan att tränga undan löputvecklingen. Mikrocykeln är preliminär men konkret: varje planerat pass har en användbar grundplan. Faktisk belastning och återhämtning används för att behålla eller justera planen, inte för att skapa den i sista stund. Kalenderveckan är bara visningen.</p></div></details></section>
+<details class="week-status-expander"><summary>Veckostatus</summary><div class="week-status-body"><section class="dashboard" aria-label="Veckoöversikt">
   <div class="metrics">
     <div class="metric"><strong>8</strong><span>pass</span></div>
     <div class="metric"><strong>10:13:46</strong><span>passtid</span></div>
@@ -757,7 +839,7 @@ body.quiet-performance.qp-history .day.workout-card-v2.past-completed{
     <div class="dashboard-title">Veckosummering</div>
     <div class="history-summary">Avslutad vecka · plan, utfall, passupplägg och Tränings-Yodas bedömningar är bevarade.</div>
   </div>
-</section>
+</section></div></details>
 <section class="week-review" data-week-review="2026-W38">
   <div class="week-review-card">
     <div class="week-review-title">Veckoutvärdering</div>
@@ -778,12 +860,12 @@ body.quiet-performance.qp-history .day.workout-card-v2.past-completed{
     <details><summary>Osäkerheter</summary><ul><li>Subjektiv återhämtning/sömn och eventuell upplevd trötthet saknas och begränsar bedömning av absorberbar belastning.</li><li>Detaljer om intensitetsstyrning (zonindelning) för sim- och cykelpass saknas.</li><li>Eventuella skador eller muskelsmärta rapporterades inte och är därför okända.</li></ul></details>
   </div>
 </section>
-<h2 class="section">Aktuell vecka</h2><div class="day">
+<div class="day">
   <div class="daytop">
     <div><div class="dow">Måndag</div><div class="date">2026-09-14</div></div>
     <div class="badge fixed">GENOMFÖRT</div>
   </div>
-  <div class="session">Enduroskola + styrka · styrkan efter enduron</div>
+  <div class="session week-pass-session"><span class="week-pass-icon-group" data-week-pass-icons="enduro,strength"><svg class="sport-icon icon-enduro" aria-hidden="true" viewBox="0 0 640 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M280 32c-13.3 0-24 10.7-24 24s10.7 24 24 24l57.7 0 16.4 30.3L256 192l-45.3-45.3c-12-12-28.3-18.7-45.3-18.7L64 128c-17.7 0-32 14.3-32 32l0 32 96 0c88.4 0 160 71.6 160 160c0 11-1.1 21.7-3.2 32l70.4 0c-2.1-10.3-3.2-21-3.2-32c0-52.2 25-98.6 63.7-127.8l15.4 28.6C402.4 276.3 384 312 384 352c0 70.7 57.3 128 128 128s128-57.3 128-128s-57.3-128-128-128c-13.5 0-26.5 2.1-38.7 6L418.2 128l61.8 0c17.7 0 32-14.3 32-32l0-32c0-17.7-14.3-32-32-32l-20.4 0c-7.5 0-14.7 2.6-20.5 7.4L391.7 78.9l-14-26c-7-12.9-20.5-21-35.2-21L280 32zM462.7 311.2l28.2 52.2c6.3 11.7 20.9 16 32.5 9.7s16-20.9 9.7-32.5l-28.2-52.2c2.3-.3 4.7-.4 7.1-.4c35.3 0 64 28.7 64 64s-28.7 64-64 64s-64-28.7-64-64c0-15.5 5.5-29.7 14.7-40.8zM187.3 376c-9.5 23.5-32.5 40-59.3 40c-35.3 0-64-28.7-64-64s28.7-64 64-64c26.9 0 49.9 16.5 59.3 40l66.4 0C242.5 268.8 190.5 224 128 224C57.3 224 0 281.3 0 352s57.3 128 128 128c62.5 0 114.5-44.8 125.8-104l-66.4 0zM128 384a32 32 0 1 0 0-64 32 32 0 1 0 0 64z"/></svg><svg class="sport-icon icon-strength" aria-hidden="true" viewBox="0 0 640 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M96 64c0-17.7 14.3-32 32-32h32c17.7 0 32 14.3 32 32v160 64 160c0 17.7-14.3 32-32 32h-32c-17.7 0-32-14.3-32-32v-64H64c-17.7 0-32-14.3-32-32v-64c-17.7 0-32-14.3-32-32s14.3-32 32-32v-64c0-17.7 14.3-32 32-32h32V64zm448 0v64h32c17.7 0 32 14.3 32 32v64c17.7 0 32 14.3 32 32s-14.3 32-32 32v64c0 17.7-14.3 32-32 32h-32v64c0 17.7-14.3 32-32 32h-32c-17.7 0-32-14.3-32-32V288 224 64c0-17.7 14.3-32 32-32h32c17.7 0 32 14.3 32 32zM416 224v64H224v-64h192z"/></svg></span><span class="week-pass-session-text">Enduroskola + styrka · styrkan efter enduron</span></div>
   <div class="reason">Användarbekräftad kombination: enduroskolan genomförs först och styrka/core direkt efter. Styrkan hålls kontrollerad utan failure; den samlade faktiska belastningen från enduro och styrka ska vägas in inför tisdagens prioriterade löptröskel.</div>
   <div class="pass"><div class="pass-title">Automatiskt från Strava</div><div><strong>WeightTraining</strong> · 34:49 · snittpuls 75 · max 109</div><div><strong>Enduro</strong> · 13,93 km · 1:29:04 · snittpuls 107 · max 166</div></div><div class="coach yoda-v2">
   <div class="coach-title">Tränings-Yoda (AI)</div>
@@ -811,7 +893,7 @@ body.quiet-performance.qp-history .day.workout-card-v2.past-completed{
     <div><div class="dow">Tisdag</div><div class="date">2026-09-15</div></div>
     <div class="badge fixed">GENOMFÖRT</div>
   </div>
-  <div class="session">Löpning utomhus · kontrollerad tröskel · 4 × 8 min / 120 s jogg</div>
+  <div class="session week-pass-session"><span class="week-pass-icon-group" data-week-pass-icons="run"><svg class="sport-icon icon-run" aria-hidden="true" viewBox="0 0 448 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M320 48a48 48 0 1 0-96 0 48 48 0 1 0 96 0zM125.7 175.5c9.9-9.9 23.4-15.5 37.5-15.5 1.9 0 3.8.1 5.6.3L137.6 254c-9.3 28 1.7 58.8 26.8 74.5l86.2 53.9-25.4 88.8c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l28.7-100.4c5.9-20.6-2.6-42.6-20.7-53.9L238 299l30.9-82.4 5.1 12.3C289 264.7 323.9 288 362.7 288H384c17.7 0 32-14.3 32-32s-14.3-32-32-32h-21.3c-12.9 0-24.6-7.8-29.5-19.7l-6.3-15c-14.6-35.1-44.1-61.9-80.5-73.1l-48.7-15c-11.1-3.4-22.7-5.2-34.4-5.2-31 0-60.8 12.3-82.7 34.3l-23.2 23.1c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l23.1-23.1zM91.2 352H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h69.6c19 0 36.2-11.2 43.9-28.5l11.5-25.9-9.5-6c-17.5-10.9-30.5-26.8-37.9-44.9L91.2 352z"/></svg></span><span class="week-pass-session-text">Löpning utomhus · kontrollerad tröskel · 4 × 8 min / 120 s jogg</span></div>
   <div class="reason">Användarbekräftad justering av dagens tröskelpass. 4 × 8 min ger 32 min kvalitetsarbete och väljs framför 3 × 10 min eftersom åttaminutersblocken passar standardrundan bättre; intensiteten ska inte höjas.</div>
   <div class="pass"><div class="pass-title">Automatiskt från Strava</div><div><strong>Run</strong> · 13,13 km · 1:04:03 · snittpuls 143 · max 163</div></div><div class="coach yoda-v2">
   <div class="coach-title">Tränings-Yoda (AI)</div>
@@ -839,7 +921,7 @@ body.quiet-performance.qp-history .day.workout-card-v2.past-completed{
     <div><div class="dow">Onsdag</div><div class="date">2026-09-16</div></div>
     <div class="badge fixed">GENOMFÖRT</div>
   </div>
-  <div class="swim-workout"><div class="swim-session-head"><strong>Simning · 3 200 m</strong><span class="swim-meta">aerob/teknik</span></div></div>
+  <div class="swim-workout"><div class="swim-session-head"><strong class="session-with-icon week-pass-session"><span class="week-pass-icon-group" data-week-pass-icons="swim"><svg class="sport-icon icon-swim" aria-hidden="true" viewBox="0 0 576 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M309.5 178.4 447.9 297.1c-1.6.9-3.2 2-4.8 3-18 12.4-40.1 20.3-59.2 20.3-19.6 0-40.8-7.7-59.2-20.3-22.1-15.5-51.6-15.5-73.7 0-17.1 11.8-38 20.3-59.2 20.3-10.1 0-21.1-2.2-31.9-6.2C163.1 193.2 262.2 96 384 96h64c17.7 0 32 14.3 32 32s-14.3 32-32 32h-64c-26.9 0-52.3 6.6-74.5 18.4zM160 160A64 64 0 1 1 32 160a64 64 0 1 1 128 0zM306.5 325.9C329 341.4 356.5 352 384 352c26.9 0 55.4-10.8 77.4-26.1 11.9-8.5 28.1-7.8 39.2 1.7 14.4 11.9 32.5 21 50.6 25.2 17.2 4 27.9 21.2 23.9 38.4s-21.2 27.9-38.4 23.9c-24.5-5.7-44.9-16.5-58.2-25C449.5 405.7 417 416 384 416c-31.9 0-60.6-9.9-80.4-18.9-5.8-2.7-11.1-5.3-15.6-7.7-4.5 2.4-9.7 5.1-15.6 7.7-19.8 9-48.5 18.9-80.4 18.9-33 0-65.5-10.3-94.5-25.8-13.4 8.4-33.7 19.3-58.2 25-17.2 4-34.4-6.7-38.4-23.9s6.7-34.4 23.9-38.4c18.1-4.2 36.2-13.3 50.6-25.2 11.1-9.4 27.3-10.1 39.2-1.7C136.7 341.2 165.1 352 192 352c27.5 0 55-10.6 77.5-26.1 11.1-7.9 25.9-7.9 37 0z"/></svg></span><span class="week-pass-session-text">Simning · 3 200 m</span></strong><span class="swim-meta">aerob/teknik</span></div></div>
   <div class="reason">Preliminär simstruktur förs vidare från föregående veckas etablerade simdos för kontinuitet. Totaldosen ökas inte automatiskt; slutlig dos och intensitet omprövas mot faktisk belastning och återhämtning från de närmast föregående 2–3 dagarna.</div>
   <div class="pass"><div class="pass-title">Automatiskt från Strava</div><div><strong>Swim</strong> · 3,50 km · 1:12:03 · snittpuls 128 · max 171</div></div><div class="coach yoda-v2">
   <div class="coach-title">Tränings-Yoda (AI)</div>
@@ -867,7 +949,7 @@ body.quiet-performance.qp-history .day.workout-card-v2.past-completed{
     <div><div class="dow">Torsdag</div><div class="date">2026-09-17</div></div>
     <div class="badge fixed">GENOMFÖRT</div>
   </div>
-  <div class="session">MTB/XC · 60 min · teknik + lugn aerob stig</div>
+  <div class="session week-pass-session"><span class="week-pass-icon-group" data-week-pass-icons="bike"><svg class="sport-icon icon-bike" aria-hidden="true" viewBox="0 0 640 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M312 32c-13.3 0-24 10.7-24 24s10.7 24 24 24h25.7l34.6 64H222.9l-27.4-38C191 99.7 183.7 96 176 96h-56c-13.3 0-24 10.7-24 24s10.7 24 24 24h43.7l22.1 30.7-26.6 53.1c-10-2.5-20.5-3.8-31.2-3.8C57.3 224 0 281.3 0 352s57.3 128 128 128c65.3 0 119.1-48.9 127-112h49c8.5 0 16.3-4.5 20.7-11.8l84.8-143.5 21.7 40.1C402.4 276.3 384 312 384 352c0 70.7 57.3 128 128 128s128-57.3 128-128-57.3-128-128-128c-13.5 0-26.5 2.1-38.7 6L375.4 48.8C369.8 38.4 359 32 347.2 32H312zM458.6 303.7l32.3 59.7c6.3 11.7 20.9 16 32.5 9.7s16-20.9 9.7-32.5l-32.3-59.7c3.6-.6 7.4-.9 11.2-.9 39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72c0-18.6 7-35.5 18.6-48.3zM133.2 368h65c-7.3 32.1-36 56-70.2 56-39.8 0-72-32.2-72-72s32.2-72 72-72c1.7 0 3.4.1 5.1.2l-24.2 48.5c-9 18.1 4.1 39.4 24.3 39.4zm33.7-48 50.7-101.3 72.9 101.2-.1.1H166.9zm90.6-128H366L317 274.8 257.4 192z"/></svg></span><span class="week-pass-session-text">MTB/XC · 60 min · teknik + lugn aerob stig</span></div>
   <div class="reason">Utvecklar teknisk MTB/XC och aerob cykelkapacitet som stöd för målbilden. 60 minuter lugn teknisk stig är grundplan och kortas vid behov för att skydda nästa prioriterade löpstimulus.</div>
   <div class="pass"><div class="pass-title">Automatiskt från Strava</div><div><strong>MountainBikeRide</strong> · 18,05 km · 1:17:15 · snittpuls 127 · max 152</div></div><div class="coach yoda-v2">
   <div class="coach-title">Tränings-Yoda (AI)</div>
@@ -895,7 +977,7 @@ body.quiet-performance.qp-history .day.workout-card-v2.past-completed{
     <div><div class="dow">Fredag</div><div class="date">2026-09-18</div></div>
     <div class="badge fixed">GENOMFÖRT</div>
   </div>
-  <div class="session">Löpning · backkvalitet · 15 min lugnt + 2 × 8 × 150 m / lugn joggvila + 10 min lugnt</div>
+  <div class="session week-pass-session"><span class="week-pass-icon-group" data-week-pass-icons="run"><svg class="sport-icon icon-run" aria-hidden="true" viewBox="0 0 448 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M320 48a48 48 0 1 0-96 0 48 48 0 1 0 96 0zM125.7 175.5c9.9-9.9 23.4-15.5 37.5-15.5 1.9 0 3.8.1 5.6.3L137.6 254c-9.3 28 1.7 58.8 26.8 74.5l86.2 53.9-25.4 88.8c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l28.7-100.4c5.9-20.6-2.6-42.6-20.7-53.9L238 299l30.9-82.4 5.1 12.3C289 264.7 323.9 288 362.7 288H384c17.7 0 32-14.3 32-32s-14.3-32-32-32h-21.3c-12.9 0-24.6-7.8-29.5-19.7l-6.3-15c-14.6-35.1-44.1-61.9-80.5-73.1l-48.7-15c-11.1-3.4-22.7-5.2-34.4-5.2-31 0-60.8 12.3-82.7 34.3l-23.2 23.1c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l23.1-23.1zM91.2 352H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h69.6c19 0 36.2-11.2 43.9-28.5l11.5-25.9-9.5-6c-17.5-10.9-30.5-26.8-37.9-44.9L91.2 352z"/></svg></span><span class="week-pass-session-text">Löpning · backkvalitet · 15 min lugnt + 2 × 8 × 150 m / lugn joggvila + 10 min lugnt</span></div>
   <div class="reason">Mesocykelns andra prioriterade löpkvalitet. Användaren har uttryckligen rapporterat 3 × 7 = 21 genomförda backintervaller; det är nu demonstrerat repetitionsvolymgolv. Nästa normaldos ska därför ligga över 21 arbetsrepetitioner eller ha ett explicit hold-/regressionsskäl.</div>
   <div class="decision coach-adjust"><strong>Tränings-Yoda · justering</strong>Passet är nedjusterat från grundplanen. Följ passupplägget ovan.</div><div class="pass"><div class="pass-title">Automatiskt från Strava</div><div><strong>Run</strong> · 15,01 km · 1:17:56 · snittpuls 141 · max 163</div></div><div class="coach yoda-v2">
   <div class="coach-title">Tränings-Yoda (AI)</div>
@@ -923,7 +1005,7 @@ body.quiet-performance.qp-history .day.workout-card-v2.past-completed{
     <div><div class="dow">Lördag</div><div class="date">2026-09-19</div></div>
     <div class="badge fixed">GENOMFÖRT</div>
   </div>
-  <div class="session">Simning · 3 200 m · aerob/teknik + styrka/core · 25 min · styrkemall</div>
+  <div class="session week-pass-session"><span class="week-pass-icon-group" data-week-pass-icons="strength,swim"><svg class="sport-icon icon-strength" aria-hidden="true" viewBox="0 0 640 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M96 64c0-17.7 14.3-32 32-32h32c17.7 0 32 14.3 32 32v160 64 160c0 17.7-14.3 32-32 32h-32c-17.7 0-32-14.3-32-32v-64H64c-17.7 0-32-14.3-32-32v-64c-17.7 0-32-14.3-32-32s14.3-32 32-32v-64c0-17.7 14.3-32 32-32h32V64zm448 0v64h32c17.7 0 32 14.3 32 32v64c17.7 0 32 14.3 32 32s-14.3 32-32 32v64c0 17.7-14.3 32-32 32h-32v64c0 17.7-14.3 32-32 32h-32c-17.7 0-32-14.3-32-32V288 224 64c0-17.7 14.3-32 32-32h32c17.7 0 32 14.3 32 32zM416 224v64H224v-64h192z"/></svg><svg class="sport-icon icon-swim" aria-hidden="true" viewBox="0 0 576 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M309.5 178.4 447.9 297.1c-1.6.9-3.2 2-4.8 3-18 12.4-40.1 20.3-59.2 20.3-19.6 0-40.8-7.7-59.2-20.3-22.1-15.5-51.6-15.5-73.7 0-17.1 11.8-38 20.3-59.2 20.3-10.1 0-21.1-2.2-31.9-6.2C163.1 193.2 262.2 96 384 96h64c17.7 0 32 14.3 32 32s-14.3 32-32 32h-64c-26.9 0-52.3 6.6-74.5 18.4zM160 160A64 64 0 1 1 32 160a64 64 0 1 1 128 0zM306.5 325.9C329 341.4 356.5 352 384 352c26.9 0 55.4-10.8 77.4-26.1 11.9-8.5 28.1-7.8 39.2 1.7 14.4 11.9 32.5 21 50.6 25.2 17.2 4 27.9 21.2 23.9 38.4s-21.2 27.9-38.4 23.9c-24.5-5.7-44.9-16.5-58.2-25C449.5 405.7 417 416 384 416c-31.9 0-60.6-9.9-80.4-18.9-5.8-2.7-11.1-5.3-15.6-7.7-4.5 2.4-9.7 5.1-15.6 7.7-19.8 9-48.5 18.9-80.4 18.9-33 0-65.5-10.3-94.5-25.8-13.4 8.4-33.7 19.3-58.2 25-17.2 4-34.4-6.7-38.4-23.9s6.7-34.4 23.9-38.4c18.1-4.2 36.2-13.3 50.6-25.2 11.1-9.4 27.3-10.1 39.2-1.7C136.7 341.2 165.1 352 192 352c27.5 0 55-10.6 77.5-26.1 11.1-7.9 25.9-7.9 37 0z"/></svg></span><span class="week-pass-session-text">Simning · 3 200 m · aerob/teknik + styrka/core · 25 min · styrkemall</span></div>
   <div class="reason">Kombinerar mikrocykelns andra simexponering med skyddad styrka/core. Simningen är aerob/teknisk för låg mekanisk kostnad; styrkan förblir en egen skyddad kapacitet och reduceras eller flyttas om fredagens faktiska belastning motiverar det.</div>
   <div class="decision coach-adjust"><strong>Tränings-Yoda · justering</strong>Passet är nedjusterat från grundplanen. Följ passupplägget ovan.</div><div class="pass"><div class="pass-title">Automatiskt från Strava</div><div><strong>Swim</strong> · 4,00 km · 1:18:50 · snittpuls 130 · max 156</div></div><div class="coach yoda-v2">
   <div class="coach-title">Tränings-Yoda (AI)</div>
@@ -951,7 +1033,7 @@ body.quiet-performance.qp-history .day.workout-card-v2.past-completed{
     <div><div class="dow">Söndag</div><div class="date">2026-09-20</div></div>
     <div class="badge fixed">GENOMFÖRT</div>
   </div>
-  <div class="session">Löpning · lugn distans · 75 min</div>
+  <div class="session week-pass-session"><span class="week-pass-icon-group" data-week-pass-icons="run"><svg class="sport-icon icon-run" aria-hidden="true" viewBox="0 0 448 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M320 48a48 48 0 1 0-96 0 48 48 0 1 0 96 0zM125.7 175.5c9.9-9.9 23.4-15.5 37.5-15.5 1.9 0 3.8.1 5.6.3L137.6 254c-9.3 28 1.7 58.8 26.8 74.5l86.2 53.9-25.4 88.8c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l28.7-100.4c5.9-20.6-2.6-42.6-20.7-53.9L238 299l30.9-82.4 5.1 12.3C289 264.7 323.9 288 362.7 288H384c17.7 0 32-14.3 32-32s-14.3-32-32-32h-21.3c-12.9 0-24.6-7.8-29.5-19.7l-6.3-15c-14.6-35.1-44.1-61.9-80.5-73.1l-48.7-15c-11.1-3.4-22.7-5.2-34.4-5.2-31 0-60.8 12.3-82.7 34.3l-23.2 23.1c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l23.1-23.1zM91.2 352H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h69.6c19 0 36.2-11.2 43.9-28.5l11.5-25.9-9.5-6c-17.5-10.9-30.5-26.8-37.9-44.9L91.2 352z"/></svg></span><span class="week-pass-session-text">Löpning · lugn distans · 75 min</span></div>
   <div class="reason">Mesocykelns tredje löpstimulus bygger tålighet och kontinuitet utan att bli ytterligare kvalitet. 75 minuter lugnt är grundplan; passet kortas, flyttas eller tas bort om föregående belastning motiverar det.</div>
   <div class="decision coach-adjust"><strong>Tränings-Yoda · justering</strong>Passet är nedjusterat. Följ passupplägget ovan.</div><div class="pass"><div class="pass-title">Automatiskt från Strava</div><div><strong>Run</strong> · 22,46 km · 1:59:46 · snittpuls 139 · max 158</div></div><div class="coach yoda-v2">
   <div class="coach-title">Tränings-Yoda (AI)</div>
