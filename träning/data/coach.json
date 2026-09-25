@@ -8,17 +8,17 @@
           "Användarrapport: 3 × 8 backintervaller (24 × 150 m totalt). Garmin klassade passet som Tempo. Passet genomfördes av praktiska skäl i stället för dagens planerade simning; simningen flyttas till 2026-09-26. Före passet rapporterade Garmin allt grönt och hög träningsberedskap. Relativt bra kontroll. Ingen fartjakt uppför RPE 6/10. Känsla: Pigg.",
           "Planstatus 2026-09-25: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
-        "summary": "Genomfört: 3 × 8 backintervaller (24 totalt). Simningen flyttas till 2026-09-26",
+        "summary": "Genomfört: 3 × 8 backintervaller (24 totalt). Känsla pigg RPE 6/10",
         "unknowns": [
-          "Subjektiv återhämtning nästa 24–48 h trots pigg känsla idag",
-          "Eventuell lokal muskelsmärta/trötthet i ben som kan påverka lördag/söndag"
+          "Hur användarens återhämtning utvecklas kommande 24–72 h trots pigg känsla.",
+          "Eventuella lokala muskelspänningar eller ömhet som kan påverka styrke- eller långpassdos."
         ],
         "confidence": "medium",
         "interpretations": [
-          "Passet fullföljde avsett backkvalitetsstimulus och visar god tolerans utan överdriven fartjakt",
-          "Eftersom simningen är redan flyttad till 2026-09-26 ska den inte läggas ovanpå dagens genomförande och närbelastning inför söndagens planerade långpass måste beaktas"
+          "Genomfört backkvalitet levererar avsett backstyrka/löpekonomi‑stimulus och räknas i mikrocykelns belastning.",
+          "Eftersom användaren var pigg och rapporterade kontrollerad insats finns inget skäl att automatiskt vila nästa dag, men närbelastning (senaste 3 dagar) bör beaktas inför långpass på söndag."
         ],
-        "load_interpretation": "Passet bidrar mekanisk, neuromuskulär och kardiovaskulär löpbelastning som ersatte planerad simning och räknas i närbelastningen."
+        "load_interpretation": "Passet ger mekanisk, neuromuskulär och kardiovaskulär stimulans från 24 korta arbetsrep; inga tecken på överdriven ansträngning i rapporten."
       },
       "auto_apply": {
         "note": "Ingen automatisk planändring.",
@@ -27,15 +27,15 @@
       "activity_id": 20326850936,
       "plan_action": {
         "action": "keep",
-        "reason": "Planerad simning är redan flyttad till 2026-09-26 och mikrocykeln skyddar söndagens långpass; inga konservativa reduktioner krävs nu.",
-        "target_date": "",
+        "reason": "Passet genomfördes som planerat och simningen flyttades av användaren till 2026-09-26.",
+        "target_date": "2026-09-26",
         "dose_option_id": "",
-        "recommendation": "Behåll plan: genomför simning 2026-09-26 som planerat; håll söndagens löpdistans oförändrad men börja lugnt och avbryt eller korta om ben känns oväntat trötta.",
+        "recommendation": "Behåll planerad simning 2026-09-26 enligt tidigare flytt; ingen ändring av kommande söndags långa lugna löpning föreslås nu. Om du känner ovanlig stelhet eller trötthet morgonen efter, meddela så justerar vi söndagens dos.",
         "requires_approval": false
       },
       "activity_date": "2026-09-25",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-09-25T20:38:09.334657+00:00",
+      "generated_at_utc": "2026-09-25T20:42:50.166150+00:00",
       "analysis_contract": {
         "pipeline_version": 3,
         "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
@@ -1287,9 +1287,9 @@
       "generated_at_utc": "2026-08-28T01:05:04.449248+00:00"
     }
   ],
-  "last_run_utc": "2026-09-25T20:38:09.334657+00:00",
+  "last_run_utc": "2026-09-25T20:42:50.166150+00:00",
   "contract_version": 15,
-  "last_trigger_hash": "3ad6c1f1c18c683f4f68e52010d06897b255100d4720c7f7ae1e130fb7fe7cc6",
+  "last_trigger_hash": "85b79deb0185e8dff3e97c6e658782561541e703624b29293475fa46cb1e8fdb",
   "output_contract_version": 19,
   "pipeline_contract_version": 3
 }
