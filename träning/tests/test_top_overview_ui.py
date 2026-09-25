@@ -196,7 +196,7 @@ class TopOverviewUiTests(unittest.TestCase):
 
 
     def test_current_week_heading_with_post_workout_anchor_is_supported(self):
-        page = self.sample_page().replace(
+        page = self.page().replace(
             '<h2 class="section">Aktuell vecka</h2>',
             '<h2 class="section" id="aktuell-vecka">Aktuell vecka</h2>',
             1,
