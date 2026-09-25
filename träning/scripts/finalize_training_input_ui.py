@@ -67,9 +67,61 @@ JS = r"""
   }
 
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  const PENDING_PREFIX = 'training-input-pending-v1:';
+  const pendingKey = (activityId) => `${PENDING_PREFIX}${activityId}`;
+
+  const processedKeys = (root) => (root.dataset.processedEventKeys || '')
+    .split(',')
+    .map((value) => value.trim())
+    .filter(Boolean);
+
+  const readPending = (activityId) => {
+    try {
+      const raw = localStorage.getItem(pendingKey(activityId));
+      if (!raw) return null;
+      const value = JSON.parse(raw);
+      if (
+        !value ||
+        value.activityId !== Number(activityId) ||
+        !/^training-input:[0-9a-f]{24}$/.test(String(value.eventKey || ''))
+      ) {
+        return null;
+      }
+      return value;
+    } catch (error) {
+      console.debug('TRAINING_INPUT_PENDING_READ_FAILED', error);
+      return null;
+    }
+  };
+
+  const writePending = (activityId, eventKey, state) => {
+    try {
+      localStorage.setItem(
+        pendingKey(activityId),
+        JSON.stringify({
+          activityId: Number(activityId),
+          eventKey,
+          rpe: state.rpe,
+          feelings: state.feelings,
+          text: state.text,
+          submittedAt: new Date().toISOString()
+        })
+      );
+    } catch (error) {
+      console.debug('TRAINING_INPUT_PENDING_WRITE_FAILED', error);
+    }
+  };
+
+  const clearPending = (activityId) => {
+    try {
+      localStorage.removeItem(pendingKey(activityId));
+    } catch (error) {
+      console.debug('TRAINING_INPUT_PENDING_CLEAR_FAILED', error);
+    }
+  };
 
   async function waitForProcessed(activityId, eventKey, onProgress) {
-    for (let attempt = 0; attempt < 90; attempt += 1) {
+    for (let attempt = 0; attempt < 240; attempt += 1) {
       if (attempt === 5) onProgress('Uppdaterar analys…');
       if (attempt === 15) onProgress('Väntar på färdig omräkning…');
       await sleep(2000);
@@ -87,11 +139,11 @@ JS = r"""
         const fresh = [...doc.querySelectorAll('[data-training-input]')]
           .find((item) => item.dataset.activityId === String(activityId));
         if (fresh) {
-          const processedKeys = (fresh.dataset.processedEventKeys || '')
+          const freshProcessedKeys = (fresh.dataset.processedEventKeys || '')
             .split(',')
             .map((value) => value.trim())
             .filter(Boolean);
-          if (processedKeys.includes(eventKey)) return true;
+          if (freshProcessedKeys.includes(eventKey)) return true;
         }
       } catch (error) {
         console.debug('TRAINING_INPUT_POLL_RETRY', error);
@@ -132,16 +184,16 @@ JS = r"""
       return button ? button.textContent.trim() : key;
     };
 
-    const compactSummary = () => {
-      const parts = ['Sparat'];
+    const compactSummary = (stateLabel = 'Sparat') => {
+      const parts = [stateLabel];
       if (rpe !== null) parts.push(`RPE ${rpe}`);
       [...feelings].forEach((key) => parts.push(feelingLabel(key)));
       return parts.join(' · ');
     };
 
-    const updateCompact = () => {
+    const updateCompact = (stateLabel = 'Sparat') => {
       root.dataset.reviewed = 'true';
-      summary.textContent = compactSummary();
+      summary.textContent = compactSummary(stateLabel);
       notePreview.textContent = text.value.trim();
       toggle.textContent = 'Ändra';
     };
@@ -173,6 +225,46 @@ JS = r"""
       toggle.hidden = false;
       status.textContent = '';
     };
+
+    const refreshWhenProcessed = async (eventKey) => {
+      const processed = await waitForProcessed(
+        root.dataset.activityId,
+        eventKey,
+        (message) => { status.textContent = message; }
+      );
+      if (processed) {
+        clearPending(root.dataset.activityId);
+        status.textContent = 'Klart';
+        const next = new URL(window.location.href);
+        next.searchParams.set('_feedback_done', String(Date.now()));
+        window.location.replace(next.toString());
+        return true;
+      }
+
+      status.textContent = 'Mottaget · väntar på publicering.';
+      root.dataset.submitting = 'false';
+      save.disabled = false;
+      return false;
+    };
+
+    const pending = readPending(root.dataset.activityId);
+    if (pending && processedKeys(root).includes(pending.eventKey)) {
+      clearPending(root.dataset.activityId);
+    } else if (pending) {
+      restore({
+        rpe: Number.isInteger(pending.rpe) ? pending.rpe : null,
+        feelings: Array.isArray(pending.feelings) ? pending.feelings : [],
+        text: typeof pending.text === 'string' ? pending.text : ''
+      });
+      initial = snapshot();
+      updateCompact('Mottaget');
+      editor.hidden = true;
+      toggle.hidden = false;
+      root.dataset.submitting = 'true';
+      save.disabled = true;
+      status.textContent = 'Mottaget · bearbetas';
+      void refreshWhenProcessed(pending.eventKey);
+    }
 
     toggle.addEventListener('click', openEditor);
     cancel.addEventListener('click', closeEditor);
@@ -222,28 +314,14 @@ JS = r"""
         if (!response.ok) throw new Error(body.error || 'request_failed');
         if (!body.event_key) throw new Error('missing_event_key');
 
-        updateCompact();
+        writePending(root.dataset.activityId, body.event_key, snapshot());
+        updateCompact('Mottaget');
         initial = snapshot();
         editor.hidden = true;
         toggle.hidden = false;
-        status.textContent = 'Uppdaterar analys…';
+        status.textContent = 'Mottaget · bearbetas';
 
-        const processed = await waitForProcessed(
-          root.dataset.activityId,
-          body.event_key,
-          (message) => { status.textContent = message; }
-        );
-        if (processed) {
-          status.textContent = 'Klart';
-          const next = new URL(window.location.href);
-          next.searchParams.set('_feedback_done', String(Date.now()));
-          window.location.replace(next.toString());
-          return;
-        }
-
-        status.textContent = 'Sparat · automatisk uppdatering kunde inte bekräftas.';
-        root.dataset.submitting = 'false';
-        save.disabled = false;
+        await refreshWhenProcessed(body.event_key);
       } catch (error) {
         status.textContent = `Kunde inte spara (${error.message}).`;
         root.dataset.submitting = 'false';
