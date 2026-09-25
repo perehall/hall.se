@@ -4,7 +4,7 @@
   "week_start": "2026-09-21",
   "week_end": "2026-09-27",
   "created_at_utc": "2026-09-20T23:15:26.146433+00:00",
-  "updated_at_utc": "2026-09-25T17:52:32.314460+00:00",
+  "updated_at_utc": "2026-09-25T19:39:40.604915+00:00",
   "plan": {
     "days": [
       {
@@ -570,9 +570,111 @@
       {
         "date": "2026-09-25",
         "label": "Fredag",
+        "sport": "run",
+        "reason": "Användarbekräftat genomförande: fredagens planerade simning ersattes av 24 × 150 m backintervaller, strukturerade som tre block om åtta. Simningen läggs därför inte ovanpå samma dag utan flyttas till lördag.",
+        "status": "planned",
+        "session": "Löpning · backkvalitet · 3 × 8 × 150 m",
+        "stimuli": [
+          "run_hill_quality"
+        ],
+        "activity_id": 20326850936,
+        "manual_lock": true,
+        "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
+        "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc1",
+        "priority_role": "flex",
+        "classification": "training",
+        "microcycle_day": 5,
+        "workout_design": {
+          "objective": {
+            "stimuli": [
+              "run_hill_quality"
+            ],
+            "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
+            "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc1",
+            "priority_role": "flex",
+            "mesocycle_role": "secondary",
+            "microcycle_slot": ""
+          },
+          "selection": {
+            "method": "deterministic_constraint_scoring",
+            "reason_for_today": "Användarbekräftat genomförande: fredagens planerade simning ersattes av 24 × 150 m backintervaller, strukturerade som tre block om åtta. Simningen läggs därför inte ovanpå samma dag utan flyttas till lördag.",
+            "preferred_dose_option_id": ""
+          },
+          "candidates": [
+            {
+              "id": "current-session",
+              "dose": {
+                "kind": "external",
+                "value": 1
+              },
+              "score": {
+                "basis": "deterministic_constraint_alignment",
+                "total": 65,
+                "breakdown": {
+                  "mesocycle_alignment": 30,
+                  "microcycle_alignment": 10,
+                  "near_term_resolution": 0,
+                  "progression_alignment": 15,
+                  "prescription_specificity": 10
+                }
+              },
+              "intent": "Användarbekräftat genomförande: fredagens planerade simning ersattes av 24 × 150 m backintervaller, strukturerade som tre block om åtta. Simningen läggs därför inte ovanpå samma dag utan flyttas till lördag.",
+              "session": "Löpning · backkvalitet · 3 × 8 × 150 m",
+              "stimuli": [
+                "run_hill_quality"
+              ],
+              "prescription": {
+                "blocks": [
+                  {
+                    "name": "Fast/externt strukturerat pass",
+                    "work": {},
+                    "intensity": "extern struktur",
+                    "instruction": "Faktiskt genomförd backkvalitet räknas som mekanisk, neuromuskulär och kardiovaskulär löpbelastning. Fortsatta beslut ska utgå från den faktiska dosen 3 × 8 × 150 m, inte från den ersatta simplanen."
+                  }
+                ],
+                "source": "external_commitment",
+                "executable": true,
+                "completeness": "external"
+              },
+              "dose_option_id": ""
+            }
+          ],
+          "schema_version": 1,
+          "near_term_context": {
+            "load_dimensions": [
+              "mechanical",
+              "neuromuscular",
+              "cardiovascular"
+            ],
+            "selection_uses_only_preapproved_doses": false
+          },
+          "selected_candidate_id": "current-session",
+          "progression_from_previous": {
+            "reason": "Användarbekräftat genomförande: fredagens planerade simning ersattes av 24 × 150 m backintervaller, strukturerade som tre block om åtta. Simningen läggs därför inte ovanpå samma dag utan flyttas till lördag.",
+            "relation": "support",
+            "demonstrated_floor_option_id": ""
+          }
+        },
+        "load_dimensions": [
+          "mechanical",
+          "neuromuscular",
+          "cardiovascular"
+        ],
+        "manual_override": {
+          "note": "Fredagens planerade simning ersattes av genomförd backkvalitet 3 × 8 × 150 m. Simningen flyttas till lördag 2026-09-26.",
+          "source": "user_confirmed"
+        },
+        "planning_status": "fixed",
+        "microcycle_index": 1,
+        "original_session": "Simning · 4 000 m · aerob + kontrollerad tröskel",
+        "development_focus": "Faktiskt genomförd backkvalitet räknas som mekanisk, neuromuskulär och kardiovaskulär löpbelastning. Fortsatta beslut ska utgå från den faktiska dosen 3 × 8 × 150 m, inte från den ersatta simplanen."
+      },
+      {
+        "date": "2026-09-26",
+        "label": "Lördag",
         "sport": "swim",
-        "reason": "Tisdagens 4 × 8 min gav redan mikrocykelns planerade löptröskelstimulus. Fredagens duplicerade löptröskel tas därför bort. En andra simexponering läggs här med den etablerade 4 000 m-mallen för att bevara mesocykelns simprioritet utan ytterligare mekanisk löpbelastning.",
-        "status": "preliminary",
+        "reason": "Användarbekräftad flytt av fredagens planerade 4 000 m-simning. Lördagen var tidigare öppen; simningen ersätter den öppna dagen som veckans andra simexponering efter fredagens backkvalitet och ska räknas i närbelastningen inför söndagens preliminära löpning.",
+        "status": "planned",
         "session": "Simning · 4 000 m · aerob + kontrollerad tröskel",
         "stimuli": [
           "swim_aerobic",
@@ -580,15 +682,7 @@
           "swim_technique"
         ],
         "dose_open": false,
-        "device_sync": {
-          "status": "synced",
-          "transport": "intervals_icu",
-          "source_hash": "9fcd60c075496d2ba5301ad8c850ecb2ec0dd8430864ecc062e85a53774b9e24",
-          "updated_at_utc": "2026-09-25T17:52:19.135022+00:00",
-          "device_delivery": "unverified",
-          "verified_at_utc": "2026-09-25T17:52:19.135022+00:00",
-          "provider_event_id": 138142476
-        },
+        "manual_lock": false,
         "dose_options": [
           {
             "id": "swim-aerobic-threshold-4000",
@@ -692,7 +786,7 @@
         "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc1",
         "priority_role": "flex",
         "watch_workout": {
-          "id": "swim-2026-w39-2026-09-25-aerob-threshold-4000",
+          "id": "swim-2026-w39-2026-09-26-aerob-threshold-4000",
           "name": "Aerob + kontrollerad tröskel · 4 000 m",
           "type": "Swim",
           "blocks": [
@@ -782,134 +876,8 @@
           "sync_enabled": false,
           "planned_distance_m": 4000
         },
-        "device_workout": {
-          "date": "2026-09-25",
-          "name": "Simning · 4 000 m · aerob + kontrollerad tröskel",
-          "sport": "swim",
-          "blocks": [
-            {
-              "name": "Insim + teknik",
-              "sets": 1,
-              "steps": [
-                {
-                  "kind": "work",
-                  "duration": {
-                    "kind": "distance",
-                    "meters": 600
-                  },
-                  "instruction": "Insim + teknik enligt etablerad rutin · utan redskap",
-                  "intensity_class": "warmup"
-                }
-              ],
-              "repetitions_per_set": 1
-            },
-            {
-              "name": "Aerob 1",
-              "sets": 1,
-              "steps": [
-                {
-                  "kind": "work",
-                  "duration": {
-                    "kind": "distance",
-                    "meters": 200
-                  },
-                  "instruction": "Aerobt, stabil teknik · utan redskap",
-                  "intensity_class": "interval"
-                },
-                {
-                  "kind": "recovery",
-                  "duration": {
-                    "kind": "time",
-                    "seconds": 20
-                  },
-                  "press_lap": false,
-                  "instruction": "Vila",
-                  "intensity_class": "recovery",
-                  "transport_reference_only": false
-                }
-              ],
-              "repetitions_per_set": 6
-            },
-            {
-              "name": "Kontrollerad tröskel",
-              "sets": 1,
-              "steps": [
-                {
-                  "kind": "work",
-                  "duration": {
-                    "kind": "distance",
-                    "meters": 200
-                  },
-                  "instruction": "Kontrollerad tröskel · paddlar + dolme",
-                  "intensity_class": "interval"
-                },
-                {
-                  "kind": "recovery",
-                  "duration": {
-                    "kind": "time",
-                    "seconds": 25
-                  },
-                  "press_lap": false,
-                  "instruction": "Vila",
-                  "intensity_class": "recovery",
-                  "transport_reference_only": false
-                }
-              ],
-              "repetitions_per_set": 4
-            },
-            {
-              "name": "Aerob 2",
-              "sets": 1,
-              "steps": [
-                {
-                  "kind": "work",
-                  "duration": {
-                    "kind": "distance",
-                    "meters": 200
-                  },
-                  "instruction": "Aerobt, återgå till stabil rytm och teknik · utan redskap",
-                  "intensity_class": "interval"
-                },
-                {
-                  "kind": "recovery",
-                  "duration": {
-                    "kind": "time",
-                    "seconds": 20
-                  },
-                  "press_lap": false,
-                  "instruction": "Vila",
-                  "intensity_class": "recovery",
-                  "transport_reference_only": false
-                }
-              ],
-              "repetitions_per_set": 6
-            },
-            {
-              "name": "Avsim",
-              "sets": 1,
-              "steps": [
-                {
-                  "kind": "work",
-                  "duration": {
-                    "kind": "distance",
-                    "meters": 200
-                  },
-                  "instruction": "Mycket lugnt avsim · utan redskap",
-                  "intensity_class": "cooldown"
-                }
-              ],
-              "repetitions_per_set": 1
-            }
-          ],
-          "transport": "intervals_icu",
-          "external_id": "hall-device:2026-09-25:swim:swim_aerobic_threshold_3",
-          "source_hash": "9fcd60c075496d2ba5301ad8c850ecb2ec0dd8430864ecc062e85a53774b9e24",
-          "provider_type": "Swim",
-          "target_policy": "explicit_single_primary_only",
-          "schema_version": 1,
-          "source_candidate_id": "swim-aerobic-threshold-4000"
-        },
-        "microcycle_day": 5,
+        "classification": "training",
+        "microcycle_day": 6,
         "swim_equipment": {
           "planned": [
             "paddles",
@@ -1063,21 +1031,15 @@
           "technical"
         ],
         "manual_override": {
-          "note": "Fredagens tidigare 4 × 8 löptröskel ersätts efter att samma tröskelstimulus genomfördes tisdag 2026-09-22. Andra simexponeringen bevaras.",
-          "source": "coach_replan_after_actual"
+          "note": "Fredagens 4 000 m simpass flyttas av praktiska skäl till lördag. Detta är en flytt av veckans simexponering, inte extra träning ovanpå planen. planning_status=fixed bevarar användarvalet; manual_lock används inte eftersom det i workout-designlagret betyder extern aktivitet.",
+          "source": "user_confirmed"
         },
         "microcycle_slot": "swim_aerobic_threshold_3",
+        "planning_status": "fixed",
         "microcycle_index": 1,
+        "original_session": "Ingen planerad träning",
         "development_focus": "Bibehåll teknisk kvalitet genom ett längre aerobt pass med en avgränsad, kontrollerad tröskeldel; tröskeldelen ska inte bli maximal.",
         "baseline_option_id": "swim-aerobic-threshold-4000"
-      },
-      {
-        "date": "2026-09-26",
-        "label": "Lördag",
-        "sport": "open",
-        "reason": "Ingen träning är planerad som standard på denna dag. En ledig dag är inte i sig skäl att lägga till ett pass; eventuell ändring ska tjäna mikrocykeln och bygga på faktisk information.",
-        "status": "open",
-        "session": "Ingen planerad träning"
       },
       {
         "date": "2026-09-27",
@@ -1094,9 +1056,9 @@
           "status": "synced",
           "transport": "intervals_icu",
           "source_hash": "9dc12d3e522e49454af7c6ffe216ee9ba323186427181ac1e1ae64a8d6009578",
-          "updated_at_utc": "2026-09-25T17:52:19.459054+00:00",
+          "updated_at_utc": "2026-09-25T19:39:27.010787+00:00",
           "device_delivery": "unverified",
-          "verified_at_utc": "2026-09-25T17:52:19.459054+00:00",
+          "verified_at_utc": "2026-09-25T19:39:27.010787+00:00",
           "provider_event_id": 138097036
         },
         "dose_options": [
@@ -1457,18 +1419,330 @@
       "sport_type": "Run",
       "start_date": "2026-09-25T16:20:41Z",
       "device_name": "Garmin Forerunner 970",
+      "user_report": "3 × 8 backintervaller (24 × 150 m totalt). Garmin klassade passet som Tempo. Passet genomfördes av praktiska skäl i stället för dagens planerade simning; simningen flyttas till 2026-09-26. Före passet rapporterade Garmin allt grönt och hög träningsberedskap.",
       "average_watts": 279.3,
+      "display_label": "Löpning · backintervaller",
       "max_heartrate": 165.0,
       "moving_time_s": 4564,
+      "classification": "training",
       "elapsed_time_s": 4567,
       "start_date_local": "2026-09-25T18:20:41Z",
       "average_heartrate": 141.6,
+      "source_sport_type": "Run",
+      "classification_reason": "Användarbekräftad backkvalitet. Strava-varven visar deterministiskt 24 korta arbetsvarv runt 150 m i tre block om åtta; totaldistansen får därför inte feltolkas som ett sammanhängande långpass.",
       "total_elevation_gain_m": 277.0,
       "weighted_average_watts": 287,
       "workout_analysis_context": {
         "run": {
           "average_pace": "5:08/km",
-          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals.",
+          "short_intervals": {
+            "reps": [
+              {
+                "pace": "4:20/km",
+                "lap_index": 6,
+                "speed_m_s": 3.853,
+                "distance_m": 150.26,
+                "max_heartrate": 152.0,
+                "moving_time_s": 39.0,
+                "pace_s_per_km": 259.55,
+                "average_heartrate": 144.6
+              },
+              {
+                "pace": "4:32/km",
+                "lap_index": 8,
+                "speed_m_s": 3.678,
+                "distance_m": 147.12,
+                "max_heartrate": 151.0,
+                "moving_time_s": 40.0,
+                "pace_s_per_km": 271.89,
+                "average_heartrate": 140.6
+              },
+              {
+                "pace": "4:35/km",
+                "lap_index": 10,
+                "speed_m_s": 3.642,
+                "distance_m": 149.32,
+                "max_heartrate": 154.0,
+                "moving_time_s": 41.0,
+                "pace_s_per_km": 274.58,
+                "average_heartrate": 143.2
+              },
+              {
+                "pace": "4:23/km",
+                "lap_index": 12,
+                "speed_m_s": 3.802,
+                "distance_m": 148.28,
+                "max_heartrate": 154.0,
+                "moving_time_s": 39.0,
+                "pace_s_per_km": 263.02,
+                "average_heartrate": 144.0
+              },
+              {
+                "pace": "4:25/km",
+                "lap_index": 14,
+                "speed_m_s": 3.78,
+                "distance_m": 147.42,
+                "max_heartrate": 157.0,
+                "moving_time_s": 39.0,
+                "pace_s_per_km": 264.55,
+                "average_heartrate": 146.6
+              },
+              {
+                "pace": "4:14/km",
+                "lap_index": 16,
+                "speed_m_s": 3.942,
+                "distance_m": 149.78,
+                "max_heartrate": 160.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 253.71,
+                "average_heartrate": 149.8
+              },
+              {
+                "pace": "4:11/km",
+                "lap_index": 18,
+                "speed_m_s": 3.977,
+                "distance_m": 151.13,
+                "max_heartrate": 160.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 251.44,
+                "average_heartrate": 150.0
+              },
+              {
+                "pace": "4:08/km",
+                "lap_index": 20,
+                "speed_m_s": 4.027,
+                "distance_m": 148.99,
+                "max_heartrate": 159.0,
+                "moving_time_s": 37.0,
+                "pace_s_per_km": 248.34,
+                "average_heartrate": 151.7
+              },
+              {
+                "pace": "4:26/km",
+                "lap_index": 23,
+                "speed_m_s": 3.761,
+                "distance_m": 146.69,
+                "max_heartrate": 159.0,
+                "moving_time_s": 39.0,
+                "pace_s_per_km": 265.87,
+                "average_heartrate": 149.4
+              },
+              {
+                "pace": "4:05/km",
+                "lap_index": 25,
+                "speed_m_s": 4.081,
+                "distance_m": 151.0,
+                "max_heartrate": 159.0,
+                "moving_time_s": 37.0,
+                "pace_s_per_km": 245.03,
+                "average_heartrate": 149.0
+              },
+              {
+                "pace": "4:13/km",
+                "lap_index": 27,
+                "speed_m_s": 3.957,
+                "distance_m": 150.36,
+                "max_heartrate": 159.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 252.73,
+                "average_heartrate": 149.3
+              },
+              {
+                "pace": "3:55/km",
+                "lap_index": 29,
+                "speed_m_s": 4.249,
+                "distance_m": 152.96,
+                "max_heartrate": 161.0,
+                "moving_time_s": 36.0,
+                "pace_s_per_km": 235.36,
+                "average_heartrate": 150.1
+              },
+              {
+                "pace": "4:08/km",
+                "lap_index": 31,
+                "speed_m_s": 4.035,
+                "distance_m": 149.3,
+                "max_heartrate": 162.0,
+                "moving_time_s": 37.0,
+                "pace_s_per_km": 247.82,
+                "average_heartrate": 151.7
+              },
+              {
+                "pace": "4:05/km",
+                "lap_index": 33,
+                "speed_m_s": 4.088,
+                "distance_m": 151.24,
+                "max_heartrate": 159.0,
+                "moving_time_s": 37.0,
+                "pace_s_per_km": 244.64,
+                "average_heartrate": 151.3
+              },
+              {
+                "pace": "4:13/km",
+                "lap_index": 35,
+                "speed_m_s": 3.957,
+                "distance_m": 150.38,
+                "max_heartrate": 163.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 252.69,
+                "average_heartrate": 152.3
+              },
+              {
+                "pace": "3:54/km",
+                "lap_index": 37,
+                "speed_m_s": 4.278,
+                "distance_m": 149.72,
+                "max_heartrate": 164.0,
+                "moving_time_s": 35.0,
+                "pace_s_per_km": 233.77,
+                "average_heartrate": 154.0
+              },
+              {
+                "pace": "4:22/km",
+                "lap_index": 40,
+                "speed_m_s": 3.819,
+                "distance_m": 145.11,
+                "max_heartrate": 158.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 261.87,
+                "average_heartrate": 148.8
+              },
+              {
+                "pace": "4:01/km",
+                "lap_index": 42,
+                "speed_m_s": 4.145,
+                "distance_m": 153.37,
+                "max_heartrate": 158.0,
+                "moving_time_s": 37.0,
+                "pace_s_per_km": 241.25,
+                "average_heartrate": 147.9
+              },
+              {
+                "pace": "4:08/km",
+                "lap_index": 44,
+                "speed_m_s": 4.039,
+                "distance_m": 149.43,
+                "max_heartrate": 161.0,
+                "moving_time_s": 37.0,
+                "pace_s_per_km": 247.61,
+                "average_heartrate": 149.9
+              },
+              {
+                "pace": "4:20/km",
+                "lap_index": 46,
+                "speed_m_s": 3.839,
+                "distance_m": 145.89,
+                "max_heartrate": 157.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 260.47,
+                "average_heartrate": 146.5
+              },
+              {
+                "pace": "4:01/km",
+                "lap_index": 48,
+                "speed_m_s": 4.149,
+                "distance_m": 153.52,
+                "max_heartrate": 162.0,
+                "moving_time_s": 37.0,
+                "pace_s_per_km": 241.01,
+                "average_heartrate": 150.9
+              },
+              {
+                "pace": "4:06/km",
+                "lap_index": 50,
+                "speed_m_s": 4.059,
+                "distance_m": 150.19,
+                "max_heartrate": 162.0,
+                "moving_time_s": 37.0,
+                "pace_s_per_km": 246.35,
+                "average_heartrate": 151.8
+              },
+              {
+                "pace": "4:05/km",
+                "lap_index": 52,
+                "speed_m_s": 4.088,
+                "distance_m": 151.26,
+                "max_heartrate": 161.0,
+                "moving_time_s": 37.0,
+                "pace_s_per_km": 244.61,
+                "average_heartrate": 150.8
+              },
+              {
+                "pace": "3:54/km",
+                "lap_index": 54,
+                "speed_m_s": 4.276,
+                "distance_m": 149.65,
+                "max_heartrate": 163.0,
+                "moving_time_s": 35.0,
+                "pace_s_per_km": 233.88,
+                "average_heartrate": 151.3
+              }
+            ],
+            "blocks": [
+              {
+                "block_index": 1,
+                "lap_indices": [
+                  6,
+                  8,
+                  10,
+                  12,
+                  14,
+                  16,
+                  18,
+                  20
+                ],
+                "repetitions": 8
+              },
+              {
+                "block_index": 2,
+                "lap_indices": [
+                  23,
+                  25,
+                  27,
+                  29,
+                  31,
+                  33,
+                  35,
+                  37
+                ],
+                "repetitions": 8
+              },
+              {
+                "block_index": 3,
+                "lap_indices": [
+                  40,
+                  42,
+                  44,
+                  46,
+                  48,
+                  50,
+                  52,
+                  54
+                ],
+                "repetitions": 8
+              }
+            ],
+            "structured": true,
+            "detection_basis": "Dominant short-lap distance cluster with repeated one-lap slower recoveries; block boundaries are gaps larger than one recovery lap.",
+            "work_distance_m": 3592.4,
+            "work_duration_s": 904.0,
+            "repetition_count": 24,
+            "mean_rep_speed_m_s": 3.98,
+            "structure_signature": "3x8x150m",
+            "interpretation_limits": [
+              "The structure proves repeated short work-like laps, not that the terrain was uphill.",
+              "Provider laps alone do not establish threshold, tempo, sprint or another physiological intensity label.",
+              "Terrain and intended intensity require user report, plan context or another explicit source."
+            ],
+            "block_repetition_counts": [
+              8,
+              8,
+              8
+            ],
+            "representative_distance_m": 149.8,
+            "mean_single_lap_recovery_speed_m_s": 2.956
+          },
+          "source_lap_note": "Near-1 km source laps are descriptive measurements only. Only run.short_intervals may classify a repeated short-lap structure, and it does not infer terrain or physiological intensity.",
           "source_laps_near_1km": [
             {
               "pace": "5:18/km",
@@ -1542,11 +1816,11 @@
         "enduro": null,
         "sport_type": "Run",
         "activity_id": 20326850936,
-        "user_report": "",
-        "display_label": "Run",
-        "classification": null,
+        "user_report": "3 × 8 backintervaller (24 × 150 m totalt). Garmin klassade passet som Tempo. Passet genomfördes av praktiska skäl i stället för dagens planerade simning; simningen flyttas till 2026-09-26. Före passet rapporterade Garmin allt grönt och hög träningsberedskap.",
+        "display_label": "Löpning · backintervaller",
+        "classification": "training",
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },
       "laps": [
         {
@@ -2279,7 +2553,7 @@
         "display_label": "MTB/XC",
         "classification": "training",
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },
       "laps": [
         {
@@ -2902,7 +3176,7 @@
         "display_label": "Swim",
         "classification": "training",
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },
       "laps": [
         {
@@ -3378,7 +3652,10 @@
       "workout_analysis_context": {
         "run": {
           "average_pace": "4:46/km",
-          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals.",
+          "short_intervals": {
+            "structured": false
+          },
+          "source_lap_note": "Near-1 km source laps are descriptive measurements only. Only run.short_intervals may classify a repeated short-lap structure, and it does not infer terrain or physiological intensity.",
           "source_laps_near_1km": [
             {
               "pace": "5:17/km",
@@ -3480,7 +3757,7 @@
         "display_label": "Löpning · tröskel",
         "classification": "training",
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },
       "laps": [
         {
@@ -3780,7 +4057,7 @@
         "display_label": "WeightTraining",
         "classification": "training",
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },
       "laps": [
         {
@@ -3847,7 +4124,7 @@
         "display_label": "Enduro",
         "classification": "training",
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },
       "laps": [
         {
@@ -3870,20 +4147,21 @@
       "model": "gpt-5-mini",
       "assessment": {
         "facts": [
-          "Löpning: 14,83 km · 1:16:07 · 277 m+ · snittpuls 141,6 · maxpuls 165.",
-          "Planerat simpass 4000 m; genomfört 14829.5 m."
+          "Löpning · backintervaller: 14,83 km · 1:16:07 · 277 m+ · snittpuls 141,6 · maxpuls 165.",
+          "Användarrapport: 3 × 8 backintervaller (24 × 150 m totalt). Garmin klassade passet som Tempo. Passet genomfördes av praktiska skäl i stället för dagens planerade simning; simningen flyttas till 2026-09-26. Före passet rapporterade Garmin allt grönt och hög träningsberedskap.",
+          "Planstatus 2026-09-25: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
-        "summary": "Genomfört långt terränglöpning 14.8 km på 76 min med stabil snittpuls 142 och flera 1‑km‑segment runt 5:08/km; passet ersatte planerad simning.",
+        "summary": "Genomfört: 3 × 8 backintervaller (24 totalt). Passet ger förväntad mekanisk, neuromuskulär och kardiovaskulär löpbelastning",
         "unknowns": [
-          "Subjektiv återhämtning efter passet (användarrapport tom)",
-          "Planerad sims exakta tidpunkt och om användaren redan genomfört simdelen idag"
+          "Subjektiv trötthet efter passet under nästa 24–48 h",
+          "Detaljerad lokal muskeltrötthet eller små skador som kan påverka simteknik"
         ],
         "confidence": "medium",
         "interpretations": [
-          "Ett långt löppass genomfört idag ger kardiovaskulär och mekanisk belastning som konkurrerar med dagens planerade simstimulus.",
-          "Eftersom mikrocykeln redan innehåller flera löp- och Simning‑exponeringar betyder detta utförande att simningen för 2026-09-25 inte matchar faktisk aktivitet och bör inte läggas ovanpå utan…"
+          "Passet levererade det planerade backstimuluset och räknas som mekanisk/neuromuskulär belastning för mikrocykeln",
+          "Eftersom simningen redan flyttats till 2026-09-26 måste närbelastningen inför den dagens simpass beaktas (tröskel + backserier inom 72 h)"
         ],
-        "load_interpretation": "Passet är ett betydande löpstimulus i närbelastningsfönstret och påverkar återstående mikrocykel (särskilt planerad sim samma dag)."
+        "load_interpretation": "Närbelastningen föregående 2–3 dagar visar tröskel (4×8) + lugn MTB/XC; dagens backserie adderar kort, högaktiverande löpbelastning som kräver konservativ hantering inför…"
       },
       "auto_apply": {
         "note": "Ingen automatisk planändring.",
@@ -3891,20 +4169,20 @@
       },
       "activity_id": 20326850936,
       "plan_action": {
-        "action": "review",
-        "reason": "Dagens faktiska långa löppass ger närbelastning som krockar med planerad 4 000 m‑simning och kräver coachbedömning.",
-        "target_date": "2026-09-25",
+        "action": "keep",
+        "reason": "Simningen är redan planerad flyttad till 2026-09-26 som användaren angett och planens nära‑term‑kontext beaktar dagens backserie.",
+        "target_date": "2026-09-26",
         "dose_option_id": "",
-        "recommendation": "Granska dagens planerade simpass innan utförande; överväg att flytta simningen till annan dag eller reducera dosen (ej automatisk ökning). Ange om du kände dig pigg eller trött efter löpningen så jag kan föreslå konkret alternativ.",
-        "requires_approval": true
+        "recommendation": "Behåll planerad simning 2026-09-26 men håll den programmerade 4 000 m‑sessionen konservativ: undvik maximal tröskelinsats i tröskelblocket och prioritera teknik; om du känner ovanlig lokal bentrötthet morgonen efter, välj att reducera eller flytta simningen.",
+        "requires_approval": false
       },
       "activity_date": "2026-09-25",
       "activity_name": "Löpning på kvällen",
-      "generated_at_utc": "2026-09-25T17:52:17.543803+00:00",
+      "generated_at_utc": "2026-09-25T19:39:25.985601+00:00",
       "analysis_contract": {
         "pipeline_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
-        "analysis_code_sha256": "b2b605b727aaea5a4027070ea282ce432554fdd8a3f4f664cf37251ade67f342",
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
+        "analysis_code_sha256": "899ccbc738b41513ca2513454e86c3dc7fe807921b3fc57d50a40bf775577ae3",
         "plan_comparison_version": 2,
         "workout_context_version": 3
       },

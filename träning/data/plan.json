@@ -563,9 +563,111 @@
     {
       "date": "2026-09-25",
       "label": "Fredag",
+      "sport": "run",
+      "reason": "Användarbekräftat genomförande: fredagens planerade simning ersattes av 24 × 150 m backintervaller, strukturerade som tre block om åtta. Simningen läggs därför inte ovanpå samma dag utan flyttas till lördag.",
+      "status": "planned",
+      "session": "Löpning · backkvalitet · 3 × 8 × 150 m",
+      "stimuli": [
+        "run_hill_quality"
+      ],
+      "activity_id": 20326850936,
+      "manual_lock": true,
+      "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
+      "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc1",
+      "priority_role": "flex",
+      "classification": "training",
+      "microcycle_day": 5,
+      "workout_design": {
+        "objective": {
+          "stimuli": [
+            "run_hill_quality"
+          ],
+          "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
+          "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc1",
+          "priority_role": "flex",
+          "mesocycle_role": "secondary",
+          "microcycle_slot": ""
+        },
+        "selection": {
+          "method": "deterministic_constraint_scoring",
+          "reason_for_today": "Användarbekräftat genomförande: fredagens planerade simning ersattes av 24 × 150 m backintervaller, strukturerade som tre block om åtta. Simningen läggs därför inte ovanpå samma dag utan flyttas till lördag.",
+          "preferred_dose_option_id": ""
+        },
+        "candidates": [
+          {
+            "id": "current-session",
+            "dose": {
+              "kind": "external",
+              "value": 1
+            },
+            "score": {
+              "basis": "deterministic_constraint_alignment",
+              "total": 65,
+              "breakdown": {
+                "mesocycle_alignment": 30,
+                "microcycle_alignment": 10,
+                "near_term_resolution": 0,
+                "progression_alignment": 15,
+                "prescription_specificity": 10
+              }
+            },
+            "intent": "Användarbekräftat genomförande: fredagens planerade simning ersattes av 24 × 150 m backintervaller, strukturerade som tre block om åtta. Simningen läggs därför inte ovanpå samma dag utan flyttas till lördag.",
+            "session": "Löpning · backkvalitet · 3 × 8 × 150 m",
+            "stimuli": [
+              "run_hill_quality"
+            ],
+            "prescription": {
+              "blocks": [
+                {
+                  "name": "Fast/externt strukturerat pass",
+                  "work": {},
+                  "intensity": "extern struktur",
+                  "instruction": "Faktiskt genomförd backkvalitet räknas som mekanisk, neuromuskulär och kardiovaskulär löpbelastning. Fortsatta beslut ska utgå från den faktiska dosen 3 × 8 × 150 m, inte från den ersatta simplanen."
+                }
+              ],
+              "source": "external_commitment",
+              "executable": true,
+              "completeness": "external"
+            },
+            "dose_option_id": ""
+          }
+        ],
+        "schema_version": 1,
+        "near_term_context": {
+          "load_dimensions": [
+            "mechanical",
+            "neuromuscular",
+            "cardiovascular"
+          ],
+          "selection_uses_only_preapproved_doses": false
+        },
+        "selected_candidate_id": "current-session",
+        "progression_from_previous": {
+          "reason": "Användarbekräftat genomförande: fredagens planerade simning ersattes av 24 × 150 m backintervaller, strukturerade som tre block om åtta. Simningen läggs därför inte ovanpå samma dag utan flyttas till lördag.",
+          "relation": "support",
+          "demonstrated_floor_option_id": ""
+        }
+      },
+      "load_dimensions": [
+        "mechanical",
+        "neuromuscular",
+        "cardiovascular"
+      ],
+      "manual_override": {
+        "note": "Fredagens planerade simning ersattes av genomförd backkvalitet 3 × 8 × 150 m. Simningen flyttas till lördag 2026-09-26.",
+        "source": "user_confirmed"
+      },
+      "planning_status": "fixed",
+      "microcycle_index": 1,
+      "original_session": "Simning · 4 000 m · aerob + kontrollerad tröskel",
+      "development_focus": "Faktiskt genomförd backkvalitet räknas som mekanisk, neuromuskulär och kardiovaskulär löpbelastning. Fortsatta beslut ska utgå från den faktiska dosen 3 × 8 × 150 m, inte från den ersatta simplanen."
+    },
+    {
+      "date": "2026-09-26",
+      "label": "Lördag",
       "sport": "swim",
-      "reason": "Tisdagens 4 × 8 min gav redan mikrocykelns planerade löptröskelstimulus. Fredagens duplicerade löptröskel tas därför bort. En andra simexponering läggs här med den etablerade 4 000 m-mallen för att bevara mesocykelns simprioritet utan ytterligare mekanisk löpbelastning.",
-      "status": "preliminary",
+      "reason": "Användarbekräftad flytt av fredagens planerade 4 000 m-simning. Lördagen var tidigare öppen; simningen ersätter den öppna dagen som veckans andra simexponering efter fredagens backkvalitet och ska räknas i närbelastningen inför söndagens preliminära löpning.",
+      "status": "planned",
       "session": "Simning · 4 000 m · aerob + kontrollerad tröskel",
       "stimuli": [
         "swim_aerobic",
@@ -573,15 +675,7 @@
         "swim_technique"
       ],
       "dose_open": false,
-      "device_sync": {
-        "status": "synced",
-        "transport": "intervals_icu",
-        "source_hash": "9fcd60c075496d2ba5301ad8c850ecb2ec0dd8430864ecc062e85a53774b9e24",
-        "updated_at_utc": "2026-09-25T17:52:19.135022+00:00",
-        "device_delivery": "unverified",
-        "verified_at_utc": "2026-09-25T17:52:19.135022+00:00",
-        "provider_event_id": 138142476
-      },
+      "manual_lock": false,
       "dose_options": [
         {
           "id": "swim-aerobic-threshold-4000",
@@ -685,7 +779,7 @@
       "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc1",
       "priority_role": "flex",
       "watch_workout": {
-        "id": "swim-2026-w39-2026-09-25-aerob-threshold-4000",
+        "id": "swim-2026-w39-2026-09-26-aerob-threshold-4000",
         "name": "Aerob + kontrollerad tröskel · 4 000 m",
         "type": "Swim",
         "blocks": [
@@ -775,134 +869,8 @@
         "sync_enabled": false,
         "planned_distance_m": 4000
       },
-      "device_workout": {
-        "date": "2026-09-25",
-        "name": "Simning · 4 000 m · aerob + kontrollerad tröskel",
-        "sport": "swim",
-        "blocks": [
-          {
-            "name": "Insim + teknik",
-            "sets": 1,
-            "steps": [
-              {
-                "kind": "work",
-                "duration": {
-                  "kind": "distance",
-                  "meters": 600
-                },
-                "instruction": "Insim + teknik enligt etablerad rutin · utan redskap",
-                "intensity_class": "warmup"
-              }
-            ],
-            "repetitions_per_set": 1
-          },
-          {
-            "name": "Aerob 1",
-            "sets": 1,
-            "steps": [
-              {
-                "kind": "work",
-                "duration": {
-                  "kind": "distance",
-                  "meters": 200
-                },
-                "instruction": "Aerobt, stabil teknik · utan redskap",
-                "intensity_class": "interval"
-              },
-              {
-                "kind": "recovery",
-                "duration": {
-                  "kind": "time",
-                  "seconds": 20
-                },
-                "press_lap": false,
-                "instruction": "Vila",
-                "intensity_class": "recovery",
-                "transport_reference_only": false
-              }
-            ],
-            "repetitions_per_set": 6
-          },
-          {
-            "name": "Kontrollerad tröskel",
-            "sets": 1,
-            "steps": [
-              {
-                "kind": "work",
-                "duration": {
-                  "kind": "distance",
-                  "meters": 200
-                },
-                "instruction": "Kontrollerad tröskel · paddlar + dolme",
-                "intensity_class": "interval"
-              },
-              {
-                "kind": "recovery",
-                "duration": {
-                  "kind": "time",
-                  "seconds": 25
-                },
-                "press_lap": false,
-                "instruction": "Vila",
-                "intensity_class": "recovery",
-                "transport_reference_only": false
-              }
-            ],
-            "repetitions_per_set": 4
-          },
-          {
-            "name": "Aerob 2",
-            "sets": 1,
-            "steps": [
-              {
-                "kind": "work",
-                "duration": {
-                  "kind": "distance",
-                  "meters": 200
-                },
-                "instruction": "Aerobt, återgå till stabil rytm och teknik · utan redskap",
-                "intensity_class": "interval"
-              },
-              {
-                "kind": "recovery",
-                "duration": {
-                  "kind": "time",
-                  "seconds": 20
-                },
-                "press_lap": false,
-                "instruction": "Vila",
-                "intensity_class": "recovery",
-                "transport_reference_only": false
-              }
-            ],
-            "repetitions_per_set": 6
-          },
-          {
-            "name": "Avsim",
-            "sets": 1,
-            "steps": [
-              {
-                "kind": "work",
-                "duration": {
-                  "kind": "distance",
-                  "meters": 200
-                },
-                "instruction": "Mycket lugnt avsim · utan redskap",
-                "intensity_class": "cooldown"
-              }
-            ],
-            "repetitions_per_set": 1
-          }
-        ],
-        "transport": "intervals_icu",
-        "external_id": "hall-device:2026-09-25:swim:swim_aerobic_threshold_3",
-        "source_hash": "9fcd60c075496d2ba5301ad8c850ecb2ec0dd8430864ecc062e85a53774b9e24",
-        "provider_type": "Swim",
-        "target_policy": "explicit_single_primary_only",
-        "schema_version": 1,
-        "source_candidate_id": "swim-aerobic-threshold-4000"
-      },
-      "microcycle_day": 5,
+      "classification": "training",
+      "microcycle_day": 6,
       "swim_equipment": {
         "planned": [
           "paddles",
@@ -1056,21 +1024,15 @@
         "technical"
       ],
       "manual_override": {
-        "note": "Fredagens tidigare 4 × 8 löptröskel ersätts efter att samma tröskelstimulus genomfördes tisdag 2026-09-22. Andra simexponeringen bevaras.",
-        "source": "coach_replan_after_actual"
+        "note": "Fredagens 4 000 m simpass flyttas av praktiska skäl till lördag. Detta är en flytt av veckans simexponering, inte extra träning ovanpå planen. planning_status=fixed bevarar användarvalet; manual_lock används inte eftersom det i workout-designlagret betyder extern aktivitet.",
+        "source": "user_confirmed"
       },
       "microcycle_slot": "swim_aerobic_threshold_3",
+      "planning_status": "fixed",
       "microcycle_index": 1,
+      "original_session": "Ingen planerad träning",
       "development_focus": "Bibehåll teknisk kvalitet genom ett längre aerobt pass med en avgränsad, kontrollerad tröskeldel; tröskeldelen ska inte bli maximal.",
       "baseline_option_id": "swim-aerobic-threshold-4000"
-    },
-    {
-      "date": "2026-09-26",
-      "label": "Lördag",
-      "sport": "open",
-      "reason": "Ingen träning är planerad som standard på denna dag. En ledig dag är inte i sig skäl att lägga till ett pass; eventuell ändring ska tjäna mikrocykeln och bygga på faktisk information.",
-      "status": "open",
-      "session": "Ingen planerad träning"
     },
     {
       "date": "2026-09-27",
@@ -1087,9 +1049,9 @@
         "status": "synced",
         "transport": "intervals_icu",
         "source_hash": "9dc12d3e522e49454af7c6ffe216ee9ba323186427181ac1e1ae64a8d6009578",
-        "updated_at_utc": "2026-09-25T17:52:19.459054+00:00",
+        "updated_at_utc": "2026-09-25T19:39:27.010787+00:00",
         "device_delivery": "unverified",
-        "verified_at_utc": "2026-09-25T17:52:19.459054+00:00",
+        "verified_at_utc": "2026-09-25T19:39:27.010787+00:00",
         "provider_event_id": 138097036
       },
       "dose_options": [

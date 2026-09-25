@@ -1,12 +1,12 @@
 {
-  "last_sync_utc": "2026-09-25T17:49:19.974487+00:00",
+  "last_sync_utc": "2026-09-25T19:37:16.252630+00:00",
   "schema_version": 2,
   "activity_semantics": {
     "changed_ids": [],
     "schema_version": 1,
-    "overrides_applied": 16,
+    "overrides_applied": 17,
     "auto_rules_applied": 11,
-    "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
+    "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
     "override_ids_present": [
       "19852599244",
       "19862241646",
@@ -23,7 +23,8 @@
       "20272196080",
       "20284663236",
       "20300494236",
-      "20314473143"
+      "20314473143",
+      "20326850936"
     ],
     "workout_analysis_contract_version": 3
   },
@@ -46,18 +47,330 @@
       "sport_type": "Run",
       "start_date": "2026-09-25T16:20:41Z",
       "device_name": "Garmin Forerunner 970",
+      "user_report": "3 × 8 backintervaller (24 × 150 m totalt). Garmin klassade passet som Tempo. Passet genomfördes av praktiska skäl i stället för dagens planerade simning; simningen flyttas till 2026-09-26. Före passet rapporterade Garmin allt grönt och hög träningsberedskap.",
       "average_watts": 279.3,
+      "display_label": "Löpning · backintervaller",
       "max_heartrate": 165.0,
       "moving_time_s": 4564,
+      "classification": "training",
       "elapsed_time_s": 4567,
       "start_date_local": "2026-09-25T18:20:41Z",
       "average_heartrate": 141.6,
+      "source_sport_type": "Run",
+      "classification_reason": "Användarbekräftad backkvalitet. Strava-varven visar deterministiskt 24 korta arbetsvarv runt 150 m i tre block om åtta; totaldistansen får därför inte feltolkas som ett sammanhängande långpass.",
       "total_elevation_gain_m": 277.0,
       "weighted_average_watts": 287,
       "workout_analysis_context": {
         "run": {
           "average_pace": "5:08/km",
-          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals.",
+          "short_intervals": {
+            "reps": [
+              {
+                "pace": "4:20/km",
+                "lap_index": 6,
+                "speed_m_s": 3.853,
+                "distance_m": 150.26,
+                "max_heartrate": 152.0,
+                "moving_time_s": 39.0,
+                "pace_s_per_km": 259.55,
+                "average_heartrate": 144.6
+              },
+              {
+                "pace": "4:32/km",
+                "lap_index": 8,
+                "speed_m_s": 3.678,
+                "distance_m": 147.12,
+                "max_heartrate": 151.0,
+                "moving_time_s": 40.0,
+                "pace_s_per_km": 271.89,
+                "average_heartrate": 140.6
+              },
+              {
+                "pace": "4:35/km",
+                "lap_index": 10,
+                "speed_m_s": 3.642,
+                "distance_m": 149.32,
+                "max_heartrate": 154.0,
+                "moving_time_s": 41.0,
+                "pace_s_per_km": 274.58,
+                "average_heartrate": 143.2
+              },
+              {
+                "pace": "4:23/km",
+                "lap_index": 12,
+                "speed_m_s": 3.802,
+                "distance_m": 148.28,
+                "max_heartrate": 154.0,
+                "moving_time_s": 39.0,
+                "pace_s_per_km": 263.02,
+                "average_heartrate": 144.0
+              },
+              {
+                "pace": "4:25/km",
+                "lap_index": 14,
+                "speed_m_s": 3.78,
+                "distance_m": 147.42,
+                "max_heartrate": 157.0,
+                "moving_time_s": 39.0,
+                "pace_s_per_km": 264.55,
+                "average_heartrate": 146.6
+              },
+              {
+                "pace": "4:14/km",
+                "lap_index": 16,
+                "speed_m_s": 3.942,
+                "distance_m": 149.78,
+                "max_heartrate": 160.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 253.71,
+                "average_heartrate": 149.8
+              },
+              {
+                "pace": "4:11/km",
+                "lap_index": 18,
+                "speed_m_s": 3.977,
+                "distance_m": 151.13,
+                "max_heartrate": 160.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 251.44,
+                "average_heartrate": 150.0
+              },
+              {
+                "pace": "4:08/km",
+                "lap_index": 20,
+                "speed_m_s": 4.027,
+                "distance_m": 148.99,
+                "max_heartrate": 159.0,
+                "moving_time_s": 37.0,
+                "pace_s_per_km": 248.34,
+                "average_heartrate": 151.7
+              },
+              {
+                "pace": "4:26/km",
+                "lap_index": 23,
+                "speed_m_s": 3.761,
+                "distance_m": 146.69,
+                "max_heartrate": 159.0,
+                "moving_time_s": 39.0,
+                "pace_s_per_km": 265.87,
+                "average_heartrate": 149.4
+              },
+              {
+                "pace": "4:05/km",
+                "lap_index": 25,
+                "speed_m_s": 4.081,
+                "distance_m": 151.0,
+                "max_heartrate": 159.0,
+                "moving_time_s": 37.0,
+                "pace_s_per_km": 245.03,
+                "average_heartrate": 149.0
+              },
+              {
+                "pace": "4:13/km",
+                "lap_index": 27,
+                "speed_m_s": 3.957,
+                "distance_m": 150.36,
+                "max_heartrate": 159.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 252.73,
+                "average_heartrate": 149.3
+              },
+              {
+                "pace": "3:55/km",
+                "lap_index": 29,
+                "speed_m_s": 4.249,
+                "distance_m": 152.96,
+                "max_heartrate": 161.0,
+                "moving_time_s": 36.0,
+                "pace_s_per_km": 235.36,
+                "average_heartrate": 150.1
+              },
+              {
+                "pace": "4:08/km",
+                "lap_index": 31,
+                "speed_m_s": 4.035,
+                "distance_m": 149.3,
+                "max_heartrate": 162.0,
+                "moving_time_s": 37.0,
+                "pace_s_per_km": 247.82,
+                "average_heartrate": 151.7
+              },
+              {
+                "pace": "4:05/km",
+                "lap_index": 33,
+                "speed_m_s": 4.088,
+                "distance_m": 151.24,
+                "max_heartrate": 159.0,
+                "moving_time_s": 37.0,
+                "pace_s_per_km": 244.64,
+                "average_heartrate": 151.3
+              },
+              {
+                "pace": "4:13/km",
+                "lap_index": 35,
+                "speed_m_s": 3.957,
+                "distance_m": 150.38,
+                "max_heartrate": 163.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 252.69,
+                "average_heartrate": 152.3
+              },
+              {
+                "pace": "3:54/km",
+                "lap_index": 37,
+                "speed_m_s": 4.278,
+                "distance_m": 149.72,
+                "max_heartrate": 164.0,
+                "moving_time_s": 35.0,
+                "pace_s_per_km": 233.77,
+                "average_heartrate": 154.0
+              },
+              {
+                "pace": "4:22/km",
+                "lap_index": 40,
+                "speed_m_s": 3.819,
+                "distance_m": 145.11,
+                "max_heartrate": 158.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 261.87,
+                "average_heartrate": 148.8
+              },
+              {
+                "pace": "4:01/km",
+                "lap_index": 42,
+                "speed_m_s": 4.145,
+                "distance_m": 153.37,
+                "max_heartrate": 158.0,
+                "moving_time_s": 37.0,
+                "pace_s_per_km": 241.25,
+                "average_heartrate": 147.9
+              },
+              {
+                "pace": "4:08/km",
+                "lap_index": 44,
+                "speed_m_s": 4.039,
+                "distance_m": 149.43,
+                "max_heartrate": 161.0,
+                "moving_time_s": 37.0,
+                "pace_s_per_km": 247.61,
+                "average_heartrate": 149.9
+              },
+              {
+                "pace": "4:20/km",
+                "lap_index": 46,
+                "speed_m_s": 3.839,
+                "distance_m": 145.89,
+                "max_heartrate": 157.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 260.47,
+                "average_heartrate": 146.5
+              },
+              {
+                "pace": "4:01/km",
+                "lap_index": 48,
+                "speed_m_s": 4.149,
+                "distance_m": 153.52,
+                "max_heartrate": 162.0,
+                "moving_time_s": 37.0,
+                "pace_s_per_km": 241.01,
+                "average_heartrate": 150.9
+              },
+              {
+                "pace": "4:06/km",
+                "lap_index": 50,
+                "speed_m_s": 4.059,
+                "distance_m": 150.19,
+                "max_heartrate": 162.0,
+                "moving_time_s": 37.0,
+                "pace_s_per_km": 246.35,
+                "average_heartrate": 151.8
+              },
+              {
+                "pace": "4:05/km",
+                "lap_index": 52,
+                "speed_m_s": 4.088,
+                "distance_m": 151.26,
+                "max_heartrate": 161.0,
+                "moving_time_s": 37.0,
+                "pace_s_per_km": 244.61,
+                "average_heartrate": 150.8
+              },
+              {
+                "pace": "3:54/km",
+                "lap_index": 54,
+                "speed_m_s": 4.276,
+                "distance_m": 149.65,
+                "max_heartrate": 163.0,
+                "moving_time_s": 35.0,
+                "pace_s_per_km": 233.88,
+                "average_heartrate": 151.3
+              }
+            ],
+            "blocks": [
+              {
+                "block_index": 1,
+                "lap_indices": [
+                  6,
+                  8,
+                  10,
+                  12,
+                  14,
+                  16,
+                  18,
+                  20
+                ],
+                "repetitions": 8
+              },
+              {
+                "block_index": 2,
+                "lap_indices": [
+                  23,
+                  25,
+                  27,
+                  29,
+                  31,
+                  33,
+                  35,
+                  37
+                ],
+                "repetitions": 8
+              },
+              {
+                "block_index": 3,
+                "lap_indices": [
+                  40,
+                  42,
+                  44,
+                  46,
+                  48,
+                  50,
+                  52,
+                  54
+                ],
+                "repetitions": 8
+              }
+            ],
+            "structured": true,
+            "detection_basis": "Dominant short-lap distance cluster with repeated one-lap slower recoveries; block boundaries are gaps larger than one recovery lap.",
+            "work_distance_m": 3592.4,
+            "work_duration_s": 904.0,
+            "repetition_count": 24,
+            "mean_rep_speed_m_s": 3.98,
+            "structure_signature": "3x8x150m",
+            "interpretation_limits": [
+              "The structure proves repeated short work-like laps, not that the terrain was uphill.",
+              "Provider laps alone do not establish threshold, tempo, sprint or another physiological intensity label.",
+              "Terrain and intended intensity require user report, plan context or another explicit source."
+            ],
+            "block_repetition_counts": [
+              8,
+              8,
+              8
+            ],
+            "representative_distance_m": 149.8,
+            "mean_single_lap_recovery_speed_m_s": 2.956
+          },
+          "source_lap_note": "Near-1 km source laps are descriptive measurements only. Only run.short_intervals may classify a repeated short-lap structure, and it does not infer terrain or physiological intensity.",
           "source_laps_near_1km": [
             {
               "pace": "5:18/km",
@@ -131,11 +444,11 @@
         "enduro": null,
         "sport_type": "Run",
         "activity_id": 20326850936,
-        "user_report": "",
-        "display_label": "Run",
-        "classification": null,
+        "user_report": "3 × 8 backintervaller (24 × 150 m totalt). Garmin klassade passet som Tempo. Passet genomfördes av praktiska skäl i stället för dagens planerade simning; simningen flyttas till 2026-09-26. Före passet rapporterade Garmin allt grönt och hög träningsberedskap.",
+        "display_label": "Löpning · backintervaller",
+        "classification": "training",
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },
       "laps": [
         {
@@ -868,7 +1181,7 @@
         "display_label": "MTB/XC",
         "classification": "training",
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },
       "laps": [
         {
@@ -1491,7 +1804,7 @@
         "display_label": "Swim",
         "classification": "training",
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },
       "laps": [
         {
@@ -1967,7 +2280,10 @@
       "workout_analysis_context": {
         "run": {
           "average_pace": "4:46/km",
-          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals.",
+          "short_intervals": {
+            "structured": false
+          },
+          "source_lap_note": "Near-1 km source laps are descriptive measurements only. Only run.short_intervals may classify a repeated short-lap structure, and it does not infer terrain or physiological intensity.",
           "source_laps_near_1km": [
             {
               "pace": "5:17/km",
@@ -2069,7 +2385,7 @@
         "display_label": "Löpning · tröskel",
         "classification": "training",
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },
       "laps": [
         {
@@ -2369,7 +2685,7 @@
         "display_label": "WeightTraining",
         "classification": "training",
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },
       "laps": [
         {
@@ -2436,7 +2752,7 @@
         "display_label": "Enduro",
         "classification": "training",
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },
       "laps": [
         {
@@ -2475,7 +2791,10 @@
       "workout_analysis_context": {
         "run": {
           "average_pace": "5:15/km",
-          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals.",
+          "short_intervals": {
+            "structured": false
+          },
+          "source_lap_note": "Near-1 km source laps are descriptive measurements only. Only run.short_intervals may classify a repeated short-lap structure, and it does not infer terrain or physiological intensity.",
           "source_laps_near_1km": [
             {
               "pace": "5:14/km",
@@ -2681,7 +3000,7 @@
         "display_label": "Run",
         "classification": null,
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },
       "laps": [
         {
@@ -3609,7 +3928,7 @@
         "display_label": "Swim",
         "classification": null,
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },
       "laps": [
         {
@@ -4229,7 +4548,325 @@
       "workout_analysis_context": {
         "run": {
           "average_pace": "5:12/km",
-          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals.",
+          "short_intervals": {
+            "reps": [
+              {
+                "pace": "4:22/km",
+                "lap_index": 4,
+                "speed_m_s": 3.818,
+                "distance_m": 145.08,
+                "max_heartrate": 156.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 261.92,
+                "average_heartrate": 144.5
+              },
+              {
+                "pace": "4:21/km",
+                "lap_index": 6,
+                "speed_m_s": 3.829,
+                "distance_m": 145.52,
+                "max_heartrate": 157.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 261.13,
+                "average_heartrate": 146.8
+              },
+              {
+                "pace": "4:25/km",
+                "lap_index": 8,
+                "speed_m_s": 3.77,
+                "distance_m": 147.02,
+                "max_heartrate": 154.0,
+                "moving_time_s": 39.0,
+                "pace_s_per_km": 265.27,
+                "average_heartrate": 145.8
+              },
+              {
+                "pace": "4:17/km",
+                "lap_index": 10,
+                "speed_m_s": 3.888,
+                "distance_m": 147.73,
+                "max_heartrate": 159.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 257.23,
+                "average_heartrate": 148.5
+              },
+              {
+                "pace": "4:18/km",
+                "lap_index": 12,
+                "speed_m_s": 3.877,
+                "distance_m": 147.32,
+                "max_heartrate": 160.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 257.94,
+                "average_heartrate": 149.2
+              },
+              {
+                "pace": "4:15/km",
+                "lap_index": 14,
+                "speed_m_s": 3.923,
+                "distance_m": 149.08,
+                "max_heartrate": 159.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 254.9,
+                "average_heartrate": 148.6
+              },
+              {
+                "pace": "4:20/km",
+                "lap_index": 16,
+                "speed_m_s": 3.843,
+                "distance_m": 146.03,
+                "max_heartrate": 156.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 260.22,
+                "average_heartrate": 143.6
+              },
+              {
+                "pace": "4:19/km",
+                "lap_index": 18,
+                "speed_m_s": 3.862,
+                "distance_m": 146.77,
+                "max_heartrate": 161.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 258.91,
+                "average_heartrate": 148.4
+              },
+              {
+                "pace": "4:12/km",
+                "lap_index": 20,
+                "speed_m_s": 3.975,
+                "distance_m": 147.09,
+                "max_heartrate": 162.0,
+                "moving_time_s": 37.0,
+                "pace_s_per_km": 251.55,
+                "average_heartrate": 150.0
+              },
+              {
+                "pace": "4:26/km",
+                "lap_index": 23,
+                "speed_m_s": 3.758,
+                "distance_m": 150.33,
+                "max_heartrate": 159.0,
+                "moving_time_s": 40.0,
+                "pace_s_per_km": 266.08,
+                "average_heartrate": 147.8
+              },
+              {
+                "pace": "4:15/km",
+                "lap_index": 25,
+                "speed_m_s": 3.927,
+                "distance_m": 149.22,
+                "max_heartrate": 159.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 254.66,
+                "average_heartrate": 149.1
+              },
+              {
+                "pace": "4:10/km",
+                "lap_index": 27,
+                "speed_m_s": 3.994,
+                "distance_m": 147.77,
+                "max_heartrate": 160.0,
+                "moving_time_s": 37.0,
+                "pace_s_per_km": 250.39,
+                "average_heartrate": 149.8
+              },
+              {
+                "pace": "4:10/km",
+                "lap_index": 29,
+                "speed_m_s": 3.998,
+                "distance_m": 147.93,
+                "max_heartrate": 160.0,
+                "moving_time_s": 37.0,
+                "pace_s_per_km": 250.12,
+                "average_heartrate": 149.2
+              },
+              {
+                "pace": "4:15/km",
+                "lap_index": 31,
+                "speed_m_s": 3.927,
+                "distance_m": 149.21,
+                "max_heartrate": 161.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 254.67,
+                "average_heartrate": 150.6
+              },
+              {
+                "pace": "4:15/km",
+                "lap_index": 33,
+                "speed_m_s": 3.921,
+                "distance_m": 149.01,
+                "max_heartrate": 162.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 255.02,
+                "average_heartrate": 151.7
+              },
+              {
+                "pace": "4:12/km",
+                "lap_index": 35,
+                "speed_m_s": 3.961,
+                "distance_m": 146.56,
+                "max_heartrate": 163.0,
+                "moving_time_s": 37.0,
+                "pace_s_per_km": 252.46,
+                "average_heartrate": 152.7
+              },
+              {
+                "pace": "4:10/km",
+                "lap_index": 37,
+                "speed_m_s": 3.993,
+                "distance_m": 151.75,
+                "max_heartrate": 161.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 250.41,
+                "average_heartrate": 149.7
+              },
+              {
+                "pace": "4:26/km",
+                "lap_index": 40,
+                "speed_m_s": 3.761,
+                "distance_m": 146.68,
+                "max_heartrate": 158.0,
+                "moving_time_s": 39.0,
+                "pace_s_per_km": 265.88,
+                "average_heartrate": 147.2
+              },
+              {
+                "pace": "4:22/km",
+                "lap_index": 42,
+                "speed_m_s": 3.817,
+                "distance_m": 145.04,
+                "max_heartrate": 160.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 262.0,
+                "average_heartrate": 148.9
+              },
+              {
+                "pace": "4:16/km",
+                "lap_index": 44,
+                "speed_m_s": 3.899,
+                "distance_m": 148.17,
+                "max_heartrate": 158.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 256.46,
+                "average_heartrate": 148.1
+              },
+              {
+                "pace": "4:28/km",
+                "lap_index": 46,
+                "speed_m_s": 3.729,
+                "distance_m": 149.16,
+                "max_heartrate": 158.0,
+                "moving_time_s": 40.0,
+                "pace_s_per_km": 268.17,
+                "average_heartrate": 147.2
+              },
+              {
+                "pace": "4:09/km",
+                "lap_index": 48,
+                "speed_m_s": 4.013,
+                "distance_m": 152.48,
+                "max_heartrate": 160.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 249.21,
+                "average_heartrate": 148.5
+              },
+              {
+                "pace": "4:15/km",
+                "lap_index": 50,
+                "speed_m_s": 3.925,
+                "distance_m": 149.16,
+                "max_heartrate": 161.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 254.76,
+                "average_heartrate": 147.1
+              },
+              {
+                "pace": "4:17/km",
+                "lap_index": 52,
+                "speed_m_s": 3.89,
+                "distance_m": 147.83,
+                "max_heartrate": 163.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 257.05,
+                "average_heartrate": 152.1
+              },
+              {
+                "pace": "4:16/km",
+                "lap_index": 54,
+                "speed_m_s": 3.909,
+                "distance_m": 148.53,
+                "max_heartrate": 160.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 255.84,
+                "average_heartrate": 150.8
+              }
+            ],
+            "blocks": [
+              {
+                "block_index": 1,
+                "lap_indices": [
+                  4,
+                  6,
+                  8,
+                  10,
+                  12,
+                  14,
+                  16,
+                  18,
+                  20
+                ],
+                "repetitions": 9
+              },
+              {
+                "block_index": 2,
+                "lap_indices": [
+                  23,
+                  25,
+                  27,
+                  29,
+                  31,
+                  33,
+                  35,
+                  37
+                ],
+                "repetitions": 8
+              },
+              {
+                "block_index": 3,
+                "lap_indices": [
+                  40,
+                  42,
+                  44,
+                  46,
+                  48,
+                  50,
+                  52,
+                  54
+                ],
+                "repetitions": 8
+              }
+            ],
+            "structured": true,
+            "detection_basis": "Dominant short-lap distance cluster with repeated one-lap slower recoveries; block boundaries are gaps larger than one recovery lap.",
+            "work_distance_m": 3700.5,
+            "work_duration_s": 952.0,
+            "repetition_count": 25,
+            "mean_rep_speed_m_s": 3.888,
+            "structure_signature": "9+8+8x148m",
+            "interpretation_limits": [
+              "The structure proves repeated short work-like laps, not that the terrain was uphill.",
+              "Provider laps alone do not establish threshold, tempo, sprint or another physiological intensity label.",
+              "Terrain and intended intensity require user report, plan context or another explicit source."
+            ],
+            "block_repetition_counts": [
+              9,
+              8,
+              8
+            ],
+            "representative_distance_m": 147.8,
+            "mean_single_lap_recovery_speed_m_s": 2.859
+          },
+          "source_lap_note": "Near-1 km source laps are descriptive measurements only. Only run.short_intervals may classify a repeated short-lap structure, and it does not infer terrain or physiological intensity.",
           "source_laps_near_1km": [
             {
               "pace": "5:04/km",
@@ -4307,7 +4944,7 @@
         "display_label": "Löpning · backintervaller",
         "classification": "training",
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },
       "laps": [
         {
@@ -5034,7 +5671,7 @@
         "display_label": "MountainBikeRide",
         "classification": null,
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },
       "laps": [
         {
@@ -6046,7 +6683,7 @@
         "display_label": "Swim",
         "classification": null,
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },
       "laps": [
         {
@@ -6985,7 +7622,10 @@
       "workout_analysis_context": {
         "run": {
           "average_pace": "4:53/km",
-          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals.",
+          "short_intervals": {
+            "structured": false
+          },
+          "source_lap_note": "Near-1 km source laps are descriptive measurements only. Only run.short_intervals may classify a repeated short-lap structure, and it does not infer terrain or physiological intensity.",
           "source_laps_near_1km": [
             {
               "pace": "5:28/km",
@@ -7071,7 +7711,7 @@
         "display_label": "Run",
         "classification": null,
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },
       "laps": [
         {
@@ -7378,7 +8018,7 @@
         "display_label": "WeightTraining",
         "classification": null,
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },
       "laps": [
         {
@@ -7450,7 +8090,7 @@
         "display_label": "Enduro",
         "classification": "training",
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },
       "laps": [
         {
@@ -7489,7 +8129,10 @@
       "workout_analysis_context": {
         "run": {
           "average_pace": "5:44/km",
-          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals.",
+          "short_intervals": {
+            "structured": false
+          },
+          "source_lap_note": "Near-1 km source laps are descriptive measurements only. Only run.short_intervals may classify a repeated short-lap structure, and it does not infer terrain or physiological intensity.",
           "source_laps_near_1km": [
             {
               "pace": "5:29/km",
@@ -7663,7 +8306,7 @@
         "display_label": "TrailRun",
         "classification": null,
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },
       "laps": [
         {
@@ -7934,7 +8577,7 @@
         "display_label": "Ride",
         "classification": null,
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },
       "laps": [
         {
@@ -8006,7 +8649,7 @@
         "display_label": "Enduro",
         "classification": "training",
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },
       "laps": [
         {
@@ -8050,7 +8693,281 @@
       "workout_analysis_context": {
         "run": {
           "average_pace": "5:15/km",
-          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals.",
+          "short_intervals": {
+            "reps": [
+              {
+                "pace": "4:29/km",
+                "lap_index": 8,
+                "speed_m_s": 3.717,
+                "distance_m": 148.7,
+                "max_heartrate": 158.0,
+                "moving_time_s": 40.0,
+                "pace_s_per_km": 269.0,
+                "average_heartrate": 149.8
+              },
+              {
+                "pace": "4:15/km",
+                "lap_index": 10,
+                "speed_m_s": 3.924,
+                "distance_m": 153.03,
+                "max_heartrate": 159.0,
+                "moving_time_s": 39.0,
+                "pace_s_per_km": 254.85,
+                "average_heartrate": 148.6
+              },
+              {
+                "pace": "4:04/km",
+                "lap_index": 12,
+                "speed_m_s": 4.096,
+                "distance_m": 155.66,
+                "max_heartrate": 160.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 244.12,
+                "average_heartrate": 149.4
+              },
+              {
+                "pace": "4:13/km",
+                "lap_index": 14,
+                "speed_m_s": 3.953,
+                "distance_m": 150.2,
+                "max_heartrate": 162.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 253.0,
+                "average_heartrate": 150.3
+              },
+              {
+                "pace": "3:57/km",
+                "lap_index": 16,
+                "speed_m_s": 4.211,
+                "distance_m": 155.8,
+                "max_heartrate": 161.0,
+                "moving_time_s": 37.0,
+                "pace_s_per_km": 237.48,
+                "average_heartrate": 151.9
+              },
+              {
+                "pace": "4:01/km",
+                "lap_index": 18,
+                "speed_m_s": 4.153,
+                "distance_m": 153.65,
+                "max_heartrate": 163.0,
+                "moving_time_s": 37.0,
+                "pace_s_per_km": 240.81,
+                "average_heartrate": 152.3
+              },
+              {
+                "pace": "4:05/km",
+                "lap_index": 20,
+                "speed_m_s": 4.076,
+                "distance_m": 150.81,
+                "max_heartrate": 164.0,
+                "moving_time_s": 37.0,
+                "pace_s_per_km": 245.34,
+                "average_heartrate": 152.9
+              },
+              {
+                "pace": "4:22/km",
+                "lap_index": 23,
+                "speed_m_s": 3.815,
+                "distance_m": 148.77,
+                "max_heartrate": 162.0,
+                "moving_time_s": 39.0,
+                "pace_s_per_km": 262.15,
+                "average_heartrate": 152.8
+              },
+              {
+                "pace": "4:04/km",
+                "lap_index": 25,
+                "speed_m_s": 4.107,
+                "distance_m": 156.05,
+                "max_heartrate": 161.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 243.51,
+                "average_heartrate": 149.5
+              },
+              {
+                "pace": "4:04/km",
+                "lap_index": 27,
+                "speed_m_s": 4.091,
+                "distance_m": 155.45,
+                "max_heartrate": 163.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 244.45,
+                "average_heartrate": 152.4
+              },
+              {
+                "pace": "4:11/km",
+                "lap_index": 29,
+                "speed_m_s": 3.988,
+                "distance_m": 151.54,
+                "max_heartrate": 164.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 250.76,
+                "average_heartrate": 150.9
+              },
+              {
+                "pace": "4:15/km",
+                "lap_index": 31,
+                "speed_m_s": 3.928,
+                "distance_m": 149.28,
+                "max_heartrate": 163.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 254.56,
+                "average_heartrate": 151.8
+              },
+              {
+                "pace": "4:17/km",
+                "lap_index": 33,
+                "speed_m_s": 3.896,
+                "distance_m": 148.03,
+                "max_heartrate": 164.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 256.7,
+                "average_heartrate": 151.9
+              },
+              {
+                "pace": "4:10/km",
+                "lap_index": 35,
+                "speed_m_s": 3.998,
+                "distance_m": 151.93,
+                "max_heartrate": 164.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 250.12,
+                "average_heartrate": 154.2
+              },
+              {
+                "pace": "4:29/km",
+                "lap_index": 38,
+                "speed_m_s": 3.716,
+                "distance_m": 148.64,
+                "max_heartrate": 163.0,
+                "moving_time_s": 40.0,
+                "pace_s_per_km": 269.11,
+                "average_heartrate": 152.6
+              },
+              {
+                "pace": "4:08/km",
+                "lap_index": 40,
+                "speed_m_s": 4.026,
+                "distance_m": 153.0,
+                "max_heartrate": 163.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 248.37,
+                "average_heartrate": 152.7
+              },
+              {
+                "pace": "4:00/km",
+                "lap_index": 42,
+                "speed_m_s": 4.162,
+                "distance_m": 158.15,
+                "max_heartrate": 162.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 240.28,
+                "average_heartrate": 152.4
+              },
+              {
+                "pace": "4:05/km",
+                "lap_index": 44,
+                "speed_m_s": 4.079,
+                "distance_m": 154.99,
+                "max_heartrate": 163.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 245.18,
+                "average_heartrate": 152.3
+              },
+              {
+                "pace": "4:13/km",
+                "lap_index": 46,
+                "speed_m_s": 3.949,
+                "distance_m": 154.01,
+                "max_heartrate": 165.0,
+                "moving_time_s": 39.0,
+                "pace_s_per_km": 253.23,
+                "average_heartrate": 153.6
+              },
+              {
+                "pace": "4:10/km",
+                "lap_index": 48,
+                "speed_m_s": 3.998,
+                "distance_m": 155.92,
+                "max_heartrate": 165.0,
+                "moving_time_s": 39.0,
+                "pace_s_per_km": 250.13,
+                "average_heartrate": 154.4
+              },
+              {
+                "pace": "4:00/km",
+                "lap_index": 50,
+                "speed_m_s": 4.168,
+                "distance_m": 150.06,
+                "max_heartrate": 167.0,
+                "moving_time_s": 36.0,
+                "pace_s_per_km": 239.9,
+                "average_heartrate": 156.5
+              }
+            ],
+            "blocks": [
+              {
+                "block_index": 1,
+                "lap_indices": [
+                  8,
+                  10,
+                  12,
+                  14,
+                  16,
+                  18,
+                  20
+                ],
+                "repetitions": 7
+              },
+              {
+                "block_index": 2,
+                "lap_indices": [
+                  23,
+                  25,
+                  27,
+                  29,
+                  31,
+                  33,
+                  35
+                ],
+                "repetitions": 7
+              },
+              {
+                "block_index": 3,
+                "lap_indices": [
+                  38,
+                  40,
+                  42,
+                  44,
+                  46,
+                  48,
+                  50
+                ],
+                "repetitions": 7
+              }
+            ],
+            "structured": true,
+            "detection_basis": "Dominant short-lap distance cluster with repeated one-lap slower recoveries; block boundaries are gaps larger than one recovery lap.",
+            "work_distance_m": 3203.7,
+            "work_duration_s": 801.0,
+            "repetition_count": 21,
+            "mean_rep_speed_m_s": 4.002,
+            "structure_signature": "3x7x153m",
+            "interpretation_limits": [
+              "The structure proves repeated short work-like laps, not that the terrain was uphill.",
+              "Provider laps alone do not establish threshold, tempo, sprint or another physiological intensity label.",
+              "Terrain and intended intensity require user report, plan context or another explicit source."
+            ],
+            "block_repetition_counts": [
+              7,
+              7,
+              7
+            ],
+            "representative_distance_m": 153.0,
+            "mean_single_lap_recovery_speed_m_s": 2.801
+          },
+          "source_lap_note": "Near-1 km source laps are descriptive measurements only. Only run.short_intervals may classify a repeated short-lap structure, and it does not infer terrain or physiological intensity.",
           "source_laps_near_1km": [
             {
               "pace": "5:18/km",
@@ -8128,7 +9045,7 @@
         "display_label": "Löpning · backintervaller",
         "classification": "training",
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },
       "laps": [
         {
@@ -8812,7 +9729,7 @@
         "display_label": "MTB/XC",
         "classification": "training",
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },
       "laps": [
         {
@@ -9430,7 +10347,7 @@
         "display_label": "Swim",
         "classification": null,
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },
       "laps": [
         {
@@ -9918,7 +10835,10 @@
       "workout_analysis_context": {
         "run": {
           "average_pace": "4:43/km",
-          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals.",
+          "short_intervals": {
+            "structured": false
+          },
+          "source_lap_note": "Near-1 km source laps are descriptive measurements only. Only run.short_intervals may classify a repeated short-lap structure, and it does not infer terrain or physiological intensity.",
           "source_laps_near_1km": [],
           "average_pace_s_per_km": 282.88,
           "fastest_source_lap_near_1km": null
@@ -9940,7 +10860,7 @@
         "display_label": "Löpband · 4 × 8 min Tempo",
         "classification": "training",
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },
       "laps": [
         {
@@ -10163,7 +11083,7 @@
         "display_label": "WeightTraining",
         "classification": null,
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },
       "laps": [
         {
@@ -10236,7 +11156,7 @@
         "display_label": "Enduro",
         "classification": "training",
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },
       "laps": [
         {
@@ -10280,7 +11200,10 @@
       "workout_analysis_context": {
         "run": {
           "average_pace": "5:16/km",
-          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals.",
+          "short_intervals": {
+            "structured": false
+          },
+          "source_lap_note": "Near-1 km source laps are descriptive measurements only. Only run.short_intervals may classify a repeated short-lap structure, and it does not infer terrain or physiological intensity.",
           "source_laps_near_1km": [
             {
               "pace": "5:22/km",
@@ -10486,7 +11409,7 @@
         "display_label": "Löpning · distans",
         "classification": "training",
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },
       "laps": [
         {
@@ -11439,7 +12362,7 @@
         "display_label": "Swim",
         "classification": null,
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },
       "laps": [
         {
@@ -12047,7 +12970,248 @@
       "workout_analysis_context": {
         "run": {
           "average_pace": "5:14/km",
-          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals.",
+          "short_intervals": {
+            "reps": [
+              {
+                "pace": "4:43/km",
+                "lap_index": 4,
+                "speed_m_s": 3.528,
+                "distance_m": 144.65,
+                "max_heartrate": 156.0,
+                "moving_time_s": 41.0,
+                "pace_s_per_km": 283.44,
+                "average_heartrate": 147.8
+              },
+              {
+                "pace": "4:29/km",
+                "lap_index": 6,
+                "speed_m_s": 3.717,
+                "distance_m": 148.69,
+                "max_heartrate": 157.0,
+                "moving_time_s": 40.0,
+                "pace_s_per_km": 269.02,
+                "average_heartrate": 147.1
+              },
+              {
+                "pace": "4:23/km",
+                "lap_index": 8,
+                "speed_m_s": 3.797,
+                "distance_m": 148.09,
+                "max_heartrate": 157.0,
+                "moving_time_s": 39.0,
+                "pace_s_per_km": 263.35,
+                "average_heartrate": 147.6
+              },
+              {
+                "pace": "4:20/km",
+                "lap_index": 10,
+                "speed_m_s": 3.841,
+                "distance_m": 149.78,
+                "max_heartrate": 156.0,
+                "moving_time_s": 39.0,
+                "pace_s_per_km": 260.38,
+                "average_heartrate": 147.1
+              },
+              {
+                "pace": "4:09/km",
+                "lap_index": 12,
+                "speed_m_s": 4.013,
+                "distance_m": 152.49,
+                "max_heartrate": 159.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 249.2,
+                "average_heartrate": 149.4
+              },
+              {
+                "pace": "4:13/km",
+                "lap_index": 14,
+                "speed_m_s": 3.958,
+                "distance_m": 150.41,
+                "max_heartrate": 160.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 252.64,
+                "average_heartrate": 149.3
+              },
+              {
+                "pace": "4:25/km",
+                "lap_index": 17,
+                "speed_m_s": 3.777,
+                "distance_m": 151.09,
+                "max_heartrate": 156.0,
+                "moving_time_s": 40.0,
+                "pace_s_per_km": 264.74,
+                "average_heartrate": 149.1
+              },
+              {
+                "pace": "4:22/km",
+                "lap_index": 19,
+                "speed_m_s": 3.819,
+                "distance_m": 145.12,
+                "max_heartrate": 162.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 261.85,
+                "average_heartrate": 152.7
+              },
+              {
+                "pace": "4:11/km",
+                "lap_index": 21,
+                "speed_m_s": 3.986,
+                "distance_m": 151.46,
+                "max_heartrate": 164.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 250.89,
+                "average_heartrate": 153.4
+              },
+              {
+                "pace": "4:12/km",
+                "lap_index": 23,
+                "speed_m_s": 3.97,
+                "distance_m": 146.89,
+                "max_heartrate": 165.0,
+                "moving_time_s": 37.0,
+                "pace_s_per_km": 251.89,
+                "average_heartrate": 154.1
+              },
+              {
+                "pace": "4:03/km",
+                "lap_index": 25,
+                "speed_m_s": 4.11,
+                "distance_m": 152.07,
+                "max_heartrate": 165.0,
+                "moving_time_s": 37.0,
+                "pace_s_per_km": 243.31,
+                "average_heartrate": 154.2
+              },
+              {
+                "pace": "4:01/km",
+                "lap_index": 27,
+                "speed_m_s": 4.148,
+                "distance_m": 153.47,
+                "max_heartrate": 166.0,
+                "moving_time_s": 37.0,
+                "pace_s_per_km": 241.09,
+                "average_heartrate": 155.4
+              },
+              {
+                "pace": "4:27/km",
+                "lap_index": 30,
+                "speed_m_s": 3.751,
+                "distance_m": 146.3,
+                "max_heartrate": 163.0,
+                "moving_time_s": 39.0,
+                "pace_s_per_km": 266.58,
+                "average_heartrate": 155.3
+              },
+              {
+                "pace": "4:06/km",
+                "lap_index": 32,
+                "speed_m_s": 4.066,
+                "distance_m": 150.44,
+                "max_heartrate": 162.0,
+                "moving_time_s": 37.0,
+                "pace_s_per_km": 245.95,
+                "average_heartrate": 152.3
+              },
+              {
+                "pace": "4:15/km",
+                "lap_index": 34,
+                "speed_m_s": 3.922,
+                "distance_m": 145.1,
+                "max_heartrate": 164.0,
+                "moving_time_s": 37.0,
+                "pace_s_per_km": 255.0,
+                "average_heartrate": 152.5
+              },
+              {
+                "pace": "4:15/km",
+                "lap_index": 36,
+                "speed_m_s": 3.914,
+                "distance_m": 148.75,
+                "max_heartrate": 162.0,
+                "moving_time_s": 38.0,
+                "pace_s_per_km": 255.46,
+                "average_heartrate": 153.2
+              },
+              {
+                "pace": "4:03/km",
+                "lap_index": 38,
+                "speed_m_s": 4.111,
+                "distance_m": 152.12,
+                "max_heartrate": 165.0,
+                "moving_time_s": 37.0,
+                "pace_s_per_km": 243.23,
+                "average_heartrate": 154.3
+              },
+              {
+                "pace": "4:02/km",
+                "lap_index": 40,
+                "speed_m_s": 4.129,
+                "distance_m": 148.64,
+                "max_heartrate": 167.0,
+                "moving_time_s": 36.0,
+                "pace_s_per_km": 242.2,
+                "average_heartrate": 157.4
+              }
+            ],
+            "blocks": [
+              {
+                "block_index": 1,
+                "lap_indices": [
+                  4,
+                  6,
+                  8,
+                  10,
+                  12,
+                  14
+                ],
+                "repetitions": 6
+              },
+              {
+                "block_index": 2,
+                "lap_indices": [
+                  17,
+                  19,
+                  21,
+                  23,
+                  25,
+                  27
+                ],
+                "repetitions": 6
+              },
+              {
+                "block_index": 3,
+                "lap_indices": [
+                  30,
+                  32,
+                  34,
+                  36,
+                  38,
+                  40
+                ],
+                "repetitions": 6
+              }
+            ],
+            "structured": true,
+            "detection_basis": "Dominant short-lap distance cluster with repeated one-lap slower recoveries; block boundaries are gaps larger than one recovery lap.",
+            "work_distance_m": 2685.6,
+            "work_duration_s": 686.0,
+            "repetition_count": 18,
+            "mean_rep_speed_m_s": 3.92,
+            "structure_signature": "3x6x149m",
+            "interpretation_limits": [
+              "The structure proves repeated short work-like laps, not that the terrain was uphill.",
+              "Provider laps alone do not establish threshold, tempo, sprint or another physiological intensity label.",
+              "Terrain and intended intensity require user report, plan context or another explicit source."
+            ],
+            "block_repetition_counts": [
+              6,
+              6,
+              6
+            ],
+            "representative_distance_m": 149.3,
+            "mean_single_lap_recovery_speed_m_s": 2.954
+          },
+          "source_lap_note": "Near-1 km source laps are descriptive measurements only. Only run.short_intervals may classify a repeated short-lap structure, and it does not infer terrain or physiological intensity.",
           "source_laps_near_1km": [
             {
               "pace": "5:23/km",
@@ -12125,7 +13289,7 @@
         "display_label": "Löpning · backintervaller",
         "classification": "training",
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },
       "laps": [
         {
@@ -12684,7 +13848,7 @@
         "display_label": "MountainBikeRide",
         "classification": null,
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },
       "laps": [
         {
@@ -12820,7 +13984,7 @@
         "display_label": "Swimrun",
         "classification": null,
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },
       "laps": [
         {
@@ -12932,7 +14096,10 @@
       "workout_analysis_context": {
         "run": {
           "average_pace": "4:53/km",
-          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals.",
+          "short_intervals": {
+            "structured": false
+          },
+          "source_lap_note": "Near-1 km source laps are descriptive measurements only. Only run.short_intervals may classify a repeated short-lap structure, and it does not infer terrain or physiological intensity.",
           "source_laps_near_1km": [
             {
               "pace": "5:24/km",
@@ -13010,7 +14177,7 @@
         "display_label": "Run",
         "classification": null,
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },
       "laps": [
         {
@@ -13286,7 +14453,7 @@
         "display_label": "Enduro",
         "classification": "training",
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },
       "laps": [
         {
@@ -13325,7 +14492,10 @@
       "workout_analysis_context": {
         "run": {
           "average_pace": "5:28/km",
-          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals.",
+          "short_intervals": {
+            "structured": false
+          },
+          "source_lap_note": "Near-1 km source laps are descriptive measurements only. Only run.short_intervals may classify a repeated short-lap structure, and it does not infer terrain or physiological intensity.",
           "source_laps_near_1km": [],
           "average_pace_s_per_km": 328.14,
           "fastest_source_lap_near_1km": null
@@ -13347,7 +14517,7 @@
         "display_label": "Run",
         "classification": null,
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       }
     },
     {
@@ -13408,7 +14578,7 @@
         "display_label": "Simning · aerob + tröskel",
         "classification": "training",
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       }
     },
     {
@@ -13433,7 +14603,10 @@
       "workout_analysis_context": {
         "run": {
           "average_pace": "5:14/km",
-          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals.",
+          "short_intervals": {
+            "structured": false
+          },
+          "source_lap_note": "Near-1 km source laps are descriptive measurements only. Only run.short_intervals may classify a repeated short-lap structure, and it does not infer terrain or physiological intensity.",
           "source_laps_near_1km": [],
           "average_pace_s_per_km": 313.87,
           "fastest_source_lap_near_1km": null
@@ -13455,7 +14628,7 @@
         "display_label": "Run",
         "classification": null,
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       }
     },
     {
@@ -13496,7 +14669,7 @@
         "display_label": "MountainBikeRide",
         "classification": null,
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       }
     },
     {
@@ -13542,7 +14715,7 @@
         "display_label": "Swimrun · Jogersö Extreme",
         "classification": "training",
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       }
     },
     {
@@ -13572,7 +14745,10 @@
       "workout_analysis_context": {
         "run": {
           "average_pace": "4:59/km",
-          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals.",
+          "short_intervals": {
+            "structured": false
+          },
+          "source_lap_note": "Near-1 km source laps are descriptive measurements only. Only run.short_intervals may classify a repeated short-lap structure, and it does not infer terrain or physiological intensity.",
           "source_laps_near_1km": [],
           "average_pace_s_per_km": 299.04,
           "fastest_source_lap_near_1km": null
@@ -13594,7 +14770,7 @@
         "display_label": "Run",
         "classification": "training",
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       }
     },
     {
@@ -13633,7 +14809,7 @@
         "display_label": "WeightTraining",
         "classification": null,
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       }
     },
     {
@@ -13689,7 +14865,7 @@
         "display_label": "Enduro",
         "classification": "training",
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       }
     },
     {
@@ -13717,7 +14893,10 @@
       "workout_analysis_context": {
         "run": {
           "average_pace": "5:18/km",
-          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals.",
+          "short_intervals": {
+            "structured": false
+          },
+          "source_lap_note": "Near-1 km source laps are descriptive measurements only. Only run.short_intervals may classify a repeated short-lap structure, and it does not infer terrain or physiological intensity.",
           "source_laps_near_1km": [],
           "average_pace_s_per_km": 318.16,
           "fastest_source_lap_near_1km": null
@@ -13739,7 +14918,7 @@
         "display_label": "Löpning · grus/asfalt",
         "classification": "training",
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       }
     },
     {
@@ -13790,7 +14969,7 @@
         "display_label": "Enduro",
         "classification": "recreation",
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       }
     },
     {
@@ -13829,7 +15008,7 @@
         "display_label": "StandUpPaddling",
         "classification": null,
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       }
     },
     {
@@ -13882,7 +15061,7 @@
         "display_label": "Swim",
         "classification": null,
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       }
     },
     {
@@ -13905,7 +15084,10 @@
       "workout_analysis_context": {
         "run": {
           "average_pace": "4:55/km",
-          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals.",
+          "short_intervals": {
+            "structured": false
+          },
+          "source_lap_note": "Near-1 km source laps are descriptive measurements only. Only run.short_intervals may classify a repeated short-lap structure, and it does not infer terrain or physiological intensity.",
           "source_laps_near_1km": [],
           "average_pace_s_per_km": 294.55,
           "fastest_source_lap_near_1km": null
@@ -13927,7 +15109,7 @@
         "display_label": "Run",
         "classification": null,
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       }
     },
     {
@@ -13975,7 +15157,7 @@
         "display_label": "Swimrun",
         "classification": null,
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       }
     },
     {
@@ -14014,7 +15196,7 @@
         "display_label": "WeightTraining",
         "classification": null,
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       }
     },
     {
@@ -14067,7 +15249,7 @@
         "display_label": "Swim",
         "classification": null,
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       }
     },
     {
@@ -14090,7 +15272,10 @@
       "workout_analysis_context": {
         "run": {
           "average_pace": "5:46/km",
-          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals.",
+          "short_intervals": {
+            "structured": false
+          },
+          "source_lap_note": "Near-1 km source laps are descriptive measurements only. Only run.short_intervals may classify a repeated short-lap structure, and it does not infer terrain or physiological intensity.",
           "source_laps_near_1km": [],
           "average_pace_s_per_km": 345.66,
           "fastest_source_lap_near_1km": null
@@ -14112,7 +15297,7 @@
         "display_label": "TrailRun",
         "classification": null,
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       }
     },
     {
@@ -14135,7 +15320,10 @@
       "workout_analysis_context": {
         "run": {
           "average_pace": "5:27/km",
-          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals.",
+          "short_intervals": {
+            "structured": false
+          },
+          "source_lap_note": "Near-1 km source laps are descriptive measurements only. Only run.short_intervals may classify a repeated short-lap structure, and it does not infer terrain or physiological intensity.",
           "source_laps_near_1km": [],
           "average_pace_s_per_km": 326.72,
           "fastest_source_lap_near_1km": null
@@ -14157,7 +15345,7 @@
         "display_label": "Run",
         "classification": null,
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       }
     },
     {
@@ -14196,7 +15384,7 @@
         "display_label": "WeightTraining",
         "classification": null,
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       }
     },
     {
@@ -14235,7 +15423,7 @@
         "display_label": "MountainBikeRide",
         "classification": null,
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       }
     },
     {
@@ -14258,7 +15446,10 @@
       "workout_analysis_context": {
         "run": {
           "average_pace": "5:25/km",
-          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals.",
+          "short_intervals": {
+            "structured": false
+          },
+          "source_lap_note": "Near-1 km source laps are descriptive measurements only. Only run.short_intervals may classify a repeated short-lap structure, and it does not infer terrain or physiological intensity.",
           "source_laps_near_1km": [],
           "average_pace_s_per_km": 325.44,
           "fastest_source_lap_near_1km": null
@@ -14280,7 +15471,7 @@
         "display_label": "Run",
         "classification": null,
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       }
     },
     {
@@ -14303,7 +15494,10 @@
       "workout_analysis_context": {
         "run": {
           "average_pace": "5:54/km",
-          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals.",
+          "short_intervals": {
+            "structured": false
+          },
+          "source_lap_note": "Near-1 km source laps are descriptive measurements only. Only run.short_intervals may classify a repeated short-lap structure, and it does not infer terrain or physiological intensity.",
           "source_laps_near_1km": [],
           "average_pace_s_per_km": 354.3,
           "fastest_source_lap_near_1km": null
@@ -14325,7 +15519,7 @@
         "display_label": "TrailRun",
         "classification": null,
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       }
     },
     {
@@ -14373,7 +15567,7 @@
         "display_label": "Swimrun",
         "classification": null,
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       }
     },
     {
@@ -14396,7 +15590,10 @@
       "workout_analysis_context": {
         "run": {
           "average_pace": "5:53/km",
-          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals.",
+          "short_intervals": {
+            "structured": false
+          },
+          "source_lap_note": "Near-1 km source laps are descriptive measurements only. Only run.short_intervals may classify a repeated short-lap structure, and it does not infer terrain or physiological intensity.",
           "source_laps_near_1km": [],
           "average_pace_s_per_km": 352.82,
           "fastest_source_lap_near_1km": null
@@ -14418,7 +15615,7 @@
         "display_label": "Run",
         "classification": null,
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       }
     },
     {
@@ -14457,7 +15654,7 @@
         "display_label": "Walk",
         "classification": null,
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       }
     },
     {
@@ -14496,7 +15693,7 @@
         "display_label": "StandUpPaddling",
         "classification": null,
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       }
     },
     {
@@ -14544,7 +15741,7 @@
         "display_label": "Swimrun",
         "classification": null,
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       }
     },
     {
@@ -14594,7 +15791,7 @@
         "display_label": "Swimrun",
         "classification": null,
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       }
     },
     {
@@ -14619,7 +15816,10 @@
       "workout_analysis_context": {
         "run": {
           "average_pace": "7:35/km",
-          "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals.",
+          "short_intervals": {
+            "structured": false
+          },
+          "source_lap_note": "Near-1 km source laps are descriptive measurements only. Only run.short_intervals may classify a repeated short-lap structure, and it does not infer terrain or physiological intensity.",
           "source_laps_near_1km": [],
           "average_pace_s_per_km": 454.93,
           "fastest_source_lap_near_1km": null
@@ -14641,7 +15841,7 @@
         "display_label": "TrailRun",
         "classification": null,
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       }
     },
     {
@@ -14691,7 +15891,7 @@
         "display_label": "Swimrun",
         "classification": null,
         "contract_version": 3,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be"
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       }
     }
   ]
