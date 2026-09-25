@@ -98,6 +98,7 @@ class TopOverviewUiTests(unittest.TestCase):
 <section class="training-input" data-training-input data-activity-id="23"><div>Flytande feedback</div></section>
 <!-- training-input-ui-v1:end -->
 <h2 class="section">Aktuell vecka</h2>
+<details class="week-status-expander"><summary>5 pass · 5:33 · 4 träningsdagar</summary><div class="week-status-body"><section class="dashboard" aria-label="Veckoöversikt"></section></div></details>
 <div class="day completed-day-simplified" id="dag-2026-09-23">{embedded}</div>
 <div class="day future-workout-applied" id="dag-2026-09-25"></div>
 </div></body></html>"""
@@ -129,20 +130,25 @@ class TopOverviewUiTests(unittest.TestCase):
         self.assertIn(">Plan och motivering</summary>", rendered)
         self.assertNotIn("Veckobeslut:", rendered)
 
-        self.assertIn("Veckofokus", rendered)
+        self.assertNotIn("Veckofokus", rendered)
+        self.assertIn('class="current-week-header"', rendered)
         self.assertIn("Sim aerob/teknik + kontrollerad löptröskel", rendered)
-        self.assertIn("Byggblock · mikrocykel 1 av 4", rendered)
+        self.assertIn(
+            "Byggblock · mikrocykel 1 av 4 · 5 pass · 5:33 · 4 träningsdagar",
+            rendered,
+        )
         self.assertIn(">Planidé</summary>", rendered)
+        self.assertIn(">Veckostatus</summary>", rendered)
         self.assertIn("Mesocykelhypotes:", rendered)
         self.assertIn("Primärt:", rendered)
         self.assertIn("Skyddat:", rendered)
 
-        # Visual priority: Today is the only surfaced primary block; focus is
-        # quieter and Aktuell vecka starts after a deliberate whitespace break.
+        # Visual priority: Today is the only surfaced primary block. Week focus
+        # is context for Aktuell vecka rather than a competing section.
         self.assertIn("border-radius:18px", rendered)
         self.assertIn("background:rgba(255,255,255,.74)", rendered)
-        self.assertIn("margin-top:42px", rendered)
-        self.assertIn(".top-week-focus{\n  margin-top:15px;", rendered)
+        self.assertIn(".current-week-header{\n  margin-top:42px;", rendered)
+        self.assertNotIn('class="top-week-focus"', rendered)
 
         current = rendered.index('<h2 class="section">Aktuell vecka</h2>')
         prefix = rendered[:current]
