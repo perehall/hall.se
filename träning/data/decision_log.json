@@ -336,6 +336,14 @@
       "source_hash": "7abaa480b46f344c1cc4338e9a16f50157107072576384b9839a2a74e38502fc",
       "generated_at_utc": "2026-09-25T06:49:09.689186+00:00",
       "summary": "Reparerar guard-fel genom att flytta enda progressbeslutet till ett direkt primärt simstimulus (swim_aerobic_technique) som stöds av athlete_state; swim_strength ändras till consolidate så att kombinationsreceptet inte progressas som obligatoriskt icke-primärt stimulus. Behåller övriga val (styrka/core, tröskel, MTB) och sparar en vilodag i slutet av veckan. Alla hard_requirements verifierade: två simexponeringar, minst en styrke/core, primära kapaciteter täckta, max run-quality ≤2, dag 1 blockerad, dag 2 låg benbelastning, minst en kalenderdag utan träning, 4–5 slots."
+    },
+    {
+      "kind": "microcycle",
+      "decision_id": "2026-W40",
+      "source": "openai_repaired",
+      "source_hash": "889e6bcf6ba6965dc414d764f92dd99ce16b428bbaa9763c95d1b7097b7ba1ab",
+      "generated_at_utc": "2026-09-25T17:43:27.013663+00:00",
+      "summary": "Åtgärdar specificerade guard_failures: tar bort swim_strength från dag 2 (dag‑efter‑Enduro), ersätter med rent tekniskt/aerobt simpass dag 2 för låg benbelastning, flyttar det kombinerade sim+styrke‑pass till dag 4 och ändrar dess åtgärd från progress → establish, tar bort MTB‑slotten för att undvika konflikt med långt löppass och tröskel och säkerställer minst en vilodag. Behåller två simexponeringar, minst en styrka/core‑exponering (kombinerad), och täcker alla primära kapaciteter."
     }
   ]
 }

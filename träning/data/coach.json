@@ -4,6 +4,51 @@
       "model": "gpt-5-mini",
       "assessment": {
         "facts": [
+          "Löpning: 14,83 km · 1:16:07 · 277 m+ · snittpuls 141,6 · maxpuls 165.",
+          "Planerat simpass 4000 m; genomfört 14829.5 m."
+        ],
+        "summary": "Genomfört långt löppass 14,83 km på 76 min med genomsnittspuls 142 och flera 1 km-kontroller; visar genomförd aerob/me­ka­nisk belastning men ingen simning utförd enligt plan.",
+        "unknowns": [
+          "Subjektiv känsla efter passet saknas i användarrapporten",
+          "Återhämtningen till nästa pass är ännu inte verifierad av samma-dagsdata."
+        ],
+        "confidence": "medium",
+        "interpretations": [
+          "Detta pass ersatte den planerade simningen och levererar löptröskel-/aerobt stimulus som redan finns i mikrocykeln.",
+          "Eftersom mikrocykeln redan innehåller flera löpstimuli (inkl."
+        ],
+        "load_interpretation": "Passet ger ytterligare kardiovaskulär och mekanisk belastning nära andra hårda löppass denna mikrocykel; påverkar kommande 48–72 h återhämtning för löpning."
+      },
+      "auto_apply": {
+        "note": "Ingen automatisk planändring.",
+        "applied": false
+      },
+      "activity_id": 20326850936,
+      "plan_action": {
+        "action": "keep",
+        "reason": "Passet är en faktisk löpbelastning som ligger inom mikrocykelns avsedda stimuli och inga nära‑tidskonflikter motiverar automatisk reduktion.",
+        "target_date": "",
+        "dose_option_id": "",
+        "recommendation": "Behåll nuvarande plan; undvik extra benkrävande löpning de närmaste 48–72 timmar och håll planerade sim‑ och styrkepass oförändrade. Om du känner ovanlig trötthet eller lokal muskelvärk imorgon, meddela så reducerar jag kommande löppass.",
+        "requires_approval": false
+      },
+      "activity_date": "2026-09-25",
+      "activity_name": "Löpning på kvällen",
+      "generated_at_utc": "2026-09-25T17:43:53.565929+00:00",
+      "analysis_contract": {
+        "pipeline_version": 3,
+        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
+        "analysis_code_sha256": "b2b605b727aaea5a4027070ea282ce432554fdd8a3f4f664cf37251ade67f342",
+        "plan_comparison_version": 2,
+        "workout_context_version": 3
+      },
+      "performance_marker_id": null,
+      "performance_protocol_key": null
+    },
+    {
+      "model": "gpt-5-mini",
+      "assessment": {
+        "facts": [
           "MTB/XC: 19,04 km · 1:22:56 · 207 m+ · snittpuls 126,4 · maxpuls 149.",
           "Användarrapport: Cirka 80 min lugn stig-MTB. Dagen var planerad som vilodag. Fint pass med bra flyt. Ingen fartjakt. Lättare att hålla ner farten när man kör med lampa RPE 6/10. Känsla: Pigg. Fint pass med bra flyt. Ingen fartjakt. Lättare att hålla ner farten när man kör med lampa RPE 4/10. Känsla: Pigg."
         ],
@@ -1239,47 +1284,11 @@
       "activity_date": "2026-08-27",
       "activity_name": "Evening Stigrull",
       "generated_at_utc": "2026-08-28T01:05:04.449248+00:00"
-    },
-    {
-      "model": "gpt-5-mini",
-      "assessment": {
-        "facts": [
-          "Swimrun · Jogersö Extreme: 6,80 km · 56:25 · 102,2 m+ · snittpuls 131,9 · maxpuls 164.",
-          "Användarrapport: Ett varv på Jogersö Extreme. Pulsmätningen tappades under cirka 2 km där ansträngningen gick rätt hårt; registrerad Z1 på den delen är felaktig och faktisk intensitet bedöms av användaren som minst Z3.",
-          "Planstatus 2026-08-26: dagens planerade pass är genomfört i coachens beslutsunderlag."
-        ],
-        "summary": "Onsdagens Swimrun var mer belastande än pulsdatan visar och ökar veckobelastningen; torsdags-MTB bör hållas teknisk och lugn.",
-        "unknowns": [
-          "Subjektiv dagskänsla torsdag morgon (kan motivera återställning).",
-          "Exakt intensitet under swimrunens pulsbortfall strax över Z3 (påverkar hur mycket…"
-        ],
-        "confidence": "medium",
-        "interpretations": [
-          "Samlad belastning mån–ons ökar risken att lägga ny hård kvalitet utan extra absorption.",
-          "Dagens…"
-        ],
-        "load_interpretation": "Det närbelastande swimrunpasset innehöll åtminstone en period motsvarande minst Z3 och höjer behovet av absorbering före ny kvalitet."
-      },
-      "auto_apply": {
-        "note": "Ingen automatisk planändring.",
-        "applied": false
-      },
-      "activity_id": 19911120461,
-      "plan_action": {
-        "action": "keep",
-        "reason": "Planen redan villkorat skalat ned…",
-        "target_date": "2026-08-27",
-        "recommendation": "Behåll dagens ordination: MTB/XC teknik + aerob stig…",
-        "requires_approval": false
-      },
-      "activity_date": "2026-08-26",
-      "activity_name": "SLK Swimrun Jogersö Extreme",
-      "generated_at_utc": "2026-08-27T13:22:06.233402+00:00"
     }
   ],
-  "last_run_utc": "2026-09-25T17:13:09.390193+00:00",
+  "last_run_utc": "2026-09-25T17:43:53.565929+00:00",
   "contract_version": 15,
-  "last_trigger_hash": "e804caf935d9dc548709af2b0435b2f7932ff1fc85192bb15e053918de8ff494",
+  "last_trigger_hash": "eaff91b1ae5be59ad301e93a9fede7e9153162f0128aa2b8bd5f3e3440f24774",
   "output_contract_version": 19,
   "pipeline_contract_version": 3
 }
