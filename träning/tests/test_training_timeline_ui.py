@@ -71,6 +71,7 @@ class TrainingTimelineUiTests(unittest.TestCase):
         self.assertIn(JS_END, rendered)
         self.assertIn("active.querySelector('.dow')", rendered)
         self.assertIn("active.querySelector('.date')", rendered)
+        self.assertIn("active.querySelector('.future-workout-title-text')", rendered)
         self.assertIn("active.querySelector('.session')", rendered)
         self.assertIn("classList.add('timeline-active')", rendered)
         self.assertIn("addEventListener('scroll',schedule,{passive:true})", rendered)
