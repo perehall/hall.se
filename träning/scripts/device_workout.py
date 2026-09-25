@@ -275,7 +275,13 @@ def materialize_day(day: dict, *, in_horizon: bool) -> dict:
     result = copy.deepcopy(day)
     sport = _text(result.get("sport"))
     status = result.get("status")
-    if sport not in SUPPORTED_SPORTS or status not in SYNCABLE_STATUSES:
+    watch_workout = result.get("watch_workout") or {}
+    sync_enabled = watch_workout.get("sync_enabled") if isinstance(watch_workout, dict) else None
+    if (
+        sport not in SUPPORTED_SPORTS
+        or status not in SYNCABLE_STATUSES
+        or sync_enabled is False
+    ):
         result.pop("device_workout", None)
         result.pop("device_sync", None)
         return result
