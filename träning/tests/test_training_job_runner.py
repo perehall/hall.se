@@ -32,8 +32,9 @@ class TrainingJobRunnerTests(unittest.TestCase):
     def test_pipeline_order_is_explicit_and_stable(self):
         keys = self.stage_keys("event")
         self.assertEqual(
-            keys[:6],
+            keys[:7],
             [
+                "hydrate_activity_backend",
                 "strava_event",
                 "persist_strava_refresh_token",
                 "normalize_activity_semantics",
@@ -75,6 +76,21 @@ class TrainingJobRunnerTests(unittest.TestCase):
             self.assertFalse(stage.optional)
             self.assertIn("supabase_runtime_state.py", stage.command[1])
             self.assertEqual(stage.command[-2:], ("--scope", scope))
+
+    def test_training_input_is_applied_after_db_hydration_and_before_ingest(self):
+        with patch.dict(os.environ, {"TRAINING_INPUT_EVENT": "true"}, clear=False):
+            keys = self.stage_keys("reconcile")
+        self.assertLess(keys.index("hydrate_activity_backend"), keys.index("apply_training_input"))
+        self.assertLess(keys.index("apply_training_input"), keys.index("strava_reconcile"))
+
+    def test_activity_backend_hydration_is_required_and_first(self):
+        stages = {stage.key: stage for stage in build_stages("event")}
+        keys = self.stage_keys("event")
+        hydrated = stages["hydrate_activity_backend"]
+        self.assertFalse(hydrated.optional)
+        self.assertEqual(keys[0], "hydrate_activity_backend")
+        self.assertIn("supabase_activity_backend.py", hydrated.command[1])
+        self.assertEqual(hydrated.command[-2:], ("--mode", "hydrate"))
 
     def test_rotated_strava_token_is_persisted_before_backend_gate(self):
         keys = self.stage_keys("event")

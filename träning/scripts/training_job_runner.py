@@ -52,7 +52,16 @@ def build_stages(ingest_mode: str) -> list[Stage]:
         remove_stdin_on_success=True,
     )
 
-    return [
+    stages = [
+        Stage(
+            "hydrate_activity_backend",
+            python_stage("supabase_activity_backend.py", "--mode", "hydrate"),
+        ),
+    ]
+    if str(os.environ.get("TRAINING_INPUT_EVENT") or "").strip().lower() == "true":
+        stages.append(Stage("apply_training_input", python_stage("training_input.py")))
+
+    stages.extend([
         ingest,
         persist_token,
         Stage("normalize_activity_semantics", python_stage("normalize_activity_semantics.py")),
@@ -116,7 +125,8 @@ def build_stages(ingest_mode: str) -> list[Stage]:
             python_stage("supabase_runtime_state.py", "--scope", "final"),
         ),
         Stage("render_and_validate_site", python_stage("render_training_site.py")),
-    ]
+    ])
+    return stages
 
 
 def _stdin_file(stage: Stage):

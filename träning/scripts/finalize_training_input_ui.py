@@ -94,7 +94,7 @@ JS = r"""
     }
   };
 
-  const writePending = (activityId, eventKey, state) => {
+  const writePending = (activityId, eventKey, state, durable) => {
     try {
       localStorage.setItem(
         pendingKey(activityId),
@@ -104,6 +104,7 @@ JS = r"""
           rpe: state.rpe,
           feelings: state.feelings,
           text: state.text,
+          durable: Boolean(durable),
           submittedAt: new Date().toISOString()
         })
       );
@@ -226,7 +227,7 @@ JS = r"""
       status.textContent = '';
     };
 
-    const refreshWhenProcessed = async (eventKey) => {
+    const refreshWhenProcessed = async (eventKey, durable) => {
       const processed = await waitForProcessed(
         root.dataset.activityId,
         eventKey,
@@ -241,7 +242,9 @@ JS = r"""
         return true;
       }
 
-      status.textContent = 'Mottaget · väntar på publicering.';
+      status.textContent = durable
+        ? 'Sparat · analysen uppdateras senare.'
+        : 'Mottaget · väntar på publicering.';
       root.dataset.submitting = 'false';
       save.disabled = false;
       return false;
@@ -257,13 +260,14 @@ JS = r"""
         text: typeof pending.text === 'string' ? pending.text : ''
       });
       initial = snapshot();
-      updateCompact('Mottaget');
+      const durable = pending.durable === true;
+      updateCompact(durable ? 'Sparat' : 'Mottaget');
       editor.hidden = true;
       toggle.hidden = false;
-      root.dataset.submitting = 'true';
-      save.disabled = true;
-      status.textContent = 'Mottaget · bearbetas';
-      void refreshWhenProcessed(pending.eventKey);
+      root.dataset.submitting = durable ? 'false' : 'true';
+      save.disabled = !durable;
+      status.textContent = durable ? 'Sparat · analys uppdateras…' : 'Mottaget · bearbetas';
+      void refreshWhenProcessed(pending.eventKey, durable);
     }
 
     toggle.addEventListener('click', openEditor);
@@ -314,14 +318,21 @@ JS = r"""
         if (!response.ok) throw new Error(body.error || 'request_failed');
         if (!body.event_key) throw new Error('missing_event_key');
 
-        writePending(root.dataset.activityId, body.event_key, snapshot());
-        updateCompact('Mottaget');
+        const durable = body.status === 'saved' && body.persistence === 'supabase';
+        writePending(root.dataset.activityId, body.event_key, snapshot(), durable);
+        updateCompact(durable ? 'Sparat' : 'Mottaget');
         initial = snapshot();
         editor.hidden = true;
         toggle.hidden = false;
-        status.textContent = 'Mottaget · bearbetas';
+        root.dataset.submitting = durable ? 'false' : 'true';
+        save.disabled = !durable;
+        status.textContent = durable
+          ? (body.processing === 'deferred'
+              ? 'Sparat · analys köas om automatiskt'
+              : 'Sparat · analys uppdateras…')
+          : 'Mottaget · bearbetas';
 
-        await refreshWhenProcessed(body.event_key);
+        void refreshWhenProcessed(body.event_key, durable);
       } catch (error) {
         status.textContent = `Kunde inte spara (${error.message}).`;
         root.dataset.submitting = 'false';

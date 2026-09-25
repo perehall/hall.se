@@ -14,6 +14,9 @@ const env = {
   DISPATCH_EVENT_TYPE: "strava-activity-event",
   GITHUB_API_VERSION: "2026-03-10",
   DISPATCH_TIMEOUT_MS: "1500",
+  SUPABASE_PROJECT_URL: "https://example.supabase.co",
+  SUPABASE_SECRET_KEY: "sb_secret_test",
+  SUPABASE_TIMEOUT_MS: "1500",
 };
 
 function event(overrides = {}) {
@@ -122,11 +125,26 @@ test("athlete events are acknowledged without dispatch", async () => {
 });
 
 
-test("authenticated training GUI input dispatches constrained repository event", async () => {
-  let requestBody;
+test("authenticated training GUI input is persisted before async dispatch", async () => {
+  let persistBody;
+  let dispatchBody;
+  const calls = [];
   const fakeFetch = async (url, init) => {
+    calls.push(url);
+    if (url === "https://example.supabase.co/rest/v1/rpc/training_submit_activity_feedback") {
+      assert.equal(init.headers.apikey, "sb_secret_test");
+      persistBody = JSON.parse(init.body);
+      return new Response(JSON.stringify({
+        status: "saved",
+        event_key: persistBody.p_event_key,
+        feedback_id: "feedback-id",
+      }), {
+        status: 200,
+        headers: {"content-type": "application/json"},
+      });
+    }
     assert.equal(url, "https://api.github.com/repos/perehall/hall.se/dispatches");
-    requestBody = JSON.parse(init.body);
+    dispatchBody = JSON.parse(init.body);
     return new Response(null, { status: 204 });
   };
   const request = new Request("https://xn--hll-qla.se/träning/training-api/input", {
@@ -145,11 +163,113 @@ test("authenticated training GUI input dispatches constrained repository event",
     }),
   });
   const response = await handleRequest(request, env, fakeFetch);
+  const body = await response.json();
   assert.equal(response.status, 200);
+  assert.equal(body.status, "saved");
+  assert.equal(body.persistence, "supabase");
+  assert.equal(body.processing, "queued");
+  assert.deepEqual(calls, [
+    "https://example.supabase.co/rest/v1/rpc/training_submit_activity_feedback",
+    "https://api.github.com/repos/perehall/hall.se/dispatches",
+  ]);
+  assert.equal(persistBody.p_provider_activity_id, "789");
+  assert.equal(persistBody.p_operation, "NATURAL_LANGUAGE");
+  assert.equal(persistBody.p_rpe, 6);
+  assert.deepEqual(persistBody.p_feeling, ["fresh", "could_do_more"]);
+  assert.equal(dispatchBody.event_type, "training-input-event");
+  assert.equal(dispatchBody.client_payload.activity_id, 789);
+  assert.match(dispatchBody.client_payload.event_key, /^training-input:/);
+  assert.equal(dispatchBody.client_payload.event_key, persistBody.p_event_key);
+});
+
+test("training GUI input fails closed when direct persistence fails", async () => {
+  let githubCalled = false;
+  const fakeFetch = async (url) => {
+    if (url.includes("supabase.co")) {
+      return new Response("database unavailable", { status: 503 });
+    }
+    githubCalled = true;
+    return new Response(null, { status: 204 });
+  };
+  const request = new Request("https://xn--hll-qla.se/träning/training-api/input", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      "cf-access-jwt-assertion": "signed-access-jwt",
+    },
+    body: JSON.stringify({
+      operation: "ADD_FEEDBACK",
+      activity_id: 789,
+      text: "Kontrollerat.",
+    }),
+  });
+  const response = await handleRequest(request, env, fakeFetch);
+  assert.equal(response.status, 503);
+  assert.deepEqual(await response.json(), { error: "persistence_failed" });
+  assert.equal(githubCalled, false);
+});
+
+test("training GUI input stays saved when async dispatch fails after persistence", async () => {
+  const fakeFetch = async (url, init) => {
+    if (url.includes("supabase.co")) {
+      const body = JSON.parse(init.body);
+      return new Response(JSON.stringify({
+        status: "saved",
+        event_key: body.p_event_key,
+      }), {
+        status: 200,
+        headers: {"content-type": "application/json"},
+      });
+    }
+    return new Response("temporary failure", { status: 503 });
+  };
+  const request = new Request("https://xn--hll-qla.se/träning/training-api/input", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      "cf-access-jwt-assertion": "signed-access-jwt",
+    },
+    body: JSON.stringify({
+      operation: "ADD_FEEDBACK",
+      activity_id: 789,
+      text: "Kontrollerat.",
+    }),
+  });
+  const response = await handleRequest(request, env, fakeFetch);
+  const body = await response.json();
+  assert.equal(response.status, 202);
+  assert.equal(body.status, "saved");
+  assert.equal(body.persistence, "supabase");
+  assert.equal(body.processing, "deferred");
+});
+
+test("training GUI input keeps dispatch-only fallback until Supabase secret is configured", async () => {
+  const fallbackEnv = { ...env };
+  delete fallbackEnv.SUPABASE_SECRET_KEY;
+  let requestBody;
+  const fakeFetch = async (url, init) => {
+    assert.equal(url, "https://api.github.com/repos/perehall/hall.se/dispatches");
+    requestBody = JSON.parse(init.body);
+    return new Response(null, { status: 204 });
+  };
+  const request = new Request("https://xn--hll-qla.se/träning/training-api/input", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      "cf-access-jwt-assertion": "signed-access-jwt",
+    },
+    body: JSON.stringify({
+      operation: "ADD_FEEDBACK",
+      activity_id: 789,
+      text: "Pigg.",
+    }),
+  });
+  const response = await handleRequest(request, fallbackEnv, fakeFetch);
+  const body = await response.json();
+  assert.equal(response.status, 200);
+  assert.equal(body.status, "accepted");
+  assert.equal(body.persistence, "dispatch");
   assert.equal(requestBody.event_type, "training-input-event");
-  assert.equal(requestBody.client_payload.activity_id, 789);
-  assert.equal(requestBody.client_payload.operation, "NATURAL_LANGUAGE");
-  assert.match(requestBody.client_payload.event_key, /^training-input:/);
 });
 
 test("training GUI input requires Cloudflare Access assertion", async () => {
@@ -209,4 +329,5 @@ test("Wrangler keeps workers.dev enabled for the registered Strava callback", ()
   const config = readFileSync(new URL("../wrangler.jsonc", import.meta.url), "utf8");
   assert.match(config, /"workers_dev"\s*:\s*true/);
   assert.match(config, /"name"\s*:\s*"hall-se"/);
+  assert.match(config, /"SUPABASE_PROJECT_URL"\s*:\s*"https:\/\/izzevnhgtsvffpkccoai\.supabase\.co"/);
 });

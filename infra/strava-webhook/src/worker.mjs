@@ -7,6 +7,9 @@ const TRAINING_INPUT_OPERATIONS = new Set(["ADD_FEEDBACK", "UPDATE_COMPLETED_WOR
 const TRAINING_INPUT_FEELINGS = new Set(["fresh", "tired", "strong_legs", "heavy_legs", "pain", "could_do_more"]);
 const DEFAULT_GITHUB_API_VERSION = "2026-03-10";
 const DEFAULT_TIMEOUT_MS = 1500;
+const DEFAULT_SUPABASE_PROJECT_URL = "https://izzevnhgtsvffpkccoai.supabase.co";
+const TRAINING_FEEDBACK_RPC_PATH = "/rest/v1/rpc/training_submit_activity_feedback";
+const DEFAULT_SUPABASE_TIMEOUT_MS = 2500;
 
 function jsonResponse(body, status = 200) {
   return new Response(JSON.stringify(body), {
@@ -20,6 +23,16 @@ function jsonResponse(body, status = 200) {
 
 function configured(value) {
   return typeof value === "string" && value.trim().length > 0;
+}
+
+function supabaseSecretKey(env) {
+  if (configured(env.SUPABASE_SECRET_KEY)) return env.SUPABASE_SECRET_KEY.trim();
+  if (configured(env.SUPABASE_SERVICE_ROLE_KEY)) return env.SUPABASE_SERVICE_ROLE_KEY.trim();
+  return "";
+}
+
+function directTrainingInputPersistenceConfigured(env) {
+  return configured(supabaseSecretKey(env));
 }
 
 async function sha256Hex(value) {
@@ -89,6 +102,54 @@ export function validateActivityEvent(payload, env) {
     },
   };
 }
+
+export async function persistTrainingInput(event, env, fetchImpl = fetch) {
+  const secretKey = supabaseSecretKey(env);
+  if (!configured(secretKey)) {
+    throw new Error("Supabase secret key is not configured");
+  }
+  const projectUrl = configured(env.SUPABASE_PROJECT_URL)
+    ? env.SUPABASE_PROJECT_URL.trim().replace(/\/$/, "")
+    : DEFAULT_SUPABASE_PROJECT_URL;
+  const timeoutMs = Number(env.SUPABASE_TIMEOUT_MS || DEFAULT_SUPABASE_TIMEOUT_MS);
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort("supabase_feedback_timeout"), timeoutMs);
+
+  try {
+    const response = await fetchImpl(projectUrl + TRAINING_FEEDBACK_RPC_PATH, {
+      method: "POST",
+      signal: controller.signal,
+      headers: {
+        apikey: secretKey,
+        "content-type": "application/json",
+        "user-agent": "hall-se-training-input-worker",
+      },
+      body: JSON.stringify({
+        p_provider_activity_id: String(event.activity_id),
+        p_source: event.source,
+        p_operation: event.operation,
+        p_feedback_text: event.text,
+        p_rpe: event.rpe,
+        p_feeling: event.feeling,
+        p_event_key: event.event_key,
+        p_submitted_at: event.submitted_at,
+        p_raw: event,
+      }),
+    });
+    if (!response.ok) {
+      const body = (await response.text()).slice(0, 500);
+      throw new Error(`Supabase feedback RPC failed: HTTP ${response.status} ${body}`);
+    }
+    const body = await response.json().catch(() => ({}));
+    if (body?.status !== "saved" || body?.event_key !== event.event_key) {
+      throw new Error("Supabase feedback RPC returned an invalid acknowledgement");
+    }
+    return body;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 
 export async function dispatchToGitHub(event, env, fetchImpl = fetch, eventTypeOverride = null) {
   if (!configured(env.GITHUB_DISPATCH_TOKEN)) {
@@ -244,6 +305,17 @@ async function handleTrainingInputRequest(request, env, fetchImpl) {
     event_key: "training-input:" + digest.slice(0, 24),
   };
 
+  const directPersistence = directTrainingInputPersistenceConfigured(env);
+  if (directPersistence) {
+    try {
+      await persistTrainingInput(event, env, fetchImpl);
+      console.log("TRAINING_INPUT_PERSISTED", event.event_key, event.operation);
+    } catch (error) {
+      console.error("TRAINING_INPUT_PERSIST_FAILED", event.event_key, String(error));
+      return jsonResponse({ error: "persistence_failed" }, 503);
+    }
+  }
+
   try {
     const eventType = configured(env.TRAINING_INPUT_EVENT_TYPE)
       ? env.TRAINING_INPUT_EVENT_TYPE.trim()
@@ -251,11 +323,24 @@ async function handleTrainingInputRequest(request, env, fetchImpl) {
     await dispatchToGitHub(event, env, fetchImpl, eventType);
   } catch (error) {
     console.error("TRAINING_INPUT_DISPATCH_FAILED", event.event_key, String(error));
+    if (directPersistence) {
+      return jsonResponse({
+        status: "saved",
+        persistence: "supabase",
+        processing: "deferred",
+        event_key: event.event_key,
+      }, 202);
+    }
     return jsonResponse({ error: "dispatch_failed" }, 503);
   }
 
   console.log("TRAINING_INPUT_DISPATCHED", event.event_key, event.operation);
-  return jsonResponse({ status: "accepted", event_key: event.event_key });
+  return jsonResponse({
+    status: directPersistence ? "saved" : "accepted",
+    persistence: directPersistence ? "supabase" : "dispatch",
+    processing: "queued",
+    event_key: event.event_key,
+  });
 }
 
 export async function handleRequest(request, env, fetchImpl = fetch) {
@@ -269,6 +354,7 @@ export async function handleRequest(request, env, fetchImpl = fetch) {
       owner_configured: configured(env.STRAVA_OWNER_ID),
       subscription_configured: configured(env.STRAVA_SUBSCRIPTION_ID),
       github_dispatch_configured: configured(env.GITHUB_DISPATCH_TOKEN),
+      training_input_direct_persistence_configured: directTrainingInputPersistenceConfigured(env),
       training_input_endpoint: TRAINING_INPUT_PATH,
       webhook_path_fingerprint: await secretFingerprint(env.WEBHOOK_PATH_SECRET),
       verify_token_fingerprint: await secretFingerprint(env.STRAVA_VERIFY_TOKEN),

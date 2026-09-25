@@ -80,6 +80,11 @@ class TrainingInputUiTests(unittest.TestCase):
         self.assertIn("localStorage.removeItem", rendered)
         self.assertIn("Mottaget · bearbetas", rendered)
         self.assertIn("Mottaget · väntar på publicering.", rendered)
+        self.assertIn("body.status === 'saved' && body.persistence === 'supabase'", rendered)
+        self.assertIn("Sparat · analys uppdateras…", rendered)
+        self.assertIn("Sparat · analys köas om automatiskt", rendered)
+        self.assertIn("Sparat · analysen uppdateras senare.", rendered)
+        self.assertIn("durable: Boolean(durable)", rendered)
         self.assertIn("attempt < 240", rendered)
 
     def test_current_week_activities_remain_open_for_feedback(self):
