@@ -166,6 +166,28 @@ def inner_text_from_class(block: str, class_name: str) -> str:
     return strip_tags(match.group(1)) if match else ""
 
 
+def remove_first_div(block: str, class_name: str) -> str:
+    raw = first_div(block, class_name)
+    if not raw:
+        return block
+    return block.replace(raw, "", 1)
+
+
+def strip_legacy_workout_nodes(block: str) -> str:
+    """Remove the old parallel future-workout presentation after shell extraction."""
+    for class_name in (
+        "session",
+        "swim-workout",
+        "workout-prescription",
+        "development-focus",
+        "next-weather",
+        "swim-equipment-line",
+        "card-v2-footer",
+    ):
+        block = remove_first_div(block, class_name)
+    return block
+
+
 def reason_from_block(block: str, fallback: str) -> str:
     match = re.search(r'<div class="reason">(.*?)</div>', block, re.S | re.I)
     return compact_reason(match.group(1) if match else fallback)
@@ -366,7 +388,9 @@ def apply_shell(
             raise RuntimeError(f"Future workout shell: daytop saknas för {day_date}")
 
         shell = render_shell(day, block, registry)
-        new_block = opening + block[opening_end:]
+        cleaned_block = strip_legacy_workout_nodes(block)
+        cleaned_opening_end = cleaned_block.find(">") + 1
+        new_block = opening + cleaned_block[cleaned_opening_end:]
         daytop_pos = new_block.find(daytop, len(opening))
         if daytop_pos < 0:
             raise RuntimeError(f"Future workout shell: daytop kunde inte placeras för {day_date}")
