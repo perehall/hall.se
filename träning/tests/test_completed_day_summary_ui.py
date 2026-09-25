@@ -137,6 +137,41 @@ class CompletedDaySummaryUiTests(unittest.TestCase):
         self.assertNotIn("Passinsikt", rendered)
         self.assertNotIn("WeightTraining", rendered)
 
+    def test_completed_day_materializes_editor_even_when_upstream_input_is_only_in_top_region(self):
+        page = """<html><head><style></style></head><body>
+<header>
+<!-- training-input-ui-v1:start -->
+<section class="training-input" data-training-input data-activity-id="20326850936" data-reviewed="false" data-processed-event-keys="">
+  <div class="training-input-compact"><div><div class="training-input-summary">Hur kändes passet?</div></div><button type="button" class="training-input-toggle" data-training-input-toggle>Ändra</button></div>
+  <div class="training-input-editor" data-training-input-editor hidden><button type="button" data-training-input-save>Spara</button></div>
+</section>
+<!-- training-input-ui-v1:end -->
+</header>
+<div class="day completed-day workout-card-v2" id="dag-2026-09-25">
+  <div class="session"><span class="session-text"><strong class="session-title">Löpning · backkvalitet</strong><span class="session-meta">3 × 8 × 150 m</span></span></div>
+</div>
+</body></html>"""
+        activities = {
+            "activities": [{
+                "id": 20326850936,
+                "sport_type": "Run",
+                "display_label": "Löpning · backintervaller",
+                "start_date_local": "2026-09-25T18:20:41+02:00",
+                "elapsed_time_s": 4567,
+                "distance_m": 14829.5,
+            }]
+        }
+        overrides = {"schema_version": 1, "overrides": {}}
+        rendered, changed = simplify_completed_days(
+            page, activities, overrides, "2026-09-25"
+        )
+        self.assertEqual(changed, 1)
+        day_start = rendered.index('id="dag-2026-09-25"')
+        day_block = rendered[day_start:]
+        self.assertIn('data-activity-id="20326850936"', day_block)
+        self.assertIn(">Ändra</button>", day_block)
+        self.assertIn("Kommentar eller korrigering av passet", day_block)
+
     def test_day_without_activity_is_not_changed(self):
         rendered, changed = simplify_completed_days(
             self.page(), {"activities": []}, self.overrides(), "2026-09-22"
