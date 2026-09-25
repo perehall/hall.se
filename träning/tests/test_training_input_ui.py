@@ -84,6 +84,8 @@ class TrainingInputUiTests(unittest.TestCase):
         self.assertIn("Sparat · analys uppdateras…", rendered)
         self.assertIn("Sparat · analys köas om automatiskt", rendered)
         self.assertIn("Sparat · analysen uppdateras senare.", rendered)
+        self.assertIn("updateVisibleCompletedDayStatus", rendered)
+        self.assertIn("const visibleStatus = bits.length ? bits.join(' · ') : 'Sparat';", rendered)
         self.assertIn("durable: Boolean(durable)", rendered)
         self.assertIn("attempt < 240", rendered)
         self.assertIn("let feeling = null", rendered)
