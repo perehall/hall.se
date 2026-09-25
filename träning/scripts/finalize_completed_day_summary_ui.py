@@ -49,7 +49,7 @@ ACTIVITY_ID_RE = re.compile(r'data-activity-id="(?P<id>\d+)"')
 CSS = r"""
 /* completed-day-summary-v2 */
 .day.completed-day-simplified{padding-top:14px;padding-bottom:16px}
-.completed-day-simplified>.session{display:none}
+.completed-day-simplified>.session,.completed-day-simplified>.swim-workout{display:none}
 .completed-day-summary{margin-top:1px;color:var(--qp-text,#111827)}
 .completed-day-kicker{display:block;margin-bottom:5px;color:var(--qp-tertiary,#64748b);font-size:.64rem;font-weight:850;letter-spacing:.075em;text-transform:uppercase}
 .completed-day-title{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:0;font-size:1.08rem;font-weight:850;letter-spacing:-.018em;line-height:1.28}
@@ -308,13 +308,29 @@ def planned_copy(block: str) -> str:
     if not title:
         raw = extract(r'<div class="session[^"]*">(.*?)</div>', block)
         title = strip_tags(raw)
+    if not title:
+        title = strip_tags(extract(r'class="swim-session-head".*?<strong[^>]*>(.*?)</strong>', block))
+        meta = strip_tags(extract(r'class="swim-meta">(.*?)</span>', block))
     result = strip_tags(title)
     meta = strip_tags(meta)
-    if meta:
+    if meta and meta.lower() not in result.lower():
         result += f" · {meta}"
     if result.lower() == "ingen planerad träning":
         return "Vilodag"
     return result
+
+
+def primary_plan_block(block: str) -> tuple[int, int] | None:
+    """Find the visible planned-workout node independent of sport-specific markup."""
+    candidates = []
+    for marker in ('<div class="session', '<div class="swim-workout'):
+        start = block.find(marker)
+        if start >= 0:
+            candidates.append(start)
+    if not candidates:
+        return None
+    start = min(candidates)
+    return start, balanced_div_end(block, start)
 
 
 def summary_reason(value: str) -> str:
@@ -523,7 +539,14 @@ def render_summary(
     icon_registry: dict | None = None,
 ) -> str:
     decision = extract(r'class="coach-decision".*?<strong>(.*?)</strong>', block)
+    if not decision:
+        decision = extract(
+            r'class="week-activity-plan-impact".*?<strong>(.*?)</strong>',
+            block,
+        )
     coach_summary = extract(r'class="coach-summary">(.*?)</div>', block)
+    if not coach_summary and activities:
+        coach_summary = insight_copy(block, activities[0].get("id"))
     next_step = extract(r'class="coach-next".*?<div>(.*?)</div>\s*</div>', block)
 
     plan_title = normalize_decision(decision)
@@ -616,11 +639,11 @@ def simplify_completed_days(
         if 'class="completed-day-summary"' in block:
             continue
 
-        session_start = block.find('<div class="session')
-        if session_start < 0:
+        primary = primary_plan_block(block)
+        if primary is None:
             continue
-        session_end = balanced_div_end(block, session_start)
-        rest = block[session_end:-6]
+        primary_start, primary_end = primary
+        rest = block[primary_end:-6]
         summary = render_summary(
             block,
             activities,
@@ -636,7 +659,7 @@ def simplify_completed_days(
             opening = opening.replace('class="day', 'class="day completed-day-simplified', 1)
         # Keep the original session in the DOM for accessibility/icon contracts;
         # CSS hides it in the compact completed state.
-        new_block = opening + block[block.find(">") + 1:session_end] + summary + '</div>'
+        new_block = opening + block[block.find(">") + 1:primary_end] + summary + '</div>'
         page = page[:start] + new_block + page[end:]
         changed += 1
 
