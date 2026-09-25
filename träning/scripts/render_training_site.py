@@ -56,6 +56,7 @@ PIPELINE = (
     "finalize_training_timeline_ui.py",
     "finalize_week_navigation_ui.py",
     "finalize_week_page_consistency_ui.py",
+    "finalize_all_week_pass_icons.py",
     "finalize_generated_whitespace.py",
     "check_week_reviews.py",
     "check_week_review_ui.py",
