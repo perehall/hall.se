@@ -219,3 +219,12 @@ the persisted state-document hashes, then overlays newer append-only
 snapshot from erasing or hiding feedback that arrived while another pipeline
 run was in progress.
 
+Operator-authored semantic corrections that originate outside the browser
+feedback path live in `data/activity_directives.json`, not in the generated
+`activity_overrides.json` cache. After backend hydration and provider ingest,
+`apply_activity_directives.py` overlays only the explicitly named fields onto
+the fresh backend projection. Newer append-only feedback and unrelated override
+fields are preserved, and the merged snapshot is then promoted back to
+Supabase. This keeps Supabase authoritative without making a generated Git cache
+an accidental write source.
+

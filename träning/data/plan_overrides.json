@@ -205,7 +205,7 @@
     {
       "date": "2026-09-26",
       "source": "user_confirmed",
-      "note": "Fredagens 4 000 m simpass flyttas av praktiska skäl till lördag. Detta är en flytt av veckans simexponering, inte extra träning ovanpå planen.",
+      "note": "Fredagens 4 000 m simpass flyttas av praktiska skäl till lördag. Detta är en flytt av veckans simexponering, inte extra träning ovanpå planen. planning_status=fixed bevarar användarvalet; manual_lock används inte eftersom det i workout-designlagret betyder extern aktivitet.",
       "remove_fields": [
         "workout_design",
         "device_workout",
@@ -221,7 +221,7 @@
         "development_focus": "Bibehåll teknisk kvalitet genom ett längre aerobt pass med en avgränsad, kontrollerad tröskeldel; tröskeldelen ska inte bli maximal.",
         "sport": "swim",
         "classification": "training",
-        "manual_lock": true,
+        "manual_lock": false,
         "priority_role": "flex",
         "stimuli": [
           "swim_aerobic",
