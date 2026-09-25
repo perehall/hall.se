@@ -50,6 +50,7 @@ EXPECTED_PIPELINE = (
     "finalize_backend_status_ui.py",
     "finalize_quiet_performance_ui.py",
     "finalize_quiet_performance_v2_ui.py",
+    "finalize_upcoming_workout_shell_ui.py",
     "finalize_completed_day_summary_ui.py",
     "finalize_rest_day_language.py",
     "finalize_training_timeline_ui.py",
@@ -93,7 +94,8 @@ class RenderPipelineTests(unittest.TestCase):
         self.assertLess(PIPELINE.index("finalize_week_shell_ui.py"), PIPELINE.index("finalize_backend_status_ui.py"))
         self.assertLess(PIPELINE.index("finalize_backend_status_ui.py"), PIPELINE.index("finalize_quiet_performance_ui.py"))
         self.assertLess(PIPELINE.index("finalize_quiet_performance_ui.py"), PIPELINE.index("finalize_quiet_performance_v2_ui.py"))
-        self.assertLess(PIPELINE.index("finalize_quiet_performance_v2_ui.py"), PIPELINE.index("finalize_completed_day_summary_ui.py"))
+        self.assertLess(PIPELINE.index("finalize_quiet_performance_v2_ui.py"), PIPELINE.index("finalize_upcoming_workout_shell_ui.py"))
+        self.assertLess(PIPELINE.index("finalize_upcoming_workout_shell_ui.py"), PIPELINE.index("finalize_completed_day_summary_ui.py"))
         self.assertLess(PIPELINE.index("finalize_completed_day_summary_ui.py"), PIPELINE.index("finalize_rest_day_language.py"))
         self.assertLess(PIPELINE.index("finalize_rest_day_language.py"), PIPELINE.index("finalize_training_timeline_ui.py"))
         self.assertLess(PIPELINE.index("finalize_training_timeline_ui.py"), PIPELINE.index("finalize_generated_whitespace.py"))
