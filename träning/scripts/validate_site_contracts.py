@@ -224,6 +224,14 @@ def main() -> None:
             index.count('class="top-overview"') == 1,
             "Preflight: exakt en sammanhållen toppöversikt krävs",
         )
+        require(
+            index.count('class="current-week-header"') == 1,
+            "Preflight: exakt ett sammanhållet huvud för Aktuell vecka krävs",
+        )
+        require(
+            'class="top-week-focus"' not in index,
+            "Preflight: Veckofokus ligger fortfarande som eget topplager",
+        )
         current_week_pos = index.find('<h2 class="section">Aktuell vecka</h2>')
         require(current_week_pos > 0, "Preflight: Aktuell vecka-rubrik saknas")
         prefix = index[:current_week_pos]
