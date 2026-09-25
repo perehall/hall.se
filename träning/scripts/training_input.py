@@ -95,8 +95,8 @@ def validate_payload(payload: dict) -> dict:
             raise RuntimeError("rpe måste vara ett heltal 1–10.")
 
     feeling = payload.get("feeling") or []
-    if not isinstance(feeling, list) or len(feeling) > 6:
-        raise RuntimeError("feeling måste vara en lista med högst sex värden.")
+    if not isinstance(feeling, list) or len(feeling) > 1:
+        raise RuntimeError("feeling måste vara en lista med högst ett värde.")
     normalized_feeling = []
     for value in feeling:
         code = str(value or "").strip()
