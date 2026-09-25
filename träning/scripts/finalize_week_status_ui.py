@@ -8,8 +8,8 @@ INDEX_FILE = ROOT / "index.html"
 CSS_MARKER = "/* week-status-ui-v2 */"
 CSS = r'''
 /* week-status-ui-v2 */
-.week-status-expander{margin:8px 0 16px}
-.week-status-expander>summary{cursor:pointer;list-style:none;color:#334155;font-size:.84rem;font-weight:850;padding:7px 0;line-height:1.35}
+.week-status-expander{margin:4px 0 19px}
+.week-status-expander>summary{cursor:pointer;list-style:none;color:#7b8490;font-size:.72rem;font-weight:650;padding:4px 0;line-height:1.35}
 .week-status-expander>summary::-webkit-details-marker{display:none}
 .week-status-expander>summary:after{content:" +"}
 .week-status-expander[open]>summary:after{content:" −"}
@@ -45,9 +45,9 @@ def extract_summary(dashboard):
 
     pass_count = int(metrics["pass"])
     day_count = int(metrics["träningsdagar"])
-    day_word = "dag" if day_count == 1 else "dagar"
+    day_word = "träningsdag" if day_count == 1 else "träningsdagar"
     duration = compact_duration(metrics["passtid"])
-    return f"Veckostatus · {pass_count} pass · {duration} · {day_count} {day_word}"
+    return f"{pass_count} pass · {duration} · {day_count} {day_word}"
 
 
 def promote_week_status(page):
@@ -100,7 +100,7 @@ def main():
     required = [
         CSS_MARKER,
         'class="week-status-expander"',
-        '<summary>Veckostatus · ',
+        'class="week-status-expander"',
         '<section class="dashboard" aria-label="Veckoöversikt">',
         '.week-status-expander .dashboard>.dashboard-card:last-child{display:none}',
         '.week-status-expander>summary:after{content:" +"}',
