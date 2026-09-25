@@ -1,65 +1,62 @@
 {
   "slots": [
     {
-      "action": "progress",
+      "action": "consolidate",
       "day_index": 2,
-      "rationale": "Progression av simmens aeroba/tekniska stimulus (stöd i flera 3–4k‑pass); låg benbelastning dag efter enduro passar simfokus.",
+      "rationale": "Lågmekanisk simexponering dagen efter fast enduro ger konkret plan utan att anta att benen är redo för ny benkvalitet.",
       "recipe_key": "swim_aerobic_technique",
       "evidence_refs": [
-        "session:20239623463",
-        "session:20300494236",
-        "mesocycle:20260921-swim_aerobic-swim_technique-run_threshold"
-      ]
-    },
-    {
-      "action": "establish",
-      "day_index": 3,
-      "rationale": "Andra simexponeringen kombinerad med kontrollerad styrka/core för att uppfylla styrke‑per‑mikrocykel‑kravet; placerad dag 3 för att undvika direkt dag‑efter‑enduro‑konflikt.",
-      "recipe_key": "swim_strength",
-      "evidence_refs": [
-        "session:20300494236",
-        "session:20272196080",
-        "mesocycle:20260921-swim_aerobic-swim_technique-run_threshold"
+        "mesocycle.primary_capabilities"
       ]
     },
     {
       "action": "consolidate",
-      "day_index": 4,
-      "rationale": "Bibehåll kontrollerad 4×8‑struktur utan progression (senaste 4×8 2026‑09‑22); endast en primärprogress tillåts i veckoblocket.",
+      "day_index": 3,
+      "rationale": "Realiserar mesocykelns primära kapacitet run_threshold med säker separation från annan benbelastning.",
       "recipe_key": "run_threshold",
       "evidence_refs": [
-        "session:20284663236",
-        "mesocycle:20260921-swim_aerobic-swim_technique-run_threshold"
+        "mesocycle.primary_capabilities"
       ]
     },
     {
       "action": "establish",
-      "day_index": 6,
-      "rationale": "Etablera lugn långt löppass för löptålighet placerat ≥48 h efter tröskel (dag 4) och inte direkt intill MTB; stöd i tidigare långa distanspass.",
+      "day_index": 5,
+      "rationale": "Kombinera en nödvändig simexponering med ännu ej uppfylld styrka/core.",
+      "recipe_key": "swim_strength",
+      "evidence_refs": [
+        "mesocycle.primary_capabilities"
+      ]
+    },
+    {
+      "action": "consolidate",
+      "day_index": 7,
+      "rationale": "Behåll lugn löptålighet med separation från löpkvalitet.",
       "recipe_key": "run_easy_distance",
       "evidence_refs": [
-        "session:20254486837",
-        "mesocycle:20260921-swim_aerobic-swim_technique-run_threshold"
+        "planning_policy.microcycle_policy"
       ]
     }
   ],
-  "source": "openai_repaired",
+  "source": "deterministic_fallback_after_repair_guard",
   "week_key": "2026-W40",
-  "rationale": "Reparerar förslag för att undanröja alla guard‑failures: swim_strength flyttas bort från direkt dag‑efter‑enduro, endast en primär progress (swim_aerobic_technique) väljs med stöd i senaste 3–4k‑pass, två simexponeringar inkluderas, minst en styrka/core exponering (via swim_strength) säkerställs, run_threshold konsolideras och långt lugnt löppass placeras ≥48 h efter tröskel. MTB‑slot tas bort och minst en kalenderdag lämnas fri (dag 5).",
+  "rationale": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern.",
   "week_start": "2026-09-28",
-  "source_hash": "d1b0ff257b23eea8874b40571bafb9a98540a59bdd2057428d5854c773fd80c9",
+  "source_hash": "a157db5dc7bd44c30199a0effd6fe0cb111bfe1caa714550b04ba34ab3a87acd",
   "guard_repair": {
-    "result": "accepted",
+    "result": "fallback",
     "attempted": true,
+    "repair_failures": [
+      "dag 1 är blockerad av fast endurobelastning"
+    ],
     "initial_failures": [
+      "dag 1 är blockerad av fast endurobelastning",
       "swim_strength får inte ligga direkt dagen efter fast enduro när faktisk benbelastning ännu är okänd",
-      "lång löpdistans får inte ligga direkt intill MTB/XC; den sekundära cykelexponeringen ska utgå eller flyttas",
       "swim_strength får inte progressas eftersom receptet inte realiserar ett direkt primärt stimulus"
     ]
   },
   "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
   "schema_version": 1,
-  "generated_at_utc": "2026-09-25T20:15:20.953217+00:00",
+  "generated_at_utc": "2026-09-25T20:27:43.736584+00:00",
   "planner_revision": 7,
   "competition_context": {
     "as_of": "2026-09-28",
