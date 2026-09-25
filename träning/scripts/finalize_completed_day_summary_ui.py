@@ -23,7 +23,7 @@ from finalize_post_workout_ui import (
     fmt_hr,
     local_date,
 )
-from finalize_training_input_ui import FEELING_LABELS, feedback_from_override
+from finalize_training_input_ui import FEELING_LABELS, feedback_from_override, render_block
 from finalize_completed_sport_icon import activity_icon_key, render_icon
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -191,6 +191,54 @@ def training_input_blocks(page: str) -> dict[int, dict[str, str]]:
             "section": embedded,
         }
     return blocks
+
+
+def processed_event_keys_from_override(override: dict) -> list[str]:
+    values = override.get("training_input_event_keys") or []
+    if not isinstance(values, list):
+        values = []
+    keys = [
+        str(value).strip()
+        for value in values
+        if re.fullmatch(r"training-input:[0-9a-f]{24}", str(value).strip())
+    ]
+    legacy = str(override.get("last_training_input_event_key") or "").strip()
+    if re.fullmatch(r"training-input:[0-9a-f]{24}", legacy) and legacy not in keys:
+        keys.append(legacy)
+    return keys[-8:]
+
+
+def ensure_activity_input_blocks(
+    input_blocks: dict[int, dict[str, str]],
+    activities_state: dict,
+    overrides: dict,
+) -> dict[int, dict[str, str]]:
+    mapping = overrides.get("overrides") or {}
+    for activity in activities_state.get("activities") or []:
+        activity_id = activity.get("id")
+        if not isinstance(activity_id, int) or activity_id in input_blocks:
+            continue
+        override = mapping.get(str(activity_id)) or {}
+        rendered = render_block(
+            activity,
+            processed_event_keys_from_override(override),
+            feedback_from_override(override),
+        )
+        match = TRAINING_INPUT_BLOCK_RE.search(rendered)
+        if not match:
+            raise RuntimeError(
+                f"Completed-day summary: kunde inte materialisera editor för aktivitet {activity_id}."
+            )
+        section = match.group("section").replace(
+            '<section class="training-input"',
+            '<section class="training-input completed-day-inline-input"',
+            1,
+        )
+        input_blocks[activity_id] = {
+            "full": "",
+            "section": section,
+        }
+    return input_blocks
 
 
 def performed_title_html(activities: list[dict], icon_registry: dict) -> tuple[str, list[str]]:
@@ -615,7 +663,9 @@ def simplify_completed_days(
     today: str,
     icon_registry: dict | None = None,
 ) -> tuple[str, int]:
-    input_blocks = training_input_blocks(page)
+    input_blocks = ensure_activity_input_blocks(
+        training_input_blocks(page), activities_state, overrides
+    )
     consumed_input_ids: set[int] = set()
     grouped: dict[str, list[dict]] = {}
     for activity in activities_state.get("activities") or []:
