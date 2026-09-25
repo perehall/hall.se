@@ -281,7 +281,7 @@
       "mesocycle_source_hash": "a8b5f8c55f665c67c8e4a949cf2aeb645712cef12ae5e5f25bb80cb04ccb4da4",
       "microcycle_source_hash": "a157db5dc7bd44c30199a0effd6fe0cb111bfe1caa714550b04ba34ab3a87acd",
       "mesocycle_decision_source": "openai",
-      "microcycle_decision_source": "deterministic_fallback_after_repair_guard"
+      "microcycle_decision_source": "openai_repaired"
     },
     "evaluation_date": "2026-10-19",
     "goal_basis_hash": "30201a00f8ff4f10c913b8fbf2d31052418d4e0d3812c799ca49b56a38accdf9",
@@ -377,7 +377,7 @@
       {
         "slot": "swim_aerobic_technique_1",
         "sport": "swim",
-        "reason": "Lågmekanisk simexponering dagen efter fast enduro ger konkret plan utan att anta att benen är redo för ny benkvalitet. Valet utgår från ett observerat värde 3200 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
+        "reason": "Låg benbelastningsdag efter fixed enduro; etablera teknisk/aerob sim som första simpass i veckan. Valet utgår från ett observerat värde 3200 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
         "session": "Simning · 3 200 m · aerob/teknik",
         "stimuli": [
           "swim_aerobic",
@@ -493,7 +493,7 @@
           "source": "athlete_state",
           "microcycle_plan": [
             {
-              "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
+              "reason": "Mikrocykelbeslutet valde establish och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
               "relation": "hold",
               "option_id": "swim-3200",
               "microcycle": 2
@@ -507,8 +507,8 @@
       {
         "slot": "run_threshold_2",
         "sport": "run",
-        "reason": "Realiserar mesocykelns primära kapacitet run_threshold med säker separation från annan benbelastning. Valet utgår från ett observerat värde 32 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
-        "session": "Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg",
+        "reason": "Primärt mesocykelstimulus; progress stöds av upprepade 4×8‑evidens och god känsla i senaste tröskelpass. Valet utgår från ett observerat värde 32 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: progress; materialiserad relation: progress.",
+        "session": "Löpning · kontrollerad tröskel · 4 × 9 min / 90 s jogg",
         "stimuli": [
           "run_threshold"
         ],
@@ -549,7 +549,7 @@
           "mechanical"
         ],
         "development_focus": "Jämn, kontrollerad tröskelkaraktär. Progression ska främst öka absorberbar arbetstid, inte jaga högre intensitet.",
-        "baseline_option_id": "run-threshold-4x8",
+        "baseline_option_id": "run-threshold-4x9",
         "progression_criteria": [
           "Ändra bara dos när faktisk träningsrespons eller mesocykelns progressionsbeslut ger sakligt stöd.",
           "Wellness eller en enskild bra dag får inte ensam motivera belastningsökning.",
@@ -561,21 +561,21 @@
           "source": "athlete_state",
           "microcycle_plan": [
             {
-              "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
-              "relation": "hold",
-              "option_id": "run-threshold-4x8",
+              "reason": "Mikrocykelbeslutet valde progress och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
+              "relation": "progress",
+              "option_id": "run-threshold-4x9",
               "microcycle": 2
             }
           ],
           "demonstrated_floor_option_id": "run-threshold-4x8",
           "same_dose_repeat_requires_reason": true
         },
-        "progression_target_option_id": "run-threshold-4x9"
+        "progression_ceiling_reason": "Ingen högre förgodkänd dos finns i receptkatalogen. Fortsatt utveckling kräver nytt recept eller annan progressionsaxel, inte automatisk extrapolering."
       },
       {
         "slot": "swim_strength_3",
         "sport": "strength",
-        "reason": "Kombinera en nödvändig simexponering med ännu ej uppfylld styrka/core. Valet utgår från ett observerat värde 36.0167 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
+        "reason": "Andra simexponeringen kombineras med styrka/core för att uppfylla krav på två simpass och minst en styrkesession utan extra benkvalitet; placerad ≥48 h efter tröskel. Valet utgår från ett observerat värde 36.0167 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
         "session": "Simning · 3 200 m · aerob/teknik + styrka/core · ca 35 min · styrkemall",
         "stimuli": [
           "swim_aerobic",
@@ -629,12 +629,12 @@
       {
         "slot": "run_easy_distance_4",
         "sport": "run",
-        "reason": "Behåll lugn löptålighet med separation från löpkvalitet. Valet utgår från ett observerat värde 119.767 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
+        "reason": "Långt lugnt löppass för löptålighet, placerat ≥48 h efter tröskel och >24 h efter kombinationspass; konsolidera utan ökad intensitet. Valet utgår från ett observerat värde 119.767 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
         "session": "Löpning · lugn distans · 120 min",
         "stimuli": [
           "run_easy_distance"
         ],
-        "day_index": 7,
+        "day_index": 6,
         "dose_options": [
           {
             "id": "run-easy-60",
