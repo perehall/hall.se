@@ -31,6 +31,10 @@ WEEK_DIR = ROOT / "vecka"
 
 CSS_MARKER = "/* crisp-top-overview-v1 */"
 CURRENT_WEEK_HEADING = '<h2 class="section">Aktuell vecka</h2>'
+CURRENT_WEEK_HEADING_RE = re.compile(
+    r'<h2 class="section"(?: id="aktuell-vecka")?>Aktuell vecka</h2>',
+    re.I,
+)
 FLOATING_INPUT_RE = re.compile(
     r'<section class="training-input"[^>]*data-training-input[^>]*data-activity-id="(?P<id>\d+)"',
     re.I,
@@ -650,7 +654,8 @@ def apply_top_overview(
         return add_css(page)
 
     header_start = page.find("<header>")
-    week_start = page.find(CURRENT_WEEK_HEADING)
+    week_heading = CURRENT_WEEK_HEADING_RE.search(page)
+    week_start = week_heading.start() if week_heading else -1
     if header_start < 0 or week_start < 0 or week_start <= header_start:
         raise RuntimeError("Crisp top: kunde inte avgränsa nuvarande toppregion.")
 
@@ -668,7 +673,9 @@ def apply_top_overview(
     )
     current_week_header = build_current_week_header(plan, strategy, week_region)
     week_region = normalize_week_status_action(week_region)
-    week_region = week_region.replace(CURRENT_WEEK_HEADING, current_week_header, 1)
+    week_region, replacements = CURRENT_WEEK_HEADING_RE.subn(current_week_header, week_region, count=1)
+    if replacements != 1:
+        raise RuntimeError("Crisp top: rubriken Aktuell vecka kunde inte ersättas entydigt.")
     rendered = page[:header_start] + replacement + "\n\n" + week_region
     return add_css(rendered)
 

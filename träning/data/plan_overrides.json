@@ -158,6 +158,290 @@
           "mechanical"
         ]
       }
+    },
+    {
+      "date": "2026-09-25",
+      "source": "user_confirmed",
+      "note": "Fredagens planerade simning ersattes av genomförd backkvalitet 3 × 8 × 150 m. Simningen flyttas till lördag 2026-09-26.",
+      "remove_fields": [
+        "microcycle_slot",
+        "optional_stimuli",
+        "performance_marker_id",
+        "dose_options",
+        "baseline_option_id",
+        "dose_open",
+        "dose_resolution",
+        "development_progression",
+        "development_step",
+        "workout_design",
+        "device_workout",
+        "device_sync",
+        "watch_workout",
+        "swim_equipment",
+        "alternative_sports",
+        "coach_adjustment"
+      ],
+      "set": {
+        "status": "planned",
+        "planning_status": "fixed",
+        "session": "Löpning · backkvalitet · 3 × 8 × 150 m",
+        "reason": "Användarbekräftat genomförande: fredagens planerade simning ersattes av 24 × 150 m backintervaller, strukturerade som tre block om åtta. Simningen läggs därför inte ovanpå samma dag utan flyttas till lördag.",
+        "development_focus": "Faktiskt genomförd backkvalitet räknas som mekanisk, neuromuskulär och kardiovaskulär löpbelastning. Fortsatta beslut ska utgå från den faktiska dosen 3 × 8 × 150 m, inte från den ersatta simplanen.",
+        "sport": "run",
+        "classification": "training",
+        "activity_id": 20326850936,
+        "manual_lock": true,
+        "priority_role": "flex",
+        "stimuli": [
+          "run_hill_quality"
+        ],
+        "load_dimensions": [
+          "mechanical",
+          "neuromuscular",
+          "cardiovascular"
+        ]
+      }
+    },
+    {
+      "date": "2026-09-26",
+      "source": "user_confirmed",
+      "note": "Fredagens 4 000 m simpass flyttas av praktiska skäl till lördag. Detta är en flytt av veckans simexponering, inte extra träning ovanpå planen.",
+      "remove_fields": [
+        "workout_design",
+        "device_workout",
+        "device_sync",
+        "coach_adjustment",
+        "alternative_sports"
+      ],
+      "set": {
+        "status": "planned",
+        "planning_status": "fixed",
+        "session": "Simning · 4 000 m · aerob + kontrollerad tröskel",
+        "reason": "Användarbekräftad flytt av fredagens planerade 4 000 m-simning. Lördagen var tidigare öppen; simningen ersätter den öppna dagen som veckans andra simexponering efter fredagens backkvalitet och ska räknas i närbelastningen inför söndagens preliminära löpning.",
+        "development_focus": "Bibehåll teknisk kvalitet genom ett längre aerobt pass med en avgränsad, kontrollerad tröskeldel; tröskeldelen ska inte bli maximal.",
+        "sport": "swim",
+        "classification": "training",
+        "manual_lock": true,
+        "priority_role": "flex",
+        "stimuli": [
+          "swim_aerobic",
+          "swim_threshold",
+          "swim_technique"
+        ],
+        "load_dimensions": [
+          "cardiovascular",
+          "technical"
+        ],
+        "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
+        "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc1",
+        "microcycle_index": 1,
+        "microcycle_day": 6,
+        "microcycle_slot": "swim_aerobic_threshold_3",
+        "dose_open": false,
+        "dose_options": [
+          {
+            "id": "swim-aerobic-threshold-4000",
+            "kind": "structured",
+            "value": 4000,
+            "intent": "Användarens etablerade 4 000 m-mall: aerob bas med 4 × 200 m kontrollerad tröskel med paddlar + dolme. Detta är ett separat kvalitetsrecept, inte en automatisk volymprogression från 3 200 m.",
+            "session": "Simning · 4 000 m · aerob + kontrollerad tröskel",
+            "watch_workout": {
+              "name": "Aerob + kontrollerad tröskel · 4 000 m",
+              "type": "Swim",
+              "blocks": [
+                {
+                  "name": "Insim + teknik",
+                  "steps": [
+                    {
+                      "kind": "swim",
+                      "text": "Insim + teknik enligt etablerad rutin",
+                      "equipment": [],
+                      "intensity": "warmup",
+                      "distance_m": 600
+                    }
+                  ]
+                },
+                {
+                  "name": "Aerob 1",
+                  "steps": [
+                    {
+                      "kind": "swim",
+                      "text": "Aerobt, stabil teknik",
+                      "equipment": [],
+                      "intensity": "active",
+                      "distance_m": 200
+                    },
+                    {
+                      "kind": "rest",
+                      "duration_s": 20
+                    }
+                  ],
+                  "repeat": 6
+                },
+                {
+                  "name": "Kontrollerad tröskel",
+                  "steps": [
+                    {
+                      "kind": "swim",
+                      "text": "Kontrollerad tröskel",
+                      "equipment": [
+                        "paddles",
+                        "pull_buoy"
+                      ],
+                      "intensity": "active",
+                      "distance_m": 200
+                    },
+                    {
+                      "kind": "rest",
+                      "duration_s": 25
+                    }
+                  ],
+                  "repeat": 4
+                },
+                {
+                  "name": "Aerob 2",
+                  "steps": [
+                    {
+                      "kind": "swim",
+                      "text": "Aerobt, återgå till stabil rytm och teknik",
+                      "equipment": [],
+                      "intensity": "active",
+                      "distance_m": 200
+                    },
+                    {
+                      "kind": "rest",
+                      "duration_s": 20
+                    }
+                  ],
+                  "repeat": 6
+                },
+                {
+                  "name": "Avsim",
+                  "steps": [
+                    {
+                      "kind": "swim",
+                      "text": "Mycket lugnt avsim",
+                      "equipment": [],
+                      "intensity": "cooldown",
+                      "distance_m": 200
+                    }
+                  ]
+                }
+              ],
+              "equipment": [
+                "paddles",
+                "pull_buoy"
+              ],
+              "planned_distance_m": 4000
+            },
+            "source_evidence": "Explicit användarmall och genomförd 4 000 m aerob+tröskel-simning."
+          }
+        ],
+        "dose_resolution": {
+          "kind": "structured",
+          "state": "baseline",
+          "value": 4000,
+          "option_id": "swim-aerobic-threshold-4000"
+        },
+        "baseline_option_id": "swim-aerobic-threshold-4000",
+        "watch_workout": {
+          "id": "swim-2026-w39-2026-09-26-aerob-threshold-4000",
+          "name": "Aerob + kontrollerad tröskel · 4 000 m",
+          "type": "Swim",
+          "blocks": [
+            {
+              "name": "Insim + teknik",
+              "steps": [
+                {
+                  "kind": "swim",
+                  "text": "Insim + teknik enligt etablerad rutin",
+                  "equipment": [],
+                  "intensity": "warmup",
+                  "distance_m": 600
+                }
+              ]
+            },
+            {
+              "name": "Aerob 1",
+              "steps": [
+                {
+                  "kind": "swim",
+                  "text": "Aerobt, stabil teknik",
+                  "equipment": [],
+                  "intensity": "active",
+                  "distance_m": 200
+                },
+                {
+                  "kind": "rest",
+                  "duration_s": 20
+                }
+              ],
+              "repeat": 6
+            },
+            {
+              "name": "Kontrollerad tröskel",
+              "steps": [
+                {
+                  "kind": "swim",
+                  "text": "Kontrollerad tröskel",
+                  "equipment": [
+                    "paddles",
+                    "pull_buoy"
+                  ],
+                  "intensity": "active",
+                  "distance_m": 200
+                },
+                {
+                  "kind": "rest",
+                  "duration_s": 25
+                }
+              ],
+              "repeat": 4
+            },
+            {
+              "name": "Aerob 2",
+              "steps": [
+                {
+                  "kind": "swim",
+                  "text": "Aerobt, återgå till stabil rytm och teknik",
+                  "equipment": [],
+                  "intensity": "active",
+                  "distance_m": 200
+                },
+                {
+                  "kind": "rest",
+                  "duration_s": 20
+                }
+              ],
+              "repeat": 6
+            },
+            {
+              "name": "Avsim",
+              "steps": [
+                {
+                  "kind": "swim",
+                  "text": "Mycket lugnt avsim",
+                  "equipment": [],
+                  "intensity": "cooldown",
+                  "distance_m": 200
+                }
+              ]
+            }
+          ],
+          "equipment": [
+            "paddles",
+            "pull_buoy"
+          ],
+          "sync_enabled": false,
+          "planned_distance_m": 4000
+        },
+        "swim_equipment": {
+          "planned": [
+            "paddles",
+            "pull_buoy"
+          ]
+        }
+      }
     }
   ]
 }

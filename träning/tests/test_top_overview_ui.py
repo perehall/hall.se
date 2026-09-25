@@ -194,5 +194,25 @@ class TopOverviewUiTests(unittest.TestCase):
         self.assertEqual(once, twice)
 
 
+
+    def test_current_week_heading_with_post_workout_anchor_is_supported(self):
+        page = self.page().replace(
+            '<h2 class="section">Aktuell vecka</h2>',
+            '<h2 class="section" id="aktuell-vecka">Aktuell vecka</h2>',
+            1,
+        )
+        rendered = apply_top_overview(
+            page,
+            self.plan(),
+            self.strategy(),
+            self.activities(),
+            self.registry(),
+            today=date(2026, 9, 25),
+        )
+        self.assertEqual(rendered.count('class="top-overview"'), 1)
+        self.assertEqual(rendered.count('class="current-week-header"'), 1)
+        self.assertIn('<h2 class="section">Aktuell vecka</h2>', rendered)
+        self.assertNotIn('id="aktuell-vecka"', rendered)
+
 if __name__ == "__main__":
     unittest.main()

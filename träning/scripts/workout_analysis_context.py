@@ -8,7 +8,7 @@ This module converts source measurements into a compact, versioned contract.
 from __future__ import annotations
 
 from math import isclose
-from statistics import mean
+from statistics import mean, median
 
 
 WORKOUT_ANALYSIS_CONTRACT_VERSION = 3
@@ -80,6 +80,160 @@ def _total_facts(activity):
     }
 
 
+def _run_lap_measurements(activity):
+    rows = []
+    for source_position, lap in enumerate(activity.get("laps") or []):
+        distance = _positive(lap.get("distance_m"))
+        duration = _positive(lap.get("moving_time_s")) or _positive(lap.get("elapsed_time_s"))
+        if distance is None or duration is None:
+            continue
+        speed = distance / duration
+        rows.append(
+            {
+                "source_position": source_position,
+                "lap_index": lap.get("lap_index"),
+                "distance_m": round(distance, 2),
+                "moving_time_s": round(duration, 1),
+                "speed_m_s": round(speed, 3),
+                "pace_s_per_km": round(pace_s_per_km(duration, distance), 2),
+                "pace": fmt_pace(pace_s_per_km(duration, distance)),
+                "average_heartrate": _number(lap.get("average_heartrate")),
+                "max_heartrate": _number(lap.get("max_heartrate")),
+            }
+        )
+    return rows
+
+
+def _run_short_interval_context(activity):
+    """Detect repeated short work laps without inventing terrain or intensity.
+
+    The detector deliberately requires a dominant distance cluster that alternates
+    with slower single-lap recoveries. This distinguishes work reps from recovery
+    laps and avoids treating ordinary autolaps as intervals.
+    """
+    rows = _run_lap_measurements(activity)
+    candidates = [
+        row
+        for row in rows
+        if 80 <= row["distance_m"] <= 300
+        and 15 <= row["moving_time_s"] <= 120
+    ]
+    if len(candidates) < 6:
+        return {"structured": False}
+
+    best = None
+    for pivot in candidates:
+        tolerance = max(8.0, pivot["distance_m"] * 0.07)
+        cluster = [
+            row for row in candidates
+            if abs(row["distance_m"] - pivot["distance_m"]) <= tolerance
+        ]
+        spread = (
+            max(row["distance_m"] for row in cluster)
+            - min(row["distance_m"] for row in cluster)
+        )
+        score = (len(cluster), -spread)
+        if best is None or score > best[0]:
+            best = (score, cluster)
+
+    cluster = best[1] if best else []
+    if len(cluster) < 6:
+        return {"structured": False}
+
+    center = median(row["distance_m"] for row in cluster)
+    tolerance = max(8.0, center * 0.07)
+    reps = sorted(
+        [
+            row for row in candidates
+            if abs(row["distance_m"] - center) <= tolerance
+        ],
+        key=lambda row: row["source_position"],
+    )
+    if len(reps) < 6:
+        return {"structured": False}
+
+    by_position = {row["source_position"]: row for row in rows}
+    single_recoveries = []
+    alternating_gaps = 0
+    for previous, current in zip(reps, reps[1:]):
+        gap = current["source_position"] - previous["source_position"]
+        if gap == 2:
+            recovery = by_position.get(previous["source_position"] + 1)
+            if recovery:
+                single_recoveries.append(recovery)
+                alternating_gaps += 1
+
+    required_alternating = max(4, int(round((len(reps) - 1) * 0.60)))
+    if alternating_gaps < required_alternating or not single_recoveries:
+        return {"structured": False}
+
+    rep_speed = mean(row["speed_m_s"] for row in reps)
+    recovery_speed = mean(row["speed_m_s"] for row in single_recoveries)
+    if recovery_speed <= 0 or rep_speed < recovery_speed * 1.10:
+        return {"structured": False}
+
+    blocks = []
+    current_block = []
+    for index, rep in enumerate(reps):
+        if index == 0:
+            current_block = [rep]
+            continue
+        previous = reps[index - 1]
+        if rep["source_position"] - previous["source_position"] == 2:
+            current_block.append(rep)
+        else:
+            blocks.append(current_block)
+            current_block = [rep]
+    if current_block:
+        blocks.append(current_block)
+
+    block_counts = [len(block) for block in blocks]
+    if any(count < 2 for count in block_counts):
+        return {"structured": False}
+
+    representative_distance = int(round(median(row["distance_m"] for row in reps)))
+    if len(block_counts) > 1 and len(set(block_counts)) == 1:
+        signature = f"{len(block_counts)}x{block_counts[0]}x{representative_distance}m"
+    elif len(block_counts) == 1:
+        signature = f"{block_counts[0]}x{representative_distance}m"
+    else:
+        signature = f"{'+'.join(str(value) for value in block_counts)}x{representative_distance}m"
+
+    public_reps = [
+        {key: value for key, value in row.items() if key != "source_position"}
+        for row in reps
+    ]
+    return {
+        "structured": True,
+        "structure_signature": signature,
+        "repetition_count": len(reps),
+        "representative_distance_m": round(median(row["distance_m"] for row in reps), 1),
+        "work_distance_m": round(sum(row["distance_m"] for row in reps), 1),
+        "work_duration_s": round(sum(row["moving_time_s"] for row in reps), 1),
+        "block_repetition_counts": block_counts,
+        "blocks": [
+            {
+                "block_index": block_index,
+                "repetitions": len(block),
+                "lap_indices": [row.get("lap_index") for row in block],
+            }
+            for block_index, block in enumerate(blocks, 1)
+        ],
+        "reps": public_reps,
+        "mean_rep_speed_m_s": round(rep_speed, 3),
+        "mean_single_lap_recovery_speed_m_s": round(recovery_speed, 3),
+        "detection_basis": (
+            "Dominant short-lap distance cluster with repeated one-lap slower recoveries; "
+            "block boundaries are gaps larger than one recovery lap."
+        ),
+        "interpretation_limits": [
+            "The structure proves repeated short work-like laps, not that the terrain was uphill.",
+            "Provider laps alone do not establish threshold, tempo, sprint or another physiological intensity label.",
+            "Terrain and intended intensity require user report, plan context or another explicit source.",
+        ],
+    }
+
+
 def _run_context(activity):
     total_pace = pace_s_per_km(activity.get("moving_time_s"), activity.get("distance_m"))
     source_laps = []
@@ -112,8 +266,11 @@ def _run_context(activity):
         "average_pace": fmt_pace(total_pace),
         "source_laps_near_1km": source_laps,
         "fastest_source_lap_near_1km": fastest,
+        "short_intervals": _run_short_interval_context(activity),
         "source_lap_note": (
-            "Source laps are descriptive measurements only; do not assume they are workout intervals."
+            "Near-1 km source laps are descriptive measurements only. "
+            "Only run.short_intervals may classify a repeated short-lap structure, "
+            "and it does not infer terrain or physiological intensity."
         ),
     }
 
@@ -326,6 +483,28 @@ def validate_workout_analysis_context(activity, context):
                 float(row.get("pace_s_per_km")), expected_lap, abs_tol=0.02
             ):
                 raise RuntimeError("Workout analysis: lap pace failed arithmetic validation")
+
+        short_intervals = run.get("short_intervals") or {}
+        if short_intervals.get("structured"):
+            reps = short_intervals.get("reps") or []
+            blocks = short_intervals.get("blocks") or []
+            if len(reps) != short_intervals.get("repetition_count"):
+                raise RuntimeError("Workout analysis: short-interval repetition count mismatch")
+            if sum(int(block.get("repetitions") or 0) for block in blocks) != len(reps):
+                raise RuntimeError("Workout analysis: short-interval block count mismatch")
+            for rep in reps:
+                source = by_index.get(rep.get("lap_index"))
+                source_distance = _positive((source or {}).get("distance_m"))
+                source_duration = (
+                    _positive((source or {}).get("moving_time_s"))
+                    or _positive((source or {}).get("elapsed_time_s"))
+                )
+                if source_distance is None or source_duration is None:
+                    raise RuntimeError("Workout analysis: short interval lacks source lap")
+                if not isclose(float(rep.get("distance_m")), source_distance, abs_tol=0.02):
+                    raise RuntimeError("Workout analysis: short-interval distance mismatch")
+                if not isclose(float(rep.get("moving_time_s")), source_duration, abs_tol=0.11):
+                    raise RuntimeError("Workout analysis: short-interval duration mismatch")
 
     swim = context.get("swim")
     if swim is not None:
