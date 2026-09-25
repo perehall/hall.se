@@ -312,6 +312,14 @@
       "source_hash": "02a929a2817044155cff4595e2b58cf7ae1311a9878ef88a48419d24a97f8478",
       "generated_at_utc": "2026-09-25T00:29:44.209478+00:00",
       "summary": "Reparerar konflikt där lång lugn löpning lades direkt intill MTB/XC genom att ta bort mtb_technical‑slotet (sekundär exponering) och behålla de fyra nödvändiga sloten: två sim (en progress), en kombinerad sim+styrka och kontrollerad tröskel samt långt lugnt löppass. Detta uppfyller alla hard_requirements (alla primära kapaciteter täckta, 2 simexponeringar, minst 1 styrka/core, max run‑quality ≤2, minst en vilodag — dag 3 — och dag 2 låg benbelastning efter enduro dag 1)."
+    },
+    {
+      "kind": "microcycle",
+      "decision_id": "2026-W40",
+      "source": "openai_repaired",
+      "source_hash": "e1ec1d883c0bac98136f4f6817b08cb4e1cea1b82610855217b46e18b7d03976",
+      "generated_at_utc": "2026-09-25T05:45:07.496753+00:00",
+      "summary": "Reparerar konflikt mellan lång lugn löpning och MTB genom att ta bort MTB‑slot och lämna minst en vilodag. Behåller simprogression (stöd i upprepade 3–4k‑pass), konsoliderar tröskel och etablerar kombopasset swim+styrka för att uppfylla styrke‑/simkravet. Slotantal 4 (inom min/max). Day1 förblir enduro (blockerat); day2 är lågt benbelastande simpass enligt guardrail."
     }
   ]
 }

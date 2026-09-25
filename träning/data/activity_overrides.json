@@ -171,11 +171,25 @@
     "20314473143": {
       "sport": "MountainBikeRide",
       "reason": "Explicit användarrapport anger att detta var ett spontant lugnt stig-MTB-pass på en dag som i planen var vilodag. Passet ska registreras separat som faktisk träningsbelastning och får inte skrivas om till ett planerat pass.",
-      "user_report": "Cirka 80 min lugn stig-MTB. Dagen var planerad som vilodag.",
+      "user_report": "Cirka 80 min lugn stig-MTB. Dagen var planerad som vilodag. Fint pass med bra flyt. Ingen fartjakt. Lättare att hålla ner farten när man kör med lampa RPE 4/10. Känsla: Pigg.",
       "display_label": "MTB/XC",
       "plan_relation": "separate",
       "classification": "training",
-      "source_sport_type": "MountainBikeRide"
+      "source_sport_type": "MountainBikeRide",
+      "training_feedback": {
+        "rpe": 4,
+        "text": "Fint pass med bra flyt. Ingen fartjakt. Lättare att hålla ner farten när man kör med lampa",
+        "feeling": [
+          "fresh"
+        ],
+        "event_key": "training-input:5dd65798f3489a75f77357e0",
+        "operation": "ADD_FEEDBACK",
+        "submitted_at": "2026-09-25T05:41:48.383Z"
+      },
+      "training_input_event_keys": [
+        "training-input:5dd65798f3489a75f77357e0"
+      ],
+      "last_training_input_event_key": "training-input:5dd65798f3489a75f77357e0"
     }
   }
 }
