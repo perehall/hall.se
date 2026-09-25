@@ -113,7 +113,10 @@ class TrainingInputUiTests(unittest.TestCase):
         self.assertIn('data-activity-id="202"', rendered)
         self.assertIn(">Enduro</span>", rendered)
         self.assertIn(">Styrka</span>", rendered)
-        self.assertNotIn(">Utvärdera</button>", rendered)\n        self.assertEqual(rendered.count(">Ändra</button>"), 2)\n        self.assertIn("Kommentar eller korrigering av passet", rendered)\n        self.assertIn("korrigera vad som faktiskt genomfördes", rendered)
+        self.assertNotIn(">Utvärdera</button>", rendered)
+        self.assertEqual(rendered.count(">Ändra</button>"), 2)
+        self.assertIn("Kommentar eller korrigering av passet", rendered)
+        self.assertIn("korrigera vad som faktiskt genomfördes", rendered)
         self.assertIn("querySelectorAll('[data-training-input]')", rendered)
 
     def test_legacy_saved_feedback_renders_as_compact_receipt(self):
