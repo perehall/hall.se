@@ -259,7 +259,7 @@ export function validateTrainingInput(payload) {
   };
 }
 
-async function handleTrainingInputRequest(request, env, fetchImpl) {
+async function handleTrainingInputRequest(request, env, fetchImpl, executionContext = null) {
   const url = new URL(request.url);
   const allowedHost = configured(env.TRAINING_INPUT_HOST)
     ? env.TRAINING_INPUT_HOST.trim().toLowerCase()
@@ -316,13 +316,37 @@ async function handleTrainingInputRequest(request, env, fetchImpl) {
     }
   }
 
+  const eventType = configured(env.TRAINING_INPUT_EVENT_TYPE)
+    ? env.TRAINING_INPUT_EVENT_TYPE.trim()
+    : DEFAULT_TRAINING_INPUT_EVENT_TYPE;
+  const dispatch = async () => {
+    try {
+      await dispatchToGitHub(event, env, fetchImpl, eventType);
+      console.log("TRAINING_INPUT_DISPATCHED", event.event_key, event.operation);
+    } catch (error) {
+      console.error("TRAINING_INPUT_DISPATCH_FAILED", event.event_key, String(error));
+      throw error;
+    }
+  };
+
+  if (directPersistence && executionContext && typeof executionContext.waitUntil === "function") {
+    executionContext.waitUntil(
+      dispatch().catch(() => {
+        // The feedback is already durable in Supabase. A later scheduled
+        // canonical run hydrates it even if this best-effort dispatch fails.
+      }),
+    );
+    return jsonResponse({
+      status: "saved",
+      persistence: "supabase",
+      processing: "queued",
+      event_key: event.event_key,
+    });
+  }
+
   try {
-    const eventType = configured(env.TRAINING_INPUT_EVENT_TYPE)
-      ? env.TRAINING_INPUT_EVENT_TYPE.trim()
-      : DEFAULT_TRAINING_INPUT_EVENT_TYPE;
-    await dispatchToGitHub(event, env, fetchImpl, eventType);
-  } catch (error) {
-    console.error("TRAINING_INPUT_DISPATCH_FAILED", event.event_key, String(error));
+    await dispatch();
+  } catch {
     if (directPersistence) {
       return jsonResponse({
         status: "saved",
@@ -334,7 +358,6 @@ async function handleTrainingInputRequest(request, env, fetchImpl) {
     return jsonResponse({ error: "dispatch_failed" }, 503);
   }
 
-  console.log("TRAINING_INPUT_DISPATCHED", event.event_key, event.operation);
   return jsonResponse({
     status: directPersistence ? "saved" : "accepted",
     persistence: directPersistence ? "supabase" : "dispatch",
@@ -343,7 +366,7 @@ async function handleTrainingInputRequest(request, env, fetchImpl) {
   });
 }
 
-export async function handleRequest(request, env, fetchImpl = fetch) {
+export async function handleRequest(request, env, fetchImpl = fetch, executionContext = null) {
   const url = new URL(request.url);
 
   if (url.pathname === "/healthz") {
@@ -362,7 +385,7 @@ export async function handleRequest(request, env, fetchImpl = fetch) {
   }
 
   if (decodeURIComponent(url.pathname) === TRAINING_INPUT_PATH) {
-    return handleTrainingInputRequest(request, env, fetchImpl);
+    return handleTrainingInputRequest(request, env, fetchImpl, executionContext);
   }
 
   const webhookPath = await expectedWebhookPath(env);
@@ -417,7 +440,7 @@ export async function handleRequest(request, env, fetchImpl = fetch) {
 }
 
 export default {
-  async fetch(request, env) {
-    return handleRequest(request, env);
+  async fetch(request, env, ctx) {
+    return handleRequest(request, env, fetch, ctx);
   },
 };

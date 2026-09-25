@@ -125,10 +125,18 @@ test("athlete events are acknowledged without dispatch", async () => {
 });
 
 
-test("authenticated training GUI input is persisted before async dispatch", async () => {
+test("authenticated training GUI input returns after persistence without waiting for dispatch", async () => {
   let persistBody;
   let dispatchBody;
+  let releaseDispatch;
   const calls = [];
+  const background = [];
+  const dispatchGate = new Promise((resolve) => { releaseDispatch = resolve; });
+  const ctx = {
+    waitUntil(promise) {
+      background.push(promise);
+    },
+  };
   const fakeFetch = async (url, init) => {
     calls.push(url);
     if (url === "https://example.supabase.co/rest/v1/rpc/training_submit_activity_feedback") {
@@ -145,6 +153,7 @@ test("authenticated training GUI input is persisted before async dispatch", asyn
     }
     assert.equal(url, "https://api.github.com/repos/perehall/hall.se/dispatches");
     dispatchBody = JSON.parse(init.body);
+    await dispatchGate;
     return new Response(null, { status: 204 });
   };
   const request = new Request("https://xn--hll-qla.se/träning/training-api/input", {
@@ -162,12 +171,13 @@ test("authenticated training GUI input is persisted before async dispatch", asyn
       source: "training-gui-v1",
     }),
   });
-  const response = await handleRequest(request, env, fakeFetch);
+  const response = await handleRequest(request, env, fakeFetch, ctx);
   const body = await response.json();
   assert.equal(response.status, 200);
   assert.equal(body.status, "saved");
   assert.equal(body.persistence, "supabase");
   assert.equal(body.processing, "queued");
+  assert.equal(background.length, 1);
   assert.deepEqual(calls, [
     "https://example.supabase.co/rest/v1/rpc/training_submit_activity_feedback",
     "https://api.github.com/repos/perehall/hall.se/dispatches",
@@ -180,6 +190,8 @@ test("authenticated training GUI input is persisted before async dispatch", asyn
   assert.equal(dispatchBody.client_payload.activity_id, 789);
   assert.match(dispatchBody.client_payload.event_key, /^training-input:/);
   assert.equal(dispatchBody.client_payload.event_key, persistBody.p_event_key);
+  releaseDispatch();
+  await background[0];
 });
 
 test("training GUI input fails closed when direct persistence fails", async () => {
@@ -209,7 +221,13 @@ test("training GUI input fails closed when direct persistence fails", async () =
   assert.equal(githubCalled, false);
 });
 
-test("training GUI input stays saved when async dispatch fails after persistence", async () => {
+test("training GUI input stays saved when background dispatch fails after persistence", async () => {
+  const background = [];
+  const ctx = {
+    waitUntil(promise) {
+      background.push(promise);
+    },
+  };
   const fakeFetch = async (url, init) => {
     if (url.includes("supabase.co")) {
       const body = JSON.parse(init.body);
@@ -235,12 +253,14 @@ test("training GUI input stays saved when async dispatch fails after persistence
       text: "Kontrollerat.",
     }),
   });
-  const response = await handleRequest(request, env, fakeFetch);
+  const response = await handleRequest(request, env, fakeFetch, ctx);
   const body = await response.json();
-  assert.equal(response.status, 202);
+  assert.equal(response.status, 200);
   assert.equal(body.status, "saved");
   assert.equal(body.persistence, "supabase");
-  assert.equal(body.processing, "deferred");
+  assert.equal(body.processing, "queued");
+  assert.equal(background.length, 1);
+  await background[0];
 });
 
 test("training GUI input keeps dispatch-only fallback until Supabase secret is configured", async () => {
