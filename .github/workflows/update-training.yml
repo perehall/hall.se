@@ -113,10 +113,8 @@ jobs:
           OPENAI_MODEL: gpt-5-mini
           TRAINING_INPUT_MODEL: gpt-5-mini
           TRAINING_INPUT_PAYLOAD: ${{ toJson(github.event.client_payload) }}
+          TRAINING_INPUT_EVENT: ${{ github.event.action == 'training-input-event' && 'true' || 'false' }}
         run: |
-          if [ "${{ github.event.action }}" = "training-input-event" ]; then
-            python "träning/scripts/training_input.py"
-          fi
           if [ "${{ github.event.action }}" = "strava-activity-event" ]; then
             ingest_mode=event
           else
