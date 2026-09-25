@@ -6,6 +6,10 @@
   "main": "src/worker.mjs",
   "compatibility_date": "2026-08-24",
   "workers_dev": true,
+  "vars": {
+    "SUPABASE_PROJECT_URL": "https://izzevnhgtsvffpkccoai.supabase.co",
+    "SUPABASE_TIMEOUT_MS": "2500"
+  },
   "observability": {
     "enabled": true
   },
