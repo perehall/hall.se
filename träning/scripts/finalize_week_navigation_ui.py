@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import html
 import re
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -78,7 +78,7 @@ def week_date(key: str) -> date:
 
 
 def shift_week(key: str, delta: int) -> str:
-    return week_key_from_date(week_date(key) + __import__("datetime").timedelta(days=7*delta))
+    return week_key_from_date(week_date(key) + timedelta(days=7 * delta))
 
 
 def week_number(key: str) -> int:
@@ -87,7 +87,7 @@ def week_number(key: str) -> int:
 
 def period(key: str) -> str:
     start = week_date(key)
-    end = start + __import__("datetime").timedelta(days=6)
+    end = start + timedelta(days=6)
     if start.month == end.month:
         return f"{start.day}–{end.day} {MONTHS[start.month]}"
     return f"{start.day} {MONTHS[start.month]}–{end.day} {MONTHS[end.month]}"
