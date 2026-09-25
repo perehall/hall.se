@@ -123,11 +123,11 @@ jobs:
               -H 'Cache-Control: no-cache' \\
               -H 'Pragma: no-cache' \\
               "${url}&attempt=${attempt}" || true)"
-            if grep -Fq 'class="top-overview"' <<<"$html" \\
-              && grep -Fq 'class="top-week-nav"' <<<"$html" \\
-              && grep -Fq 'class="top-today"' <<<"$html"; then
-              echo "PUBLIC_TRAINING_PAGE_OK attempt=${attempt}"
-              exit 0
+            if grep -Fq 'class="top-overview"' <<<"$html"; then
+              if grep -Fq 'class="top-week-nav"' <<<"$html" && grep -Fq 'class="top-today"' <<<"$html"; then
+                echo "PUBLIC_TRAINING_PAGE_OK attempt=${attempt}"
+                exit 0
+              fi
             fi
             echo "Public page not updated yet (attempt ${attempt}/18); retrying..."
             sleep 10
