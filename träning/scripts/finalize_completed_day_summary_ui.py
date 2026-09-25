@@ -234,8 +234,9 @@ def ensure_activity_input_blocks(
             '<section class="training-input completed-day-inline-input"',
             1,
         )
+        previous = input_blocks.get(activity_id) or {}
         input_blocks[activity_id] = {
-            "full": "",
+            "full": previous.get("full", ""),
             "section": section,
         }
     return input_blocks
