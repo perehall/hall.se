@@ -191,11 +191,29 @@ JS = r"""
       return parts.join(' · ');
     };
 
+    const updateVisibleCompletedDayStatus = () => {
+      const row = root.closest('.completed-day-feedback-row');
+      if (!row) return;
+      const main = row.querySelector('.completed-day-feedback-main');
+      if (!main) return;
+      const bits = [];
+      if (rpe !== null) bits.push(`RPE ${rpe}`);
+      if (feeling) bits.push(feelingLabel(feeling));
+      const visibleStatus = bits.length ? bits.join(' · ') : 'Sparat';
+      const statusNode = main.querySelector('span');
+      if (statusNode) statusNode.textContent = visibleStatus;
+      else {
+        const strong = main.querySelector('strong');
+        if (strong) strong.textContent = visibleStatus;
+      }
+    };
+
     const updateCompact = (stateLabel = 'Sparat') => {
       root.dataset.reviewed = 'true';
       summary.textContent = compactSummary(stateLabel);
       notePreview.textContent = text.value.trim();
       toggle.textContent = 'Ändra';
+      updateVisibleCompletedDayStatus();
     };
 
     const restore = (state) => {
