@@ -32,11 +32,12 @@ class TrainingJobRunnerTests(unittest.TestCase):
     def test_pipeline_order_is_explicit_and_stable(self):
         keys = self.stage_keys("event")
         self.assertEqual(
-            keys[:7],
+            keys[:8],
             [
                 "hydrate_activity_backend",
                 "strava_event",
                 "persist_strava_refresh_token",
+                "apply_activity_directives",
                 "normalize_activity_semantics",
                 "migrate_typed_plan",
                 "validate_ingested_data",
@@ -104,6 +105,7 @@ class TrainingJobRunnerTests(unittest.TestCase):
         keys = self.stage_keys("event")
         promoted = stages["promote_activity_backend"]
         self.assertFalse(promoted.optional)
+        self.assertLess(keys.index("apply_activity_directives"), keys.index("normalize_activity_semantics"))
         self.assertLess(keys.index("normalize_activity_semantics"), keys.index("promote_activity_backend"))
         self.assertLess(keys.index("promote_activity_backend"), keys.index("sync_performance_details"))
         self.assertLess(keys.index("promote_activity_backend"), keys.index("weekly_review"))
