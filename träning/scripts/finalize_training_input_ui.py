@@ -506,7 +506,7 @@ def render_block(
     )
 
     return f"""{BLOCK_START}
-<section class="training-input" data-training-input data-activity-id="{activity_id}" data-reviewed="{"true" if reviewed else "false"}" data-processed-event-keys="{html.escape(processed_event_keys_attr, quote=True)}" aria-label="Feedback efter pass">
+<section class="training-input" data-training-input data-activity-id="{activity_id}" data-reviewed="{"true" if reviewed else "false"}" data-processed-event-keys="{html.escape(processed_event_keys_attr, quote=True)}" aria-label="Ändra eller utvärdera genomfört pass">
   <div class="training-input-compact">
     <div>
       <div class="training-input-title-row">
@@ -517,15 +517,15 @@ def render_block(
       <div class="training-input-note" data-training-input-note>{html.escape(note)}</div>
       <div class="training-input-status" data-training-input-status aria-live="polite"></div>
     </div>
-    <button type="button" class="training-input-toggle" data-training-input-toggle>{"Ändra" if reviewed else "Utvärdera"}</button>
+    <button type="button" class="training-input-toggle" data-training-input-toggle>Ändra</button>
   </div>
   <div class="training-input-editor" data-training-input-editor hidden>
     <span class="training-input-label">Ansträngning</span>
     <div class="training-input-options">{rpe_html}</div>
     <span class="training-input-label">Känsla</span>
     <div class="training-input-options">{feeling_html}</div>
-    <span class="training-input-label">Kommentar eller ändring</span>
-    <textarea maxlength="800" placeholder="Kort kommentar om något är värt att fånga.">{html.escape(note)}</textarea>
+    <span class="training-input-label">Kommentar eller korrigering av passet</span>
+    <textarea maxlength="800" placeholder="Kommentar om känslan, eller korrigera vad som faktiskt genomfördes.">{html.escape(note)}</textarea>
     <div class="training-input-actions">
       <button type="button" class="training-input-save" data-training-input-save>Spara</button>
       <button type="button" class="training-input-cancel" data-training-input-cancel>Avbryt</button>
