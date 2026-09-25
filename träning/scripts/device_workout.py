@@ -286,6 +286,19 @@ def materialize_day(day: dict, *, in_horizon: bool) -> dict:
         result.pop("device_sync", None)
         return result
 
+    candidate = selected_candidate(result)
+    prescription = candidate.get("prescription") if isinstance(candidate, dict) else None
+    if (
+        not candidate
+        or not isinstance(prescription, dict)
+        or prescription.get("executable") is not True
+        or prescription.get("completeness") != "full"
+        or not (prescription.get("blocks") or [])
+    ):
+        result.pop("device_workout", None)
+        result.pop("device_sync", None)
+        return result
+
     workout = compile_device_workout(result)
     previous_sync = result.get("device_sync") or {}
     same_source = previous_sync.get("source_hash") == workout["source_hash"]
