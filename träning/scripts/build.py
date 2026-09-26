@@ -4,6 +4,8 @@ from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+from activity_labels import public_activity_label
+
 ROOT = Path(__file__).resolve().parents[1]
 plan = json.loads((ROOT / "data" / "plan.json").read_text(encoding="utf-8"))
 acts = json.loads((ROOT / "data" / "activities.json").read_text(encoding="utf-8"))
@@ -132,7 +134,7 @@ for d in plan["days"]:
     auto = ""
     if raw:
         lines = "".join(
-            f'<div><strong>{html.escape(a.get("sport_type") or "Aktivitet")}</strong> · {html.escape(fmt_activity(a))}</div>'
+            f'<div><strong>{html.escape(public_activity_label(a))}</strong> · {html.escape(fmt_activity(a))}</div>'
             for a in raw
         )
         auto = f'<div class="pass"><div class="pass-title">Automatiskt från Strava</div>{lines}</div>'
