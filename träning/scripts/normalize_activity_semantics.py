@@ -23,6 +23,7 @@ SWIMRUN_NAME_RE = re.compile(r"\bswim\s*-?\s*run\b|\bswimrun\b", re.IGNORECASE)
 ENDURO_NAME_RULE = "mountainbike-explicit-enduro-name-v1"
 ENDURO_WORKOUT_NAME_RULE = "workout-explicit-enduro-name-v1"
 ENDURO_EMTB_PROXY_RULE = "emountainbike-user-enduro-proxy-v1"
+ENDURO_EBIKE_GEAR_RULE = "ebike-explicit-enduro-motorcycle-gear-v1"
 ENDURO_RIDE_GEAR_RULE = "ride-explicit-enduro-motorcycle-gear-v1"
 SWIMRUN_NAME_RULE = "trailrun-explicit-swimrun-name-v1"
 FEEDBACK_LABELS = {
@@ -97,6 +98,19 @@ def auto_enduro_workout_candidate(activity):
     return True
 
 
+def auto_enduro_ebike_candidate(activity):
+    """Recognize Strava eBike fallback only with explicit motorcycle evidence."""
+    if raw_sport(activity) != "EBikeRide":
+        return False
+    name = str(activity.get("name") or "").strip()
+    gear = str(activity.get("gear_name") or "").strip()
+    if not name or not ENDURO_NAME_RE.search(name):
+        return False
+    if MTB_NAME_RE.search(name):
+        return False
+    return bool(gear and MOTORCYCLE_GEAR_RE.search(gear))
+
+
 def auto_enduro_ride_candidate(activity):
     """Recognize Strava's generic Ride fallback only with motorcycle evidence.
 
@@ -148,6 +162,20 @@ def apply_auto_semantics(activity):
                 "user convention: Strava e-MTB represents Enduro",
             ],
             reason="User convention: Strava e-MTB represents Enduro; Enduro is actual training load.",
+        )
+
+    if auto_enduro_ebike_candidate(activity):
+        original = raw_sport(activity)
+        return _apply_enduro(
+            activity,
+            original=original,
+            rule=ENDURO_EBIKE_GEAR_RULE,
+            evidence=[
+                "source_sport_type=EBikeRide",
+                "explicit Enduro/Motocross activity name",
+                f"motorcycle gear={activity.get('gear_name')}",
+            ],
+            reason="Strava exposed the motorcycle Enduro recording as eBike, but the explicit activity name and motorcycle gear identify actual Enduro training load.",
         )
 
     if auto_enduro_workout_candidate(activity):
