@@ -12,6 +12,7 @@ from coach_rules import matching_activity  # noqa: E402
 from normalize_activity_semantics import (  # noqa: E402
     apply_semantics,
     auto_enduro_candidate,
+    auto_enduro_ebike_candidate,
     auto_enduro_workout_candidate,
     invalidate_coach_analyses,
 )
@@ -96,6 +97,43 @@ class ActivitySemanticsTests(unittest.TestCase):
     def test_motocross_name_is_equivalent_signal(self):
         activity = {"name": "Motocross kväll", "sport_type": "MountainBikeRide"}
         self.assertTrue(auto_enduro_candidate(activity))
+
+    def test_ebike_with_enduro_name_and_motorcycle_gear_is_enduro(self):
+        state = {
+            "activities": [
+                {
+                    "id": 20337767421,
+                    "name": "Enduro vid lunch",
+                    "sport_type": "EBikeRide",
+                    "gear_name": "KTM 300 EXC TPI",
+                    "start_date_local": "2026-09-26T11:15:16Z",
+                }
+            ]
+        }
+        override_count, auto_count, _ = apply_semantics(
+            state, {"schema_version": 1, "overrides": {}}
+        )
+        activity = state["activities"][0]
+        self.assertEqual((override_count, auto_count), (0, 1))
+        self.assertEqual(activity["source_sport_type"], "EBikeRide")
+        self.assertEqual(activity["sport_type"], "Enduro")
+        self.assertEqual(activity["classification"], "training")
+        self.assertEqual(activity["display_label"], "Enduro")
+        self.assertEqual(
+            activity["sport_normalization"]["rule"],
+            "ebike-explicit-enduro-motorcycle-gear-v1",
+        )
+
+    def test_plain_ebike_is_not_reclassified_as_enduro(self):
+        self.assertFalse(
+            auto_enduro_ebike_candidate(
+                {
+                    "name": "E-bike ride",
+                    "sport_type": "EBikeRide",
+                    "gear_name": "Specialized Turbo",
+                }
+            )
+        )
 
     def test_emountainbike_is_user_enduro_training_proxy_without_name_signal(self):
         state = {
