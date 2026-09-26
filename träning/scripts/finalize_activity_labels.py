@@ -68,7 +68,7 @@ def main():
 
         raw_line = render_activity_line(activity, raw_label)
         normalized_line = render_activity_line(activity, display_label)
-        expected.append((activity.get("id"), raw_label, display_label, normalized_line))
+        expected.append((activity.get("id"), raw_label, display_label, raw_line, normalized_line))
 
         if normalized_line in page:
             continue
@@ -82,15 +82,14 @@ def main():
     INDEX_FILE.write_text(page, encoding="utf-8")
     rendered = INDEX_FILE.read_text(encoding="utf-8")
 
-    for activity_id, raw_label, display_label, normalized_line in expected:
+    for activity_id, raw_label, display_label, raw_line, normalized_line in expected:
         if normalized_line not in rendered:
             raise RuntimeError(
                 f"Aktivitetsetikett: normaliserad etikett {display_label!r} saknas för {activity_id}"
             )
-        raw_token = f"<strong>{html.escape(raw_label)}</strong>"
-        if raw_token in rendered and raw_label in PUBLIC_ACTIVITY_LABELS:
+        if raw_line in rendered and raw_label in PUBLIC_ACTIVITY_LABELS:
             raise RuntimeError(
-                f"Aktivitetsetikett: rå leverantörstyp {raw_label!r} finns kvar i synlig UI"
+                f"Aktivitetsetikett: rå leverantörsrad {raw_label!r} finns kvar för {activity_id}"
             )
 
     print(
