@@ -4,6 +4,52 @@
       "model": "gpt-5-mini",
       "assessment": {
         "facts": [
+          "Simning: 3,00 km · 1:03:42 · snittpuls 112,9 · maxpuls 144.",
+          "Planstatus 2026-09-26: dagen är markerad genomförd i coachens beslutsunderlag.",
+          "Planerat simpass 4000 m; genomfört 3000 m. Genomförd setstruktur avviker från planens struktur."
+        ],
+        "summary": "Genomfört 3 000 m simpass med strukturen 1×400 + 4×50 + 12×200; tröskelsetorna (12×200) höll stabilitet men totaldistans blev 1 000 m under plan.",
+        "unknowns": [
+          "Subjektiv känsla/utmattning efter simningen (användarrapport tom).",
+          "Eventuell muskeltrötthet från enduroens faktiska belastning som påverkar löpningens tolerans."
+        ],
+        "confidence": "medium",
+        "interpretations": [
+          "Simningen uppfyllde huvudstimuli (aerob + kontrollerad tröskel) men låg i volym under planerat 4 000 m, så veckans simexponering är realiserad men något reducerad i volym.",
+          "Givet föregående backkvalitet och enduro samma dag bör söndagens långa löpning skyddas från ytterligare mekanisk belastning; reducerad/standard dos är rimlig beroende på återhämtning."
+        ],
+        "load_interpretation": "Närbelastningen sista 48–72 h innehåller löpning (backintervaller), enduro och två simpass; konservativ hantering rekommenderas inför söndagens 120 min löpning."
+      },
+      "auto_apply": {
+        "note": "Konservativ ändring applicerad på 2026-09-27: reduce.",
+        "applied": true
+      },
+      "activity_id": 20337309419,
+      "plan_action": {
+        "action": "reduce",
+        "reason": "Närbelastningen (backintervaller + enduro + reducerad simvolym) motiverar konservativ reducering inför planerat 120 min-långpass.",
+        "target_date": "2026-09-27",
+        "dose_option_id": "run-easy-90",
+        "recommendation": "Följ det justerade passupplägget i planen.",
+        "requires_approval": false
+      },
+      "activity_date": "2026-09-26",
+      "activity_name": "Simning på eftermiddagen",
+      "generated_at_utc": "2026-09-26T16:45:16.821951+00:00",
+      "analysis_contract": {
+        "pipeline_version": 3,
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
+        "analysis_code_sha256": "899ccbc738b41513ca2513454e86c3dc7fe807921b3fc57d50a40bf775577ae3",
+        "plan_comparison_version": 2,
+        "workout_context_version": 3
+      },
+      "performance_marker_id": null,
+      "performance_protocol_key": null
+    },
+    {
+      "model": "gpt-5-mini",
+      "assessment": {
+        "facts": [
           "Löpning · backintervaller: 14,83 km · 1:16:07 · 277 m+ · snittpuls 141,6 · maxpuls 165.",
           "Användarrapport: 3 × 8 backintervaller (24 × 150 m totalt). Garmin klassade passet som Tempo. Passet genomfördes av praktiska skäl i stället för dagens planerade simning; simningen flyttas till 2026-09-26. Före passet rapporterade Garmin allt grönt och hög träningsberedskap. Kontrollerad fart. 8x150m x 3 RPE 6/10. Känsla: Pigg.",
           "Planstatus 2026-09-25: dagen är markerad genomförd i coachens beslutsunderlag."
@@ -1249,47 +1295,11 @@
       "activity_date": "2026-08-28",
       "activity_name": "Löpning på kvällen",
       "generated_at_utc": "2026-08-29T09:19:56.366468+00:00"
-    },
-    {
-      "model": "gpt-5-mini",
-      "assessment": {
-        "facts": [
-          "MTB/XC: 18,13 km · 1:10:48 · 210 m+ · snittpuls 128,3 · maxpuls 147.",
-          "Planstatus 2026-08-27: dagens planerade pass är genomfört i coachens beslutsunderlag."
-        ],
-        "summary": "MTB/XC/X…",
-        "unknowns": [
-          "Subjektiv dagskänsla i dag (fredag) och lokal bentrötthet.",
-          "Exakt planerad mängd repetitioner för dagens backpass (dose öppen)."
-        ],
-        "confidence": "medium",
-        "interpretations": [
-          "Veckans samlade belastning är absorberbar men lämnar mindre marginal för i daglig högdos backkvalitet.",
-          "MTB-passets karaktär (teknik + lugn) minskar risken för att backpasset blir överbelastande om dos väljs konservativt."
-        ],
-        "load_interpretation": "De senaste fyra dagarna innehåller 3 tunga/medeltunga pass; dagens…"
-      },
-      "auto_apply": {
-        "note": "Ingen automatisk planändring.",
-        "applied": false
-      },
-      "activity_id": 19926277295,
-      "plan_action": {
-        "action": "keep",
-        "reason": "Närbelastningen från måndag–torsdag går ihop med mesocykelns prioritering och dagens…",
-        "target_date": "2026-08-28",
-        "dose_option_id": "",
-        "recommendation": "Behåll dagens backkvalitet enligt plan men välj en konservativ dos i linje med mesocykeln: start med ett måttligt antal repetitioner och prioritera mekanisk kvalitet framför volym; avbryt eller korta ner om lokal trötthet upplevs vid uppvärmning.",
-        "requires_approval": false
-      },
-      "activity_date": "2026-08-27",
-      "activity_name": "Evening Stigrull",
-      "generated_at_utc": "2026-08-28T01:05:04.449248+00:00"
     }
   ],
-  "last_run_utc": "2026-09-26T11:25:47.996949+00:00",
+  "last_run_utc": "2026-09-26T16:45:16.821951+00:00",
   "contract_version": 15,
-  "last_trigger_hash": "87f41765618db4e7a41dcdb6d89020e66f4e9b4fb41529519ad5420c2e119ab4",
+  "last_trigger_hash": "2b9163e1f3acc66ac8514bd87b85be1c8aa8bec0cb71154242463f2e6b5679a1",
   "output_contract_version": 19,
   "pipeline_contract_version": 3
 }

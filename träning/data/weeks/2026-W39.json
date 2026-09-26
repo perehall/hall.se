@@ -4,7 +4,7 @@
   "week_start": "2026-09-21",
   "week_end": "2026-09-27",
   "created_at_utc": "2026-09-20T23:15:26.146433+00:00",
-  "updated_at_utc": "2026-09-26T11:26:03.229903+00:00",
+  "updated_at_utc": "2026-09-26T16:45:39.262470+00:00",
   "plan": {
     "days": [
       {
@@ -682,6 +682,7 @@
           "swim_technique"
         ],
         "dose_open": false,
+        "activity_id": 20337309419,
         "manual_lock": false,
         "dose_options": [
           {
@@ -1046,19 +1047,24 @@
         "label": "Söndag",
         "sport": "run",
         "reason": "Långt lugnt löppass för löptålighet; placerat ≥48 h efter tröskel för återhämtning och kvalitet. Valet utgår från ett observerat värde 119.767 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
-        "status": "preliminary",
-        "session": "Löpning · lugn distans · 120 min",
+        "status": "conditional",
+        "session": "Löpning · lugn distans · 90 min",
         "stimuli": [
           "run_easy_distance"
         ],
         "dose_open": false,
+        "auto_coach": {
+          "action": "reduce",
+          "reason": "Närbelastningen (backintervaller + enduro + reducerad simvolym) motiverar konservativ reducering inför planerat 120 min-långpass.",
+          "applied_at_utc": "2026-09-26T16:45:16.820667+00:00"
+        },
         "device_sync": {
           "status": "synced",
           "transport": "intervals_icu",
-          "source_hash": "9dc12d3e522e49454af7c6ffe216ee9ba323186427181ac1e1ae64a8d6009578",
-          "updated_at_utc": "2026-09-26T11:25:48.987313+00:00",
+          "source_hash": "ed4e43efadc726b64a31ed446ba36b6a79d26a51a8b0c31587ec0f29a4aed08e",
+          "updated_at_utc": "2026-09-26T16:45:18.420522+00:00",
           "device_delivery": "unverified",
-          "verified_at_utc": "2026-09-26T11:25:48.987313+00:00",
+          "verified_at_utc": "2026-09-26T16:45:18.420522+00:00",
           "provider_event_id": 138097036
         },
         "dose_options": [
@@ -1103,7 +1109,7 @@
         "priority_role": "flex",
         "device_workout": {
           "date": "2026-09-27",
-          "name": "Löpning · lugn distans · 120 min",
+          "name": "Löpning · lugn distans · 90 min",
           "sport": "run",
           "blocks": [
             {
@@ -1114,7 +1120,7 @@
                   "kind": "work",
                   "duration": {
                     "kind": "time",
-                    "seconds": 7200
+                    "seconds": 5400
                   },
                   "instruction": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt.",
                   "intensity_class": "active"
@@ -1125,11 +1131,11 @@
           ],
           "transport": "intervals_icu",
           "external_id": "hall-device:2026-09-27:run:run_easy_distance_4",
-          "source_hash": "9dc12d3e522e49454af7c6ffe216ee9ba323186427181ac1e1ae64a8d6009578",
+          "source_hash": "ed4e43efadc726b64a31ed446ba36b6a79d26a51a8b0c31587ec0f29a4aed08e",
           "provider_type": "Run",
           "target_policy": "explicit_single_primary_only",
           "schema_version": 1,
-          "source_candidate_id": "run-easy-120"
+          "source_candidate_id": "run-easy-90"
         },
         "microcycle_day": 7,
         "workout_design": {
@@ -1145,15 +1151,15 @@
           },
           "selection": {
             "method": "deterministic_constraint_scoring",
-            "reason_for_today": "Lång distansdos som kräver stöd i faktisk tålighet och närbelastning.",
-            "preferred_dose_option_id": "run-easy-120"
+            "reason_for_today": "Närbelastningen (backintervaller + enduro + reducerad simvolym) motiverar konservativ reducering inför planerat 120 min-långpass.",
+            "preferred_dose_option_id": "run-easy-90"
           },
           "candidates": [
             {
-              "id": "run-easy-120",
+              "id": "run-easy-90",
               "dose": {
                 "kind": "duration_minutes",
-                "value": 120
+                "value": 90
               },
               "score": {
                 "basis": "deterministic_constraint_alignment",
@@ -1166,8 +1172,8 @@
                   "prescription_specificity": 15
                 }
               },
-              "intent": "Lång distansdos som kräver stöd i faktisk tålighet och närbelastning.",
-              "session": "Löpning · lugn distans · 120 min",
+              "intent": "Progressionsalternativ när 75 min absorberats.",
+              "session": "Löpning · lugn distans · 90 min",
               "stimuli": [
                 "run_easy_distance"
               ],
@@ -1176,7 +1182,7 @@
                   {
                     "name": "Pass",
                     "work": {
-                      "duration_s": 7200
+                      "duration_s": 5400
                     },
                     "intensity": "lugn",
                     "instruction": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt."
@@ -1186,7 +1192,7 @@
                 "executable": true,
                 "completeness": "full"
               },
-              "dose_option_id": "run-easy-120"
+              "dose_option_id": "run-easy-90"
             },
             {
               "id": "run-easy-105",
@@ -1228,45 +1234,6 @@
               "dose_option_id": "run-easy-105"
             },
             {
-              "id": "run-easy-90",
-              "dose": {
-                "kind": "duration_minutes",
-                "value": 90
-              },
-              "score": {
-                "basis": "deterministic_constraint_alignment",
-                "total": 70,
-                "breakdown": {
-                  "mesocycle_alignment": 30,
-                  "microcycle_alignment": 10,
-                  "near_term_resolution": 0,
-                  "progression_alignment": 15,
-                  "prescription_specificity": 15
-                }
-              },
-              "intent": "Progressionsalternativ när 75 min absorberats.",
-              "session": "Löpning · lugn distans · 90 min",
-              "stimuli": [
-                "run_easy_distance"
-              ],
-              "prescription": {
-                "blocks": [
-                  {
-                    "name": "Pass",
-                    "work": {
-                      "duration_s": 5400
-                    },
-                    "intensity": "lugn",
-                    "instruction": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt."
-                  }
-                ],
-                "source": "duration_session",
-                "executable": true,
-                "completeness": "full"
-              },
-              "dose_option_id": "run-easy-90"
-            },
-            {
               "id": "run-easy-75",
               "dose": {
                 "kind": "duration_minutes",
@@ -1304,6 +1271,45 @@
                 "completeness": "full"
               },
               "dose_option_id": "run-easy-75"
+            },
+            {
+              "id": "run-easy-120",
+              "dose": {
+                "kind": "duration_minutes",
+                "value": 120
+              },
+              "score": {
+                "basis": "deterministic_constraint_alignment",
+                "total": 70,
+                "breakdown": {
+                  "mesocycle_alignment": 30,
+                  "microcycle_alignment": 10,
+                  "near_term_resolution": 0,
+                  "progression_alignment": 15,
+                  "prescription_specificity": 15
+                }
+              },
+              "intent": "Lång distansdos som kräver stöd i faktisk tålighet och närbelastning.",
+              "session": "Löpning · lugn distans · 120 min",
+              "stimuli": [
+                "run_easy_distance"
+              ],
+              "prescription": {
+                "blocks": [
+                  {
+                    "name": "Pass",
+                    "work": {
+                      "duration_s": 7200
+                    },
+                    "intensity": "lugn",
+                    "instruction": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt."
+                  }
+                ],
+                "source": "duration_session",
+                "executable": true,
+                "completeness": "full"
+              },
+              "dose_option_id": "run-easy-120"
             }
           ],
           "schema_version": 1,
@@ -1314,25 +1320,30 @@
             ],
             "selection_uses_only_preapproved_doses": true
           },
-          "selected_candidate_id": "run-easy-120",
+          "selected_candidate_id": "run-easy-90",
           "progression_from_previous": {
-            "reason": "Lång distansdos som kräver stöd i faktisk tålighet och närbelastning.",
+            "reason": "Närbelastningen (backintervaller + enduro + reducerad simvolym) motiverar konservativ reducering inför planerat 120 min-långpass.",
             "relation": "support",
             "demonstrated_floor_option_id": ""
           }
         },
         "dose_resolution": {
           "kind": "duration_minutes",
-          "state": "baseline",
-          "value": 120,
-          "option_id": "run-easy-120"
+          "basis": "Närbelastningen (backintervaller + enduro + reducerad simvolym) motiverar konservativ reducering inför planerat 120 min-långpass.",
+          "state": "resolved",
+          "value": 90,
+          "source": "near_term_ai_revision",
+          "option_id": "run-easy-90",
+          "applied_at_utc": "2026-09-26T16:45:16.820667+00:00"
         },
         "load_dimensions": [
           "cardiovascular",
           "mechanical"
         ],
         "microcycle_slot": "run_easy_distance_4",
+        "coach_adjustment": "Passet är nedjusterat från grundplanen. Följ passupplägget ovan.",
         "microcycle_index": 1,
+        "original_session": "Löpning · lugn distans · 120 min",
         "development_focus": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt.",
         "baseline_option_id": "run-easy-120"
       }
@@ -1408,6 +1419,1140 @@
     "workout_design_schema_version": 1
   },
   "activities": [
+    {
+      "id": 20337309419,
+      "name": "Simning på eftermiddagen",
+      "source": "Strava API",
+      "gear_id": null,
+      "calories": 458.0,
+      "gear_name": null,
+      "distance_m": 3000.0,
+      "sport_type": "Swim",
+      "start_date": "2026-09-26T12:28:08Z",
+      "device_name": "Garmin Forerunner 970",
+      "average_watts": null,
+      "max_heartrate": 144.0,
+      "moving_time_s": 2566,
+      "elapsed_time_s": 3822,
+      "start_date_local": "2026-09-26T14:28:08Z",
+      "average_heartrate": 112.9,
+      "total_elevation_gain_m": 0,
+      "weighted_average_watts": null,
+      "workout_analysis_context": {
+        "run": null,
+        "swim": {
+          "structure": [
+            {
+              "lap_indices": [
+                1
+              ],
+              "repetitions": 1,
+              "total_distance_m": 400.0,
+              "distance_per_rep_m": 400
+            },
+            {
+              "lap_indices": [
+                3,
+                5,
+                7,
+                9
+              ],
+              "repetitions": 4,
+              "total_distance_m": 200.0,
+              "distance_per_rep_m": 50
+            },
+            {
+              "lap_indices": [
+                11,
+                13,
+                15,
+                18,
+                20,
+                22,
+                24,
+                26,
+                28,
+                30,
+                33,
+                35
+              ],
+              "repetitions": 12,
+              "total_distance_m": 2400.0,
+              "distance_per_rep_m": 200
+            }
+          ],
+          "structured": true,
+          "repeat_sets": [
+            {
+              "reps": [
+                {
+                  "pace": "1:22,0/100 m",
+                  "lap_index": 3,
+                  "distance_m": 50.0,
+                  "max_heartrate": 88.0,
+                  "moving_time_s": 41.0,
+                  "pace_s_per_100m": 82.0,
+                  "average_heartrate": 74.2,
+                  "rest_marker_before": true,
+                  "recorded_rest_before_s": 82.0
+                },
+                {
+                  "pace": "1:20,0/100 m",
+                  "lap_index": 5,
+                  "distance_m": 50.0,
+                  "max_heartrate": 126.0,
+                  "moving_time_s": 40.0,
+                  "pace_s_per_100m": 80.0,
+                  "average_heartrate": 115.9,
+                  "rest_marker_before": true,
+                  "recorded_rest_before_s": 22.0
+                },
+                {
+                  "pace": "1:18,0/100 m",
+                  "lap_index": 7,
+                  "distance_m": 50.0,
+                  "max_heartrate": 125.0,
+                  "moving_time_s": 39.0,
+                  "pace_s_per_100m": 78.0,
+                  "average_heartrate": 119.8,
+                  "rest_marker_before": true,
+                  "recorded_rest_before_s": 22.0
+                },
+                {
+                  "pace": "1:18,0/100 m",
+                  "lap_index": 9,
+                  "distance_m": 50.0,
+                  "max_heartrate": 133.0,
+                  "moving_time_s": 39.0,
+                  "pace_s_per_100m": 78.0,
+                  "average_heartrate": 124.0,
+                  "rest_marker_before": true,
+                  "recorded_rest_before_s": 22.0
+                }
+              ],
+              "set_index": 1,
+              "lap_indices": [
+                3,
+                5,
+                7,
+                9
+              ],
+              "repetitions": 4,
+              "total_distance_m": 200.0,
+              "distance_per_rep_m": 50.0,
+              "pace_mean_s_per_100m": 79.5,
+              "pace_range_s_per_100m": 4.0,
+              "average_heartrate_mean": 108.5,
+              "pace_fastest_s_per_100m": 78.0,
+              "pace_slowest_s_per_100m": 82.0,
+              "recorded_rest_between_reps_s": [
+                22.0,
+                22.0,
+                22.0
+              ],
+              "pace_first_to_last_delta_s_per_100m": -4.0
+            },
+            {
+              "reps": [
+                {
+                  "pace": "1:30,5/100 m",
+                  "lap_index": 11,
+                  "distance_m": 200.0,
+                  "max_heartrate": 133.0,
+                  "moving_time_s": 181.0,
+                  "pace_s_per_100m": 90.5,
+                  "average_heartrate": 115.9,
+                  "rest_marker_before": true,
+                  "recorded_rest_before_s": 456.0
+                },
+                {
+                  "pace": "1:28,0/100 m",
+                  "lap_index": 13,
+                  "distance_m": 200.0,
+                  "max_heartrate": 141.0,
+                  "moving_time_s": 176.0,
+                  "pace_s_per_100m": 88.0,
+                  "average_heartrate": 133.1,
+                  "rest_marker_before": true,
+                  "recorded_rest_before_s": 21.0
+                },
+                {
+                  "pace": "1:29,0/100 m",
+                  "lap_index": 15,
+                  "distance_m": 200.0,
+                  "max_heartrate": 144.0,
+                  "moving_time_s": 178.0,
+                  "pace_s_per_100m": 89.0,
+                  "average_heartrate": 136.7,
+                  "rest_marker_before": true,
+                  "recorded_rest_before_s": 26.0
+                },
+                {
+                  "pace": "1:28,5/100 m",
+                  "lap_index": 18,
+                  "distance_m": 200.0,
+                  "max_heartrate": 125.0,
+                  "moving_time_s": 177.0,
+                  "pace_s_per_100m": 88.5,
+                  "average_heartrate": 118.4,
+                  "rest_marker_before": true,
+                  "recorded_rest_before_s": 21.0
+                },
+                {
+                  "pace": "1:29,0/100 m",
+                  "lap_index": 20,
+                  "distance_m": 200.0,
+                  "max_heartrate": 126.0,
+                  "moving_time_s": 178.0,
+                  "pace_s_per_100m": 89.0,
+                  "average_heartrate": 116.0,
+                  "rest_marker_before": true,
+                  "recorded_rest_before_s": 22.0
+                },
+                {
+                  "pace": "1:29,5/100 m",
+                  "lap_index": 22,
+                  "distance_m": 200.0,
+                  "max_heartrate": 130.0,
+                  "moving_time_s": 179.0,
+                  "pace_s_per_100m": 89.5,
+                  "average_heartrate": 124.4,
+                  "rest_marker_before": true,
+                  "recorded_rest_before_s": 21.0
+                },
+                {
+                  "pace": "1:19,0/100 m",
+                  "lap_index": 24,
+                  "distance_m": 200.0,
+                  "max_heartrate": 131.0,
+                  "moving_time_s": 158.0,
+                  "pace_s_per_100m": 79.0,
+                  "average_heartrate": 119.3,
+                  "rest_marker_before": true,
+                  "recorded_rest_before_s": 114.0
+                },
+                {
+                  "pace": "1:18,5/100 m",
+                  "lap_index": 26,
+                  "distance_m": 200.0,
+                  "max_heartrate": 135.0,
+                  "moving_time_s": 157.0,
+                  "pace_s_per_100m": 78.5,
+                  "average_heartrate": 121.9,
+                  "rest_marker_before": true,
+                  "recorded_rest_before_s": 32.0
+                },
+                {
+                  "pace": "1:19,0/100 m",
+                  "lap_index": 28,
+                  "distance_m": 200.0,
+                  "max_heartrate": 135.0,
+                  "moving_time_s": 158.0,
+                  "pace_s_per_100m": 79.0,
+                  "average_heartrate": 126.6,
+                  "rest_marker_before": true,
+                  "recorded_rest_before_s": 32.0
+                },
+                {
+                  "pace": "1:19,5/100 m",
+                  "lap_index": 30,
+                  "distance_m": 200.0,
+                  "max_heartrate": 133.0,
+                  "moving_time_s": 159.0,
+                  "pace_s_per_100m": 79.5,
+                  "average_heartrate": 127.7,
+                  "rest_marker_before": true,
+                  "recorded_rest_before_s": 32.0
+                },
+                {
+                  "pace": "1:21,5/100 m",
+                  "lap_index": 33,
+                  "distance_m": 200.0,
+                  "max_heartrate": 129.0,
+                  "moving_time_s": 163.0,
+                  "pace_s_per_100m": 81.5,
+                  "average_heartrate": 115.8,
+                  "rest_marker_before": true,
+                  "recorded_rest_before_s": 30.0
+                },
+                {
+                  "pace": "1:22,5/100 m",
+                  "lap_index": 35,
+                  "distance_m": 200.0,
+                  "max_heartrate": 127.0,
+                  "moving_time_s": 165.0,
+                  "pace_s_per_100m": 82.5,
+                  "average_heartrate": 118.9,
+                  "rest_marker_before": true,
+                  "recorded_rest_before_s": 31.0
+                }
+              ],
+              "set_index": 2,
+              "lap_indices": [
+                11,
+                13,
+                15,
+                18,
+                20,
+                22,
+                24,
+                26,
+                28,
+                30,
+                33,
+                35
+              ],
+              "repetitions": 12,
+              "total_distance_m": 2400.0,
+              "distance_per_rep_m": 200.0,
+              "pace_mean_s_per_100m": 84.54,
+              "pace_range_s_per_100m": 12.0,
+              "average_heartrate_mean": 122.9,
+              "pace_fastest_s_per_100m": 78.5,
+              "pace_slowest_s_per_100m": 90.5,
+              "recorded_rest_between_reps_s": [
+                21.0,
+                26.0,
+                21.0,
+                22.0,
+                21.0,
+                114.0,
+                32.0,
+                32.0,
+                32.0,
+                30.0,
+                31.0
+              ],
+              "pace_first_to_last_delta_s_per_100m": -8.0
+            }
+          ],
+          "structure_basis": "Equal-distance positive source laps are grouped as a repeat set only when a zero-distance lap/rest marker separates the repetitions.",
+          "source_intervals": [
+            {
+              "pace": "1:34,5/100 m",
+              "lap_index": 1,
+              "distance_m": 400.0,
+              "max_heartrate": 129.0,
+              "moving_time_s": 378.0,
+              "pace_s_per_100m": 94.5,
+              "average_heartrate": 118.0,
+              "rest_marker_before": false,
+              "recorded_rest_before_s": 0.0
+            },
+            {
+              "pace": "1:22,0/100 m",
+              "lap_index": 3,
+              "distance_m": 50.0,
+              "max_heartrate": 88.0,
+              "moving_time_s": 41.0,
+              "pace_s_per_100m": 82.0,
+              "average_heartrate": 74.2,
+              "rest_marker_before": true,
+              "recorded_rest_before_s": 82.0
+            },
+            {
+              "pace": "1:20,0/100 m",
+              "lap_index": 5,
+              "distance_m": 50.0,
+              "max_heartrate": 126.0,
+              "moving_time_s": 40.0,
+              "pace_s_per_100m": 80.0,
+              "average_heartrate": 115.9,
+              "rest_marker_before": true,
+              "recorded_rest_before_s": 22.0
+            },
+            {
+              "pace": "1:18,0/100 m",
+              "lap_index": 7,
+              "distance_m": 50.0,
+              "max_heartrate": 125.0,
+              "moving_time_s": 39.0,
+              "pace_s_per_100m": 78.0,
+              "average_heartrate": 119.8,
+              "rest_marker_before": true,
+              "recorded_rest_before_s": 22.0
+            },
+            {
+              "pace": "1:18,0/100 m",
+              "lap_index": 9,
+              "distance_m": 50.0,
+              "max_heartrate": 133.0,
+              "moving_time_s": 39.0,
+              "pace_s_per_100m": 78.0,
+              "average_heartrate": 124.0,
+              "rest_marker_before": true,
+              "recorded_rest_before_s": 22.0
+            },
+            {
+              "pace": "1:30,5/100 m",
+              "lap_index": 11,
+              "distance_m": 200.0,
+              "max_heartrate": 133.0,
+              "moving_time_s": 181.0,
+              "pace_s_per_100m": 90.5,
+              "average_heartrate": 115.9,
+              "rest_marker_before": true,
+              "recorded_rest_before_s": 456.0
+            },
+            {
+              "pace": "1:28,0/100 m",
+              "lap_index": 13,
+              "distance_m": 200.0,
+              "max_heartrate": 141.0,
+              "moving_time_s": 176.0,
+              "pace_s_per_100m": 88.0,
+              "average_heartrate": 133.1,
+              "rest_marker_before": true,
+              "recorded_rest_before_s": 21.0
+            },
+            {
+              "pace": "1:29,0/100 m",
+              "lap_index": 15,
+              "distance_m": 200.0,
+              "max_heartrate": 144.0,
+              "moving_time_s": 178.0,
+              "pace_s_per_100m": 89.0,
+              "average_heartrate": 136.7,
+              "rest_marker_before": true,
+              "recorded_rest_before_s": 26.0
+            },
+            {
+              "pace": "1:28,5/100 m",
+              "lap_index": 18,
+              "distance_m": 200.0,
+              "max_heartrate": 125.0,
+              "moving_time_s": 177.0,
+              "pace_s_per_100m": 88.5,
+              "average_heartrate": 118.4,
+              "rest_marker_before": true,
+              "recorded_rest_before_s": 21.0
+            },
+            {
+              "pace": "1:29,0/100 m",
+              "lap_index": 20,
+              "distance_m": 200.0,
+              "max_heartrate": 126.0,
+              "moving_time_s": 178.0,
+              "pace_s_per_100m": 89.0,
+              "average_heartrate": 116.0,
+              "rest_marker_before": true,
+              "recorded_rest_before_s": 22.0
+            },
+            {
+              "pace": "1:29,5/100 m",
+              "lap_index": 22,
+              "distance_m": 200.0,
+              "max_heartrate": 130.0,
+              "moving_time_s": 179.0,
+              "pace_s_per_100m": 89.5,
+              "average_heartrate": 124.4,
+              "rest_marker_before": true,
+              "recorded_rest_before_s": 21.0
+            },
+            {
+              "pace": "1:19,0/100 m",
+              "lap_index": 24,
+              "distance_m": 200.0,
+              "max_heartrate": 131.0,
+              "moving_time_s": 158.0,
+              "pace_s_per_100m": 79.0,
+              "average_heartrate": 119.3,
+              "rest_marker_before": true,
+              "recorded_rest_before_s": 114.0
+            },
+            {
+              "pace": "1:18,5/100 m",
+              "lap_index": 26,
+              "distance_m": 200.0,
+              "max_heartrate": 135.0,
+              "moving_time_s": 157.0,
+              "pace_s_per_100m": 78.5,
+              "average_heartrate": 121.9,
+              "rest_marker_before": true,
+              "recorded_rest_before_s": 32.0
+            },
+            {
+              "pace": "1:19,0/100 m",
+              "lap_index": 28,
+              "distance_m": 200.0,
+              "max_heartrate": 135.0,
+              "moving_time_s": 158.0,
+              "pace_s_per_100m": 79.0,
+              "average_heartrate": 126.6,
+              "rest_marker_before": true,
+              "recorded_rest_before_s": 32.0
+            },
+            {
+              "pace": "1:19,5/100 m",
+              "lap_index": 30,
+              "distance_m": 200.0,
+              "max_heartrate": 133.0,
+              "moving_time_s": 159.0,
+              "pace_s_per_100m": 79.5,
+              "average_heartrate": 127.7,
+              "rest_marker_before": true,
+              "recorded_rest_before_s": 32.0
+            },
+            {
+              "pace": "1:21,5/100 m",
+              "lap_index": 33,
+              "distance_m": 200.0,
+              "max_heartrate": 129.0,
+              "moving_time_s": 163.0,
+              "pace_s_per_100m": 81.5,
+              "average_heartrate": 115.8,
+              "rest_marker_before": true,
+              "recorded_rest_before_s": 30.0
+            },
+            {
+              "pace": "1:22,5/100 m",
+              "lap_index": 35,
+              "distance_m": 200.0,
+              "max_heartrate": 127.0,
+              "moving_time_s": 165.0,
+              "pace_s_per_100m": 82.5,
+              "average_heartrate": 118.9,
+              "rest_marker_before": true,
+              "recorded_rest_before_s": 31.0
+            }
+          ],
+          "structure_signature": "1x400+4x50+12x200",
+          "interpretation_limits": [
+            "Pace is derived deterministically from source lap time and distance.",
+            "Set structure and pace stability do not by themselves prove stroke-technique quality or physiological intensity.",
+            "Swimming heart rate is observed source data and is not an intensity classification by itself."
+          ],
+          "source_lap_distance_sum_m": 3000.0,
+          "source_lap_distance_matches_activity": true
+        },
+        "total": {
+          "distance_m": 3000.0,
+          "distance_km": 3.0,
+          "max_heartrate": 144.0,
+          "moving_time_s": 2566.0,
+          "elapsed_time_s": 3822.0,
+          "elevation_gain_m": 0.0,
+          "average_heartrate": 112.9
+        },
+        "enduro": null,
+        "sport_type": "Swim",
+        "activity_id": 20337309419,
+        "user_report": "",
+        "display_label": "Swim",
+        "classification": null,
+        "contract_version": 3,
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
+      },
+      "laps": [
+        {
+          "name": "Lap 0",
+          "lap_index": 1,
+          "distance_m": 400.0,
+          "average_speed": 1.06,
+          "average_watts": null,
+          "max_heartrate": 129.0,
+          "moving_time_s": 378,
+          "elapsed_time_s": 378,
+          "average_cadence": 25.0,
+          "average_heartrate": 118.0
+        },
+        {
+          "name": "Lap 1",
+          "lap_index": 2,
+          "distance_m": 0.0,
+          "average_speed": 0.0,
+          "average_watts": null,
+          "max_heartrate": 129.0,
+          "moving_time_s": 82,
+          "elapsed_time_s": 82,
+          "average_cadence": 0.0,
+          "average_heartrate": 98.7
+        },
+        {
+          "name": "Lap 2",
+          "lap_index": 3,
+          "distance_m": 50.0,
+          "average_speed": 1.22,
+          "average_watts": null,
+          "max_heartrate": 88.0,
+          "moving_time_s": 41,
+          "elapsed_time_s": 41,
+          "average_cadence": 26.0,
+          "average_heartrate": 74.2
+        },
+        {
+          "name": "Lap 3",
+          "lap_index": 4,
+          "distance_m": 0.0,
+          "average_speed": 0.0,
+          "average_watts": null,
+          "max_heartrate": 119.0,
+          "moving_time_s": 22,
+          "elapsed_time_s": 22,
+          "average_cadence": 0.0,
+          "average_heartrate": 100.0
+        },
+        {
+          "name": "Lap 4",
+          "lap_index": 5,
+          "distance_m": 50.0,
+          "average_speed": 1.25,
+          "average_watts": null,
+          "max_heartrate": 126.0,
+          "moving_time_s": 40,
+          "elapsed_time_s": 40,
+          "average_cadence": 28.0,
+          "average_heartrate": 115.9
+        },
+        {
+          "name": "Lap 5",
+          "lap_index": 6,
+          "distance_m": 0.0,
+          "average_speed": 0.0,
+          "average_watts": null,
+          "max_heartrate": 128.0,
+          "moving_time_s": 23,
+          "elapsed_time_s": 22,
+          "average_cadence": 0.0,
+          "average_heartrate": 124.9
+        },
+        {
+          "name": "Lap 6",
+          "lap_index": 7,
+          "distance_m": 50.0,
+          "average_speed": 1.28,
+          "average_watts": null,
+          "max_heartrate": 125.0,
+          "moving_time_s": 39,
+          "elapsed_time_s": 39,
+          "average_cadence": 30.0,
+          "average_heartrate": 119.8
+        },
+        {
+          "name": "Lap 7",
+          "lap_index": 8,
+          "distance_m": 0.0,
+          "average_speed": 0.0,
+          "average_watts": null,
+          "max_heartrate": 130.0,
+          "moving_time_s": 22,
+          "elapsed_time_s": 22,
+          "average_cadence": 0.0,
+          "average_heartrate": 125.1
+        },
+        {
+          "name": "Lap 8",
+          "lap_index": 9,
+          "distance_m": 50.0,
+          "average_speed": 1.28,
+          "average_watts": null,
+          "max_heartrate": 133.0,
+          "moving_time_s": 39,
+          "elapsed_time_s": 39,
+          "average_cadence": 31.0,
+          "average_heartrate": 124.0
+        },
+        {
+          "name": "Lap 9",
+          "lap_index": 10,
+          "distance_m": 0.0,
+          "average_speed": 0.0,
+          "average_watts": null,
+          "max_heartrate": 136.0,
+          "moving_time_s": 456,
+          "elapsed_time_s": 456,
+          "average_cadence": 0.0,
+          "average_heartrate": 82.1
+        },
+        {
+          "name": "Lap 10",
+          "lap_index": 11,
+          "distance_m": 200.0,
+          "average_speed": 1.1,
+          "average_watts": null,
+          "max_heartrate": 133.0,
+          "moving_time_s": 181,
+          "elapsed_time_s": 181,
+          "average_cadence": 27.0,
+          "average_heartrate": 115.9
+        },
+        {
+          "name": "Lap 11",
+          "lap_index": 12,
+          "distance_m": 0.0,
+          "average_speed": 0.0,
+          "average_watts": null,
+          "max_heartrate": 129.0,
+          "moving_time_s": 21,
+          "elapsed_time_s": 21,
+          "average_cadence": 0.0,
+          "average_heartrate": 124.5
+        },
+        {
+          "name": "Lap 12",
+          "lap_index": 13,
+          "distance_m": 200.0,
+          "average_speed": 1.14,
+          "average_watts": null,
+          "max_heartrate": 141.0,
+          "moving_time_s": 176,
+          "elapsed_time_s": 175,
+          "average_cadence": 29.0,
+          "average_heartrate": 133.1
+        },
+        {
+          "name": "Lap 13",
+          "lap_index": 14,
+          "distance_m": 0.0,
+          "average_speed": 0.0,
+          "average_watts": null,
+          "max_heartrate": 140.0,
+          "moving_time_s": 26,
+          "elapsed_time_s": 26,
+          "average_cadence": 0.0,
+          "average_heartrate": 135.5
+        },
+        {
+          "name": "Lap 14",
+          "lap_index": 15,
+          "distance_m": 200.0,
+          "average_speed": 1.12,
+          "average_watts": null,
+          "max_heartrate": 144.0,
+          "moving_time_s": 178,
+          "elapsed_time_s": 178,
+          "average_cadence": 29.0,
+          "average_heartrate": 136.7
+        },
+        {
+          "name": "Lap 15",
+          "lap_index": 16,
+          "distance_m": 0.0,
+          "average_speed": 0.0,
+          "average_watts": null,
+          "max_heartrate": 142.0,
+          "moving_time_s": 14,
+          "elapsed_time_s": 14,
+          "average_cadence": 0.0,
+          "average_heartrate": 139.2
+        },
+        {
+          "name": "Lap 16",
+          "lap_index": 17,
+          "distance_m": 0.0,
+          "average_speed": 0.0,
+          "average_watts": null,
+          "max_heartrate": 93.0,
+          "moving_time_s": 7,
+          "elapsed_time_s": 7,
+          "average_cadence": 0.0,
+          "average_heartrate": 92.0
+        },
+        {
+          "name": "Lap 17",
+          "lap_index": 18,
+          "distance_m": 200.0,
+          "average_speed": 1.13,
+          "average_watts": null,
+          "max_heartrate": 125.0,
+          "moving_time_s": 177,
+          "elapsed_time_s": 177,
+          "average_cadence": 27.0,
+          "average_heartrate": 118.4
+        },
+        {
+          "name": "Lap 18",
+          "lap_index": 19,
+          "distance_m": 0.0,
+          "average_speed": 0.0,
+          "average_watts": null,
+          "max_heartrate": 122.0,
+          "moving_time_s": 22,
+          "elapsed_time_s": 22,
+          "average_cadence": 0.0,
+          "average_heartrate": 112.7
+        },
+        {
+          "name": "Lap 19",
+          "lap_index": 20,
+          "distance_m": 200.0,
+          "average_speed": 1.12,
+          "average_watts": null,
+          "max_heartrate": 126.0,
+          "moving_time_s": 178,
+          "elapsed_time_s": 178,
+          "average_cadence": 27.0,
+          "average_heartrate": 116.0
+        },
+        {
+          "name": "Lap 20",
+          "lap_index": 21,
+          "distance_m": 0.0,
+          "average_speed": 0.0,
+          "average_watts": null,
+          "max_heartrate": 125.0,
+          "moving_time_s": 21,
+          "elapsed_time_s": 21,
+          "average_cadence": 0.0,
+          "average_heartrate": 117.8
+        },
+        {
+          "name": "Lap 21",
+          "lap_index": 22,
+          "distance_m": 200.0,
+          "average_speed": 1.12,
+          "average_watts": null,
+          "max_heartrate": 130.0,
+          "moving_time_s": 179,
+          "elapsed_time_s": 179,
+          "average_cadence": 26.0,
+          "average_heartrate": 124.4
+        },
+        {
+          "name": "Lap 22",
+          "lap_index": 23,
+          "distance_m": 0.0,
+          "average_speed": 0.0,
+          "average_watts": null,
+          "max_heartrate": 128.0,
+          "moving_time_s": 114,
+          "elapsed_time_s": 114,
+          "average_cadence": 0.0,
+          "average_heartrate": 96.3
+        },
+        {
+          "name": "Lap 23",
+          "lap_index": 24,
+          "distance_m": 200.0,
+          "average_speed": 1.27,
+          "average_watts": null,
+          "max_heartrate": 131.0,
+          "moving_time_s": 158,
+          "elapsed_time_s": 158,
+          "average_cadence": 29.0,
+          "average_heartrate": 119.3
+        },
+        {
+          "name": "Lap 24",
+          "lap_index": 25,
+          "distance_m": 0.0,
+          "average_speed": 0.0,
+          "average_watts": null,
+          "max_heartrate": 129.0,
+          "moving_time_s": 32,
+          "elapsed_time_s": 32,
+          "average_cadence": 0.0,
+          "average_heartrate": 113.2
+        },
+        {
+          "name": "Lap 25",
+          "lap_index": 26,
+          "distance_m": 200.0,
+          "average_speed": 1.27,
+          "average_watts": null,
+          "max_heartrate": 135.0,
+          "moving_time_s": 157,
+          "elapsed_time_s": 156,
+          "average_cadence": 29.0,
+          "average_heartrate": 121.9
+        },
+        {
+          "name": "Lap 26",
+          "lap_index": 27,
+          "distance_m": 0.0,
+          "average_speed": 0.0,
+          "average_watts": null,
+          "max_heartrate": 133.0,
+          "moving_time_s": 32,
+          "elapsed_time_s": 32,
+          "average_cadence": 0.0,
+          "average_heartrate": 118.6
+        },
+        {
+          "name": "Lap 27",
+          "lap_index": 28,
+          "distance_m": 200.0,
+          "average_speed": 1.27,
+          "average_watts": null,
+          "max_heartrate": 135.0,
+          "moving_time_s": 158,
+          "elapsed_time_s": 157,
+          "average_cadence": 29.0,
+          "average_heartrate": 126.6
+        },
+        {
+          "name": "Lap 28",
+          "lap_index": 29,
+          "distance_m": 0.0,
+          "average_speed": 0.0,
+          "average_watts": null,
+          "max_heartrate": 133.0,
+          "moving_time_s": 32,
+          "elapsed_time_s": 32,
+          "average_cadence": 0.0,
+          "average_heartrate": 122.0
+        },
+        {
+          "name": "Lap 29",
+          "lap_index": 30,
+          "distance_m": 200.0,
+          "average_speed": 1.26,
+          "average_watts": null,
+          "max_heartrate": 133.0,
+          "moving_time_s": 159,
+          "elapsed_time_s": 159,
+          "average_cadence": 29.0,
+          "average_heartrate": 127.7
+        },
+        {
+          "name": "Lap 30",
+          "lap_index": 31,
+          "distance_m": 0.0,
+          "average_speed": 0.0,
+          "average_watts": null,
+          "max_heartrate": 131.0,
+          "moving_time_s": 9,
+          "elapsed_time_s": 9,
+          "average_cadence": 0.0,
+          "average_heartrate": 129.1
+        },
+        {
+          "name": "Lap 31",
+          "lap_index": 32,
+          "distance_m": 0.0,
+          "average_speed": 0.0,
+          "average_watts": null,
+          "max_heartrate": 88.0,
+          "moving_time_s": 21,
+          "elapsed_time_s": 21,
+          "average_cadence": 0.0,
+          "average_heartrate": 86.0
+        },
+        {
+          "name": "Lap 32",
+          "lap_index": 33,
+          "distance_m": 200.0,
+          "average_speed": 1.23,
+          "average_watts": null,
+          "max_heartrate": 129.0,
+          "moving_time_s": 163,
+          "elapsed_time_s": 163,
+          "average_cadence": 28.0,
+          "average_heartrate": 115.8
+        },
+        {
+          "name": "Lap 33",
+          "lap_index": 34,
+          "distance_m": 0.0,
+          "average_speed": 0.0,
+          "average_watts": null,
+          "max_heartrate": 127.0,
+          "moving_time_s": 31,
+          "elapsed_time_s": 31,
+          "average_cadence": 0.0,
+          "average_heartrate": 110.1
+        },
+        {
+          "name": "Lap 34",
+          "lap_index": 35,
+          "distance_m": 200.0,
+          "average_speed": 1.21,
+          "average_watts": null,
+          "max_heartrate": 127.0,
+          "moving_time_s": 165,
+          "elapsed_time_s": 165,
+          "average_cadence": 28.0,
+          "average_heartrate": 118.9
+        },
+        {
+          "name": "Lap 35",
+          "lap_index": 36,
+          "distance_m": 0.0,
+          "average_speed": 0.0,
+          "average_watts": null,
+          "max_heartrate": 124.0,
+          "moving_time_s": 22,
+          "elapsed_time_s": 22,
+          "average_cadence": 0.0,
+          "average_heartrate": 115.4
+        },
+        {
+          "name": "Lap 36",
+          "lap_index": 37,
+          "distance_m": 0.0,
+          "average_speed": 0.0,
+          "average_watts": null,
+          "max_heartrate": 104.0,
+          "moving_time_s": 1,
+          "elapsed_time_s": 1,
+          "average_cadence": 0.0,
+          "average_heartrate": 0.0
+        },
+        {
+          "name": "Lap 37",
+          "lap_index": 38,
+          "distance_m": 0.0,
+          "average_speed": 0.0,
+          "average_watts": null,
+          "max_heartrate": 103.0,
+          "moving_time_s": 1,
+          "elapsed_time_s": 1,
+          "average_cadence": 0.0,
+          "average_heartrate": 0.0
+        },
+        {
+          "name": "Lap 38",
+          "lap_index": 39,
+          "distance_m": 0.0,
+          "average_speed": 0.0,
+          "average_watts": null,
+          "max_heartrate": 103.0,
+          "moving_time_s": 1,
+          "elapsed_time_s": 1,
+          "average_cadence": 0.0,
+          "average_heartrate": 0.0
+        },
+        {
+          "name": "Lap 39",
+          "lap_index": 40,
+          "distance_m": 0.0,
+          "average_speed": 0.0,
+          "average_watts": null,
+          "max_heartrate": 102.0,
+          "moving_time_s": 2,
+          "elapsed_time_s": 2,
+          "average_cadence": 0.0,
+          "average_heartrate": 102.0
+        },
+        {
+          "name": "Lap 40",
+          "lap_index": 41,
+          "distance_m": 0.0,
+          "average_speed": 0.0,
+          "average_watts": null,
+          "max_heartrate": 102.0,
+          "moving_time_s": 5,
+          "elapsed_time_s": 4,
+          "average_cadence": 0.0,
+          "average_heartrate": 101.7
+        },
+        {
+          "name": "Lap 41",
+          "lap_index": 42,
+          "distance_m": 0.0,
+          "average_speed": 0.0,
+          "average_watts": null,
+          "max_heartrate": 101.0,
+          "moving_time_s": 3,
+          "elapsed_time_s": 3,
+          "average_cadence": 0.0,
+          "average_heartrate": 99.5
+        },
+        {
+          "name": "Lap 42",
+          "lap_index": 43,
+          "distance_m": 0.0,
+          "average_speed": 0.0,
+          "average_watts": null,
+          "max_heartrate": 97.0,
+          "moving_time_s": 2,
+          "elapsed_time_s": 2,
+          "average_cadence": 0.0,
+          "average_heartrate": 95.0
+        },
+        {
+          "name": "Lap 43",
+          "lap_index": 44,
+          "distance_m": 0.0,
+          "average_speed": 0.0,
+          "average_watts": null,
+          "max_heartrate": 93.0,
+          "moving_time_s": 3,
+          "elapsed_time_s": 2,
+          "average_cadence": 0.0,
+          "average_heartrate": 88.0
+        },
+        {
+          "name": "Lap 44",
+          "lap_index": 45,
+          "distance_m": 0.0,
+          "average_speed": 0.0,
+          "average_watts": null,
+          "max_heartrate": 85.0,
+          "moving_time_s": 2,
+          "elapsed_time_s": 2,
+          "average_cadence": 0.0,
+          "average_heartrate": 83.0
+        },
+        {
+          "name": "Lap 45",
+          "lap_index": 46,
+          "distance_m": 0.0,
+          "average_speed": 0.0,
+          "average_watts": null,
+          "max_heartrate": 82.0,
+          "moving_time_s": 7,
+          "elapsed_time_s": 7,
+          "average_cadence": 0.0,
+          "average_heartrate": 80.7
+        }
+      ]
+    },
+    {
+      "id": 20337767421,
+      "name": "Enduro vid lunch",
+      "source": "Strava API",
+      "gear_id": "b18458212",
+      "calories": 690.0,
+      "gear_name": "KTM 300 EXC TPI",
+      "distance_m": 26611.2,
+      "sport_type": "EBikeRide",
+      "start_date": "2026-09-26T09:15:16Z",
+      "device_name": "Garmin Forerunner 970",
+      "average_watts": 248.1,
+      "max_heartrate": 146.0,
+      "moving_time_s": 4782,
+      "elapsed_time_s": 6062,
+      "start_date_local": "2026-09-26T11:15:16Z",
+      "average_heartrate": 125.1,
+      "total_elevation_gain_m": 527.2,
+      "weighted_average_watts": null,
+      "workout_analysis_context": {
+        "run": null,
+        "swim": null,
+        "total": {
+          "distance_m": 26611.2,
+          "distance_km": 26.611,
+          "max_heartrate": 146.0,
+          "moving_time_s": 4782.0,
+          "elapsed_time_s": 6062.0,
+          "elevation_gain_m": 527.2,
+          "average_heartrate": 125.1
+        },
+        "enduro": null,
+        "sport_type": "EBikeRide",
+        "activity_id": 20337767421,
+        "user_report": "",
+        "display_label": "EBikeRide",
+        "classification": null,
+        "contract_version": 3,
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
+      },
+      "laps": [
+        {
+          "name": "Lap 0",
+          "lap_index": 1,
+          "distance_m": 26615.8,
+          "average_speed": 5.57,
+          "average_watts": 248.1,
+          "max_heartrate": 146.0,
+          "moving_time_s": 4782,
+          "elapsed_time_s": 5085,
+          "average_cadence": null,
+          "average_heartrate": 125.1
+        }
+      ]
+    },
     {
       "id": 20326850936,
       "name": "Löpning på kvällen",
@@ -4143,6 +5288,52 @@
     }
   ],
   "coach_analyses": [
+    {
+      "model": "gpt-5-mini",
+      "assessment": {
+        "facts": [
+          "Simning: 3,00 km · 1:03:42 · snittpuls 112,9 · maxpuls 144.",
+          "Planstatus 2026-09-26: dagen är markerad genomförd i coachens beslutsunderlag.",
+          "Planerat simpass 4000 m; genomfört 3000 m. Genomförd setstruktur avviker från planens struktur."
+        ],
+        "summary": "Genomfört 3 000 m simpass med strukturen 1×400 + 4×50 + 12×200; tröskelsetorna (12×200) höll stabilitet men totaldistans blev 1 000 m under plan.",
+        "unknowns": [
+          "Subjektiv känsla/utmattning efter simningen (användarrapport tom).",
+          "Eventuell muskeltrötthet från enduroens faktiska belastning som påverkar löpningens tolerans."
+        ],
+        "confidence": "medium",
+        "interpretations": [
+          "Simningen uppfyllde huvudstimuli (aerob + kontrollerad tröskel) men låg i volym under planerat 4 000 m, så veckans simexponering är realiserad men något reducerad i volym.",
+          "Givet föregående backkvalitet och enduro samma dag bör söndagens långa löpning skyddas från ytterligare mekanisk belastning; reducerad/standard dos är rimlig beroende på återhämtning."
+        ],
+        "load_interpretation": "Närbelastningen sista 48–72 h innehåller löpning (backintervaller), enduro och två simpass; konservativ hantering rekommenderas inför söndagens 120 min löpning."
+      },
+      "auto_apply": {
+        "note": "Konservativ ändring applicerad på 2026-09-27: reduce.",
+        "applied": true
+      },
+      "activity_id": 20337309419,
+      "plan_action": {
+        "action": "reduce",
+        "reason": "Närbelastningen (backintervaller + enduro + reducerad simvolym) motiverar konservativ reducering inför planerat 120 min-långpass.",
+        "target_date": "2026-09-27",
+        "dose_option_id": "run-easy-90",
+        "recommendation": "Följ det justerade passupplägget i planen.",
+        "requires_approval": false
+      },
+      "activity_date": "2026-09-26",
+      "activity_name": "Simning på eftermiddagen",
+      "generated_at_utc": "2026-09-26T16:45:16.821951+00:00",
+      "analysis_contract": {
+        "pipeline_version": 3,
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
+        "analysis_code_sha256": "899ccbc738b41513ca2513454e86c3dc7fe807921b3fc57d50a40bf775577ae3",
+        "plan_comparison_version": 2,
+        "workout_context_version": 3
+      },
+      "performance_marker_id": null,
+      "performance_protocol_key": null
+    },
     {
       "model": "gpt-5-mini",
       "assessment": {

@@ -675,6 +675,7 @@
         "swim_technique"
       ],
       "dose_open": false,
+      "activity_id": 20337309419,
       "manual_lock": false,
       "dose_options": [
         {
@@ -1039,19 +1040,24 @@
       "label": "Söndag",
       "sport": "run",
       "reason": "Långt lugnt löppass för löptålighet; placerat ≥48 h efter tröskel för återhämtning och kvalitet. Valet utgår från ett observerat värde 119.767 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
-      "status": "preliminary",
-      "session": "Löpning · lugn distans · 120 min",
+      "status": "conditional",
+      "session": "Löpning · lugn distans · 90 min",
       "stimuli": [
         "run_easy_distance"
       ],
       "dose_open": false,
+      "auto_coach": {
+        "action": "reduce",
+        "reason": "Närbelastningen (backintervaller + enduro + reducerad simvolym) motiverar konservativ reducering inför planerat 120 min-långpass.",
+        "applied_at_utc": "2026-09-26T16:45:16.820667+00:00"
+      },
       "device_sync": {
         "status": "synced",
         "transport": "intervals_icu",
-        "source_hash": "9dc12d3e522e49454af7c6ffe216ee9ba323186427181ac1e1ae64a8d6009578",
-        "updated_at_utc": "2026-09-26T11:25:48.987313+00:00",
+        "source_hash": "ed4e43efadc726b64a31ed446ba36b6a79d26a51a8b0c31587ec0f29a4aed08e",
+        "updated_at_utc": "2026-09-26T16:45:18.420522+00:00",
         "device_delivery": "unverified",
-        "verified_at_utc": "2026-09-26T11:25:48.987313+00:00",
+        "verified_at_utc": "2026-09-26T16:45:18.420522+00:00",
         "provider_event_id": 138097036
       },
       "dose_options": [
@@ -1096,7 +1102,7 @@
       "priority_role": "flex",
       "device_workout": {
         "date": "2026-09-27",
-        "name": "Löpning · lugn distans · 120 min",
+        "name": "Löpning · lugn distans · 90 min",
         "sport": "run",
         "blocks": [
           {
@@ -1107,7 +1113,7 @@
                 "kind": "work",
                 "duration": {
                   "kind": "time",
-                  "seconds": 7200
+                  "seconds": 5400
                 },
                 "instruction": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt.",
                 "intensity_class": "active"
@@ -1118,11 +1124,11 @@
         ],
         "transport": "intervals_icu",
         "external_id": "hall-device:2026-09-27:run:run_easy_distance_4",
-        "source_hash": "9dc12d3e522e49454af7c6ffe216ee9ba323186427181ac1e1ae64a8d6009578",
+        "source_hash": "ed4e43efadc726b64a31ed446ba36b6a79d26a51a8b0c31587ec0f29a4aed08e",
         "provider_type": "Run",
         "target_policy": "explicit_single_primary_only",
         "schema_version": 1,
-        "source_candidate_id": "run-easy-120"
+        "source_candidate_id": "run-easy-90"
       },
       "microcycle_day": 7,
       "workout_design": {
@@ -1138,15 +1144,15 @@
         },
         "selection": {
           "method": "deterministic_constraint_scoring",
-          "reason_for_today": "Lång distansdos som kräver stöd i faktisk tålighet och närbelastning.",
-          "preferred_dose_option_id": "run-easy-120"
+          "reason_for_today": "Närbelastningen (backintervaller + enduro + reducerad simvolym) motiverar konservativ reducering inför planerat 120 min-långpass.",
+          "preferred_dose_option_id": "run-easy-90"
         },
         "candidates": [
           {
-            "id": "run-easy-120",
+            "id": "run-easy-90",
             "dose": {
               "kind": "duration_minutes",
-              "value": 120
+              "value": 90
             },
             "score": {
               "basis": "deterministic_constraint_alignment",
@@ -1159,8 +1165,8 @@
                 "prescription_specificity": 15
               }
             },
-            "intent": "Lång distansdos som kräver stöd i faktisk tålighet och närbelastning.",
-            "session": "Löpning · lugn distans · 120 min",
+            "intent": "Progressionsalternativ när 75 min absorberats.",
+            "session": "Löpning · lugn distans · 90 min",
             "stimuli": [
               "run_easy_distance"
             ],
@@ -1169,7 +1175,7 @@
                 {
                   "name": "Pass",
                   "work": {
-                    "duration_s": 7200
+                    "duration_s": 5400
                   },
                   "intensity": "lugn",
                   "instruction": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt."
@@ -1179,7 +1185,7 @@
               "executable": true,
               "completeness": "full"
             },
-            "dose_option_id": "run-easy-120"
+            "dose_option_id": "run-easy-90"
           },
           {
             "id": "run-easy-105",
@@ -1221,45 +1227,6 @@
             "dose_option_id": "run-easy-105"
           },
           {
-            "id": "run-easy-90",
-            "dose": {
-              "kind": "duration_minutes",
-              "value": 90
-            },
-            "score": {
-              "basis": "deterministic_constraint_alignment",
-              "total": 70,
-              "breakdown": {
-                "mesocycle_alignment": 30,
-                "microcycle_alignment": 10,
-                "near_term_resolution": 0,
-                "progression_alignment": 15,
-                "prescription_specificity": 15
-              }
-            },
-            "intent": "Progressionsalternativ när 75 min absorberats.",
-            "session": "Löpning · lugn distans · 90 min",
-            "stimuli": [
-              "run_easy_distance"
-            ],
-            "prescription": {
-              "blocks": [
-                {
-                  "name": "Pass",
-                  "work": {
-                    "duration_s": 5400
-                  },
-                  "intensity": "lugn",
-                  "instruction": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt."
-                }
-              ],
-              "source": "duration_session",
-              "executable": true,
-              "completeness": "full"
-            },
-            "dose_option_id": "run-easy-90"
-          },
-          {
             "id": "run-easy-75",
             "dose": {
               "kind": "duration_minutes",
@@ -1297,6 +1264,45 @@
               "completeness": "full"
             },
             "dose_option_id": "run-easy-75"
+          },
+          {
+            "id": "run-easy-120",
+            "dose": {
+              "kind": "duration_minutes",
+              "value": 120
+            },
+            "score": {
+              "basis": "deterministic_constraint_alignment",
+              "total": 70,
+              "breakdown": {
+                "mesocycle_alignment": 30,
+                "microcycle_alignment": 10,
+                "near_term_resolution": 0,
+                "progression_alignment": 15,
+                "prescription_specificity": 15
+              }
+            },
+            "intent": "Lång distansdos som kräver stöd i faktisk tålighet och närbelastning.",
+            "session": "Löpning · lugn distans · 120 min",
+            "stimuli": [
+              "run_easy_distance"
+            ],
+            "prescription": {
+              "blocks": [
+                {
+                  "name": "Pass",
+                  "work": {
+                    "duration_s": 7200
+                  },
+                  "intensity": "lugn",
+                  "instruction": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt."
+                }
+              ],
+              "source": "duration_session",
+              "executable": true,
+              "completeness": "full"
+            },
+            "dose_option_id": "run-easy-120"
           }
         ],
         "schema_version": 1,
@@ -1307,25 +1313,30 @@
           ],
           "selection_uses_only_preapproved_doses": true
         },
-        "selected_candidate_id": "run-easy-120",
+        "selected_candidate_id": "run-easy-90",
         "progression_from_previous": {
-          "reason": "Lång distansdos som kräver stöd i faktisk tålighet och närbelastning.",
+          "reason": "Närbelastningen (backintervaller + enduro + reducerad simvolym) motiverar konservativ reducering inför planerat 120 min-långpass.",
           "relation": "support",
           "demonstrated_floor_option_id": ""
         }
       },
       "dose_resolution": {
         "kind": "duration_minutes",
-        "state": "baseline",
-        "value": 120,
-        "option_id": "run-easy-120"
+        "basis": "Närbelastningen (backintervaller + enduro + reducerad simvolym) motiverar konservativ reducering inför planerat 120 min-långpass.",
+        "state": "resolved",
+        "value": 90,
+        "source": "near_term_ai_revision",
+        "option_id": "run-easy-90",
+        "applied_at_utc": "2026-09-26T16:45:16.820667+00:00"
       },
       "load_dimensions": [
         "cardiovascular",
         "mechanical"
       ],
       "microcycle_slot": "run_easy_distance_4",
+      "coach_adjustment": "Passet är nedjusterat från grundplanen. Följ passupplägget ovan.",
       "microcycle_index": 1,
+      "original_session": "Löpning · lugn distans · 120 min",
       "development_focus": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt.",
       "baseline_option_id": "run-easy-120"
     }
