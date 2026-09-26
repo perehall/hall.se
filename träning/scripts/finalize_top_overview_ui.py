@@ -19,6 +19,8 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from finalize_day_session_icons import SPORT_ICON_KEYS, icon
+from finalize_completed_day_summary_ui import activity_label
+from finalize_post_workout_ui import fmt_distance, fmt_duration
 from finalize_upcoming_workout_shell_ui import split_session
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -520,12 +522,18 @@ def build_top(
     if not day:
         raise RuntimeError(f"Crisp top: dagens planrad saknas för {today_key}")
 
-    activity_dates = {
-        str(activity.get("start_date_local") or activity.get("start_date") or "")[:10]
+    today_activities = [
+        activity
         for activity in activities.get("activities") or []
-    }
-    title, today_meta = split_session(day)
-    status = status_label(day, has_completed_activity=today_key in activity_dates)
+        if str(activity.get("start_date_local") or activity.get("start_date") or "")[:10] == today_key
+        and str(activity.get("classification") or "training").strip().lower() != "recreation"
+    ]
+    if today_activities:
+        title, today_meta, today_icons = actual_today_content(today_activities, registry)
+    else:
+        title, today_meta = split_session(day)
+        today_icons = today_icon(day, registry)
+    status = status_label(day, has_completed_activity=bool(today_activities))
     reason = clean_reason(str(day.get("reason") or ""))
     override_note = clean_reason(str((day.get("manual_override") or {}).get("note") or ""))
 
@@ -573,7 +581,7 @@ def build_top(
         f'<span class="top-status">{html.escape(status)}</span>'
         '</div>'
         '<div class="top-today-title">'
-        + today_icon(day, registry)
+        + today_icons
         + f'<span>{html.escape(title)}</span></div>'
         + today_meta_html
         + next_html_row
