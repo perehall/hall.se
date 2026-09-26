@@ -37,14 +37,24 @@
       ]
     }
   ],
-  "source": "deterministic_fallback",
+  "source": "deterministic_fallback_after_repair_guard",
   "week_key": "2026-W40",
-  "rationale": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern. Modellbedömning saknades: Planeringsmodellen misslyckades: oväntad modellstatus incomplete: {'reason': 'max_output_tokens'}",
+  "rationale": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern.",
   "week_start": "2026-09-28",
   "source_hash": "742c2e6888a81a313a2aa2e255c063a5d6071a0d230516d11c44831c9366bb38",
+  "guard_repair": {
+    "result": "fallback",
+    "attempted": true,
+    "repair_failures": [
+      "swim_strength får inte ligga direkt dagen efter fast enduro när faktisk benbelastning ännu är okänd"
+    ],
+    "initial_failures": [
+      "lång löpdistans får inte ligga direkt intill MTB/XC; den sekundära cykelexponeringen ska utgå eller flyttas"
+    ]
+  },
   "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
   "schema_version": 1,
-  "generated_at_utc": "2026-09-26T19:41:18.493849+00:00",
+  "generated_at_utc": "2026-09-26T21:13:45.724587+00:00",
   "planner_revision": 7,
   "competition_context": {
     "as_of": "2026-09-28",
