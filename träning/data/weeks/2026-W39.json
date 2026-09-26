@@ -4,7 +4,7 @@
   "week_start": "2026-09-21",
   "week_end": "2026-09-27",
   "created_at_utc": "2026-09-20T23:15:26.146433+00:00",
-  "updated_at_utc": "2026-09-26T16:45:39.262470+00:00",
+  "updated_at_utc": "2026-09-26T19:33:14.228013+00:00",
   "plan": {
     "days": [
       {
@@ -1055,16 +1055,16 @@
         "dose_open": false,
         "auto_coach": {
           "action": "reduce",
-          "reason": "Närbelastningen (backintervaller + enduro + reducerad simvolym) motiverar konservativ reducering inför planerat 120 min-långpass.",
-          "applied_at_utc": "2026-09-26T16:45:16.820667+00:00"
+          "reason": "Närbelastningen (backintervaller + enduro + reducerad simvolym) motiverar konservativ reduktion inför planerat långt lugnt löppass.",
+          "applied_at_utc": "2026-09-26T19:32:54.880807+00:00"
         },
         "device_sync": {
           "status": "synced",
           "transport": "intervals_icu",
           "source_hash": "ed4e43efadc726b64a31ed446ba36b6a79d26a51a8b0c31587ec0f29a4aed08e",
-          "updated_at_utc": "2026-09-26T16:45:18.420522+00:00",
+          "updated_at_utc": "2026-09-26T19:32:56.331368+00:00",
           "device_delivery": "unverified",
-          "verified_at_utc": "2026-09-26T16:45:18.420522+00:00",
+          "verified_at_utc": "2026-09-26T19:32:56.331368+00:00",
           "provider_event_id": 138097036
         },
         "dose_options": [
@@ -2506,15 +2506,27 @@
       "calories": 690.0,
       "gear_name": "KTM 300 EXC TPI",
       "distance_m": 26611.2,
-      "sport_type": "EBikeRide",
+      "sport_type": "Enduro",
       "start_date": "2026-09-26T09:15:16Z",
       "device_name": "Garmin Forerunner 970",
       "average_watts": 248.1,
+      "display_label": "Enduro",
       "max_heartrate": 146.0,
       "moving_time_s": 4782,
+      "classification": "training",
       "elapsed_time_s": 6062,
       "start_date_local": "2026-09-26T11:15:16Z",
       "average_heartrate": 125.1,
+      "source_sport_type": "EBikeRide",
+      "sport_normalization": {
+        "rule": "ebike-explicit-enduro-motorcycle-gear-v1",
+        "evidence": [
+          "source_sport_type=EBikeRide",
+          "explicit Enduro/Motocross activity name",
+          "motorcycle gear=KTM 300 EXC TPI"
+        ]
+      },
+      "classification_reason": "Strava exposed the motorcycle Enduro recording as eBike, but the explicit activity name and motorcycle gear identify actual Enduro training load.",
       "total_elevation_gain_m": 527.2,
       "weighted_average_watts": null,
       "workout_analysis_context": {
@@ -2529,12 +2541,18 @@
           "elevation_gain_m": 527.2,
           "average_heartrate": 125.1
         },
-        "enduro": null,
-        "sport_type": "EBikeRide",
+        "enduro": {
+          "duration_note": "For Enduro, session_duration_s is the workout duration. Strava moving_time_s only describes time classified as moving and must not replace total session duration.",
+          "moving_time_s": 4782.0,
+          "duration_basis": "elapsed_time_s",
+          "non_moving_time_s": 1280.0,
+          "session_duration_s": 6062.0
+        },
+        "sport_type": "Enduro",
         "activity_id": 20337767421,
         "user_report": "",
-        "display_label": "EBikeRide",
-        "classification": null,
+        "display_label": "Enduro",
+        "classification": "training",
         "contract_version": 3,
         "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },
@@ -5296,17 +5314,17 @@
           "Planstatus 2026-09-26: dagen är markerad genomförd i coachens beslutsunderlag.",
           "Planerat simpass 4000 m; genomfört 3000 m. Genomförd setstruktur avviker från planens struktur."
         ],
-        "summary": "Genomfört 3 000 m simpass med strukturen 1×400 + 4×50 + 12×200; tröskelsetorna (12×200) höll stabilitet men totaldistans blev 1 000 m under plan.",
+        "summary": "Genomfört simpass 3 000 m med strukturerade set (1×400, 4×50, 12×200) och stabil pacevariation i 50/200‑seten; distans minus planerade 4 000 m.",
         "unknowns": [
-          "Subjektiv känsla/utmattning efter simningen (användarrapport tom).",
-          "Eventuell muskeltrötthet från enduroens faktiska belastning som påverkar löpningens tolerans."
+          "Subjektiv trötthet/återhämtning efter dagens enduro (ingen användarrapport).",
+          "Eventuell användning av paddlar/pullbuoy under dagens tröskelset (plan avsåg paddlar men inte verifierat)."
         ],
         "confidence": "medium",
         "interpretations": [
-          "Simningen uppfyllde huvudstimuli (aerob + kontrollerad tröskel) men låg i volym under planerat 4 000 m, så veckans simexponering är realiserad men något reducerad i volym.",
-          "Givet föregående backkvalitet och enduro samma dag bör söndagens långa löpning skyddas från ytterligare mekanisk belastning; reducerad/standard dos är rimlig beroende på återhämtning."
+          "Passet demonstrerar genomförd längre simserie men saknar de planerade 1 000 m för full dos; huvudsetten bibehöll relativ fartstabilitet vilket stödjer teknisk/aerob stimulus.",
+          "Givet föregående backkvalitet och samma dags enduro rekommenderas konservativ hantering inför planerat löppass 2026‑09‑27."
         ],
-        "load_interpretation": "Närbelastningen sista 48–72 h innehåller löpning (backintervaller), enduro och två simpass; konservativ hantering rekommenderas inför söndagens 120 min löpning."
+        "load_interpretation": "Närbelastningen de senaste 2–3 dagarna innehåller backintervaller + enduro + detta reducerade simpass och motiverar försiktig närhetsanpassning."
       },
       "auto_apply": {
         "note": "Konservativ ändring applicerad på 2026-09-27: reduce.",
@@ -5315,15 +5333,15 @@
       "activity_id": 20337309419,
       "plan_action": {
         "action": "reduce",
-        "reason": "Närbelastningen (backintervaller + enduro + reducerad simvolym) motiverar konservativ reducering inför planerat 120 min-långpass.",
+        "reason": "Närbelastningen (backintervaller + enduro + reducerad simvolym) motiverar konservativ reduktion inför planerat långt lugnt löppass.",
         "target_date": "2026-09-27",
-        "dose_option_id": "run-easy-90",
+        "dose_option_id": "",
         "recommendation": "Följ det justerade passupplägget i planen.",
         "requires_approval": false
       },
       "activity_date": "2026-09-26",
       "activity_name": "Simning på eftermiddagen",
-      "generated_at_utc": "2026-09-26T16:45:16.821951+00:00",
+      "generated_at_utc": "2026-09-26T19:32:54.882721+00:00",
       "analysis_contract": {
         "pipeline_version": 3,
         "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
