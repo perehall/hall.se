@@ -4,21 +4,22 @@
       "model": "gpt-5-mini",
       "assessment": {
         "facts": [
-          "Simning: 3,00 km · 1:03:42 · snittpuls 112,9 · maxpuls 144.",
+          "Swim: 3,00 km · 1:03:42 · snittpuls 112,9 · maxpuls 144.",
+          "Användarrapport: RPE 8/10. Känsla: Trött.",
           "Planstatus 2026-09-26: dagen är markerad genomförd i coachens beslutsunderlag.",
           "Planerat simpass 4000 m; genomfört 3000 m. Genomförd setstruktur avviker från planens struktur."
         ],
-        "summary": "Genomfört 3 000 m simpass med strukturen 1×400 + 4×50 + 12×200; tempo varierade från ~1:30/100 till ~1:18/100 med stabilitet mot slutet.",
+        "summary": "Genomfört 3 000 m strukturerat simpass med 1x400 + 4x50 + 12x200; användaren rapporterar RPE 8/10 och trötthet.",
         "unknowns": [
-          "Subjektiv återhämtning/ömhet efter dagens enduro+sim (ingen användarrapport för senaste sim).",
-          "Eventuell nattsömn/vecka‑slutströtthet som påverkar morgondagens kvalitet."
+          "Användarens återhämtningsunderlaget och nutrition efter passet (kan påverka återhämtning).",
+          "Eventuell lokal muskelsmärta eller skadedefinition som skulle kräva vila."
         ],
         "confidence": "medium",
         "interpretations": [
-          "Passet genomförde betydande simvolym och tekniskt/tempoindelade set men avvek från planerad 4 000 m vilket minskar planens avsedda tröskelvolym.",
-          "Givet den ackumulerade närbelastningen bör planerat långt lugnt löppass i planerat träningsinnehåll hanteras konservativt för återhämtning och kvalitet."
+          "Passet genomfört men volymen under planerad dos; belastningen är ändå substantiell i närtid tillsammans med dagens enduro och gårdagens backintervaller.",
+          "Subjektiv trötthet (RPE8) indikerar att återhämtning bör prioriteras före extra högkvalitativa eller långa benpass de kommande 48–72 h."
         ],
-        "load_interpretation": "Närbelastningen (enduro + backintervaller + dagens 3k-sim) motiverar konservativ hantering i de närmaste 48–72 timmar."
+        "load_interpretation": "Närbelastningen (enduro tidigare samma dag + gårdagens backintervaller) talar för konservativ hantering de närmaste 48–72 timmarna."
       },
       "auto_apply": {
         "note": "Konservativ ändring applicerad på 2026-09-27: reduce.",
@@ -27,15 +28,15 @@
       "activity_id": 20337309419,
       "plan_action": {
         "action": "reduce",
-        "reason": "Närbelastningen (enduro + backintervaller + reducerad simvolym) motiverar konservativ reduktion inför planerat långt lugnt löppass.",
+        "reason": "Närbelastningen (enduro + backintervaller + dagens sim + subjektiv trötthet) motiverar konservativ reduktion inför planerat långt lugnt löppass.",
         "target_date": "2026-09-27",
-        "dose_option_id": "run-easy-75",
+        "dose_option_id": "run-easy-60",
         "recommendation": "Följ det justerade passupplägget i planen.",
         "requires_approval": false
       },
       "activity_date": "2026-09-26",
       "activity_name": "Simning på eftermiddagen",
-      "generated_at_utc": "2026-09-26T19:37:42.113933+00:00",
+      "generated_at_utc": "2026-09-26T19:41:38.718901+00:00",
       "analysis_contract": {
         "pipeline_version": 3,
         "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
@@ -1297,9 +1298,9 @@
       "generated_at_utc": "2026-08-29T09:19:56.366468+00:00"
     }
   ],
-  "last_run_utc": "2026-09-26T19:37:42.113933+00:00",
+  "last_run_utc": "2026-09-26T19:41:38.718901+00:00",
   "contract_version": 15,
-  "last_trigger_hash": "f681569fd03fd59c77407c1f161afb73d8c8ad7a0c16b291dbe72f4035d9d35e",
+  "last_trigger_hash": "4660aba989c18a8cad49c1cd8bf5e0b801bd4ddeedc32290c16bb2dd9ccd529e",
   "output_contract_version": 19,
   "pipeline_contract_version": 3
 }

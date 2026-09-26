@@ -408,6 +408,14 @@
       "source_hash": "a2769458cda118fdd51a20bf00bffd0a1c3c8d834ea9d76653cbacbf618946af",
       "generated_at_utc": "2026-09-26T19:37:18.368997+00:00",
       "summary": "Åtgärdar guard‑fel: tar bort swim_strength direkt dagen efter fast enduro och flyttar progression så att den gäller ett primärt stimulus (swim_aerobic) med stöd i athlete_state. Behåller minst två simexponeringar, minst en styrka/core‑exponering (kombinerad med sim på dag 6), täcker alla primära kapaciteter, håller maximalt två löpkvaliteter och lämnar dag 4 utan planering."
+    },
+    {
+      "kind": "microcycle",
+      "decision_id": "2026-W40",
+      "source": "deterministic_fallback",
+      "source_hash": "742c2e6888a81a313a2aa2e255c063a5d6071a0d230516d11c44831c9366bb38",
+      "generated_at_utc": "2026-09-26T19:41:18.493849+00:00",
+      "summary": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern. Modellbedömning saknades: Planeringsmodellen misslyckades: oväntad modellstatus incomplete: {'reason': 'max_output_tokens'}"
     }
   ]
 }

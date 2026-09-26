@@ -1,12 +1,12 @@
 {
-  "last_sync_utc": "2026-09-26T19:33:33.465102+00:00",
+  "last_sync_utc": "2026-09-26T19:38:23.098303+00:00",
   "schema_version": 2,
   "activity_semantics": {
     "changed_ids": [
-      "20337767421"
+      "20337309419"
     ],
     "schema_version": 1,
-    "overrides_applied": 18,
+    "overrides_applied": 19,
     "auto_rules_applied": 11,
     "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
     "override_ids_present": [
@@ -27,6 +27,7 @@
       "20300494236",
       "20314473143",
       "20326850936",
+      "20337309419",
       "20337767421"
     ],
     "workout_analysis_contract_version": 3
@@ -50,12 +51,17 @@
       "sport_type": "Swim",
       "start_date": "2026-09-26T12:28:08Z",
       "device_name": "Garmin Forerunner 970",
+      "user_report": "RPE 8/10. Känsla: Trött.",
       "average_watts": null,
+      "display_label": "Swim",
       "max_heartrate": 144.0,
       "moving_time_s": 2566,
+      "classification": "training",
       "elapsed_time_s": 3822,
       "start_date_local": "2026-09-26T14:28:08Z",
       "average_heartrate": 112.9,
+      "source_sport_type": "Swim",
+      "classification_reason": "Explicit GUI-input från användaren ska behandlas som förstaklassdata i analys och fortsatt planering.",
       "total_elevation_gain_m": 0,
       "weighted_average_watts": null,
       "workout_analysis_context": {
@@ -557,9 +563,9 @@
         "enduro": null,
         "sport_type": "Swim",
         "activity_id": 20337309419,
-        "user_report": "",
+        "user_report": "RPE 8/10. Känsla: Trött.",
         "display_label": "Swim",
-        "classification": null,
+        "classification": "training",
         "contract_version": 3,
         "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },
