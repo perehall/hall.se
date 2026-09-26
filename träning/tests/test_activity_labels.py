@@ -43,6 +43,17 @@ class ActivityLabelTests(unittest.TestCase):
         self.assertIn("<strong>Styrka</strong>", rendered)
         self.assertNotIn("WeightTraining", rendered)
 
+    def test_swim_provider_type_is_rendered_as_public_label(self):
+        activity = {"sport_type": "Swim", "elapsed_time_s": 1800}
+        self.assertEqual(public_activity_label(activity), "Simning")
+        rendered = render_activity_line(activity, public_activity_label(activity))
+        self.assertIn("<strong>Simning</strong>", rendered)
+        self.assertNotIn("<strong>Swim</strong>", rendered)
+
+    def test_unknown_provider_type_degrades_to_safe_public_fallback(self):
+        activity = {"sport_type": "FutureProviderSport"}
+        self.assertEqual(public_activity_label(activity), "Aktivitet")
+
     def test_canonical_activity_fact_uses_same_public_strength_label(self):
         activity = {
             "sport_type": "WeightTraining",
