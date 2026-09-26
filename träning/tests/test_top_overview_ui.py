@@ -75,6 +75,7 @@ class TopOverviewUiTests(unittest.TestCase):
     def registry(self):
         return {
             "swim": {"viewBox": "0 0 24 24", "path": "M1 1h22v22H1z"},
+            "enduro": {"viewBox": "0 0 24 24", "path": "M2 2h20v20H2z"},
         }
 
     def page(self, *, embed_feedback=True):
@@ -162,6 +163,52 @@ class TopOverviewUiTests(unittest.TestCase):
         # The feedback editor is preserved in its completed workout, not discarded.
         self.assertIn('data-feedback-activity-id="23"', rendered[current:])
         self.assertIn('data-activity-id="23"', rendered[current:])
+
+    def test_completed_today_renders_actual_multi_session_truth_not_plan(self):
+        plan = self.plan()
+        plan["days"][1] = {
+            "date": "2026-09-26",
+            "label": "Lördag",
+            "sport": "swim",
+            "status": "completed",
+            "session": "Simning · 4 000 m · aerob + kontrollerad tröskel",
+            "reason": "Planerat 4 000 m simning.",
+        }
+        activities = {
+            "activities": [
+                {
+                    "id": 20337767421,
+                    "sport_type": "Enduro",
+                    "display_label": "Enduro",
+                    "classification": "training",
+                    "start_date_local": "2026-09-26T11:15:16+02:00",
+                    "distance_m": 26611.2,
+                    "elapsed_time_s": 6062,
+                },
+                {
+                    "id": 20337309419,
+                    "sport_type": "Swim",
+                    "display_label": "Simning",
+                    "classification": "training",
+                    "start_date_local": "2026-09-26T16:00:00+02:00",
+                    "distance_m": 3000,
+                    "elapsed_time_s": 3822,
+                },
+            ]
+        }
+        rendered = apply_top_overview(
+            self.page(),
+            plan,
+            self.strategy(),
+            activities,
+            self.registry(),
+            today=date(2026, 9, 26),
+        )
+        top = rendered.split('<section class="current-week-header"', 1)[0]
+        self.assertIn("Enduro + Simning", top)
+        self.assertIn("Enduro 26,61 km · 1:41:02", top)
+        self.assertIn("Simning 3,00 km · 1:03:42", top)
+        self.assertNotIn("Simning · 4 000 m", top)
 
     def test_fails_closed_before_dropping_unmoved_feedback(self):
         with self.assertRaises(RuntimeError):
