@@ -19,6 +19,10 @@ COACH_FILE = DATA_DIR / "coach.json"
 MANIFEST_FILE = WEEKS_DIR / "index.json"
 CURRENT_URL = "/träning/"
 
+BUILD_SUPPORT = (
+    "activity_labels.py",
+)
+
 BUILD_CHAIN = (
     "build.py",
     "finalize_dashboard.py",
@@ -246,7 +250,7 @@ def build_snapshot_page(snapshot, ordered_keys, current_key):
         write_json(data_dir / "activities.json", {"activities": snapshot.get("activities", [])})
         write_json(data_dir / "coach.json", {"analyses": snapshot.get("coach_analyses", [])})
         write_json(data_dir / "weather.json", {"status": "unavailable", "daily": {}})
-        for script_name in BUILD_CHAIN:
+        for script_name in (*BUILD_SUPPORT, *BUILD_CHAIN):
             source = ROOT / "scripts" / script_name
             if not source.exists():
                 raise RuntimeError(f"Veckoarkiv: byggskript saknas: {script_name}")
