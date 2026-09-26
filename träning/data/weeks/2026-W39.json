@@ -4,7 +4,7 @@
   "week_start": "2026-09-21",
   "week_end": "2026-09-27",
   "created_at_utc": "2026-09-20T23:15:26.146433+00:00",
-  "updated_at_utc": "2026-09-26T19:33:14.228013+00:00",
+  "updated_at_utc": "2026-09-26T19:38:04.228207+00:00",
   "plan": {
     "days": [
       {
@@ -1048,23 +1048,23 @@
         "sport": "run",
         "reason": "Långt lugnt löppass för löptålighet; placerat ≥48 h efter tröskel för återhämtning och kvalitet. Valet utgår från ett observerat värde 119.767 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
         "status": "conditional",
-        "session": "Löpning · lugn distans · 90 min",
+        "session": "Löpning · lugn distans · 75 min",
         "stimuli": [
           "run_easy_distance"
         ],
         "dose_open": false,
         "auto_coach": {
           "action": "reduce",
-          "reason": "Närbelastningen (backintervaller + enduro + reducerad simvolym) motiverar konservativ reduktion inför planerat långt lugnt löppass.",
-          "applied_at_utc": "2026-09-26T19:32:54.880807+00:00"
+          "reason": "Närbelastningen (enduro + backintervaller + reducerad simvolym) motiverar konservativ reduktion inför planerat långt lugnt löppass.",
+          "applied_at_utc": "2026-09-26T19:37:42.111892+00:00"
         },
         "device_sync": {
           "status": "synced",
           "transport": "intervals_icu",
-          "source_hash": "ed4e43efadc726b64a31ed446ba36b6a79d26a51a8b0c31587ec0f29a4aed08e",
-          "updated_at_utc": "2026-09-26T19:32:56.331368+00:00",
+          "source_hash": "13e18ea206c02c0e34c07bd95cd1a6b2c91c0b68185fd91fbfa0b0078a82b85f",
+          "updated_at_utc": "2026-09-26T19:37:44.164923+00:00",
           "device_delivery": "unverified",
-          "verified_at_utc": "2026-09-26T19:32:56.331368+00:00",
+          "verified_at_utc": "2026-09-26T19:37:44.164923+00:00",
           "provider_event_id": 138097036
         },
         "dose_options": [
@@ -1109,7 +1109,7 @@
         "priority_role": "flex",
         "device_workout": {
           "date": "2026-09-27",
-          "name": "Löpning · lugn distans · 90 min",
+          "name": "Löpning · lugn distans · 75 min",
           "sport": "run",
           "blocks": [
             {
@@ -1120,7 +1120,7 @@
                   "kind": "work",
                   "duration": {
                     "kind": "time",
-                    "seconds": 5400
+                    "seconds": 4500
                   },
                   "instruction": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt.",
                   "intensity_class": "active"
@@ -1131,11 +1131,11 @@
           ],
           "transport": "intervals_icu",
           "external_id": "hall-device:2026-09-27:run:run_easy_distance_4",
-          "source_hash": "ed4e43efadc726b64a31ed446ba36b6a79d26a51a8b0c31587ec0f29a4aed08e",
+          "source_hash": "13e18ea206c02c0e34c07bd95cd1a6b2c91c0b68185fd91fbfa0b0078a82b85f",
           "provider_type": "Run",
           "target_policy": "explicit_single_primary_only",
           "schema_version": 1,
-          "source_candidate_id": "run-easy-90"
+          "source_candidate_id": "run-easy-75"
         },
         "microcycle_day": 7,
         "workout_design": {
@@ -1151,15 +1151,15 @@
           },
           "selection": {
             "method": "deterministic_constraint_scoring",
-            "reason_for_today": "Närbelastningen (backintervaller + enduro + reducerad simvolym) motiverar konservativ reducering inför planerat 120 min-långpass.",
-            "preferred_dose_option_id": "run-easy-90"
+            "reason_for_today": "Närbelastningen (enduro + backintervaller + reducerad simvolym) motiverar konservativ reduktion inför planerat långt lugnt löppass.",
+            "preferred_dose_option_id": "run-easy-75"
           },
           "candidates": [
             {
-              "id": "run-easy-90",
+              "id": "run-easy-75",
               "dose": {
                 "kind": "duration_minutes",
-                "value": 90
+                "value": 75
               },
               "score": {
                 "basis": "deterministic_constraint_alignment",
@@ -1168,6 +1168,84 @@
                   "mesocycle_alignment": 30,
                   "microcycle_alignment": 30,
                   "near_term_resolution": 10,
+                  "progression_alignment": 15,
+                  "prescription_specificity": 15
+                }
+              },
+              "intent": "Normal kontrollerad distansdos.",
+              "session": "Löpning · lugn distans · 75 min",
+              "stimuli": [
+                "run_easy_distance"
+              ],
+              "prescription": {
+                "blocks": [
+                  {
+                    "name": "Pass",
+                    "work": {
+                      "duration_s": 4500
+                    },
+                    "intensity": "lugn",
+                    "instruction": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt."
+                  }
+                ],
+                "source": "duration_session",
+                "executable": true,
+                "completeness": "full"
+              },
+              "dose_option_id": "run-easy-75"
+            },
+            {
+              "id": "run-easy-60",
+              "dose": {
+                "kind": "duration_minutes",
+                "value": 60
+              },
+              "score": {
+                "basis": "deterministic_constraint_alignment",
+                "total": 70,
+                "breakdown": {
+                  "mesocycle_alignment": 30,
+                  "microcycle_alignment": 10,
+                  "near_term_resolution": 0,
+                  "progression_alignment": 15,
+                  "prescription_specificity": 15
+                }
+              },
+              "intent": "Reducerad/etablerande distansdos.",
+              "session": "Löpning · lugn distans · 60 min",
+              "stimuli": [
+                "run_easy_distance"
+              ],
+              "prescription": {
+                "blocks": [
+                  {
+                    "name": "Pass",
+                    "work": {
+                      "duration_s": 3600
+                    },
+                    "intensity": "lugn",
+                    "instruction": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt."
+                  }
+                ],
+                "source": "duration_session",
+                "executable": true,
+                "completeness": "full"
+              },
+              "dose_option_id": "run-easy-60"
+            },
+            {
+              "id": "run-easy-90",
+              "dose": {
+                "kind": "duration_minutes",
+                "value": 90
+              },
+              "score": {
+                "basis": "deterministic_constraint_alignment",
+                "total": 70,
+                "breakdown": {
+                  "mesocycle_alignment": 30,
+                  "microcycle_alignment": 10,
+                  "near_term_resolution": 0,
                   "progression_alignment": 15,
                   "prescription_specificity": 15
                 }
@@ -1232,84 +1310,6 @@
                 "completeness": "full"
               },
               "dose_option_id": "run-easy-105"
-            },
-            {
-              "id": "run-easy-75",
-              "dose": {
-                "kind": "duration_minutes",
-                "value": 75
-              },
-              "score": {
-                "basis": "deterministic_constraint_alignment",
-                "total": 70,
-                "breakdown": {
-                  "mesocycle_alignment": 30,
-                  "microcycle_alignment": 10,
-                  "near_term_resolution": 0,
-                  "progression_alignment": 15,
-                  "prescription_specificity": 15
-                }
-              },
-              "intent": "Normal kontrollerad distansdos.",
-              "session": "Löpning · lugn distans · 75 min",
-              "stimuli": [
-                "run_easy_distance"
-              ],
-              "prescription": {
-                "blocks": [
-                  {
-                    "name": "Pass",
-                    "work": {
-                      "duration_s": 4500
-                    },
-                    "intensity": "lugn",
-                    "instruction": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt."
-                  }
-                ],
-                "source": "duration_session",
-                "executable": true,
-                "completeness": "full"
-              },
-              "dose_option_id": "run-easy-75"
-            },
-            {
-              "id": "run-easy-120",
-              "dose": {
-                "kind": "duration_minutes",
-                "value": 120
-              },
-              "score": {
-                "basis": "deterministic_constraint_alignment",
-                "total": 70,
-                "breakdown": {
-                  "mesocycle_alignment": 30,
-                  "microcycle_alignment": 10,
-                  "near_term_resolution": 0,
-                  "progression_alignment": 15,
-                  "prescription_specificity": 15
-                }
-              },
-              "intent": "Lång distansdos som kräver stöd i faktisk tålighet och närbelastning.",
-              "session": "Löpning · lugn distans · 120 min",
-              "stimuli": [
-                "run_easy_distance"
-              ],
-              "prescription": {
-                "blocks": [
-                  {
-                    "name": "Pass",
-                    "work": {
-                      "duration_s": 7200
-                    },
-                    "intensity": "lugn",
-                    "instruction": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt."
-                  }
-                ],
-                "source": "duration_session",
-                "executable": true,
-                "completeness": "full"
-              },
-              "dose_option_id": "run-easy-120"
             }
           ],
           "schema_version": 1,
@@ -1320,21 +1320,21 @@
             ],
             "selection_uses_only_preapproved_doses": true
           },
-          "selected_candidate_id": "run-easy-90",
+          "selected_candidate_id": "run-easy-75",
           "progression_from_previous": {
-            "reason": "Närbelastningen (backintervaller + enduro + reducerad simvolym) motiverar konservativ reducering inför planerat 120 min-långpass.",
+            "reason": "Närbelastningen (enduro + backintervaller + reducerad simvolym) motiverar konservativ reduktion inför planerat långt lugnt löppass.",
             "relation": "support",
             "demonstrated_floor_option_id": ""
           }
         },
         "dose_resolution": {
           "kind": "duration_minutes",
-          "basis": "Närbelastningen (backintervaller + enduro + reducerad simvolym) motiverar konservativ reducering inför planerat 120 min-långpass.",
+          "basis": "Närbelastningen (enduro + backintervaller + reducerad simvolym) motiverar konservativ reduktion inför planerat långt lugnt löppass.",
           "state": "resolved",
-          "value": 90,
+          "value": 75,
           "source": "near_term_ai_revision",
-          "option_id": "run-easy-90",
-          "applied_at_utc": "2026-09-26T16:45:16.820667+00:00"
+          "option_id": "run-easy-75",
+          "applied_at_utc": "2026-09-26T19:37:42.111892+00:00"
         },
         "load_dimensions": [
           "cardiovascular",
@@ -2509,6 +2509,7 @@
       "sport_type": "Enduro",
       "start_date": "2026-09-26T09:15:16Z",
       "device_name": "Garmin Forerunner 970",
+      "user_report": "RPE 6/10. Känsla: Pigg.",
       "average_watts": 248.1,
       "display_label": "Enduro",
       "max_heartrate": 146.0,
@@ -2518,15 +2519,7 @@
       "start_date_local": "2026-09-26T11:15:16Z",
       "average_heartrate": 125.1,
       "source_sport_type": "EBikeRide",
-      "sport_normalization": {
-        "rule": "ebike-explicit-enduro-motorcycle-gear-v1",
-        "evidence": [
-          "source_sport_type=EBikeRide",
-          "explicit Enduro/Motocross activity name",
-          "motorcycle gear=KTM 300 EXC TPI"
-        ]
-      },
-      "classification_reason": "Strava exposed the motorcycle Enduro recording as eBike, but the explicit activity name and motorcycle gear identify actual Enduro training load.",
+      "classification_reason": "Explicit GUI-input från användaren ska behandlas som förstaklassdata i analys och fortsatt planering.",
       "total_elevation_gain_m": 527.2,
       "weighted_average_watts": null,
       "workout_analysis_context": {
@@ -2550,7 +2543,7 @@
         },
         "sport_type": "Enduro",
         "activity_id": 20337767421,
-        "user_report": "",
+        "user_report": "RPE 6/10. Känsla: Pigg.",
         "display_label": "Enduro",
         "classification": "training",
         "contract_version": 3,
@@ -5314,17 +5307,17 @@
           "Planstatus 2026-09-26: dagen är markerad genomförd i coachens beslutsunderlag.",
           "Planerat simpass 4000 m; genomfört 3000 m. Genomförd setstruktur avviker från planens struktur."
         ],
-        "summary": "Genomfört simpass 3 000 m med strukturerade set (1×400, 4×50, 12×200) och stabil pacevariation i 50/200‑seten; distans minus planerade 4 000 m.",
+        "summary": "Genomfört 3 000 m simpass med strukturen 1×400 + 4×50 + 12×200; tempo varierade från ~1:30/100 till ~1:18/100 med stabilitet mot slutet.",
         "unknowns": [
-          "Subjektiv trötthet/återhämtning efter dagens enduro (ingen användarrapport).",
-          "Eventuell användning av paddlar/pullbuoy under dagens tröskelset (plan avsåg paddlar men inte verifierat)."
+          "Subjektiv återhämtning/ömhet efter dagens enduro+sim (ingen användarrapport för senaste sim).",
+          "Eventuell nattsömn/vecka‑slutströtthet som påverkar morgondagens kvalitet."
         ],
         "confidence": "medium",
         "interpretations": [
-          "Passet demonstrerar genomförd längre simserie men saknar de planerade 1 000 m för full dos; huvudsetten bibehöll relativ fartstabilitet vilket stödjer teknisk/aerob stimulus.",
-          "Givet föregående backkvalitet och samma dags enduro rekommenderas konservativ hantering inför planerat löppass 2026‑09‑27."
+          "Passet genomförde betydande simvolym och tekniskt/tempoindelade set men avvek från planerad 4 000 m vilket minskar planens avsedda tröskelvolym.",
+          "Givet den ackumulerade närbelastningen bör planerat långt lugnt löppass i planerat träningsinnehåll hanteras konservativt för återhämtning och kvalitet."
         ],
-        "load_interpretation": "Närbelastningen de senaste 2–3 dagarna innehåller backintervaller + enduro + detta reducerade simpass och motiverar försiktig närhetsanpassning."
+        "load_interpretation": "Närbelastningen (enduro + backintervaller + dagens 3k-sim) motiverar konservativ hantering i de närmaste 48–72 timmar."
       },
       "auto_apply": {
         "note": "Konservativ ändring applicerad på 2026-09-27: reduce.",
@@ -5333,15 +5326,15 @@
       "activity_id": 20337309419,
       "plan_action": {
         "action": "reduce",
-        "reason": "Närbelastningen (backintervaller + enduro + reducerad simvolym) motiverar konservativ reduktion inför planerat långt lugnt löppass.",
+        "reason": "Närbelastningen (enduro + backintervaller + reducerad simvolym) motiverar konservativ reduktion inför planerat långt lugnt löppass.",
         "target_date": "2026-09-27",
-        "dose_option_id": "",
+        "dose_option_id": "run-easy-75",
         "recommendation": "Följ det justerade passupplägget i planen.",
         "requires_approval": false
       },
       "activity_date": "2026-09-26",
       "activity_name": "Simning på eftermiddagen",
-      "generated_at_utc": "2026-09-26T19:32:54.882721+00:00",
+      "generated_at_utc": "2026-09-26T19:37:42.113933+00:00",
       "analysis_contract": {
         "pipeline_version": 3,
         "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
