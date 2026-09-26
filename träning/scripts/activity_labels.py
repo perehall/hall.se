@@ -24,4 +24,4 @@ def public_activity_label(activity):
     semantic_label = str(activity.get("display_label") or "").strip()
     if semantic_label:
         return semantic_label
-    return PUBLIC_ACTIVITY_LABELS.get(raw_label, raw_label)
+    return PUBLIC_ACTIVITY_LABELS.get(raw_label, "Aktivitet")
