@@ -56,6 +56,11 @@ jobs:
           assert semantics["today"]["title"]
           assert semantics["week"]["start"] <= semantics["today"]["date"] <= semantics["week"]["end"]
           assert semantics["week"]["planned_count"] >= 1
+          document=payload["document"]
+          assert document.startswith("<!doctype html>")
+          assert 'name="viewport"' in document
+          assert 'data-v2-goal-link' in document
+          assert "Styrkemall" in document and "Om systemet" in document
           print("V2_SHADOW_OK", json.dumps(semantics, ensure_ascii=False, sort_keys=True))
           PY
           PYTHONPATH="träning:träning/scripts" python - <<'PY'
