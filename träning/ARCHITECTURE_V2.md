@@ -71,10 +71,10 @@ Phase 1: Presentation vertical slice
   - [x] Manual activity truth: completed manual context is typed from canonical planned-workout payload and rendered separately.
   - [x] Sport identity/icons: structured sport identity is rendered from a validated SVG asset registry across current and historical views.
   - [x] Device sync: current/future structured workouts expose canonical Intervals.icu sync state without claiming physical-watch delivery.
-- [ ] Cut publication over after the v2 renderer carries the complete retained UI contract.
+- [ ] Cut publication over after the v2 renderer carries the complete retained UI contract **and the current-week experience has been human-verified against the approved production baseline**.
 - [ ] Delete replaced finalizers.
 
-Cutover rule: a green parity gate is necessary but not sufficient. The current
+Cutover rule: a green parity gate is necessary but not sufficient. The production rollback on 2026-09-27 established the pre-cutover current-week page as the approved UX baseline. Structural/semantic parity must therefore include information hierarchy, progressive disclosure, completed-vs-planned emphasis, feedback/evaluation presentation, week context/status placement, navigation and mobile visual hierarchy. A human visual check of the deployed current week is mandatory before cutover or legacy deletion. The current
 the previously identified weather, navigation and historical-detail blockers
 are now represented by typed v2 inputs/read models. Weather is an external
 synced forecast cache behind a repository port; it is not promoted to canonical
