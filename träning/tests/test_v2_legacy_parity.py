@@ -91,6 +91,41 @@ class LegacyParityTests(unittest.TestCase):
         v2["week"]["days"][1]["weather"] = "Fel väder"
         self.assertTrue(compare_cutover_contract(legacy, v2))
 
+    def test_weather_parity_ignores_legacy_label_punctuation_only(self):
+        legacy = {
+            "today": {"date": "2026-09-27", "title": "Löpning"},
+            "week": {
+                "days": [
+                    {
+                        "date": "2026-09-27",
+                        "completed": False,
+                        "actual_labels": [],
+                        "weather": (
+                            "Väder i Oxelösund: Klart · 12,0–15,4 °C · "
+                            "nederbördsrisk max 0 % · vind max 4,9 m/s"
+                        ),
+                    }
+                ]
+            },
+        }
+        v2 = {
+            "today": {"date": "2026-09-27", "title": "Löpning"},
+            "week": {
+                "days": [
+                    {
+                        "date": "2026-09-27",
+                        "state": "fixed",
+                        "actual_labels": [],
+                        "weather": (
+                            "Väder · Oxelösund · Klart · 12,0–15,4 °C · "
+                            "nederbördsrisk max 0 % · vind max 4,9 m/s"
+                        ),
+                    }
+                ]
+            },
+        }
+        self.assertEqual(compare_cutover_contract(legacy, v2), [])
+
 
 if __name__ == "__main__":
     unittest.main()
