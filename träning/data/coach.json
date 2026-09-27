@@ -5,21 +5,21 @@
       "assessment": {
         "facts": [
           "TrailRun: 13,46 km · 1:20:04 · 198 m+ · snittpuls 130,8 · maxpuls 144.",
-          "Användarrapport: RPE 4/10. Känsla: Tunga ben.",
+          "Användarrapport: Var väldigt sliten så gick ut väldigt lugnt, försökte hålla pulsen runt 130BPM men tempot under 6min/km. Vaknade till och kunde kört dubbla distansen med den ansträngningen RPE 4/10. Känsla: Tunga ben.",
           "Planstatus 2026-09-27: dagen är markerad genomförd i coachens beslutsunderlag.",
           "Planerad tidsdos 60 min; faktisk rörelsetid 79.95 min (+19.95 min mot vald dos)."
         ],
-        "summary": "13.45 km terrängløp genomført med lugn genomsnittsfart (5:57/km) och låg subjektiv ansträngning (RPE 4) men med rapport om tunga ben.",
+        "summary": "13.46 km lugn terränglöpning genomförd med snitttempo 5:57/km och genomsnittspuls 130–131, användaren rapporterar trötta/tunga ben och låg RPE (4/10).",
         "unknowns": [
-          "Subjektiv återhämtning kommande 24–48 h (ingen ny rapport ännu)",
-          "Detaljer om terrängens tekniska krävlighet och lokal muskulär belastning"
+          "Hur känns benen nästa 24–48 h efter passet?",
+          "Eventuell lokal muskelömhet eller sömnpåverkan inte tydligt kopplat till återhämtning nästa dag."
         ],
         "confidence": "medium",
         "interpretations": [
-          "Passet visar genomförd längre lugn terrängdistans men användarens 'tunga ben' betyder lokal muskulär trötthet som kan påverka nästa löppass.",
-          "Givet kumulativ närbelastning (enduro + backintervaller + två simpass) är det inte skäl för progress; bevara konservativ dos eller reducera nästa löppass."
+          "Full återhämtning från dagens pass är ännu inte verifierad.",
+          "Givet föregående 2–3 dagars belastning (enduro, backintervaller, två simpass) finns skäl att hålla söndagens reducerade dos som konservativt beslut."
         ],
-        "load_interpretation": "Närbelastningen de senaste 2–3 dagarna (enduro + backintervaller + 2 simpass) motiverar konservativ reduktion eller oförändrat lugnt nästa steg."
+        "load_interpretation": "Passet är längre än planerat (80 vs 60 min) men intensitet och användarrapport indikerar genomförbar men kvarstående lokal trötthet."
       },
       "auto_apply": {
         "note": "Ingen automatisk planändring.",
@@ -28,15 +28,15 @@
       "activity_id": 20350203020,
       "plan_action": {
         "action": "keep",
-        "reason": "Planen valde redan en konservativ dos (60 min) och dagens data och rapport stödjer att inte öka belastningen.",
+        "reason": "Närbelastningen och användarrapport stödjer att den redan applicerade konservativa reduktionen (60 min) var lämplig; inget behov att ytterligare skala ner eller vila de närmaste…",
         "target_date": "",
         "dose_option_id": "",
-        "recommendation": "Följ planerat reducerat lugnt pass (det valda passalternativet). Prioritera återhämtning: lätt gång, återställande näring och mjuk rörlighet; avvakta ny subjektiv rapport innan ändring.",
+        "recommendation": "Följ redan applicerat pass (Löpning‑easy 60). Prioritera återhämtningsunderlaget, lätt återhämtning och undvik ytterligare benbelastning i morgondagens enduro‑skola om känslan försämras.",
         "requires_approval": false
       },
       "activity_date": "2026-09-27",
       "activity_name": "Terränglöpning vid lunch",
-      "generated_at_utc": "2026-09-27T12:37:17.380512+00:00",
+      "generated_at_utc": "2026-09-27T13:13:44.334832+00:00",
       "analysis_contract": {
         "pipeline_version": 3,
         "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
@@ -1309,9 +1309,9 @@
       "generated_at_utc": "2026-08-30T09:19:51.776072+00:00"
     }
   ],
-  "last_run_utc": "2026-09-27T12:37:17.380512+00:00",
+  "last_run_utc": "2026-09-27T13:13:44.334832+00:00",
   "contract_version": 15,
-  "last_trigger_hash": "08e82f3b2df6dc5be4c7719e590e3fa13bc641f15659b4e149a2bab0e0057ca9",
+  "last_trigger_hash": "8c6105f944a5bdb557a523f606e0f6a2c28255bb85c48316ee39f35cf6e2b420",
   "output_contract_version": 19,
   "pipeline_contract_version": 3
 }
