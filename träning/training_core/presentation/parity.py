@@ -4,7 +4,10 @@ from __future__ import annotations
 
 from typing import Any
 
-from training_core.application.presentation import PresentationSnapshot
+from training_core.application.presentation import (
+    HistoricalPresentationSnapshot,
+    PresentationSnapshot,
+)
 
 
 def semantic_snapshot(snapshot: PresentationSnapshot) -> dict[str, Any]:
@@ -74,6 +77,73 @@ def semantic_snapshot(snapshot: PresentationSnapshot) -> dict[str, Any]:
                 }
                 for d in snapshot.week.days
             ],
+        },
+    }
+
+
+def historical_semantic_snapshot(
+    snapshot: HistoricalPresentationSnapshot,
+) -> dict[str, Any]:
+    model = snapshot.history
+    review = model.review
+    return {
+        "navigation": {
+            "key": snapshot.navigation.key,
+            "state": snapshot.navigation.state,
+            "previous": snapshot.navigation.previous.key
+            if snapshot.navigation.previous else None,
+            "next": snapshot.navigation.next.key
+            if snapshot.navigation.next else None,
+        },
+        "history": {
+            "key": model.key,
+            "start": model.start.isoformat(),
+            "end": model.end.isoformat(),
+            "title": model.title,
+            "principle": model.principle,
+            "days": [
+                {
+                    "date": day.local_date.isoformat(),
+                    "state": day.state,
+                    "planned_session": day.planned_session,
+                    "reason": day.reason,
+                    "development_focus": day.development_focus,
+                    "prescription": list(day.prescription),
+                    "activities": [
+                        {
+                            "provider_activity_id": activity.provider_activity_id,
+                            "label": activity.label,
+                            "detail": activity.detail,
+                            "classification": activity.classification,
+                            "user_report": activity.user_report,
+                            "coach_summary": activity.coach_summary,
+                            "plan_impact": activity.plan_impact,
+                            "action_reason": activity.action_reason,
+                            "next_step": activity.next_step,
+                            "uncertainties": list(activity.uncertainties),
+                        }
+                        for activity in day.activities
+                    ],
+                }
+                for day in model.days
+            ],
+            "review": (
+                {
+                    "activity_count": review.activity_count,
+                    "training_activity_count": review.training_activity_count,
+                    "recreation_activity_count": review.recreation_activity_count,
+                    "active_days": review.active_days,
+                    "total_activity_time": review.total_activity_time,
+                    "summary": review.summary,
+                    "worked": list(review.worked),
+                    "not_as_planned": list(review.not_as_planned),
+                    "load_continuity": review.load_continuity,
+                    "key_lesson": review.key_lesson,
+                    "next_week_implication": review.next_week_implication,
+                    "uncertainties": list(review.uncertainties),
+                }
+                if review else None
+            ),
         },
     }
 
