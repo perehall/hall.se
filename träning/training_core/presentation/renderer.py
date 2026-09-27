@@ -633,6 +633,53 @@ def render_today(snapshot: PresentationSnapshot) -> str:
     )
 
 
+def render_week_context(snapshot: PresentationSnapshot) -> str:
+    model = snapshot.week_context
+    if model is None:
+        return ""
+
+    taxonomy = []
+    for label, values in (
+        ("Primärt", model.primary),
+        ("Sekundärt", model.secondary),
+        ("Underhåll", model.maintenance),
+        ("Skyddat", model.protected),
+    ):
+        if values:
+            taxonomy.append(
+                f"<strong>{html.escape(label)}:</strong> "
+                + html.escape(", ".join(values))
+            )
+
+    details_parts = []
+    if model.principle:
+        details_parts.append(f"<p>{html.escape(model.principle)}</p>")
+    if model.hypothesis:
+        details_parts.append(
+            '<p><strong>Mesocykelhypotes:</strong> '
+            + html.escape(model.hypothesis)
+            + "</p>"
+        )
+    if taxonomy:
+        details_parts.append("<p>" + " · ".join(taxonomy) + "</p>")
+
+    details = (
+        '<details class="v2-week-context-plan">'
+        '<summary>Planidé</summary>'
+        '<div class="v2-week-context-plan-body">'
+        + "".join(details_parts)
+        + "</div></details>"
+        if details_parts else ""
+    )
+    return (
+        '<section class="v2-week-context" aria-label="Aktuell veckas fokus">'
+        '<h2>Aktuell vecka</h2>'
+        f'<strong class="v2-week-focus">{html.escape(model.focus)}</strong>'
+        f'<p class="v2-week-meta">{html.escape(model.meta_line)}</p>'
+        f'{details}</section>'
+    )
+
+
 def render_week(snapshot: PresentationSnapshot) -> str:
     model = snapshot.week
     rows = []
@@ -667,6 +714,7 @@ def render_snapshot(snapshot: PresentationSnapshot) -> str:
     return (
         render_navigation(snapshot)
         + render_today(snapshot)
+        + render_week_context(snapshot)
         + render_week(snapshot)
         + feedback_script
     )

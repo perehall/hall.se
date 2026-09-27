@@ -74,8 +74,8 @@ SURFACES = (
     ),
     CutoverSurface(
         "week_context",
-        "blocker",
-        "Current week focus, microcycle position and plan idea are retained production information not yet represented in v2.",
+        "migrated",
+        "Current week focus, microcycle position, plan idea and capability taxonomy are read from canonical mesocycle/microcycle PostgreSQL state.",
     ),
     CutoverSurface(
         "week_status",

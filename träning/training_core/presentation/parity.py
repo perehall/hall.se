@@ -62,6 +62,19 @@ def semantic_snapshot(snapshot: PresentationSnapshot) -> dict[str, Any]:
                 for outcome in snapshot.today.outcomes
             ],
         },
+        "week_context": (
+            {
+                "focus": snapshot.week_context.focus,
+                "meta_line": snapshot.week_context.meta_line,
+                "principle": snapshot.week_context.principle,
+                "hypothesis": snapshot.week_context.hypothesis,
+                "primary": list(snapshot.week_context.primary),
+                "secondary": list(snapshot.week_context.secondary),
+                "maintenance": list(snapshot.week_context.maintenance),
+                "protected": list(snapshot.week_context.protected),
+            }
+            if snapshot.week_context else None
+        ),
         "weather": {
             "status": snapshot.weather.status,
             "source": snapshot.weather.source,

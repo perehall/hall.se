@@ -42,6 +42,26 @@ class LegacyParityTests(unittest.TestCase):
             "nederbördsrisk max 0 % · vind max 4,9 m/s",
         )
 
+    def test_extracts_current_week_focus_and_meta(self):
+        legacy = self._legacy(
+            '<section class="top-today"><div class="top-today-title">Löpning</div></section>'
+            '<section class="current-week-header">'
+            '<strong class="week-context-focus current-week-focus">'
+            'Sim aerob/teknik + kontrollerad löptröskel</strong>'
+            '<div class="week-context-meta current-week-meta">'
+            'Byggblock · mikrocykel 1 av 4 · 8 pass · 6 träningsdagar</div>'
+            '</section>'
+            '<div class="day" id="dag-2026-09-27"><div>Plan</div></div>'
+        )
+        self.assertEqual(
+            legacy["week_context"]["focus"],
+            "Sim aerob/teknik + kontrollerad löptröskel",
+        )
+        self.assertEqual(
+            legacy["week_context"]["meta_line"],
+            "Byggblock · mikrocykel 1 av 4 · 8 pass · 6 träningsdagar",
+        )
+
     def test_cutover_contract_accepts_legacy_split_dose_but_not_wrong_activity(self):
         legacy = {
             "today": {"date": "2026-09-27", "title": "Löpning · lugn distans"},

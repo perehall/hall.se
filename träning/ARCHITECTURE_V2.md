@@ -66,6 +66,7 @@ Phase 1: Presentation vertical slice
 - [x] Encode retained-surface status as a machine-readable cutover contract and report blockers in CI.
 - [ ] Resolve the cutover blockers reported by `v2_cutover_readiness.py`.
   - [x] Public-copy normalization: internal planner provenance is filtered at the read-model boundary.
+  - [x] Week context: focus, microcycle position and plan idea come from relational mesocycle/microcycle state.
 - [ ] Cut publication over after the v2 renderer carries the complete retained UI contract.
 - [ ] Delete replaced finalizers.
 

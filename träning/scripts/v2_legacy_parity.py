@@ -79,8 +79,22 @@ def legacy_semantic_contract(index_path: Path, *, today: date) -> dict:
             }
         )
 
+    focus_match = re.search(
+        r'class="[^"]*current-week-focus[^"]*"[^>]*>(.*?)</(?:strong|div)>',
+        html,
+        re.S,
+    )
+    meta_match = re.search(
+        r'class="[^"]*current-week-meta[^"]*"[^>]*>(.*?)</div>',
+        html,
+        re.S,
+    )
     return {
         "today": {"date": today_iso, "title": today_title},
+        "week_context": {
+            "focus": _text(focus_match.group(1)) if focus_match else "",
+            "meta_line": _text(meta_match.group(1)) if meta_match else "",
+        },
         "week": {"days": days},
     }
 
@@ -97,6 +111,23 @@ def compare_cutover_contract(legacy: dict, v2: dict) -> list[str]:
     # canonical session title. Prefix equality therefore represents the same fact.
     if not (v2_title == legacy_title or v2_title.startswith(legacy_title + " ·")):
         differences.append(f"today.title: {legacy_title!r} != {v2_title!r}")
+
+    legacy_context = legacy.get("week_context") or {}
+    v2_context = v2.get("week_context") or {}
+    legacy_focus = legacy_context.get("focus") or ""
+    if legacy_focus and legacy_focus != (v2_context.get("focus") or ""):
+        differences.append(
+            f"week_context.focus: {legacy_focus!r} != "
+            f"{(v2_context.get('focus') or '')!r}"
+        )
+    legacy_meta = legacy_context.get("meta_line") or ""
+    v2_meta = v2_context.get("meta_line") or ""
+    if legacy_meta and not (
+        legacy_meta == v2_meta or legacy_meta.startswith(v2_meta + " ·")
+    ):
+        differences.append(
+            f"week_context.meta_line: {legacy_meta!r} != {v2_meta!r}"
+        )
 
     legacy_days = {d["date"]: d for d in legacy["week"]["days"]}
     v2_days = {d["date"]: d for d in v2["week"]["days"]}
