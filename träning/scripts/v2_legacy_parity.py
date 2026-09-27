@@ -89,8 +89,28 @@ def legacy_semantic_contract(index_path: Path, *, today: date) -> dict:
         html,
         re.S,
     )
+    status_match = re.search(
+        r'<details class="week-status-expander"><summary>(.*?)</summary>',
+        html,
+        re.S,
+    )
+    sport_distribution = [
+        {
+            "label": _text(label),
+            "duration": _text(duration),
+        }
+        for label, duration in re.findall(
+            r'<div class="sport-head"><span>(.*?)</span><strong>(.*?)</strong></div>',
+            html,
+            re.S,
+        )
+    ]
     return {
         "today": {"date": today_iso, "title": today_title},
+        "week_status": {
+            "summary": _text(status_match.group(1)) if status_match else "",
+            "sport_distribution": sport_distribution,
+        },
         "week_context": {
             "focus": _text(focus_match.group(1)) if focus_match else "",
             "meta_line": _text(meta_match.group(1)) if meta_match else "",
@@ -111,6 +131,23 @@ def compare_cutover_contract(legacy: dict, v2: dict) -> list[str]:
     # canonical session title. Prefix equality therefore represents the same fact.
     if not (v2_title == legacy_title or v2_title.startswith(legacy_title + " ·")):
         differences.append(f"today.title: {legacy_title!r} != {v2_title!r}")
+
+    legacy_status = legacy.get("week_status") or {}
+    legacy_status_summary = legacy_status.get("summary") or ""
+    if legacy_status_summary:
+        v2_status_summary = (v2.get("week") or {}).get("status_summary") or ""
+        if legacy_status_summary != v2_status_summary:
+            differences.append(
+                f"week.status_summary: {legacy_status_summary!r} != "
+                f"{v2_status_summary!r}"
+            )
+    legacy_sports = legacy_status.get("sport_distribution") or []
+    if legacy_sports:
+        v2_sports = (v2.get("week") or {}).get("sport_distribution") or []
+        if legacy_sports != v2_sports:
+            differences.append(
+                f"week.sport_distribution: {legacy_sports!r} != {v2_sports!r}"
+            )
 
     legacy_context = legacy.get("week_context") or {}
     v2_context = v2.get("week_context") or {}
