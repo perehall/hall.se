@@ -10,6 +10,16 @@ SPORT_ICON_KEYS = {
     "enduro": "enduro",
     "strength": "strength",
     "swimrun": "run",
+    "running": "run",
+    "trailrun": "run",
+    "virtualrun": "run",
+    "swimming": "swim",
+    "ride": "bike",
+    "virtualride": "bike",
+    "mountainbikeride": "bike",
+    "emountainbikeride": "bike",
+    "weighttraining": "strength",
+    "strengthtraining": "strength",
 }
 
 STIMULUS_ICON_KEYS = {
