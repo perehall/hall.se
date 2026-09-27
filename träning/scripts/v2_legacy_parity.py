@@ -23,6 +23,20 @@ def _text(value: str) -> str:
     return " ".join(unescape(_TAG_RE.sub(" ", value)).split())
 
 
+LEGACY_PUBLIC_ACTIVITY_LABELS = {
+    "TrailRun": "Traillöpning",
+    "Run": "Löpning",
+    "Swim": "Simning",
+    "MountainBikeRide": "MTB/XC",
+    "WeightTraining": "Styrka",
+}
+
+
+def _normalize_activity_label(value: str) -> str:
+    text = " ".join(str(value or "").split())
+    return LEGACY_PUBLIC_ACTIVITY_LABELS.get(text, text)
+
+
 def _normalize_weather_text(value: str) -> str:
     normalized = " ".join(str(value or "").split())
     normalized = re.sub(
@@ -161,7 +175,7 @@ def compare_cutover_contract(legacy: dict, v2: dict) -> list[str]:
         differences.append(
             f"today.date: {legacy['today']['date']!r} != {v2['today']['date']!r}"
         )
-    legacy_title = legacy["today"]["title"]
+    legacy_title = _normalize_activity_label(legacy["today"]["title"])
     v2_title = v2["today"]["title"]
     # Legacy splits dose into a separate meta line; v2 currently keeps it in the
     # canonical session title. Prefix equality therefore represents the same fact.
