@@ -78,7 +78,7 @@ class HistoricalPresentationTests(unittest.TestCase):
         self.assertIn("Veckosummering", rendered)
         self.assertIn("Det som fungerade", rendered)
         self.assertIn("Inte enligt plan", rendered)
-        self.assertIn("Belastning &amp; kontinuitet", rendered)
+        self.assertIn("Belastning & kontinuitet", rendered)
         self.assertIn("Osäkerheter i underlaget", rendered)
         self.assertIn("Ursprungsplan och motivering", rendered)
         self.assertNotIn("data-v2-feedback-editor", rendered)
