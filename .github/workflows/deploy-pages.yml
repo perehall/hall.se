@@ -38,7 +38,10 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install v2 PostgreSQL driver\n        run: python -m pip install "psycopg[binary]>=3.2,<4"\n\n      - name: Run deterministic regression suite
+      - name: Install v2 PostgreSQL driver
+        run: python -m pip install "psycopg[binary]>=3.2,<4"
+
+      - name: Run deterministic regression suite
         run: python "träning/scripts/run_regression_tests.py"
 
       - name: Test Strava webhook worker
@@ -69,7 +72,8 @@ jobs:
               or (strategy.get("current_mesocycle") or {}).get("goal_basis_hash") != digest
           )
           with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as handle:
-              handle.write(f"stale={'true' if stale else 'false'}\n")
+              handle.write(f"stale={'true' if stale else 'false'}
+")
           if stale:
               print(
                   "::notice::Deployment deferred: canonical goal/race contract changed "
