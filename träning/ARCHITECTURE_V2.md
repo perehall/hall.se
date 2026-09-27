@@ -67,6 +67,7 @@ Phase 1: Presentation vertical slice
 - [ ] Resolve the cutover blockers reported by `v2_cutover_readiness.py`.
   - [x] Public-copy normalization: internal planner provenance is filtered at the read-model boundary.
   - [x] Week context: focus, microcycle position and plan idea come from relational mesocycle/microcycle state.
+  - [x] Week status: pass count, exact passtid, training days and sport distribution derive from canonical activities.
 - [ ] Cut publication over after the v2 renderer carries the complete retained UI contract.
 - [ ] Delete replaced finalizers.
 
