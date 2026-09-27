@@ -10,6 +10,7 @@ sys.path.insert(0, str(ROOT))
 from training_core.application.presentation import build_presentation_snapshot
 from training_core.presentation.navigation import PublishedWeek
 from training_core.presentation.renderer import render_snapshot, render_today
+from training_core.domain.weather import DailyWeatherForecast, WeatherSnapshot
 from training_core.presentation.today import CompletedActivity, PlannedDay
 
 
@@ -93,6 +94,26 @@ class FakeArchiveRepository:
         ]
 
 
+class FakeWeatherRepository:
+    def current(self):
+        return WeatherSnapshot(
+            status="ok",
+            source="SMHI Open Data · SNOW1gv1",
+            fetched_at_utc="2026-09-27T08:45:00+00:00",
+            daily=(
+                DailyWeatherForecast(
+                    local_date=date(2026, 9, 27),
+                    location_name="Oxelösund",
+                    temperature_min_c=12.0,
+                    temperature_max_c=15.4,
+                    wind_max_ms=4.9,
+                    precip_probability_max_pct=0,
+                    symbol_code=1,
+                ),
+            ),
+        )
+
+
 class PresentationSliceTests(unittest.TestCase):
     def test_repository_to_read_model_to_html_is_pure_and_semantic(self):
         snapshot = build_presentation_snapshot(
@@ -156,9 +177,11 @@ class PresentationSliceTests(unittest.TestCase):
         self.assertIn('href="/träning/vecka/2026-W38/"', rendered)
         self.assertIn('href="/träning/vecka/2026-W40/"', rendered)
 
-    def test_planned_today_renders_prescription_and_rationale_without_finalizer(self):
+    def test_planned_today_renders_prescription_rationale_and_weather_without_finalizer(self):
         snapshot = build_presentation_snapshot(
-            FakeRepository(), today=date(2026, 9, 27)
+            FakeRepository(),
+            today=date(2026, 9, 27),
+            weather_repository=FakeWeatherRepository(),
         )
         rendered = render_today(snapshot)
         self.assertIn("Passupplägg", rendered)
@@ -166,6 +189,13 @@ class PresentationSliceTests(unittest.TestCase):
         self.assertIn("Plan och motivering", rendered)
         self.assertIn("Bygg löptålighet med god kontroll.", rendered)
         self.assertIn("Lugn aerob löpning.", rendered)
+        self.assertIn(
+            "Väder · Oxelösund · Klart · 12,0–15,4 °C · "
+            "nederbördsrisk max 0 % · vind max 4,9 m/s",
+            rendered,
+        )
+        self.assertIn("Väderprognos:", render_snapshot(snapshot))
+        self.assertIn(">SMHI</a>", render_snapshot(snapshot))
 
 
 if __name__ == "__main__":
