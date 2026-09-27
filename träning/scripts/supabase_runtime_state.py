@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 from pathlib import Path
 from typing import Any
 
@@ -26,12 +27,26 @@ from supabase_shadow_model import (
     build_shadow_payload,
     canonical_hash,
 )
-from supabase_shadow_writer import assert_schema, database_url, upsert
-
-
 def _driver():
     import psycopg
     return psycopg
+
+
+def database_url() -> str:
+    value = os.environ.get("SUPABASE_DB_URL", "").strip()
+    if not value:
+        raise RuntimeError("SUPABASE_DB_URL is missing")
+    return value
+
+
+def _assert_schema(cur: Any) -> None:
+    from supabase_shadow_writer import assert_schema
+    _assert_schema(cur)
+
+
+def _upsert(cur: Any, table: str, row: dict[str, Any], conflict_keys) -> None:
+    from supabase_shadow_writer import upsert
+    _upsert(cur, table, row, conflict_keys)
 
 
 SCOPE_KEYS = {
@@ -140,7 +155,7 @@ def _linked_activity_id(
 
 def _write_documents(cur: Any, rows: list[dict[str, Any]]) -> None:
     for row in rows:
-        upsert(cur, "state_documents", dict(row), ("document_key",))
+        _upsert(cur, "state_documents", dict(row), ("document_key",))
 
 
 def _write_planning_relational(
@@ -150,10 +165,10 @@ def _write_planning_relational(
     activity_ids: dict[tuple[str, str], Any],
 ) -> None:
     for row in payload.get("mesocycles") or []:
-        upsert(cur, "mesocycles", dict(row), ("id",))
+        _upsert(cur, "mesocycles", dict(row), ("id",))
 
     for row in payload.get("microcycles") or []:
-        upsert(cur, "microcycles", dict(row), ("id",))
+        _upsert(cur, "microcycles", dict(row), ("id",))
 
     cur.execute(
         "update training.planned_workouts set is_current = false where is_current"
@@ -167,7 +182,7 @@ def _write_planning_relational(
         )
         row["is_current"] = True
         row["last_seen_source_hash"] = runtime_hash
-        upsert(cur, "planned_workouts", row, ("workout_key",))
+        _upsert(cur, "planned_workouts", row, ("workout_key",))
 
 
 def _write_coach_relational(
@@ -182,7 +197,7 @@ def _write_coach_relational(
         row["activity_id"] = _linked_activity_id(
             activity_ids, provider, source_id
         )
-        upsert(
+        _upsert(
             cur,
             "coach_evaluations",
             row,
@@ -393,7 +408,7 @@ def promote_runtime_scope(
         connect_timeout=15,
     ) as conn:
         with conn.cursor() as cur:
-            assert_schema(cur)
+            _assert_schema(cur)
             activity_ids = (
                 _activity_uuid_map(cur, payload) if activity_ids_needed else {}
             )
