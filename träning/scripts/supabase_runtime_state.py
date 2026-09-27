@@ -19,7 +19,6 @@ import json
 from pathlib import Path
 from typing import Any
 
-import psycopg
 
 from supabase_shadow_model import (
     DATA,
@@ -28,6 +27,11 @@ from supabase_shadow_model import (
     canonical_hash,
 )
 from supabase_shadow_writer import assert_schema, database_url, upsert
+
+
+def _driver():
+    import psycopg
+    return psycopg
 
 
 SCOPE_KEYS = {
@@ -249,7 +253,7 @@ def _fresh_readback(
     expected_workouts: set[str],
 ) -> dict[str, dict[str, Any]]:
     expected = {row["document_key"]: row for row in rows}
-    with psycopg.connect(
+    with _driver().connect(
         database_url(),
         sslmode="require",
         connect_timeout=15,
@@ -324,7 +328,7 @@ def hydrate_runtime_scope(
         raise RuntimeError(f"Unknown runtime backend scope: {scope}")
 
     keys = SCOPE_KEYS[scope]
-    with psycopg.connect(
+    with _driver().connect(
         database_url(),
         sslmode="require",
         connect_timeout=15,
@@ -383,7 +387,7 @@ def promote_runtime_scope(
     runtime_hash = scope_source_hash(rows)
     activity_ids_needed = scope in {"planning", "final"}
 
-    with psycopg.connect(
+    with _driver().connect(
         database_url(),
         sslmode="require",
         connect_timeout=15,
