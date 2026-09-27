@@ -867,6 +867,76 @@ def render_week(snapshot: PresentationSnapshot) -> str:
     )
 
 
+STRENGTH_REFERENCE = (
+    "Liten dos explosivitet/plyometri när omkringliggande belastning tillåter.",
+    "Bulgarian split squat som huvudalternativ för unilateral benstyrka.",
+    "Marklyft eller RDL som normal höftdominant huvudövning.",
+    "Vad + soleus regelbundet.",
+    "Enarmsrodd + press som huvuddrag/press.",
+    "Välj två bålövningar; låt inte accessoarer tränga undan huvudstyrkan.",
+)
+
+SYSTEM_REFERENCE = (
+    ("Målbild", "Den långsiktiga riktningen är överordnad. Ändrad målbild kräver omprövning nedåt i planeringskedjan."),
+    ("Mesocykel", "Flerveckors planeringsmotor för utvecklingsfokus, skyddade stimuli, progression och utvärdering."),
+    ("Mikrocykel", "Organiserar arbetet till en absorberbar följd av pass, vila och öppna beslut."),
+    ("Pass", "Verkställer ett tydligt stimulus eller en stödjande roll; stimuluset skyddas före exakt passform eller veckodag."),
+    ("Återkoppling", "Faktisk respons går tillbaka uppåt och kan justera mikrocykel och mesocykel."),
+)
+
+
+def render_reference_tools() -> str:
+    strength = "".join(f"<li>{html.escape(item)}</li>" for item in STRENGTH_REFERENCE)
+    system = "".join(
+        f"<li><strong>{html.escape(label)}:</strong> {html.escape(copy)}</li>"
+        for label, copy in SYSTEM_REFERENCE
+    )
+    return (
+        '<nav class="v2-reference-tools" aria-label="Referenser">'
+        '<button type="button" data-v2-open-reference="strength">Styrkemall</button>'
+        '<button type="button" data-v2-open-reference="system">Om systemet</button>'
+        '</nav>'
+        '<dialog id="v2-strength-reference" class="v2-reference-dialog">'
+        '<form method="dialog"><button aria-label="Stäng">Stäng</button></form>'
+        '<h2>Styrkemall</h2>'
+        '<p>Referens. Aktuellt styrkebeslut styrs av mesocykeln, mikrocykelns ordning och faktisk närbelastning.</p>'
+        f'<ul>{strength}</ul></dialog>'
+        '<dialog id="v2-system-reference" class="v2-reference-dialog">'
+        '<form method="dialog"><button aria-label="Stäng">Stäng</button></form>'
+        '<h2>Om träningssystemet</h2>'
+        '<p><strong>Målbilden anger vart. Mesocykeln väljer utvecklingsväg. Mikrocykeln organiserar arbetet.</strong></p>'
+        f'<ul>{system}</ul></dialog>'
+        '<script>document.querySelectorAll("[data-v2-open-reference]").forEach((b)=>'
+        'b.addEventListener("click",()=>document.getElementById("v2-"+b.dataset.v2OpenReference+"-reference").showModal()));</script>'
+    )
+
+
+V2_SHELL_CSS = """
+:root{color-scheme:light;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:#0f172a;background:#f8fafc}
+*{box-sizing:border-box}body{margin:0;line-height:1.45}.v2-shell{width:min(100%,720px);margin:0 auto;padding:20px 16px 56px}
+.v2-shell a{color:inherit}.v2-shell-main{display:grid;gap:18px}.v2-shell-meta{display:flex;justify-content:flex-end;margin:4px 0 12px;font-size:.82rem}
+.v2-reference-tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.v2-reference-tools button,.v2-reference-dialog button{font:inherit}
+.v2-reference-tools button{border:1px solid #cbd5e1;background:#fff;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700}
+.v2-reference-dialog{width:min(520px,calc(100vw - 32px));max-height:calc(100vh - 32px);border:1px solid #e2e8f0;border-radius:18px;padding:18px}
+.v2-reference-dialog::backdrop{background:rgba(15,23,42,.38)}.v2-reference-dialog form{float:right}
+@media(max-width:620px){.v2-shell{padding:16px 13px 48px}.v2-reference-dialog{width:calc(100vw - 16px);max-height:78vh}}
+"""
+
+
+def render_document(snapshot: PresentationSnapshot, *, title: str = "Träning") -> str:
+    body = render_snapshot(snapshot)
+    return (
+        '<!doctype html><html lang="sv"><head><meta charset="utf-8">'
+        '<meta name="viewport" content="width=device-width,initial-scale=1">'
+        f'<title>{html.escape(title)}</title><style>{V2_SHELL_CSS}</style></head><body>'
+        '<div class="v2-shell">'
+        '<div class="v2-shell-meta"><a href="/träning/malbild-2027/" data-v2-goal-link>Målbild 2027 →</a></div>'
+        f'<main class="v2-shell-main">{body}</main>'
+        f'{render_reference_tools()}'
+        '</div></body></html>'
+    )
+
+
 def render_snapshot(snapshot: PresentationSnapshot) -> str:
     feedback_script = FEEDBACK_SCRIPT if snapshot.today.outcomes else ""
     return (
