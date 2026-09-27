@@ -53,48 +53,30 @@ jobs:
           python "träning/scripts/validate_device_workouts.py"
           python "träning/scripts/render_training_site.py"
           test -s "träning/index.html"
-          grep -Fq '<section class="dashboard"' "träning/index.html"
-          grep -Fq 'class="top-overview"' "träning/index.html"
-          grep -Fq 'class="top-today"' "träning/index.html"
-          grep -Eq 'class="[^"]*current-week-header[^"]*"' "träning/index.html"
-          grep -Eq 'class="[^"]*current-week-focus[^"]*"' "träning/index.html"
-          grep -Eq 'class="[^"]*current-week-meta[^"]*"' "träning/index.html"
-          grep -Eq 'class="[^"]*week-context-header[^"]*"' "träning/index.html"
-          ! grep -Fq 'class="top-week-focus"' "träning/index.html"
-          grep -Fq 'mikrocykel' "träning/index.html"
-          ! grep -Fq 'class="training-brain"' "träning/index.html"
-          ! grep -Fq 'class="hero week-focus-card"' "träning/index.html"
-          grep -Fq 'Kalendervecka:' "träning/index.html"
-          grep -Fq 'class="week-status-expander"' "träning/index.html"
-          grep -Fq 'träningsdagar' "träning/index.html"
-          grep -Fq 'Garmin via Intervals.icu används som privat återhämtningskontext' "träning/index.html"
+          grep -Fq '<!doctype html>' "träning/index.html"
+          grep -Fq 'class="v2-shell"' "träning/index.html"
+          grep -Fq 'class="v2-today"' "träning/index.html"
+          grep -Fq 'class="v2-week"' "träning/index.html"
+          grep -Fq 'class="v2-week-context"' "träning/index.html"
+          grep -Fq 'class="v2-week-status"' "träning/index.html"
+          grep -Fq 'data-v2-goal-link' "träning/index.html"
+          grep -Fq 'Målbild 2027' "träning/index.html"
+          grep -Fq 'Styrkemall' "träning/index.html"
+          grep -Fq 'Om systemet' "träning/index.html"
           grep -Fq 'Väderprognos:' "träning/index.html"
           grep -Fq '>SMHI</a>' "träning/index.html"
-          grep -Eq 'Passupplägg|class="completed-day-summary"' "träning/index.html"
-          grep -Eq 'workout-card-v2|class="completed-day-summary"' "träning/index.html"
-          grep -Eq 'class="card-v2-footer"|class="completed-day-summary"' "träning/index.html"
           python - <<'PY'
           import re
           from pathlib import Path
           html=Path("träning/index.html").read_text(encoding="utf-8")
-          states=re.findall(r'class="device-sync-state\s+(pending|synced|error)"', html)
+          states=re.findall(r'data-device-sync="(pending|synced|error)"', html)
           labels=re.findall(r'Klocksync (väntar|skickad|fel)', html)
           if states and len(states) != len(labels):
-              raise SystemExit("Device-sync smoke: statuschip saknar giltig publik etikett")
-          print(f"DEVICE_SYNC_SMOKE_OK visible={len(states)}")
+              raise SystemExit("V2 device-sync smoke: status saknar giltig publik etikett")
+          if "quiet-performance-v1:start" in html or "card-v2-footer" in html:
+              raise SystemExit("Legacy presentation layer leaked into v2 publication")
+          print(f"V2_PUBLICATION_SMOKE_OK device_sync_visible={len(states)}")
           PY
-          grep -Fq 'quiet-performance-v1:start' "träning/index.html"
-          grep -Fq 'quiet-performance-v2:start' "träning/index.html"
-          grep -Fq 'training-timeline-v1:start' "träning/index.html"
-          grep -Fq 'class="week-timeline"' "träning/index.html"
-          ! grep -Fq 'class="timeline-scroll-context"' "träning/index.html"
-          ! grep -Fq 'training-timeline-js-v1:start' "träning/index.html"
-          grep -Fq 'class="top-week-nav"' "träning/index.html"
-          grep -Fq 'background:transparent!important;' "träning/index.html"
-          grep -Fq 'content="#F6F7F5"' "träning/index.html"
-          grep -Fq 'quiet-performance qp-current' "träning/index.html"
-          ! grep -Fq '<div class="dashboard-title">Kommande dagar</div>' "träning/index.html"
-          ! grep -Fq 'Prioritering just nu:' "träning/index.html"
 
       - name: Diff hygiene
         run: git diff --check
