@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 from datetime import date
 
 from training_core.application.presentation import build_presentation_snapshot
@@ -30,7 +31,13 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--date", type=date.fromisoformat, default=date.today())
     args = parser.parse_args()
-    print(json.dumps(snapshot_payload(args.date), ensure_ascii=False, sort_keys=True))
+    payload = snapshot_payload(args.date)
+    output = json.dumps(payload, ensure_ascii=False, sort_keys=True)
+    print(output)
+    output_path = str(os.environ.get("V2_PROBE_OUTPUT") or "").strip()
+    if output_path:
+        from pathlib import Path
+        Path(output_path).write_text(output + "\n", encoding="utf-8")
     return 0
 
 
