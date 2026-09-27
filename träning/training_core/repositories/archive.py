@@ -54,6 +54,7 @@ def _clean_strings(values) -> tuple[str, ...]:
 
 class WeekArchiveRepository(Protocol):
     def published_weeks(self) -> Sequence[PublishedWeek]: ...
+    def current_published_week(self) -> PublishedWeek: ...
     def archived_week(self, key: str) -> ArchivedWeek: ...
 
 
@@ -71,8 +72,14 @@ class ManifestWeekArchiveRepository:
     def _reviews_dir(self) -> Path:
         return self.reviews_dir or self.path.parent.parent / "week_reviews"
 
-    def published_weeks(self) -> list[PublishedWeek]:
+    def _manifest(self) -> dict:
         document = json.loads(self.path.read_text(encoding="utf-8"))
+        if document.get("schema_version") != 2:
+            raise RuntimeError("unsupported week archive manifest")
+        return document
+
+    def published_weeks(self) -> list[PublishedWeek]:
+        document = self._manifest()
         if document.get("schema_version") != 2:
             raise RuntimeError("unsupported week archive manifest")
         result = []
@@ -92,6 +99,21 @@ class ManifestWeekArchiveRepository:
                 )
             )
         return result
+
+    def current_published_week(self) -> PublishedWeek:
+        document = self._manifest()
+        current_key = str(document.get("current_week_key") or "").strip()
+        if not current_key:
+            raise RuntimeError("week archive manifest missing current_week_key")
+        current = next(
+            (row for row in self.published_weeks() if row.key == current_key),
+            None,
+        )
+        if current is None:
+            raise RuntimeError(
+                f"week archive manifest current week not published: {current_key}"
+            )
+        return current
 
     def archived_week(self, key: str) -> ArchivedWeek:
         snapshot_path = self._snapshots_dir / f"{key}.json"
