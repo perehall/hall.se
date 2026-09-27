@@ -41,12 +41,12 @@ def database_url() -> str:
 
 def _assert_schema(cur: Any) -> None:
     from supabase_shadow_writer import assert_schema
-    _assert_schema(cur)
+    assert_schema(cur)
 
 
 def _upsert(cur: Any, table: str, row: dict[str, Any], conflict_keys) -> None:
     from supabase_shadow_writer import upsert
-    _upsert(cur, table, row, conflict_keys)
+    upsert(cur, table, row, conflict_keys)
 
 
 SCOPE_KEYS = {
