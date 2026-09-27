@@ -45,8 +45,10 @@ class LegacyParityTests(unittest.TestCase):
     def test_extracts_week_status_and_sport_distribution(self):
         legacy = self._legacy(
             '<section class="top-today"><div class="top-today-title">Löpning</div></section>'
-            '<details class="week-status-expander"><summary>'
-            '8 pass · 9:34:34 · 6 träningsdagar</summary>'
+            '<details class="week-status-expander"><summary>Veckostatus</summary>'
+            '<div class="metric"><strong>8</strong><span>pass</span></div>'
+            '<div class="metric"><strong>9:34:34</strong><span>passtid</span></div>'
+            '<div class="metric"><strong>6</strong><span>träningsdagar</span></div>'
             '<div class="sport-head"><span>Enduro</span><strong>3:17:51</strong></div>'
             '<div class="sport-head"><span>Löpning</span><strong>2:17:34</strong></div>'
             '</details>'
