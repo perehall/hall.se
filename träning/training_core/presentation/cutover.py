@@ -79,8 +79,8 @@ SURFACES = (
     ),
     CutoverSurface(
         "week_status",
-        "blocker",
-        "Current production exposes pass count, session time, training days and sport distribution; v2 only carries partial counts.",
+        "migrated",
+        "Pass count, exact session time, training-day count and sport distribution are derived directly from canonical activity truth in the v2 Week read model.",
     ),
     CutoverSurface(
         "device_sync_status",
