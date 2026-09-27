@@ -4,7 +4,7 @@
   "week_start": "2026-09-21",
   "week_end": "2026-09-27",
   "created_at_utc": "2026-09-20T23:15:26.146433+00:00",
-  "updated_at_utc": "2026-09-27T10:04:21.789883+00:00",
+  "updated_at_utc": "2026-09-27T10:09:20.808489+00:00",
   "plan": {
     "days": [
       {
@@ -1055,16 +1055,16 @@
         "dose_open": false,
         "auto_coach": {
           "action": "reduce",
-          "reason": "Konservativ reduktion rekommenderas p.g.a. kumulativ närbelastning och hög RPE efter dagens sim.",
-          "applied_at_utc": "2026-09-27T10:04:03.862715+00:00"
+          "reason": "Konservativ reduktion rekommenderas på grund av kumulativ närbelastning och hög RPE efter dagens sim.",
+          "applied_at_utc": "2026-09-27T10:08:54.478421+00:00"
         },
         "device_sync": {
           "status": "synced",
           "transport": "intervals_icu",
           "source_hash": "d73c17537fe87dbcbcf589b67854337903b3d4a8c0dfd18765ceb05cbd56e91c",
-          "updated_at_utc": "2026-09-27T10:04:05.498166+00:00",
+          "updated_at_utc": "2026-09-27T10:08:56.081682+00:00",
           "device_delivery": "unverified",
-          "verified_at_utc": "2026-09-27T10:04:05.498166+00:00",
+          "verified_at_utc": "2026-09-27T10:08:56.081682+00:00",
           "provider_event_id": 138097036
         },
         "dose_options": [
@@ -5313,17 +5313,17 @@
           "Planstatus 2026-09-26: dagen är markerad genomförd i coachens beslutsunderlag.",
           "Planerat simpass 4000 m; genomfört 3000 m. Genomförd setstruktur avviker från planens struktur."
         ],
-        "summary": "Genomfört simpass 3 000 m med tydlig setstruktur (1×400, 4×50, 12×200); användarrapport RPE 8/10 och 'trött' indikerar hög ansträngning idag.",
+        "summary": "Genomfört 3 000 m strukturerat simpass (1×400 + 4×50 + 12×200) med RPE 8/10 och användarrapport om trötthet; passet avvek från planerat 4 000 m (-25%).",
         "unknowns": [
-          "Hur återhämtningen utvecklas över natten före söndagens löppass",
-          "Subjektiv trötthetens orsak (t.ex."
+          "Subjektiv återhämtning nästa morgon (söndagsmorgon) kan ändra beslut.",
+          "Detaljer om återhämtningsunderlaget/nutrition efter passet som påverkar återhämtning är okända."
         ],
         "confidence": "medium",
         "interpretations": [
-          "Passet genomfördes men avvikelsen från planerat 4 000 m visar att användaren fann full dos svår att fullfölja idag",
-          "Hög RPE tillsammans med föregående enduro och backintervaller innebär ökad ackumulerad belastning som talar för reducerad löpning nästa dag"
+          "Passet visar fullföljd 3k sim med tydlig tröskelblock (12×200) men användaren uppgav hög ansträngning vilket ökar korttidsåterhämtningsbehovet.",
+          "Eftersom senaste 48–72 h innehåller enduro + backintervaller + detta simpass rekommenderas konservativ hantering av morgondagens långpass för att skydda kvalitet och undvika ackumulerad…"
         ],
-        "load_interpretation": "Närbelastningen de senaste 2–3 dagarna (enduro + backintervaller + dagens 3k‑sim) plus subjektiv trötthet motiverar konservativ närhetsjustering."
+        "load_interpretation": "Närbelastningen de senaste 2–3 dagarna (enduro + backintervaller + dagens sim med hög RPE) talar för konservativ återhämtning inför morgondagens löpning."
       },
       "auto_apply": {
         "note": "Konservativ ändring applicerad på 2026-09-27: reduce.",
@@ -5332,7 +5332,7 @@
       "activity_id": 20337309419,
       "plan_action": {
         "action": "reduce",
-        "reason": "Konservativ reduktion rekommenderas p.g.a.",
+        "reason": "Konservativ reduktion rekommenderas på grund av kumulativ närbelastning och hög RPE efter dagens sim.",
         "target_date": "2026-09-27",
         "dose_option_id": "",
         "recommendation": "Följ det justerade passupplägget i planen.",
@@ -5340,7 +5340,7 @@
       },
       "activity_date": "2026-09-26",
       "activity_name": "Simning på eftermiddagen",
-      "generated_at_utc": "2026-09-27T10:04:03.864482+00:00",
+      "generated_at_utc": "2026-09-27T10:08:54.480335+00:00",
       "analysis_contract": {
         "pipeline_version": 3,
         "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
