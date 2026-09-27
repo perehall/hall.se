@@ -73,7 +73,7 @@ EXPECTED_PIPELINE = (
 
 class RenderPipelineTests(unittest.TestCase):
     def test_pipeline_order_is_single_explicit_contract(self):
-        self.assertEqual(LEGACY_PARITY_PIPELINE, EXPECTED_LEGACY_PARITY_PIPELINE)
+        self.assertEqual(LEGACY_PARITY_PIPELINE, EXPECTED_PIPELINE)
         self.assertEqual(len(LEGACY_PARITY_PIPELINE), len(set(LEGACY_PARITY_PIPELINE)))
         self.assertEqual(LEGACY_PARITY_PIPELINE[-2:], ("validate_site_contracts.py", "validate_training_data.py"))
         self.assertLess(LEGACY_PARITY_PIPELINE.index("apply_plan_overrides.py"), LEGACY_PARITY_PIPELINE.index("enforce_coach_output_contract.py"))
@@ -121,7 +121,7 @@ class RenderPipelineTests(unittest.TestCase):
             calls.append((Path(command[1]).name, check, cwd))
 
         run_legacy_parity_pipeline(runner=fake_runner)
-        self.assertEqual([name for name, _, _ in calls], list(EXPECTED_LEGACY_PARITY_PIPELINE))
+        self.assertEqual([name for name, _, _ in calls], list(EXPECTED_PIPELINE))
         self.assertTrue(all(check is True for _, check, _ in calls))
         self.assertTrue(all(cwd == REPO_ROOT for _, _, cwd in calls))
 
