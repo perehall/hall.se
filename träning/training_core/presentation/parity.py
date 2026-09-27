@@ -45,6 +45,13 @@ def semantic_snapshot(snapshot: PresentationSnapshot) -> dict[str, Any]:
             "development_focus": snapshot.today.development_focus,
             "prescription": list(snapshot.today.prescription),
             "icon_keys": list(snapshot.today.icon_keys),
+            "device_sync": (
+                {
+                    "status": snapshot.today.device_sync.status,
+                    "label": snapshot.today.device_sync.label,
+                }
+                if snapshot.today.device_sync else None
+            ),
             "manual_activities": [
                 {
                     "session": activity.session,
@@ -117,6 +124,10 @@ def semantic_snapshot(snapshot: PresentationSnapshot) -> dict[str, Any]:
                     "planned_session": d.planned_session,
                     "actual_labels": list(d.actual_labels),
                     "icon_keys": list(d.icon_keys),
+                    "device_sync": (
+                        {"status": d.device_sync.status, "label": d.device_sync.label}
+                        if d.device_sync else None
+                    ),
                     "manual_activities": [
                         {
                             "session": activity.session,
