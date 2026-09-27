@@ -9,17 +9,17 @@
           "Planstatus 2026-09-26: dagen är markerad genomförd i coachens beslutsunderlag.",
           "Planerat simpass 4000 m; genomfört 3000 m. Genomförd setstruktur avviker från planens struktur."
         ],
-        "summary": "Genomfört 3 000 m simpass (struktur 1x400+4x50+12x200) med RPE 8/10 och användarrapport: trött.",
+        "summary": "Genomfört simpass 3 000 m med tydlig setstruktur (1×400, 4×50, 12×200); användarrapport RPE 8/10 och 'trött' indikerar hög ansträngning idag.",
         "unknowns": [
-          "Hur återhämtad du är nästa morgon (subjektiv rapport saknas för efterföljande dag).",
-          "Detaljer om ompassering av söndagens löppass om du känner dig bättre än idag."
+          "Hur återhämtningen utvecklas över natten före söndagens löppass",
+          "Subjektiv trötthetens orsak (t.ex."
         ],
         "confidence": "medium",
         "interpretations": [
-          "Passet visar att simteknisk/aerob volym genomfördes men med hög subjektiv ansträngning vilket minskar absorberbar närkapacitet kommande 24–72 h.",
-          "I mikrocykelkontextet ökar detta kumulativ mekanisk/kardiovaskulär belastning efter tidigare enduro och backintervaller; planen rekommenderar konservativ reduktion för nästa löppass."
+          "Passet genomfördes men avvikelsen från planerat 4 000 m visar att användaren fann full dos svår att fullfölja idag",
+          "Hög RPE tillsammans med föregående enduro och backintervaller innebär ökad ackumulerad belastning som talar för reducerad löpning nästa dag"
         ],
-        "load_interpretation": "Lägg ihop med senaste 2–3 dagars faktiska belastning (enduro + backintervaller + tidigare sim) — nära-term närbelastningen kan inte nivåklassas mot personlig baslinje…"
+        "load_interpretation": "Närbelastningen de senaste 2–3 dagarna (enduro + backintervaller + dagens 3k‑sim) plus subjektiv trötthet motiverar konservativ närhetsjustering."
       },
       "auto_apply": {
         "note": "Konservativ ändring applicerad på 2026-09-27: reduce.",
@@ -36,7 +36,7 @@
       },
       "activity_date": "2026-09-26",
       "activity_name": "Simning på eftermiddagen",
-      "generated_at_utc": "2026-09-27T09:57:16.806750+00:00",
+      "generated_at_utc": "2026-09-27T10:04:03.864482+00:00",
       "analysis_contract": {
         "pipeline_version": 3,
         "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
@@ -1298,9 +1298,9 @@
       "generated_at_utc": "2026-08-29T09:19:56.366468+00:00"
     }
   ],
-  "last_run_utc": "2026-09-27T09:57:16.806750+00:00",
+  "last_run_utc": "2026-09-27T10:04:03.864482+00:00",
   "contract_version": 15,
-  "last_trigger_hash": "66a4c223ed7ee901ff944f3c627b6e368576ce5ccaaf0a780fa041e636a52784",
+  "last_trigger_hash": "ac9acf8f431176256d8d4beed4dfd067c4925dfed4cbbd914bd96e5ea30e0e2f",
   "output_contract_version": 19,
   "pipeline_contract_version": 3
 }

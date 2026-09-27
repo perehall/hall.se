@@ -3,60 +3,62 @@
     {
       "action": "consolidate",
       "day_index": 2,
-      "rationale": "Lågmekanisk simexponering dagen efter fast enduro ger konkret plan utan att anta att benen är redo för ny benkvalitet.",
+      "rationale": "Låg benbelastande tekniskt/aerobt simpass dag efter Enduro för återhämtning och teknikkonsolidering.",
       "recipe_key": "swim_aerobic_technique",
       "evidence_refs": [
-        "mesocycle.primary_capabilities"
+        "recent_session:2026-09-23:20300494236",
+        "capability_fact:swim_aerobic:2026-08-29:19946705399",
+        "mesocycle:20260921-swim_aerobic-swim_technique-run_threshold"
+      ]
+    },
+    {
+      "action": "progress",
+      "day_index": 4,
+      "rationale": "Endast ett primärt stimulus får progress; välgrundat av upprepade kontrollerade 4×8‑sessioner i faktafönstret.",
+      "recipe_key": "run_threshold",
+      "evidence_refs": [
+        "recent_session:2026-09-22:20284663236",
+        "capability_facts:run_threshold",
+        "mesocycle:progression_axes"
       ]
     },
     {
       "action": "consolidate",
-      "day_index": 3,
-      "rationale": "Realiserar mesocykelns primära kapacitet run_threshold med säker separation från annan benbelastning.",
-      "recipe_key": "run_threshold",
+      "day_index": 5,
+      "rationale": "Kombinationspass som ger andra simexponeringen och uppfyller styrka/core‑kravet utan extra benbelastande styrkepass.",
+      "recipe_key": "swim_strength",
       "evidence_refs": [
-        "mesocycle.primary_capabilities"
+        "recent_session:2026-09-21:20272196080",
+        "recent_session:2026-09-19:20239623463",
+        "recipe_profiles:swim_strength"
       ]
     },
     {
       "action": "establish",
-      "day_index": 5,
-      "rationale": "Kombinera en nödvändig simexponering med ännu ej uppfylld styrka/core.",
-      "recipe_key": "swim_strength",
-      "evidence_refs": [
-        "mesocycle.primary_capabilities"
-      ]
-    },
-    {
-      "action": "consolidate",
-      "day_index": 7,
-      "rationale": "Behåll lugn löptålighet med separation från löpkvalitet.",
+      "day_index": 6,
+      "rationale": "Lugn längre löpning för löptålighet placerad ≥48 h från tröskelpasset; undviker att ligga intill MTB och ger vilodag senare i veckan.",
       "recipe_key": "run_easy_distance",
       "evidence_refs": [
-        "planning_policy.microcycle_policy"
+        "recent_session:2026-09-20:20254486837",
+        "mesocycle:progression_axes"
       ]
     }
   ],
-  "source": "deterministic_fallback_after_repair_guard",
+  "source": "openai_repaired",
   "week_key": "2026-W40",
-  "rationale": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern.",
+  "rationale": "Tar bort MTB för att undanröja konflikt (långt löppass intill MTB/XC) och inför minst en vilodag. Behåller simexponeringar (inkl. kombinationspass för styrka), en kontrollerad tröskelprogression (enda primära progressionen) och ett långt lugnt löppass placerat ≥48 h från tröskel. Dag 1 är fast Enduro; dag 2 är låg benbelastning (sim).",
   "week_start": "2026-09-28",
   "source_hash": "690f4566d9c1ba922f481565768787343133b3d63c9e1cb4decd90b7bc9f3adc",
   "guard_repair": {
-    "result": "fallback",
+    "result": "accepted",
     "attempted": true,
-    "repair_failures": [
-      "för många giltiga träningsslots: 6 > 5",
-      "lång löpdistans får inte ligga direkt intill MTB/XC; den sekundära cykelexponeringen ska utgå eller flyttas",
-      "mikrocykeln fyller alla sju dagar trots att ledig dag aldrig är ett eget skäl att lägga till träning"
-    ],
     "initial_failures": [
-      "dag 1 är blockerad av fast endurobelastning"
+      "lång löpdistans får inte ligga direkt intill MTB/XC; den sekundära cykelexponeringen ska utgå eller flyttas"
     ]
   },
   "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
   "schema_version": 1,
-  "generated_at_utc": "2026-09-27T09:57:04.198153+00:00",
+  "generated_at_utc": "2026-09-27T10:03:44.611411+00:00",
   "planner_revision": 7,
   "competition_context": {
     "as_of": "2026-09-28",
