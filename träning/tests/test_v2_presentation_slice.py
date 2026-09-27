@@ -16,7 +16,16 @@ class FakeRepository:
     def planned_days(self, start, end):
         return [
             PlannedDay(date(2026,9,26), "Simning · 4 000 m", "swim", "completed"),
-            PlannedDay(date(2026,9,27), "Löpning · lugn distans · 60 min", "run", "conditional"),
+            PlannedDay(
+                date(2026,9,27), "Löpning · lugn distans · 60 min", "run", "conditional",
+                reason="Bygg löptålighet med god kontroll.",
+                development_focus="Lugn aerob löpning.",
+                payload={"workout_design":{"selected_candidate_id":"easy","candidates":[
+                    {"id":"easy","prescription":{"blocks":[
+                        {"name":"Huvuddel","intensity":"Z2","instruction":"60 min lugnt"}
+                    ]}}
+                ]}},
+            ),
         ]
 
     def completed_activities(self, start, end):
@@ -36,6 +45,15 @@ class PresentationSliceTests(unittest.TestCase):
         self.assertIn("Simning · 3,00 km · 1:03:42", rendered)
         self.assertIn("Löpning · lugn distans · 60 min", rendered)
         self.assertNotIn("Simning · 4 000 m</h1>", rendered)
+
+    def test_planned_today_renders_prescription_and_rationale_without_finalizer(self):
+        snapshot = build_presentation_snapshot(FakeRepository(), today=date(2026,9,27))
+        rendered = render_today(snapshot)
+        self.assertIn("Passupplägg", rendered)
+        self.assertIn("Huvuddel · Z2 · 60 min lugnt", rendered)
+        self.assertIn("Plan och motivering", rendered)
+        self.assertIn("Bygg löptålighet med god kontroll.", rendered)
+        self.assertIn("Lugn aerob löpning.", rendered)
 
 
 if __name__ == "__main__":
