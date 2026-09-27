@@ -25,7 +25,7 @@ class Conn:
 
 class PostgresPresentationRepositoryTests(unittest.TestCase):
     def test_plans_are_read_only_from_current_relational_rows(self):
-        rows=[(date(2026,9,27),"Löpning · 60 min","run","conditional","fixed",False)]
+        rows=[(date(2026,9,27),"Löpning · 60 min","run","conditional","fixed",False,"Skäl","Fokus",{})]
         repo=PostgresPresentationRepository(lambda: Conn(rows))
         days=repo.planned_days(date(2026,9,27),date(2026,10,4))
         self.assertEqual(days[0].session,"Löpning · 60 min")
