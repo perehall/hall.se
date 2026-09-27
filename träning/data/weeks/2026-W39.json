@@ -4,7 +4,7 @@
   "week_start": "2026-09-21",
   "week_end": "2026-09-27",
   "created_at_utc": "2026-09-20T23:15:26.146433+00:00",
-  "updated_at_utc": "2026-09-27T17:21:30.977511+00:00",
+  "updated_at_utc": "2026-09-27T17:54:39.291704+00:00",
   "plan": {
     "days": [
       {
@@ -1063,9 +1063,9 @@
           "status": "synced",
           "transport": "intervals_icu",
           "source_hash": "d73c17537fe87dbcbcf589b67854337903b3d4a8c0dfd18765ceb05cbd56e91c",
-          "updated_at_utc": "2026-09-27T17:21:17.959579+00:00",
+          "updated_at_utc": "2026-09-27T17:54:22.739716+00:00",
           "device_delivery": "unverified",
-          "verified_at_utc": "2026-09-27T17:21:17.959579+00:00",
+          "verified_at_utc": "2026-09-27T17:54:22.739716+00:00",
           "provider_event_id": 138097036
         },
         "dose_options": [
@@ -5651,17 +5651,17 @@
           "Planstatus 2026-09-27: dagen är markerad genomförd i coachens beslutsunderlag.",
           "Planerad tidsdos 60 min; faktisk rörelsetid 79.95 min (+19.95 min mot vald dos)."
         ],
-        "summary": "13.5 km lugn terrängrunda genomförd med genomsnittspuls 131 bpm och användarrapport om trötta ben och låg RPE (4/10).",
+        "summary": "13.46 km terränglöpning genomfört lugnt (snitttempo 5:57/km) med låg subjektiv ansträngning men tunga ben enligt användarrapport.",
         "unknowns": [
-          "Hur du återhämtar dig nästa 24–48 h (subjektiv rapport kväll/natt).",
-          "Eventuella muskulära/localiserade problem som inte rapporterats."
+          "Hur du känner dig kommande 24–48 timmar (subjektiv återhämtning).",
+          "Eventuella lokala muskulära störningar/skador ej rapporterade."
         ],
         "confidence": "medium",
         "interpretations": [
-          "Full återhämtning från dagens pass är ännu inte verifierad.",
-          "Givet ackumulerad närbelastning och subjektiv trötthet bör planens konservativa reduktion (det valda passalternativet) kvarstå för kommande 48–72 h."
+          "Att du kunde hålla låg puls och låg RPE visar att passet var genomförbart men tunga ben och hög tidigare RPE indikerar kvarstående mekanisk/trötthetsbelastning.",
+          "Eftersom passet överskred planerad duration men låg i intensitet, och omgivande dagar redan innehåller belastning, motiverar detta konservativt bevarande av reducerad dos nästa gång…"
         ],
-        "load_interpretation": "Närbelastningen (enduro + 4×8 tröskel + två simpass + dagens runda) motiverar konservativ reducering enligt planens tidigare automatiska beslut."
+        "load_interpretation": "Passet är längre än planerat (80 vs 60 min) men intensitet och användarrapport tyder på tolererat utförande; finns kumulativ närbelastning från tidigare dagar."
       },
       "auto_apply": {
         "note": "Ingen automatisk planändring.",
@@ -5669,16 +5669,16 @@
       },
       "activity_id": 20350203020,
       "plan_action": {
-        "action": "review",
-        "reason": "Beslutet skjuts upp eftersom mellanliggande planerade dagar ännu inte har ett känt utfall.",
+        "action": "keep",
+        "reason": "Konservativt beslut: planens nedjustering (det valda passalternativet) var redan applicerad och är lämplig med den samlade närbelastningen.",
         "target_date": "",
         "dose_option_id": "",
-        "recommendation": "Måndag: Enduroskola · fast tillfälle ligger kvar som plan. Tisdag: Simning · 3 200 m · aerob/teknik bedöms efter den faktiska belastningen från måndag och återhämtningen därefter.",
+        "recommendation": "Följ den redan valda reducerade dosen (det valda passalternativet) — ingen ytterligare ändring behövs; vila vid ökad stelhet eller smärta.",
         "requires_approval": false
       },
       "activity_date": "2026-09-27",
       "activity_name": "Terränglöpning vid lunch",
-      "generated_at_utc": "2026-09-27T17:21:16.466775+00:00",
+      "generated_at_utc": "2026-09-27T17:54:20.912898+00:00",
       "analysis_contract": {
         "pipeline_version": 3,
         "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
