@@ -913,7 +913,7 @@ def render_reference_tools() -> str:
 
 V2_SHELL_CSS = """
 :root{color-scheme:light;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:#0f172a;background:#f8fafc}
-*{box-sizing:border-box}body{margin:0;line-height:1.45}.v2-shell{width:min(100%,720px);margin:0 auto;padding:20px 16px 56px}
+*{box-sizing:border-box}body{margin:0;line-height:1.45}.v2-sport-icon{display:inline-block;width:1.25em;height:1.25em;max-width:1.25em;max-height:1.25em;flex:0 0 1.25em;vertical-align:-.18em}.v2-sport-icons{display:inline-flex;align-items:center;gap:.3em;flex:0 0 auto}.v2-today-title,.v2-week-session,.v2-outcome-title,.v2-history-activity header,.v2-manual-activity header{display:flex;align-items:center;gap:.5rem}.v2-watch-icon{width:1em;height:1em;flex:0 0 1em;vertical-align:-.12em}.v2-shell{width:min(100%,720px);margin:0 auto;padding:20px 16px 56px}
 .v2-shell a{color:inherit}.v2-shell-main{display:grid;gap:18px}.v2-shell-meta{display:flex;justify-content:flex-end;margin:4px 0 12px;font-size:.82rem}
 .v2-reference-tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.v2-reference-tools button,.v2-reference-dialog button{font:inherit}
 .v2-reference-tools button{border:1px solid #cbd5e1;background:#fff;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700}
