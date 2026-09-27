@@ -40,4 +40,15 @@ jobs:
           SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
         run: |
           test -n "$SUPABASE_DB_URL"
-          PYTHONPATH="träning" python "träning/v2_presentation_probe.py"
+          V2_PROBE_OUTPUT="/tmp/v2-presentation.json" PYTHONPATH="träning" python "träning/v2_presentation_probe.py"
+          python - <<\'PY\'
+          import json
+          from pathlib import Path
+          payload=json.loads(Path("/tmp/v2-presentation.json").read_text(encoding="utf-8"))
+          semantics=payload["semantics"]
+          assert semantics["today"]["date"]
+          assert semantics["today"]["title"]
+          assert semantics["week"]["start"] <= semantics["today"]["date"] <= semantics["week"]["end"]
+          assert semantics["week"]["planned_count"] >= 1
+          print("V2_SHADOW_OK", json.dumps(semantics, ensure_ascii=False, sort_keys=True))
+          PY
