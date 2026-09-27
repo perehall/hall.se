@@ -135,6 +135,34 @@ class PostgresPresentationRepositoryTests(unittest.TestCase):
         self.assertIn("training.activity_feedback", factory.last_query)
         self.assertIn("training.coach_evaluations", factory.last_query)
 
+    def test_trailrun_provider_vocabulary_is_public_traillopning(self):
+        rows = [
+            (
+                "43",
+                date(2026, 9, 27),
+                "TrailRun",
+                "run",
+                4804,
+                13460.0,
+                130.0,
+                150.0,
+                "",
+                "",
+                None,
+                [],
+                "",
+                "",
+                "",
+                "",
+                False,
+            )
+        ]
+        repo = PostgresPresentationRepository(CapturingFactory(rows))
+        activities = repo.completed_activities(
+            date(2026, 9, 27), date(2026, 9, 27)
+        )
+        self.assertEqual(activities[0].label, "Traillöpning")
+
     def test_provider_vocabulary_is_normalized_before_presentation(self):
         rows = [
             (

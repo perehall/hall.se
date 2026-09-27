@@ -11,6 +11,10 @@ from training_core.presentation.manual_activity import (
     manual_activities_for_day,
 )
 from training_core.presentation.public_copy import public_reason
+from training_core.presentation.sport_identity import (
+    activity_icon_key,
+    planned_icon_keys,
+)
 
 
 FEELING_LABELS = {
@@ -76,6 +80,7 @@ class ActivityOutcomeReadModel:
     plan_impact: str
     action_reason: str
     next_step: str
+    icon_key: str
 
 
 @dataclass(frozen=True)
@@ -91,6 +96,7 @@ class TodayReadModel:
     prescription: tuple[str, ...] = ()
     outcomes: tuple[ActivityOutcomeReadModel, ...] = ()
     manual_activities: tuple[ManualActivityReadModel, ...] = ()
+    icon_keys: tuple[str, ...] = ()
 
 
 def _duration(seconds: int | None) -> str:
@@ -148,6 +154,7 @@ def activity_outcome(activity: CompletedActivity) -> ActivityOutcomeReadModel:
         plan_impact=plan_impact(activity),
         action_reason=activity.action_reason,
         next_step=activity.recommendation,
+        icon_key=activity_icon_key(activity.sport_family),
     )
 
 
@@ -222,4 +229,14 @@ def build_today_read_model(
         prescription=_prescription_lines(planned),
         outcomes=outcomes,
         manual_activities=manual,
+        icon_keys=(
+            tuple(
+                dict.fromkeys(
+                    [activity_icon_key(activity.sport_family) for activity in actual]
+                    + [activity.icon_key for activity in manual]
+                )
+            )
+            if actual or manual
+            else planned_icon_keys(sport=planned.sport, payload=planned.payload)
+        ),
     )

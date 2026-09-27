@@ -69,8 +69,8 @@ SURFACES = (
     ),
     CutoverSurface(
         "sport_identity_icons",
-        "blocker",
-        "Production requires visible sport SVG identity for planned and completed primary surfaces; v2 has no icon contract yet.",
+        "migrated",
+        "Structured plan/activity/manual sport identity is carried as typed icon keys and rendered from a validated read-only SVG asset registry across current and historical surfaces.",
     ),
     CutoverSurface(
         "week_context",

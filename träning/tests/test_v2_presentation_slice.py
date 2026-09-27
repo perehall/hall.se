@@ -121,7 +121,7 @@ class PresentationSliceTests(unittest.TestCase):
         )
         rendered = render_today(snapshot)
         self.assertIn('data-state="completed"', rendered)
-        self.assertIn("<h1>Enduro + Simning</h1>", rendered)
+        self.assertIn("<span>Enduro + Simning</span></h1>", rendered)
         self.assertIn("Enduro · 26,61 km · 1:41:02", rendered)
         self.assertIn("Simning · 3,00 km · 1:03:42", rendered)
         self.assertIn("Löpning · lugn distans · 60 min", rendered)

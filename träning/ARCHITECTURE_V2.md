@@ -69,6 +69,7 @@ Phase 1: Presentation vertical slice
   - [x] Week context: focus, microcycle position and plan idea come from relational mesocycle/microcycle state.
   - [x] Week status: pass count, exact passtid, training days and sport distribution derive from canonical activities.
   - [x] Manual activity truth: completed manual context is typed from canonical planned-workout payload and rendered separately.
+  - [x] Sport identity/icons: structured sport identity is rendered from a validated SVG asset registry across current and historical views.
 - [ ] Cut publication over after the v2 renderer carries the complete retained UI contract.
 - [ ] Delete replaced finalizers.
 

@@ -20,7 +20,7 @@ PUBLIC_ACTIVITY_LABELS = {
     "enduro": "Enduro",
     "strength": "Styrka",
     "Run": "Löpning",
-    "TrailRun": "Löpning",
+    "TrailRun": "Traillöpning",
     "VirtualRun": "Löpning",
     "Swim": "Simning",
     "Ride": "Cykel",

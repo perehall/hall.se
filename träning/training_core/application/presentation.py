@@ -22,6 +22,7 @@ from training_core.presentation.week_context import (
 )
 from training_core.repositories.archive import WeekArchiveRepository
 from training_core.repositories.context import PlanningContextRepository
+from training_core.repositories.icons import SportIconRegistry, SportIconRepository
 from training_core.repositories.presentation import PresentationRepository
 from training_core.repositories.weather import WeatherRepository
 
@@ -33,12 +34,14 @@ class PresentationSnapshot:
     navigation: WeekNavigationReadModel
     weather: WeatherReadModel
     week_context: WeekContextReadModel | None
+    sport_icons: SportIconRegistry | None
 
 
 @dataclass(frozen=True)
 class HistoricalPresentationSnapshot:
     history: HistoricalWeekReadModel
     navigation: WeekNavigationReadModel
+    sport_icons: SportIconRegistry | None
 
 
 def week_bounds(day: date) -> tuple[date, date]:
@@ -53,6 +56,7 @@ def build_presentation_snapshot(
     archive_repository: WeekArchiveRepository | None = None,
     weather_repository: WeatherRepository | None = None,
     context_repository: PlanningContextRepository | None = None,
+    icon_repository: SportIconRepository | None = None,
 ) -> PresentationSnapshot:
     week_start, week_end = week_bounds(today)
     read_end = max(week_end, today + timedelta(days=7))
@@ -73,6 +77,7 @@ def build_presentation_snapshot(
         if context_repository is not None
         else None
     )
+    sport_icons = icon_repository.current() if icon_repository is not None else None
     return PresentationSnapshot(
         today=build_today_read_model(today=today, plan=plan, activities=activities),
         week=build_week_read_model(
@@ -89,6 +94,7 @@ def build_presentation_snapshot(
             snapshot=weather_snapshot,
         ),
         week_context=build_week_context_read_model(planning_context),
+        sport_icons=sport_icons,
     )
 
 
@@ -96,6 +102,7 @@ def build_historical_presentation_snapshot(
     archive_repository: WeekArchiveRepository,
     *,
     week_key: str,
+    icon_repository: SportIconRepository | None = None,
 ) -> HistoricalPresentationSnapshot:
     archived = archive_repository.archived_week(week_key)
     current = archive_repository.current_published_week()
@@ -108,4 +115,5 @@ def build_historical_presentation_snapshot(
             planned_days=(),
             published_weeks=published,
         ),
+        sport_icons=icon_repository.current() if icon_repository is not None else None,
     )

@@ -12,6 +12,10 @@ from training_core.domain.history import (
     ArchivedWeekReview,
 )
 from training_core.presentation.public_copy import public_reason
+from training_core.presentation.sport_identity import (
+    activity_icon_key,
+    planned_icon_keys,
+)
 
 
 PLAN_IMPACT_LABELS = {
@@ -32,6 +36,7 @@ class HistoricalActivityReadModel:
     action_reason: str
     next_step: str
     uncertainties: tuple[str, ...]
+    icon_key: str
 
 
 @dataclass(frozen=True)
@@ -42,6 +47,7 @@ class HistoricalDayReadModel:
     development_focus: str
     prescription: tuple[str, ...]
     activities: tuple[HistoricalActivityReadModel, ...]
+    planned_icon_keys: tuple[str, ...]
     state: str
 
 
@@ -158,6 +164,7 @@ def _activity_model(
         action_reason=evaluation.action_reason if evaluation else "",
         next_step=evaluation.recommendation if evaluation else "",
         uncertainties=evaluation.unknowns if evaluation else (),
+        icon_key=activity_icon_key(activity.sport_type),
     )
 
 
@@ -207,6 +214,10 @@ def build_historical_week_read_model(
                 development_focus=planned.development_focus,
                 prescription=_prescription_lines(planned.payload),
                 activities=activities,
+                planned_icon_keys=planned_icon_keys(
+                    sport=str(planned.payload.get("sport") or ""),
+                    payload=planned.payload,
+                ),
                 state="completed" if activities else "not_recorded",
             )
         )

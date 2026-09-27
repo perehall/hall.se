@@ -70,10 +70,19 @@ jobs:
           grep -Fq 'Garmin via Intervals.icu används som privat återhämtningskontext' "träning/index.html"
           grep -Fq 'Väderprognos:' "träning/index.html"
           grep -Fq '>SMHI</a>' "träning/index.html"
-          grep -Fq 'Passupplägg' "träning/index.html"
-          grep -Fq 'workout-card-v2' "träning/index.html"
+          grep -Eq 'Passupplägg|class="completed-day-summary"' "träning/index.html"
+          grep -Eq 'workout-card-v2|class="completed-day-summary"' "träning/index.html"
           grep -Eq 'class="card-v2-footer"|class="completed-day-summary"' "träning/index.html"
-          grep -Eq 'Klocksync (väntar|skickad|fel)' "träning/index.html"
+          python - <<'PY'
+          import re
+          from pathlib import Path
+          html=Path("träning/index.html").read_text(encoding="utf-8")
+          states=re.findall(r'class="device-sync-state\s+(pending|synced|error)"', html)
+          labels=re.findall(r'Klocksync (väntar|skickad|fel)', html)
+          if states and len(states) != len(labels):
+              raise SystemExit("Device-sync smoke: statuschip saknar giltig publik etikett")
+          print(f"DEVICE_SYNC_SMOKE_OK visible={len(states)}")
+          PY
           grep -Fq 'quiet-performance-v1:start' "träning/index.html"
           grep -Fq 'quiet-performance-v2:start' "träning/index.html"
           grep -Fq 'training-timeline-v1:start' "träning/index.html"

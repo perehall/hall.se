@@ -16,10 +16,10 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 from pathlib import Path
 from typing import Any
 
-import psycopg
 
 from supabase_shadow_model import (
     DATA,
@@ -27,7 +27,26 @@ from supabase_shadow_model import (
     build_shadow_payload,
     canonical_hash,
 )
-from supabase_shadow_writer import assert_schema, database_url, upsert
+def _driver():
+    import psycopg
+    return psycopg
+
+
+def database_url() -> str:
+    value = os.environ.get("SUPABASE_DB_URL", "").strip()
+    if not value:
+        raise RuntimeError("SUPABASE_DB_URL is missing")
+    return value
+
+
+def _assert_schema(cur: Any) -> None:
+    from supabase_shadow_writer import assert_schema
+    assert_schema(cur)
+
+
+def _upsert(cur: Any, table: str, row: dict[str, Any], conflict_keys) -> None:
+    from supabase_shadow_writer import upsert
+    upsert(cur, table, row, conflict_keys)
 
 
 SCOPE_KEYS = {
@@ -136,7 +155,7 @@ def _linked_activity_id(
 
 def _write_documents(cur: Any, rows: list[dict[str, Any]]) -> None:
     for row in rows:
-        upsert(cur, "state_documents", dict(row), ("document_key",))
+        _upsert(cur, "state_documents", dict(row), ("document_key",))
 
 
 def _write_planning_relational(
@@ -146,10 +165,10 @@ def _write_planning_relational(
     activity_ids: dict[tuple[str, str], Any],
 ) -> None:
     for row in payload.get("mesocycles") or []:
-        upsert(cur, "mesocycles", dict(row), ("id",))
+        _upsert(cur, "mesocycles", dict(row), ("id",))
 
     for row in payload.get("microcycles") or []:
-        upsert(cur, "microcycles", dict(row), ("id",))
+        _upsert(cur, "microcycles", dict(row), ("id",))
 
     cur.execute(
         "update training.planned_workouts set is_current = false where is_current"
@@ -163,7 +182,7 @@ def _write_planning_relational(
         )
         row["is_current"] = True
         row["last_seen_source_hash"] = runtime_hash
-        upsert(cur, "planned_workouts", row, ("workout_key",))
+        _upsert(cur, "planned_workouts", row, ("workout_key",))
 
 
 def _write_coach_relational(
@@ -178,7 +197,7 @@ def _write_coach_relational(
         row["activity_id"] = _linked_activity_id(
             activity_ids, provider, source_id
         )
-        upsert(
+        _upsert(
             cur,
             "coach_evaluations",
             row,
@@ -249,7 +268,7 @@ def _fresh_readback(
     expected_workouts: set[str],
 ) -> dict[str, dict[str, Any]]:
     expected = {row["document_key"]: row for row in rows}
-    with psycopg.connect(
+    with _driver().connect(
         database_url(),
         sslmode="require",
         connect_timeout=15,
@@ -314,6 +333,72 @@ def _materialize_cache(
         )
 
 
+def hydrate_runtime_scope(
+    scope: str,
+    *,
+    data_dir: Path = DATA,
+) -> dict[str, Any]:
+    """Materialize verified runtime documents without mutating PostgreSQL."""
+    if scope not in SCOPE_KEYS:
+        raise RuntimeError(f"Unknown runtime backend scope: {scope}")
+
+    keys = SCOPE_KEYS[scope]
+    with _driver().connect(
+        database_url(),
+        sslmode="require",
+        connect_timeout=15,
+    ) as conn:
+        with conn.cursor() as cur:
+            cur.execute("set transaction read only")
+            cur.execute(
+                """
+                select document_key, source_hash, payload
+                from training.state_documents
+                where document_key = any(%s)
+                """,
+                (list(keys),),
+            )
+            rows = {
+                str(key): {
+                    "source_hash": str(source_hash or ""),
+                    "payload": payload,
+                }
+                for key, source_hash, payload in cur.fetchall()
+            }
+            conn.rollback()
+
+    missing = sorted(set(keys) - set(rows))
+    if missing:
+        raise RuntimeError(
+            "Runtime backend hydration is missing documents: " + ", ".join(missing)
+        )
+    for key in keys:
+        record = rows[key]
+        if canonical_hash(record["payload"]) != record["source_hash"]:
+            raise RuntimeError(
+                f"Runtime backend hydration payload hash mismatch for {key}"
+            )
+
+    _materialize_cache(rows, data_dir)
+    hydrated_hash = canonical_hash(
+        {
+            key: {
+                "source_hash": rows[key]["source_hash"],
+                "payload": rows[key]["payload"],
+            }
+            for key in sorted(rows)
+        }
+    )
+    return {
+        "scope": scope,
+        "source": "supabase_db",
+        "verified": True,
+        "source_hash": hydrated_hash,
+        "documents": sorted(rows),
+        "current_workouts": 0,
+    }
+
+
 def promote_runtime_scope(
     scope: str,
     *,
@@ -327,13 +412,13 @@ def promote_runtime_scope(
     runtime_hash = scope_source_hash(rows)
     activity_ids_needed = scope in {"planning", "final"}
 
-    with psycopg.connect(
+    with _driver().connect(
         database_url(),
         sslmode="require",
         connect_timeout=15,
     ) as conn:
         with conn.cursor() as cur:
-            assert_schema(cur)
+            _assert_schema(cur)
             activity_ids = (
                 _activity_uuid_map(cur, payload) if activity_ids_needed else {}
             )
@@ -370,9 +455,18 @@ def promote_runtime_scope(
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--scope", choices=tuple(SCOPE_KEYS), required=True)
+    parser.add_argument(
+        "--mode",
+        choices=("promote", "hydrate"),
+        default="promote",
+    )
     args = parser.parse_args(argv)
     try:
-        result = promote_runtime_scope(args.scope)
+        result = (
+            hydrate_runtime_scope(args.scope)
+            if args.mode == "hydrate"
+            else promote_runtime_scope(args.scope)
+        )
     except Exception as exc:
         print(
             f"SUPABASE_RUNTIME_STATE_FAILED scope={args.scope} "
@@ -382,7 +476,7 @@ def main(argv: list[str] | None = None) -> int:
 
     print(
         "SUPABASE_RUNTIME_STATE_OK "
-        f"scope={result['scope']} source={result['source']} "
+        f"mode={args.mode} scope={result['scope']} source={result['source']} "
         f"verified={result['verified']} source_hash={result['source_hash']} "
         f"documents={','.join(result['documents'])} "
         f"current_workouts={result['current_workouts']}"

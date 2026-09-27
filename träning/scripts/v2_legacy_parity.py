@@ -23,6 +23,20 @@ def _text(value: str) -> str:
     return " ".join(unescape(_TAG_RE.sub(" ", value)).split())
 
 
+LEGACY_PUBLIC_ACTIVITY_LABELS = {
+    "TrailRun": "Traillöpning",
+    "Run": "Löpning",
+    "Swim": "Simning",
+    "MountainBikeRide": "MTB/XC",
+    "WeightTraining": "Styrka",
+}
+
+
+def _normalize_activity_label(value: str) -> str:
+    text = " ".join(str(value or "").split())
+    return LEGACY_PUBLIC_ACTIVITY_LABELS.get(text, text)
+
+
 def _normalize_weather_text(value: str) -> str:
     normalized = " ".join(str(value or "").split())
     normalized = re.sub(
@@ -70,11 +84,36 @@ def legacy_semantic_contract(index_path: Path, *, today: date) -> dict:
             body,
             re.S,
         )
+        visible_icons = re.search(
+            r'data-visible-sport-icons="([^"]*)"',
+            body,
+        )
+        if visible_icons:
+            icon_keys = [
+                value.strip()
+                for value in visible_icons.group(1).split(",")
+                if value.strip()
+            ]
+        else:
+            group = re.search(r'data-week-pass-icons="([^"]*)"', body)
+            if group:
+                icon_keys = [
+                    value.strip()
+                    for value in group.group(1).split(",")
+                    if value.strip()
+                ]
+            else:
+                first_icon = re.search(
+                    r'class="sport-icon icon-([a-z]+)(?:\s|")',
+                    body,
+                )
+                icon_keys = [first_icon.group(1)] if first_icon else []
         days.append(
             {
                 "date": date_value,
                 "completed": completed,
                 "actual_labels": actual_labels,
+                "icon_keys": icon_keys,
                 "weather": _text(weather_match.group(1)) if weather_match else "",
             }
         )
@@ -136,7 +175,7 @@ def compare_cutover_contract(legacy: dict, v2: dict) -> list[str]:
         differences.append(
             f"today.date: {legacy['today']['date']!r} != {v2['today']['date']!r}"
         )
-    legacy_title = legacy["today"]["title"]
+    legacy_title = _normalize_activity_label(legacy["today"]["title"])
     v2_title = v2["today"]["title"]
     # Legacy splits dose into a separate meta line; v2 currently keeps it in the
     # canonical session title. Prefix equality therefore represents the same fact.
@@ -194,6 +233,14 @@ def compare_cutover_contract(legacy: dict, v2: dict) -> list[str]:
                 differences.append(
                     f"week.{day_date}.actual_labels: "
                     f"{legacy_day['actual_labels']!r} != {v2_day['actual_labels']!r}"
+                )
+        legacy_icons = legacy_day.get("icon_keys") or []
+        if legacy_icons:
+            v2_icons = v2_day.get("icon_keys") or []
+            if legacy_icons != v2_icons:
+                differences.append(
+                    f"week.{day_date}.icon_keys: "
+                    f"{legacy_icons!r} != {v2_icons!r}"
                 )
         legacy_weather = legacy_day.get("weather") or ""
         if legacy_weather:
