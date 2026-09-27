@@ -64,8 +64,8 @@ SURFACES = (
     ),
     CutoverSurface(
         "public_copy_normalization",
-        "blocker",
-        "V2 still exposes internal planning prose such as athlete_state/materialized relation in public reason text.",
+        "migrated",
+        "Canonical planning provenance is filtered at the read-model boundary; internal athlete_state/decision-trace vocabulary is not public copy.",
     ),
     CutoverSurface(
         "sport_identity_icons",

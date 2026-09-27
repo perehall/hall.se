@@ -11,6 +11,7 @@ from training_core.domain.history import (
     ArchivedWeek,
     ArchivedWeekReview,
 )
+from training_core.presentation.public_copy import public_reason
 
 
 PLAN_IMPACT_LABELS = {
@@ -202,7 +203,7 @@ def build_historical_week_read_model(
             HistoricalDayReadModel(
                 local_date=planned.local_date,
                 planned_session=planned.session,
-                reason=planned.reason,
+                reason=public_reason(planned.reason),
                 development_focus=planned.development_focus,
                 prescription=_prescription_lines(planned.payload),
                 activities=activities,

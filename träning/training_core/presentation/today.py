@@ -6,6 +6,8 @@ from dataclasses import dataclass
 from datetime import date
 from typing import Iterable
 
+from training_core.presentation.public_copy import public_reason
+
 
 FEELING_LABELS = {
     "fresh": "Pigg",
@@ -203,7 +205,7 @@ def build_today_read_model(
         details=details,
         planned_session=planned.session,
         next_session=future[0].session if future else None,
-        reason=planned.reason,
+        reason=public_reason(planned.reason),
         development_focus=planned.development_focus,
         prescription=_prescription_lines(planned),
         outcomes=outcomes,

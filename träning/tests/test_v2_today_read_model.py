@@ -95,6 +95,29 @@ class TodayReadModelTests(unittest.TestCase):
         )
         self.assertEqual(model.outcomes[0].plan_impact, "Ändring rekommenderades")
 
+    def test_today_reason_never_exposes_internal_planning_provenance(self):
+        today = date(2026, 9, 27)
+        model = build_today_read_model(
+            today=today,
+            plan=[
+                PlannedDay(
+                    today,
+                    "Löpning · lugn distans · 60 min",
+                    "run",
+                    "conditional",
+                    reason=(
+                        "Långt lugnt löppass för löptålighet. "
+                        "Valet utgår från 119.767 i athlete_state. "
+                        "Veckobeslut: establish; materialiserad relation: hold."
+                    ),
+                )
+            ],
+            activities=[],
+        )
+        self.assertEqual(model.reason, "Långt lugnt löppass för löptålighet.")
+        self.assertNotIn("athlete_state", model.reason)
+        self.assertNotIn("materialiserad relation", model.reason)
+
     def test_plan_is_used_only_when_no_actual_activity_exists(self):
         today = date(2026, 9, 25)
         model = build_today_read_model(
