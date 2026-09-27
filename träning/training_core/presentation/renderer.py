@@ -260,6 +260,48 @@ FEEDBACK_SCRIPT = r"""
 """.strip()
 
 
+def _render_sport_icon(
+    snapshot: PresentationSnapshot | HistoricalPresentationSnapshot,
+    key: str,
+) -> str:
+    registry = snapshot.sport_icons
+    if registry is None:
+        return ""
+    icon = registry.require(key)
+    escaped_key = html.escape(icon.key, quote=True)
+    view_box = html.escape(icon.view_box, quote=True)
+    path = html.escape(icon.path, quote=True)
+    if icon.solid:
+        return (
+            f'<svg class="v2-sport-icon icon-{escaped_key}" '
+            f'data-sport-icon="{escaped_key}" aria-hidden="true" '
+            f'viewBox="{view_box}" fill="currentColor" '
+            'xmlns="http://www.w3.org/2000/svg">'
+            f'<path d="{path}"/></svg>'
+        )
+    return (
+        f'<svg class="v2-sport-icon icon-{escaped_key}" '
+        f'data-sport-icon="{escaped_key}" aria-hidden="true" '
+        f'viewBox="{view_box}" fill="none" stroke="currentColor" '
+        'stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" '
+        'xmlns="http://www.w3.org/2000/svg">'
+        f'<path d="{path}"/></svg>'
+    )
+
+
+def _render_icon_group(
+    snapshot: PresentationSnapshot | HistoricalPresentationSnapshot,
+    keys: tuple[str, ...],
+) -> str:
+    if not keys or snapshot.sport_icons is None:
+        return ""
+    icons = "".join(_render_sport_icon(snapshot, key) for key in keys)
+    return (
+        f'<span class="v2-sport-icons" data-sport-icons="{html.escape(",".join(keys), quote=True)}">'
+        f'{icons}</span>'
+    )
+
+
 def _choice_button(
     *,
     css_class: str,
@@ -330,9 +372,16 @@ def _render_feedback_editor(outcome: ActivityOutcomeReadModel) -> str:
     )
 
 
-def _render_outcome(outcome: ActivityOutcomeReadModel, *, show_label: bool) -> str:
+def _render_outcome(
+    snapshot: PresentationSnapshot,
+    outcome: ActivityOutcomeReadModel,
+    *,
+    show_label: bool,
+) -> str:
     heading = (
-        f'<h2 class="v2-outcome-title">{html.escape(outcome.label)}</h2>'
+        '<h2 class="v2-outcome-title">'
+        + _render_icon_group(snapshot, (outcome.icon_key,))
+        + f'<span>{html.escape(outcome.label)}</span></h2>'
         if show_label else ""
     )
     feedback = _render_feedback_editor(outcome)
@@ -365,6 +414,7 @@ def _render_outcome(outcome: ActivityOutcomeReadModel, *, show_label: bool) -> s
 
 
 def _render_manual_activities(
+    snapshot: PresentationSnapshot,
     activities: tuple[ManualActivityReadModel, ...],
     *,
     css_class: str,
@@ -382,7 +432,8 @@ def _render_manual_activities(
             f'data-sport="{html.escape(activity.sport, quote=True)}" '
             f'data-classification="{html.escape(activity.classification, quote=True)}">'
             '<header>'
-            f'<strong>{html.escape(activity.session)}</strong>'
+            + _render_icon_group(snapshot, (activity.icon_key,))
+            + f'<strong>{html.escape(activity.session)}</strong>'
             f'<span>{html.escape(activity.classification_label)}</span>'
             '</header>'
             f'{reason}</article>'
@@ -394,11 +445,14 @@ def _render_manual_activities(
     )
 
 
-def _render_completed_context(model: TodayReadModel) -> str:
+def _render_completed_context(
+    snapshot: PresentationSnapshot,
+    model: TodayReadModel,
+) -> str:
     if not model.outcomes:
         return ""
     cards = "".join(
-        _render_outcome(outcome, show_label=len(model.outcomes) > 1)
+        _render_outcome(snapshot, outcome, show_label=len(model.outcomes) > 1)
         for outcome in model.outcomes
     )
     planned = (
@@ -506,6 +560,7 @@ def _render_historical_review(
 
 
 def _render_historical_activity(
+    snapshot: HistoricalPresentationSnapshot,
     activity: HistoricalActivityReadModel,
 ) -> str:
     classification = (
@@ -554,14 +609,18 @@ def _render_historical_activity(
         f'<article class="v2-history-activity" '
         f'data-activity-id="{html.escape(activity.provider_activity_id, quote=True)}">'
         '<header>'
-        f'<h3>{html.escape(activity.label)}</h3>{classification}</header>'
+        + _render_icon_group(snapshot, (activity.icon_key,))
+        + f'<h3>{html.escape(activity.label)}</h3>{classification}</header>'
         f'{detail}{report}{evaluation}{impact}{next_step}{uncertainty}</article>'
     )
 
 
-def _render_historical_day(day: HistoricalDayReadModel) -> str:
+def _render_historical_day(
+    snapshot: HistoricalPresentationSnapshot,
+    day: HistoricalDayReadModel,
+) -> str:
     activities = "".join(
-        _render_historical_activity(activity)
+        _render_historical_activity(snapshot, activity)
         for activity in day.activities
     )
     prescription = (
@@ -580,7 +639,8 @@ def _render_historical_day(day: HistoricalDayReadModel) -> str:
         '<details class="v2-history-original-plan">'
         '<summary>Ursprungsplan och motivering</summary>'
         '<div class="v2-history-original-plan-body">'
-        f'<strong>{html.escape(day.planned_session)}</strong>'
+        + _render_icon_group(snapshot, day.planned_icon_keys)
+        + f'<strong>{html.escape(day.planned_session)}</strong>'
         f'{prescription}{rationale}</div></details>'
         if day.planned_session or prescription or rationale else ""
     )
@@ -600,7 +660,7 @@ def render_historical_snapshot(
     snapshot: HistoricalPresentationSnapshot,
 ) -> str:
     model = snapshot.history
-    days = "".join(_render_historical_day(day) for day in model.days)
+    days = "".join(_render_historical_day(snapshot, day) for day in model.days)
     principle = (
         f'<p class="v2-history-principle">{html.escape(model.principle)}</p>'
         if model.principle else ""
@@ -633,8 +693,9 @@ def render_today(snapshot: PresentationSnapshot) -> str:
     model = snapshot.today
     detail_html = "".join(f"<li>{html.escape(detail)}</li>" for detail in model.details)
     details = f'<ul class="v2-today-details">{detail_html}</ul>' if detail_html else ""
-    completed_context = _render_completed_context(model)
+    completed_context = _render_completed_context(snapshot, model)
     manual_html = _render_manual_activities(
+        snapshot,
         model.manual_activities,
         css_class="v2-today-manual-activities",
     )
@@ -663,7 +724,9 @@ def render_today(snapshot: PresentationSnapshot) -> str:
     )
     return (
         f'<section class="v2-today" data-state="{html.escape(model.state)}">'
-        f'<p class="v2-kicker">Idag</p><h1>{html.escape(model.title)}</h1>'
+        '<p class="v2-kicker">Idag</p><h1 class="v2-today-title">'
+        + _render_icon_group(snapshot, model.icon_keys)
+        + f'<span>{html.escape(model.title)}</span></h1>'
         f'{details}{weather_html}{manual_html}{completed_context}{prescription}{rationale}{next_html}</section>'
     )
 
@@ -754,12 +817,15 @@ def render_week(snapshot: PresentationSnapshot) -> str:
             if not day.actual_labels else ""
         )
         manual_html = _render_manual_activities(
+            snapshot,
             day.manual_activities,
             css_class="v2-week-manual-activities",
         )
         rows.append(
             f'<li data-date="{day.local_date.isoformat()}" data-state="{html.escape(day.state)}">'
-            f'<strong>{html.escape(shown)}</strong>{weather_html}{manual_html}</li>'
+            '<strong class="v2-week-session">'
+            + _render_icon_group(snapshot, day.icon_keys)
+            + f'<span>{html.escape(shown)}</span></strong>{weather_html}{manual_html}</li>'
         )
     source = (
         '<p class="v2-weather-source">Väderprognos: '
