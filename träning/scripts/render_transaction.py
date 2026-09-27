@@ -17,6 +17,7 @@ from pathlib import Path
 TRAINING_ROOT = Path(__file__).resolve().parents[1]
 REPO_ROOT = TRAINING_ROOT.parent
 RENDERER = TRAINING_ROOT / "scripts" / "render_training_site.py"
+STATUS_FILE = Path("/tmp/training_publication_status")
 
 
 def _copy_tree(source: Path, destination: Path) -> None:
@@ -33,6 +34,7 @@ def render_transaction(*, runner=subprocess.run) -> int:
         _copy_tree(TRAINING_ROOT, snapshot)
         result = runner([sys.executable, str(RENDERER)], cwd=REPO_ROOT, check=False)
         if result.returncode == 0:
+            STATUS_FILE.write_text("success\n", encoding="utf-8")
             print("PUBLICATION_TRANSACTION_OK", flush=True)
             return 0
 
@@ -40,6 +42,7 @@ def render_transaction(*, runner=subprocess.run) -> int:
         _copy_tree(TRAINING_ROOT, failed)
         shutil.rmtree(TRAINING_ROOT)
         _copy_tree(snapshot, TRAINING_ROOT)
+        STATUS_FILE.write_text("failed\n", encoding="utf-8")
         print(
             "PUBLICATION_TRANSACTION_ROLLBACK "
             f"renderer_exit={result.returncode} canonical_state_preserved=true",
