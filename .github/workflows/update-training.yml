@@ -96,6 +96,7 @@ jobs:
         run: python -m pip install --disable-pip-version-check "psycopg[binary]>=3.2,<4"
 
       - name: Run canonical training update pipeline
+        id: canonical_pipeline
         env:
           STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
           STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
@@ -123,6 +124,9 @@ jobs:
             ingest_mode=reconcile
           fi
           python "träning/scripts/training_job_runner.py" --ingest-mode "$ingest_mode"
+          publication="$(cat /tmp/training_publication_status 2>/dev/null || printf failed)"
+          echo "publication=$publication" >> "$GITHUB_OUTPUT"
+          echo "Publication transaction: $publication"
 
       - name: Commit synced data, coach state and live page
         id: commit_changes
@@ -182,12 +186,16 @@ jobs:
           fi
 
       - name: Dispatch canonical Pages deployment
-        if: steps.commit_changes.outputs.changed == 'true'
+        if: steps.commit_changes.outputs.changed == 'true' && steps.canonical_pipeline.outputs.publication == 'success'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh workflow run deploy-pages.yml --ref main
           echo "Generated training commit published through the canonical Pages workflow_dispatch."
+
+      - name: Report deferred publication
+        if: steps.commit_changes.outputs.changed == 'true' && steps.canonical_pipeline.outputs.publication != 'success'
+        run: echo "::warning::Canonical training state was committed, but site publication failed validation. Previous live site remains unchanged; Pages deployment was intentionally deferred."
 
       - name: Confirm clean retry queued
         if: steps.commit_changes.outputs.retry == 'true'
