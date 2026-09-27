@@ -6,6 +6,10 @@ from dataclasses import dataclass
 from datetime import date
 from typing import Iterable
 
+from training_core.presentation.device_sync import (
+    DeviceSyncReadModel,
+    build_device_sync_read_model,
+)
 from training_core.presentation.manual_activity import (
     ManualActivityReadModel,
     manual_activities_for_day,
@@ -97,6 +101,7 @@ class TodayReadModel:
     outcomes: tuple[ActivityOutcomeReadModel, ...] = ()
     manual_activities: tuple[ManualActivityReadModel, ...] = ()
     icon_keys: tuple[str, ...] = ()
+    device_sync: DeviceSyncReadModel | None = None
 
 
 def _duration(seconds: int | None) -> str:
@@ -238,5 +243,9 @@ def build_today_read_model(
             )
             if actual or manual
             else planned_icon_keys(sport=planned.sport, payload=planned.payload)
+        ),
+        device_sync=build_device_sync_read_model(
+            planned.payload,
+            completed=bool(actual or manual),
         ),
     )
