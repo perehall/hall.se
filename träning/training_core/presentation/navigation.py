@@ -106,7 +106,7 @@ def build_week_navigation(
         return WeekNavigationLink(
             key=key,
             label=f"Vecka {week_number(key)}",
-            url=week_url(key, current_key),
+            url=available[key][2],
         )
 
     previous_key = ordered[index - 1] if index > 0 else None
