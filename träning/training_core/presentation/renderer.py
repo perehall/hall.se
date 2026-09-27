@@ -4,7 +4,15 @@ from __future__ import annotations
 
 import html
 
-from training_core.application.presentation import PresentationSnapshot
+from training_core.application.presentation import (
+    HistoricalPresentationSnapshot,
+    PresentationSnapshot,
+)
+from training_core.presentation.history import (
+    HistoricalActivityReadModel,
+    HistoricalDayReadModel,
+    HistoricalWeekReviewReadModel,
+)
 from training_core.presentation.today import (
     ActivityOutcomeReadModel,
     FEELING_LABELS,
@@ -373,7 +381,9 @@ def _render_completed_context(model: TodayReadModel) -> str:
     return f'<section class="v2-completed-outcomes">{cards}</section>{planned}'
 
 
-def render_navigation(snapshot: PresentationSnapshot) -> str:
+def render_navigation(
+    snapshot: PresentationSnapshot | HistoricalPresentationSnapshot,
+) -> str:
     model = snapshot.navigation
 
     def link(item, css_class: str, arrow: str) -> str:
@@ -397,6 +407,184 @@ def render_navigation(snapshot: PresentationSnapshot) -> str:
         '</div>'
         + link(model.next, "next", "›")
         + '</nav>'
+    )
+
+
+WEEKDAY_LABELS = (
+    "Måndag",
+    "Tisdag",
+    "Onsdag",
+    "Torsdag",
+    "Fredag",
+    "Lördag",
+    "Söndag",
+)
+
+
+def _render_string_list(items: tuple[str, ...]) -> str:
+    if not items:
+        return ""
+    return "<ul>" + "".join(f"<li>{html.escape(item)}</li>" for item in items) + "</ul>"
+
+
+def _render_historical_review(
+    review: HistoricalWeekReviewReadModel | None,
+) -> str:
+    if review is None:
+        return ""
+    uncertainties = (
+        '<details class="v2-history-uncertainties">'
+        '<summary>Osäkerheter i underlaget</summary>'
+        + _render_string_list(review.uncertainties)
+        + "</details>"
+        if review.uncertainties else ""
+    )
+    return (
+        '<section class="v2-week-review">'
+        '<p class="v2-kicker">Veckosummering</p>'
+        f'<p class="v2-week-review-summary">{html.escape(review.summary)}</p>'
+        '<div class="v2-week-review-metrics">'
+        f'<span><strong>{review.training_activity_count}</strong> träningspass</span>'
+        f'<span><strong>{html.escape(review.total_activity_time)}</strong> passtid</span>'
+        f'<span><strong>{review.active_days}</strong> träningsdagar</span>'
+        + (
+            f'<span><strong>{review.recreation_activity_count}</strong> rekreation</span>'
+            if review.recreation_activity_count else ""
+        )
+        + '</div>'
+        '<div class="v2-week-review-grid">'
+        '<section><h2>Det som fungerade</h2>'
+        + _render_string_list(review.worked)
+        + '</section>'
+        '<section><h2>Inte enligt plan</h2>'
+        + _render_string_list(review.not_as_planned)
+        + '</section>'
+        '<section><h2>Belastning & kontinuitet</h2>'
+        f'<p>{html.escape(review.load_continuity)}</p></section>'
+        '<section><h2>Viktigaste lärdomen</h2>'
+        f'<p>{html.escape(review.key_lesson)}</p></section>'
+        '</div>'
+        + (
+            '<section class="v2-week-review-next"><h2>Implikation framåt</h2>'
+            f'<p>{html.escape(review.next_week_implication)}</p></section>'
+            if review.next_week_implication else ""
+        )
+        + uncertainties
+        + '</section>'
+    )
+
+
+def _render_historical_activity(
+    activity: HistoricalActivityReadModel,
+) -> str:
+    classification = (
+        '<span class="v2-history-classification">Rekreation</span>'
+        if activity.classification == "recreation" else ""
+    )
+    detail = (
+        f'<p class="v2-history-activity-detail">{html.escape(activity.detail)}</p>'
+        if activity.detail else ""
+    )
+    report = (
+        '<div class="v2-history-user-report">'
+        '<span class="v2-outcome-label">Din kommentar</span>'
+        f'<p>{html.escape(activity.user_report)}</p></div>'
+        if activity.user_report else ""
+    )
+    evaluation = (
+        '<div class="v2-history-evaluation">'
+        '<span class="v2-outcome-label">Utvärdering</span>'
+        f'<p>{html.escape(activity.coach_summary)}</p></div>'
+        if activity.coach_summary else ""
+    )
+    impact_copy = activity.plan_impact
+    if activity.action_reason:
+        impact_copy += ((" · " if impact_copy else "") + activity.action_reason)
+    impact = (
+        '<div class="v2-history-plan-impact">'
+        '<span class="v2-outcome-label">Planpåverkan</span>'
+        f'<p>{html.escape(impact_copy)}</p></div>'
+        if impact_copy else ""
+    )
+    next_step = (
+        '<div class="v2-history-next-step">'
+        '<span class="v2-outcome-label">Nästa steg</span>'
+        f'<p>{html.escape(activity.next_step)}</p></div>'
+        if activity.next_step else ""
+    )
+    uncertainty = (
+        '<details class="v2-history-activity-uncertainty">'
+        '<summary>Osäkerhet</summary>'
+        + _render_string_list(activity.uncertainties)
+        + '</details>'
+        if activity.uncertainties else ""
+    )
+    return (
+        f'<article class="v2-history-activity" '
+        f'data-activity-id="{html.escape(activity.provider_activity_id, quote=True)}">'
+        '<header>'
+        f'<h3>{html.escape(activity.label)}</h3>{classification}</header>'
+        f'{detail}{report}{evaluation}{impact}{next_step}{uncertainty}</article>'
+    )
+
+
+def _render_historical_day(day: HistoricalDayReadModel) -> str:
+    activities = "".join(
+        _render_historical_activity(activity)
+        for activity in day.activities
+    )
+    prescription = (
+        '<div class="v2-history-prescription">'
+        '<span class="v2-outcome-label">Passupplägg</span>'
+        + _render_string_list(day.prescription)
+        + '</div>'
+        if day.prescription else ""
+    )
+    rationale = "".join(
+        f"<p>{html.escape(value)}</p>"
+        for value in (day.reason, day.development_focus)
+        if value
+    )
+    planned = (
+        '<details class="v2-history-original-plan">'
+        '<summary>Ursprungsplan och motivering</summary>'
+        '<div class="v2-history-original-plan-body">'
+        f'<strong>{html.escape(day.planned_session)}</strong>'
+        f'{prescription}{rationale}</div></details>'
+        if day.planned_session or prescription or rationale else ""
+    )
+    label = WEEKDAY_LABELS[day.local_date.weekday()]
+    return (
+        f'<section class="v2-history-day" data-date="{day.local_date.isoformat()}" '
+        f'data-state="{html.escape(day.state)}">'
+        '<header class="v2-history-day-header">'
+        f'<span>{html.escape(label)}</span>'
+        f'<time datetime="{day.local_date.isoformat()}">{day.local_date.isoformat()}</time>'
+        '</header>'
+        f'<div class="v2-history-activities">{activities}</div>{planned}</section>'
+    )
+
+
+def render_historical_snapshot(
+    snapshot: HistoricalPresentationSnapshot,
+) -> str:
+    model = snapshot.history
+    days = "".join(_render_historical_day(day) for day in model.days)
+    principle = (
+        f'<p class="v2-history-principle">{html.escape(model.principle)}</p>'
+        if model.principle else ""
+    )
+    header = (
+        '<section class="v2-history-header">'
+        '<p class="v2-kicker">Historisk vecka</p>'
+        f'<h1>{html.escape(model.title or snapshot.navigation.label)}</h1>'
+        f'{principle}</section>'
+    )
+    return (
+        render_navigation(snapshot)
+        + header
+        + _render_historical_review(model.review)
+        + f'<section class="v2-history-days">{days}</section>'
     )
 
 
