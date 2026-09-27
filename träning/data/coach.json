@@ -9,34 +9,34 @@
           "Planstatus 2026-09-26: dagen är markerad genomförd i coachens beslutsunderlag.",
           "Planerat simpass 4000 m; genomfört 3000 m. Genomförd setstruktur avviker från planens struktur."
         ],
-        "summary": "Genomfört simpass 3 000 m med strukturen 1×400 + 4×50 + 12×200; användaren rapporterar RPE 8/10 och trötthet.",
+        "summary": "Genomfört 3 000 m simpass med strukturen 1×400 + 4×50 + 12×200; användaren rapporterar RPE 8/10 och trötthet.",
         "unknowns": [
-          "Subjektiv återhämtning nästa morgon (2026-09-27) kan ändra tolerans.",
-          "Eventuella akuta skador eller lokal muskelvärk rapporterades inte och är inte kända."
+          "Hur bra användaren sov efter passet och morgondagens subjektiva känsla",
+          "Detaljerad lokal muskulär trötthet i benen efter kombinationen enduro+backintervaller"
         ],
         "confidence": "medium",
         "interpretations": [
-          "Passet visar genomförd teknisk/aerob simexponering men kortare än planerat (−1 000 m) vilket minskar planerat stimulus i veckan.",
-          "Hög subjektiv trötthet samma dag kombinerat med föregående enduro och korta löpintervaller motiverar att behålla den konservativa reduktionen av söndagens löppass."
+          "Passet genomfördes men avvek från plan (planerat 4 000 m; -25% volym) vilket minskar det avsedda tröskelstimulusets kvantitet.",
+          "Hög subjektiv RPE tillsammans med övrig närbelastning talar för att dagens sim ökar ackumulerad belastning snarare än att indikera full återhämtning."
         ],
-        "load_interpretation": "Närbelastningen (enduro + backintervaller + dagens sim) och hög RPE talar för konservativ justering av närmaste löppass."
+        "load_interpretation": "Närbelastningen (enduro + backintervaller + dagens sim + subjektiv trötthet) motiverar konservativ justering de närmaste 48–72 timmarna."
       },
       "auto_apply": {
-        "note": "Ingen automatisk planändring.",
-        "applied": false
+        "note": "Konservativ ändring applicerad på 2026-09-27: reduce.",
+        "applied": true
       },
       "activity_id": 20337309419,
       "plan_action": {
-        "action": "keep",
-        "reason": "Konservativ reduktion av planerat löppass är redan beslutad med hänsyn till kumulativ närbelastning och hög RPE.",
+        "action": "reduce",
+        "reason": "Konservativ reduktion rekommenderas p.g.a.",
         "target_date": "2026-09-27",
         "dose_option_id": "",
-        "recommendation": "Följ redan applicerat alternativ det valda passalternativet (60 min lugn distans). Vila eller lätt mobilisering resten av dagen; underrätta coach om oförmåga att genomföra 60 min morgondagen.",
+        "recommendation": "Följ det justerade passupplägget i planen.",
         "requires_approval": false
       },
       "activity_date": "2026-09-26",
       "activity_name": "Simning på eftermiddagen",
-      "generated_at_utc": "2026-09-27T06:22:59.051052+00:00",
+      "generated_at_utc": "2026-09-27T09:17:29.402657+00:00",
       "analysis_contract": {
         "pipeline_version": 3,
         "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
@@ -1298,9 +1298,9 @@
       "generated_at_utc": "2026-08-29T09:19:56.366468+00:00"
     }
   ],
-  "last_run_utc": "2026-09-27T06:22:59.051052+00:00",
+  "last_run_utc": "2026-09-27T09:17:29.402657+00:00",
   "contract_version": 15,
-  "last_trigger_hash": "d93fb224ea230e85cdd984f650e557d330ed9a5635e8ca5324e3086b6424aeea",
+  "last_trigger_hash": "05b7417fd69d7b0944dee2432d387ea6186cf6be449f2fd3b14c11ab3c77e869",
   "output_contract_version": 19,
   "pipeline_contract_version": 3
 }
