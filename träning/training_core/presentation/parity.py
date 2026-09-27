@@ -17,6 +17,9 @@ def semantic_snapshot(snapshot: PresentationSnapshot) -> dict[str, Any]:
             "details": list(snapshot.today.details),
             "planned_session": snapshot.today.planned_session,
             "next_session": snapshot.today.next_session,
+            "reason": snapshot.today.reason,
+            "development_focus": snapshot.today.development_focus,
+            "prescription": list(snapshot.today.prescription),
         },
         "week": {
             "start": snapshot.week.start.isoformat(),
