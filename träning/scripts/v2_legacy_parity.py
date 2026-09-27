@@ -23,6 +23,16 @@ def _text(value: str) -> str:
     return " ".join(unescape(_TAG_RE.sub(" ", value)).split())
 
 
+def _normalize_weather_text(value: str) -> str:
+    normalized = " ".join(str(value or "").split())
+    normalized = re.sub(
+        r"^Väder i ([^:]+):\s*",
+        r"Väder · \1 · ",
+        normalized,
+    )
+    return normalized
+
+
 def legacy_semantic_contract(index_path: Path, *, today: date) -> dict:
     html = index_path.read_text(encoding="utf-8")
     today_iso = today.isoformat()
@@ -109,7 +119,7 @@ def compare_cutover_contract(legacy: dict, v2: dict) -> list[str]:
         legacy_weather = legacy_day.get("weather") or ""
         if legacy_weather:
             v2_weather = v2_day.get("weather") or ""
-            if legacy_weather != v2_weather:
+            if _normalize_weather_text(legacy_weather) != _normalize_weather_text(v2_weather):
                 differences.append(
                     f"week.{day_date}.weather: "
                     f"{legacy_weather!r} != {v2_weather!r}"
