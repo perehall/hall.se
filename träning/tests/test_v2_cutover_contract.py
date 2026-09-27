@@ -28,7 +28,6 @@ class CutoverContractTests(unittest.TestCase):
             set(blocker_keys()),
             {
                 "sport_identity_icons",
-                "week_context",
                 "week_status",
                 "device_sync_status",
                 "page_shell",
