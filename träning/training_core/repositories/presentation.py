@@ -15,6 +15,8 @@ PUBLIC_ACTIVITY_LABELS = {
     "swim": "Simning",
     "bike": "Cykel",
     "mtb": "MTB/XC",
+    "MountainBikeRide": "MTB/XC",
+    "EMountainBikeRide": "MTB/XC",
     "enduro": "Enduro",
     "strength": "Styrka",
     "Run": "Löpning",
@@ -32,6 +34,8 @@ PUBLIC_ACTIVITY_LABELS = {
 def public_activity_label(label: str, sport_family: str) -> str:
     raw = str(label or "").strip()
     family = str(sport_family or "").strip()
+    if raw and raw not in PUBLIC_ACTIVITY_LABELS:
+        return raw
     return PUBLIC_ACTIVITY_LABELS.get(raw, PUBLIC_ACTIVITY_LABELS.get(family, raw or family or "Träning"))
 
 
