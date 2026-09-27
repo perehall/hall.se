@@ -1,90 +1,22 @@
 #!/usr/bin/env python3
-import subprocess
+"""Canonical v2 publisher for the current training page.
+
+The current page is rendered once from canonical PostgreSQL state. Legacy HTML
+mutation is intentionally excluded from production publication after the v2
+cutover; historical/goal maintenance remains owned by its dedicated workflows.
+"""
 import sys
+from datetime import date
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-REPO_ROOT = ROOT.parent
-
-# Canonical deterministic rendering order. CI and production must call this
-# same pipeline instead of maintaining separate lists of finalizers.
-PIPELINE = (
-    "apply_plan_overrides.py",
-    "enforce_coach_output_contract.py",
-    "normalize_coach_language.py",
-    "finalize_canonical_coach_facts.py",
-    "build.py",
-    "finalize_dashboard.py",
-    "finalize_dashboard_ui.py",
-    "finalize_activity_labels.py",
-    "finalize_yoda_ui.py",
-    "archive_weeks.py",
-    "finalize_week_review_ui.py",
-    "build_upcoming_week.py",
-    "finalize_header_ui.py",
-    "finalize_navigation_ui.py",
-    "finalize_training_brain_ui.py",
-    "finalize_relative_next_ui.py",
-    "finalize_progression_ui.py",
-    "finalize_sport_icons.py",
-    "finalize_day_session_icons.py",
-    "finalize_workout_history.py",
-    "finalize_signal_ui.py",
-    "finalize_device_sync_ui.py",
-    "finalize_historical_coach_ui.py",
-    "finalize_week_activity_insights.py",
-    "finalize_user_report_ui.py",
-    "finalize_week_status_ui.py",
-    "finalize_post_workout_ui.py",
-    "finalize_training_input_ui.py",
-    "finalize_human_training_language.py",
-    "finalize_completed_workout_truth.py",
-    "finalize_completed_sport_icon.py",
-    "finalize_coach_clarity_ui.py",
-    "finalize_card_v2_ui.py",
-    "build_home.py",
-    "finalize_goal_link_layout.py",
-    "publish_goal_cache_bypass.py",
-    "finalize_week_shell_ui.py",
-    "finalize_backend_status_ui.py",
-    "finalize_quiet_performance_ui.py",
-    "finalize_quiet_performance_v2_ui.py",
-    "finalize_upcoming_workout_shell_ui.py",
-    "finalize_completed_day_summary_ui.py",
-    "finalize_top_overview_ui.py",
-    "finalize_rest_day_language.py",
-    "finalize_training_timeline_ui.py",
-    "finalize_week_navigation_ui.py",
-    "finalize_week_page_consistency_ui.py",
-    "finalize_all_week_pass_icons.py",
-    "finalize_generated_whitespace.py",
-    "check_week_reviews.py",
-    "check_week_review_ui.py",
-    "validate_site_contracts.py",
-    "validate_training_data.py",
-)
-
-
-def run_pipeline(*, runner=None):
-    runner = runner or subprocess.run
-    for index, script_name in enumerate(PIPELINE, start=1):
-        script = ROOT / "scripts" / script_name
-        if not script.exists():
-            raise RuntimeError(f"Render pipeline: script saknas: {script_name}")
-        print(f"PIPELINE_STAGE_START {index}/{len(PIPELINE)} {script_name}", flush=True)
-        runner([sys.executable, str(script)], check=True, cwd=REPO_ROOT)
-        print(f"PIPELINE_STAGE_OK {index}/{len(PIPELINE)} {script_name}", flush=True)
-    print(f"Render pipeline OK: {len(PIPELINE)} deterministiska steg.")
 
 
 def publish_v2_current_page():
-    # Legacy rendering remains the rollback path while v2 owns the published
-    # current page. The snapshot is built from canonical PostgreSQL state.
     sys.path.insert(0, str(ROOT))
     from v2_presentation_probe import build_snapshot
     from training_core.presentation.cutover import cutover_ready
     from training_core.presentation.renderer import render_document
-    from datetime import date
 
     if not cutover_ready():
         raise RuntimeError("V2 publication blocked by cutover contract")
@@ -98,7 +30,6 @@ def publish_v2_current_page():
 
 
 def main():
-    run_pipeline()
     publish_v2_current_page()
     return 0
 
