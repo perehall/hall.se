@@ -12,22 +12,17 @@ import json
 from datetime import date
 
 from training_core.application.presentation import build_presentation_snapshot
-from training_core.presentation.renderer import render_today
+from training_core.presentation.parity import semantic_snapshot
+from training_core.presentation.renderer import render_snapshot
 from training_core.repositories.presentation import PostgresPresentationRepository
 
 
 def snapshot_payload(today: date) -> dict:
     repository = PostgresPresentationRepository.from_environment()
     snapshot = build_presentation_snapshot(repository, today=today)
-    model = snapshot.today
     return {
-        "date": model.local_date.isoformat(),
-        "state": model.state,
-        "title": model.title,
-        "details": list(model.details),
-        "planned_session": model.planned_session,
-        "next_session": model.next_session,
-        "html": render_today(snapshot),
+        "semantics": semantic_snapshot(snapshot),
+        "html": render_snapshot(snapshot),
     }
 
 
