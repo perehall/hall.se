@@ -126,7 +126,14 @@ def build_stages(ingest_mode: str) -> list[Stage]:
             "commit_final_runtime_backend",
             python_stage("supabase_runtime_state.py", "--scope", "final"),
         ),
-        Stage("render_and_validate_site", python_stage("render_training_site.py")),
+        # Publication is failure-isolated from canonical state. A broken renderer
+        # rolls back all presentation mutations and degrades the run instead of
+        # invalidating already committed activity/planning state.
+        Stage(
+            "publish_site",
+            python_stage("render_transaction.py"),
+            optional=True,
+        ),
     ])
     return stages
 
