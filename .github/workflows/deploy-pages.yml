@@ -94,7 +94,10 @@ jobs:
         if: steps.planning_freshness.outputs.stale != 'true'
         env:
           SUPABASE_PUBLISHABLE_KEY: ${{ vars.SUPABASE_PUBLISHABLE_KEY }}
-        run: python "träning/scripts/render_training_site.py"
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          test -n "$SUPABASE_DB_URL"
+          python "träning/scripts/render_training_site.py"
 
       - name: Configure GitHub Pages
         if: steps.planning_freshness.outputs.stale != 'true'
@@ -136,7 +139,7 @@ jobs:
 
             if grep -Fq 'class="v2-shell"' "$body" \
               && grep -Fq 'class="v2-today"' "$body" \
-              && grep -Eq 'class="[^"]*week-context-header[^"]*"' "$body"; then
+              && grep -Fq 'class="v2-week-context"' "$body"; then
               echo "PUBLIC_TRAINING_PAGE_OK attempt=${attempt}"
               exit 0
             fi
