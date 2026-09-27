@@ -679,6 +679,27 @@ def render_historical_snapshot(
     )
 
 
+WATCH_ICON = (
+    '<svg class="v2-watch-icon" aria-hidden="true" viewBox="0 0 24 24" '
+    'fill="none" stroke="currentColor" stroke-width="1.8" '
+    'stroke-linecap="round" stroke-linejoin="round">'
+    '<rect x="7" y="5" width="10" height="14" rx="2.2"/>'
+    '<path d="M9.5 5V2.5h5V5M9.5 19v2.5h5V19M12 9v3l2 1.5"/>'
+    '</svg>'
+)
+
+
+def _render_device_sync(sync) -> str:
+    if sync is None:
+        return ""
+    return (
+        f'<div class="v2-device-sync {html.escape(sync.status, quote=True)}" '
+        f'data-device-sync="{html.escape(sync.status, quote=True)}" '
+        f'title="{html.escape(sync.help_text, quote=True)}">'
+        f'{WATCH_ICON}<span>{html.escape(sync.label)}</span></div>'
+    )
+
+
 def _render_weather_line(snapshot: PresentationSnapshot, local_date, css_class: str) -> str:
     weather = snapshot.weather.for_date(local_date)
     if weather is None or not weather.summary:
@@ -703,6 +724,7 @@ def render_today(snapshot: PresentationSnapshot) -> str:
         _render_weather_line(snapshot, model.local_date, "v2-today-weather")
         if not model.outcomes else ""
     )
+    device_sync_html = _render_device_sync(model.device_sync)
 
     prescription_html = "".join(
         f"<li>{html.escape(line)}</li>" for line in model.prescription
@@ -727,7 +749,7 @@ def render_today(snapshot: PresentationSnapshot) -> str:
         '<p class="v2-kicker">Idag</p><h1 class="v2-today-title">'
         + _render_icon_group(snapshot, model.icon_keys)
         + f'<span>{html.escape(model.title)}</span></h1>'
-        f'{details}{weather_html}{manual_html}{completed_context}{prescription}{rationale}{next_html}</section>'
+        f'{details}{weather_html}{device_sync_html}{manual_html}{completed_context}{prescription}{rationale}{next_html}</section>'
     )
 
 
@@ -821,11 +843,14 @@ def render_week(snapshot: PresentationSnapshot) -> str:
             day.manual_activities,
             css_class="v2-week-manual-activities",
         )
+        device_sync_html = _render_device_sync(day.device_sync)
         rows.append(
             f'<li data-date="{day.local_date.isoformat()}" data-state="{html.escape(day.state)}">'
             '<strong class="v2-week-session">'
             + _render_icon_group(snapshot, day.icon_keys)
-            + f'<span>{html.escape(shown)}</span></strong>{weather_html}{manual_html}</li>'
+            + f'<span>{html.escape(shown)}</span></strong>{weather_html}'
+            + device_sync_html
+            + f'{manual_html}</li>'
         )
     source = (
         '<p class="v2-weather-source">Väderprognos: '

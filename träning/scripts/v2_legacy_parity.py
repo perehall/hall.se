@@ -108,12 +108,24 @@ def legacy_semantic_contract(index_path: Path, *, today: date) -> dict:
                     body,
                 )
                 icon_keys = [first_icon.group(1)] if first_icon else []
+        sync_match = re.search(
+            r'class="device-sync-state\s+(pending|synced|error)"[^>]*>.*?<span>(.*?)</span>',
+            body,
+            re.S,
+        )
+        device_sync = None
+        if sync_match and not completed:
+            device_sync = {
+                "status": sync_match.group(1),
+                "label": _text(sync_match.group(2)),
+            }
         days.append(
             {
                 "date": date_value,
                 "completed": completed,
                 "actual_labels": actual_labels,
                 "icon_keys": icon_keys,
+                "device_sync": device_sync,
                 "weather": _text(weather_match.group(1)) if weather_match else "",
             }
         )
@@ -242,6 +254,13 @@ def compare_cutover_contract(legacy: dict, v2: dict) -> list[str]:
                     f"week.{day_date}.icon_keys: "
                     f"{legacy_icons!r} != {v2_icons!r}"
                 )
+        legacy_sync = legacy_day.get("device_sync")
+        v2_sync = v2_day.get("device_sync")
+        if legacy_sync != v2_sync:
+            differences.append(
+                f"week.{day_date}.device_sync: "
+                f"{legacy_sync!r} != {v2_sync!r}"
+            )
         legacy_weather = legacy_day.get("weather") or ""
         if legacy_weather:
             v2_weather = v2_day.get("weather") or ""
