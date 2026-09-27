@@ -10,6 +10,31 @@ from typing import Protocol, Sequence
 from training_core.presentation.today import CompletedActivity, PlannedDay
 
 
+PUBLIC_ACTIVITY_LABELS = {
+    "run": "Löpning",
+    "swim": "Simning",
+    "bike": "Cykel",
+    "mtb": "MTB/XC",
+    "enduro": "Enduro",
+    "strength": "Styrka",
+    "Run": "Löpning",
+    "TrailRun": "Löpning",
+    "VirtualRun": "Löpning",
+    "Swim": "Simning",
+    "Ride": "Cykel",
+    "VirtualRide": "Cykel",
+    "MountainBikeRide": "MTB/XC",
+    "WeightTraining": "Styrka",
+    "StrengthTraining": "Styrka",
+}
+
+
+def public_activity_label(label: str, sport_family: str) -> str:
+    raw = str(label or "").strip()
+    family = str(sport_family or "").strip()
+    return PUBLIC_ACTIVITY_LABELS.get(raw, PUBLIC_ACTIVITY_LABELS.get(family, raw or family or "Träning"))
+
+
 class PresentationRepository(Protocol):
     def planned_days(self, start: date, end: date) -> Sequence[PlannedDay]: ...
     def completed_activities(self, start: date, end: date) -> Sequence[CompletedActivity]: ...
@@ -64,7 +89,8 @@ class PostgresPresentationRepository:
             rows = cur.fetchall()
         return [
             CompletedActivity(
-                provider_activity_id=str(row[0]), local_date=row[1], label=row[2],
+                provider_activity_id=str(row[0]), local_date=row[1],
+                label=public_activity_label(row[2], row[3]),
                 sport_family=row[3], elapsed_time_s=row[4], distance_m=row[5],
             )
             for row in rows
