@@ -89,8 +89,13 @@ SURFACES = (
     ),
     CutoverSurface(
         "page_shell",
-        "migrated",
-        "V2 exposes a complete responsive HTML publication document through render_document.",
+        "blocker",
+        "V2 has a responsive document shell, but it has not yet reproduced the human-approved current-week information hierarchy, progressive disclosure, card/timeline treatment and interaction density.",
+    ),
+    CutoverSurface(
+        "approved_current_week_experience",
+        "blocker",
+        "The pre-cutover current-week page is the human-approved product baseline. V2 must preserve what is primary, secondary/collapsed, completed-vs-planned emphasis, feedback/evaluation presentation, week focus/status placement, navigation and mobile visual hierarchy before production cutover.",
     ),
     CutoverSurface(
         "manual_activity_truth",
@@ -119,8 +124,8 @@ SURFACES = (
     ),
     CutoverSurface(
         "legacy_card_layers",
-        "retire",
-        "Historical card-v1/v2, quiet-performance and HTML post-processing layers are implementation details, not retained capabilities.",
+        "blocker",
+        "The mutator implementation remains a deletion target, but its user-visible presentation semantics are retained until the approved current-week experience has an equivalent pure-render contract.",
     ),
 )
 
