@@ -77,8 +77,29 @@ def run_pipeline(*, runner=None):
     print(f"Render pipeline OK: {len(PIPELINE)} deterministiska steg.")
 
 
+def publish_v2_current_page():
+    # Legacy rendering remains the rollback path while v2 owns the published
+    # current page. The snapshot is built from canonical PostgreSQL state.
+    sys.path.insert(0, str(ROOT))
+    from v2_presentation_probe import build_snapshot
+    from training_core.presentation.cutover import cutover_ready
+    from training_core.presentation.renderer import render_document
+    from datetime import date
+
+    if not cutover_ready():
+        raise RuntimeError("V2 publication blocked by cutover contract")
+    snapshot = build_snapshot(date.today())
+    document = render_document(snapshot)
+    if not document.startswith("<!doctype html>"):
+        raise RuntimeError("V2 publication did not produce a complete document")
+    target = ROOT / "index.html"
+    target.write_text(document, encoding="utf-8")
+    print("V2_PUBLICATION_OK träning/index.html", flush=True)
+
+
 def main():
     run_pipeline()
+    publish_v2_current_page()
     return 0
 
 
