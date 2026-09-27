@@ -377,7 +377,7 @@
       {
         "slot": "swim_aerobic_technique_1",
         "sport": "swim",
-        "reason": "Dag efter enduro kräver låg benbelastning — tekniskt aerob simpass konsoliderar mesocykelns simkapacitet utan benstress. Valet utgår från ett observerat värde 3200 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
+        "reason": "Låg‑benplacering dag efter enduro; konservativ teknisk/aerob progression stöds av upprepade 3–4k‑pass. Valet utgår från ett observerat värde 3200 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Katalogen innehåller inget högre verifierat steg, därför konsolideras dosen. Veckobeslut: progress; materialiserad relation: hold.",
         "session": "Simning · 3 200 m · aerob/teknik",
         "stimuli": [
           "swim_aerobic",
@@ -493,7 +493,7 @@
           "source": "athlete_state",
           "microcycle_plan": [
             {
-              "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
+              "reason": "Mikrocykelbeslutet valde progress och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
               "relation": "hold",
               "option_id": "swim-3200",
               "microcycle": 2
@@ -507,7 +507,7 @@
       {
         "slot": "run_threshold_2",
         "sport": "run",
-        "reason": "Behåll kontrollerad tröskel (ingen progression) baserat på nyliga 4×8‑sessioner och för att undvika för hög närbelastning före långpass. Valet utgår från ett observerat värde 32 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
+        "reason": "Behålla kontroll över 4×8‑tröskel; placerad ≥48 h från långt lugnt pass för absorberbarhet. Valet utgår från ett observerat värde 32 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
         "session": "Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg",
         "stimuli": [
           "run_threshold"
@@ -575,7 +575,7 @@
       {
         "slot": "swim_strength_3",
         "sport": "strength",
-        "reason": "Kombinerar andra simexponeringen med styrka/core för att uppfylla mikrocykelns styrke‑krav utan att lägga ett extra benkvalitetspass nära tröskeln. Valet utgår från ett observerat värde 36.0167 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
+        "reason": "Andra simexponeringen kombineras med styrka/core för att uppfylla sim‑ och styrkekrav utan extra benkvalitetspass; låg plyometrisk nivå rekommenderas efter tröskel. Valet utgår från ett observerat värde 36.0167 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
         "session": "Simning · 3 200 m · aerob/teknik + styrka/core · ca 35 min · styrkemall",
         "stimuli": [
           "swim_aerobic",
@@ -583,7 +583,7 @@
           "strength_unilateral",
           "strength_core"
         ],
-        "day_index": 5,
+        "day_index": 4,
         "dose_options": [
           {
             "id": "swim-strength-25",
@@ -627,14 +627,69 @@
         "performance_marker_id": "strength-repeatability"
       },
       {
-        "slot": "run_easy_distance_4",
+        "slot": "mtb_technical_4",
+        "sport": "bike",
+        "reason": "Underhåll av teknisk MTB placerad två dagar från tröskel och separerad från långt löppass; hålls låg/teknisk enligt mesocykel‑guardrails. Valet utgår från ett observerat värde 131.383 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
+        "session": "MTB/XC · 90 min · teknik + lugn aerob stig",
+        "stimuli": [
+          "mtb_technical",
+          "mtb_aerobic"
+        ],
+        "day_index": 5,
+        "dose_options": [
+          {
+            "id": "mtb-tech-45",
+            "kind": "duration_minutes",
+            "value": 45,
+            "intent": "Kort teknisk exponering.",
+            "session": "MTB/XC · 45 min · teknik + lugn aerob stig"
+          },
+          {
+            "id": "mtb-tech-60",
+            "kind": "duration_minutes",
+            "value": 60,
+            "intent": "Normal teknisk/aerob exponering.",
+            "session": "MTB/XC · 60 min · teknik + lugn aerob stig"
+          },
+          {
+            "id": "mtb-tech-75",
+            "kind": "duration_minutes",
+            "value": 75,
+            "intent": "Progressionsalternativ när cykelbelastningen absorberas.",
+            "session": "MTB/XC · 75 min · teknik + lugn aerob stig"
+          },
+          {
+            "id": "mtb-tech-90",
+            "kind": "duration_minutes",
+            "value": 90,
+            "intent": "Längre teknisk/aerob exponering med krav på marginal till löpkvalitet.",
+            "session": "MTB/XC · 90 min · teknik + lugn aerob stig"
+          }
+        ],
+        "priority_role": "flex",
+        "load_dimensions": [
+          "cardiovascular",
+          "neuromuscular",
+          "technical"
+        ],
+        "development_focus": "Blick, linjeval, bromspunkter och flyt före segmentjakt.",
+        "baseline_option_id": "mtb-tech-90",
+        "progression_criteria": [
+          "Ändra bara dos när faktisk träningsrespons eller mesocykelns progressionsbeslut ger sakligt stöd.",
+          "Wellness eller en enskild bra dag får inte ensam motivera belastningsökning.",
+          "Närliggande 2–3 dagars faktisk belastning ska kunna motivera hold, reduktion eller flytt."
+        ],
+        "performance_marker_id": "mtb-technical-repeat"
+      },
+      {
+        "slot": "run_easy_distance_5",
         "sport": "run",
-        "reason": "Långt lugnt löppass för löptålighet placerat ≥48 h från tröskel och utan att tränga ut planerade kvalitetsstimulit. Valet utgår från ett observerat värde 119.767 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
+        "reason": "Långt lugnt löppass för löptålighet placerat ≥48 h efter tröskel och med en vilodag (dag 6) mellan MTB och långpass för att undvika konflikt. Valet utgår från ett observerat värde 119.767 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
         "session": "Löpning · lugn distans · 120 min",
         "stimuli": [
           "run_easy_distance"
         ],
-        "day_index": 6,
+        "day_index": 7,
         "dose_options": [
           {
             "id": "run-easy-60",
