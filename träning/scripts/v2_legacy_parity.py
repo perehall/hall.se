@@ -54,11 +54,18 @@ def legacy_semantic_contract(index_path: Path, *, today: date) -> dict:
                     for part in re.split(r'<span class="completed-day-title-sep">.*?</span>', title.group(1), flags=re.S)
                     if _text(part)
                 ]
+        weather_match = re.search(
+            r'<[^>]+data-weather-date="' + re.escape(date_value)
+            + r'"[^>]+data-weather-scope="day"[^>]*>(.*?)</[^>]+>',
+            body,
+            re.S,
+        )
         days.append(
             {
                 "date": date_value,
                 "completed": completed,
                 "actual_labels": actual_labels,
+                "weather": _text(weather_match.group(1)) if weather_match else "",
             }
         )
 
@@ -98,5 +105,13 @@ def compare_cutover_contract(legacy: dict, v2: dict) -> list[str]:
                 differences.append(
                     f"week.{day_date}.actual_labels: "
                     f"{legacy_day['actual_labels']!r} != {v2_day['actual_labels']!r}"
+                )
+        legacy_weather = legacy_day.get("weather") or ""
+        if legacy_weather:
+            v2_weather = v2_day.get("weather") or ""
+            if legacy_weather != v2_weather:
+                differences.append(
+                    f"week.{day_date}.weather: "
+                    f"{legacy_weather!r} != {v2_weather!r}"
                 )
     return differences
