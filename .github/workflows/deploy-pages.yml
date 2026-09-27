@@ -72,8 +72,7 @@ jobs:
               or (strategy.get("current_mesocycle") or {}).get("goal_basis_hash") != digest
           )
           with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as handle:
-              handle.write(f"stale={'true' if stale else 'false'}
-")
+              print(f"stale={'true' if stale else 'false'}", file=handle)
           if stale:
               print(
                   "::notice::Deployment deferred: canonical goal/race contract changed "
