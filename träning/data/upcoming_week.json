@@ -91,7 +91,7 @@
       "date": "2026-09-29",
       "label": "Tisdag",
       "sport": "swim",
-      "reason": "Dag‑2 kräver låg benbelastning efter fast enduro; konsolidera teknisk aerob sim för att hålla mesocykelns simprioritet utan progression. Valet utgår från ett observerat värde 3200 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
+      "reason": "Lågmekanisk simexponering dagen efter fast enduro ger konkret plan utan att anta att benen är redo för ny benkvalitet. Valet utgår från ett observerat värde 3200 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
       "status": "preliminary",
       "session": "Simning · 3 200 m · aerob/teknik",
       "stimuli": [
@@ -454,7 +454,7 @@
       "date": "2026-09-30",
       "label": "Onsdag",
       "sport": "run",
-      "reason": "Behåll mesocykelns etablerade 4×8‑tröskel utan progression denna vecka (stöd i senaste 4×8‑sessioner). Valet utgår från ett observerat värde 32 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
+      "reason": "Realiserar mesocykelns primära kapacitet run_threshold med säker separation från annan benbelastning. Valet utgår från ett observerat värde 32 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
       "status": "preliminary",
       "session": "Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg",
       "stimuli": [
@@ -465,9 +465,9 @@
         "status": "synced",
         "transport": "intervals_icu",
         "source_hash": "8823720772feaa90f87477a0a0839c160b4a14fd61ca3333ff3a74a4c9925344",
-        "updated_at_utc": "2026-09-27T12:05:05.944494+00:00",
+        "updated_at_utc": "2026-09-27T12:25:25.313947+00:00",
         "device_delivery": "unverified",
-        "verified_at_utc": "2026-09-27T12:05:05.944494+00:00",
+        "verified_at_utc": "2026-09-27T12:25:25.313947+00:00",
         "provider_event_id": 139207143
       },
       "dose_options": [
@@ -798,8 +798,17 @@
     {
       "date": "2026-10-01",
       "label": "Torsdag",
+      "sport": "open",
+      "reason": "Ingen träning är planerad som standard på denna dag. En ledig dag är inte i sig skäl att lägga till ett pass; eventuell ändring ska tjäna mikrocykeln och bygga på faktisk information.",
+      "status": "open",
+      "session": "Ingen planerad träning",
+      "planning_status": "open"
+    },
+    {
+      "date": "2026-10-02",
+      "label": "Fredag",
       "sport": "strength",
-      "reason": "Etablera den obligatoriska styrka/core‑exponeringen genom kombinationsreceptet så att andra simpass levereras utan en extra styrkedag och utan extra benbelastning. Valet utgår från ett observerat värde 36.0167 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
+      "reason": "Kombinera en nödvändig simexponering med ännu ej uppfylld styrka/core. Valet utgår från ett observerat värde 36.0167 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
       "status": "preliminary",
       "session": "Simning · 3 200 m · aerob/teknik + styrka/core · ca 35 min · styrkemall",
       "stimuli": [
@@ -836,7 +845,7 @@
       "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc2",
       "priority_role": "protected_support",
       "watch_workout": {
-        "id": "swim-2026-w40-2026-10-01-preview",
+        "id": "swim-2026-w40-2026-10-02-preview",
         "name": "Aerob/teknik · kroppslinje och rotation · 3 200 m",
         "type": "Swim",
         "blocks": [
@@ -920,7 +929,7 @@
         "sync_enabled": false,
         "planned_distance_m": 3200
       },
-      "microcycle_day": 4,
+      "microcycle_day": 5,
       "swim_component": {
         "source": "verified_previous_watch_workout",
         "principle": "Simdelen använder en redan exekverbar struktur. Den kombinerade dagen får inte dölja simningen som text i ett styrkepass.",
@@ -1494,8 +1503,8 @@
       "performance_marker_id": "strength-repeatability"
     },
     {
-      "date": "2026-10-02",
-      "label": "Fredag",
+      "date": "2026-10-03",
+      "label": "Lördag",
       "sport": "open",
       "reason": "Ingen träning är planerad som standard på denna dag. En ledig dag är inte i sig skäl att lägga till ett pass; eventuell ändring ska tjäna mikrocykeln och bygga på faktisk information.",
       "status": "open",
@@ -1503,10 +1512,10 @@
       "planning_status": "open"
     },
     {
-      "date": "2026-10-03",
-      "label": "Lördag",
+      "date": "2026-10-04",
+      "label": "Söndag",
       "sport": "run",
-      "reason": "Långt lugnt löppass för löptålighet; placerat ≥48 h efter tröskel för återhämtning och för att undvika att ligga intill MTB‑exponering (MTB utgår denna vecka för att löpspecifikiteten skyddas). Valet utgår från ett observerat värde 119.767 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
+      "reason": "Behåll lugn löptålighet med separation från löpkvalitet. Valet utgår från ett observerat värde 119.767 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
       "status": "preliminary",
       "session": "Löpning · lugn distans · 120 min",
       "stimuli": [
@@ -1514,13 +1523,10 @@
       ],
       "dose_open": false,
       "device_sync": {
-        "status": "synced",
+        "status": "deferred",
         "transport": "intervals_icu",
-        "source_hash": "df71f161734f48e2be92854ae5b51d484d1b97afc68bdbcfd4dab8d070f97513",
-        "updated_at_utc": "2026-09-27T12:05:06.126035+00:00",
-        "device_delivery": "unverified",
-        "verified_at_utc": "2026-09-27T12:05:06.126035+00:00",
-        "provider_event_id": 139207144
+        "source_hash": "fc34fb45dbc296bec07d8662aa718b651a9536c375e2d2068fe7a37c428c8dfc",
+        "device_delivery": "unverified"
       },
       "dose_options": [
         {
@@ -1563,7 +1569,7 @@
       "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc2",
       "priority_role": "flex",
       "device_workout": {
-        "date": "2026-10-03",
+        "date": "2026-10-04",
         "name": "Löpning · lugn distans · 120 min",
         "sport": "run",
         "blocks": [
@@ -1585,14 +1591,14 @@
           }
         ],
         "transport": "intervals_icu",
-        "external_id": "hall-device:2026-10-03:run:run_easy_distance_4",
-        "source_hash": "df71f161734f48e2be92854ae5b51d484d1b97afc68bdbcfd4dab8d070f97513",
+        "external_id": "hall-device:2026-10-04:run:run_easy_distance_4",
+        "source_hash": "fc34fb45dbc296bec07d8662aa718b651a9536c375e2d2068fe7a37c428c8dfc",
         "provider_type": "Run",
         "target_policy": "explicit_single_primary_only",
         "schema_version": 1,
         "source_candidate_id": "run-easy-120"
       },
-      "microcycle_day": 6,
+      "microcycle_day": 7,
       "workout_design": {
         "objective": {
           "stimuli": [
@@ -1797,15 +1803,6 @@
       "microcycle_index": 2,
       "development_focus": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt.",
       "baseline_option_id": "run-easy-120"
-    },
-    {
-      "date": "2026-10-04",
-      "label": "Söndag",
-      "sport": "open",
-      "reason": "Ingen träning är planerad som standard på denna dag. En ledig dag är inte i sig skäl att lägga till ett pass; eventuell ändring ska tjäna mikrocykeln och bygga på faktisk information.",
-      "status": "open",
-      "session": "Ingen planerad träning",
-      "planning_status": "open"
     }
   ],
   "meta": {

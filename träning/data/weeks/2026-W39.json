@@ -4,7 +4,7 @@
   "week_start": "2026-09-21",
   "week_end": "2026-09-27",
   "created_at_utc": "2026-09-20T23:15:26.146433+00:00",
-  "updated_at_utc": "2026-09-27T12:05:27.069095+00:00",
+  "updated_at_utc": "2026-09-27T12:25:43.888358+00:00",
   "plan": {
     "days": [
       {
@@ -1063,9 +1063,9 @@
           "status": "synced",
           "transport": "intervals_icu",
           "source_hash": "d73c17537fe87dbcbcf589b67854337903b3d4a8c0dfd18765ceb05cbd56e91c",
-          "updated_at_utc": "2026-09-27T12:05:05.757972+00:00",
+          "updated_at_utc": "2026-09-27T12:25:25.116142+00:00",
           "device_delivery": "unverified",
-          "verified_at_utc": "2026-09-27T12:05:05.757972+00:00",
+          "verified_at_utc": "2026-09-27T12:25:25.116142+00:00",
           "provider_event_id": 138097036
         },
         "dose_options": [
@@ -5645,17 +5645,17 @@
           "Planstatus 2026-09-27: dagen är markerad genomförd i coachens beslutsunderlag.",
           "Planerad tidsdos 60 min; faktisk rörelsetid 79.95 min (+19.95 min mot vald dos)."
         ],
-        "summary": "Genomfört 13,455 m terränglöpning (≈4 800 s) med medelpuls 131 bpm; passet är ett längre lugnt/varierat terrängpass utan kortintervallstruktur.",
+        "summary": "13.46 km trail på ~80 min med varierad kilometerfart och medelhög puls; passet genomfördes trots hög sim‑RPE och tidigare back-/enduro‑belastning.",
         "unknowns": [
-          "Ingen subjektiv användarrapport för dagens löpning finns i aktiviteten",
-          "Terrängens tekniska krav (hur mekanisk belastning fördelades) ej specificerad"
+          "Subjektiv återhämtning efter passet (användarrapport tom) kan ändra rekommendation.",
+          "Detaljer om underlag/terrängintensitet som påverkar mekanisk kostnad saknas."
         ],
         "confidence": "medium",
         "interpretations": [
-          "Passet bekräftar att ett längre terrängtillfälle kunde genomföras men visar inget om snabb tröskelprogression eller teknikförbättring",
-          "Givet föregående hårda sim (RPE8) och backintervaller är det rimligt att hålla den redan beslutade reducerade löpdosen"
+          "Passet visar att ett långt lugnt terrängpass kunde genomföras men var längre än planens valda 60 min‑dose (actual 79.95 min).",
+          "Givet föregående enduro, backintervaller och 4 000 m simning rekommenderar mikrocykeln att inte öka kommande löpdos; dagens genomförande stödjer att behålla den konservativa linjen."
         ],
-        "load_interpretation": "Närbelastningen de senaste 2–3 dagarna innehåller enduro, två simpass (ett hårt) och backintervaller; konservativ reduktion av söndagens plan var därför motiverad."
+        "load_interpretation": "Närbelastningen (enduro + 3×8 backintervaller + 4k sim) motiverar att planens konservativa reduktion behålls för kommande 2–3 dagar."
       },
       "auto_apply": {
         "note": "Ingen automatisk planändring.",
@@ -5664,15 +5664,15 @@
       "activity_id": 20350203020,
       "plan_action": {
         "action": "keep",
-        "reason": "Planen var redan konservativt reducerad (60 min) p.g.a.",
+        "reason": "Konservativ reduktion valdes redan p.g.a.",
         "target_date": "",
         "dose_option_id": "",
-        "recommendation": "Följ dagens nedskalade passupplägg (det valda passalternativet). Vila/aktiv återhämtning resten av dagen och håll kommande Enduroskola enligt plan; rapportera RPE/känsla om något känns ovanligt tungt.",
+        "recommendation": "Följ redan nedjusterat 60‑min‑dose i mikrocykeln; vila eller lätt aktivitet nästa dag om du känner ovanlig trötthet. Ingen omplanering krävs.",
         "requires_approval": false
       },
       "activity_date": "2026-09-27",
       "activity_name": "Terränglöpning vid lunch",
-      "generated_at_utc": "2026-09-27T12:05:04.084482+00:00",
+      "generated_at_utc": "2026-09-27T12:25:23.794835+00:00",
       "analysis_contract": {
         "pipeline_version": 3,
         "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
