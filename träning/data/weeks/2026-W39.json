@@ -4,7 +4,7 @@
   "week_start": "2026-09-21",
   "week_end": "2026-09-27",
   "created_at_utc": "2026-09-20T23:15:26.146433+00:00",
-  "updated_at_utc": "2026-09-27T09:17:49.693593+00:00",
+  "updated_at_utc": "2026-09-27T09:57:29.874090+00:00",
   "plan": {
     "days": [
       {
@@ -1056,15 +1056,15 @@
         "auto_coach": {
           "action": "reduce",
           "reason": "Konservativ reduktion rekommenderas p.g.a. kumulativ närbelastning och hög RPE efter dagens sim.",
-          "applied_at_utc": "2026-09-27T09:17:29.400918+00:00"
+          "applied_at_utc": "2026-09-27T09:57:16.804863+00:00"
         },
         "device_sync": {
           "status": "synced",
           "transport": "intervals_icu",
           "source_hash": "d73c17537fe87dbcbcf589b67854337903b3d4a8c0dfd18765ceb05cbd56e91c",
-          "updated_at_utc": "2026-09-27T09:17:30.748699+00:00",
+          "updated_at_utc": "2026-09-27T09:57:17.937010+00:00",
           "device_delivery": "unverified",
-          "verified_at_utc": "2026-09-27T09:17:30.748699+00:00",
+          "verified_at_utc": "2026-09-27T09:57:17.937010+00:00",
           "provider_event_id": 138097036
         },
         "dose_options": [
@@ -5313,17 +5313,17 @@
           "Planstatus 2026-09-26: dagen är markerad genomförd i coachens beslutsunderlag.",
           "Planerat simpass 4000 m; genomfört 3000 m. Genomförd setstruktur avviker från planens struktur."
         ],
-        "summary": "Genomfört 3 000 m simpass med strukturen 1×400 + 4×50 + 12×200; användaren rapporterar RPE 8/10 och trötthet.",
+        "summary": "Genomfört 3 000 m simpass (struktur 1x400+4x50+12x200) med RPE 8/10 och användarrapport: trött.",
         "unknowns": [
-          "Hur bra användaren sov efter passet och morgondagens subjektiva känsla",
-          "Detaljerad lokal muskulär trötthet i benen efter kombinationen enduro+backintervaller"
+          "Hur återhämtad du är nästa morgon (subjektiv rapport saknas för efterföljande dag).",
+          "Detaljer om ompassering av söndagens löppass om du känner dig bättre än idag."
         ],
         "confidence": "medium",
         "interpretations": [
-          "Passet genomfördes men avvek från plan (planerat 4 000 m; -25% volym) vilket minskar det avsedda tröskelstimulusets kvantitet.",
-          "Hög subjektiv RPE tillsammans med övrig närbelastning talar för att dagens sim ökar ackumulerad belastning snarare än att indikera full återhämtning."
+          "Passet visar att simteknisk/aerob volym genomfördes men med hög subjektiv ansträngning vilket minskar absorberbar närkapacitet kommande 24–72 h.",
+          "I mikrocykelkontextet ökar detta kumulativ mekanisk/kardiovaskulär belastning efter tidigare enduro och backintervaller; planen rekommenderar konservativ reduktion för nästa löppass."
         ],
-        "load_interpretation": "Närbelastningen (enduro + backintervaller + dagens sim + subjektiv trötthet) motiverar konservativ justering de närmaste 48–72 timmarna."
+        "load_interpretation": "Lägg ihop med senaste 2–3 dagars faktiska belastning (enduro + backintervaller + tidigare sim) — nära-term närbelastningen kan inte nivåklassas mot personlig baslinje…"
       },
       "auto_apply": {
         "note": "Konservativ ändring applicerad på 2026-09-27: reduce.",
@@ -5340,7 +5340,7 @@
       },
       "activity_date": "2026-09-26",
       "activity_name": "Simning på eftermiddagen",
-      "generated_at_utc": "2026-09-27T09:17:29.402657+00:00",
+      "generated_at_utc": "2026-09-27T09:57:16.806750+00:00",
       "analysis_contract": {
         "pipeline_version": 3,
         "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
