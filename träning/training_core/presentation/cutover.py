@@ -89,8 +89,8 @@ SURFACES = (
     ),
     CutoverSurface(
         "page_shell",
-        "blocker",
-        "V2 renderer currently emits fragments, not the complete responsive document shell used for publication.",
+        "migrated",
+        "V2 exposes a complete responsive HTML publication document through render_document.",
     ),
     CutoverSurface(
         "manual_activity_truth",
@@ -104,13 +104,13 @@ SURFACES = (
     ),
     CutoverSurface(
         "goal_link",
-        "blocker",
-        "The main v2 shell must retain a route to the separately published goal page.",
+        "migrated",
+        "The v2 publication shell retains the canonical /träning/malbild-2027/ route.",
     ),
     CutoverSurface(
         "system_reference_tools",
-        "blocker",
-        "The current page exposes Om systemet and Styrkemall reference tools; cutover must preserve or explicitly redesign them.",
+        "migrated",
+        "The v2 publication shell preserves Styrkemall and Om systemet as accessible dialog references.",
     ),
     CutoverSurface(
         "backend_status",
