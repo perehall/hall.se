@@ -38,6 +38,13 @@ class PostgresPresentationRepositoryTests(unittest.TestCase):
         self.assertEqual(activities[0].label,"Enduro")
         self.assertEqual(activities[0].distance_m,26611.2)
 
+    def test_provider_vocabulary_is_normalized_before_presentation(self):
+        rows=[("42",date(2026,9,26),"Swim","swim",3822,3000.0)]
+        repo=PostgresPresentationRepository(lambda: Conn(rows))
+        activities=repo.completed_activities(date(2026,9,26),date(2026,9,26))
+        self.assertEqual(activities[0].label,"Simning")
+
+
 
 if __name__ == "__main__":
     unittest.main()
