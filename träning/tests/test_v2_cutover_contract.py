@@ -27,7 +27,6 @@ class CutoverContractTests(unittest.TestCase):
         self.assertEqual(
             set(blocker_keys()),
             {
-                "public_copy_normalization",
                 "sport_identity_icons",
                 "week_context",
                 "week_status",
