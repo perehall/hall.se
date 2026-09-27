@@ -16,6 +16,7 @@ class SportIcon:
     key: str
     view_box: str
     path: str
+    solid: bool = True
 
 
 @dataclass(frozen=True)
@@ -51,7 +52,7 @@ class FileSportIconRepository:
             path = str(value.get("path") or "").strip()
             if not view_box or not path:
                 raise RuntimeError(f"incomplete sport icon entry: {key}")
-            icons[key] = SportIcon(key=key, view_box=view_box, path=path)
+            icons[key] = SportIcon(key=key, view_box=view_box, path=path, solid=True)
 
         # "activity" is the only fallback and can be a simple line glyph.
         if "activity" not in icons:
@@ -59,6 +60,7 @@ class FileSportIconRepository:
                 key="activity",
                 view_box="0 0 24 24",
                 path="M3 12h4l2-5 4 10 2-5h6",
+                solid=False,
             )
         for required in ("run", "swim", "bike", "enduro", "strength"):
             if required not in icons:
