@@ -44,12 +44,14 @@ def semantic_snapshot(snapshot: PresentationSnapshot) -> dict[str, Any]:
             "reason": snapshot.today.reason,
             "development_focus": snapshot.today.development_focus,
             "prescription": list(snapshot.today.prescription),
+            "icon_keys": list(snapshot.today.icon_keys),
             "manual_activities": [
                 {
                     "session": activity.session,
                     "sport": activity.sport,
                     "classification": activity.classification,
                     "reason": activity.reason,
+                    "icon_key": activity.icon_key,
                 }
                 for activity in snapshot.today.manual_activities
             ],
@@ -67,6 +69,7 @@ def semantic_snapshot(snapshot: PresentationSnapshot) -> dict[str, Any]:
                     "plan_impact": outcome.plan_impact,
                     "action_reason": outcome.action_reason,
                     "next_step": outcome.next_step,
+                    "icon_key": outcome.icon_key,
                 }
                 for outcome in snapshot.today.outcomes
             ],
@@ -113,6 +116,7 @@ def semantic_snapshot(snapshot: PresentationSnapshot) -> dict[str, Any]:
                     "state": d.state,
                     "planned_session": d.planned_session,
                     "actual_labels": list(d.actual_labels),
+                    "icon_keys": list(d.icon_keys),
                     "manual_activities": [
                         {
                             "session": activity.session,
@@ -163,6 +167,7 @@ def historical_semantic_snapshot(
                     "reason": day.reason,
                     "development_focus": day.development_focus,
                     "prescription": list(day.prescription),
+                    "planned_icon_keys": list(day.planned_icon_keys),
                     "activities": [
                         {
                             "provider_activity_id": activity.provider_activity_id,
@@ -175,6 +180,7 @@ def historical_semantic_snapshot(
                             "action_reason": activity.action_reason,
                             "next_step": activity.next_step,
                             "uncertainties": list(activity.uncertainties),
+                            "icon_key": activity.icon_key,
                         }
                         for activity in day.activities
                     ],
