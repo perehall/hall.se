@@ -3,9 +3,12 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 
 from training_core.presentation.public_copy import public_reason
-from training_core.presentation.today import PlannedDay
+
+if TYPE_CHECKING:
+    from training_core.presentation.today import PlannedDay
 
 
 VALID_CLASSIFICATIONS = {"training", "recreation"}
@@ -24,7 +27,7 @@ class ManualActivityReadModel:
 
 
 def manual_activities_for_day(
-    day: PlannedDay,
+    day: "PlannedDay",
 ) -> tuple[ManualActivityReadModel, ...]:
     payload = day.payload or {}
     raw = payload.get("manual_activities") or []
