@@ -41,7 +41,7 @@ jobs:
         run: |
           test -n "$SUPABASE_DB_URL"
           V2_PROBE_OUTPUT="/tmp/v2-presentation.json" PYTHONPATH="träning" python "träning/v2_presentation_probe.py"
-          python - <<\'PY\'
+          python - <<'PY'
           import json
           from pathlib import Path
           payload=json.loads(Path("/tmp/v2-presentation.json").read_text(encoding="utf-8"))
