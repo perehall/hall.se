@@ -26,7 +26,7 @@ from training_core.repositories.weather import FileWeatherRepository
 ROOT = Path(__file__).resolve().parent
 
 
-def snapshot_payload(today: date) -> dict:
+def build_snapshot(today: date):
     repository = PostgresPresentationRepository.from_environment()
     archive_repository = ManifestWeekArchiveRepository(
         ROOT / "data" / "weeks" / "index.json"
@@ -42,6 +42,11 @@ def snapshot_payload(today: date) -> dict:
         context_repository=context_repository,
         icon_repository=icon_repository,
     )
+    return snapshot
+
+
+def snapshot_payload(today: date) -> dict:
+    snapshot = build_snapshot(today)
     return {
         "semantics": semantic_snapshot(snapshot),
         "html": render_snapshot(snapshot),
