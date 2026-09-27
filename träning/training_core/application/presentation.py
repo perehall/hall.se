@@ -16,7 +16,12 @@ from training_core.presentation.navigation import (
 from training_core.presentation.today import TodayReadModel, build_today_read_model
 from training_core.presentation.weather import WeatherReadModel, build_weather_read_model
 from training_core.presentation.week import WeekReadModel, build_week_read_model
+from training_core.presentation.week_context import (
+    WeekContextReadModel,
+    build_week_context_read_model,
+)
 from training_core.repositories.archive import WeekArchiveRepository
+from training_core.repositories.context import PlanningContextRepository
 from training_core.repositories.presentation import PresentationRepository
 from training_core.repositories.weather import WeatherRepository
 
@@ -27,6 +32,7 @@ class PresentationSnapshot:
     week: WeekReadModel
     navigation: WeekNavigationReadModel
     weather: WeatherReadModel
+    week_context: WeekContextReadModel | None
 
 
 @dataclass(frozen=True)
@@ -46,6 +52,7 @@ def build_presentation_snapshot(
     today: date,
     archive_repository: WeekArchiveRepository | None = None,
     weather_repository: WeatherRepository | None = None,
+    context_repository: PlanningContextRepository | None = None,
 ) -> PresentationSnapshot:
     week_start, week_end = week_bounds(today)
     read_end = max(week_end, today + timedelta(days=7))
@@ -59,6 +66,11 @@ def build_presentation_snapshot(
     weather_snapshot = (
         weather_repository.current()
         if weather_repository is not None
+        else None
+    )
+    planning_context = (
+        context_repository.week_context(week_start)
+        if context_repository is not None
         else None
     )
     return PresentationSnapshot(
@@ -76,6 +88,7 @@ def build_presentation_snapshot(
             plan=plan,
             snapshot=weather_snapshot,
         ),
+        week_context=build_week_context_read_model(planning_context),
     )
 
 
