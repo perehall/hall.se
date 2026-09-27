@@ -89,11 +89,22 @@ def legacy_semantic_contract(index_path: Path, *, today: date) -> dict:
         html,
         re.S,
     )
-    status_match = re.search(
-        r'<details class="week-status-expander"><summary>(.*?)</summary>',
-        html,
-        re.S,
-    )
+    status_metrics = {
+        _text(label): _text(value)
+        for value, label in re.findall(
+            r'<div class="metric"><strong>(.*?)</strong><span>(pass|passtid|träningsdagar)</span></div>',
+            html,
+            re.S,
+        )
+    }
+    status_summary = ""
+    if all(key in status_metrics for key in ("pass", "passtid", "träningsdagar")):
+        day_count = int(status_metrics["träningsdagar"])
+        day_word = "träningsdag" if day_count == 1 else "träningsdagar"
+        status_summary = (
+            f'{status_metrics["pass"]} pass · {status_metrics["passtid"]} · '
+            f'{day_count} {day_word}'
+        )
     sport_distribution = [
         {
             "label": _text(label),
@@ -108,7 +119,7 @@ def legacy_semantic_contract(index_path: Path, *, today: date) -> dict:
     return {
         "today": {"date": today_iso, "title": today_title},
         "week_status": {
-            "summary": _text(status_match.group(1)) if status_match else "",
+            "summary": status_summary,
             "sport_distribution": sport_distribution,
         },
         "week_context": {
