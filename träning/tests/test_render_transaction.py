@@ -33,7 +33,8 @@ class RenderTransactionTests(unittest.TestCase):
 
             with patch.object(render_transaction, "TRAINING_ROOT", training), \
                  patch.object(render_transaction, "REPO_ROOT", repo), \
-                 patch.object(render_transaction, "RENDERER", renderer):
+                 patch.object(render_transaction, "RENDERER", renderer), \
+                 patch.object(render_transaction, "STATUS_FILE", Path(tmp) / "status"):
                 result = render_transaction.render_transaction(runner=failing_runner)
 
             self.assertEqual(result, 17)
