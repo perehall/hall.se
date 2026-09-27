@@ -32,6 +32,7 @@ class CompletedActivity:
     distance_m: float | None = None
     average_heartrate: float | None = None
     max_heartrate: float | None = None
+    feedback_event_key: str = ""
     feedback_text: str = ""
     rpe: int | None = None
     feelings: tuple[str, ...] = ()
@@ -61,7 +62,10 @@ class ActivityOutcomeReadModel:
     label: str
     detail: str
     feedback_status: str
+    feedback_event_key: str
     feedback_text: str
+    rpe: int | None
+    feelings: tuple[str, ...]
     coach_summary: str
     plan_impact: str
     action_reason: str
@@ -129,7 +133,10 @@ def activity_outcome(activity: CompletedActivity) -> ActivityOutcomeReadModel:
         label=activity.label,
         detail=activity_detail(activity),
         feedback_status=feedback_status(activity),
+        feedback_event_key=activity.feedback_event_key,
         feedback_text=activity.feedback_text,
+        rpe=activity.rpe,
+        feelings=activity.feelings,
         coach_summary=activity.coach_summary,
         plan_impact=plan_impact(activity),
         action_reason=activity.action_reason,
