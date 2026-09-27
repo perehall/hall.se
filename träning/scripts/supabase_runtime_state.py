@@ -314,6 +314,62 @@ def _materialize_cache(
         )
 
 
+def hydrate_runtime_scope(
+    scope: str,
+    *,
+    data_dir: Path = DATA,
+) -> dict[str, Any]:
+    """Materialize verified runtime documents without mutating PostgreSQL."""
+    if scope not in SCOPE_KEYS:
+        raise RuntimeError(f"Unknown runtime backend scope: {scope}")
+
+    keys = SCOPE_KEYS[scope]
+    with psycopg.connect(
+        database_url(),
+        sslmode="require",
+        connect_timeout=15,
+    ) as conn:
+        with conn.cursor() as cur:
+            cur.execute("set transaction read only")
+            cur.execute(
+                """
+                select document_key, source_hash, payload
+                from training.state_documents
+                where document_key = any(%s)
+                """,
+                (list(keys),),
+            )
+            rows = {
+                str(key): {
+                    "source_hash": str(source_hash or ""),
+                    "payload": payload,
+                }
+                for key, source_hash, payload in cur.fetchall()
+            }
+            conn.rollback()
+
+    missing = sorted(set(keys) - set(rows))
+    if missing:
+        raise RuntimeError(
+            "Runtime backend hydration is missing documents: " + ", ".join(missing)
+        )
+    for key in keys:
+        record = rows[key]
+        if canonical_hash(record["payload"]) != record["source_hash"]:
+            raise RuntimeError(
+                f"Runtime backend hydration payload hash mismatch for {key}"
+            )
+
+    _materialize_cache(rows, data_dir)
+    return {
+        "scope": scope,
+        "source": "supabase_db",
+        "verified": True,
+        "documents": sorted(rows),
+        "current_workouts": 0,
+    }
+
+
 def promote_runtime_scope(
     scope: str,
     *,
@@ -370,9 +426,18 @@ def promote_runtime_scope(
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--scope", choices=tuple(SCOPE_KEYS), required=True)
+    parser.add_argument(
+        "--mode",
+        choices=("promote", "hydrate"),
+        default="promote",
+    )
     args = parser.parse_args(argv)
     try:
-        result = promote_runtime_scope(args.scope)
+        result = (
+            hydrate_runtime_scope(args.scope)
+            if args.mode == "hydrate"
+            else promote_runtime_scope(args.scope)
+        )
     except Exception as exc:
         print(
             f"SUPABASE_RUNTIME_STATE_FAILED scope={args.scope} "
@@ -382,7 +447,7 @@ def main(argv: list[str] | None = None) -> int:
 
     print(
         "SUPABASE_RUNTIME_STATE_OK "
-        f"scope={result['scope']} source={result['source']} "
+        f"mode={args.mode} scope={result['scope']} source={result['source']} "
         f"verified={result['verified']} source_hash={result['source_hash']} "
         f"documents={','.join(result['documents'])} "
         f"current_workouts={result['current_workouts']}"
