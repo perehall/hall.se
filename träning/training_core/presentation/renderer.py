@@ -680,6 +680,34 @@ def render_week_context(snapshot: PresentationSnapshot) -> str:
     )
 
 
+def render_week_status(snapshot: PresentationSnapshot) -> str:
+    model = snapshot.week
+    sports = "".join(
+        '<div class="v2-week-sport">'
+        f'<span>{html.escape(item.label)}</span>'
+        f'<strong>{html.escape(item.duration)}</strong>'
+        '</div>'
+        for item in model.sport_distribution
+    )
+    distribution = (
+        '<div class="v2-week-sports">'
+        '<h3>Grenfördelning · passtid</h3>'
+        f'{sports}</div>'
+        if sports else ""
+    )
+    return (
+        '<details class="v2-week-status">'
+        f'<summary>{html.escape(model.status_summary)}</summary>'
+        '<div class="v2-week-status-body">'
+        '<div class="v2-week-metrics">'
+        f'<span><strong>{model.completed_activity_count}</strong> pass</span>'
+        f'<span><strong>{html.escape(model.session_time)}</strong> passtid</span>'
+        f'<span><strong>{model.training_day_count}</strong> träningsdagar</span>'
+        '</div>'
+        f'{distribution}</div></details>'
+    )
+
+
 def render_week(snapshot: PresentationSnapshot) -> str:
     model = snapshot.week
     rows = []
@@ -715,6 +743,7 @@ def render_snapshot(snapshot: PresentationSnapshot) -> str:
         render_navigation(snapshot)
         + render_today(snapshot)
         + render_week_context(snapshot)
+        + render_week_status(snapshot)
         + render_week(snapshot)
         + feedback_script
     )
