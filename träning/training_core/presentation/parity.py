@@ -93,6 +93,11 @@ def semantic_snapshot(snapshot: PresentationSnapshot) -> dict[str, Any]:
             "planned_count": snapshot.week.planned_count,
             "completed_activity_count": snapshot.week.completed_activity_count,
             "training_day_count": snapshot.week.training_day_count,
+            "status_summary": snapshot.week.status_summary,
+            "sport_distribution": [
+                {"label": item.label, "duration": item.duration}
+                for item in snapshot.week.sport_distribution
+            ],
             "days": [
                 {
                     "date": d.local_date.isoformat(),
