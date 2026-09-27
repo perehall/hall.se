@@ -30,7 +30,6 @@ class CutoverContractTests(unittest.TestCase):
                 "sport_identity_icons",
                 "device_sync_status",
                 "page_shell",
-                "manual_activity_truth",
                 "goal_link",
                 "system_reference_tools",
             },
