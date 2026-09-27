@@ -62,7 +62,9 @@ Phase 1: Presentation vertical slice
 - [x] Build week navigation from explicit archive publication metadata plus canonical current/future planned dates; never infer navigation by inspecting generated HTML paths.
 - [x] Render historical week detail from typed immutable audit objects (archived plan, activities, coach evaluations and week review) without re-rendering or mutating legacy HTML.
 - [x] Carry synced SMHI weather through a WeatherRepository into typed Today/Week fields and include weather semantics in the legacy↔v2 parity gate.
-- [ ] Audit all remaining retained production surfaces against the v2 read model before cutover.
+- [x] Audit all remaining retained production surfaces against the v2 read model before cutover.
+- [x] Encode retained-surface status as a machine-readable cutover contract and report blockers in CI.
+- [ ] Resolve the cutover blockers reported by `v2_cutover_readiness.py`.
 - [ ] Cut publication over after the v2 renderer carries the complete retained UI contract.
 - [ ] Delete replaced finalizers.
 
@@ -72,8 +74,10 @@ are now represented by typed v2 inputs/read models. Weather is an external
 synced forecast cache behind a repository port; it is not promoted to canonical
 training state. Historical detail is normalized behind an audit repository
 adapter and rendered from typed read models; the presentation layer never reads
-the archive JSON directly. Before production cutover, perform an explicit
-retained-surface audit rather than assuming those known blockers were exhaustive. Navigation now comes from typed
+the archive JSON directly. The retained-surface audit is now executable rather than implicit. CI reports
+the current blocker set through `v2_cutover_readiness.py`; production cutover
+must use `--require-ready` and therefore cannot proceed while a retained
+capability remains classified as a blocker. Navigation now comes from typed
 publication/canonical inputs rather than generated-file existence. Workout prescription, current post-workout outcome/feedback display
 and the completed-workout feedback editor are now carried by typed v2 fields and the
 same pure render pass. Production must therefore remain on legacy until
