@@ -26,11 +26,20 @@ class LegacyParityTests(unittest.TestCase):
             '<div class="completed-day-summary"><div class="completed-day-title">'
             '<span>Enduro</span><span class="completed-day-title-sep">+</span>'
             '<span>Simning</span></div></div></div>'
-            '<div class="day" id="dag-2026-09-27"><div>Plan</div></div>'
+            '<div class="day" id="dag-2026-09-27"><div>Plan</div>'
+            '<div class="next-weather" data-weather-date="2026-09-27" '
+            'data-weather-scope="day"><strong>Väder · Oxelösund</strong> · '
+            'Klart · 12,0–15,4 °C · nederbördsrisk max 0 % · vind max 4,9 m/s'
+            '</div></div>'
         )
         self.assertEqual(legacy["today"]["title"], "Löpning · lugn distans")
         self.assertEqual(
             legacy["week"]["days"][0]["actual_labels"], ["Enduro", "Simning"]
+        )
+        self.assertEqual(
+            legacy["week"]["days"][1]["weather"],
+            "Väder · Oxelösund · Klart · 12,0–15,4 °C · "
+            "nederbördsrisk max 0 % · vind max 4,9 m/s",
         )
 
     def test_cutover_contract_accepts_legacy_split_dose_but_not_wrong_activity(self):
@@ -42,6 +51,13 @@ class LegacyParityTests(unittest.TestCase):
                         "date": "2026-09-26",
                         "completed": True,
                         "actual_labels": ["Enduro", "Simning"],
+                        "weather": "",
+                    },
+                    {
+                        "date": "2026-09-27",
+                        "completed": False,
+                        "actual_labels": [],
+                        "weather": "Väder · Oxelösund · Klart · 12,0 °C",
                     }
                 ]
             },
@@ -57,12 +73,22 @@ class LegacyParityTests(unittest.TestCase):
                         "date": "2026-09-26",
                         "state": "completed",
                         "actual_labels": ["Enduro", "Simning"],
+                        "weather": "",
+                    },
+                    {
+                        "date": "2026-09-27",
+                        "state": "fixed",
+                        "actual_labels": [],
+                        "weather": "Väder · Oxelösund · Klart · 12,0 °C",
                     }
                 ]
             },
         }
         self.assertEqual(compare_cutover_contract(legacy, v2), [])
         v2["week"]["days"][0]["actual_labels"] = ["EBikeRide"]
+        self.assertTrue(compare_cutover_contract(legacy, v2))
+        v2["week"]["days"][0]["actual_labels"] = ["Enduro", "Simning"]
+        v2["week"]["days"][1]["weather"] = "Fel väder"
         self.assertTrue(compare_cutover_contract(legacy, v2))
 
 
