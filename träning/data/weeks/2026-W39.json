@@ -4,7 +4,7 @@
   "week_start": "2026-09-21",
   "week_end": "2026-09-27",
   "created_at_utc": "2026-09-20T23:15:26.146433+00:00",
-  "updated_at_utc": "2026-09-27T17:54:39.291704+00:00",
+  "updated_at_utc": "2026-09-27T19:06:55.778032+00:00",
   "plan": {
     "days": [
       {
@@ -1063,9 +1063,9 @@
           "status": "synced",
           "transport": "intervals_icu",
           "source_hash": "d73c17537fe87dbcbcf589b67854337903b3d4a8c0dfd18765ceb05cbd56e91c",
-          "updated_at_utc": "2026-09-27T17:54:22.739716+00:00",
+          "updated_at_utc": "2026-09-27T19:06:39.382145+00:00",
           "device_delivery": "unverified",
-          "verified_at_utc": "2026-09-27T17:54:22.739716+00:00",
+          "verified_at_utc": "2026-09-27T19:06:39.382145+00:00",
           "provider_event_id": 138097036
         },
         "dose_options": [
@@ -5651,17 +5651,17 @@
           "Planstatus 2026-09-27: dagen är markerad genomförd i coachens beslutsunderlag.",
           "Planerad tidsdos 60 min; faktisk rörelsetid 79.95 min (+19.95 min mot vald dos)."
         ],
-        "summary": "13.46 km terränglöpning genomfört lugnt (snitttempo 5:57/km) med låg subjektiv ansträngning men tunga ben enligt användarrapport.",
+        "summary": "13.5 km terränglöpning genomförd lugnt (avg 5:57/km, 79.95 min) med låg subjektiv ansträngning samma dag men tunga ben rapporterade.",
         "unknowns": [
-          "Hur du känner dig kommande 24–48 timmar (subjektiv återhämtning).",
-          "Eventuella lokala muskulära störningar/skador ej rapporterade."
+          "Subsequent 24–72h recovery status (återhämtningsunderlaget/energirapport efter idag).",
+          "Detaljer om planerat pass de närmaste tillåtna planerat träningsinnehåll (ingen planerat träningsinnehåll finns)."
         ],
         "confidence": "medium",
         "interpretations": [
-          "Att du kunde hålla låg puls och låg RPE visar att passet var genomförbart men tunga ben och hög tidigare RPE indikerar kvarstående mekanisk/trötthetsbelastning.",
-          "Eftersom passet överskred planerad duration men låg i intensitet, och omgivande dagar redan innehåller belastning, motiverar detta konservativt bevarande av reducerad dos nästa gång…"
+          "Passet visar att löpning på avsedd intensitet genomfördes trots subjektiv trötthet — det var tolererat samma dag men inte bevis på full återhämtning.",
+          "Givet kumulativ närbelastning och att dagens pass översteg valda 60‑min dosen är konservativ reduktion eller oförändrat planerat nästa närmaste pass motiverad."
         ],
-        "load_interpretation": "Passet är längre än planerat (80 vs 60 min) men intensitet och användarrapport tyder på tolererat utförande; finns kumulativ närbelastning från tidigare dagar."
+        "load_interpretation": "Närbelastningen de senaste 3 dagarna (backintervaller + 4k sim + enduro + dagens lugna långpass) motiverar konservativ hantering av kommande pass."
       },
       "auto_apply": {
         "note": "Ingen automatisk planändring.",
@@ -5670,15 +5670,15 @@
       "activity_id": 20350203020,
       "plan_action": {
         "action": "keep",
-        "reason": "Konservativt beslut: planens nedjustering (det valda passalternativet) var redan applicerad och är lämplig med den samlade närbelastningen.",
+        "reason": "Planen har redan konservativt nedjusterats (Löpning‑easy‑60) och dagens genomförda lågintensiva pass är förenligt med det beslutet.",
         "target_date": "",
         "dose_option_id": "",
-        "recommendation": "Följ den redan valda reducerade dosen (det valda passalternativet) — ingen ytterligare ändring behövs; vila vid ökad stelhet eller smärta.",
+        "recommendation": "Följ det nedjusterade passet (Löpning‑easy‑60) som materialiserats i planen; prioritera återhämtningsunderlaget, näring och lätt rörlighet idag/ikväll och rapportera hur benen känns morgonen efter.",
         "requires_approval": false
       },
       "activity_date": "2026-09-27",
       "activity_name": "Terränglöpning vid lunch",
-      "generated_at_utc": "2026-09-27T17:54:20.912898+00:00",
+      "generated_at_utc": "2026-09-27T19:06:37.756298+00:00",
       "analysis_contract": {
         "pipeline_version": 3,
         "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
