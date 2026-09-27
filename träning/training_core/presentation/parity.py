@@ -62,6 +62,18 @@ def semantic_snapshot(snapshot: PresentationSnapshot) -> dict[str, Any]:
                 for outcome in snapshot.today.outcomes
             ],
         },
+        "weather": {
+            "status": snapshot.weather.status,
+            "source": snapshot.weather.source,
+            "days": [
+                {
+                    "date": weather.local_date.isoformat(),
+                    "summary": weather.summary,
+                    "stale": weather.stale,
+                }
+                for weather in snapshot.weather.days
+            ],
+        },
         "week": {
             "start": snapshot.week.start.isoformat(),
             "end": snapshot.week.end.isoformat(),
@@ -74,6 +86,12 @@ def semantic_snapshot(snapshot: PresentationSnapshot) -> dict[str, Any]:
                     "state": d.state,
                     "planned_session": d.planned_session,
                     "actual_labels": list(d.actual_labels),
+                    "weather": (
+                        snapshot.weather.for_date(d.local_date).summary
+                        if snapshot.weather.for_date(d.local_date) is not None
+                        and not d.actual_labels
+                        else ""
+                    ),
                 }
                 for d in snapshot.week.days
             ],

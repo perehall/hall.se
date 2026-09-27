@@ -18,6 +18,7 @@ from training_core.presentation.parity import semantic_snapshot
 from training_core.presentation.renderer import render_snapshot
 from training_core.repositories.archive import ManifestWeekArchiveRepository
 from training_core.repositories.presentation import PostgresPresentationRepository
+from training_core.repositories.weather import FileWeatherRepository
 
 
 ROOT = Path(__file__).resolve().parent
@@ -28,10 +29,12 @@ def snapshot_payload(today: date) -> dict:
     archive_repository = ManifestWeekArchiveRepository(
         ROOT / "data" / "weeks" / "index.json"
     )
+    weather_repository = FileWeatherRepository(ROOT / "data" / "weather.json")
     snapshot = build_presentation_snapshot(
         repository,
         today=today,
         archive_repository=archive_repository,
+        weather_repository=weather_repository,
     )
     return {
         "semantics": semantic_snapshot(snapshot),

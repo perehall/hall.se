@@ -588,11 +588,25 @@ def render_historical_snapshot(
     )
 
 
+def _render_weather_line(snapshot: PresentationSnapshot, local_date, css_class: str) -> str:
+    weather = snapshot.weather.for_date(local_date)
+    if weather is None or not weather.summary:
+        return ""
+    return (
+        f'<p class="{css_class}" data-weather-date="{local_date.isoformat()}">'
+        f'{html.escape(weather.summary)}</p>'
+    )
+
+
 def render_today(snapshot: PresentationSnapshot) -> str:
     model = snapshot.today
     detail_html = "".join(f"<li>{html.escape(detail)}</li>" for detail in model.details)
     details = f'<ul class="v2-today-details">{detail_html}</ul>' if detail_html else ""
     completed_context = _render_completed_context(model)
+    weather_html = (
+        _render_weather_line(snapshot, model.local_date, "v2-today-weather")
+        if not model.outcomes else ""
+    )
 
     prescription_html = "".join(
         f"<li>{html.escape(line)}</li>" for line in model.prescription
@@ -615,7 +629,7 @@ def render_today(snapshot: PresentationSnapshot) -> str:
     return (
         f'<section class="v2-today" data-state="{html.escape(model.state)}">'
         f'<p class="v2-kicker">Idag</p><h1>{html.escape(model.title)}</h1>'
-        f'{details}{completed_context}{prescription}{rationale}{next_html}</section>'
+        f'{details}{weather_html}{completed_context}{prescription}{rationale}{next_html}</section>'
     )
 
 
@@ -625,16 +639,26 @@ def render_week(snapshot: PresentationSnapshot) -> str:
     for day in model.days:
         actual = " + ".join(day.actual_labels)
         shown = actual or day.planned_session
+        weather_html = (
+            _render_weather_line(snapshot, day.local_date, "v2-week-weather")
+            if not day.actual_labels else ""
+        )
         rows.append(
             f'<li data-date="{day.local_date.isoformat()}" data-state="{html.escape(day.state)}">'
-            f'<strong>{html.escape(shown)}</strong></li>'
+            f'<strong>{html.escape(shown)}</strong>{weather_html}</li>'
         )
+    source = (
+        '<p class="v2-weather-source">Väderprognos: '
+        f'<a href="{html.escape(snapshot.weather.source_url, quote=True)}" '
+        'target="_blank" rel="noopener">SMHI</a></p>'
+        if snapshot.weather.days else ""
+    )
     return (
         f'<section class="v2-week" data-start="{model.start.isoformat()}" '
         f'data-end="{model.end.isoformat()}">'
         f'<p>{model.training_day_count} träningsdagar · '
         f'{model.completed_activity_count} aktiviteter</p>'
-        f'<ol>{"".join(rows)}</ol></section>'
+        f'<ol>{"".join(rows)}</ol>{source}</section>'
     )
 
 
