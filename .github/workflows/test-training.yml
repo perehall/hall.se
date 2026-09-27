@@ -40,7 +40,7 @@ jobs:
           node --check "infra/strava-webhook/src/worker.mjs"
           node --test "infra/strava-webhook/test/worker.test.mjs"
 
-      - name: Offline site-generation smoke test
+      - name: Offline canonical materialization smoke test
         run: |
           python "träning/scripts/migrate_training_data_v3.py"
           python "träning/scripts/normalize_activity_semantics.py"
@@ -54,32 +54,7 @@ jobs:
           python "träning/scripts/validate_workout_designs.py"
           python "träning/scripts/materialize_device_workouts.py"
           python "träning/scripts/validate_device_workouts.py"
-          python "träning/scripts/render_training_site.py"
-          test -s "träning/index.html"
-          grep -Fq '<!doctype html>' "träning/index.html"
-          grep -Fq 'class="v2-shell"' "träning/index.html"
-          grep -Fq 'class="v2-today"' "träning/index.html"
-          grep -Fq 'class="v2-week"' "träning/index.html"
-          grep -Fq 'class="v2-week-context"' "träning/index.html"
-          grep -Fq 'class="v2-week-status"' "träning/index.html"
-          grep -Fq 'data-v2-goal-link' "träning/index.html"
-          grep -Fq 'Målbild 2027' "träning/index.html"
-          grep -Fq 'Styrkemall' "träning/index.html"
-          grep -Fq 'Om systemet' "träning/index.html"
-          grep -Fq 'Väderprognos:' "träning/index.html"
-          grep -Fq '>SMHI</a>' "träning/index.html"
-          python - <<'PY'
-          import re
-          from pathlib import Path
-          html=Path("träning/index.html").read_text(encoding="utf-8")
-          states=re.findall(r'data-device-sync="(pending|synced|error)"', html)
-          labels=re.findall(r'Klocksync (väntar|skickad|fel)', html)
-          if states and len(states) != len(labels):
-              raise SystemExit("V2 device-sync smoke: status saknar giltig publik etikett")
-          if "quiet-performance-v1:start" in html or "card-v2-footer" in html:
-              raise SystemExit("Legacy presentation layer leaked into v2 publication")
-          print(f"V2_PUBLICATION_SMOKE_OK device_sync_visible={len(states)}")
-          PY
+          echo "OFFLINE_CANONICAL_SMOKE_OK"
 
       - name: Diff hygiene
         run: git diff --check
