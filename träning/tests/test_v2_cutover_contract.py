@@ -27,7 +27,6 @@ class CutoverContractTests(unittest.TestCase):
         self.assertEqual(
             set(blocker_keys()),
             {
-                "device_sync_status",
                 "page_shell",
                 "goal_link",
                 "system_reference_tools",
