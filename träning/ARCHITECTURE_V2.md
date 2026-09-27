@@ -60,14 +60,16 @@ Phase 1: Presentation vertical slice
 - [x] Carry current post-workout feedback and latest coach outcome from PostgreSQL into the typed Today read model and render them without HTML post-processing.
 - [x] Replace the completed-workout feedback editing interaction in the pure v2 render pass; durable Supabase acknowledgment is keyed by the feedback event identity instead of legacy override markers.
 - [x] Build week navigation from explicit archive publication metadata plus canonical current/future planned dates; never infer navigation by inspecting generated HTML paths.
+- [x] Render historical week detail from typed immutable audit objects (archived plan, activities, coach evaluations and week review) without re-rendering or mutating legacy HTML.
 - [ ] Cut publication over after the v2 renderer carries the complete retained UI contract.
 - [ ] Delete replaced finalizers.
 
 Cutover rule: a green parity gate is necessary but not sufficient. The current
-legacy page still contains retained interaction/detail surfaces (weather and
-historical detail) that are not yet part of the v2 renderer. Navigation now
-comes from typed publication/canonical inputs rather than generated-file
-existence. Workout prescription, current post-workout outcome/feedback display
+legacy page still contains retained weather detail that is not yet part of the
+v2 renderer. Historical detail is now normalized behind an audit repository
+adapter and rendered from typed read models; the presentation layer never reads
+the archive JSON directly. Navigation now comes from typed
+publication/canonical inputs rather than generated-file existence. Workout prescription, current post-workout outcome/feedback display
 and the completed-workout feedback editor are now carried by typed v2 fields and the
 same pure render pass. Production must therefore remain on legacy until
 those required surfaces are represented by typed read-model fields and rendered
