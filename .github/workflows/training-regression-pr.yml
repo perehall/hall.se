@@ -31,3 +31,13 @@ jobs:
 
       - name: Run deterministic training regression suite
         run: python "träning/scripts/run_regression_tests.py"
+
+      - name: Install PostgreSQL driver for v2 read-only probe
+        run: python -m pip install "psycopg[binary]>=3.2,<4"
+
+      - name: Probe architecture v2 directly against canonical PostgreSQL
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          test -n "$SUPABASE_DB_URL"
+          PYTHONPATH="träning" python "träning/v2_presentation_probe.py"
