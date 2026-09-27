@@ -4,7 +4,7 @@
   "week_start": "2026-09-21",
   "week_end": "2026-09-27",
   "created_at_utc": "2026-09-20T23:15:26.146433+00:00",
-  "updated_at_utc": "2026-09-27T10:09:20.808489+00:00",
+  "updated_at_utc": "2026-09-27T11:59:02.136260+00:00",
   "plan": {
     "days": [
       {
@@ -1058,13 +1058,14 @@
           "reason": "Konservativ reduktion rekommenderas på grund av kumulativ närbelastning och hög RPE efter dagens sim.",
           "applied_at_utc": "2026-09-27T10:08:54.478421+00:00"
         },
+        "activity_id": 20350203020,
         "device_sync": {
           "status": "synced",
           "transport": "intervals_icu",
           "source_hash": "d73c17537fe87dbcbcf589b67854337903b3d4a8c0dfd18765ceb05cbd56e91c",
-          "updated_at_utc": "2026-09-27T10:08:56.081682+00:00",
+          "updated_at_utc": "2026-09-27T11:58:40.440090+00:00",
           "device_delivery": "unverified",
-          "verified_at_utc": "2026-09-27T10:08:56.081682+00:00",
+          "verified_at_utc": "2026-09-27T11:58:40.440090+00:00",
           "provider_event_id": 138097036
         },
         "dose_options": [
@@ -1419,6 +1420,338 @@
     "workout_design_schema_version": 1
   },
   "activities": [
+    {
+      "id": 20350203020,
+      "name": "Terränglöpning vid lunch",
+      "source": "Strava API",
+      "gear_id": null,
+      "calories": 790.0,
+      "gear_name": null,
+      "distance_m": 13455.0,
+      "sport_type": "TrailRun",
+      "start_date": "2026-09-27T10:20:09Z",
+      "device_name": "Garmin Forerunner 970",
+      "average_watts": 244.2,
+      "max_heartrate": 144.0,
+      "moving_time_s": 4797,
+      "elapsed_time_s": 4804,
+      "start_date_local": "2026-09-27T12:20:09Z",
+      "average_heartrate": 130.8,
+      "total_elevation_gain_m": 198.0,
+      "weighted_average_watts": 246,
+      "workout_analysis_context": {
+        "run": {
+          "average_pace": "5:57/km",
+          "short_intervals": {
+            "structured": false
+          },
+          "source_lap_note": "Near-1 km source laps are descriptive measurements only. Only run.short_intervals may classify a repeated short-lap structure, and it does not infer terrain or physiological intensity.",
+          "source_laps_near_1km": [
+            {
+              "pace": "5:34/km",
+              "lap_index": 1,
+              "distance_m": 1000.0,
+              "moving_time_s": 334,
+              "pace_s_per_km": 334.0,
+              "average_heartrate": 117.6
+            },
+            {
+              "pace": "5:40/km",
+              "lap_index": 2,
+              "distance_m": 1000.0,
+              "moving_time_s": 340,
+              "pace_s_per_km": 340.0,
+              "average_heartrate": 127.8
+            },
+            {
+              "pace": "6:21/km",
+              "lap_index": 3,
+              "distance_m": 1000.0,
+              "moving_time_s": 381,
+              "pace_s_per_km": 381.0,
+              "average_heartrate": 131.3
+            },
+            {
+              "pace": "6:37/km",
+              "lap_index": 4,
+              "distance_m": 1000.0,
+              "moving_time_s": 397,
+              "pace_s_per_km": 397.0,
+              "average_heartrate": 131.0
+            },
+            {
+              "pace": "5:58/km",
+              "lap_index": 5,
+              "distance_m": 1000.0,
+              "moving_time_s": 358,
+              "pace_s_per_km": 358.0,
+              "average_heartrate": 133.0
+            },
+            {
+              "pace": "5:39/km",
+              "lap_index": 6,
+              "distance_m": 1000.0,
+              "moving_time_s": 339,
+              "pace_s_per_km": 339.0,
+              "average_heartrate": 129.6
+            },
+            {
+              "pace": "5:42/km",
+              "lap_index": 7,
+              "distance_m": 1000.0,
+              "moving_time_s": 342,
+              "pace_s_per_km": 342.0,
+              "average_heartrate": 131.0
+            },
+            {
+              "pace": "6:09/km",
+              "lap_index": 8,
+              "distance_m": 1000.0,
+              "moving_time_s": 369,
+              "pace_s_per_km": 369.0,
+              "average_heartrate": 131.9
+            },
+            {
+              "pace": "6:08/km",
+              "lap_index": 9,
+              "distance_m": 1000.0,
+              "moving_time_s": 368,
+              "pace_s_per_km": 368.0,
+              "average_heartrate": 133.1
+            },
+            {
+              "pace": "6:01/km",
+              "lap_index": 10,
+              "distance_m": 1000.0,
+              "moving_time_s": 361,
+              "pace_s_per_km": 361.0,
+              "average_heartrate": 131.4
+            },
+            {
+              "pace": "6:08/km",
+              "lap_index": 11,
+              "distance_m": 1000.0,
+              "moving_time_s": 368,
+              "pace_s_per_km": 368.0,
+              "average_heartrate": 131.4
+            },
+            {
+              "pace": "6:01/km",
+              "lap_index": 12,
+              "distance_m": 1000.0,
+              "moving_time_s": 361,
+              "pace_s_per_km": 361.0,
+              "average_heartrate": 134.4
+            },
+            {
+              "pace": "5:23/km",
+              "lap_index": 13,
+              "distance_m": 1000.0,
+              "moving_time_s": 323,
+              "pace_s_per_km": 323.0,
+              "average_heartrate": 135.1
+            }
+          ],
+          "average_pace_s_per_km": 356.52,
+          "fastest_source_lap_near_1km": {
+            "pace": "5:23/km",
+            "lap_index": 13,
+            "distance_m": 1000.0,
+            "moving_time_s": 323,
+            "pace_s_per_km": 323.0,
+            "average_heartrate": 135.1
+          }
+        },
+        "swim": null,
+        "total": {
+          "distance_m": 13455.0,
+          "distance_km": 13.455,
+          "max_heartrate": 144.0,
+          "moving_time_s": 4797.0,
+          "elapsed_time_s": 4804.0,
+          "elevation_gain_m": 198.0,
+          "average_heartrate": 130.8
+        },
+        "enduro": null,
+        "sport_type": "TrailRun",
+        "activity_id": 20350203020,
+        "user_report": "",
+        "display_label": "TrailRun",
+        "classification": null,
+        "contract_version": 3,
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
+      },
+      "laps": [
+        {
+          "name": "Lap 0",
+          "lap_index": 1,
+          "distance_m": 1000.0,
+          "average_speed": 2.99,
+          "average_watts": 263.9,
+          "max_heartrate": 128.0,
+          "moving_time_s": 334,
+          "elapsed_time_s": 334,
+          "average_cadence": 79.6,
+          "average_heartrate": 117.6
+        },
+        {
+          "name": "Lap 1",
+          "lap_index": 2,
+          "distance_m": 1000.0,
+          "average_speed": 2.94,
+          "average_watts": 252.7,
+          "max_heartrate": 132.0,
+          "moving_time_s": 340,
+          "elapsed_time_s": 346,
+          "average_cadence": 79.8,
+          "average_heartrate": 127.8
+        },
+        {
+          "name": "Lap 2",
+          "lap_index": 3,
+          "distance_m": 1000.0,
+          "average_speed": 2.62,
+          "average_watts": 240.6,
+          "max_heartrate": 141.0,
+          "moving_time_s": 381,
+          "elapsed_time_s": 381,
+          "average_cadence": 79.3,
+          "average_heartrate": 131.3
+        },
+        {
+          "name": "Lap 3",
+          "lap_index": 4,
+          "distance_m": 1000.0,
+          "average_speed": 2.52,
+          "average_watts": 221.2,
+          "max_heartrate": 144.0,
+          "moving_time_s": 397,
+          "elapsed_time_s": 397,
+          "average_cadence": 78.8,
+          "average_heartrate": 131.0
+        },
+        {
+          "name": "Lap 4",
+          "lap_index": 5,
+          "distance_m": 1000.0,
+          "average_speed": 2.79,
+          "average_watts": 249.3,
+          "max_heartrate": 144.0,
+          "moving_time_s": 358,
+          "elapsed_time_s": 358,
+          "average_cadence": 79.3,
+          "average_heartrate": 133.0
+        },
+        {
+          "name": "Lap 5",
+          "lap_index": 6,
+          "distance_m": 1000.0,
+          "average_speed": 2.95,
+          "average_watts": 252.9,
+          "max_heartrate": 135.0,
+          "moving_time_s": 339,
+          "elapsed_time_s": 339,
+          "average_cadence": 79.6,
+          "average_heartrate": 129.6
+        },
+        {
+          "name": "Lap 6",
+          "lap_index": 7,
+          "distance_m": 1000.0,
+          "average_speed": 2.92,
+          "average_watts": 249.5,
+          "max_heartrate": 135.0,
+          "moving_time_s": 342,
+          "elapsed_time_s": 342,
+          "average_cadence": 79.8,
+          "average_heartrate": 131.0
+        },
+        {
+          "name": "Lap 7",
+          "lap_index": 8,
+          "distance_m": 1000.0,
+          "average_speed": 2.71,
+          "average_watts": 242.5,
+          "max_heartrate": 144.0,
+          "moving_time_s": 369,
+          "elapsed_time_s": 368,
+          "average_cadence": 80.1,
+          "average_heartrate": 131.9
+        },
+        {
+          "name": "Lap 8",
+          "lap_index": 9,
+          "distance_m": 1000.0,
+          "average_speed": 2.72,
+          "average_watts": 239.3,
+          "max_heartrate": 139.0,
+          "moving_time_s": 368,
+          "elapsed_time_s": 368,
+          "average_cadence": 80.6,
+          "average_heartrate": 133.1
+        },
+        {
+          "name": "Lap 9",
+          "lap_index": 10,
+          "distance_m": 1000.0,
+          "average_speed": 2.77,
+          "average_watts": 232.4,
+          "max_heartrate": 135.0,
+          "moving_time_s": 361,
+          "elapsed_time_s": 361,
+          "average_cadence": 81.1,
+          "average_heartrate": 131.4
+        },
+        {
+          "name": "Lap 10",
+          "lap_index": 11,
+          "distance_m": 1000.0,
+          "average_speed": 2.72,
+          "average_watts": 234.9,
+          "max_heartrate": 140.0,
+          "moving_time_s": 368,
+          "elapsed_time_s": 368,
+          "average_cadence": 80.9,
+          "average_heartrate": 131.4
+        },
+        {
+          "name": "Lap 11",
+          "lap_index": 12,
+          "distance_m": 1000.0,
+          "average_speed": 2.77,
+          "average_watts": 240.3,
+          "max_heartrate": 143.0,
+          "moving_time_s": 361,
+          "elapsed_time_s": 361,
+          "average_cadence": 81.2,
+          "average_heartrate": 134.4
+        },
+        {
+          "name": "Lap 12",
+          "lap_index": 13,
+          "distance_m": 1000.0,
+          "average_speed": 3.1,
+          "average_watts": 253.1,
+          "max_heartrate": 144.0,
+          "moving_time_s": 323,
+          "elapsed_time_s": 323,
+          "average_cadence": 81.2,
+          "average_heartrate": 135.1
+        },
+        {
+          "name": "Lap 13",
+          "lap_index": 14,
+          "distance_m": 454.98,
+          "average_speed": 2.9,
+          "average_watts": 263.3,
+          "max_heartrate": 139.0,
+          "moving_time_s": 157,
+          "elapsed_time_s": 157,
+          "average_cadence": 80.7,
+          "average_heartrate": 133.3
+        }
+      ]
+    },
     {
       "id": 20337309419,
       "name": "Simning på eftermiddagen",
@@ -5304,6 +5637,52 @@
     }
   ],
   "coach_analyses": [
+    {
+      "model": "gpt-5-mini",
+      "assessment": {
+        "facts": [
+          "Löpning: 13,46 km · 1:20:04 · 198 m+ · snittpuls 130,8 · maxpuls 144.",
+          "Planstatus 2026-09-27: dagen är markerad genomförd i coachens beslutsunderlag.",
+          "Planerad tidsdos 60 min; faktisk rörelsetid 79.95 min (+19.95 min mot vald dos)."
+        ],
+        "summary": "13.5 km terränglöpning (≈4h/4800s) genomförd med genomsnittspuls 131 och varierande kilometertider; passet registreras som fullföljt istället för planerade 60 min.",
+        "unknowns": [
+          "Subjektiv RPE för dagens löpning (användarrapport tom).",
+          "återhämtningsunderlaget/återhämtningskänsla senare samma dag kan påverka beslut men finns endast som återhämtningsunderlaget‑trend."
+        ],
+        "confidence": "medium",
+        "interpretations": [
+          "Passet visar genomförd längre löptid än planerat (≈80 min vs godkänt 60 min) och därmed ökad kortsiktig mekanisk/kardiovaskulär belastning.",
+          "I kontext av föregående enduro, 3×8 backintervaller och två simpass innebär detta kumulativ belastning som stödjer en reducerad nära‑term dos."
+        ],
+        "load_interpretation": "Närbelastningen senaste 2–3 dagarna är hög (enduro + backintervaller + två simpass + detta långpass) och motiverar konservativ hantering av kommande plan."
+      },
+      "auto_apply": {
+        "note": "Ingen automatisk planändring.",
+        "applied": false
+      },
+      "activity_id": 20350203020,
+      "plan_action": {
+        "action": "review",
+        "reason": "Beslutet skjuts upp eftersom mellanliggande planerade dagar ännu inte har ett känt utfall.",
+        "target_date": "",
+        "dose_option_id": "",
+        "recommendation": "Måndag: Enduroskola · fast tillfälle ligger kvar som plan. Tisdag: Simning · 3 200 m · aerob/teknik bedöms efter den faktiska belastningen från måndag och återhämtningen därefter.",
+        "requires_approval": false
+      },
+      "activity_date": "2026-09-27",
+      "activity_name": "Terränglöpning vid lunch",
+      "generated_at_utc": "2026-09-27T11:58:38.503785+00:00",
+      "analysis_contract": {
+        "pipeline_version": 3,
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
+        "analysis_code_sha256": "899ccbc738b41513ca2513454e86c3dc7fe807921b3fc57d50a40bf775577ae3",
+        "plan_comparison_version": 2,
+        "workout_context_version": 3
+      },
+      "performance_marker_id": null,
+      "performance_protocol_key": null
+    },
     {
       "model": "gpt-5-mini",
       "assessment": {
