@@ -85,11 +85,15 @@ class WeekReadModelTests(unittest.TestCase):
             source_id += 1
         # Three extra activities with zero duration preserve the current
         # production count (8) without changing the known 34 474 s aggregate.
-        for offset in range(3):
+        for activity_date in (
+            date(2026, 9, 21),
+            date(2026, 9, 22),
+            date(2026, 9, 26),
+        ):
             activities.append(
                 CompletedActivity(
                     str(source_id),
-                    date(2026, 9, 21 + offset),
+                    activity_date,
                     "Löpning",
                     "run",
                     elapsed_time_s=0,
