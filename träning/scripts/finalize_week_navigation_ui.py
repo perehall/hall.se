@@ -11,6 +11,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 INDEX = ROOT / "index.html"
 PLAN = ROOT / "data" / "plan.json"
+UPCOMING = ROOT / "data" / "upcoming_week.json"
 WEEKS = ROOT / "vecka"
 
 CSS_MARKER = "/* unified-week-navigation-v1 */"
@@ -94,11 +95,31 @@ def period(key: str) -> str:
 
 
 def available_week_keys(current_key: str) -> set[str]:
+    """Return navigable weeks.
+
+    Historical publication directories are valid history. Future directories are
+    not authority: only the current upcoming_week document may make a future
+    week navigable.
+    """
     keys = {current_key}
+    current_start = week_date(current_key)
     if WEEKS.exists():
         for p in WEEKS.iterdir():
-            if p.is_dir() and re.fullmatch(r"\d{4}-W\d{2}", p.name) and (p/"index.html").exists():
+            if (
+                p.is_dir()
+                and re.fullmatch(r"\d{4}-W\d{2}", p.name)
+                and (p / "index.html").exists()
+                and week_date(p.name) < current_start
+            ):
                 keys.add(p.name)
+    if UPCOMING.exists():
+        upcoming = load_json(UPCOMING)
+        meta = upcoming.get("meta") or {}
+        upcoming_key = upcoming.get("week_key")
+        if not upcoming_key and meta.get("week_start"):
+            upcoming_key = week_key_from_date(date.fromisoformat(str(meta["week_start"])))
+        if upcoming_key == shift_week(current_key, 1):
+            keys.add(upcoming_key)
     return keys
 
 
