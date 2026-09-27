@@ -9,17 +9,17 @@
           "Planstatus 2026-09-27: dagen är markerad genomförd i coachens beslutsunderlag.",
           "Planerad tidsdos 60 min; faktisk rörelsetid 79.95 min (+19.95 min mot vald dos)."
         ],
-        "summary": "13.46 km terränglöpning genomförd lugnt (snitt5:57/km), snittpuls130BPM; användaren rapporterar trötta/tunga ben men lägre RPE under passet.",
+        "summary": "Genomfört 13,46 km terrängpass på ~4h/79min rörtid med intensitet (snittpuls 131) och användarrapport om trötta, tunga ben.",
         "unknowns": [
-          "Hur återhämtningen känns nästa 24–48 h (användarrapport saknas efter passet).",
-          "Detaljerad lokal muskelsmärta eller skada som kan ändra rekommendation."
+          "Subjektiv återhämtning nästa 24–48 h (återhämtningsunderlaget/energi) kan ändra beslut",
+          "Eventuell planerad enduro måndag är fast och kan påverka kvarvarande veckan"
         ],
         "confidence": "medium",
         "interpretations": [
-          "Genomfört långsamt långpass ligger inom det redan nedjusterade 60 min‑dosen (faktisk duration ~80 min) vilket ökar närbelastningen jämfört med planerat 60 min.",
-          "Subjektiv trötthet tidigare och två simpass plus enduro/backintervaller senaste dagarna motiverar fortsatt konservativ hantering nästa 48–72 h."
+          "Passet genomfördes i avsedd lugn distanskaraktär men användarrapport och närbelastning visar ackumulerad trötthet snarare än frisk absorbering.",
+          "Detta pass visar att en lugn längre löptid tolererades idag men bekräftar inte att mer belastning bör adderas de närmaste 2–3 dagarna."
         ],
-        "load_interpretation": "Passet gav kardiovaskulär belastning och mekanisk benstress som adderar till senaste 2–3 dagars exponering (enduro + backintervaller + två simpass)."
+        "load_interpretation": "Närbelastningen senaste 2–3 dagarna (enduro, backintervaller, två tunga simpass + idag) motiverar fortsatt konservativ hantering de närmaste 48–72 timmarna."
       },
       "auto_apply": {
         "note": "Ingen automatisk planändring.",
@@ -27,16 +27,16 @@
       },
       "activity_id": 20350203020,
       "plan_action": {
-        "action": "review",
-        "reason": "Beslutet skjuts upp eftersom mellanliggande planerade dagar ännu inte har ett känt utfall.",
+        "action": "keep",
+        "reason": "Mikrocykeln har redan konservativt reducerat dagens dos och närbelastningen talar för att bibehålla plan utan ökning de närmaste dagarna.",
         "target_date": "",
         "dose_option_id": "",
-        "recommendation": "Måndag: Enduroskola · fast tillfälle ligger kvar som plan. Tisdag: Simning · 3 200 m · aerob/teknik bedöms efter den faktiska belastningen från måndag och återhämtningen därefter.",
+        "recommendation": "Följ planens nu valda reducerade löpdos (60 min) och prioritera vila/återhämtningsunderlaget samt lätt återhämtning; avvakta med ytterligare hårda eller benkrävande pass tills subjektiv återhämtning eller ny data visar förbättring.",
         "requires_approval": false
       },
       "activity_date": "2026-09-27",
       "activity_name": "Terränglöpning vid lunch",
-      "generated_at_utc": "2026-09-27T13:19:31.745564+00:00",
+      "generated_at_utc": "2026-09-27T13:52:46.830242+00:00",
       "analysis_contract": {
         "pipeline_version": 3,
         "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
@@ -1309,9 +1309,9 @@
       "generated_at_utc": "2026-08-30T09:19:51.776072+00:00"
     }
   ],
-  "last_run_utc": "2026-09-27T13:19:31.745564+00:00",
+  "last_run_utc": "2026-09-27T13:52:46.830242+00:00",
   "contract_version": 15,
-  "last_trigger_hash": "d2f54dbd4eaab764eec9e8f8682c777446e2f21befcf0268f227a8ad374cf5a2",
+  "last_trigger_hash": "7342f141c07b8401c13292caa158eeeb390dbd5b8886c533b446ffa631b155a6",
   "output_contract_version": 19,
   "pipeline_contract_version": 3
 }
