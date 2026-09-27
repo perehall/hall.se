@@ -123,6 +123,7 @@ def semantic_snapshot(snapshot: PresentationSnapshot) -> dict[str, Any]:
                             "sport": activity.sport,
                             "classification": activity.classification,
                             "reason": activity.reason,
+                            "icon_key": activity.icon_key,
                         }
                         for activity in d.manual_activities
                     ],
