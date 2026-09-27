@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from dataclasses import asdict
 from typing import Any
 
 from training_core.application.presentation import PresentationSnapshot
@@ -20,6 +19,20 @@ def semantic_snapshot(snapshot: PresentationSnapshot) -> dict[str, Any]:
             "reason": snapshot.today.reason,
             "development_focus": snapshot.today.development_focus,
             "prescription": list(snapshot.today.prescription),
+            "outcomes": [
+                {
+                    "provider_activity_id": outcome.provider_activity_id,
+                    "label": outcome.label,
+                    "detail": outcome.detail,
+                    "feedback_status": outcome.feedback_status,
+                    "feedback_text": outcome.feedback_text,
+                    "coach_summary": outcome.coach_summary,
+                    "plan_impact": outcome.plan_impact,
+                    "action_reason": outcome.action_reason,
+                    "next_step": outcome.next_step,
+                }
+                for outcome in snapshot.today.outcomes
+            ],
         },
         "week": {
             "start": snapshot.week.start.isoformat(),
@@ -42,9 +55,12 @@ def semantic_snapshot(snapshot: PresentationSnapshot) -> dict[str, Any]:
 
 def compare_semantics(expected: dict[str, Any], actual: dict[str, Any]) -> list[str]:
     differences: list[str] = []
+
     def walk(path: str, left: Any, right: Any) -> None:
         if type(left) is not type(right):
-            differences.append(f"{path}: type {type(left).__name__} != {type(right).__name__}")
+            differences.append(
+                f"{path}: type {type(left).__name__} != {type(right).__name__}"
+            )
         elif isinstance(left, dict):
             for key in sorted(set(left) | set(right)):
                 if key not in left:
@@ -60,5 +76,6 @@ def compare_semantics(expected: dict[str, Any], actual: dict[str, Any]) -> list[
                 walk(f"{path}[{i}]", a, b)
         elif left != right:
             differences.append(f"{path}: {left!r} != {right!r}")
+
     walk("$", expected, actual)
     return differences
