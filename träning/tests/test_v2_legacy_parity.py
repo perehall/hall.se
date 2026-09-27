@@ -42,6 +42,30 @@ class LegacyParityTests(unittest.TestCase):
             "nederbördsrisk max 0 % · vind max 4,9 m/s",
         )
 
+    def test_extracts_week_status_and_sport_distribution(self):
+        legacy = self._legacy(
+            '<section class="top-today"><div class="top-today-title">Löpning</div></section>'
+            '<details class="week-status-expander"><summary>Veckostatus</summary>'
+            '<div class="metric"><strong>8</strong><span>pass</span></div>'
+            '<div class="metric"><strong>9:34:34</strong><span>passtid</span></div>'
+            '<div class="metric"><strong>6</strong><span>träningsdagar</span></div>'
+            '<div class="sport-head"><span>Enduro</span><strong>3:17:51</strong></div>'
+            '<div class="sport-head"><span>Löpning</span><strong>2:17:34</strong></div>'
+            '</details>'
+            '<div class="day" id="dag-2026-09-27"><div>Plan</div></div>'
+        )
+        self.assertEqual(
+            legacy["week_status"]["summary"],
+            "8 pass · 9:34:34 · 6 träningsdagar",
+        )
+        self.assertEqual(
+            legacy["week_status"]["sport_distribution"],
+            [
+                {"label": "Enduro", "duration": "3:17:51"},
+                {"label": "Löpning", "duration": "2:17:34"},
+            ],
+        )
+
     def test_extracts_current_week_focus_and_meta(self):
         legacy = self._legacy(
             '<section class="top-today"><div class="top-today-title">Löpning</div></section>'

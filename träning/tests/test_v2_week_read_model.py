@@ -1,23 +1,117 @@
 #!/usr/bin/env python3
-import sys, unittest
+import sys
+import unittest
 from datetime import date
 from pathlib import Path
-ROOT=Path(__file__).resolve().parents[1]; sys.path.insert(0,str(ROOT))
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
 from training_core.presentation.today import CompletedActivity, PlannedDay
 from training_core.presentation.week import build_week_read_model
 
+
 class WeekReadModelTests(unittest.TestCase):
     def test_multiple_activities_are_one_training_day_but_two_activities(self):
-        start=date(2026,9,21); end=date(2026,9,27)
-        plan=[PlannedDay(date(2026,9,26),"Simning · 4 000 m","swim","planned")]
-        acts=[
-            CompletedActivity("1",date(2026,9,26),"Enduro","enduro"),
-            CompletedActivity("2",date(2026,9,26),"Simning","swim"),
+        start = date(2026, 9, 21)
+        end = date(2026, 9, 27)
+        plan = [
+            PlannedDay(
+                date(2026, 9, 26),
+                "Simning · 4 000 m",
+                "swim",
+                "planned",
+            )
         ]
-        model=build_week_read_model(start=start,end=end,plan=plan,activities=acts)
-        self.assertEqual(model.training_day_count,1)
-        self.assertEqual(model.completed_activity_count,2)
-        self.assertEqual(model.days[0].actual_labels,("Enduro","Simning"))
-        self.assertEqual(model.days[0].state,"completed")
+        acts = [
+            CompletedActivity(
+                "1",
+                date(2026, 9, 26),
+                "Enduro",
+                "enduro",
+                elapsed_time_s=6062,
+            ),
+            CompletedActivity(
+                "2",
+                date(2026, 9, 26),
+                "Simning",
+                "swim",
+                elapsed_time_s=3822,
+            ),
+        ]
+        model = build_week_read_model(
+            start=start,
+            end=end,
+            plan=plan,
+            activities=acts,
+        )
+        self.assertEqual(model.training_day_count, 1)
+        self.assertEqual(model.completed_activity_count, 2)
+        self.assertEqual(model.days[0].actual_labels, ("Enduro", "Simning"))
+        self.assertEqual(model.days[0].state, "completed")
+        self.assertEqual(model.session_time_s, 9884)
+        self.assertEqual(model.session_time, "2:44:44")
+        self.assertEqual(
+            model.status_summary,
+            "2 pass · 2:44:44 · 1 träningsdag",
+        )
+        self.assertEqual(
+            [(item.label, item.duration) for item in model.sport_distribution],
+            [("Enduro", "1:41:02"), ("Simning", "1:03:42")],
+        )
 
-if __name__=="__main__": unittest.main()
+    def test_week_status_matches_current_production_aggregate_contract(self):
+        start = date(2026, 9, 21)
+        end = date(2026, 9, 27)
+        durations = [
+            ("Enduro", "enduro", 11871),
+            ("Löpning", "run", 8254),
+            ("MTB/XC", "bike", 4976),
+            ("Simning", "swim", 7359),
+            ("Styrka", "strength", 2014),
+        ]
+        activities = []
+        source_id = 1
+        for index, (label, family, seconds) in enumerate(durations):
+            activities.append(
+                CompletedActivity(
+                    str(source_id),
+                    date(2026, 9, 21 + min(index, 5)),
+                    label,
+                    family,
+                    elapsed_time_s=seconds,
+                )
+            )
+            source_id += 1
+        # Three extra activities with zero duration preserve the current
+        # production count (8) without changing the known 34 474 s aggregate.
+        for activity_date in (
+            date(2026, 9, 21),
+            date(2026, 9, 22),
+            date(2026, 9, 26),
+        ):
+            activities.append(
+                CompletedActivity(
+                    str(source_id),
+                    activity_date,
+                    "Löpning",
+                    "run",
+                    elapsed_time_s=0,
+                )
+            )
+            source_id += 1
+
+        model = build_week_read_model(
+            start=start,
+            end=end,
+            plan=[],
+            activities=activities,
+        )
+        self.assertEqual(model.completed_activity_count, 8)
+        self.assertEqual(model.session_time_s, 34474)
+        self.assertEqual(model.session_time, "9:34:34")
+        self.assertEqual(model.training_day_count, 6)
+
+
+if __name__ == "__main__":
+    unittest.main()

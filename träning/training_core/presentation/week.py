@@ -9,12 +9,31 @@ from typing import Iterable
 from training_core.presentation.today import CompletedActivity, PlannedDay
 
 
+SPORT_GROUP_LABELS = {
+    "run": "Löpning",
+    "swim": "Simning",
+    "strength": "Styrka",
+    "enduro": "Enduro",
+    "swimrun": "Swimrun",
+}
+
+
 @dataclass(frozen=True)
 class WeekDayReadModel:
     local_date: date
     planned_session: str
     actual_labels: tuple[str, ...]
     state: str
+
+
+@dataclass(frozen=True)
+class WeekSportReadModel:
+    label: str
+    duration_s: int
+
+    @property
+    def duration(self) -> str:
+        return format_duration(self.duration_s)
 
 
 @dataclass(frozen=True)
@@ -25,6 +44,37 @@ class WeekReadModel:
     planned_count: int
     completed_activity_count: int
     training_day_count: int
+    session_time_s: int
+    sport_distribution: tuple[WeekSportReadModel, ...]
+
+    @property
+    def session_time(self) -> str:
+        return format_duration(self.session_time_s)
+
+    @property
+    def status_summary(self) -> str:
+        day_word = "träningsdag" if self.training_day_count == 1 else "träningsdagar"
+        return (
+            f"{self.completed_activity_count} pass · {self.session_time} · "
+            f"{self.training_day_count} {day_word}"
+        )
+
+
+def format_duration(seconds: int | None) -> str:
+    total = max(0, int(seconds or 0))
+    hours, rem = divmod(total, 3600)
+    minutes, secs = divmod(rem, 60)
+    return f"{hours}:{minutes:02d}:{secs:02d}" if hours else f"{minutes}:{secs:02d}"
+
+
+def sport_group(activity: CompletedActivity) -> str:
+    family = str(activity.sport_family or "").strip().lower()
+    if family == "bike":
+        return "MTB/XC" if "MTB" in activity.label.upper() else "Cykel"
+    return SPORT_GROUP_LABELS.get(
+        family,
+        activity.label or family or "Övrigt",
+    )
 
 
 def build_week_read_model(
@@ -41,9 +91,11 @@ def build_week_read_model(
         key=lambda day: day.local_date,
     )
     by_date: dict[date, list[CompletedActivity]] = {}
+    week_activities: list[CompletedActivity] = []
     for activity in activities:
         if start <= activity.local_date <= end:
             by_date.setdefault(activity.local_date, []).append(activity)
+            week_activities.append(activity)
 
     days: list[WeekDayReadModel] = []
     for day in planned:
@@ -59,11 +111,27 @@ def build_week_read_model(
                 ),
             )
         )
+
+    sport_seconds: dict[str, int] = {}
+    for activity in week_activities:
+        group = sport_group(activity)
+        sport_seconds[group] = sport_seconds.get(group, 0) + int(
+            activity.elapsed_time_s or 0
+        )
+    distribution = tuple(
+        WeekSportReadModel(label=label, duration_s=seconds)
+        for label, seconds in sorted(
+            sport_seconds.items(),
+            key=lambda item: (-item[1], item[0]),
+        )
+    )
     return WeekReadModel(
         start=start,
         end=end,
         days=tuple(days),
         planned_count=len(planned),
-        completed_activity_count=sum(len(v) for v in by_date.values()),
+        completed_activity_count=len(week_activities),
         training_day_count=len(by_date),
+        session_time_s=sum(int(activity.elapsed_time_s or 0) for activity in week_activities),
+        sport_distribution=distribution,
     )
