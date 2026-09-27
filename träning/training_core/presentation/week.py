@@ -10,6 +10,10 @@ from training_core.presentation.manual_activity import (
     ManualActivityReadModel,
     manual_activities_for_day,
 )
+from training_core.presentation.sport_identity import (
+    activity_icon_key,
+    planned_icon_keys,
+)
 from training_core.presentation.today import CompletedActivity, PlannedDay
 
 
@@ -28,6 +32,7 @@ class WeekDayReadModel:
     planned_session: str
     actual_labels: tuple[str, ...]
     manual_activities: tuple[ManualActivityReadModel, ...]
+    icon_keys: tuple[str, ...]
     state: str
 
 
@@ -112,6 +117,19 @@ def build_week_read_model(
                 planned_session=day.session,
                 actual_labels=actual,
                 manual_activities=manual,
+                icon_keys=(
+                    tuple(
+                        dict.fromkeys(
+                            [
+                                activity_icon_key(activity.sport_family)
+                                for activity in by_date.get(day.local_date, [])
+                            ]
+                            + [activity.icon_key for activity in manual]
+                        )
+                    )
+                    if actual or manual
+                    else planned_icon_keys(sport=day.sport, payload=day.payload)
+                ),
                 state="completed" if actual or manual else (
                     "fixed" if day.manual_lock or day.planning_status == "fixed"
                     else day.status or "open"
