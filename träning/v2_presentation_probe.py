@@ -15,7 +15,7 @@ from pathlib import Path
 
 from training_core.application.presentation import build_presentation_snapshot
 from training_core.presentation.parity import semantic_snapshot
-from training_core.presentation.renderer import render_snapshot
+from training_core.presentation.renderer import render_document, render_snapshot
 from training_core.repositories.archive import ManifestWeekArchiveRepository
 from training_core.repositories.context import PostgresPlanningContextRepository
 from training_core.repositories.icons import FileSportIconRepository
@@ -45,6 +45,7 @@ def snapshot_payload(today: date) -> dict:
     return {
         "semantics": semantic_snapshot(snapshot),
         "html": render_snapshot(snapshot),
+        "document": render_document(snapshot),
     }
 
 
