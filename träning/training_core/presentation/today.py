@@ -25,6 +25,9 @@ class PlannedDay:
     status: str
     planning_status: str = ""
     manual_lock: bool = False
+    reason: str = ""
+    development_focus: str = ""
+    payload: dict | None = None
 
 
 @dataclass(frozen=True)
@@ -35,6 +38,9 @@ class TodayReadModel:
     details: tuple[str, ...]
     planned_session: str
     next_session: str | None = None
+    reason: str = ""
+    development_focus: str = ""
+    prescription: tuple[str, ...] = ()
 
 
 def _duration(seconds: int | None) -> str:
@@ -52,6 +58,26 @@ def activity_detail(activity: CompletedActivity) -> str:
     if activity.elapsed_time_s:
         facts.append(_duration(activity.elapsed_time_s))
     return activity.label + ((" · " + " · ".join(facts)) if facts else "")
+
+
+def _prescription_lines(day: PlannedDay) -> tuple[str, ...]:
+    payload = day.payload or {}
+    design = payload.get("workout_design") or {}
+    selected_id = design.get("selected_candidate_id")
+    candidates = design.get("candidates") or []
+    selected = next((item for item in candidates if item.get("id") == selected_id), None)
+    if selected is None and len(candidates) == 1:
+        selected = candidates[0]
+    blocks = ((selected or {}).get("prescription") or {}).get("blocks") or []
+    lines = []
+    for block in blocks:
+        name = str(block.get("name") or "").strip()
+        instruction = str(block.get("instruction") or "").strip()
+        intensity = str(block.get("intensity") or "").strip()
+        value = " · ".join(part for part in (name, intensity, instruction) if part)
+        if value:
+            lines.append(value)
+    return tuple(lines)
 
 
 def build_today_read_model(
@@ -88,4 +114,7 @@ def build_today_read_model(
         details=details,
         planned_session=planned.session,
         next_session=future[0].session if future else None,
+        reason=planned.reason,
+        development_focus=planned.development_focus,
+        prescription=_prescription_lines(planned),
     )
