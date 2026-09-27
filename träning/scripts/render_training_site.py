@@ -8,7 +8,7 @@ REPO_ROOT = ROOT.parent
 
 # Canonical deterministic rendering order. CI and production must call this
 # same pipeline instead of maintaining separate lists of finalizers.
-PIPELINE = (
+LEGACY_PARITY_PIPELINE = (
     "apply_plan_overrides.py",
     "enforce_coach_output_contract.py",
     "normalize_coach_language.py",
@@ -65,21 +65,20 @@ PIPELINE = (
 )
 
 
-def run_pipeline(*, runner=None):
+def run_legacy_parity_pipeline(*, runner=None):
     runner = runner or subprocess.run
-    for index, script_name in enumerate(PIPELINE, start=1):
+    for index, script_name in enumerate(LEGACY_PARITY_PIPELINE, start=1):
         script = ROOT / "scripts" / script_name
         if not script.exists():
             raise RuntimeError(f"Render pipeline: script saknas: {script_name}")
-        print(f"PIPELINE_STAGE_START {index}/{len(PIPELINE)} {script_name}", flush=True)
+        print(f"PIPELINE_STAGE_START {index}/{len(LEGACY_PARITY_PIPELINE)} {script_name}", flush=True)
         runner([sys.executable, str(script)], check=True, cwd=REPO_ROOT)
-        print(f"PIPELINE_STAGE_OK {index}/{len(PIPELINE)} {script_name}", flush=True)
-    print(f"Render pipeline OK: {len(PIPELINE)} deterministiska steg.")
+        print(f"PIPELINE_STAGE_OK {index}/{len(LEGACY_PARITY_PIPELINE)} {script_name}", flush=True)
+    print(f"Render pipeline OK: {len(LEGACY_PARITY_PIPELINE)} deterministiska steg.")
 
 
 def publish_v2_current_page():
-    # Legacy rendering remains the rollback path while v2 owns the published
-    # current page. The snapshot is built from canonical PostgreSQL state.
+    # Production publishes v2 directly from canonical PostgreSQL state.
     sys.path.insert(0, str(ROOT))
     from v2_presentation_probe import build_snapshot
     from training_core.presentation.cutover import cutover_ready
@@ -98,7 +97,6 @@ def publish_v2_current_page():
 
 
 def main():
-    run_pipeline()
     publish_v2_current_page()
     return 0
 
