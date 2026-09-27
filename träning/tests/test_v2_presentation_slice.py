@@ -8,6 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from training_core.application.presentation import build_presentation_snapshot
+from training_core.presentation.navigation import PublishedWeek
 from training_core.presentation.renderer import render_snapshot, render_today
 from training_core.presentation.today import CompletedActivity, PlannedDay
 
@@ -43,6 +44,12 @@ class FakeRepository:
                     }
                 },
             ),
+            PlannedDay(
+                date(2026, 9, 28),
+                "Simning · aerob",
+                "swim",
+                "preliminary",
+            ),
         ]
 
     def completed_activities(self, start, end):
@@ -71,6 +78,18 @@ class FakeRepository:
                 3822,
                 3000,
             ),
+        ]
+
+
+class FakeArchiveRepository:
+    def published_weeks(self):
+        return [
+            PublishedWeek(
+                "2026-W38",
+                date(2026, 9, 14),
+                date(2026, 9, 20),
+                "/träning/vecka/2026-W38/",
+            )
         ]
 
 
@@ -124,6 +143,18 @@ class PresentationSliceTests(unittest.TestCase):
         self.assertIn("training-gui-v2", rendered)
         self.assertIn("durable_ack_missing", rendered)
         self.assertNotIn("data-processed-event-keys", rendered)
+
+    def test_snapshot_navigation_uses_archive_and_future_canonical_plan(self):
+        snapshot = build_presentation_snapshot(
+            FakeRepository(),
+            today=date(2026, 9, 26),
+            archive_repository=FakeArchiveRepository(),
+        )
+        rendered = render_snapshot(snapshot)
+        self.assertIn("<strong>Vecka 39</strong>", rendered)
+        self.assertIn("21–27 sep · aktuell", rendered)
+        self.assertIn('href="/träning/vecka/2026-W38/"', rendered)
+        self.assertIn('href="/träning/vecka/2026-W40/"', rendered)
 
     def test_planned_today_renders_prescription_and_rationale_without_finalizer(self):
         snapshot = build_presentation_snapshot(
