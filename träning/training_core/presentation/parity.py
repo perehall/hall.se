@@ -9,6 +9,28 @@ from training_core.application.presentation import PresentationSnapshot
 
 def semantic_snapshot(snapshot: PresentationSnapshot) -> dict[str, Any]:
     return {
+        "navigation": {
+            "key": snapshot.navigation.key,
+            "label": snapshot.navigation.label,
+            "period": snapshot.navigation.period,
+            "state": snapshot.navigation.state,
+            "previous": (
+                {
+                    "key": snapshot.navigation.previous.key,
+                    "label": snapshot.navigation.previous.label,
+                    "url": snapshot.navigation.previous.url,
+                }
+                if snapshot.navigation.previous else None
+            ),
+            "next": (
+                {
+                    "key": snapshot.navigation.next.key,
+                    "label": snapshot.navigation.next.label,
+                    "url": snapshot.navigation.next.url,
+                }
+                if snapshot.navigation.next else None
+            ),
+        },
         "today": {
             "date": snapshot.today.local_date.isoformat(),
             "state": snapshot.today.state,

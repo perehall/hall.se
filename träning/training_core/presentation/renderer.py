@@ -373,6 +373,33 @@ def _render_completed_context(model: TodayReadModel) -> str:
     return f'<section class="v2-completed-outcomes">{cards}</section>{planned}'
 
 
+def render_navigation(snapshot: PresentationSnapshot) -> str:
+    model = snapshot.navigation
+
+    def link(item, css_class: str, arrow: str) -> str:
+        if item is None:
+            return f'<span class="v2-week-link {css_class} disabled"></span>'
+        label = (
+            f'{arrow} {item.label}' if css_class == "prev"
+            else f'{item.label} {arrow}'
+        )
+        return (
+            f'<a class="v2-week-link {css_class}" '
+            f'href="{html.escape(item.url, quote=True)}">{html.escape(label)}</a>'
+        )
+
+    return (
+        '<nav class="v2-week-nav" aria-label="Veckonavigering">'
+        + link(model.previous, "prev", "‹")
+        + '<div class="v2-week-current">'
+        f'<strong>{html.escape(model.label)}</strong>'
+        f'<span>{html.escape(model.period)} · {html.escape(model.state)}</span>'
+        '</div>'
+        + link(model.next, "next", "›")
+        + '</nav>'
+    )
+
+
 def render_today(snapshot: PresentationSnapshot) -> str:
     model = snapshot.today
     detail_html = "".join(f"<li>{html.escape(detail)}</li>" for detail in model.details)
@@ -425,4 +452,9 @@ def render_week(snapshot: PresentationSnapshot) -> str:
 
 def render_snapshot(snapshot: PresentationSnapshot) -> str:
     feedback_script = FEEDBACK_SCRIPT if snapshot.today.outcomes else ""
-    return render_today(snapshot) + render_week(snapshot) + feedback_script
+    return (
+        render_navigation(snapshot)
+        + render_today(snapshot)
+        + render_week(snapshot)
+        + feedback_script
+    )
