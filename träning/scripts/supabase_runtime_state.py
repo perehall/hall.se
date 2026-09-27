@@ -380,10 +380,20 @@ def hydrate_runtime_scope(
             )
 
     _materialize_cache(rows, data_dir)
+    hydrated_hash = canonical_hash(
+        {
+            key: {
+                "source_hash": rows[key]["source_hash"],
+                "payload": rows[key]["payload"],
+            }
+            for key in sorted(rows)
+        }
+    )
     return {
         "scope": scope,
         "source": "supabase_db",
         "verified": True,
+        "source_hash": hydrated_hash,
         "documents": sorted(rows),
         "current_workouts": 0,
     }
