@@ -101,14 +101,15 @@ class PostgresPresentationRepository:
                    coalesce(a.sport_family, a.sport_type),
                    a.elapsed_time_s, a.distance_m,
                    a.average_heartrate, a.max_heartrate,
-                   coalesce(f.feedback_text,''), f.rpe, coalesce(f.feeling,'{}'::text[]),
+                   coalesce(f.event_key,''), coalesce(f.feedback_text,''),
+                   f.rpe, coalesce(f.feeling,'{}'::text[]),
                    coalesce(c.summary,''), coalesce(c.plan_action,''),
                    coalesce(c.action_reason,''), coalesce(c.recommendation,''),
                    coalesce(c.auto_applied,false)
             from training.activities a
             left join training.activity_overrides o on o.activity_id = a.id
             left join lateral (
-                select feedback_text, rpe, feeling
+                select event_key, feedback_text, rpe, feeling
                 from training.activity_feedback
                 where activity_id = a.id
                 order by coalesce(submitted_at, created_at) desc, created_at desc
@@ -139,14 +140,15 @@ class PostgresPresentationRepository:
                 distance_m=row[5],
                 average_heartrate=row[6],
                 max_heartrate=row[7],
-                feedback_text=row[8] or "",
-                rpe=row[9],
-                feelings=tuple(row[10] or ()),
-                coach_summary=row[11] or "",
-                plan_action=row[12] or "",
-                action_reason=row[13] or "",
-                recommendation=row[14] or "",
-                coach_auto_applied=bool(row[15]),
+                feedback_event_key=row[8] or "",
+                feedback_text=row[9] or "",
+                rpe=row[10],
+                feelings=tuple(row[11] or ()),
+                coach_summary=row[12] or "",
+                plan_action=row[13] or "",
+                action_reason=row[14] or "",
+                recommendation=row[15] or "",
+                coach_auto_applied=bool(row[16]),
             )
             for row in rows
         ]
