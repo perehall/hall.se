@@ -70,7 +70,7 @@ class RuntimeHydrationTests(unittest.TestCase):
         driver = Driver(rows)
 
         with tempfile.TemporaryDirectory() as tmp, patch.object(
-            runtime.psycopg, "connect", driver.connect
+            runtime, "_driver", return_value=driver
         ):
             result = runtime.hydrate_runtime_scope(
                 "final",
@@ -99,7 +99,7 @@ class RuntimeHydrationTests(unittest.TestCase):
         key = runtime.SCOPE_KEYS["athlete"][0]
         driver = Driver([(key, "wrong", {"document": key})])
         with tempfile.TemporaryDirectory() as tmp, patch.object(
-            runtime.psycopg, "connect", driver.connect
+            runtime, "_driver", return_value=driver
         ):
             with self.assertRaisesRegex(RuntimeError, "payload hash mismatch"):
                 runtime.hydrate_runtime_scope(
