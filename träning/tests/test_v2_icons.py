@@ -12,6 +12,7 @@ from training_core.application.presentation import (  # noqa: E402
     build_presentation_snapshot,
 )
 from training_core.presentation.renderer import (  # noqa: E402
+    render_document,
     render_historical_snapshot,
     render_snapshot,
 )
@@ -123,6 +124,16 @@ class SportIconTests(unittest.TestCase):
         self.assertEqual(snapshot.week.days[0].icon_keys, ("enduro", "strength"))
         rendered = render_snapshot(snapshot)
         self.assertIn('data-sport-icons="enduro,strength"', rendered)
+
+    def test_document_constrains_sport_icons_to_text_scale(self):
+        snapshot = build_presentation_snapshot(
+            CurrentRepository(),
+            today=date(2026, 9, 27),
+            icon_repository=self.icons,
+        )
+        rendered = render_document(snapshot)
+        self.assertIn(".v2-sport-icon{display:inline-block;width:1.25em;height:1.25em", rendered)
+        self.assertIn(".v2-sport-icons{display:inline-flex;align-items:center", rendered)
 
     def test_historical_page_renders_activity_and_original_plan_icons(self):
         archive = ManifestWeekArchiveRepository(ROOT / "data" / "weeks" / "index.json")
