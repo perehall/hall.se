@@ -70,6 +70,7 @@ Phase 1: Presentation vertical slice
   - [x] Week status: pass count, exact passtid, training days and sport distribution derive from canonical activities.
   - [x] Manual activity truth: completed manual context is typed from canonical planned-workout payload and rendered separately.
   - [x] Sport identity/icons: structured sport identity is rendered from a validated SVG asset registry across current and historical views.
+  - [x] Device sync: current/future structured workouts expose canonical Intervals.icu sync state without claiming physical-watch delivery.
 - [ ] Cut publication over after the v2 renderer carries the complete retained UI contract.
 - [ ] Delete replaced finalizers.
 
