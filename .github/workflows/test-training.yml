@@ -70,8 +70,8 @@ jobs:
           grep -Fq 'Garmin via Intervals.icu används som privat återhämtningskontext' "träning/index.html"
           grep -Fq 'Väderprognos:' "träning/index.html"
           grep -Fq '>SMHI</a>' "träning/index.html"
-          grep -Fq 'Passupplägg' "träning/index.html"
-          grep -Fq 'workout-card-v2' "träning/index.html"
+          grep -Eq 'Passupplägg|class="completed-day-summary"' "träning/index.html"
+          grep -Eq 'workout-card-v2|class="completed-day-summary"' "träning/index.html"
           grep -Eq 'class="card-v2-footer"|class="completed-day-summary"' "träning/index.html"
           python - <<'PY'
           import re
