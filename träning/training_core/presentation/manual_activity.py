@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 from training_core.presentation.public_copy import public_reason
+from training_core.presentation.sport_identity import sport_icon_key
 
 if TYPE_CHECKING:
     from training_core.presentation.today import PlannedDay
@@ -20,6 +21,7 @@ class ManualActivityReadModel:
     sport: str
     classification: str
     reason: str
+    icon_key: str
 
     @property
     def classification_label(self) -> str:
@@ -73,6 +75,7 @@ def manual_activities_for_day(
                     str(item.get("reason") or ""),
                     max_chars=320,
                 ),
+                icon_key=sport_icon_key(sport) or "activity",
             )
         )
     return tuple(result)
