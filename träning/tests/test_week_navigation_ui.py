@@ -6,7 +6,7 @@ from pathlib import Path
 SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
-from finalize_week_navigation_ui import nav_html, shift_week  # noqa: E402
+from finalize_week_navigation_ui import nav_html, shift_week, week_date  # noqa: E402
 
 
 class UnifiedWeekNavigationTests(unittest.TestCase):
@@ -35,6 +35,16 @@ class UnifiedWeekNavigationTests(unittest.TestCase):
         rendered = nav_html("2026-W40", self.current, self.available)
         self.assertIn('href="/träning/">‹ Vecka 39</a>', rendered)
         self.assertIn('<strong>Vecka 40</strong><span>28 sep–4 okt · preliminär</span>', rendered)
+        self.assertIn('<span class="top-week-link next disabled">Vecka 41 ›</span>', rendered)
+
+    def test_stale_future_archive_must_not_make_next_week_navigable(self):
+        stale_archive_set = self.available | {"2026-W41"}
+        filtered = {
+            key for key in stale_archive_set
+            if key == self.current or week_date(key) <= week_date("2026-W40")
+        }
+        rendered = nav_html("2026-W40", self.current, filtered)
+        self.assertNotIn('href="/träning/vecka/2026-W41/"', rendered)
         self.assertIn('<span class="top-week-link next disabled">Vecka 41 ›</span>', rendered)
 
     def test_iso_week_shift_crosses_year_boundary(self):
