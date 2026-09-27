@@ -6,6 +6,10 @@ from dataclasses import dataclass
 from datetime import date
 from typing import Iterable
 
+from training_core.presentation.manual_activity import (
+    ManualActivityReadModel,
+    manual_activities_for_day,
+)
 from training_core.presentation.public_copy import public_reason
 
 
@@ -86,6 +90,7 @@ class TodayReadModel:
     development_focus: str = ""
     prescription: tuple[str, ...] = ()
     outcomes: tuple[ActivityOutcomeReadModel, ...] = ()
+    manual_activities: tuple[ManualActivityReadModel, ...] = ()
 
 
 def _duration(seconds: int | None) -> str:
@@ -178,14 +183,21 @@ def build_today_read_model(
         raise ValueError(f"missing planned day for {today.isoformat()}")
 
     actual = tuple(activity for activity in activities if activity.local_date == today)
+    manual = manual_activities_for_day(planned)
     future = sorted(
         (day for day in days.values() if day.local_date > today),
         key=lambda day: day.local_date,
     )
 
-    if actual:
-        title = " + ".join(activity.label for activity in actual)
-        details = tuple(activity_detail(activity) for activity in actual)
+    if actual or manual:
+        title_parts = [activity.label for activity in actual] + [
+            activity.session for activity in manual
+        ]
+        title = " + ".join(title_parts)
+        details = tuple(activity_detail(activity) for activity in actual) + tuple(
+            f"{activity.session} · {activity.classification_label}"
+            for activity in manual
+        )
         outcomes = tuple(activity_outcome(activity) for activity in actual)
         state = "completed"
     else:
@@ -209,4 +221,5 @@ def build_today_read_model(
         development_focus=planned.development_focus,
         prescription=_prescription_lines(planned),
         outcomes=outcomes,
+        manual_activities=manual,
     )
