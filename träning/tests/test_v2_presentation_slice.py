@@ -8,7 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from training_core.application.presentation import build_presentation_snapshot
-from training_core.presentation.renderer import render_today
+from training_core.presentation.renderer import render_snapshot, render_today
 from training_core.presentation.today import CompletedActivity, PlannedDay
 
 
@@ -54,6 +54,7 @@ class FakeRepository:
                 "enduro",
                 6062,
                 26611.2,
+                feedback_event_key="training-input:aaaaaaaaaaaaaaaaaaaaaaaa",
                 feedback_text="Kul och kontrollerat.",
                 rpe=5,
                 feelings=("fresh",),
@@ -105,6 +106,24 @@ class PresentationSliceTests(unittest.TestCase):
         self.assertIn("Ursprungsplan", rendered)
         self.assertIn("Simning · 4 000 m", rendered)
         self.assertIn("Inte utvärderat", rendered)
+        self.assertIn('data-v2-feedback-editor', rendered)
+        self.assertIn(
+            'data-feedback-event-key="training-input:aaaaaaaaaaaaaaaaaaaaaaaa"',
+            rendered,
+        )
+        self.assertIn('data-v2-feedback-save', rendered)
+        self.assertNotIn('training-input-ui-v1', rendered)
+
+    def test_snapshot_carries_v2_feedback_interaction_without_legacy_finalizer(self):
+        snapshot = build_presentation_snapshot(
+            FakeRepository(), today=date(2026, 9, 26)
+        )
+        rendered = render_snapshot(snapshot)
+        self.assertIn("/* training-v2-feedback */", rendered)
+        self.assertIn("/träning/training-api/input", rendered)
+        self.assertIn("training-gui-v2", rendered)
+        self.assertIn("durable_ack_missing", rendered)
+        self.assertNotIn("data-processed-event-keys", rendered)
 
     def test_planned_today_renders_prescription_and_rationale_without_finalizer(self):
         snapshot = build_presentation_snapshot(
