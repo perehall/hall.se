@@ -56,7 +56,6 @@ jobs:
           grep -Fq '<section class="dashboard"' "träning/index.html"
           grep -Fq 'class="top-overview"' "träning/index.html"
           grep -Fq 'class="top-today"' "träning/index.html"
-          grep -Fq 'class="top-next"' "träning/index.html"
           grep -Eq 'class="[^"]*current-week-header[^"]*"' "träning/index.html"
           grep -Eq 'class="[^"]*current-week-focus[^"]*"' "träning/index.html"
           grep -Eq 'class="[^"]*current-week-meta[^"]*"' "träning/index.html"

@@ -19,6 +19,7 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from finalize_day_session_icons import SPORT_ICON_KEYS, icon
+from activity_labels import public_activity_label
 from finalize_upcoming_workout_shell_ui import split_session
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -340,6 +341,52 @@ def today_icon(day: dict, registry: dict) -> str:
     return icon(key, registry) if key else ""
 
 
+def fmt_actual_duration(seconds) -> str:
+    total = max(0, int(seconds or 0))
+    hours, rem = divmod(total, 3600)
+    minutes, secs = divmod(rem, 60)
+    return f"{hours}:{minutes:02d}:{secs:02d}" if hours else f"{minutes}:{secs:02d}"
+
+
+def actual_today_content(activities: list[dict], registry: dict) -> tuple[str, str, str]:
+    """Render today's canonical completed activities without depending on later finalizers."""
+    labels: list[str] = []
+    details: list[str] = []
+    icons: list[str] = []
+    seen_icons: set[str] = set()
+
+    for activity in activities:
+        label = public_activity_label(activity)
+        labels.append(label)
+
+        facts: list[str] = []
+        distance = float(activity.get("distance_m") or 0)
+        if distance > 0:
+            facts.append(f"{distance / 1000:.2f} km".replace(".", ","))
+        seconds = activity.get("elapsed_time_s") or activity.get("moving_time_s")
+        if seconds:
+            facts.append(fmt_actual_duration(seconds))
+        details.append(label + ((" " + " · ".join(facts)) if facts else ""))
+
+        sport = str(activity.get("sport_type") or activity.get("type") or "").strip().lower()
+        icon_key = {
+            "swim": "swim",
+            "run": "run",
+            "trailrun": "run",
+            "ride": "bike",
+            "mountainbikeride": "bike",
+            "enduro": "enduro",
+            "weighttraining": "strength",
+        }.get(sport)
+        if icon_key and icon_key not in seen_icons:
+            rendered_icon = icon(icon_key, registry)
+            if rendered_icon:
+                icons.append(rendered_icon)
+                seen_icons.add(icon_key)
+
+    return " + ".join(labels), " · ".join(details), "".join(icons)
+
+
 def next_day_copy(plan: dict, current_date: date) -> tuple[str, str]:
     tomorrow = current_date + timedelta(days=1)
     days = {
@@ -520,12 +567,18 @@ def build_top(
     if not day:
         raise RuntimeError(f"Crisp top: dagens planrad saknas för {today_key}")
 
-    activity_dates = {
-        str(activity.get("start_date_local") or activity.get("start_date") or "")[:10]
+    today_activities = [
+        activity
         for activity in activities.get("activities") or []
-    }
-    title, today_meta = split_session(day)
-    status = status_label(day, has_completed_activity=today_key in activity_dates)
+        if str(activity.get("start_date_local") or activity.get("start_date") or "")[:10] == today_key
+        and str(activity.get("classification") or "training").strip().lower() != "recreation"
+    ]
+    if today_activities:
+        title, today_meta, today_icons = actual_today_content(today_activities, registry)
+    else:
+        title, today_meta = split_session(day)
+        today_icons = today_icon(day, registry)
+    status = status_label(day, has_completed_activity=bool(today_activities))
     reason = clean_reason(str(day.get("reason") or ""))
     override_note = clean_reason(str((day.get("manual_override") or {}).get("note") or ""))
 
@@ -573,7 +626,7 @@ def build_top(
         f'<span class="top-status">{html.escape(status)}</span>'
         '</div>'
         '<div class="top-today-title">'
-        + today_icon(day, registry)
+        + today_icons
         + f'<span>{html.escape(title)}</span></div>'
         + today_meta_html
         + next_html_row

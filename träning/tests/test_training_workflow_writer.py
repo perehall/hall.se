@@ -84,6 +84,16 @@ class TrainingWorkflowWriterTests(unittest.TestCase):
         self.assertIn("steps.commit_changes.outputs.changed == 'true'", workflow)
         self.assertNotIn("Push to main triggers deploy-pages.yml automatically", workflow)
 
+    def test_pages_requires_successful_publication_transaction(self):
+        workflow = self.workflow_text()
+        self.assertIn('id: canonical_pipeline', workflow)
+        self.assertIn('publication="$(cat /tmp/training_publication_status', workflow)
+        self.assertIn(
+            "steps.commit_changes.outputs.changed == 'true' && steps.canonical_pipeline.outputs.publication == 'success'",
+            workflow,
+        )
+        self.assertIn("Report deferred publication", workflow)
+
     def test_obsolete_shadow_sync_cannot_block_or_overwrite_live_input(self):
         workflow = self.workflow_text()
         update = self.update_job_text()

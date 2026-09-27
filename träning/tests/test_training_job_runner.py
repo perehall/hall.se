@@ -64,8 +64,8 @@ class TrainingJobRunnerTests(unittest.TestCase):
         self.assertLess(keys.index("validate_device_workouts"), keys.index("sync_device_workouts"))
         self.assertLess(keys.index("sync_device_workouts"), keys.index("guard_coach_claims"))
         self.assertLess(keys.index("validate_post_coach"), keys.index("commit_final_runtime_backend"))
-        self.assertLess(keys.index("commit_final_runtime_backend"), keys.index("render_and_validate_site"))
-        self.assertEqual(keys[-1], "render_and_validate_site")
+        self.assertLess(keys.index("commit_final_runtime_backend"), keys.index("publish_site"))
+        self.assertEqual(keys[-1], "publish_site")
 
     def test_runtime_backend_commit_points_are_required(self):
         stages = {stage.key: stage for stage in build_stages("event")}
@@ -132,8 +132,16 @@ class TrainingJobRunnerTests(unittest.TestCase):
                 "coach_analysis",
                 "sync_device_workouts",
                 "weekly_review",
+                "publish_site",
             },
         )
+
+    def test_publication_failure_cannot_invalidate_canonical_pipeline(self):
+        stages = {stage.key: stage for stage in build_stages("event")}
+        publish = stages["publish_site"]
+        self.assertTrue(publish.optional)
+        self.assertIn("render_transaction.py", publish.command[1])
+        self.assertEqual(self.stage_keys("event")[-2:], ["commit_final_runtime_backend", "publish_site"])
 
     @patch("training_job_runner.subprocess.run")
     def test_required_stage_fails_closed(self, mocked_run):
