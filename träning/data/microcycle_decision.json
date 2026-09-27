@@ -41,21 +41,24 @@
   "week_key": "2026-W40",
   "rationale": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern.",
   "week_start": "2026-09-28",
-  "source_hash": "62009add8df8f16c6cf087070c8b0548fcf4ae747d065cdaccea5ce0bde172c4",
+  "source_hash": "88517db74bc5f3d12ec6ff0c7aaf6ea7a899bba19d82204b8b55f573e5d5a4f6",
   "guard_repair": {
     "result": "fallback",
     "attempted": true,
     "repair_failures": [
-      "dag 1 är blockerad av fast endurobelastning"
+      "dag 1 är blockerad av fast endurobelastning",
+      "för få giltiga träningsslots: 3 < 4"
     ],
     "initial_failures": [
       "dag 1 är blockerad av fast endurobelastning",
-      "swim_strength får inte ligga direkt dagen efter fast enduro när faktisk benbelastning ännu är okänd"
+      "för få giltiga träningsslots: 3 < 4",
+      "swim_strength får inte ligga direkt dagen efter fast enduro när faktisk benbelastning ännu är okänd",
+      "swim_strength får inte progressas eftersom receptet inte realiserar ett direkt primärt stimulus"
     ]
   },
   "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
   "schema_version": 1,
-  "generated_at_utc": "2026-09-27T12:25:02.945020+00:00",
+  "generated_at_utc": "2026-09-27T12:37:02.205530+00:00",
   "planner_revision": 7,
   "competition_context": {
     "as_of": "2026-09-28",

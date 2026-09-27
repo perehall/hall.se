@@ -432,6 +432,14 @@
       "source_hash": "62009add8df8f16c6cf087070c8b0548fcf4ae747d065cdaccea5ce0bde172c4",
       "generated_at_utc": "2026-09-27T11:58:15.842397+00:00",
       "summary": "Reparerar föregående förslag så att dag 2 blir låg benbelastning, swim_strength flyttas från dag 2 till dag 5 för att ge styrke/core‑exponering utan att riskera benkonflikt dag efter enduro, och en vilodag läggs in för att undvika två löpbelastningar i följd. Primära kapaciteter täcks (2 simexponeringar + run_threshold) och minst en styrke/core‑session är planerad. Slot‑antalet är 4 (inom 4–5)."
+    },
+    {
+      "kind": "microcycle",
+      "decision_id": "2026-W40",
+      "source": "deterministic_fallback_after_repair_guard",
+      "source_hash": "88517db74bc5f3d12ec6ff0c7aaf6ea7a899bba19d82204b8b55f573e5d5a4f6",
+      "generated_at_utc": "2026-09-27T12:37:02.205530+00:00",
+      "summary": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern."
     }
   ]
 }
