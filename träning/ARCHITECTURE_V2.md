@@ -57,13 +57,16 @@ Phase 1: Presentation vertical slice
 - [x] Build typed Today/Week read model from canonical state.
 - [x] Render it once, without HTML post-processing.
 - [x] Compare semantic output with production through an executable CI parity gate.
+- [x] Carry current post-workout feedback and latest coach outcome from PostgreSQL into the typed Today read model and render them without HTML post-processing.
+- [ ] Replace the completed-workout feedback editing interaction without a legacy HTML finalizer.
 - [ ] Cut publication over after the v2 renderer carries the complete retained UI contract.
 - [ ] Delete replaced finalizers.
 
 Cutover rule: a green parity gate is necessary but not sufficient. The current
-legacy page contains retained interaction/detail surfaces (feedback, workout
-prescription, weather, navigation and historical detail) that are not yet part
-of the minimal v2 renderer. Production must therefore remain on legacy until
+legacy page still contains retained interaction/detail surfaces (the feedback
+editor, weather, navigation and historical detail) that are not yet part of the
+v2 renderer. Workout prescription and current post-workout outcome/feedback
+display are now carried by typed v2 fields. Production must therefore remain on legacy until
 those required surfaces are represented by typed read-model fields and rendered
 in the same pure pass. Do not preserve them by adding post-render mutators.
 
