@@ -44,6 +44,15 @@ def semantic_snapshot(snapshot: PresentationSnapshot) -> dict[str, Any]:
             "reason": snapshot.today.reason,
             "development_focus": snapshot.today.development_focus,
             "prescription": list(snapshot.today.prescription),
+            "manual_activities": [
+                {
+                    "session": activity.session,
+                    "sport": activity.sport,
+                    "classification": activity.classification,
+                    "reason": activity.reason,
+                }
+                for activity in snapshot.today.manual_activities
+            ],
             "outcomes": [
                 {
                     "provider_activity_id": outcome.provider_activity_id,
@@ -104,6 +113,15 @@ def semantic_snapshot(snapshot: PresentationSnapshot) -> dict[str, Any]:
                     "state": d.state,
                     "planned_session": d.planned_session,
                     "actual_labels": list(d.actual_labels),
+                    "manual_activities": [
+                        {
+                            "session": activity.session,
+                            "sport": activity.sport,
+                            "classification": activity.classification,
+                            "reason": activity.reason,
+                        }
+                        for activity in d.manual_activities
+                    ],
                     "weather": (
                         snapshot.weather.for_date(d.local_date).summary
                         if snapshot.weather.for_date(d.local_date) is not None

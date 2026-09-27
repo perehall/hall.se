@@ -94,8 +94,8 @@ SURFACES = (
     ),
     CutoverSurface(
         "manual_activity_truth",
-        "blocker",
-        "Manual completed activities are an explicit production contract and have not yet been proven through the v2 repository path.",
+        "migrated",
+        "Manual completed activities are fail-closed typed factual context read from canonical planned_workouts.payload and rendered separately from imported activities.",
     ),
     CutoverSurface(
         "goal_page",

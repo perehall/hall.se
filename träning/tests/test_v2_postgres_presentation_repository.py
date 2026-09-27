@@ -71,7 +71,15 @@ class PostgresPresentationRepositoryTests(unittest.TestCase):
                 False,
                 "Skäl",
                 "Fokus",
-                {},
+                {
+                    "manual_activities": [
+                        {
+                            "status": "completed",
+                            "sport": "strength",
+                            "session": "Styrka/core · 25 min",
+                        }
+                    ]
+                },
             )
         ]
         factory = CapturingFactory(rows)
@@ -79,6 +87,10 @@ class PostgresPresentationRepositoryTests(unittest.TestCase):
         days = repo.planned_days(date(2026, 9, 27), date(2026, 10, 4))
         self.assertEqual(days[0].session, "Löpning · 60 min")
         self.assertEqual(days[0].planning_status, "fixed")
+        self.assertEqual(
+            days[0].payload["manual_activities"][0]["session"],
+            "Styrka/core · 25 min",
+        )
         self.assertIn("where is_current", factory.last_query)
 
     def test_activity_override_label_and_latest_outcome_are_resolved_by_repository(self):

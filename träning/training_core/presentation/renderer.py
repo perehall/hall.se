@@ -13,6 +13,7 @@ from training_core.presentation.history import (
     HistoricalDayReadModel,
     HistoricalWeekReviewReadModel,
 )
+from training_core.presentation.manual_activity import ManualActivityReadModel
 from training_core.presentation.today import (
     ActivityOutcomeReadModel,
     FEELING_LABELS,
@@ -363,6 +364,36 @@ def _render_outcome(outcome: ActivityOutcomeReadModel, *, show_label: bool) -> s
     )
 
 
+def _render_manual_activities(
+    activities: tuple[ManualActivityReadModel, ...],
+    *,
+    css_class: str,
+) -> str:
+    if not activities:
+        return ""
+    items = []
+    for activity in activities:
+        reason = (
+            f'<p>{html.escape(activity.reason)}</p>'
+            if activity.reason else ""
+        )
+        items.append(
+            '<article class="v2-manual-activity" '
+            f'data-sport="{html.escape(activity.sport, quote=True)}" '
+            f'data-classification="{html.escape(activity.classification, quote=True)}">'
+            '<header>'
+            f'<strong>{html.escape(activity.session)}</strong>'
+            f'<span>{html.escape(activity.classification_label)}</span>'
+            '</header>'
+            f'{reason}</article>'
+        )
+    return (
+        f'<section class="{css_class}" aria-label="Manuellt rapporterade aktiviteter">'
+        + "".join(items)
+        + "</section>"
+    )
+
+
 def _render_completed_context(model: TodayReadModel) -> str:
     if not model.outcomes:
         return ""
@@ -603,6 +634,10 @@ def render_today(snapshot: PresentationSnapshot) -> str:
     detail_html = "".join(f"<li>{html.escape(detail)}</li>" for detail in model.details)
     details = f'<ul class="v2-today-details">{detail_html}</ul>' if detail_html else ""
     completed_context = _render_completed_context(model)
+    manual_html = _render_manual_activities(
+        model.manual_activities,
+        css_class="v2-today-manual-activities",
+    )
     weather_html = (
         _render_weather_line(snapshot, model.local_date, "v2-today-weather")
         if not model.outcomes else ""
@@ -629,7 +664,7 @@ def render_today(snapshot: PresentationSnapshot) -> str:
     return (
         f'<section class="v2-today" data-state="{html.escape(model.state)}">'
         f'<p class="v2-kicker">Idag</p><h1>{html.escape(model.title)}</h1>'
-        f'{details}{weather_html}{completed_context}{prescription}{rationale}{next_html}</section>'
+        f'{details}{weather_html}{manual_html}{completed_context}{prescription}{rationale}{next_html}</section>'
     )
 
 
@@ -718,9 +753,13 @@ def render_week(snapshot: PresentationSnapshot) -> str:
             _render_weather_line(snapshot, day.local_date, "v2-week-weather")
             if not day.actual_labels else ""
         )
+        manual_html = _render_manual_activities(
+            day.manual_activities,
+            css_class="v2-week-manual-activities",
+        )
         rows.append(
             f'<li data-date="{day.local_date.isoformat()}" data-state="{html.escape(day.state)}">'
-            f'<strong>{html.escape(shown)}</strong>{weather_html}</li>'
+            f'<strong>{html.escape(shown)}</strong>{weather_html}{manual_html}</li>'
         )
     source = (
         '<p class="v2-weather-source">Väderprognos: '

@@ -6,6 +6,10 @@ from dataclasses import dataclass
 from datetime import date
 from typing import Iterable
 
+from training_core.presentation.manual_activity import (
+    ManualActivityReadModel,
+    manual_activities_for_day,
+)
 from training_core.presentation.today import CompletedActivity, PlannedDay
 
 
@@ -23,6 +27,7 @@ class WeekDayReadModel:
     local_date: date
     planned_session: str
     actual_labels: tuple[str, ...]
+    manual_activities: tuple[ManualActivityReadModel, ...]
     state: str
 
 
@@ -100,12 +105,14 @@ def build_week_read_model(
     days: list[WeekDayReadModel] = []
     for day in planned:
         actual = tuple(a.label for a in by_date.get(day.local_date, []))
+        manual = manual_activities_for_day(day)
         days.append(
             WeekDayReadModel(
                 local_date=day.local_date,
                 planned_session=day.session,
                 actual_labels=actual,
-                state="completed" if actual else (
+                manual_activities=manual,
+                state="completed" if actual or manual else (
                     "fixed" if day.manual_lock or day.planning_status == "fixed"
                     else day.status or "open"
                 ),
