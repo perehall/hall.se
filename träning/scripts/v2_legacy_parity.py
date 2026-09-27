@@ -55,8 +55,8 @@ def legacy_semantic_contract(index_path: Path, *, today: date) -> dict:
                     if _text(part)
                 ]
         weather_match = re.search(
-            r'<[^>]+data-weather-date="' + re.escape(date_value)
-            + r'"[^>]+data-weather-scope="day"[^>]*>(.*?)</[^>]+>',
+            r'<div[^>]+data-weather-date="' + re.escape(date_value)
+            + r'"[^>]+data-weather-scope="day"[^>]*>(.*?)</div>',
             body,
             re.S,
         )
