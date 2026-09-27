@@ -43,6 +43,9 @@ jobs:
           SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
         run: |
           test -n "$SUPABASE_DB_URL"
+          python "träning/scripts/supabase_activity_backend.py" --mode hydrate
+          python "träning/scripts/supabase_runtime_state.py" --scope final --mode hydrate
+          python "träning/scripts/render_training_site.py"
           V2_PROBE_OUTPUT="/tmp/v2-presentation.json" PYTHONPATH="träning" python "träning/v2_presentation_probe.py"
           python - <<'PY'
           import json
