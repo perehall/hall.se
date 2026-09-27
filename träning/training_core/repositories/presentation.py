@@ -59,7 +59,9 @@ class PostgresPresentationRepository:
     def planned_days(self, start: date, end: date) -> list[PlannedDay]:
         query = """
             select scheduled_date, session, coalesce(sport,''), coalesce(status,''),
-                   coalesce(planning_status,''), coalesce(manual_lock,false)
+                   coalesce(planning_status,''), coalesce(manual_lock,false),
+                   coalesce(reason,''), coalesce(development_focus,''),
+                   coalesce(payload,'{}'::jsonb)
             from training.planned_workouts
             where is_current
               and scheduled_date between %s and %s
@@ -72,6 +74,7 @@ class PostgresPresentationRepository:
             PlannedDay(
                 local_date=row[0], session=row[1], sport=row[2], status=row[3],
                 planning_status=row[4], manual_lock=bool(row[5]),
+                reason=row[6], development_focus=row[7], payload=row[8] or {},
             )
             for row in rows
         ]
