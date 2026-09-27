@@ -84,8 +84,8 @@ SURFACES = (
     ),
     CutoverSurface(
         "device_sync_status",
-        "blocker",
-        "Planned syncable workouts expose Klocksync status in production; v2 does not yet surface device_sync.",
+        "migrated",
+        "Planned syncable workouts expose fail-closed pending/synced/error state from canonical payload; deferred and completed states remain hidden and physical watch delivery is never claimed.",
     ),
     CutoverSurface(
         "page_shell",
