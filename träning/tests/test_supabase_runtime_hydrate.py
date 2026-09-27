@@ -71,6 +71,8 @@ class RuntimeHydrationTests(unittest.TestCase):
 
         with tempfile.TemporaryDirectory() as tmp, patch.object(
             runtime, "_driver", return_value=driver
+        ), patch.object(
+            runtime, "database_url", return_value="postgresql://test"
         ):
             result = runtime.hydrate_runtime_scope(
                 "final",
@@ -100,6 +102,8 @@ class RuntimeHydrationTests(unittest.TestCase):
         driver = Driver([(key, "wrong", {"document": key})])
         with tempfile.TemporaryDirectory() as tmp, patch.object(
             runtime, "_driver", return_value=driver
+        ), patch.object(
+            runtime, "database_url", return_value="postgresql://test"
         ):
             with self.assertRaisesRegex(RuntimeError, "payload hash mismatch"):
                 runtime.hydrate_runtime_scope(
