@@ -92,6 +92,7 @@ class PostgresPresentationRepositoryTests(unittest.TestCase):
                 26611.2,
                 142.0,
                 171.0,
+                "training-input:aaaaaaaaaaaaaaaaaaaaaaaa",
                 "Bra kontroll.",
                 6,
                 ["fresh", "could_do_more"],
@@ -110,6 +111,10 @@ class PostgresPresentationRepositoryTests(unittest.TestCase):
         activity = activities[0]
         self.assertEqual(activity.label, "Enduro")
         self.assertEqual(activity.distance_m, 26611.2)
+        self.assertEqual(
+            activity.feedback_event_key,
+            "training-input:aaaaaaaaaaaaaaaaaaaaaaaa",
+        )
         self.assertEqual(activity.rpe, 6)
         self.assertEqual(activity.feelings, ("fresh", "could_do_more"))
         self.assertEqual(activity.coach_summary, "Avsett stimulus genomfört.")
@@ -129,6 +134,7 @@ class PostgresPresentationRepositoryTests(unittest.TestCase):
                 3000.0,
                 None,
                 None,
+                "",
                 "",
                 None,
                 [],
