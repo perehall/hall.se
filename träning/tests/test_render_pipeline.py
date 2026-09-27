@@ -7,7 +7,7 @@ SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
 from render_training_site import (  # noqa: E402
-    LEGACY_PARITY_LEGACY_PARITY_PIPELINE,
+    LEGACY_PARITY_PIPELINE,
     REPO_ROOT,
     main,
     run_legacy_parity_pipeline,
