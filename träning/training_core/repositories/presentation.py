@@ -99,7 +99,7 @@ class PostgresPresentationRepository:
             select a.provider_activity_id, a.local_date,
                    coalesce(o.display_label, a.display_label, a.sport_family, a.sport_type),
                    coalesce(a.sport_family, a.sport_type),
-                   a.elapsed_time_s, a.distance_m,
+                   coalesce(a.elapsed_time_s, a.moving_time_s), a.distance_m,
                    a.average_heartrate, a.max_heartrate,
                    coalesce(f.event_key,''), coalesce(f.feedback_text,''),
                    f.rpe, coalesce(f.feeling,'{}'::text[]),
