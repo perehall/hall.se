@@ -1356,11 +1356,7 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
             system,
             source_payload,
             microcycle_schema(
-                sorted(
-                    key
-                    for key in catalog["recipes"]
-                    if key not in DEPRECATED_COMPOSITE_RECIPES
-                )
+                sorted(catalog["recipes"])
             ),
             "microcycle_decision",
             request_fn=request_fn,
@@ -1389,11 +1385,7 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
                     system + " Detta är ett reparationsförsök efter deterministisk guard; varje angivet fel måste lösas.",
                     repair_payload,
                     microcycle_schema(
-                        sorted(
-                            key
-                            for key in catalog["recipes"]
-                            if key not in DEPRECATED_COMPOSITE_RECIPES
-                        )
+                        sorted(catalog["recipes"])
                     ),
                     "microcycle_decision_repair",
                     request_fn=request_fn,
