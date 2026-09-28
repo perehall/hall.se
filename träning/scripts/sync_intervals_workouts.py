@@ -23,6 +23,7 @@ from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 from zoneinfo import ZoneInfo
 
+from canonical_plan import planned_workouts as canonical_planned_workouts
 from device_workout import validate_device_workout
 
 
@@ -303,9 +304,8 @@ def horizon(documents):
 
 
 def planned_workouts(document):
-    """Return physical workouts, falling back only for pre-migration documents."""
-    canonical = document.get("planned_workouts")
-    return canonical if canonical is not None else (document.get("days") or [])
+    """Return canonical physical workouts and fail closed on invalid state."""
+    return canonical_planned_workouts(document, context="Intervals sync")
 
 
 def desired_workouts(documents, oldest, newest):
