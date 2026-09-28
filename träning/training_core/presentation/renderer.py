@@ -1120,7 +1120,7 @@ body{margin:0;background:var(--bg);color:var(--text);line-height:1.45;letter-spa
 .v2-rest-day{color:var(--muted);font-weight:620}
 .v2-week-weather{color:var(--muted);font-size:.72rem;margin-top:8px}.v2-weather-source{color:var(--muted);font-size:.68rem;margin:8px 0 0 112px}
 
-.v2-sport-icon{display:inline-block;width:20px;height:20px;max-width:22px;max-height:22px;flex:0 0 20px;vertical-align:-.18em;color:var(--secondary)}
+.v2-sport-icon{display:inline-block;width:1.25em;height:1.25em;max-width:1.25em;max-height:1.25em;flex:0 0 1.25em;vertical-align:-.18em;color:var(--secondary)}
 .v2-sport-icons{display:inline-flex;align-items:center;gap:5px;flex:0 0 auto}.v2-watch-icon{width:13px;height:13px;flex:0 0 13px}
 .v2-device-sync{display:flex;align-items:center;gap:5px;color:var(--muted);font-size:.7rem;margin-top:6px}
 
