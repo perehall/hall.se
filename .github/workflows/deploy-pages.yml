@@ -102,6 +102,15 @@ jobs:
           test -n "$SUPABASE_DB_URL"
           python "träning/scripts/render_training_site.py"
 
+      - name: Build architecture v2 preview
+        if: steps.planning_freshness.outputs.stale != 'true'
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          test -n "$SUPABASE_DB_URL"
+          PYTHONPATH="träning" python "träning/v2_presentation_probe.py" \
+            --document-output "träning/v2-preview/index.html"
+
       - name: Configure GitHub Pages
         if: steps.planning_freshness.outputs.stale != 'true'
         uses: actions/configure-pages@v5
