@@ -107,7 +107,11 @@ class SportIconTests(unittest.TestCase):
             icon_repository=self.icons,
         )
         self.assertEqual(snapshot.today.icon_keys, ("swim", "strength"))
-        self.assertEqual(snapshot.week.days[0].icon_keys, ("swim", "strength"))
+        sunday = next(
+            day for day in snapshot.week.days
+            if day.local_date == date(2026, 9, 27)
+        )
+        self.assertEqual(sunday.icon_keys, ("swim", "strength"))
 
         rendered = render_snapshot(snapshot)
         self.assertIn('data-sport-icons="swim,strength"', rendered)
@@ -121,7 +125,11 @@ class SportIconTests(unittest.TestCase):
             icon_repository=self.icons,
         )
         self.assertEqual(snapshot.today.icon_keys, ("enduro", "strength"))
-        self.assertEqual(snapshot.week.days[0].icon_keys, ("enduro", "strength"))
+        sunday = next(
+            day for day in snapshot.week.days
+            if day.local_date == date(2026, 9, 27)
+        )
+        self.assertEqual(sunday.icon_keys, ("enduro", "strength"))
         rendered = render_snapshot(snapshot)
         self.assertIn('data-sport-icons="enduro,strength"', rendered)
 
