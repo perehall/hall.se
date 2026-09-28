@@ -74,19 +74,51 @@ class PhysicalWorkoutArchitectureTests(unittest.TestCase):
                 f"{workout.get('date')} {workout.get('session')} mixes {sorted(families)}",
             )
 
-    def test_active_runtime_has_no_composite_swim_strength_concept(self):
+    def test_active_runtime_has_no_composite_same_day_workout_concept(self):
         active_sources = (
             ROOT / "scripts" / "adaptive_planner.py",
             ROOT / "scripts" / "workout_design.py",
             ROOT / "scripts" / "migrate_training_data_v3.py",
+            ROOT / "scripts" / "rollover_week.py",
+            ROOT / "scripts" / "materialize_workout_designs.py",
         )
-        forbidden = "swim_" + "strength"
+        forbidden_tokens = (
+            "swim_" + "strength",
+            "swim_component",
+            "Composite support day",
+            "kombinerade dagen",
+        )
         for path in active_sources:
-            self.assertNotIn(
-                forbidden,
-                path.read_text(encoding="utf-8"),
-                f"{path.name} must not contain composite workout semantics",
+            source = path.read_text(encoding="utf-8")
+            for token in forbidden_tokens:
+                self.assertNotIn(
+                    token,
+                    source,
+                    f"{path.name} must not contain composite workout semantics: {token}",
+                )
+
+    def test_current_runtime_documents_have_no_retired_composite_fields(self):
+        for filename in ("plan.json", "upcoming_week.json"):
+            document = json.loads(
+                (ROOT / "data" / filename).read_text(encoding="utf-8")
             )
+
+            def assert_clean(value, path="root"):
+                if isinstance(value, list):
+                    for index, item in enumerate(value):
+                        assert_clean(item, f"{path}[{index}]")
+                    return
+                if not isinstance(value, dict):
+                    return
+                self.assertNotIn(
+                    "swim_component",
+                    value,
+                    f"{filename}:{path} contains retired composite state",
+                )
+                for key, item in value.items():
+                    assert_clean(item, f"{path}.{key}")
+
+            assert_clean(document)
 
     def test_calendar_projection_does_not_merge_three_same_day_workouts(self):
         document = {
