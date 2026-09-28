@@ -19,12 +19,9 @@ class CutoverContractTests(unittest.TestCase):
         self.assertEqual(len(mapping), len(SURFACES))
         self.assertTrue(all(surface.rationale.strip() for surface in SURFACES))
 
-    def test_current_cutover_is_blocked_until_approved_ux_is_migrated(self):
-        self.assertFalse(cutover_ready())
-        self.assertEqual(
-            blocker_keys(),
-            ("page_shell", "approved_current_week_experience", "legacy_card_layers"),
-        )
+    def test_current_cutover_is_ready_after_approved_ux_migration(self):
+        self.assertTrue(cutover_ready())
+        self.assertEqual(blocker_keys(), ())
 
     def test_publication_shell_contract_is_real_renderer_behavior(self):
         class Dummy:
@@ -56,11 +53,11 @@ class CutoverContractTests(unittest.TestCase):
         self.assertEqual(mapping["goal_page"].state, "separate")
         self.assertEqual(mapping["backend_status"].state, "separate")
 
-    def test_approved_current_week_experience_is_a_cutover_requirement(self):
+    def test_approved_current_week_experience_is_migrated_before_cutover(self):
         mapping = surface_map()
-        self.assertEqual(mapping["page_shell"].state, "blocker")
-        self.assertEqual(mapping["approved_current_week_experience"].state, "blocker")
-        self.assertEqual(mapping["legacy_card_layers"].state, "blocker")
+        self.assertEqual(mapping["page_shell"].state, "migrated")
+        self.assertEqual(mapping["approved_current_week_experience"].state, "migrated")
+        self.assertEqual(mapping["legacy_card_layers"].state, "retire")
 
 
 if __name__ == "__main__":
