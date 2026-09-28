@@ -114,9 +114,6 @@ class SwimEquipmentLingoTests(unittest.TestCase):
                 {
                     "date": "2026-09-25",
                     "label": "Fredag",
-                    "status": "planned",
-                    "sport": "swim",
-                    "session": "Stale cache",
                 }
             ],
             "planned_workouts": [planned],
@@ -164,8 +161,7 @@ class SwimEquipmentLingoTests(unittest.TestCase):
             ["paddles", "pull_buoy"],
         )
 
-        self.assertEqual(day["session"], workout["session"])
-        self.assertEqual(day["watch_workout"]["id"], "dated-workout-id")
+        self.assertEqual(day, {"date": "2026-09-25", "label": "Fredag"})
 
 if __name__ == "__main__":
     unittest.main()
