@@ -31,10 +31,13 @@ class CoachPipelineTests(unittest.TestCase):
             },
         }
         plan = {
-            "days": [
+            "planned_workouts": [
                 {
+                    "workout_key": "run-0906",
                     "date": "2026-09-06",
                     "session": "Löpning · lugn distans · 75 min",
+                    "status": "planned",
+                    "sport": "run",
                     "dose_resolution": {"kind": "duration_minutes", "value": 75},
                     "dose_options": [
                         {"kind": "duration_minutes", "value": 75},
@@ -104,18 +107,24 @@ class CoachPipelineTests(unittest.TestCase):
             "requires_approval": False,
         }
         plan = {
-            "days": [
+            "planned_workouts": [
                 {
+                    "workout_key": "enduro-0907",
                     "date": "2026-09-07",
                     "label": "Måndag",
                     "session": "Enduroskola · fast tillfälle",
+                    "status": "planned",
+                    "sport": "enduro",
                     "planning_status": "fixed",
                     "manual_lock": True,
                 },
                 {
+                    "workout_key": "run-0908",
                     "date": "2026-09-08",
                     "label": "Tisdag",
                     "session": "Löpning · kontrollerad tröskel · 3 × 10 min / 90 s jogg",
+                    "status": "preliminary",
+                    "sport": "run",
                     "planning_status": "preliminary",
                 },
             ]
@@ -127,8 +136,9 @@ class CoachPipelineTests(unittest.TestCase):
 
     def test_unambiguous_fulfilled_plan_is_persistently_linked(self):
         plan = {
-            "days": [
+            "planned_workouts": [
                 {
+                    "workout_key": "enduro-0907",
                     "date": "2026-09-07",
                     "sport": "enduro",
                     "session": "Enduroskola · fast tillfälle",
@@ -150,13 +160,14 @@ class CoachPipelineTests(unittest.TestCase):
             },
         ]
         self.assertTrue(link_fulfilled_activity_ids(plan, activities))
-        self.assertEqual(plan["days"][0]["activity_id"], 20078705519)
+        self.assertEqual(plan["planned_workouts"][0]["activity_id"], 20078705519)
         self.assertFalse(link_fulfilled_activity_ids(plan, activities))
 
     def test_ambiguous_plan_match_is_not_persisted(self):
         plan = {
-            "days": [
+            "planned_workouts": [
                 {
+                    "workout_key": "enduro-0907",
                     "date": "2026-09-07",
                     "sport": "enduro",
                     "session": "Enduroskola",
@@ -168,12 +179,13 @@ class CoachPipelineTests(unittest.TestCase):
             {"id": 2, "sport_type": "Enduro", "start_date_local": "2026-09-07T19:00:00"},
         ]
         self.assertFalse(link_fulfilled_activity_ids(plan, activities))
-        self.assertNotIn("activity_id", plan["days"][0])
+        self.assertNotIn("activity_id", plan["planned_workouts"][0])
 
     def test_unanalysed_planned_activity_wins_over_later_same_day_support_activity(self):
         plan = {
-            "days": [
+            "planned_workouts": [
                 {
+                    "workout_key": "enduro-0907",
                     "date": "2026-09-07",
                     "sport": "enduro",
                     "session": "Enduroskola",
@@ -201,8 +213,9 @@ class CoachPipelineTests(unittest.TestCase):
 
     def test_latest_activity_resumes_once_planned_activity_has_analysis(self):
         plan = {
-            "days": [
+            "planned_workouts": [
                 {
+                    "workout_key": "enduro-0907",
                     "date": "2026-09-07",
                     "sport": "enduro",
                     "session": "Enduroskola",
