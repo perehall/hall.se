@@ -376,6 +376,6 @@ test("Wrangler keeps one canonical production config with required runtime secre
     "GITHUB_DISPATCH_TOKEN",
     "SUPABASE_SECRET_KEY",
   ]) {
-    assert.match(config, new RegExp(`"\\${secret}"`));
+    assert.ok(config.includes(`"${secret}"`), `missing required secret declaration: ${secret}`);
   }
 });
