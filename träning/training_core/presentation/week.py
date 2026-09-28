@@ -157,7 +157,7 @@ def build_week_read_model(
             by_date.setdefault(activity.local_date, []).append(activity)
             week_activities.append(activity)
 
-    dates = sorted(set(plan_by_date) | set(by_date))
+    dates = tuple(start + timedelta(days=offset) for offset in range((end - start).days + 1))
     days: list[WeekDayReadModel] = []
     for local_date in dates:
         all_planned = tuple(plan_by_date.get(local_date, ()))
