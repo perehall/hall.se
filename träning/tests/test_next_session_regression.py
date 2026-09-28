@@ -22,7 +22,8 @@ class NextSessionRegressionTests(unittest.TestCase):
 
     def test_later_decision_note_never_skips_earlier_planned_session(self):
         active = {
-            "days": [
+            "meta": {"week_start": "2026-08-31", "week_end": "2026-09-06"},
+            "planned_workouts": [
                 {
                     "date": "2026-09-06",
                     "label": "Söndag",
@@ -33,7 +34,8 @@ class NextSessionRegressionTests(unittest.TestCase):
             ]
         }
         upcoming = {
-            "days": [
+            "meta": {"week_start": "2026-09-07", "week_end": "2026-09-13"},
+            "planned_workouts": [
                 {
                     "date": "2026-09-07",
                     "label": "Måndag",
@@ -61,8 +63,10 @@ class NextSessionRegressionTests(unittest.TestCase):
             ]
         }
 
+        canonical_window = planning_window(active, upcoming)
+        retired_ui_view = {"days": canonical_window["planned_workouts"]}
         decision = resolve_next_decision(
-            planning_window(active, upcoming),
+            retired_ui_view,
             [],
             self.strategy,
             date(2026, 9, 6),
