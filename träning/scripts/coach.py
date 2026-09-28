@@ -248,14 +248,14 @@ def rolling_load_context(activities, plan, local_date, strategy):
             actuals.append(activity)
 
     planned = []
-    for day in plan.get("days", []):
-        day_text = day.get("date") or ""
+    for workout in planned_workouts(plan):
+        day_text = workout.get("date") or ""
         try:
             planned_day = datetime.fromisoformat(day_text).date()
         except (TypeError, ValueError):
             continue
         if today <= planned_day <= planned_end:
-            planned.append(day)
+            planned.append(workout)
 
     return {
         "lookback_days": lookback_days,
@@ -264,7 +264,21 @@ def rolling_load_context(activities, plan, local_date, strategy):
             actuals,
             key=lambda item: item.get("start_date_local") or item.get("start_date") or "",
         ),
-        "planned_days": sorted(planned, key=lambda item: item.get("date") or ""),
+        "planned_workouts": sorted(
+            planned,
+            key=lambda item: (
+                item.get("date") or "",
+                workout_key(item, plan.get("meta") or {}),
+            ),
+        ),
+        # Compatibility alias. Semantically these are workouts, not unique days.
+        "planned_days": sorted(
+            planned,
+            key=lambda item: (
+                item.get("date") or "",
+                workout_key(item, plan.get("meta") or {}),
+            ),
+        ),
         "load_dimensions": load_model.get("dimensions") or [],
         "rules": load_model.get("rules") or [],
     }
