@@ -122,22 +122,31 @@ class PhysicalWorkoutArchitectureTests(unittest.TestCase):
 
     def test_active_runtime_documents_have_no_retired_composite_identifiers(self):
         retired = "swim_" + "strength"
-        for filename in ("plan.json", "upcoming_week.json"):
-            document = json.loads(
-                (ROOT / "data" / filename).read_text(encoding="utf-8")
-            )
+        plan = json.loads((ROOT / "data" / "plan.json").read_text(encoding="utf-8"))
+        week_start = plan["meta"]["week_start"]
+        year, week, _ = __import__("datetime").date.fromisoformat(week_start).isocalendar()
+        filenames = [
+            "plan.json",
+            "upcoming_week.json",
+            f"weeks/{year}-W{week:02d}.json",
+        ]
 
-            def walk(value):
-                if isinstance(value, dict):
-                    for key, item in value.items():
-                        yield str(key)
-                        yield from walk(item)
-                elif isinstance(value, list):
-                    for item in value:
-                        yield from walk(item)
-                elif isinstance(value, str):
-                    yield value
+        def walk(value):
+            if isinstance(value, dict):
+                for key, item in value.items():
+                    yield str(key)
+                    yield from walk(item)
+            elif isinstance(value, list):
+                for item in value:
+                    yield from walk(item)
+            elif isinstance(value, str):
+                yield value
 
+        for filename in filenames:
+            path = ROOT / "data" / filename
+            if not path.exists():
+                continue
+            document = json.loads(path.read_text(encoding="utf-8"))
             offenders = [value for value in walk(document) if retired in value]
             self.assertEqual(
                 offenders,
