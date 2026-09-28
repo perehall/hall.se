@@ -61,6 +61,7 @@ jobs:
               "owner_configured",
               "subscription_configured",
               "github_dispatch_configured",
+              "training_input_direct_persistence_configured",
           )
           missing = [key for key in required_true if data.get(key) is not True]
           if missing:
