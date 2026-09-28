@@ -49,6 +49,16 @@ def planning_window(plan, upcoming=None):
         for day in upcoming_days
         if date.fromisoformat(day["date"]) > active_end
     ]
+
+    if result.get("planned_workouts") is not None or (upcoming or {}).get("planned_workouts") is not None:
+        active_workouts = deepcopy(result.get("planned_workouts") or [])
+        upcoming_workouts = deepcopy((upcoming or {}).get("planned_workouts") or [])
+        result["planned_workouts"] = active_workouts + [
+            workout
+            for workout in upcoming_workouts
+            if date.fromisoformat(workout["date"]) > active_end
+        ]
+
     result["near_term_window"] = {
         "active_week_end": active_end.isoformat(),
         "upcoming_week_start": upcoming_start.isoformat(),
@@ -60,22 +70,276 @@ def planning_window(plan, upcoming=None):
     return result
 
 
+def workout_key(workout, meta=None):
+    """Return a stable identity for one physical planned workout."""
+    meta = meta or {}
+    explicit = str(workout.get("workout_key") or "").strip()
+    if explicit:
+        return explicit
+    date_value = str(workout.get("date") or "").strip()
+    microcycle_id = str(
+        workout.get("microcycle_id") or meta.get("microcycle_id") or ""
+    ).strip()
+    slot = str(workout.get("microcycle_slot") or "").strip()
+    if microcycle_id and date_value and slot:
+        return f"{microcycle_id}:{date_value}:{slot}"
+    # Legacy plans contain at most one physical workout per date. This fallback
+    # is only a compatibility identity; new multi-session plans always carry a
+    # microcycle slot / relational workout key.
+    if date_value:
+        return f"legacy:{date_value}"
+    return ""
+
+
+def planned_workouts(plan):
+    """Return the physical-workout collection, never the 7-row calendar projection."""
+    if plan.get("planned_workouts") is not None:
+        rows = plan.get("planned_workouts") or []
+    else:
+        rows = plan.get("days") or []
+    meta = plan.get("meta") or {}
+    result = []
+    for workout in rows:
+        if not isinstance(workout, dict):
+            continue
+        if workout.get("sport") in {"open", "rest"}:
+            continue
+        item = workout
+        key = workout_key(item, meta)
+        if key and not item.get("workout_key"):
+            item["workout_key"] = key
+        result.append(item)
+    return result
+
+
+def workout_components(workout):
+    raw = workout.get("components") or workout.get("workout_components")
+    if raw is None and isinstance(workout.get("payload"), dict):
+        raw = (
+            workout["payload"].get("components")
+            or workout["payload"].get("workout_components")
+        )
+    if not isinstance(raw, list):
+        return ()
+    components = []
+    for index, component in enumerate(raw):
+        if not isinstance(component, dict):
+            continue
+        sport = str(component.get("sport") or "").strip().lower()
+        if not sport:
+            continue
+        components.append(
+            (
+                int(component.get("order") or index + 1),
+                sport,
+            )
+        )
+    return tuple(sport for _, sport in sorted(components))
+
+
+def workout_required_families(workout):
+    """Families that must be represented for the workout to be complete.
+
+    A normal workout has one required family. A structured multisport workout
+    has one requirement per ordered component. Matching remains fail-closed
+    whenever two planned workouts compete for the same unlinked activity.
+    """
+    components = workout_components(workout)
+    if components:
+        requirements = []
+        for sport in components:
+            families = PLAN_SPORT_ACTIVITY_FAMILIES.get(sport, set())
+            if not families:
+                return ()
+            requirements.append(frozenset(families))
+        return tuple(requirements)
+
+    families = planned_families(workout)
+    return (frozenset(families),) if families else ()
+
+
+def _activity_candidates_for_requirement(requirement, activities, date_value, used_ids):
+    return [
+        activity
+        for activity in activities
+        if activity_local_date(activity) == date_value
+        and activity_family(activity) in requirement
+        and activity.get("plan_relation") != "separate"
+        and str(activity.get("id")) not in used_ids
+    ]
+
+
+def workout_fulfillment(plan, activities):
+    """Resolve complete planned workouts without guessing ambiguous links.
+
+    Returns workout_key -> tuple(activity_ids). One activity is never consumed
+    by two workouts. Explicit activity_id linkage wins. For unlinked work,
+    every required sport component must have exactly one candidate and that
+    candidate must not also be eligible for another unresolved workout.
+    """
+    workouts = planned_workouts(plan)
+    by_date = {}
+    for workout in workouts:
+        by_date.setdefault(str(workout.get("date") or ""), []).append(workout)
+
+    fulfilled = {}
+    for date_value, date_workouts in by_date.items():
+        used_ids = set()
+
+        # First honor explicit canonical linkage.
+        unresolved = []
+        for workout in date_workouts:
+            key = workout_key(workout, plan.get("meta") or {})
+            explicit_id = workout.get("activity_id")
+            if explicit_id is None:
+                unresolved.append(workout)
+                continue
+            linked = next(
+                (
+                    activity
+                    for activity in activities
+                    if str(activity.get("id")) == str(explicit_id)
+                    and activity_local_date(activity) == date_value
+                    and activity.get("plan_relation") != "separate"
+                ),
+                None,
+            )
+            if linked is not None:
+                fulfilled[key] = (linked.get("id"),)
+                used_ids.add(str(linked.get("id")))
+            else:
+                unresolved.append(workout)
+
+        # Candidate map is calculated before consuming any inferred activity so
+        # competing same-family sessions remain ambiguous rather than order-dependent.
+        requirement_candidates = {}
+        candidate_owners = {}
+        for workout in unresolved:
+            key = workout_key(workout, plan.get("meta") or {})
+            requirements = workout_required_families(workout)
+            per_requirement = []
+            for requirement in requirements:
+                candidates = _activity_candidates_for_requirement(
+                    requirement, activities, date_value, used_ids
+                )
+                ids = tuple(str(activity.get("id")) for activity in candidates)
+                per_requirement.append((requirement, candidates))
+                for candidate_id in ids:
+                    candidate_owners.setdefault(candidate_id, set()).add(key)
+            requirement_candidates[key] = per_requirement
+
+        for workout in unresolved:
+            key = workout_key(workout, plan.get("meta") or {})
+            requirements = requirement_candidates.get(key) or []
+            matched = []
+            local_used = set()
+            complete = bool(requirements)
+            for _requirement, candidates in requirements:
+                unique = [
+                    activity
+                    for activity in candidates
+                    if str(activity.get("id")) not in local_used
+                    and len(candidate_owners.get(str(activity.get("id")), set())) == 1
+                ]
+                if len(unique) != 1:
+                    complete = False
+                    break
+                activity = unique[0]
+                local_used.add(str(activity.get("id")))
+                matched.append(activity.get("id"))
+            if complete:
+                fulfilled[key] = tuple(matched)
+                used_ids.update(str(activity_id) for activity_id in matched)
+
+    return fulfilled
+
+
+def fulfilled_plan_workouts(plan, activities):
+    return workout_fulfillment(plan, activities)
+
+
+def _workouts_by_date(plan):
+    result = {}
+    for workout in planned_workouts(plan):
+        result.setdefault(str(workout.get("date") or ""), []).append(workout)
+    return result
+
+
+def unresolved_plan_workout_keys(plan, activities):
+    fulfilled = fulfilled_plan_workouts(plan, activities)
+    return tuple(
+        workout_key(workout, plan.get("meta") or {})
+        for workout in planned_workouts(plan)
+        if workout_key(workout, plan.get("meta") or {}) not in fulfilled
+        and workout.get("status") != "completed"
+    )
+
+
+def allowed_target_workouts(plan, activities, today_local):
+    fulfilled = fulfilled_plan_workouts(plan, activities)
+    result = []
+    for workout in planned_workouts(plan):
+        date_value = str(workout.get("date") or "")
+        key = workout_key(workout, plan.get("meta") or {})
+        if not date_value or date_value < today_local:
+            continue
+        if workout.get("status") == "completed" or key in fulfilled:
+            continue
+        if workout.get("manual_lock") is True:
+            continue
+        if workout.get("classification") == "recreation":
+            continue
+        result.append(
+            {
+                "workout_key": key,
+                "date": date_value,
+                "session": str(workout.get("session") or ""),
+                "sport": str(workout.get("sport") or ""),
+            }
+        )
+    return result
+
+
+def _date_is_resolved(plan, activities, date_value):
+    date_workouts = _workouts_by_date(plan).get(date_value, [])
+    if not date_workouts:
+        # A calendar day without physical workouts is resolved by definition.
+        return True
+    fulfilled = fulfilled_plan_workouts(plan, activities)
+    return all(
+        workout.get("status") == "completed"
+        or workout_key(workout, plan.get("meta") or {}) in fulfilled
+        for workout in date_workouts
+    )
+
+
+def decision_ready_target_workouts(plan, activities, today_local):
+    candidates = allowed_target_workouts(plan, activities, today_local)
+    dates = sorted({item["date"] for item in candidates})
+    ready_dates = set()
+    for target_date in dates:
+        unresolved_prior = False
+        for day in plan.get("days") or []:
+            date_value = str(day.get("date") or "")
+            if not date_value or date_value < today_local or date_value >= target_date:
+                continue
+            if not _date_is_resolved(plan, activities, date_value):
+                unresolved_prior = True
+                break
+        if not unresolved_prior:
+            ready_dates.add(target_date)
+    return [item for item in candidates if item["date"] in ready_dates]
+
+
 def remaining_training_dates(plan, activities, today_local):
-    """Return known future training dates, including fixed/manual-lock sessions."""
-    fulfilled = fulfilled_plan_dates(plan, activities)
-    dates = []
-    for day in plan.get("days") or []:
-        date_value = str(day.get("date") or "")
-        if not date_value or date_value <= today_local:
-            continue
-        if day.get("status") == "completed" or date_value in fulfilled:
-            continue
-        if day.get("sport") in {"open", "rest"}:
-            continue
-        if day.get("classification") == "recreation":
-            continue
-        dates.append(date_value)
-    return dates
+    """Return future dates with at least one unresolved physical workout."""
+    return sorted(
+        {
+            item["date"]
+            for item in allowed_target_workouts(plan, activities, today_local)
+            if item["date"] > today_local
+        }
+    )
 
 
 def activity_local_date(activity):
@@ -148,70 +412,56 @@ def matching_activity(day, activities):
 
 
 def fulfilled_plan_dates(plan, activities):
-    fulfilled = {}
-    for day in plan.get("days", []):
-        activity = matching_activity(day, activities)
-        if activity:
-            fulfilled[day["date"]] = activity.get("id")
-    return fulfilled
+    """Compatibility date view: a date is fulfilled only when all its workouts are."""
+    by_date = _workouts_by_date(plan)
+    fulfilled = fulfilled_plan_workouts(plan, activities)
+    result = {}
+    for date_value, workouts in by_date.items():
+        if workouts and all(
+            workout.get("status") == "completed"
+            or workout_key(workout, plan.get("meta") or {}) in fulfilled
+            for workout in workouts
+        ):
+            ids = [
+                activity_id
+                for workout in workouts
+                for activity_id in fulfilled.get(
+                    workout_key(workout, plan.get("meta") or {}), ()
+                )
+            ]
+            result[date_value] = ids[0] if len(ids) == 1 else tuple(ids)
+    return result
 
 
 def allowed_target_dates(plan, activities, today_local):
-    fulfilled = fulfilled_plan_dates(plan, activities)
-    allowed = []
-    for day in plan.get("days", []):
-        date_value = day.get("date") or ""
-        if not date_value or date_value < today_local:
-            continue
-        if day.get("status") in {"completed", "open"}:
-            continue
-        # A user-confirmed current plan may be locked until its planned activity
-        # has actually happened. This prevents stale prior activity from rewriting
-        # a decision the user has just made for today.
-        if day.get("manual_lock") is True:
-            continue
-        # Rest/open and recreation are intentional no-auto-prescription states.
-        if day.get("sport") in {"open", "rest"}:
-            continue
-        if day.get("classification") == "recreation":
-            continue
-        if date_value in fulfilled:
-            continue
-        allowed.append(date_value)
-    return allowed
+    return list(
+        dict.fromkeys(
+            item["date"]
+            for item in allowed_target_workouts(plan, activities, today_local)
+        )
+    )
 
 
 def unresolved_intervening_dates(plan, activities, today_local, target_date):
-    """Return dates whose unknown outcome must be known before changing target_date.
-
-    A coach action may only auto-edit a later session when every calendar day from
-    today up to (but not including) the target is already fulfilled/completed or
-    explicitly planned as rest. This prevents stale activity data from rewriting a
-    session across still-unknown intervening load.
-    """
-    fulfilled = fulfilled_plan_dates(plan, activities)
     unresolved = []
     for day in plan.get("days", []):
         date_value = day.get("date") or ""
         if not date_value or date_value < today_local or date_value >= target_date:
             continue
-        if day.get("status") == "completed" or date_value in fulfilled:
-            continue
-        if day.get("sport") == "rest":
-            continue
-        unresolved.append(date_value)
+        if not _date_is_resolved(plan, activities, date_value):
+            unresolved.append(date_value)
     return unresolved
 
 
 def decision_ready_target_dates(plan, activities, today_local):
-    """Only targets with no unresolved intervening day are safe to change now."""
-    candidates = allowed_target_dates(plan, activities, today_local)
-    return [
-        target
-        for target in candidates
-        if not unresolved_intervening_dates(plan, activities, today_local, target)
-    ]
-
+    return list(
+        dict.fromkeys(
+            item["date"]
+            for item in decision_ready_target_workouts(
+                plan, activities, today_local
+            )
+        )
+    )
 
 def _explicit_weekday_references(text):
     lowered = str(text or "").lower()
@@ -283,25 +533,48 @@ def normalize_deferred_future_action(action, candidate_dates, ready_dates):
 
 def plan_for_coach(plan, activities):
     result = deepcopy(plan)
-    fulfilled = fulfilled_plan_dates(result, activities)
+    fulfilled_workouts = fulfilled_plan_workouts(result, activities)
     by_id = {
-        activity.get("id"): activity
+        str(activity.get("id")): activity
         for activity in activities
         if activity.get("id") is not None
     }
 
-    for day in result.get("days", []):
-        activity_id = fulfilled.get(day.get("date"))
-        if activity_id is None:
+    for workout in planned_workouts(result):
+        key = workout_key(workout, result.get("meta") or {})
+        activity_ids = fulfilled_workouts.get(key)
+        if not activity_ids:
             continue
-        activity = by_id.get(activity_id) or {}
+        workout["status"] = "completed"
+        workout["coach_fulfilled_by_activities"] = [
+            {
+                "id": activity_id,
+                "sport_type": (by_id.get(str(activity_id)) or {}).get("sport_type"),
+                "display_label": (by_id.get(str(activity_id)) or {}).get("display_label"),
+            }
+            for activity_id in activity_ids
+        ]
+        if len(activity_ids) == 1:
+            workout["coach_fulfilled_by_activity"] = workout[
+                "coach_fulfilled_by_activities"
+            ][0]
+
+    fulfilled_dates = fulfilled_plan_dates(result, activities)
+    for day in result.get("days", []):
+        date_value = day.get("date")
+        if date_value not in fulfilled_dates:
+            continue
         day["status"] = "completed"
-        day["coach_fulfilled_by_activity"] = {
-            "id": activity_id,
-            "sport_type": activity.get("sport_type"),
-            "display_label": activity.get("display_label"),
-        }
-    return result, fulfilled
+        ids = fulfilled_dates[date_value]
+        ids = ids if isinstance(ids, tuple) else (ids,)
+        if len(ids) == 1:
+            activity = by_id.get(str(ids[0])) or {}
+            day["coach_fulfilled_by_activity"] = {
+                "id": ids[0],
+                "sport_type": activity.get("sport_type"),
+                "display_label": activity.get("display_label"),
+            }
+    return result, fulfilled_dates
 
 
 def validate_plan_action(action, allowed_dates):
