@@ -15,7 +15,7 @@ CSS_MARKER = "/* workout-prescription-v1 */"
 CSS = r'''
 /* workout-prescription-v1 */
 .development-focus{margin-top:11px;padding:10px 12px;border:1px solid #c7d2fe;border-radius:12px;background:#f8faff;display:grid;gap:3px}.development-focus strong{color:#4338ca;font-size:.68rem;font-weight:900;text-transform:uppercase;letter-spacing:.07em}.development-focus span{color:#312e81;font-size:.88rem;line-height:1.42}
-.workout-prescription{margin:10px 0 4px;padding:10px 12px;border:1px solid #dbe4f0;border-radius:12px;background:#fff;display:grid;gap:0}.workout-prescription-head{font-size:.72rem;font-weight:800;color:#475569;margin-bottom:3px}.workout-prescription-row{display:grid;grid-template-columns:minmax(72px,auto) 1fr;gap:10px;padding:7px 0;border-top:1px solid #eef2f7;align-items:start}.workout-prescription-row:first-of-type{border-top:0}.workout-prescription-dose{font-weight:800;color:#0f172a;white-space:nowrap}.workout-prescription-text{color:#334155;line-height:1.38}.workout-prescription-recovery{color:#64748b}.future-compact .workout-prescription,.past-completed .workout-prescription,.today-completed .workout-prescription{display:none}
+.workout-prescription{margin:10px 0 4px;padding:10px 12px;border:1px solid #dbe4f0;border-radius:12px;background:#fff;display:grid;gap:0}.workout-prescription-head{font-size:.72rem;font-weight:800;color:#475569;margin-bottom:3px}.workout-prescription-row{display:grid;grid-template-columns:minmax(72px,auto) 1fr;gap:10px;padding:7px 0;border-top:1px solid #eef2f7;align-items:start}.workout-prescription-row:first-of-type{border-top:0}.workout-prescription-dose{font-weight:800;color:#0f172a;white-space:nowrap}.workout-prescription-text{color:#334155;line-height:1.38}.workout-prescription-recovery{color:#64748b}.workout-components{display:grid;gap:10px;margin:10px 0 4px}.workout-component{padding:10px 12px;border:1px solid #dbe4f0;border-radius:12px;background:#fff}.workout-component-title{margin-bottom:4px;font-size:.8rem;font-weight:800;color:#0f172a}.workout-component .workout-prescription{margin:0;padding:0;border:0;border-radius:0}.future-compact .workout-prescription,.past-completed .workout-prescription,.today-completed .workout-prescription,.future-compact .workout-components,.past-completed .workout-components,.today-completed .workout-components{display:none}
 @media (max-width:520px){.workout-prescription-row{grid-template-columns:68px 1fr;gap:8px}.workout-prescription{padding:9px 10px}}
 /* workout-prescription-v1 */
 '''.strip()
@@ -113,35 +113,61 @@ def prescription_html(day):
     if not blocks:
         return ""
 
-    rows = []
-    for block in blocks:
-        dose = _work_dose(block.get("work"))
-        instruction = str(block.get("instruction") or block.get("name") or "").strip()
-        is_swim = "equipment" in block or block.get("component") == "swim"
-        if "equipment" in block:
-            equipment = equipment_lingo(block.get("equipment"))
-            instruction = f"{instruction} · {equipment}" if instruction else equipment
-        recovery = _recovery_text(block.get("recovery"), swim=is_swim)
-        if recovery:
-            instruction = (
-                f"{instruction} · {recovery}"
-                if instruction
-                else recovery
+    def render_rows(component_blocks):
+        rows = []
+        for block in component_blocks:
+            dose = _work_dose(block.get("work"))
+            instruction = str(block.get("instruction") or block.get("name") or "").strip()
+            is_swim = "equipment" in block or block.get("component") == "swim"
+            if "equipment" in block:
+                equipment = equipment_lingo(block.get("equipment"))
+                instruction = f"{instruction} · {equipment}" if instruction else equipment
+            recovery = _recovery_text(block.get("recovery"), swim=is_swim)
+            if recovery:
+                instruction = f"{instruction} · {recovery}" if instruction else recovery
+            if not dose and not instruction:
+                continue
+            rows.append(
+                '<div class="workout-prescription-row">'
+                f'<span class="workout-prescription-dose">{html.escape(dose or "—")}</span>'
+                f'<span class="workout-prescription-text">{html.escape(instruction)}</span>'
+                '</div>'
             )
-        if not dose and not instruction:
-            continue
-        rows.append(
-            '<div class="workout-prescription-row">'
-            f'<span class="workout-prescription-dose">{html.escape(dose or "—")}</span>'
-            f'<span class="workout-prescription-text">{html.escape(instruction)}</span>'
-            '</div>'
-        )
+        return "".join(rows)
+
+    components = {}
+    for block in blocks:
+        component = str(block.get("component") or "").strip()
+        if component:
+            components.setdefault(component, []).append(block)
+
+    # A composite planning exposure may share a calendar day, but its actual
+    # workouts are separate sessions. Preserve that distinction in the UI.
+    if len(components) > 1:
+        labels = {"swim": "Simning", "strength": "Styrka/core", "run": "Löpning", "bike": "Cykel"}
+        panels = []
+        for component, component_blocks in components.items():
+            rows = render_rows(component_blocks)
+            if not rows:
+                continue
+            panels.append(
+                f'<section class="workout-component workout-component-{html.escape(component)}">'
+                f'<div class="workout-component-title">{html.escape(labels.get(component, component.capitalize()))}</div>'
+                '<div class="workout-prescription">'
+                '<div class="workout-prescription-head">Passupplägg</div>'
+                + rows
+                + '</div></section>'
+            )
+        if panels:
+            return '<div class="workout-components" data-session-count="' + str(len(panels)) + '">' + "".join(panels) + "</div>"
+
+    rows = render_rows(blocks)
     if not rows:
         return ""
     return (
         '<div class="workout-prescription">'
         '<div class="workout-prescription-head">Passupplägg</div>'
-        + "".join(rows)
+        + rows
         + "</div>"
     )
 
