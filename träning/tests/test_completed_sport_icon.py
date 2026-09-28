@@ -19,16 +19,36 @@ class CompletedSportIconTests(unittest.TestCase):
   </div>
 </section>
 </body></html>'''
-        self.plan = {
-            "days": [
-                {
-                    "date": "2026-09-06",
-                    "sport": "run",
-                    "session": "Löpning · lugn distans",
-                }
-            ]
+        run = {
+            "date": "2026-09-06",
+            "sport": "run",
+            "status": "planned",
+            "session": "Löpning · lugn distans",
+            "workout_key": "w-run",
         }
-        self.upcoming = {"days": [{"date": "2026-09-07", "session": "Enduro"}]}
+        enduro = {
+            "date": "2026-09-07",
+            "sport": "enduro",
+            "status": "planned",
+            "session": "Enduro",
+            "workout_key": "w-enduro",
+        }
+        self.plan = {
+            "meta": {
+                "week_start": "2026-08-31",
+                "week_end": "2026-09-06",
+            },
+            "days": [run],
+            "planned_workouts": [run],
+        }
+        self.upcoming = {
+            "meta": {
+                "week_start": "2026-09-07",
+                "week_end": "2026-09-13",
+            },
+            "days": [enduro],
+            "planned_workouts": [enduro],
+        }
         self.activities = {
             "activities": [
                 {
