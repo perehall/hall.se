@@ -60,33 +60,58 @@ def latest_for_analysis(latest, decision_plan, latest_date, code_signature=None)
 
 
 def link_fulfilled_activity_ids(plan, activities):
-    """Persist an unambiguous plan→activity identity link.
+    """Persist only deterministic workout→activity linkage.
 
-    Downstream UI and coach code must never guess which same-day activity fulfilled
-    a planned session. matching_activity already fails closed on ambiguity, so a
-    link is only persisted when sport family/date semantics identify one source.
-    Existing explicit links are preserved.
+    Independent same-day workouts are linked separately. A multisport workout may
+    link to several component activities through activity_ids. Ambiguous
+    same-family matching remains unresolved rather than being guessed.
     """
     changed = False
-    for day in plan.get("days") or []:
-        if day.get("activity_id") is not None:
+    fulfilled = legacy.fulfilled_plan_workouts(plan, activities)
+    meta = plan.get("meta") or {}
+
+    for workout in legacy.planned_workouts(plan):
+        key = legacy.workout_key(workout, meta)
+        activity_ids = tuple(fulfilled.get(key) or ())
+        if not activity_ids:
             continue
-        activity = matching_activity(day, activities)
-        if not activity or activity.get("id") is None:
-            continue
-        day["activity_id"] = activity["id"]
-        changed = True
+
+        if len(activity_ids) == 1:
+            if str(workout.get("activity_id") or "") != str(activity_ids[0]):
+                workout["activity_id"] = activity_ids[0]
+                workout.pop("activity_ids", None)
+                changed = True
+        else:
+            normalized = list(activity_ids)
+            if workout.get("activity_ids") != normalized:
+                workout["activity_ids"] = normalized
+                workout.pop("activity_id", None)
+                changed = True
+
+    # Legacy calendar rows are a projection only. Preserve a single activity_id
+    # there when the date contains exactly one fulfilled physical workout.
+    if plan.get("planned_workouts") is not None:
+        by_date = {}
+        for workout in legacy.planned_workouts(plan):
+            key = legacy.workout_key(workout, meta)
+            ids = tuple(fulfilled.get(key) or ())
+            if ids:
+                by_date.setdefault(workout.get("date"), []).append(ids)
+        for day in plan.get("days") or []:
+            groups = by_date.get(day.get("date")) or []
+            if len(groups) == 1 and len(groups[0]) == 1:
+                if str(day.get("activity_id") or "") != str(groups[0][0]):
+                    day["activity_id"] = groups[0][0]
+                    changed = True
+            elif len(groups) != 1:
+                if "activity_id" in day:
+                    day.pop("activity_id", None)
+                    changed = True
     return changed
 
 
 def select_activity_for_analysis(decision_plan, activities, coach_state, local_date):
-    """Prefer an unanalysed fulfilled plan session over a later support activity.
-
-    Multiple activities can occur on one day. The planned session is the primary
-    coaching object and must receive its own analysis even if a later spontaneous
-    or support activity is chronologically newer. Once that planned activity has
-    an analysis, normal latest-activity behavior resumes.
-    """
+    """Prefer unanalysed activities that deterministically fulfill planned workouts."""
     if not activities:
         return None
 
@@ -95,20 +120,37 @@ def select_activity_for_analysis(decision_plan, activities, coach_state, local_d
         for entry in coach_state.get("analyses") or []
         if entry.get("activity_id") is not None
     }
-    current_day = next(
-        (day for day in decision_plan.get("days") or [] if day.get("date") == local_date),
-        None,
-    )
-    if current_day:
-        planned_activity = matching_activity(current_day, activities)
-        if (
-            planned_activity
-            and planned_activity.get("id") is not None
-            and str(planned_activity.get("id")) not in analysed_ids
-        ):
-            return planned_activity
+    by_id = {
+        str(activity.get("id")): activity
+        for activity in activities
+        if activity.get("id") is not None
+    }
+    fulfilled = legacy.fulfilled_plan_workouts(decision_plan, activities)
 
-    return max(activities, key=lambda activity: activity.get("start_date") or "")
+    planned_candidates = []
+    for workout in legacy.planned_workouts(decision_plan):
+        if str(workout.get("date") or "") != local_date:
+            continue
+        key = legacy.workout_key(workout, decision_plan.get("meta") or {})
+        for activity_id in fulfilled.get(key) or ():
+            activity = by_id.get(str(activity_id))
+            if activity and str(activity_id) not in analysed_ids:
+                planned_candidates.append(activity)
+
+    if planned_candidates:
+        return min(
+            planned_candidates,
+            key=lambda activity: activity.get("start_date") or "",
+        )
+
+    unanalysed = [
+        activity
+        for activity in activities
+        if activity.get("id") is None
+        or str(activity.get("id")) not in analysed_ids
+    ]
+    source = unanalysed or activities
+    return max(source, key=lambda activity: activity.get("start_date") or "")
 
 
 def concretize_deferred_review(action, decision_plan, latest_date):
