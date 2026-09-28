@@ -45,7 +45,7 @@ WELLNESS_CONTEXT_FILE = Path(
 )
 
 MODEL = os.environ.get("OPENAI_MODEL", "gpt-5-mini")
-COACH_CONTRACT_VERSION = 15
+COACH_CONTRACT_VERSION = 16
 PRIVATE_WELLNESS_PATTERN = re.compile(
     r"\b(?:hrv|vilopuls|restinghr|sömn(?:poäng|score)?|sleep(?:secs|score|quality)?|wellness|garmin|intervals\.icu)\b"
     r"(?:\s*[:=]?\s*[-+]?\d+(?:[.,]\d+)?)?",
@@ -480,6 +480,7 @@ def normalize_same_day_open_dose_action(plan, action, today_local):
 
     normalized["action"] = "review"
     normalized["target_date"] = ""
+    normalized["target_workout_key"] = ""
     normalized["dose_option_id"] = ""
     normalized["reason"] = (
         "Dagens pass har fortfarande öppen dos men ingen giltig förhandsgodkänd dos valdes."
