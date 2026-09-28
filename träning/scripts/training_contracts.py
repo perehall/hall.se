@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import re
 from datetime import date, timedelta
 
 
@@ -15,6 +16,15 @@ VALID_COMPONENT_SPORTS = {"run", "swim", "bike", "strength", "enduro", "swimrun"
 VALID_WORKOUT_STEP_KINDS = {"swim", "rest", "lap_rest"}
 VALID_COACH_ACTIONS = {"keep", "reduce", "rest", "review"}
 VALID_CONFIDENCE = {"low", "medium", "high"}
+
+WORKOUT_SLOT_RE = re.compile(r"^[a-z0-9][a-z0-9_-]*$")
+STIMULUS_FAMILY_PREFIXES = {
+    "run": ("run_",),
+    "swim": ("swim_",),
+    "bike": ("mtb_", "bike_"),
+    "strength": ("strength_", "plyometric"),
+    "enduro": ("enduro_",),
+}
 
 ACTIVITY_FAMILY = {
     "Run": "run",
@@ -76,6 +86,44 @@ def _nonnegative_number(value, context):
         return
     require(isinstance(value, (int, float)) and not isinstance(value, bool), f"{context}: måste vara numeriskt")
     require(value >= 0, f"{context}: får inte vara negativt")
+
+
+def _stimulus_families(workout):
+    stimuli = list(workout.get("stimuli") or []) + list(
+        workout.get("optional_stimuli") or []
+    )
+    return {
+        family
+        for family, prefixes in STIMULUS_FAMILY_PREFIXES.items()
+        if any(
+            any(str(stimulus).startswith(prefix) for prefix in prefixes)
+            for stimulus in stimuli
+        )
+    }
+
+
+def _validate_physical_workout_identity(workout, context):
+    slot = str(workout.get("microcycle_slot") or "").strip()
+    explicit_key = str(workout.get("workout_key") or "").strip()
+    require(
+        bool(explicit_key or slot),
+        f"{context}: workout_key eller microcycle_slot krävs för stabil passidentitet",
+    )
+    if slot:
+        require(
+            WORKOUT_SLOT_RE.fullmatch(slot) is not None,
+            f"{context}: microcycle_slot måste identifiera ett självständigt pass "
+            "och får inte innehålla komponent-/composite-syntax",
+        )
+
+    sport = str(workout.get("sport") or "").strip()
+    families = _stimulus_families(workout)
+    if sport not in {"multisport", "swimrun"} and families:
+        require(
+            families <= {sport},
+            f"{context}: självständigt {sport}-pass får inte bära stimuli från "
+            f"andra sportfamiljer: {sorted(families)}",
+        )
 
 
 def _validate_baseline_dose_contract(day, context):
@@ -242,15 +290,10 @@ def validate_plan_document(document, *, upcoming=False):
                     f"{context}: ogiltig classification",
                 )
 
+            _validate_physical_workout_identity(workout, context)
             slot = str(workout.get("microcycle_slot") or "").strip()
             explicit_key = str(workout.get("workout_key") or "").strip()
-            identity = explicit_key or (
-                f"{workout_date.isoformat()}:{slot}" if slot else ""
-            )
-            require(
-                bool(identity),
-                f"{context}: workout_key eller microcycle_slot krävs för stabil passidentitet",
-            )
+            identity = explicit_key or f"{workout_date.isoformat()}:{slot}"
             require(
                 identity not in seen_workout_ids,
                 f"{context}: dubblerad passidentitet {identity!r}",
