@@ -34,6 +34,7 @@ SPORT_GROUP_LABELS = {
 class WeekDayReadModel:
     local_date: date
     planned_session: str
+    planned_sessions: tuple[str, ...]
     actual_labels: tuple[str, ...]
     manual_activities: tuple[ManualActivityReadModel, ...]
     icon_keys: tuple[str, ...]
@@ -113,35 +114,51 @@ def build_week_read_model(
             week_activities.append(activity)
 
     days: list[WeekDayReadModel] = []
+    planned_by_date: dict[date, list[PlannedDay]] = {}
     for day in planned:
-        actual = tuple(a.label for a in by_date.get(day.local_date, []))
-        manual = manual_activities_for_day(day)
+        planned_by_date.setdefault(day.local_date, []).append(day)
+
+    for local_date, planned_sessions in planned_by_date.items():
+        actual = tuple(a.label for a in by_date.get(local_date, []))
+        manual = tuple(
+            activity
+            for day in planned_sessions
+            for activity in manual_activities_for_day(day)
+        )
+        session_titles = tuple(day.session for day in planned_sessions)
+        states = [
+            "fixed" if day.manual_lock or day.planning_status == "fixed"
+            else day.status or "open"
+            for day in planned_sessions
+        ]
         days.append(
             WeekDayReadModel(
-                local_date=day.local_date,
-                planned_session=day.session,
+                local_date=local_date,
+                planned_session=" + ".join(session_titles),
+                planned_sessions=session_titles,
                 actual_labels=actual,
                 manual_activities=manual,
                 icon_keys=(
-                    tuple(
-                        dict.fromkeys(
-                            [
-                                activity_icon_key(activity.sport_family)
-                                for activity in by_date.get(day.local_date, [])
-                            ]
-                            + [activity.icon_key for activity in manual]
-                        )
-                    )
+                    tuple(dict.fromkeys(
+                        [activity_icon_key(activity.sport_family) for activity in by_date.get(local_date, [])]
+                        + [activity.icon_key for activity in manual]
+                    ))
                     if actual or manual
-                    else planned_icon_keys(sport=day.sport, payload=day.payload)
+                    else tuple(dict.fromkeys(
+                        key
+                        for day in planned_sessions
+                        for key in planned_icon_keys(sport=day.sport, payload=day.payload)
+                    ))
                 ),
-                device_sync=build_device_sync_read_model(
-                    day.payload,
-                    completed=bool(actual or manual),
-                ),
+                device_sync=next((
+                    model
+                    for day in planned_sessions
+                    if (model := build_device_sync_read_model(
+                        day.payload, completed=bool(actual or manual)
+                    )) is not None
+                ), None),
                 state="completed" if actual or manual else (
-                    "fixed" if day.manual_lock or day.planning_status == "fixed"
-                    else day.status or "open"
+                    "fixed" if "fixed" in states else states[0]
                 ),
             )
         )
