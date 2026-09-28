@@ -120,6 +120,12 @@ class RenderPipelineTests(unittest.TestCase):
         self.assertTrue(all(check is True for _, check, _ in calls))
         self.assertTrue(all(cwd == REPO_ROOT for _, _, cwd in calls))
 
+    def test_v2_preview_is_published_after_legacy_pipeline_not_as_a_finalizer(self):
+        source = (SCRIPTS / "render_training_site.py").read_text(encoding="utf-8")
+        self.assertNotIn("render_v2_preview.py", PIPELINE)
+        self.assertIn('preview_script = ROOT / "scripts" / "render_v2_preview.py"', source)
+        self.assertLess(source.index("run_pipeline()"), source.index("preview_script ="))
+
     def test_pages_deploy_defers_stale_goal_state_without_failure(self):
         workflow = (REPO_ROOT / ".github" / "workflows" / "deploy-pages.yml").read_text(
             encoding="utf-8"
