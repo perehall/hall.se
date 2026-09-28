@@ -1009,7 +1009,7 @@
           "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc2",
           "priority_role": "flex",
           "mesocycle_role": "primary",
-          "microcycle_slot": "swim_strength_3:swim"
+          "microcycle_slot": "swim_aerobic_technique_3"
         },
         "selection": {
           "method": "deterministic_constraint_scoring",
@@ -1140,14 +1140,10 @@
         "cardiovascular",
         "technical"
       ],
-      "microcycle_slot": "swim_strength_3:swim",
+      "microcycle_slot": "swim_aerobic_technique_3",
       "microcycle_index": 2,
-      "optional_stimuli": [
-        "plyometric"
-      ],
       "development_focus": "Teknisk kvalitet och stabil aerob rytm; simningen ska kunna stödja helheten med låg mekanisk kostnad för benen.",
       "baseline_option_id": "swim-3200",
-      "performance_marker_id": "strength-repeatability",
       "additional_planned_workouts": 1
     },
     {
@@ -2527,7 +2523,7 @@
           "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc2",
           "priority_role": "flex",
           "mesocycle_role": "primary",
-          "microcycle_slot": "swim_strength_3:swim"
+          "microcycle_slot": "swim_aerobic_technique_3"
         },
         "selection": {
           "method": "deterministic_constraint_scoring",
@@ -2658,7 +2654,7 @@
         "cardiovascular",
         "technical"
       ],
-      "microcycle_slot": "swim_strength_3:swim",
+      "microcycle_slot": "swim_aerobic_technique_3",
       "microcycle_index": 2,
       "development_focus": "Teknisk kvalitet och stabil aerob rytm; simningen ska kunna stödja helheten med låg mekanisk kostnad för benen.",
       "baseline_option_id": "swim-3200"
@@ -2675,15 +2671,6 @@
         "strength_core"
       ],
       "dose_open": false,
-      "device_sync": {
-        "status": "synced",
-        "transport": "intervals_icu",
-        "source_hash": "350932d60abb145c3e8a9b16ccf707f8825a486daa25526f1ca0d573a7767778",
-        "updated_at_utc": "2026-09-28T11:37:00.041668+00:00",
-        "device_delivery": "unverified",
-        "verified_at_utc": "2026-09-28T11:37:00.041668+00:00",
-        "provider_event_id": 139579174
-      },
       "dose_options": [
         {
           "id": "strength-25",
@@ -2710,37 +2697,6 @@
       "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
       "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc2",
       "priority_role": "protected_support",
-      "device_workout": {
-        "date": "2026-10-02",
-        "name": "Styrka/core · ca 35 min · styrkemall",
-        "sport": "strength",
-        "blocks": [
-          {
-            "name": "Tidsram",
-            "sets": 1,
-            "steps": [
-              {
-                "kind": "work",
-                "duration": {
-                  "kind": "time",
-                  "seconds": 2100
-                },
-                "instruction": "Styrka/core inom vald tidsram",
-                "intensity_class": "active"
-              }
-            ],
-            "repetitions_per_set": 1
-          }
-        ],
-        "transport": "intervals_icu",
-        "external_id": "hall-device:2026-10-02:strength:swim_strength_3-strength",
-        "source_hash": "350932d60abb145c3e8a9b16ccf707f8825a486daa25526f1ca0d573a7767778",
-        "detail_level": "duration_only",
-        "provider_type": "WeightTraining",
-        "target_policy": "explicit_single_primary_only",
-        "schema_version": 1,
-        "source_candidate_id": "strength-35"
-      },
       "microcycle_day": 5,
       "workout_design": {
         "objective": {
@@ -2752,7 +2708,7 @@
           "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc2",
           "priority_role": "protected_support",
           "mesocycle_role": "protected_capacity",
-          "microcycle_slot": "swim_strength_3:strength"
+          "microcycle_slot": "strength_core_4"
         },
         "selection": {
           "method": "deterministic_constraint_scoring",
@@ -3023,7 +2979,7 @@
         "mechanical",
         "neuromuscular"
       ],
-      "microcycle_slot": "swim_strength_3:strength",
+      "microcycle_slot": "strength_core_4",
       "microcycle_index": 2,
       "optional_stimuli": [
         "plyometric"

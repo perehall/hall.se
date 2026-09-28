@@ -120,6 +120,31 @@ class PhysicalWorkoutArchitectureTests(unittest.TestCase):
 
             assert_clean(document)
 
+    def test_active_runtime_documents_have_no_retired_composite_identifiers(self):
+        retired = "swim_" + "strength"
+        for filename in ("plan.json", "upcoming_week.json"):
+            document = json.loads(
+                (ROOT / "data" / filename).read_text(encoding="utf-8")
+            )
+
+            def walk(value):
+                if isinstance(value, dict):
+                    for key, item in value.items():
+                        yield str(key)
+                        yield from walk(item)
+                elif isinstance(value, list):
+                    for item in value:
+                        yield from walk(item)
+                elif isinstance(value, str):
+                    yield value
+
+            offenders = [value for value in walk(document) if retired in value]
+            self.assertEqual(
+                offenders,
+                [],
+                f"{filename} contains retired composite identity/state: {offenders[:5]}",
+            )
+
     def test_calendar_projection_does_not_merge_three_same_day_workouts(self):
         document = {
             "days": [
