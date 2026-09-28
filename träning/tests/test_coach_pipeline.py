@@ -9,8 +9,10 @@ sys.path.insert(0, str(SCRIPTS))
 
 import coach as legacy  # noqa: E402
 from coach_pipeline import (  # noqa: E402
+    AUTO_ANALYSIS_RECENT_LIMIT,
     COACH_PIPELINE_CONTRACT_VERSION,
     DEFERRED_REVIEW_REASON,
+    analysed_activity_ids,
     analysis_code_signature,
     concretize_deferred_review,
     latest_for_analysis,
@@ -210,6 +212,119 @@ class CoachPipelineTests(unittest.TestCase):
             plan, [enduro, strength], coach_state, "2026-09-07"
         )
         self.assertEqual(selected["id"], 20078705519)
+
+    def test_analysis_ledger_survives_bounded_visible_history(self):
+        coach_state = {
+            "analyses": [{"activity_id": index} for index in range(101, 131)],
+            "analysed_activity_ids": ["42", "43"],
+        }
+        ids = analysed_activity_ids(coach_state)
+        self.assertIn("42", ids)
+        self.assertIn("130", ids)
+
+    def test_automatic_analysis_never_backfills_beyond_recent_window(self):
+        activities = [
+            {
+                "id": index,
+                "sport_type": "Run",
+                "start_date": f"2026-08-{index:02d}T10:00:00Z"
+                if index <= 31
+                else f"2026-09-{index - 31:02d}T10:00:00Z",
+                "start_date_local": f"2026-08-{index:02d}T12:00:00"
+                if index <= 31
+                else f"2026-09-{index - 31:02d}T12:00:00",
+            }
+            for index in range(1, 41)
+        ]
+        recent = sorted(
+            activities,
+            key=lambda activity: activity["start_date"],
+            reverse=True,
+        )[:AUTO_ANALYSIS_RECENT_LIMIT]
+        coach_state = {
+            "analyses": [{"activity_id": activity["id"]} for activity in recent],
+        }
+        selected = select_activity_for_analysis(
+            {"planned_workouts": []},
+            activities,
+            coach_state,
+            "2026-09-28",
+        )
+        self.assertEqual(selected["id"], recent[0]["id"])
+        self.assertNotEqual(selected["id"], activities[0]["id"])
+
+    def test_durable_ledger_prevents_dropped_analysis_from_becoming_new_again(self):
+        older = {
+            "id": 1,
+            "sport_type": "Run",
+            "start_date": "2026-09-27T10:00:00Z",
+            "start_date_local": "2026-09-27T12:00:00",
+        }
+        latest = {
+            "id": 2,
+            "sport_type": "Run",
+            "start_date": "2026-09-28T10:00:00Z",
+            "start_date_local": "2026-09-28T12:00:00",
+        }
+        coach_state = {
+            "analyses": [{"activity_id": 2}],
+            "analysed_activity_ids": ["1", "2"],
+        }
+        selected = select_activity_for_analysis(
+            {"planned_workouts": []},
+            [older, latest],
+            coach_state,
+            "2026-09-28",
+        )
+        self.assertEqual(selected["id"], 2)
+
+    def test_direct_feedback_targets_exact_activity_even_when_already_analysed(self):
+        older = {
+            "id": 1,
+            "sport_type": "WeightTraining",
+            "start_date": "2026-09-27T10:00:00Z",
+            "start_date_local": "2026-09-27T12:00:00",
+        }
+        latest = {
+            "id": 2,
+            "sport_type": "Run",
+            "start_date": "2026-09-28T10:00:00Z",
+            "start_date_local": "2026-09-28T12:00:00",
+        }
+        coach_state = {
+            "analyses": [{"activity_id": 1}, {"activity_id": 2}],
+            "analysed_activity_ids": ["1", "2"],
+        }
+        selected = select_activity_for_analysis(
+            {"planned_workouts": []},
+            [older, latest],
+            coach_state,
+            "2026-09-28",
+            target_activity_id=1,
+        )
+        self.assertEqual(selected["id"], 1)
+
+    def test_recent_activity_history_drops_laps_and_detailed_workout_context(self):
+        activity = {
+            "id": 99,
+            "name": "Backpass",
+            "sport_type": "Run",
+            "start_date": "2026-09-28T10:00:00Z",
+            "moving_time_s": 3600,
+            "distance_m": 10000,
+            "laps": [{"lap_index": index, "distance_m": 150} for index in range(60)],
+            "workout_analysis_context": {
+                "display_label": "Löpning · backintervaller",
+                "user_report": "Kontrollerat.",
+                "raw_intervals": [{"index": index} for index in range(60)],
+            },
+        }
+        summary = legacy.summarize_activity_history(activity)
+        self.assertNotIn("laps", summary)
+        self.assertNotIn("workout_analysis_context", summary)
+        self.assertEqual(summary["user_report"], "Kontrollerat.")
+        self.assertEqual(summary["moving_time_s"], 3600)
+        self.assertEqual(summary["distance_m"], 10000)
 
     def test_latest_activity_resumes_once_planned_activity_has_analysis(self):
         plan = {
