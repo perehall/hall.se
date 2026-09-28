@@ -62,6 +62,7 @@ class WorkoutPlanContextTests(unittest.TestCase):
                     "workout_key": "w-run-0901",
                     "date": "2026-09-01",
                     "session": "Löpning",
+                    "sport": "run",
                     "dose_resolution": {"kind": "duration_minutes", "value": 60},
                     "dose_options": [
                         {"kind": "duration_minutes", "value": 60},
