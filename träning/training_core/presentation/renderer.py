@@ -386,11 +386,14 @@ def _render_outcome(
         if show_label else ""
     )
     feedback = _render_feedback_editor(outcome)
+    evaluation_copy = outcome.coach_summary
+    if not evaluation_copy and outcome.feedback_event_key:
+        evaluation_copy = "Coachanalys väntar."
     evaluation = (
         '<div class="v2-outcome-row v2-evaluation">'
         '<span class="v2-outcome-label">Utvärdering</span>'
-        f'<p>{html.escape(outcome.coach_summary)}</p></div>'
-        if outcome.coach_summary else ""
+        f'<p>{html.escape(evaluation_copy)}</p></div>'
+        if evaluation_copy else ""
     )
     impact_copy = outcome.plan_impact
     if outcome.action_reason:
@@ -925,13 +928,15 @@ def render_week_status(snapshot: PresentationSnapshot) -> str:
     sports = "".join(
         '<div class="v2-week-sport">'
         f'<span>{html.escape(item.label)}</span>'
-        f'<strong>{html.escape(item.duration)}</strong>'
-        '</div>'
+        '<strong>'
+        f'{html.escape(item.duration)}'
+        + (f' · {html.escape(item.distance)}' if item.distance_m > 0 else '')
+        + '</strong></div>'
         for item in model.sport_distribution
     )
     distribution = (
         '<div class="v2-week-sports">'
-        '<h3>Grenfördelning · passtid</h3>'
+        '<h3>Grenfördelning · passtid / distans</h3>'
         f'{sports}</div>'
         if sports else ""
     )
@@ -942,7 +947,11 @@ def render_week_status(snapshot: PresentationSnapshot) -> str:
         '<div class="v2-week-metrics">'
         f'<span><strong>{model.completed_activity_count}</strong> pass</span>'
         f'<span><strong>{html.escape(model.session_time)}</strong> passtid</span>'
-        f'<span><strong>{model.training_day_count}</strong> träningsdagar</span>'
+        + (
+            f'<span><strong>{html.escape(model.total_distance)}</strong> distans</span>'
+            if model.total_distance_m > 0 else ''
+        )
+        + f'<span><strong>{model.training_day_count}</strong> träningsdagar</span>'
         '</div>'
         f'{distribution}</div></details>'
     )
