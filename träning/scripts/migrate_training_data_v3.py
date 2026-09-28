@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 
 from training_contracts import PLAN_SCHEMA_VERSION, VALID_PLAN_SPORTS
+from calendar_projection import refresh_calendar_projection
 
 ROOT = Path(__file__).resolve().parents[1]
 PLAN_FILES = [ROOT / "data" / "plan.json", ROOT / "data" / "upcoming_week.json"]
@@ -57,6 +58,7 @@ def migrate_plan(path, catalog=None):
             if day.get("sport") not in VALID_PLAN_SPORTS:
                 raise RuntimeError(f"Migration v3: {path.name} har ogiltig sport för {day.get('date')}")
         changed = materialize_physical_workouts(document)
+        changed = refresh_calendar_projection(document) or changed
         if changed:
             path.write_text(json.dumps(document, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         return changed
@@ -79,6 +81,7 @@ def migrate_plan(path, catalog=None):
 
     document["schema_version"] = PLAN_SCHEMA_VERSION
     materialize_physical_workouts(document)
+    refresh_calendar_projection(document)
     path.write_text(json.dumps(document, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return True
 
