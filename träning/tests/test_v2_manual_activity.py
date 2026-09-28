@@ -48,8 +48,12 @@ class ManualActivityTests(unittest.TestCase):
         self.assertEqual(snapshot.today.state, "completed")
         self.assertEqual(snapshot.today.title, "Styrka/core · 25 min")
         self.assertEqual(len(snapshot.today.manual_activities), 1)
+        sunday = next(
+            day for day in snapshot.week.days
+            if day.local_date == date(2026, 9, 27)
+        )
         self.assertEqual(
-            snapshot.week.days[0].manual_activities[0].classification,
+            sunday.manual_activities[0].classification,
             "training",
         )
 
