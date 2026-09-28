@@ -302,14 +302,20 @@ def horizon(documents):
     return today_date.isoformat(), (today_date + timedelta(days=6)).isoformat()
 
 
+def planned_workouts(document):
+    """Return physical workouts, falling back only for pre-migration documents."""
+    canonical = document.get("planned_workouts")
+    return canonical if canonical is not None else (document.get("days") or [])
+
+
 def desired_workouts(documents, oldest, newest):
     result = []
     seen = set()
     for document in documents.values():
-        for day in document.get("days") or []:
-            date_text = str(day.get("date") or "")
-            workout = day.get("device_workout")
-            sync = day.get("device_sync") or {}
+        for planned in planned_workouts(document):
+            date_text = str(planned.get("date") or "")
+            workout = planned.get("device_workout")
+            sync = planned.get("device_sync") or {}
             if not isinstance(workout, dict) or not oldest <= date_text <= newest:
                 continue
             if sync.get("status") == "deferred":
@@ -326,8 +332,8 @@ def desired_workouts(documents, oldest, newest):
 def mark_status(documents, workout, *, status, event_id=None, error=None):
     now = datetime.now(timezone.utc).isoformat()
     for document in documents.values():
-        for day in document.get("days") or []:
-            candidate = day.get("device_workout") or {}
+        for planned in planned_workouts(document):
+            candidate = planned.get("device_workout") or {}
             if candidate.get("external_id") != workout.get("external_id"):
                 continue
             sync = {
@@ -343,7 +349,7 @@ def mark_status(documents, workout, *, status, event_id=None, error=None):
                 sync["verified_at_utc"] = now
             if error:
                 sync["error"] = str(error)[:240]
-            day["device_sync"] = sync
+            planned["device_sync"] = sync
 
 
 def persist_documents(documents):
