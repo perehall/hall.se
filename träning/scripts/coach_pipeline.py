@@ -244,8 +244,8 @@ def normalize_unapplicable_plan_action(
     action,
     decision_plan,
     ready_dates,
-    ready_workouts,
-    local_date,
+    ready_workouts=None,
+    local_date=None,
 ):
     """Fail closed when model output cannot be applied safely.
 
@@ -254,6 +254,22 @@ def normalize_unapplicable_plan_action(
     ingestion or publication; degrade only that action to a no-change review.
     """
     normalized = dict(action)
+    if ready_workouts is None:
+        allowed_dates = set(ready_dates or ())
+        ready_workouts = [
+            {
+                "workout_key": legacy.workout_key(
+                    workout, decision_plan.get("meta") or {}
+                ),
+                "date": str(workout.get("date") or ""),
+                "session": str(workout.get("session") or ""),
+                "sport": str(workout.get("sport") or ""),
+            }
+            for workout in legacy.planned_workouts(decision_plan)
+            if str(workout.get("date") or "") in allowed_dates
+            and workout.get("status") not in {"completed", "open", "rest"}
+            and workout.get("classification") != "recreation"
+        ]
     try:
         legacy.validate_plan_action(normalized, ready_dates, ready_workouts)
         legacy.validate_dose_option_action(decision_plan, normalized, local_date)
