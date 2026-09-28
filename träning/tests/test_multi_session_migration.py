@@ -16,9 +16,7 @@ def canonical_document():
         "days": [
             {
                 "date": "2026-10-02",
-                "status": "preliminary",
-                "sport": "swim",
-                "session": "Kalenderprojektion",
+                "label": "Fredag",
             }
         ],
         "planned_workouts": [
@@ -73,12 +71,12 @@ class MultiSessionMigrationTests(unittest.TestCase):
                 }
             ],
         }
-        with self.assertRaisesRegex(RuntimeError, "migreras explicit offline"):
+        with self.assertRaisesRegex(RuntimeError, "får inte härledas från days"):
             materialize_physical_workouts(document)
 
     def test_planned_workouts_must_be_a_collection(self):
         document = {"schema_version": 3, "days": [], "planned_workouts": {}}
-        with self.assertRaisesRegex(RuntimeError, "måste vara en lista"):
+        with self.assertRaisesRegex(RuntimeError, "får inte härledas från days"):
             materialize_physical_workouts(document)
 
 
