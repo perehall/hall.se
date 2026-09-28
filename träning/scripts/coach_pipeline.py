@@ -51,13 +51,15 @@ def analysis_code_signature(paths=ANALYSIS_CODE_FILES):
 
 
 def latest_for_analysis(latest, decision_plan, latest_date, code_signature=None):
-    enriched = dict(latest)
     workout_context = dict(latest.get("workout_analysis_context") or {})
     plan_comparison = build_plan_comparison(decision_plan, latest, latest_date)
     workout_context["plan_comparison"] = plan_comparison
     workout_context["coach_pipeline_contract_version"] = COACH_PIPELINE_CONTRACT_VERSION
     workout_context["analysis_code_sha256"] = code_signature or analysis_code_signature()
-    enriched["workout_analysis_context"] = workout_context
+    enriched = legacy.latest_activity_for_coach(
+        latest,
+        workout_context=workout_context,
+    )
     return enriched, plan_comparison
 
 
@@ -411,7 +413,11 @@ def main():
         print("AI coach pipeline: OPENAI_API_KEY saknas; hoppar över AI-analys.")
         return 0
 
-    recent = legacy.recent_activity_history(activities, limit=10)
+    recent = legacy.recent_activity_history(
+        activities,
+        limit=8,
+        exclude_id=latest.get("id"),
+    )
     coach_plan, fulfilled_dates = legacy.plan_for_coach(decision_plan, activities)
     candidate_workouts = legacy.allowed_target_workouts(
         decision_plan, activities, local_date
@@ -435,12 +441,15 @@ def main():
         "recent_activities": recent,
         "rolling_load_context": rolling_context,
         "performance_context": performance_context,
-        "current_plan": coach_plan,
-        "current_strategy": strategy,
+        "current_plan": legacy.plan_context_for_coach(coach_plan),
+        "current_strategy": legacy.strategy_context_for_coach(strategy),
         "private_wellness_context": wellness_context,
         "fulfilled_plan_dates": sorted(fulfilled_dates),
         "allowed_target_dates": ready_dates,
-        "allowed_target_workouts": ready_workouts,
+        "allowed_target_workouts": legacy.target_workouts_for_coach(
+            decision_plan,
+            ready_workouts,
+        ),
         "deferred_target_dates": deferred_dates,
         "instruction": (
             "Analysera senaste passet utifrån latest_activity.workout_analysis_context som primärt faktalager. "
