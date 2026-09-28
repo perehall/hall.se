@@ -73,7 +73,11 @@ def refresh_swim_recipes(document, catalog):
     result = deepcopy(document)
     by_option_id, by_distance = catalog_swim_workouts(catalog)
 
-    for day in result.get("days") or []:
+    collections = [result.get("days") or []]
+    if result.get("planned_workouts") is not None:
+        collections.append(result.get("planned_workouts") or [])
+
+    for day in [item for collection in collections for item in collection]:
         for option in day.get("dose_options") or []:
             option_id = str(option.get("id") or "").strip()
             canonical = by_option_id.get(option_id)
@@ -106,10 +110,13 @@ def refresh_swim_recipes(document, catalog):
 
 
 def validate_materialized(document, label):
-    for index, day in enumerate(document.get("days") or []):
-        if day.get("sport") in {"rest", "open"}:
+    for collection_name in ("days", "planned_workouts"):
+        if collection_name == "planned_workouts" and document.get(collection_name) is None:
             continue
-        validate_workout_design(day, f"{label}.days[{index}]")
+        for index, day in enumerate(document.get(collection_name) or []):
+            if day.get("sport") in {"rest", "open"}:
+                continue
+            validate_workout_design(day, f"{label}.{collection_name}[{index}]")
 
 
 def main():
@@ -130,7 +137,11 @@ def main():
             + str(
                 sum(
                     1
-                    for day in materialized.get("days") or []
+                    for day in (
+                        materialized.get("planned_workouts")
+                        if materialized.get("planned_workouts") is not None
+                        else materialized.get("days") or []
+                    )
                     if day.get("sport") not in {"rest", "open"}
                 )
             )
