@@ -279,7 +279,7 @@ def allowed_target_workouts(plan, activities, today_local):
         key = workout_key(workout, plan.get("meta") or {})
         if not date_value or date_value < today_local:
             continue
-        if workout.get("status") == "completed" or key in fulfilled:
+        if workout.get("status") in {"completed", "open", "rest"} or key in fulfilled:
             continue
         if workout.get("manual_lock") is True:
             continue
