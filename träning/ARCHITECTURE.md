@@ -31,16 +31,27 @@ state.
 7. **Actual activity truth outranks prescription.** Once one or more canonical
    activities exist for a date, the primary Today surface describes those
    activities rather than claiming the planned prescription was completed.
+8. **Calendar dates are containers, not workout identities.** A date may hold
+   zero, one or many independent planned workouts. Each physical workout has its
+   own identity and prescription.
+9. **Do not encode co-location as a composite recipe.** Swim + strength, run +
+   bike or any other same-day combination remains separate workouts. A single
+   workout may contain multiple sports only when it is explicitly a multisport
+   session with ordered components, such as a brick.
+10. **Runtime migration never guesses physical workout structure.** Premultipass
+    documents must be migrated explicitly offline. Production code may project
+    canonical workouts into a compatibility calendar cache, but it may not
+    split, merge or infer workouts from that cache.
 
 ## Legacy renderer containment
 
-The current renderer still contains 53 ordered mutation/validation stages.
-That is legacy debt, not the target architecture. Until it is replaced by a
-single view-model renderer, it runs only inside `render_transaction.py`.
+Production uses the pure v2 renderer. The old ordered mutation/finalizer chain
+is retained only as parity/history debt and must not regain production
+ownership.
 
-Migration rule: move one coherent surface at a time from post-render mutation
-into source rendering, add a domain regression test, then delete the redundant
-finalizer. Never add a new HTML finalizer.
+Migration rule: move or delete one coherent legacy capability at a time, keep a
+domain regression test, and never add a new HTML finalizer or a new
+sport/date-specific compatibility path.
 
 ## Required end-to-end contracts
 
