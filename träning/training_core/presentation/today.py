@@ -16,6 +16,7 @@ from training_core.presentation.manual_activity import (
     manual_activities_for_day,
 )
 from training_core.presentation.public_copy import public_reason
+from training_core.presentation.prescription import prescription_lines
 from training_core.presentation.sport_identity import (
     activity_icon_key,
     planned_icon_keys,
@@ -171,23 +172,7 @@ def activity_outcome(activity: CompletedActivity) -> ActivityOutcomeReadModel:
 
 
 def _prescription_lines(workout: PlannedWorkout) -> tuple[str, ...]:
-    payload = workout.payload or {}
-    design = payload.get("workout_design") or {}
-    selected_id = design.get("selected_candidate_id")
-    candidates = design.get("candidates") or []
-    selected = next((item for item in candidates if item.get("id") == selected_id), None)
-    if selected is None and len(candidates) == 1:
-        selected = candidates[0]
-    blocks = ((selected or {}).get("prescription") or {}).get("blocks") or []
-    lines = []
-    for block in blocks:
-        name = str(block.get("name") or "").strip()
-        instruction = str(block.get("instruction") or "").strip()
-        intensity = str(block.get("intensity") or "").strip()
-        value = " · ".join(part for part in (name, intensity, instruction) if part)
-        if value:
-            lines.append(value)
-    return tuple(lines)
+    return prescription_lines(workout.payload or {})
 
 
 def _workout_read_model(
