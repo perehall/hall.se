@@ -160,10 +160,9 @@ class WeeklyRolloverTests(unittest.TestCase):
             self.assertEqual(day["session"], group[0]["session"])
 
         for workout in workouts:
-            if workout["sport"] == "swim":
-                self.assertTrue((workout.get("watch_workout") or {}).get("blocks"))
-            else:
+            if workout["sport"] != "swim":
                 self.assertNotIn("watch_workout", workout)
+            self.assertNotIn("swim_component", workout)
 
     def test_multiple_strategy_slots_on_same_day_materialize_as_distinct_workouts(self):
         strategy = deepcopy(STRATEGY)
@@ -212,7 +211,10 @@ class WeeklyRolloverTests(unittest.TestCase):
         workouts = future["planned_workouts"]
         self.assertTrue(workouts)
         for workout in workouts:
-            self.assertEqual(workout["planning_status"], "preliminary")
+            if workout["sport"] == "enduro":
+                self.assertEqual(workout["planning_status"], "fixed")
+            else:
+                self.assertEqual(workout["planning_status"], "preliminary")
             if workout.get("dose_options"):
                 self.assertIn(
                     workout["baseline_option_id"],
@@ -232,9 +234,7 @@ class WeeklyRolloverTests(unittest.TestCase):
 
         swims = [workout for workout in workouts if workout["sport"] == "swim"]
         self.assertTrue(swims)
-        self.assertTrue(
-            all((workout.get("watch_workout") or {}).get("blocks") for workout in swims)
-        )
+        self.assertTrue(all("swim_component" not in workout for workout in swims))
 
     def test_catalog_swim_option_materializes_exact_watch_structure(self):
         day = {
@@ -281,7 +281,7 @@ class WeeklyRolloverTests(unittest.TestCase):
         self.assertFalse(day["watch_workout"]["sync_enabled"])
         self.assertIn("swim-4000", day["watch_workout"]["id"])
 
-    def test_swim_structure_is_owned_by_the_planned_swim_not_previous_calendar_day(self):
+    def test_rollover_never_borrows_swim_structure_from_previous_calendar_day(self):
         upcoming = add_structured_swim(upcoming_w35())
         promoted, future = rollover_documents(
             plan_w34(), upcoming, date(2026, 8, 24), STRATEGY
@@ -295,20 +295,21 @@ class WeeklyRolloverTests(unittest.TestCase):
         self.assertTrue(swim_workouts)
 
         for workout in swim_workouts:
-            self.assertTrue((workout.get("watch_workout") or {}).get("blocks"))
-            selected = next(
-                option
-                for option in workout["dose_options"]
-                if option["id"] == workout["baseline_option_id"]
-            )
-            self.assertEqual(
-                workout["watch_workout"]["blocks"],
-                selected["watch_workout"]["blocks"],
-            )
+            self.assertNotIn("swim_component", workout)
             self.assertNotEqual(
-                workout["watch_workout"]["blocks"],
-                source["watch_workout"]["blocks"],
+                workout.get("watch_workout"),
+                source["watch_workout"],
             )
+            if workout.get("watch_workout"):
+                selected = next(
+                    option
+                    for option in workout["dose_options"]
+                    if option["id"] == workout["baseline_option_id"]
+                )
+                self.assertEqual(
+                    workout["watch_workout"]["blocks"],
+                    selected["watch_workout"]["blocks"],
+                )
 
     def test_mesocycle_end_builds_concrete_nonprogressive_bridge_week(self):
         promoted = {
