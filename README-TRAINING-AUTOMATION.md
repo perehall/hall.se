@@ -118,9 +118,9 @@ Workflow:
 
 `.github/workflows/update-training.yml`
 
-Workflowet kan startas manuellt med `workflow_dispatch` och körs dessutom schemalagt:
+Workflowet kan startas manuellt med `workflow_dispatch` och triggas normalt av Strava-/träningsinput-events.
 
-`17 */3 * * *`
+Den tidigare 3-timmarsreconcilen är pensionerad efter verifierad webhookdrift. En separat Stockholm-midnattsworkflow kör fortfarande en daglig full reconcile som säkerhetsnät och för datumberoende veckorullning.
 
 Det innebär en körning var tredje timme.
 
