@@ -291,7 +291,7 @@ def validate_plan_document(document, *, upcoming=False):
                         f"{context}: multisport kräver minst två komponenter",
                     )
             elif sport == "multisport":
-                raise TrainingContractError(
+                raise ContractError(
                     f"{context}: multisport kräver explicita components"
                 )
 
