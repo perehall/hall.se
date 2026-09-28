@@ -79,6 +79,8 @@ def run_pipeline(*, runner=None):
 
 def main():
     run_pipeline()
+    preview_script = ROOT / "scripts" / "render_v2_preview.py"
+    subprocess.run([sys.executable, str(preview_script)], check=True, cwd=REPO_ROOT)
     return 0
 
 
