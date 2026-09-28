@@ -156,7 +156,7 @@ class TrainingContractTests(unittest.TestCase):
 
     def test_free_text_cannot_replace_explicit_sport(self):
         plan = valid_week()
-        del plan["days"][2]["sport"]
+        del plan["planned_workouts"][2]["sport"]
         plan["planned_workouts"][2]["session"] = "Löpning · tröskel"
         with self.assertRaises(ContractError):
             validate_plan_document(plan)
