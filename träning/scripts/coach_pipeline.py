@@ -24,7 +24,9 @@ from workout_plan_context import (
 )
 
 
-COACH_PIPELINE_CONTRACT_VERSION = 3
+COACH_PIPELINE_CONTRACT_VERSION = 4
+AUTO_ANALYSIS_RECENT_LIMIT = 30
+ANALYSIS_LEDGER_VERSION = 1
 SCRIPTS = Path(__file__).resolve().parent
 ANALYSIS_CODE_FILES = (
     SCRIPTS / "coach_pipeline.py",
@@ -92,21 +94,63 @@ def link_fulfilled_activity_ids(plan, activities):
     return changed
 
 
-def select_activity_for_analysis(decision_plan, activities, coach_state, local_date):
-    """Prefer unanalysed activities that deterministically fulfill planned workouts."""
-    if not activities:
-        return None
-
-    analysed_ids = {
+def analysed_activity_ids(coach_state):
+    """Durable analysis ledger independent of the bounded rendered analysis history."""
+    ids = {
+        str(value)
+        for value in (coach_state.get("analysed_activity_ids") or [])
+        if value is not None and str(value).strip()
+    }
+    ids.update(
         str(entry.get("activity_id"))
         for entry in coach_state.get("analyses") or []
         if entry.get("activity_id") is not None
-    }
+    )
+    return ids
+
+
+def training_input_target_activity_id():
+    if str(os.environ.get("TRAINING_INPUT_EVENT") or "").strip().lower() != "true":
+        return None
+    raw = str(os.environ.get("TRAINING_INPUT_PAYLOAD") or "").strip()
+    if not raw:
+        raise RuntimeError("AI coach pipeline: training-input-event saknar payload")
+    try:
+        payload = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise RuntimeError("AI coach pipeline: training-input-event har ogiltig JSON") from exc
+    activity_id = payload.get("activity_id")
+    if not isinstance(activity_id, int) or isinstance(activity_id, bool) or activity_id <= 0:
+        raise RuntimeError("AI coach pipeline: training-input-event saknar giltigt activity_id")
+    return activity_id
+
+
+def select_activity_for_analysis(
+    decision_plan,
+    activities,
+    coach_state,
+    local_date,
+    *,
+    target_activity_id=None,
+):
+    """Analyse current evidence, never endlessly backfill beyond the bounded recent window."""
+    if not activities:
+        return None
+
     by_id = {
         str(activity.get("id")): activity
         for activity in activities
         if activity.get("id") is not None
     }
+    if target_activity_id is not None:
+        target = by_id.get(str(target_activity_id))
+        if target is None:
+            raise RuntimeError(
+                f"AI coach pipeline: target activity_id={target_activity_id} saknas efter backend hydration"
+            )
+        return target
+
+    analysed_ids = analysed_activity_ids(coach_state)
     fulfilled = legacy.fulfilled_plan_workouts(decision_plan, activities)
 
     planned_candidates = []
@@ -125,14 +169,19 @@ def select_activity_for_analysis(decision_plan, activities, coach_state, local_d
             key=lambda activity: activity.get("start_date") or "",
         )
 
+    recent_scope = sorted(
+        activities,
+        key=lambda activity: activity.get("start_date") or "",
+        reverse=True,
+    )[:AUTO_ANALYSIS_RECENT_LIMIT]
     unanalysed = [
         activity
-        for activity in activities
+        for activity in recent_scope
         if activity.get("id") is None
         or str(activity.get("id")) not in analysed_ids
     ]
-    source = unanalysed or activities
-    return max(source, key=lambda activity: activity.get("start_date") or "")
+    source = unanalysed or recent_scope
+    return max(source, key=lambda activity: activity.get("start_date") or "") if source else None
 
 
 def concretize_deferred_review(action, decision_plan, latest_date):
@@ -321,6 +370,7 @@ def main():
         activities,
         coach_state,
         local_date,
+        target_activity_id=training_input_target_activity_id(),
     )
     if latest is None:
         print("AI coach pipeline: inga aktiviteter att analysera.")
@@ -361,11 +411,7 @@ def main():
         print("AI coach pipeline: OPENAI_API_KEY saknas; hoppar över AI-analys.")
         return 0
 
-    recent = sorted(
-        activities,
-        key=lambda activity: activity.get("start_date") or "",
-        reverse=True,
-    )[:10]
+    recent = legacy.recent_activity_history(activities, limit=10)
     coach_plan, fulfilled_dates = legacy.plan_for_coach(decision_plan, activities)
     candidate_workouts = legacy.allowed_target_workouts(
         decision_plan, activities, local_date
@@ -553,6 +599,19 @@ def main():
     ]
     analyses.insert(0, entry)
     coach_state["analyses"] = analyses[:30]
+    ledger = [
+        str(value)
+        for value in (coach_state.get("analysed_activity_ids") or [])
+        if value is not None and str(value).strip()
+    ]
+    for analysis in coach_state["analyses"]:
+        value = analysis.get("activity_id")
+        if value is not None and str(value) not in ledger:
+            ledger.append(str(value))
+    if latest.get("id") is not None and str(latest.get("id")) not in ledger:
+        ledger.append(str(latest.get("id")))
+    coach_state["analysed_activity_ids"] = ledger
+    coach_state["analysis_ledger_version"] = ANALYSIS_LEDGER_VERSION
     coach_state["last_run_utc"] = now_utc
     updated_decision_plan = legacy.planning_window(plan, upcoming)
     coach_state["last_trigger_hash"] = legacy.stable_hash(
