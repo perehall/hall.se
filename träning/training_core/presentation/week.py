@@ -117,6 +117,7 @@ def sport_group(activity: CompletedActivity) -> str:
 
 
 def _planned_read_model(workout: PlannedWorkout) -> PlannedWorkoutReadModel:
+    from training_core.presentation.prescription import prescription_rows
     from training_core.presentation.today import _prescription_lines
 
     return PlannedWorkoutReadModel(
@@ -126,6 +127,7 @@ def _planned_read_model(workout: PlannedWorkout) -> PlannedWorkoutReadModel:
         icon_keys=planned_icon_keys(sport=workout.sport, payload=workout.payload),
         component_sports=tuple(component.sport for component in workout.components),
         prescription=_prescription_lines(workout),
+        prescription_rows=prescription_rows(workout.payload or {}),
         reason=workout.reason,
         development_focus=workout.development_focus,
         device_sync=build_device_sync_read_model(workout.payload, completed=False),
