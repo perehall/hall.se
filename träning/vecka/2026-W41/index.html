@@ -783,6 +783,26 @@ body.quiet-performance.qp-history .day.workout-card-v2.past-completed{
   line-height:1.4;
 }
 .week-context-header .top-details{margin-top:8px}
+.week-context-header .week-context-plan>summary{
+  display:inline-block;
+  cursor:pointer;
+  list-style:none;
+  color:var(--qp-secondary,#59636f);
+  font-size:.68rem;
+  font-weight:600;
+  line-height:1.35;
+  text-decoration:underline;
+  text-decoration-thickness:1px;
+  text-underline-offset:3px;
+  text-decoration-color:var(--qp-line,#cbd5e1);
+}
+.week-context-header .week-context-plan>summary::-webkit-details-marker{display:none}
+.week-context-header .week-context-plan>summary:hover{
+  color:var(--qp-text,#111827);
+  text-decoration-color:currentColor;
+}
+.week-context-header .week-context-plan>summary:after{content:""}
+.week-context-header .week-context-plan[open]>summary:after{content:""}
 .week-context-header + .week-status-expander{
   margin-top:2px;
   margin-bottom:20px;
