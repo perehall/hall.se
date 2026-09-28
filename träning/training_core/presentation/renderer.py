@@ -1019,10 +1019,25 @@ def render_week(snapshot: PresentationSnapshot) -> str:
         )
 
         if actual:
+            actual_summary = (
+                f'<div class="v2-week-actual-summary">{html.escape(day.status_summary)}</div>'
+                if day.status_summary else ""
+            )
+            actual_details = (
+                '<div class="v2-week-actual-details">'
+                + "".join(
+                    f'<div>{html.escape(activity.detail)}</div>'
+                    for activity in day.actual_activities
+                )
+                + '</div>'
+                if len(day.actual_activities) > 1 else ""
+            )
             workout_html = (
                 '<strong class="v2-week-session">'
                 + _render_icon_group(snapshot, day.icon_keys)
                 + f'<span>{html.escape(actual)}</span></strong>'
+                + actual_summary
+                + actual_details
             )
         elif day.planned_workouts:
             workout_html = (
@@ -1171,6 +1186,8 @@ body{margin:0;background:var(--bg);color:var(--text);line-height:1.45;letter-spa
 .v2-week-day[data-state="fixed"] .v2-week-state{border-color:#c9cdf8;background:var(--accent-soft);color:var(--accent)}
 .v2-week-daybody{min-width:0;margin-top:14px}
 .v2-week-session{display:flex;align-items:center;gap:8px;font-size:1.03rem;font-weight:760;line-height:1.3}
+.v2-week-actual-summary{margin-top:8px;color:var(--secondary);font-size:.8rem;font-weight:650;line-height:1.35;font-variant-numeric:tabular-nums}
+.v2-week-actual-details{display:grid;gap:3px;margin-top:7px;padding-top:7px;border-top:1px solid var(--line-soft);color:var(--muted);font-size:.74rem;line-height:1.4;font-variant-numeric:tabular-nums}
 .v2-rest-day{color:var(--muted);font-weight:620}
 .v2-week-weather{color:var(--muted);font-size:.72rem;margin-top:8px}.v2-weather-source{color:var(--muted);font-size:.68rem;margin:8px 2px 0}
 
