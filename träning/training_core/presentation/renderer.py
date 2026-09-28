@@ -518,6 +518,28 @@ WEEKDAY_LABELS = (
     "Söndag",
 )
 
+MONTH_LABELS = (
+    "jan", "feb", "mar", "apr", "maj", "jun",
+    "jul", "aug", "sep", "okt", "nov", "dec",
+)
+
+DAY_STATE_LABELS = {
+    "completed": "Genomfört",
+    "fixed": "Fast",
+    "planned": "Aktuell plan",
+    "conditional": "Kan ändras",
+    "preliminary": "Preliminärt",
+    "open": "Vilodag",
+}
+
+
+def _compact_local_date(value) -> str:
+    return f"{value.day} {MONTH_LABELS[value.month - 1]}"
+
+
+def _day_state_label(state: str) -> str:
+    return DAY_STATE_LABELS.get(str(state or "").strip().lower(), str(state or "").strip())
+
 
 def _render_string_list(items: tuple[str, ...]) -> str:
     if not items:
@@ -947,7 +969,7 @@ def render_week(snapshot: PresentationSnapshot) -> str:
                 + _render_icon_group(snapshot, day.icon_keys)
                 + f'<span>{html.escape(actual)}</span></strong>'
             )
-        elif len(day.planned_workouts) > 1:
+        elif day.planned_workouts:
             workout_html = (
                 '<div class="v2-week-planned-list">'
                 + "".join(
@@ -959,20 +981,21 @@ def render_week(snapshot: PresentationSnapshot) -> str:
                 + '</div>'
             )
         else:
-            shown = day.planned_session
-            workout_html = (
-                '<strong class="v2-week-session">'
-                + _render_icon_group(snapshot, day.icon_keys)
-                + f'<span>{html.escape(shown)}</span></strong>'
-                + _render_device_sync(day.device_sync)
-            )
+            workout_html = '<strong class="v2-week-session v2-rest-day">Vilodag</strong>'
 
         rows.append(
-            f'<li data-date="{day.local_date.isoformat()}" data-state="{html.escape(day.state)}">'
+            f'<li class="v2-week-day" data-date="{day.local_date.isoformat()}" '
+            f'data-state="{html.escape(day.state)}">'
+            '<div class="v2-week-dayhead">'
+            f'<span class="v2-week-dow">{html.escape(WEEKDAY_LABELS[day.local_date.weekday()])}</span>'
+            f'<span class="v2-week-date">{html.escape(_compact_local_date(day.local_date))}</span>'
+            f'<span class="v2-week-state">{html.escape(_day_state_label(day.state))}</span>'
+            '</div>'
+            '<div class="v2-week-daybody">'
             + workout_html
             + weather_html
             + manual_html
-            + '</li>'
+            + '</div></li>'
         )
     source = (
         '<p class="v2-weather-source">Väderprognos: '
@@ -981,10 +1004,8 @@ def render_week(snapshot: PresentationSnapshot) -> str:
         if snapshot.weather.days else ""
     )
     return (
-        f'<section class="v2-week" data-start="{model.start.isoformat()}" '
-        f'data-end="{model.end.isoformat()}">'
-        f'<p>{model.training_day_count} träningsdagar · '
-        f'{model.completed_activity_count} aktiviteter</p>'
+        f'<section class="v2-week" aria-label="Aktuell veckas pass" '
+        f'data-start="{model.start.isoformat()}" data-end="{model.end.isoformat()}">'
         f'<ol>{"".join(rows)}</ol>{source}</section>'
     )
 
@@ -1034,24 +1055,126 @@ def render_reference_tools() -> str:
 
 
 V2_SHELL_CSS = """
-:root{color-scheme:light;--bg:#f5f7fb;--card:#fff;--text:#0f172a;--muted:#64748b;--line:#e2e8f0;--accent:#2563eb;--shadow:0 8px 24px rgba(15,23,42,.06);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--text);background:var(--bg)}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);line-height:1.45}
-.v2-shell{width:min(100%,760px);margin:auto;padding:20px 16px 56px}.v2-shell a{color:inherit}.v2-shell-main{display:grid;gap:18px}.v2-shell-meta{display:flex;justify-content:flex-end;margin:4px 2px 8px;font-size:.82rem;color:var(--muted)}
-.v2-week-nav{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;padding:9px 10px;border:1px solid var(--line);border-radius:14px;background:#fff;box-shadow:0 6px 18px rgba(15,23,42,.04)}.v2-week-link{font-size:.82rem;font-weight:800;color:#1d4ed8!important;text-decoration:none}.v2-week-link.next{text-align:right}.v2-week-current{text-align:center;line-height:1.15}.v2-week-current strong{display:block;font-size:.86rem}.v2-week-current span{display:block;margin-top:3px;color:var(--muted);font-size:.65rem;font-weight:800}
-.v2-today,.v2-week-context,.v2-week-status,.v2-week>ol>li,.v2-activity-outcome,.v2-manual-activity,.v2-week-review,.v2-history-day{background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow)}
-.v2-today{padding:18px}.v2-kicker{text-transform:uppercase;letter-spacing:.1em;font-size:.72rem;font-weight:800;color:var(--muted);margin:0 0 7px}.v2-today-title{font-size:1.55rem;line-height:1.15;letter-spacing:-.025em;margin:0 0 10px;display:flex;align-items:center;gap:.55rem}.v2-today-details{margin:8px 0 14px;padding-left:20px;color:#334155}.v2-today-details li{margin:4px 0}
-.v2-sport-icon{display:inline-block;width:1.25em;height:1.25em;max-width:1.25em;max-height:1.25em;flex:0 0 1.25em;vertical-align:-.18em}.v2-sport-icons{display:inline-flex;align-items:center;gap:.3em;flex:0 0 auto}.v2-week-session,.v2-outcome-title,.v2-history-activity header,.v2-manual-activity header{display:flex;align-items:center;gap:.5rem}.v2-watch-icon{width:1em;height:1em;flex:0 0 1em}
-.v2-completed-outcomes{display:grid;gap:12px}.v2-activity-outcome{padding:14px 15px;box-shadow:none;border-radius:14px}.v2-outcome-row{margin-top:13px}.v2-outcome-label{display:block;color:var(--muted);font-size:.76rem;font-weight:800;margin-bottom:4px}.v2-outcome-row p{margin:3px 0;color:#334155}.v2-feedback-compact{display:flex;align-items:center;gap:8px}.v2-feedback-toggle{font:inherit;font-size:.75rem}.v2-feedback-note{margin:6px 0;color:#334155}.v2-feedback-panel{margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}.v2-feedback-options{display:flex;flex-wrap:wrap;gap:6px;margin:5px 0 10px}.v2-feedback-chip{border:1px solid #cbd5e1;background:#fff;border-radius:999px;padding:6px 9px}.v2-feedback-chip[aria-pressed="true"]{background:#dbeafe;border-color:#93c5fd}.v2-feedback textarea{width:100%;min-height:90px;margin-top:5px;border:1px solid #cbd5e1;border-radius:10px;padding:9px;font:inherit}.v2-feedback-actions{display:flex;gap:8px;margin-top:8px}
-.v2-completed-context,.v2-rationale,.v2-week-status{border:1px solid var(--line);border-radius:14px;background:#fff;box-shadow:none;overflow:hidden}.v2-original-workout{display:flex;align-items:center;gap:.5rem;margin:7px 0}.v2-planned-workouts,.v2-week-planned-list{display:grid;gap:10px}.v2-planned-workout,.v2-week-planned-workout{border:1px solid var(--line);border-radius:14px;padding:12px;background:#fff}.v2-planned-workout header,.v2-week-planned-workout header{display:flex;align-items:center;gap:.5rem}.v2-workout-components{margin:6px 0 0;color:var(--muted);font-size:.82rem}.v2-completed-context summary,.v2-rationale summary,.v2-week-status summary{cursor:pointer;padding:12px 14px;font-weight:800}.v2-completed-context-body,.v2-week-status-body,.v2-week-context-plan-body{padding:0 14px 14px}.v2-prescription{border-top:1px solid var(--line);margin-top:14px;padding-top:12px}.v2-prescription h2{font-size:1rem;margin:0 0 7px}.v2-prescription ul{margin:0;padding-left:20px}
-.v2-week-context{padding:17px 18px}.v2-week-context h2{font-size:1.2rem;margin:0 0 9px}.v2-week-focus{display:block;font-size:.98rem}.v2-week-meta{color:var(--muted);font-size:.86rem;margin:7px 0}.v2-week-context-plan{margin-top:8px}.v2-week-context-plan summary{display:inline-block;cursor:pointer;list-style:none;color:var(--muted);font-size:.72rem;font-weight:650;line-height:1.35;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;text-decoration-color:#cbd5e1}.v2-week-context-plan summary::-webkit-details-marker{display:none}.v2-week-context-plan summary:hover,.v2-week-context-plan summary:focus-visible{color:var(--text);text-decoration-color:currentColor}
-.v2-week-status{border-radius:18px;box-shadow:var(--shadow)}.v2-week-metrics{display:flex;gap:16px;flex-wrap:wrap;color:#334155}.v2-week-sports{margin-top:12px}.v2-week-sports h3{font-size:.85rem}.v2-week-sport{display:flex;justify-content:space-between;border-top:1px solid var(--line);padding:7px 0}
-.v2-week{background:transparent}.v2-week>p{color:var(--muted);font-size:.88rem;margin:0 2px 8px}.v2-week>ol{list-style:none;margin:0;padding:0;display:grid;gap:10px}.v2-week>ol>li{padding:14px 16px}.v2-week-session{font-size:.98rem}.v2-week-weather,.v2-today-weather{color:var(--muted);font-size:.82rem;margin:7px 0 0}.v2-weather-source{font-size:.75rem!important;margin-top:8px!important}
-.v2-device-sync{display:flex;align-items:center;gap:5px;color:var(--muted);font-size:.78rem;margin-top:7px}.v2-next{margin:14px 0 0;color:#334155}.v2-next span{font-size:.76rem;font-weight:800;color:var(--muted);text-transform:uppercase;margin-right:5px}
-.v2-reference-tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.v2-reference-tools button,.v2-reference-dialog button{font:inherit}.v2-reference-tools button{border:1px solid #cbd5e1;background:#fff;border-radius:999px;padding:9px 13px;font-size:.82rem;font-weight:700}.v2-reference-dialog{width:min(520px,calc(100vw - 32px));max-height:calc(100vh - 32px);border:1px solid var(--line);border-radius:18px;padding:18px}.v2-reference-dialog::backdrop{background:rgba(15,23,42,.38)}.v2-reference-dialog form{float:right}
-.v2-history-header,.v2-week-review,.v2-history-day{padding:18px}.v2-history-days{display:grid;gap:12px}.v2-history-activity{padding:12px 0;border-top:1px solid var(--line)}.v2-history-activity:first-child{border-top:0}
-@media(min-width:650px){.v2-shell{padding-top:34px}.v2-today,.v2-week-context,.v2-week>ol>li{padding:20px 22px}}
-@media(max-width:620px){.v2-shell{padding:14px 12px 48px}.v2-week-nav{grid-template-columns:1fr auto 1fr;padding:8px}.v2-week-link{font-size:.75rem}.v2-week-current strong{font-size:.8rem}.v2-today-title{font-size:1.4rem}.v2-reference-dialog{width:calc(100vw - 16px);max-height:78vh}}
+:root{
+  color-scheme:light;
+  --bg:#F6F7F5;--card:#FCFCFB;--elevated:#FFFFFF;
+  --text:#171918;--secondary:#5E6661;--muted:#69706B;
+  --line:#E4E7E3;--line-soft:#ECEEEB;--accent:#5964E8;
+  --accent-soft:#F1F2FD;--green:#287A54;--green-soft:#EDF7F1;
+  font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",sans-serif;
+  color:var(--text);background:var(--bg)
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);line-height:1.45;letter-spacing:-.005em}
+::selection{background:var(--accent-soft)}:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.v2-shell{width:min(100%,720px);margin:auto;padding:24px 16px 64px}
+.v2-shell a{color:inherit}.v2-shell-main{display:block}
+.v2-shell-meta{display:flex;justify-content:flex-end;margin:0 2px 8px;font-size:.68rem;color:var(--muted)}
+.v2-shell-meta a{text-decoration:none;font-weight:650}
+.v2-shell-meta a:hover{text-decoration:underline;text-underline-offset:3px}
+
+.v2-week-nav{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:14px;padding:2px 0 12px;border:0;border-bottom:1px solid var(--line);background:transparent}
+.v2-week-link{font-size:.78rem;font-weight:650;color:var(--secondary)!important;text-decoration:none;white-space:nowrap}
+.v2-week-link.next{text-align:right}.v2-week-link:hover{color:var(--text)!important}.v2-week-link.disabled{visibility:hidden}
+.v2-week-current{text-align:center;line-height:1.15}.v2-week-current strong{display:block;font-size:.92rem;font-weight:780;letter-spacing:-.01em}
+.v2-week-current span{display:block;margin-top:3px;color:var(--muted);font-size:.68rem;font-weight:600}
+
+.v2-today{margin-top:18px;padding:18px 20px 17px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.74);box-shadow:0 8px 24px rgba(15,23,42,.045)}
+.v2-kicker{text-transform:uppercase;letter-spacing:.075em;font-size:.66rem;font-weight:800;color:var(--muted);margin:0 0 8px}
+.v2-today-title{font-size:1.28rem;line-height:1.28;letter-spacing:-.022em;margin:0;display:flex;align-items:center;gap:9px;font-weight:760}
+.v2-today-details{margin:7px 0 0;padding-left:30px;color:var(--secondary);font-size:.8rem}.v2-today-details li{margin:3px 0}
+.v2-today-weather{color:var(--secondary);font-size:.76rem;margin:9px 0 0 30px}
+.v2-next{margin:13px 0 0;color:var(--secondary);font-size:.78rem}.v2-next span{font-size:.68rem;font-weight:800;color:var(--muted);text-transform:uppercase;margin-right:5px}
+
+.v2-week-context{margin-top:42px;padding:0 2px 2px;border:0;background:transparent}
+.v2-week-context h2{font-size:1.24rem;margin:0;letter-spacing:-.018em;font-weight:700}
+.v2-week-focus{display:block;margin-top:6px;font-size:.94rem;font-weight:670;line-height:1.4;letter-spacing:-.008em}
+.v2-week-meta{margin:4px 0 0;color:var(--muted);font-size:.72rem;line-height:1.4}
+.v2-week-context-plan{margin-top:8px}.v2-week-context-plan summary{display:inline-block;cursor:pointer;list-style:none;color:var(--secondary);font-size:.68rem;font-weight:600;line-height:1.35;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;text-decoration-color:var(--line)}
+.v2-week-context-plan summary::-webkit-details-marker{display:none}.v2-week-context-plan summary:hover{color:var(--text);text-decoration-color:currentColor}
+.v2-week-context-plan-body{margin-top:8px;padding:0 0 0 12px;border-left:1px solid var(--line);color:var(--secondary);font-size:.78rem;line-height:1.5}
+.v2-week-context-plan-body p{margin:0}.v2-week-context-plan-body p+p{margin-top:8px}
+
+.v2-week-status{margin:2px 0 20px;border:0;background:transparent}
+.v2-week-status summary{cursor:pointer;list-style:none;color:var(--muted);font-size:.7rem;font-weight:620;padding:3px 0}
+.v2-week-status summary::-webkit-details-marker{display:none}.v2-week-status summary:after{content:" +"}.v2-week-status[open] summary:after{content:" −"}
+.v2-week-status-body{margin-top:8px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+.v2-week-metrics{display:flex;gap:16px;flex-wrap:wrap;color:var(--secondary);font-size:.8rem}
+.v2-week-sports{margin-top:10px}.v2-week-sports h3{font-size:.72rem;color:var(--muted);margin:0 0 5px}
+.v2-week-sport{display:flex;justify-content:space-between;border-top:1px solid var(--line-soft);padding:6px 0;font-size:.78rem}
+
+.v2-week{position:relative;margin:5px 0 30px}
+.v2-week>ol{list-style:none;margin:0;padding:0}
+.v2-week-day{position:relative;display:grid;grid-template-columns:92px minmax(0,1fr);column-gap:20px;align-items:start;margin:0;padding:23px 0 27px;border:0;background:transparent}
+.v2-week-day+.v2-week-day{border-top:1px solid var(--line-soft)}
+.v2-week-day:before{content:"";position:absolute;top:0;bottom:0;left:82px;width:1px;background:var(--line-soft);pointer-events:none}
+.v2-week-day:first-child:before{top:29px}.v2-week-day:last-child:before{bottom:calc(100% - 30px)}
+.v2-week-dayhead{position:relative;grid-column:1;align-self:start;padding-right:20px;min-width:0}
+.v2-week-dayhead:after{content:"";position:absolute;top:6px;right:5px;width:7px;height:7px;border:1px solid var(--line);border-radius:50%;background:var(--bg)}
+.v2-week-day[data-state="completed"] .v2-week-dayhead:after{border-color:var(--green);background:var(--green)}
+.v2-week-dow{display:block;color:var(--secondary);font-size:.66rem;font-weight:700;letter-spacing:.065em;text-transform:uppercase;white-space:nowrap}
+.v2-week-date{display:block;margin-top:2px;color:var(--muted);font-size:.68rem}
+.v2-week-state{display:block;margin-top:7px;color:var(--muted);font-size:.61rem;font-weight:650;line-height:1.25}
+.v2-week-daybody{grid-column:2;min-width:0}
+.v2-week-session{display:flex;align-items:center;gap:8px;font-size:1.03rem;font-weight:760;line-height:1.3}
+.v2-rest-day{color:var(--muted);font-weight:620}
+.v2-week-weather{color:var(--muted);font-size:.72rem;margin-top:8px}.v2-weather-source{color:var(--muted);font-size:.68rem;margin:8px 0 0 112px}
+
+.v2-sport-icon{display:inline-block;width:20px;height:20px;max-width:22px;max-height:22px;flex:0 0 20px;vertical-align:-.18em;color:var(--secondary)}
+.v2-sport-icons{display:inline-flex;align-items:center;gap:5px;flex:0 0 auto}.v2-watch-icon{width:13px;height:13px;flex:0 0 13px}
+.v2-device-sync{display:flex;align-items:center;gap:5px;color:var(--muted);font-size:.7rem;margin-top:6px}
+
+.v2-planned-workouts{display:grid;gap:10px;margin-top:14px}
+.v2-planned-workout{border:1px solid var(--line);border-radius:13px;padding:12px;background:var(--elevated)}
+.v2-week-planned-list{display:grid;gap:0}
+.v2-week-planned-workout{border:0;background:transparent;padding:0 0 13px}
+.v2-week-planned-workout+.v2-week-planned-workout{padding-top:15px;border-top:1px solid var(--line-soft)}
+.v2-planned-workout header,.v2-week-planned-workout header{display:flex;align-items:center;gap:8px;font-size:.98rem;line-height:1.3}
+.v2-workout-components{margin:5px 0 0;color:var(--muted);font-size:.76rem}
+
+.v2-prescription{margin-top:12px;padding-top:10px;border-top:1px solid var(--line-soft)}
+.v2-prescription h2{font-size:.67rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+.v2-prescription ul{margin:0;padding:0;list-style:none}.v2-prescription li{padding:4px 0;color:var(--secondary);font-size:.79rem;line-height:1.42}
+.v2-rationale,.v2-completed-context{margin-top:10px;border:1px solid var(--line-soft);border-radius:11px;background:var(--card);overflow:hidden}
+.v2-rationale summary,.v2-completed-context summary{cursor:pointer;list-style:none;padding:9px 11px;color:var(--secondary);font-size:.72rem;font-weight:650}
+.v2-rationale summary::-webkit-details-marker,.v2-completed-context summary::-webkit-details-marker{display:none}
+.v2-rationale summary:after,.v2-completed-context summary:after{content:" +"}.v2-rationale[open] summary:after,.v2-completed-context[open] summary:after{content:" −"}
+.v2-rationale p{margin:0;padding:0 11px 9px;color:var(--secondary);font-size:.76rem;line-height:1.45}.v2-rationale p+p{padding-top:0}
+.v2-completed-context-body{padding:0 11px 10px}.v2-original-workout{display:flex;align-items:center;gap:7px;margin:6px 0;font-size:.78rem;color:var(--secondary)}
+
+.v2-completed-outcomes{display:grid;gap:12px;margin-top:12px}.v2-activity-outcome{padding:12px 0;border-top:1px solid var(--line-soft)}
+.v2-outcome-title{display:flex;align-items:center;gap:8px;font-size:1rem;margin:0}.v2-outcome-row{margin-top:12px}
+.v2-outcome-label{display:block;color:var(--muted);font-size:.66rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;margin-bottom:3px}
+.v2-outcome-row p{margin:3px 0;color:var(--secondary);font-size:.82rem}
+.v2-feedback-compact{display:flex;align-items:center;gap:8px}.v2-feedback-toggle{font:inherit;border:0;background:transparent;padding:0;color:var(--accent);font-size:.72rem;font-weight:650;cursor:pointer}
+.v2-feedback-note{margin:6px 0;color:var(--secondary)}.v2-feedback-status{display:block;margin-top:4px;color:var(--muted);font-size:.7rem}
+.v2-feedback-panel{margin-top:10px;padding-top:10px;border-top:1px solid var(--line-soft)}
+.v2-feedback-label{display:block;color:var(--muted);font-size:.68rem;font-weight:700;margin:6px 0 4px}
+.v2-feedback-options{display:flex;flex-wrap:wrap;gap:6px;margin:5px 0 10px}.v2-feedback-chip{border:1px solid var(--line);background:var(--elevated);border-radius:999px;padding:6px 9px}
+.v2-feedback-chip[aria-pressed="true"]{background:var(--accent-soft);border-color:#c9cdf8}
+.v2-feedback textarea{width:100%;min-height:90px;margin-top:5px;border:1px solid var(--line);border-radius:10px;padding:9px;font:inherit;background:var(--elevated)}
+.v2-feedback-actions{display:flex;gap:8px;margin-top:8px}.v2-feedback-actions button{font:inherit}
+
+.v2-manual-activity{margin-top:10px;padding:10px 0;border-top:1px solid var(--line-soft)}
+.v2-manual-activity header,.v2-history-activity header{display:flex;align-items:center;gap:7px}.v2-manual-activity p{color:var(--secondary);font-size:.78rem}
+.v2-reference-tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:26px;padding-top:14px;border-top:1px solid var(--line-soft)}
+.v2-reference-tools button,.v2-reference-dialog button{font:inherit}.v2-reference-tools button{border:0;background:transparent;padding:4px 0;color:var(--muted);font-size:.72rem;font-weight:650;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.v2-reference-dialog{width:min(520px,calc(100vw - 32px));max-height:calc(100vh - 32px);border:1px solid var(--line);border-radius:18px;padding:18px;background:var(--elevated)}
+.v2-reference-dialog::backdrop{background:rgba(15,23,42,.32)}.v2-reference-dialog form{float:right}
+
+.v2-history-header,.v2-week-review,.v2-history-day{padding:18px;border:1px solid var(--line);border-radius:16px;background:var(--card)}
+.v2-history-days{display:grid;gap:12px}.v2-history-activity{padding:12px 0;border-top:1px solid var(--line-soft)}.v2-history-activity:first-child{border-top:0}
+
+@media(max-width:620px){
+  .v2-shell{padding:20px 13px 56px}.v2-week-nav{gap:8px}.v2-week-link{font-size:.72rem}.v2-week-current{display:grid;gap:0}.v2-week-current strong{font-size:.86rem}.v2-week-current span{font-size:.64rem}
+  .v2-today{margin-top:15px;padding:16px 15px 15px;border-radius:16px}.v2-today-title{font-size:1.16rem}.v2-today-weather{margin-left:29px;font-size:.74rem}
+  .v2-week-context{margin-top:34px;padding:0 1px 2px}
+  .v2-week-day{grid-template-columns:76px minmax(0,1fr);column-gap:14px;padding:20px 0 23px}.v2-week-day:before{left:67px}.v2-week-dayhead{padding-right:15px}.v2-week-dayhead:after{right:4px}
+  .v2-week-weather{font-size:.7rem}.v2-weather-source{margin-left:90px}
+  .v2-planned-workout{padding:11px}.v2-week-planned-workout header{font-size:.94rem}.v2-reference-dialog{width:calc(100vw - 16px);max-height:78vh}
+}
 """
+
 
 
 def render_document(snapshot: PresentationSnapshot, *, title: str = "Träning") -> str:
