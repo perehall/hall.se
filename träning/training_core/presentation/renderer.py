@@ -767,26 +767,45 @@ COMPONENT_LABELS = {
 }
 
 
+def _render_workout_prescription(workout: PlannedWorkoutReadModel) -> str:
+    if workout.prescription_rows:
+        rows = "".join(
+            '<div class="v2-prescription-row">'
+            f'<span class="v2-prescription-dose">{html.escape(row.dose)}</span>'
+            f'<span class="v2-prescription-text">{html.escape(row.instruction)}</span>'
+            '</div>'
+            for row in workout.prescription_rows
+        )
+        return (
+            '<section class="v2-prescription v2-prescription-grid">'
+            '<h2>Passupplägg</h2>'
+            f'{rows}</section>'
+        )
+    if workout.prescription:
+        return (
+            '<section class="v2-prescription v2-prescription-list"><h2>Passupplägg</h2>'
+            + _render_string_list(workout.prescription)
+            + '</section>'
+        )
+    return ""
+
+
 def _render_planned_workout(
     snapshot: PresentationSnapshot,
     workout: PlannedWorkoutReadModel,
     *,
     css_class: str,
 ) -> str:
-    prescription = (
-        '<section class="v2-prescription"><h2>Passupplägg</h2>'
-        + _render_string_list(workout.prescription)
-        + '</section>'
-        if workout.prescription else ""
+    prescription = _render_workout_prescription(workout)
+    focus = (
+        '<div class="v2-development-focus"><strong>Fokus:</strong>'
+        f'<span>{html.escape(workout.development_focus)}</span></div>'
+        if workout.development_focus else ""
     )
-    rationale_parts = [
-        part for part in (workout.reason, workout.development_focus) if part
-    ]
     rationale = (
-        '<details class="v2-rationale"><summary>Plan och motivering</summary>'
-        + "".join(f"<p>{html.escape(part)}</p>" for part in rationale_parts)
-        + "</details>"
-        if rationale_parts else ""
+        '<details class="v2-rationale"><summary>Motivering</summary>'
+        f'<p>{html.escape(workout.reason)}</p></details>'
+        if workout.reason else ""
     )
     components = (
         '<p class="v2-workout-components">'
@@ -801,14 +820,22 @@ def _render_planned_workout(
         f' data-workout-key="{html.escape(workout.workout_key, quote=True)}"'
         if workout.workout_key else ""
     )
+    device_sync = _render_device_sync(workout.device_sync)
+    footer = (
+        '<div class="v2-card-footer">'
+        + rationale
+        + device_sync
+        + '</div>'
+        if rationale or device_sync else ""
+    )
     return (
         f'<article class="{css_class}"{key_attr}><header>'
         + _render_icon_group(snapshot, workout.icon_keys)
         + f'<strong>{html.escape(workout.session)}</strong></header>'
         + components
-        + _render_device_sync(workout.device_sync)
         + prescription
-        + rationale
+        + focus
+        + footer
         + '</article>'
     )
 
@@ -842,12 +869,14 @@ def render_today(snapshot: PresentationSnapshot) -> str:
     )
 
     device_sync_html = "" if multiple_planned else _render_device_sync(model.device_sync)
-    prescription_html = "".join(
-        f"<li>{html.escape(line)}</li>" for line in model.prescription
-    )
     prescription = (
-        f'<section class="v2-prescription"><h2>Passupplägg</h2><ul>{prescription_html}</ul></section>'
-        if prescription_html and not model.outcomes and not multiple_planned else ""
+        _render_workout_prescription(model.planned_workouts[0])
+        if (
+            not model.outcomes
+            and not multiple_planned
+            and len(model.planned_workouts) == 1
+        )
+        else ""
     )
     rationale_parts = [part for part in (model.reason, model.development_focus) if part]
     rationale = (
@@ -1131,7 +1160,7 @@ body{margin:0;background:var(--bg);color:var(--text);line-height:1.45;letter-spa
 
 .v2-week{position:relative;margin:18px 0 30px}
 .v2-week>ol{list-style:none;margin:0;padding:0;display:grid;gap:12px}
-.v2-week-card{position:relative;display:block;margin:0;padding:18px;border:1px solid var(--line);border-radius:16px;background:var(--card)}
+.v2-week-card{position:relative;display:block;margin:0;padding:16px 17px;border:1px solid #e5eaf1;border-radius:15px;background:var(--elevated);box-shadow:0 1px 2px rgba(15,23,42,.035),0 6px 16px rgba(15,23,42,.025)}
 .v2-week-day+.v2-week-day{border-top:1px solid var(--line)}
 .v2-week-day:before,.v2-week-dayhead:after{display:none}
 .v2-week-dayhead{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto;column-gap:12px;align-items:center;min-width:0;padding:0}
@@ -1157,9 +1186,21 @@ body{margin:0;background:var(--bg);color:var(--text);line-height:1.45;letter-spa
 .v2-planned-workout header,.v2-week-planned-workout header{display:flex;align-items:center;gap:8px;font-size:.98rem;line-height:1.3}
 .v2-workout-components{margin:5px 0 0;color:var(--muted);font-size:.76rem}
 
-.v2-prescription{margin-top:12px;padding-top:10px;border-top:1px solid var(--line-soft)}
-.v2-prescription h2{font-size:.67rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
-.v2-prescription ul{margin:0;padding:0;list-style:none}.v2-prescription li{padding:4px 0;color:var(--secondary);font-size:.79rem;line-height:1.42}
+.v2-prescription{margin:13px 0 3px;padding:0;border:0;background:transparent}
+.v2-prescription h2{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.v2-prescription-grid{display:grid;grid-template-columns:max-content minmax(0,1fr);column-gap:0;row-gap:0}
+.v2-prescription-row{display:contents}
+.v2-prescription-dose{font-weight:800;color:var(--text);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap;padding:5px 13px 5px 0;line-height:1.35;letter-spacing:-.01em}
+.v2-prescription-text{min-width:0;color:var(--secondary);line-height:1.38;padding:5px 0 5px 14px;border-left:1px solid var(--line)}
+.v2-prescription-list ul{margin:0;padding:0;list-style:none}.v2-prescription-list li{padding:4px 0;color:var(--secondary);font-size:.79rem;line-height:1.42}
+.v2-development-focus{display:flex;align-items:flex-start;gap:8px;margin-top:10px;padding:8px 0 0;border-top:1px solid var(--line-soft)}
+.v2-development-focus strong{flex:0 0 auto;margin-top:1px;padding:2px 7px;border-radius:999px;background:#f1f5f9;color:var(--muted);font-size:.68rem;font-weight:750}
+.v2-development-focus span{min-width:0;color:var(--secondary);font-size:.84rem;line-height:1.42}
+.v2-card-footer{display:flex;align-items:center;gap:12px;margin-top:13px;padding-top:9px;border-top:1px solid var(--line-soft);min-height:26px}
+.v2-card-footer .v2-rationale{margin:0;border:0;border-radius:0;background:transparent;overflow:visible}
+.v2-card-footer .v2-rationale summary{padding:0;color:var(--muted);font-size:.76rem;font-weight:600}
+.v2-card-footer .v2-rationale p{padding:8px 0 0;margin:0}
+.v2-card-footer .v2-device-sync{margin:0 0 0 auto}
 .v2-rationale,.v2-completed-context{margin-top:10px;border:1px solid var(--line-soft);border-radius:11px;background:var(--card);overflow:hidden}
 .v2-rationale summary,.v2-completed-context summary{cursor:pointer;list-style:none;padding:9px 11px;color:var(--secondary);font-size:.72rem;font-weight:650}
 .v2-rationale summary::-webkit-details-marker,.v2-completed-context summary::-webkit-details-marker{display:none}
@@ -1196,7 +1237,7 @@ body{margin:0;background:var(--bg);color:var(--text);line-height:1.45;letter-spa
   .v2-week-context{margin-top:34px;padding:0 1px 2px}
   .v2-week-card{padding:15px;border-radius:15px}.v2-week-dayhead{column-gap:8px}.v2-week-state{font-size:.57rem;padding:4px 7px}
   .v2-week-weather{font-size:.7rem}.v2-weather-source{margin-left:2px}
-  .v2-planned-workout{padding:11px}.v2-week-planned-workout header{font-size:.94rem}.v2-reference-dialog{width:calc(100vw - 16px);max-height:78vh}
+  .v2-planned-workout{padding:11px}.v2-week-planned-workout header{font-size:.94rem}.v2-prescription-dose{padding:4px 10px 4px 0;font-size:.92rem}.v2-prescription-text{padding:4px 0 4px 10px}.v2-development-focus{gap:6px}.v2-reference-dialog{width:calc(100vw - 16px);max-height:78vh}
 }
 """
 
