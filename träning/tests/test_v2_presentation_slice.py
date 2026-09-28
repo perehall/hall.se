@@ -193,6 +193,21 @@ class PresentationSliceTests(unittest.TestCase):
         self.assertIn("Styrka/core · 35 min", rendered)
         self.assertNotIn("Simning · 3 200 m + Styrka/core · 35 min", rendered)
 
+    def test_week_timeline_preserves_date_axis_status_and_rest_semantics(self):
+        snapshot = build_presentation_snapshot(
+            FakeRepository(), today=date(2026, 9, 26)
+        )
+        rendered = render_week(snapshot)
+        self.assertIn('class="v2-week-dayhead"', rendered)
+        self.assertIn('class="v2-week-dow">Måndag</span>', rendered)
+        self.assertIn('class="v2-week-date">21 sep</span>', rendered)
+        self.assertIn('class="v2-week-state">Vilodag</span>', rendered)
+        self.assertIn(
+            '<strong class="v2-week-session v2-rest-day">Vilodag</strong>',
+            rendered,
+        )
+        self.assertNotIn("Ingen planerad träning", rendered)
+
     def test_multisport_workout_renders_ordered_components(self):
         class BrickRepository:
             def planned_days(self, start, end):
