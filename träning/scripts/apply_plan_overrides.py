@@ -97,85 +97,44 @@ def _target_workout(document: dict, override: dict):
     target_date = str(override.get("date") or "").strip()
     target_key = str(override.get("workout_key") or "").strip()
     physical = document.get("planned_workouts")
-
-    if isinstance(physical, list):
-        matches = [
-            workout
-            for workout in physical
-            if isinstance(workout, dict)
-            and workout.get("date") == target_date
-            and (
-                not target_key
-                or _workout_key(workout, document.get("meta") or {}) == target_key
-            )
-        ]
-        if target_key and len(matches) != 1:
-            raise PlanOverrideError(
-                f"plan overrides: workout_key {target_key!r} matchar {len(matches)} pass"
-            )
-        if not target_key and len(matches) > 1:
-            raise PlanOverrideError(
-                f"plan overrides: {target_date} har {len(matches)} pass; workout_key krävs"
-            )
-        if matches:
-            return matches[0], True
-
-    days = document.get("days") or []
-    matches = [
-        day
-        for day in days
-        if isinstance(day, dict) and day.get("date") == target_date
-    ]
-    if len(matches) > 1:
-        raise PlanOverrideError(
-            f"plan overrides: kalenderdatum {target_date} förekommer {len(matches)} gånger"
-        )
-    return (matches[0], False) if matches else (None, False)
-
-
-def _refresh_calendar_projection(document: dict, target_date: str) -> None:
-    physical = document.get("planned_workouts")
     if not isinstance(physical, list):
-        return
-    calendar = next(
-        (
-            day
-            for day in document.get("days") or []
-            if isinstance(day, dict) and day.get("date") == target_date
-        ),
-        None,
-    )
-    if calendar is None:
-        return
-    candidates = [
+        raise PlanOverrideError(
+            "plan overrides: planned_workouts saknas; runtime får inte använda days"
+        )
+
+    matches = [
         workout
         for workout in physical
-        if workout.get("date") == target_date
-        and workout.get("sport") not in {"open", "rest"}
+        if isinstance(workout, dict)
+        and workout.get("date") == target_date
+        and (
+            not target_key
+            or _workout_key(workout, document.get("meta") or {}) == target_key
+        )
     ]
-    if not candidates:
-        return
-    source = candidates[0]
-    label = calendar.get("label")
-    date_value = calendar.get("date")
-    calendar.clear()
-    calendar.update(deepcopy(source))
-    if label is not None:
-        calendar["label"] = label
-    calendar["date"] = date_value
+    if target_key and len(matches) != 1:
+        raise PlanOverrideError(
+            f"plan overrides: workout_key {target_key!r} matchar {len(matches)} pass"
+        )
+    if not target_key and len(matches) > 1:
+        raise PlanOverrideError(
+            f"plan overrides: {target_date} har {len(matches)} pass; workout_key krävs"
+        )
+    return matches[0] if matches else None
 
 
 def apply_overrides(document: dict, config: dict) -> int:
     """Apply matching overrides and return the number of documents changed (0/1)."""
     overrides = _validate_config(config)
-    days = document.get("days")
-    if not isinstance(days, list):
-        raise PlanOverrideError("plan overrides: dokumentet saknar days-lista")
+    if not isinstance(document.get("planned_workouts"), list):
+        raise PlanOverrideError(
+            "plan overrides: dokumentet saknar planned_workouts"
+        )
 
     changed = False
     for override in overrides:
         target_date = str(override["date"])
-        day, is_physical_workout = _target_workout(document, override)
+        day = _target_workout(document, override)
         if day is None:
             continue
         # Completed activity truth wins over a stale future commitment.
@@ -214,8 +173,6 @@ def apply_overrides(document: dict, config: dict) -> int:
             meta.update(meta_updates)
 
         row_changed = day != before_day
-        if row_changed and is_physical_workout:
-            _refresh_calendar_projection(document, target_date)
         changed = changed or row_changed or (document.get("meta") or {}) != before_meta
 
     return 1 if changed else 0
