@@ -1035,28 +1035,37 @@ def fallback_microcycle(meso, policy, catalog, target_start, completed_context=N
 
 
 def microcycle_layout_failures(rows, catalog, target_start):
-    """Hard scheduling guards for known planned load adjacency."""
+    """Hard scheduling guards for known planned load adjacency.
+
+    Calendar dates group workouts; they are not unique workout slots. Guards
+    therefore evaluate all recipes on each date without collapsing co-located
+    sessions.
+    """
     failures = []
     fixed_enduro = is_enduro_school_date(target_start)
-    by_day = {
-        row.get("day_index"): row
-        for row in rows
-        if isinstance(row, dict)
-        and isinstance(row.get("day_index"), int)
-        and row.get("recipe_key") in catalog["recipes"]
-    }
+    by_day = {}
+    for row in rows:
+        if (
+            isinstance(row, dict)
+            and isinstance(row.get("day_index"), int)
+            and row.get("recipe_key") in catalog["recipes"]
+        ):
+            by_day.setdefault(row["day_index"], []).append(row)
 
-    if fixed_enduro and 2 in by_day:
-        recipe = by_day[2]["recipe_key"]
-        if recipe in DAY_AFTER_ENDURO_BLOCKED_RECIPES:
-            failures.append(
-                f"{recipe} får inte ligga direkt dagen efter fast enduro när faktisk benbelastning ännu är okänd"
-            )
+    def recipes_on(day):
+        return {
+            row["recipe_key"]
+            for row in by_day.get(day, [])
+        }
+
+    if fixed_enduro and recipes_on(2).intersection(DAY_AFTER_ENDURO_BLOCKED_RECIPES):
+        blocked = sorted(recipes_on(2).intersection(DAY_AFTER_ENDURO_BLOCKED_RECIPES))
+        failures.append(
+            f"{', '.join(blocked)} får inte ligga direkt dagen efter fast enduro när faktisk benbelastning ännu är okänd"
+        )
 
     run_days = sorted(
-        day
-        for day, row in by_day.items()
-        if row["recipe_key"] in RUN_STRESS_RECIPES
+        day for day in by_day if recipes_on(day).intersection(RUN_STRESS_RECIPES)
     )
     for previous, current in zip(run_days, run_days[1:]):
         if current - previous == 1:
@@ -1065,23 +1074,21 @@ def microcycle_layout_failures(rows, catalog, target_start):
             )
             break
 
-    for day, row in by_day.items():
-        if row["recipe_key"] != "run_easy_distance":
+    for day in by_day:
+        if "run_easy_distance" not in recipes_on(day):
             continue
         for neighbor in (day - 1, day + 1):
-            neighbor_row = by_day.get(neighbor)
-            if neighbor_row and neighbor_row["recipe_key"] == "mtb_technical":
+            if "mtb_technical" in recipes_on(neighbor):
                 failures.append(
                     "lång löpdistans får inte ligga direkt intill MTB/XC; den sekundära cykelexponeringen ska utgå eller flyttas"
                 )
                 break
 
-    for day, row in by_day.items():
-        if row["recipe_key"] not in {"run_threshold", "run_hill_quality"}:
+    for day in by_day:
+        if not recipes_on(day).intersection({"run_threshold", "run_hill_quality"}):
             continue
         for neighbor in (day - 1, day + 1):
-            neighbor_row = by_day.get(neighbor)
-            if neighbor_row and neighbor_row["recipe_key"] == "mtb_technical":
+            if "mtb_technical" in recipes_on(neighbor):
                 failures.append(
                     "MTB/XC får inte ligga direkt intill löpkvalitet; sekundär cykelbelastning ska inte kompromissa primärt löpstimulus"
                 )
@@ -1103,7 +1110,6 @@ def microcycle_guard_failures(result, meso, policy, catalog, target_start, compl
     slots = result.get("slots") or []
     failures = []
     valid_rows = []
-    seen_days = set()
     fixed_enduro = is_enduro_school_date(target_start)
     completed_context = completed_context or {}
     completed_swims = int(completed_context.get("swim_exposures") or 0)
@@ -1123,21 +1129,14 @@ def microcycle_guard_failures(result, meso, policy, catalog, target_start, compl
         if fixed_enduro and day == 1:
             failures.append("dag 1 är blockerad av fast endurobelastning")
             continue
-        if day in seen_days:
-            failures.append(f"flera pass ligger på mikrocykeldag {day}")
-            continue
         if recipe_key not in recipes:
             failures.append(f"slot[{index}] använder okänt recipe_key {recipe_key!r}")
             continue
-        seen_days.add(day)
         valid_rows.append(row)
 
     minimum = max(0, 4 - completed_slot_days)
-    maximum = 5 if fixed_enduro else 6
     if len(valid_rows) < minimum:
         failures.append(f"för få giltiga träningsslots: {len(valid_rows)} < {minimum}")
-    if len(valid_rows) > maximum:
-        failures.append(f"för många giltiga träningsslots: {len(valid_rows)} > {maximum}")
 
     for failure in microcycle_layout_failures(valid_rows, catalog, target_start):
         if failure not in failures:
@@ -1218,7 +1217,6 @@ def microcycle_guard_failures(result, meso, policy, catalog, target_start, compl
 
 def validate_and_normalize_micro(result, meso, policy, catalog, target_start, completed_context=None):
     recipes = catalog["recipes"]
-    seen_days = set()
     cleaned = []
     primaries = set(meso.get("primary_capabilities") or [])
     fixed_enduro = is_enduro_school_date(target_start)
@@ -1230,7 +1228,7 @@ def validate_and_normalize_micro(result, meso, policy, catalog, target_start, co
             continue
         if fixed_enduro and day == 1:
             continue
-        if day in seen_days or recipe_key not in recipes:
+        if recipe_key not in recipes:
             continue
         action = row.get("action")
         if action not in {"establish", "progress", "consolidate", "reduce"}:
@@ -1249,7 +1247,6 @@ def validate_and_normalize_micro(result, meso, policy, catalog, target_start, co
                 "evidence_refs": [str(x) for x in (row.get("evidence_refs") or []) if str(x).strip()][:6],
             }
         )
-        seen_days.add(day)
 
     used_caps = set()
     direct_primary_caps = set()
