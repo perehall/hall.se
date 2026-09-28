@@ -922,11 +922,14 @@ def render_week_context(snapshot: PresentationSnapshot) -> str:
         + "</div></details>"
         if details_parts else ""
     )
+    week_meta = " · ".join(
+        part for part in (model.meta_line, snapshot.week.status_summary) if part
+    )
     return (
         '<section class="v2-week-context" aria-label="Aktuell veckas fokus">'
         '<h2>Aktuell vecka</h2>'
         f'<strong class="v2-week-focus">{html.escape(model.focus)}</strong>'
-        f'<p class="v2-week-meta">{html.escape(model.meta_line)}</p>'
+        f'<p class="v2-week-meta">{html.escape(week_meta)}</p>'
         f'{details}</section>'
     )
 
@@ -948,9 +951,12 @@ def render_week_status(snapshot: PresentationSnapshot) -> str:
         f'{sports}</div>'
         if sports else ""
     )
+    training_day_label = (
+        "träningsdag" if model.training_day_count == 1 else "träningsdagar"
+    )
     return (
         '<details class="v2-week-status">'
-        f'<summary>{html.escape(model.status_summary)}</summary>'
+        '<summary>Veckostatus</summary>'
         '<div class="v2-week-status-body">'
         '<div class="v2-week-metrics">'
         f'<span><strong>{model.completed_activity_count}</strong> pass</span>'
@@ -959,7 +965,10 @@ def render_week_status(snapshot: PresentationSnapshot) -> str:
             f'<span><strong>{html.escape(model.total_distance)}</strong> distans</span>'
             if model.total_distance_m > 0 else ''
         )
-        + f'<span><strong>{model.training_day_count}</strong> träningsdagar</span>'
+        + (
+            f'<span><strong>{model.training_day_count}</strong> '
+            f'{training_day_label}</span>'
+        )
         '</div>'
         f'{distribution}</div></details>'
     )
@@ -1001,7 +1010,7 @@ def render_week(snapshot: PresentationSnapshot) -> str:
             workout_html = '<strong class="v2-week-session v2-rest-day">Vilodag</strong>'
 
         rows.append(
-            f'<li class="v2-week-day" data-date="{day.local_date.isoformat()}" '
+            f'<li class="v2-week-day v2-week-card" data-date="{day.local_date.isoformat()}" '
             f'data-state="{html.escape(day.state)}">'
             '<div class="v2-week-dayhead">'
             f'<span class="v2-week-dow">{html.escape(WEEKDAY_LABELS[day.local_date.weekday()])}</span>'
@@ -1120,22 +1129,21 @@ body{margin:0;background:var(--bg);color:var(--text);line-height:1.45;letter-spa
 .v2-week-sports{margin-top:10px}.v2-week-sports h3{font-size:.72rem;color:var(--muted);margin:0 0 5px}
 .v2-week-sport{display:flex;justify-content:space-between;border-top:1px solid var(--line-soft);padding:6px 0;font-size:.78rem}
 
-.v2-week{position:relative;margin:5px 0 30px}
-.v2-week>ol{list-style:none;margin:0;padding:0}
-.v2-week-day{position:relative;display:grid;grid-template-columns:92px minmax(0,1fr);column-gap:20px;align-items:start;margin:0;padding:23px 0 27px;border:0;background:transparent}
-.v2-week-day+.v2-week-day{border-top:1px solid var(--line-soft)}
-.v2-week-day:before{content:"";position:absolute;top:0;bottom:0;left:82px;width:1px;background:var(--line-soft);pointer-events:none}
-.v2-week-day:first-child:before{top:29px}.v2-week-day:last-child:before{bottom:calc(100% - 30px)}
-.v2-week-dayhead{position:relative;grid-column:1;align-self:start;padding-right:20px;min-width:0}
-.v2-week-dayhead:after{content:"";position:absolute;top:6px;right:5px;width:7px;height:7px;border:1px solid var(--line);border-radius:50%;background:var(--bg)}
-.v2-week-day[data-state="completed"] .v2-week-dayhead:after{border-color:var(--green);background:var(--green)}
-.v2-week-dow{display:block;color:var(--secondary);font-size:.66rem;font-weight:700;letter-spacing:.065em;text-transform:uppercase;white-space:nowrap}
-.v2-week-date{display:block;margin-top:2px;color:var(--muted);font-size:.68rem}
-.v2-week-state{display:block;margin-top:7px;color:var(--muted);font-size:.61rem;font-weight:650;line-height:1.25}
-.v2-week-daybody{grid-column:2;min-width:0}
+.v2-week{position:relative;margin:18px 0 30px}
+.v2-week>ol{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.v2-week-card{position:relative;display:block;margin:0;padding:18px;border:1px solid var(--line);border-radius:16px;background:var(--card)}
+.v2-week-day+.v2-week-day{border-top:1px solid var(--line)}
+.v2-week-day:before,.v2-week-dayhead:after{display:none}
+.v2-week-dayhead{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto;column-gap:12px;align-items:center;min-width:0;padding:0}
+.v2-week-dow{grid-column:1;grid-row:1;display:block;color:var(--secondary);font-size:.72rem;font-weight:750;letter-spacing:.055em;text-transform:uppercase;white-space:nowrap}
+.v2-week-date{grid-column:1;grid-row:2;display:block;margin-top:2px;color:var(--muted);font-size:.7rem}
+.v2-week-state{grid-column:2;grid-row:1 / span 2;align-self:start;display:block;margin:0;padding:4px 8px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:.6rem;font-weight:760;letter-spacing:.04em;line-height:1.2;text-transform:uppercase}
+.v2-week-day[data-state="completed"] .v2-week-state{border-color:#bddfcb;background:var(--green-soft);color:var(--green)}
+.v2-week-day[data-state="fixed"] .v2-week-state{border-color:#c9cdf8;background:var(--accent-soft);color:var(--accent)}
+.v2-week-daybody{min-width:0;margin-top:14px}
 .v2-week-session{display:flex;align-items:center;gap:8px;font-size:1.03rem;font-weight:760;line-height:1.3}
 .v2-rest-day{color:var(--muted);font-weight:620}
-.v2-week-weather{color:var(--muted);font-size:.72rem;margin-top:8px}.v2-weather-source{color:var(--muted);font-size:.68rem;margin:8px 0 0 112px}
+.v2-week-weather{color:var(--muted);font-size:.72rem;margin-top:8px}.v2-weather-source{color:var(--muted);font-size:.68rem;margin:8px 2px 0}
 
 .v2-sport-icon{display:inline-block;width:1.25em;height:1.25em;max-width:1.25em;max-height:1.25em;flex:0 0 1.25em;vertical-align:-.18em;color:var(--secondary)}
 .v2-sport-icons{display:inline-flex;align-items:center;gap:5px;flex:0 0 auto}.v2-watch-icon{width:13px;height:13px;flex:0 0 13px}
@@ -1186,8 +1194,8 @@ body{margin:0;background:var(--bg);color:var(--text);line-height:1.45;letter-spa
   .v2-shell{padding:20px 13px 56px}.v2-week-nav{gap:8px}.v2-week-link{font-size:.72rem}.v2-week-current{display:grid;gap:0}.v2-week-current strong{font-size:.86rem}.v2-week-current span{font-size:.64rem}
   .v2-today{margin-top:15px;padding:16px 15px 15px;border-radius:16px}.v2-today-title{font-size:1.16rem}.v2-today-weather{margin-left:29px;font-size:.74rem}
   .v2-week-context{margin-top:34px;padding:0 1px 2px}
-  .v2-week-day{grid-template-columns:76px minmax(0,1fr);column-gap:14px;padding:20px 0 23px}.v2-week-day:before{left:67px}.v2-week-dayhead{padding-right:15px}.v2-week-dayhead:after{right:4px}
-  .v2-week-weather{font-size:.7rem}.v2-weather-source{margin-left:90px}
+  .v2-week-card{padding:15px;border-radius:15px}.v2-week-dayhead{column-gap:8px}.v2-week-state{font-size:.57rem;padding:4px 7px}
+  .v2-week-weather{font-size:.7rem}.v2-weather-source{margin-left:2px}
   .v2-planned-workout{padding:11px}.v2-week-planned-workout header{font-size:.94rem}.v2-reference-dialog{width:calc(100vw - 16px);max-height:78vh}
 }
 """
