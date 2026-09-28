@@ -383,6 +383,8 @@ class PresentationSliceTests(unittest.TestCase):
         self.assertIn("/träning/training-api/input", rendered)
         self.assertIn("training-gui-v2", rendered)
         self.assertIn("durable_ack_missing", rendered)
+        self.assertIn("Sparningen kunde inte verifieras som beständigt lagrad.", rendered)
+        self.assertIn("persistence_not_configured", rendered)
         self.assertNotIn("data-processed-event-keys", rendered)
 
     def test_snapshot_navigation_uses_archive_and_future_canonical_plan(self):
