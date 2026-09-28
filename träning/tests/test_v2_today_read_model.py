@@ -23,7 +23,7 @@ class TodayReadModelTests(unittest.TestCase):
                 PlannedDay(today, "Simning · 4 000 m", "swim", "planned"),
                 PlannedDay(
                     date(2026, 9, 27),
-                    "Löpning · lugn distans · 120 min",
+                    "Workout C",
                     "run",
                     "planned",
                 ),
@@ -41,18 +41,18 @@ class TodayReadModelTests(unittest.TestCase):
             ("Enduro · 26,61 km · 1:41:02", "Simning · 3,00 km · 1:03:42"),
         )
         self.assertEqual(model.planned_session, "Simning · 4 000 m")
-        self.assertEqual(model.next_session, "Löpning · lugn distans · 120 min")
+        self.assertEqual(model.next_session, "Workout C")
         self.assertEqual(len(model.outcomes), 2)
 
 
-    def test_two_planned_workouts_same_day_remain_separate_sessions(self):
-        today = date(2026, 10, 2)
+    def test_multiple_planned_workouts_same_day_preserve_workout_identity(self):
+        today = date(2026, 1, 8)
         model = build_today_read_model(
             today=today,
             plan=[
-                PlannedDay(today, "Simning · 3 200 m · aerob/teknik", "swim", "preliminary"),
-                PlannedDay(today, "Styrka/core · ca 35 min · styrkemall", "strength", "preliminary"),
-                PlannedDay(date(2026, 10, 4), "Löpning · lugn distans · 120 min", "run", "preliminary"),
+                PlannedDay(today, "Workout A", "swim", "preliminary"),
+                PlannedDay(today, "Workout B", "strength", "preliminary"),
+                PlannedDay(date(2026, 10, 4), "Workout C", "run", "preliminary"),
             ],
             activities=[],
         )
@@ -60,13 +60,13 @@ class TodayReadModelTests(unittest.TestCase):
         self.assertEqual(
             model.planned_sessions,
             (
-                "Simning · 3 200 m · aerob/teknik",
-                "Styrka/core · ca 35 min · styrkemall",
+                "Workout A",
+                "Workout B",
             ),
         )
         self.assertEqual(model.details, model.planned_sessions)
         self.assertEqual(model.icon_keys, ("swim", "strength"))
-        self.assertEqual(model.next_session, "Löpning · lugn distans · 120 min")
+        self.assertEqual(model.next_session, "Workout C")
 
 
     def test_completed_outcome_carries_feedback_and_latest_coach_decision(self):
