@@ -403,7 +403,6 @@ def microcycle_schema(recipe_keys):
             "slots": {
                 "type": "array",
                 "minItems": 4,
-                "maxItems": 6,
                 "items": {
                     "type": "object",
                     "additionalProperties": False,
@@ -858,7 +857,6 @@ def fallback_microcycle(meso, policy, catalog, target_start, completed_context=N
     completed_swims = int(completed_context.get("swim_exposures") or 0)
     completed_strength = int(completed_context.get("strength_exposures") or 0)
     completed_direct = set(completed_context.get("direct_capabilities") or [])
-    max_slots = 5 if fixed_enduro else 6
     slots = []
 
     preferred_days = {
@@ -883,15 +881,39 @@ def fallback_microcycle(meso, policy, catalog, target_start, completed_context=N
             }
         ]
 
-    def add_recipe(recipe, rationale, *, action=None, allow_repeat=False):
-        if recipe not in catalog["recipes"] or len(slots) >= max_slots:
+    def add_recipe(
+        recipe,
+        rationale,
+        *,
+        action=None,
+        allow_repeat=False,
+        preferred_same_day=None,
+    ):
+        if recipe not in catalog["recipes"]:
             return False
         if not allow_repeat and any(row["recipe_key"] == recipe for row in slots):
             return True
-        for day in preferred_days.get(recipe, range(1, 8)):
+
+        configured = list(preferred_days.get(recipe, range(1, 8)))
+        if preferred_same_day in configured:
+            configured.remove(preferred_same_day)
+            configured.insert(0, preferred_same_day)
+
+        # Prefer unused calendar days, but co-location is a first-class option.
+        # A date is not a workout identity; constraints decide whether two
+        # independent sessions may share it.
+        occupied = {row["day_index"] for row in slots}
+        candidate_days = (
+            [day for day in configured if day not in occupied]
+            + [day for day in configured if day in occupied]
+        )
+        if preferred_same_day is not None:
+            candidate_days = [preferred_same_day] + [
+                day for day in candidate_days if day != preferred_same_day
+            ]
+
+        for day in candidate_days:
             if fixed_enduro and day == 1:
-                continue
-            if any(row["day_index"] == day for row in slots):
                 continue
             conflicts = microcycle_layout_failures(
                 candidate_rows(day, recipe), catalog, target_start
@@ -956,28 +978,26 @@ def fallback_microcycle(meso, policy, catalog, target_start, completed_context=N
         and completed_strength < 1
         and not planned_strength
     )
+    latest_swim_day = None
     while swim_count < required_swims:
-        recipe = "swim_strength" if strength_needed else "swim_aerobic_technique"
+        before = len(slots)
         if not add_recipe(
-            recipe,
-            (
-                "Kombinera en nödvändig simexponering med ännu ej uppfylld styrka/core."
-                if recipe == "swim_strength"
-                else "Lägg en ren lågmekanisk simexponering; styrka/core är redan faktiskt genomförd eller planerad."
-            ),
+            "swim_aerobic_technique",
+            "Lägg en ren lågmekanisk simexponering som ett självständigt pass.",
             action="establish",
-            allow_repeat=(recipe == "swim_aerobic_technique"),
+            allow_repeat=True,
         ):
             break
         swim_count += 1
-        if recipe == "swim_strength":
-            strength_needed = False
+        if len(slots) > before:
+            latest_swim_day = slots[-1]["day_index"]
 
     if strength_needed:
         add_recipe(
-            "swim_strength",
-            "Skydda styrka/core tillsammans med en redan motiverad simexponering.",
+            "strength_core",
+            "Skydda styrka/core som ett självständigt pass; samlokalisera med simning endast när mikrocykelns belastningsordning motiverar det.",
             action="establish",
+            preferred_same_day=latest_swim_day,
         )
 
     # A race-relevant easy-distance exposure is useful when it fits safely, but
@@ -1329,7 +1349,7 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
         "Lägg inte löptröskel, backkvalitet eller lång löpdistans två dagar i rad. När dag 1 är fast enduro ska dag 2 ha låg benbelastning; "
         "lägg inte löp- eller MTB-belastning där innan faktiskt enduroutfall är känt. MTB/XC får inte ligga direkt intill löptröskel eller backkvalitet; "
         "sekundär cykelbelastning ska utgå hellre än att kompromissa ett primärt löpstimulus. Lämna minst en kalenderdag utan planerad träning. "
-        "Använd kombinationsreceptet swim_strength när det hjälper att uppfylla både sim- och styrkekrav utan en extra dag. "
+        "Flera självständiga pass får ligga samma kalenderdag när belastningsordningen motiverar det; varje slot är alltid ett eget pass. Datum är inte passidentitet. "
         "Om swim_threshold behövs finns ett separat etablerat 4 000 m-recept; behandla det som kvalitetsrecept, inte som automatisk distansprogression från det aeroba 3 200 m-passet. "
         "Enduro dag 1 är faktisk belastning och blockerar annan planering den dagen. "
         "Progress får bara väljas för ett primärt mesocykelstimulus och ska ha stöd i athlete_state; annars välj consolidate/establish. "
