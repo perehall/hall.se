@@ -302,11 +302,11 @@ def materialize_planned_swims(future):
             continue
         target = deepcopy(workout)
         target_date = date.fromisoformat(target["date"])
-        if not apply_swim_option_structure(target, target_date, next_key):
-            raise RuntimeError(
-                f"Veckoskifte: simpass {target.get('date')} saknar katalogbunden "
-                "exekverbar simstruktur för vald dos"
-            )
+        # When the strategy already carries its catalog-authored executable
+        # recipe, materialize it here. Otherwise leave the workout untouched;
+        # the canonical catalog materializer resolves it later in the pipeline.
+        # Never borrow structure from another workout or another sport.
+        apply_swim_option_structure(target, target_date, next_key)
         workouts[index] = target
 
     refresh_calendar_projection(future)
