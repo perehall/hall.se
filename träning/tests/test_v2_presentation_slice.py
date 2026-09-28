@@ -376,10 +376,70 @@ class PresentationSliceTests(unittest.TestCase):
         rendered = render_document(snapshot)
         self.assertIn('class="v2-week-day v2-week-card"', rendered)
         self.assertIn(
-            ".v2-week-card{position:relative;display:block;margin:0;padding:18px;"
-            "border:1px solid var(--line);border-radius:16px;background:var(--card)}",
+            ".v2-week-card{position:relative;display:block;margin:0;padding:16px 17px;"
+            "border:1px solid #e5eaf1;border-radius:15px;background:var(--elevated);"
+            "box-shadow:0 1px 2px rgba(15,23,42,.035),0 6px 16px rgba(15,23,42,.025)}",
             rendered,
         )
+
+    def test_week_uses_structured_dose_recovery_and_swim_equipment_layout(self):
+        class StructuredRepository:
+            def planned_days(self, start, end):
+                return [
+                    PlannedDay(
+                        date(2026, 9, 26),
+                        "Simning · 3 200 m · aerob/teknik",
+                        "swim",
+                        "planned",
+                        workout_key="swim-structured",
+                        payload={
+                            "workout_design": {
+                                "selected_candidate_id": "swim-3200",
+                                "candidates": [
+                                    {
+                                        "id": "swim-3200",
+                                        "prescription": {
+                                            "completeness": "full",
+                                            "blocks": [
+                                                {
+                                                    "name": "Insim",
+                                                    "work": {
+                                                        "distance_m": 400,
+                                                        "repetitions": 1,
+                                                    },
+                                                    "equipment": [],
+                                                    "instruction": "Lugn insim",
+                                                },
+                                                {
+                                                    "name": "Teknik",
+                                                    "work": {
+                                                        "distance_m": 50,
+                                                        "repetitions": 6,
+                                                    },
+                                                    "recovery": {"duration_s": 15},
+                                                    "equipment": [],
+                                                    "instruction": "Stabil linje",
+                                                },
+                                            ],
+                                        },
+                                    }
+                                ],
+                            }
+                        },
+                    )
+                ]
+
+            def completed_activities(self, start, end):
+                return []
+
+        snapshot = build_presentation_snapshot(
+            StructuredRepository(), today=date(2026, 9, 26)
+        )
+        rendered = render_week(snapshot)
+        self.assertIn('class="v2-prescription-dose">400 m</span>', rendered)
+        self.assertIn('class="v2-prescription-dose">6×50 m</span>', rendered)
+        self.assertIn("Lugn insim · utan redskap", rendered)
+        self.assertIn("Stabil linje · utan redskap · v 15 s", rendered)
 
     def test_feedback_without_coach_result_is_explicitly_pending(self):
         class PendingRepository:
