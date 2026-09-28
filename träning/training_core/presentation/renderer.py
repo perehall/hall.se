@@ -969,8 +969,8 @@ def render_week_status(snapshot: PresentationSnapshot) -> str:
             f'<span><strong>{model.training_day_count}</strong> '
             f'{training_day_label}</span>'
         )
-        '</div>'
-        f'{distribution}</div></details>'
+        + '</div>'
+        + f'{distribution}</div></details>'
     )
 
 
