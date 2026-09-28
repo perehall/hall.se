@@ -30,6 +30,7 @@ class WeekReadModelTests(unittest.TestCase):
                 "Enduro",
                 "enduro",
                 elapsed_time_s=6062,
+                distance_m=26611.2,
             ),
             CompletedActivity(
                 "2",
@@ -37,6 +38,7 @@ class WeekReadModelTests(unittest.TestCase):
                 "Simning",
                 "swim",
                 elapsed_time_s=3822,
+                distance_m=3000,
             ),
         ]
         model = build_week_read_model(
@@ -52,13 +54,18 @@ class WeekReadModelTests(unittest.TestCase):
         self.assertEqual(saturday.state, "completed")
         self.assertEqual(model.session_time_s, 9884)
         self.assertEqual(model.session_time, "2:44:44")
+        self.assertEqual(model.total_distance_m, 29611.2)
+        self.assertEqual(model.total_distance, "29,61 km")
         self.assertEqual(
             model.status_summary,
-            "2 pass · 2:44:44 · 1 träningsdag",
+            "2 pass · 2:44:44 · 29,61 km · 1 träningsdag",
         )
         self.assertEqual(
-            [(item.label, item.duration) for item in model.sport_distribution],
-            [("Enduro", "1:41:02"), ("Simning", "1:03:42")],
+            [(item.label, item.duration, item.distance) for item in model.sport_distribution],
+            [
+                ("Enduro", "1:41:02", "26,61 km"),
+                ("Simning", "1:03:42", "3,00 km"),
+            ],
         )
 
     def test_multiple_planned_workouts_share_one_calendar_day(self):
