@@ -76,6 +76,8 @@ jobs:
               raise SystemExit("WEBHOOK_PATH_SECRET matchar inte mellan GitHub och Cloudflare Runtime.")
           if data.get("verify_token_fingerprint") != expected_verify:
               raise SystemExit("STRAVA_VERIFY_TOKEN matchar inte STRAVA_WEBHOOK_VERIFY_TOKEN i GitHub.")
+          if data.get("training_input_direct_persistence_configured") is not True:
+              raise SystemExit("Worker saknar direkt Supabase-persistens för träningsfeedback.")
           print("Worker runtime secrets match GitHub.")
           PY
 
