@@ -58,9 +58,9 @@ CAPABILITY_TO_RECIPE = {
     "swim_aerobic": "swim_aerobic_technique",
     "swim_technique": "swim_aerobic_technique",
     "swim_threshold": "swim_aerobic_threshold",
-    "strength_unilateral": "swim_strength",
-    "strength_core": "swim_strength",
-    "plyometric": "swim_strength",
+    "strength_unilateral": "strength_core",
+    "strength_core": "strength_core",
+    "plyometric": "strength_core",
 }
 
 FIXED_PROTECTED_CAPACITY = (
@@ -93,7 +93,8 @@ PRIMARY_CAPABILITIES_WITH_EXECUTABLE_RECIPES = {
     "swim_technique",
     "swim_threshold",
 }
-SUPPORT_ONLY_RECIPES = {"swim_strength"}
+SUPPORT_ONLY_RECIPES = {"strength_core", "swim_strength"}
+DEPRECATED_COMPOSITE_RECIPES = {"swim_strength"}
 RUN_STRESS_RECIPES = {"run_threshold", "run_hill_quality", "run_easy_distance"}
 DAY_AFTER_ENDURO_BLOCKED_RECIPES = RUN_STRESS_RECIPES | {"mtb_technical", "swim_strength", "strength_core"}
 
@@ -1132,6 +1133,11 @@ def microcycle_guard_failures(result, meso, policy, catalog, target_start, compl
         if recipe_key not in recipes:
             failures.append(f"slot[{index}] använder okänt recipe_key {recipe_key!r}")
             continue
+        if recipe_key in DEPRECATED_COMPOSITE_RECIPES:
+            failures.append(
+                f"{recipe_key} är ett utfasat kombinationsrecept; separata fysiska pass måste vara separata slots"
+            )
+            continue
         valid_rows.append(row)
 
     minimum = max(0, 4 - completed_slot_days)
@@ -1356,7 +1362,13 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
         raw = call_structured(
             system,
             source_payload,
-            microcycle_schema(sorted(catalog["recipes"])),
+            microcycle_schema(
+                sorted(
+                    key
+                    for key in catalog["recipes"]
+                    if key not in DEPRECATED_COMPOSITE_RECIPES
+                )
+            ),
             "microcycle_decision",
             request_fn=request_fn,
         )
@@ -1383,7 +1395,13 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
                 repaired = call_structured(
                     system + " Detta är ett reparationsförsök efter deterministisk guard; varje angivet fel måste lösas.",
                     repair_payload,
-                    microcycle_schema(sorted(catalog["recipes"])),
+                    microcycle_schema(
+                        sorted(
+                            key
+                            for key in catalog["recipes"]
+                            if key not in DEPRECATED_COMPOSITE_RECIPES
+                        )
+                    ),
                     "microcycle_decision_repair",
                     request_fn=request_fn,
                 )
