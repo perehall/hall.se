@@ -74,7 +74,7 @@ class HistoricalPresentationTests(unittest.TestCase):
         self.assertIn("<strong>Vecka 38</strong>", rendered)
         self.assertIn("14–20 sep · historik", rendered)
         self.assertIn('href="/träning/vecka/2026-W37/"', rendered)
-        self.assertIn('href="/träning/"', rendered)
+        self.assertIn('href="/träning/vecka/2026-W39/"', rendered)
         self.assertIn("Veckosummering", rendered)
         self.assertIn("Det som fungerade", rendered)
         self.assertIn("Inte enligt plan", rendered)

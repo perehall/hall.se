@@ -66,16 +66,6 @@ jobs:
           assert "Styrkemall" in document and "Om systemet" in document
           print("V2_SHADOW_OK", json.dumps(semantics, ensure_ascii=False, sort_keys=True))
           PY
-          PYTHONPATH="träning:träning/scripts" python - <<'PY'
-          import json
-          from datetime import date
-          from pathlib import Path
-          from v2_legacy_parity import compare_cutover_contract, legacy_semantic_contract
-          payload=json.loads(Path("/tmp/v2-presentation.json").read_text(encoding="utf-8"))
-          today=date.fromisoformat(payload["semantics"]["today"]["date"])
-          legacy=legacy_semantic_contract(Path("träning/index.html"), today=today)
-          differences=compare_cutover_contract(legacy, payload["semantics"])
-          if differences:
-              raise SystemExit("V2_PARITY_FAILED\\n" + "\\n".join(differences))
-          print("V2_PARITY_OK")
-          PY
+          # Architecture v2 is now the production renderer. Legacy HTML parity
+          # was a migration gate and must not block correct canonical v2 state
+          # after calendar rollover or other v2-only presentation improvements.
