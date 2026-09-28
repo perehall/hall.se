@@ -362,9 +362,20 @@ test("training GUI input rejects non-custom hostname before request processing",
 });
 
 
-test("Wrangler keeps workers.dev enabled for the registered Strava callback", () => {
+test("Wrangler keeps one canonical production config with required runtime secrets", () => {
   const config = readFileSync(new URL("../wrangler.jsonc", import.meta.url), "utf8");
   assert.match(config, /"workers_dev"\s*:\s*true/);
   assert.match(config, /"name"\s*:\s*"hall-se"/);
   assert.match(config, /"SUPABASE_PROJECT_URL"\s*:\s*"https:\/\/izzevnhgtsvffpkccoai\.supabase\.co"/);
+
+  for (const secret of [
+    "WEBHOOK_PATH_SECRET",
+    "STRAVA_VERIFY_TOKEN",
+    "STRAVA_OWNER_ID",
+    "STRAVA_SUBSCRIPTION_ID",
+    "GITHUB_DISPATCH_TOKEN",
+    "SUPABASE_SECRET_KEY",
+  ]) {
+    assert.ok(config.includes(`"${secret}"`), `missing required secret declaration: ${secret}`);
+  }
 });
