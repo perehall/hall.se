@@ -31,7 +31,6 @@ from coach_rules import (
     workout_key,
 )
 from strategy_contracts import validate_training_strategy
-from calendar_projection import refresh_calendar_projection
 from wellness_context import signature_payload, validate_context
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -578,17 +577,6 @@ def validate_dose_option_action(plan, action, today_local):
     return True
 
 
-def _refresh_legacy_day_projection(plan, target_date, fallback=None):
-    """Refresh the compatibility calendar cache from canonical workouts."""
-    if plan.get("planned_workouts") is None:
-        return
-    refresh_calendar_projection(
-        plan,
-        target_date=target_date,
-        fallback=fallback,
-    )
-
-
 def apply_conservative_action(plan, action, *, now_utc=None):
     kind = action.get("action")
     target = action.get("target_date") or ""
@@ -652,7 +640,6 @@ def apply_conservative_action(plan, action, *, now_utc=None):
                 "reason": reason,
                 "applied_at_utc": applied_at,
             }
-            _refresh_legacy_day_projection(plan, target, fallback=day)
             return True, f"Dagens dos löstes konservativt på {target}: {option_id}."
         return False, "Ingen automatisk planändring."
 
@@ -677,8 +664,6 @@ def apply_conservative_action(plan, action, *, now_utc=None):
         day["coach_adjustment"] = f"Skala ned passet. {action.get('recommendation', '')}".strip()
         changed = True
 
-    if changed:
-        _refresh_legacy_day_projection(plan, target, fallback=day)
     return changed, f"Konservativ ändring applicerad på {target}: {kind}."
 
 
@@ -826,7 +811,7 @@ def main():
                 workout_key(item, document.get("meta") or {}) == target_key
                 for item in planned_workouts(document)
             )
-        return any(day.get("date") == target_date for day in document.get("days", []))
+        return any(workout.get("date") == target_date for workout in planned_workouts(document))
 
     if target_date and not owns_target(plan) and owns_target(upcoming):
         target_plan = upcoming
