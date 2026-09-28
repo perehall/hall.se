@@ -70,6 +70,24 @@ class SwimEquipmentLingoTests(unittest.TestCase):
         self.assertIn("Kontrollerad tröskel · paddlar + dolme · v 25 s", rendered)
         self.assertNotIn("vila 25 s", rendered)
 
+    def test_composite_swim_strength_renders_as_two_sessions(self):
+        day = swim_day()
+        blocks = day["workout_design"]["candidates"][0]["prescription"]["blocks"]
+        blocks[0]["component"] = "swim"
+        blocks[1]["component"] = "swim"
+        blocks.append({
+            "name": "Tidsram",
+            "work": {"duration_s": 2100},
+            "instruction": "Styrka/core inom vald tidsram",
+            "component": "strength",
+        })
+        rendered = prescription_html(day)
+        self.assertIn('class="workout-components"', rendered)
+        self.assertIn('workout-component-swim', rendered)
+        self.assertIn('workout-component-strength', rendered)
+        self.assertIn(">Simning<", rendered)
+        self.assertIn(">Styrka/core<", rendered)
+
     def test_device_instruction_keeps_equipment_explicit(self):
         workout = compile_device_workout(swim_day())
         self.assertEqual(
