@@ -88,25 +88,7 @@ def link_fulfilled_activity_ids(plan, activities):
                 workout.pop("activity_id", None)
                 changed = True
 
-    # Legacy calendar rows are a projection only. Preserve a single activity_id
-    # there when the date contains exactly one fulfilled physical workout.
-    if plan.get("planned_workouts") is not None:
-        by_date = {}
-        for workout in legacy.planned_workouts(plan):
-            key = legacy.workout_key(workout, meta)
-            ids = tuple(fulfilled.get(key) or ())
-            if ids:
-                by_date.setdefault(workout.get("date"), []).append(ids)
-        for day in plan.get("days") or []:
-            groups = by_date.get(day.get("date")) or []
-            if len(groups) == 1 and len(groups[0]) == 1:
-                if str(day.get("activity_id") or "") != str(groups[0][0]):
-                    day["activity_id"] = groups[0][0]
-                    changed = True
-            elif len(groups) != 1:
-                if "activity_id" in day:
-                    day.pop("activity_id", None)
-                    changed = True
+
     return changed
 
 
@@ -161,11 +143,14 @@ def concretize_deferred_review(action, decision_plan, latest_date):
 
     future_days = sorted(
         [
-            day
-            for day in (decision_plan.get("days") or [])
-            if str(day.get("date") or "") > latest_date and day.get("session")
+            workout
+            for workout in legacy.planned_workouts(decision_plan)
+            if str(workout.get("date") or "") > latest_date
         ],
-        key=lambda day: day.get("date"),
+        key=lambda workout: (
+            str(workout.get("date") or ""),
+            str(workout.get("microcycle_slot") or ""),
+        ),
     )
     fixed_day = next(
         (
@@ -521,8 +506,8 @@ def main():
                 for item in legacy.planned_workouts(document)
             )
         return any(
-            day.get("date") == target_date
-            for day in document.get("days", [])
+            workout.get("date") == target_date
+            for workout in legacy.planned_workouts(document)
         )
 
     if target_date and not owns_target(plan) and owns_target(upcoming):
