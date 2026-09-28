@@ -44,6 +44,36 @@ class PhysicalWorkoutArchitectureTests(unittest.TestCase):
                 f"{key} mixes physical sport families {sorted(families)}",
             )
 
+    def test_current_canonical_workouts_do_not_mix_physical_sport_families(self):
+        plan = json.loads((ROOT / "data" / "plan.json").read_text(encoding="utf-8"))
+        family_prefixes = {
+            "run": ("run_",),
+            "swim": ("swim_",),
+            "strength": ("strength_", "plyometric"),
+            "bike": ("mtb_", "bike_"),
+            "enduro": ("enduro_",),
+        }
+        for workout in plan.get("planned_workouts") or []:
+            sport = str(workout.get("sport") or "")
+            if sport in {"multisport", "open", "rest"}:
+                continue
+            stimuli = list(workout.get("stimuli") or []) + list(
+                workout.get("optional_stimuli") or []
+            )
+            families = {
+                family
+                for family, prefixes in family_prefixes.items()
+                if any(
+                    any(str(stimulus).startswith(prefix) for prefix in prefixes)
+                    for stimulus in stimuli
+                )
+            }
+            self.assertLessEqual(
+                len(families),
+                1,
+                f"{workout.get('date')} {workout.get('session')} mixes {sorted(families)}",
+            )
+
     def test_active_runtime_has_no_composite_swim_strength_concept(self):
         active_sources = (
             ROOT / "scripts" / "adaptive_planner.py",
