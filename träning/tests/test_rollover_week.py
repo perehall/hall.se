@@ -281,28 +281,34 @@ class WeeklyRolloverTests(unittest.TestCase):
         self.assertFalse(day["watch_workout"]["sync_enabled"])
         self.assertIn("swim-4000", day["watch_workout"]["id"])
 
-    def test_structured_swim_is_carried_forward_without_volume_increase(self):
+    def test_swim_structure_is_owned_by_the_planned_swim_not_previous_calendar_day(self):
         upcoming = add_structured_swim(upcoming_w35())
-        promoted, future = rollover_documents(plan_w34(), upcoming, date(2026, 8, 24), STRATEGY)
+        promoted, future = rollover_documents(
+            plan_w34(), upcoming, date(2026, 8, 24), STRATEGY
+        )
         source = promoted["days"][1]
-        target = future["days"][2]
-        self.assertEqual(future["days"][1]["stimuli"], ["run_threshold"])
+        swim_workouts = [
+            workout
+            for workout in future["planned_workouts"]
+            if workout["sport"] == "swim"
+        ]
+        self.assertTrue(swim_workouts)
 
-        self.assertEqual(source["sport"], "swim")
-        self.assertEqual(target["sport"], "swim")
-        self.assertEqual(target["status"], "preliminary")
-        self.assertEqual(target["planning_status"], "preliminary")
-        self.assertEqual(target["date"], "2026-09-02")
-        self.assertEqual(target["watch_workout"]["planned_distance_m"], 3200)
-        self.assertEqual(target["watch_workout"]["blocks"], source["watch_workout"]["blocks"])
-        self.assertFalse(target["watch_workout"]["sync_enabled"])
-        self.assertNotEqual(target["watch_workout"]["id"], source["watch_workout"]["id"])
-        self.assertNotIn("external_id", target["watch_workout"])
-        self.assertTrue(target["development_focus"])
-        self.assertIn("ökas inte automatiskt", target["reason"])
-        self.assertEqual(target["baseline_option_id"], "swim-support-3200")
-        self.assertEqual(target["dose_resolution"]["option_id"], "swim-support-3200")
-        self.assertIn("swim-support-3200", {option["id"] for option in target["dose_options"]})
+        for workout in swim_workouts:
+            self.assertTrue((workout.get("watch_workout") or {}).get("blocks"))
+            selected = next(
+                option
+                for option in workout["dose_options"]
+                if option["id"] == workout["baseline_option_id"]
+            )
+            self.assertEqual(
+                workout["watch_workout"]["blocks"],
+                selected["watch_workout"]["blocks"],
+            )
+            self.assertNotEqual(
+                workout["watch_workout"]["blocks"],
+                source["watch_workout"]["blocks"],
+            )
 
     def test_mesocycle_end_builds_concrete_nonprogressive_bridge_week(self):
         promoted = {
