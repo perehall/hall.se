@@ -3,6 +3,7 @@ from copy import deepcopy
 from datetime import date, timedelta
 
 from activity_labels import public_activity_label
+from canonical_plan import near_term_window, planned_workouts as canonical_planned_workouts
 from training_contracts import ACTIVITY_FAMILY, PLAN_SPORT_ACTIVITY_FAMILIES
 
 
@@ -18,56 +19,8 @@ WEEKDAY_ALIASES = {
 
 
 def planning_window(plan, upcoming=None):
-    """Combine the active calendar week with the contiguous upcoming week.
-
-    Calendar weeks are storage/presentation boundaries, not decision boundaries.
-    The returned document is a copy used for near-term reasoning only; callers
-    must still persist changes to the source document that owns the target date.
-    """
-    result = deepcopy(plan)
-    upcoming_days = (upcoming or {}).get("days") or []
-    if not upcoming_days:
-        return result
-
-    active_days = result.get("days") or []
-    if not active_days:
-        raise RuntimeError("Närtidsplan: aktiv plan saknar dagar")
-
-    try:
-        active_end = max(date.fromisoformat(day["date"]) for day in active_days)
-        upcoming_start = min(date.fromisoformat(day["date"]) for day in upcoming_days)
-    except (KeyError, TypeError, ValueError) as exc:
-        raise RuntimeError("Närtidsplan: ogiltigt datum i planunderlaget") from exc
-
-    if upcoming_start != active_end + timedelta(days=1):
-        raise RuntimeError(
-            "Närtidsplan: upcoming_week är inte sammanhängande med aktiv plan"
-        )
-
-    result["days"] = deepcopy(active_days) + [
-        deepcopy(day)
-        for day in upcoming_days
-        if date.fromisoformat(day["date"]) > active_end
-    ]
-
-    if result.get("planned_workouts") is not None or (upcoming or {}).get("planned_workouts") is not None:
-        active_workouts = deepcopy(result.get("planned_workouts") or [])
-        upcoming_workouts = deepcopy((upcoming or {}).get("planned_workouts") or [])
-        result["planned_workouts"] = active_workouts + [
-            workout
-            for workout in upcoming_workouts
-            if date.fromisoformat(workout["date"]) > active_end
-        ]
-
-    result["near_term_window"] = {
-        "active_week_end": active_end.isoformat(),
-        "upcoming_week_start": upcoming_start.isoformat(),
-        "window_end": max(
-            date.fromisoformat(day["date"]) for day in result["days"]
-        ).isoformat(),
-        "calendar_week_is_presentation": True,
-    }
-    return result
+    """Combine contiguous canonical workout collections for near-term reasoning."""
+    return near_term_window(plan, upcoming)
 
 
 def workout_key(workout, meta=None):
@@ -83,29 +36,14 @@ def workout_key(workout, meta=None):
     slot = str(workout.get("microcycle_slot") or "").strip()
     if microcycle_id and date_value and slot:
         return f"{microcycle_id}:{date_value}:{slot}"
-    # Legacy plans contain at most one physical workout per date. This fallback
-    # is only a compatibility identity; new multi-session plans always carry a
-    # microcycle slot / relational workout key.
-    if date_value:
-        return f"legacy:{date_value}"
-    return ""
+    raise RuntimeError(
+        "Planerat pass saknar stabil workout-identitet; runtime får inte använda datum som pass-ID"
+    )
 
 
 def planned_workouts(plan):
-    """Return the physical-workout collection, never the 7-row calendar projection."""
-    if plan.get("planned_workouts") is not None:
-        rows = plan.get("planned_workouts") or []
-    else:
-        rows = plan.get("days") or []
-    meta = plan.get("meta") or {}
-    result = []
-    for workout in rows:
-        if not isinstance(workout, dict):
-            continue
-        if workout.get("sport") in {"open", "rest"}:
-            continue
-        result.append(workout)
-    return result
+    """Return canonical physical workouts; never reinterpret calendar rows."""
+    return canonical_planned_workouts(plan, context="coach plan")
 
 
 def workout_components(workout):
@@ -315,9 +253,8 @@ def decision_ready_target_workouts(plan, activities, today_local):
     ready_dates = set()
     for target_date in dates:
         unresolved_prior = False
-        for day in plan.get("days") or []:
-            date_value = str(day.get("date") or "")
-            if not date_value or date_value < today_local or date_value >= target_date:
+        for date_value in sorted(_workouts_by_date(plan)):
+            if date_value < today_local or date_value >= target_date:
                 continue
             if not _date_is_resolved(plan, activities, date_value):
                 unresolved_prior = True
@@ -440,9 +377,8 @@ def allowed_target_dates(plan, activities, today_local):
 
 def unresolved_intervening_dates(plan, activities, today_local, target_date):
     unresolved = []
-    for day in plan.get("days", []):
-        date_value = day.get("date") or ""
-        if not date_value or date_value < today_local or date_value >= target_date:
+    for date_value in sorted(_workouts_by_date(plan)):
+        if date_value < today_local or date_value >= target_date:
             continue
         if not _date_is_resolved(plan, activities, date_value):
             unresolved.append(date_value)
