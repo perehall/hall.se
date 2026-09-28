@@ -59,6 +59,19 @@ class TrainingWorkflowWriterTests(unittest.TestCase):
         self.assertIn("gh workflow run update-training.yml --ref main", update)
         self.assertIn("git push origin HEAD:main", update)
 
+    def test_redundant_three_hour_reconcile_is_retired_but_daily_refresh_remains(self):
+        workflow = self.workflow_text()
+        refresh = (
+            REPO_ROOT / ".github" / "workflows" / "refresh-training-day.yml"
+        ).read_text(encoding="utf-8")
+
+        trigger_block = workflow.split("permissions:", 1)[0]
+        self.assertNotIn("schedule:", trigger_block)
+        self.assertNotIn('17 */3 * * *', workflow)
+        self.assertIn('5 22 * * *', refresh)
+        self.assertIn('5 23 * * *', refresh)
+        self.assertIn("gh workflow run update-training.yml --ref main", refresh)
+
     def test_push_trigger_is_restricted_to_main(self):
         workflow = self.workflow_text()
         push_block = workflow.split("  push:\n", 1)[1].split("\nconcurrency:", 1)[0]
