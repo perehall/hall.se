@@ -555,7 +555,7 @@ class AdaptivePlanningTests(unittest.TestCase):
         )
         recipes = [row["recipe_key"] for row in result["slots"]]
         self.assertNotIn("run_threshold", recipes)
-        self.assertNotIn("swim_strength", recipes)
+        self.assertNotIn("strength_core", recipes)
         self.assertEqual(recipes.count("swim_aerobic_technique"), 2)
         self.assertIn("run_easy_distance", recipes)
         self.assertFalse(
@@ -714,7 +714,7 @@ class AdaptivePlanningTests(unittest.TestCase):
             "slots": [
                 {"day_index": 2, "recipe_key": "swim_aerobic_technique", "action": "establish", "rationale": "låg benbelastning efter enduro", "evidence_refs": []},
                 {"day_index": 3, "recipe_key": "run_threshold", "action": "consolidate", "rationale": "threshold med marginal efter enduro", "evidence_refs": []},
-                {"day_index": 5, "recipe_key": "swim_strength", "action": "establish", "rationale": "swim+strength", "evidence_refs": []},
+                {"day_index": 5, "recipe_key": "strength_core", "action": "establish", "rationale": "strength", "evidence_refs": []},
                 {"day_index": 7, "recipe_key": "run_easy_distance", "action": "consolidate", "rationale": "distance separerad från löpkvalitet", "evidence_refs": []},
             ],
         }
@@ -773,7 +773,7 @@ class AdaptivePlanningTests(unittest.TestCase):
         self.assertFalse(model_valid)
         recipes = [row["recipe_key"] for row in normalized["slots"]]
         self.assertIn("swim_aerobic_technique", recipes)
-        self.assertIn("swim_strength", recipes)
+        self.assertIn("strength_core", recipes)
 
     def test_generated_strategy_is_contract_valid_and_traceable(self):
         meso = fallback_mesocycle(self.goal, self.policy, {})
