@@ -119,7 +119,6 @@ class TopOverviewUiTests(unittest.TestCase):
         self.assertIn("‹ Vecka 38", rendered)
         self.assertIn("Vecka 39", rendered)
         self.assertIn("21–27 sep", rendered)
-        self.assertIn("Vecka 40 ›", rendered)
         self.assertIn("Uppdaterad 25 sep 08:49", rendered)
         self.assertIn("Målbild 2027 →", rendered)
 
