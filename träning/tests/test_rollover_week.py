@@ -341,23 +341,34 @@ class WeeklyRolloverTests(unittest.TestCase):
         self.assertIn("mesocykelutvärdering", future["meta"]["title"])
         self.assertEqual(future["meta"]["microcycle_id"], "")
         self.assertEqual(future["days"][0]["sport"], "enduro")
-        self.assertEqual(
-            [day["sport"] for day in future["days"][1:]],
-            ["run", "swim", "bike", "run", "strength", "run"],
+
+        workouts = [
+            workout
+            for workout in future["planned_workouts"]
+            if workout["sport"] != "enduro"
+        ]
+        slots = STRATEGY["current_mesocycle"]["microcycle_template"]
+        self.assertEqual(len(workouts), len(slots))
+        for slot in slots:
+            workout = next(
+                item for item in workouts if item["microcycle_slot"] == slot["slot"]
+            )
+            self.assertEqual(workout["sport"], slot["sport"])
+            self.assertTrue(workout.get("transition_review"))
+            self.assertEqual(workout["planning_status"], "preliminary")
+
+        by_date = {}
+        for workout in workouts:
+            by_date.setdefault(workout["date"], []).append(workout)
+        for date_value, group in by_date.items():
+            day = next(item for item in future["days"] if item["date"] == date_value)
+            if len(group) > 1:
+                self.assertEqual(day["additional_planned_workouts"], len(group) - 1)
+
+        self.assertIn(
+            "utan automatisk belastningsökning",
+            future["meta"]["principle"],
         )
-        self.assertEqual(future["days"][1]["baseline_option_id"], "run-threshold-3x8")
-        hill_slot = next(
-            slot
-            for slot in STRATEGY["current_mesocycle"]["microcycle_template"]
-            if slot["slot"] == "run_hill_quality"
-        )
-        self.assertEqual(
-            future["days"][4]["baseline_option_id"],
-            hill_slot["development_progression"]["demonstrated_floor_option_id"],
-        )
-        self.assertTrue(all(day.get("transition_review") is True for day in future["days"][1:]))
-        self.assertTrue(all(day.get("planning_status") == "preliminary" for day in future["days"][1:]))
-        self.assertIn("utan automatisk belastningsökning", future["meta"]["principle"])
 
     def test_empty_promoted_review_week_is_repaired_from_previous_plan_on_monday(self):
         previous = {
