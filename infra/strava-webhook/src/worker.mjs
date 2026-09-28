@@ -306,14 +306,16 @@ async function handleTrainingInputRequest(request, env, fetchImpl, executionCont
   };
 
   const directPersistence = directTrainingInputPersistenceConfigured(env);
-  if (directPersistence) {
-    try {
-      await persistTrainingInput(event, env, fetchImpl);
-      console.log("TRAINING_INPUT_PERSISTED", event.event_key, event.operation);
-    } catch (error) {
-      console.error("TRAINING_INPUT_PERSIST_FAILED", event.event_key, String(error));
-      return jsonResponse({ error: "persistence_failed" }, 503);
-    }
+  if (!directPersistence) {
+    console.error("TRAINING_INPUT_PERSISTENCE_NOT_CONFIGURED", event.operation);
+    return jsonResponse({ error: "persistence_not_configured" }, 503);
+  }
+  try {
+    await persistTrainingInput(event, env, fetchImpl);
+    console.log("TRAINING_INPUT_PERSISTED", event.event_key, event.operation);
+  } catch (error) {
+    console.error("TRAINING_INPUT_PERSIST_FAILED", event.event_key, String(error));
+    return jsonResponse({ error: "persistence_failed" }, 503);
   }
 
   const eventType = configured(env.TRAINING_INPUT_EVENT_TYPE)
@@ -329,7 +331,7 @@ async function handleTrainingInputRequest(request, env, fetchImpl, executionCont
     }
   };
 
-  if (directPersistence && executionContext && typeof executionContext.waitUntil === "function") {
+  if (executionContext && typeof executionContext.waitUntil === "function") {
     executionContext.waitUntil(
       dispatch().catch(() => {
         // The feedback is already durable in Supabase. A later scheduled
@@ -347,20 +349,17 @@ async function handleTrainingInputRequest(request, env, fetchImpl, executionCont
   try {
     await dispatch();
   } catch {
-    if (directPersistence) {
-      return jsonResponse({
-        status: "saved",
-        persistence: "supabase",
-        processing: "deferred",
-        event_key: event.event_key,
-      }, 202);
-    }
-    return jsonResponse({ error: "dispatch_failed" }, 503);
+    return jsonResponse({
+      status: "saved",
+      persistence: "supabase",
+      processing: "deferred",
+      event_key: event.event_key,
+    }, 202);
   }
 
   return jsonResponse({
-    status: directPersistence ? "saved" : "accepted",
-    persistence: directPersistence ? "supabase" : "dispatch",
+    status: "saved",
+    persistence: "supabase",
     processing: "queued",
     event_key: event.event_key,
   });

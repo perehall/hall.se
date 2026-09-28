@@ -88,6 +88,14 @@ FEEDBACK_SCRIPT = r"""
     status.textContent = 'Sparat · analysen uppdateras senare.';
   }
 
+  const saveErrorCopy = (code) => ({
+    access_required: 'Inloggningen behöver förnyas innan passet kan sparas.',
+    persistence_not_configured: 'Sparningstjänsten saknar en fungerande backendkoppling.',
+    persistence_failed: 'Kunde inte spara ändringen i träningsdatabasen.',
+    durable_ack_missing: 'Sparningen kunde inte verifieras som beständigt lagrad.',
+    request_failed: 'Sparningen misslyckades.'
+  }[code] || 'Sparningen misslyckades.');
+
   roots.forEach((root) => {
     const activityId = root.dataset.activityId;
     const editor = root.querySelector('[data-v2-feedback-panel]');
@@ -248,7 +256,7 @@ FEEDBACK_SCRIPT = r"""
           : 'Sparat · analys uppdateras…';
         void waitForPublished(activityId, body.event_key, status);
       } catch (error) {
-        status.textContent = 'Kunde inte spara (' + error.message + ').';
+        status.textContent = saveErrorCopy(error.message);
         save.disabled = false;
         editor.hidden = false;
         toggle.hidden = true;
