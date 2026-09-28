@@ -21,6 +21,7 @@ from rollover_week import (  # noqa: E402
 
 
 def plan_w34():
+    start = date(2026, 8, 17)
     return {
         "schema_version": 3,
         "meta": {
@@ -33,12 +34,19 @@ def plan_w34():
         },
         "days": [
             {
-                "date": f"2026-08-{17 + i:02d}",
+                "date": (start + timedelta(days=i)).isoformat(),
                 "label": "Dag",
+            }
+            for i in range(7)
+        ],
+        "planned_workouts": [
+            {
+                "date": (start + timedelta(days=i)).isoformat(),
                 "status": "completed",
                 "sport": "run",
                 "session": "Pass",
                 "reason": "R",
+                "microcycle_slot": f"run-{i + 1}",
             }
             for i in range(7)
         ],
@@ -47,24 +55,7 @@ def plan_w34():
 
 
 def upcoming_w35():
-    days = []
-    for i in range(7):
-        days.append(
-            {
-                "date": f"2026-08-{24 + i:02d}",
-                "label": "Dag",
-                "status": "planned" if i == 0 else "open",
-                "planning_status": "fixed" if i == 0 else "open",
-                "sport": "enduro" if i == 0 else "open",
-                "session": "Enduroskola" if i == 0 else "Öppet",
-                "reason": "R",
-                **(
-                    {"classification": "training", "dose_open": True}
-                    if i == 0
-                    else {}
-                ),
-            }
-        )
+    start = date(2026, 8, 24)
     return {
         "schema_version": 3,
         "state": "preliminary",
@@ -78,47 +69,71 @@ def upcoming_w35():
             "principle": "P",
             "preview_summary": "Preview",
         },
-        "days": days,
+        "days": [
+            {
+                "date": (start + timedelta(days=i)).isoformat(),
+                "label": "Dag",
+            }
+            for i in range(7)
+        ],
+        "planned_workouts": [
+            {
+                "date": "2026-08-24",
+                "label": "Måndag",
+                "status": "planned",
+                "planning_status": "fixed",
+                "sport": "enduro",
+                "session": "Enduroskola · fast tillfälle",
+                "reason": "R",
+                "classification": "training",
+                "manual_lock": True,
+                "microcycle_slot": "fixed_enduro_school",
+            }
+        ],
         "strength_template": ["Styrka"],
     }
 
 
 def add_structured_swim(upcoming):
-    upcoming = {**upcoming, "days": [dict(day) for day in upcoming["days"]]}
-    upcoming["days"][1] = {
-        "date": "2026-08-25",
-        "label": "Tisdag",
-        "status": "preliminary",
-        "planning_status": "preliminary",
-        "sport": "swim",
-        "session": "Simning · aerob/teknik · 3 200 m",
-        "reason": "Preliminärt simpass.",
-        "development_focus": "Tidigt grepp.",
-        "swim_equipment": {"planned": "none"},
-        "watch_workout": {
-            "sync_enabled": False,
-            "id": "swim-w35-test",
-            "type": "Swim",
-            "equipment": [],
-            "name": "Aerob 3200",
-            "planned_distance_m": 3200,
-            "blocks": [
-                {
-                    "name": "Aerob",
-                    "repeat": 8,
-                    "steps": [
-                        {
-                            "kind": "swim",
-                            "text": "Jämnt",
-                            "distance_m": 400,
-                            "intensity": "active",
-                        }
-                    ],
-                }
-            ],
-        },
-    }
+    upcoming = deepcopy(upcoming)
+    upcoming["planned_workouts"].append(
+        {
+            "date": "2026-08-25",
+            "label": "Tisdag",
+            "status": "preliminary",
+            "planning_status": "preliminary",
+            "sport": "swim",
+            "session": "Simning · aerob/teknik · 3 200 m",
+            "reason": "Preliminärt simpass.",
+            "development_focus": "Tidigt grepp.",
+            "microcycle_slot": "swim-test",
+            "swim_equipment": {"planned": "none"},
+            "watch_workout": {
+                "sync_enabled": False,
+                "id": "swim-w35-test",
+                "type": "Swim",
+                "equipment": [],
+                "name": "Aerob 3200",
+                "planned_distance_m": 3200,
+                "blocks": [
+                    {
+                        "name": "Aerob",
+                        "repeat": 8,
+                        "steps": [
+                            {
+                                "kind": "swim",
+                                "text": "Jämnt",
+                                "distance_m": 400,
+                                "intensity": "active",
+                            }
+                        ],
+                    }
+                ],
+            },
+        }
+    )
     return upcoming
+
 
 
 class WeeklyRolloverTests(unittest.TestCase):
@@ -150,14 +165,10 @@ class WeeklyRolloverTests(unittest.TestCase):
             self.assertEqual(workout["stimuli"], slot["stimuli"])
             self.assertEqual(workout["planning_status"], "preliminary")
 
-        same_day_groups = {}
-        for workout in workouts:
-            same_day_groups.setdefault(workout["date"], []).append(workout)
-        for date_value, group in same_day_groups.items():
-            day = next(item for item in future["days"] if item["date"] == date_value)
-            if len(group) > 1:
-                self.assertEqual(day["additional_planned_workouts"], len(group) - 1)
-            self.assertEqual(day["session"], group[0]["session"])
+        self.assertEqual(len(future["days"]), 7)
+        self.assertTrue(
+            all(set(day) == {"date", "label"} for day in future["days"])
+        )
 
         for workout in workouts:
             if workout["sport"] != "swim":
@@ -286,7 +297,11 @@ class WeeklyRolloverTests(unittest.TestCase):
         promoted, future = rollover_documents(
             plan_w34(), upcoming, date(2026, 8, 24), STRATEGY
         )
-        source = promoted["days"][1]
+        source = next(
+            workout
+            for workout in promoted["planned_workouts"]
+            if workout["sport"] == "swim"
+        )
         swim_workouts = [
             workout
             for workout in future["planned_workouts"]
@@ -326,13 +341,10 @@ class WeeklyRolloverTests(unittest.TestCase):
                 {
                     "date": (date(2026, 9, 14) + timedelta(days=i)).isoformat(),
                     "label": "Dag",
-                    "status": "open",
-                    "sport": "open",
-                    "session": "Öppet",
-                    "reason": "R",
                 }
                 for i in range(7)
             ],
+            "planned_workouts": [],
             "strength_template": ["Styrka"],
         }
         future = build_open_next_week(promoted, STRATEGY)
@@ -340,7 +352,10 @@ class WeeklyRolloverTests(unittest.TestCase):
         self.assertEqual(future["meta"]["mesocycle_id"], "")
         self.assertIn("mesocykelutvärdering", future["meta"]["title"])
         self.assertEqual(future["meta"]["microcycle_id"], "")
-        self.assertEqual(future["days"][0]["sport"], "enduro")
+        self.assertTrue(
+            any(workout["sport"] == "enduro" for workout in future["planned_workouts"])
+        )
+        self.assertTrue(all(set(day) == {"date", "label"} for day in future["days"]))
 
         workouts = [
             workout
@@ -356,14 +371,6 @@ class WeeklyRolloverTests(unittest.TestCase):
             self.assertEqual(workout["sport"], slot["sport"])
             self.assertTrue(workout.get("transition_review"))
             self.assertEqual(workout["planning_status"], "preliminary")
-
-        by_date = {}
-        for workout in workouts:
-            by_date.setdefault(workout["date"], []).append(workout)
-        for date_value, group in by_date.items():
-            day = next(item for item in future["days"] if item["date"] == date_value)
-            if len(group) > 1:
-                self.assertEqual(day["additional_planned_workouts"], len(group) - 1)
 
         self.assertIn(
             "utan automatisk belastningsökning",
@@ -385,48 +392,47 @@ class WeeklyRolloverTests(unittest.TestCase):
                 {
                     "date": (date(2026, 9, 14) + timedelta(days=i)).isoformat(),
                     "label": "Dag",
-                    "status": "open",
-                    "sport": "open",
-                    "session": "Öppet",
-                    "reason": "R",
                 }
                 for i in range(7)
             ],
+            "planned_workouts": [],
             "strength_template": ["Styrka"],
         }
         current_preview = build_open_next_week(previous, STRATEGY)
-        current = {**current_preview}
+        current = deepcopy(current_preview)
         current.pop("state", None)
         current.pop("week_key", None)
-        current["days"] = [dict(day) for day in current_preview["days"]]
-        for day in current["days"]:
-            day.pop("planning_status", None)
-        # Simulera den gamla felaktiga produktionen: bara fast Enduro, resten öppet.
-        for index in range(1, 7):
-            current["days"][index] = {
-                "date": (date(2026, 9, 21) + timedelta(days=index)).isoformat(),
-                "label": "Dag",
-                "status": "open",
-                "sport": "open",
-                "session": "Ingen planerad träning",
-                "reason": "R",
-            }
+        current["planned_workouts"] = [
+            workout
+            for workout in current["planned_workouts"]
+            if workout.get("sport") == "enduro"
+        ]
         repaired = repair_transition_week_from_previous(
             current, previous, STRATEGY, date(2026, 9, 21)
         )
         self.assertIsNotNone(repaired)
         self.assertEqual(repaired["meta"]["week_start"], "2026-09-21")
-        self.assertEqual(repaired["days"][1]["sport"], "run")
-        self.assertEqual(repaired["days"][1]["baseline_option_id"], "run-threshold-3x8")
+        threshold = next(
+            workout
+            for workout in repaired["planned_workouts"]
+            if workout.get("microcycle_slot") == "run_threshold"
+        )
+        self.assertEqual(threshold["baseline_option_id"], "run-threshold-3x8")
         hill_slot = next(
             slot
             for slot in STRATEGY["current_mesocycle"]["microcycle_template"]
             if slot["slot"] == "run_hill_quality"
         )
+        hill = next(
+            workout
+            for workout in repaired["planned_workouts"]
+            if workout.get("microcycle_slot") == "run_hill_quality"
+        )
         self.assertEqual(
-            repaired["days"][4]["baseline_option_id"],
+            hill["baseline_option_id"],
             hill_slot["development_progression"]["demonstrated_floor_option_id"],
         )
+        self.assertTrue(all(set(day) == {"date", "label"} for day in repaired["days"]))
 
 if __name__ == "__main__":
     unittest.main()
