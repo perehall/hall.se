@@ -48,10 +48,15 @@ class WeekDayReadModel:
 class WeekSportReadModel:
     label: str
     duration_s: int
+    distance_m: float
 
     @property
     def duration(self) -> str:
         return format_duration(self.duration_s)
+
+    @property
+    def distance(self) -> str:
+        return format_distance(self.distance_m)
 
 
 @dataclass(frozen=True)
@@ -63,6 +68,7 @@ class WeekReadModel:
     completed_activity_count: int
     training_day_count: int
     session_time_s: int
+    total_distance_m: float
     sport_distribution: tuple[WeekSportReadModel, ...]
 
     @property
@@ -70,12 +76,20 @@ class WeekReadModel:
         return format_duration(self.session_time_s)
 
     @property
+    def total_distance(self) -> str:
+        return format_distance(self.total_distance_m)
+
+    @property
     def status_summary(self) -> str:
         day_word = "träningsdag" if self.training_day_count == 1 else "träningsdagar"
-        return (
-            f"{self.completed_activity_count} pass · {self.session_time} · "
-            f"{self.training_day_count} {day_word}"
-        )
+        parts = [
+            f"{self.completed_activity_count} pass",
+            self.session_time,
+        ]
+        if self.total_distance_m > 0:
+            parts.append(self.total_distance)
+        parts.append(f"{self.training_day_count} {day_word}")
+        return " · ".join(parts)
 
 
 def format_duration(seconds: int | None) -> str:
@@ -83,6 +97,13 @@ def format_duration(seconds: int | None) -> str:
     hours, rem = divmod(total, 3600)
     minutes, secs = divmod(rem, 60)
     return f"{hours}:{minutes:02d}:{secs:02d}" if hours else f"{minutes}:{secs:02d}"
+
+
+def format_distance(meters: float | int | None) -> str:
+    total = max(0.0, float(meters or 0.0))
+    if total and total < 1000:
+        return f"{round(total):.0f} m"
+    return f"{total / 1000:.2f} km".replace(".", ",")
 
 
 def sport_group(activity: CompletedActivity) -> str:
@@ -205,17 +226,21 @@ def build_week_read_model(
             )
         )
 
-    sport_seconds: dict[str, int] = {}
+    sport_stats: dict[str, dict[str, float]] = {}
     for activity in week_activities:
         group = sport_group(activity)
-        sport_seconds[group] = sport_seconds.get(group, 0) + int(
-            activity.elapsed_time_s or 0
-        )
+        stats = sport_stats.setdefault(group, {"duration_s": 0.0, "distance_m": 0.0})
+        stats["duration_s"] += int(activity.elapsed_time_s or 0)
+        stats["distance_m"] += float(activity.distance_m or 0.0)
     distribution = tuple(
-        WeekSportReadModel(label=label, duration_s=seconds)
-        for label, seconds in sorted(
-            sport_seconds.items(),
-            key=lambda item: (-item[1], item[0]),
+        WeekSportReadModel(
+            label=label,
+            duration_s=int(stats["duration_s"]),
+            distance_m=stats["distance_m"],
+        )
+        for label, stats in sorted(
+            sport_stats.items(),
+            key=lambda item: (-item[1]["duration_s"], item[0]),
         )
     )
     return WeekReadModel(
@@ -229,5 +254,6 @@ def build_week_read_model(
         completed_activity_count=len(week_activities),
         training_day_count=len(by_date),
         session_time_s=sum(int(activity.elapsed_time_s or 0) for activity in week_activities),
+        total_distance_m=sum(float(activity.distance_m or 0.0) for activity in week_activities),
         sport_distribution=distribution,
     )

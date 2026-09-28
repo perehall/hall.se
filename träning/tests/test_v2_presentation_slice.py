@@ -9,7 +9,12 @@ sys.path.insert(0, str(ROOT))
 
 from training_core.application.presentation import build_presentation_snapshot
 from training_core.presentation.navigation import PublishedWeek
-from training_core.presentation.renderer import render_snapshot, render_today, render_week
+from training_core.presentation.renderer import (
+    render_snapshot,
+    render_today,
+    render_week,
+    render_week_status,
+)
 from training_core.domain.weather import DailyWeatherForecast, WeatherSnapshot
 from training_core.presentation.today import CompletedActivity, PlannedDay
 
@@ -322,6 +327,52 @@ class PresentationSliceTests(unittest.TestCase):
         )
         self.assertIn('data-v2-feedback-save', rendered)
         self.assertNotIn('training-input-ui-v1', rendered)
+
+    def test_week_status_includes_total_and_per_sport_distance(self):
+        snapshot = build_presentation_snapshot(
+            FakeRepository(), today=date(2026, 9, 26)
+        )
+        rendered = render_week_status(snapshot)
+        self.assertIn("2 pass · 2:44:44 · 29,61 km · 1 träningsdag", rendered)
+        self.assertIn("<strong>29,61 km</strong> distans", rendered)
+        self.assertIn("Enduro</span><strong>1:41:02 · 26,61 km</strong>", rendered)
+        self.assertIn("Simning</span><strong>1:03:42 · 3,00 km</strong>", rendered)
+
+    def test_feedback_without_coach_result_is_explicitly_pending(self):
+        class PendingRepository:
+            def planned_days(self, start, end):
+                return [
+                    PlannedDay(
+                        date(2026, 9, 26),
+                        "Enduro",
+                        "enduro",
+                        "completed",
+                        workout_key="enduro-1",
+                    )
+                ]
+
+            def completed_activities(self, start, end):
+                return [
+                    CompletedActivity(
+                        "99",
+                        date(2026, 9, 26),
+                        "Enduro",
+                        "enduro",
+                        3600,
+                        10000,
+                        feedback_event_key="training-input:bbbbbbbbbbbbbbbbbbbbbbbb",
+                        feedback_text="Kontrollerat.",
+                        rpe=4,
+                        feelings=("fresh",),
+                    )
+                ]
+
+        snapshot = build_presentation_snapshot(
+            PendingRepository(), today=date(2026, 9, 26)
+        )
+        rendered = render_today(snapshot)
+        self.assertIn("Utvärdering", rendered)
+        self.assertIn("Coachanalys väntar.", rendered)
 
     def test_snapshot_carries_v2_feedback_interaction_without_legacy_finalizer(self):
         snapshot = build_presentation_snapshot(

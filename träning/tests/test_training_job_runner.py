@@ -183,6 +183,13 @@ class TrainingJobRunnerTests(unittest.TestCase):
         self.assertTrue(stages["weekly_review"].optional)
         self.assertEqual(stages["weekly_review"].attempts, 2)
 
+    def test_training_input_requires_coach_analysis_before_publication(self):
+        with patch.dict(os.environ, {"TRAINING_INPUT_EVENT": "true"}, clear=False):
+            stages = {stage.key: stage for stage in build_stages("reconcile")}
+        coach = stages["coach_analysis"]
+        self.assertFalse(coach.optional)
+        self.assertEqual(coach.attempts, 2)
+
     def test_persist_token_requires_repository_at_execution_time(self):
         stage = next(
             stage for stage in build_stages("event") if stage.key == "persist_strava_refresh_token"
