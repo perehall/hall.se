@@ -20,22 +20,28 @@ from training_contracts import (  # noqa: E402
 
 def valid_week(*, upcoming=False):
     start = date(2026, 8, 24)
-    sports = ["enduro", "swim", "run", "strength", "swim", "bike", "open"]
-    days = []
-    for index, sport in enumerate(sports):
-        day_date = (start + timedelta(days=index)).isoformat()
-        status = "open" if sport == "open" else "planned"
-        day = {
-            "date": day_date,
+    days = [
+        {
+            "date": (start + timedelta(days=index)).isoformat(),
             "label": f"Dag {index + 1}",
-            "status": status,
-            "sport": sport,
+        }
+        for index in range(7)
+    ]
+    sports = ["enduro", "swim", "run", "strength", "swim", "bike"]
+    planned_workouts = []
+    for index, sport in enumerate(sports):
+        workout = {
+            "date": (start + timedelta(days=index)).isoformat(),
             "session": f"Pass {index + 1}",
             "reason": "Testfixture med explicit maskinläsbar sport.",
+            "sport": sport,
+            "status": "planned",
+            "microcycle_slot": f"{sport}-{index + 1}",
         }
         if upcoming:
-            day["planning_status"] = "open" if sport == "open" else "planned"
-        days.append(day)
+            workout["planning_status"] = "planned"
+        planned_workouts.append(workout)
+
     document = {
         "schema_version": 3,
         "meta": {
@@ -47,6 +53,7 @@ def valid_week(*, upcoming=False):
             "principle": "Kontrakttest.",
         },
         "days": days,
+        "planned_workouts": planned_workouts,
     }
     if upcoming:
         document["state"] = "preliminary"
@@ -143,14 +150,14 @@ class TrainingContractTests(unittest.TestCase):
 
     def test_missing_explicit_sport_fails(self):
         plan = valid_week()
-        del plan["days"][2]["sport"]
+        del plan["planned_workouts"][2]["sport"]
         with self.assertRaises(ContractError):
             validate_plan_document(plan)
 
     def test_free_text_cannot_replace_explicit_sport(self):
         plan = valid_week()
         del plan["days"][2]["sport"]
-        plan["days"][2]["session"] = "Löpning · tröskel"
+        plan["planned_workouts"][2]["session"] = "Löpning · tröskel"
         with self.assertRaises(ContractError):
             validate_plan_document(plan)
 
@@ -168,7 +175,7 @@ class TrainingContractTests(unittest.TestCase):
 
     def test_baseline_option_requires_matching_internal_options(self):
         plan = valid_week()
-        day = plan["days"][2]
+        day = plan["planned_workouts"][2]
         day["session"] = "Löpning · 60 min"
         day["baseline_option_id"] = "run-60"
         day["dose_options"] = [
