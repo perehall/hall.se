@@ -1617,43 +1617,6 @@ def materialize_template(meso, micro, policy, catalog, athlete_state):
         if recipe.get("performance_marker_id"):
             slot["performance_marker_id"] = recipe["performance_marker_id"]
 
-        # A planning recipe may deliberately co-locate complementary work on
-        # one calendar day. Physical sessions remain first-class objects: they
-        # must never be collapsed into one workout merely because they share a
-        # planning slot.
-        if recipe_key == "swim_strength":
-            swim_recipe = catalog["recipes"]["swim_aerobic_technique"]
-            swim_option = deepcopy(swim_recipe["options"][0])
-            strength_recipe = catalog["recipes"]["strength_core"]
-            strength_option = next(
-                (
-                    deepcopy(item)
-                    for item in strength_recipe["options"]
-                    if item.get("value") == selected.get("value")
-                ),
-                deepcopy(strength_recipe["options"][0]),
-            )
-            slot["sessions"] = [
-                {
-                    "id": "swim",
-                    "sport": "swim",
-                    "session": swim_option["session"],
-                    "stimuli": deepcopy(swim_recipe.get("stimuli") or []),
-                    "dose_option": swim_option,
-                    "development_focus": swim_recipe["development_focus"],
-                },
-                {
-                    "id": "strength",
-                    "sport": "strength",
-                    "session": strength_option["session"],
-                    "stimuli": deepcopy(strength_recipe.get("stimuli") or []),
-                    "optional_stimuli": deepcopy(strength_recipe.get("optional_stimuli") or []),
-                    "dose_option": strength_option,
-                    "development_focus": strength_recipe["development_focus"],
-                },
-            ]
-            slot["session"] = "Två separata pass · simning + styrka/core"
-
         if role == "anchor":
             slot["development_progression"] = {
                 "mode": "develop",
