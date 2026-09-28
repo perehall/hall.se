@@ -51,6 +51,20 @@ class WeekReadModelTests(unittest.TestCase):
         self.assertEqual(model.completed_activity_count, 2)
         saturday = next(day for day in model.days if day.local_date == date(2026, 9, 26))
         self.assertEqual(saturday.actual_labels, ("Enduro", "Simning"))
+        self.assertEqual(saturday.completed_activity_count, 2)
+        self.assertEqual(saturday.session_time, "2:44:44")
+        self.assertEqual(saturday.total_distance, "29,61 km")
+        self.assertEqual(
+            saturday.status_summary,
+            "2 pass · 2:44:44 · 29,61 km",
+        )
+        self.assertEqual(
+            [activity.detail for activity in saturday.actual_activities],
+            [
+                "Enduro · 26,61 km · 1:41:02",
+                "Simning · 3,00 km · 1:03:42",
+            ],
+        )
         self.assertEqual(saturday.state, "completed")
         self.assertEqual(model.session_time_s, 9884)
         self.assertEqual(model.session_time, "2:44:44")
