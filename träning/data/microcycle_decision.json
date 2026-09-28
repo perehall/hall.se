@@ -20,11 +20,20 @@
     },
     {
       "action": "establish",
-      "day_index": 5,
-      "rationale": "Kombinera en nödvändig simexponering med ännu ej uppfylld styrka/core.",
-      "recipe_key": "swim_strength",
+      "day_index": 4,
+      "rationale": "Lägg en ren lågmekanisk simexponering som ett självständigt pass.",
+      "recipe_key": "swim_aerobic_technique",
       "evidence_refs": [
         "mesocycle.primary_capabilities"
+      ]
+    },
+    {
+      "action": "establish",
+      "day_index": 4,
+      "rationale": "Skydda styrka/core som ett självständigt pass; samlokalisera med simning endast när mikrocykelns belastningsordning motiverar det.",
+      "recipe_key": "strength_core",
+      "evidence_refs": [
+        "planning_policy.microcycle_policy"
       ]
     },
     {
@@ -44,8 +53,8 @@
   "source_hash": "2f23e88254cf8244936bf8e13d360290a49653e67d44276f6b648f56defa8567",
   "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
   "schema_version": 1,
-  "generated_at_utc": "2026-09-28T07:10:55.876768+00:00",
-  "planner_revision": 7,
+  "generated_at_utc": "2026-09-28T08:24:40.465838+00:00",
+  "planner_revision": 8,
   "competition_context": {
     "as_of": "2026-10-05",
     "event": "ÖTILLÖ Åland World Series",

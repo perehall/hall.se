@@ -573,52 +573,178 @@
         "progression_target_option_id": "run-threshold-4x9"
       },
       {
-        "slot": "swim_strength_3",
-        "sport": "strength",
-        "reason": "Kombinera en nödvändig simexponering med ännu ej uppfylld styrka/core. Valet utgår från ett observerat värde 36.0167 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
-        "session": "Simning · 3 200 m · aerob/teknik + styrka/core · ca 35 min · styrkemall",
+        "slot": "swim_aerobic_technique_3",
+        "sport": "swim",
+        "reason": "Lägg en ren lågmekanisk simexponering som ett självständigt pass. Valet utgår från ett observerat värde 3200 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
+        "session": "Simning · 3 200 m · aerob/teknik",
         "stimuli": [
           "swim_aerobic",
-          "swim_technique",
+          "swim_technique"
+        ],
+        "day_index": 4,
+        "dose_options": [
+          {
+            "id": "swim-3200",
+            "kind": "structured",
+            "value": 3200,
+            "intent": "Kortare etablerad simexponering.",
+            "session": "Simning · 3 200 m · aerob/teknik",
+            "watch_workout": {
+              "name": "Aerob/teknik · kroppslinje och rotation · 3 200 m",
+              "type": "Swim",
+              "blocks": [
+                {
+                  "name": "Insim",
+                  "steps": [
+                    {
+                      "kind": "swim",
+                      "text": "Lugn insim",
+                      "equipment": [],
+                      "intensity": "warmup",
+                      "distance_m": 400
+                    }
+                  ]
+                },
+                {
+                  "name": "Kroppslinje och rotation",
+                  "steps": [
+                    {
+                      "kind": "swim",
+                      "text": "Stabil linje, kontrollerad rotation",
+                      "equipment": [],
+                      "intensity": "active",
+                      "distance_m": 50
+                    },
+                    {
+                      "kind": "rest",
+                      "duration_s": 15
+                    }
+                  ],
+                  "repeat": 6
+                },
+                {
+                  "name": "Aerob",
+                  "steps": [
+                    {
+                      "kind": "swim",
+                      "text": "Stadigt aerob med stabil kroppslinje",
+                      "equipment": [],
+                      "intensity": "active",
+                      "distance_m": 500
+                    },
+                    {
+                      "kind": "rest",
+                      "duration_s": 30
+                    }
+                  ],
+                  "repeat": 4
+                },
+                {
+                  "name": "Frekvens",
+                  "steps": [
+                    {
+                      "kind": "swim",
+                      "text": "Avslappnad frekvens med bibehållen linje",
+                      "equipment": [],
+                      "intensity": "active",
+                      "distance_m": 50
+                    },
+                    {
+                      "kind": "rest",
+                      "duration_s": 15
+                    }
+                  ],
+                  "repeat": 6
+                },
+                {
+                  "name": "Avsim",
+                  "steps": [
+                    {
+                      "kind": "swim",
+                      "text": "Mycket lugnt avsim",
+                      "equipment": [],
+                      "intensity": "cooldown",
+                      "distance_m": 200
+                    }
+                  ]
+                }
+              ],
+              "equipment": [],
+              "planned_distance_m": 3200
+            }
+          }
+        ],
+        "priority_role": "anchor",
+        "load_dimensions": [
+          "cardiovascular",
+          "technical"
+        ],
+        "development_focus": "Teknisk kvalitet och stabil aerob rytm; simningen ska kunna stödja helheten med låg mekanisk kostnad för benen.",
+        "baseline_option_id": "swim-3200",
+        "progression_criteria": [
+          "Ändra bara dos när faktisk träningsrespons eller mesocykelns progressionsbeslut ger sakligt stöd.",
+          "Wellness eller en enskild bra dag får inte ensam motivera belastningsökning.",
+          "Närliggande 2–3 dagars faktisk belastning ska kunna motivera hold, reduktion eller flytt."
+        ],
+        "development_progression": {
+          "mode": "develop",
+          "source": "athlete_state",
+          "microcycle_plan": [
+            {
+              "reason": "Mikrocykelbeslutet valde establish och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
+              "relation": "hold",
+              "option_id": "swim-3200",
+              "microcycle": 3
+            }
+          ],
+          "demonstrated_floor_option_id": "swim-3200",
+          "same_dose_repeat_requires_reason": true
+        },
+        "progression_ceiling_reason": "Ingen högre förgodkänd dos finns i receptkatalogen. Fortsatt utveckling kräver nytt recept eller annan progressionsaxel, inte automatisk extrapolering."
+      },
+      {
+        "slot": "strength_core_4",
+        "sport": "strength",
+        "reason": "Skydda styrka/core som ett självständigt pass; samlokalisera med simning endast när mikrocykelns belastningsordning motiverar det. Valet utgår från ett observerat värde 36.0167 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
+        "session": "Styrka/core · ca 35 min · styrkemall",
+        "stimuli": [
           "strength_unilateral",
           "strength_core"
         ],
-        "day_index": 5,
+        "day_index": 4,
         "dose_options": [
           {
-            "id": "swim-strength-25",
-            "kind": "structured",
+            "id": "strength-25",
+            "kind": "duration_minutes",
             "value": 25,
-            "intent": "Reducerad styrkedos med bibehållen andra simexponering.",
-            "session": "Simning · 3 200 m · aerob/teknik + styrka/core · 25 min · styrkemall"
+            "intent": "Reducerad skyddsdos.",
+            "session": "Styrka/core · 25 min · styrkemall"
           },
           {
-            "id": "swim-strength-35",
-            "kind": "structured",
+            "id": "strength-35",
+            "kind": "duration_minutes",
             "value": 35,
-            "intent": "Normal kombinerad skyddsexponering.",
-            "session": "Simning · 3 200 m · aerob/teknik + styrka/core · ca 35 min · styrkemall"
+            "intent": "Normal kort styrka/core-exponering.",
+            "session": "Styrka/core · ca 35 min · styrkemall"
           },
           {
-            "id": "swim-strength-45",
-            "kind": "structured",
+            "id": "strength-45",
+            "kind": "duration_minutes",
             "value": 45,
-            "intent": "Utökad styrkeexponering när omgivande belastning stödjer den.",
-            "session": "Simning · 3 200 m · aerob/teknik + styrka/core · ca 45 min · styrkemall"
+            "intent": "Utökad exponering när belastningen runt passet tillåter.",
+            "session": "Styrka/core · ca 45 min · styrkemall"
           }
         ],
         "priority_role": "protected_support",
         "load_dimensions": [
-          "cardiovascular",
-          "technical",
           "mechanical",
           "neuromuscular"
         ],
         "optional_stimuli": [
           "plyometric"
         ],
-        "development_focus": "Andra simexponeringen hålls aerob/teknisk och kombineras med kontrollerad styrka/core för att skydda båda kapaciteterna utan ett extra benkvalitetspass.",
-        "baseline_option_id": "swim-strength-35",
+        "development_focus": "Kontrollerad unilateral benstyrka, höftdominant arbete och bål. Plyometri endast när benen är mekaniskt fräscha.",
+        "baseline_option_id": "strength-35",
         "progression_criteria": [
           "Ändra bara dos när faktisk träningsrespons eller mesocykelns progressionsbeslut ger sakligt stöd.",
           "Wellness eller en enskild bra dag får inte ensam motivera belastningsökning.",
@@ -627,7 +753,7 @@
         "performance_marker_id": "strength-repeatability"
       },
       {
-        "slot": "run_easy_distance_4",
+        "slot": "run_easy_distance_5",
         "sport": "run",
         "reason": "Behåll lugn löptålighet med separation från löpkvalitet. Valet utgår från ett observerat värde 119.767 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
         "session": "Löpning · lugn distans · 120 min",
