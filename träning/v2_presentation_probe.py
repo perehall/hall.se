@@ -57,6 +57,11 @@ def snapshot_payload(today: date) -> dict:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--date", type=date.fromisoformat, default=date.today())
+    parser.add_argument(
+        "--document-output",
+        type=Path,
+        help="Write the pure v2 HTML document to this path.",
+    )
     args = parser.parse_args()
     payload = snapshot_payload(args.date)
     output = json.dumps(payload, ensure_ascii=False, sort_keys=True)
@@ -64,6 +69,10 @@ def main() -> int:
     output_path = str(os.environ.get("V2_PROBE_OUTPUT") or "").strip()
     if output_path:
         Path(output_path).write_text(output + "\n", encoding="utf-8")
+    if args.document_output:
+        args.document_output.parent.mkdir(parents=True, exist_ok=True)
+        args.document_output.write_text(payload["document"], encoding="utf-8")
+        print(f"V2_DOCUMENT_OK {args.document_output}")
     return 0
 
 
