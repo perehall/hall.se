@@ -4,6 +4,52 @@
       "model": "gpt-5-mini",
       "assessment": {
         "facts": [
+          "Enduro: 12,53 km · 1:36:49 · 391,6 m+ · snittpuls 101,2 · maxpuls 150.",
+          "Användarrapport: Teknisk körning, stenbacke och berghäll, kostnad för passet minimal RPE 4/10. Känsla: Pigg. Lätt teknik, stenbackar och berghällar RPE 4/10."
+        ],
+        "summary": "Enduropasset omfattade 1:36:49 totalt och 392 m+; det räknas som faktisk teknisk och mekanisk träningsbelastning inför nästa prioriterade pass.",
+        "unknowns": [
+          "Exakt lokal muskulär trötthet i ben efter flera dagars aktivitetsserie kan inte avgöras från dessa data",
+          "Eventuell natt-till-natt återhämtning påverkar tolerans för hårdare följande benpass"
+        ],
+        "confidence": "medium",
+        "interpretations": [
+          "Teknisk, lågmekanisk enduro gav rimlig belastning men ingår som faktisk extern belastning i mikrocykeln.",
+          "Eftersom planerade 2026-09-29 simpasset avsiktligt är lågmekanisk och finns i allowed_target_dates rekommenderas att det behålls enligt plan."
+        ],
+        "load_interpretation": "För Enduro används hela 1:36:49 som tidsomfattning; Stravas rörelsetid 1:03:37 och snittpuls 101 beskriver inte den tekniska/mekaniska belastningen ensamma."
+      },
+      "auto_apply": {
+        "note": "Ingen automatisk planändring.",
+        "applied": false
+      },
+      "activity_id": 20271537143,
+      "plan_action": {
+        "action": "keep",
+        "reason": "Dagen efter teknisk, låg-RPE enduro är den planerade 3 200 m simningen lågmekanisk och avsedd för detta läge.",
+        "target_date": "2026-09-29",
+        "dose_option_id": "",
+        "recommendation": "Behåll planerad simning 2026-09-29 (3 200 m aerob/teknik) som planerat; prioritera teknik och mekanisk belastning. Avstå från extra benintensiva pass tills återhämtning bekräftats.",
+        "requires_approval": false,
+        "target_workout_key": "20260921-swim_aerobic-swim_technique-run_threshold:mc2:2026-09-29:swim_aerobic_technique_1"
+      },
+      "activity_date": "2026-09-21",
+      "activity_name": "Enduro på kvällen",
+      "generated_at_utc": "2026-09-28T20:55:43.083039+00:00",
+      "analysis_contract": {
+        "pipeline_version": 4,
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
+        "analysis_code_sha256": "3323209316fd3786118440b80471660165354ea9f5a4df5bc883275747d2cc5e",
+        "plan_comparison_version": 3,
+        "workout_context_version": 3
+      },
+      "performance_marker_id": null,
+      "performance_protocol_key": null
+    },
+    {
+      "model": "gpt-5-mini",
+      "assessment": {
+        "facts": [
           "Enduro: 26,61 km · 1:41:02 · 527,2 m+ · snittpuls 125,1 · maxpuls 146.",
           "Användarrapport: RPE 6/10. Känsla: Pigg."
         ],
@@ -1301,49 +1347,11 @@
       "generated_at_utc": "2026-09-04T16:20:45.372573+00:00",
       "performance_marker_id": null,
       "performance_protocol_key": null
-    },
-    {
-      "model": "gpt-5-mini",
-      "assessment": {
-        "facts": [
-          "Swimrun: 6,89 km · 54:25 · 104,3 m+ · snittpuls 135,4 · maxpuls 158.",
-          "Planstatus 2026-09-02: dagen är markerad genomförd i coachens beslutsunderlag."
-        ],
-        "summary": "Jogget igenom ett hårt men kontrollerat Swimrun-varv (≈3,100–3,300 s) med stigande puls och höga arbetswatt i senare löpblock; passet är kompatibelt med veckans plan men adderar…",
-        "unknowns": [
-          "Subjektiv dagskänsla efter passet (benkänsla) saknas och kan ändra beslut.",
-          "Exakt andel sim vs löp i varje lap (hur mycket mekanisk belastning per del) saknas som kan finjustera skalning."
-        ],
-        "confidence": "medium",
-        "interpretations": [
-          "Swimrun ersatte planerad simning och gav både aerob träning och mekanisk löpbelastning som ökar veckans totala benkostnad.",
-          "Belastningsmönstret tre dagar i följd (enduro, tröskel, Swimrun) talar för konservativ justering av dagens…"
-        ],
-        "load_interpretation": "Närbelastningen: kardiovaskulär volym + måttlig–mekanisk/neuromuskulär belastning från löp-/byten under Swimrun."
-      },
-      "auto_apply": {
-        "note": "Konservativ ändring applicerad på 2026-09-03: reduce.",
-        "applied": true
-      },
-      "activity_id": 20008258969,
-      "plan_action": {
-        "action": "reduce",
-        "reason": "Skydda fredagens prioriterade backkvalitet efter tre dagars ackumulerad belastning.",
-        "target_date": "2026-09-03",
-        "dose_option_id": "",
-        "recommendation": "Gör dagens MTB/XC som ordinerat men i förkortad dos…",
-        "requires_approval": false
-      },
-      "activity_date": "2026-09-02",
-      "activity_name": "SLK Swimrun Jogersö Extreme",
-      "generated_at_utc": "2026-09-03T16:24:58.462418+00:00",
-      "performance_marker_id": null,
-      "performance_protocol_key": null
     }
   ],
-  "last_run_utc": "2026-09-28T20:11:09.661317+00:00",
+  "last_run_utc": "2026-09-28T20:55:43.083039+00:00",
   "contract_version": 16,
-  "last_trigger_hash": "bcd79685ff51910aab5fddd69a463e3bc164d3dbc953a852a31d0c105cd1f2db",
+  "last_trigger_hash": "e791ef5ebc0150b5200653c6556a3a246787f94099314c04d7e9145e66e0db2f",
   "analysed_activity_ids": [
     "20367593813",
     "20350203020",
@@ -1376,7 +1384,8 @@
     "19994118756",
     "19960743008",
     "20368346174",
-    "20337767421"
+    "20337767421",
+    "20271537143"
   ],
   "analysis_ledger_version": 1,
   "output_contract_version": 19,
