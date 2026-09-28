@@ -53,6 +53,44 @@ def base_day(*, sport="run", candidate_id="run-threshold-3x10", blocks=None):
     }
 
 
+def strength_day():
+    return {
+        "date": "2026-10-02",
+        "status": "preliminary",
+        "sport": "strength",
+        "microcycle_slot": "strength_core",
+        "session": "Styrka/core · ca 35 min · styrkemall",
+        "workout_design": {
+            "selected_candidate_id": "strength-35",
+            "candidates": [
+                {
+                    "id": "strength-35",
+                    "session": "Styrka/core · ca 35 min · styrkemall",
+                    "prescription": {
+                        "executable": True,
+                        "completeness": "partial",
+                        "missing": ["exercise_sets_reps_load"],
+                        "blocks": [
+                            {
+                                "name": "Tidsram",
+                                "work": {"duration_s": 2100},
+                                "instruction": "Styrka/core inom vald tidsram",
+                                "intensity": "kontrollerad",
+                            },
+                            {
+                                "name": "Styrkemall",
+                                "work": {},
+                                "instruction": "Bulgarian split squat som huvudalternativ.",
+                                "intensity": "enligt styrkemall",
+                            },
+                        ],
+                    },
+                }
+            ],
+        },
+    }
+
+
 class DeviceWorkoutTests(unittest.TestCase):
     def test_threshold_compiles_from_selected_candidate_without_invented_target(self):
         workout = compile_device_workout(base_day())
@@ -149,9 +187,23 @@ class DeviceWorkoutTests(unittest.TestCase):
         self.assertNotIn("device_workout", materialized)
         self.assertNotIn("device_sync", materialized)
 
-    def test_strength_is_not_silently_compiled(self):
-        with self.assertRaises(DeviceWorkoutError):
-            compile_device_workout(base_day(sport="strength"))
+    def test_strength_syncs_only_known_duration_without_inventing_sets_reps_or_load(self):
+        workout = compile_device_workout(strength_day())
+        self.assertEqual(workout["provider_type"], "WeightTraining")
+        self.assertEqual(workout["detail_level"], "duration_only")
+        self.assertEqual(len(workout["blocks"]), 1)
+        step = workout["blocks"][0]["steps"][0]
+        self.assertEqual(step["duration"], {"kind": "time", "seconds": 2100})
+        self.assertEqual(step["instruction"], "Styrka/core inom vald tidsram")
+        self.assertNotIn("Bulgarian", str(workout))
+        self.assertTrue(validate_device_workout(workout, "strength"))
+
+        materialized = materialize_day(strength_day(), in_horizon=True)
+        self.assertEqual(materialized["device_sync"]["status"], "pending")
+        self.assertEqual(
+            materialized["device_workout"]["provider_type"],
+            "WeightTraining",
+        )
 
 
 if __name__ == "__main__":

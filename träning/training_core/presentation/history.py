@@ -12,6 +12,7 @@ from training_core.domain.history import (
     ArchivedWeekReview,
 )
 from training_core.presentation.public_copy import public_reason
+from training_core.presentation.prescription import prescription_lines
 from training_core.presentation.sport_identity import (
     activity_icon_key,
     planned_icon_keys,
@@ -102,25 +103,7 @@ def _activity_detail(activity: ArchivedActivity) -> str:
 
 
 def _prescription_lines(payload: dict) -> tuple[str, ...]:
-    design = payload.get("workout_design") or {}
-    selected_id = design.get("selected_candidate_id")
-    candidates = design.get("candidates") or []
-    selected = next(
-        (item for item in candidates if item.get("id") == selected_id),
-        None,
-    )
-    if selected is None and len(candidates) == 1:
-        selected = candidates[0]
-    blocks = ((selected or {}).get("prescription") or {}).get("blocks") or []
-    lines: list[str] = []
-    for block in blocks:
-        name = str(block.get("name") or "").strip()
-        intensity = str(block.get("intensity") or "").strip()
-        instruction = str(block.get("instruction") or "").strip()
-        line = " · ".join(part for part in (name, intensity, instruction) if part)
-        if line:
-            lines.append(line)
-    return tuple(lines)
+    return prescription_lines(payload)
 
 
 def _plan_impact(evaluation: ArchivedCoachEvaluation | None) -> str:
