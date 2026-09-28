@@ -493,6 +493,8 @@ def normalize_deferred_future_action(action, candidate_dates, ready_dates):
         ):
             normalized["action"] = "review"
             normalized["target_date"] = ""
+            normalized["target_workout_key"] = ""
+            normalized["dose_option_id"] = ""
             normalized["reason"] = (
                 "Rådet kunde inte kopplas entydigt till det angivna målpasset och "
                 "appliceras därför inte automatiskt."
@@ -516,6 +518,8 @@ def normalize_deferred_future_action(action, candidate_dates, ready_dates):
 
     normalized["action"] = "review"
     normalized["target_date"] = ""
+    normalized["target_workout_key"] = ""
+    normalized["dose_option_id"] = ""
     normalized["reason"] = (
         "Beslutet skjuts upp eftersom mellanliggande planerade dagar ännu inte har ett känt utfall."
     )
@@ -727,6 +731,8 @@ def normalize_no_remaining_plan(
 
     normalized = dict(action)
     normalized["target_date"] = ""
+    normalized["target_workout_key"] = ""
+    normalized["dose_option_id"] = ""
     if normalized.get("action") in {"reduce", "rest"}:
         normalized["action"] = "review"
     normalized["recommendation"] = (
