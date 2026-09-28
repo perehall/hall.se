@@ -131,7 +131,16 @@ class ManifestWeekArchiveRepository:
         plan = snapshot.get("plan") or {}
         plan_meta = plan.get("meta") or {}
         plan_days = []
-        for row in plan.get("days") or []:
+        canonical_rows = plan.get("planned_workouts")
+        if isinstance(canonical_rows, list):
+            archived_rows = canonical_rows
+        else:
+            archived_rows = snapshot.get("legacy_plan_days")
+            if not isinstance(archived_rows, list):
+                raise RuntimeError(
+                    f"archived week {key} lacks canonical workouts and explicit legacy audit rows"
+                )
+        for row in archived_rows:
             local_date = date.fromisoformat(str(row.get("date") or ""))
             plan_days.append(
                 ArchivedPlanDay(
