@@ -37,7 +37,34 @@ class OpenAiUsageTests(unittest.TestCase):
         self.assertIn("reasoning_tokens=80", line)
         self.assertIn("total_tokens=1120", line)
         self.assertIn("request_chars=", line)
+        self.assertIn("payload_field_chars=none", line)
         self.assertNotIn("DO-NOT-LOG-THIS", line)
+
+    def test_payload_field_sizes_are_logged_without_values(self):
+        response = {
+            "model": "gpt-5-mini",
+            "usage": {"input_tokens": 10, "total_tokens": 10},
+        }
+        payload = {
+            "current_plan": {"secret_text": "PLAN-CONTENT-MUST-NOT-LOG"},
+            "recent_activities": [{"id": 1}],
+        }
+        request = {
+            "input": [
+                {"role": "system", "content": "system"},
+                {"role": "user", "content": __import__("json").dumps(payload)},
+            ]
+        }
+
+        output = io.StringIO()
+        with redirect_stdout(output):
+            log_openai_usage("coach", response, request)
+
+        line = output.getvalue()
+        self.assertIn("payload_field_chars=", line)
+        self.assertIn("current_plan:", line)
+        self.assertIn("recent_activities:", line)
+        self.assertNotIn("PLAN-CONTENT-MUST-NOT-LOG", line)
 
 
 if __name__ == "__main__":

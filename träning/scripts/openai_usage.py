@@ -10,6 +10,29 @@ def _integer(value) -> int:
     return int(value) if isinstance(value, (int, float)) and not isinstance(value, bool) else 0
 
 
+def _payload_field_chars(request_body: dict | None) -> str:
+    if not isinstance(request_body, dict):
+        return ""
+    for item in request_body.get("input") or []:
+        if not isinstance(item, dict) or item.get("role") != "user":
+            continue
+        content = item.get("content")
+        if not isinstance(content, str):
+            continue
+        try:
+            payload = json.loads(content)
+        except json.JSONDecodeError:
+            return ""
+        if not isinstance(payload, dict):
+            return ""
+        parts = [
+            f"{key}:{len(json.dumps(value, ensure_ascii=False, separators=(',', ':')))}"
+            for key, value in sorted(payload.items())
+        ]
+        return ",".join(parts)
+    return ""
+
+
 def log_openai_usage(stage: str, response: dict, request_body: dict | None = None) -> None:
     """Log token counters only; never prompt or response content."""
     usage = response.get("usage") if isinstance(response, dict) else {}
@@ -24,10 +47,12 @@ def log_openai_usage(stage: str, response: dict, request_body: dict | None = Non
         request_chars = len(json.dumps(request_body, ensure_ascii=False, separators=(",", ":")))
 
     model = str(response.get("model") or "") if isinstance(response, dict) else ""
+    field_chars = _payload_field_chars(request_body)
     print(
         "OPENAI_USAGE "
         f"stage={stage} model={model or 'unknown'} "
         f"request_chars={request_chars} "
+        f"payload_field_chars={field_chars or 'none'} "
         f"input_tokens={_integer(usage.get('input_tokens'))} "
         f"cached_tokens={_integer(input_details.get('cached_tokens'))} "
         f"output_tokens={_integer(usage.get('output_tokens'))} "

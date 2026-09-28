@@ -24,6 +24,10 @@ from coach import (  # noqa: E402
     neutralize_unbased_load_labels,
     performance_context_for_activity,
     performance_facts,
+    latest_activity_for_coach,
+    plan_context_for_coach,
+    strategy_context_for_coach,
+    summarize_planned_workout,
     scrub_private_wellness_output,
     rolling_load_context,
     stable_hash,
@@ -268,6 +272,98 @@ class CoachApiTests(unittest.TestCase):
         )
         self.assertEqual(context["lookback_days"], 3)
         self.assertEqual(context["lookahead_days"], 3)
+
+    def test_latest_activity_projection_excludes_raw_laps(self):
+        activity = {
+            "id": 7,
+            "sport_type": "Run",
+            "moving_time_s": 3600,
+            "laps": [{"lap_index": index} for index in range(50)],
+            "workout_analysis_context": {
+                "run": {"work_intervals": [{"pace_s_per_km": 240}]},
+                "user_report": "Kontrollerat.",
+            },
+        }
+        projected = latest_activity_for_coach(activity)
+        self.assertNotIn("laps", projected)
+        self.assertIn("workout_analysis_context", projected)
+        self.assertEqual(projected["user_report"], "Kontrollerat.")
+
+    def test_planned_workout_projection_keeps_decision_fields_not_device_payloads(self):
+        workout = {
+            "workout_key": "w-swim",
+            "date": "2026-09-29",
+            "sport": "swim",
+            "session": "Simning · 3 200 m",
+            "stimuli": ["swim_aerobic"],
+            "dose_open": False,
+            "dose_resolution": {"kind": "structured", "value": 3200, "option_id": "swim-3200"},
+            "dose_options": [
+                {
+                    "id": "swim-3200",
+                    "kind": "structured",
+                    "value": 3200,
+                    "session": "Simning · 3 200 m",
+                    "watch_workout": {"blocks": [{"steps": [{"distance_m": 50}] * 40}]},
+                }
+            ],
+            "watch_workout": {"blocks": [{"steps": [{"distance_m": 50}] * 40}]},
+            "workout_design": {"candidates": [{"prescription": {"blocks": [1, 2, 3]}}]},
+        }
+        projected = summarize_planned_workout(workout)
+        self.assertNotIn("watch_workout", projected)
+        self.assertNotIn("workout_design", projected)
+        self.assertEqual(projected["dose_options"][0]["id"], "swim-3200")
+        self.assertNotIn("watch_workout", projected["dose_options"][0])
+
+    def test_plan_and_strategy_projections_remove_duplicate_runtime_documents(self):
+        plan = {
+            "meta": {
+                "week_start": "2026-09-28",
+                "week_end": "2026-10-04",
+                "timezone": "Europe/Stockholm",
+                "principle": "Kontinuitet.",
+            },
+            "days": [{"date": "2026-09-28"}],
+            "strength_template": {"large": "payload"},
+            "planned_workouts": [
+                {
+                    "workout_key": "w-run",
+                    "date": "2026-09-29",
+                    "sport": "run",
+                    "session": "Löpning",
+                    "watch_workout": {"large": "payload"},
+                }
+            ],
+        }
+        strategy = {
+            "north_star": "Allroundatlet",
+            "load_model": {"lookback_days": 3, "lookahead_days": 3},
+            "current_priorities": [{"key": "run"}],
+            "current_mesocycle": {
+                "id": "meso",
+                "title": "Block",
+                "guardrails": ["Kontrollerad belastning"],
+                "microcycle_template": [{"large": "duplicated-plan-payload"}],
+                "decision_trace": {
+                    "competition_context": {
+                        "event": "Åland",
+                        "event_date": "2027-08-01",
+                        "planning_implications": ["Sim + löp"],
+                        "race_profile": {"large": "not-needed-here"},
+                    }
+                },
+            },
+        }
+        plan_projection = plan_context_for_coach(plan)
+        strategy_projection = strategy_context_for_coach(strategy)
+        self.assertNotIn("days", plan_projection)
+        self.assertNotIn("strength_template", plan_projection)
+        self.assertNotIn("microcycle_template", strategy_projection["current_mesocycle"])
+        self.assertNotIn(
+            "race_profile",
+            strategy_projection["current_mesocycle"]["competition_context"],
+        )
 
     def test_performance_context_is_selected_by_activity_id(self):
         history = {

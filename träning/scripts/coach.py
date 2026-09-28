@@ -139,7 +139,7 @@ def load_private_wellness_context(path=None):
 
 
 def summarize_activity_history(activity):
-    """Compact historical context; detailed laps/context belong only to latest_activity."""
+    """Compact historical facts; detailed provider arrays never belong in history."""
     context = activity.get("workout_analysis_context") or {}
     return {
         "id": activity.get("id"),
@@ -155,17 +155,191 @@ def summarize_activity_history(activity):
         "total_elevation_gain_m": activity.get("total_elevation_gain_m"),
         "average_heartrate": activity.get("average_heartrate"),
         "max_heartrate": activity.get("max_heartrate"),
+        "average_watts": activity.get("average_watts"),
+        "weighted_average_watts": activity.get("weighted_average_watts"),
         "user_report": activity.get("user_report") or context.get("user_report") or "",
     }
 
 
-def recent_activity_history(activities, limit=10):
+def latest_activity_for_coach(activity, workout_context=None):
+    """Detailed latest-activity projection without raw lap/provider duplication."""
+    result = summarize_activity_history(activity)
+    result["device_name"] = activity.get("device_name")
+    result["calories"] = activity.get("calories")
+    result["workout_analysis_context"] = (
+        workout_context
+        if workout_context is not None
+        else deepcopy(activity.get("workout_analysis_context") or {})
+    )
+    return result
+
+
+def recent_activity_history(activities, limit=8, exclude_id=None):
     rows = sorted(
-        activities,
+        [
+            activity
+            for activity in activities
+            if exclude_id is None or str(activity.get("id")) != str(exclude_id)
+        ],
         key=lambda activity: activity.get("start_date") or "",
         reverse=True,
     )[:limit]
     return [summarize_activity_history(activity) for activity in rows]
+
+
+def summarize_dose_option(option):
+    return {
+        key: deepcopy(option.get(key))
+        for key in ("id", "kind", "value", "session", "intent")
+        if option.get(key) not in (None, "", [], {})
+    }
+
+
+def summarize_planned_workout(workout, meta=None):
+    """Decision projection for one canonical workout; excludes device/render payloads."""
+    meta = meta or {}
+    result = {
+        "workout_key": workout_key(workout, meta),
+        "date": workout.get("date"),
+        "label": workout.get("label"),
+        "sport": workout.get("sport"),
+        "session": workout.get("session"),
+        "reason": workout.get("reason"),
+        "status": workout.get("status"),
+        "planning_status": workout.get("planning_status"),
+        "manual_lock": workout.get("manual_lock") is True,
+        "classification": workout.get("classification"),
+        "priority_role": workout.get("priority_role"),
+        "stimuli": deepcopy(workout.get("stimuli") or []),
+        "load_dimensions": deepcopy(workout.get("load_dimensions") or []),
+        "development_focus": workout.get("development_focus"),
+        "dose_open": workout.get("dose_open") is True,
+        "dose_resolution": deepcopy(workout.get("dose_resolution") or {}),
+        "dose_options": [
+            summarize_dose_option(option)
+            for option in (workout.get("dose_options") or [])
+        ],
+        "development_step": deepcopy(workout.get("development_step") or {}),
+    }
+    if workout.get("activity_id") is not None:
+        result["activity_id"] = workout.get("activity_id")
+    if workout.get("activity_ids"):
+        result["activity_ids"] = deepcopy(workout.get("activity_ids"))
+    if workout.get("coach_fulfilled_by_activities"):
+        result["coach_fulfilled_by_activities"] = deepcopy(
+            workout.get("coach_fulfilled_by_activities")
+        )
+    return {
+        key: value
+        for key, value in result.items()
+        if value not in (None, "", [], {}) or key in {"manual_lock", "dose_open"}
+    }
+
+
+def plan_context_for_coach(plan):
+    meta = plan.get("meta") or {}
+    compact_meta = {
+        key: deepcopy(meta.get(key))
+        for key in (
+            "week",
+            "week_start",
+            "week_end",
+            "timezone",
+            "mesocycle_id",
+            "microcycle_id",
+            "microcycle_index",
+            "microcycle_total",
+            "principle",
+            "requires_mesocycle_review",
+            "missing_protected_stimuli",
+            "missing_protected_capabilities",
+        )
+        if meta.get(key) not in (None, "", [], {})
+    }
+    return {
+        "meta": compact_meta,
+        "near_term_window": deepcopy(plan.get("near_term_window") or {}),
+        "planned_workouts": [
+            summarize_planned_workout(workout, meta)
+            for workout in planned_workouts(plan)
+        ],
+    }
+
+
+def strategy_context_for_coach(strategy):
+    mesocycle = strategy.get("current_mesocycle") or {}
+    decision_trace = mesocycle.get("decision_trace") or {}
+    competition = decision_trace.get("competition_context") or {}
+    capacity = mesocycle.get("capacity_protection") or {}
+    return {
+        "north_star": strategy.get("north_star"),
+        "goal_contract": deepcopy(strategy.get("goal_contract") or {}),
+        "current_priorities": deepcopy(strategy.get("current_priorities") or []),
+        "strategic_readiness": deepcopy(strategy.get("strategic_readiness") or []),
+        "load_model": deepcopy(strategy.get("load_model") or {}),
+        "current_mesocycle": {
+            key: deepcopy(mesocycle.get(key))
+            for key in (
+                "id",
+                "title",
+                "start_date",
+                "end_date",
+                "hypothesis",
+                "evaluation_date",
+                "contract",
+                "guardrails",
+                "success_signals",
+                "goal_contribution",
+                "goal_contributions",
+                "progression_policy",
+            )
+            if mesocycle.get(key) not in (None, "", [], {})
+        }
+        | {
+            "capacity_protection": {
+                key: deepcopy(capacity.get(key))
+                for key in (
+                    "rules",
+                    "required_each_microcycle",
+                    "protected_across_mesocycle",
+                    "completed_current_microcycle",
+                    "missing_required_action",
+                )
+                if capacity.get(key) not in (None, "", [], {})
+            },
+            "competition_context": {
+                key: deepcopy(competition.get(key))
+                for key in (
+                    "event",
+                    "target",
+                    "event_date",
+                    "days_to_event",
+                    "weeks_to_event",
+                    "horizon_stage",
+                    "category_status",
+                    "planning_implications",
+                )
+                if competition.get(key) not in (None, "", [], {})
+            },
+        },
+    }
+
+
+def target_workouts_for_coach(plan, targets):
+    by_key = {
+        workout_key(workout, plan.get("meta") or {}): workout
+        for workout in planned_workouts(plan)
+    }
+    result = []
+    for target in targets:
+        key = str(target.get("workout_key") or "")
+        workout = by_key.get(key)
+        result.append(
+            summarize_planned_workout(workout, plan.get("meta") or {})
+            if workout is not None
+            else deepcopy(target)
+        )
+    return result
 
 
 def stable_hash(plan, latest_activity, local_date, strategy=None, wellness_context=None, rolling_context=None, performance_context=None):
@@ -292,17 +466,23 @@ def rolling_load_context(activities, plan, local_date, strategy):
     return {
         "lookback_days": lookback_days,
         "lookahead_days": lookahead_days,
-        "actual_activities": sorted(
-            actuals,
-            key=lambda item: item.get("start_date_local") or item.get("start_date") or "",
-        ),
-        "planned_workouts": sorted(
-            planned,
-            key=lambda item: (
-                item.get("date") or "",
-                workout_key(item, plan.get("meta") or {}),
-            ),
-        ),
+        "actual_activities": [
+            summarize_activity_history(item)
+            for item in sorted(
+                actuals,
+                key=lambda item: item.get("start_date_local") or item.get("start_date") or "",
+            )
+        ],
+        "planned_workouts": [
+            summarize_planned_workout(item, plan.get("meta") or {})
+            for item in sorted(
+                planned,
+                key=lambda item: (
+                    item.get("date") or "",
+                    workout_key(item, plan.get("meta") or {}),
+                ),
+            )
+        ],
         "load_dimensions": load_model.get("dimensions") or [],
         "rules": load_model.get("rules") or [],
     }
@@ -733,7 +913,7 @@ def main():
         return 0
 
     latest_date = (latest.get("start_date_local") or latest.get("start_date") or "")[:10]
-    recent = recent_activity_history(activities, limit=10)
+    recent = recent_activity_history(activities, limit=8, exclude_id=latest.get("id"))
     coach_plan, fulfilled_dates = plan_for_coach(decision_plan, activities)
     candidate_workouts = allowed_target_workouts(decision_plan, activities, local_date)
     ready_workouts = decision_ready_target_workouts(decision_plan, activities, local_date)
@@ -744,17 +924,17 @@ def main():
 
     input_data = {
         "today_local": local_date,
-        "latest_activity": latest,
+        "latest_activity": latest_activity_for_coach(latest),
         "latest_activity_date": latest_date,
         "recent_activities": recent,
         "rolling_load_context": rolling_context,
         "performance_context": performance_context,
-        "current_plan": coach_plan,
-        "current_strategy": strategy,
+        "current_plan": plan_context_for_coach(coach_plan),
+        "current_strategy": strategy_context_for_coach(strategy),
         "private_wellness_context": wellness_context,
         "fulfilled_plan_dates": sorted(fulfilled_dates),
         "allowed_target_dates": ready_dates,
-        "allowed_target_workouts": ready_workouts,
+        "allowed_target_workouts": target_workouts_for_coach(decision_plan, ready_workouts),
         "deferred_target_dates": deferred_dates,
         "instruction": (
             "Analysera senaste passet mot rolling_load_context, performance_context, aktuell plan och current_strategy. "
