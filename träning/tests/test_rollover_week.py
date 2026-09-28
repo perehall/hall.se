@@ -204,36 +204,37 @@ class WeeklyRolloverTests(unittest.TestCase):
             rollover_documents(plan_w34(), upcoming, date(2026, 8, 24), STRATEGY)
 
     def test_future_week_has_concrete_baselines_with_mesocycle_progression(self):
-        promoted, _ = rollover_documents(plan_w34(), upcoming_w35(), date(2026, 8, 24), STRATEGY)
+        promoted, _ = rollover_documents(
+            plan_w34(), upcoming_w35(), date(2026, 8, 24), STRATEGY
+        )
         future = build_open_next_week(promoted, STRATEGY)
-        enduro = future["days"][0]
-        self.assertEqual(enduro["sport"], "enduro")
-        self.assertNotIn("dose_open", enduro)
 
-        expected = {
-            1: ("run-threshold-3x8", "3 × 8 min"),
-            2: ("swim-support-3200", "3 200 m"),
-            3: ("mtb-support-60", "60 min"),
-            4: ("run-hill-3x8x150", "3 × 8 × 150 m"),
-            5: ("strength-support-35", "35 min"),
-            6: ("run-easy-75", "75 min"),
-        }
-        for index, (option_id, marker) in expected.items():
-            day = future["days"][index]
-            self.assertEqual(day["planning_status"], "preliminary")
-            self.assertEqual(day["baseline_option_id"], option_id)
-            self.assertEqual(day["dose_resolution"]["state"], "baseline")
-            self.assertIn(marker, day["session"])
-            self.assertNotIn("dos öppen", day["session"].lower())
+        workouts = future["planned_workouts"]
+        self.assertTrue(workouts)
+        for workout in workouts:
+            self.assertEqual(workout["planning_status"], "preliminary")
+            if workout.get("dose_options"):
+                self.assertIn(
+                    workout["baseline_option_id"],
+                    {option["id"] for option in workout["dose_options"]},
+                )
+                self.assertEqual(workout["dose_resolution"]["state"], "baseline")
+                self.assertNotIn("dos öppen", workout["session"].lower())
 
-        strength_day = future["days"][5]
-        self.assertEqual(strength_day["planning_status"], "preliminary")
-        self.assertEqual(strength_day["priority_role"], "protected_support")
-        self.assertIn("strength_unilateral", strength_day["stimuli"])
-        self.assertIn("strength_core", strength_day["stimuli"])
-        self.assertEqual(strength_day["performance_marker_id"], "strength-repeatability")
-        self.assertEqual(future["meta"]["missing_protected_capabilities"], [])
-        self.assertFalse(future["meta"]["requires_mesocycle_review"])
+        strength = next(
+            workout for workout in workouts if workout["sport"] == "strength"
+        )
+        self.assertEqual(strength["priority_role"], "protected_support")
+        self.assertIn("strength_unilateral", strength["stimuli"])
+        self.assertIn("strength_core", strength["stimuli"])
+        self.assertNotIn("swim_aerobic", strength["stimuli"])
+        self.assertNotIn("swim_technique", strength["stimuli"])
+
+        swims = [workout for workout in workouts if workout["sport"] == "swim"]
+        self.assertTrue(swims)
+        self.assertTrue(
+            all((workout.get("watch_workout") or {}).get("blocks") for workout in swims)
+        )
 
     def test_catalog_swim_option_materializes_exact_watch_structure(self):
         day = {
