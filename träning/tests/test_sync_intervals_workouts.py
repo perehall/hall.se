@@ -99,7 +99,57 @@ def swim_day():
     }
 
 
+def strength_day():
+    session = "Styrka/core · ca 35 min · styrkemall"
+    return {
+        "date": "2026-10-02",
+        "status": "preliminary",
+        "sport": "strength",
+        "microcycle_slot": "strength_core",
+        "session": session,
+        "workout_design": {
+            "selected_candidate_id": "strength-35",
+            "candidates": [
+                {
+                    "id": "strength-35",
+                    "session": session,
+                    "prescription": {
+                        "executable": True,
+                        "completeness": "partial",
+                        "missing": ["exercise_sets_reps_load"],
+                        "blocks": [
+                            {
+                                "name": "Tidsram",
+                                "work": {"duration_s": 2100},
+                                "instruction": "Styrka/core inom vald tidsram",
+                                "intensity": "kontrollerad",
+                            },
+                            {
+                                "name": "Styrkemall",
+                                "work": {},
+                                "instruction": "Bulgarian split squat som huvudalternativ.",
+                                "intensity": "enligt styrkemall",
+                            },
+                        ],
+                    },
+                }
+            ],
+        },
+    }
+
+
 class IntervalsWorkoutSyncTests(unittest.TestCase):
+    def test_strength_payload_is_weight_training_with_only_known_duration(self):
+        workout = compile_device_workout(strength_day())
+        payload = sync.payload_for(workout)
+        self.assertEqual(payload["type"], "WeightTraining")
+        self.assertIn("Tidsram", payload["description"])
+        self.assertIn(
+            "- Styrka/core inom vald tidsram 35m intensity=active",
+            payload["description"],
+        )
+        self.assertNotIn("Bulgarian", payload["description"])
+
     def test_threshold_description_uses_supported_text_syntax(self):
         workout = compile_device_workout(run_day())
         description = sync.render_description(workout)
