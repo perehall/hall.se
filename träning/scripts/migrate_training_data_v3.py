@@ -168,6 +168,19 @@ def _split_legacy_composite(day, catalog):
     return [swim, strength]
 
 
+def _standalone_legacy_workout(day):
+    workout = deepcopy(day)
+    if not str(workout.get("microcycle_slot") or "").strip():
+        date_value = str(workout.get("date") or "").strip()
+        sport = str(workout.get("sport") or "training").strip().lower()
+        if not date_value:
+            raise RuntimeError("Multi-session migration: fristående pass saknar datum")
+        workout["microcycle_slot"] = f"legacy-{date_value}-{sport}"
+    workout.pop("workout_key", None)
+    workout.pop("additional_planned_workouts", None)
+    return workout
+
+
 def materialize_physical_workouts(document, catalog):
     """Upgrade the calendar projection to canonical 0..N workout identity.
 
@@ -187,7 +200,7 @@ def materialize_physical_workouts(document, catalog):
         if _legacy_composite_swim_strength(day):
             workouts.extend(_split_legacy_composite(day, catalog))
         else:
-            workouts.append(deepcopy(day))
+            workouts.append(_standalone_legacy_workout(day))
 
     document["planned_workouts"] = workouts
     return True
