@@ -136,6 +136,8 @@ class PostgresPresentationRepositoryTests(unittest.TestCase):
             [workout.sport for workout in workouts],
             ["swim", "strength"],
         )
+        self.assertIn("same_day_order", repo.connection_factory.last_query)
+        self.assertIn("jsonb_typeof", repo.connection_factory.last_query)
 
     def test_activity_override_label_and_latest_outcome_are_resolved_by_repository(self):
         rows = [
