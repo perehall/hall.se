@@ -94,13 +94,13 @@ SURFACES = (
     ),
     CutoverSurface(
         "page_shell",
-        "blocker",
-        "V2 preview now carries the approved current-week hierarchy, progressive disclosure and flat timeline treatment; production cutover remains blocked until human visual acceptance.",
+        "migrated",
+        "The pure v2 shell carries the human-verified current-week hierarchy, progressive disclosure and flat timeline treatment.",
     ),
     CutoverSurface(
         "approved_current_week_experience",
-        "blocker",
-        "The pre-cutover current-week page remains the product baseline. The equivalent pure-render preview is implemented but awaits human verification of primary/secondary emphasis, feedback presentation, navigation and mobile hierarchy.",
+        "migrated",
+        "The pure-render current-week experience was visually accepted in preview before production cutover; Multipass, hierarchy and compact presentation are preserved.",
     ),
     CutoverSurface(
         "manual_activity_truth",
@@ -129,8 +129,8 @@ SURFACES = (
     ),
     CutoverSurface(
         "legacy_card_layers",
-        "blocker",
-        "The mutator implementation remains a deletion target and production fallback until the pure-render preview is visually accepted; no new production finalizer is introduced for Multipass.",
+        "retire",
+        "Legacy card mutators are no longer part of production rendering after v2 cutover; they remain only as historical/parity code until separately deleted.",
     ),
 )
 
