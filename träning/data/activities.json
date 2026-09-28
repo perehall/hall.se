@@ -1,11 +1,13 @@
 {
-  "last_sync_utc": "2026-09-28T13:52:26.011668+00:00",
+  "last_sync_utc": "2026-09-28T17:58:25.182053+00:00",
   "schema_version": 2,
   "activity_semantics": {
-    "changed_ids": [],
+    "changed_ids": [
+      "20367593813"
+    ],
     "schema_version": 1,
     "overrides_applied": 20,
-    "auto_rules_applied": 11,
+    "auto_rules_applied": 12,
     "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
     "override_ids_present": [
       "19852599244",
@@ -32,13 +34,85 @@
     "workout_analysis_contract_version": 3
   },
   "last_webhook_event": {
-    "event_key": "368165:activity:20350203020:update:1790511627",
-    "object_id": 20350203020,
-    "event_time": 1790511627,
-    "aspect_type": "update",
-    "processed_at_utc": "2026-09-27T12:20:48.993318+00:00"
+    "event_key": "368165:activity:20367593813:create:1790618281",
+    "object_id": 20367593813,
+    "event_time": 1790618281,
+    "aspect_type": "create",
+    "processed_at_utc": "2026-09-28T17:58:25.182053+00:00"
   },
   "activities": [
+    {
+      "id": 20367593813,
+      "name": "Enduro på eftermiddagen",
+      "source": "Strava API",
+      "gear_id": "b18458212",
+      "calories": 573.0,
+      "gear_name": "KTM 300 EXC TPI",
+      "distance_m": 15159.8,
+      "sport_type": "Enduro",
+      "start_date": "2026-09-28T14:35:00Z",
+      "device_name": "Garmin Forerunner 970",
+      "average_watts": 250.7,
+      "display_label": "Enduro",
+      "max_heartrate": 149.0,
+      "moving_time_s": 3966,
+      "classification": "training",
+      "elapsed_time_s": 5892,
+      "start_date_local": "2026-09-28T16:35:00Z",
+      "average_heartrate": 118.2,
+      "source_sport_type": "EMountainBikeRide",
+      "sport_normalization": {
+        "rule": "emountainbike-user-enduro-proxy-v1",
+        "evidence": [
+          "source_sport_type=EMountainBikeRide",
+          "user convention: Strava e-MTB represents Enduro"
+        ]
+      },
+      "classification_reason": "User convention: Strava e-MTB represents Enduro; Enduro is actual training load.",
+      "total_elevation_gain_m": 478.0,
+      "weighted_average_watts": null,
+      "workout_analysis_context": {
+        "run": null,
+        "swim": null,
+        "total": {
+          "distance_m": 15159.8,
+          "distance_km": 15.16,
+          "max_heartrate": 149.0,
+          "moving_time_s": 3966.0,
+          "elapsed_time_s": 5892.0,
+          "elevation_gain_m": 478.0,
+          "average_heartrate": 118.2
+        },
+        "enduro": {
+          "duration_note": "For Enduro, session_duration_s is the workout duration. Strava moving_time_s only describes time classified as moving and must not replace total session duration.",
+          "moving_time_s": 3966.0,
+          "duration_basis": "elapsed_time_s",
+          "non_moving_time_s": 1926.0,
+          "session_duration_s": 5892.0
+        },
+        "sport_type": "Enduro",
+        "activity_id": 20367593813,
+        "user_report": "",
+        "display_label": "Enduro",
+        "classification": "training",
+        "contract_version": 3,
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
+      },
+      "laps": [
+        {
+          "name": "Lap 0",
+          "lap_index": 1,
+          "distance_m": 15163.3,
+          "average_speed": 3.82,
+          "average_watts": 250.7,
+          "max_heartrate": 149.0,
+          "moving_time_s": 3966,
+          "elapsed_time_s": 5892,
+          "average_cadence": null,
+          "average_heartrate": 118.2
+        }
+      ]
+    },
     {
       "id": 20350203020,
       "name": "Terränglöpning vid lunch",
