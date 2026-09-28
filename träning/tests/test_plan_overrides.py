@@ -131,15 +131,7 @@ class PlanOverrideTests(unittest.TestCase):
         document = {
             "schema_version": 3,
             "meta": {},
-            "days": [
-                {
-                    "date": "2026-09-12",
-                    "label": "Lördag",
-                    "status": "planned",
-                    "session": "Simning",
-                    "sport": "swim",
-                }
-            ],
+            "days": [{"date": "2026-09-12", "label": "Lördag"}],
             "planned_workouts": [
                 {
                     "workout_key": "swim-1",
