@@ -19,7 +19,7 @@ from swim_lingo import equipment_lingo
 
 
 DEVICE_WORKOUT_SCHEMA_VERSION = 1
-SUPPORTED_SPORTS = {"swim": "Swim", "run": "Run", "bike": "Ride"}
+SUPPORTED_SPORTS = {"swim": "Swim", "run": "Run", "bike": "Ride", "strength": "WeightTraining"}
 SYNCABLE_STATUSES = {"planned", "preliminary", "conditional"}
 
 
@@ -147,6 +147,33 @@ def _recovery_step(block: dict) -> dict | None:
     }
 
 
+def _block_has_device_duration(block: dict) -> bool:
+    work = block.get("work") or {}
+    duration_s = work.get("duration_s")
+    distance_m = work.get("distance_m")
+    return (
+        isinstance(duration_s, (int, float)) and duration_s > 0
+    ) or (
+        isinstance(distance_m, (int, float)) and distance_m > 0
+    )
+
+
+def _prescription_is_device_syncable(sport: str, prescription: dict) -> bool:
+    if prescription.get("executable") is not True:
+        return False
+    blocks = prescription.get("blocks") or []
+    if not blocks:
+        return False
+    if prescription.get("completeness") == "full":
+        return all(_block_has_device_duration(block) for block in blocks)
+    if sport == "strength" and prescription.get("completeness") == "partial":
+        # Strength currently has an explicit session-duration dose plus a
+        # qualitative exercise reference. Sync only the known duration; never
+        # invent sets, reps, load or per-exercise timing.
+        return any(_block_has_device_duration(block) for block in blocks)
+    return False
+
+
 def _compile_block(block: dict) -> dict:
     work = block.get("work") or {}
     repetitions = int(work.get("repetitions") or 1)
@@ -199,13 +226,20 @@ def compile_device_workout(day: dict) -> dict:
     if not candidate:
         raise DeviceWorkoutError("device_workout: vald workout-kandidat saknas")
     prescription = candidate.get("prescription") or {}
-    if prescription.get("executable") is not True or prescription.get("completeness") != "full":
-        raise DeviceWorkoutError("device_workout: vald kandidat saknar full exekverbar prescription")
+    if not _prescription_is_device_syncable(sport, prescription):
+        raise DeviceWorkoutError(
+            "device_workout: vald kandidat saknar en säkert synkbar prescription"
+        )
     source_blocks = prescription.get("blocks") or []
-    if not source_blocks:
-        raise DeviceWorkoutError("device_workout: vald kandidat saknar block")
+    device_source_blocks = (
+        [block for block in source_blocks if _block_has_device_duration(block)]
+        if sport == "strength"
+        else source_blocks
+    )
+    if not device_source_blocks:
+        raise DeviceWorkoutError("device_workout: vald kandidat saknar synkbara block")
 
-    blocks = [_compile_block(block) for block in source_blocks]
+    blocks = [_compile_block(block) for block in device_source_blocks]
     source_hash = _source_hash(day, candidate, blocks)
     session = _text(candidate.get("session")) or _text(day.get("session"))
     return {
@@ -220,6 +254,11 @@ def compile_device_workout(day: dict) -> dict:
         "blocks": blocks,
         "target_policy": "explicit_single_primary_only",
         "transport": "intervals_icu",
+        "detail_level": (
+            "duration_only"
+            if sport == "strength" and prescription.get("completeness") == "partial"
+            else "structured"
+        ),
     }
 
 
@@ -291,9 +330,7 @@ def materialize_day(day: dict, *, in_horizon: bool) -> dict:
     if (
         not candidate
         or not isinstance(prescription, dict)
-        or prescription.get("executable") is not True
-        or prescription.get("completeness") != "full"
-        or not (prescription.get("blocks") or [])
+        or not _prescription_is_device_syncable(sport, prescription)
     ):
         result.pop("device_workout", None)
         result.pop("device_sync", None)
