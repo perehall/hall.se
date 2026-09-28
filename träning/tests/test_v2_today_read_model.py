@@ -44,6 +44,72 @@ class TodayReadModelTests(unittest.TestCase):
         self.assertEqual(model.next_session, "Löpning · lugn distans · 120 min")
         self.assertEqual(len(model.outcomes), 2)
 
+    def test_multiple_planned_workouts_on_same_date_are_preserved(self):
+        today = date(2026, 9, 26)
+        model = build_today_read_model(
+            today=today,
+            plan=[
+                PlannedDay(
+                    today,
+                    "Simning · 3 200 m",
+                    "swim",
+                    "planned",
+                    workout_key="w-swim",
+                ),
+                PlannedDay(
+                    today,
+                    "Styrka/core · 35 min",
+                    "strength",
+                    "planned",
+                    workout_key="w-strength",
+                ),
+            ],
+            activities=[],
+        )
+        self.assertEqual(model.title, "2 planerade pass")
+        self.assertEqual(
+            [workout.workout_key for workout in model.planned_workouts],
+            ["w-swim", "w-strength"],
+        )
+        self.assertEqual(
+            [workout.session for workout in model.planned_workouts],
+            ["Simning · 3 200 m", "Styrka/core · 35 min"],
+        )
+
+    def test_multisport_workout_keeps_ordered_components(self):
+        today = date(2026, 9, 26)
+        model = build_today_read_model(
+            today=today,
+            plan=[
+                PlannedDay(
+                    today,
+                    "Brick · cykel + löpning",
+                    "multisport",
+                    "planned",
+                    payload={
+                        "components": [
+                            {"order": 1, "sport": "bike", "label": "Cykel"},
+                            {"order": 2, "sport": "run", "label": "Löpning"},
+                        ]
+                    },
+                    workout_key="brick-1",
+                )
+            ],
+            activities=[],
+        )
+        self.assertEqual(
+            model.planned_workouts[0].component_sports,
+            ("bike", "run"),
+        )
+        self.assertEqual(model.icon_keys, ("bike", "run"))
+
+    def test_zero_planned_workouts_is_a_valid_rest_day(self):
+        today = date(2026, 9, 26)
+        model = build_today_read_model(today=today, plan=[], activities=[])
+        self.assertEqual(model.title, "Vilodag")
+        self.assertEqual(model.planned_workouts, ())
+        self.assertEqual(model.state, "open")
+
     def test_completed_outcome_carries_feedback_and_latest_coach_decision(self):
         today = date(2026, 9, 27)
         activity = CompletedActivity(
