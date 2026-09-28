@@ -3,9 +3,9 @@ import json
 from copy import deepcopy
 from pathlib import Path
 
+from canonical_plan import planned_workouts as canonical_planned_workouts
 from strategy_contracts import validate_training_strategy
 from workout_design import materialize_document, validate_workout_design
-from calendar_projection import refresh_calendar_projection
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -94,17 +94,16 @@ def refresh_swim_recipes(document, catalog):
             "planned": deepcopy(canonical.get("equipment") or [])
         }
 
-    refresh_calendar_projection(result)
     return result
 
 def validate_materialized(document, label):
-    for collection_name in ("days", "planned_workouts"):
-        if collection_name == "planned_workouts" and document.get(collection_name) is None:
-            continue
-        for index, day in enumerate(document.get(collection_name) or []):
-            if day.get("sport") in {"rest", "open"}:
-                continue
-            validate_workout_design(day, f"{label}.{collection_name}[{index}]")
+    for index, workout in enumerate(
+        canonical_planned_workouts(document, context=label)
+    ):
+        validate_workout_design(
+            workout,
+            f"{label}.planned_workouts[{index}]",
+        )
 
 
 def main():
@@ -123,14 +122,8 @@ def main():
         counts.append(
             f"{label}="
             + str(
-                sum(
-                    1
-                    for day in (
-                        materialized.get("planned_workouts")
-                        if materialized.get("planned_workouts") is not None
-                        else materialized.get("days") or []
-                    )
-                    if day.get("sport") not in {"rest", "open"}
+                len(
+                    canonical_planned_workouts(materialized, context=label)
                 )
             )
         )
