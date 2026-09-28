@@ -159,12 +159,11 @@ def seed_fixed_commitments(week_document):
                 ]
                 planned_workouts.append(deepcopy(fixed))
     if isinstance(planned_workouts, list):
-        planned_workouts.sort(
-            key=lambda workout: (
-                str(workout.get("date") or ""),
-                str(workout.get("microcycle_slot") or ""),
-            )
-        )
+        # Keep strategy order between workouts on the same date. Calendar date
+        # ordering is useful, but a lexical slot-name sort must never redefine
+        # same-day workout order.
+        planned_workouts.sort(key=lambda workout: str(workout.get("date") or ""))
+        refresh_calendar_projection(week_document)
     return week_document
 
 
