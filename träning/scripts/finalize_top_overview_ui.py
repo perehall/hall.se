@@ -241,6 +241,23 @@ body.quiet-performance.qp-current .current-week-meta{
   line-height:1.4;
 }
 body.quiet-performance.qp-current .current-week-header .top-details{margin-top:8px}
+body.quiet-performance.qp-current .current-week-plan>summary{
+  display:inline-block;
+  color:var(--qp-secondary,#59636f);
+  font-size:.68rem;
+  font-weight:600;
+  line-height:1.35;
+  text-decoration:underline;
+  text-decoration-thickness:1px;
+  text-underline-offset:3px;
+  text-decoration-color:var(--qp-line,#cbd5e1);
+}
+body.quiet-performance.qp-current .current-week-plan>summary:hover{
+  color:var(--qp-text,#111827);
+  text-decoration-color:currentColor;
+}
+body.quiet-performance.qp-current .current-week-plan>summary:after{content:""}
+body.quiet-performance.qp-current .current-week-plan[open]>summary:after{content:""}
 body.quiet-performance.qp-current .current-week-header + .week-status-expander{
   margin-top:2px;
   margin-bottom:20px;
