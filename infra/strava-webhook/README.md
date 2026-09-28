@@ -12,6 +12,7 @@ Eventkedja för träningsappen:
 - GitHub-token ska vara en dedikerad fine-grained PAT för endast `perehall/hall.se` med **Contents: write**, vilket GitHub kräver för `repository_dispatch`.
 - Workern väntar högst 1,5 s på GitHubs `204`. Vid fel returnerar den 503 så att Strava kan retrya. Eventnyckeln är deterministisk och GitHub-synken är idempotent.
 - Den befintliga schemalagda Strava-synken behålls som fallback tills webhooken är verifierad end-to-end.
+- GUI-feedback är fail-closed: Workern måste först få en durable acknowledgement från Supabase. Saknas `SUPABASE_SECRET_KEY` returneras 503 och inget GitHub-event dispatchas; dispatch-only räknas aldrig som sparad feedback.
 
 ## Cloudflare-konfiguration
 
@@ -24,6 +25,7 @@ npx wrangler secret put WEBHOOK_PATH_SECRET
 npx wrangler secret put STRAVA_VERIFY_TOKEN
 npx wrangler secret put GITHUB_DISPATCH_TOKEN
 npx wrangler secret put STRAVA_OWNER_ID
+npx wrangler secret put SUPABASE_SECRET_KEY
 npm run deploy
 ```
 
@@ -38,7 +40,7 @@ Callback-URL blir:
 
 `https://<worker-host>/strava/<WEBHOOK_PATH_SECRET>`
 
-`GET /healthz` visar endast om konfigurationen finns, aldrig secret-värden.
+`GET /healthz` visar endast om konfigurationen finns, aldrig secret-värden. Produktionsverifieringen kräver att `training_input_direct_persistence_configured=true`.
 
 ## Strava-subscription
 
