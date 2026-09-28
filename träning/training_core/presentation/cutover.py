@@ -95,12 +95,12 @@ SURFACES = (
     CutoverSurface(
         "page_shell",
         "blocker",
-        "V2 has a responsive document shell, but it has not yet reproduced the human-approved current-week information hierarchy, progressive disclosure, card/timeline treatment and interaction density.",
+        "V2 preview now carries the approved current-week hierarchy, progressive disclosure and flat timeline treatment; production cutover remains blocked until human visual acceptance.",
     ),
     CutoverSurface(
         "approved_current_week_experience",
         "blocker",
-        "The pre-cutover current-week page is the human-approved product baseline. V2 must preserve what is primary, secondary/collapsed, completed-vs-planned emphasis, feedback/evaluation presentation, week focus/status placement, navigation and mobile visual hierarchy before production cutover.",
+        "The pre-cutover current-week page remains the product baseline. The equivalent pure-render preview is implemented but awaits human verification of primary/secondary emphasis, feedback presentation, navigation and mobile hierarchy.",
     ),
     CutoverSurface(
         "manual_activity_truth",
@@ -130,7 +130,7 @@ SURFACES = (
     CutoverSurface(
         "legacy_card_layers",
         "blocker",
-        "The mutator implementation remains a deletion target, but its user-visible presentation semantics are retained until the approved current-week experience has an equivalent pure-render contract.",
+        "The mutator implementation remains a deletion target and production fallback until the pure-render preview is visually accepted; no new production finalizer is introduced for Multipass.",
     ),
 )
 
