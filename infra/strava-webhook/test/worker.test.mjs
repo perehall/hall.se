@@ -263,15 +263,10 @@ test("training GUI input stays saved when background dispatch fails after persis
   await background[0];
 });
 
-test("training GUI input keeps dispatch-only fallback until Supabase secret is configured", async () => {
-  const fallbackEnv = { ...env };
-  delete fallbackEnv.SUPABASE_SECRET_KEY;
-  let requestBody;
-  const fakeFetch = async (url, init) => {
-    assert.equal(url, "https://api.github.com/repos/perehall/hall.se/dispatches");
-    requestBody = JSON.parse(init.body);
-    return new Response(null, { status: 204 });
-  };
+test("training GUI input fails closed when durable persistence is not configured", async () => {
+  const noPersistenceEnv = { ...env };
+  delete noPersistenceEnv.SUPABASE_SECRET_KEY;
+  let externalCallMade = false;
   const request = new Request("https://xn--hll-qla.se/träning/training-api/input", {
     method: "POST",
     headers: {
@@ -284,12 +279,13 @@ test("training GUI input keeps dispatch-only fallback until Supabase secret is c
       text: "Pigg.",
     }),
   });
-  const response = await handleRequest(request, fallbackEnv, fakeFetch);
-  const body = await response.json();
-  assert.equal(response.status, 200);
-  assert.equal(body.status, "accepted");
-  assert.equal(body.persistence, "dispatch");
-  assert.equal(requestBody.event_type, "training-input-event");
+  const response = await handleRequest(request, noPersistenceEnv, async () => {
+    externalCallMade = true;
+    throw new Error("No external service may be called without durable persistence");
+  });
+  assert.equal(response.status, 503);
+  assert.deepEqual(await response.json(), { error: "persistence_not_configured" });
+  assert.equal(externalCallMade, false);
 });
 
 test("training GUI input rejects multiple feelings", async () => {
