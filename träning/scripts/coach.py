@@ -17,6 +17,7 @@ from coach_rules import (
     canonical_facts,
     decision_ready_target_dates,
     decision_ready_target_workouts,
+    fulfilled_plan_workouts,
     normalize_assessment_confidence,
     normalize_deferred_future_action,
     normalize_no_remaining_plan,
