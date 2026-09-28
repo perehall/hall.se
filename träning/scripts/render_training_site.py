@@ -77,16 +77,28 @@ def run_legacy_parity_pipeline(*, runner=None):
     print(f"Render pipeline OK: {len(LEGACY_PARITY_PIPELINE)} deterministiska steg.")
 
 
+def cutover_contract_ready():
+    sys.path.insert(0, str(ROOT))
+    from training_core.presentation.cutover import cutover_ready
+
+    return cutover_ready()
+
+
+def publish_v2_preview():
+    preview_script = ROOT / "scripts" / "render_v2_preview.py"
+    subprocess.run([sys.executable, str(preview_script)], check=True, cwd=REPO_ROOT)
+
+
 def publish_v2_current_page():
-    # Production publishes v2 directly from canonical PostgreSQL state.
+    # Production publishes v2 directly from canonical PostgreSQL state only
+    # after every user-visible cutover surface is explicitly migrated.
     sys.path.insert(0, str(ROOT))
     from v2_presentation_probe import build_snapshot
-    from training_core.presentation.cutover import cutover_ready
     from training_core.presentation.renderer import render_document
     from datetime import datetime
     from zoneinfo import ZoneInfo
 
-    if not cutover_ready():
+    if not cutover_contract_ready():
         raise RuntimeError("V2 publication blocked by cutover contract")
     local_date = datetime.now(ZoneInfo("Europe/Stockholm")).date()
     snapshot = build_snapshot(local_date)
@@ -106,7 +118,14 @@ def publish_v2_current_page():
 
 
 def main():
-    publish_v2_current_page()
+    if cutover_contract_ready():
+        publish_v2_current_page()
+    else:
+        # Transitional safety path: preserve the human-approved production
+        # experience while the remaining v2 presentation surfaces are migrated.
+        run_legacy_parity_pipeline()
+        publish_v2_preview()
+        print("V2_CUTOVER_DEFERRED legacy production retained", flush=True)
     return 0
 
 
