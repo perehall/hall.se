@@ -245,8 +245,6 @@ def build_today_read_model(
 ) -> TodayReadModel:
     plan_rows = tuple(plan)
     today_rows = tuple(row for row in plan_rows if row.local_date == today)
-    if not today_rows:
-        raise ValueError(f"missing planned day for {today.isoformat()}")
 
     training_rows = planned_training_workouts(today_rows)
     display_rows = training_rows or today_rows[:1]
@@ -285,8 +283,10 @@ def build_today_read_model(
     else:
         if len(training_rows) > 1:
             title = f"{len(training_rows)} planerade pass"
-        else:
+        elif display_rows:
             title = display_rows[0].session
+        else:
+            title = "Vilodag"
         details = ()
         outcomes = ()
         state = _state_for(display_rows)
