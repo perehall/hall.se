@@ -208,6 +208,65 @@ class PresentationSliceTests(unittest.TestCase):
         )
         self.assertNotIn("Ingen planerad träning", rendered)
 
+    def test_strength_template_source_labels_are_not_repeated_in_prescription(self):
+        class StrengthRepository:
+            def planned_days(self, start, end):
+                return [
+                    PlannedDay(
+                        date(2026, 9, 26),
+                        "Styrka/core · ca 35 min · styrkemall",
+                        "strength",
+                        "planned",
+                        workout_key="strength-1",
+                        payload={
+                            "workout_design": {
+                                "selected_candidate_id": "strength-35",
+                                "candidates": [
+                                    {
+                                        "id": "strength-35",
+                                        "prescription": {
+                                            "blocks": [
+                                                {
+                                                    "name": "Tidsram",
+                                                    "intensity": "kontrollerad",
+                                                    "instruction": "Styrka/core inom vald tidsram",
+                                                },
+                                                {
+                                                    "name": "Styrkemall",
+                                                    "intensity": "enligt styrkemall",
+                                                    "instruction": "Bulgarian split squat som huvudalternativ för unilateral benstyrka.",
+                                                },
+                                                {
+                                                    "name": "Styrkemall",
+                                                    "intensity": "enligt styrkemall",
+                                                    "instruction": "Marklyft eller RDL som normal höftdominant huvudövning.",
+                                                },
+                                            ]
+                                        },
+                                    }
+                                ],
+                            }
+                        },
+                    )
+                ]
+
+            def completed_activities(self, start, end):
+                return []
+
+        snapshot = build_presentation_snapshot(
+            StrengthRepository(), today=date(2026, 9, 26)
+        )
+        rendered = render_week(snapshot)
+        self.assertIn(
+            "Bulgarian split squat som huvudalternativ för unilateral benstyrka.",
+            rendered,
+        )
+        self.assertIn(
+            "Marklyft eller RDL som normal höftdominant huvudövning.",
+            rendered,
+        )
+        self.assertNotIn("Styrkemall · enligt styrkemall", rendered)
+
     def test_multisport_workout_renders_ordered_components(self):
         class BrickRepository:
             def planned_days(self, start, end):
