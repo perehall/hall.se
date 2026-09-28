@@ -325,9 +325,13 @@ def workout_records(*plans: dict[str, Any]) -> list[dict[str, Any]]:
         source_workouts = plan.get("planned_workouts")
         if source_workouts is None:
             source_workouts = plan.get("days") or []
+        same_day_order: dict[str, int] = {}
         for day in source_workouts:
             if str(day.get("sport") or "").strip().lower() in {"", "open", "rest"}:
                 continue
+            local_date = str(day["date"])
+            ordinal = same_day_order.get(local_date, 0)
+            same_day_order[local_date] = ordinal + 1
             key = workout_key(day, meta)
             mesocycle_id = day.get("mesocycle_id") or meta.get("mesocycle_id")
             microcycle_id = day.get("microcycle_id") or meta.get("microcycle_id")
@@ -354,7 +358,7 @@ def workout_records(*plans: dict[str, Any]) -> list[dict[str, Any]]:
                 "stimuli": list(day.get("stimuli") or []),
                 "linked_provider": "strava" if day.get("activity_id") is not None else None,
                 "linked_provider_activity_id": str(day["activity_id"]) if day.get("activity_id") is not None else None,
-                "payload": day,
+                "payload": {**day, "same_day_order": ordinal},
             }
     return [rows[key] for key in sorted(rows)]
 
