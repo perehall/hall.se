@@ -228,9 +228,9 @@ def hill_day():
 class WorkoutDesignTests(unittest.TestCase):
     def test_swim_is_a_full_executable_3200m_recipe(self):
         day = swim_day()
-        document = {"days": [day], "strength_template": []}
+        document = {"planned_workouts": [day], "strength_template": []}
         materialized = materialize_document(document, strategy())
-        day = materialized["days"][0]
+        day = materialized["planned_workouts"][0]
         candidate = selected_candidate(day)
         prescription = candidate["prescription"]
 

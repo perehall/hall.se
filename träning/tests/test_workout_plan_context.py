@@ -15,8 +15,9 @@ from workout_plan_context import (  # noqa: E402
 class WorkoutPlanContextTests(unittest.TestCase):
     def test_sep6_run_is_detected_as_above_approved_duration_range(self):
         plan = {
-            "days": [
+            "planned_workouts": [
                 {
+                    "workout_key": "w-run-0906",
                     "date": "2026-09-06",
                     "session": "Löpning · lugn distans · 75 min",
                     "status": "preliminary",
@@ -56,10 +57,12 @@ class WorkoutPlanContextTests(unittest.TestCase):
 
     def test_activity_inside_approved_duration_range_is_not_called_deviation(self):
         plan = {
-            "days": [
+            "planned_workouts": [
                 {
+                    "workout_key": "w-run-0901",
                     "date": "2026-09-01",
                     "session": "Löpning",
+                    "sport": "run",
                     "dose_resolution": {"kind": "duration_minutes", "value": 60},
                     "dose_options": [
                         {"kind": "duration_minutes", "value": 60},
@@ -79,14 +82,15 @@ class WorkoutPlanContextTests(unittest.TestCase):
         )
 
     def test_missing_plan_day_fails_open_without_inventing_a_match(self):
-        context = build_plan_comparison({"days": []}, {"moving_time_s": 3600}, "2026-09-01")
+        context = build_plan_comparison({"planned_workouts": []}, {"moving_time_s": 3600}, "2026-09-01")
         self.assertFalse(context["plan_day_found"])
         self.assertEqual(plan_comparison_fact(context), "")
 
     def test_swim_structure_detects_a_different_structured_session(self):
         plan = {
-            "days": [
+            "planned_workouts": [
                 {
+                    "workout_key": "w-swim-0916",
                     "date": "2026-09-16",
                     "session": "Simning · 3 200 m · aerob/teknik",
                     "sport": "swim",
@@ -162,8 +166,9 @@ class WorkoutPlanContextTests(unittest.TestCase):
 
     def test_swim_structure_treats_small_omissions_as_modified_planned_structure(self):
         plan = {
-            "days": [
+            "planned_workouts": [
                 {
+                    "workout_key": "w-swim-0916",
                     "date": "2026-09-16",
                     "session": "Kontrollerad tröskel 3 600 m",
                     "sport": "swim",

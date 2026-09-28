@@ -76,46 +76,54 @@ class TrainingBrainTests(unittest.TestCase):
             validate_training_strategy(stale_goal)
 
     def test_next_decision_crosses_calendar_week_boundary(self):
+        sunday = {
+            "date": "2026-08-30",
+            "label": "Söndag",
+            "status": "completed",
+            "session": "Löpning · lugn distans",
+            "sport": "run",
+            "stimuli": ["run_easy_distance"],
+            "workout_key": "w-sunday",
+        }
+        monday = {
+            "date": "2026-08-31",
+            "label": "Måndag",
+            "status": "planned",
+            "planning_status": "fixed",
+            "session": "Enduroskola · fast tillfälle",
+            "sport": "enduro",
+            "classification": "training",
+            "manual_lock": True,
+            "priority_role": "anchor",
+            "stimuli": ["enduro_technical"],
+            "workout_key": "w-monday",
+        }
+        tuesday = {
+            "date": "2026-09-01",
+            "label": "Tisdag",
+            "status": "preliminary",
+            "session": "Löpning · kontrollerad tröskel · 3 × 8 min / 90 s jogg",
+            "sport": "run",
+            "priority_role": "anchor",
+            "stimuli": ["run_threshold"],
+            "workout_key": "w-tuesday",
+        }
         active = {
-            "days": [
-                {
-                    "date": "2026-08-30",
-                    "label": "Söndag",
-                    "status": "completed",
-                    "session": "Löpning · lugn distans",
-                    "sport": "run",
-                    "stimuli": ["run_easy_distance"],
-                }
-            ]
+            "meta": {"week_start": "2026-08-24", "week_end": "2026-08-30"},
+            "planned_workouts": [sunday],
         }
         upcoming = {
-            "days": [
-                {
-                    "date": "2026-08-31",
-                    "label": "Måndag",
-                    "status": "planned",
-                    "planning_status": "fixed",
-                    "session": "Enduroskola · fast tillfälle",
-                    "sport": "enduro",
-                    "classification": "training",
-                    "manual_lock": True,
-                    "priority_role": "anchor",
-                    "stimuli": ["enduro_technical"],
-                },
-                {
-                    "date": "2026-09-01",
-                    "label": "Tisdag",
-                    "status": "preliminary",
-                    "session": "Löpning · kontrollerad tröskel · 3 × 8 min / 90 s jogg",
-                    "sport": "run",
-                    "priority_role": "anchor",
-                    "stimuli": ["run_threshold"],
-                },
-            ]
+            "meta": {"week_start": "2026-08-31", "week_end": "2026-09-06"},
+            "planned_workouts": [monday, tuesday],
         }
 
         window = planning_window(active, upcoming)
-        decision = resolve_next_decision(window, [], self.strategy, date(2026, 8, 30))
+        decision = resolve_next_decision(
+            {"days": window["planned_workouts"]},
+            [],
+            self.strategy,
+            date(2026, 8, 30),
+        )
 
         self.assertEqual(decision["date"], "2026-08-31")
         self.assertEqual(decision["label"], "Måndag")
@@ -234,7 +242,10 @@ class TrainingBrainTests(unittest.TestCase):
         self.assertIn("60 min", brief["headline"])
 
     def test_next_session_is_concrete_before_previous_session_is_completed(self):
-        decision = resolve_next_decision(self.plan, [], self.strategy, date(2026, 8, 31))
+        retired_ui_view = {"days": self.plan["planned_workouts"]}
+        decision = resolve_next_decision(
+            retired_ui_view, [], self.strategy, date(2026, 8, 31)
+        )
         self.assertEqual(decision["date"], "2026-09-01")
         self.assertIn("3 × 8 min", decision["headline"])
         self.assertIn("Grundplan", decision["note"])

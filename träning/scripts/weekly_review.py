@@ -9,7 +9,7 @@ from datetime import date, datetime, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-from coach_rules import activity_family, activity_local_date, planned_families
+from coach_rules import activity_local_date, fulfilled_plan_workouts, planned_workouts, workout_key
 from week_review_contracts import (
     REVIEW_CONTRACT_VERSION,
     REVIEW_SCHEMA_VERSION,
@@ -106,24 +106,6 @@ def source_activities_for_week(week_start, week_end, primary, fallback=None):
     )
 
 
-def plan_outcome(day, day_activities):
-    sport = str(day.get("sport") or "").strip().lower()
-    families = planned_families(day)
-    matching = [activity for activity in day_activities if activity_family(activity) in families]
-
-    if sport in {"rest", "open"}:
-        outcome = "no_activity_planned" if not day_activities else "unplanned_activity"
-    elif matching:
-        outcome = "fulfilled"
-    elif day_activities:
-        outcome = "different_activity"
-    elif day.get("status") == "completed":
-        outcome = "completed_without_synced_activity"
-    else:
-        outcome = "not_completed"
-    return outcome, matching
-
-
 def build_week_facts(plan, activities):
     week_key, week_start, week_end = week_key_from_plan(plan)
     week_activities = source_activities_for_week(week_start, week_end, activities)
@@ -176,25 +158,48 @@ def build_week_facts(plan, activities):
 
     outcomes = []
     outcome_counts = {}
-    for day in plan.get("days") or []:
-        actuals = by_date.get(day.get("date"), [])
-        outcome, matching = plan_outcome(day, actuals)
+    canonical_workouts = planned_workouts(plan)
+    fulfilled = fulfilled_plan_workouts(plan, week_activities)
+    activities_by_id = {
+        str(activity.get("id")): activity
+        for activity in week_activities
+        if activity.get("id") is not None
+    }
+    meta = plan.get("meta") or {}
+    for workout in canonical_workouts:
+        date_value = str(workout.get("date") or "")
+        actuals = by_date.get(date_value, [])
+        key = workout_key(workout, meta)
+        matched_ids = tuple(fulfilled.get(key) or ())
+        matching = [
+            activities_by_id[str(activity_id)]
+            for activity_id in matched_ids
+            if str(activity_id) in activities_by_id
+        ]
+        if matching:
+            outcome = "fulfilled"
+        elif actuals:
+            outcome = "different_activity"
+        elif workout.get("status") == "completed":
+            outcome = "completed_without_synced_activity"
+        else:
+            outcome = "not_completed"
         outcome_counts[outcome] = outcome_counts.get(outcome, 0) + 1
         outcomes.append(
             {
-                "date": day.get("date"),
-                "label": day.get("label"),
-                "planned_sport": day.get("sport"),
-                "recorded_session": day.get("session"),
-                "original_session": day.get("original_session"),
-                "status": day.get("status"),
+                "workout_key": key,
+                "date": date_value,
+                "planned_sport": workout.get("sport"),
+                "recorded_session": workout.get("session"),
+                "original_session": workout.get("original_session"),
+                "status": workout.get("status"),
                 "outcome": outcome,
                 "actual_activity_ids": [activity.get("id") for activity in actuals],
                 "actual_labels": [activity_label(activity) for activity in actuals],
                 "matching_activity_ids": [activity.get("id") for activity in matching],
                 "context": {
-                    "reason": day.get("reason"),
-                    "coach_adjustment": day.get("coach_adjustment"),
+                    "reason": workout.get("reason"),
+                    "coach_adjustment": workout.get("coach_adjustment"),
                 },
             }
         )

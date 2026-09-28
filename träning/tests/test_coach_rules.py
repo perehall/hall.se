@@ -28,9 +28,9 @@ from coach_rules import (  # noqa: E402
 class CoachRulesTests(unittest.TestCase):
     def test_run_fulfills_same_day_trail_plan_via_explicit_sport(self):
         plan = {
-            "days": [
+            "planned_workouts": [
                 {
-                    "date": "2026-08-23",
+                    "workout_key": "fixture-1", "date": "2026-08-23",
                     "status": "preliminary",
                     "sport": "run",
                     "session": "Trail · lugnt · ca 50–70 min",
@@ -65,14 +65,6 @@ class CoachRulesTests(unittest.TestCase):
                     "sport": "strength",
                     "session": "Styrka",
                 },
-            ],
-            "days": [
-                {
-                    "date": "2026-08-23",
-                    "status": "planned",
-                    "sport": "swim",
-                    "session": "Simning",
-                }
             ],
         }
         activities = [
@@ -112,14 +104,6 @@ class CoachRulesTests(unittest.TestCase):
                     "session": "MTB",
                 },
             ],
-            "days": [
-                {
-                    "date": "2026-08-23",
-                    "status": "planned",
-                    "sport": "run",
-                    "session": "Löpning",
-                }
-            ],
         }
         activities = [
             {
@@ -156,7 +140,6 @@ class CoachRulesTests(unittest.TestCase):
                     "session": "Löpning 2",
                 },
             ],
-            "days": [],
         }
         activities = [
             {
@@ -196,7 +179,6 @@ class CoachRulesTests(unittest.TestCase):
                     "activity_id": 21,
                 },
             ],
-            "days": [],
         }
         activities = [
             {
@@ -230,7 +212,6 @@ class CoachRulesTests(unittest.TestCase):
                     ],
                 }
             ],
-            "days": [],
         }
         bike = {
             "id": 30,
@@ -271,9 +252,9 @@ class CoachRulesTests(unittest.TestCase):
 
     def test_session_wording_is_not_used_as_sport_source(self):
         plan = {
-            "days": [
+            "planned_workouts": [
                 {
-                    "date": "2026-08-23",
+                    "workout_key": "fixture-2", "date": "2026-08-23",
                     "status": "planned",
                     "sport": "swim",
                     "session": "Trail · den här texten får inte styra sportmatchningen",
@@ -288,9 +269,9 @@ class CoachRulesTests(unittest.TestCase):
 
     def test_unrelated_activity_does_not_fulfill_plan(self):
         plan = {
-            "days": [
+            "planned_workouts": [
                 {
-                    "date": "2026-08-23",
+                    "workout_key": "fixture-3", "date": "2026-08-23",
                     "status": "planned",
                     "sport": "swim",
                     "session": "Simning · aerob/teknik",
@@ -310,9 +291,9 @@ class CoachRulesTests(unittest.TestCase):
 
     def test_swimrun_can_be_fulfilled_by_run_family_source_activity(self):
         plan = {
-            "days": [
+            "planned_workouts": [
                 {
-                    "date": "2026-08-19",
+                    "workout_key": "fixture-4", "date": "2026-08-19",
                     "status": "planned",
                     "sport": "swimrun",
                     "session": "Swimrun · klubbpass",
@@ -326,13 +307,13 @@ class CoachRulesTests(unittest.TestCase):
 
     def test_completed_past_fulfilled_rest_and_open_dates_are_not_targets(self):
         plan = {
-            "days": [
-                {"date": "2026-08-22", "status": "planned", "sport": "run", "session": "Löpning · lugnt"},
-                {"date": "2026-08-23", "status": "planned", "sport": "run", "session": "Trail · lugnt"},
-                {"date": "2026-08-24", "status": "completed", "sport": "enduro", "session": "Enduro"},
-                {"date": "2026-08-25", "status": "planned", "sport": "swim", "session": "Simning · lugnt"},
-                {"date": "2026-08-26", "status": "planned", "sport": "rest", "session": "Vila"},
-                {"date": "2026-08-27", "status": "open", "sport": "open", "session": "Öppet · trail eller vila"},
+            "planned_workouts": [
+                {"workout_key": "fixture-5", "date": "2026-08-22", "status": "planned", "sport": "run", "session": "Löpning · lugnt"},
+                {"workout_key": "fixture-6", "date": "2026-08-23", "status": "planned", "sport": "run", "session": "Trail · lugnt"},
+                {"workout_key": "fixture-7", "date": "2026-08-24", "status": "completed", "sport": "enduro", "session": "Enduro"},
+                {"workout_key": "fixture-8", "date": "2026-08-25", "status": "planned", "sport": "swim", "session": "Simning · lugnt"},
+                {"workout_key": "fixture-9", "date": "2026-08-26", "status": "planned", "sport": "rest", "session": "Vila"},
+                {"workout_key": "fixture-10", "date": "2026-08-27", "status": "open", "sport": "open", "session": "Öppet · trail eller vila"},
             ]
         }
         activities = [
@@ -343,22 +324,22 @@ class CoachRulesTests(unittest.TestCase):
 
     def test_future_target_is_deferred_until_intervening_days_are_known(self):
         plan = {
-            "days": [
+            "planned_workouts": [
                 {
-                    "date": "2026-08-24",
+                    "workout_key": "fixture-11", "date": "2026-08-24",
                     "status": "planned",
                     "sport": "enduro",
                     "classification": "recreation",
                     "session": "Enduroskola",
                 },
                 {
-                    "date": "2026-08-25",
+                    "workout_key": "fixture-12", "date": "2026-08-25",
                     "status": "planned",
                     "sport": "swim",
                     "session": "Simning · aerob/teknik",
                 },
                 {
-                    "date": "2026-08-26",
+                    "workout_key": "fixture-13", "date": "2026-08-26",
                     "status": "conditional",
                     "sport": "run",
                     "session": "Löpning · kontrollerad tröskel · 3 × 10 min",
@@ -379,22 +360,22 @@ class CoachRulesTests(unittest.TestCase):
 
     def test_tomorrows_target_becomes_ready_after_today_is_fulfilled(self):
         plan = {
-            "days": [
+            "planned_workouts": [
                 {
-                    "date": "2026-08-24",
+                    "workout_key": "fixture-14", "date": "2026-08-24",
                     "status": "planned",
                     "sport": "enduro",
                     "classification": "recreation",
                     "session": "Enduroskola",
                 },
                 {
-                    "date": "2026-08-25",
+                    "workout_key": "fixture-15", "date": "2026-08-25",
                     "status": "planned",
                     "sport": "swim",
                     "session": "Simning · aerob/teknik",
                 },
                 {
-                    "date": "2026-08-26",
+                    "workout_key": "fixture-16", "date": "2026-08-26",
                     "status": "conditional",
                     "sport": "run",
                     "session": "Löpning · kontrollerad tröskel",
@@ -409,10 +390,10 @@ class CoachRulesTests(unittest.TestCase):
 
     def test_wednesday_becomes_ready_after_tuesday_is_fulfilled(self):
         plan = {
-            "days": [
-                {"date": "2026-08-24", "status": "completed", "sport": "enduro", "session": "Enduro"},
-                {"date": "2026-08-25", "status": "planned", "sport": "swim", "session": "Simning"},
-                {"date": "2026-08-26", "status": "conditional", "sport": "run", "session": "Tröskel"},
+            "planned_workouts": [
+                {"workout_key": "fixture-17", "date": "2026-08-24", "status": "completed", "sport": "enduro", "session": "Enduro"},
+                {"workout_key": "fixture-18", "date": "2026-08-25", "status": "planned", "sport": "swim", "session": "Simning"},
+                {"workout_key": "fixture-19", "date": "2026-08-26", "status": "conditional", "sport": "run", "session": "Tröskel"},
             ]
         }
         activities = [
@@ -476,8 +457,8 @@ class CoachRulesTests(unittest.TestCase):
 
     def test_coach_view_marks_matching_day_completed_without_mutating_plan(self):
         plan = {
-            "days": [
-                {"date": "2026-08-23", "status": "preliminary", "sport": "run", "session": "Trail · lugnt"}
+            "planned_workouts": [
+                {"workout_key": "fixture-20", "date": "2026-08-23", "status": "preliminary", "sport": "run", "session": "Trail · lugnt"}
             ]
         }
         activities = [
@@ -491,9 +472,12 @@ class CoachRulesTests(unittest.TestCase):
 
         coach_plan, fulfilled = plan_for_coach(plan, activities)
         self.assertEqual(fulfilled, {"2026-08-23": 3})
-        self.assertEqual(coach_plan["days"][0]["status"], "completed")
-        self.assertEqual(coach_plan["days"][0]["coach_fulfilled_by_activity"]["id"], 3)
-        self.assertEqual(plan["days"][0]["status"], "preliminary")
+        self.assertEqual(coach_plan["planned_workouts"][0]["status"], "completed")
+        self.assertEqual(
+            coach_plan["planned_workouts"][0]["coach_fulfilled_by_activity"]["id"],
+            3,
+        )
+        self.assertEqual(plan["planned_workouts"][0]["status"], "preliminary")
 
     def test_invalid_ai_target_is_rejected(self):
         action = {

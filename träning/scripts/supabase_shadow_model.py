@@ -14,6 +14,7 @@ import json
 from pathlib import Path
 from typing import Any
 
+from canonical_plan import planned_workouts as canonical_planned_workouts
 from training_contracts import ACTIVITY_FAMILY
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -322,9 +323,9 @@ def workout_records(*plans: dict[str, Any]) -> list[dict[str, Any]]:
     rows: dict[str, dict[str, Any]] = {}
     for plan in plans:
         meta = plan.get("meta") or {}
-        source_workouts = plan.get("planned_workouts")
-        if source_workouts is None:
-            source_workouts = plan.get("days") or []
+        source_workouts = canonical_planned_workouts(
+            plan, context="Supabase shadow model"
+        )
         same_day_order: dict[str, int] = {}
         for day in source_workouts:
             if str(day.get("sport") or "").strip().lower() in {"", "open", "rest"}:

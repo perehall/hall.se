@@ -218,10 +218,9 @@ class IntervalsWorkoutSyncTests(unittest.TestCase):
 
         documents = {
             "plan": {
-                "days": [first],
                 "planned_workouts": [first, second],
             },
-            "upcoming": {"days": [], "planned_workouts": []},
+            "upcoming": {"planned_workouts": []},
         }
 
         desired = sync.desired_workouts(
@@ -246,8 +245,8 @@ class IntervalsWorkoutSyncTests(unittest.TestCase):
             "device_delivery": "unverified",
         }
         documents = {
-            "plan": {"days": [day]},
-            "upcoming": {"days": []},
+            "plan": {"planned_workouts": [day]},
+            "upcoming": {"planned_workouts": []},
         }
         desired_payload = sync.payload_for(workout)
         initial = [

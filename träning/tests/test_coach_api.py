@@ -145,8 +145,9 @@ class CoachApiTests(unittest.TestCase):
 
     def test_rest_action_changes_machine_readable_plan_type(self):
         plan = {
-            "days": [
+            "planned_workouts": [
                 {
+                    "workout_key": "w-run-0825",
                     "date": "2026-08-25",
                     "status": "planned",
                     "sport": "run",
@@ -166,7 +167,7 @@ class CoachApiTests(unittest.TestCase):
             action,
             now_utc="2026-08-23T18:00:00+00:00",
         )
-        day = plan["days"][0]
+        day = plan["planned_workouts"][0]
         self.assertTrue(changed)
         self.assertEqual(day["sport"], "rest")
         self.assertEqual(day["status"], "conditional")
@@ -175,15 +176,6 @@ class CoachApiTests(unittest.TestCase):
 
     def test_rest_action_changes_only_target_workout_on_multi_session_day(self):
         plan = {
-            "days": [
-                {
-                    "date": "2026-08-25",
-                    "status": "planned",
-                    "sport": "run",
-                    "session": "Löpning",
-                    "reason": "R",
-                }
-            ],
             "planned_workouts": [
                 {
                     "workout_key": "run-1",
@@ -221,14 +213,8 @@ class CoachApiTests(unittest.TestCase):
         self.assertEqual(run["sport"], "rest")
         self.assertEqual(bike["sport"], "bike")
         self.assertEqual(bike["session"], "MTB")
-        self.assertEqual(
-            plan["days"][0]["session"],
-            "MTB",
-            "Legacy calendar projection should move to the remaining physical workout.",
-        )
-
     def test_wellness_change_invalidates_coach_but_timestamp_change_does_not(self):
-        plan = {"days": []}
+        plan = {"planned_workouts": []}
         latest = {"id": 1}
         strategy = {"schema_version": 1}
         wellness = {
@@ -267,17 +253,17 @@ class CoachApiTests(unittest.TestCase):
             {"id": 4, "start_date_local": "2026-08-31T08:00:00", "sport_type": "Enduro"},
         ]
         plan = {
-            "days": [
-                {"date": "2026-08-31", "session": "Enduro"},
-                {"date": "2026-09-01", "session": "Threshold"},
-                {"date": "2026-09-03", "session": "MTB"},
-                {"date": "2026-09-04", "session": "Hills"},
+            "planned_workouts": [
+                {"workout_key": "w-enduro", "date": "2026-08-31", "session": "Enduro", "sport": "enduro"},
+                {"workout_key": "w-threshold", "date": "2026-09-01", "session": "Threshold", "sport": "run"},
+                {"workout_key": "w-mtb", "date": "2026-09-03", "session": "MTB", "sport": "bike"},
+                {"workout_key": "w-hills", "date": "2026-09-04", "session": "Hills", "sport": "run"},
             ]
         }
         context = rolling_load_context(activities, plan, "2026-08-31", strategy)
         self.assertEqual([a["id"] for a in context["actual_activities"]], [3, 4])
         self.assertEqual(
-            [d["date"] for d in context["planned_days"]],
+            [d["date"] for d in context["planned_workouts"]],
             ["2026-08-31", "2026-09-01", "2026-09-03"],
         )
         self.assertEqual(context["lookback_days"], 3)
@@ -458,8 +444,9 @@ class CoachApiTests(unittest.TestCase):
 
     def test_reselecting_same_resolved_dose_is_idempotent(self):
         plan = {
-            "days": [
+            "planned_workouts": [
                 {
+                    "workout_key": "w-bike-0829",
                     "date": "2026-08-29",
                     "status": "conditional",
                     "sport": "bike",
@@ -502,8 +489,9 @@ class CoachApiTests(unittest.TestCase):
 
     def test_resolved_dose_can_only_move_downward(self):
         plan = {
-            "days": [
+            "planned_workouts": [
                 {
+                    "workout_key": "w-bike-0829",
                     "date": "2026-08-29",
                     "status": "conditional",
                     "sport": "bike",
@@ -547,8 +535,8 @@ class CoachApiTests(unittest.TestCase):
             now_utc="2026-08-28T19:40:00+00:00",
         )
         self.assertTrue(changed)
-        self.assertEqual(plan["days"][0]["dose_resolution"]["value"], 60)
-        self.assertEqual(plan["days"][0]["dose_resolution"]["source"], "near_term_ai_revision")
+        self.assertEqual(plan["planned_workouts"][0]["dose_resolution"]["value"], 60)
+        self.assertEqual(plan["planned_workouts"][0]["dose_resolution"]["source"], "near_term_ai_revision")
 
         increase_action = {
             "action": "reduce",
@@ -563,8 +551,9 @@ class CoachApiTests(unittest.TestCase):
 
     def test_same_day_keep_without_dose_option_becomes_review(self):
         plan = {
-            "days": [
+            "planned_workouts": [
                 {
+                    "workout_key": "w-run-0828",
                     "date": "2026-08-28",
                     "status": "planned",
                     "sport": "run",
@@ -609,8 +598,9 @@ class CoachApiTests(unittest.TestCase):
 
     def test_keep_can_resolve_open_same_day_dose_from_approved_option(self):
         plan = {
-            "days": [
+            "planned_workouts": [
                 {
+                    "workout_key": "w-bike-0827",
                     "date": "2026-08-27",
                     "status": "planned",
                     "sport": "bike",
@@ -647,7 +637,7 @@ class CoachApiTests(unittest.TestCase):
             action,
             now_utc="2026-08-27T16:00:00+00:00",
         )
-        day = plan["days"][0]
+        day = plan["planned_workouts"][0]
         self.assertTrue(changed)
         self.assertFalse(day["dose_open"])
         self.assertEqual(day["session"], "MTB/XC · 60 min · teknik + lugn aerob stig")
@@ -655,8 +645,9 @@ class CoachApiTests(unittest.TestCase):
 
     def test_same_day_keep_must_choose_approved_dose_when_options_exist(self):
         plan = {
-            "days": [
+            "planned_workouts": [
                 {
+                    "workout_key": "w-bike-0827",
                     "date": "2026-08-27",
                     "status": "planned",
                     "sport": "bike",

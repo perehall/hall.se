@@ -15,10 +15,13 @@ from coach_pipeline import (  # noqa: E402
 class InvalidDoseOptionGuardTests(unittest.TestCase):
     def setUp(self):
         self.plan = {
-            "days": [
+            "planned_workouts": [
                 {
+                    "workout_key": "run-0911",
                     "date": "2026-09-11",
+                    "status": "planned",
                     "sport": "run",
+                    "session": "Backkvalitet",
                     "dose_open": True,
                     "dose_options": [
                         {"id": "run-hill-6x150"},
@@ -27,8 +30,11 @@ class InvalidDoseOptionGuardTests(unittest.TestCase):
                     ],
                 },
                 {
+                    "workout_key": "bike-0912",
                     "date": "2026-09-12",
+                    "status": "planned",
                     "sport": "bike",
+                    "session": "MTB",
                     "dose_open": True,
                     "dose_options": [
                         {"id": "mtb-support-60"},

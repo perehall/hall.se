@@ -121,7 +121,7 @@ class SupabaseShadowModelTests(unittest.TestCase):
 
     def test_workout_key_is_stable_and_uses_slot(self):
         plan = {
-            "days": [
+            "planned_workouts": [
                 {
                     "date": "2026-09-22",
                     "session": "4 x 8",
@@ -172,16 +172,6 @@ class SupabaseShadowModelTests(unittest.TestCase):
                     "stimuli": ["run_easy_distance"],
                 },
             ],
-            "days": [
-                {
-                    "date": "2026-09-25",
-                    "session": "Legacy projection",
-                    "sport": "swim",
-                    "microcycle_day": 5,
-                    "microcycle_slot": "legacy",
-                    "stimuli": ["swim_aerobic"],
-                }
-            ],
         }
         rows = workout_records(plan)
         self.assertEqual(len(rows), 3)
@@ -204,12 +194,13 @@ class SupabaseShadowModelTests(unittest.TestCase):
                 "mesocycle_id": "m1",
                 "microcycle_id": "m1:mc1",
             },
-            "days": [
+            "planned_workouts": [
                 {
                     "date": "2026-09-24",
                     "session": "Löpning · 30 min",
                     "sport": "run",
                     "microcycle_day": 4,
+                    "microcycle_slot": "run-easy",
                     "stimuli": [],
                 }
             ],
@@ -219,7 +210,7 @@ class SupabaseShadowModelTests(unittest.TestCase):
         self.assertEqual(rows[0]["microcycle_id"], "m1:mc1")
         self.assertEqual(
             rows[0]["workout_key"],
-            "m1:mc1:2026-09-24:day-4",
+            "m1:mc1:2026-09-24:run-easy",
         )
 
     def test_canonical_hash_is_order_independent_for_objects(self):

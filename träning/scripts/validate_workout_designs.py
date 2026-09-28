@@ -2,6 +2,7 @@
 import json
 from pathlib import Path
 
+from canonical_plan import planned_workouts as canonical_planned_workouts
 from workout_design import WORKOUT_DESIGN_SCHEMA_VERSION, WorkoutDesignError, validate_workout_design
 
 
@@ -20,20 +21,13 @@ def validate_document(document, label):
             f"{label}: workout_design_schema_version måste vara {WORKOUT_DESIGN_SCHEMA_VERSION}"
         )
 
-    collection_name = (
-        "planned_workouts"
-        if document.get("planned_workouts") is not None
-        else "days"
-    )
-    collection = document.get(collection_name) or []
+    collection = canonical_planned_workouts(document, context=label)
 
     count = 0
     for index, workout in enumerate(collection):
-        if workout.get("sport") in {"rest", "open"}:
-            continue
         validate_workout_design(
             workout,
-            f"{label}.{collection_name}[{index}]",
+            f"{label}.planned_workouts[{index}]",
         )
         count += 1
     return count

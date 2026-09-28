@@ -115,30 +115,32 @@ class PostWorkoutUiTests(unittest.TestCase):
         self.assertIn('id="aktuell-vecka"', rendered)
 
     def test_completed_sunday_shows_monday_session_from_upcoming_week(self):
+        completed_run = {
+            "date": "2026-08-30",
+            "label": "Söndag",
+            "status": "completed",
+            "sport": "run",
+            "session": "Löpning · lugn distans",
+            "activity_id": 88,
+            "workout_key": "w-run",
+        }
+        monday_enduro = {
+            "date": "2026-08-31",
+            "label": "Måndag",
+            "status": "planned",
+            "sport": "enduro",
+            "session": "Enduroskola · fast tillfälle",
+            "dose_open": True,
+            "manual_lock": True,
+            "workout_key": "w-enduro",
+        }
         active = {
-            "days": [
-                {
-                    "date": "2026-08-30",
-                    "label": "Söndag",
-                    "status": "completed",
-                    "sport": "run",
-                    "session": "Löpning · lugn distans",
-                    "activity_id": 88,
-                }
-            ]
+            "meta": {"week_start": "2026-08-24", "week_end": "2026-08-30"},
+            "planned_workouts": [completed_run],
         }
         upcoming = {
-            "days": [
-                {
-                    "date": "2026-08-31",
-                    "label": "Måndag",
-                    "status": "planned",
-                    "sport": "enduro",
-                    "session": "Enduroskola · fast tillfälle",
-                    "dose_open": True,
-                    "manual_lock": True,
-                }
-            ]
+            "meta": {"week_start": "2026-08-31", "week_end": "2026-09-06"},
+            "planned_workouts": [monday_enduro],
         }
         activities = {
             "activities": [
@@ -153,6 +155,9 @@ class PostWorkoutUiTests(unittest.TestCase):
             ]
         }
         window = planning_window(active, upcoming)
+        # Retired finalizer reads its historical day-shaped view; production
+        # runtime does not. Keep that translation local to this legacy test.
+        window["days"] = [completed_run, monday_enduro]
         rendered = apply_post_workout_ui(
             BASE_PAGE,
             window,

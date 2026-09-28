@@ -49,7 +49,7 @@ class DevelopmentProgressionContractTests(unittest.TestCase):
             validate_training_strategy(broken)
 
     def test_existing_today_reduction_preserves_historical_plan_before_pass(self):
-        today = next(day for day in self.plan["days"] if day.get("date") == "2026-09-04")
+        today = next(workout for workout in self.plan["planned_workouts"] if workout.get("date") == "2026-09-04" and workout.get("sport") == "run")
         self.assertEqual(today["baseline_option_id"], "run-hill-2x7x150")
         self.assertEqual(today["dose_resolution"]["option_id"], "run-hill-2x6x150")
         self.assertIn("2 × 6 × 150 m", today["session"])
@@ -57,8 +57,8 @@ class DevelopmentProgressionContractTests(unittest.TestCase):
 
     def test_next_microcycle_anchors_reported_21_interval_floor(self):
         future = build_mesocycle_next_week(self.plan, self.strategy)
-        threshold = next(day for day in future["days"] if day.get("microcycle_slot") == "run_threshold")
-        hill = next(day for day in future["days"] if day.get("microcycle_slot") == "run_hill_quality")
+        threshold = next(workout for workout in future["planned_workouts"] if workout.get("microcycle_slot") == "run_threshold")
+        hill = next(workout for workout in future["planned_workouts"] if workout.get("microcycle_slot") == "run_hill_quality")
         self.assertEqual(threshold["microcycle_index"], 3)
         self.assertEqual(threshold["baseline_option_id"], "run-threshold-3x10")
         self.assertEqual(hill["baseline_option_id"], "run-hill-3x7x150")

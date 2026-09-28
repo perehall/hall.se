@@ -604,14 +604,13 @@ def selected_candidate(day: dict) -> dict:
 def materialize_document(document: dict, strategy: dict) -> dict:
     result = copy.deepcopy(document)
     result["workout_design_schema_version"] = WORKOUT_DESIGN_SCHEMA_VERSION
-    collections = [result.get("days") or []]
-    if result.get("planned_workouts") is not None:
-        collections.append(result.get("planned_workouts") or [])
-    for day in [item for collection in collections for item in collection]:
-        if day.get("sport") in {"rest", "open"}:
-            day.pop("workout_design", None)
-            continue
-        day["workout_design"] = build_workout_design(day, result, strategy)
+    workouts = result.get("planned_workouts")
+    if not isinstance(workouts, list):
+        raise WorkoutDesignError(
+            "planned_workouts saknas; workout design får inte härledas från days"
+        )
+    for workout in workouts:
+        workout["workout_design"] = build_workout_design(workout, result, strategy)
     return result
 
 

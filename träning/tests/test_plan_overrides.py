@@ -15,12 +15,13 @@ class PlanOverrideTests(unittest.TestCase):
         self.document = {
             "schema_version": 3,
             "meta": {"missing_protected_stimuli": []},
-            "days": [
+            "days": [{"date": "2026-09-12", "label": "Lördag"}],
+            "planned_workouts": [
                 {
+                    "workout_key": "strength-0912",
                     "date": "2026-09-12",
-                    "label": "Lördag",
                     "status": "preliminary",
-                    "session": "Simning + styrka",
+                    "session": "Styrka/core · 35 min",
                     "sport": "strength",
                     "dose_options": [{"id": "old"}],
                     "workout_design": {"selected_candidate_id": "old"},
@@ -53,9 +54,9 @@ class PlanOverrideTests(unittest.TestCase):
     def test_replaces_session_and_strips_stale_derived_state(self):
         changed = apply_overrides(self.document, self.config)
         self.assertEqual(changed, 1)
-        day = self.document["days"][0]
+        day = self.document["planned_workouts"][0]
         self.assertEqual(day["session"], "Enduro · Krokek · 10:00–14:00")
-        self.assertEqual(day["original_session"], "Simning + styrka")
+        self.assertEqual(day["original_session"], "Styrka/core · 35 min")
         self.assertEqual(day["planning_status"], "fixed")
         self.assertTrue(day["manual_lock"])
         self.assertNotIn("dose_options", day)
@@ -74,7 +75,7 @@ class PlanOverrideTests(unittest.TestCase):
 
     def test_reapply_preserves_regenerated_session_derived_state(self):
         self.assertEqual(apply_overrides(self.document, self.config), 1)
-        day = self.document["days"][0]
+        day = self.document["planned_workouts"][0]
         day["workout_design"] = {"selected_candidate_id": "current-session"}
         day["device_workout"] = {"external_id": "hall-device:test"}
         day["device_sync"] = {"status": "synced"}
@@ -91,15 +92,7 @@ class PlanOverrideTests(unittest.TestCase):
         document = {
             "schema_version": 3,
             "meta": {"microcycle_id": "m1:mc1"},
-            "days": [
-                {
-                    "date": "2026-09-12",
-                    "label": "Lördag",
-                    "status": "planned",
-                    "session": "Simning",
-                    "sport": "swim",
-                }
-            ],
+            "days": [{"date": "2026-09-12", "label": "Lördag"}],
             "planned_workouts": [
                 {
                     "workout_key": "swim-1",
@@ -138,15 +131,7 @@ class PlanOverrideTests(unittest.TestCase):
         document = {
             "schema_version": 3,
             "meta": {},
-            "days": [
-                {
-                    "date": "2026-09-12",
-                    "label": "Lördag",
-                    "status": "planned",
-                    "session": "Simning",
-                    "sport": "swim",
-                }
-            ],
+            "days": [{"date": "2026-09-12", "label": "Lördag"}],
             "planned_workouts": [
                 {
                     "workout_key": "swim-1",
@@ -177,7 +162,7 @@ class PlanOverrideTests(unittest.TestCase):
             apply_overrides(document, config)
 
     def test_completed_truth_is_not_rewritten(self):
-        day = self.document["days"][0]
+        day = self.document["planned_workouts"][0]
         day["status"] = "completed"
         before = deepcopy(self.document)
         self.assertEqual(apply_overrides(self.document, self.config), 0)

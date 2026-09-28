@@ -6,8 +6,8 @@ from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+from canonical_plan import build_calendar_axis, planned_workouts as canonical_planned_workouts
 from strategy_contracts import validate_training_strategy
-from calendar_projection import refresh_calendar_projection
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "data"
@@ -134,36 +134,48 @@ def fixed_enduro_school_day(day_date, label="Måndag"):
 
 
 def seed_fixed_commitments(week_document):
-    planned_workouts = week_document.get("planned_workouts")
-    for index, day in enumerate(week_document.get("days") or []):
-        day_date = date.fromisoformat(day["date"])
-        if is_enduro_school_date(day_date):
-            fixed = fixed_enduro_school_day(day_date, day.get("label") or "Måndag")
-            for field in (
-                "mesocycle_id",
-                "microcycle_id",
-                "microcycle_index",
-                "microcycle_day",
-            ):
-                if day.get(field) is not None:
-                    fixed[field] = day[field]
-            fixed["microcycle_slot"] = "fixed_enduro_school"
-            week_document["days"][index] = fixed
+    workouts = week_document.get("planned_workouts")
+    if not isinstance(workouts, list):
+        raise RuntimeError(
+            "Veckoskifte: planned_workouts saknas; fasta åtaganden får inte härledas från days"
+        )
 
-            if isinstance(planned_workouts, list):
-                planned_workouts[:] = [
-                    workout
-                    for workout in planned_workouts
-                    if workout.get("date") != day_date.isoformat()
-                    or workout.get("microcycle_slot") != "fixed_enduro_school"
-                ]
-                planned_workouts.append(deepcopy(fixed))
-    if isinstance(planned_workouts, list):
-        # Keep strategy order between workouts on the same date. Calendar date
-        # ordering is useful, but a lexical slot-name sort must never redefine
-        # same-day workout order.
-        planned_workouts.sort(key=lambda workout: str(workout.get("date") or ""))
-        refresh_calendar_projection(week_document)
+    meta = week_document.get("meta") or {}
+    start, _ = validate_week_bounds(meta, "veckoplan")
+    for offset in range(7):
+        day_date = start + timedelta(days=offset)
+        if not is_enduro_school_date(day_date):
+            continue
+
+        fixed = fixed_enduro_school_day(day_date, WEEKDAY_LABELS[offset])
+        if meta.get("mesocycle_id"):
+            fixed["mesocycle_id"] = meta["mesocycle_id"]
+        if meta.get("microcycle_id"):
+            fixed["microcycle_id"] = meta["microcycle_id"]
+        if meta.get("microcycle_index") is not None:
+            fixed["microcycle_index"] = meta["microcycle_index"]
+        fixed["microcycle_day"] = offset + 1
+        fixed["microcycle_slot"] = "fixed_enduro_school"
+
+        retained = [
+            workout
+            for workout in workouts
+            if not (
+                workout.get("date") == day_date.isoformat()
+                and workout.get("microcycle_slot") == "fixed_enduro_school"
+            )
+        ]
+        insert_at = next(
+            (
+                index
+                for index, workout in enumerate(retained)
+                if str(workout.get("date") or "") >= day_date.isoformat()
+            ),
+            len(retained),
+        )
+        retained.insert(insert_at, fixed)
+        workouts[:] = retained
+
     return week_document
 
 
@@ -218,11 +230,9 @@ def promote_upcoming(upcoming):
     meta = promoted.get("meta") or {}
     meta.pop("preview_summary", None)
 
-    collections = [promoted.get("days") or []]
-    if promoted.get("planned_workouts") is not None:
-        collections.append(promoted.get("planned_workouts") or [])
+    workouts = canonical_planned_workouts(promoted, context="kommande plan")
 
-    for day in [item for collection in collections for item in collection]:
+    for day in workouts:
         day.pop("planning_status", None)
 
         if day.get("dose_open") is True and (day.get("dose_options") or []):
@@ -308,7 +318,6 @@ def materialize_planned_swims(future):
         apply_swim_option_structure(target, target_date, next_key)
         workouts[index] = target
 
-    refresh_calendar_projection(future)
     return future
 
 def mesocycle_microcycle_state(mesocycle, cycle_start):
@@ -347,24 +356,8 @@ def build_mesocycle_next_week(promoted, strategy):
     microcycle_index, total_microcycles = mesocycle_microcycle_state(mesocycle, next_start)
     microcycle_length = int(mesocycle["microcycle_structure"]["length_days"])
 
-    days = []
+    days = build_calendar_axis(next_start)
     planned_workouts = []
-    for offset, label in enumerate(WEEKDAY_LABELS):
-        day_date = next_start + timedelta(days=offset)
-        days.append(
-            {
-                "date": day_date.isoformat(),
-                "label": label,
-                "status": "open",
-                "planning_status": "open",
-                "session": "Ingen planerad träning",
-                "reason": (
-                    "Ingen träning är planerad som standard på denna dag. En ledig dag är inte i sig skäl "
-                    "att lägga till ett pass; eventuell ändring ska tjäna mikrocykeln och bygga på faktisk information."
-                ),
-                "sport": "open",
-            }
-        )
 
     inside_mesocycle = (
         microcycle_index is not None
@@ -424,12 +417,6 @@ def build_mesocycle_next_week(promoted, strategy):
                 planned_day["swim_equipment"] = {"planned": "tbd"}
                 apply_swim_option_structure(planned_day, day_date, week_key(next_start))
             planned_workouts.append(deepcopy(planned_day))
-            if days[offset].get("sport") in {"open", "rest"}:
-                days[offset] = deepcopy(planned_day)
-            else:
-                days[offset]["additional_planned_workouts"] = (
-                    int(days[offset].get("additional_planned_workouts") or 0) + 1
-                )
 
         title = f'{mesocycle["title"]} · mikrocykel {microcycle_index} av {total_microcycles}'
         principle = (
@@ -499,12 +486,6 @@ def build_mesocycle_next_week(promoted, strategy):
                 planned_day["swim_equipment"] = {"planned": "tbd"}
                 apply_swim_option_structure(planned_day, day_date, week_key(next_start))
             planned_workouts.append(deepcopy(planned_day))
-            if days[offset].get("sport") in {"open", "rest"}:
-                days[offset] = deepcopy(planned_day)
-            else:
-                days[offset]["additional_planned_workouts"] = (
-                    int(days[offset].get("additional_planned_workouts") or 0) + 1
-                )
 
         title = "Övergångsmikrocykel · mesocykelutvärdering"
         principle = (
@@ -549,16 +530,9 @@ def build_mesocycle_next_week(promoted, strategy):
     future = seed_fixed_commitments(future)
 
     if inside_mesocycle:
-        for offset, day in enumerate(future["days"]):
-            if day.get("sport") not in {"open", "rest"}:
-                day["mesocycle_id"] = mesocycle["id"]
-                day["microcycle_id"] = f'{mesocycle["id"]}:mc{microcycle_index}'
-                day["microcycle_index"] = microcycle_index
-                day["microcycle_day"] = offset + 1
-
         actual_stimuli = {
             stimulus
-            for workout in (future.get("planned_workouts") or future["days"])
+            for workout in canonical_planned_workouts(future, context="framtidsplan")
             for stimulus in (workout.get("stimuli") or [])
         }
         missing = [
@@ -611,9 +585,9 @@ def repair_transition_week_from_previous(plan, previous_plan, strategy, today):
         return None
 
     meaningful = [
-        day
-        for day in (plan.get("days") or [])
-        if day.get("sport") not in {"open", "rest", "enduro"}
+        workout
+        for workout in canonical_planned_workouts(plan, context="aktiv plan")
+        if workout.get("sport") != "enduro"
     ]
     if meaningful:
         return None
