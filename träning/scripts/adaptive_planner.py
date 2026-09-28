@@ -58,9 +58,9 @@ CAPABILITY_TO_RECIPE = {
     "swim_aerobic": "swim_aerobic_technique",
     "swim_technique": "swim_aerobic_technique",
     "swim_threshold": "swim_aerobic_threshold",
-    "strength_unilateral": "swim_strength",
-    "strength_core": "swim_strength",
-    "plyometric": "swim_strength",
+    "strength_unilateral": "strength_core",
+    "strength_core": "strength_core",
+    "plyometric": "strength_core",
 }
 
 FIXED_PROTECTED_CAPACITY = (
@@ -93,9 +93,9 @@ PRIMARY_CAPABILITIES_WITH_EXECUTABLE_RECIPES = {
     "swim_technique",
     "swim_threshold",
 }
-SUPPORT_ONLY_RECIPES = {"swim_strength"}
+SUPPORT_ONLY_RECIPES = {"strength_core"}
 RUN_STRESS_RECIPES = {"run_threshold", "run_hill_quality", "run_easy_distance"}
-DAY_AFTER_ENDURO_BLOCKED_RECIPES = RUN_STRESS_RECIPES | {"mtb_technical", "swim_strength", "strength_core"}
+DAY_AFTER_ENDURO_BLOCKED_RECIPES = RUN_STRESS_RECIPES | {"mtb_technical", "strength_core"}
 
 
 def load_json(path: Path, fallback):
