@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+from canonical_plan import planned_workouts as canonical_planned_workouts
 from device_workout import materialize_day, validate_device_workout
 
 
@@ -43,17 +44,11 @@ def _materialize_collection(items, *, today, horizon_end):
 def materialize_document(document, *, today, horizon_end):
     result = dict(document)
     result["device_workout_schema_version"] = 1
-    result["days"] = _materialize_collection(
-        document.get("days") or [],
+    result["planned_workouts"] = _materialize_collection(
+        canonical_planned_workouts(document, context="device materialization"),
         today=today,
         horizon_end=horizon_end,
     )
-    if document.get("planned_workouts") is not None:
-        result["planned_workouts"] = _materialize_collection(
-            document.get("planned_workouts") or [],
-            today=today,
-            horizon_end=horizon_end,
-        )
     return result
 
 
@@ -61,21 +56,20 @@ def validate_document(document, label):
     if document.get("device_workout_schema_version") != 1:
         raise RuntimeError(f"{label}: device_workout_schema_version måste vara 1")
     count = 0
-    for collection_name in ("days", "planned_workouts"):
-        if collection_name == "planned_workouts" and document.get(collection_name) is None:
+    for index, workout_row in enumerate(
+        canonical_planned_workouts(document, context=label)
+    ):
+        workout = workout_row.get("device_workout")
+        if workout is None:
             continue
-        for index, day in enumerate(document.get(collection_name) or []):
-            workout = day.get("device_workout")
-            if workout is None:
-                continue
-            context = f"{label}.{collection_name}[{index}]"
-            validate_device_workout(workout, context)
-            sync = day.get("device_sync") or {}
-            if sync.get("source_hash") != workout.get("source_hash"):
-                raise RuntimeError(f"{context}: device_sync source_hash avviker")
-            if sync.get("status") not in {"pending", "synced", "error", "deferred"}:
-                raise RuntimeError(f"{context}: device_sync status ogiltig")
-            count += 1
+        context = f"{label}.planned_workouts[{index}]"
+        validate_device_workout(workout, context)
+        sync = workout_row.get("device_sync") or {}
+        if sync.get("source_hash") != workout.get("source_hash"):
+            raise RuntimeError(f"{context}: device_sync source_hash avviker")
+        if sync.get("status") not in {"pending", "synced", "error", "deferred"}:
+            raise RuntimeError(f"{context}: device_sync status ogiltig")
+        count += 1
     return count
 
 
