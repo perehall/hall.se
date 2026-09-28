@@ -93,6 +93,11 @@ def day_is_outdoor(day: PlannedDay) -> bool:
         return False
     if sport in OUTDOOR_PLAN_SPORTS:
         return True
+    if any(
+        str(component.sport or "").strip().lower() in OUTDOOR_PLAN_SPORTS
+        for component in day.components
+    ):
+        return True
     return any(token in session for token in OUTDOOR_SESSION_TOKENS)
 
 
@@ -174,11 +179,13 @@ def build_weather_read_model(
             days=(),
         )
 
-    plan_by_date = {day.local_date: day for day in plan}
+    plan_by_date = {}
+    for day in plan:
+        plan_by_date.setdefault(day.local_date, []).append(day)
     forecasts = []
     for forecast in snapshot.daily:
-        day = plan_by_date.get(forecast.local_date)
-        if day is None or not day_is_outdoor(day):
+        workouts = plan_by_date.get(forecast.local_date) or []
+        if not any(day_is_outdoor(day) for day in workouts):
             continue
         forecasts.append(
             _day_model(
