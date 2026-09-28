@@ -6,6 +6,7 @@ import re
 import time
 import urllib.error
 import urllib.request
+from copy import deepcopy
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
