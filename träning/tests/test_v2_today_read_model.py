@@ -44,6 +44,31 @@ class TodayReadModelTests(unittest.TestCase):
         self.assertEqual(model.next_session, "Löpning · lugn distans · 120 min")
         self.assertEqual(len(model.outcomes), 2)
 
+
+    def test_two_planned_workouts_same_day_remain_separate_sessions(self):
+        today = date(2026, 10, 2)
+        model = build_today_read_model(
+            today=today,
+            plan=[
+                PlannedDay(today, "Simning · 3 200 m · aerob/teknik", "swim", "preliminary"),
+                PlannedDay(today, "Styrka/core · ca 35 min · styrkemall", "strength", "preliminary"),
+                PlannedDay(date(2026, 10, 4), "Löpning · lugn distans · 120 min", "run", "preliminary"),
+            ],
+            activities=[],
+        )
+
+        self.assertEqual(
+            model.planned_sessions,
+            (
+                "Simning · 3 200 m · aerob/teknik",
+                "Styrka/core · ca 35 min · styrkemall",
+            ),
+        )
+        self.assertEqual(model.details, model.planned_sessions)
+        self.assertEqual(model.icon_keys, ("swim", "strength"))
+        self.assertEqual(model.next_session, "Löpning · lugn distans · 120 min")
+
+
     def test_completed_outcome_carries_feedback_and_latest_coach_decision(self):
         today = date(2026, 9, 27)
         activity = CompletedActivity(
