@@ -125,19 +125,54 @@ class RenderPipelineTests(unittest.TestCase):
         self.assertTrue(all(check is True for _, check, _ in calls))
         self.assertTrue(all(cwd == REPO_ROOT for _, _, cwd in calls))
 
-    def test_production_main_does_not_execute_legacy_parity_pipeline(self):
+    def test_blocked_cutover_keeps_approved_legacy_production_and_builds_preview(self):
         import render_training_site
 
-        original_publish = render_training_site.publish_v2_current_page
-        original_legacy = render_training_site.run_legacy_parity_pipeline
+        originals = (
+            render_training_site.cutover_contract_ready,
+            render_training_site.publish_v2_current_page,
+            render_training_site.run_legacy_parity_pipeline,
+            render_training_site.publish_v2_preview,
+        )
         calls = []
         try:
+            render_training_site.cutover_contract_ready = lambda: False
             render_training_site.publish_v2_current_page = lambda: calls.append("v2")
             render_training_site.run_legacy_parity_pipeline = lambda: calls.append("legacy")
+            render_training_site.publish_v2_preview = lambda: calls.append("preview")
             self.assertEqual(main(), 0)
         finally:
-            render_training_site.publish_v2_current_page = original_publish
-            render_training_site.run_legacy_parity_pipeline = original_legacy
+            (
+                render_training_site.cutover_contract_ready,
+                render_training_site.publish_v2_current_page,
+                render_training_site.run_legacy_parity_pipeline,
+                render_training_site.publish_v2_preview,
+            ) = originals
+        self.assertEqual(calls, ["legacy", "preview"])
+
+    def test_ready_cutover_publishes_only_v2(self):
+        import render_training_site
+
+        originals = (
+            render_training_site.cutover_contract_ready,
+            render_training_site.publish_v2_current_page,
+            render_training_site.run_legacy_parity_pipeline,
+            render_training_site.publish_v2_preview,
+        )
+        calls = []
+        try:
+            render_training_site.cutover_contract_ready = lambda: True
+            render_training_site.publish_v2_current_page = lambda: calls.append("v2")
+            render_training_site.run_legacy_parity_pipeline = lambda: calls.append("legacy")
+            render_training_site.publish_v2_preview = lambda: calls.append("preview")
+            self.assertEqual(main(), 0)
+        finally:
+            (
+                render_training_site.cutover_contract_ready,
+                render_training_site.publish_v2_current_page,
+                render_training_site.run_legacy_parity_pipeline,
+                render_training_site.publish_v2_preview,
+            ) = originals
         self.assertEqual(calls, ["v2"])
 
     def test_production_renderer_uses_stockholm_calendar_date(self):
