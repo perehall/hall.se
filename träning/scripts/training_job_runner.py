@@ -45,6 +45,9 @@ def build_stages(ingest_mode: str) -> list[Stage]:
     )
 
     repository = os.environ.get("GITHUB_REPOSITORY", "")
+    training_input_event = (
+        str(os.environ.get("TRAINING_INPUT_EVENT") or "").strip().lower() == "true"
+    )
     persist_token = Stage(
         "persist_strava_refresh_token",
         ("gh", "secret", "set", "STRAVA_REFRESH_TOKEN", "--repo", repository),
@@ -58,7 +61,7 @@ def build_stages(ingest_mode: str) -> list[Stage]:
             python_stage("supabase_activity_backend.py", "--mode", "hydrate"),
         ),
     ]
-    if str(os.environ.get("TRAINING_INPUT_EVENT") or "").strip().lower() == "true":
+    if training_input_event:
         stages.append(Stage("apply_training_input", python_stage("training_input.py")))
 
     stages.extend([
@@ -107,7 +110,7 @@ def build_stages(ingest_mode: str) -> list[Stage]:
         Stage(
             "coach_analysis",
             python_stage("coach_pipeline.py"),
-            optional=True,
+            optional=not training_input_event,
             attempts=2,
         ),
         Stage("materialize_workout_designs_post_coach", python_stage("materialize_workout_designs.py")),
