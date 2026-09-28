@@ -203,8 +203,8 @@ class SupabaseShadowModelTests(unittest.TestCase):
             "days": [
                 {
                     "date": "2026-09-24",
-                    "session": "Vilodag",
-                    "sport": "rest",
+                    "session": "Löpning · 30 min",
+                    "sport": "run",
                     "microcycle_day": 4,
                     "stimuli": [],
                 }
