@@ -127,8 +127,10 @@ def prescription_rows(payload: dict) -> tuple[PrescriptionRow, ...]:
     rows = []
     for block in prescription.get("blocks") or []:
         dose = _work_dose(block.get("work") or {})
-        instruction = str(block.get("instruction") or block.get("name") or "").strip()
         is_swim = "equipment" in block or block.get("component") == "swim"
+        instruction = str(block.get("instruction") or block.get("name") or "").strip()
+        if not dose and not is_swim:
+            instruction = _display_line(block)
 
         if "equipment" in block:
             equipment = _equipment_lingo(block.get("equipment"))
