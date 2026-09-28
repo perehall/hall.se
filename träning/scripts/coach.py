@@ -166,10 +166,10 @@ def latest_activity_for_coach(activity, workout_context=None):
     result = summarize_activity_history(activity)
     result["device_name"] = activity.get("device_name")
     result["calories"] = activity.get("calories")
-    result["workout_analysis_context"] = deepcopy(
+    result["workout_analysis_context"] = (
         workout_context
         if workout_context is not None
-        else (activity.get("workout_analysis_context") or {})
+        else deepcopy(activity.get("workout_analysis_context") or {})
     )
     return result
 
