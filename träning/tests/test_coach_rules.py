@@ -28,7 +28,7 @@ from coach_rules import (  # noqa: E402
 class CoachRulesTests(unittest.TestCase):
     def test_run_fulfills_same_day_trail_plan_via_explicit_sport(self):
         plan = {
-            "days": [
+            "planned_workouts": [
                 {
                     "date": "2026-08-23",
                     "status": "preliminary",
@@ -65,14 +65,6 @@ class CoachRulesTests(unittest.TestCase):
                     "sport": "strength",
                     "session": "Styrka",
                 },
-            ],
-            "days": [
-                {
-                    "date": "2026-08-23",
-                    "status": "planned",
-                    "sport": "swim",
-                    "session": "Simning",
-                }
             ],
         }
         activities = [
@@ -112,14 +104,6 @@ class CoachRulesTests(unittest.TestCase):
                     "session": "MTB",
                 },
             ],
-            "days": [
-                {
-                    "date": "2026-08-23",
-                    "status": "planned",
-                    "sport": "run",
-                    "session": "Löpning",
-                }
-            ],
         }
         activities = [
             {
@@ -156,7 +140,6 @@ class CoachRulesTests(unittest.TestCase):
                     "session": "Löpning 2",
                 },
             ],
-            "days": [],
         }
         activities = [
             {
@@ -196,7 +179,6 @@ class CoachRulesTests(unittest.TestCase):
                     "activity_id": 21,
                 },
             ],
-            "days": [],
         }
         activities = [
             {
@@ -230,7 +212,6 @@ class CoachRulesTests(unittest.TestCase):
                     ],
                 }
             ],
-            "days": [],
         }
         bike = {
             "id": 30,
@@ -271,7 +252,7 @@ class CoachRulesTests(unittest.TestCase):
 
     def test_session_wording_is_not_used_as_sport_source(self):
         plan = {
-            "days": [
+            "planned_workouts": [
                 {
                     "date": "2026-08-23",
                     "status": "planned",
@@ -288,7 +269,7 @@ class CoachRulesTests(unittest.TestCase):
 
     def test_unrelated_activity_does_not_fulfill_plan(self):
         plan = {
-            "days": [
+            "planned_workouts": [
                 {
                     "date": "2026-08-23",
                     "status": "planned",
@@ -310,7 +291,7 @@ class CoachRulesTests(unittest.TestCase):
 
     def test_swimrun_can_be_fulfilled_by_run_family_source_activity(self):
         plan = {
-            "days": [
+            "planned_workouts": [
                 {
                     "date": "2026-08-19",
                     "status": "planned",
@@ -326,7 +307,7 @@ class CoachRulesTests(unittest.TestCase):
 
     def test_completed_past_fulfilled_rest_and_open_dates_are_not_targets(self):
         plan = {
-            "days": [
+            "planned_workouts": [
                 {"date": "2026-08-22", "status": "planned", "sport": "run", "session": "Löpning · lugnt"},
                 {"date": "2026-08-23", "status": "planned", "sport": "run", "session": "Trail · lugnt"},
                 {"date": "2026-08-24", "status": "completed", "sport": "enduro", "session": "Enduro"},
@@ -343,7 +324,7 @@ class CoachRulesTests(unittest.TestCase):
 
     def test_future_target_is_deferred_until_intervening_days_are_known(self):
         plan = {
-            "days": [
+            "planned_workouts": [
                 {
                     "date": "2026-08-24",
                     "status": "planned",
@@ -379,7 +360,7 @@ class CoachRulesTests(unittest.TestCase):
 
     def test_tomorrows_target_becomes_ready_after_today_is_fulfilled(self):
         plan = {
-            "days": [
+            "planned_workouts": [
                 {
                     "date": "2026-08-24",
                     "status": "planned",
@@ -409,7 +390,7 @@ class CoachRulesTests(unittest.TestCase):
 
     def test_wednesday_becomes_ready_after_tuesday_is_fulfilled(self):
         plan = {
-            "days": [
+            "planned_workouts": [
                 {"date": "2026-08-24", "status": "completed", "sport": "enduro", "session": "Enduro"},
                 {"date": "2026-08-25", "status": "planned", "sport": "swim", "session": "Simning"},
                 {"date": "2026-08-26", "status": "conditional", "sport": "run", "session": "Tröskel"},
@@ -476,7 +457,7 @@ class CoachRulesTests(unittest.TestCase):
 
     def test_coach_view_marks_matching_day_completed_without_mutating_plan(self):
         plan = {
-            "days": [
+            "planned_workouts": [
                 {"date": "2026-08-23", "status": "preliminary", "sport": "run", "session": "Trail · lugnt"}
             ]
         }
@@ -491,9 +472,12 @@ class CoachRulesTests(unittest.TestCase):
 
         coach_plan, fulfilled = plan_for_coach(plan, activities)
         self.assertEqual(fulfilled, {"2026-08-23": 3})
-        self.assertEqual(coach_plan["days"][0]["status"], "completed")
-        self.assertEqual(coach_plan["days"][0]["coach_fulfilled_by_activity"]["id"], 3)
-        self.assertEqual(plan["days"][0]["status"], "preliminary")
+        self.assertEqual(coach_plan["planned_workouts"][0]["status"], "completed")
+        self.assertEqual(
+            coach_plan["planned_workouts"][0]["coach_fulfilled_by_activity"]["id"],
+            3,
+        )
+        self.assertEqual(plan["planned_workouts"][0]["status"], "preliminary")
 
     def test_invalid_ai_target_is_rejected(self):
         action = {
