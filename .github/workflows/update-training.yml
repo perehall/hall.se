@@ -6,11 +6,6 @@ on:
     types:
       - strava-activity-event
       - training-input-event
-  schedule:
-    # Safety reconcile behålls tills Strava-webhooken är verifierad end-to-end.
-    # Veckorullning sker redan i den kanoniska pipelinen och den separata
-    # midnight-workflowen dispatchar samma pipeline en gång per lokal dag.
-    - cron: "17 */3 * * *"
   push:
     branches:
       - main
