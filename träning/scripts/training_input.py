@@ -15,6 +15,8 @@ import re
 import urllib.request
 from pathlib import Path
 
+from openai_usage import log_openai_usage
+
 ROOT = Path(__file__).resolve().parents[1]
 ACTIVITIES_FILE = ROOT / "data" / "activities.json"
 OVERRIDES_FILE = ROOT / "data" / "activity_overrides.json"
@@ -222,6 +224,7 @@ def classify_with_model(payload: dict, activity: dict) -> str:
     try:
         with urllib.request.urlopen(req, timeout=45) as response:
             result = json.load(response)
+        log_openai_usage("training_input_classifier", result, body)
         if result.get("status") != "completed":
             return deterministic_operation(payload)
         parsed = json.loads(extract_output_text(result))

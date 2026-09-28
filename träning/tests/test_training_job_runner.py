@@ -176,19 +176,20 @@ class TrainingJobRunnerTests(unittest.TestCase):
         self.assertFalse(run_stage(stage, 1, 1))
         self.assertEqual(mocked_run.call_count, 2)
 
-    def test_ai_enrichment_stages_retry_without_becoming_pipeline_requirements(self):
+    def test_ai_stages_use_one_process_attempt_and_own_internal_retry_policy(self):
         stages = {stage.key: stage for stage in build_stages("event")}
         self.assertTrue(stages["coach_analysis"].optional)
-        self.assertEqual(stages["coach_analysis"].attempts, 2)
+        self.assertEqual(stages["coach_analysis"].attempts, 1)
         self.assertTrue(stages["weekly_review"].optional)
-        self.assertEqual(stages["weekly_review"].attempts, 2)
+        self.assertEqual(stages["weekly_review"].attempts, 1)
+        self.assertEqual(stages["adaptive_planning"].attempts, 1)
 
     def test_training_input_requires_coach_analysis_before_publication(self):
         with patch.dict(os.environ, {"TRAINING_INPUT_EVENT": "true"}, clear=False):
             stages = {stage.key: stage for stage in build_stages("reconcile")}
         coach = stages["coach_analysis"]
         self.assertFalse(coach.optional)
-        self.assertEqual(coach.attempts, 2)
+        self.assertEqual(coach.attempts, 1)
 
     def test_persist_token_requires_repository_at_execution_time(self):
         stage = next(

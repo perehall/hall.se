@@ -32,6 +32,7 @@ from coach_rules import (
 )
 from strategy_contracts import validate_training_strategy
 from wellness_context import signature_payload, validate_context
+from openai_usage import log_openai_usage
 
 ROOT = Path(__file__).resolve().parents[1]
 PLAN_FILE = ROOT / "data" / "plan.json"
@@ -135,6 +136,36 @@ def load_private_wellness_context(path=None):
     context = json.loads(path.read_text(encoding="utf-8"))
     validate_context(context)
     return context
+
+
+def summarize_activity_history(activity):
+    """Compact historical context; detailed laps/context belong only to latest_activity."""
+    context = activity.get("workout_analysis_context") or {}
+    return {
+        "id": activity.get("id"),
+        "name": activity.get("name"),
+        "sport_type": activity.get("sport_type"),
+        "display_label": activity.get("display_label") or context.get("display_label"),
+        "classification": activity.get("classification") or context.get("classification"),
+        "start_date": activity.get("start_date"),
+        "start_date_local": activity.get("start_date_local"),
+        "moving_time_s": activity.get("moving_time_s"),
+        "elapsed_time_s": activity.get("elapsed_time_s"),
+        "distance_m": activity.get("distance_m"),
+        "total_elevation_gain_m": activity.get("total_elevation_gain_m"),
+        "average_heartrate": activity.get("average_heartrate"),
+        "max_heartrate": activity.get("max_heartrate"),
+        "user_report": activity.get("user_report") or context.get("user_report") or "",
+    }
+
+
+def recent_activity_history(activities, limit=10):
+    rows = sorted(
+        activities,
+        key=lambda activity: activity.get("start_date") or "",
+        reverse=True,
+    )[:limit]
+    return [summarize_activity_history(activity) for activity in rows]
 
 
 def stable_hash(plan, latest_activity, local_date, strategy=None, wellness_context=None, rolling_context=None, performance_context=None):
@@ -407,7 +438,9 @@ def request_openai(body, api_key=None):
         method="POST",
     )
     with urllib.request.urlopen(req, timeout=120) as response:
-        return json.load(response)
+        result = json.load(response)
+    log_openai_usage("coach", result, body)
+    return result
 
 
 def parse_completed_response(response):
@@ -700,7 +733,7 @@ def main():
         return 0
 
     latest_date = (latest.get("start_date_local") or latest.get("start_date") or "")[:10]
-    recent = sorted(activities, key=lambda activity: activity.get("start_date") or "", reverse=True)[:10]
+    recent = recent_activity_history(activities, limit=10)
     coach_plan, fulfilled_dates = plan_for_coach(decision_plan, activities)
     candidate_workouts = allowed_target_workouts(decision_plan, activities, local_date)
     ready_workouts = decision_ready_target_workouts(decision_plan, activities, local_date)
