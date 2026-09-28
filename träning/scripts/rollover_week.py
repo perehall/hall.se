@@ -200,7 +200,11 @@ def promote_upcoming(upcoming):
     meta = promoted.get("meta") or {}
     meta.pop("preview_summary", None)
 
-    for day in promoted.get("days") or []:
+    collections = [promoted.get("days") or []]
+    if promoted.get("planned_workouts") is not None:
+        collections.append(promoted.get("planned_workouts") or [])
+
+    for day in [item for collection in collections for item in collection]:
         day.pop("planning_status", None)
 
         if day.get("dose_open") is True and (day.get("dose_options") or []):
@@ -253,7 +257,8 @@ def apply_swim_option_structure(day, target_date, week_key_value):
     workout = template
     workout["sync_enabled"] = False
     workout.pop("external_id", None)
-    workout["id"] = f"swim-{week_key_value.lower()}-{target_date.isoformat()}-{day.get('baseline_option_id')}"
+    identity = str(day.get("microcycle_slot") or day.get("baseline_option_id") or "workout").replace(" ", "-")
+    workout["id"] = f"swim-{week_key_value.lower()}-{target_date.isoformat()}-{identity}"
     day["watch_workout"] = workout
     day["swim_equipment"] = {"planned": deepcopy(workout.get("equipment") or [])}
     return True
@@ -448,6 +453,7 @@ def build_mesocycle_next_week(promoted, strategy):
     microcycle_length = int(mesocycle["microcycle_structure"]["length_days"])
 
     days = []
+    planned_workouts = []
     for offset, label in enumerate(WEEKDAY_LABELS):
         day_date = next_start + timedelta(days=offset)
         days.append(
@@ -521,7 +527,14 @@ def build_mesocycle_next_week(promoted, strategy):
                     )
             if slot["sport"] == "swim":
                 planned_day["swim_equipment"] = {"planned": "tbd"}
-            days[offset] = planned_day
+                apply_swim_option_structure(planned_day, day_date, week_key(next_start))
+            planned_workouts.append(deepcopy(planned_day))
+            if days[offset].get("sport") in {"open", "rest"}:
+                days[offset] = deepcopy(planned_day)
+            else:
+                days[offset]["additional_planned_workouts"] = (
+                    int(days[offset].get("additional_planned_workouts") or 0) + 1
+                )
 
         title = f'{mesocycle["title"]} · mikrocykel {microcycle_index} av {total_microcycles}'
         principle = (
@@ -589,7 +602,14 @@ def build_mesocycle_next_week(promoted, strategy):
                     )
             if slot["sport"] == "swim":
                 planned_day["swim_equipment"] = {"planned": "tbd"}
-            days[offset] = planned_day
+                apply_swim_option_structure(planned_day, day_date, week_key(next_start))
+            planned_workouts.append(deepcopy(planned_day))
+            if days[offset].get("sport") in {"open", "rest"}:
+                days[offset] = deepcopy(planned_day)
+            else:
+                days[offset]["additional_planned_workouts"] = (
+                    int(days[offset].get("additional_planned_workouts") or 0) + 1
+                )
 
         title = "Övergångsmikrocykel · mesocykelutvärdering"
         principle = (
@@ -626,6 +646,7 @@ def build_mesocycle_next_week(promoted, strategy):
             "capacity_protection": deepcopy(mesocycle.get("capacity_protection") or {}) if inside_mesocycle else {},
         },
         "days": days,
+        "planned_workouts": planned_workouts,
         "strength_template": deepcopy(promoted.get("strength_template") or []),
     }
 
@@ -650,8 +671,8 @@ def build_mesocycle_next_week(promoted, strategy):
 
         actual_stimuli = {
             stimulus
-            for day in future["days"]
-            for stimulus in (day.get("stimuli") or [])
+            for workout in (future.get("planned_workouts") or future["days"])
+            for stimulus in (workout.get("stimuli") or [])
         }
         missing = [
             stimulus
