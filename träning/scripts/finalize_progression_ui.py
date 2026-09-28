@@ -182,6 +182,19 @@ def inject_prescription(page, day):
     if 'class="workout-prescription"' in segment:
         return page
 
+    if 'class="workout-components"' in block:
+        # Do not present two physical sessions as one concatenated workout.
+        import re
+        segment, count = re.subn(
+            r'<div class="session">.*?</div>',
+            '<div class="session">Simning + styrka/core · två separata pass</div>',
+            segment,
+            count=1,
+            flags=re.S,
+        )
+        if count != 1:
+            raise RuntimeError(f"Progressions-UI: kunde inte märka separata pass för {day['date']}")
+
     reason_marker = '<div class="reason">'
     position = segment.find(reason_marker)
     if position < 0:
