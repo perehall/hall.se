@@ -537,6 +537,7 @@
         "transport": "intervals_icu",
         "external_id": "hall-device:2026-10-07:run:run_threshold_2",
         "source_hash": "a40259e78851cfdf7f9a82e279f6165212ad00c4f1b8fca6dc062faae04dd3af",
+        "detail_level": "structured",
         "provider_type": "Run",
         "target_policy": "explicit_single_primary_only",
         "schema_version": 1,
@@ -1257,6 +1258,7 @@
         "transport": "intervals_icu",
         "external_id": "hall-device:2026-10-11:run:run_easy_distance_5",
         "source_hash": "ca169eac53c0c173ae385b8712007bcd090b26fddb2343f4e6d6ae2a78a84dcb",
+        "detail_level": "structured",
         "provider_type": "Run",
         "target_policy": "explicit_single_primary_only",
         "schema_version": 1,
@@ -2076,6 +2078,7 @@
         "transport": "intervals_icu",
         "external_id": "hall-device:2026-10-07:run:run_threshold_2",
         "source_hash": "a40259e78851cfdf7f9a82e279f6165212ad00c4f1b8fca6dc062faae04dd3af",
+        "detail_level": "structured",
         "provider_type": "Run",
         "target_policy": "explicit_single_primary_only",
         "schema_version": 1,
@@ -2344,6 +2347,12 @@
         "strength_core"
       ],
       "dose_open": false,
+      "device_sync": {
+        "status": "deferred",
+        "transport": "intervals_icu",
+        "source_hash": "5df4a0d67eee409be2673cc74f8fdcd3b155ab9b1ded50be0512e397e1a2d3f8",
+        "device_delivery": "unverified"
+      },
       "dose_options": [
         {
           "id": "strength-25",
@@ -2370,6 +2379,37 @@
       "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
       "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc3",
       "priority_role": "protected_support",
+      "device_workout": {
+        "date": "2026-10-08",
+        "name": "Styrka/core · ca 35 min · styrkemall",
+        "sport": "strength",
+        "blocks": [
+          {
+            "name": "Tidsram",
+            "sets": 1,
+            "steps": [
+              {
+                "kind": "work",
+                "duration": {
+                  "kind": "time",
+                  "seconds": 2100
+                },
+                "instruction": "Styrka/core inom vald tidsram",
+                "intensity_class": "active"
+              }
+            ],
+            "repetitions_per_set": 1
+          }
+        ],
+        "transport": "intervals_icu",
+        "external_id": "hall-device:2026-10-08:strength:strength_core_4",
+        "source_hash": "5df4a0d67eee409be2673cc74f8fdcd3b155ab9b1ded50be0512e397e1a2d3f8",
+        "detail_level": "duration_only",
+        "provider_type": "WeightTraining",
+        "target_policy": "explicit_single_primary_only",
+        "schema_version": 1,
+        "source_candidate_id": "strength-35"
+      },
       "microcycle_day": 4,
       "workout_design": {
         "objective": {
@@ -3107,6 +3147,7 @@
         "transport": "intervals_icu",
         "external_id": "hall-device:2026-10-11:run:run_easy_distance_5",
         "source_hash": "ca169eac53c0c173ae385b8712007bcd090b26fddb2343f4e6d6ae2a78a84dcb",
+        "detail_level": "structured",
         "provider_type": "Run",
         "target_policy": "explicit_single_primary_only",
         "schema_version": 1,

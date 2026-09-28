@@ -4,7 +4,7 @@
   "week_start": "2026-09-28",
   "week_end": "2026-10-04",
   "created_at_utc": "2026-09-28T00:33:59.823062+00:00",
-  "updated_at_utc": "2026-09-28T09:28:28.437124+00:00",
+  "updated_at_utc": "2026-09-28T09:48:35.443612+00:00",
   "plan": {
     "days": [
       {
@@ -545,6 +545,7 @@
           "transport": "intervals_icu",
           "external_id": "hall-device:2026-09-30:run:run_threshold_2",
           "source_hash": "8823720772feaa90f87477a0a0839c160b4a14fd61ca3333ff3a74a4c9925344",
+          "detail_level": "structured",
           "provider_type": "Run",
           "target_policy": "explicit_single_primary_only",
           "schema_version": 1,
@@ -1598,6 +1599,7 @@
           "transport": "intervals_icu",
           "external_id": "hall-device:2026-10-04:run:run_easy_distance_4",
           "source_hash": "fc34fb45dbc296bec07d8662aa718b651a9536c375e2d2068fe7a37c428c8dfc",
+          "detail_level": "structured",
           "provider_type": "Run",
           "target_policy": "explicit_single_primary_only",
           "schema_version": 1,
@@ -2345,9 +2347,9 @@
           "status": "synced",
           "transport": "intervals_icu",
           "source_hash": "8823720772feaa90f87477a0a0839c160b4a14fd61ca3333ff3a74a4c9925344",
-          "updated_at_utc": "2026-09-28T09:28:09.963037+00:00",
+          "updated_at_utc": "2026-09-28T09:48:18.634286+00:00",
           "device_delivery": "unverified",
-          "verified_at_utc": "2026-09-28T09:28:09.963037+00:00",
+          "verified_at_utc": "2026-09-28T09:48:18.634286+00:00",
           "provider_event_id": 139375858
         },
         "dose_options": [
@@ -2419,6 +2421,7 @@
           "transport": "intervals_icu",
           "external_id": "hall-device:2026-09-30:run:run_threshold_2",
           "source_hash": "8823720772feaa90f87477a0a0839c160b4a14fd61ca3333ff3a74a4c9925344",
+          "detail_level": "structured",
           "provider_type": "Run",
           "target_policy": "explicit_single_primary_only",
           "schema_version": 1,
@@ -3028,6 +3031,15 @@
           "strength_core"
         ],
         "dose_open": false,
+        "device_sync": {
+          "status": "synced",
+          "transport": "intervals_icu",
+          "source_hash": "350932d60abb145c3e8a9b16ccf707f8825a486daa25526f1ca0d573a7767778",
+          "updated_at_utc": "2026-09-28T09:48:18.785269+00:00",
+          "device_delivery": "unverified",
+          "verified_at_utc": "2026-09-28T09:48:18.785269+00:00",
+          "provider_event_id": 139579174
+        },
         "dose_options": [
           {
             "id": "strength-25",
@@ -3054,6 +3066,37 @@
         "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
         "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc2",
         "priority_role": "protected_support",
+        "device_workout": {
+          "date": "2026-10-02",
+          "name": "Styrka/core · ca 35 min · styrkemall",
+          "sport": "strength",
+          "blocks": [
+            {
+              "name": "Tidsram",
+              "sets": 1,
+              "steps": [
+                {
+                  "kind": "work",
+                  "duration": {
+                    "kind": "time",
+                    "seconds": 2100
+                  },
+                  "instruction": "Styrka/core inom vald tidsram",
+                  "intensity_class": "active"
+                }
+              ],
+              "repetitions_per_set": 1
+            }
+          ],
+          "transport": "intervals_icu",
+          "external_id": "hall-device:2026-10-02:strength:swim_strength_3-strength",
+          "source_hash": "350932d60abb145c3e8a9b16ccf707f8825a486daa25526f1ca0d573a7767778",
+          "detail_level": "duration_only",
+          "provider_type": "WeightTraining",
+          "target_policy": "explicit_single_primary_only",
+          "schema_version": 1,
+          "source_candidate_id": "strength-35"
+        },
         "microcycle_day": 5,
         "workout_design": {
           "objective": {
@@ -3360,9 +3403,9 @@
           "status": "synced",
           "transport": "intervals_icu",
           "source_hash": "fc34fb45dbc296bec07d8662aa718b651a9536c375e2d2068fe7a37c428c8dfc",
-          "updated_at_utc": "2026-09-28T09:28:10.169262+00:00",
+          "updated_at_utc": "2026-09-28T09:48:18.952659+00:00",
           "device_delivery": "unverified",
-          "verified_at_utc": "2026-09-28T09:28:10.169262+00:00",
+          "verified_at_utc": "2026-09-28T09:48:18.952659+00:00",
           "provider_event_id": 139449494
         },
         "dose_options": [
@@ -3430,6 +3473,7 @@
           "transport": "intervals_icu",
           "external_id": "hall-device:2026-10-04:run:run_easy_distance_4",
           "source_hash": "fc34fb45dbc296bec07d8662aa718b651a9536c375e2d2068fe7a37c428c8dfc",
+          "detail_level": "structured",
           "provider_type": "Run",
           "target_policy": "explicit_single_primary_only",
           "schema_version": 1,
