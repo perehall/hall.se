@@ -493,6 +493,8 @@ def build_mesocycle_next_week(promoted, strategy):
                 "microcycle_day": int(slot["day_index"]),
                 "microcycle_slot": slot["slot"],
             }
+            if slot.get("sessions"):
+                planned_day["sessions"] = deepcopy(slot["sessions"])
             if slot.get("optional_stimuli"):
                 planned_day["optional_stimuli"] = deepcopy(slot["optional_stimuli"])
             if slot.get("performance_marker_id"):
