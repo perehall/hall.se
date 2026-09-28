@@ -1,13 +1,13 @@
 {
-  "last_sync_utc": "2026-09-28T18:06:25.124180+00:00",
+  "last_sync_utc": "2026-09-28T18:10:13.541447+00:00",
   "schema_version": 2,
   "activity_semantics": {
     "changed_ids": [
       "20367593813"
     ],
     "schema_version": 1,
-    "overrides_applied": 20,
-    "auto_rules_applied": 12,
+    "overrides_applied": 21,
+    "auto_rules_applied": 11,
     "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
     "override_ids_present": [
       "19852599244",
@@ -29,7 +29,8 @@
       "20326850936",
       "20337309419",
       "20337767421",
-      "20350203020"
+      "20350203020",
+      "20367593813"
     ],
     "workout_analysis_contract_version": 3
   },
@@ -52,6 +53,7 @@
       "sport_type": "Enduro",
       "start_date": "2026-09-28T14:35:00Z",
       "device_name": "Garmin Forerunner 970",
+      "user_report": "Teknikpass. Stalp och timing. RPE 4/10. Känsla: Pigg.",
       "average_watts": 250.7,
       "display_label": "Enduro",
       "max_heartrate": 149.0,
@@ -61,14 +63,7 @@
       "start_date_local": "2026-09-28T16:35:00Z",
       "average_heartrate": 118.2,
       "source_sport_type": "EMountainBikeRide",
-      "sport_normalization": {
-        "rule": "emountainbike-user-enduro-proxy-v1",
-        "evidence": [
-          "source_sport_type=EMountainBikeRide",
-          "user convention: Strava e-MTB represents Enduro"
-        ]
-      },
-      "classification_reason": "User convention: Strava e-MTB represents Enduro; Enduro is actual training load.",
+      "classification_reason": "Explicit GUI-input från användaren ska behandlas som förstaklassdata i analys och fortsatt planering.",
       "total_elevation_gain_m": 478.0,
       "weighted_average_watts": null,
       "workout_analysis_context": {
@@ -92,7 +87,7 @@
         },
         "sport_type": "Enduro",
         "activity_id": 20367593813,
-        "user_report": "",
+        "user_report": "Teknikpass. Stalp och timing. RPE 4/10. Känsla: Pigg.",
         "display_label": "Enduro",
         "classification": "training",
         "contract_version": 3,
