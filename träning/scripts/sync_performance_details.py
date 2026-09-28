@@ -224,17 +224,33 @@ def threshold_protocols(activity):
 
 def detect_threshold_rows(activity, rows):
     for protocol in threshold_protocols(activity):
-        matching = [
-            (seconds, row)
-            for seconds, row in rows
+        indexed = [
+            (index, seconds, row)
+            for index, (seconds, row) in enumerate(rows)
             if abs(seconds - protocol["target_s"]) <= protocol["tolerance_s"]
         ]
-        if len(matching) != protocol["count"]:
-            continue
+        if protocol["explicit"]:
+            # The user report is first-class evidence for the intended structure.
+            # Provider auto-intervals may contain extra similarly long WORK rows;
+            # choose the reported number closest to the reported duration instead
+            # of rejecting the whole activity.
+            if len(indexed) < protocol["count"]:
+                continue
+            selected = sorted(
+                indexed,
+                key=lambda item: (abs(item[1] - protocol["target_s"]), item[0]),
+            )[: protocol["count"]]
+            selected.sort(key=lambda item: item[0])
+        else:
+            # Without an explicit report, fail closed: the detected shape must be
+            # unambiguous rather than selecting a convenient subset.
+            if len(indexed) != protocol["count"]:
+                continue
+            selected = indexed
         return {
             "marker_id": "run-threshold-control",
             "protocol_key": f"run_threshold:{protocol['count']}x{protocol['minutes']}",
-            "work_rows": [row for _, row in matching],
+            "work_rows": [row for _, _, row in selected],
         }
     return None
 

@@ -88,6 +88,25 @@ class PerformanceDetailTests(unittest.TestCase):
         self.assertEqual(detected["protocol_key"], "run_threshold:4x8")
         self.assertEqual(len(detected["work_rows"]), 4)
 
+    def test_explicit_four_by_eight_can_disambiguate_extra_provider_work_row(self):
+        activity = {
+            "sport_type": "Run",
+            "user_report": "4×8 min Tempo enligt Garmin.",
+        }
+        detail = {
+            "icu_intervals": [
+                interval(480, 2000, 150),
+                interval(482, 2010, 151),
+                interval(479, 2020, 153),
+                interval(481, 2030, 154),
+                interval(420, 1700, 145),
+            ]
+        }
+        detected = infer_threshold_protocol(activity, detail)
+        self.assertEqual(detected["protocol_key"], "run_threshold:4x8")
+        self.assertEqual(len(detected["work_rows"]), 4)
+        self.assertTrue(all(row["moving_time"] >= 479 for row in detected["work_rows"]))
+
     def test_four_by_nine_threshold_is_supported_as_comparable_future_protocol(self):
         activity = {
             "sport_type": "Run",
