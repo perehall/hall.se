@@ -15,6 +15,16 @@
     "SUPABASE_TIMEOUT_MS": "2500",
     "TRAINING_INPUT_HOST": "xn--hll-qla.se"
   },
+  "secrets": {
+    "required": [
+      "WEBHOOK_PATH_SECRET",
+      "STRAVA_VERIFY_TOKEN",
+      "STRAVA_OWNER_ID",
+      "STRAVA_SUBSCRIPTION_ID",
+      "GITHUB_DISPATCH_TOKEN",
+      "SUPABASE_SECRET_KEY"
+    ]
+  },
   "observability": {
     "enabled": true
   },
