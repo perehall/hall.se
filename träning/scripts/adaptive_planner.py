@@ -28,6 +28,7 @@ from rollover_week import (
 )
 from strategy_contracts import validate_training_strategy
 from supabase_goal_source import load_goal_for_planner
+from openai_usage import log_openai_usage
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
@@ -238,7 +239,9 @@ def request_openai(body, api_key=None):
     )
     try:
         with urllib.request.urlopen(request, timeout=120) as response:
-            return json.load(response)
+            result = json.load(response)
+        log_openai_usage("adaptive_planner", result, body)
+        return result
     except urllib.error.HTTPError as exc:
         detail = exc.read().decode("utf-8", errors="replace")
         raise RuntimeError(f"OpenAI HTTP {exc.code}: {detail[:1600]}") from exc
