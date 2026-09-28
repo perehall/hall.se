@@ -20,11 +20,21 @@ def validate_document(document, label):
             f"{label}: workout_design_schema_version måste vara {WORKOUT_DESIGN_SCHEMA_VERSION}"
         )
 
+    collection_name = (
+        "planned_workouts"
+        if document.get("planned_workouts") is not None
+        else "days"
+    )
+    collection = document.get(collection_name) or []
+
     count = 0
-    for index, day in enumerate(document.get("days") or []):
-        if day.get("sport") in {"rest", "open"}:
+    for index, workout in enumerate(collection):
+        if workout.get("sport") in {"rest", "open"}:
             continue
-        validate_workout_design(day, f"{label}.days[{index}]")
+        validate_workout_design(
+            workout,
+            f"{label}.{collection_name}[{index}]",
+        )
         count += 1
     return count
 
