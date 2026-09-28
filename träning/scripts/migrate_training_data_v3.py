@@ -1,51 +1,49 @@
 #!/usr/bin/env python3
+"""Offline canonical-plan guard retained for explicit forensic migrations.
+
+This module is not part of runtime or deployment. It deliberately refuses to
+infer physical workouts from calendar rows. Pre-canonical documents require an
+explicit reviewed migration artifact; schema-v3 documents may only be cleaned
+so `days` remains presentation geometry.
+"""
+from __future__ import annotations
+
 import json
 from pathlib import Path
 
-from training_contracts import PLAN_SCHEMA_VERSION, VALID_PLAN_SPORTS
-from calendar_projection import refresh_calendar_projection
+from training_contracts import PLAN_SCHEMA_VERSION
 
 ROOT = Path(__file__).resolve().parents[1]
 PLAN_FILES = [ROOT / "data" / "plan.json", ROOT / "data" / "upcoming_week.json"]
 COACH_FILE = ROOT / "data" / "coach.json"
 
-# One-time reviewed migration. No sport is inferred from Swedish free text.
-# Unknown dates fail closed instead of being guessed.
-SPORT_BY_DATE = {
-    "2026-08-17": "swim",
-    "2026-08-18": "strength",
-    "2026-08-19": "swimrun",
-    "2026-08-20": "run",
-    "2026-08-21": "swim",
-    "2026-08-22": "enduro",
-    "2026-08-23": "run",
-    "2026-08-24": "enduro",
-    "2026-08-25": "swim",
-    "2026-08-26": "run",
-    "2026-08-27": "strength",
-    "2026-08-28": "swim",
-    "2026-08-29": "bike",
-    "2026-08-30": "open",
-}
-
-
 
 def materialize_physical_workouts(document, catalog=None):
-    """Require canonical physical-workout identity.
-
-    Production migration no longer interprets calendar rows as workouts. A
-    schema-v3 document must already contain planned_workouts; older documents
-    require an explicit offline migration. This keeps runtime free of
-    sport/date/session-specific conversion rules.
-    """
-    if document.get("planned_workouts") is None:
+    workouts = document.get("planned_workouts")
+    if not isinstance(workouts, list):
         raise RuntimeError(
-            "Migration v3: planned_workouts saknas; premultipass-data måste "
-            "migreras explicit offline och får inte tolkas i runtime"
+            "Offline migration: planned_workouts saknas; fysisk träningsidentitet "
+            "får inte härledas från days"
         )
-    if not isinstance(document.get("planned_workouts"), list):
-        raise RuntimeError("Migration v3: planned_workouts måste vara en lista")
     return False
+
+
+def _calendar_axis_only(document):
+    days = document.get("days")
+    if not isinstance(days, list):
+        raise RuntimeError("Offline migration: days måste vara en lista")
+    cleaned = []
+    for row in days:
+        if not isinstance(row, dict):
+            raise RuntimeError("Offline migration: days innehåller icke-objekt")
+        date_value = str(row.get("date") or "").strip()
+        label = str(row.get("label") or "").strip()
+        if not date_value or not label:
+            raise RuntimeError("Offline migration: kalenderaxel saknar date/label")
+        cleaned.append({"date": date_value, "label": label})
+    changed = cleaned != days
+    document["days"] = cleaned
+    return changed
 
 
 def migrate_plan(path, catalog=None):
@@ -53,37 +51,19 @@ def migrate_plan(path, catalog=None):
         return False
     document = json.loads(path.read_text(encoding="utf-8"))
     version = document.get("schema_version")
-    if version == PLAN_SCHEMA_VERSION:
-        for day in document.get("days", []):
-            if day.get("sport") not in VALID_PLAN_SPORTS:
-                raise RuntimeError(f"Migration v3: {path.name} har ogiltig sport för {day.get('date')}")
-        changed = materialize_physical_workouts(document)
-        changed = refresh_calendar_projection(document) or changed
-        if changed:
-            path.write_text(json.dumps(document, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-        return changed
-    if version not in (None, 2):
-        raise RuntimeError(f"Migration v3: stöder inte schema_version {version!r} i {path.name}")
-
-    for day in document.get("days", []):
-        day_date = day.get("date")
-        expected = SPORT_BY_DATE.get(day_date)
-        if not expected:
-            raise RuntimeError(
-                f"Migration v3: saknar explicit, granskad sportmapping för {day_date!r}; vägrar gissa"
-            )
-        existing = day.get("sport")
-        if existing and existing != expected:
-            raise RuntimeError(
-                f"Migration v3: {day_date} har sport {existing!r}, men migrationen förväntar {expected!r}"
-            )
-        day["sport"] = expected
-
-    document["schema_version"] = PLAN_SCHEMA_VERSION
+    if version != PLAN_SCHEMA_VERSION:
+        raise RuntimeError(
+            f"Offline migration: {path.name} schema_version {version!r} är pre-canonical; "
+            "automatisk datum-/sportmappning är förbjuden"
+        )
     materialize_physical_workouts(document)
-    refresh_calendar_projection(document)
-    path.write_text(json.dumps(document, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    return True
+    changed = _calendar_axis_only(document)
+    if changed:
+        path.write_text(
+            json.dumps(document, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+    return changed
 
 
 def migrate_coach_history():
@@ -97,7 +77,10 @@ def migrate_coach_history():
             assessment["confidence"] = "medium"
             changed = True
     if changed:
-        COACH_FILE.write_text(json.dumps(document, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        COACH_FILE.write_text(
+            json.dumps(document, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
     return changed
 
 
@@ -105,11 +88,12 @@ def main():
     changed = [path.name for path in PLAN_FILES if migrate_plan(path)]
     if migrate_coach_history():
         changed.append(COACH_FILE.name)
-    if changed:
-        print("Migration v3 OK: " + ", ".join(changed))
-    else:
-        print("Migration v3: redan migrerat; inga ändringar.")
+    print(
+        "Offline canonical migration: "
+        + (", ".join(changed) if changed else "inga ändringar")
+    )
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
