@@ -10,9 +10,11 @@ sys.path.insert(0, str(ROOT))
 from training_core.application.presentation import build_presentation_snapshot
 from training_core.presentation.navigation import PublishedWeek
 from training_core.presentation.renderer import (
+    render_document,
     render_snapshot,
     render_today,
     render_week,
+    render_week_context,
     render_week_status,
 )
 from training_core.domain.weather import DailyWeatherForecast, WeatherSnapshot
@@ -203,6 +205,7 @@ class PresentationSliceTests(unittest.TestCase):
             FakeRepository(), today=date(2026, 9, 26)
         )
         rendered = render_week(snapshot)
+        self.assertIn('class="v2-week-day v2-week-card"', rendered)
         self.assertIn('class="v2-week-dayhead"', rendered)
         self.assertIn('class="v2-week-dow">Måndag</span>', rendered)
         self.assertIn('class="v2-week-date">21 sep</span>', rendered)
@@ -333,10 +336,50 @@ class PresentationSliceTests(unittest.TestCase):
             FakeRepository(), today=date(2026, 9, 26)
         )
         rendered = render_week_status(snapshot)
-        self.assertIn("2 pass · 2:44:44 · 29,61 km · 1 träningsdag", rendered)
+        self.assertIn("<summary>Veckostatus</summary>", rendered)
+        self.assertIn("<strong>2</strong> pass", rendered)
+        self.assertIn("<strong>2:44:44</strong> passtid", rendered)
         self.assertIn("<strong>29,61 km</strong> distans", rendered)
+        self.assertIn("<strong>1</strong> träningsdag", rendered)
         self.assertIn("Enduro</span><strong>1:41:02 · 26,61 km</strong>", rendered)
         self.assertIn("Simning</span><strong>1:03:42 · 3,00 km</strong>", rendered)
+
+    def test_current_week_context_keeps_week_totals_visible_without_opening_status(self):
+        class WeekContext:
+            focus = "Sim + kontrollerad löptröskel"
+            meta_line = "Byggblock · mikrocykel 2 av 4"
+            principle = ""
+            hypothesis = ""
+            primary = ()
+            secondary = ()
+            maintenance = ()
+            protected = ()
+
+        class Week:
+            status_summary = "2 pass · 2:44:44 · 29,61 km · 1 träningsdag"
+
+        class Snapshot:
+            week_context = WeekContext()
+            week = Week()
+
+        rendered = render_week_context(Snapshot())
+        self.assertIn(
+            "Byggblock · mikrocykel 2 av 4 · 2 pass · 2:44:44 · "
+            "29,61 km · 1 träningsdag",
+            rendered,
+        )
+
+    def test_current_week_card_primitive_has_card_visual_contract(self):
+        snapshot = build_presentation_snapshot(
+            FakeRepository(), today=date(2026, 9, 26)
+        )
+        rendered = render_document(snapshot)
+        self.assertIn('class="v2-week-day v2-week-card"', rendered)
+        self.assertIn(
+            ".v2-week-card{position:relative;display:block;margin:0;padding:18px;"
+            "border:1px solid var(--line);border-radius:16px;background:var(--card)}",
+            rendered,
+        )
 
     def test_feedback_without_coach_result_is_explicitly_pending(self):
         class PendingRepository:
