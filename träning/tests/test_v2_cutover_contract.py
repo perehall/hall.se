@@ -39,6 +39,18 @@ class CutoverContractTests(unittest.TestCase):
         self.assertIn("Om systemet", source)
         self.assertIn('name="viewport"', source)
 
+    def test_preview_contains_approved_current_week_structure_before_human_cutover(self):
+        source = Path(
+            ROOT / "training_core" / "presentation" / "renderer.py"
+        ).read_text(encoding="utf-8")
+        self.assertIn('class="v2-week-dayhead"', source)
+        self.assertIn('class="v2-week-daybody"', source)
+        self.assertIn('class="v2-week-status"', source)
+        self.assertIn('<summary>Planidé</summary>', source)
+        self.assertIn("--bg:#F6F7F5", source)
+        self.assertIn("grid-template-columns:92px minmax(0,1fr)", source)
+        self.assertIn(".v2-week-planned-workout+.v2-week-planned-workout", source)
+
     def test_goal_page_and_backend_status_are_explicitly_separate(self):
         mapping = surface_map()
         self.assertEqual(mapping["goal_page"].state, "separate")
