@@ -254,10 +254,10 @@ class CoachApiTests(unittest.TestCase):
         ]
         plan = {
             "planned_workouts": [
-                {"workout_key": "w-enduro", "date": "2026-08-31", "session": "Enduro"},
-                {"workout_key": "w-threshold", "date": "2026-09-01", "session": "Threshold"},
-                {"workout_key": "w-mtb", "date": "2026-09-03", "session": "MTB"},
-                {"workout_key": "w-hills", "date": "2026-09-04", "session": "Hills"},
+                {"workout_key": "w-enduro", "date": "2026-08-31", "session": "Enduro", "sport": "enduro"},
+                {"workout_key": "w-threshold", "date": "2026-09-01", "session": "Threshold", "sport": "run"},
+                {"workout_key": "w-mtb", "date": "2026-09-03", "session": "MTB", "sport": "bike"},
+                {"workout_key": "w-hills", "date": "2026-09-04", "session": "Hills", "sport": "run"},
             ]
         }
         context = rolling_load_context(activities, plan, "2026-08-31", strategy)
