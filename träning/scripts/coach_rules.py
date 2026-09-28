@@ -496,20 +496,6 @@ def plan_for_coach(plan, activities):
             ][0]
 
     fulfilled_dates = fulfilled_plan_dates(result, activities)
-    for day in result.get("days", []):
-        date_value = day.get("date")
-        if date_value not in fulfilled_dates:
-            continue
-        day["status"] = "completed"
-        ids = fulfilled_dates[date_value]
-        ids = ids if isinstance(ids, tuple) else (ids,)
-        if len(ids) == 1:
-            activity = by_id.get(str(ids[0])) or {}
-            day["coach_fulfilled_by_activity"] = {
-                "id": ids[0],
-                "sport_type": activity.get("sport_type"),
-                "display_label": activity.get("display_label"),
-            }
     return result, fulfilled_dates
 
 
