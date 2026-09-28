@@ -72,7 +72,16 @@ class PostgresPresentationRepository:
             from training.planned_workouts
             where is_current
               and scheduled_date between %s and %s
-            order by scheduled_date, workout_key
+            order by
+              scheduled_date,
+              coalesce(
+                case
+                  when jsonb_typeof(payload->'same_day_order') = 'number'
+                  then (payload->>'same_day_order')::integer
+                end,
+                2147483647
+              ),
+              workout_key
         """
         with self.connection_factory() as conn, conn.cursor() as cur:
             cur.execute(query, (start, end))
