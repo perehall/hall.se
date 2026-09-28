@@ -25,21 +25,35 @@ def write_if_changed(path, payload):
     return True
 
 
-def materialize_document(document, *, today, horizon_end):
-    result = dict(document)
-    days = []
-    for day in document.get("days") or []:
+def _materialize_collection(items, *, today, horizon_end):
+    materialized = []
+    for day in items or []:
         date_text = str(day.get("date") or "")
         if date_text < today:
             cleaned = dict(day)
             cleaned.pop("device_workout", None)
             cleaned.pop("device_sync", None)
-            days.append(cleaned)
+            materialized.append(cleaned)
             continue
         in_horizon = today <= date_text <= horizon_end
-        days.append(materialize_day(day, in_horizon=in_horizon))
+        materialized.append(materialize_day(day, in_horizon=in_horizon))
+    return materialized
+
+
+def materialize_document(document, *, today, horizon_end):
+    result = dict(document)
     result["device_workout_schema_version"] = 1
-    result["days"] = days
+    result["days"] = _materialize_collection(
+        document.get("days") or [],
+        today=today,
+        horizon_end=horizon_end,
+    )
+    if document.get("planned_workouts") is not None:
+        result["planned_workouts"] = _materialize_collection(
+            document.get("planned_workouts") or [],
+            today=today,
+            horizon_end=horizon_end,
+        )
     return result
 
 
@@ -47,17 +61,21 @@ def validate_document(document, label):
     if document.get("device_workout_schema_version") != 1:
         raise RuntimeError(f"{label}: device_workout_schema_version måste vara 1")
     count = 0
-    for index, day in enumerate(document.get("days") or []):
-        workout = day.get("device_workout")
-        if workout is None:
+    for collection_name in ("days", "planned_workouts"):
+        if collection_name == "planned_workouts" and document.get(collection_name) is None:
             continue
-        validate_device_workout(workout, f"{label}.days[{index}]")
-        sync = day.get("device_sync") or {}
-        if sync.get("source_hash") != workout.get("source_hash"):
-            raise RuntimeError(f"{label}.days[{index}]: device_sync source_hash avviker")
-        if sync.get("status") not in {"pending", "synced", "error", "deferred"}:
-            raise RuntimeError(f"{label}.days[{index}]: device_sync status ogiltig")
-        count += 1
+        for index, day in enumerate(document.get(collection_name) or []):
+            workout = day.get("device_workout")
+            if workout is None:
+                continue
+            context = f"{label}.{collection_name}[{index}]"
+            validate_device_workout(workout, context)
+            sync = day.get("device_sync") or {}
+            if sync.get("source_hash") != workout.get("source_hash"):
+                raise RuntimeError(f"{context}: device_sync source_hash avviker")
+            if sync.get("status") not in {"pending", "synced", "error", "deferred"}:
+                raise RuntimeError(f"{context}: device_sync status ogiltig")
+            count += 1
     return count
 
 

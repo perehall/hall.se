@@ -140,6 +140,60 @@ class SupabaseShadowModelTests(unittest.TestCase):
             "m1:mc1:2026-09-22:run_threshold",
         )
 
+    def test_multiple_workouts_on_same_date_become_distinct_rows(self):
+        plan = {
+            "meta": {
+                "mesocycle_id": "m1",
+                "microcycle_id": "m1:mc1",
+            },
+            "planned_workouts": [
+                {
+                    "date": "2026-09-25",
+                    "session": "Simning",
+                    "sport": "swim",
+                    "microcycle_day": 5,
+                    "microcycle_slot": "swim_1",
+                    "stimuli": ["swim_aerobic"],
+                },
+                {
+                    "date": "2026-09-25",
+                    "session": "Styrka",
+                    "sport": "strength",
+                    "microcycle_day": 5,
+                    "microcycle_slot": "strength_2",
+                    "stimuli": ["strength_core"],
+                },
+                {
+                    "date": "2026-09-25",
+                    "session": "Löpning",
+                    "sport": "run",
+                    "microcycle_day": 5,
+                    "microcycle_slot": "run_3",
+                    "stimuli": ["run_easy_distance"],
+                },
+            ],
+            "days": [
+                {
+                    "date": "2026-09-25",
+                    "session": "Legacy projection",
+                    "sport": "swim",
+                    "microcycle_day": 5,
+                    "microcycle_slot": "legacy",
+                    "stimuli": ["swim_aerobic"],
+                }
+            ],
+        }
+        rows = workout_records(plan)
+        self.assertEqual(len(rows), 3)
+        self.assertEqual(
+            {row["workout_key"] for row in rows},
+            {
+                "m1:mc1:2026-09-25:swim_1",
+                "m1:mc1:2026-09-25:strength_2",
+                "m1:mc1:2026-09-25:run_3",
+            },
+        )
+
     def test_workout_inherits_cycle_context_from_plan_meta(self):
         plan = {
             "meta": {
@@ -149,8 +203,8 @@ class SupabaseShadowModelTests(unittest.TestCase):
             "days": [
                 {
                     "date": "2026-09-24",
-                    "session": "Vilodag",
-                    "sport": "rest",
+                    "session": "Löpning · 30 min",
+                    "sport": "run",
                     "microcycle_day": 4,
                     "stimuli": [],
                 }

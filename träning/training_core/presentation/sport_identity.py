@@ -59,6 +59,14 @@ def planned_icon_keys(*, sport: str, payload: dict | None = None) -> tuple[str, 
         add(sport_icon_key(raw_sport))
 
     raw = payload or {}
+
+    components = raw.get("components") or raw.get("workout_components") or []
+    if isinstance(components, list):
+        for component in components:
+            if not isinstance(component, dict):
+                continue
+            add(sport_icon_key(component.get("sport")))
+
     stimuli = raw.get("stimuli") or []
     if not isinstance(stimuli, list):
         stimuli = []

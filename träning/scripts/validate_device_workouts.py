@@ -18,27 +18,31 @@ def validate_document(document, label):
     if document.get("device_workout_schema_version") != 1:
         raise RuntimeError(f"{label}: device_workout_schema_version måste vara 1")
     count = 0
-    for index, day in enumerate(document.get("days") or []):
-        workout = day.get("device_workout")
-        sync = day.get("device_sync")
-        if workout is None:
-            if sync is not None:
-                raise RuntimeError(f"{label}.days[{index}]: device_sync finns utan device_workout")
+    for collection_name in ("days", "planned_workouts"):
+        if collection_name == "planned_workouts" and document.get(collection_name) is None:
             continue
-        validate_device_workout(workout, f"{label}.days[{index}]")
-        if not isinstance(sync, dict):
-            raise RuntimeError(f"{label}.days[{index}]: device_sync saknas")
-        if sync.get("source_hash") != workout.get("source_hash"):
-            raise RuntimeError(f"{label}.days[{index}]: device_sync source_hash avviker")
-        if sync.get("transport") != "intervals_icu":
-            raise RuntimeError(f"{label}.days[{index}]: device_sync transport ogiltig")
-        if sync.get("device_delivery") != "unverified":
-            raise RuntimeError(
-                f"{label}.days[{index}]: systemet får inte påstå verifiererad leverans till Garmin"
-            )
-        if sync.get("status") not in {"pending", "synced", "error", "deferred"}:
-            raise RuntimeError(f"{label}.days[{index}]: device_sync status ogiltig")
-        count += 1
+        for index, day in enumerate(document.get(collection_name) or []):
+            context = f"{label}.{collection_name}[{index}]"
+            workout = day.get("device_workout")
+            sync = day.get("device_sync")
+            if workout is None:
+                if sync is not None:
+                    raise RuntimeError(f"{context}: device_sync finns utan device_workout")
+                continue
+            validate_device_workout(workout, context)
+            if not isinstance(sync, dict):
+                raise RuntimeError(f"{context}: device_sync saknas")
+            if sync.get("source_hash") != workout.get("source_hash"):
+                raise RuntimeError(f"{context}: device_sync source_hash avviker")
+            if sync.get("transport") != "intervals_icu":
+                raise RuntimeError(f"{context}: device_sync transport ogiltig")
+            if sync.get("device_delivery") != "unverified":
+                raise RuntimeError(
+                    f"{context}: systemet får inte påstå verifiererad leverans till Garmin"
+                )
+            if sync.get("status") not in {"pending", "synced", "error", "deferred"}:
+                raise RuntimeError(f"{context}: device_sync status ogiltig")
+            count += 1
     return count
 
 

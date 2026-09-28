@@ -7,7 +7,7 @@ from pathlib import Path
 SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
-from apply_plan_overrides import apply_overrides  # noqa: E402
+from apply_plan_overrides import PlanOverrideError, apply_overrides  # noqa: E402
 
 
 class PlanOverrideTests(unittest.TestCase):
@@ -86,6 +86,95 @@ class PlanOverrideTests(unittest.TestCase):
         self.assertEqual(day["workout_design"]["selected_candidate_id"], "current-session")
         self.assertEqual(day["device_workout"]["external_id"], "hall-device:test")
         self.assertEqual(day["device_sync"]["status"], "synced")
+
+    def test_workout_key_targets_only_one_of_multiple_same_day_workouts(self):
+        document = {
+            "schema_version": 3,
+            "meta": {"microcycle_id": "m1:mc1"},
+            "days": [
+                {
+                    "date": "2026-09-12",
+                    "label": "Lördag",
+                    "status": "planned",
+                    "session": "Simning",
+                    "sport": "swim",
+                }
+            ],
+            "planned_workouts": [
+                {
+                    "workout_key": "swim-1",
+                    "date": "2026-09-12",
+                    "status": "planned",
+                    "session": "Simning",
+                    "sport": "swim",
+                },
+                {
+                    "workout_key": "strength-1",
+                    "date": "2026-09-12",
+                    "status": "planned",
+                    "session": "Styrka",
+                    "sport": "strength",
+                },
+            ],
+        }
+        config = {
+            "schema_version": 1,
+            "overrides": [
+                {
+                    "date": "2026-09-12",
+                    "workout_key": "strength-1",
+                    "set": {"session": "Styrka · kort", "sport": "strength"},
+                }
+            ],
+        }
+        self.assertEqual(apply_overrides(document, config), 1)
+        self.assertEqual(document["planned_workouts"][0]["session"], "Simning")
+        self.assertEqual(
+            document["planned_workouts"][1]["session"],
+            "Styrka · kort",
+        )
+
+    def test_date_only_override_fails_closed_when_date_has_multiple_workouts(self):
+        document = {
+            "schema_version": 3,
+            "meta": {},
+            "days": [
+                {
+                    "date": "2026-09-12",
+                    "label": "Lördag",
+                    "status": "planned",
+                    "session": "Simning",
+                    "sport": "swim",
+                }
+            ],
+            "planned_workouts": [
+                {
+                    "workout_key": "swim-1",
+                    "date": "2026-09-12",
+                    "status": "planned",
+                    "session": "Simning",
+                    "sport": "swim",
+                },
+                {
+                    "workout_key": "strength-1",
+                    "date": "2026-09-12",
+                    "status": "planned",
+                    "session": "Styrka",
+                    "sport": "strength",
+                },
+            ],
+        }
+        config = {
+            "schema_version": 1,
+            "overrides": [
+                {
+                    "date": "2026-09-12",
+                    "set": {"session": "Ändra mig"},
+                }
+            ],
+        }
+        with self.assertRaisesRegex(PlanOverrideError, "workout_key krävs"):
+            apply_overrides(document, config)
 
     def test_completed_truth_is_not_rewritten(self):
         day = self.document["days"][0]

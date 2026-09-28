@@ -197,6 +197,43 @@ class TrainingContractTests(unittest.TestCase):
         with self.assertRaisesRegex(ContractError, "baseline_option_id kräver"):
             validate_plan_document(plan)
 
+    def test_plan_supports_arbitrary_number_of_workouts_on_same_date(self):
+        plan = valid_week()
+        plan["planned_workouts"] = [
+            {
+                "workout_key": f"mc:test:{index}",
+                "microcycle_slot": f"slot-{index}",
+                "date": "2026-08-26",
+                "session": f"Pass {index}",
+                "sport": "run" if index % 2 else "swim",
+                "status": "planned",
+            }
+            for index in range(1, 13)
+        ]
+        self.assertTrue(validate_plan_document(plan))
+
+    def test_multisport_brick_is_one_workout_with_ordered_components(self):
+        plan = valid_week()
+        plan["planned_workouts"] = [
+            {
+                "workout_key": "mc:brick-1",
+                "microcycle_slot": "brick-1",
+                "date": "2026-08-26",
+                "session": "Brick · cykel → löpning",
+                "sport": "multisport",
+                "status": "planned",
+                "components": [
+                    {"sport": "bike", "label": "Cykel", "order": 1},
+                    {"sport": "run", "label": "Löpning", "order": 2},
+                ],
+            }
+        ]
+        self.assertTrue(validate_plan_document(plan))
+
+        plan["planned_workouts"][0]["components"][1]["order"] = 1
+        with self.assertRaises(ContractError):
+            validate_plan_document(plan)
+
     def test_structured_swim_distance_must_match(self):
         workout = {
             "sync_enabled": True,

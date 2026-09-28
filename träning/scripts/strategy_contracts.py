@@ -247,7 +247,6 @@ def validate_training_strategy(document):
     microcycle_template = mesocycle.get("microcycle_template")
     require(isinstance(microcycle_template, list) and microcycle_template, "strategi.current_mesocycle.microcycle_template saknas")
     template_slots = set()
-    template_days = set()
     template_stimuli = set()
     for index, item in enumerate(microcycle_template):
         context = f"strategi.current_mesocycle.microcycle_template[{index}]"
@@ -258,8 +257,6 @@ def validate_training_strategy(document):
         template_slots.add(slot)
         day_index = item.get("day_index")
         require(isinstance(day_index, int) and 1 <= day_index <= length_days, f"{context}.day_index måste ligga inom mikrocykeln")
-        require(day_index not in template_days, f"{context}: flera mesocykelplatser på mikrocykeldag {day_index}")
-        template_days.add(day_index)
         nonempty_string(item.get("sport"), f"{context}.sport")
         require(item.get("priority_role") in {"anchor", "flex", "optional", "protected_support"}, f"{context}.priority_role ogiltig")
         stimuli = item.get("stimuli")

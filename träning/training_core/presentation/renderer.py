@@ -17,6 +17,7 @@ from training_core.presentation.manual_activity import ManualActivityReadModel
 from training_core.presentation.today import (
     ActivityOutcomeReadModel,
     FEELING_LABELS,
+    PlannedWorkoutReadModel,
     TodayReadModel,
 )
 
@@ -455,13 +456,25 @@ def _render_completed_context(
         _render_outcome(snapshot, outcome, show_label=len(model.outcomes) > 1)
         for outcome in model.outcomes
     )
+    if model.planned_workouts:
+        planned_rows = "".join(
+            '<div class="v2-original-workout">'
+            + _render_icon_group(snapshot, workout.icon_keys)
+            + f'<span>{html.escape(workout.session)}</span></div>'
+            for workout in model.planned_workouts
+        )
+    elif model.planned_session:
+        planned_rows = f'<p>{html.escape(model.planned_session)}</p>'
+    else:
+        planned_rows = ""
     planned = (
         '<details class="v2-completed-context">'
         '<summary>Analys och motivering</summary>'
         '<div class="v2-completed-context-body">'
         '<span class="v2-outcome-label">Ursprungsplan</span>'
-        f'<p>{html.escape(model.planned_session)}</p></div></details>'
-        if model.planned_session else ""
+        + planned_rows
+        + '</div></details>'
+        if planned_rows else ""
     )
     return f'<section class="v2-completed-outcomes">{cards}</section>{planned}'
 
@@ -710,6 +723,63 @@ def _render_weather_line(snapshot: PresentationSnapshot, local_date, css_class: 
     )
 
 
+COMPONENT_LABELS = {
+    "run": "Löpning",
+    "swim": "Simning",
+    "bike": "Cykel",
+    "mtb": "MTB/XC",
+    "strength": "Styrka",
+    "enduro": "Enduro",
+    "swimrun": "Swimrun",
+}
+
+
+def _render_planned_workout(
+    snapshot: PresentationSnapshot,
+    workout: PlannedWorkoutReadModel,
+    *,
+    css_class: str,
+) -> str:
+    prescription = (
+        '<section class="v2-prescription"><h2>Passupplägg</h2>'
+        + _render_string_list(workout.prescription)
+        + '</section>'
+        if workout.prescription else ""
+    )
+    rationale_parts = [
+        part for part in (workout.reason, workout.development_focus) if part
+    ]
+    rationale = (
+        '<details class="v2-rationale"><summary>Plan och motivering</summary>'
+        + "".join(f"<p>{html.escape(part)}</p>" for part in rationale_parts)
+        + "</details>"
+        if rationale_parts else ""
+    )
+    components = (
+        '<p class="v2-workout-components">'
+        + " → ".join(
+            html.escape(COMPONENT_LABELS.get(sport, sport))
+            for sport in workout.component_sports
+        )
+        + '</p>'
+        if len(workout.component_sports) > 1 else ""
+    )
+    key_attr = (
+        f' data-workout-key="{html.escape(workout.workout_key, quote=True)}"'
+        if workout.workout_key else ""
+    )
+    return (
+        f'<article class="{css_class}"{key_attr}><header>'
+        + _render_icon_group(snapshot, workout.icon_keys)
+        + f'<strong>{html.escape(workout.session)}</strong></header>'
+        + components
+        + _render_device_sync(workout.device_sync)
+        + prescription
+        + rationale
+        + '</article>'
+    )
+
+
 def render_today(snapshot: PresentationSnapshot) -> str:
     model = snapshot.today
     detail_html = "".join(f"<li>{html.escape(detail)}</li>" for detail in model.details)
@@ -724,22 +794,49 @@ def render_today(snapshot: PresentationSnapshot) -> str:
         _render_weather_line(snapshot, model.local_date, "v2-today-weather")
         if not model.outcomes else ""
     )
-    device_sync_html = _render_device_sync(model.device_sync)
 
+    multiple_planned = not model.outcomes and len(model.planned_workouts) > 1
+    multi_workout_html = (
+        '<section class="v2-planned-workouts" aria-label="Planerade pass">'
+        + "".join(
+            _render_planned_workout(
+                snapshot, workout, css_class="v2-planned-workout"
+            )
+            for workout in model.planned_workouts
+        )
+        + '</section>'
+        if multiple_planned else ""
+    )
+
+    device_sync_html = "" if multiple_planned else _render_device_sync(model.device_sync)
     prescription_html = "".join(
         f"<li>{html.escape(line)}</li>" for line in model.prescription
     )
     prescription = (
         f'<section class="v2-prescription"><h2>Passupplägg</h2><ul>{prescription_html}</ul></section>'
-        if prescription_html and not model.outcomes else ""
+        if prescription_html and not model.outcomes and not multiple_planned else ""
     )
     rationale_parts = [part for part in (model.reason, model.development_focus) if part]
     rationale = (
         '<details class="v2-rationale"><summary>Plan och motivering</summary>'
         + "".join(f"<p>{html.escape(part)}</p>" for part in rationale_parts)
         + "</details>"
-        if rationale_parts and not model.outcomes else ""
+        if rationale_parts and not model.outcomes and not multiple_planned else ""
     )
+    component_line = ""
+    if (
+        not model.outcomes
+        and len(model.planned_workouts) == 1
+        and len(model.planned_workouts[0].component_sports) > 1
+    ):
+        component_line = (
+            '<p class="v2-workout-components">'
+            + " → ".join(
+                html.escape(COMPONENT_LABELS.get(sport, sport))
+                for sport in model.planned_workouts[0].component_sports
+            )
+            + '</p>'
+        )
     next_html = (
         f'<p class="v2-next"><span>Nästa</span> {html.escape(model.next_session)}</p>'
         if model.next_session else ""
@@ -749,7 +846,8 @@ def render_today(snapshot: PresentationSnapshot) -> str:
         '<p class="v2-kicker">Idag</p><h1 class="v2-today-title">'
         + _render_icon_group(snapshot, model.icon_keys)
         + f'<span>{html.escape(model.title)}</span></h1>'
-        f'{details}{weather_html}{device_sync_html}{manual_html}{completed_context}{prescription}{rationale}{next_html}</section>'
+        f'{details}{weather_html}{component_line}{device_sync_html}{manual_html}'
+        f'{completed_context}{multi_workout_html}{prescription}{rationale}{next_html}</section>'
     )
 
 
@@ -833,7 +931,6 @@ def render_week(snapshot: PresentationSnapshot) -> str:
     rows = []
     for day in model.days:
         actual = " + ".join(day.actual_labels)
-        shown = actual or day.planned_session
         weather_html = (
             _render_weather_line(snapshot, day.local_date, "v2-week-weather")
             if not day.actual_labels else ""
@@ -843,14 +940,39 @@ def render_week(snapshot: PresentationSnapshot) -> str:
             day.manual_activities,
             css_class="v2-week-manual-activities",
         )
-        device_sync_html = _render_device_sync(day.device_sync)
+
+        if actual:
+            workout_html = (
+                '<strong class="v2-week-session">'
+                + _render_icon_group(snapshot, day.icon_keys)
+                + f'<span>{html.escape(actual)}</span></strong>'
+            )
+        elif len(day.planned_workouts) > 1:
+            workout_html = (
+                '<div class="v2-week-planned-list">'
+                + "".join(
+                    _render_planned_workout(
+                        snapshot, workout, css_class="v2-week-planned-workout"
+                    )
+                    for workout in day.planned_workouts
+                )
+                + '</div>'
+            )
+        else:
+            shown = day.planned_session
+            workout_html = (
+                '<strong class="v2-week-session">'
+                + _render_icon_group(snapshot, day.icon_keys)
+                + f'<span>{html.escape(shown)}</span></strong>'
+                + _render_device_sync(day.device_sync)
+            )
+
         rows.append(
             f'<li data-date="{day.local_date.isoformat()}" data-state="{html.escape(day.state)}">'
-            '<strong class="v2-week-session">'
-            + _render_icon_group(snapshot, day.icon_keys)
-            + f'<span>{html.escape(shown)}</span></strong>{weather_html}'
-            + device_sync_html
-            + f'{manual_html}</li>'
+            + workout_html
+            + weather_html
+            + manual_html
+            + '</li>'
         )
     source = (
         '<p class="v2-weather-source">Väderprognos: '
@@ -920,7 +1042,7 @@ V2_SHELL_CSS = """
 .v2-today{padding:18px}.v2-kicker{text-transform:uppercase;letter-spacing:.1em;font-size:.72rem;font-weight:800;color:var(--muted);margin:0 0 7px}.v2-today-title{font-size:1.55rem;line-height:1.15;letter-spacing:-.025em;margin:0 0 10px;display:flex;align-items:center;gap:.55rem}.v2-today-details{margin:8px 0 14px;padding-left:20px;color:#334155}.v2-today-details li{margin:4px 0}
 .v2-sport-icon{display:inline-block;width:1.25em;height:1.25em;max-width:1.25em;max-height:1.25em;flex:0 0 1.25em;vertical-align:-.18em}.v2-sport-icons{display:inline-flex;align-items:center;gap:.3em;flex:0 0 auto}.v2-week-session,.v2-outcome-title,.v2-history-activity header,.v2-manual-activity header{display:flex;align-items:center;gap:.5rem}.v2-watch-icon{width:1em;height:1em;flex:0 0 1em}
 .v2-completed-outcomes{display:grid;gap:12px}.v2-activity-outcome{padding:14px 15px;box-shadow:none;border-radius:14px}.v2-outcome-row{margin-top:13px}.v2-outcome-label{display:block;color:var(--muted);font-size:.76rem;font-weight:800;margin-bottom:4px}.v2-outcome-row p{margin:3px 0;color:#334155}.v2-feedback-compact{display:flex;align-items:center;gap:8px}.v2-feedback-toggle{font:inherit;font-size:.75rem}.v2-feedback-note{margin:6px 0;color:#334155}.v2-feedback-panel{margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}.v2-feedback-options{display:flex;flex-wrap:wrap;gap:6px;margin:5px 0 10px}.v2-feedback-chip{border:1px solid #cbd5e1;background:#fff;border-radius:999px;padding:6px 9px}.v2-feedback-chip[aria-pressed="true"]{background:#dbeafe;border-color:#93c5fd}.v2-feedback textarea{width:100%;min-height:90px;margin-top:5px;border:1px solid #cbd5e1;border-radius:10px;padding:9px;font:inherit}.v2-feedback-actions{display:flex;gap:8px;margin-top:8px}
-.v2-completed-context,.v2-rationale,.v2-week-status{border:1px solid var(--line);border-radius:14px;background:#fff;box-shadow:none;overflow:hidden}.v2-completed-context summary,.v2-rationale summary,.v2-week-status summary{cursor:pointer;padding:12px 14px;font-weight:800}.v2-completed-context-body,.v2-week-status-body,.v2-week-context-plan-body{padding:0 14px 14px}.v2-prescription{border-top:1px solid var(--line);margin-top:14px;padding-top:12px}.v2-prescription h2{font-size:1rem;margin:0 0 7px}.v2-prescription ul{margin:0;padding-left:20px}
+.v2-completed-context,.v2-rationale,.v2-week-status{border:1px solid var(--line);border-radius:14px;background:#fff;box-shadow:none;overflow:hidden}.v2-original-workout{display:flex;align-items:center;gap:.5rem;margin:7px 0}.v2-planned-workouts,.v2-week-planned-list{display:grid;gap:10px}.v2-planned-workout,.v2-week-planned-workout{border:1px solid var(--line);border-radius:14px;padding:12px;background:#fff}.v2-planned-workout header,.v2-week-planned-workout header{display:flex;align-items:center;gap:.5rem}.v2-workout-components{margin:6px 0 0;color:var(--muted);font-size:.82rem}.v2-completed-context summary,.v2-rationale summary,.v2-week-status summary{cursor:pointer;padding:12px 14px;font-weight:800}.v2-completed-context-body,.v2-week-status-body,.v2-week-context-plan-body{padding:0 14px 14px}.v2-prescription{border-top:1px solid var(--line);margin-top:14px;padding-top:12px}.v2-prescription h2{font-size:1rem;margin:0 0 7px}.v2-prescription ul{margin:0;padding-left:20px}
 .v2-week-context{padding:17px 18px}.v2-week-context h2{font-size:1.2rem;margin:0 0 9px}.v2-week-focus{display:block;font-size:.98rem}.v2-week-meta{color:var(--muted);font-size:.86rem;margin:7px 0}.v2-week-context-plan{margin-top:10px}.v2-week-context-plan summary{cursor:pointer;font-weight:800}
 .v2-week-status{border-radius:18px;box-shadow:var(--shadow)}.v2-week-metrics{display:flex;gap:16px;flex-wrap:wrap;color:#334155}.v2-week-sports{margin-top:12px}.v2-week-sports h3{font-size:.85rem}.v2-week-sport{display:flex;justify-content:space-between;border-top:1px solid var(--line);padding:7px 0}
 .v2-week{background:transparent}.v2-week>p{color:var(--muted);font-size:.88rem;margin:0 2px 8px}.v2-week>ol{list-style:none;margin:0;padding:0;display:grid;gap:10px}.v2-week>ol>li{padding:14px 16px}.v2-week-session{font-size:.98rem}.v2-week-weather,.v2-today-weather{color:var(--muted);font-size:.82rem;margin:7px 0 0}.v2-weather-source{font-size:.75rem!important;margin-top:8px!important}

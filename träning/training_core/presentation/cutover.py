@@ -88,6 +88,11 @@ SURFACES = (
         "Planned syncable workouts expose fail-closed pending/synced/error state from canonical payload; deferred and completed states remain hidden and physical watch delivery is never claimed.",
     ),
     CutoverSurface(
+        "multi_session_days",
+        "migrated",
+        "Canonical planned-workout identity is independent of calendar date; v2 groups 0..N workouts per day and preserves ordered multisport components.",
+    ),
+    CutoverSurface(
         "page_shell",
         "blocker",
         "V2 has a responsive document shell, but it has not yet reproduced the human-approved current-week information hierarchy, progressive disclosure, card/timeline treatment and interaction density.",

@@ -3,9 +3,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import date
+from datetime import date, timedelta
 from typing import Iterable
 
+from training_core.domain.workouts import PlannedWorkout, planned_training_workouts
 from training_core.presentation.device_sync import (
     DeviceSyncReadModel,
     build_device_sync_read_model,
@@ -18,7 +19,7 @@ from training_core.presentation.sport_identity import (
     activity_icon_key,
     planned_icon_keys,
 )
-from training_core.presentation.today import CompletedActivity, PlannedDay
+from training_core.presentation.today import CompletedActivity, PlannedWorkoutReadModel
 
 
 SPORT_GROUP_LABELS = {
@@ -39,6 +40,8 @@ class WeekDayReadModel:
     icon_keys: tuple[str, ...]
     device_sync: DeviceSyncReadModel | None
     state: str
+    planned_sessions: tuple[str, ...] = ()
+    planned_workouts: tuple[PlannedWorkoutReadModel, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -92,19 +95,61 @@ def sport_group(activity: CompletedActivity) -> str:
     )
 
 
+def _planned_read_model(workout: PlannedWorkout) -> PlannedWorkoutReadModel:
+    from training_core.presentation.today import _prescription_lines
+
+    return PlannedWorkoutReadModel(
+        workout_key=workout.workout_key,
+        session=workout.session,
+        sport=workout.sport,
+        icon_keys=planned_icon_keys(sport=workout.sport, payload=workout.payload),
+        component_sports=tuple(component.sport for component in workout.components),
+        prescription=_prescription_lines(workout),
+        reason=workout.reason,
+        development_focus=workout.development_focus,
+        device_sync=build_device_sync_read_model(workout.payload, completed=False),
+    )
+
+
+def _manual_activities(workouts: tuple[PlannedWorkout, ...]) -> tuple[ManualActivityReadModel, ...]:
+    result: list[ManualActivityReadModel] = []
+    seen: set[tuple[str, str, str]] = set()
+    for workout in workouts:
+        for activity in manual_activities_for_day(workout):
+            key = (activity.session, activity.sport, activity.classification)
+            if key in seen:
+                continue
+            seen.add(key)
+            result.append(activity)
+    return tuple(result)
+
+
+def _planned_state(workouts: tuple[PlannedWorkout, ...]) -> str:
+    if not workouts:
+        return "open"
+    if any(workout.manual_lock or workout.planning_status == "fixed" for workout in workouts):
+        return "fixed"
+    states = [workout.status for workout in workouts if workout.status]
+    return states[0] if len(set(states)) == 1 and states else "planned"
+
+
 def build_week_read_model(
     *,
     start: date,
     end: date,
-    plan: Iterable[PlannedDay],
+    plan: Iterable[PlannedWorkout],
     activities: Iterable[CompletedActivity],
 ) -> WeekReadModel:
     if end < start:
         raise ValueError("week end must not precede start")
-    planned = sorted(
-        (day for day in plan if start <= day.local_date <= end),
-        key=lambda day: day.local_date,
+
+    plan_rows = tuple(
+        workout for workout in plan if start <= workout.local_date <= end
     )
+    plan_by_date: dict[date, list[PlannedWorkout]] = {}
+    for workout in plan_rows:
+        plan_by_date.setdefault(workout.local_date, []).append(workout)
+
     by_date: dict[date, list[CompletedActivity]] = {}
     week_activities: list[CompletedActivity] = []
     for activity in activities:
@@ -112,37 +157,51 @@ def build_week_read_model(
             by_date.setdefault(activity.local_date, []).append(activity)
             week_activities.append(activity)
 
+    dates = tuple(start + timedelta(days=offset) for offset in range((end - start).days + 1))
     days: list[WeekDayReadModel] = []
-    for day in planned:
-        actual = tuple(a.label for a in by_date.get(day.local_date, []))
-        manual = manual_activities_for_day(day)
+    for local_date in dates:
+        all_planned = tuple(plan_by_date.get(local_date, ()))
+        planned = planned_training_workouts(all_planned)
+        actual_activities = tuple(by_date.get(local_date, ()))
+        actual = tuple(activity.label for activity in actual_activities)
+        manual = _manual_activities(all_planned)
+        workout_models = tuple(_planned_read_model(workout) for workout in planned)
+        planned_sessions = tuple(workout.session for workout in planned)
+        planned_session = " + ".join(planned_sessions)
+        if not planned_session and all_planned:
+            planned_session = all_planned[0].session
+
+        if actual or manual:
+            icons = tuple(
+                dict.fromkeys(
+                    [activity_icon_key(activity.sport_family) for activity in actual_activities]
+                    + [activity.icon_key for activity in manual]
+                )
+            )
+            state = "completed"
+        else:
+            keys: list[str] = []
+            for workout in planned:
+                keys.extend(planned_icon_keys(sport=workout.sport, payload=workout.payload))
+            icons = tuple(dict.fromkeys(keys))
+            state = _planned_state(all_planned)
+
+        legacy_sync = (
+            build_device_sync_read_model(planned[0].payload, completed=False)
+            if len(planned) == 1
+            else None
+        )
         days.append(
             WeekDayReadModel(
-                local_date=day.local_date,
-                planned_session=day.session,
+                local_date=local_date,
+                planned_session=planned_session,
                 actual_labels=actual,
                 manual_activities=manual,
-                icon_keys=(
-                    tuple(
-                        dict.fromkeys(
-                            [
-                                activity_icon_key(activity.sport_family)
-                                for activity in by_date.get(day.local_date, [])
-                            ]
-                            + [activity.icon_key for activity in manual]
-                        )
-                    )
-                    if actual or manual
-                    else planned_icon_keys(sport=day.sport, payload=day.payload)
-                ),
-                device_sync=build_device_sync_read_model(
-                    day.payload,
-                    completed=bool(actual or manual),
-                ),
-                state="completed" if actual or manual else (
-                    "fixed" if day.manual_lock or day.planning_status == "fixed"
-                    else day.status or "open"
-                ),
+                icon_keys=icons,
+                device_sync=legacy_sync,
+                state=state,
+                planned_sessions=planned_sessions,
+                planned_workouts=workout_models,
             )
         )
 
@@ -163,7 +222,10 @@ def build_week_read_model(
         start=start,
         end=end,
         days=tuple(days),
-        planned_count=len(planned),
+        planned_count=sum(
+            len(planned_training_workouts(tuple(rows)))
+            for rows in plan_by_date.values()
+        ),
         completed_activity_count=len(week_activities),
         training_day_count=len(by_date),
         session_time_s=sum(int(activity.elapsed_time_s or 0) for activity in week_activities),

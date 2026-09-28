@@ -173,6 +173,60 @@ class CoachApiTests(unittest.TestCase):
         self.assertEqual(day["original_session"], "Löpning · lugnt · 45 min")
         self.assertEqual(day["auto_coach"]["applied_at_utc"], "2026-08-23T18:00:00+00:00")
 
+    def test_rest_action_changes_only_target_workout_on_multi_session_day(self):
+        plan = {
+            "days": [
+                {
+                    "date": "2026-08-25",
+                    "status": "planned",
+                    "sport": "run",
+                    "session": "Löpning",
+                    "reason": "R",
+                }
+            ],
+            "planned_workouts": [
+                {
+                    "workout_key": "run-1",
+                    "date": "2026-08-25",
+                    "status": "planned",
+                    "sport": "run",
+                    "session": "Löpning",
+                    "reason": "R",
+                },
+                {
+                    "workout_key": "bike-1",
+                    "date": "2026-08-25",
+                    "status": "planned",
+                    "sport": "bike",
+                    "session": "MTB",
+                    "reason": "R",
+                },
+            ],
+        }
+        action = {
+            "action": "rest",
+            "target_date": "2026-08-25",
+            "target_workout_key": "run-1",
+            "dose_option_id": "",
+            "reason": "Återhämtning.",
+            "recommendation": "Vila från löpningen.",
+        }
+        changed, _ = apply_conservative_action(
+            plan,
+            action,
+            now_utc="2026-08-23T18:00:00+00:00",
+        )
+        self.assertTrue(changed)
+        run, bike = plan["planned_workouts"]
+        self.assertEqual(run["sport"], "rest")
+        self.assertEqual(bike["sport"], "bike")
+        self.assertEqual(bike["session"], "MTB")
+        self.assertEqual(
+            plan["days"][0]["session"],
+            "MTB",
+            "Legacy calendar projection should move to the remaining physical workout.",
+        )
+
     def test_wellness_change_invalidates_coach_but_timestamp_change_does_not(self):
         plan = {"days": []}
         latest = {"id": 1}

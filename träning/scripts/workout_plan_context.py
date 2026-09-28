@@ -5,8 +5,15 @@ from __future__ import annotations
 
 from collections import defaultdict
 
+from coach_rules import (
+    activity_family,
+    planned_workouts,
+    workout_key,
+    workout_required_families,
+)
 
-PLAN_COMPARISON_CONTRACT_VERSION = 2
+
+PLAN_COMPARISON_CONTRACT_VERSION = 3
 
 
 def _number(value):
@@ -20,11 +27,50 @@ def _positive(value):
     return value if value is not None and value > 0 else None
 
 
-def _find_day(plan, activity_date):
-    return next(
-        (day for day in (plan.get("days") or []) if day.get("date") == activity_date),
-        None,
-    )
+def _find_workout(plan, activity, activity_date):
+    """Resolve the physical planned workout for this activity without guessing."""
+    activity_id = str(activity.get("id") or "")
+    rows = [
+        workout
+        for workout in planned_workouts(plan)
+        if workout.get("date") == activity_date
+    ]
+
+    explicit = [
+        workout
+        for workout in rows
+        if (
+            activity_id
+            and (
+                str(workout.get("activity_id") or "") == activity_id
+                or activity_id in {
+                    str(value)
+                    for value in (workout.get("activity_ids") or [])
+                }
+            )
+        )
+    ]
+    if len(explicit) == 1:
+        return explicit[0]
+    if len(explicit) > 1:
+        return None
+
+    # A single planned workout on the date is unambiguous even when the
+    # provider activity lacks sport metadata. With multiple same-day workouts
+    # we require family/component evidence and never guess.
+    if len(rows) == 1:
+        return rows[0]
+
+    family = activity_family(activity)
+    if not family:
+        return None
+
+    candidates = []
+    for workout in rows:
+        requirements = workout_required_families(workout)
+        if any(family in requirement for requirement in requirements):
+            candidates.append(workout)
+    return candidates[0] if len(candidates) == 1 else None
 
 
 def _duration_option_minutes(day):
@@ -231,18 +277,21 @@ def _add_swim_comparison(comparison, day, activity):
 
 def build_plan_comparison(plan, activity, activity_date):
     """Return factual plan-vs-actual data without coaching interpretation."""
-    day = _find_day(plan, activity_date)
+    day = _find_workout(plan, activity, activity_date)
     if not day:
         return {
             "contract_version": PLAN_COMPARISON_CONTRACT_VERSION,
             "plan_day_found": False,
+            "plan_workout_found": False,
             "activity_date": activity_date,
         }
 
     comparison = {
         "contract_version": PLAN_COMPARISON_CONTRACT_VERSION,
         "plan_day_found": True,
+        "plan_workout_found": True,
         "activity_date": activity_date,
+        "planned_workout_key": workout_key(day, plan.get("meta") or {}),
         "planned_session": day.get("session") or "",
         "planned_status": day.get("status") or "",
         "planned_sport": day.get("sport") or "",

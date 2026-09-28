@@ -322,7 +322,12 @@ def workout_records(*plans: dict[str, Any]) -> list[dict[str, Any]]:
     rows: dict[str, dict[str, Any]] = {}
     for plan in plans:
         meta = plan.get("meta") or {}
-        for day in plan.get("days") or []:
+        source_workouts = plan.get("planned_workouts")
+        if source_workouts is None:
+            source_workouts = plan.get("days") or []
+        for day in source_workouts:
+            if str(day.get("sport") or "").strip().lower() in {"", "open", "rest"}:
+                continue
             key = workout_key(day, meta)
             mesocycle_id = day.get("mesocycle_id") or meta.get("mesocycle_id")
             microcycle_id = day.get("microcycle_id") or meta.get("microcycle_id")

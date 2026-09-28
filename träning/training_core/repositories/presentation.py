@@ -68,7 +68,7 @@ class PostgresPresentationRepository:
             select scheduled_date, session, coalesce(sport,''), coalesce(status,''),
                    coalesce(planning_status,''), coalesce(manual_lock,false),
                    coalesce(reason,''), coalesce(development_focus,''),
-                   coalesce(payload,'{}'::jsonb)
+                   coalesce(payload,'{}'::jsonb), workout_key
             from training.planned_workouts
             where is_current
               and scheduled_date between %s and %s
@@ -88,6 +88,7 @@ class PostgresPresentationRepository:
                 reason=row[6],
                 development_focus=row[7],
                 payload=row[8] or {},
+                workout_key=row[9] or "",
             )
             for row in rows
         ]

@@ -127,6 +127,67 @@ class PresentationSliceTests(unittest.TestCase):
         self.assertIn("Löpning · lugn distans · 60 min", rendered)
         self.assertNotIn("Simning · 4 000 m</h1>", rendered)
 
+    def test_planned_today_renders_multiple_workouts_without_merging_them(self):
+        class MultiRepository:
+            def planned_days(self, start, end):
+                return [
+                    PlannedDay(
+                        date(2026, 9, 26),
+                        "Simning · 3 200 m",
+                        "swim",
+                        "planned",
+                        workout_key="swim-1",
+                    ),
+                    PlannedDay(
+                        date(2026, 9, 26),
+                        "Styrka/core · 35 min",
+                        "strength",
+                        "planned",
+                        workout_key="strength-1",
+                    ),
+                ]
+
+            def completed_activities(self, start, end):
+                return []
+
+        snapshot = build_presentation_snapshot(
+            MultiRepository(), today=date(2026, 9, 26)
+        )
+        rendered = render_today(snapshot)
+        self.assertIn("2 planerade pass", rendered)
+        self.assertIn('data-workout-key="swim-1"', rendered)
+        self.assertIn('data-workout-key="strength-1"', rendered)
+        self.assertEqual(rendered.count('class="v2-planned-workout"'), 2)
+
+    def test_multisport_workout_renders_ordered_components(self):
+        class BrickRepository:
+            def planned_days(self, start, end):
+                return [
+                    PlannedDay(
+                        date(2026, 9, 26),
+                        "Brick · cykel + löpning",
+                        "multisport",
+                        "planned",
+                        payload={
+                            "components": [
+                                {"order": 1, "sport": "bike"},
+                                {"order": 2, "sport": "run"},
+                            ]
+                        },
+                        workout_key="brick-1",
+                    )
+                ]
+
+            def completed_activities(self, start, end):
+                return []
+
+        snapshot = build_presentation_snapshot(
+            BrickRepository(), today=date(2026, 9, 26)
+        )
+        rendered = render_today(snapshot)
+        self.assertIn("Cykel → Löpning", rendered)
+        self.assertIn("Brick · cykel + löpning", rendered)
+
     def test_completed_today_renders_feedback_and_coach_outcome_without_finalizer(self):
         snapshot = build_presentation_snapshot(
             FakeRepository(), today=date(2026, 9, 26)

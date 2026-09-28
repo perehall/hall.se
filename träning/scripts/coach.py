@@ -6,21 +6,29 @@ import re
 import time
 import urllib.error
 import urllib.request
+from copy import deepcopy
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from coach_rules import (
     allowed_target_dates,
+    allowed_target_workouts,
     canonical_facts,
     decision_ready_target_dates,
+    decision_ready_target_workouts,
+    fulfilled_plan_workouts,
     normalize_assessment_confidence,
     normalize_deferred_future_action,
     normalize_no_remaining_plan,
+    normalize_target_workout,
     plan_for_coach,
+    planned_workouts,
     planning_window,
     remaining_training_dates,
+    target_workout,
     validate_plan_action,
+    workout_key,
 )
 from strategy_contracts import validate_training_strategy
 from wellness_context import signature_payload, validate_context
@@ -38,7 +46,7 @@ WELLNESS_CONTEXT_FILE = Path(
 )
 
 MODEL = os.environ.get("OPENAI_MODEL", "gpt-5-mini")
-COACH_CONTRACT_VERSION = 15
+COACH_CONTRACT_VERSION = 16
 PRIVATE_WELLNESS_PATTERN = re.compile(
     r"\b(?:hrv|vilopuls|restinghr|sömn(?:poäng|score)?|sleep(?:secs|score|quality)?|wellness|garmin|intervals\.icu)\b"
     r"(?:\s*[:=]?\s*[-+]?\d+(?:[.,]\d+)?)?",
@@ -101,12 +109,13 @@ SCHEMA = {
             "properties": {
                 "action": {"type": "string", "enum": ["keep", "reduce", "rest", "review"]},
                 "target_date": {"type": "string"},
+                "target_workout_key": {"type": "string"},
                 "reason": {"type": "string"},
                 "recommendation": {"type": "string"},
                 "dose_option_id": {"type": "string"},
                 "requires_approval": {"type": "boolean"},
             },
-            "required": ["action", "target_date", "reason", "recommendation", "dose_option_id", "requires_approval"],
+            "required": ["action", "target_date", "target_workout_key", "reason", "recommendation", "dose_option_id", "requires_approval"],
         },
     },
     "required": ["assessment", "plan_action"],
@@ -240,14 +249,14 @@ def rolling_load_context(activities, plan, local_date, strategy):
             actuals.append(activity)
 
     planned = []
-    for day in plan.get("days", []):
-        day_text = day.get("date") or ""
+    for workout in planned_workouts(plan):
+        day_text = workout.get("date") or ""
         try:
             planned_day = datetime.fromisoformat(day_text).date()
         except (TypeError, ValueError):
             continue
         if today <= planned_day <= planned_end:
-            planned.append(day)
+            planned.append(workout)
 
     return {
         "lookback_days": lookback_days,
@@ -256,7 +265,21 @@ def rolling_load_context(activities, plan, local_date, strategy):
             actuals,
             key=lambda item: item.get("start_date_local") or item.get("start_date") or "",
         ),
-        "planned_days": sorted(planned, key=lambda item: item.get("date") or ""),
+        "planned_workouts": sorted(
+            planned,
+            key=lambda item: (
+                item.get("date") or "",
+                workout_key(item, plan.get("meta") or {}),
+            ),
+        ),
+        # Compatibility alias. Semantically these are workouts, not unique days.
+        "planned_days": sorted(
+            planned,
+            key=lambda item: (
+                item.get("date") or "",
+                workout_key(item, plan.get("meta") or {}),
+            ),
+        ),
         "load_dimensions": load_model.get("dimensions") or [],
         "rules": load_model.get("rules") or [],
     }
@@ -457,7 +480,10 @@ def normalize_same_day_open_dose_action(plan, action, today_local):
     if target != today_local or normalized.get("action") not in {"keep", "reduce"}:
         return normalized
 
-    day = next((item for item in plan.get("days", []) if item.get("date") == target), None)
+    try:
+        day = target_workout(plan, normalized)
+    except RuntimeError:
+        return normalized
     if not day or day.get("dose_open") is not True:
         return normalized
 
@@ -469,6 +495,7 @@ def normalize_same_day_open_dose_action(plan, action, today_local):
 
     normalized["action"] = "review"
     normalized["target_date"] = ""
+    normalized["target_workout_key"] = ""
     normalized["dose_option_id"] = ""
     normalized["reason"] = (
         "Dagens pass har fortfarande öppen dos men ingen giltig förhandsgodkänd dos valdes."
@@ -488,7 +515,10 @@ def normalize_resolved_dose_reselection(plan, action):
     if not option_id or not target or normalized.get("action") not in {"keep", "reduce"}:
         return normalized
 
-    day = next((item for item in plan.get("days", []) if item.get("date") == target), None)
+    try:
+        day = target_workout(plan, normalized)
+    except RuntimeError:
+        return normalized
     if not day or day.get("dose_open") is True:
         return normalized
 
@@ -502,7 +532,7 @@ def validate_dose_option_action(plan, action, today_local):
     option_id = str(action.get("dose_option_id") or "").strip()
     target = str(action.get("target_date") or "").strip()
     kind = action.get("action")
-    day = next((d for d in plan.get("days", []) if d.get("date") == target), None) if target else None
+    day = target_workout(plan, action) if target else None
 
     if option_id:
         if not day:
@@ -547,6 +577,66 @@ def validate_dose_option_action(plan, action, today_local):
     return True
 
 
+def _refresh_legacy_day_projection(plan, target_date, fallback=None):
+    """Keep the 7-row calendar cache coherent without making it authoritative."""
+    if plan.get("planned_workouts") is None:
+        return
+    calendar_day = next(
+        (day for day in plan.get("days") or [] if day.get("date") == target_date),
+        None,
+    )
+    if calendar_day is None:
+        return
+    candidates = [
+        workout
+        for workout in plan.get("planned_workouts") or []
+        if workout.get("date") == target_date
+        and workout.get("sport") not in {"open", "rest"}
+    ]
+    source = candidates[0] if candidates else fallback
+    if not source:
+        return
+
+    label = calendar_day.get("label")
+    for field in (
+        "status",
+        "planning_status",
+        "session",
+        "reason",
+        "development_focus",
+        "sport",
+        "classification",
+        "manual_lock",
+        "priority_role",
+        "stimuli",
+        "load_dimensions",
+        "mesocycle_id",
+        "microcycle_id",
+        "microcycle_index",
+        "microcycle_day",
+        "microcycle_slot",
+        "dose_options",
+        "baseline_option_id",
+        "dose_resolution",
+        "dose_open",
+        "workout_design",
+        "device_workout",
+        "device_sync",
+        "watch_workout",
+        "swim_equipment",
+        "coach_adjustment",
+        "auto_coach",
+        "original_session",
+    ):
+        if field in source:
+            calendar_day[field] = deepcopy(source[field])
+        else:
+            calendar_day.pop(field, None)
+    if label is not None:
+        calendar_day["label"] = label
+    calendar_day["date"] = target_date
+
+
 def apply_conservative_action(plan, action, *, now_utc=None):
     kind = action.get("action")
     target = action.get("target_date") or ""
@@ -554,9 +644,12 @@ def apply_conservative_action(plan, action, *, now_utc=None):
     if not target:
         return False, "Ingen automatisk planändring."
 
-    day = next((d for d in plan.get("days", []) if d.get("date") == target), None)
+    try:
+        day = target_workout(plan, action)
+    except RuntimeError as exc:
+        raise RuntimeError(str(exc)) from exc
     if not day or day.get("status") == "completed":
-        return False, "Måldagen saknas eller är redan genomförd."
+        return False, "Målpasset saknas eller är redan genomfört."
 
     if kind not in ("keep", "reduce", "rest"):
         return False, "Ingen automatisk planändring."
@@ -607,6 +700,7 @@ def apply_conservative_action(plan, action, *, now_utc=None):
                 "reason": reason,
                 "applied_at_utc": applied_at,
             }
+            _refresh_legacy_day_projection(plan, target, fallback=day)
             return True, f"Dagens dos löstes konservativt på {target}: {option_id}."
         return False, "Ingen automatisk planändring."
 
@@ -631,6 +725,8 @@ def apply_conservative_action(plan, action, *, now_utc=None):
         day["coach_adjustment"] = f"Skala ned passet. {action.get('recommendation', '')}".strip()
         changed = True
 
+    if changed:
+        _refresh_legacy_day_projection(plan, target, fallback=day)
     return changed, f"Konservativ ändring applicerad på {target}: {kind}."
 
 
@@ -677,8 +773,10 @@ def main():
     latest_date = (latest.get("start_date_local") or latest.get("start_date") or "")[:10]
     recent = sorted(activities, key=lambda activity: activity.get("start_date") or "", reverse=True)[:10]
     coach_plan, fulfilled_dates = plan_for_coach(decision_plan, activities)
-    candidate_dates = allowed_target_dates(decision_plan, activities, local_date)
-    ready_dates = decision_ready_target_dates(decision_plan, activities, local_date)
+    candidate_workouts = allowed_target_workouts(decision_plan, activities, local_date)
+    ready_workouts = decision_ready_target_workouts(decision_plan, activities, local_date)
+    candidate_dates = list(dict.fromkeys(item["date"] for item in candidate_workouts))
+    ready_dates = list(dict.fromkeys(item["date"] for item in ready_workouts))
     deferred_dates = [date for date in candidate_dates if date not in ready_dates]
     remaining_dates = remaining_training_dates(decision_plan, activities, local_date)
 
@@ -694,6 +792,7 @@ def main():
         "private_wellness_context": wellness_context,
         "fulfilled_plan_dates": sorted(fulfilled_dates),
         "allowed_target_dates": ready_dates,
+        "allowed_target_workouts": ready_workouts,
         "deferred_target_dates": deferred_dates,
         "instruction": (
             "Analysera senaste passet mot rolling_load_context, performance_context, aktuell plan och current_strategy. "
@@ -707,6 +806,8 @@ def main():
             "Skydda den aktuella mesocykelns prioriterade stimuli och använd mikrocykeln för att organisera dem när det går utan att ignorera faktisk belastning. "
             "Kontrollera särskilt föregående och kommande 2–3 dagar. Dagar i fulfilled_plan_dates är redan "
             "genomförda och får aldrig ordineras igen. target_date får endast väljas ur allowed_target_dates. "
+            "När en åtgärd avser ett specifikt pass ska target_workout_key väljas ur allowed_target_workouts; "
+            "om flera pass ligger samma datum får de aldrig behandlas som ett enda pass. "
             "Datum i deferred_target_dates ligger längre fram men är inte beslutsmogna eftersom mellanliggande "
             "dagars faktiska utfall ännu saknas; skriv inte om dem nu. Om allowed_target_dates är tom ska "
             "target_date vara tomt och ingen automatisk framtidsändring göras. Föreslå endast konservativ "
@@ -745,6 +846,10 @@ def main():
         fulfilled_dates=fulfilled_dates,
         remaining_dates=remaining_dates,
     )
+    result["plan_action"] = normalize_target_workout(
+        result["plan_action"],
+        ready_workouts,
+    )
     result["plan_action"] = normalize_dose_option_field(result["plan_action"])
     result["plan_action"] = normalize_resolved_dose_reselection(
         decision_plan,
@@ -755,16 +860,25 @@ def main():
         result["plan_action"],
         local_date,
     )
-    validate_plan_action(result["plan_action"], ready_dates)
+    validate_plan_action(result["plan_action"], ready_dates, ready_workouts)
     validate_dose_option_action(decision_plan, result["plan_action"], local_date)
 
     target_date = str(result["plan_action"].get("target_date") or "")
+    target_key = str(result["plan_action"].get("target_workout_key") or "")
     target_plan = plan
     target_file = PLAN_FILE
-    if target_date and not any(day.get("date") == target_date for day in plan.get("days", [])):
-        if any(day.get("date") == target_date for day in upcoming.get("days", [])):
-            target_plan = upcoming
-            target_file = UPCOMING_FILE
+
+    def owns_target(document):
+        if target_key:
+            return any(
+                workout_key(item, document.get("meta") or {}) == target_key
+                for item in planned_workouts(document)
+            )
+        return any(day.get("date") == target_date for day in document.get("days", []))
+
+    if target_date and not owns_target(plan) and owns_target(upcoming):
+        target_plan = upcoming
+        target_file = UPCOMING_FILE
 
     changed, apply_note = apply_conservative_action(target_plan, result["plan_action"])
     if changed:

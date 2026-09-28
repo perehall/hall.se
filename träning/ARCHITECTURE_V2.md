@@ -14,6 +14,8 @@ Status: migration target. New feature work must not add dependencies on the lega
 8. AI may propose/interpret within an explicit contract; deterministic code owns invariants, persistence and permissions.
 9. Every external event and job is idempotent and observable.
 10. No new `finalize_*.py` presentation mutators. Legacy finalizers are deletion targets.
+11. A calendar date is a container, never a workout identity: each date supports 0..N independently addressable planned workouts.
+12. A planned workout may contain 1..N ordered sport components (for example brick, swimrun or triathlon-specific work) without collapsing independent same-day workouts into one composite object.
 
 ## Target modules
 
@@ -97,6 +99,7 @@ Phase 2: Canonical repository boundary
 
 Phase 3: Planning decomposition
 - Split the monolithic adaptive planner into goal, mesocycle, microcycle, stimulus, constraint and workout/dose policies.
+- Calendar scheduling must remain many-workouts-per-date; load constraints operate on all workouts grouped by date rather than enforcing one slot per day.
 - Persist a machine-readable decision trace for every plan decision.
 
 Phase 4: Coaching boundary

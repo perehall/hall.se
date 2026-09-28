@@ -2,6 +2,7 @@
 import json
 import sys
 import unittest
+from copy import deepcopy
 from datetime import date, timedelta
 from pathlib import Path
 
@@ -164,6 +165,27 @@ class WeeklyRolloverTests(unittest.TestCase):
         )
         self.assertIn("3 200 m", future["days"][5]["session"])
         self.assertEqual(future["days"][6]["stimuli"], ["run_easy_distance"])
+
+    def test_multiple_strategy_slots_on_same_day_materialize_as_distinct_workouts(self):
+        strategy = deepcopy(STRATEGY)
+        slots = strategy["current_mesocycle"]["microcycle_template"]
+        slots[0]["day_index"] = 3
+        slots[1]["day_index"] = 3
+
+        promoted, _ = rollover_documents(
+            plan_w34(), upcoming_w35(), date(2026, 8, 24), strategy
+        )
+        future = build_open_next_week(promoted, strategy)
+        same_day = [
+            workout
+            for workout in future["planned_workouts"]
+            if workout["date"] == "2026-09-02"
+        ]
+        self.assertGreaterEqual(len(same_day), 2)
+        self.assertEqual(
+            len({workout["microcycle_slot"] for workout in same_day}),
+            len(same_day),
+        )
 
     def test_enduro_school_has_exactly_eight_mondays(self):
         self.assertTrue(is_enduro_school_date("2026-08-24"))

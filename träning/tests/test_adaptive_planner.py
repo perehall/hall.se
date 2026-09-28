@@ -569,6 +569,52 @@ class AdaptivePlanningTests(unittest.TestCase):
             )
         )
 
+    def test_multiple_independent_slots_may_share_a_calendar_day(self):
+        meso = {
+            "primary_capabilities": ["swim_aerobic", "swim_technique"],
+            "secondary_capabilities": [],
+        }
+        proposal = {
+            "rationale": "separata pass samma dag",
+            "slots": [
+                {"day_index": 3, "recipe_key": "swim_aerobic_technique", "action": "establish", "rationale": "sim", "evidence_refs": []},
+                {"day_index": 3, "recipe_key": "strength_core", "action": "establish", "rationale": "styrka", "evidence_refs": []},
+                {"day_index": 5, "recipe_key": "swim_aerobic_technique", "action": "establish", "rationale": "sim 2", "evidence_refs": []},
+                {"day_index": 7, "recipe_key": "run_easy_distance", "action": "consolidate", "rationale": "distans", "evidence_refs": []},
+            ],
+        }
+        failures = microcycle_guard_failures(
+            proposal,
+            meso,
+            self.policy,
+            self.catalog,
+            date(2026, 9, 21),
+        )
+        self.assertFalse(any("flera pass" in item for item in failures))
+
+    def test_deprecated_composite_recipe_is_rejected(self):
+        meso = {
+            "primary_capabilities": ["swim_aerobic", "swim_technique"],
+            "secondary_capabilities": [],
+        }
+        proposal = {
+            "rationale": "legacy",
+            "slots": [
+                {"day_index": 3, "recipe_key": "swim_strength", "action": "establish", "rationale": "legacy", "evidence_refs": []},
+                {"day_index": 5, "recipe_key": "swim_aerobic_technique", "action": "establish", "rationale": "sim", "evidence_refs": []},
+                {"day_index": 6, "recipe_key": "run_easy_distance", "action": "consolidate", "rationale": "distans", "evidence_refs": []},
+                {"day_index": 7, "recipe_key": "strength_core", "action": "establish", "rationale": "styrka", "evidence_refs": []},
+            ],
+        }
+        failures = microcycle_guard_failures(
+            proposal,
+            meso,
+            self.policy,
+            self.catalog,
+            date(2026, 9, 21),
+        )
+        self.assertTrue(any("utfasat kombinationsrecept" in item for item in failures))
+
     def test_day_after_fixed_enduro_rejects_run_or_mtb_load(self):
         rows = [
             {"day_index": 2, "recipe_key": "run_hill_quality"},
@@ -656,7 +702,7 @@ class AdaptivePlanningTests(unittest.TestCase):
             "end_date": "2026-10-18",
             "goal_hash": goal_hash(self.goal),
         }
-        self.assertEqual(MICRO_PLANNER_REVISION, 7)
+        self.assertEqual(MICRO_PLANNER_REVISION, 8)
         stale_micro = {
             "planner_revision": 6,
             "week_start": "2026-09-28",
@@ -714,7 +760,8 @@ class AdaptivePlanningTests(unittest.TestCase):
             "slots": [
                 {"day_index": 2, "recipe_key": "swim_aerobic_technique", "action": "establish", "rationale": "låg benbelastning efter enduro", "evidence_refs": []},
                 {"day_index": 3, "recipe_key": "run_threshold", "action": "consolidate", "rationale": "threshold med marginal efter enduro", "evidence_refs": []},
-                {"day_index": 5, "recipe_key": "swim_strength", "action": "establish", "rationale": "swim+strength", "evidence_refs": []},
+                {"day_index": 5, "recipe_key": "swim_aerobic_technique", "action": "establish", "rationale": "andra simexponeringen", "evidence_refs": []},
+                {"day_index": 5, "recipe_key": "strength_core", "action": "establish", "rationale": "separat styrkepass samma dag", "evidence_refs": []},
                 {"day_index": 7, "recipe_key": "run_easy_distance", "action": "consolidate", "rationale": "distance separerad från löpkvalitet", "evidence_refs": []},
             ],
         }
@@ -773,7 +820,8 @@ class AdaptivePlanningTests(unittest.TestCase):
         self.assertFalse(model_valid)
         recipes = [row["recipe_key"] for row in normalized["slots"]]
         self.assertIn("swim_aerobic_technique", recipes)
-        self.assertIn("swim_strength", recipes)
+        self.assertIn("strength_core", recipes)
+        self.assertNotIn("swim_strength", recipes)
 
     def test_generated_strategy_is_contract_valid_and_traceable(self):
         meso = fallback_mesocycle(self.goal, self.policy, {})
@@ -856,14 +904,25 @@ class AdaptivePlanningTests(unittest.TestCase):
         )
         self.assertNotIn("progression_ceiling_reason", threshold)
 
-        combined = next(
+        swim_slots = [
             slot
             for slot in strategy["current_mesocycle"]["microcycle_template"]
             if "swim_aerobic" in slot["stimuli"]
-            and "strength_core" in slot["stimuli"]
+        ]
+        strength = next(
+            slot
+            for slot in strategy["current_mesocycle"]["microcycle_template"]
+            if "strength_core" in slot["stimuli"]
         )
-        self.assertEqual(combined["priority_role"], "protected_support")
-        self.assertNotIn("development_progression", combined)
+        self.assertEqual(strength["priority_role"], "protected_support")
+        self.assertNotIn("development_progression", strength)
+        self.assertIn(strength["day_index"], {slot["day_index"] for slot in swim_slots})
+        self.assertFalse(
+            any(
+                "swim_aerobic" in slot["stimuli"] and "strength_core" in slot["stimuli"]
+                for slot in strategy["current_mesocycle"]["microcycle_template"]
+            )
+        )
 
         self.assertFalse(
             any(

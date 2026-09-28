@@ -47,7 +47,7 @@ MODEL = os.environ.get("OPENAI_MODEL", "gpt-5-mini")
 MESO_SCHEMA_VERSION = 1
 MICRO_SCHEMA_VERSION = 1
 PLANNER_REVISION = 5
-MICRO_PLANNER_REVISION = 7
+MICRO_PLANNER_REVISION = 8
 
 CAPABILITY_TO_RECIPE = {
     "run_threshold": "run_threshold",
@@ -58,9 +58,9 @@ CAPABILITY_TO_RECIPE = {
     "swim_aerobic": "swim_aerobic_technique",
     "swim_technique": "swim_aerobic_technique",
     "swim_threshold": "swim_aerobic_threshold",
-    "strength_unilateral": "swim_strength",
-    "strength_core": "swim_strength",
-    "plyometric": "swim_strength",
+    "strength_unilateral": "strength_core",
+    "strength_core": "strength_core",
+    "plyometric": "strength_core",
 }
 
 FIXED_PROTECTED_CAPACITY = (
@@ -93,7 +93,8 @@ PRIMARY_CAPABILITIES_WITH_EXECUTABLE_RECIPES = {
     "swim_technique",
     "swim_threshold",
 }
-SUPPORT_ONLY_RECIPES = {"swim_strength"}
+SUPPORT_ONLY_RECIPES = {"strength_core", "swim_strength"}
+DEPRECATED_COMPOSITE_RECIPES = {"swim_strength"}
 RUN_STRESS_RECIPES = {"run_threshold", "run_hill_quality", "run_easy_distance"}
 DAY_AFTER_ENDURO_BLOCKED_RECIPES = RUN_STRESS_RECIPES | {"mtb_technical", "swim_strength", "strength_core"}
 
@@ -403,7 +404,6 @@ def microcycle_schema(recipe_keys):
             "slots": {
                 "type": "array",
                 "minItems": 4,
-                "maxItems": 6,
                 "items": {
                     "type": "object",
                     "additionalProperties": False,
@@ -858,7 +858,6 @@ def fallback_microcycle(meso, policy, catalog, target_start, completed_context=N
     completed_swims = int(completed_context.get("swim_exposures") or 0)
     completed_strength = int(completed_context.get("strength_exposures") or 0)
     completed_direct = set(completed_context.get("direct_capabilities") or [])
-    max_slots = 5 if fixed_enduro else 6
     slots = []
 
     preferred_days = {
@@ -883,15 +882,39 @@ def fallback_microcycle(meso, policy, catalog, target_start, completed_context=N
             }
         ]
 
-    def add_recipe(recipe, rationale, *, action=None, allow_repeat=False):
-        if recipe not in catalog["recipes"] or len(slots) >= max_slots:
+    def add_recipe(
+        recipe,
+        rationale,
+        *,
+        action=None,
+        allow_repeat=False,
+        preferred_same_day=None,
+    ):
+        if recipe not in catalog["recipes"]:
             return False
         if not allow_repeat and any(row["recipe_key"] == recipe for row in slots):
             return True
-        for day in preferred_days.get(recipe, range(1, 8)):
+
+        configured = list(preferred_days.get(recipe, range(1, 8)))
+        if preferred_same_day in configured:
+            configured.remove(preferred_same_day)
+            configured.insert(0, preferred_same_day)
+
+        # Prefer unused calendar days, but co-location is a first-class option.
+        # A date is not a workout identity; constraints decide whether two
+        # independent sessions may share it.
+        occupied = {row["day_index"] for row in slots}
+        candidate_days = (
+            [day for day in configured if day not in occupied]
+            + [day for day in configured if day in occupied]
+        )
+        if preferred_same_day is not None:
+            candidate_days = [preferred_same_day] + [
+                day for day in candidate_days if day != preferred_same_day
+            ]
+
+        for day in candidate_days:
             if fixed_enduro and day == 1:
-                continue
-            if any(row["day_index"] == day for row in slots):
                 continue
             conflicts = microcycle_layout_failures(
                 candidate_rows(day, recipe), catalog, target_start
@@ -956,28 +979,26 @@ def fallback_microcycle(meso, policy, catalog, target_start, completed_context=N
         and completed_strength < 1
         and not planned_strength
     )
+    latest_swim_day = None
     while swim_count < required_swims:
-        recipe = "swim_strength" if strength_needed else "swim_aerobic_technique"
+        before = len(slots)
         if not add_recipe(
-            recipe,
-            (
-                "Kombinera en nödvändig simexponering med ännu ej uppfylld styrka/core."
-                if recipe == "swim_strength"
-                else "Lägg en ren lågmekanisk simexponering; styrka/core är redan faktiskt genomförd eller planerad."
-            ),
+            "swim_aerobic_technique",
+            "Lägg en ren lågmekanisk simexponering som ett självständigt pass.",
             action="establish",
-            allow_repeat=(recipe == "swim_aerobic_technique"),
+            allow_repeat=True,
         ):
             break
         swim_count += 1
-        if recipe == "swim_strength":
-            strength_needed = False
+        if len(slots) > before:
+            latest_swim_day = slots[-1]["day_index"]
 
     if strength_needed:
         add_recipe(
-            "swim_strength",
-            "Skydda styrka/core tillsammans med en redan motiverad simexponering.",
+            "strength_core",
+            "Skydda styrka/core som ett självständigt pass; samlokalisera med simning endast när mikrocykelns belastningsordning motiverar det.",
             action="establish",
+            preferred_same_day=latest_swim_day,
         )
 
     # A race-relevant easy-distance exposure is useful when it fits safely, but
@@ -1015,28 +1036,37 @@ def fallback_microcycle(meso, policy, catalog, target_start, completed_context=N
 
 
 def microcycle_layout_failures(rows, catalog, target_start):
-    """Hard scheduling guards for known planned load adjacency."""
+    """Hard scheduling guards for known planned load adjacency.
+
+    Calendar dates group workouts; they are not unique workout slots. Guards
+    therefore evaluate all recipes on each date without collapsing co-located
+    sessions.
+    """
     failures = []
     fixed_enduro = is_enduro_school_date(target_start)
-    by_day = {
-        row.get("day_index"): row
-        for row in rows
-        if isinstance(row, dict)
-        and isinstance(row.get("day_index"), int)
-        and row.get("recipe_key") in catalog["recipes"]
-    }
+    by_day = {}
+    for row in rows:
+        if (
+            isinstance(row, dict)
+            and isinstance(row.get("day_index"), int)
+            and row.get("recipe_key") in catalog["recipes"]
+        ):
+            by_day.setdefault(row["day_index"], []).append(row)
 
-    if fixed_enduro and 2 in by_day:
-        recipe = by_day[2]["recipe_key"]
-        if recipe in DAY_AFTER_ENDURO_BLOCKED_RECIPES:
-            failures.append(
-                f"{recipe} får inte ligga direkt dagen efter fast enduro när faktisk benbelastning ännu är okänd"
-            )
+    def recipes_on(day):
+        return {
+            row["recipe_key"]
+            for row in by_day.get(day, [])
+        }
+
+    if fixed_enduro and recipes_on(2).intersection(DAY_AFTER_ENDURO_BLOCKED_RECIPES):
+        blocked = sorted(recipes_on(2).intersection(DAY_AFTER_ENDURO_BLOCKED_RECIPES))
+        failures.append(
+            f"{', '.join(blocked)} får inte ligga direkt dagen efter fast enduro när faktisk benbelastning ännu är okänd"
+        )
 
     run_days = sorted(
-        day
-        for day, row in by_day.items()
-        if row["recipe_key"] in RUN_STRESS_RECIPES
+        day for day in by_day if recipes_on(day).intersection(RUN_STRESS_RECIPES)
     )
     for previous, current in zip(run_days, run_days[1:]):
         if current - previous == 1:
@@ -1045,23 +1075,21 @@ def microcycle_layout_failures(rows, catalog, target_start):
             )
             break
 
-    for day, row in by_day.items():
-        if row["recipe_key"] != "run_easy_distance":
+    for day in by_day:
+        if "run_easy_distance" not in recipes_on(day):
             continue
         for neighbor in (day - 1, day + 1):
-            neighbor_row = by_day.get(neighbor)
-            if neighbor_row and neighbor_row["recipe_key"] == "mtb_technical":
+            if "mtb_technical" in recipes_on(neighbor):
                 failures.append(
                     "lång löpdistans får inte ligga direkt intill MTB/XC; den sekundära cykelexponeringen ska utgå eller flyttas"
                 )
                 break
 
-    for day, row in by_day.items():
-        if row["recipe_key"] not in {"run_threshold", "run_hill_quality"}:
+    for day in by_day:
+        if not recipes_on(day).intersection({"run_threshold", "run_hill_quality"}):
             continue
         for neighbor in (day - 1, day + 1):
-            neighbor_row = by_day.get(neighbor)
-            if neighbor_row and neighbor_row["recipe_key"] == "mtb_technical":
+            if "mtb_technical" in recipes_on(neighbor):
                 failures.append(
                     "MTB/XC får inte ligga direkt intill löpkvalitet; sekundär cykelbelastning ska inte kompromissa primärt löpstimulus"
                 )
@@ -1083,7 +1111,6 @@ def microcycle_guard_failures(result, meso, policy, catalog, target_start, compl
     slots = result.get("slots") or []
     failures = []
     valid_rows = []
-    seen_days = set()
     fixed_enduro = is_enduro_school_date(target_start)
     completed_context = completed_context or {}
     completed_swims = int(completed_context.get("swim_exposures") or 0)
@@ -1103,21 +1130,19 @@ def microcycle_guard_failures(result, meso, policy, catalog, target_start, compl
         if fixed_enduro and day == 1:
             failures.append("dag 1 är blockerad av fast endurobelastning")
             continue
-        if day in seen_days:
-            failures.append(f"flera pass ligger på mikrocykeldag {day}")
-            continue
         if recipe_key not in recipes:
             failures.append(f"slot[{index}] använder okänt recipe_key {recipe_key!r}")
             continue
-        seen_days.add(day)
+        if recipe_key in DEPRECATED_COMPOSITE_RECIPES:
+            failures.append(
+                f"{recipe_key} är ett utfasat kombinationsrecept; separata fysiska pass måste vara separata slots"
+            )
+            continue
         valid_rows.append(row)
 
     minimum = max(0, 4 - completed_slot_days)
-    maximum = 5 if fixed_enduro else 6
     if len(valid_rows) < minimum:
         failures.append(f"för få giltiga träningsslots: {len(valid_rows)} < {minimum}")
-    if len(valid_rows) > maximum:
-        failures.append(f"för många giltiga träningsslots: {len(valid_rows)} > {maximum}")
 
     for failure in microcycle_layout_failures(valid_rows, catalog, target_start):
         if failure not in failures:
@@ -1198,7 +1223,6 @@ def microcycle_guard_failures(result, meso, policy, catalog, target_start, compl
 
 def validate_and_normalize_micro(result, meso, policy, catalog, target_start, completed_context=None):
     recipes = catalog["recipes"]
-    seen_days = set()
     cleaned = []
     primaries = set(meso.get("primary_capabilities") or [])
     fixed_enduro = is_enduro_school_date(target_start)
@@ -1210,7 +1234,7 @@ def validate_and_normalize_micro(result, meso, policy, catalog, target_start, co
             continue
         if fixed_enduro and day == 1:
             continue
-        if day in seen_days or recipe_key not in recipes:
+        if recipe_key not in recipes:
             continue
         action = row.get("action")
         if action not in {"establish", "progress", "consolidate", "reduce"}:
@@ -1229,7 +1253,6 @@ def validate_and_normalize_micro(result, meso, policy, catalog, target_start, co
                 "evidence_refs": [str(x) for x in (row.get("evidence_refs") or []) if str(x).strip()][:6],
             }
         )
-        seen_days.add(day)
 
     used_caps = set()
     direct_primary_caps = set()
@@ -1329,7 +1352,7 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
         "Lägg inte löptröskel, backkvalitet eller lång löpdistans två dagar i rad. När dag 1 är fast enduro ska dag 2 ha låg benbelastning; "
         "lägg inte löp- eller MTB-belastning där innan faktiskt enduroutfall är känt. MTB/XC får inte ligga direkt intill löptröskel eller backkvalitet; "
         "sekundär cykelbelastning ska utgå hellre än att kompromissa ett primärt löpstimulus. Lämna minst en kalenderdag utan planerad träning. "
-        "Använd kombinationsreceptet swim_strength när det hjälper att uppfylla både sim- och styrkekrav utan en extra dag. "
+        "Flera självständiga pass får ligga samma kalenderdag när belastningsordningen motiverar det; varje slot är alltid ett eget pass. Datum är inte passidentitet. "
         "Om swim_threshold behövs finns ett separat etablerat 4 000 m-recept; behandla det som kvalitetsrecept, inte som automatisk distansprogression från det aeroba 3 200 m-passet. "
         "Enduro dag 1 är faktisk belastning och blockerar annan planering den dagen. "
         "Progress får bara väljas för ett primärt mesocykelstimulus och ska ha stöd i athlete_state; annars välj consolidate/establish. "
@@ -1339,7 +1362,13 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
         raw = call_structured(
             system,
             source_payload,
-            microcycle_schema(sorted(catalog["recipes"])),
+            microcycle_schema(
+                sorted(
+                    key
+                    for key in catalog["recipes"]
+                    if key not in DEPRECATED_COMPOSITE_RECIPES
+                )
+            ),
             "microcycle_decision",
             request_fn=request_fn,
         )
@@ -1366,7 +1395,13 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
                 repaired = call_structured(
                     system + " Detta är ett reparationsförsök efter deterministisk guard; varje angivet fel måste lösas.",
                     repair_payload,
-                    microcycle_schema(sorted(catalog["recipes"])),
+                    microcycle_schema(
+                        sorted(
+                            key
+                            for key in catalog["recipes"]
+                            if key not in DEPRECATED_COMPOSITE_RECIPES
+                        )
+                    ),
                     "microcycle_decision_repair",
                     request_fn=request_fn,
                 )

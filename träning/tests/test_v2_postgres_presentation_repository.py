@@ -80,6 +80,7 @@ class PostgresPresentationRepositoryTests(unittest.TestCase):
                         }
                     ]
                 },
+                "m1:mc1:2026-09-27:run_threshold",
             )
         ]
         factory = CapturingFactory(rows)
@@ -87,6 +88,10 @@ class PostgresPresentationRepositoryTests(unittest.TestCase):
         days = repo.planned_days(date(2026, 9, 27), date(2026, 10, 4))
         self.assertEqual(days[0].session, "Löpning · 60 min")
         self.assertEqual(days[0].planning_status, "fixed")
+        self.assertEqual(
+            days[0].workout_key,
+            "m1:mc1:2026-09-27:run_threshold",
+        )
         self.assertEqual(
             days[0].payload["manual_activities"][0]["session"],
             "Styrka/core · 25 min",

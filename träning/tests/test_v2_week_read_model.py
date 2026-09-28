@@ -47,8 +47,9 @@ class WeekReadModelTests(unittest.TestCase):
         )
         self.assertEqual(model.training_day_count, 1)
         self.assertEqual(model.completed_activity_count, 2)
-        self.assertEqual(model.days[0].actual_labels, ("Enduro", "Simning"))
-        self.assertEqual(model.days[0].state, "completed")
+        saturday = next(day for day in model.days if day.local_date == date(2026, 9, 26))
+        self.assertEqual(saturday.actual_labels, ("Enduro", "Simning"))
+        self.assertEqual(saturday.state, "completed")
         self.assertEqual(model.session_time_s, 9884)
         self.assertEqual(model.session_time, "2:44:44")
         self.assertEqual(
@@ -59,6 +60,26 @@ class WeekReadModelTests(unittest.TestCase):
             [(item.label, item.duration) for item in model.sport_distribution],
             [("Enduro", "1:41:02"), ("Simning", "1:03:42")],
         )
+
+    def test_multiple_planned_workouts_share_one_calendar_day(self):
+        start = date(2026, 9, 21)
+        end = date(2026, 9, 27)
+        same_day = date(2026, 9, 25)
+        model = build_week_read_model(
+            start=start,
+            end=end,
+            plan=[
+                PlannedDay(same_day, "Simning", "swim", "planned", workout_key="a"),
+                PlannedDay(same_day, "Styrka", "strength", "planned", workout_key="b"),
+                PlannedDay(same_day, "Löpning", "run", "planned", workout_key="c"),
+            ],
+            activities=[],
+        )
+        friday = next(day for day in model.days if day.local_date == same_day)
+        self.assertEqual(friday.planned_sessions, ("Simning", "Styrka", "Löpning"))
+        self.assertEqual(len(friday.planned_workouts), 3)
+        self.assertEqual(model.planned_count, 3)
+        self.assertEqual(len(model.days), 7)
 
     def test_week_status_matches_current_production_aggregate_contract(self):
         start = date(2026, 9, 21)
