@@ -65,484 +65,31 @@
     "days": [
       {
         "date": "2026-08-31",
-        "label": "Måndag",
-        "status": "planned",
-        "planning_status": "fixed",
-        "session": "Enduroskola · fast tillfälle",
-        "reason": "Fast återkommande enduroskola. Passet är känt i förväg; den faktiska belastningen registreras efteråt och används som kontrollpunkt för kommande 2–3 dagar.",
-        "development_focus": "Teknisk kvalitet och avslappnad körning; faktisk belastning styr efterföljande pass.",
-        "sport": "enduro",
-        "classification": "training",
-        "manual_lock": true,
-        "priority_role": "flex",
-        "stimuli": [
-          "enduro_technical"
-        ],
-        "mesocycle_id": "run-threshold-hill-4w",
-        "microcycle_id": "run-threshold-hill-4w:mc2",
-        "microcycle_index": 2,
-        "microcycle_day": 1,
-        "load_dimensions": [
-          "technical",
-          "neuromuscular"
-        ]
+        "label": "Måndag"
       },
       {
         "date": "2026-09-01",
-        "label": "Tisdag",
-        "status": "preliminary",
-        "session": "Löpning · kontrollerad tröskel · 3 × 8 min / 90 s jogg",
-        "reason": "Mesocykelns första prioriterade löpstimulus. Aktuell mikrocykel väljer etablering, hold eller progression från den definierade utvecklingslinjen; kortsiktig ändring kräver sakligt stöd i faktisk närbelastning eller återhämtning.",
-        "development_focus": "Jämn, kontrollerad kvalitet utan fartjakt; progression ska komma genom absorberbar träning.",
-        "sport": "run",
-        "priority_role": "anchor",
-        "stimuli": [
-          "run_threshold"
-        ],
-        "decision_note": "Grundplan: 3 × 8 min / 90 s jogg. Behåll den om måndagens enduro absorberas normalt; justera konservativt endast om faktisk belastning eller återhämtning ger skäl.",
-        "mesocycle_id": "run-threshold-hill-4w",
-        "microcycle_id": "run-threshold-hill-4w:mc2",
-        "microcycle_index": 2,
-        "microcycle_day": 2,
-        "microcycle_slot": "run_threshold",
-        "baseline_option_id": "run-threshold-3x8",
-        "dose_resolution": {
-          "state": "baseline",
-          "kind": "structured",
-          "value": 24,
-          "option_id": "run-threshold-3x8"
-        },
-        "load_dimensions": [
-          "cardiovascular",
-          "mechanical"
-        ],
-        "performance_marker_id": "run-threshold-control",
-        "dose_options": [
-          {
-            "id": "run-threshold-3x8",
-            "kind": "structured",
-            "value": 24,
-            "session": "Löpning · kontrollerad tröskel · 3 × 8 min / 90 s jogg",
-            "intent": "Etablerad kontrollerad dos som redan har genomförts i aktuell utvecklingslinje."
-          },
-          {
-            "id": "run-threshold-3x10",
-            "kind": "structured",
-            "value": 30,
-            "session": "Löpning · kontrollerad tröskel · 3 × 10 min / 90 s jogg",
-            "intent": "Planerad progression genom längre arbetstid utan avsikt att höja intensiteten."
-          }
-        ],
-        "dose_open": false,
-        "development_progression": {
-          "mode": "develop",
-          "demonstrated_floor_option_id": "run-threshold-3x8",
-          "same_dose_repeat_requires_reason": true,
-          "source": "absorbed_training_history",
-          "microcycle_plan": [
-            {
-              "microcycle": 2,
-              "option_id": "run-threshold-3x8",
-              "relation": "hold",
-              "reason": "Kriterierna kräver mer än en jämförbar 3 × 8-exponering innan arbetstiden ökas."
-            },
-            {
-              "microcycle": 3,
-              "option_id": "run-threshold-3x10",
-              "relation": "progress",
-              "reason": "Planerad utveckling från etablerade 24 till 30 min kontrollerat tröskelarbete; intensiteten hålls oförändrat kontrollerad."
-            },
-            {
-              "microcycle": 4,
-              "option_id": "run-threshold-3x10",
-              "relation": "hold",
-              "reason": "Konsolidera den högre arbetstiden och skapa jämförbar data inför mesocykelutvärderingen."
-            }
-          ]
-        },
-        "development_step": {
-          "microcycle": 2,
-          "option_id": "run-threshold-3x8",
-          "relation": "hold",
-          "reason": "Kriterierna kräver mer än en jämförbar 3 × 8-exponering innan arbetstiden ökas."
-        }
+        "label": "Tisdag"
       },
       {
         "date": "2026-09-02",
-        "label": "Onsdag",
-        "status": "conditional",
-        "session": "Simning · aerob/teknik · 3 200 m · ca 60 min · alternativ: Swimrun · Jogersö Extreme · 1 varv",
-        "swim_equipment": {
-          "planned": "none"
-        },
-        "reason": "Baslinjen är simning med liten mekanisk kostnad efter söndagens längre löpning, måndagens enduro och tisdagens tröskel. Ett varv Jogersö Extreme kan ersätta simningen om det hålls kontrollerat; det ska inte läggas ovanpå simpasset och räknas som faktisk löp-/teknisk belastning inför resten av veckan.",
-        "development_focus": "Simning: stabil kroppslinje och kontrollerad rotation. Swimrun: jämn kontrollerad ansträngning och tekniskt flyt utan fart- eller segmentjakt.",
-        "watch_workout": {
-          "sync_enabled": false,
-          "id": "swim-w36-wed-aerob-rotation-01",
-          "type": "Swim",
-          "equipment": [],
-          "name": "Aerob/teknik · kroppslinje och rotation · 3 200 m",
-          "planned_distance_m": 3200,
-          "blocks": [
-            {
-              "name": "Insim",
-              "steps": [
-                {
-                  "kind": "swim",
-                  "text": "Lugn insim",
-                  "distance_m": 400,
-                  "intensity": "warmup"
-                }
-              ]
-            },
-            {
-              "name": "Kroppslinje och rotation",
-              "repeat": 6,
-              "steps": [
-                {
-                  "kind": "swim",
-                  "text": "Stabil linje, kontrollerad rotation",
-                  "distance_m": 50,
-                  "intensity": "active"
-                },
-                {
-                  "kind": "rest",
-                  "duration_s": 15
-                }
-              ]
-            },
-            {
-              "name": "Aerob",
-              "repeat": 4,
-              "steps": [
-                {
-                  "kind": "swim",
-                  "text": "Stadigt aerob med stabil kroppslinje",
-                  "distance_m": 500,
-                  "intensity": "active"
-                },
-                {
-                  "kind": "rest",
-                  "duration_s": 30
-                }
-              ]
-            },
-            {
-              "name": "Frekvens",
-              "repeat": 6,
-              "steps": [
-                {
-                  "kind": "swim",
-                  "text": "Avslappnad frekvens med bibehållen linje",
-                  "distance_m": 50,
-                  "intensity": "active"
-                },
-                {
-                  "kind": "rest",
-                  "duration_s": 15
-                }
-              ]
-            },
-            {
-              "name": "Nedvarvning",
-              "steps": [
-                {
-                  "kind": "swim",
-                  "text": "Mycket lugnt",
-                  "distance_m": 200,
-                  "intensity": "cooldown"
-                }
-              ]
-            }
-          ]
-        },
-        "sport": "swim",
-        "priority_role": "flex",
-        "stimuli": [
-          "swim_aerobic",
-          "swim_technique"
-        ],
-        "mesocycle_id": "run-threshold-hill-4w",
-        "microcycle_id": "run-threshold-hill-4w:mc2",
-        "microcycle_index": 2,
-        "microcycle_day": 3,
-        "alternative_sports": [
-          "swimrun"
-        ],
-        "decision_note": "Swimrun är ett ersättningsalternativ, inte ett extra pass. Om det genomförs används den faktiska belastningen som kontrollpunkt för torsdagens MTB; fredagens backkvalitet skyddas."
+        "label": "Onsdag"
       },
       {
         "date": "2026-09-03",
-        "label": "Torsdag",
-        "status": "conditional",
-        "session": "MTB/XC · 45 min · teknik + lugn aerob stig",
-        "reason": "MTB/XC är fortsatt utvecklingsprioritet. Grundplanen är 60 minuter lugn teknisk stig. Om onsdagen blir Swimrun på Jogersö används dess faktiska belastning som kontrollpunkt och MTB-passet kortas eller tas bort endast om återhämtningen eller benkänslan ger sakliga skäl, för att skydda fredagens prioriterade löpkvalitet.",
-        "development_focus": "Blick, linjeval, bromspunkter och flyt före segmentjakt.",
-        "sport": "bike",
-        "priority_role": "flex",
-        "stimuli": [
-          "mtb_technical",
-          "mtb_aerobic"
-        ],
-        "mesocycle_id": "run-threshold-hill-4w",
-        "microcycle_id": "run-threshold-hill-4w:mc2",
-        "microcycle_index": 2,
-        "microcycle_day": 4,
-        "microcycle_slot": "mtb_support",
-        "baseline_option_id": "mtb-support-60",
-        "dose_resolution": {
-          "state": "resolved",
-          "kind": "duration_minutes",
-          "value": 45,
-          "source": "near_term_ai_revision",
-          "option_id": "mtb-support-45",
-          "basis": "Skydda fredagens prioriterade löpkvalitet efter tre tunga dagars belastning.",
-          "applied_at_utc": "2026-09-03T11:35:46.121873+00:00"
-        },
-        "load_dimensions": [
-          "cardiovascular",
-          "neuromuscular",
-          "technical"
-        ],
-        "performance_marker_id": "mtb-technical-repeat",
-        "decision_note": "Grundplan: 60 min lugn teknik + aerob stig. Efter eventuell onsdags-Swimrun behålls passet bara om faktisk belastning och dagskänsla är förenliga med fredagens backkvalitet.",
-        "dose_options": [
-          {
-            "id": "mtb-support-45",
-            "kind": "duration_minutes",
-            "value": 45,
-            "session": "MTB/XC · 45 min · teknik + lugn aerob stig",
-            "intent": "Kort stödpass när närbelastningen talar för extra marginal inför nästa prioriterade löpstimulus."
-          },
-          {
-            "id": "mtb-support-60",
-            "kind": "duration_minutes",
-            "value": 60,
-            "session": "MTB/XC · 60 min · teknik + lugn aerob stig",
-            "intent": "Normal konservativ stöddos när teknisk MTB/XC ska bibehållas utan att konkurrera med nästa prioriterade löpstimulus."
-          }
-        ],
-        "original_session": "MTB/XC · 60 min · teknik + lugn aerob stig",
-        "dose_open": false,
-        "auto_coach": {
-          "action": "reduce",
-          "reason": "Skydda fredagens prioriterade backkvalitet efter tre dagars ackumulerad belastning.",
-          "applied_at_utc": "2026-09-03T16:24:58.461825+00:00"
-        },
-        "coach_adjustment": "Skala ned passet. Gör dagens MTB/XC som ordinerat men i förkortad dos: mtb-support-45 (45 min). Håll det tekniskt fokus, låg kraft, undvik tunga stigningar och maximal accelerationsträning."
+        "label": "Torsdag"
       },
       {
         "date": "2026-09-04",
-        "label": "Fredag",
-        "status": "conditional",
-        "session": "Löpning · backkvalitet · 15 min lugnt + 2 × 6 × 150 m / lugn joggvila + 10 min lugnt",
-        "reason": "Mesocykelns andra prioriterade löpkvalitet: kraft, löpekonomi och mekanisk kvalitet. 2 × 6 × 150 m är demonstrerat kapacitetsgolv; aktuell mikrocykel väljer nästa utvecklingssteg. Regression kräver ett explicit närbelastningsskäl.",
-        "development_focus": "Kraftfull men kontrollerad löpning med bibehållen mekanik. Utveckla arbetsmängden stegvis; ingen maximal sprint eller syrajakt.",
-        "sport": "run",
-        "priority_role": "anchor",
-        "stimuli": [
-          "run_hill_quality"
-        ],
-        "decision_note": "Utvecklingsplan för mikrocykeln: Löpning · backkvalitet · 15 min lugnt + 2 × 7 × 150 m / lugn joggvila + 10 min lugnt. En lägre dos är ett tillfälligt belastningsbeslut och får inte bli ny normalbaseline.",
-        "mesocycle_id": "run-threshold-hill-4w",
-        "microcycle_id": "run-threshold-hill-4w:mc2",
-        "microcycle_index": 2,
-        "microcycle_day": 5,
-        "microcycle_slot": "run_hill_quality",
-        "baseline_option_id": "run-hill-2x7x150",
-        "dose_resolution": {
-          "state": "resolved",
-          "kind": "structured",
-          "value": 12,
-          "source": "migrated_existing_near_term_revision",
-          "option_id": "run-hill-2x6x150",
-          "basis": "Skydda fredagens prioriterade backkvalitet efter tre dagars ackumulerad belastning.",
-          "applied_at_utc": "2026-09-04T04:31:25.734748+00:00"
-        },
-        "load_dimensions": [
-          "mechanical",
-          "neuromuscular",
-          "cardiovascular"
-        ],
-        "performance_marker_id": "run-hill-mechanics",
-        "dose_options": [
-          {
-            "id": "run-hill-6x150",
-            "kind": "structured",
-            "value": 6,
-            "session": "Löpning · backkvalitet · 15 min lugnt + 6 × 150 m / full lugn nedjogg + 10 min lugnt",
-            "intent": "Tydligt reducerad reservdos. Får bara användas som tillfällig regression när faktisk närbelastning eller återhämtning motiverar det; aldrig som normal utvecklingsbaseline."
-          },
-          {
-            "id": "run-hill-2x6x150",
-            "kind": "structured",
-            "value": 12,
-            "session": "Löpning · backkvalitet · 15 min lugnt + 2 × 6 × 150 m / lugn joggvila + 10 min lugnt",
-            "intent": "Demonstrerat kapacitetsgolv: 2 × 6 × 150 m har genomförts utan problem. I utvecklingsläge är detta golv, inte nästa utvecklingsmål."
-          },
-          {
-            "id": "run-hill-2x7x150",
-            "kind": "structured",
-            "value": 14,
-            "session": "Löpning · backkvalitet · 15 min lugnt + 2 × 7 × 150 m / lugn joggvila + 10 min lugnt",
-            "intent": "Nästa konservativa utvecklingssteg från demonstrerade 2 × 6: endast repetitionsvolymen ökas, inte avsedd intensitet."
-          },
-          {
-            "id": "run-hill-2x8x150",
-            "kind": "structured",
-            "value": 16,
-            "session": "Löpning · backkvalitet · 15 min lugnt + 2 × 8 × 150 m / lugn joggvila + 10 min lugnt",
-            "intent": "Följande progressionssteg när 2 × 7 är absorberat med bibehållen mekanik och utan oproportionerlig återhämtningskostnad."
-          }
-        ],
-        "original_session": "Löpning · backkvalitet · 15 min lugnt + 2 × 7 × 150 m / lugn joggvila + 10 min lugnt",
-        "auto_coach": {
-          "action": "reduce",
-          "reason": "Skydda fredagens prioriterade backkvalitet efter tre dagars ackumulerad belastning.",
-          "applied_at_utc": "2026-09-04T04:31:25.734748+00:00"
-        },
-        "coach_adjustment": "Tillfällig regression från utvecklingsplanens 2 × 7 × 150 m till 2 × 6 × 150 m. Skälet är den redan dokumenterade ackumulerade närbelastningen; detta är belastningsstyrning, inte ny utvecklingsbaseline.",
-        "dose_open": false,
-        "development_progression": {
-          "mode": "develop",
-          "demonstrated_floor_option_id": "run-hill-2x6x150",
-          "same_dose_repeat_requires_reason": true,
-          "source": "user_report_2026-09-04",
-          "microcycle_plan": [
-            {
-              "microcycle": 2,
-              "option_id": "run-hill-2x7x150",
-              "relation": "progress",
-              "reason": "2 × 6 × 150 m är redan genomfört utan problem; nästa normala utvecklingsdos ökar endast repetitionsvolymen."
-            },
-            {
-              "microcycle": 3,
-              "option_id": "run-hill-2x8x150",
-              "relation": "progress",
-              "reason": "Fortsatt planerad volymprogression när mikrocykel 2 absorberats; kortsiktig regression är fortfarande tillåten med explicit skäl."
-            },
-            {
-              "microcycle": 4,
-              "option_id": "run-hill-2x8x150",
-              "relation": "hold",
-              "reason": "Konsolidera den högre dosen inför mesocykelutvärdering i stället för att öka två belastningsvariabler samtidigt."
-            }
-          ]
-        },
-        "development_step": {
-          "microcycle": 2,
-          "option_id": "run-hill-2x7x150",
-          "relation": "progress",
-          "reason": "2 × 6 × 150 m är redan genomfört utan problem; nästa normala utvecklingsdos ökar endast repetitionsvolymen."
-        }
+        "label": "Fredag"
       },
       {
         "date": "2026-09-05",
-        "label": "Lördag",
-        "status": "conditional",
-        "session": "Simning · 3 200 m · aerob/teknik + styrka/core · 25 min · styrkemall",
-        "reason": "Lördagen används som dubbel lågkostnads-/stöddag: en etablerad 3 200 m aerob/teknisk simexponering för att hålla simfrekvensen uppe samt reducerad styrka/core. Simningen ger liten mekanisk kostnad för benen; styrkan hålls kort eftersom dagen ligger mellan fredagens backkvalitet och söndagens lugna distans. Fredagens faktiska utfall är kontrollpunkt.",
-        "sport": "strength",
-        "development_focus": "Simning: teknisk kvalitet och stabil aerob rytm utan tröskeljakt. Styrka: kontrollerad unilateral styrka, höftdominant arbete, drag/press och bål; plyometri endast om benen är mekaniskt fräscha.",
-        "priority_role": "protected_support",
-        "stimuli": [
-          "strength_unilateral",
-          "strength_core",
-          "swim_aerobic",
-          "swim_technique"
-        ],
-        "mesocycle_id": "run-threshold-hill-4w",
-        "microcycle_id": "run-threshold-hill-4w:mc2",
-        "microcycle_index": 2,
-        "microcycle_day": 6,
-        "microcycle_slot": "strength_support",
-        "planning_status": "planned",
-        "optional_stimuli": [
-          "plyometric"
-        ],
-        "load_dimensions": [
-          "mechanical",
-          "neuromuscular",
-          "cardiovascular",
-          "technical"
-        ],
-        "dose_options": [
-          {
-            "id": "strength-support-25",
-            "kind": "duration_minutes",
-            "value": 25,
-            "session": "Styrka/core · 25 min · styrkemall",
-            "intent": "Reducerad skyddsdos när närbelastningen kräver extra marginal."
-          },
-          {
-            "id": "strength-support-35",
-            "kind": "duration_minutes",
-            "value": 35,
-            "session": "Styrka/core · ca 35 min · styrkemall",
-            "intent": "Normal kort styrka/core-exponering, förankrad i nyligen genomförd cirka 36-minutersstyrka."
-          }
-        ],
-        "baseline_option_id": "strength-support-35",
-        "dose_resolution": {
-          "state": "adjusted",
-          "kind": "duration_minutes",
-          "value": 25,
-          "option_id": "strength-support-25"
-        },
-        "performance_marker_id": "strength-repeatability",
-        "original_session": "Simning · 3 200 m · aerob/teknik + styrka/core · 25 min · styrkemall",
-        "auto_coach": {
-          "action": "reduce",
-          "reason": "Skydda mesocykelns prioriterade backkvalitet och absorberbarheten efter flera tunga dagar.",
-          "applied_at_utc": "2026-09-04T20:44:01.639345+00:00"
-        },
-        "coach_adjustment": "Skala ned passet. Gör lördagens skyddade styrka+sim som planerat men i reducerad styrkedos (styrka 25 min) och håll simningen aerob/teknisk; undvik plyometri. Behåll simens 3 200 m-struktur men håll intensiteten kontrollerad."
+        "label": "Lördag"
       },
       {
         "date": "2026-09-06",
-        "label": "Söndag",
-        "status": "preliminary",
-        "session": "Löpning · lugn distans · 75 min",
-        "reason": "Blockets tredje löpstimulus bygger tålighet och kontinuitet utan att bli ytterligare kvalitet. Grundplanen är 75 minuter lugnt; fredag–lördagens faktiska utfall kan motivera kortare pass, flytt eller vila.",
-        "development_focus": "Avslappnad rytm och jämn ansträngning; inget tredje kvalitetspass.",
-        "sport": "run",
-        "priority_role": "flex",
-        "stimuli": [
-          "run_easy_distance"
-        ],
-        "mesocycle_id": "run-threshold-hill-4w",
-        "microcycle_id": "run-threshold-hill-4w:mc2",
-        "microcycle_index": 2,
-        "microcycle_day": 7,
-        "microcycle_slot": "run_easy_distance",
-        "baseline_option_id": "run-easy-75",
-        "dose_resolution": {
-          "state": "baseline",
-          "kind": "duration_minutes",
-          "value": 75,
-          "option_id": "run-easy-75"
-        },
-        "load_dimensions": [
-          "cardiovascular",
-          "mechanical"
-        ],
-        "dose_options": [
-          {
-            "id": "run-easy-75",
-            "kind": "duration_minutes",
-            "value": 75,
-            "session": "Löpning · lugn distans · 75 min",
-            "intent": "Konservativ distansdos inom nyligen etablerad lugn löpvolym."
-          },
-          {
-            "id": "run-easy-90",
-            "kind": "duration_minutes",
-            "value": 90,
-            "session": "Löpning · lugn distans · 90 min",
-            "intent": "Etablerad längre lugn löpduration från nyligen genomförd träning när mikrocykeln är absorberad."
-          }
-        ]
+        "label": "Söndag"
       }
     ],
     "strength_template": [
@@ -564,12 +111,12 @@
       "distance_m": 22001.5,
       "moving_time_s": 6960,
       "elapsed_time_s": 6960,
-      "total_elevation_gain_m": 219.0,
-      "average_heartrate": 139.0,
-      "max_heartrate": 164.0,
+      "total_elevation_gain_m": 219,
+      "average_heartrate": 139,
+      "max_heartrate": 164,
       "average_watts": 268.1,
       "weighted_average_watts": 270,
-      "calories": 1217.0,
+      "calories": 1217,
       "device_name": "Garmin Forerunner 970",
       "gear_id": "g32837896",
       "gear_name": "Saucony Triumph 23",
@@ -580,10 +127,10 @@
           "name": "Lap 1",
           "elapsed_time_s": 322,
           "moving_time_s": 322,
-          "distance_m": 1000.0,
+          "distance_m": 1000,
           "average_speed": 3.11,
-          "average_heartrate": 128.0,
-          "max_heartrate": 143.0,
+          "average_heartrate": 128,
+          "max_heartrate": 143,
           "average_watts": 273.1,
           "average_cadence": 79.3
         },
@@ -592,11 +139,11 @@
           "name": "Lap 2",
           "elapsed_time_s": 305,
           "moving_time_s": 305,
-          "distance_m": 1000.0,
+          "distance_m": 1000,
           "average_speed": 3.28,
           "average_heartrate": 129.7,
-          "max_heartrate": 134.0,
-          "average_watts": 256.0,
+          "max_heartrate": 134,
+          "average_watts": 256,
           "average_cadence": 79.9
         },
         {
@@ -604,10 +151,10 @@
           "name": "Lap 3",
           "elapsed_time_s": 314,
           "moving_time_s": 314,
-          "distance_m": 1000.0,
+          "distance_m": 1000,
           "average_speed": 3.18,
           "average_heartrate": 132.9,
-          "max_heartrate": 139.0,
+          "max_heartrate": 139,
           "average_watts": 262.2,
           "average_cadence": 79.6
         },
@@ -616,10 +163,10 @@
           "name": "Lap 4",
           "elapsed_time_s": 319,
           "moving_time_s": 319,
-          "distance_m": 1000.0,
+          "distance_m": 1000,
           "average_speed": 3.13,
           "average_heartrate": 132.7,
-          "max_heartrate": 138.0,
+          "max_heartrate": 138,
           "average_watts": 263.1,
           "average_cadence": 79.8
         },
@@ -628,11 +175,11 @@
           "name": "Lap 5",
           "elapsed_time_s": 321,
           "moving_time_s": 321,
-          "distance_m": 1000.0,
+          "distance_m": 1000,
           "average_speed": 3.12,
           "average_heartrate": 135.7,
-          "max_heartrate": 140.0,
-          "average_watts": 273.0,
+          "max_heartrate": 140,
+          "average_watts": 273,
           "average_cadence": 79.9
         },
         {
@@ -640,10 +187,10 @@
           "name": "Lap 6",
           "elapsed_time_s": 330,
           "moving_time_s": 330,
-          "distance_m": 1000.0,
+          "distance_m": 1000,
           "average_speed": 3.03,
           "average_heartrate": 136.7,
-          "max_heartrate": 147.0,
+          "max_heartrate": 147,
           "average_watts": 252.7,
           "average_cadence": 79.2
         },
@@ -652,10 +199,10 @@
           "name": "Lap 7",
           "elapsed_time_s": 320,
           "moving_time_s": 320,
-          "distance_m": 1000.0,
+          "distance_m": 1000,
           "average_speed": 3.13,
           "average_heartrate": 136.1,
-          "max_heartrate": 140.0,
+          "max_heartrate": 140,
           "average_watts": 248.5,
           "average_cadence": 79.2
         },
@@ -664,47 +211,47 @@
           "name": "Lap 8",
           "elapsed_time_s": 328,
           "moving_time_s": 328,
-          "distance_m": 1000.0,
+          "distance_m": 1000,
           "average_speed": 3.05,
           "average_heartrate": 138.8,
-          "max_heartrate": 142.0,
+          "max_heartrate": 142,
           "average_watts": 257.4,
-          "average_cadence": 80.0
+          "average_cadence": 80
         },
         {
           "lap_index": 9,
           "name": "Lap 9",
           "elapsed_time_s": 320,
           "moving_time_s": 320,
-          "distance_m": 1000.0,
+          "distance_m": 1000,
           "average_speed": 3.13,
           "average_heartrate": 137.5,
-          "max_heartrate": 143.0,
+          "max_heartrate": 143,
           "average_watts": 264.4,
-          "average_cadence": 80.0
+          "average_cadence": 80
         },
         {
           "lap_index": 10,
           "name": "Lap 10",
           "elapsed_time_s": 324,
           "moving_time_s": 324,
-          "distance_m": 1000.0,
+          "distance_m": 1000,
           "average_speed": 3.09,
           "average_heartrate": 136.9,
-          "max_heartrate": 142.0,
+          "max_heartrate": 142,
           "average_watts": 253.8,
-          "average_cadence": 80.0
+          "average_cadence": 80
         },
         {
           "lap_index": 11,
           "name": "Lap 11",
           "elapsed_time_s": 320,
           "moving_time_s": 320,
-          "distance_m": 1000.0,
+          "distance_m": 1000,
           "average_speed": 3.13,
           "average_heartrate": 137.2,
-          "max_heartrate": 143.0,
-          "average_watts": 261.0,
+          "max_heartrate": 143,
+          "average_watts": 261,
           "average_cadence": 80.1
         },
         {
@@ -712,10 +259,10 @@
           "name": "Lap 12",
           "elapsed_time_s": 322,
           "moving_time_s": 322,
-          "distance_m": 1000.0,
+          "distance_m": 1000,
           "average_speed": 3.11,
           "average_heartrate": 139.2,
-          "max_heartrate": 144.0,
+          "max_heartrate": 144,
           "average_watts": 258.8,
           "average_cadence": 80.4
         },
@@ -724,10 +271,10 @@
           "name": "Lap 13",
           "elapsed_time_s": 317,
           "moving_time_s": 317,
-          "distance_m": 1000.0,
+          "distance_m": 1000,
           "average_speed": 3.15,
           "average_heartrate": 139.3,
-          "max_heartrate": 144.0,
+          "max_heartrate": 144,
           "average_watts": 254.4,
           "average_cadence": 81.4
         },
@@ -736,10 +283,10 @@
           "name": "Lap 14",
           "elapsed_time_s": 319,
           "moving_time_s": 319,
-          "distance_m": 1000.0,
+          "distance_m": 1000,
           "average_speed": 3.13,
           "average_heartrate": 139.1,
-          "max_heartrate": 146.0,
+          "max_heartrate": 146,
           "average_watts": 270.4,
           "average_cadence": 81.1
         },
@@ -748,10 +295,10 @@
           "name": "Lap 15",
           "elapsed_time_s": 319,
           "moving_time_s": 319,
-          "distance_m": 1000.0,
+          "distance_m": 1000,
           "average_speed": 3.13,
           "average_heartrate": 138.1,
-          "max_heartrate": 143.0,
+          "max_heartrate": 143,
           "average_watts": 266.7,
           "average_cadence": 80.9
         },
@@ -760,10 +307,10 @@
           "name": "Lap 16",
           "elapsed_time_s": 321,
           "moving_time_s": 321,
-          "distance_m": 1000.0,
+          "distance_m": 1000,
           "average_speed": 3.12,
-          "average_heartrate": 138.0,
-          "max_heartrate": 146.0,
+          "average_heartrate": 138,
+          "max_heartrate": 146,
           "average_watts": 268.5,
           "average_cadence": 80.9
         },
@@ -772,11 +319,11 @@
           "name": "Lap 17",
           "elapsed_time_s": 320,
           "moving_time_s": 320,
-          "distance_m": 1000.0,
+          "distance_m": 1000,
           "average_speed": 3.13,
           "average_heartrate": 141.8,
-          "max_heartrate": 146.0,
-          "average_watts": 277.0,
+          "max_heartrate": 146,
+          "average_watts": 277,
           "average_cadence": 81.5
         },
         {
@@ -784,10 +331,10 @@
           "name": "Lap 18",
           "elapsed_time_s": 322,
           "moving_time_s": 322,
-          "distance_m": 1000.0,
+          "distance_m": 1000,
           "average_speed": 3.11,
           "average_heartrate": 139.1,
-          "max_heartrate": 146.0,
+          "max_heartrate": 146,
           "average_watts": 273.4,
           "average_cadence": 81.5
         },
@@ -796,10 +343,10 @@
           "name": "Lap 19",
           "elapsed_time_s": 311,
           "moving_time_s": 311,
-          "distance_m": 1000.0,
+          "distance_m": 1000,
           "average_speed": 3.22,
           "average_heartrate": 143.9,
-          "max_heartrate": 147.0,
+          "max_heartrate": 147,
           "average_watts": 290.6,
           "average_cadence": 81.9
         },
@@ -808,10 +355,10 @@
           "name": "Lap 20",
           "elapsed_time_s": 301,
           "moving_time_s": 301,
-          "distance_m": 1000.0,
+          "distance_m": 1000,
           "average_speed": 3.32,
-          "average_heartrate": 147.0,
-          "max_heartrate": 151.0,
+          "average_heartrate": 147,
+          "max_heartrate": 151,
           "average_watts": 288.7,
           "average_cadence": 82.3
         },
@@ -820,10 +367,10 @@
           "name": "Lap 21",
           "elapsed_time_s": 264,
           "moving_time_s": 264,
-          "distance_m": 1000.0,
+          "distance_m": 1000,
           "average_speed": 3.79,
           "average_heartrate": 157.3,
-          "max_heartrate": 163.0,
+          "max_heartrate": 163,
           "average_watts": 312.2,
           "average_cadence": 85.3
         },
@@ -832,10 +379,10 @@
           "name": "Lap 22",
           "elapsed_time_s": 309,
           "moving_time_s": 309,
-          "distance_m": 1000.0,
+          "distance_m": 1000,
           "average_speed": 3.24,
           "average_heartrate": 155.8,
-          "max_heartrate": 164.0,
+          "max_heartrate": 164,
           "average_watts": 281.2,
           "average_cadence": 82.1
         }
@@ -855,11 +402,11 @@
         "total": {
           "distance_m": 22001.5,
           "distance_km": 22.002,
-          "moving_time_s": 6960.0,
-          "elapsed_time_s": 6960.0,
-          "elevation_gain_m": 219.0,
-          "average_heartrate": 139.0,
-          "max_heartrate": 164.0
+          "moving_time_s": 6960,
+          "elapsed_time_s": 6960,
+          "elevation_gain_m": 219,
+          "average_heartrate": 139,
+          "max_heartrate": 164
         },
         "run": {
           "average_pace_s_per_km": 316.34,
@@ -867,186 +414,186 @@
           "source_laps_near_1km": [
             {
               "lap_index": 1,
-              "distance_m": 1000.0,
+              "distance_m": 1000,
               "moving_time_s": 322,
-              "pace_s_per_km": 322.0,
+              "pace_s_per_km": 322,
               "pace": "5:22/km",
-              "average_heartrate": 128.0
+              "average_heartrate": 128
             },
             {
               "lap_index": 2,
-              "distance_m": 1000.0,
+              "distance_m": 1000,
               "moving_time_s": 305,
-              "pace_s_per_km": 305.0,
+              "pace_s_per_km": 305,
               "pace": "5:05/km",
               "average_heartrate": 129.7
             },
             {
               "lap_index": 3,
-              "distance_m": 1000.0,
+              "distance_m": 1000,
               "moving_time_s": 314,
-              "pace_s_per_km": 314.0,
+              "pace_s_per_km": 314,
               "pace": "5:14/km",
               "average_heartrate": 132.9
             },
             {
               "lap_index": 4,
-              "distance_m": 1000.0,
+              "distance_m": 1000,
               "moving_time_s": 319,
-              "pace_s_per_km": 319.0,
+              "pace_s_per_km": 319,
               "pace": "5:19/km",
               "average_heartrate": 132.7
             },
             {
               "lap_index": 5,
-              "distance_m": 1000.0,
+              "distance_m": 1000,
               "moving_time_s": 321,
-              "pace_s_per_km": 321.0,
+              "pace_s_per_km": 321,
               "pace": "5:21/km",
               "average_heartrate": 135.7
             },
             {
               "lap_index": 6,
-              "distance_m": 1000.0,
+              "distance_m": 1000,
               "moving_time_s": 330,
-              "pace_s_per_km": 330.0,
+              "pace_s_per_km": 330,
               "pace": "5:30/km",
               "average_heartrate": 136.7
             },
             {
               "lap_index": 7,
-              "distance_m": 1000.0,
+              "distance_m": 1000,
               "moving_time_s": 320,
-              "pace_s_per_km": 320.0,
+              "pace_s_per_km": 320,
               "pace": "5:20/km",
               "average_heartrate": 136.1
             },
             {
               "lap_index": 8,
-              "distance_m": 1000.0,
+              "distance_m": 1000,
               "moving_time_s": 328,
-              "pace_s_per_km": 328.0,
+              "pace_s_per_km": 328,
               "pace": "5:28/km",
               "average_heartrate": 138.8
             },
             {
               "lap_index": 9,
-              "distance_m": 1000.0,
+              "distance_m": 1000,
               "moving_time_s": 320,
-              "pace_s_per_km": 320.0,
+              "pace_s_per_km": 320,
               "pace": "5:20/km",
               "average_heartrate": 137.5
             },
             {
               "lap_index": 10,
-              "distance_m": 1000.0,
+              "distance_m": 1000,
               "moving_time_s": 324,
-              "pace_s_per_km": 324.0,
+              "pace_s_per_km": 324,
               "pace": "5:24/km",
               "average_heartrate": 136.9
             },
             {
               "lap_index": 11,
-              "distance_m": 1000.0,
+              "distance_m": 1000,
               "moving_time_s": 320,
-              "pace_s_per_km": 320.0,
+              "pace_s_per_km": 320,
               "pace": "5:20/km",
               "average_heartrate": 137.2
             },
             {
               "lap_index": 12,
-              "distance_m": 1000.0,
+              "distance_m": 1000,
               "moving_time_s": 322,
-              "pace_s_per_km": 322.0,
+              "pace_s_per_km": 322,
               "pace": "5:22/km",
               "average_heartrate": 139.2
             },
             {
               "lap_index": 13,
-              "distance_m": 1000.0,
+              "distance_m": 1000,
               "moving_time_s": 317,
-              "pace_s_per_km": 317.0,
+              "pace_s_per_km": 317,
               "pace": "5:17/km",
               "average_heartrate": 139.3
             },
             {
               "lap_index": 14,
-              "distance_m": 1000.0,
+              "distance_m": 1000,
               "moving_time_s": 319,
-              "pace_s_per_km": 319.0,
+              "pace_s_per_km": 319,
               "pace": "5:19/km",
               "average_heartrate": 139.1
             },
             {
               "lap_index": 15,
-              "distance_m": 1000.0,
+              "distance_m": 1000,
               "moving_time_s": 319,
-              "pace_s_per_km": 319.0,
+              "pace_s_per_km": 319,
               "pace": "5:19/km",
               "average_heartrate": 138.1
             },
             {
               "lap_index": 16,
-              "distance_m": 1000.0,
+              "distance_m": 1000,
               "moving_time_s": 321,
-              "pace_s_per_km": 321.0,
+              "pace_s_per_km": 321,
               "pace": "5:21/km",
-              "average_heartrate": 138.0
+              "average_heartrate": 138
             },
             {
               "lap_index": 17,
-              "distance_m": 1000.0,
+              "distance_m": 1000,
               "moving_time_s": 320,
-              "pace_s_per_km": 320.0,
+              "pace_s_per_km": 320,
               "pace": "5:20/km",
               "average_heartrate": 141.8
             },
             {
               "lap_index": 18,
-              "distance_m": 1000.0,
+              "distance_m": 1000,
               "moving_time_s": 322,
-              "pace_s_per_km": 322.0,
+              "pace_s_per_km": 322,
               "pace": "5:22/km",
               "average_heartrate": 139.1
             },
             {
               "lap_index": 19,
-              "distance_m": 1000.0,
+              "distance_m": 1000,
               "moving_time_s": 311,
-              "pace_s_per_km": 311.0,
+              "pace_s_per_km": 311,
               "pace": "5:11/km",
               "average_heartrate": 143.9
             },
             {
               "lap_index": 20,
-              "distance_m": 1000.0,
+              "distance_m": 1000,
               "moving_time_s": 301,
-              "pace_s_per_km": 301.0,
+              "pace_s_per_km": 301,
               "pace": "5:01/km",
-              "average_heartrate": 147.0
+              "average_heartrate": 147
             },
             {
               "lap_index": 21,
-              "distance_m": 1000.0,
+              "distance_m": 1000,
               "moving_time_s": 264,
-              "pace_s_per_km": 264.0,
+              "pace_s_per_km": 264,
               "pace": "4:24/km",
               "average_heartrate": 157.3
             },
             {
               "lap_index": 22,
-              "distance_m": 1000.0,
+              "distance_m": 1000,
               "moving_time_s": 309,
-              "pace_s_per_km": 309.0,
+              "pace_s_per_km": 309,
               "pace": "5:09/km",
               "average_heartrate": 155.8
             }
           ],
           "fastest_source_lap_near_1km": {
             "lap_index": 21,
-            "distance_m": 1000.0,
+            "distance_m": 1000,
             "moving_time_s": 264,
-            "pace_s_per_km": 264.0,
+            "pace_s_per_km": 264,
             "pace": "4:24/km",
             "average_heartrate": 157.3
           },
@@ -1061,15 +608,15 @@
       "sport_type": "Swim",
       "start_date": "2026-09-05T12:48:11Z",
       "start_date_local": "2026-09-05T14:48:11Z",
-      "distance_m": 4000.0,
+      "distance_m": 4000,
       "moving_time_s": 3401,
       "elapsed_time_s": 4433,
       "total_elevation_gain_m": 0,
       "average_heartrate": 128.5,
-      "max_heartrate": 153.0,
+      "max_heartrate": 153,
       "average_watts": null,
       "weighted_average_watts": null,
-      "calories": 696.0,
+      "calories": 696,
       "device_name": "Garmin Forerunner 970",
       "gear_id": null,
       "gear_name": null,
@@ -1080,10 +627,10 @@
           "name": "Lap 1",
           "elapsed_time_s": 378,
           "moving_time_s": 378,
-          "distance_m": 400.0,
+          "distance_m": 400,
           "average_speed": 1.06,
-          "average_heartrate": 77.0,
-          "max_heartrate": 131.0,
+          "average_heartrate": 77,
+          "max_heartrate": 131,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1092,10 +639,10 @@
           "name": "Lap 2",
           "elapsed_time_s": 44,
           "moving_time_s": 44,
-          "distance_m": 0.0,
-          "average_speed": 0.0,
+          "distance_m": 0,
+          "average_speed": 0,
           "average_heartrate": 111.6,
-          "max_heartrate": 129.0,
+          "max_heartrate": 129,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1104,10 +651,10 @@
           "name": "Lap 3",
           "elapsed_time_s": 43,
           "moving_time_s": 43,
-          "distance_m": 50.0,
+          "distance_m": 50,
           "average_speed": 1.16,
           "average_heartrate": 105.2,
-          "max_heartrate": 120.0,
+          "max_heartrate": 120,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1116,10 +663,10 @@
           "name": "Lap 4",
           "elapsed_time_s": 23,
           "moving_time_s": 23,
-          "distance_m": 0.0,
-          "average_speed": 0.0,
+          "distance_m": 0,
+          "average_speed": 0,
           "average_heartrate": 115.1,
-          "max_heartrate": 122.0,
+          "max_heartrate": 122,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1128,10 +675,10 @@
           "name": "Lap 5",
           "elapsed_time_s": 40,
           "moving_time_s": 40,
-          "distance_m": 50.0,
+          "distance_m": 50,
           "average_speed": 1.25,
           "average_heartrate": 115.2,
-          "max_heartrate": 125.0,
+          "max_heartrate": 125,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1140,10 +687,10 @@
           "name": "Lap 6",
           "elapsed_time_s": 22,
           "moving_time_s": 22,
-          "distance_m": 0.0,
-          "average_speed": 0.0,
+          "distance_m": 0,
+          "average_speed": 0,
           "average_heartrate": 122.1,
-          "max_heartrate": 128.0,
+          "max_heartrate": 128,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1152,10 +699,10 @@
           "name": "Lap 7",
           "elapsed_time_s": 39,
           "moving_time_s": 39,
-          "distance_m": 50.0,
+          "distance_m": 50,
           "average_speed": 1.28,
           "average_heartrate": 120.8,
-          "max_heartrate": 132.0,
+          "max_heartrate": 132,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1164,10 +711,10 @@
           "name": "Lap 8",
           "elapsed_time_s": 23,
           "moving_time_s": 23,
-          "distance_m": 0.0,
-          "average_speed": 0.0,
+          "distance_m": 0,
+          "average_speed": 0,
           "average_heartrate": 128.9,
-          "max_heartrate": 132.0,
+          "max_heartrate": 132,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1176,10 +723,10 @@
           "name": "Lap 9",
           "elapsed_time_s": 38,
           "moving_time_s": 38,
-          "distance_m": 50.0,
+          "distance_m": 50,
           "average_speed": 1.32,
           "average_heartrate": 122.8,
-          "max_heartrate": 131.0,
+          "max_heartrate": 131,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1188,10 +735,10 @@
           "name": "Lap 10",
           "elapsed_time_s": 70,
           "moving_time_s": 70,
-          "distance_m": 0.0,
-          "average_speed": 0.0,
+          "distance_m": 0,
+          "average_speed": 0,
           "average_heartrate": 109.7,
-          "max_heartrate": 135.0,
+          "max_heartrate": 135,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1200,10 +747,10 @@
           "name": "Lap 11",
           "elapsed_time_s": 171,
           "moving_time_s": 171,
-          "distance_m": 200.0,
+          "distance_m": 200,
           "average_speed": 1.17,
           "average_heartrate": 127.2,
-          "max_heartrate": 139.0,
+          "max_heartrate": 139,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1212,10 +759,10 @@
           "name": "Lap 12",
           "elapsed_time_s": 23,
           "moving_time_s": 23,
-          "distance_m": 0.0,
-          "average_speed": 0.0,
+          "distance_m": 0,
+          "average_speed": 0,
           "average_heartrate": 134.4,
-          "max_heartrate": 139.0,
+          "max_heartrate": 139,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1224,10 +771,10 @@
           "name": "Lap 13",
           "elapsed_time_s": 174,
           "moving_time_s": 174,
-          "distance_m": 200.0,
+          "distance_m": 200,
           "average_speed": 1.15,
           "average_heartrate": 137.8,
-          "max_heartrate": 143.0,
+          "max_heartrate": 143,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1236,10 +783,10 @@
           "name": "Lap 14",
           "elapsed_time_s": 30,
           "moving_time_s": 30,
-          "distance_m": 0.0,
-          "average_speed": 0.0,
+          "distance_m": 0,
+          "average_speed": 0,
           "average_heartrate": 132.1,
-          "max_heartrate": 140.0,
+          "max_heartrate": 140,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1248,10 +795,10 @@
           "name": "Lap 15",
           "elapsed_time_s": 2,
           "moving_time_s": 2,
-          "distance_m": 0.0,
-          "average_speed": 0.0,
+          "distance_m": 0,
+          "average_speed": 0,
           "average_heartrate": 110.5,
-          "max_heartrate": 111.0,
+          "max_heartrate": 111,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1260,10 +807,10 @@
           "name": "Lap 16",
           "elapsed_time_s": 171,
           "moving_time_s": 171,
-          "distance_m": 200.0,
+          "distance_m": 200,
           "average_speed": 1.17,
           "average_heartrate": 136.9,
-          "max_heartrate": 148.0,
+          "max_heartrate": 148,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1272,10 +819,10 @@
           "name": "Lap 17",
           "elapsed_time_s": 23,
           "moving_time_s": 23,
-          "distance_m": 0.0,
-          "average_speed": 0.0,
+          "distance_m": 0,
+          "average_speed": 0,
           "average_heartrate": 138.8,
-          "max_heartrate": 145.0,
+          "max_heartrate": 145,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1284,10 +831,10 @@
           "name": "Lap 18",
           "elapsed_time_s": 171,
           "moving_time_s": 171,
-          "distance_m": 200.0,
+          "distance_m": 200,
           "average_speed": 1.17,
           "average_heartrate": 143.1,
-          "max_heartrate": 149.0,
+          "max_heartrate": 149,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1296,10 +843,10 @@
           "name": "Lap 19",
           "elapsed_time_s": 22,
           "moving_time_s": 22,
-          "distance_m": 0.0,
-          "average_speed": 0.0,
+          "distance_m": 0,
+          "average_speed": 0,
           "average_heartrate": 142.5,
-          "max_heartrate": 147.0,
+          "max_heartrate": 147,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1308,10 +855,10 @@
           "name": "Lap 20",
           "elapsed_time_s": 170,
           "moving_time_s": 170,
-          "distance_m": 200.0,
+          "distance_m": 200,
           "average_speed": 1.18,
           "average_heartrate": 144.9,
-          "max_heartrate": 151.0,
+          "max_heartrate": 151,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1320,10 +867,10 @@
           "name": "Lap 21",
           "elapsed_time_s": 23,
           "moving_time_s": 23,
-          "distance_m": 0.0,
-          "average_speed": 0.0,
+          "distance_m": 0,
+          "average_speed": 0,
           "average_heartrate": 147.1,
-          "max_heartrate": 151.0,
+          "max_heartrate": 151,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1332,10 +879,10 @@
           "name": "Lap 22",
           "elapsed_time_s": 170,
           "moving_time_s": 170,
-          "distance_m": 200.0,
+          "distance_m": 200,
           "average_speed": 1.18,
           "average_heartrate": 147.9,
-          "max_heartrate": 152.0,
+          "max_heartrate": 152,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1344,10 +891,10 @@
           "name": "Lap 23",
           "elapsed_time_s": 153,
           "moving_time_s": 153,
-          "distance_m": 0.0,
-          "average_speed": 0.0,
+          "distance_m": 0,
+          "average_speed": 0,
           "average_heartrate": 110.9,
-          "max_heartrate": 150.0,
+          "max_heartrate": 150,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1356,10 +903,10 @@
           "name": "Lap 24",
           "elapsed_time_s": 151,
           "moving_time_s": 151,
-          "distance_m": 200.0,
+          "distance_m": 200,
           "average_speed": 1.32,
           "average_heartrate": 124.7,
-          "max_heartrate": 136.0,
+          "max_heartrate": 136,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1368,10 +915,10 @@
           "name": "Lap 25",
           "elapsed_time_s": 30,
           "moving_time_s": 30,
-          "distance_m": 0.0,
-          "average_speed": 0.0,
+          "distance_m": 0,
+          "average_speed": 0,
           "average_heartrate": 126.5,
-          "max_heartrate": 135.0,
+          "max_heartrate": 135,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1380,10 +927,10 @@
           "name": "Lap 26",
           "elapsed_time_s": 152,
           "moving_time_s": 152,
-          "distance_m": 200.0,
+          "distance_m": 200,
           "average_speed": 1.32,
-          "average_heartrate": 133.0,
-          "max_heartrate": 140.0,
+          "average_heartrate": 133,
+          "max_heartrate": 140,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1392,10 +939,10 @@
           "name": "Lap 27",
           "elapsed_time_s": 31,
           "moving_time_s": 31,
-          "distance_m": 0.0,
-          "average_speed": 0.0,
+          "distance_m": 0,
+          "average_speed": 0,
           "average_heartrate": 129.9,
-          "max_heartrate": 140.0,
+          "max_heartrate": 140,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1404,10 +951,10 @@
           "name": "Lap 28",
           "elapsed_time_s": 113,
           "moving_time_s": 113,
-          "distance_m": 150.0,
+          "distance_m": 150,
           "average_speed": 1.33,
           "average_heartrate": 133.3,
-          "max_heartrate": 143.0,
+          "max_heartrate": 143,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1416,10 +963,10 @@
           "name": "Lap 29",
           "elapsed_time_s": 30,
           "moving_time_s": 30,
-          "distance_m": 0.0,
-          "average_speed": 0.0,
+          "distance_m": 0,
+          "average_speed": 0,
           "average_heartrate": 128.2,
-          "max_heartrate": 140.0,
+          "max_heartrate": 140,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1428,10 +975,10 @@
           "name": "Lap 30",
           "elapsed_time_s": 152,
           "moving_time_s": 152,
-          "distance_m": 200.0,
+          "distance_m": 200,
           "average_speed": 1.32,
           "average_heartrate": 130.5,
-          "max_heartrate": 140.0,
+          "max_heartrate": 140,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1440,10 +987,10 @@
           "name": "Lap 31",
           "elapsed_time_s": 105,
           "moving_time_s": 105,
-          "distance_m": 0.0,
-          "average_speed": 0.0,
+          "distance_m": 0,
+          "average_speed": 0,
           "average_heartrate": 106.2,
-          "max_heartrate": 138.0,
+          "max_heartrate": 138,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1452,10 +999,10 @@
           "name": "Lap 32",
           "elapsed_time_s": 174,
           "moving_time_s": 174,
-          "distance_m": 200.0,
+          "distance_m": 200,
           "average_speed": 1.15,
           "average_heartrate": 134.5,
-          "max_heartrate": 145.0,
+          "max_heartrate": 145,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1464,10 +1011,10 @@
           "name": "Lap 33",
           "elapsed_time_s": 27,
           "moving_time_s": 27,
-          "distance_m": 0.0,
-          "average_speed": 0.0,
+          "distance_m": 0,
+          "average_speed": 0,
           "average_heartrate": 138.3,
-          "max_heartrate": 145.0,
+          "max_heartrate": 145,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1476,10 +1023,10 @@
           "name": "Lap 34",
           "elapsed_time_s": 176,
           "moving_time_s": 176,
-          "distance_m": 200.0,
+          "distance_m": 200,
           "average_speed": 1.14,
           "average_heartrate": 140.4,
-          "max_heartrate": 147.0,
+          "max_heartrate": 147,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1488,10 +1035,10 @@
           "name": "Lap 35",
           "elapsed_time_s": 30,
           "moving_time_s": 30,
-          "distance_m": 0.0,
-          "average_speed": 0.0,
+          "distance_m": 0,
+          "average_speed": 0,
           "average_heartrate": 140.7,
-          "max_heartrate": 146.0,
+          "max_heartrate": 146,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1500,10 +1047,10 @@
           "name": "Lap 36",
           "elapsed_time_s": 176,
           "moving_time_s": 176,
-          "distance_m": 200.0,
+          "distance_m": 200,
           "average_speed": 1.14,
           "average_heartrate": 142.6,
-          "max_heartrate": 151.0,
+          "max_heartrate": 151,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1512,10 +1059,10 @@
           "name": "Lap 37",
           "elapsed_time_s": 37,
           "moving_time_s": 37,
-          "distance_m": 0.0,
-          "average_speed": 0.0,
-          "average_heartrate": 140.0,
-          "max_heartrate": 150.0,
+          "distance_m": 0,
+          "average_speed": 0,
+          "average_heartrate": 140,
+          "max_heartrate": 150,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1524,10 +1071,10 @@
           "name": "Lap 38",
           "elapsed_time_s": 174,
           "moving_time_s": 174,
-          "distance_m": 200.0,
+          "distance_m": 200,
           "average_speed": 1.15,
           "average_heartrate": 143.2,
-          "max_heartrate": 152.0,
+          "max_heartrate": 152,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1536,10 +1083,10 @@
           "name": "Lap 39",
           "elapsed_time_s": 25,
           "moving_time_s": 25,
-          "distance_m": 0.0,
-          "average_speed": 0.0,
+          "distance_m": 0,
+          "average_speed": 0,
           "average_heartrate": 143.6,
-          "max_heartrate": 150.0,
+          "max_heartrate": 150,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1548,10 +1095,10 @@
           "name": "Lap 40",
           "elapsed_time_s": 6,
           "moving_time_s": 6,
-          "distance_m": 0.0,
-          "average_speed": 0.0,
+          "distance_m": 0,
+          "average_speed": 0,
           "average_heartrate": 120.2,
-          "max_heartrate": 129.0,
+          "max_heartrate": 129,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1560,10 +1107,10 @@
           "name": "Lap 41",
           "elapsed_time_s": 173,
           "moving_time_s": 173,
-          "distance_m": 200.0,
+          "distance_m": 200,
           "average_speed": 1.16,
           "average_heartrate": 143.7,
-          "max_heartrate": 153.0,
+          "max_heartrate": 153,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1572,10 +1119,10 @@
           "name": "Lap 42",
           "elapsed_time_s": 31,
           "moving_time_s": 31,
-          "distance_m": 0.0,
-          "average_speed": 0.0,
+          "distance_m": 0,
+          "average_speed": 0,
           "average_heartrate": 142.8,
-          "max_heartrate": 151.0,
+          "max_heartrate": 151,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1584,10 +1131,10 @@
           "name": "Lap 43",
           "elapsed_time_s": 173,
           "moving_time_s": 173,
-          "distance_m": 200.0,
+          "distance_m": 200,
           "average_speed": 1.16,
           "average_heartrate": 146.3,
-          "max_heartrate": 153.0,
+          "max_heartrate": 153,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1596,10 +1143,10 @@
           "name": "Lap 44",
           "elapsed_time_s": 95,
           "moving_time_s": 95,
-          "distance_m": 0.0,
-          "average_speed": 0.0,
+          "distance_m": 0,
+          "average_speed": 0,
           "average_heartrate": 124.8,
-          "max_heartrate": 152.0,
+          "max_heartrate": 152,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1608,10 +1155,10 @@
           "name": "Lap 45",
           "elapsed_time_s": 171,
           "moving_time_s": 171,
-          "distance_m": 200.0,
+          "distance_m": 200,
           "average_speed": 1.17,
-          "average_heartrate": 131.0,
-          "max_heartrate": 139.0,
+          "average_heartrate": 131,
+          "max_heartrate": 139,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1620,10 +1167,10 @@
           "name": "Lap 46",
           "elapsed_time_s": 16,
           "moving_time_s": 16,
-          "distance_m": 0.0,
-          "average_speed": 0.0,
+          "distance_m": 0,
+          "average_speed": 0,
           "average_heartrate": 133.6,
-          "max_heartrate": 137.0,
+          "max_heartrate": 137,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1632,10 +1179,10 @@
           "name": "Lap 47",
           "elapsed_time_s": 40,
           "moving_time_s": 40,
-          "distance_m": 50.0,
+          "distance_m": 50,
           "average_speed": 1.25,
-          "average_heartrate": 130.0,
-          "max_heartrate": 133.0,
+          "average_heartrate": 130,
+          "max_heartrate": 133,
           "average_watts": null,
           "average_cadence": null
         },
@@ -1644,10 +1191,10 @@
           "name": "Lap 48",
           "elapsed_time_s": 9,
           "moving_time_s": 9,
-          "distance_m": 0.0,
-          "average_speed": 0.0,
+          "distance_m": 0,
+          "average_speed": 0,
           "average_heartrate": 131.9,
-          "max_heartrate": 133.0,
+          "max_heartrate": 133,
           "average_watts": null,
           "average_cadence": null
         }
@@ -1660,13 +1207,13 @@
         "classification": null,
         "user_report": "",
         "total": {
-          "distance_m": 4000.0,
-          "distance_km": 4.0,
-          "moving_time_s": 3401.0,
-          "elapsed_time_s": 4433.0,
-          "elevation_gain_m": 0.0,
+          "distance_m": 4000,
+          "distance_km": 4,
+          "moving_time_s": 3401,
+          "elapsed_time_s": 4433,
+          "elevation_gain_m": 0,
           "average_heartrate": 128.5,
-          "max_heartrate": 153.0
+          "max_heartrate": 153
         },
         "run": null,
         "coach_prompt_sha256": "da2ef602289127ad2c0438bfa5d9356a109494ca3832020780357ab5b639444f"
@@ -1681,12 +1228,12 @@
       "distance_m": 12681.6,
       "moving_time_s": 3988,
       "elapsed_time_s": 3988,
-      "total_elevation_gain_m": 243.0,
+      "total_elevation_gain_m": 243,
       "average_heartrate": 142.4,
-      "max_heartrate": 167.0,
-      "average_watts": 275.0,
+      "max_heartrate": 167,
+      "average_watts": 275,
       "weighted_average_watts": 282,
-      "calories": 719.0,
+      "calories": 719,
       "device_name": "Garmin Forerunner 970",
       "gear_id": "g32837896",
       "gear_name": "Saucony Triumph 23",
@@ -1697,10 +1244,10 @@
           "name": "Lap 1",
           "elapsed_time_s": 323,
           "moving_time_s": 323,
-          "distance_m": 1000.0,
+          "distance_m": 1000,
           "average_speed": 3.1,
           "average_heartrate": 125.4,
-          "max_heartrate": 137.0,
+          "max_heartrate": 137,
           "average_watts": 277.2,
           "average_cadence": 79.8
         },
@@ -1709,10 +1256,10 @@
           "name": "Lap 2",
           "elapsed_time_s": 307,
           "moving_time_s": 307,
-          "distance_m": 1000.0,
+          "distance_m": 1000,
           "average_speed": 3.26,
-          "average_heartrate": 133.0,
-          "max_heartrate": 138.0,
+          "average_heartrate": 133,
+          "max_heartrate": 138,
           "average_watts": 266.5,
           "average_cadence": 80.2
         },
@@ -1724,7 +1271,7 @@
           "distance_m": 782.5,
           "average_speed": 3.14,
           "average_heartrate": 136.5,
-          "max_heartrate": 145.0,
+          "max_heartrate": 145,
           "average_watts": 265.2,
           "average_cadence": 80.7
         },
@@ -1736,7 +1283,7 @@
           "distance_m": 144.65,
           "average_speed": 3.53,
           "average_heartrate": 147.8,
-          "max_heartrate": 156.0,
+          "max_heartrate": 156,
           "average_watts": 347.9,
           "average_cadence": 85.9
         },
@@ -1747,8 +1294,8 @@
           "moving_time_s": 61,
           "distance_m": 191.42,
           "average_speed": 3.14,
-          "average_heartrate": 143.0,
-          "max_heartrate": 156.0,
+          "average_heartrate": 143,
+          "max_heartrate": 156,
           "average_watts": 247.9,
           "average_cadence": 77.8
         },
@@ -1760,7 +1307,7 @@
           "distance_m": 148.69,
           "average_speed": 3.72,
           "average_heartrate": 147.1,
-          "max_heartrate": 157.0,
+          "max_heartrate": 157,
           "average_watts": 381.2,
           "average_cadence": 86.9
         },
@@ -1772,9 +1319,9 @@
           "distance_m": 184.41,
           "average_speed": 3.02,
           "average_heartrate": 144.6,
-          "max_heartrate": 157.0,
+          "max_heartrate": 157,
           "average_watts": 243.6,
-          "average_cadence": 77.0
+          "average_cadence": 77
         },
         {
           "lap_index": 8,
@@ -1784,7 +1331,7 @@
           "distance_m": 148.09,
           "average_speed": 3.8,
           "average_heartrate": 147.6,
-          "max_heartrate": 157.0,
+          "max_heartrate": 157,
           "average_watts": 361.4,
           "average_cadence": 86.5
         },
@@ -1795,8 +1342,8 @@
           "moving_time_s": 60,
           "distance_m": 184.03,
           "average_speed": 3.07,
-          "average_heartrate": 145.0,
-          "max_heartrate": 158.0,
+          "average_heartrate": 145,
+          "max_heartrate": 158,
           "average_watts": 243.3,
           "average_cadence": 77.4
         },
@@ -1808,7 +1355,7 @@
           "distance_m": 149.78,
           "average_speed": 3.84,
           "average_heartrate": 147.1,
-          "max_heartrate": 156.0,
+          "max_heartrate": 156,
           "average_watts": 363.9,
           "average_cadence": 87.3
         },
@@ -1820,7 +1367,7 @@
           "distance_m": 189.15,
           "average_speed": 3.1,
           "average_heartrate": 146.4,
-          "max_heartrate": 158.0,
+          "max_heartrate": 158,
           "average_watts": 243.1,
           "average_cadence": 76.8
         },
@@ -1832,7 +1379,7 @@
           "distance_m": 152.49,
           "average_speed": 4.01,
           "average_heartrate": 149.4,
-          "max_heartrate": 159.0,
+          "max_heartrate": 159,
           "average_watts": 363.5,
           "average_cadence": 87.4
         },
@@ -1844,7 +1391,7 @@
           "distance_m": 180.68,
           "average_speed": 3.01,
           "average_heartrate": 146.7,
-          "max_heartrate": 160.0,
+          "max_heartrate": 160,
           "average_watts": 243.3,
           "average_cadence": 76.9
         },
@@ -1856,7 +1403,7 @@
           "distance_m": 150.41,
           "average_speed": 3.96,
           "average_heartrate": 149.3,
-          "max_heartrate": 160.0,
+          "max_heartrate": 160,
           "average_watts": 366.1,
           "average_cadence": 87.7
         },
@@ -1865,10 +1412,10 @@
           "name": "Lap 15",
           "elapsed_time_s": 324,
           "moving_time_s": 324,
-          "distance_m": 1000.0,
+          "distance_m": 1000,
           "average_speed": 3.09,
           "average_heartrate": 138.3,
-          "max_heartrate": 161.0,
+          "max_heartrate": 161,
           "average_watts": 255.9,
           "average_cadence": 78.8
         },
@@ -1880,9 +1427,9 @@
           "distance_m": 90.22,
           "average_speed": 3.01,
           "average_heartrate": 138.4,
-          "max_heartrate": 142.0,
+          "max_heartrate": 142,
           "average_watts": 255.2,
-          "average_cadence": 79.0
+          "average_cadence": 79
         },
         {
           "lap_index": 17,
@@ -1892,7 +1439,7 @@
           "distance_m": 151.09,
           "average_speed": 3.78,
           "average_heartrate": 149.1,
-          "max_heartrate": 156.0,
+          "max_heartrate": 156,
           "average_watts": 358.9,
           "average_cadence": 86.3
         },
@@ -1904,9 +1451,9 @@
           "distance_m": 176.44,
           "average_speed": 2.99,
           "average_heartrate": 147.8,
-          "max_heartrate": 156.0,
+          "max_heartrate": 156,
           "average_watts": 241.5,
-          "average_cadence": 77.0
+          "average_cadence": 77
         },
         {
           "lap_index": 19,
@@ -1916,7 +1463,7 @@
           "distance_m": 145.12,
           "average_speed": 3.82,
           "average_heartrate": 152.7,
-          "max_heartrate": 162.0,
+          "max_heartrate": 162,
           "average_watts": 370.5,
           "average_cadence": 87.5
         },
@@ -1928,7 +1475,7 @@
           "distance_m": 189.39,
           "average_speed": 2.91,
           "average_heartrate": 150.6,
-          "max_heartrate": 163.0,
+          "max_heartrate": 163,
           "average_watts": 239.9,
           "average_cadence": 76.9
         },
@@ -1940,7 +1487,7 @@
           "distance_m": 151.46,
           "average_speed": 3.99,
           "average_heartrate": 153.4,
-          "max_heartrate": 164.0,
+          "max_heartrate": 164,
           "average_watts": 375.1,
           "average_cadence": 87.5
         },
@@ -1952,7 +1499,7 @@
           "distance_m": 184.2,
           "average_speed": 2.79,
           "average_heartrate": 149.9,
-          "max_heartrate": 164.0,
+          "max_heartrate": 164,
           "average_watts": 231.1,
           "average_cadence": 76.5
         },
@@ -1964,7 +1511,7 @@
           "distance_m": 146.89,
           "average_speed": 3.97,
           "average_heartrate": 154.1,
-          "max_heartrate": 165.0,
+          "max_heartrate": 165,
           "average_watts": 377.6,
           "average_cadence": 87.5
         },
@@ -1976,7 +1523,7 @@
           "distance_m": 175.86,
           "average_speed": 2.88,
           "average_heartrate": 154.3,
-          "max_heartrate": 165.0,
+          "max_heartrate": 165,
           "average_watts": 238.3,
           "average_cadence": 75.9
         },
@@ -1988,7 +1535,7 @@
           "distance_m": 152.07,
           "average_speed": 4.11,
           "average_heartrate": 154.2,
-          "max_heartrate": 165.0,
+          "max_heartrate": 165,
           "average_watts": 379.1,
           "average_cadence": 87.7
         },
@@ -2000,8 +1547,8 @@
           "distance_m": 176.73,
           "average_speed": 2.76,
           "average_heartrate": 150.9,
-          "max_heartrate": 166.0,
-          "average_watts": 229.0,
+          "max_heartrate": 166,
+          "average_watts": 229,
           "average_cadence": 76.4
         },
         {
@@ -2012,7 +1559,7 @@
           "distance_m": 153.47,
           "average_speed": 4.15,
           "average_heartrate": 155.4,
-          "max_heartrate": 166.0,
+          "max_heartrate": 166,
           "average_watts": 377.7,
           "average_cadence": 87.7
         },
@@ -2021,10 +1568,10 @@
           "name": "Lap 28",
           "elapsed_time_s": 331,
           "moving_time_s": 331,
-          "distance_m": 1000.0,
+          "distance_m": 1000,
           "average_speed": 3.02,
           "average_heartrate": 143.1,
-          "max_heartrate": 167.0,
+          "max_heartrate": 167,
           "average_watts": 256.6,
           "average_cadence": 78.3
         },
@@ -2036,8 +1583,8 @@
           "distance_m": 90.8,
           "average_speed": 2.93,
           "average_heartrate": 142.6,
-          "max_heartrate": 145.0,
-          "average_watts": 243.0,
+          "max_heartrate": 145,
+          "average_watts": 243,
           "average_cadence": 77.9
         },
         {
@@ -2048,7 +1595,7 @@
           "distance_m": 146.3,
           "average_speed": 3.75,
           "average_heartrate": 155.3,
-          "max_heartrate": 163.0,
+          "max_heartrate": 163,
           "average_watts": 371.4,
           "average_cadence": 87.2
         },
@@ -2060,7 +1607,7 @@
           "distance_m": 184.95,
           "average_speed": 2.89,
           "average_heartrate": 147.9,
-          "max_heartrate": 163.0,
+          "max_heartrate": 163,
           "average_watts": 221.3,
           "average_cadence": 76.7
         },
@@ -2072,8 +1619,8 @@
           "distance_m": 150.44,
           "average_speed": 4.07,
           "average_heartrate": 152.3,
-          "max_heartrate": 162.0,
-          "average_watts": 375.0,
+          "max_heartrate": 162,
+          "average_watts": 375,
           "average_cadence": 88.5
         },
         {
@@ -2084,7 +1631,7 @@
           "distance_m": 187.49,
           "average_speed": 2.88,
           "average_heartrate": 150.8,
-          "max_heartrate": 164.0,
+          "max_heartrate": 164,
           "average_watts": 233.5,
           "average_cadence": 75.9
         },
@@ -2096,7 +1643,7 @@
           "distance_m": 145.1,
           "average_speed": 3.92,
           "average_heartrate": 152.5,
-          "max_heartrate": 164.0,
+          "max_heartrate": 164,
           "average_watts": 377.3,
           "average_cadence": 88.5
         },
@@ -2108,7 +1655,7 @@
           "distance_m": 182.24,
           "average_speed": 2.94,
           "average_heartrate": 153.6,
-          "max_heartrate": 165.0,
+          "max_heartrate": 165,
           "average_watts": 239.4,
           "average_cadence": 76.2
         },
@@ -2120,8 +1667,8 @@
           "distance_m": 148.75,
           "average_speed": 3.91,
           "average_heartrate": 153.2,
-          "max_heartrate": 162.0,
-          "average_watts": 371.0,
+          "max_heartrate": 162,
+          "average_watts": 371,
           "average_cadence": 88.5
         },
         {
@@ -2132,7 +1679,7 @@
           "distance_m": 178.19,
           "average_speed": 2.87,
           "average_heartrate": 152.9,
-          "max_heartrate": 163.0,
+          "max_heartrate": 163,
           "average_watts": 237.3,
           "average_cadence": 76.8
         },
@@ -2144,7 +1691,7 @@
           "distance_m": 152.12,
           "average_speed": 4.11,
           "average_heartrate": 154.3,
-          "max_heartrate": 165.0,
+          "max_heartrate": 165,
           "average_watts": 377.1,
           "average_cadence": 88.8
         },
@@ -2156,8 +1703,8 @@
           "distance_m": 182.74,
           "average_speed": 3.05,
           "average_heartrate": 156.8,
-          "max_heartrate": 167.0,
-          "average_watts": 251.0,
+          "max_heartrate": 167,
+          "average_watts": 251,
           "average_cadence": 76.7
         },
         {
@@ -2168,7 +1715,7 @@
           "distance_m": 148.64,
           "average_speed": 4.13,
           "average_heartrate": 157.4,
-          "max_heartrate": 167.0,
+          "max_heartrate": 167,
           "average_watts": 364.5,
           "average_cadence": 88.3
         },
@@ -2177,10 +1724,10 @@
           "name": "Lap 41",
           "elapsed_time_s": 325,
           "moving_time_s": 325,
-          "distance_m": 1000.0,
+          "distance_m": 1000,
           "average_speed": 3.08,
           "average_heartrate": 141.5,
-          "max_heartrate": 167.0,
+          "max_heartrate": 167,
           "average_watts": 249.2,
           "average_cadence": 78.9
         },
@@ -2189,11 +1736,11 @@
           "name": "Lap 42",
           "elapsed_time_s": 326,
           "moving_time_s": 326,
-          "distance_m": 1000.0,
+          "distance_m": 1000,
           "average_speed": 3.07,
           "average_heartrate": 139.6,
-          "max_heartrate": 146.0,
-          "average_watts": 255.0,
+          "max_heartrate": 146,
+          "average_watts": 255,
           "average_cadence": 79.5
         },
         {
@@ -2204,7 +1751,7 @@
           "distance_m": 284.56,
           "average_speed": 2.74,
           "average_heartrate": 138.3,
-          "max_heartrate": 143.0,
+          "max_heartrate": 143,
           "average_watts": 273.2,
           "average_cadence": 79.6
         }
@@ -2224,11 +1771,11 @@
         "total": {
           "distance_m": 12681.6,
           "distance_km": 12.682,
-          "moving_time_s": 3988.0,
-          "elapsed_time_s": 3988.0,
-          "elevation_gain_m": 243.0,
+          "moving_time_s": 3988,
+          "elapsed_time_s": 3988,
+          "elevation_gain_m": 243,
           "average_heartrate": 142.4,
-          "max_heartrate": 167.0
+          "max_heartrate": 167
         },
         "run": {
           "average_pace_s_per_km": 314.47,
@@ -2236,60 +1783,60 @@
           "source_laps_near_1km": [
             {
               "lap_index": 1,
-              "distance_m": 1000.0,
+              "distance_m": 1000,
               "moving_time_s": 323,
-              "pace_s_per_km": 323.0,
+              "pace_s_per_km": 323,
               "pace": "5:23/km",
               "average_heartrate": 125.4
             },
             {
               "lap_index": 2,
-              "distance_m": 1000.0,
+              "distance_m": 1000,
               "moving_time_s": 307,
-              "pace_s_per_km": 307.0,
+              "pace_s_per_km": 307,
               "pace": "5:07/km",
-              "average_heartrate": 133.0
+              "average_heartrate": 133
             },
             {
               "lap_index": 15,
-              "distance_m": 1000.0,
+              "distance_m": 1000,
               "moving_time_s": 324,
-              "pace_s_per_km": 324.0,
+              "pace_s_per_km": 324,
               "pace": "5:24/km",
               "average_heartrate": 138.3
             },
             {
               "lap_index": 28,
-              "distance_m": 1000.0,
+              "distance_m": 1000,
               "moving_time_s": 331,
-              "pace_s_per_km": 331.0,
+              "pace_s_per_km": 331,
               "pace": "5:31/km",
               "average_heartrate": 143.1
             },
             {
               "lap_index": 41,
-              "distance_m": 1000.0,
+              "distance_m": 1000,
               "moving_time_s": 325,
-              "pace_s_per_km": 325.0,
+              "pace_s_per_km": 325,
               "pace": "5:25/km",
               "average_heartrate": 141.5
             },
             {
               "lap_index": 42,
-              "distance_m": 1000.0,
+              "distance_m": 1000,
               "moving_time_s": 326,
-              "pace_s_per_km": 326.0,
+              "pace_s_per_km": 326,
               "pace": "5:26/km",
               "average_heartrate": 139.6
             }
           ],
           "fastest_source_lap_near_1km": {
             "lap_index": 2,
-            "distance_m": 1000.0,
+            "distance_m": 1000,
             "moving_time_s": 307,
-            "pace_s_per_km": 307.0,
+            "pace_s_per_km": 307,
             "pace": "5:07/km",
-            "average_heartrate": 133.0
+            "average_heartrate": 133
           },
           "source_lap_note": "Source laps are descriptive measurements only; do not assume they are workout intervals."
         },
@@ -2305,12 +1852,12 @@
       "distance_m": 31467.5,
       "moving_time_s": 7013,
       "elapsed_time_s": 7883,
-      "total_elevation_gain_m": 318.0,
-      "average_heartrate": 114.0,
-      "max_heartrate": 139.0,
+      "total_elevation_gain_m": 318,
+      "average_heartrate": 114,
+      "max_heartrate": 139,
       "average_watts": 141.7,
       "weighted_average_watts": null,
-      "calories": 947.0,
+      "calories": 947,
       "device_name": "Garmin Forerunner 970",
       "gear_id": "b18453520",
       "gear_name": "Merida One Twenty 3000",
@@ -2321,11 +1868,11 @@
           "name": "Lap 1",
           "elapsed_time_s": 1060,
           "moving_time_s": 1060,
-          "distance_m": 5000.0,
+          "distance_m": 5000,
           "average_speed": 4.72,
           "average_heartrate": 117.8,
-          "max_heartrate": 138.0,
-          "average_watts": 173.0,
+          "max_heartrate": 138,
+          "average_watts": 173,
           "average_cadence": null
         },
         {
@@ -2333,10 +1880,10 @@
           "name": "Lap 2",
           "elapsed_time_s": 967,
           "moving_time_s": 967,
-          "distance_m": 5000.0,
+          "distance_m": 5000,
           "average_speed": 5.17,
           "average_heartrate": 118.6,
-          "max_heartrate": 138.0,
+          "max_heartrate": 138,
           "average_watts": 148.7,
           "average_cadence": null
         },
@@ -2345,10 +1892,10 @@
           "name": "Lap 3",
           "elapsed_time_s": 1266,
           "moving_time_s": 1121,
-          "distance_m": 5000.0,
+          "distance_m": 5000,
           "average_speed": 4.46,
           "average_heartrate": 117.5,
-          "max_heartrate": 139.0,
+          "max_heartrate": 139,
           "average_watts": 129.8,
           "average_cadence": null
         },
@@ -2357,10 +1904,10 @@
           "name": "Lap 4",
           "elapsed_time_s": 1406,
           "moving_time_s": 1294,
-          "distance_m": 5000.0,
+          "distance_m": 5000,
           "average_speed": 3.86,
-          "average_heartrate": 111.0,
-          "max_heartrate": 130.0,
+          "average_heartrate": 111,
+          "max_heartrate": 130,
           "average_watts": 121.1,
           "average_cadence": null
         },
@@ -2369,11 +1916,11 @@
           "name": "Lap 5",
           "elapsed_time_s": 988,
           "moving_time_s": 988,
-          "distance_m": 5000.0,
+          "distance_m": 5000,
           "average_speed": 5.06,
-          "average_heartrate": 113.0,
-          "max_heartrate": 125.0,
-          "average_watts": 152.0,
+          "average_heartrate": 113,
+          "max_heartrate": 125,
+          "average_watts": 152,
           "average_cadence": null
         },
         {
@@ -2381,10 +1928,10 @@
           "name": "Lap 6",
           "elapsed_time_s": 1904,
           "moving_time_s": 1288,
-          "distance_m": 5000.0,
+          "distance_m": 5000,
           "average_speed": 3.88,
           "average_heartrate": 109.5,
-          "max_heartrate": 126.0,
+          "max_heartrate": 126,
           "average_watts": 135.5,
           "average_cadence": null
         },
@@ -2396,7 +1943,7 @@
           "distance_m": 1468.79,
           "average_speed": 5.06,
           "average_heartrate": 107.9,
-          "max_heartrate": 122.0,
+          "max_heartrate": 122,
           "average_watts": 130.5,
           "average_cadence": null
         }
@@ -2411,11 +1958,11 @@
         "total": {
           "distance_m": 31467.5,
           "distance_km": 31.468,
-          "moving_time_s": 7013.0,
-          "elapsed_time_s": 7883.0,
-          "elevation_gain_m": 318.0,
-          "average_heartrate": 114.0,
-          "max_heartrate": 139.0
+          "moving_time_s": 7013,
+          "elapsed_time_s": 7883,
+          "elevation_gain_m": 318,
+          "average_heartrate": 114,
+          "max_heartrate": 139
         },
         "run": null,
         "coach_prompt_sha256": "da2ef602289127ad2c0438bfa5d9356a109494ca3832020780357ab5b639444f"
@@ -2432,10 +1979,10 @@
       "elapsed_time_s": 3265,
       "total_elevation_gain_m": 104.3,
       "average_heartrate": 135.4,
-      "max_heartrate": 158.0,
+      "max_heartrate": 158,
       "average_watts": 222.4,
       "weighted_average_watts": 418,
-      "calories": 483.0,
+      "calories": 483,
       "device_name": "Garmin Forerunner 970",
       "gear_id": null,
       "gear_name": null,
@@ -2446,10 +1993,10 @@
           "name": "Lap 1",
           "elapsed_time_s": 390,
           "moving_time_s": 384,
-          "distance_m": 1000.0,
+          "distance_m": 1000,
           "average_speed": 2.6,
           "average_heartrate": 127.8,
-          "max_heartrate": 143.0,
+          "max_heartrate": 143,
           "average_watts": 250.6,
           "average_cadence": 78.8
         },
@@ -2461,7 +2008,7 @@
           "distance_m": 923.81,
           "average_speed": 1.63,
           "average_heartrate": 130.1,
-          "max_heartrate": 143.0,
+          "max_heartrate": 143,
           "average_watts": 115.3,
           "average_cadence": 70.1
         },
@@ -2470,10 +2017,10 @@
           "name": "Lap 3",
           "elapsed_time_s": 405,
           "moving_time_s": 404,
-          "distance_m": 1000.0,
+          "distance_m": 1000,
           "average_speed": 2.48,
           "average_heartrate": 130.2,
-          "max_heartrate": 142.0,
+          "max_heartrate": 142,
           "average_watts": 288.2,
           "average_cadence": 75.1
         },
@@ -2482,10 +2029,10 @@
           "name": "Lap 4",
           "elapsed_time_s": 711,
           "moving_time_s": 646,
-          "distance_m": 1000.0,
+          "distance_m": 1000,
           "average_speed": 1.55,
-          "average_heartrate": 134.0,
-          "max_heartrate": 152.0,
+          "average_heartrate": 134,
+          "max_heartrate": 152,
           "average_watts": 111.4,
           "average_cadence": 61.9
         },
@@ -2494,10 +2041,10 @@
           "name": "Lap 5",
           "elapsed_time_s": 457,
           "moving_time_s": 457,
-          "distance_m": 1000.0,
+          "distance_m": 1000,
           "average_speed": 2.19,
           "average_heartrate": 131.8,
-          "max_heartrate": 148.0,
+          "max_heartrate": 148,
           "average_watts": 243.6,
           "average_cadence": 77.1
         },
@@ -2506,10 +2053,10 @@
           "name": "Lap 6",
           "elapsed_time_s": 297,
           "moving_time_s": 297,
-          "distance_m": 1000.0,
+          "distance_m": 1000,
           "average_speed": 3.37,
           "average_heartrate": 151.4,
-          "max_heartrate": 157.0,
+          "max_heartrate": 157,
           "average_watts": 306.5,
           "average_cadence": 82.5
         },
@@ -2520,8 +2067,8 @@
           "moving_time_s": 343,
           "distance_m": 961.83,
           "average_speed": 2.8,
-          "average_heartrate": 149.0,
-          "max_heartrate": 158.0,
+          "average_heartrate": 149,
+          "max_heartrate": 158,
           "average_watts": 308.7,
           "average_cadence": 84.6
         }
@@ -2545,11 +2092,11 @@
         "total": {
           "distance_m": 6885.6,
           "distance_km": 6.886,
-          "moving_time_s": 3099.0,
-          "elapsed_time_s": 3265.0,
+          "moving_time_s": 3099,
+          "elapsed_time_s": 3265,
           "elevation_gain_m": 104.3,
           "average_heartrate": 135.4,
-          "max_heartrate": 158.0
+          "max_heartrate": 158
         },
         "run": null,
         "coach_prompt_sha256": "da2ef602289127ad2c0438bfa5d9356a109494ca3832020780357ab5b639444f"
@@ -2803,11 +2350,11 @@
         "total": {
           "distance_m": 10348.9,
           "distance_km": 10.349,
-          "moving_time_s": 3029.0,
-          "elapsed_time_s": 3029.0,
-          "elevation_gain_m": 61.0,
+          "moving_time_s": 3029,
+          "elapsed_time_s": 3029,
+          "elevation_gain_m": 61,
           "average_heartrate": 145.3,
-          "max_heartrate": 165.0
+          "max_heartrate": 165
         },
         "run": {
           "average_pace_s_per_km": 292.69,
@@ -2815,9 +2362,9 @@
           "source_laps_near_1km": [
             {
               "lap_index": 1,
-              "distance_m": 1000.0,
+              "distance_m": 1000,
               "moving_time_s": 324,
-              "pace_s_per_km": 324.0,
+              "pace_s_per_km": 324,
               "pace": "5:24/km",
               "average_heartrate": 127.3
             },
@@ -2831,42 +2378,42 @@
             },
             {
               "lap_index": 9,
-              "distance_m": 1000.0,
+              "distance_m": 1000,
               "moving_time_s": 257,
-              "pace_s_per_km": 257.0,
+              "pace_s_per_km": 257,
               "pace": "4:17/km",
               "average_heartrate": 145.8
             },
             {
               "lap_index": 12,
-              "distance_m": 1000.0,
+              "distance_m": 1000,
               "moving_time_s": 262,
-              "pace_s_per_km": 262.0,
+              "pace_s_per_km": 262,
               "pace": "4:22/km",
               "average_heartrate": 154.4
             },
             {
               "lap_index": 15,
-              "distance_m": 1000.0,
+              "distance_m": 1000,
               "moving_time_s": 265,
-              "pace_s_per_km": 265.0,
+              "pace_s_per_km": 265,
               "pace": "4:25/km",
               "average_heartrate": 155.5
             },
             {
               "lap_index": 17,
-              "distance_m": 1000.0,
+              "distance_m": 1000,
               "moving_time_s": 323,
-              "pace_s_per_km": 323.0,
+              "pace_s_per_km": 323,
               "pace": "5:23/km",
               "average_heartrate": 147.2
             }
           ],
           "fastest_source_lap_near_1km": {
             "lap_index": 9,
-            "distance_m": 1000.0,
+            "distance_m": 1000,
             "moving_time_s": 257,
-            "pace_s_per_km": 257.0,
+            "pace_s_per_km": 257,
             "pace": "4:17/km",
             "average_heartrate": 145.8
           },
@@ -2928,11 +2475,11 @@
         "total": {
           "distance_m": 23403.7,
           "distance_km": 23.404,
-          "moving_time_s": 3975.0,
-          "elapsed_time_s": 6024.0,
+          "moving_time_s": 3975,
+          "elapsed_time_s": 6024,
           "elevation_gain_m": 508.6,
           "average_heartrate": 110.9,
-          "max_heartrate": 178.0
+          "max_heartrate": 178
         },
         "run": null,
         "coach_prompt_sha256": "da2ef602289127ad2c0438bfa5d9356a109494ca3832020780357ab5b639444f"
@@ -3213,6 +2760,489 @@
         "applied": false,
         "note": "Ingen automatisk planändring."
       }
+    }
+  ],
+  "legacy_plan_days": [
+    {
+      "date": "2026-08-31",
+      "label": "Måndag",
+      "status": "planned",
+      "planning_status": "fixed",
+      "session": "Enduroskola · fast tillfälle",
+      "reason": "Fast återkommande enduroskola. Passet är känt i förväg; den faktiska belastningen registreras efteråt och används som kontrollpunkt för kommande 2–3 dagar.",
+      "development_focus": "Teknisk kvalitet och avslappnad körning; faktisk belastning styr efterföljande pass.",
+      "sport": "enduro",
+      "classification": "training",
+      "manual_lock": true,
+      "priority_role": "flex",
+      "stimuli": [
+        "enduro_technical"
+      ],
+      "mesocycle_id": "run-threshold-hill-4w",
+      "microcycle_id": "run-threshold-hill-4w:mc2",
+      "microcycle_index": 2,
+      "microcycle_day": 1,
+      "load_dimensions": [
+        "technical",
+        "neuromuscular"
+      ]
+    },
+    {
+      "date": "2026-09-01",
+      "label": "Tisdag",
+      "status": "preliminary",
+      "session": "Löpning · kontrollerad tröskel · 3 × 8 min / 90 s jogg",
+      "reason": "Mesocykelns första prioriterade löpstimulus. Aktuell mikrocykel väljer etablering, hold eller progression från den definierade utvecklingslinjen; kortsiktig ändring kräver sakligt stöd i faktisk närbelastning eller återhämtning.",
+      "development_focus": "Jämn, kontrollerad kvalitet utan fartjakt; progression ska komma genom absorberbar träning.",
+      "sport": "run",
+      "priority_role": "anchor",
+      "stimuli": [
+        "run_threshold"
+      ],
+      "decision_note": "Grundplan: 3 × 8 min / 90 s jogg. Behåll den om måndagens enduro absorberas normalt; justera konservativt endast om faktisk belastning eller återhämtning ger skäl.",
+      "mesocycle_id": "run-threshold-hill-4w",
+      "microcycle_id": "run-threshold-hill-4w:mc2",
+      "microcycle_index": 2,
+      "microcycle_day": 2,
+      "microcycle_slot": "run_threshold",
+      "baseline_option_id": "run-threshold-3x8",
+      "dose_resolution": {
+        "state": "baseline",
+        "kind": "structured",
+        "value": 24,
+        "option_id": "run-threshold-3x8"
+      },
+      "load_dimensions": [
+        "cardiovascular",
+        "mechanical"
+      ],
+      "performance_marker_id": "run-threshold-control",
+      "dose_options": [
+        {
+          "id": "run-threshold-3x8",
+          "kind": "structured",
+          "value": 24,
+          "session": "Löpning · kontrollerad tröskel · 3 × 8 min / 90 s jogg",
+          "intent": "Etablerad kontrollerad dos som redan har genomförts i aktuell utvecklingslinje."
+        },
+        {
+          "id": "run-threshold-3x10",
+          "kind": "structured",
+          "value": 30,
+          "session": "Löpning · kontrollerad tröskel · 3 × 10 min / 90 s jogg",
+          "intent": "Planerad progression genom längre arbetstid utan avsikt att höja intensiteten."
+        }
+      ],
+      "dose_open": false,
+      "development_progression": {
+        "mode": "develop",
+        "demonstrated_floor_option_id": "run-threshold-3x8",
+        "same_dose_repeat_requires_reason": true,
+        "source": "absorbed_training_history",
+        "microcycle_plan": [
+          {
+            "microcycle": 2,
+            "option_id": "run-threshold-3x8",
+            "relation": "hold",
+            "reason": "Kriterierna kräver mer än en jämförbar 3 × 8-exponering innan arbetstiden ökas."
+          },
+          {
+            "microcycle": 3,
+            "option_id": "run-threshold-3x10",
+            "relation": "progress",
+            "reason": "Planerad utveckling från etablerade 24 till 30 min kontrollerat tröskelarbete; intensiteten hålls oförändrat kontrollerad."
+          },
+          {
+            "microcycle": 4,
+            "option_id": "run-threshold-3x10",
+            "relation": "hold",
+            "reason": "Konsolidera den högre arbetstiden och skapa jämförbar data inför mesocykelutvärderingen."
+          }
+        ]
+      },
+      "development_step": {
+        "microcycle": 2,
+        "option_id": "run-threshold-3x8",
+        "relation": "hold",
+        "reason": "Kriterierna kräver mer än en jämförbar 3 × 8-exponering innan arbetstiden ökas."
+      }
+    },
+    {
+      "date": "2026-09-02",
+      "label": "Onsdag",
+      "status": "conditional",
+      "session": "Simning · aerob/teknik · 3 200 m · ca 60 min · alternativ: Swimrun · Jogersö Extreme · 1 varv",
+      "swim_equipment": {
+        "planned": "none"
+      },
+      "reason": "Baslinjen är simning med liten mekanisk kostnad efter söndagens längre löpning, måndagens enduro och tisdagens tröskel. Ett varv Jogersö Extreme kan ersätta simningen om det hålls kontrollerat; det ska inte läggas ovanpå simpasset och räknas som faktisk löp-/teknisk belastning inför resten av veckan.",
+      "development_focus": "Simning: stabil kroppslinje och kontrollerad rotation. Swimrun: jämn kontrollerad ansträngning och tekniskt flyt utan fart- eller segmentjakt.",
+      "watch_workout": {
+        "sync_enabled": false,
+        "id": "swim-w36-wed-aerob-rotation-01",
+        "type": "Swim",
+        "equipment": [],
+        "name": "Aerob/teknik · kroppslinje och rotation · 3 200 m",
+        "planned_distance_m": 3200,
+        "blocks": [
+          {
+            "name": "Insim",
+            "steps": [
+              {
+                "kind": "swim",
+                "text": "Lugn insim",
+                "distance_m": 400,
+                "intensity": "warmup"
+              }
+            ]
+          },
+          {
+            "name": "Kroppslinje och rotation",
+            "repeat": 6,
+            "steps": [
+              {
+                "kind": "swim",
+                "text": "Stabil linje, kontrollerad rotation",
+                "distance_m": 50,
+                "intensity": "active"
+              },
+              {
+                "kind": "rest",
+                "duration_s": 15
+              }
+            ]
+          },
+          {
+            "name": "Aerob",
+            "repeat": 4,
+            "steps": [
+              {
+                "kind": "swim",
+                "text": "Stadigt aerob med stabil kroppslinje",
+                "distance_m": 500,
+                "intensity": "active"
+              },
+              {
+                "kind": "rest",
+                "duration_s": 30
+              }
+            ]
+          },
+          {
+            "name": "Frekvens",
+            "repeat": 6,
+            "steps": [
+              {
+                "kind": "swim",
+                "text": "Avslappnad frekvens med bibehållen linje",
+                "distance_m": 50,
+                "intensity": "active"
+              },
+              {
+                "kind": "rest",
+                "duration_s": 15
+              }
+            ]
+          },
+          {
+            "name": "Nedvarvning",
+            "steps": [
+              {
+                "kind": "swim",
+                "text": "Mycket lugnt",
+                "distance_m": 200,
+                "intensity": "cooldown"
+              }
+            ]
+          }
+        ]
+      },
+      "sport": "swim",
+      "priority_role": "flex",
+      "stimuli": [
+        "swim_aerobic",
+        "swim_technique"
+      ],
+      "mesocycle_id": "run-threshold-hill-4w",
+      "microcycle_id": "run-threshold-hill-4w:mc2",
+      "microcycle_index": 2,
+      "microcycle_day": 3,
+      "alternative_sports": [
+        "swimrun"
+      ],
+      "decision_note": "Swimrun är ett ersättningsalternativ, inte ett extra pass. Om det genomförs används den faktiska belastningen som kontrollpunkt för torsdagens MTB; fredagens backkvalitet skyddas."
+    },
+    {
+      "date": "2026-09-03",
+      "label": "Torsdag",
+      "status": "conditional",
+      "session": "MTB/XC · 45 min · teknik + lugn aerob stig",
+      "reason": "MTB/XC är fortsatt utvecklingsprioritet. Grundplanen är 60 minuter lugn teknisk stig. Om onsdagen blir Swimrun på Jogersö används dess faktiska belastning som kontrollpunkt och MTB-passet kortas eller tas bort endast om återhämtningen eller benkänslan ger sakliga skäl, för att skydda fredagens prioriterade löpkvalitet.",
+      "development_focus": "Blick, linjeval, bromspunkter och flyt före segmentjakt.",
+      "sport": "bike",
+      "priority_role": "flex",
+      "stimuli": [
+        "mtb_technical",
+        "mtb_aerobic"
+      ],
+      "mesocycle_id": "run-threshold-hill-4w",
+      "microcycle_id": "run-threshold-hill-4w:mc2",
+      "microcycle_index": 2,
+      "microcycle_day": 4,
+      "microcycle_slot": "mtb_support",
+      "baseline_option_id": "mtb-support-60",
+      "dose_resolution": {
+        "state": "resolved",
+        "kind": "duration_minutes",
+        "value": 45,
+        "source": "near_term_ai_revision",
+        "option_id": "mtb-support-45",
+        "basis": "Skydda fredagens prioriterade löpkvalitet efter tre tunga dagars belastning.",
+        "applied_at_utc": "2026-09-03T11:35:46.121873+00:00"
+      },
+      "load_dimensions": [
+        "cardiovascular",
+        "neuromuscular",
+        "technical"
+      ],
+      "performance_marker_id": "mtb-technical-repeat",
+      "decision_note": "Grundplan: 60 min lugn teknik + aerob stig. Efter eventuell onsdags-Swimrun behålls passet bara om faktisk belastning och dagskänsla är förenliga med fredagens backkvalitet.",
+      "dose_options": [
+        {
+          "id": "mtb-support-45",
+          "kind": "duration_minutes",
+          "value": 45,
+          "session": "MTB/XC · 45 min · teknik + lugn aerob stig",
+          "intent": "Kort stödpass när närbelastningen talar för extra marginal inför nästa prioriterade löpstimulus."
+        },
+        {
+          "id": "mtb-support-60",
+          "kind": "duration_minutes",
+          "value": 60,
+          "session": "MTB/XC · 60 min · teknik + lugn aerob stig",
+          "intent": "Normal konservativ stöddos när teknisk MTB/XC ska bibehållas utan att konkurrera med nästa prioriterade löpstimulus."
+        }
+      ],
+      "original_session": "MTB/XC · 60 min · teknik + lugn aerob stig",
+      "dose_open": false,
+      "auto_coach": {
+        "action": "reduce",
+        "reason": "Skydda fredagens prioriterade backkvalitet efter tre dagars ackumulerad belastning.",
+        "applied_at_utc": "2026-09-03T16:24:58.461825+00:00"
+      },
+      "coach_adjustment": "Skala ned passet. Gör dagens MTB/XC som ordinerat men i förkortad dos: mtb-support-45 (45 min). Håll det tekniskt fokus, låg kraft, undvik tunga stigningar och maximal accelerationsträning."
+    },
+    {
+      "date": "2026-09-04",
+      "label": "Fredag",
+      "status": "conditional",
+      "session": "Löpning · backkvalitet · 15 min lugnt + 2 × 6 × 150 m / lugn joggvila + 10 min lugnt",
+      "reason": "Mesocykelns andra prioriterade löpkvalitet: kraft, löpekonomi och mekanisk kvalitet. 2 × 6 × 150 m är demonstrerat kapacitetsgolv; aktuell mikrocykel väljer nästa utvecklingssteg. Regression kräver ett explicit närbelastningsskäl.",
+      "development_focus": "Kraftfull men kontrollerad löpning med bibehållen mekanik. Utveckla arbetsmängden stegvis; ingen maximal sprint eller syrajakt.",
+      "sport": "run",
+      "priority_role": "anchor",
+      "stimuli": [
+        "run_hill_quality"
+      ],
+      "decision_note": "Utvecklingsplan för mikrocykeln: Löpning · backkvalitet · 15 min lugnt + 2 × 7 × 150 m / lugn joggvila + 10 min lugnt. En lägre dos är ett tillfälligt belastningsbeslut och får inte bli ny normalbaseline.",
+      "mesocycle_id": "run-threshold-hill-4w",
+      "microcycle_id": "run-threshold-hill-4w:mc2",
+      "microcycle_index": 2,
+      "microcycle_day": 5,
+      "microcycle_slot": "run_hill_quality",
+      "baseline_option_id": "run-hill-2x7x150",
+      "dose_resolution": {
+        "state": "resolved",
+        "kind": "structured",
+        "value": 12,
+        "source": "migrated_existing_near_term_revision",
+        "option_id": "run-hill-2x6x150",
+        "basis": "Skydda fredagens prioriterade backkvalitet efter tre dagars ackumulerad belastning.",
+        "applied_at_utc": "2026-09-04T04:31:25.734748+00:00"
+      },
+      "load_dimensions": [
+        "mechanical",
+        "neuromuscular",
+        "cardiovascular"
+      ],
+      "performance_marker_id": "run-hill-mechanics",
+      "dose_options": [
+        {
+          "id": "run-hill-6x150",
+          "kind": "structured",
+          "value": 6,
+          "session": "Löpning · backkvalitet · 15 min lugnt + 6 × 150 m / full lugn nedjogg + 10 min lugnt",
+          "intent": "Tydligt reducerad reservdos. Får bara användas som tillfällig regression när faktisk närbelastning eller återhämtning motiverar det; aldrig som normal utvecklingsbaseline."
+        },
+        {
+          "id": "run-hill-2x6x150",
+          "kind": "structured",
+          "value": 12,
+          "session": "Löpning · backkvalitet · 15 min lugnt + 2 × 6 × 150 m / lugn joggvila + 10 min lugnt",
+          "intent": "Demonstrerat kapacitetsgolv: 2 × 6 × 150 m har genomförts utan problem. I utvecklingsläge är detta golv, inte nästa utvecklingsmål."
+        },
+        {
+          "id": "run-hill-2x7x150",
+          "kind": "structured",
+          "value": 14,
+          "session": "Löpning · backkvalitet · 15 min lugnt + 2 × 7 × 150 m / lugn joggvila + 10 min lugnt",
+          "intent": "Nästa konservativa utvecklingssteg från demonstrerade 2 × 6: endast repetitionsvolymen ökas, inte avsedd intensitet."
+        },
+        {
+          "id": "run-hill-2x8x150",
+          "kind": "structured",
+          "value": 16,
+          "session": "Löpning · backkvalitet · 15 min lugnt + 2 × 8 × 150 m / lugn joggvila + 10 min lugnt",
+          "intent": "Följande progressionssteg när 2 × 7 är absorberat med bibehållen mekanik och utan oproportionerlig återhämtningskostnad."
+        }
+      ],
+      "original_session": "Löpning · backkvalitet · 15 min lugnt + 2 × 7 × 150 m / lugn joggvila + 10 min lugnt",
+      "auto_coach": {
+        "action": "reduce",
+        "reason": "Skydda fredagens prioriterade backkvalitet efter tre dagars ackumulerad belastning.",
+        "applied_at_utc": "2026-09-04T04:31:25.734748+00:00"
+      },
+      "coach_adjustment": "Tillfällig regression från utvecklingsplanens 2 × 7 × 150 m till 2 × 6 × 150 m. Skälet är den redan dokumenterade ackumulerade närbelastningen; detta är belastningsstyrning, inte ny utvecklingsbaseline.",
+      "dose_open": false,
+      "development_progression": {
+        "mode": "develop",
+        "demonstrated_floor_option_id": "run-hill-2x6x150",
+        "same_dose_repeat_requires_reason": true,
+        "source": "user_report_2026-09-04",
+        "microcycle_plan": [
+          {
+            "microcycle": 2,
+            "option_id": "run-hill-2x7x150",
+            "relation": "progress",
+            "reason": "2 × 6 × 150 m är redan genomfört utan problem; nästa normala utvecklingsdos ökar endast repetitionsvolymen."
+          },
+          {
+            "microcycle": 3,
+            "option_id": "run-hill-2x8x150",
+            "relation": "progress",
+            "reason": "Fortsatt planerad volymprogression när mikrocykel 2 absorberats; kortsiktig regression är fortfarande tillåten med explicit skäl."
+          },
+          {
+            "microcycle": 4,
+            "option_id": "run-hill-2x8x150",
+            "relation": "hold",
+            "reason": "Konsolidera den högre dosen inför mesocykelutvärdering i stället för att öka två belastningsvariabler samtidigt."
+          }
+        ]
+      },
+      "development_step": {
+        "microcycle": 2,
+        "option_id": "run-hill-2x7x150",
+        "relation": "progress",
+        "reason": "2 × 6 × 150 m är redan genomfört utan problem; nästa normala utvecklingsdos ökar endast repetitionsvolymen."
+      }
+    },
+    {
+      "date": "2026-09-05",
+      "label": "Lördag",
+      "status": "conditional",
+      "session": "Simning · 3 200 m · aerob/teknik + styrka/core · 25 min · styrkemall",
+      "reason": "Lördagen används som dubbel lågkostnads-/stöddag: en etablerad 3 200 m aerob/teknisk simexponering för att hålla simfrekvensen uppe samt reducerad styrka/core. Simningen ger liten mekanisk kostnad för benen; styrkan hålls kort eftersom dagen ligger mellan fredagens backkvalitet och söndagens lugna distans. Fredagens faktiska utfall är kontrollpunkt.",
+      "sport": "strength",
+      "development_focus": "Simning: teknisk kvalitet och stabil aerob rytm utan tröskeljakt. Styrka: kontrollerad unilateral styrka, höftdominant arbete, drag/press och bål; plyometri endast om benen är mekaniskt fräscha.",
+      "priority_role": "protected_support",
+      "stimuli": [
+        "strength_unilateral",
+        "strength_core",
+        "swim_aerobic",
+        "swim_technique"
+      ],
+      "mesocycle_id": "run-threshold-hill-4w",
+      "microcycle_id": "run-threshold-hill-4w:mc2",
+      "microcycle_index": 2,
+      "microcycle_day": 6,
+      "microcycle_slot": "strength_support",
+      "planning_status": "planned",
+      "optional_stimuli": [
+        "plyometric"
+      ],
+      "load_dimensions": [
+        "mechanical",
+        "neuromuscular",
+        "cardiovascular",
+        "technical"
+      ],
+      "dose_options": [
+        {
+          "id": "strength-support-25",
+          "kind": "duration_minutes",
+          "value": 25,
+          "session": "Styrka/core · 25 min · styrkemall",
+          "intent": "Reducerad skyddsdos när närbelastningen kräver extra marginal."
+        },
+        {
+          "id": "strength-support-35",
+          "kind": "duration_minutes",
+          "value": 35,
+          "session": "Styrka/core · ca 35 min · styrkemall",
+          "intent": "Normal kort styrka/core-exponering, förankrad i nyligen genomförd cirka 36-minutersstyrka."
+        }
+      ],
+      "baseline_option_id": "strength-support-35",
+      "dose_resolution": {
+        "state": "adjusted",
+        "kind": "duration_minutes",
+        "value": 25,
+        "option_id": "strength-support-25"
+      },
+      "performance_marker_id": "strength-repeatability",
+      "original_session": "Simning · 3 200 m · aerob/teknik + styrka/core · 25 min · styrkemall",
+      "auto_coach": {
+        "action": "reduce",
+        "reason": "Skydda mesocykelns prioriterade backkvalitet och absorberbarheten efter flera tunga dagar.",
+        "applied_at_utc": "2026-09-04T20:44:01.639345+00:00"
+      },
+      "coach_adjustment": "Skala ned passet. Gör lördagens skyddade styrka+sim som planerat men i reducerad styrkedos (styrka 25 min) och håll simningen aerob/teknisk; undvik plyometri. Behåll simens 3 200 m-struktur men håll intensiteten kontrollerad."
+    },
+    {
+      "date": "2026-09-06",
+      "label": "Söndag",
+      "status": "preliminary",
+      "session": "Löpning · lugn distans · 75 min",
+      "reason": "Blockets tredje löpstimulus bygger tålighet och kontinuitet utan att bli ytterligare kvalitet. Grundplanen är 75 minuter lugnt; fredag–lördagens faktiska utfall kan motivera kortare pass, flytt eller vila.",
+      "development_focus": "Avslappnad rytm och jämn ansträngning; inget tredje kvalitetspass.",
+      "sport": "run",
+      "priority_role": "flex",
+      "stimuli": [
+        "run_easy_distance"
+      ],
+      "mesocycle_id": "run-threshold-hill-4w",
+      "microcycle_id": "run-threshold-hill-4w:mc2",
+      "microcycle_index": 2,
+      "microcycle_day": 7,
+      "microcycle_slot": "run_easy_distance",
+      "baseline_option_id": "run-easy-75",
+      "dose_resolution": {
+        "state": "baseline",
+        "kind": "duration_minutes",
+        "value": 75,
+        "option_id": "run-easy-75"
+      },
+      "load_dimensions": [
+        "cardiovascular",
+        "mechanical"
+      ],
+      "dose_options": [
+        {
+          "id": "run-easy-75",
+          "kind": "duration_minutes",
+          "value": 75,
+          "session": "Löpning · lugn distans · 75 min",
+          "intent": "Konservativ distansdos inom nyligen etablerad lugn löpvolym."
+        },
+        {
+          "id": "run-easy-90",
+          "kind": "duration_minutes",
+          "value": 90,
+          "session": "Löpning · lugn distans · 90 min",
+          "intent": "Etablerad längre lugn löpduration från nyligen genomförd träning när mikrocykeln är absorberad."
+        }
+      ]
     }
   ]
 }
