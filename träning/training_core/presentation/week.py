@@ -32,16 +32,73 @@ SPORT_GROUP_LABELS = {
 
 
 @dataclass(frozen=True)
+class WeekActivityReadModel:
+    label: str
+    duration_s: int
+    distance_m: float
+
+    @property
+    def duration(self) -> str:
+        return format_duration(self.duration_s)
+
+    @property
+    def distance(self) -> str:
+        return format_distance(self.distance_m)
+
+    @property
+    def detail(self) -> str:
+        parts = [self.label]
+        if self.distance_m > 0:
+            parts.append(self.distance)
+        if self.duration_s > 0:
+            parts.append(self.duration)
+        return " · ".join(parts)
+
+
+@dataclass(frozen=True)
 class WeekDayReadModel:
     local_date: date
     planned_session: str
-    actual_labels: tuple[str, ...]
+    actual_activities: tuple[WeekActivityReadModel, ...]
     manual_activities: tuple[ManualActivityReadModel, ...]
     icon_keys: tuple[str, ...]
     device_sync: DeviceSyncReadModel | None
     state: str
     planned_sessions: tuple[str, ...] = ()
     planned_workouts: tuple[PlannedWorkoutReadModel, ...] = ()
+
+    @property
+    def actual_labels(self) -> tuple[str, ...]:
+        return tuple(activity.label for activity in self.actual_activities)
+
+    @property
+    def completed_activity_count(self) -> int:
+        return len(self.actual_activities)
+
+    @property
+    def session_time_s(self) -> int:
+        return sum(activity.duration_s for activity in self.actual_activities)
+
+    @property
+    def total_distance_m(self) -> float:
+        return sum(activity.distance_m for activity in self.actual_activities)
+
+    @property
+    def session_time(self) -> str:
+        return format_duration(self.session_time_s)
+
+    @property
+    def total_distance(self) -> str:
+        return format_distance(self.total_distance_m)
+
+    @property
+    def status_summary(self) -> str:
+        if not self.actual_activities:
+            return ""
+        parts = [f"{self.completed_activity_count} pass", self.session_time]
+        if self.total_distance_m > 0:
+            parts.append(self.total_distance)
+        return " · ".join(parts)
 
 
 @dataclass(frozen=True)
@@ -185,8 +242,15 @@ def build_week_read_model(
     for local_date in dates:
         all_planned = tuple(plan_by_date.get(local_date, ()))
         planned = planned_training_workouts(all_planned)
-        actual_activities = tuple(by_date.get(local_date, ()))
-        actual = tuple(activity.label for activity in actual_activities)
+        source_activities = tuple(by_date.get(local_date, ()))
+        actual_activities = tuple(
+            WeekActivityReadModel(
+                label=activity.label,
+                duration_s=int(activity.elapsed_time_s or 0),
+                distance_m=float(activity.distance_m or 0.0),
+            )
+            for activity in source_activities
+        )
         manual = _manual_activities(all_planned)
         workout_models = tuple(_planned_read_model(workout) for workout in planned)
         planned_sessions = tuple(workout.session for workout in planned)
@@ -194,10 +258,10 @@ def build_week_read_model(
         if not planned_session and all_planned:
             planned_session = all_planned[0].session
 
-        if actual or manual:
+        if actual_activities or manual:
             icons = tuple(
                 dict.fromkeys(
-                    [activity_icon_key(activity.sport_family) for activity in actual_activities]
+                    [activity_icon_key(activity.sport_family) for activity in source_activities]
                     + [activity.icon_key for activity in manual]
                 )
             )
@@ -218,7 +282,7 @@ def build_week_read_model(
             WeekDayReadModel(
                 local_date=local_date,
                 planned_session=planned_session,
-                actual_labels=actual,
+                actual_activities=actual_activities,
                 manual_activities=manual,
                 icon_keys=icons,
                 device_sync=legacy_sync,
