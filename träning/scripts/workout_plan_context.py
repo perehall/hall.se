@@ -55,6 +55,12 @@ def _find_workout(plan, activity, activity_date):
     if len(explicit) > 1:
         return None
 
+    # A single planned workout on the date is unambiguous even when the
+    # provider activity lacks sport metadata. With multiple same-day workouts
+    # we require family/component evidence and never guess.
+    if len(rows) == 1:
+        return rows[0]
+
     family = activity_family(activity)
     if not family:
         return None
