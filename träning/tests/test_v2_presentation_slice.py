@@ -200,6 +200,25 @@ class PresentationSliceTests(unittest.TestCase):
         self.assertIn("Styrka/core · 35 min", rendered)
         self.assertNotIn("Simning · 3 200 m + Styrka/core · 35 min", rendered)
 
+    def test_completed_week_day_renders_day_totals_and_per_activity_details(self):
+        snapshot = build_presentation_snapshot(
+            FakeRepository(), today=date(2026, 9, 26)
+        )
+        rendered = render_week(snapshot)
+        self.assertIn("Enduro + Simning", rendered)
+        self.assertIn(
+            '<div class="v2-week-actual-summary">2 pass · 2:44:44 · 29,61 km</div>',
+            rendered,
+        )
+        self.assertIn(
+            '<div>Enduro · 26,61 km · 1:41:02</div>',
+            rendered,
+        )
+        self.assertIn(
+            '<div>Simning · 3,00 km · 1:03:42</div>',
+            rendered,
+        )
+
     def test_week_timeline_preserves_date_axis_status_and_rest_semantics(self):
         snapshot = build_presentation_snapshot(
             FakeRepository(), today=date(2026, 9, 26)
