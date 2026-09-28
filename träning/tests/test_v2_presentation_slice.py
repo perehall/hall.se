@@ -9,7 +9,7 @@ sys.path.insert(0, str(ROOT))
 
 from training_core.application.presentation import build_presentation_snapshot
 from training_core.presentation.navigation import PublishedWeek
-from training_core.presentation.renderer import render_snapshot, render_today
+from training_core.presentation.renderer import render_snapshot, render_today, render_week
 from training_core.domain.weather import DailyWeatherForecast, WeatherSnapshot
 from training_core.presentation.today import CompletedActivity, PlannedDay
 
@@ -158,6 +158,40 @@ class PresentationSliceTests(unittest.TestCase):
         self.assertIn('data-workout-key="swim-1"', rendered)
         self.assertIn('data-workout-key="strength-1"', rendered)
         self.assertEqual(rendered.count('class="v2-planned-workout"'), 2)
+
+    def test_week_renders_multiple_same_day_workouts_as_independent_cards(self):
+        class MultiRepository:
+            def planned_days(self, start, end):
+                return [
+                    PlannedDay(
+                        date(2026, 9, 26),
+                        "Simning · 3 200 m",
+                        "swim",
+                        "planned",
+                        workout_key="swim-1",
+                    ),
+                    PlannedDay(
+                        date(2026, 9, 26),
+                        "Styrka/core · 35 min",
+                        "strength",
+                        "planned",
+                        workout_key="strength-1",
+                    ),
+                ]
+
+            def completed_activities(self, start, end):
+                return []
+
+        snapshot = build_presentation_snapshot(
+            MultiRepository(), today=date(2026, 9, 26)
+        )
+        rendered = render_week(snapshot)
+        self.assertEqual(rendered.count('class="v2-week-planned-workout"'), 2)
+        self.assertIn('data-workout-key="swim-1"', rendered)
+        self.assertIn('data-workout-key="strength-1"', rendered)
+        self.assertIn("Simning · 3 200 m", rendered)
+        self.assertIn("Styrka/core · 35 min", rendered)
+        self.assertNotIn("Simning · 3 200 m + Styrka/core · 35 min", rendered)
 
     def test_multisport_workout_renders_ordered_components(self):
         class BrickRepository:
