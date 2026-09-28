@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from datetime import date
 from typing import Iterable
 
+from training_core.domain.workouts import PlannedWorkout, planned_training_workouts
 from training_core.presentation.device_sync import (
     DeviceSyncReadModel,
     build_device_sync_read_model,
@@ -19,6 +20,10 @@ from training_core.presentation.sport_identity import (
     activity_icon_key,
     planned_icon_keys,
 )
+
+
+# Compatibility alias while remaining callers migrate from "day" to "workout".
+PlannedDay = PlannedWorkout
 
 
 FEELING_LABELS = {
@@ -58,19 +63,6 @@ class CompletedActivity:
 
 
 @dataclass(frozen=True)
-class PlannedDay:
-    local_date: date
-    session: str
-    sport: str
-    status: str
-    planning_status: str = ""
-    manual_lock: bool = False
-    reason: str = ""
-    development_focus: str = ""
-    payload: dict | None = None
-
-
-@dataclass(frozen=True)
 class ActivityOutcomeReadModel:
     provider_activity_id: str
     label: str
@@ -88,6 +80,19 @@ class ActivityOutcomeReadModel:
 
 
 @dataclass(frozen=True)
+class PlannedWorkoutReadModel:
+    workout_key: str
+    session: str
+    sport: str
+    icon_keys: tuple[str, ...]
+    component_sports: tuple[str, ...]
+    prescription: tuple[str, ...]
+    reason: str
+    development_focus: str
+    device_sync: DeviceSyncReadModel | None
+
+
+@dataclass(frozen=True)
 class TodayReadModel:
     local_date: date
     state: str
@@ -102,6 +107,8 @@ class TodayReadModel:
     manual_activities: tuple[ManualActivityReadModel, ...] = ()
     icon_keys: tuple[str, ...] = ()
     device_sync: DeviceSyncReadModel | None = None
+    planned_workouts: tuple[PlannedWorkoutReadModel, ...] = ()
+    next_sessions: tuple[str, ...] = ()
 
 
 def _duration(seconds: int | None) -> str:
@@ -163,8 +170,8 @@ def activity_outcome(activity: CompletedActivity) -> ActivityOutcomeReadModel:
     )
 
 
-def _prescription_lines(day: PlannedDay) -> tuple[str, ...]:
-    payload = day.payload or {}
+def _prescription_lines(workout: PlannedWorkout) -> tuple[str, ...]:
+    payload = workout.payload or {}
     design = payload.get("workout_design") or {}
     selected_id = design.get("selected_candidate_id")
     candidates = design.get("candidates") or []
@@ -183,25 +190,88 @@ def _prescription_lines(day: PlannedDay) -> tuple[str, ...]:
     return tuple(lines)
 
 
+def _workout_read_model(
+    workout: PlannedWorkout,
+    *,
+    completed: bool,
+) -> PlannedWorkoutReadModel:
+    return PlannedWorkoutReadModel(
+        workout_key=workout.workout_key,
+        session=workout.session,
+        sport=workout.sport,
+        icon_keys=planned_icon_keys(sport=workout.sport, payload=workout.payload),
+        component_sports=tuple(component.sport for component in workout.components),
+        prescription=_prescription_lines(workout),
+        reason=public_reason(workout.reason),
+        development_focus=workout.development_focus,
+        device_sync=build_device_sync_read_model(workout.payload, completed=completed),
+    )
+
+
+def _state_for(workouts: tuple[PlannedWorkout, ...]) -> str:
+    if not workouts:
+        return "open"
+    if any(
+        workout.manual_lock or workout.planning_status == "fixed"
+        for workout in workouts
+    ):
+        return "fixed"
+    states = [workout.status for workout in workouts if workout.status]
+    return states[0] if len(set(states)) == 1 and states else "planned"
+
+
+def _manual_activities(workouts: tuple[PlannedWorkout, ...]) -> tuple[ManualActivityReadModel, ...]:
+    result: list[ManualActivityReadModel] = []
+    seen: set[tuple[str, str, str]] = set()
+    for workout in workouts:
+        for activity in manual_activities_for_day(workout):
+            key = (activity.session, activity.sport, activity.classification)
+            if key in seen:
+                continue
+            seen.add(key)
+            result.append(activity)
+    return tuple(result)
+
+
+def _joined_unique(values: Iterable[str]) -> str:
+    return " · ".join(dict.fromkeys(value for value in values if value))
+
+
 def build_today_read_model(
     *,
     today: date,
-    plan: Iterable[PlannedDay],
+    plan: Iterable[PlannedWorkout],
     activities: Iterable[CompletedActivity],
 ) -> TodayReadModel:
-    days = {day.local_date: day for day in plan}
-    planned = days.get(today)
-    if planned is None:
+    plan_rows = tuple(plan)
+    today_rows = tuple(row for row in plan_rows if row.local_date == today)
+    if not today_rows:
         raise ValueError(f"missing planned day for {today.isoformat()}")
 
+    training_rows = planned_training_workouts(today_rows)
+    display_rows = training_rows or today_rows[:1]
     actual = tuple(activity for activity in activities if activity.local_date == today)
-    manual = manual_activities_for_day(planned)
-    future = sorted(
-        (day for day in days.values() if day.local_date > today),
-        key=lambda day: day.local_date,
+    manual = _manual_activities(today_rows)
+    completed = bool(actual or manual)
+    workout_models = tuple(
+        _workout_read_model(workout, completed=completed)
+        for workout in training_rows
     )
 
-    if actual or manual:
+    future_dates = sorted(
+        {row.local_date for row in plan_rows if row.local_date > today}
+    )
+    next_rows: tuple[PlannedWorkout, ...] = ()
+    for future_date in future_dates:
+        candidates = planned_training_workouts(
+            [row for row in plan_rows if row.local_date == future_date]
+        )
+        if candidates:
+            next_rows = candidates
+            break
+    next_sessions = tuple(row.session for row in next_rows)
+
+    if completed:
         title_parts = [activity.label for activity in actual] + [
             activity.session for activity in manual
         ]
@@ -213,39 +283,60 @@ def build_today_read_model(
         outcomes = tuple(activity_outcome(activity) for activity in actual)
         state = "completed"
     else:
-        title = planned.session
+        if len(training_rows) > 1:
+            title = f"{len(training_rows)} planerade pass"
+        else:
+            title = display_rows[0].session
         details = ()
         outcomes = ()
-        state = (
-            "fixed"
-            if planned.manual_lock or planned.planning_status == "fixed"
-            else planned.status or "open"
+        state = _state_for(display_rows)
+
+    planned_session = " + ".join(row.session for row in training_rows)
+    if not planned_session and display_rows:
+        planned_session = display_rows[0].session
+
+    reason = _joined_unique(public_reason(row.reason) for row in display_rows)
+    development_focus = _joined_unique(row.development_focus for row in display_rows)
+    legacy_prescription = (
+        _prescription_lines(training_rows[0])
+        if len(training_rows) == 1
+        else ()
+    )
+    legacy_device_sync = (
+        build_device_sync_read_model(training_rows[0].payload, completed=completed)
+        if len(training_rows) == 1
+        else None
+    )
+
+    if completed:
+        icon_keys = tuple(
+            dict.fromkeys(
+                [activity_icon_key(activity.sport_family) for activity in actual]
+                + [activity.icon_key for activity in manual]
+            )
         )
+    else:
+        planned_icons: list[str] = []
+        for workout in training_rows:
+            planned_icons.extend(
+                planned_icon_keys(sport=workout.sport, payload=workout.payload)
+            )
+        icon_keys = tuple(dict.fromkeys(planned_icons))
 
     return TodayReadModel(
         local_date=today,
         state=state,
         title=title,
         details=details,
-        planned_session=planned.session,
-        next_session=future[0].session if future else None,
-        reason=public_reason(planned.reason),
-        development_focus=planned.development_focus,
-        prescription=_prescription_lines(planned),
+        planned_session=planned_session,
+        next_session=" + ".join(next_sessions) if next_sessions else None,
+        reason=reason,
+        development_focus=development_focus,
+        prescription=legacy_prescription,
         outcomes=outcomes,
         manual_activities=manual,
-        icon_keys=(
-            tuple(
-                dict.fromkeys(
-                    [activity_icon_key(activity.sport_family) for activity in actual]
-                    + [activity.icon_key for activity in manual]
-                )
-            )
-            if actual or manual
-            else planned_icon_keys(sport=planned.sport, payload=planned.payload)
-        ),
-        device_sync=build_device_sync_read_model(
-            planned.payload,
-            completed=bool(actual or manual),
-        ),
+        icon_keys=icon_keys,
+        device_sync=legacy_device_sync,
+        planned_workouts=workout_models,
+        next_sessions=next_sessions,
     )
