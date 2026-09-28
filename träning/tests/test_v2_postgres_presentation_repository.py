@@ -98,6 +98,45 @@ class PostgresPresentationRepositoryTests(unittest.TestCase):
         )
         self.assertIn("where is_current", factory.last_query)
 
+    def test_same_date_workouts_are_returned_independently(self):
+        rows = [
+            (
+                date(2026, 10, 2),
+                "Simning · 3 200 m",
+                "swim",
+                "preliminary",
+                "preliminary",
+                False,
+                "Simexponering.",
+                "Aerob simning.",
+                {},
+                "m1:mc2:swim",
+            ),
+            (
+                date(2026, 10, 2),
+                "Styrka/core · 35 min",
+                "strength",
+                "preliminary",
+                "preliminary",
+                False,
+                "Styrkeexponering.",
+                "Styrka/core.",
+                {},
+                "m1:mc2:strength",
+            ),
+        ]
+        repo = PostgresPresentationRepository(CapturingFactory(rows))
+        workouts = repo.planned_days(date(2026, 10, 2), date(2026, 10, 2))
+        self.assertEqual(len(workouts), 2)
+        self.assertEqual(
+            [workout.workout_key for workout in workouts],
+            ["m1:mc2:swim", "m1:mc2:strength"],
+        )
+        self.assertEqual(
+            [workout.sport for workout in workouts],
+            ["swim", "strength"],
+        )
+
     def test_activity_override_label_and_latest_outcome_are_resolved_by_repository(self):
         rows = [
             (

@@ -6,7 +6,12 @@ from pathlib import Path
 SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
-from render_training_site import PIPELINE, REPO_ROOT, run_pipeline  # noqa: E402
+from render_training_site import (  # noqa: E402
+    LEGACY_PARITY_PIPELINE,
+    REPO_ROOT,
+    main,
+    run_legacy_parity_pipeline,
+)
 
 
 EXPECTED_PIPELINE = (
@@ -68,46 +73,46 @@ EXPECTED_PIPELINE = (
 
 class RenderPipelineTests(unittest.TestCase):
     def test_pipeline_order_is_single_explicit_contract(self):
-        self.assertEqual(PIPELINE, EXPECTED_PIPELINE)
-        self.assertEqual(len(PIPELINE), len(set(PIPELINE)))
-        self.assertEqual(PIPELINE[-2:], ("validate_site_contracts.py", "validate_training_data.py"))
-        self.assertLess(PIPELINE.index("apply_plan_overrides.py"), PIPELINE.index("enforce_coach_output_contract.py"))
-        self.assertLess(PIPELINE.index("enforce_coach_output_contract.py"), PIPELINE.index("normalize_coach_language.py"))
-        self.assertLess(PIPELINE.index("normalize_coach_language.py"), PIPELINE.index("finalize_canonical_coach_facts.py"))
-        self.assertLess(PIPELINE.index("finalize_canonical_coach_facts.py"), PIPELINE.index("build.py"))
-        self.assertLess(PIPELINE.index("archive_weeks.py"), PIPELINE.index("finalize_week_review_ui.py"))
-        self.assertLess(PIPELINE.index("finalize_week_review_ui.py"), PIPELINE.index("check_week_review_ui.py"))
-        self.assertLess(PIPELINE.index("finalize_navigation_ui.py"), PIPELINE.index("finalize_training_brain_ui.py"))
-        self.assertLess(PIPELINE.index("finalize_training_brain_ui.py"), PIPELINE.index("finalize_relative_next_ui.py"))
-        self.assertLess(PIPELINE.index("finalize_relative_next_ui.py"), PIPELINE.index("finalize_progression_ui.py"))
-        self.assertLess(PIPELINE.index("finalize_workout_history.py"), PIPELINE.index("finalize_signal_ui.py"))
-        self.assertLess(PIPELINE.index("finalize_signal_ui.py"), PIPELINE.index("finalize_device_sync_ui.py"))
-        self.assertLess(PIPELINE.index("finalize_device_sync_ui.py"), PIPELINE.index("finalize_historical_coach_ui.py"))
-        self.assertLess(PIPELINE.index("finalize_historical_coach_ui.py"), PIPELINE.index("finalize_week_activity_insights.py"))
-        self.assertLess(PIPELINE.index("finalize_week_activity_insights.py"), PIPELINE.index("finalize_user_report_ui.py"))
-        self.assertLess(PIPELINE.index("finalize_user_report_ui.py"), PIPELINE.index("finalize_week_status_ui.py"))
-        self.assertLess(PIPELINE.index("finalize_week_status_ui.py"), PIPELINE.index("finalize_post_workout_ui.py"))
-        self.assertLess(PIPELINE.index("finalize_post_workout_ui.py"), PIPELINE.index("finalize_training_input_ui.py"))
-        self.assertLess(PIPELINE.index("finalize_training_input_ui.py"), PIPELINE.index("finalize_human_training_language.py"))
-        self.assertLess(PIPELINE.index("finalize_human_training_language.py"), PIPELINE.index("finalize_completed_workout_truth.py"))
-        self.assertLess(PIPELINE.index("finalize_completed_workout_truth.py"), PIPELINE.index("finalize_completed_sport_icon.py"))
-        self.assertLess(PIPELINE.index("finalize_completed_sport_icon.py"), PIPELINE.index("finalize_coach_clarity_ui.py"))
-        self.assertLess(PIPELINE.index("finalize_coach_clarity_ui.py"), PIPELINE.index("finalize_card_v2_ui.py"))
-        self.assertLess(PIPELINE.index("finalize_card_v2_ui.py"), PIPELINE.index("build_home.py"))
-        self.assertLess(PIPELINE.index("publish_goal_cache_bypass.py"), PIPELINE.index("finalize_week_shell_ui.py"))
-        self.assertLess(PIPELINE.index("finalize_week_shell_ui.py"), PIPELINE.index("finalize_backend_status_ui.py"))
-        self.assertLess(PIPELINE.index("finalize_backend_status_ui.py"), PIPELINE.index("finalize_quiet_performance_ui.py"))
-        self.assertLess(PIPELINE.index("finalize_quiet_performance_ui.py"), PIPELINE.index("finalize_quiet_performance_v2_ui.py"))
-        self.assertLess(PIPELINE.index("finalize_quiet_performance_v2_ui.py"), PIPELINE.index("finalize_upcoming_workout_shell_ui.py"))
-        self.assertLess(PIPELINE.index("finalize_upcoming_workout_shell_ui.py"), PIPELINE.index("finalize_completed_day_summary_ui.py"))
-        self.assertLess(PIPELINE.index("finalize_completed_day_summary_ui.py"), PIPELINE.index("finalize_top_overview_ui.py"))
-        self.assertLess(PIPELINE.index("finalize_top_overview_ui.py"), PIPELINE.index("finalize_rest_day_language.py"))
-        self.assertLess(PIPELINE.index("finalize_rest_day_language.py"), PIPELINE.index("finalize_training_timeline_ui.py"))
-        self.assertLess(PIPELINE.index("finalize_training_timeline_ui.py"), PIPELINE.index("finalize_week_navigation_ui.py"))
-        self.assertLess(PIPELINE.index("finalize_week_navigation_ui.py"), PIPELINE.index("finalize_week_page_consistency_ui.py"))
-        self.assertLess(PIPELINE.index("finalize_week_page_consistency_ui.py"), PIPELINE.index("finalize_all_week_pass_icons.py"))
-        self.assertLess(PIPELINE.index("finalize_all_week_pass_icons.py"), PIPELINE.index("finalize_generated_whitespace.py"))
-        self.assertLess(PIPELINE.index("finalize_generated_whitespace.py"), PIPELINE.index("validate_site_contracts.py"))
+        self.assertEqual(LEGACY_PARITY_PIPELINE, EXPECTED_PIPELINE)
+        self.assertEqual(len(LEGACY_PARITY_PIPELINE), len(set(LEGACY_PARITY_PIPELINE)))
+        self.assertEqual(LEGACY_PARITY_PIPELINE[-2:], ("validate_site_contracts.py", "validate_training_data.py"))
+        self.assertLess(LEGACY_PARITY_PIPELINE.index("apply_plan_overrides.py"), LEGACY_PARITY_PIPELINE.index("enforce_coach_output_contract.py"))
+        self.assertLess(LEGACY_PARITY_PIPELINE.index("enforce_coach_output_contract.py"), LEGACY_PARITY_PIPELINE.index("normalize_coach_language.py"))
+        self.assertLess(LEGACY_PARITY_PIPELINE.index("normalize_coach_language.py"), LEGACY_PARITY_PIPELINE.index("finalize_canonical_coach_facts.py"))
+        self.assertLess(LEGACY_PARITY_PIPELINE.index("finalize_canonical_coach_facts.py"), LEGACY_PARITY_PIPELINE.index("build.py"))
+        self.assertLess(LEGACY_PARITY_PIPELINE.index("archive_weeks.py"), LEGACY_PARITY_PIPELINE.index("finalize_week_review_ui.py"))
+        self.assertLess(LEGACY_PARITY_PIPELINE.index("finalize_week_review_ui.py"), LEGACY_PARITY_PIPELINE.index("check_week_review_ui.py"))
+        self.assertLess(LEGACY_PARITY_PIPELINE.index("finalize_navigation_ui.py"), LEGACY_PARITY_PIPELINE.index("finalize_training_brain_ui.py"))
+        self.assertLess(LEGACY_PARITY_PIPELINE.index("finalize_training_brain_ui.py"), LEGACY_PARITY_PIPELINE.index("finalize_relative_next_ui.py"))
+        self.assertLess(LEGACY_PARITY_PIPELINE.index("finalize_relative_next_ui.py"), LEGACY_PARITY_PIPELINE.index("finalize_progression_ui.py"))
+        self.assertLess(LEGACY_PARITY_PIPELINE.index("finalize_workout_history.py"), LEGACY_PARITY_PIPELINE.index("finalize_signal_ui.py"))
+        self.assertLess(LEGACY_PARITY_PIPELINE.index("finalize_signal_ui.py"), LEGACY_PARITY_PIPELINE.index("finalize_device_sync_ui.py"))
+        self.assertLess(LEGACY_PARITY_PIPELINE.index("finalize_device_sync_ui.py"), LEGACY_PARITY_PIPELINE.index("finalize_historical_coach_ui.py"))
+        self.assertLess(LEGACY_PARITY_PIPELINE.index("finalize_historical_coach_ui.py"), LEGACY_PARITY_PIPELINE.index("finalize_week_activity_insights.py"))
+        self.assertLess(LEGACY_PARITY_PIPELINE.index("finalize_week_activity_insights.py"), LEGACY_PARITY_PIPELINE.index("finalize_user_report_ui.py"))
+        self.assertLess(LEGACY_PARITY_PIPELINE.index("finalize_user_report_ui.py"), LEGACY_PARITY_PIPELINE.index("finalize_week_status_ui.py"))
+        self.assertLess(LEGACY_PARITY_PIPELINE.index("finalize_week_status_ui.py"), LEGACY_PARITY_PIPELINE.index("finalize_post_workout_ui.py"))
+        self.assertLess(LEGACY_PARITY_PIPELINE.index("finalize_post_workout_ui.py"), LEGACY_PARITY_PIPELINE.index("finalize_training_input_ui.py"))
+        self.assertLess(LEGACY_PARITY_PIPELINE.index("finalize_training_input_ui.py"), LEGACY_PARITY_PIPELINE.index("finalize_human_training_language.py"))
+        self.assertLess(LEGACY_PARITY_PIPELINE.index("finalize_human_training_language.py"), LEGACY_PARITY_PIPELINE.index("finalize_completed_workout_truth.py"))
+        self.assertLess(LEGACY_PARITY_PIPELINE.index("finalize_completed_workout_truth.py"), LEGACY_PARITY_PIPELINE.index("finalize_completed_sport_icon.py"))
+        self.assertLess(LEGACY_PARITY_PIPELINE.index("finalize_completed_sport_icon.py"), LEGACY_PARITY_PIPELINE.index("finalize_coach_clarity_ui.py"))
+        self.assertLess(LEGACY_PARITY_PIPELINE.index("finalize_coach_clarity_ui.py"), LEGACY_PARITY_PIPELINE.index("finalize_card_v2_ui.py"))
+        self.assertLess(LEGACY_PARITY_PIPELINE.index("finalize_card_v2_ui.py"), LEGACY_PARITY_PIPELINE.index("build_home.py"))
+        self.assertLess(LEGACY_PARITY_PIPELINE.index("publish_goal_cache_bypass.py"), LEGACY_PARITY_PIPELINE.index("finalize_week_shell_ui.py"))
+        self.assertLess(LEGACY_PARITY_PIPELINE.index("finalize_week_shell_ui.py"), LEGACY_PARITY_PIPELINE.index("finalize_backend_status_ui.py"))
+        self.assertLess(LEGACY_PARITY_PIPELINE.index("finalize_backend_status_ui.py"), LEGACY_PARITY_PIPELINE.index("finalize_quiet_performance_ui.py"))
+        self.assertLess(LEGACY_PARITY_PIPELINE.index("finalize_quiet_performance_ui.py"), LEGACY_PARITY_PIPELINE.index("finalize_quiet_performance_v2_ui.py"))
+        self.assertLess(LEGACY_PARITY_PIPELINE.index("finalize_quiet_performance_v2_ui.py"), LEGACY_PARITY_PIPELINE.index("finalize_upcoming_workout_shell_ui.py"))
+        self.assertLess(LEGACY_PARITY_PIPELINE.index("finalize_upcoming_workout_shell_ui.py"), LEGACY_PARITY_PIPELINE.index("finalize_completed_day_summary_ui.py"))
+        self.assertLess(LEGACY_PARITY_PIPELINE.index("finalize_completed_day_summary_ui.py"), LEGACY_PARITY_PIPELINE.index("finalize_top_overview_ui.py"))
+        self.assertLess(LEGACY_PARITY_PIPELINE.index("finalize_top_overview_ui.py"), LEGACY_PARITY_PIPELINE.index("finalize_rest_day_language.py"))
+        self.assertLess(LEGACY_PARITY_PIPELINE.index("finalize_rest_day_language.py"), LEGACY_PARITY_PIPELINE.index("finalize_training_timeline_ui.py"))
+        self.assertLess(LEGACY_PARITY_PIPELINE.index("finalize_training_timeline_ui.py"), LEGACY_PARITY_PIPELINE.index("finalize_week_navigation_ui.py"))
+        self.assertLess(LEGACY_PARITY_PIPELINE.index("finalize_week_navigation_ui.py"), LEGACY_PARITY_PIPELINE.index("finalize_week_page_consistency_ui.py"))
+        self.assertLess(LEGACY_PARITY_PIPELINE.index("finalize_week_page_consistency_ui.py"), LEGACY_PARITY_PIPELINE.index("finalize_all_week_pass_icons.py"))
+        self.assertLess(LEGACY_PARITY_PIPELINE.index("finalize_all_week_pass_icons.py"), LEGACY_PARITY_PIPELINE.index("finalize_generated_whitespace.py"))
+        self.assertLess(LEGACY_PARITY_PIPELINE.index("finalize_generated_whitespace.py"), LEGACY_PARITY_PIPELINE.index("validate_site_contracts.py"))
 
     def test_runner_executes_every_stage_in_canonical_order(self):
         calls = []
@@ -115,16 +120,30 @@ class RenderPipelineTests(unittest.TestCase):
         def fake_runner(command, *, check, cwd):
             calls.append((Path(command[1]).name, check, cwd))
 
-        run_pipeline(runner=fake_runner)
+        run_legacy_parity_pipeline(runner=fake_runner)
         self.assertEqual([name for name, _, _ in calls], list(EXPECTED_PIPELINE))
         self.assertTrue(all(check is True for _, check, _ in calls))
         self.assertTrue(all(cwd == REPO_ROOT for _, _, cwd in calls))
 
-    def test_v2_preview_is_published_after_legacy_pipeline_not_as_a_finalizer(self):
+    def test_production_main_does_not_execute_legacy_parity_pipeline(self):
+        import render_training_site
+
+        original_publish = render_training_site.publish_v2_current_page
+        original_legacy = render_training_site.run_legacy_parity_pipeline
+        calls = []
+        try:
+            render_training_site.publish_v2_current_page = lambda: calls.append("v2")
+            render_training_site.run_legacy_parity_pipeline = lambda: calls.append("legacy")
+            self.assertEqual(main(), 0)
+        finally:
+            render_training_site.publish_v2_current_page = original_publish
+            render_training_site.run_legacy_parity_pipeline = original_legacy
+        self.assertEqual(calls, ["v2"])
+
+    def test_production_renderer_uses_stockholm_calendar_date(self):
         source = (SCRIPTS / "render_training_site.py").read_text(encoding="utf-8")
-        self.assertNotIn("render_v2_preview.py", PIPELINE)
-        self.assertIn('preview_script = ROOT / "scripts" / "render_v2_preview.py"', source)
-        self.assertLess(source.index("run_pipeline()"), source.index("preview_script ="))
+        self.assertIn('ZoneInfo("Europe/Stockholm")', source)
+        self.assertNotIn("date.today()", source)
 
     def test_pages_deploy_defers_stale_goal_state_without_failure(self):
         workflow = (REPO_ROOT / ".github" / "workflows" / "deploy-pages.yml").read_text(
