@@ -193,6 +193,10 @@ class SupabaseShadowModelTests(unittest.TestCase):
                 "m1:mc1:2026-09-25:run_3",
             },
         )
+        by_session = {row["session"]: row for row in rows}
+        self.assertEqual(by_session["Simning"]["payload"]["same_day_order"], 0)
+        self.assertEqual(by_session["Styrka"]["payload"]["same_day_order"], 1)
+        self.assertEqual(by_session["Löpning"]["payload"]["same_day_order"], 2)
 
     def test_workout_inherits_cycle_context_from_plan_meta(self):
         plan = {
