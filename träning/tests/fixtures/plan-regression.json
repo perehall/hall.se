@@ -58,7 +58,44 @@
   "days": [
     {
       "date": "2026-08-31",
-      "label": "Måndag",
+      "label": "Måndag"
+    },
+    {
+      "date": "2026-09-01",
+      "label": "Tisdag"
+    },
+    {
+      "date": "2026-09-02",
+      "label": "Onsdag"
+    },
+    {
+      "date": "2026-09-03",
+      "label": "Torsdag"
+    },
+    {
+      "date": "2026-09-04",
+      "label": "Fredag"
+    },
+    {
+      "date": "2026-09-05",
+      "label": "Lördag"
+    },
+    {
+      "date": "2026-09-06",
+      "label": "Söndag"
+    }
+  ],
+  "strength_template": [
+    "Liten dos explosivitet/plyometri när omkringliggande belastning tillåter.",
+    "Bulgarian split squat som huvudalternativ för unilateral benstyrka.",
+    "Marklyft eller RDL som normal höftdominant huvudövning.",
+    "Vad + soleus regelbundet.",
+    "Enarmsrodd + press som huvuddrag/press.",
+    "Välj två bålövningar; låt inte accessoarer tränga undan huvudstyrkan."
+  ],
+  "planned_workouts": [
+    {
+      "date": "2026-08-31",
       "status": "planned",
       "planning_status": "fixed",
       "session": "Enduroskola · fast tillfälle",
@@ -78,11 +115,11 @@
       "load_dimensions": [
         "technical",
         "neuromuscular"
-      ]
+      ],
+      "microcycle_slot": "fixed_enduro_school"
     },
     {
       "date": "2026-09-01",
-      "label": "Tisdag",
       "status": "preliminary",
       "session": "Löpning · kontrollerad tröskel · 3 × 8 min / 90 s jogg",
       "reason": "Mesocykelns första prioriterade löpstimulus. Aktuell mikrocykel väljer etablering, hold eller progression från den definierade utvecklingslinjen; kortsiktig ändring kräver sakligt stöd i faktisk närbelastning eller återhämtning.",
@@ -162,7 +199,6 @@
     },
     {
       "date": "2026-09-02",
-      "label": "Onsdag",
       "status": "conditional",
       "session": "Simning · aerob/teknik · 3 200 m · ca 60 min · alternativ: Swimrun · Jogersö Extreme · 1 varv",
       "swim_equipment": {
@@ -268,11 +304,11 @@
       "alternative_sports": [
         "swimrun"
       ],
-      "decision_note": "Swimrun är ett ersättningsalternativ, inte ett extra pass. Om det genomförs används den faktiska belastningen som kontrollpunkt för torsdagens MTB; fredagens backkvalitet skyddas."
+      "decision_note": "Swimrun är ett ersättningsalternativ, inte ett extra pass. Om det genomförs används den faktiska belastningen som kontrollpunkt för torsdagens MTB; fredagens backkvalitet skyddas.",
+      "microcycle_slot": "swim_support_1"
     },
     {
       "date": "2026-09-03",
-      "label": "Torsdag",
       "status": "conditional",
       "session": "MTB/XC · 45 min · teknik + lugn aerob stig",
       "reason": "MTB/XC är fortsatt utvecklingsprioritet. Grundplanen är 60 minuter lugn teknisk stig. Om onsdagen blir Swimrun på Jogersö används dess faktiska belastning som kontrollpunkt och MTB-passet kortas eller tas bort endast om återhämtningen eller benkänslan ger sakliga skäl, för att skydda fredagens prioriterade löpkvalitet.",
@@ -332,7 +368,6 @@
     },
     {
       "date": "2026-09-04",
-      "label": "Fredag",
       "status": "conditional",
       "session": "Löpning · backkvalitet · 15 min lugnt + 2 × 6 × 150 m / lugn joggvila + 10 min lugnt",
       "reason": "Mesocykelns andra prioriterade löpkvalitet: kraft, löpekonomi och mekanisk kvalitet. 2 × 6 × 150 m är demonstrerat kapacitetsgolv; aktuell mikrocykel väljer nästa utvecklingssteg. Regression kräver ett explicit närbelastningsskäl.",
@@ -437,18 +472,15 @@
     },
     {
       "date": "2026-09-05",
-      "label": "Lördag",
       "status": "conditional",
-      "session": "Simning · 3 200 m · aerob/teknik + styrka/core · 25 min · styrkemall",
-      "reason": "Lördagen används som dubbel lågkostnads-/stöddag: en etablerad 3 200 m aerob/teknisk simexponering för att hålla simfrekvensen uppe samt reducerad styrka/core. Simningen ger liten mekanisk kostnad för benen; styrkan hålls kort eftersom dagen ligger mellan fredagens backkvalitet och söndagens lugna distans. Fredagens faktiska utfall är kontrollpunkt.",
+      "session": "Styrka/core · 25 min · styrkemall",
+      "reason": "Skyddad styrka/core mellan fredagens backkvalitet och söndagens lugna distans. Dosen hålls kort och kontrollerad; faktisk belastning styr om den behöver reduceras.",
       "sport": "strength",
-      "development_focus": "Simning: teknisk kvalitet och stabil aerob rytm utan tröskeljakt. Styrka: kontrollerad unilateral styrka, höftdominant arbete, drag/press och bål; plyometri endast om benen är mekaniskt fräscha.",
+      "development_focus": "Kontrollerad unilateral styrka, höftdominant arbete, drag/press och bål; plyometri endast om benen är mekaniskt fräscha.",
       "priority_role": "protected_support",
       "stimuli": [
         "strength_unilateral",
-        "strength_core",
-        "swim_aerobic",
-        "swim_technique"
+        "strength_core"
       ],
       "mesocycle_id": "run-threshold-hill-4w",
       "microcycle_id": "run-threshold-hill-4w:mc2",
@@ -461,9 +493,7 @@
       ],
       "load_dimensions": [
         "mechanical",
-        "neuromuscular",
-        "cardiovascular",
-        "technical"
+        "neuromuscular"
       ],
       "dose_options": [
         {
@@ -489,17 +519,39 @@
         "option_id": "strength-support-25"
       },
       "performance_marker_id": "strength-repeatability",
-      "original_session": "Simning · 3 200 m · aerob/teknik + styrka/core · 25 min · styrkemall",
+      "original_session": "Styrka/core · 35 min · styrkemall",
       "auto_coach": {
         "action": "reduce",
         "reason": "Skydda mesocykelns prioriterade backkvalitet och absorberbarheten efter flera tunga dagar.",
         "applied_at_utc": "2026-09-04T20:44:01.639345+00:00"
       },
-      "coach_adjustment": "Skala ned passet. Gör lördagens skyddade styrka+sim som planerat men i reducerad styrkedos (styrka 25 min) och håll simningen aerob/teknisk; undvik plyometri. Behåll simens 3 200 m-struktur men håll intensiteten kontrollerad."
+      "coach_adjustment": "Reducerad skyddsdos: styrka/core 25 min; undvik plyometri om benen inte är mekaniskt fräscha."
+    },
+    {
+      "date": "2026-09-05",
+      "status": "conditional",
+      "planning_status": "planned",
+      "session": "Simning · 3 200 m · aerob/teknik",
+      "reason": "Separat aerob/teknisk simexponering med låg mekanisk kostnad för benen.",
+      "development_focus": "Teknisk kvalitet och stabil aerob rytm utan tröskeljakt.",
+      "sport": "swim",
+      "priority_role": "flex",
+      "stimuli": [
+        "swim_aerobic",
+        "swim_technique"
+      ],
+      "mesocycle_id": "run-threshold-hill-4w",
+      "microcycle_id": "run-threshold-hill-4w:mc2",
+      "microcycle_index": 2,
+      "microcycle_day": 6,
+      "microcycle_slot": "swim_support_2",
+      "load_dimensions": [
+        "cardiovascular",
+        "technical"
+      ]
     },
     {
       "date": "2026-09-06",
-      "label": "Söndag",
       "status": "preliminary",
       "session": "Löpning · lugn distans · 75 min",
       "reason": "Blockets tredje löpstimulus bygger tålighet och kontinuitet utan att bli ytterligare kvalitet. Grundplanen är 75 minuter lugnt; fredag–lördagens faktiska utfall kan motivera kortare pass, flytt eller vila.",
@@ -542,13 +594,5 @@
         }
       ]
     }
-  ],
-  "strength_template": [
-    "Liten dos explosivitet/plyometri när omkringliggande belastning tillåter.",
-    "Bulgarian split squat som huvudalternativ för unilateral benstyrka.",
-    "Marklyft eller RDL som normal höftdominant huvudövning.",
-    "Vad + soleus regelbundet.",
-    "Enarmsrodd + press som huvuddrag/press.",
-    "Välj två bålövningar; låt inte accessoarer tränga undan huvudstyrkan."
   ]
 }
