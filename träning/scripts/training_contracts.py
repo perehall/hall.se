@@ -10,7 +10,8 @@ VALID_DAY_STATUSES = {"completed", "planned", "preliminary", "conditional", "ope
 VALID_PLANNING_STATUSES = {"fixed", "planned", "preliminary", "open"}
 VALID_CLASSIFICATIONS = {"training", "recreation"}
 VALID_PLAN_RELATIONS = {"separate"}
-VALID_PLAN_SPORTS = {"run", "swim", "bike", "strength", "enduro", "swimrun", "rest", "open"}
+VALID_PLAN_SPORTS = {"run", "swim", "bike", "strength", "enduro", "swimrun", "multisport", "rest", "open"}
+VALID_COMPONENT_SPORTS = {"run", "swim", "bike", "strength", "enduro", "swimrun"}
 VALID_WORKOUT_STEP_KINDS = {"swim", "rest", "lap_rest"}
 VALID_COACH_ACTIONS = {"keep", "reduce", "rest", "review"}
 VALID_CONFIDENCE = {"low", "medium", "high"}
@@ -204,6 +205,102 @@ def validate_plan_document(document, *, upcoming=False):
         if "watch_workout" in day:
             validate_watch_workout(day["watch_workout"], f"{context}.watch_workout")
         _validate_baseline_dose_contract(day, context)
+
+    planned_workouts = document.get("planned_workouts")
+    if planned_workouts is not None:
+        require(
+            isinstance(planned_workouts, list),
+            "plan.planned_workouts måste vara lista när fältet finns",
+        )
+        seen_workout_ids = set()
+        for index, workout in enumerate(planned_workouts):
+            context = f"plan.planned_workouts[{index}]"
+            require(isinstance(workout, dict), f"{context}: måste vara objekt")
+            workout_date = _iso_date(workout.get("date"), f"{context}.date")
+            require(
+                start <= workout_date <= end,
+                f"{context}.date ligger utanför kalenderveckan",
+            )
+            _nonempty_string(workout.get("session"), f"{context}.session")
+            sport = workout.get("sport")
+            require(
+                sport in VALID_PLAN_SPORTS - {"rest", "open"},
+                f"{context}: ogiltig fysisk sport {sport!r}",
+            )
+            require(
+                workout.get("status") in VALID_DAY_STATUSES,
+                f"{context}: ogiltig status {workout.get('status')!r}",
+            )
+            if upcoming:
+                require(
+                    workout.get("planning_status") in VALID_PLANNING_STATUSES,
+                    f"{context}: ogiltig planning_status",
+                )
+            if "classification" in workout:
+                require(
+                    workout.get("classification") in VALID_CLASSIFICATIONS,
+                    f"{context}: ogiltig classification",
+                )
+
+            slot = str(workout.get("microcycle_slot") or "").strip()
+            explicit_key = str(workout.get("workout_key") or "").strip()
+            identity = explicit_key or (
+                f"{workout_date.isoformat()}:{slot}" if slot else ""
+            )
+            require(
+                bool(identity),
+                f"{context}: workout_key eller microcycle_slot krävs för stabil passidentitet",
+            )
+            require(
+                identity not in seen_workout_ids,
+                f"{context}: dubblerad passidentitet {identity!r}",
+            )
+            seen_workout_ids.add(identity)
+
+            components = workout.get("components") or workout.get("workout_components")
+            if components is not None:
+                require(
+                    isinstance(components, list) and components,
+                    f"{context}.components måste vara en icke-tom lista",
+                )
+                orders = []
+                for component_index, component in enumerate(components):
+                    component_context = f"{context}.components[{component_index}]"
+                    require(
+                        isinstance(component, dict),
+                        f"{component_context}: måste vara objekt",
+                    )
+                    component_sport = str(component.get("sport") or "").strip()
+                    require(
+                        component_sport in VALID_COMPONENT_SPORTS,
+                        f"{component_context}.sport ogiltig: {component_sport!r}",
+                    )
+                    order = component.get("order", component_index + 1)
+                    require(
+                        isinstance(order, int) and order > 0,
+                        f"{component_context}.order måste vara positivt heltal",
+                    )
+                    orders.append(order)
+                require(
+                    len(orders) == len(set(orders)),
+                    f"{context}.components har dubblerad ordning",
+                )
+                if sport == "multisport":
+                    require(
+                        len(components) >= 2,
+                        f"{context}: multisport kräver minst två komponenter",
+                    )
+            elif sport == "multisport":
+                raise TrainingContractError(
+                    f"{context}: multisport kräver explicita components"
+                )
+
+            if "watch_workout" in workout:
+                validate_watch_workout(
+                    workout["watch_workout"],
+                    f"{context}.watch_workout",
+                )
+            _validate_baseline_dose_contract(workout, context)
 
     if upcoming:
         require(document.get("state") == "preliminary", "upcoming plan: state måste vara 'preliminary'")
