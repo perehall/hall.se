@@ -21,6 +21,24 @@ from weekly_review_ui import insert_review_after_dashboard  # noqa: E402
 
 
 def sample_plan():
+    dates = [
+        ("2026-08-17", "Måndag"),
+        ("2026-08-18", "Tisdag"),
+        ("2026-08-19", "Onsdag"),
+        ("2026-08-20", "Torsdag"),
+        ("2026-08-21", "Fredag"),
+        ("2026-08-22", "Lördag"),
+        ("2026-08-23", "Söndag"),
+    ]
+    workouts = [
+        {"workout_key": "w-swim-1", "date": "2026-08-17", "status": "completed", "sport": "swim", "session": "Simning", "reason": "Genomfört."},
+        {"workout_key": "w-strength-1", "date": "2026-08-18", "status": "completed", "sport": "strength", "session": "Styrka", "reason": "Genomfört."},
+        {"workout_key": "w-swimrun-1", "date": "2026-08-19", "status": "completed", "sport": "swimrun", "session": "Swimrun", "reason": "Genomfört."},
+        {"workout_key": "w-run-1", "date": "2026-08-20", "status": "completed", "sport": "run", "session": "Tröskel", "reason": "Kontrollerat."},
+        {"workout_key": "w-swim-2", "date": "2026-08-21", "status": "completed", "sport": "swim", "session": "Simning", "reason": "Genomfört."},
+        {"workout_key": "w-enduro-1", "date": "2026-08-22", "status": "completed", "sport": "enduro", "classification": "recreation", "session": "Enduro", "reason": "Lätt rekreation."},
+        {"workout_key": "w-run-2", "date": "2026-08-23", "status": "preliminary", "sport": "run", "session": "Trail", "reason": "Preliminärt."},
+    ]
     return {
         "schema_version": 3,
         "meta": {
@@ -31,15 +49,8 @@ def sample_plan():
             "title": "Testvecka",
             "principle": "Kontinuitet.",
         },
-        "days": [
-            {"date": "2026-08-17", "label": "Måndag", "status": "completed", "sport": "swim", "session": "Simning", "reason": "Genomfört."},
-            {"date": "2026-08-18", "label": "Tisdag", "status": "completed", "sport": "strength", "session": "Styrka", "reason": "Genomfört."},
-            {"date": "2026-08-19", "label": "Onsdag", "status": "completed", "sport": "swimrun", "session": "Swimrun", "reason": "Genomfört."},
-            {"date": "2026-08-20", "label": "Torsdag", "status": "completed", "sport": "run", "session": "Tröskel", "reason": "Kontrollerat."},
-            {"date": "2026-08-21", "label": "Fredag", "status": "completed", "sport": "swim", "session": "Simning", "reason": "Genomfört."},
-            {"date": "2026-08-22", "label": "Lördag", "status": "completed", "sport": "enduro", "classification": "recreation", "session": "Enduro", "reason": "Lätt rekreation."},
-            {"date": "2026-08-23", "label": "Söndag", "status": "preliminary", "sport": "run", "session": "Trail", "reason": "Preliminärt."},
-        ],
+        "days": [{"date": value, "label": label} for value, label in dates],
+        "planned_workouts": workouts,
     }
 
 
