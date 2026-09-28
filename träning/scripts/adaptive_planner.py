@@ -47,7 +47,7 @@ MODEL = os.environ.get("OPENAI_MODEL", "gpt-5-mini")
 MESO_SCHEMA_VERSION = 1
 MICRO_SCHEMA_VERSION = 1
 PLANNER_REVISION = 5
-MICRO_PLANNER_REVISION = 8
+MICRO_PLANNER_REVISION = 9
 
 CAPABILITY_TO_RECIPE = {
     "run_threshold": "run_threshold",
@@ -93,10 +93,9 @@ PRIMARY_CAPABILITIES_WITH_EXECUTABLE_RECIPES = {
     "swim_technique",
     "swim_threshold",
 }
-SUPPORT_ONLY_RECIPES = {"strength_core", "swim_strength"}
-DEPRECATED_COMPOSITE_RECIPES = {"swim_strength"}
+SUPPORT_ONLY_RECIPES = {"strength_core"}
 RUN_STRESS_RECIPES = {"run_threshold", "run_hill_quality", "run_easy_distance"}
-DAY_AFTER_ENDURO_BLOCKED_RECIPES = RUN_STRESS_RECIPES | {"mtb_technical", "swim_strength", "strength_core"}
+DAY_AFTER_ENDURO_BLOCKED_RECIPES = RUN_STRESS_RECIPES | {"mtb_technical", "strength_core"}
 
 
 def load_json(path: Path, fallback):
@@ -867,7 +866,6 @@ def fallback_microcycle(meso, policy, catalog, target_start, completed_context=N
         "run_hill_quality": [5, 6, 7, 4, 3] if fixed_enduro else [4, 5, 6, 7, 3, 2, 1],
         "run_easy_distance": [7, 6, 5, 4, 3] if fixed_enduro else [7, 6, 5, 4, 3, 2, 1],
         "mtb_technical": [6, 7, 4, 5, 3] if fixed_enduro else [6, 7, 4, 5, 3, 2, 1],
-        "swim_strength": [5, 6, 4, 3, 7, 2] if fixed_enduro else [5, 6, 4, 3, 7, 2, 1],
         "strength_core": [5, 6, 4, 3, 7, 2] if fixed_enduro else [5, 6, 4, 3, 7, 2, 1],
     }
 
@@ -1133,11 +1131,6 @@ def microcycle_guard_failures(result, meso, policy, catalog, target_start, compl
         if recipe_key not in recipes:
             failures.append(f"slot[{index}] använder okänt recipe_key {recipe_key!r}")
             continue
-        if recipe_key in DEPRECATED_COMPOSITE_RECIPES:
-            failures.append(
-                f"{recipe_key} är ett utfasat kombinationsrecept; separata fysiska pass måste vara separata slots"
-            )
-            continue
         valid_rows.append(row)
 
     minimum = max(0, 4 - completed_slot_days)
@@ -1181,7 +1174,7 @@ def microcycle_guard_failures(result, meso, policy, catalog, target_start, compl
             )
         if (
             completed_strength >= 1
-            and recipe_key in {"swim_strength", "strength_core"}
+            and recipe_key == "strength_core"
             and not {"strength_unilateral", "strength_core"}.intersection(primaries)
         ):
             failures.append(
@@ -1363,11 +1356,7 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
             system,
             source_payload,
             microcycle_schema(
-                sorted(
-                    key
-                    for key in catalog["recipes"]
-                    if key not in DEPRECATED_COMPOSITE_RECIPES
-                )
+                sorted(catalog["recipes"])
             ),
             "microcycle_decision",
             request_fn=request_fn,
@@ -1396,11 +1385,7 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
                     system + " Detta är ett reparationsförsök efter deterministisk guard; varje angivet fel måste lösas.",
                     repair_payload,
                     microcycle_schema(
-                        sorted(
-                            key
-                            for key in catalog["recipes"]
-                            if key not in DEPRECATED_COMPOSITE_RECIPES
-                        )
+                        sorted(catalog["recipes"])
                     ),
                     "microcycle_decision_repair",
                     request_fn=request_fn,
@@ -1512,7 +1497,7 @@ def demonstrated_value(recipe_key, athlete_state):
             if isinstance(item.get("distance_m"), (int, float))
         ]
         return max(values) if values else None
-    if recipe_key in {"strength_core", "swim_strength"}:
+    if recipe_key == "strength_core":
         value = ((facts.get("strength_unilateral") or {}).get("longest_duration") or {}).get("elapsed_time_s")
         return float(value) / 60.0 if isinstance(value, (int, float)) else None
     return None

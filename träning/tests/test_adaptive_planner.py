@@ -555,7 +555,6 @@ class AdaptivePlanningTests(unittest.TestCase):
         )
         recipes = [row["recipe_key"] for row in result["slots"]]
         self.assertNotIn("run_threshold", recipes)
-        self.assertNotIn("swim_strength", recipes)
         self.assertEqual(recipes.count("swim_aerobic_technique"), 2)
         self.assertIn("run_easy_distance", recipes)
         self.assertFalse(
@@ -592,15 +591,15 @@ class AdaptivePlanningTests(unittest.TestCase):
         )
         self.assertFalse(any("flera pass" in item for item in failures))
 
-    def test_deprecated_composite_recipe_is_rejected(self):
+    def test_unknown_recipe_is_rejected_generically(self):
         meso = {
             "primary_capabilities": ["swim_aerobic", "swim_technique"],
             "secondary_capabilities": [],
         }
         proposal = {
-            "rationale": "legacy",
+            "rationale": "invalid recipe",
             "slots": [
-                {"day_index": 3, "recipe_key": "swim_strength", "action": "establish", "rationale": "legacy", "evidence_refs": []},
+                {"day_index": 3, "recipe_key": "unknown_recipe", "action": "establish", "rationale": "invalid", "evidence_refs": []},
                 {"day_index": 5, "recipe_key": "swim_aerobic_technique", "action": "establish", "rationale": "sim", "evidence_refs": []},
                 {"day_index": 6, "recipe_key": "run_easy_distance", "action": "consolidate", "rationale": "distans", "evidence_refs": []},
                 {"day_index": 7, "recipe_key": "strength_core", "action": "establish", "rationale": "styrka", "evidence_refs": []},
@@ -613,7 +612,7 @@ class AdaptivePlanningTests(unittest.TestCase):
             self.catalog,
             date(2026, 9, 21),
         )
-        self.assertTrue(any("utfasat kombinationsrecept" in item for item in failures))
+        self.assertTrue(any("okänt recipe_key" in item for item in failures))
 
     def test_day_after_fixed_enduro_rejects_run_or_mtb_load(self):
         rows = [
@@ -702,7 +701,7 @@ class AdaptivePlanningTests(unittest.TestCase):
             "end_date": "2026-10-18",
             "goal_hash": goal_hash(self.goal),
         }
-        self.assertEqual(MICRO_PLANNER_REVISION, 8)
+        self.assertEqual(MICRO_PLANNER_REVISION, 9)
         stale_micro = {
             "planner_revision": 6,
             "week_start": "2026-09-28",
@@ -821,7 +820,6 @@ class AdaptivePlanningTests(unittest.TestCase):
         recipes = [row["recipe_key"] for row in normalized["slots"]]
         self.assertIn("swim_aerobic_technique", recipes)
         self.assertIn("strength_core", recipes)
-        self.assertNotIn("swim_strength", recipes)
 
     def test_generated_strategy_is_contract_valid_and_traceable(self):
         meso = fallback_mesocycle(self.goal, self.policy, {})

@@ -31,6 +31,7 @@ from coach_rules import (
     workout_key,
 )
 from strategy_contracts import validate_training_strategy
+from calendar_projection import refresh_calendar_projection
 from wellness_context import signature_payload, validate_context
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -578,63 +579,14 @@ def validate_dose_option_action(plan, action, today_local):
 
 
 def _refresh_legacy_day_projection(plan, target_date, fallback=None):
-    """Keep the 7-row calendar cache coherent without making it authoritative."""
+    """Refresh the compatibility calendar cache from canonical workouts."""
     if plan.get("planned_workouts") is None:
         return
-    calendar_day = next(
-        (day for day in plan.get("days") or [] if day.get("date") == target_date),
-        None,
+    refresh_calendar_projection(
+        plan,
+        target_date=target_date,
+        fallback=fallback,
     )
-    if calendar_day is None:
-        return
-    candidates = [
-        workout
-        for workout in plan.get("planned_workouts") or []
-        if workout.get("date") == target_date
-        and workout.get("sport") not in {"open", "rest"}
-    ]
-    source = candidates[0] if candidates else fallback
-    if not source:
-        return
-
-    label = calendar_day.get("label")
-    for field in (
-        "status",
-        "planning_status",
-        "session",
-        "reason",
-        "development_focus",
-        "sport",
-        "classification",
-        "manual_lock",
-        "priority_role",
-        "stimuli",
-        "load_dimensions",
-        "mesocycle_id",
-        "microcycle_id",
-        "microcycle_index",
-        "microcycle_day",
-        "microcycle_slot",
-        "dose_options",
-        "baseline_option_id",
-        "dose_resolution",
-        "dose_open",
-        "workout_design",
-        "device_workout",
-        "device_sync",
-        "watch_workout",
-        "swim_equipment",
-        "coach_adjustment",
-        "auto_coach",
-        "original_session",
-    ):
-        if field in source:
-            calendar_day[field] = deepcopy(source[field])
-        else:
-            calendar_day.pop(field, None)
-    if label is not None:
-        calendar_day["label"] = label
-    calendar_day["date"] = target_date
 
 
 def apply_conservative_action(plan, action, *, now_utc=None):
