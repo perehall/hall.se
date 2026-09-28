@@ -133,6 +133,7 @@ def fixed_enduro_school_day(day_date, label="Måndag"):
 
 
 def seed_fixed_commitments(week_document):
+    planned_workouts = week_document.get("planned_workouts")
     for index, day in enumerate(week_document.get("days") or []):
         day_date = date.fromisoformat(day["date"])
         if is_enduro_school_date(day_date):
@@ -145,7 +146,24 @@ def seed_fixed_commitments(week_document):
             ):
                 if day.get(field) is not None:
                     fixed[field] = day[field]
+            fixed["microcycle_slot"] = "fixed_enduro_school"
             week_document["days"][index] = fixed
+
+            if isinstance(planned_workouts, list):
+                planned_workouts[:] = [
+                    workout
+                    for workout in planned_workouts
+                    if workout.get("date") != day_date.isoformat()
+                    or workout.get("microcycle_slot") != "fixed_enduro_school"
+                ]
+                planned_workouts.append(deepcopy(fixed))
+    if isinstance(planned_workouts, list):
+        planned_workouts.sort(
+            key=lambda workout: (
+                str(workout.get("date") or ""),
+                str(workout.get("microcycle_slot") or ""),
+            )
+        )
     return week_document
 
 
