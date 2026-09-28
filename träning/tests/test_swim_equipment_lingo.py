@@ -82,12 +82,12 @@ class SwimEquipmentLingoTests(unittest.TestCase):
         )
 
     def test_catalog_recipe_refresh_reaches_started_week_without_replanning(self):
-        stale = {
-            "days": [
-                {
-                    "date": "2026-09-25",
-                    "sport": "swim",
-                    "baseline_option_id": "swim-4000",
+        planned = {
+            "date": "2026-09-25",
+            "status": "planned",
+            "session": "Simning · 4 000 m",
+            "sport": "swim",
+            "baseline_option_id": "swim-4000",
                     "dose_resolution": {"option_id": "swim-4000"},
                     "dose_options": [
                         {
@@ -108,12 +108,23 @@ class SwimEquipmentLingoTests(unittest.TestCase):
                         "planned_distance_m": 4000,
                         "blocks": [],
                     },
+        }
+        stale = {
+            "days": [
+                {
+                    "date": "2026-09-25",
+                    "label": "Fredag",
+                    "status": "planned",
+                    "sport": "swim",
+                    "session": "Stale cache",
                 }
-            ]
+            ],
+            "planned_workouts": [planned],
         }
         catalog = {
             "recipes": {
                 "swim": {
+                    "sport": "swim",
                     "options": [
                         {
                             "id": "swim-4000",
@@ -142,16 +153,19 @@ class SwimEquipmentLingoTests(unittest.TestCase):
         }
 
         refreshed = refresh_swim_recipes(stale, catalog)
+        workout = refreshed["planned_workouts"][0]
         day = refreshed["days"][0]
-        step = day["dose_options"][0]["watch_workout"]["blocks"][0]["steps"][0]
+        step = workout["dose_options"][0]["watch_workout"]["blocks"][0]["steps"][0]
         self.assertEqual(step["equipment"], ["paddles", "pull_buoy"])
-        self.assertEqual(day["watch_workout"]["id"], "dated-workout-id")
-        self.assertFalse(day["watch_workout"]["sync_enabled"])
+        self.assertEqual(workout["watch_workout"]["id"], "dated-workout-id")
+        self.assertFalse(workout["watch_workout"]["sync_enabled"])
         self.assertEqual(
-            day["swim_equipment"]["planned"],
+            workout["swim_equipment"]["planned"],
             ["paddles", "pull_buoy"],
         )
 
+        self.assertEqual(day["session"], workout["session"])
+        self.assertEqual(day["watch_workout"]["id"], "dated-workout-id")
 
 if __name__ == "__main__":
     unittest.main()
