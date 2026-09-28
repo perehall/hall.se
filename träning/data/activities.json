@@ -1,10 +1,10 @@
 {
-  "last_sync_utc": "2026-09-28T19:02:04.491463+00:00",
+  "last_sync_utc": "2026-09-28T19:07:31.483608+00:00",
   "schema_version": 2,
   "activity_semantics": {
     "changed_ids": [],
     "schema_version": 1,
-    "overrides_applied": 21,
+    "overrides_applied": 22,
     "auto_rules_applied": 11,
     "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
     "override_ids_present": [
@@ -28,7 +28,8 @@
       "20337309419",
       "20337767421",
       "20350203020",
-      "20367593813"
+      "20367593813",
+      "20368346174"
     ],
     "workout_analysis_contract_version": 3
   },
@@ -51,12 +52,17 @@
       "sport_type": "WeightTraining",
       "start_date": "2026-09-28T18:09:00Z",
       "device_name": "Garmin Forerunner 970",
+      "user_report": "Palloff-press 10x3 på resp.sida , latsdrag med band 15x3, bulgarian splits 8x3, atomics med TRX, bänkrodd 12x3, dead bug, reverse plank RPE 6/10. Känsla: Pigg.",
       "average_watts": null,
+      "display_label": "WeightTraining",
       "max_heartrate": 116.0,
       "moving_time_s": 2212,
+      "classification": "training",
       "elapsed_time_s": 2212,
       "start_date_local": "2026-09-28T20:09:00Z",
       "average_heartrate": 80.0,
+      "source_sport_type": "WeightTraining",
+      "classification_reason": "Explicit GUI-input från användaren ska behandlas som förstaklassdata i analys och fortsatt planering.",
       "total_elevation_gain_m": 0,
       "weighted_average_watts": null,
       "workout_analysis_context": {
@@ -74,9 +80,9 @@
         "enduro": null,
         "sport_type": "WeightTraining",
         "activity_id": 20368346174,
-        "user_report": "",
+        "user_report": "Palloff-press 10x3 på resp.sida , latsdrag med band 15x3, bulgarian splits 8x3, atomics med TRX, bänkrodd 12x3, dead bug, reverse plank RPE 6/10. Känsla: Pigg.",
         "display_label": "WeightTraining",
-        "classification": null,
+        "classification": "training",
         "contract_version": 3,
         "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },
