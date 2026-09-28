@@ -104,11 +104,7 @@ def planned_workouts(plan):
             continue
         if workout.get("sport") in {"open", "rest"}:
             continue
-        item = workout
-        key = workout_key(item, meta)
-        if key and not item.get("workout_key"):
-            item["workout_key"] = key
-        result.append(item)
+        result.append(workout)
     return result
 
 
@@ -577,8 +573,102 @@ def plan_for_coach(plan, activities):
     return result, fulfilled_dates
 
 
-def validate_plan_action(action, allowed_dates):
+def target_workout(plan, action):
+    """Resolve exactly one physical workout for an action.
+
+    workout_key is authoritative. Date-only targeting is accepted only for a
+    legacy/single-workout date. Ambiguity always fails closed.
+    """
+    target_key = str(action.get("target_workout_key") or "").strip()
+    target_date = str(action.get("target_date") or "").strip()
+    rows = planned_workouts(plan)
+
+    if target_key:
+        matches = [
+            workout
+            for workout in rows
+            if workout_key(workout, plan.get("meta") or {}) == target_key
+        ]
+        if len(matches) != 1:
+            raise RuntimeError(
+                f"AI coach: target_workout_key {target_key!r} matchar {len(matches)} pass"
+            )
+        if target_date and str(matches[0].get("date") or "") != target_date:
+            raise RuntimeError(
+                "AI coach: target_workout_key och target_date pekar på olika pass"
+            )
+        return matches[0]
+
+    if not target_date:
+        return None
+    matches = [
+        workout
+        for workout in rows
+        if str(workout.get("date") or "") == target_date
+        and workout.get("status") != "completed"
+    ]
+    if len(matches) == 1:
+        return matches[0]
+    if len(matches) > 1:
+        raise RuntimeError(
+            f"AI coach: {target_date} har {len(matches)} möjliga målpass; target_workout_key krävs"
+        )
+    return None
+
+
+def normalize_target_workout(action, allowed_workouts):
+    """Attach a deterministic workout key when date-only output is unambiguous."""
+    normalized = dict(action)
+    kind = normalized.get("action")
+    target_date = str(normalized.get("target_date") or "").strip()
+    target_key = str(normalized.get("target_workout_key") or "").strip()
+
+    if kind not in {"keep", "reduce", "rest"} or not target_date:
+        normalized["target_workout_key"] = target_key if target_date else ""
+        return normalized
+
+    candidates = [
+        item for item in allowed_workouts
+        if str(item.get("date") or "") == target_date
+    ]
+    if target_key:
+        if any(item.get("workout_key") == target_key for item in candidates):
+            return normalized
+        normalized["action"] = "review"
+        normalized["target_date"] = ""
+        normalized["target_workout_key"] = ""
+        normalized["dose_option_id"] = ""
+        normalized["reason"] = (
+            "Det angivna målpasset finns inte bland de beslutsmogna passen."
+        )
+        normalized["recommendation"] = (
+            "Behåll nuvarande plan; ingen automatisk ändring görs."
+        )
+        normalized["requires_approval"] = False
+        return normalized
+
+    if len(candidates) == 1:
+        normalized["target_workout_key"] = candidates[0]["workout_key"]
+        return normalized
+
+    if len(candidates) > 1:
+        normalized["action"] = "review"
+        normalized["target_date"] = ""
+        normalized["target_workout_key"] = ""
+        normalized["dose_option_id"] = ""
+        normalized["reason"] = (
+            "Flera separata pass ligger samma dag och modellens råd anger inte vilket pass som avses."
+        )
+        normalized["recommendation"] = (
+            "Behåll passen oförändrade tills ett specifikt målpass kan identifieras."
+        )
+        normalized["requires_approval"] = False
+    return normalized
+
+
+def validate_plan_action(action, allowed_dates, allowed_workouts=None):
     target = str(action.get("target_date") or "").strip()
+    target_key = str(action.get("target_workout_key") or "").strip()
     kind = action.get("action")
     allowed = set(allowed_dates)
 
@@ -586,8 +676,42 @@ def validate_plan_action(action, allowed_dates):
         raise RuntimeError(
             f"AI coach: förbjudet target_date {target!r}; tillåtna datum är {sorted(allowed)!r}"
         )
+
+    if allowed_workouts is not None:
+        by_key = {
+            str(item.get("workout_key") or ""): item
+            for item in allowed_workouts
+            if str(item.get("workout_key") or "")
+        }
+        if target_key and target_key not in by_key:
+            raise RuntimeError(
+                f"AI coach: förbjudet target_workout_key {target_key!r}"
+            )
+        if target_key and target and str(by_key[target_key].get("date") or "") != target:
+            raise RuntimeError(
+                "AI coach: target_workout_key matchar inte target_date"
+            )
+        same_day = [
+            item for item in allowed_workouts
+            if str(item.get("date") or "") == target
+        ]
+        if target and kind in {"keep", "reduce", "rest"} and len(same_day) > 1 and not target_key:
+            raise RuntimeError(
+                "AI coach: flera målpass finns samma datum; target_workout_key krävs"
+            )
+
     if kind in {"reduce", "rest"} and not target:
         raise RuntimeError(f"AI coach: action {kind!r} kräver ett tillåtet target_date")
+    if kind in {"reduce", "rest"} and allowed_workouts is not None and not target_key:
+        same_day = [
+            item for item in allowed_workouts
+            if str(item.get("date") or "") == target
+        ]
+        if len(same_day) == 1:
+            # normalize_target_workout should normally have filled this already.
+            raise RuntimeError(
+                "AI coach: automatisk passändring kräver target_workout_key"
+            )
     return action
 
 
