@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import unittest
+from datetime import date, timedelta
 from pathlib import Path
 
 SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
@@ -12,6 +13,7 @@ from rollover_week import promote_upcoming  # noqa: E402
 
 class WeekTransitionSemanticsTests(unittest.TestCase):
     def test_vague_training_fails_closed_but_fixed_enduro_school_stays_concrete(self):
+        start = date(2026, 8, 24)
         upcoming = {
             "state": "preliminary",
             "week_key": "2026-W35",
@@ -26,18 +28,28 @@ class WeekTransitionSemanticsTests(unittest.TestCase):
             },
             "days": [
                 {
+                    "date": (start + timedelta(days=index)).isoformat(),
+                    "label": f"Dag {index + 1}",
+                }
+                for index in range(7)
+            ],
+            "planned_workouts": [
+                {
+                    "workout_key": "enduro-fixed",
+                    "microcycle_slot": "fixed_enduro_school",
                     "date": "2026-08-24",
-                    "label": "Måndag",
                     "status": "planned",
                     "planning_status": "fixed",
                     "sport": "enduro",
                     "classification": "training",
+                    "manual_lock": True,
                     "session": "Enduroskola",
                     "reason": "Fast kalenderaktivitet och faktisk träningsbelastning.",
                 },
                 {
+                    "workout_key": "strength-vague",
+                    "microcycle_slot": "strength-core",
                     "date": "2026-08-25",
-                    "label": "Tisdag",
                     "status": "preliminary",
                     "planning_status": "preliminary",
                     "sport": "strength",
@@ -49,31 +61,34 @@ class WeekTransitionSemanticsTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "saknar konkret grundplan"):
             promote_upcoming(upcoming)
 
-        fixed_only = {**upcoming, "days": [upcoming["days"][0]]}
+        fixed_only = {
+            **upcoming,
+            "planned_workouts": [upcoming["planned_workouts"][0]],
+        }
         promoted = promote_upcoming(fixed_only)
-        self.assertEqual(promoted["days"][0]["status"], "planned")
-        self.assertEqual(promoted["days"][0]["classification"], "training")
-        self.assertNotIn("dose_open", promoted["days"][0])
-        self.assertIn("Enduroskola", promoted["days"][0]["session"])
+        workout = promoted["planned_workouts"][0]
+        self.assertEqual(workout["status"], "planned")
+        self.assertEqual(workout["classification"], "training")
+        self.assertNotIn("dose_open", workout)
+        self.assertIn("Enduroskola", workout["session"])
 
-    def test_coach_cannot_target_open_or_recreation_days(self):
+    def test_coach_cannot_target_recreation_workouts(self):
         plan = {
-            "days": [
+            "planned_workouts": [
                 {
+                    "workout_key": "enduro-recreation",
                     "date": "2026-08-24",
                     "status": "planned",
                     "sport": "enduro",
                     "classification": "recreation",
+                    "session": "Enduro",
                 },
                 {
-                    "date": "2026-08-25",
-                    "status": "open",
-                    "sport": "strength",
-                },
-                {
+                    "workout_key": "run-1",
                     "date": "2026-08-26",
                     "status": "planned",
                     "sport": "run",
+                    "session": "Löpning",
                 },
             ]
         }
