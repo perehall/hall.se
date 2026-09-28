@@ -10,6 +10,7 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from coach_rules import activity_local_date, fulfilled_plan_workouts, planned_workouts, workout_key
+from openai_usage import log_openai_usage
 from week_review_contracts import (
     REVIEW_CONTRACT_VERSION,
     REVIEW_SCHEMA_VERSION,
@@ -286,7 +287,9 @@ def request_openai(body, api_key=None):
         method="POST",
     )
     with urllib.request.urlopen(request, timeout=120) as response:
-        return json.load(response)
+        result = json.load(response)
+    log_openai_usage("weekly_review", result, body)
+    return result
 
 
 def call_openai(system_prompt, input_data, *, request_fn=None, sleep_fn=None, model=None):
