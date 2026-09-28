@@ -16,7 +16,11 @@ from training_core.presentation.manual_activity import (
     manual_activities_for_day,
 )
 from training_core.presentation.public_copy import public_reason
-from training_core.presentation.prescription import prescription_lines
+from training_core.presentation.prescription import (
+    PrescriptionRow,
+    prescription_lines,
+    prescription_rows,
+)
 from training_core.presentation.sport_identity import (
     activity_icon_key,
     planned_icon_keys,
@@ -88,6 +92,7 @@ class PlannedWorkoutReadModel:
     icon_keys: tuple[str, ...]
     component_sports: tuple[str, ...]
     prescription: tuple[str, ...]
+    prescription_rows: tuple[PrescriptionRow, ...]
     reason: str
     development_focus: str
     device_sync: DeviceSyncReadModel | None
@@ -187,6 +192,7 @@ def _workout_read_model(
         icon_keys=planned_icon_keys(sport=workout.sport, payload=workout.payload),
         component_sports=tuple(component.sport for component in workout.components),
         prescription=_prescription_lines(workout),
+        prescription_rows=prescription_rows(workout.payload or {}),
         reason=public_reason(workout.reason),
         development_focus=workout.development_focus,
         device_sync=build_device_sync_read_model(workout.payload, completed=completed),
