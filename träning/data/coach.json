@@ -4,6 +4,53 @@
       "model": "gpt-5-mini",
       "assessment": {
         "facts": [
+          "Enduro: 15,16 km · 1:38:12 · 478 m+ · snittpuls 118,2 · maxpuls 149.",
+          "Användarrapport: Teknikpass. Stalp och timing. RPE 4/10. Känsla: Pigg.",
+          "Planstatus 2026-09-28: dagen är markerad genomförd i coachens beslutsunderlag."
+        ],
+        "summary": "Enduropasset omfattade 1:38:12 totalt och 478 m+; det räknas som faktisk teknisk och mekanisk träningsbelastning inför nästa prioriterade pass.",
+        "unknowns": [
+          "Subsequent 24–72h subjektiv svar (ömhet/trötta ben) okänt trots pigg samma dag.",
+          "Eventuella mekaniska skador eller lokala muskelsmärtor som påverkar styrka/löpning inte rapporterade"
+        ],
+        "confidence": "medium",
+        "interpretations": [
+          "Passet gav avsett tekniskt stimulus utan hög fysiologisk kostnad samma dag, vilket stöder att det fyllde 'enduro_technical'-slotten.",
+          "Eftersom enduron räknas som faktisk extern belastning bör närmaste planerade benkvaliteter beaktas (sim nästa dag är lågmekanisk och prioriterad)."
+        ],
+        "load_interpretation": "För Enduro används hela 1:38:12 som tidsomfattning; Stravas rörelsetid 1:06:06 och snittpuls 118 beskriver inte den tekniska/mekaniska belastningen ensamma."
+      },
+      "auto_apply": {
+        "note": "Ingen automatisk planändring.",
+        "applied": false
+      },
+      "activity_id": 20367593813,
+      "plan_action": {
+        "action": "keep",
+        "reason": "Enduro var tekniskt och lågintensivt (RPE 4) och mesocykelprioriteringen skyddar morgondagens simning som lågmekanisk exponering.",
+        "target_date": "2026-09-29",
+        "dose_option_id": "",
+        "recommendation": "Behåll planerad simning 2026-09-29 (3 200 m, aerob/teknik) som planerat; håll insatsen kontrollerad och avboka eller skala ner endast om du känner oväntad lokal trötthet eller smärta innan simpasset.",
+        "requires_approval": false,
+        "target_workout_key": "20260921-swim_aerobic-swim_technique-run_threshold:mc2:2026-09-29:swim_aerobic_technique_1"
+      },
+      "activity_date": "2026-09-28",
+      "activity_name": "Enduro på eftermiddagen",
+      "generated_at_utc": "2026-09-28T19:42:52.507979+00:00",
+      "analysis_contract": {
+        "pipeline_version": 4,
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
+        "analysis_code_sha256": "ebbfcd52b5f4fc408bf4da097e31c59abeb6d749b094ec62f431222cf9b2449b",
+        "plan_comparison_version": 3,
+        "workout_context_version": 3
+      },
+      "performance_marker_id": null,
+      "performance_protocol_key": null
+    },
+    {
+      "model": "gpt-5-mini",
+      "assessment": {
+        "facts": [
           "TrailRun: 13,46 km · 1:20:04 · 198 m+ · snittpuls 130,8 · maxpuls 144.",
           "Användarrapport: Var väldigt sliten så gick ut väldigt lugnt, försökte hålla pulsen runt 130BPM men tempot under 6min/km. Vaknade till och kunde kört dubbla distansen med den ansträngningen RPE 4/10. Känsla: Tunga ben.",
           "Planstatus 2026-09-27: dagen är markerad genomförd i coachens beslutsunderlag.",
@@ -1275,43 +1322,44 @@
       "generated_at_utc": "2026-08-31T18:10:59.820818+00:00",
       "performance_marker_id": null,
       "performance_protocol_key": null
-    },
-    {
-      "model": "gpt-5-mini",
-      "assessment": {
-        "facts": [
-          "Simning · aerob + tröskel: 4,00 km · 1:14:59 · snittpuls 129,7 · maxpuls 157.",
-          "Användarrapport: Spontant simpass: Aerob+tröskel 4K, 4 000 m. Passet är separat från dagens planerade MTB-pass och ska räknas som faktisk träningsbelastning, inte som genomförande av dagens plan."
-        ],
-        "summary": "Simningen genomfördes: 4 000 m på 1:14:59.",
-        "unknowns": [
-          "Setstruktur kunde inte verifieras från passdata."
-        ],
-        "confidence": "medium",
-        "interpretations": [],
-        "load_interpretation": "Ingen setbaserad slutsats används för planändring."
-      },
-      "auto_apply": {
-        "note": "Ingen automatisk planändring.",
-        "applied": false
-      },
-      "activity_id": 19946705399,
-      "plan_action": {
-        "action": "keep",
-        "reason": "Veckan absorberas bäst genom att behålla söndagens lugna löp enligt mikrocykel och skydda mesocykelns löpstimulus.",
-        "target_date": "2026-08-30",
-        "dose_option_id": "",
-        "recommendation": "Gör Löpning · lugn distans · 75 min: 75 min lugn distans; håll intensiteten lätt och avbryt eller korta ner om benen känns tunga.",
-        "requires_approval": false
-      },
-      "activity_date": "2026-08-29",
-      "activity_name": "Simning vid lunch",
-      "generated_at_utc": "2026-08-30T09:19:51.776072+00:00"
     }
   ],
-  "last_run_utc": "2026-09-27T19:32:25.487510+00:00",
-  "contract_version": 15,
-  "last_trigger_hash": null,
+  "last_run_utc": "2026-09-28T19:42:52.507979+00:00",
+  "contract_version": 16,
+  "last_trigger_hash": "537cb431c92f46a61bdda494bdfa9c06192e27633f88a5c7caa04902cd2adfc3",
+  "analysed_activity_ids": [
+    "20367593813",
+    "20350203020",
+    "20337309419",
+    "20326850936",
+    "20314473143",
+    "20300494236",
+    "20284663236",
+    "20272196080",
+    "20254486837",
+    "20239623463",
+    "20229568713",
+    "20218282169",
+    "20203770266",
+    "20188628588",
+    "20175536586",
+    "20175917270",
+    "20157600319",
+    "20153873263",
+    "20144331562",
+    "20133500464",
+    "20120769386",
+    "20106458579",
+    "20079150228",
+    "20078705519",
+    "20057585521",
+    "20047602146",
+    "20024236347",
+    "20008258969",
+    "19994118756",
+    "19960743008"
+  ],
+  "analysis_ledger_version": 1,
   "output_contract_version": 19,
-  "pipeline_contract_version": 3
+  "pipeline_contract_version": 4
 }
