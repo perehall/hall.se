@@ -1,80 +1,8 @@
 #!/usr/bin/env python3
-import subprocess
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-REPO_ROOT = ROOT.parent
-
-# Canonical deterministic rendering order. CI and production must call this
-# same pipeline instead of maintaining separate lists of finalizers.
-LEGACY_PARITY_PIPELINE = (
-    "apply_plan_overrides.py",
-    "enforce_coach_output_contract.py",
-    "normalize_coach_language.py",
-    "finalize_canonical_coach_facts.py",
-    "build.py",
-    "finalize_dashboard.py",
-    "finalize_dashboard_ui.py",
-    "finalize_activity_labels.py",
-    "finalize_yoda_ui.py",
-    "archive_weeks.py",
-    "finalize_week_review_ui.py",
-    "build_upcoming_week.py",
-    "finalize_header_ui.py",
-    "finalize_navigation_ui.py",
-    "finalize_training_brain_ui.py",
-    "finalize_relative_next_ui.py",
-    "finalize_progression_ui.py",
-    "finalize_sport_icons.py",
-    "finalize_day_session_icons.py",
-    "finalize_workout_history.py",
-    "finalize_signal_ui.py",
-    "finalize_device_sync_ui.py",
-    "finalize_historical_coach_ui.py",
-    "finalize_week_activity_insights.py",
-    "finalize_user_report_ui.py",
-    "finalize_week_status_ui.py",
-    "finalize_post_workout_ui.py",
-    "finalize_training_input_ui.py",
-    "finalize_human_training_language.py",
-    "finalize_completed_workout_truth.py",
-    "finalize_completed_sport_icon.py",
-    "finalize_coach_clarity_ui.py",
-    "finalize_card_v2_ui.py",
-    "build_home.py",
-    "finalize_goal_link_layout.py",
-    "publish_goal_cache_bypass.py",
-    "finalize_week_shell_ui.py",
-    "finalize_backend_status_ui.py",
-    "finalize_quiet_performance_ui.py",
-    "finalize_quiet_performance_v2_ui.py",
-    "finalize_upcoming_workout_shell_ui.py",
-    "finalize_completed_day_summary_ui.py",
-    "finalize_top_overview_ui.py",
-    "finalize_rest_day_language.py",
-    "finalize_training_timeline_ui.py",
-    "finalize_week_navigation_ui.py",
-    "finalize_week_page_consistency_ui.py",
-    "finalize_all_week_pass_icons.py",
-    "finalize_generated_whitespace.py",
-    "check_week_reviews.py",
-    "check_week_review_ui.py",
-    "validate_site_contracts.py",
-    "validate_training_data.py",
-)
-
-
-def run_legacy_parity_pipeline(*, runner=None):
-    runner = runner or subprocess.run
-    for index, script_name in enumerate(LEGACY_PARITY_PIPELINE, start=1):
-        script = ROOT / "scripts" / script_name
-        if not script.exists():
-            raise RuntimeError(f"Render pipeline: script saknas: {script_name}")
-        print(f"PIPELINE_STAGE_START {index}/{len(LEGACY_PARITY_PIPELINE)} {script_name}", flush=True)
-        runner([sys.executable, str(script)], check=True, cwd=REPO_ROOT)
-        print(f"PIPELINE_STAGE_OK {index}/{len(LEGACY_PARITY_PIPELINE)} {script_name}", flush=True)
-    print(f"Render pipeline OK: {len(LEGACY_PARITY_PIPELINE)} deterministiska steg.")
 
 
 def cutover_contract_ready():
@@ -84,14 +12,8 @@ def cutover_contract_ready():
     return cutover_ready()
 
 
-def publish_v2_preview():
-    preview_script = ROOT / "scripts" / "render_v2_preview.py"
-    subprocess.run([sys.executable, str(preview_script)], check=True, cwd=REPO_ROOT)
-
-
 def publish_v2_current_page():
-    # Production publishes v2 directly from canonical PostgreSQL state only
-    # after every user-visible cutover surface is explicitly migrated.
+    """Publish production directly from canonical PostgreSQL presentation state."""
     sys.path.insert(0, str(ROOT))
     from v2_presentation_probe import build_snapshot
     from training_core.presentation.renderer import render_document
@@ -100,6 +22,7 @@ def publish_v2_current_page():
 
     if not cutover_contract_ready():
         raise RuntimeError("V2 publication blocked by cutover contract")
+
     local_date = datetime.now(ZoneInfo("Europe/Stockholm")).date()
     snapshot = build_snapshot(local_date)
     document = render_document(snapshot)
@@ -111,21 +34,22 @@ def publish_v2_current_page():
     )
     missing = [marker for marker in required if marker not in document]
     if missing:
-        raise RuntimeError("V2 publication missing required structure: " + ", ".join(missing))
+        raise RuntimeError(
+            "V2 publication missing required structure: " + ", ".join(missing)
+        )
+
     target = ROOT / "index.html"
     target.write_text(document, encoding="utf-8")
-    print(f"V2_PUBLICATION_OK träning/index.html date={local_date.isoformat()}", flush=True)
+    print(
+        f"V2_PUBLICATION_OK träning/index.html date={local_date.isoformat()}",
+        flush=True,
+    )
 
 
 def main():
-    if cutover_contract_ready():
-        publish_v2_current_page()
-    else:
-        # Transitional safety path: preserve the human-approved production
-        # experience while the remaining v2 presentation surfaces are migrated.
-        run_legacy_parity_pipeline()
-        publish_v2_preview()
-        print("V2_CUTOVER_DEFERRED legacy production retained", flush=True)
+    # The v2 cutover is complete. Production must fail closed rather than
+    # falling back to legacy HTML mutators that can rewrite canonical state.
+    publish_v2_current_page()
     return 0
 
 
