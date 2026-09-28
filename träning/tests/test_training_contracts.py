@@ -212,6 +212,36 @@ class TrainingContractTests(unittest.TestCase):
         ]
         self.assertTrue(validate_plan_document(plan))
 
+    def test_physical_workout_slot_cannot_encode_component_subslots(self):
+        plan = valid_week()
+        plan["planned_workouts"] = [
+            {
+                "microcycle_slot": "combined-slot:component-a",
+                "date": "2026-08-26",
+                "session": "Pass A",
+                "sport": "run",
+                "status": "planned",
+            }
+        ]
+        with self.assertRaisesRegex(ContractError, "självständigt pass"):
+            validate_plan_document(plan)
+
+    def test_single_sport_workout_cannot_carry_cross_family_stimuli(self):
+        plan = valid_week()
+        plan["planned_workouts"] = [
+            {
+                "microcycle_slot": "swim-a",
+                "date": "2026-08-26",
+                "session": "Simning",
+                "sport": "swim",
+                "status": "planned",
+                "stimuli": ["swim_aerobic"],
+                "optional_stimuli": ["plyometric"],
+            }
+        ]
+        with self.assertRaisesRegex(ContractError, "andra sportfamiljer"):
+            validate_plan_document(plan)
+
     def test_multisport_brick_is_one_workout_with_ordered_components(self):
         plan = valid_week()
         plan["planned_workouts"] = [
