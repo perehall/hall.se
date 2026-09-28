@@ -477,27 +477,54 @@
         }
       },
       {
+        "slot": "swim_support_2",
+        "sport": "swim",
+        "priority_role": "flex",
+        "stimuli": [
+          "swim_aerobic",
+          "swim_technique"
+        ],
+        "session": "Simning · 3 200 m · aerob/teknik",
+        "reason": "Mikrocykelns andra självständiga simexponering; aerob/teknisk för låg mekanisk kostnad och utan att blandas med styrkepasset samma dag.",
+        "development_focus": "Teknisk kvalitet och stabil aerob simning.",
+        "day_index": 6,
+        "dose_options": [
+          {
+            "id": "swim-support-3200",
+            "kind": "structured",
+            "value": 3200,
+            "session": "Simning · 3 200 m · aerob/teknik",
+            "intent": "Etablerad simdistans från nyligen genomförda pass; exakt serie kan återanvändas när strukturen finns i underlaget."
+          }
+        ],
+        "baseline_option_id": "swim-support-3200",
+        "load_dimensions": [
+          "cardiovascular",
+          "technical"
+        ],
+        "progression_criteria": [
+          "Simningen är underhåll/långsam utveckling i denna mesocykel; ingen automatisk volymprogression krävs.",
+          "Teknisk kvalitet och låg konkurrens med prioriterad löpning väger tyngre än större mängd."
+        ]
+      },
+      {
         "slot": "strength_support",
         "sport": "strength",
         "priority_role": "protected_support",
         "stimuli": [
           "strength_unilateral",
-          "strength_core",
-          "swim_aerobic",
-          "swim_technique"
+          "strength_core"
         ],
         "optional_stimuli": [
           "plyometric"
         ],
-        "session": "Simning · 3 200 m · aerob/teknik + styrka/core · ca 35 min · styrkemall",
-        "reason": "Kombinerar mikrocykelns andra simexponering med skyddad styrka/core. Simningen är aerob/teknisk för låg mekanisk kostnad; styrkan förblir en egen skyddad kapacitet och reduceras eller flyttas om fredagens faktiska belastning motiverar det.",
-        "development_focus": "Simning: teknisk kvalitet och stabil aerob rytm. Styrka: kontrollerad unilateral styrka, höftdominant arbete, drag/press och bål; plyometri endast när benen är mekaniskt fräscha.",
+        "session": "Styrka/core · ca 35 min · styrkemall",
+        "reason": "Skyddad styrka/core som självständigt pass. Reduceras eller flyttas om faktisk närbelastning motiverar det.",
+        "development_focus": "Kontrollerad unilateral styrka, höftdominant arbete, drag/press och bål; plyometri endast när benen är mekaniskt fräscha.",
         "day_index": 6,
         "load_dimensions": [
           "mechanical",
-          "neuromuscular",
-          "cardiovascular",
-          "technical"
+          "neuromuscular"
         ],
         "performance_marker_id": "strength-repeatability",
         "dose_options": [
@@ -505,14 +532,14 @@
             "id": "strength-support-25",
             "kind": "duration_minutes",
             "value": 25,
-            "session": "Simning · 3 200 m · aerob/teknik + styrka/core · 25 min · styrkemall",
+            "session": "Styrka/core · 25 min · styrkemall",
             "intent": "Reducerad skyddsdos när närbelastningen kräver extra marginal."
           },
           {
             "id": "strength-support-35",
             "kind": "duration_minutes",
             "value": 35,
-            "session": "Simning · 3 200 m · aerob/teknik + styrka/core · ca 35 min · styrkemall",
+            "session": "Styrka/core · ca 35 min · styrkemall",
             "intent": "Normal kort styrka/core-exponering, förankrad i nyligen genomförd cirka 36-minutersstyrka."
           }
         ],
