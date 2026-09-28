@@ -438,9 +438,9 @@ def request_openai(body, api_key=None):
         method="POST",
     )
     with urllib.request.urlopen(req, timeout=120) as response:
-            result = json.load(response)
-        log_openai_usage("coach", result, body)
-        return result
+        result = json.load(response)
+    log_openai_usage("coach", result, body)
+    return result
 
 
 def parse_completed_response(response):
