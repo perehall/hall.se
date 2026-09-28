@@ -155,6 +155,36 @@ class IntervalsWorkoutSyncTests(unittest.TestCase):
         with self.assertRaises(sync.IntervalsSyncError):
             sync.verify_semantics(stored, workout)
 
+    def test_desired_workouts_reads_all_canonical_same_day_sessions(self):
+        first = run_day()
+        first["microcycle_slot"] = "run-a"
+        first["device_workout"] = compile_device_workout(first)
+        first["device_sync"] = {"status": "pending"}
+
+        second = run_day(hill=True)
+        second["microcycle_slot"] = "run-b"
+        second["device_workout"] = compile_device_workout(second)
+        second["device_sync"] = {"status": "pending"}
+
+        documents = {
+            "plan": {
+                "days": [first],
+                "planned_workouts": [first, second],
+            },
+            "upcoming": {"days": [], "planned_workouts": []},
+        }
+
+        desired = sync.desired_workouts(
+            documents,
+            "2026-09-15",
+            "2026-09-21",
+        )
+        self.assertEqual(len(desired), 2)
+        self.assertEqual(
+            len({workout["external_id"] for workout in desired}),
+            2,
+        )
+
     def test_reconcile_upserts_desired_deletes_stale_and_records_verified_transport(self):
         day = run_day()
         workout = compile_device_workout(day)
