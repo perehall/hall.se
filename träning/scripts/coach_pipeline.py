@@ -173,10 +173,10 @@ def normalize_invalid_dose_option_action(action, decision_plan):
     if not option_id or not target or kind not in {"keep", "reduce"}:
         return normalized
 
-    day = next(
-        (item for item in decision_plan.get("days") or [] if item.get("date") == target),
-        None,
-    )
+    try:
+        day = legacy.target_workout(decision_plan, normalized)
+    except RuntimeError:
+        day = None
     if not day:
         return normalized
 
@@ -190,6 +190,7 @@ def normalize_invalid_dose_option_action(action, decision_plan):
 
     normalized["action"] = "review"
     normalized["target_date"] = ""
+    normalized["target_workout_key"] = ""
     normalized["dose_option_id"] = ""
     normalized["reason"] = "Det valda dosalternativet matchar inte det planerade passet."
     normalized["recommendation"] = "Behåll nuvarande plan; ingen automatisk ändring görs."
@@ -197,7 +198,13 @@ def normalize_invalid_dose_option_action(action, decision_plan):
     return normalized
 
 
-def normalize_unapplicable_plan_action(action, decision_plan, ready_dates, local_date):
+def normalize_unapplicable_plan_action(
+    action,
+    decision_plan,
+    ready_dates,
+    ready_workouts,
+    local_date,
+):
     """Fail closed when model output cannot be applied safely.
 
     Structured model output is untrusted until the deterministic plan validators
@@ -206,7 +213,7 @@ def normalize_unapplicable_plan_action(action, decision_plan, ready_dates, local
     """
     normalized = dict(action)
     try:
-        legacy.validate_plan_action(normalized, ready_dates)
+        legacy.validate_plan_action(normalized, ready_dates, ready_workouts)
         legacy.validate_dose_option_action(decision_plan, normalized, local_date)
         return normalized
     except RuntimeError as exc:
@@ -217,6 +224,7 @@ def normalize_unapplicable_plan_action(action, decision_plan, ready_dates, local
 
     normalized["action"] = "review"
     normalized["target_date"] = ""
+    normalized["target_workout_key"] = ""
     normalized["dose_option_id"] = ""
     normalized["reason"] = (
         "Den föreslagna automatiska planändringen kunde inte kopplas entydigt "
@@ -229,7 +237,7 @@ def normalize_unapplicable_plan_action(action, decision_plan, ready_dates, local
     normalized["requires_approval"] = False
 
     # The fallback itself is deterministic and must satisfy the same contracts.
-    legacy.validate_plan_action(normalized, ready_dates)
+    legacy.validate_plan_action(normalized, ready_dates, ready_workouts)
     legacy.validate_dose_option_action(decision_plan, normalized, local_date)
     return normalized
 
@@ -316,8 +324,18 @@ def main():
         reverse=True,
     )[:10]
     coach_plan, fulfilled_dates = legacy.plan_for_coach(decision_plan, activities)
-    candidate_dates = legacy.allowed_target_dates(decision_plan, activities, local_date)
-    ready_dates = legacy.decision_ready_target_dates(decision_plan, activities, local_date)
+    candidate_workouts = legacy.allowed_target_workouts(
+        decision_plan, activities, local_date
+    )
+    ready_workouts = legacy.decision_ready_target_workouts(
+        decision_plan, activities, local_date
+    )
+    candidate_dates = list(
+        dict.fromkeys(item["date"] for item in candidate_workouts)
+    )
+    ready_dates = list(
+        dict.fromkeys(item["date"] for item in ready_workouts)
+    )
     deferred_dates = [date for date in candidate_dates if date not in ready_dates]
     remaining_dates = legacy.remaining_training_dates(decision_plan, activities, local_date)
 
@@ -333,6 +351,7 @@ def main():
         "private_wellness_context": wellness_context,
         "fulfilled_plan_dates": sorted(fulfilled_dates),
         "allowed_target_dates": ready_dates,
+        "allowed_target_workouts": ready_workouts,
         "deferred_target_dates": deferred_dates,
         "instruction": (
             "Analysera senaste passet utifrån latest_activity.workout_analysis_context som primärt faktalager. "
@@ -342,10 +361,12 @@ def main():
             "Om performance_context finns är dess arbetsintervall och jämförelsedelta deterministiska fakta: tolka dem, "
             "men rekonstruera eller ändra aldrig siffrorna. Skilj inom-pass-trend från jämförelse mot tidigare samma protokoll. "
             "private_wellness_context är privat och tillfälligt: använd det endast konservativt och återge aldrig råvärden eller källnamn. "
-            "Dagar i fulfilled_plan_dates är redan genomförda och får aldrig ordineras igen. target_date får endast väljas ur allowed_target_dates. "
+            "Dagar i fulfilled_plan_dates är helt genomförda och får aldrig ordineras igen. target_date får endast väljas ur allowed_target_dates. "
+            "target_workout_key ska peka på ett pass i allowed_target_workouts. Om flera separata pass ligger samma datum "
+            "måste exakt målpass anges; de får aldrig slås ihop till ett datumobjekt. "
             "Datum i deferred_target_dates är inte beslutsmogna och ska inte ändras nu. Om allowed_target_dates är tom ska target_date vara tomt. "
             "Föreslå endast konservativ automatisk ändring; allt som kan innebära ökad belastning ska vara review. "
-            "Om dose_option_id används måste id:t finnas i dose_options för exakt samma target_date; blanda aldrig dosalternativ mellan dagar. "
+            "Om dose_option_id används måste id:t finnas i dose_options för exakt samma target_workout_key; blanda aldrig dosalternativ mellan pass. "
             "Hitta aldrig på klockslag eller rapporteringsfönster för användarfeedback."
         ),
     }
@@ -393,6 +414,10 @@ def main():
         fulfilled_dates=fulfilled_dates,
         remaining_dates=remaining_dates,
     )
+    result["plan_action"] = legacy.normalize_target_workout(
+        result["plan_action"],
+        ready_workouts,
+    )
     result["plan_action"] = legacy.normalize_dose_option_field(result["plan_action"])
     result["plan_action"] = legacy.normalize_resolved_dose_reselection(
         decision_plan,
@@ -417,19 +442,34 @@ def main():
         result["plan_action"],
         decision_plan,
         ready_dates,
+        ready_workouts,
         local_date,
     )
     # Keep the strict validators after normalization as an invariant check.
-    legacy.validate_plan_action(result["plan_action"], ready_dates)
+    legacy.validate_plan_action(
+        result["plan_action"], ready_dates, ready_workouts
+    )
     legacy.validate_dose_option_action(decision_plan, result["plan_action"], local_date)
 
     target_date = str(result["plan_action"].get("target_date") or "")
+    target_key = str(result["plan_action"].get("target_workout_key") or "")
     target_plan = plan
     target_file = legacy.PLAN_FILE
-    if target_date and not any(day.get("date") == target_date for day in plan.get("days", [])):
-        if any(day.get("date") == target_date for day in upcoming.get("days", [])):
-            target_plan = upcoming
-            target_file = legacy.UPCOMING_FILE
+
+    def owns_target(document):
+        if target_key:
+            return any(
+                legacy.workout_key(item, document.get("meta") or {}) == target_key
+                for item in legacy.planned_workouts(document)
+            )
+        return any(
+            day.get("date") == target_date
+            for day in document.get("days", [])
+        )
+
+    if target_date and not owns_target(plan) and owns_target(upcoming):
+        target_plan = upcoming
+        target_file = legacy.UPCOMING_FILE
 
     changed, apply_note = legacy.apply_conservative_action(target_plan, result["plan_action"])
     if changed:
