@@ -272,14 +272,6 @@ def rolling_load_context(activities, plan, local_date, strategy):
                 workout_key(item, plan.get("meta") or {}),
             ),
         ),
-        # Compatibility alias. Semantically these are workouts, not unique days.
-        "planned_days": sorted(
-            planned,
-            key=lambda item: (
-                item.get("date") or "",
-                workout_key(item, plan.get("meta") or {}),
-            ),
-        ),
         "load_dimensions": load_model.get("dimensions") or [],
         "rules": load_model.get("rules") or [],
     }
