@@ -11,18 +11,15 @@
         "enduro_technical"
       ],
       "manual_lock": true,
-      "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
-      "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc3",
       "priority_role": "flex",
       "classification": "training",
-      "microcycle_day": 1,
       "workout_design": {
         "objective": {
           "stimuli": [
             "enduro_technical"
           ],
-          "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
-          "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc3",
+          "mesocycle_id": "",
+          "microcycle_id": "",
           "priority_role": "flex",
           "mesocycle_role": "external_load",
           "microcycle_slot": "fixed_enduro_school"
@@ -85,7 +82,6 @@
       },
       "microcycle_slot": "fixed_enduro_school",
       "planning_status": "fixed",
-      "microcycle_index": 3,
       "development_focus": "Teknisk kvalitet och avslappnad körning; faktisk belastning styr efterföljande pass."
     },
     {
@@ -797,341 +793,324 @@
     {
       "date": "2026-10-08",
       "label": "Torsdag",
-      "sport": "swim",
-      "reason": "Lägg en ren lågmekanisk simexponering som ett självständigt pass. Valet utgår från ett observerat värde 3200 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
+      "sport": "strength",
+      "reason": "Skydda styrka/core som ett självständigt pass; samlokalisera med simning endast när mikrocykelns belastningsordning motiverar det. Valet utgår från ett observerat värde 36.0167 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
       "status": "preliminary",
-      "session": "Simning · 3 200 m · aerob/teknik",
+      "session": "Styrka/core · ca 35 min · styrkemall",
       "stimuli": [
-        "swim_aerobic",
-        "swim_technique"
+        "strength_unilateral",
+        "strength_core"
       ],
       "dose_open": false,
       "dose_options": [
         {
-          "id": "swim-3200",
-          "kind": "structured",
-          "value": 3200,
-          "intent": "Kortare etablerad simexponering.",
-          "session": "Simning · 3 200 m · aerob/teknik",
-          "watch_workout": {
-            "name": "Aerob/teknik · kroppslinje och rotation · 3 200 m",
-            "type": "Swim",
-            "blocks": [
-              {
-                "name": "Insim",
-                "steps": [
-                  {
-                    "kind": "swim",
-                    "text": "Lugn insim",
-                    "equipment": [],
-                    "intensity": "warmup",
-                    "distance_m": 400
-                  }
-                ]
-              },
-              {
-                "name": "Kroppslinje och rotation",
-                "steps": [
-                  {
-                    "kind": "swim",
-                    "text": "Stabil linje, kontrollerad rotation",
-                    "equipment": [],
-                    "intensity": "active",
-                    "distance_m": 50
-                  },
-                  {
-                    "kind": "rest",
-                    "duration_s": 15
-                  }
-                ],
-                "repeat": 6
-              },
-              {
-                "name": "Aerob",
-                "steps": [
-                  {
-                    "kind": "swim",
-                    "text": "Stadigt aerob med stabil kroppslinje",
-                    "equipment": [],
-                    "intensity": "active",
-                    "distance_m": 500
-                  },
-                  {
-                    "kind": "rest",
-                    "duration_s": 30
-                  }
-                ],
-                "repeat": 4
-              },
-              {
-                "name": "Frekvens",
-                "steps": [
-                  {
-                    "kind": "swim",
-                    "text": "Avslappnad frekvens med bibehållen linje",
-                    "equipment": [],
-                    "intensity": "active",
-                    "distance_m": 50
-                  },
-                  {
-                    "kind": "rest",
-                    "duration_s": 15
-                  }
-                ],
-                "repeat": 6
-              },
-              {
-                "name": "Avsim",
-                "steps": [
-                  {
-                    "kind": "swim",
-                    "text": "Mycket lugnt avsim",
-                    "equipment": [],
-                    "intensity": "cooldown",
-                    "distance_m": 200
-                  }
-                ]
-              }
-            ],
-            "equipment": [],
-            "planned_distance_m": 3200
-          }
+          "id": "strength-25",
+          "kind": "duration_minutes",
+          "value": 25,
+          "intent": "Reducerad skyddsdos.",
+          "session": "Styrka/core · 25 min · styrkemall"
+        },
+        {
+          "id": "strength-35",
+          "kind": "duration_minutes",
+          "value": 35,
+          "intent": "Normal kort styrka/core-exponering.",
+          "session": "Styrka/core · ca 35 min · styrkemall"
+        },
+        {
+          "id": "strength-45",
+          "kind": "duration_minutes",
+          "value": 45,
+          "intent": "Utökad exponering när belastningen runt passet tillåter.",
+          "session": "Styrka/core · ca 45 min · styrkemall"
         }
       ],
       "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
       "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc3",
-      "priority_role": "anchor",
-      "watch_workout": {
-        "id": "swim-2026-w41-2026-10-08-swim_aerobic_technique_3",
-        "name": "Aerob/teknik · kroppslinje och rotation · 3 200 m",
-        "type": "Swim",
-        "blocks": [
-          {
-            "name": "Insim",
-            "steps": [
-              {
-                "kind": "swim",
-                "text": "Lugn insim",
-                "equipment": [],
-                "intensity": "warmup",
-                "distance_m": 400
-              }
-            ]
-          },
-          {
-            "name": "Kroppslinje och rotation",
-            "steps": [
-              {
-                "kind": "swim",
-                "text": "Stabil linje, kontrollerad rotation",
-                "equipment": [],
-                "intensity": "active",
-                "distance_m": 50
-              },
-              {
-                "kind": "rest",
-                "duration_s": 15
-              }
-            ],
-            "repeat": 6
-          },
-          {
-            "name": "Aerob",
-            "steps": [
-              {
-                "kind": "swim",
-                "text": "Stadigt aerob med stabil kroppslinje",
-                "equipment": [],
-                "intensity": "active",
-                "distance_m": 500
-              },
-              {
-                "kind": "rest",
-                "duration_s": 30
-              }
-            ],
-            "repeat": 4
-          },
-          {
-            "name": "Frekvens",
-            "steps": [
-              {
-                "kind": "swim",
-                "text": "Avslappnad frekvens med bibehållen linje",
-                "equipment": [],
-                "intensity": "active",
-                "distance_m": 50
-              },
-              {
-                "kind": "rest",
-                "duration_s": 15
-              }
-            ],
-            "repeat": 6
-          },
-          {
-            "name": "Avsim",
-            "steps": [
-              {
-                "kind": "swim",
-                "text": "Mycket lugnt avsim",
-                "equipment": [],
-                "intensity": "cooldown",
-                "distance_m": 200
-              }
-            ]
-          }
-        ],
-        "equipment": [],
-        "sync_enabled": false,
-        "planned_distance_m": 3200
-      },
+      "priority_role": "protected_support",
       "microcycle_day": 4,
-      "swim_equipment": {
-        "planned": []
-      },
       "workout_design": {
         "objective": {
           "stimuli": [
-            "swim_aerobic",
-            "swim_technique"
+            "strength_unilateral",
+            "strength_core"
           ],
           "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
           "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc3",
-          "priority_role": "anchor",
-          "mesocycle_role": "primary",
-          "microcycle_slot": "swim_aerobic_technique_3"
+          "priority_role": "protected_support",
+          "mesocycle_role": "protected_capacity",
+          "microcycle_slot": "strength_core_4"
         },
         "selection": {
           "method": "deterministic_constraint_scoring",
-          "reason_for_today": "Mikrocykelbeslutet valde establish och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
-          "preferred_dose_option_id": "swim-3200"
+          "reason_for_today": "Normal kort styrka/core-exponering.",
+          "preferred_dose_option_id": "strength-35"
         },
         "candidates": [
           {
-            "id": "swim-3200",
+            "id": "strength-35",
             "dose": {
-              "kind": "structured",
-              "value": 3200
+              "kind": "duration_minutes",
+              "value": 35
             },
             "score": {
               "basis": "deterministic_constraint_alignment",
-              "total": 100,
+              "total": 85,
               "breakdown": {
                 "mesocycle_alignment": 30,
                 "microcycle_alignment": 30,
                 "near_term_resolution": 10,
                 "progression_alignment": 15,
-                "prescription_specificity": 15
+                "prescription_specificity": 0
               }
             },
-            "intent": "Kortare etablerad simexponering.",
-            "session": "Simning · 3 200 m · aerob/teknik",
+            "intent": "Normal kort styrka/core-exponering.",
+            "session": "Styrka/core · ca 35 min · styrkemall",
             "stimuli": [
-              "swim_aerobic",
-              "swim_technique"
+              "strength_unilateral",
+              "strength_core"
             ],
             "prescription": {
               "blocks": [
                 {
-                  "name": "Insim",
+                  "name": "Tidsram",
                   "work": {
-                    "distance_m": 400,
-                    "repetitions": 1,
-                    "total_distance_m": 400
+                    "duration_s": 2100
                   },
-                  "equipment": [],
-                  "intensity": "warmup",
-                  "instruction": "Lugn insim"
+                  "intensity": "kontrollerad",
+                  "instruction": "Styrka/core inom vald tidsram"
                 },
                 {
-                  "name": "Kroppslinje och rotation",
-                  "work": {
-                    "distance_m": 50,
-                    "repetitions": 6,
-                    "total_distance_m": 300
-                  },
-                  "recovery": {
-                    "duration_s": 15
-                  },
-                  "equipment": [],
-                  "intensity": "active",
-                  "instruction": "Stabil linje, kontrollerad rotation"
+                  "name": "Styrkemall",
+                  "work": {},
+                  "intensity": "enligt styrkemall",
+                  "instruction": "Liten dos explosivitet/plyometri när omkringliggande belastning tillåter."
                 },
                 {
-                  "name": "Aerob",
-                  "work": {
-                    "distance_m": 500,
-                    "repetitions": 4,
-                    "total_distance_m": 2000
-                  },
-                  "recovery": {
-                    "duration_s": 30
-                  },
-                  "equipment": [],
-                  "intensity": "active",
-                  "instruction": "Stadigt aerob med stabil kroppslinje"
+                  "name": "Styrkemall",
+                  "work": {},
+                  "intensity": "enligt styrkemall",
+                  "instruction": "Bulgarian split squat som huvudalternativ för unilateral benstyrka."
                 },
                 {
-                  "name": "Frekvens",
-                  "work": {
-                    "distance_m": 50,
-                    "repetitions": 6,
-                    "total_distance_m": 300
-                  },
-                  "recovery": {
-                    "duration_s": 15
-                  },
-                  "equipment": [],
-                  "intensity": "active",
-                  "instruction": "Avslappnad frekvens med bibehållen linje"
+                  "name": "Styrkemall",
+                  "work": {},
+                  "intensity": "enligt styrkemall",
+                  "instruction": "Marklyft eller RDL som normal höftdominant huvudövning."
                 },
                 {
-                  "name": "Avsim",
-                  "work": {
-                    "distance_m": 200,
-                    "repetitions": 1,
-                    "total_distance_m": 200
-                  },
-                  "equipment": [],
-                  "intensity": "cooldown",
-                  "instruction": "Mycket lugnt avsim"
+                  "name": "Styrkemall",
+                  "work": {},
+                  "intensity": "enligt styrkemall",
+                  "instruction": "Vad + soleus regelbundet."
+                },
+                {
+                  "name": "Styrkemall",
+                  "work": {},
+                  "intensity": "enligt styrkemall",
+                  "instruction": "Enarmsrodd + press som huvuddrag/press."
+                },
+                {
+                  "name": "Styrkemall",
+                  "work": {},
+                  "intensity": "enligt styrkemall",
+                  "instruction": "Välj två bålövningar; låt inte accessoarer tränga undan huvudstyrkan."
                 }
               ],
-              "source": "watch_workout",
+              "source": "strength_template",
+              "missing": [
+                "exercise_sets_reps_load"
+              ],
               "executable": true,
-              "completeness": "full",
-              "total_distance_m": 3200
+              "completeness": "partial"
             },
-            "dose_option_id": "swim-3200"
+            "dose_option_id": "strength-35"
+          },
+          {
+            "id": "strength-25",
+            "dose": {
+              "kind": "duration_minutes",
+              "value": 25
+            },
+            "score": {
+              "basis": "deterministic_constraint_alignment",
+              "total": 55,
+              "breakdown": {
+                "mesocycle_alignment": 30,
+                "microcycle_alignment": 10,
+                "near_term_resolution": 0,
+                "progression_alignment": 15,
+                "prescription_specificity": 0
+              }
+            },
+            "intent": "Reducerad skyddsdos.",
+            "session": "Styrka/core · 25 min · styrkemall",
+            "stimuli": [
+              "strength_unilateral",
+              "strength_core"
+            ],
+            "prescription": {
+              "blocks": [
+                {
+                  "name": "Tidsram",
+                  "work": {
+                    "duration_s": 1500
+                  },
+                  "intensity": "kontrollerad",
+                  "instruction": "Styrka/core inom vald tidsram"
+                },
+                {
+                  "name": "Styrkemall",
+                  "work": {},
+                  "intensity": "enligt styrkemall",
+                  "instruction": "Liten dos explosivitet/plyometri när omkringliggande belastning tillåter."
+                },
+                {
+                  "name": "Styrkemall",
+                  "work": {},
+                  "intensity": "enligt styrkemall",
+                  "instruction": "Bulgarian split squat som huvudalternativ för unilateral benstyrka."
+                },
+                {
+                  "name": "Styrkemall",
+                  "work": {},
+                  "intensity": "enligt styrkemall",
+                  "instruction": "Marklyft eller RDL som normal höftdominant huvudövning."
+                },
+                {
+                  "name": "Styrkemall",
+                  "work": {},
+                  "intensity": "enligt styrkemall",
+                  "instruction": "Vad + soleus regelbundet."
+                },
+                {
+                  "name": "Styrkemall",
+                  "work": {},
+                  "intensity": "enligt styrkemall",
+                  "instruction": "Enarmsrodd + press som huvuddrag/press."
+                },
+                {
+                  "name": "Styrkemall",
+                  "work": {},
+                  "intensity": "enligt styrkemall",
+                  "instruction": "Välj två bålövningar; låt inte accessoarer tränga undan huvudstyrkan."
+                }
+              ],
+              "source": "strength_template",
+              "missing": [
+                "exercise_sets_reps_load"
+              ],
+              "executable": true,
+              "completeness": "partial"
+            },
+            "dose_option_id": "strength-25"
+          },
+          {
+            "id": "strength-45",
+            "dose": {
+              "kind": "duration_minutes",
+              "value": 45
+            },
+            "score": {
+              "basis": "deterministic_constraint_alignment",
+              "total": 55,
+              "breakdown": {
+                "mesocycle_alignment": 30,
+                "microcycle_alignment": 10,
+                "near_term_resolution": 0,
+                "progression_alignment": 15,
+                "prescription_specificity": 0
+              }
+            },
+            "intent": "Utökad exponering när belastningen runt passet tillåter.",
+            "session": "Styrka/core · ca 45 min · styrkemall",
+            "stimuli": [
+              "strength_unilateral",
+              "strength_core"
+            ],
+            "prescription": {
+              "blocks": [
+                {
+                  "name": "Tidsram",
+                  "work": {
+                    "duration_s": 2700
+                  },
+                  "intensity": "kontrollerad",
+                  "instruction": "Styrka/core inom vald tidsram"
+                },
+                {
+                  "name": "Styrkemall",
+                  "work": {},
+                  "intensity": "enligt styrkemall",
+                  "instruction": "Liten dos explosivitet/plyometri när omkringliggande belastning tillåter."
+                },
+                {
+                  "name": "Styrkemall",
+                  "work": {},
+                  "intensity": "enligt styrkemall",
+                  "instruction": "Bulgarian split squat som huvudalternativ för unilateral benstyrka."
+                },
+                {
+                  "name": "Styrkemall",
+                  "work": {},
+                  "intensity": "enligt styrkemall",
+                  "instruction": "Marklyft eller RDL som normal höftdominant huvudövning."
+                },
+                {
+                  "name": "Styrkemall",
+                  "work": {},
+                  "intensity": "enligt styrkemall",
+                  "instruction": "Vad + soleus regelbundet."
+                },
+                {
+                  "name": "Styrkemall",
+                  "work": {},
+                  "intensity": "enligt styrkemall",
+                  "instruction": "Enarmsrodd + press som huvuddrag/press."
+                },
+                {
+                  "name": "Styrkemall",
+                  "work": {},
+                  "intensity": "enligt styrkemall",
+                  "instruction": "Välj två bålövningar; låt inte accessoarer tränga undan huvudstyrkan."
+                }
+              ],
+              "source": "strength_template",
+              "missing": [
+                "exercise_sets_reps_load"
+              ],
+              "executable": true,
+              "completeness": "partial"
+            },
+            "dose_option_id": "strength-45"
           }
         ],
         "schema_version": 1,
         "near_term_context": {
           "load_dimensions": [
-            "cardiovascular",
-            "technical"
+            "mechanical",
+            "neuromuscular"
           ],
           "selection_uses_only_preapproved_doses": true
         },
-        "selected_candidate_id": "swim-3200",
+        "selected_candidate_id": "strength-35",
         "progression_from_previous": {
-          "reason": "Mikrocykelbeslutet valde establish och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
-          "relation": "hold",
-          "demonstrated_floor_option_id": "swim-3200"
+          "reason": "Normal kort styrka/core-exponering.",
+          "relation": "support",
+          "demonstrated_floor_option_id": ""
         }
       },
       "dose_resolution": {
-        "kind": "structured",
+        "kind": "duration_minutes",
         "state": "baseline",
-        "value": 3200,
-        "option_id": "swim-3200"
+        "value": 35,
+        "option_id": "strength-35"
       },
       "load_dimensions": [
-        "cardiovascular",
-        "technical"
+        "mechanical",
+        "neuromuscular"
       ],
-      "microcycle_slot": "swim_aerobic_technique_3",
+      "microcycle_slot": "strength_core_4",
       "planning_status": "preliminary",
       "development_step": {
         "reason": "Mikrocykelbeslutet valde establish och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
@@ -1140,8 +1119,8 @@
         "microcycle": 3
       },
       "microcycle_index": 3,
-      "development_focus": "Teknisk kvalitet och stabil aerob rytm; simningen ska kunna stödja helheten med låg mekanisk kostnad för benen.",
-      "baseline_option_id": "swim-3200",
+      "development_focus": "Kontrollerad unilateral benstyrka, höftdominant arbete och bål. Plyometri endast när benen är mekaniskt fräscha.",
+      "baseline_option_id": "strength-35",
       "development_progression": {
         "mode": "develop",
         "source": "athlete_state",
@@ -1156,7 +1135,44 @@
         "demonstrated_floor_option_id": "swim-3200",
         "same_dose_repeat_requires_reason": true
       },
-      "additional_planned_workouts": 1
+      "additional_planned_workouts": 1,
+      "device_workout": {
+        "date": "2026-10-08",
+        "name": "Styrka/core · ca 35 min · styrkemall",
+        "sport": "strength",
+        "blocks": [
+          {
+            "name": "Tidsram",
+            "sets": 1,
+            "steps": [
+              {
+                "kind": "work",
+                "duration": {
+                  "kind": "time",
+                  "seconds": 2100
+                },
+                "instruction": "Styrka/core inom vald tidsram",
+                "intensity_class": "active"
+              }
+            ],
+            "repetitions_per_set": 1
+          }
+        ],
+        "transport": "intervals_icu",
+        "external_id": "hall-device:2026-10-08:strength:strength_core_4",
+        "source_hash": "5df4a0d67eee409be2673cc74f8fdcd3b155ab9b1ded50be0512e397e1a2d3f8",
+        "detail_level": "duration_only",
+        "provider_type": "WeightTraining",
+        "target_policy": "explicit_single_primary_only",
+        "schema_version": 1,
+        "source_candidate_id": "strength-35"
+      },
+      "device_sync": {
+        "status": "deferred",
+        "transport": "intervals_icu",
+        "source_hash": "5df4a0d67eee409be2673cc74f8fdcd3b155ab9b1ded50be0512e397e1a2d3f8",
+        "device_delivery": "unverified"
+      }
     },
     {
       "date": "2026-10-09",
