@@ -2,7 +2,7 @@
 from datetime import date, timedelta
 import math
 
-from coach_rules import activity_local_date, matching_activity
+from coach_rules import activity_local_date, matching_activity, planned_workouts
 
 
 STATUS_LABELS = {
@@ -54,8 +54,17 @@ def _bool_setting(settings, key):
     return value is True
 
 
-def _day_by_date(plan, day_text):
-    return next((item for item in plan.get("days") or [] if item.get("date") == day_text), None)
+def _workouts_on_date(plan, day_text):
+    return [
+        workout
+        for workout in planned_workouts(plan)
+        if str(workout.get("date") or "") == day_text
+    ]
+
+
+def _single_workout_on_date(plan, day_text):
+    workouts = _workouts_on_date(plan, day_text)
+    return workouts[0] if len(workouts) == 1 else None
 
 
 def _nearby_plan_days(plan, today_date, *, before=0, after=0):
@@ -64,9 +73,8 @@ def _nearby_plan_days(plan, today_date, *, before=0, after=0):
         if offset == 0:
             continue
         day_date = today_date + timedelta(days=offset)
-        day = _day_by_date(plan, day_date.isoformat())
-        if day:
-            rows.append((offset, day))
+        for workout in _workouts_on_date(plan, day_date.isoformat()):
+            rows.append((offset, workout))
     return rows
 
 
@@ -93,7 +101,7 @@ def resolve_weather_advice(plan, activities, weather, settings, today):
     """
     today_date = today if isinstance(today, date) else date.fromisoformat(str(today))
     today_text = today_date.isoformat()
-    day = _day_by_date(plan, today_text)
+    day = _single_workout_on_date(plan, today_text)
     if not day or day_fulfilled(day, activities):
         return None
     if (weather or {}).get("status") != "ok":
@@ -200,82 +208,116 @@ def stimulus_labels(day, strategy):
 
 def resolve_today(plan, activities, strategy, today):
     today_text = today.isoformat() if isinstance(today, date) else str(today)
-    day = next((item for item in plan.get("days") or [] if item.get("date") == today_text), None)
-    if not day:
+    workouts = _workouts_on_date(plan, today_text)
+    if not workouts:
         return {
             "date": today_text,
-            "status": "UTANFÖR AKTUELL VECKA",
-            "headline": "Ingen aktiv dagsplan",
-            "why": "Den aktiva veckoplanen innehåller inte dagens datum.",
+            "status": "VILODAG",
+            "headline": "Ingen planerad träning",
+            "why": "Ingen fysisk workout är planerad på datumet.",
             "role": "",
             "stimuli": [],
             "fulfilled": False,
         }
 
-    fulfilled = day_fulfilled(day, activities)
-    status = "GENOMFÖRT" if fulfilled else STATUS_LABELS.get(day.get("status"), str(day.get("status") or "").upper())
-    headline = "Dagens plan är genomförd" if fulfilled else day.get("session") or "Ingen session"
-    if fulfilled:
-        activity = matching_activity(day, activities)
-        label = (
-            (activity or {}).get("display_label")
-            or (activity or {}).get("sport_type")
-            or "Aktivitet"
+    fulfilled_rows = [workout for workout in workouts if day_fulfilled(workout, activities)]
+    all_fulfilled = len(fulfilled_rows) == len(workouts)
+
+    if len(workouts) == 1:
+        workout = workouts[0]
+        fulfilled = bool(fulfilled_rows)
+        status = (
+            "GENOMFÖRT"
+            if fulfilled
+            else STATUS_LABELS.get(
+                workout.get("status"),
+                str(workout.get("status") or "").upper(),
+            )
         )
-        why = "Registrerat som dagens plan: " + str(label) + "."
-    else:
-        why = day.get("reason") or "Ingen motivering registrerad."
+        headline = (
+            "Dagens plan är genomförd"
+            if fulfilled
+            else workout.get("session") or "Ingen session"
+        )
+        if fulfilled:
+            activity = matching_activity(workout, activities)
+            label = (
+                (activity or {}).get("display_label")
+                or (activity or {}).get("sport_type")
+                or "Aktivitet"
+            )
+            why = "Registrerat som dagens plan: " + str(label) + "."
+        else:
+            why = workout.get("reason") or "Ingen motivering registrerad."
+        return {
+            "date": today_text,
+            "status": status,
+            "headline": headline,
+            "why": why,
+            "role": ROLE_LABELS.get(workout.get("priority_role"), ""),
+            "stimuli": stimulus_labels(workout, strategy),
+            "fulfilled": fulfilled,
+        }
 
     return {
         "date": today_text,
-        "status": status,
-        "headline": headline,
-        "why": why,
-        "role": ROLE_LABELS.get(day.get("priority_role"), ""),
-        "stimuli": stimulus_labels(day, strategy),
-        "fulfilled": fulfilled,
+        "status": "GENOMFÖRT" if all_fulfilled else "FLERA PASS",
+        "headline": f"{len(workouts)} planerade pass",
+        "why": " · ".join(str(workout.get("session") or "") for workout in workouts),
+        "role": "",
+        "stimuli": [
+            stimulus
+            for workout in workouts
+            for stimulus in stimulus_labels(workout, strategy)
+        ],
+        "fulfilled": all_fulfilled,
     }
 
 
 def resolve_next_decision(plan, activities, strategy, today):
-    """Return the chronologically next unfulfilled planned session.
-
-    Notes, conditional status and anchor priority describe that next session;
-    they must never cause the UI to skip an earlier planned session.
-    """
+    """Return the chronologically next unfulfilled physical workout."""
     today_date = today if isinstance(today, date) else date.fromisoformat(str(today))
     horizon_days = int((strategy.get("decision_policy") or {}).get("horizon_days") or 3)
     horizon_end = today_date + timedelta(days=horizon_days)
     future = []
-    for day in plan.get("days") or []:
+    for order, workout in enumerate(planned_workouts(plan)):
         try:
-            day_date = date.fromisoformat(day.get("date") or "")
+            workout_date = date.fromisoformat(str(workout.get("date") or ""))
         except ValueError:
             continue
-        if not (today_date < day_date <= horizon_end):
+        if not (today_date < workout_date <= horizon_end):
             continue
-        if day_fulfilled(day, activities):
+        if day_fulfilled(workout, activities):
             continue
-        if not str(day.get("session") or "").strip():
+        if not str(workout.get("session") or "").strip():
             continue
-        future.append((day_date, day))
+        future.append((workout_date, order, workout))
 
     if future:
-        day_date, day = min(future, key=lambda item: item[0])
-        if day.get("decision_note"):
-            note = day.get("decision_note")
-        elif day.get("status") == "conditional":
-            note = day.get("coach_adjustment") or (
+        workout_date, _order, workout = min(future, key=lambda item: (item[0], item[1]))
+        if workout.get("decision_note"):
+            note = workout.get("decision_note")
+        elif workout.get("status") == "conditional":
+            note = workout.get("coach_adjustment") or (
                 "Grundplanen finns kvar, men ny faktisk information har motiverat en uttrycklig villkorsmarkering."
             )
-        elif day.get("priority_role") == "anchor":
+        elif workout.get("priority_role") == "anchor":
             note = "Konkret grundplan. Ändra endast om ny belastning, återhämtning eller fasta åtaganden ger sakliga skäl."
         else:
             note = "Grundplanen ligger fast med nuvarande underlag."
+        weekday = (
+            "Måndag",
+            "Tisdag",
+            "Onsdag",
+            "Torsdag",
+            "Fredag",
+            "Lördag",
+            "Söndag",
+        )[workout_date.weekday()]
         return {
-            "date": day_date.isoformat(),
-            "label": day.get("label") or day_date.isoformat(),
-            "headline": day.get("session") or "Kommande pass",
+            "date": workout_date.isoformat(),
+            "label": workout.get("label") or weekday,
+            "headline": workout.get("session") or "Kommande pass",
             "note": note,
         }
 
