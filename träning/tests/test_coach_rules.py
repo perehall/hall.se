@@ -8,13 +8,17 @@ sys.path.insert(0, str(SCRIPTS))
 
 from coach_rules import (  # noqa: E402
     allowed_target_dates,
+    allowed_target_workouts,
     canonical_activity_fact,
     canonical_facts,
     decision_ready_target_dates,
+    decision_ready_target_workouts,
     fulfilled_plan_dates,
+    fulfilled_plan_workouts,
     normalize_assessment_confidence,
     normalize_deferred_future_action,
     normalize_no_remaining_plan,
+    normalize_target_workout,
     plan_for_coach,
     unresolved_intervening_dates,
     validate_plan_action,
@@ -43,6 +47,227 @@ class CoachRulesTests(unittest.TestCase):
 
         self.assertEqual(fulfilled_plan_dates(plan, activities), {"2026-08-23": 19862241646})
         self.assertEqual(allowed_target_dates(plan, activities, "2026-08-23"), [])
+
+    def test_one_of_two_same_day_workouts_can_be_fulfilled_independently(self):
+        plan = {
+            "planned_workouts": [
+                {
+                    "workout_key": "swim-1",
+                    "date": "2026-08-23",
+                    "status": "planned",
+                    "sport": "swim",
+                    "session": "Simning",
+                },
+                {
+                    "workout_key": "strength-1",
+                    "date": "2026-08-23",
+                    "status": "planned",
+                    "sport": "strength",
+                    "session": "Styrka",
+                },
+            ],
+            "days": [
+                {
+                    "date": "2026-08-23",
+                    "status": "planned",
+                    "sport": "swim",
+                    "session": "Simning",
+                }
+            ],
+        }
+        activities = [
+            {
+                "id": 1,
+                "sport_type": "Swim",
+                "start_date_local": "2026-08-23T08:00:00Z",
+            }
+        ]
+
+        self.assertEqual(
+            fulfilled_plan_workouts(plan, activities),
+            {"swim-1": (1,)},
+        )
+        self.assertEqual(fulfilled_plan_dates(plan, activities), {})
+        targets = allowed_target_workouts(plan, activities, "2026-08-23")
+        self.assertEqual(
+            [item["workout_key"] for item in targets],
+            ["strength-1"],
+        )
+
+    def test_two_different_same_day_workouts_can_both_be_fulfilled(self):
+        plan = {
+            "planned_workouts": [
+                {
+                    "workout_key": "run-1",
+                    "date": "2026-08-23",
+                    "status": "planned",
+                    "sport": "run",
+                    "session": "Löpning",
+                },
+                {
+                    "workout_key": "bike-1",
+                    "date": "2026-08-23",
+                    "status": "planned",
+                    "sport": "bike",
+                    "session": "MTB",
+                },
+            ],
+            "days": [
+                {
+                    "date": "2026-08-23",
+                    "status": "planned",
+                    "sport": "run",
+                    "session": "Löpning",
+                }
+            ],
+        }
+        activities = [
+            {
+                "id": 10,
+                "sport_type": "Run",
+                "start_date_local": "2026-08-23T08:00:00Z",
+            },
+            {
+                "id": 11,
+                "sport_type": "MountainBikeRide",
+                "start_date_local": "2026-08-23T17:00:00Z",
+            },
+        ]
+        fulfilled = fulfilled_plan_workouts(plan, activities)
+        self.assertEqual(fulfilled["run-1"], (10,))
+        self.assertEqual(fulfilled["bike-1"], (11,))
+        self.assertIn("2026-08-23", fulfilled_plan_dates(plan, activities))
+
+    def test_same_sport_same_day_matching_fails_closed_without_explicit_link(self):
+        plan = {
+            "planned_workouts": [
+                {
+                    "workout_key": "run-am",
+                    "date": "2026-08-23",
+                    "status": "planned",
+                    "sport": "run",
+                    "session": "Löpning 1",
+                },
+                {
+                    "workout_key": "run-pm",
+                    "date": "2026-08-23",
+                    "status": "planned",
+                    "sport": "run",
+                    "session": "Löpning 2",
+                },
+            ],
+            "days": [],
+        }
+        activities = [
+            {
+                "id": 20,
+                "sport_type": "Run",
+                "start_date_local": "2026-08-23T08:00:00Z",
+            },
+            {
+                "id": 21,
+                "sport_type": "Run",
+                "start_date_local": "2026-08-23T17:00:00Z",
+            },
+        ]
+        self.assertEqual(fulfilled_plan_workouts(plan, activities), {})
+        self.assertEqual(
+            {item["workout_key"] for item in allowed_target_workouts(plan, activities, "2026-08-23")},
+            {"run-am", "run-pm"},
+        )
+
+    def test_explicit_activity_link_resolves_same_sport_ambiguity(self):
+        plan = {
+            "planned_workouts": [
+                {
+                    "workout_key": "run-am",
+                    "date": "2026-08-23",
+                    "status": "planned",
+                    "sport": "run",
+                    "session": "Löpning 1",
+                    "activity_id": 20,
+                },
+                {
+                    "workout_key": "run-pm",
+                    "date": "2026-08-23",
+                    "status": "planned",
+                    "sport": "run",
+                    "session": "Löpning 2",
+                    "activity_id": 21,
+                },
+            ],
+            "days": [],
+        }
+        activities = [
+            {
+                "id": 20,
+                "sport_type": "Run",
+                "start_date_local": "2026-08-23T08:00:00Z",
+            },
+            {
+                "id": 21,
+                "sport_type": "Run",
+                "start_date_local": "2026-08-23T17:00:00Z",
+            },
+        ]
+        self.assertEqual(
+            fulfilled_plan_workouts(plan, activities),
+            {"run-am": (20,), "run-pm": (21,)},
+        )
+
+    def test_brick_requires_all_ordered_sport_components(self):
+        plan = {
+            "planned_workouts": [
+                {
+                    "workout_key": "brick-1",
+                    "date": "2026-08-23",
+                    "status": "planned",
+                    "sport": "multisport",
+                    "session": "Brick",
+                    "components": [
+                        {"order": 1, "sport": "bike"},
+                        {"order": 2, "sport": "run"},
+                    ],
+                }
+            ],
+            "days": [],
+        }
+        bike = {
+            "id": 30,
+            "sport_type": "Ride",
+            "start_date_local": "2026-08-23T08:00:00Z",
+        }
+        run = {
+            "id": 31,
+            "sport_type": "Run",
+            "start_date_local": "2026-08-23T09:30:00Z",
+        }
+        self.assertEqual(fulfilled_plan_workouts(plan, [bike]), {})
+        self.assertEqual(
+            fulfilled_plan_workouts(plan, [bike, run]),
+            {"brick-1": (30, 31)},
+        )
+
+    def test_date_only_action_is_neutralized_when_multiple_workouts_are_targets(self):
+        action = {
+            "action": "reduce",
+            "target_date": "2026-08-23",
+            "target_workout_key": "",
+            "dose_option_id": "",
+            "reason": "x",
+            "recommendation": "x",
+            "requires_approval": False,
+        }
+        normalized = normalize_target_workout(
+            action,
+            [
+                {"workout_key": "run-1", "date": "2026-08-23", "session": "Run", "sport": "run"},
+                {"workout_key": "bike-1", "date": "2026-08-23", "session": "Bike", "sport": "bike"},
+            ],
+        )
+        self.assertEqual(normalized["action"], "review")
+        self.assertEqual(normalized["target_date"], "")
+        self.assertEqual(normalized["target_workout_key"], "")
 
     def test_session_wording_is_not_used_as_sport_source(self):
         plan = {
