@@ -198,7 +198,7 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
 
   <section id="saved" class="saved">
     <div class="check">✓</div><h1>Profilen är sparad.</h1>
-    <p class="lead" style="margin-left:auto;margin-right:auto">Coachmotorn har fått de nya ramarna och omplanering är köad. Du kan när som helst gå tillbaka hit och ändra dem.</p>
+    <p class="lead" style="margin-left:auto;margin-right:auto">Din profil är nu beständigt sparad. Nästa steg är att koppla den deklarerade profilen till coachmotorns planeringskontrakt innan den får ändra träningen.</p>
     <a class="btn primary" style="display:inline-block;text-decoration:none" href="/träning/">Till träningsplanen</a>
   </section>
 </div>
@@ -417,7 +417,7 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
         await persist("draft");
         setStep(step+1);
       }else{
-        el("saveStatus").textContent="Sparar profil och köar omplanering…";
+        el("saveStatus").textContent="Sparar träningsprofil…";
         await persist("complete");
         el("flow").style.display="none";el("footer").style.display="none";el("progressBar").style.width="100%";el("saved").classList.add("active");
       }
