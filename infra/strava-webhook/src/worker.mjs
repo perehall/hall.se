@@ -1,7 +1,6 @@
 const DEFAULT_REPOSITORY = "perehall/hall.se";
 const DEFAULT_EVENT_TYPE = "strava-activity-event";
 const DEFAULT_TRAINING_INPUT_EVENT_TYPE = "training-input-event";
-const DEFAULT_ATHLETE_PROFILE_EVENT_TYPE = "athlete-profile-event";
 const TRAINING_INPUT_PATH = "/träning/training-api/input";
 const ATHLETE_PROFILE_PATH = "/träning/training-api/profile";
 const DEFAULT_TRAINING_INPUT_HOST = "xn--hll-qla.se";
@@ -326,31 +325,10 @@ async function handleAthleteProfileRequest(request, env, fetchImpl, executionCon
     return jsonResponse({ ...result, processing: "draft_saved" });
   }
 
-  const submittedAt = new Date().toISOString();
-  const digest = await sha256Hex(athleteSubject + ":" + String(result.revision || "") + ":" + submittedAt);
-  const event = {
-    event_key: "athlete-profile:" + digest.slice(0, 24),
-    source: "athlete-onboarding-v1",
-    profile_status: "complete",
-    submitted_at: submittedAt,
-  };
-  const eventType = configured(env.ATHLETE_PROFILE_EVENT_TYPE)
-    ? env.ATHLETE_PROFILE_EVENT_TYPE.trim()
-    : DEFAULT_ATHLETE_PROFILE_EVENT_TYPE;
-  const dispatch = () => dispatchToGitHub(event, env, fetchImpl, eventType);
-
-  if (executionContext && typeof executionContext.waitUntil === "function") {
-    executionContext.waitUntil(dispatch().catch((error) => {
-      console.error("ATHLETE_PROFILE_DISPATCH_FAILED", event.event_key, String(error));
-    }));
-    return jsonResponse({ ...result, processing: "queued", event_key: event.event_key });
-  }
-  try {
-    await dispatch();
-    return jsonResponse({ ...result, processing: "queued", event_key: event.event_key });
-  } catch {
-    return jsonResponse({ ...result, processing: "deferred", event_key: event.event_key }, 202);
-  }
+  // Completion is deliberately only a durable profile write in v1. The coach
+  // must not reinterpret goals or replan until the declared-profile planning
+  // contract is connected and verified end-to-end.
+  return jsonResponse({ ...result, processing: "profile_saved" });
 }
 
 async function sha256Hex(value) {
