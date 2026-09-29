@@ -1671,6 +1671,7 @@ def build_microcycle_source_payload(
     athlete_state,
     target_start,
     athlete_profile=None,
+    starting_state=None,
     completed_context=None,
 ):
     completed_context = completed_context or completed_microcycle_context(
@@ -1689,6 +1690,7 @@ def build_microcycle_source_payload(
         "week_start": target_start.isoformat(),
         "declared_athlete_profile": declared_profile,
         "declared_profile_contract": profile_contract,
+        "confirmed_starting_state": planner_starting_state_view(starting_state),
         "competition_context": competition_context,
         "completed_microcycle_context": completed_context,
         "block_context": mesocycle_block_context(meso, target_start, policy),
@@ -1781,6 +1783,7 @@ def generate_microcycle(
     athlete_state,
     target_start,
     athlete_profile=None,
+    starting_state=None,
     *,
     request_fn=None,
 ):
@@ -1793,13 +1796,14 @@ def generate_microcycle(
         athlete_state,
         target_start,
         athlete_profile=athlete_profile,
+        starting_state=starting_state,
         completed_context=completed_context,
     )
     competition_context = source_payload["competition_context"]
     digest = canonical_hash(source_payload)
     system = (
         "Du komponerar en sjudagars mikrocykel från ett redan fattat mesocykelbeslut. "
-        "Mesocykeln har redan vägt hela målportföljen; mikrocykeln får inte omtolka A-målet som enda mål. declared_athlete_profile och declared_profile_contract är atletens egna uppgifter och får inte ersättas av AI-antaganden. "
+        "Mesocykeln har redan vägt hela målportföljen; mikrocykeln får inte omtolka A-målet som enda mål. declared_athlete_profile och declared_profile_contract är atletens egna uppgifter och får inte ersättas av AI-antaganden. confirmed_starting_state är bekräftat startläge: observerad del är fakta, manuell del är självrapport och får styra konservativ etablering men aldrig räknas som absorberad dos eller ensam motivera progression. "
         "Ett enskilt sjudagarsfönster behöver inte uttrycka varje mål eller disciplin, men det får inte systematiskt radera kapaciteter som mesocykeln håller sekundära, underhållna eller skyddade. "
         "competition_context beskriver det verifierade A-loppet och tid kvar. Den får påverka specificitet inom mesocykelns beslut men är aldrig i sig skäl att lägga till träning eller öka dos. "
         "Välj endast dag, stimulusrecept och åtgärden establish/progress/consolidate/reduce. "
@@ -1950,6 +1954,7 @@ def generate_microcycle(
             "competition_context": competition_context,
             "completed_microcycle_context": completed_context,
             "athlete_profile_hash": athlete_profile_hash(athlete_profile),
+            "starting_state_hash": athlete_starting_state_hash(starting_state),
         }
     )
     if repair_metadata is not None:
