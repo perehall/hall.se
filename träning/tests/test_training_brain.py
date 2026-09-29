@@ -35,6 +35,34 @@ class TrainingBrainTests(unittest.TestCase):
         with self.assertRaises(StrategyContractError):
             validate_training_strategy(strategy)
 
+    def test_completed_primary_stimulus_satisfies_live_microcycle_contract(self):
+        strategy = deepcopy(self.strategy)
+        mesocycle = strategy["current_mesocycle"]
+        protected = list(mesocycle["protected_stimuli"])
+        primary = protected[0]
+        original = list(mesocycle["microcycle_template"])
+        mesocycle["microcycle_template"] = [
+            slot for slot in original
+            if primary not in (slot.get("stimuli") or [])
+        ]
+        self.assertLess(
+            len(mesocycle["microcycle_template"]),
+            len(original),
+            "fixture must contain a slot for the selected primary capability",
+        )
+
+        with self.assertRaises(StrategyContractError):
+            validate_training_strategy(strategy)
+
+        completed = list(
+            mesocycle["capacity_protection"].get("completed_current_microcycle") or []
+        )
+        if primary not in completed:
+            completed.append(primary)
+        mesocycle["capacity_protection"]["completed_current_microcycle"] = completed
+
+        self.assertTrue(validate_training_strategy(strategy))
+
     def test_long_term_goal_is_primary_contract(self):
         hierarchy = self.strategy["planning_hierarchy"]
         self.assertEqual(

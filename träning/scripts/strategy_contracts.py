@@ -395,13 +395,18 @@ def validate_training_strategy(document):
                 target_value = next(option["value"] for option in dose_options if option["id"] == progression_target)
                 require(target_value > baseline_value, f"{context}: progression_target måste vara större än baseline i vald belastningsvariabel")
 
-    missing_protected = [key for key in protected if key not in template_stimuli]
+    # A protected primary capability is a microcycle obligation, not a
+    # requirement to remain in the future template after it has already been
+    # completed. Live replanning may therefore remove a future duplicate while
+    # retaining the completed capability as explicit canonical evidence.
+    covered_microcycle = template_stimuli | set(completed_current)
+    missing_protected = [key for key in protected if key not in covered_microcycle]
     require(
         not missing_protected,
-        f"strategi.current_mesocycle.microcycle_template saknar protected stimuli {missing_protected!r}",
+        "strategi.current_mesocycle saknar protected stimuli i både faktiskt genomfört och kvarvarande plan "
+        f"{missing_protected!r}",
     )
-    covered_capacity = template_stimuli | set(completed_current)
-    missing_capacity = [key for key in required_each if key not in covered_capacity]
+    missing_capacity = [key for key in required_each if key not in covered_microcycle]
     require(
         not missing_capacity,
         "strategi.current_mesocycle saknar obligatorisk kapacitet i både faktiskt genomfört och kvarvarande plan "

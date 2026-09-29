@@ -359,13 +359,31 @@ def resolve_planning_target(
     # reclassify an already imported generic run and trigger a real replan.
     if plan_start <= today <= plan_end and current_completed_context is not None:
         current_context_hash = completed_context_signature(current_completed_context)
-        previous_context = (
+        # The active plan is the durable baseline for the live microcycle.
+        # microcycle_decision may legitimately point at the upcoming week after a
+        # successful planning pass; using that file as the sole baseline would
+        # cause unchanged live-week training to reopen the current week again on
+        # the next pipeline run.
+        plan_context = (
+            ((meta.get("capacity_protection") or {}).get("completed_context"))
+            or {}
+        )
+        micro_context = (
             (microcycle_decision or {}).get("completed_microcycle_context") or {}
         )
-        previous_context_hash = completed_context_signature(previous_context)
         micro_week_start = str(
             (microcycle_decision or {}).get("week_start") or ""
         ).strip()
+        previous_context = (
+            plan_context
+            if plan_context
+            else (
+                micro_context
+                if micro_week_start == plan_start.isoformat()
+                else {}
+            )
+        )
+        previous_context_hash = completed_context_signature(previous_context)
         current_has_training = bool(
             (current_completed_context or {}).get("activity_refs")
             or (current_completed_context or {}).get("direct_capabilities")
@@ -373,10 +391,7 @@ def resolve_planning_target(
             or int((current_completed_context or {}).get("swim_exposures") or 0)
             or int((current_completed_context or {}).get("enduro_exposures") or 0)
         )
-        if current_has_training and (
-            micro_week_start != plan_start.isoformat()
-            or current_context_hash != previous_context_hash
-        ):
+        if current_has_training and current_context_hash != previous_context_hash:
             return plan_start, True
 
     # A canonical goal change is the explicit exception to mesocycle authority.
