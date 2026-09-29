@@ -93,11 +93,12 @@ export function validateAthleteProfile(payload) {
     return { ok: false, status: 400, reason: "invalid_profile_step" };
   }
 
-  const goals = payload.goals ?? [];
-  if (!Array.isArray(goals) || goals.length > 8) {
+  const rawGoals = payload.goals ?? [];
+  if (!Array.isArray(rawGoals) || rawGoals.length > 8) {
     return { ok: false, status: 400, reason: "invalid_goals" };
   }
-  for (const goal of goals) {
+  const goals = [];
+  for (const goal of rawGoals) {
     if (!goal || typeof goal !== "object" || Array.isArray(goal)) {
       return { ok: false, status: 400, reason: "invalid_goal" };
     }
@@ -105,7 +106,19 @@ export function validateAthleteProfile(payload) {
     if (Object.keys(goal).some((key) => !goalKeys.has(key))) {
       return { ok: false, status: 400, reason: "invalid_goal" };
     }
-    if (typeof goal.text !== "string" || goal.text.trim().length < 3 || goal.text.length > 500) {
+    if (typeof goal.text !== "string" || goal.text.length > 500) {
+      return { ok: false, status: 400, reason: "invalid_goal_text" };
+    }
+    const goalText = goal.text.trim();
+    // Drafts are intentionally incomplete. The UI starts with one blank goal
+    // row, which is a presentation placeholder and must not make autosave fail.
+    // Blank rows are discarded server-side; completed profiles still require
+    // at least one real goal below.
+    if (!goalText) {
+      if (payload.status === "draft") continue;
+      return { ok: false, status: 400, reason: "invalid_goal_text" };
+    }
+    if (goalText.length < 3) {
       return { ok: false, status: 400, reason: "invalid_goal_text" };
     }
     if (goal.target_date != null && goal.target_date !== "" && !validIsoDate(goal.target_date)) {
@@ -114,6 +127,11 @@ export function validateAthleteProfile(payload) {
     if (goal.importance != null && !["primary", "equal", "secondary"].includes(goal.importance)) {
       return { ok: false, status: 400, reason: "invalid_goal_importance" };
     }
+    goals.push({
+      text: goalText,
+      target_date: goal.target_date || null,
+      importance: goal.importance || "equal",
+    });
   }
 
   const availability = payload.availability ?? {};
@@ -206,11 +224,7 @@ export function validateAthleteProfile(payload) {
       schema_version: 1,
       status: payload.status,
       current_step: payload.current_step,
-      goals: goals.map((goal) => ({
-        text: goal.text.trim(),
-        target_date: goal.target_date || null,
-        importance: goal.importance || "equal",
-      })),
+      goals,
       availability,
       preferences: {
         frequency,
