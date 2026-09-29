@@ -309,6 +309,7 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
   let profile=emptyProfile();
   let startingState=emptyStartingState();
   let observedCandidate=null;
+  let startingStateBackendReady=false;
   let returnToSummary=false;
   let generationRequestId=null;
 
@@ -530,8 +531,13 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
 
   function renderStartingState(){
     const observed=el("observedStarting");
-    observed.innerHTML=observedSummaryHtml(observedCandidate);
     const manual=el("manualStarting");
+    if(!startingStateBackendReady){
+      observed.innerHTML='<div class="starting-card"><h2>Startläget kunde inte laddas</h2><p class="note" style="margin-top:0">Backend för startläget är inte tillgänglig just nu. Inga antaganden görs; försök igen senare.</p></div>';
+      manual.classList.remove("active");
+      return;
+    }
+    observed.innerHTML=observedSummaryHtml(observedCandidate);
     const disciplines=startingState.manual_state.disciplines||{};
     el("startingDisciplineChips").innerHTML=STARTING_DISCIPLINES.map(([key,label])=>`
       <div class="chip"><input type="checkbox" id="start-${key}" value="${key}" ${disciplines[key]?"checked":""}><label for="start-${key}">${label}</label></div>`).join("");
@@ -639,6 +645,7 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
     collect();
     if(step===1 && !profile.goals.some(goal=>goal.text.length>=3)){alert("Skriv minst ett mål.");return false}
     if(step===2){
+      if(!startingStateBackendReady){alert("Startläget kunde inte laddas. Försök igen när backend är tillgänglig.");return false}
       collectStartingState();
       if(startingState.source_mode==="observed"){
         if(!observedCandidate||startingState.confirmation.observed_representative!==true){alert("Bekräfta om den observerade träningshistoriken är representativ, eller beskriv nuläget själv.");return false}
@@ -783,6 +790,8 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
           if(profile.status==="complete")step=TOTAL;
         }
       }
+      if(!startingResponse.ok)throw new Error("starting_state_backend_unavailable");
+      startingStateBackendReady=true;
       if(startingResponse.ok){
         const body=await startingResponse.json();
         observedCandidate=body.observed_candidate||null;
@@ -796,7 +805,7 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
         }
       }
       if(profile.status==="complete"&&startingState.status!=="confirmed")step=2;
-    }catch(e){console.warn("Onboarding resume unavailable",e)}
+    }catch(e){startingStateBackendReady=false;console.warn("Onboarding resume unavailable",e)}
     hydrateControls();setStep(step);
   }
 
