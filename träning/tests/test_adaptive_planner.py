@@ -13,6 +13,7 @@ sys.path.insert(0, str(SCRIPTS))
 from adaptive_planner import (  # noqa: E402
     MICRO_PLANNER_REVISION,
     choose_option,
+    completed_context_signature,
     completed_microcycle_context,
     fallback_mesocycle,
     fallback_microcycle,
@@ -1139,6 +1140,23 @@ class AdaptivePlanningTests(unittest.TestCase):
         day2 = next(row for row in slots if row["day_index"] == 2)
         self.assertEqual(day2["recipe_key"], "swim_aerobic_technique")
         self.assertNotIn("mtb_technical", [row["recipe_key"] for row in slots])
+
+    def test_legacy_completed_context_signature_treats_missing_planning_credits_as_direct_capabilities(self):
+        legacy = {
+            "activity_refs": ["1"],
+            "direct_capabilities": ["run_threshold"],
+            "capability_refs": {"run_threshold": ["1"]},
+        }
+        current = {
+            "activity_refs": ["1"],
+            "direct_capabilities": ["run_threshold"],
+            "planning_credits": ["run_threshold"],
+            "capability_refs": {"run_threshold": ["1"]},
+        }
+        self.assertEqual(
+            completed_context_signature(legacy),
+            completed_context_signature(current),
+        )
 
     def test_changed_completed_semantics_reopen_started_current_week(self):
         plan = {
