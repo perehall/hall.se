@@ -96,10 +96,13 @@ def publish_v2_upcoming_page(local_date=None):
     return target
 
 def main():
+    from build_development_page import publish_development_page
+
     # The v2 cutover is complete. Production must fail closed rather than
     # falling back to legacy HTML mutators that can rewrite canonical state.
     publish_v2_current_page()
     publish_v2_upcoming_page()
+    publish_development_page()
     return 0
 
 
