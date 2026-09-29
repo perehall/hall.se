@@ -374,6 +374,39 @@ test("athlete profile validation keeps goals and life constraints separate from 
   assert.equal(result.profile.goals.length, 2);
 });
 
+test("blank goal placeholder is accepted and removed from onboarding draft", () => {
+  const result = validateAthleteProfile({
+    schema_version: 1,
+    status: "draft",
+    current_step: 0,
+    goals: [{ text: "", target_date: null, importance: "equal" }],
+    availability: {},
+    preferences: { frequency: {}, facilities: [] },
+    constraints: { fixed_commitments: "", other: "" },
+    coach_autonomy: "week_auto",
+  });
+  assert.equal(result.ok, true);
+  assert.deepEqual(result.profile.goals, []);
+});
+
+test("blank goal placeholder is rejected for completed onboarding", () => {
+  const result = validateAthleteProfile({
+    schema_version: 1,
+    status: "complete",
+    current_step: 8,
+    goals: [{ text: "", target_date: null, importance: "equal" }],
+    availability: {},
+    preferences: {
+      frequency: { preferred_days: 6, min_days: 5, max_days: 7 },
+      facilities: [],
+    },
+    constraints: { fixed_commitments: "", other: "" },
+    coach_autonomy: "week_auto",
+  });
+  assert.equal(result.ok, false);
+  assert.equal(result.reason, "invalid_goal_text");
+});
+
 test("athlete profile draft is persisted without triggering replanning", async () => {
   const calls = [];
   let body;
