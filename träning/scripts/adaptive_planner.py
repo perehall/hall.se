@@ -1038,7 +1038,7 @@ def mesocycle_history_context(meso, target_start, catalog):
     return history[-3:]
 
 
-def fallback_microcycle(meso, policy, catalog, target_start, completed_context=None):
+def fallback_microcycle(meso, policy, catalog, target_start, completed_context=None, athlete_profile=None):
     """Conservative composition from requirements, not from calendar fill.
 
     Fixed Enduro consumes a real training day. Secondary capabilities are not a
@@ -1254,7 +1254,7 @@ def fallback_microcycle(meso, policy, catalog, target_start, completed_context=N
     }
 
 
-def microcycle_layout_failures(rows, catalog, target_start):
+def microcycle_layout_failures(rows, catalog, target_start, athlete_profile=None):
     """Hard scheduling guards for known planned load adjacency.
 
     Calendar dates group workouts; they are not unique workout slots. Guards
@@ -1324,7 +1324,7 @@ def microcycle_layout_failures(rows, catalog, target_start):
     return failures
 
 
-def microcycle_guard_failures(result, meso, policy, catalog, target_start, completed_context=None):
+def microcycle_guard_failures(result, meso, policy, catalog, target_start, completed_context=None, athlete_profile=None):
     """Return explicit structural violations without silently repairing the model output."""
     recipes = catalog["recipes"]
     slots = result.get("slots") or []
@@ -1456,7 +1456,7 @@ def microcycle_guard_failures(result, meso, policy, catalog, target_start, compl
     return failures
 
 
-def validate_and_normalize_micro(result, meso, policy, catalog, target_start, completed_context=None):
+def validate_and_normalize_micro(result, meso, policy, catalog, target_start, completed_context=None, athlete_profile=None):
     recipes = catalog["recipes"]
     cleaned = []
     primaries = set(meso.get("primary_capabilities") or [])
@@ -1558,7 +1558,7 @@ def normalize_progress_actions_from_absorption(microcycle, athlete_state):
     return normalized
 
 
-def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start, *, request_fn=None):
+def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start, athlete_profile=None, *, request_fn=None):
     completed_context = completed_microcycle_context(athlete_state, target_start)
     competition_context = build_competition_context(
         goal,
