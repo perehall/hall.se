@@ -536,6 +536,22 @@
       "source_hash": "0d32b80fe7f8b6aa08bafd45ccd57885f4a5da7766e0e2c391df73eb77ca10c0",
       "generated_at_utc": "2026-09-29T07:47:26.436133+00:00",
       "summary": "Tagit bort dag 1‑slotten eftersom dag 1 är blockerad av faktiskt enduroutfall. Behåller övriga val från förslaget då de uppfyller mesocykelens guardrails och hard_requirements (2 sim, minst 1 styrka/core, alla primära kapaciteter täckta, max löpkvalitet ≤2, 4 slots kvar, minst en kalenderdag fri). Run_threshold får progression (absorberad och progression_ready), simpassen hålls olika i karaktär (technique + endurance) och strength/core skyddas. Dag 2 har låg benbelastning efter enduro enligt policy."
+    },
+    {
+      "kind": "mesocycle",
+      "decision_id": "20261005-swim_aerobic-swim_technique-run_threshold",
+      "source": "openai",
+      "source_hash": "0eae270c0a6350b16fbacfa81a7865220b0ad87606a49cacec8678e148881c26",
+      "generated_at_utc": "2026-09-29T11:26:16.250600+00:00",
+      "summary": "Konservativ progress: konsolidera sim, progressa kontrollerad löptröskel, skydda styrka"
+    },
+    {
+      "kind": "microcycle",
+      "decision_id": "2026-W41",
+      "source": "openai_repaired",
+      "source_hash": "771eea980fa2672e9e978257deb51bdc2995ca5f24c5844f0d08bea9001360c9",
+      "generated_at_utc": "2026-09-29T11:27:44.795569+00:00",
+      "summary": "Reparerar konflikt där långt lugnt löppass låg direkt intill MTB/XC (dag 6 vs 7). Flyttar run_easy_distance till dag 5 och swim_aerobic_endurance till dag 6 så att: 1) löpet ligger ≥48 h från tröskel (dag 3→5), 2) löp och MTB inte är intilliggande, 3) dag 2 efter det fasta enduroblocket förblir låg benbelastning. Behåller mesocykelbeslut (enda progression = run_threshold) och uppfyller hard_requirements (minst 2 sim, minst 1 styrka/core, max run quality osv.)."
     }
   ]
 }
