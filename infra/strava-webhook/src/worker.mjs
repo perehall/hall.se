@@ -585,6 +585,7 @@ async function handleAthletePlanGenerationRequest(request, env, fetchImpl) {
       status: generation.status,
       request_id: requestId,
       profile_revision: generation.profile_revision,
+      starting_state_revision: generation.starting_state_revision,
       processing: generation.status === "running" ? "running" : "queued",
     });
   }
@@ -592,6 +593,7 @@ async function handleAthletePlanGenerationRequest(request, env, fetchImpl) {
   const event = {
     request_id: requestId,
     profile_revision: generation.profile_revision,
+    starting_state_revision: generation.starting_state_revision,
     event_key: "athlete-plan:" + requestId,
     source: "athlete-profile-v1",
   };
@@ -625,6 +627,7 @@ async function handleAthletePlanGenerationRequest(request, env, fetchImpl) {
     status: "queued",
     request_id: requestId,
     profile_revision: generation.profile_revision,
+    starting_state_revision: generation.starting_state_revision,
     processing: "queued",
   });
 }
