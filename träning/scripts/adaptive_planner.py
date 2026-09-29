@@ -1746,15 +1746,23 @@ def choose_option(recipe_key, recipe, action, athlete_state):
     absorbed = float(absorbed) if isinstance(absorbed, (int, float)) else None
     tolerated = float(tolerated) if isinstance(tolerated, (int, float)) else None
 
-    # Prefer evidence that a dose has been absorbed. A merely demonstrated higher
-    # maximum must not silently become the future planning floor.
+    # Prefer evidence that a dose has been absorbed. When the new response
+    # profile exists, a merely demonstrated maximum must never become the future
+    # planning floor. Legacy demonstrated-value fallback is retained only for
+    # old/test state that predates dose_response.
     trusted = absorbed if absorbed is not None else tolerated
-    if trusted is None:
+    if trusted is None and profile is None:
         trusted = float(observed) if isinstance(observed, (int, float)) else None
 
     if trusted is None:
         floor_index = 0
         evidence = (
+            (
+                "Dose-response finns men saknar verifierad tolererad/absorberad nivå; "
+                "lägsta katalogalternativ används som konservativ etableringspunkt."
+            )
+            if profile is not None
+            else
             "Ingen verifierad dosmarkör finns; lägsta katalogalternativ används som etableringspunkt, "
             "inte som fastställd optimal dos."
         )

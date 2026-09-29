@@ -286,16 +286,22 @@ def build_dose_response(sessions, evidence, *, today):
         for row in rows:
             repeated = _comparable_count(rows, row["dose_value"]) >= 2
             direct = row["direct_response"]["signal"]
-            recovery = row["recovery_context_24_72h"]["signal"]
+            recovery = row["recovery_context_24_72h"]
 
             if direct == "caution":
                 status = "caution"
-            elif direct == "supportive" and repeated and recovery != "caution":
+            elif direct == "supportive" and repeated and not recovery["window_complete"]:
+                status = "tolerated_pending_recovery"
+            elif direct == "supportive" and repeated and recovery["signal"] != "caution":
                 status = "absorbed"
-            elif direct == "supportive" and repeated and recovery == "caution":
+            elif direct == "supportive" and repeated and recovery["signal"] == "caution":
                 status = "tolerated_with_recovery_caution"
-            else:
+            elif direct in {"supportive", "neutral"}:
                 status = "tolerated"
+            else:
+                # Silence proves only that the dose was completed. It is not
+                # evidence that the athlete tolerated or absorbed it.
+                status = "demonstrated"
 
             row["repeat_supported"] = repeated
             row["response_status"] = status
@@ -305,7 +311,7 @@ def build_dose_response(sessions, evidence, *, today):
             (
                 row["dose_value"]
                 for row in rows
-                if row["response_status"] in {"absorbed", "tolerated"}
+                if row["response_status"] in {"absorbed", "tolerated", "tolerated_pending_recovery"}
             ),
             default=None,
         )
@@ -318,8 +324,7 @@ def build_dose_response(sessions, evidence, *, today):
         progression_ready = bool(
             absorbed is not None
             and latest is not None
-            and latest["direct_response"]["signal"] != "caution"
-            and latest["response_status"] != "tolerated_with_recovery_caution"
+            and latest["response_status"] in {"absorbed", "tolerated"}
             and latest["dose_value"] >= absorbed * 0.90
         )
 
@@ -327,8 +332,12 @@ def build_dose_response(sessions, evidence, *, today):
             reason = "Ingen verifierad exponering finns."
         elif latest["direct_response"]["signal"] == "caution":
             reason = "Senaste jämförbara exponeringen innehåller en explicit varningssignal från användaren."
+        elif latest["response_status"] == "demonstrated":
+            reason = "Senaste jämförbara exponeringen är genomförd men saknar återkoppling; tystnad räknas inte som tolerans."
         elif absorbed is None:
             reason = "Dos har demonstrerats/tolererats men saknar ännu upprepad stödjande respons för att klassas som absorberad."
+        elif latest["response_status"] == "tolerated_pending_recovery":
+            reason = "Senaste jämförbara exponeringen har stödjande passrespons men 72 h-observationsfönstret är ännu inte komplett."
         elif latest["response_status"] == "tolerated_with_recovery_caution":
             reason = "Senaste exponeringen har stödjande passrespons men 24–72 h-kontexten innehåller en varningssignal; kausalitet antas inte."
         elif latest["dose_value"] < absorbed * 0.90:
