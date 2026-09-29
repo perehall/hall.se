@@ -23,6 +23,7 @@ from athlete_profile_source import load_athlete_profile_for_planner, planner_pro
 from athlete_starting_state_source import load_starting_state_for_planner, planner_starting_state_view
 from canonical_plan import planned_workouts as canonical_planned_workouts
 from goal_contracts import planning_goal_hash, planning_goal_set
+from development_roadmap import build_development_roadmap
 from race_contracts import build_competition_context
 from rollover_week import (
     build_mesocycle_next_week,
@@ -2539,7 +2540,7 @@ def goal_runtime_source_label(runtime_source):
     )
 
 
-def materialize_strategy(goal, policy, meso, micro, catalog, athlete_state, goal_runtime_source=None, starting_state=None):
+def materialize_strategy(goal, policy, meso, micro, catalog, athlete_state, goal_runtime_source=None, starting_state=None, athlete_profile=None):
     strategy = deepcopy(policy["strategy_base"])
     strategy["schema_version"] = int(policy["compatibility_strategy_schema_version"])
     digest = goal_hash(goal)
@@ -2548,6 +2549,7 @@ def materialize_strategy(goal, policy, meso, micro, catalog, athlete_state, goal
     strategy["capability_portfolio"] = generated_capability_portfolio(policy, meso)
     strategy["strategic_readiness"] = generated_strategic_readiness(goal, policy)
     goal_rows = planning_goal_set(goal)
+    declared_profile_goals = deepcopy((planner_profile_view(athlete_profile) or {}).get("goals") or [])
     normalized_contributions = normalize_goal_contributions(
         goal_rows,
         meso.get("goal_contributions"),
@@ -2570,6 +2572,7 @@ def materialize_strategy(goal, policy, meso, micro, catalog, athlete_state, goal
         "goal_hash": digest,
         "goal_change_requires_mesocycle_review": True,
         "goal_set": deepcopy(goal_rows),
+        "declared_profile_goals": declared_profile_goals,
         "competition_context": deepcopy(meso.get("competition_context") or {}),
         "principle": (
             "Målportföljen är kanonisk: varaktiga utvecklingsmål anger vilken atlet som byggs och "
@@ -2681,6 +2684,7 @@ def materialize_strategy(goal, policy, meso, micro, catalog, athlete_state, goal
             "competition_context": deepcopy(meso.get("competition_context") or {}),
         },
     }
+    strategy["development_roadmap"] = build_development_roadmap(strategy, policy, athlete_state)
     strategy["generated_planning"] = {
         "source_policy": "data/planning_policy.json",
         "source_goal": goal_runtime_source_label(runtime_source),
@@ -2983,6 +2987,7 @@ def build_upcoming_strategy_after_active_replan(
         athlete_state,
         goal_runtime_source=goal_runtime_source,
         starting_state=starting_state,
+        athlete_profile=athlete_profile,
     )
     return future_strategy, {
         "week_start": next_start.isoformat(),
@@ -3167,6 +3172,7 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
         athlete_state,
         goal_runtime_source=goal_runtime_source,
         starting_state=starting_state,
+        athlete_profile=athlete_profile,
     )
     write_json(STRATEGY_FILE, strategy)
 

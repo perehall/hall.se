@@ -464,6 +464,41 @@ def validate_training_strategy(document):
             f"strategi.current_mesocycle.{field} innehåller ogiltig text",
         )
 
+    roadmap = document.get("development_roadmap")
+    if roadmap is not None:
+        require(isinstance(roadmap, dict), "strategi.development_roadmap måste vara objekt")
+        require(roadmap.get("schema_version") == 1, "strategi.development_roadmap schema_version måste vara 1")
+        require(
+            roadmap.get("projection_type") == "derived_transparency_view",
+            "strategi.development_roadmap får endast vara en härledd transparensvy",
+        )
+        require(
+            roadmap.get("goal_basis_hash") == goal_hash,
+            "strategi.development_roadmap måste bygga på aktuell målbild",
+        )
+        nonempty_string(
+            roadmap.get("interpretation_boundary"),
+            "strategi.development_roadmap.interpretation_boundary",
+        )
+        active_block = roadmap.get("active_block")
+        require(isinstance(active_block, dict), "strategi.development_roadmap.active_block saknas")
+        require(
+            active_block.get("id") == mesocycle.get("id"),
+            "strategi.development_roadmap.active_block måste matcha aktuell mesocykel",
+        )
+        timeline = roadmap.get("timeline")
+        require(
+            isinstance(timeline, list) and timeline,
+            "strategi.development_roadmap.timeline saknas",
+        )
+        for index, item in enumerate(timeline):
+            context = f"strategi.development_roadmap.timeline[{index}]"
+            require(isinstance(item, dict), f"{context}: måste vara objekt")
+            nonempty_string(item.get("id"), f"{context}.id")
+            nonempty_string(item.get("kind"), f"{context}.kind")
+            iso_date(item.get("date"), f"{context}.date")
+            nonempty_string(item.get("title"), f"{context}.title")
+
     readiness = document.get("strategic_readiness")
     require(isinstance(readiness, list) and readiness, "strategi.strategic_readiness saknas")
     readiness_keys = set()
