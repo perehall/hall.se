@@ -506,7 +506,9 @@ async function handleAthleteProfileRequest(request, env, fetchImpl, executionCon
       {
         p_athlete_subject: athleteSubject,
         p_profile: validation.profile,
-        p_set_planning_default: validation.profile.status === "complete",
+        // Browser onboarding is per athlete. It must never promote a user to the
+        // legacy single-athlete planning_default bridge.
+        p_set_planning_default: false,
       },
       env,
       fetchImpl,
