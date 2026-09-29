@@ -241,18 +241,13 @@
       "label": "Tisdag",
       "sport": "swim",
       "reason": "Låg benbelastningsdag efter fast enduro — tekniskt aerob simbasspass som första av två veckosessioner för att prioritera teknik och låg mekanisk kostnad. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: establish; materialiserad relation: establish.",
-      "status": "conditional",
+      "status": "preliminary",
       "session": "Simning · 3 200 m · aerob/teknik",
       "stimuli": [
         "swim_aerobic",
         "swim_technique"
       ],
       "dose_open": false,
-      "auto_coach": {
-        "action": "reduce",
-        "reason": "Dagens löppass ersatte planerad simbassession och ökade benbelastningen i mikrocykeln; bevara simstimulus men konservativt.",
-        "applied_at_utc": "2026-09-29T20:54:12.269490+00:00"
-      },
       "recipe_key": "swim_aerobic_technique",
       "block_intent": "establish",
       "dose_options": [
@@ -581,7 +576,6 @@
         "technical"
       ],
       "microcycle_slot": "swim_aerobic_technique_1",
-      "coach_adjustment": "Skala ned passet. Skala dagens planerade simning 3 200 m till inget ytterligare idag; markera simsessionen som pending/re‑schedule — behåll simstimulus denna vecka men flytta till senare datum efter 24–72h återhämtning om känslan är bra. Ingen ökning av framtida dos föreslås automatiskt.",
       "development_step": {
         "reason": "Mikrocykelbeslutet valde establish och dosen materialiserades från verifierad träningsrespons, bekräftat startläge eller konservativ katalogbas utan att höja flera belastningsvariabler samtidigt.",
         "relation": "establish",
@@ -589,7 +583,6 @@
         "microcycle": 1
       },
       "microcycle_index": 1,
-      "original_session": "Simning · 3 200 m · aerob/teknik",
       "development_focus": "Teknisk kvalitet och stabil aerob rytm; simningen ska kunna stödja helheten med låg mekanisk kostnad för benen.",
       "baseline_option_id": "swim-3200",
       "development_character": "technique_aerobic",
@@ -624,9 +617,9 @@
         "status": "synced",
         "transport": "intervals_icu",
         "source_hash": "3173a11d865d944fc7f3dcdbb047c9878e097e8850b395490b41ff713327fac1",
-        "updated_at_utc": "2026-09-29T20:54:13.877785+00:00",
+        "updated_at_utc": "2026-09-29T21:01:41.935476+00:00",
         "device_delivery": "unverified",
-        "verified_at_utc": "2026-09-29T20:54:13.877785+00:00",
+        "verified_at_utc": "2026-09-29T21:01:41.935476+00:00",
         "provider_event_id": 140057389
       },
       "block_intent": "establish",
@@ -1562,9 +1555,9 @@
         "status": "synced",
         "transport": "intervals_icu",
         "source_hash": "06d94eed631d6037f578283b9fce27e8530dcfb04204bea214c6447063d4b3f2",
-        "updated_at_utc": "2026-09-29T20:54:14.133818+00:00",
+        "updated_at_utc": "2026-09-29T21:01:42.252064+00:00",
         "device_delivery": "unverified",
-        "verified_at_utc": "2026-09-29T20:54:14.133818+00:00",
+        "verified_at_utc": "2026-09-29T21:01:42.252064+00:00",
         "provider_event_id": 140057390
       },
       "block_intent": "establish",
