@@ -4,6 +4,52 @@
       "model": "gpt-5-mini",
       "assessment": {
         "facts": [
+          "Löpning: 13,14 km · 1:02:35 · 112 m+ · snittpuls 146,1 · maxpuls 162.",
+          "Planerat simpass 3200 m; genomfört 13135.4 m."
+        ],
+        "summary": "13.1 km kontrollerad löptur med snittpuls 146 och upprepade ~4:15–4:23/km 1 km-segment mot slutet indikerar kapacitet att hålla snabbare fart i delar av passet.",
+        "unknowns": [
+          "Subjektiv känsla efter passet saknas i användarrapporten och kan förändra återhämtningsbedömningen",
+          "Detaljer om terräng/progression i dagens löpning (t.ex. backar) saknas och påverkar mekanisk belastningsbedömning"
+        ],
+        "confidence": "medium",
+        "interpretations": [
+          "Passet visar att du kunde genomföra delar i högre fart än snittet — användbart för löpkapacitet men ersätter inte planerad teknisk simexponering.",
+          "Eftersom veckans faktiska närbelastning redan innehåller flera benbelastande pass, riskerar ett nytt benkrävande kvalitetspass imorgon att skapa ackumulerad lokal belastning om inget anpassas."
+        ],
+        "load_interpretation": "Senaste 3 dagars fönster visar flera dagars träning (enduro, styrka, terränglöpning) så dagens löpning lägger ytterligare ben- och kardiovaskulär belastning som bör vägas mot planerad simning imorgon."
+      },
+      "auto_apply": {
+        "note": "Konservativ ändring applicerad på 2026-09-29: reduce.",
+        "applied": true
+      },
+      "activity_id": 20381137043,
+      "plan_action": {
+        "action": "reduce",
+        "reason": "Flera senaste dagars benbelastning + genomfört löppass ersätter planerad lågmekanisk simexponering som riskerar att lägga onödig total belastning.",
+        "target_date": "2026-09-29",
+        "dose_option_id": "",
+        "recommendation": "Byt dagens planerade simning (3 200 m) mot aktiv återhämtning: lätt sim 1 200–1 500 m eller 30–40 min mycket lätt teknikfokus; inga hårda set. Håll intensitet mycket låg och prioritera rörlighet och teknik.",
+        "requires_approval": false,
+        "target_workout_key": "20260928-run_threshold-swim_aerobic-swim_technique:mc1:2026-09-29:swim_aerobic_technique_1"
+      },
+      "activity_date": "2026-09-29",
+      "activity_name": "Löpning på eftermiddagen",
+      "generated_at_utc": "2026-09-29T17:09:10.797202+00:00",
+      "analysis_contract": {
+        "pipeline_version": 4,
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
+        "analysis_code_sha256": "3323209316fd3786118440b80471660165354ea9f5a4df5bc883275747d2cc5e",
+        "plan_comparison_version": 3,
+        "workout_context_version": 3
+      },
+      "performance_marker_id": null,
+      "performance_protocol_key": null
+    },
+    {
+      "model": "gpt-5-mini",
+      "assessment": {
+        "facts": [
           "WeightTraining: 36:52 · snittpuls 80 · maxpuls 116.",
           "Användarrapport: Palloff-press 10x3 på resp.sida , latsdrag med band 15x3, bulgarian splits 8x3, atomics med TRX, bänkrodd 12x3, dead bug, reverse plank RPE 6/10. Känsla: Pigg.",
           "Planstatus 2026-09-28: dagen är markerad genomförd i coachens beslutsunderlag."
@@ -1322,44 +1368,11 @@
       },
       "performance_marker_id": null,
       "performance_protocol_key": null
-    },
-    {
-      "model": "gpt-5-mini",
-      "assessment": {
-        "facts": [
-          "Simning: 4,00 km · 1:13:53 · snittpuls 128,5 · maxpuls 153."
-        ],
-        "summary": "Simningen genomfördes: 4 000 m på 1:13:53.",
-        "unknowns": [
-          "Set-/intervallstruktur och subjektiv känsla efter simningen saknas."
-        ],
-        "confidence": "low",
-        "interpretations": [],
-        "load_interpretation": "Set-/intervallnivå saknas i det strukturerade analyslagret; teknik, fartstabilitet och intensitetsutveckling går därför inte att bedöma säkert."
-      },
-      "auto_apply": {
-        "note": "Ingen automatisk planändring.",
-        "applied": false
-      },
-      "activity_id": 20047602146,
-      "plan_action": {
-        "action": "keep",
-        "reason": "Simpasset är dokumenterat, har mekanisk kostnad och passar som planerad stödexponering inför söndagens lugna löp.",
-        "target_date": "2026-09-06",
-        "dose_option_id": "",
-        "recommendation": "Behåll söndagens löppass enligt plan (Löpning · lugn distans · 75 min). Inget ytterligare styrke-/simarbete krävs i dag; vila eller lätt aktivitet tills löppasset om du känner ovanlig trötthet.",
-        "requires_approval": false
-      },
-      "activity_date": "2026-09-05",
-      "activity_name": "Simning på eftermiddagen",
-      "generated_at_utc": "2026-09-05T22:54:32.006236+00:00",
-      "performance_marker_id": null,
-      "performance_protocol_key": null
     }
   ],
-  "last_run_utc": "2026-09-29T13:49:25.873071+00:00",
+  "last_run_utc": "2026-09-29T17:09:10.797202+00:00",
   "contract_version": 16,
-  "last_trigger_hash": "c4b3bc132e2dc263ec8b87065fbf44e54d87311240a3fb8ba1e749dc1ae27c0a",
+  "last_trigger_hash": "2e44bb2e894b312f31fa2f6aa4f37c6b61de2111dacddae1f53ee3f2a5832aab",
   "analysed_activity_ids": [
     "20367593813",
     "20350203020",
@@ -1394,7 +1407,8 @@
     "20368346174",
     "20337767421",
     "20271537143",
-    "20092166843"
+    "20092166843",
+    "20381137043"
   ],
   "analysis_ledger_version": 1,
   "output_contract_version": 19,
