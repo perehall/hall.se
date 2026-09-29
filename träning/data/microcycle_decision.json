@@ -2,54 +2,53 @@
   "slots": [
     {
       "action": "establish",
-      "day_index": 3,
-      "rationale": "Första av två tekniska/aeroba simbassessioner; placerad efter redan utförda tidiga dagars belastning för låg benpåverkan och teknikkontroll enligt mesocykel.",
+      "day_index": 2,
+      "rationale": "Låg benbelastningsdag efter fast enduro — tekniskt aerob simbasspass som första av två veckosessioner för att prioritera teknik och låg mekanisk kostnad.",
       "recipe_key": "swim_aerobic_technique",
       "evidence_refs": [
-        "recipe_profiles:swim-3200",
-        "athlete_state.swim_aerobic.demonstrated_value=4000.0",
-        "recent_session:20337309419 (Swim 2026-09-26 RPE8 — caution)"
+        "activity:20300494236",
+        "activity:20337309419",
+        "athlete_state.swim_aerobic.demonstrated_value=4000.0"
       ]
     },
     {
-      "action": "consolidate",
+      "action": "establish",
       "day_index": 5,
-      "rationale": "En löpkvalitet denna mikrocykel (consolidate) för att bibehålla kraft/mekanik utan att överskrida max_run_quality när tidigare run_threshold räknas med.",
+      "rationale": "Bibehålla neuromuskulär kraft/kvantitet utan att överskrida max löpkvaliteter; placerat så det inte ligger intill redan genomförd tröskel.",
       "recipe_key": "run_hill_quality",
       "evidence_refs": [
-        "athlete_state.run_hill_quality.absorbed_value=24.0",
-        "recent_session:20326850936 (Backintervaller 2026-09-25)",
-        "microcycle_policy:max_run_quality_exposures=2"
+        "activity:20326850936",
+        "activity:20229568713",
+        "athlete_state.run_hill_quality.absorbed_value=24.0"
       ]
     },
     {
       "action": "establish",
       "day_index": 6,
-      "rationale": "Andra simbassessionen för konservativ aerob/teknisk stabilisering (~3 200 m) enligt mesocykelens normalexponeringer.",
+      "rationale": "Andra simbassessionen (aerob uthållighet) för att uppfylla normalt antal simbassessioner och stabilisera teknisk kvalitet utan volymprogression.",
       "recipe_key": "swim_aerobic_endurance",
       "evidence_refs": [
-        "recipe_profiles:swim-aerobic-endurance-3200",
-        "recent_session:20300494236 (Swim 3200m 2026-09-23)",
-        "mesocycle.hypothesis: två simbassessioner/vecka ~3200 m"
+        "activity:20239623463",
+        "activity:20300494236",
+        "recipe_profiles:swim_aerobic_endurance"
       ]
     },
     {
       "action": "establish",
       "day_index": 7,
-      "rationale": "Långt lugnt löppass för löptålighet placerat med tillräckligt avstånd från andra löpkvaliteter och utan att upprepa absorberad tröskeldos.",
+      "rationale": "Lugn längre distans i slutet av veckan för löptålighet/återhämtning; placerad så att den inte blir två dagar i rad med tröskel/backkvalitet.",
       "recipe_key": "run_easy_distance",
       "evidence_refs": [
-        "athlete_state.run_easy_distance.longest_duration=2026-09-20 (119.8 min)",
-        "mesocycle.progression_axes: run_easy_distance",
-        "guardrails: day_after_fixed_enduro_requires_low_leg_load"
+        "activity:20254486837",
+        "athlete_state.run_easy_distance.absorbed_value=116.0"
       ]
     }
   ],
   "source": "openai_repaired",
   "week_key": "2026-W40",
-  "rationale": "Reparerar så att dag 1 (fast enduro) inte planeras om och så att redan genomförda primära stimuli inte dupliceras. Tar bort planerad run_threshold och extra styrkepass (båda redan genomförda denna mikrocykel), behåller två simbassessioner enligt mesocykelkrav och lägger endast en extra löpkvalitet (så max_run_quality ≤2 när tidigare run_threshold räknas med). Placerar passen på dagar utan redan utförd aktivitet och respekterar låg benbelastning nära enduro samt krav på minst 4 slots.",
+  "rationale": "Åtgärdar guard-fel genom att ta bort planerade dupliceringar på dag 1 (fast enduro), undvika redundant run_threshold och undvika ytterligare styrka då minst en styrke/core redan är genomförd. Behåller två simbassessioner, maximerar inte löpkvaliteter och ser till att dag 2 är låg benbelastning efter enduro. Totalt 4 slots (inom tillåtet intervall) och alla primära kapaciteter täcks direkt (run_threshold krediteras från genomförd session).",
   "week_start": "2026-09-28",
-  "source_hash": "21cd22fd535dbb5bcf1837808c49afe3b3eeb5d3594551f21c52232432f4816e",
+  "source_hash": "825d116240a91e6d6b5b1f73972928bb3c88c6affe532d26e37e84e969627b51",
   "guard_repair": {
     "result": "accepted",
     "attempted": true,
@@ -62,7 +61,7 @@
   },
   "mesocycle_id": "20260928-run_threshold-swim_aerobic-swim_technique",
   "schema_version": 1,
-  "generated_at_utc": "2026-09-29T18:37:48.756743+00:00",
+  "generated_at_utc": "2026-09-29T20:07:48.742768+00:00",
   "planner_revision": 13,
   "competition_context": {
     "as_of": "2026-09-28",
@@ -143,7 +142,7 @@
       "20368346174",
       "20381137043"
     ],
-    "evidence_note": "Familjeexponeringar kommer från faktiskt registrerade aktiviteter i målveckan. Direkt kapabilitetskredit kräver daterad athlete_state-evidens från samma aktivitet.",
+    "evidence_note": "Familjeexponeringar kommer från faktiskt registrerade aktiviteter i målveckan. Direct_capabilities kräver daterad fysiologisk/kapabilitetsevidens. Planning_credits kan dessutom komma från en durabel, entydig strukturell match mot ett närliggande planerat intent och används för att undvika redundant framtida ordination utan att påstå mer fysiologi än underlaget stödjer.",
     "swim_exposures": 0,
     "capability_refs": {
       "run_threshold": [
@@ -154,14 +153,34 @@
       ]
     },
     "enduro_exposures": 1,
+    "planning_credits": [
+      "run_threshold",
+      "strength_unilateral"
+    ],
     "strength_exposures": 1,
     "completed_slot_days": 1,
     "direct_capabilities": [
       "run_threshold",
       "strength_unilateral"
     ],
+    "planning_credit_refs": {
+      "run_threshold": [
+        "20381137043"
+      ],
+      "strength_unilateral": [
+        "20368346174"
+      ]
+    },
     "completed_day_indexes": [
       2
-    ]
+    ],
+    "capability_day_indexes": {
+      "run_threshold": [
+        2
+      ],
+      "strength_unilateral": [
+        1
+      ]
+    }
   }
 }

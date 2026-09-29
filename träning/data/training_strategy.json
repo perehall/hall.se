@@ -296,7 +296,7 @@
       "starting_state_hash": "52ff32e9ef09bd337669bbf6347085139222e7abd6a7cec41efd516a62e45cfe",
       "athlete_profile_hash": "559e0b6e5a587d351baa65817f81e04e433d0d46aac60b57a73429fd5b43d1bc",
       "mesocycle_source_hash": "9fb730125d779e8644a8486faa35467fe547c33194d479bd24aed65dfcf81994",
-      "microcycle_source_hash": "21cd22fd535dbb5bcf1837808c49afe3b3eeb5d3594551f21c52232432f4816e",
+      "microcycle_source_hash": "825d116240a91e6d6b5b1f73972928bb3c88c6affe532d26e37e84e969627b51",
       "mesocycle_decision_source": "openai",
       "microcycle_decision_source": "openai_repaired"
     },
@@ -376,7 +376,7 @@
           "20368346174",
           "20381137043"
         ],
-        "evidence_note": "Familjeexponeringar kommer från faktiskt registrerade aktiviteter i målveckan. Direkt kapabilitetskredit kräver daterad athlete_state-evidens från samma aktivitet.",
+        "evidence_note": "Familjeexponeringar kommer från faktiskt registrerade aktiviteter i målveckan. Direct_capabilities kräver daterad fysiologisk/kapabilitetsevidens. Planning_credits kan dessutom komma från en durabel, entydig strukturell match mot ett närliggande planerat intent och används för att undvika redundant framtida ordination utan att påstå mer fysiologi än underlaget stödjer.",
         "swim_exposures": 0,
         "capability_refs": {
           "run_threshold": [
@@ -387,15 +387,35 @@
           ]
         },
         "enduro_exposures": 1,
+        "planning_credits": [
+          "run_threshold",
+          "strength_unilateral"
+        ],
         "strength_exposures": 1,
         "completed_slot_days": 1,
         "direct_capabilities": [
           "run_threshold",
           "strength_unilateral"
         ],
+        "planning_credit_refs": {
+          "run_threshold": [
+            "20381137043"
+          ],
+          "strength_unilateral": [
+            "20368346174"
+          ]
+        },
         "completed_day_indexes": [
           2
-        ]
+        ],
+        "capability_day_indexes": {
+          "run_threshold": [
+            2
+          ],
+          "strength_unilateral": [
+            1
+          ]
+        }
       },
       "missing_required_action": "review_and_restore_in_next_absorbable_window",
       "required_each_microcycle": [
@@ -418,13 +438,13 @@
       {
         "slot": "swim_aerobic_technique_1",
         "sport": "swim",
-        "reason": "Första av två tekniska/aeroba simbassessioner; placerad efter redan utförda tidiga dagars belastning för låg benpåverkan och teknikkontroll enligt mesocykel. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: establish; materialiserad relation: establish.",
+        "reason": "Låg benbelastningsdag efter fast enduro — tekniskt aerob simbasspass som första av två veckosessioner för att prioritera teknik och låg mekanisk kostnad. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: establish; materialiserad relation: establish.",
         "session": "Simning · 3 200 m · aerob/teknik",
         "stimuli": [
           "swim_aerobic",
           "swim_technique"
         ],
-        "day_index": 3,
+        "day_index": 2,
         "recipe_key": "swim_aerobic_technique",
         "block_intent": "establish",
         "dose_options": [
@@ -551,7 +571,7 @@
       {
         "slot": "run_hill_quality_2",
         "sport": "run",
-        "reason": "En löpkvalitet denna mikrocykel (consolidate) för att bibehålla kraft/mekanik utan att överskrida max_run_quality när tidigare run_threshold räknas med. Dosgolvet utgår från absorberad nivå 24 i athlete_state.dose_response, inte från högsta genomförda värde. Veckobeslut: consolidate; materialiserad relation: hold.",
+        "reason": "Bibehålla neuromuskulär kraft/kvantitet utan att överskrida max löpkvaliteter; placerat så det inte ligger intill redan genomförd tröskel. Dosgolvet utgår från absorberad nivå 24 i athlete_state.dose_response, inte från högsta genomförda värde. Veckobeslut: establish; materialiserad relation: hold.",
         "session": "Löpning · backkvalitet · 15 min lugnt + 3 × 8 × 150 m / lugn joggvila + 10 min lugnt",
         "stimuli": [
           "run_hill_quality"
@@ -643,7 +663,7 @@
       {
         "slot": "swim_aerobic_endurance_3",
         "sport": "swim",
-        "reason": "Andra simbassessionen för konservativ aerob/teknisk stabilisering (~3 200 m) enligt mesocykelens normalexponeringer. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: establish; materialiserad relation: establish.",
+        "reason": "Andra simbassessionen (aerob uthållighet) för att uppfylla normalt antal simbassessioner och stabilisera teknisk kvalitet utan volymprogression. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: establish; materialiserad relation: establish.",
         "session": "Simning · 3 200 m · aerob uthållighet",
         "stimuli": [
           "swim_aerobic",
@@ -832,7 +852,7 @@
       {
         "slot": "run_easy_distance_4",
         "sport": "run",
-        "reason": "Långt lugnt löppass för löptålighet placerat med tillräckligt avstånd från andra löpkvaliteter och utan att upprepa absorberad tröskeldos. Dosgolvet utgår från absorberad nivå 116 i athlete_state.dose_response, inte från högsta genomförda värde. Veckobeslut: establish; materialiserad relation: hold.",
+        "reason": "Lugn längre distans i slutet av veckan för löptålighet/återhämtning; placerad så att den inte blir två dagar i rad med tröskel/backkvalitet. Dosgolvet utgår från absorberad nivå 116 i athlete_state.dose_response, inte från högsta genomförda värde. Veckobeslut: establish; materialiserad relation: hold.",
         "session": "Löpning · lugn distans · 105 min",
         "stimuli": [
           "run_easy_distance"

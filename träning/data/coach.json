@@ -5,38 +5,37 @@
       "assessment": {
         "facts": [
           "Löpning · 4 × 8 min: 13,14 km · 1:02:35 · 112 m+ · snittpuls 146,1 · maxpuls 162.",
-          "Användarrapport: Spontant löppass: 4 × 8 min / 90 s joggvila. Samma 4 × 8/90-struktur som veckans planerade kontrollerade löptröskel. Spontant löppass: 4 × 8 min / 90 s joggvila. Samma 4 × 8/90-struktur som veckans planerade kontrollerade löptröskel. Bra kontroll, kände mig stark RPE 6/10. Känsla: Starka ben.",
-          "Planerat simpass 3200 m; genomfört 13135.4 m."
+          "Användarrapport: Spontant löppass: 4 × 8 min / 90 s joggvila. Samma 4 × 8/90-struktur som veckans planerade kontrollerade löptröskel. Spontant löppass: 4 × 8 min / 90 s joggvila. Samma 4 × 8/90-struktur som veckans planerade kontrollerade löptröskel. Bra kontroll, kände mig stark RPE 6/10. Känsla: Starka ben."
         ],
-        "summary": "Genomfört spontant 4×8 min/90 s löpprogram genomfört kontrollerat och med god känsla (62,6 min, 13.14 km, snittpuls 146 bpm).",
+        "summary": "Genomfört spontant 4×8 min (90 s gång/jogg) med god kontroll och RPE 6/10; visar ett starkt genomfört tröskelstrukturpass idag.",
         "unknowns": [
-          "Hur återhämtningen utvecklas de närmaste 24–48 h (subjektiv trötthet nästa dag).",
-          "Full återhämtning från dagens pass är ännu inte verifierad."
+          "Exakt 24–72 h återhämtningsstatus efter dagens pass (subjektiv följdrapport saknas).",
+          "Detaljer om intensitet för varje 8‑minutersblock (HR‑/pace‑profil inom intervallen) utöver aggregerade lappar."
         ],
         "confidence": "medium",
         "interpretations": [
-          "Full återhämtning från dagens pass är ännu inte verifierad.",
-          "Eftersom passet ersatte dagens planerade simning och ligger ovanpå senaste 2–3 dagars redan omfattande belastning (enduro, styrka, trailrun), bör kommande lågmekanisk simexponering övervägas innan ytterligare benbelastning bokas."
+          "Passet replikerar planerad 4×8/90‑struktur och genomfördes kontrollerat — visar att aktuell tröskelstruktur är genomförbar idag.",
+          "Kombinationen av en hög‑RPE simsession (26/9) inom 3‑dagarsfönstret och flera tekniska/enduro‑pass kräver konservativ hantering av kommande benbelastning."
         ],
-        "load_interpretation": "Passet adderar en löpkvalitet nära planerat tröskelarbete men ersätter planerad simning och ökar närbelastningen på benen kommande 48–72 h."
+        "load_interpretation": "Nyliga 3‑dagarsfönstret innehåller flera pass (enduro, simning, styrka, terränglöpning) — dagens löppass ökar kardiovaskulär och löpspecifik närbelastning i fönstret."
       },
       "auto_apply": {
-        "note": "Konservativ ändring applicerad på 2026-09-29: reduce.",
-        "applied": true
+        "note": "Ingen automatisk planändring.",
+        "applied": false
       },
       "activity_id": 20381137043,
       "plan_action": {
-        "action": "reduce",
-        "reason": "Dagens planerade simning ersattes av ett löppass med tröskelstruktur vilket ökar benbelastningen i korttidsfönstret.",
-        "target_date": "2026-09-29",
+        "action": "keep",
+        "reason": "Mikrocykeln prioriterar två skyddade simbassessioner och dagens löppass var kontrollerat utan tecken på överdriven trötthet.",
+        "target_date": "2026-09-30",
         "dose_option_id": "",
-        "recommendation": "Skala dagens simpass till vila eller kort tekniskt återhämtningspass; om simning ändå görs, håll det ≤1 600–2 000 m med fokus på teknik och mekanisk belastning. Ingen progression eller extra löpning tills 24–48 h återhämtningssignal bekräftas.",
+        "recommendation": "Behåll planerad simning 2026-09-30 (Simning · 3 200 m · aerob/teknik). Vila eller mycket lätt aktivitet imorgon morgon om du känner lokal muskeltrötthet; rapportera hur benen känns 24 h efter dagens pass.",
         "requires_approval": false,
-        "target_workout_key": "20260928-run_threshold-swim_aerobic-swim_technique:mc1:2026-09-29:swim_aerobic_technique_1"
+        "target_workout_key": "20260928-run_threshold-swim_aerobic-swim_technique:mc1:2026-09-30:swim_aerobic_technique_1"
       },
       "activity_date": "2026-09-29",
       "activity_name": "Löpning på eftermiddagen",
-      "generated_at_utc": "2026-09-29T19:47:53.440975+00:00",
+      "generated_at_utc": "2026-09-29T20:08:01.127275+00:00",
       "analysis_contract": {
         "pipeline_version": 4,
         "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
@@ -1371,9 +1370,9 @@
       "performance_protocol_key": null
     }
   ],
-  "last_run_utc": "2026-09-29T19:47:53.440975+00:00",
+  "last_run_utc": "2026-09-29T20:08:01.127275+00:00",
   "contract_version": 16,
-  "last_trigger_hash": "b3686e8e1c3753bbd76b1a7e3be49b5286dee6bc19a519556203c438272b93cb",
+  "last_trigger_hash": "062a59a916574dd2f704f2865c67a6d582442216464c9fd1ca3cd46735627933",
   "analysed_activity_ids": [
     "20367593813",
     "20350203020",
