@@ -5,6 +5,7 @@ ROOT = Path(__file__).resolve().parents[2]
 MIGRATION = ROOT / "supabase" / "migrations" / "20260929094500_athlete_onboarding_profile.sql"
 GENERATION_MIGRATION = ROOT / "supabase" / "migrations" / "20260929123000_plan_generation_requests.sql"
 ACTIVATION_MIGRATION = ROOT / "supabase" / "migrations" / "20260929132000_profile_activation_boundary.sql"
+STARTING_STATE_MIGRATION = ROOT / "supabase" / "migrations" / "20260929141000_athlete_starting_state.sql"
 
 
 class AthleteProfileSqlTests(unittest.TestCase):
@@ -13,6 +14,7 @@ class AthleteProfileSqlTests(unittest.TestCase):
         cls.sql = MIGRATION.read_text(encoding="utf-8").lower()
         cls.generation_sql = GENERATION_MIGRATION.read_text(encoding="utf-8").lower()
         cls.activation_sql = ACTIVATION_MIGRATION.read_text(encoding="utf-8").lower()
+        cls.starting_state_sql = STARTING_STATE_MIGRATION.read_text(encoding="utf-8").lower()
 
     def test_profile_is_per_athlete_and_backend_only(self):
         self.assertIn("create table if not exists training.athlete_profiles", self.sql)
@@ -52,6 +54,27 @@ class AthleteProfileSqlTests(unittest.TestCase):
         self.assertIn("alter column profile_snapshot set not null", self.activation_sql)
         self.assertIn("jsonb_typeof(profile_snapshot) = 'object'", self.activation_sql)
         self.assertIn("profile revision it was created from", self.activation_sql)
+
+    def test_starting_state_is_per_athlete_and_separate_from_preferences(self):
+        self.assertIn("create table if not exists training.athlete_starting_states", self.starting_state_sql)
+        self.assertIn("athlete_subject text primary key", self.starting_state_sql)
+        self.assertIn("source_mode text not null", self.starting_state_sql)
+        self.assertIn("manual_state jsonb", self.starting_state_sql)
+        self.assertIn("observed_snapshot jsonb", self.starting_state_sql)
+        self.assertIn("active_state jsonb", self.starting_state_sql)
+        self.assertIn("enable row level security", self.starting_state_sql)
+
+    def test_observed_candidate_is_confirmation_input_not_progression_proof(self):
+        self.assertIn("presentation threshold", self.starting_state_sql)
+        self.assertIn("not a physiological", self.starting_state_sql)
+        self.assertIn("observed_starting_state_requires_confirmation", self.starting_state_sql)
+
+    def test_generation_freezes_profile_and_starting_state_together(self):
+        self.assertIn("starting_state_revision bigint", self.starting_state_sql)
+        self.assertIn("starting_state_snapshot jsonb", self.starting_state_sql)
+        self.assertIn("confirmed_starting_state_required", self.starting_state_sql)
+        self.assertIn("active_state = v_request.starting_state_snapshot", self.starting_state_sql)
+        self.assertIn("active_starting_state_revision", self.starting_state_sql)
 
     def test_frequency_contract_is_explicit(self):
         self.assertIn("preferred_days", self.sql)
