@@ -918,7 +918,8 @@ def render_week_context(snapshot: PresentationSnapshot) -> str:
     if model is None:
         return ""
 
-    state = str(snapshot.navigation.state or "").strip().lower()
+    navigation = getattr(snapshot, "navigation", None)
+    state = str(getattr(navigation, "state", "") or "").strip().lower()
     heading = "Kommande vecka" if state == "kommande" else "Aktuell vecka"
     aria_label = "Kommande veckas fokus" if state == "kommande" else "Aktuell veckas fokus"
 
@@ -1009,6 +1010,9 @@ def render_week_status(snapshot: PresentationSnapshot) -> str:
 
 def render_week(snapshot: PresentationSnapshot) -> str:
     model = snapshot.week
+    navigation = getattr(snapshot, "navigation", None)
+    state = str(getattr(navigation, "state", "") or "").strip().lower()
+    aria_label = "Kommande veckas pass" if state == "kommande" else "Aktuell veckas pass"
     rows = []
     for day in model.days:
         actual = " + ".join(day.actual_labels)
@@ -1078,7 +1082,7 @@ def render_week(snapshot: PresentationSnapshot) -> str:
         if snapshot.weather.days else ""
     )
     return (
-        f'<section class="v2-week" aria-label="Aktuell veckas pass" '
+        f'<section class="v2-week" aria-label="{html.escape(aria_label, quote=True)}" '
         f'data-start="{model.start.isoformat()}" data-end="{model.end.isoformat()}">'
         f'<ol>{"".join(rows)}</ol>{source}</section>'
     )
