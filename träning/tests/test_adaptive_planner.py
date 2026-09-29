@@ -22,6 +22,7 @@ from adaptive_planner import (  # noqa: E402
     goal_runtime_source_label,
     materialize_strategy,
     mesocycle_schema,
+    mesocycle_is_valid,
     microcycle_guard_failures,
     microcycle_is_valid,
     microcycle_layout_failures,
