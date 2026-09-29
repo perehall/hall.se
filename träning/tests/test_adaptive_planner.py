@@ -776,6 +776,50 @@ class AdaptivePlanningTests(unittest.TestCase):
             ["20284663236"],
         )
 
+    def test_structural_intent_match_gets_planning_credit_without_direct_capability_claim(self):
+        state = {
+            "recent_sessions": [
+                {
+                    "id": 77,
+                    "date": "2026-09-29",
+                    "family": "run",
+                    "classification": "training",
+                    "training_profile": {
+                        "planning_credits": ["run_threshold"],
+                        "stimuli": [],
+                        "intent_matches": [
+                            {
+                                "relation": "fulfills_planned_dose",
+                                "confidence": "high",
+                                "stimuli": ["run_threshold"],
+                            }
+                        ],
+                    },
+                }
+            ],
+            "capability_facts": {},
+        }
+        context = completed_microcycle_context(state, date(2026, 9, 28))
+        self.assertNotIn("run_threshold", context["direct_capabilities"])
+        self.assertIn("run_threshold", context["planning_credits"])
+        self.assertEqual(context["planning_credit_refs"]["run_threshold"], ["77"])
+
+        meso = {
+            "primary_capabilities": ["run_threshold", "swim_aerobic", "swim_technique"],
+            "secondary_capabilities": ["run_easy_distance"],
+        }
+        result = fallback_microcycle(
+            meso,
+            self.policy,
+            self.catalog,
+            date(2026, 9, 28),
+            completed_context=context,
+        )
+        self.assertNotIn(
+            "run_threshold",
+            [row["recipe_key"] for row in result["slots"]],
+        )
+
     def test_generic_run_without_capability_evidence_is_not_credited_as_threshold(self):
         state = {
             "recent_sessions": [
