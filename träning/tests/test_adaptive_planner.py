@@ -25,6 +25,7 @@ from adaptive_planner import (  # noqa: E402
     microcycle_guard_failures,
     microcycle_is_valid,
     microcycle_layout_failures,
+    profile_planning_contract,
     resolve_planning_target,
     target_week,
     validate_and_normalize_micro,
@@ -913,7 +914,76 @@ class AdaptivePlanningTests(unittest.TestCase):
         )
         self.assertTrue(any("direkt intill MTB/XC" in item for item in failures))
 
-    def test_fallback_with_fixed_enduro_leaves_recovery_room(self):
+    def test_profile_contract_keeps_declared_inputs_separate(self):
+        profile = {
+            "schema_version": 1,
+            "status": "complete",
+            "goals": [{"text": "Bli bättre på MTB", "target_date": None, "importance": "equal"}],
+            "availability": {
+                "monday": {"available": True, "minutes": 90},
+                "tuesday": {"available": False, "minutes": None},
+            },
+            "preferences": {
+                "frequency": {"preferred_days": 7, "min_days": 5, "max_days": 7},
+                "double_sessions": "sometimes",
+                "rest_days": "load_driven",
+                "facilities": ["mtb", "indoor_bike"],
+            },
+            "constraints": {"fixed_commitments": "Enduro måndag", "other": ""},
+            "coach_autonomy": "week_auto",
+        }
+        contract = profile_planning_contract(profile)
+        self.assertEqual(contract["preferred_active_days"], 7)
+        self.assertIn(2, contract["unavailable_days"])
+        self.assertIn("indoor_bike", contract["facilities"])
+        self.assertNotIn("capacity", contract)
+
+    def test_declared_unavailable_day_is_hard_constraint(self):
+        profile = {
+            "availability": {"thursday": {"available": False, "minutes": None}},
+            "preferences": {"frequency": {}, "double_sessions": "sometimes", "rest_days": "load_driven"},
+            "constraints": {},
+        }
+        rows = [{"day_index": 4, "recipe_key": "swim_aerobic_technique"}]
+        failures = microcycle_layout_failures(
+            rows, self.catalog, date(2026, 10, 19), athlete_profile=profile
+        )
+        self.assertTrue(any("otillgänglig" in item for item in failures))
+
+    def test_occasional_double_is_rejected_when_available_day_is_unused(self):
+        profile = {
+            "availability": {
+                key: {"available": True, "minutes": None}
+                for key in ("monday","tuesday","wednesday","thursday","friday","saturday","sunday")
+            },
+            "preferences": {
+                "frequency": {"preferred_days": 7, "min_days": 5, "max_days": 7},
+                "double_sessions": "sometimes",
+                "rest_days": "load_driven",
+            },
+            "constraints": {},
+        }
+        rows = [
+            {"day_index": 2, "recipe_key": "swim_aerobic_technique"},
+            {"day_index": 2, "recipe_key": "strength_core"},
+            {"day_index": 4, "recipe_key": "run_threshold"},
+        ]
+        failures = microcycle_layout_failures(
+            rows, self.catalog, date(2026, 10, 19), athlete_profile=profile
+        )
+        self.assertTrue(any("dubbelpass klustras" in item for item in failures))
+
+    def test_no_global_rule_requires_a_rest_day(self):
+        rows = [
+            {"day_index": day, "recipe_key": "swim_aerobic_technique"}
+            for day in range(1, 8)
+        ]
+        failures = microcycle_layout_failures(
+            rows, self.catalog, date(2026, 10, 19)
+        )
+        self.assertFalse(any("sju dagar" in item or "vilodag" in item for item in failures))
+
+    def test_fallback_with_fixed_enduro_respects_mechanical_guards(self):
         meso = {
             "primary_capabilities": [
                 "swim_aerobic",
@@ -938,8 +1008,6 @@ class AdaptivePlanningTests(unittest.TestCase):
         )
         day2 = next(row for row in slots if row["day_index"] == 2)
         self.assertEqual(day2["recipe_key"], "swim_aerobic_technique")
-        occupied = {1} | {row["day_index"] for row in slots}
-        self.assertLess(len(occupied), 7)
         self.assertNotIn("mtb_technical", [row["recipe_key"] for row in slots])
 
     def test_micro_planner_revision_does_not_rebuild_started_current_week(self):
