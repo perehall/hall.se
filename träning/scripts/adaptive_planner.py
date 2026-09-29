@@ -2576,13 +2576,26 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
             generation_request_id if explicit_profile_generation else None
         )
     )
+    starting_state, starting_state_source = load_starting_state_for_planner(
+        generation_request_id=(
+            generation_request_id if explicit_profile_generation else None
+        )
+    )
     profile_hash_value = athlete_profile_hash(athlete_profile)
+    starting_state_hash_value = athlete_starting_state_hash(starting_state)
     expected_profile_revision = str(
         os.environ.get("ATHLETE_PROFILE_EXPECTED_REVISION") or ""
+    ).strip()
+    expected_starting_state_revision = str(
+        os.environ.get("ATHLETE_STARTING_STATE_EXPECTED_REVISION") or ""
     ).strip()
     if explicit_profile_generation and not athlete_profile:
         raise RuntimeError(
             "Adaptive planering: explicit profilgenerering kräver en komplett beständigt sparad atletprofil"
+        )
+    if explicit_profile_generation and not starting_state:
+        raise RuntimeError(
+            "Adaptive planering: explicit profilgenerering kräver ett bekräftat startläge"
         )
     if (
         explicit_profile_generation
@@ -2591,6 +2604,14 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
     ):
         raise RuntimeError(
             "Adaptive planering: atletprofilen ändrades efter genereringsbegäran; skapa planen igen från aktuell profil"
+        )
+    if (
+        explicit_profile_generation
+        and expected_starting_state_revision
+        and str(starting_state_source.get("revision") or "") != expected_starting_state_revision
+    ):
+        raise RuntimeError(
+            "Adaptive planering: startläget ändrades efter genereringsbegäran; skapa planen igen från aktuellt startläge"
         )
 
     policy = load_json(POLICY_FILE, {})
@@ -2612,7 +2633,9 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
         plan, upcoming, meso, today, goal=goal, microcycle_decision=micro
     )
 
-    if not mesocycle_is_valid(meso, goal, target_start, profile_hash_value):
+    if not mesocycle_is_valid(
+        meso, goal, target_start, profile_hash_value, starting_state_hash_value
+    ):
         meso = generate_mesocycle(
             goal,
             policy,
@@ -2620,6 +2643,7 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
             previous_mesocycle(current_strategy),
             target_start,
             athlete_profile=athlete_profile,
+            starting_state=starting_state,
             request_fn=meso_request_fn,
         )
         write_json(MESO_FILE, meso)
@@ -2634,6 +2658,7 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
         athlete_state,
         target_start,
         athlete_profile=athlete_profile,
+        starting_state=starting_state,
         completed_context=completed_context,
     )
     micro_digest = canonical_hash(micro_source_payload)
@@ -2646,6 +2671,7 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
             athlete_state,
             target_start,
             athlete_profile=athlete_profile,
+            starting_state=starting_state,
             request_fn=micro_request_fn,
         )
         write_json(MICRO_FILE, micro)
@@ -2659,6 +2685,7 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
         catalog,
         athlete_state,
         goal_runtime_source=goal_runtime_source,
+        starting_state=starting_state,
     )
     write_json(STRATEGY_FILE, strategy)
     scope = rebuild_calendar(plan, strategy, target_start, active_replan)
@@ -2670,6 +2697,8 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
         f"goal_source={goal_runtime_source['source']} "
         f"profile_source={athlete_profile_source.get('source')} "
         f"profile_revision={athlete_profile_source.get('revision')} "
+        f"starting_state_source={starting_state_source.get('source')} "
+        f"starting_state_revision={starting_state_source.get('revision')} "
         f"calendar={scope}."
     )
     return 0
