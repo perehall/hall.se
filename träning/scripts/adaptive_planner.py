@@ -1809,7 +1809,6 @@ def build_microcycle_source_payload(
     athlete_profile=None,
     starting_state=None,
     completed_context=None,
-    upcoming_strategy=None,
 ):
     completed_context = completed_context or completed_microcycle_context(
         athlete_state, target_start
@@ -2950,6 +2949,7 @@ def rebuild_calendar(
     *,
     today=None,
     completed_context=None,
+    upcoming_strategy=None,
 ):
     if active_replan:
         source = previous_archived_plan(target_start)
