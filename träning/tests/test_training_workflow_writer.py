@@ -90,6 +90,18 @@ class TrainingWorkflowWriterTests(unittest.TestCase):
         ):
             self.assertIn(path, workflow)
 
+    def test_profile_plan_generation_is_a_durable_canonical_event(self):
+        workflow = self.workflow_text()
+        update = self.update_job_text()
+
+        self.assertIn("- athlete-profile-plan-request", workflow)
+        self.assertIn("Mark athlete plan generation running", update)
+        self.assertIn("ATHLETE_PROFILE_PLAN_REQUEST:", update)
+        self.assertIn("ATHLETE_PROFILE_EXPECTED_REVISION:", update)
+        self.assertIn("plan_generation_status.py", update)
+        self.assertIn("--status completed", update)
+        self.assertIn("--status failed", update)
+
     def test_generated_training_commit_dispatches_pages_explicitly(self):
         workflow = self.workflow_text()
 
