@@ -127,18 +127,22 @@ class PeriodizedDevelopmentTests(unittest.TestCase):
             failures,
         )
 
-    def test_new_aerobic_endurance_swim_is_3600m_and_distinct(self):
+    def test_aerobic_endurance_swim_has_3200_consolidation_and_3600_progression(self):
         recipe = self.catalog["recipes"]["swim_aerobic_endurance"]
-        option = recipe["options"][0]
-        workout = option["watch_workout"]
-        total = 0
-        for block in workout["blocks"]:
-            repeat = int(block.get("repeat", 1))
-            for step in block.get("steps") or []:
-                if step.get("kind") == "swim":
-                    total += repeat * int(step["distance_m"])
-        self.assertEqual(total, 3600)
-        self.assertEqual(total, workout["planned_distance_m"])
+        self.assertEqual(
+            [option["value"] for option in recipe["options"]],
+            [3200, 3600],
+        )
+        for option in recipe["options"]:
+            workout = option["watch_workout"]
+            total = 0
+            for block in workout["blocks"]:
+                repeat = int(block.get("repeat", 1))
+                for step in block.get("steps") or []:
+                    if step.get("kind") == "swim":
+                        total += repeat * int(step["distance_m"])
+            self.assertEqual(total, option["value"])
+            self.assertEqual(total, workout["planned_distance_m"])
         self.assertEqual(recipe["development_character"], "aerobic_endurance")
         self.assertNotEqual(
             recipe["development_character"],

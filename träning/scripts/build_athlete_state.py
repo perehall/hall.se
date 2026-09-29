@@ -14,6 +14,7 @@ from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 from coach_rules import activity_family, activity_local_date
+from dose_response import build_dose_response, build_load_windows
 from supabase_activity_backend import load_activities_for_runtime
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -272,6 +273,9 @@ def build_state(activities_state, performance_history, *, today=None, lookback_d
         },
     }
 
+    dose_response = build_dose_response(recent_sessions, evidence, today=today)
+    load_windows = build_load_windows(recent_sessions, today=today)
+
     return {
         "schema_version": SCHEMA_VERSION,
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
@@ -283,11 +287,15 @@ def build_state(activities_state, performance_history, *, today=None, lookback_d
         "by_family": by_family,
         "recent_sessions": recent_sessions[-24:],
         "capability_facts": capability_facts,
+        "dose_response": dose_response,
+        "load_windows": load_windows,
         "performance_fingerprints": performance[-12:],
         "recent_week_reviews": recent_reviews(),
         "interpretation_boundary": (
-            "Dokumentet innehåller observerade fakta och uttryckliga användarrapporter. "
-            "Det anger inte optimal belastning, återhämtning, skaderisk eller framtida träningsdos."
+            "Dokumentet innehåller observerade fakta, uttryckliga användarrapporter och en konservativ "
+            "klassificering av demonstrerad/tolererad/absorberad dos. 24–72 h-signaler är kontext och "
+            "tillskrivs inte kausalt ett tidigare pass. Dokumentet anger inte optimal belastning, "
+            "återhämtning, skaderisk eller framtida träningsdos."
         ),
     }
 

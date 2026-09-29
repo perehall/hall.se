@@ -495,6 +495,79 @@
       "development_focus": "Utveckla simuthållighet genom längre sammanhängande aeroba block med stabil teknik, utan att samtidigt lägga till ett tröskelfokus.",
       "options": [
         {
+          "id": "swim-aerobic-endurance-3200",
+          "kind": "structured",
+          "value": 3200,
+          "session": "Simning · 3 200 m · aerob uthållighet",
+          "intent": "Konsolideringsdos med samma aeroba uthållighetskaraktär. Används när absorberad respons ännu inte stödjer 3 600 m.",
+          "watch_workout": {
+            "type": "Swim",
+            "equipment": [],
+            "name": "Aerob uthållighet · längre block · 3 200 m",
+            "planned_distance_m": 3200,
+            "blocks": [
+              {
+                "name": "Insim + teknik",
+                "steps": [
+                  {
+                    "kind": "swim",
+                    "text": "Lugn insim med fokus på linje och avslappning",
+                    "distance_m": 600,
+                    "intensity": "warmup",
+                    "equipment": []
+                  }
+                ]
+              },
+              {
+                "name": "Aerob uthållighet",
+                "repeat": 4,
+                "steps": [
+                  {
+                    "kind": "swim",
+                    "text": "Stabil aerob rytm och bibehållen teknik genom hela blocket",
+                    "distance_m": 500,
+                    "intensity": "active",
+                    "equipment": []
+                  },
+                  {
+                    "kind": "rest",
+                    "duration_s": 30
+                  }
+                ]
+              },
+              {
+                "name": "Teknik + frekvens",
+                "repeat": 4,
+                "steps": [
+                  {
+                    "kind": "swim",
+                    "text": "Avslappnad frekvens med stabil linje",
+                    "distance_m": 100,
+                    "intensity": "active",
+                    "equipment": []
+                  },
+                  {
+                    "kind": "rest",
+                    "duration_s": 20
+                  }
+                ]
+              },
+              {
+                "name": "Avsim",
+                "steps": [
+                  {
+                    "kind": "swim",
+                    "text": "Mycket lugnt avsim",
+                    "distance_m": 200,
+                    "intensity": "cooldown",
+                    "equipment": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
           "id": "swim-aerobic-endurance-3600",
           "kind": "structured",
           "value": 3600,

@@ -48,7 +48,7 @@ MODEL = os.environ.get("OPENAI_MODEL", "gpt-5-mini")
 MESO_SCHEMA_VERSION = 1
 MICRO_SCHEMA_VERSION = 1
 PLANNER_REVISION = 5
-MICRO_PLANNER_REVISION = 10
+MICRO_PLANNER_REVISION = 11
 
 CAPABILITY_TO_RECIPE = {
     "run_threshold": "run_threshold",
@@ -62,6 +62,17 @@ CAPABILITY_TO_RECIPE = {
     "strength_unilateral": "strength_core",
     "strength_core": "strength_core",
     "plyometric": "strength_core",
+}
+
+RECIPE_TO_RESPONSE_CAPABILITY = {
+    "run_threshold": "run_threshold",
+    "run_hill_quality": "run_hill_quality",
+    "run_easy_distance": "run_easy_distance",
+    "mtb_technical": "mtb_technical",
+    "swim_aerobic_technique": "swim_aerobic",
+    "swim_aerobic_endurance": "swim_aerobic",
+    "swim_aerobic_threshold": "swim_threshold",
+    "strength_core": "strength_unilateral",
 }
 
 FIXED_PROTECTED_CAPACITY = (
@@ -1436,6 +1447,45 @@ def validate_and_normalize_micro(result, meso, policy, catalog, target_start, co
     return {"rationale": str(result.get("rationale") or "").strip(), "slots": sorted(cleaned, key=lambda x: x["day_index"])}, True
 
 
+def response_profile_for_recipe(recipe_key, athlete_state):
+    capability = RECIPE_TO_RESPONSE_CAPABILITY.get(recipe_key)
+    if not capability:
+        return None
+    return (
+        ((athlete_state.get("dose_response") or {}).get("by_capability") or {})
+        .get(capability)
+    )
+
+
+def normalize_progress_actions_from_absorption(microcycle, athlete_state):
+    """Fail closed: requested progression becomes consolidation without absorbed evidence."""
+    normalized = deepcopy(microcycle)
+    for slot in normalized.get("slots") or []:
+        if slot.get("action") != "progress":
+            continue
+        recipe_key = str(slot.get("recipe_key") or "")
+        profile = response_profile_for_recipe(recipe_key, athlete_state)
+        if profile and profile.get("progression_ready") is True:
+            continue
+
+        reason = (
+            str((profile or {}).get("progression_reason") or "").strip()
+            or "Absorberad dos med stödjande återkoppling saknas."
+        )
+        slot["action"] = "consolidate"
+        slot["rationale"] = (
+            str(slot.get("rationale") or "").rstrip()
+            + " Automatisk progression neutraliseras: "
+            + reason
+        ).strip()
+        refs = list(slot.get("evidence_refs") or [])
+        marker = "athlete_state.dose_response: progression_ready=false"
+        if marker not in refs:
+            refs.append(marker)
+        slot["evidence_refs"] = refs
+    return normalized
+
+
 def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start, *, request_fn=None):
     completed_context = completed_microcycle_context(athlete_state, target_start)
     competition_context = build_competition_context(
@@ -1487,6 +1537,7 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
             "day_after_fixed_enduro_requires_low_leg_load": is_enduro_school_date(target_start),
             "adjacent_run_stressors_forbidden": True,
             "at_least_one_calendar_day_without_planned_training": True,
+            "automatic_progress_requires_absorbed_dose": True,
         },
     }
     digest = canonical_hash(source_payload)
@@ -1514,6 +1565,9 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
         "Flera självständiga pass får ligga samma kalenderdag när belastningsordningen motiverar det; varje slot är alltid ett eget pass. Datum är inte passidentitet. "
         "Om swim_threshold behövs finns ett separat etablerat 4 000 m-recept; behandla det som kvalitetsrecept, inte som automatisk distansprogression från det aeroba 3 200 m-passet. "
         "Enduro dag 1 är faktisk belastning och blockerar annan planering den dagen. "
+        "athlete_state.dose_response skiljer demonstrerad, tolererad och absorberad dos. Progress får bara väljas när relevant capability har progression_ready=true; "
+        "ett genomfört maxvärde är aldrig i sig progressionsstöd. 24–72 h-signaler är återhämtningskontext utan antagen kausalitet. "
+        "athlete_state.load_windows är faktiska durations-/exponeringsfönster och får användas för att upptäcka ackumulerad belastning, men är inte TSS eller ett återhämtningsmått. "
         "Progress får bara väljas för ett primärt mesocykelstimulus och ska ha stöd i athlete_state; annars välj consolidate/establish. "
         "En ledig dag är inte ett skäl att fylla kalendern. Kontrollera slutligen själv att varje hard_requirement är uppfyllt innan du svarar."
     )
@@ -1599,6 +1653,10 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
             "result": "fallback",
         }
         repair_metadata["normalization_guard_failed"] = True
+    normalized = normalize_progress_actions_from_absorption(
+        normalized,
+        athlete_state,
+    )
     normalized.update(
         {
             "schema_version": MICRO_SCHEMA_VERSION,
@@ -1680,31 +1738,68 @@ def choose_option(recipe_key, recipe, action, athlete_state):
     if not options:
         raise RuntimeError(f"Recept {recipe_key!r} saknar numeriska dosalternativ")
     options = sorted(options, key=lambda item: (float(item["value"]), str(item.get("id") or "")))
-    observed = demonstrated_value(recipe_key, athlete_state)
 
-    if observed is None:
+    observed = demonstrated_value(recipe_key, athlete_state)
+    profile = response_profile_for_recipe(recipe_key, athlete_state)
+    absorbed = (profile or {}).get("absorbed_value")
+    tolerated = (profile or {}).get("tolerated_value")
+    absorbed = float(absorbed) if isinstance(absorbed, (int, float)) else None
+    tolerated = float(tolerated) if isinstance(tolerated, (int, float)) else None
+
+    # Prefer evidence that a dose has been absorbed. A merely demonstrated higher
+    # maximum must not silently become the future planning floor.
+    trusted = absorbed if absorbed is not None else tolerated
+    if trusted is None:
+        trusted = float(observed) if isinstance(observed, (int, float)) else None
+
+    if trusted is None:
         floor_index = 0
-        evidence = "Ingen verifierad dosmarkör finns i athlete_state; lägsta katalogalternativ används som etableringspunkt, inte som fastställd optimal dos."
+        evidence = (
+            "Ingen verifierad dosmarkör finns; lägsta katalogalternativ används som etableringspunkt, "
+            "inte som fastställd optimal dos."
+        )
     else:
         eligible = [
             index for index, item in enumerate(options)
-            if float(item["value"]) <= float(observed) * 1.02
+            if float(item["value"]) <= trusted * 1.02
         ]
         floor_index = max(eligible) if eligible else 0
-        evidence = (
-            f"Valet utgår från ett observerat värde {observed:g} i athlete_state för receptets dosvariabel; "
-            "värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning."
-        )
+        if absorbed is not None:
+            evidence = (
+                f"Dosgolvet utgår från absorberad nivå {absorbed:g} i athlete_state.dose_response, "
+                "inte från högsta genomförda värde."
+            )
+        elif tolerated is not None:
+            evidence = (
+                f"Absorberad nivå saknas; dosgolvet utgår konservativt från tolererad nivå {tolerated:g}. "
+                "Detta är inte bevis för optimal framtida belastning."
+            )
+        else:
+            evidence = (
+                f"Endast demonstrerad nivå {trusted:g} finns; värdet används konservativt som kapacitetsfakta, "
+                "inte som bevis för absorberad eller optimal framtida belastning."
+            )
 
     selected_index = floor_index
     relation = "hold"
+    progression_ready = bool(profile and profile.get("progression_ready") is True)
+
     if action == "progress":
-        if floor_index + 1 < len(options):
+        if not progression_ready:
+            relation = "hold"
+            reason = str((profile or {}).get("progression_reason") or "").strip()
+            evidence += (
+                " Automatisk progression blockeras eftersom absorberad dos och aktuell respons inte ger "
+                "tillräckligt stöd."
+                + (f" {reason}" if reason else "")
+            )
+        elif floor_index + 1 < len(options):
             selected_index = floor_index + 1
             relation = "progress"
+            evidence += " Progression tillåts eftersom dose_response markerar progression_ready=true."
         else:
             relation = "hold"
-            evidence += " Katalogen innehåller inget högre verifierat steg, därför konsolideras dosen."
+            evidence += " Katalogen innehåller inget högre förgodkänt steg, därför konsolideras dosen."
     elif action == "reduce":
         if floor_index > 0:
             selected_index = floor_index - 1
@@ -1712,7 +1807,7 @@ def choose_option(recipe_key, recipe, action, athlete_state):
         else:
             relation = "hold"
     elif action == "establish":
-        relation = "establish" if observed is None else "hold"
+        relation = "establish" if trusted is None else "hold"
     else:
         relation = "hold"
 

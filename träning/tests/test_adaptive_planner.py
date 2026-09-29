@@ -379,6 +379,109 @@ class AdaptivePlanningTests(unittest.TestCase):
         self.assertEqual(threshold[0]["distance_m"], 4000)
         self.assertEqual(threshold[0]["protocol"], "aerob+threshold")
 
+    def test_dose_response_distinguishes_absorbed_from_latest_caution(self):
+        activities = {
+            "activities": [
+                {
+                    "id": 100,
+                    "start_date_local": "2026-09-16T18:00:00",
+                    "sport_type": "Swim",
+                    "classification": "training",
+                    "elapsed_time_s": 3600,
+                    "distance_m": 3200,
+                    "user_report": "Bra kontroll. RPE 6/10. Känsla: Pigg.",
+                },
+                {
+                    "id": 101,
+                    "start_date_local": "2026-09-23T18:00:00",
+                    "sport_type": "Swim",
+                    "classification": "training",
+                    "elapsed_time_s": 3550,
+                    "distance_m": 3200,
+                    "user_report": "Väldigt bra kontroll. RPE 6/10. Känsla: Kunde gjort mer.",
+                },
+                {
+                    "id": 102,
+                    "start_date_local": "2026-09-24T18:00:00",
+                    "sport_type": "MountainBikeRide",
+                    "classification": "training",
+                    "elapsed_time_s": 4800,
+                    "distance_m": 18000,
+                    "user_report": "Känsla: Pigg.",
+                },
+                {
+                    "id": 103,
+                    "start_date_local": "2026-09-26T18:00:00",
+                    "sport_type": "Swim",
+                    "classification": "training",
+                    "elapsed_time_s": 3800,
+                    "distance_m": 3000,
+                    "user_report": "RPE 8/10. Känsla: Trött.",
+                },
+            ]
+        }
+        state = build_state(activities, {"entries": []}, today=date(2026, 9, 29))
+        profile = state["dose_response"]["by_capability"]["swim_aerobic"]
+        self.assertEqual(profile["absorbed_value"], 3200.0)
+        self.assertEqual(profile["latest_exposure"]["direct_response"]["signal"], "caution")
+        self.assertFalse(profile["progression_ready"])
+
+        recipe = self.catalog["recipes"]["swim_aerobic_endurance"]
+        selected, floor, _, relation, evidence = choose_option(
+            "swim_aerobic_endurance", recipe, "progress", state
+        )
+        self.assertEqual(floor["id"], "swim-aerobic-endurance-3200")
+        self.assertEqual(selected["id"], "swim-aerobic-endurance-3200")
+        self.assertEqual(relation, "hold")
+        self.assertIn("absorberad nivå 3200", evidence)
+
+    def test_repeated_supportive_threshold_response_becomes_absorbed(self):
+        activities = {
+            "activities": [
+                {
+                    "id": 110,
+                    "start_date_local": "2026-09-08T18:00:00",
+                    "sport_type": "Run",
+                    "classification": "training",
+                    "elapsed_time_s": 3700,
+                    "distance_m": 12000,
+                    "user_report": "4x8 min tröskel. RPE 6/10. Känsla: Pigg.",
+                },
+                {
+                    "id": 111,
+                    "start_date_local": "2026-09-09T18:00:00",
+                    "sport_type": "Swim",
+                    "classification": "training",
+                    "elapsed_time_s": 3400,
+                    "distance_m": 3000,
+                    "user_report": "Känsla: Pigg.",
+                },
+                {
+                    "id": 112,
+                    "start_date_local": "2026-09-22T18:00:00",
+                    "sport_type": "Run",
+                    "classification": "training",
+                    "elapsed_time_s": 3680,
+                    "distance_m": 12800,
+                    "user_report": "4x8 min tröskel. Bra kontroll. RPE 6/10. Känsla: Kunde gjort mer.",
+                },
+                {
+                    "id": 113,
+                    "start_date_local": "2026-09-23T18:00:00",
+                    "sport_type": "Swim",
+                    "classification": "training",
+                    "elapsed_time_s": 3500,
+                    "distance_m": 3200,
+                    "user_report": "Känsla: Pigg.",
+                },
+            ]
+        }
+        state = build_state(activities, {"entries": []}, today=date(2026, 9, 29))
+        profile = state["dose_response"]["by_capability"]["run_threshold"]
+        self.assertEqual(profile["absorbed_value"], 32.0)
+        self.assertTrue(profile["progression_ready"])
+        self.assertIn("recent_7d", state["load_windows"]["windows"])
+
     def test_swim_threshold_recipe_uses_explicit_threshold_evidence(self):
         state = {
             "capability_facts": {
@@ -417,7 +520,7 @@ class AdaptivePlanningTests(unittest.TestCase):
         self.assertEqual(next_option["id"], "run-threshold-4x9")
         self.assertEqual(relation, "hold")
 
-    def test_progression_can_move_beyond_demonstrated_four_by_eight(self):
+    def test_progression_can_move_beyond_absorbed_four_by_eight(self):
         state = {
             "capability_facts": {
                 "run_threshold": {
@@ -425,7 +528,17 @@ class AdaptivePlanningTests(unittest.TestCase):
                         {"work_minutes": 32.0, "kind": "explicit_user_report"}
                     ]
                 }
-            }
+            },
+            "dose_response": {
+                "by_capability": {
+                    "run_threshold": {
+                        "absorbed_value": 32.0,
+                        "tolerated_value": 32.0,
+                        "progression_ready": True,
+                        "progression_reason": "Repeated supportive response.",
+                    }
+                }
+            },
         }
         recipe = self.catalog["recipes"]["run_threshold"]
         selected, floor, _, relation, _ = choose_option(
@@ -435,7 +548,7 @@ class AdaptivePlanningTests(unittest.TestCase):
         self.assertEqual(selected["id"], "run-threshold-4x9")
         self.assertEqual(relation, "progress")
 
-    def test_progression_moves_one_catalog_step_from_observed_floor(self):
+    def test_progression_moves_one_catalog_step_from_absorbed_floor(self):
         state = {
             "capability_facts": {
                 "run_threshold": {
@@ -443,7 +556,17 @@ class AdaptivePlanningTests(unittest.TestCase):
                         {"work_minutes": 24.0, "kind": "performance_fingerprint"}
                     ]
                 }
-            }
+            },
+            "dose_response": {
+                "by_capability": {
+                    "run_threshold": {
+                        "absorbed_value": 24.0,
+                        "tolerated_value": 24.0,
+                        "progression_ready": True,
+                        "progression_reason": "Repeated supportive response.",
+                    }
+                }
+            },
         }
         recipe = self.catalog["recipes"]["run_threshold"]
         selected, floor, _, relation, _ = choose_option(
@@ -452,6 +575,35 @@ class AdaptivePlanningTests(unittest.TestCase):
         self.assertEqual(floor["id"], "run-threshold-3x8")
         self.assertEqual(selected["id"], "run-threshold-3x10")
         self.assertEqual(relation, "progress")
+
+    def test_progression_is_blocked_when_only_demonstrated_or_tolerated(self):
+        state = {
+            "capability_facts": {
+                "run_threshold": {
+                    "evidence": [
+                        {"work_minutes": 32.0, "kind": "explicit_user_report"}
+                    ]
+                }
+            },
+            "dose_response": {
+                "by_capability": {
+                    "run_threshold": {
+                        "absorbed_value": None,
+                        "tolerated_value": 32.0,
+                        "progression_ready": False,
+                        "progression_reason": "Dose completed but not yet absorbed.",
+                    }
+                }
+            },
+        }
+        recipe = self.catalog["recipes"]["run_threshold"]
+        selected, floor, _, relation, evidence = choose_option(
+            "run_threshold", recipe, "progress", state
+        )
+        self.assertEqual(floor["id"], "run-threshold-4x8")
+        self.assertEqual(selected["id"], "run-threshold-4x8")
+        self.assertEqual(relation, "hold")
+        self.assertIn("blockeras", evidence)
 
     def test_completed_threshold_is_credited_only_from_dated_capability_evidence(self):
         state = {
@@ -702,7 +854,7 @@ class AdaptivePlanningTests(unittest.TestCase):
             "end_date": "2026-10-18",
             "goal_hash": goal_hash(self.goal),
         }
-        self.assertEqual(MICRO_PLANNER_REVISION, 10)
+        self.assertEqual(MICRO_PLANNER_REVISION, 11)
         stale_micro = {
             "planner_revision": 6,
             "week_start": "2026-09-28",
