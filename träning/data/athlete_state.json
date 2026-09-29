@@ -54,6 +54,1807 @@
     "start": "2026-08-05",
     "lookback_days": 56
   },
+  "load_windows": {
+    "windows": {
+      "recent_7d": {
+        "end": "2026-09-29",
+        "start": "2026-09-23",
+        "time_s": 35872,
+        "by_family": {
+          "run": {
+            "time_s": 9371,
+            "active_days": 2,
+            "activity_count": 2
+          },
+          "bike": {
+            "time_s": 4976,
+            "active_days": 1,
+            "activity_count": 1
+          },
+          "swim": {
+            "time_s": 7359,
+            "active_days": 2,
+            "activity_count": 2
+          },
+          "enduro": {
+            "time_s": 11954,
+            "active_days": 2,
+            "activity_count": 2
+          },
+          "strength": {
+            "time_s": 2212,
+            "active_days": 1,
+            "activity_count": 1
+          }
+        },
+        "active_days": 6,
+        "activity_count": 8
+      },
+      "recent_28d": {
+        "end": "2026-09-29",
+        "start": "2026-09-02",
+        "time_s": 155960,
+        "by_family": {
+          "run": {
+            "time_s": 54213,
+            "active_days": 11,
+            "activity_count": 11
+          },
+          "bike": {
+            "time_s": 23742,
+            "active_days": 5,
+            "activity_count": 5
+          },
+          "swim": {
+            "time_s": 24363,
+            "active_days": 6,
+            "activity_count": 6
+          },
+          "enduro": {
+            "time_s": 42403,
+            "active_days": 6,
+            "activity_count": 6
+          },
+          "swimrun": {
+            "time_s": 3265,
+            "active_days": 1,
+            "activity_count": 1
+          },
+          "strength": {
+            "time_s": 7974,
+            "active_days": 4,
+            "activity_count": 4
+          }
+        },
+        "active_days": 27,
+        "activity_count": 33
+      },
+      "previous_7d": {
+        "end": "2026-09-22",
+        "start": "2026-09-16",
+        "time_s": 37060,
+        "by_family": {
+          "run": {
+            "time_s": 15549,
+            "active_days": 3,
+            "activity_count": 3
+          },
+          "bike": {
+            "time_s": 4635,
+            "active_days": 1,
+            "activity_count": 1
+          },
+          "swim": {
+            "time_s": 9053,
+            "active_days": 2,
+            "activity_count": 2
+          },
+          "enduro": {
+            "time_s": 5809,
+            "active_days": 1,
+            "activity_count": 1
+          },
+          "strength": {
+            "time_s": 2014,
+            "active_days": 1,
+            "activity_count": 1
+          }
+        },
+        "active_days": 7,
+        "activity_count": 8
+      }
+    },
+    "interpretation_boundary": "Fönstren är observerad duration och exponeringsfrekvens. De är inte TSS, belastningspoäng, återhämtningsmått eller bevis för lämplig framtida veckodos."
+  },
+  "dose_response": {
+    "model": "demonstrated_tolerated_absorbed_v1",
+    "principle": "Genomförd dos är inte samma sak som absorberad dos. Automatisk progression kräver upprepad jämförbar exponering med stödjande användarrespons; 24–72 h-signaler används som kontext och tillskrivs inte kausalt ett tidigare pass.",
+    "by_capability": {
+      "swim_aerobic": {
+        "metric": "distance_m",
+        "exposures": [
+          {
+            "date": "2026-08-17",
+            "metric": "distance_m",
+            "dose_value": 3200.0,
+            "activity_id": 19783232279,
+            "direct_response": {
+              "signal": "unknown",
+              "rpe_values": [],
+              "caution_terms": [],
+              "supportive_terms": []
+            },
+            "response_status": "tolerated",
+            "repeat_supported": true,
+            "recovery_context_24_72h": {
+              "signal": "unobserved",
+              "observations": [],
+              "window_complete": true,
+              "causal_interpretation": "not_inferred"
+            }
+          },
+          {
+            "date": "2026-08-21",
+            "metric": "distance_m",
+            "dose_value": 3200.0,
+            "activity_id": 19839384290,
+            "direct_response": {
+              "signal": "unknown",
+              "rpe_values": [],
+              "caution_terms": [],
+              "supportive_terms": []
+            },
+            "response_status": "tolerated",
+            "repeat_supported": true,
+            "recovery_context_24_72h": {
+              "signal": "unobserved",
+              "observations": [],
+              "window_complete": true,
+              "causal_interpretation": "not_inferred"
+            }
+          },
+          {
+            "date": "2026-09-05",
+            "metric": "distance_m",
+            "dose_value": 4000.0,
+            "activity_id": 20047602146,
+            "direct_response": {
+              "signal": "unknown",
+              "rpe_values": [],
+              "caution_terms": [],
+              "supportive_terms": []
+            },
+            "response_status": "tolerated",
+            "repeat_supported": true,
+            "recovery_context_24_72h": {
+              "signal": "supportive",
+              "observations": [
+                {
+                  "date": "2026-09-06",
+                  "family": "run",
+                  "signal": "supportive",
+                  "activity_id": 20057585521,
+                  "caution_terms": [],
+                  "supportive_terms": [
+                    "pigg"
+                  ]
+                }
+              ],
+              "window_complete": true,
+              "causal_interpretation": "not_inferred"
+            }
+          },
+          {
+            "date": "2026-09-09",
+            "metric": "distance_m",
+            "dose_value": 3200.0,
+            "activity_id": 20106458579,
+            "direct_response": {
+              "signal": "unknown",
+              "rpe_values": [],
+              "caution_terms": [],
+              "supportive_terms": []
+            },
+            "response_status": "tolerated",
+            "repeat_supported": true,
+            "recovery_context_24_72h": {
+              "signal": "unobserved",
+              "observations": [],
+              "window_complete": true,
+              "causal_interpretation": "not_inferred"
+            }
+          },
+          {
+            "date": "2026-09-16",
+            "metric": "distance_m",
+            "dose_value": 3500.0,
+            "activity_id": 20203770266,
+            "direct_response": {
+              "signal": "unknown",
+              "rpe_values": [],
+              "caution_terms": [],
+              "supportive_terms": []
+            },
+            "response_status": "tolerated",
+            "repeat_supported": true,
+            "recovery_context_24_72h": {
+              "signal": "supportive",
+              "observations": [
+                {
+                  "date": "2026-09-18",
+                  "family": "run",
+                  "signal": "supportive",
+                  "activity_id": 20229568713,
+                  "caution_terms": [],
+                  "supportive_terms": [
+                    "superpigg",
+                    "pigg"
+                  ]
+                }
+              ],
+              "window_complete": true,
+              "causal_interpretation": "not_inferred"
+            }
+          },
+          {
+            "date": "2026-09-19",
+            "metric": "distance_m",
+            "dose_value": 4000.0,
+            "activity_id": 20239623463,
+            "direct_response": {
+              "signal": "unknown",
+              "rpe_values": [],
+              "caution_terms": [],
+              "supportive_terms": []
+            },
+            "response_status": "tolerated",
+            "repeat_supported": true,
+            "recovery_context_24_72h": {
+              "signal": "supportive",
+              "observations": [
+                {
+                  "date": "2026-09-21",
+                  "family": "enduro",
+                  "signal": "supportive",
+                  "activity_id": 20271537143,
+                  "caution_terms": [],
+                  "supportive_terms": [
+                    "pigg"
+                  ]
+                },
+                {
+                  "date": "2026-09-21",
+                  "family": "strength",
+                  "signal": "supportive",
+                  "activity_id": 20272196080,
+                  "caution_terms": [],
+                  "supportive_terms": [
+                    "pigg"
+                  ]
+                },
+                {
+                  "date": "2026-09-22",
+                  "family": "run",
+                  "signal": "supportive",
+                  "activity_id": 20284663236,
+                  "caution_terms": [],
+                  "supportive_terms": [
+                    "kunde gjort mer"
+                  ]
+                }
+              ],
+              "window_complete": true,
+              "causal_interpretation": "not_inferred"
+            }
+          },
+          {
+            "date": "2026-09-23",
+            "metric": "distance_m",
+            "dose_value": 3200.0,
+            "activity_id": 20300494236,
+            "direct_response": {
+              "signal": "supportive",
+              "rpe_values": [
+                6.0
+              ],
+              "caution_terms": [],
+              "supportive_terms": [
+                "kunde gjort mer",
+                "väldigt bra kontroll",
+                "bra kontroll"
+              ]
+            },
+            "response_status": "tolerated_with_recovery_caution",
+            "repeat_supported": true,
+            "recovery_context_24_72h": {
+              "signal": "caution",
+              "observations": [
+                {
+                  "date": "2026-09-24",
+                  "family": "bike",
+                  "signal": "supportive",
+                  "activity_id": 20314473143,
+                  "caution_terms": [],
+                  "supportive_terms": [
+                    "pigg"
+                  ]
+                },
+                {
+                  "date": "2026-09-25",
+                  "family": "run",
+                  "signal": "supportive",
+                  "activity_id": 20326850936,
+                  "caution_terms": [],
+                  "supportive_terms": [
+                    "pigg"
+                  ]
+                },
+                {
+                  "date": "2026-09-26",
+                  "family": "swim",
+                  "signal": "caution",
+                  "activity_id": 20337309419,
+                  "caution_terms": [
+                    "trött"
+                  ],
+                  "supportive_terms": []
+                },
+                {
+                  "date": "2026-09-26",
+                  "family": "enduro",
+                  "signal": "supportive",
+                  "activity_id": 20337767421,
+                  "caution_terms": [],
+                  "supportive_terms": [
+                    "pigg"
+                  ]
+                }
+              ],
+              "window_complete": true,
+              "causal_interpretation": "not_inferred"
+            }
+          },
+          {
+            "date": "2026-09-26",
+            "metric": "distance_m",
+            "dose_value": 3000.0,
+            "activity_id": 20337309419,
+            "direct_response": {
+              "signal": "caution",
+              "rpe_values": [
+                8.0
+              ],
+              "caution_terms": [
+                "trött"
+              ],
+              "supportive_terms": []
+            },
+            "response_status": "caution",
+            "repeat_supported": true,
+            "recovery_context_24_72h": {
+              "signal": "caution",
+              "observations": [
+                {
+                  "date": "2026-09-27",
+                  "family": "run",
+                  "signal": "caution",
+                  "activity_id": 20350203020,
+                  "caution_terms": [
+                    "väldigt sliten",
+                    "sliten",
+                    "tunga ben"
+                  ],
+                  "supportive_terms": []
+                },
+                {
+                  "date": "2026-09-28",
+                  "family": "enduro",
+                  "signal": "supportive",
+                  "activity_id": 20367593813,
+                  "caution_terms": [],
+                  "supportive_terms": [
+                    "pigg"
+                  ]
+                },
+                {
+                  "date": "2026-09-28",
+                  "family": "strength",
+                  "signal": "supportive",
+                  "activity_id": 20368346174,
+                  "caution_terms": [],
+                  "supportive_terms": [
+                    "pigg"
+                  ]
+                }
+              ],
+              "window_complete": true,
+              "causal_interpretation": "not_inferred"
+            }
+          }
+        ],
+        "absorbed_value": null,
+        "latest_exposure": {
+          "date": "2026-09-26",
+          "metric": "distance_m",
+          "dose_value": 3000.0,
+          "activity_id": 20337309419,
+          "direct_response": {
+            "signal": "caution",
+            "rpe_values": [
+              8.0
+            ],
+            "caution_terms": [
+              "trött"
+            ],
+            "supportive_terms": []
+          },
+          "response_status": "caution",
+          "repeat_supported": true,
+          "recovery_context_24_72h": {
+            "signal": "caution",
+            "observations": [
+              {
+                "date": "2026-09-27",
+                "family": "run",
+                "signal": "caution",
+                "activity_id": 20350203020,
+                "caution_terms": [
+                  "väldigt sliten",
+                  "sliten",
+                  "tunga ben"
+                ],
+                "supportive_terms": []
+              },
+              {
+                "date": "2026-09-28",
+                "family": "enduro",
+                "signal": "supportive",
+                "activity_id": 20367593813,
+                "caution_terms": [],
+                "supportive_terms": [
+                  "pigg"
+                ]
+              },
+              {
+                "date": "2026-09-28",
+                "family": "strength",
+                "signal": "supportive",
+                "activity_id": 20368346174,
+                "caution_terms": [],
+                "supportive_terms": [
+                  "pigg"
+                ]
+              }
+            ],
+            "window_complete": true,
+            "causal_interpretation": "not_inferred"
+          }
+        },
+        "tolerated_value": 4000.0,
+        "progression_ready": false,
+        "demonstrated_value": 4000.0,
+        "progression_reason": "Senaste jämförbara exponeringen innehåller en explicit varningssignal från användaren."
+      },
+      "mtb_technical": {
+        "metric": "duration_minutes",
+        "exposures": [
+          {
+            "date": "2026-08-13",
+            "metric": "duration_minutes",
+            "dose_value": 78.98,
+            "activity_id": 19729195603,
+            "direct_response": {
+              "signal": "unknown",
+              "rpe_values": [],
+              "caution_terms": [],
+              "supportive_terms": []
+            },
+            "response_status": "tolerated",
+            "repeat_supported": true,
+            "recovery_context_24_72h": {
+              "signal": "unobserved",
+              "observations": [],
+              "window_complete": true,
+              "causal_interpretation": "not_inferred"
+            }
+          },
+          {
+            "date": "2026-08-27",
+            "metric": "duration_minutes",
+            "dose_value": 70.8,
+            "activity_id": 19926277295,
+            "direct_response": {
+              "signal": "unknown",
+              "rpe_values": [],
+              "caution_terms": [],
+              "supportive_terms": []
+            },
+            "response_status": "tolerated",
+            "repeat_supported": true,
+            "recovery_context_24_72h": {
+              "signal": "unobserved",
+              "observations": [],
+              "window_complete": true,
+              "causal_interpretation": "not_inferred"
+            }
+          },
+          {
+            "date": "2026-09-03",
+            "metric": "duration_minutes",
+            "dose_value": 131.38,
+            "activity_id": 20024236347,
+            "direct_response": {
+              "signal": "unknown",
+              "rpe_values": [],
+              "caution_terms": [],
+              "supportive_terms": []
+            },
+            "response_status": "tolerated",
+            "repeat_supported": false,
+            "recovery_context_24_72h": {
+              "signal": "supportive",
+              "observations": [
+                {
+                  "date": "2026-09-06",
+                  "family": "run",
+                  "signal": "supportive",
+                  "activity_id": 20057585521,
+                  "caution_terms": [],
+                  "supportive_terms": [
+                    "pigg"
+                  ]
+                }
+              ],
+              "window_complete": true,
+              "causal_interpretation": "not_inferred"
+            }
+          },
+          {
+            "date": "2026-09-10",
+            "metric": "duration_minutes",
+            "dose_value": 73.23,
+            "activity_id": 20120769386,
+            "direct_response": {
+              "signal": "neutral",
+              "rpe_values": [],
+              "caution_terms": [],
+              "supportive_terms": []
+            },
+            "response_status": "tolerated",
+            "repeat_supported": true,
+            "recovery_context_24_72h": {
+              "signal": "unobserved",
+              "observations": [],
+              "window_complete": true,
+              "causal_interpretation": "not_inferred"
+            }
+          },
+          {
+            "date": "2026-09-13",
+            "metric": "duration_minutes",
+            "dose_value": 30.9,
+            "activity_id": 20153873263,
+            "direct_response": {
+              "signal": "unknown",
+              "rpe_values": [],
+              "caution_terms": [],
+              "supportive_terms": []
+            },
+            "response_status": "tolerated",
+            "repeat_supported": false,
+            "recovery_context_24_72h": {
+              "signal": "unobserved",
+              "observations": [],
+              "window_complete": true,
+              "causal_interpretation": "not_inferred"
+            }
+          },
+          {
+            "date": "2026-09-17",
+            "metric": "duration_minutes",
+            "dose_value": 77.25,
+            "activity_id": 20218282169,
+            "direct_response": {
+              "signal": "unknown",
+              "rpe_values": [],
+              "caution_terms": [],
+              "supportive_terms": []
+            },
+            "response_status": "tolerated",
+            "repeat_supported": true,
+            "recovery_context_24_72h": {
+              "signal": "supportive",
+              "observations": [
+                {
+                  "date": "2026-09-18",
+                  "family": "run",
+                  "signal": "supportive",
+                  "activity_id": 20229568713,
+                  "caution_terms": [],
+                  "supportive_terms": [
+                    "superpigg",
+                    "pigg"
+                  ]
+                }
+              ],
+              "window_complete": true,
+              "causal_interpretation": "not_inferred"
+            }
+          },
+          {
+            "date": "2026-09-24",
+            "metric": "duration_minutes",
+            "dose_value": 82.93,
+            "activity_id": 20314473143,
+            "direct_response": {
+              "signal": "supportive",
+              "rpe_values": [
+                6.0,
+                4.0
+              ],
+              "caution_terms": [],
+              "supportive_terms": [
+                "pigg"
+              ]
+            },
+            "response_status": "tolerated_with_recovery_caution",
+            "repeat_supported": true,
+            "recovery_context_24_72h": {
+              "signal": "caution",
+              "observations": [
+                {
+                  "date": "2026-09-25",
+                  "family": "run",
+                  "signal": "supportive",
+                  "activity_id": 20326850936,
+                  "caution_terms": [],
+                  "supportive_terms": [
+                    "pigg"
+                  ]
+                },
+                {
+                  "date": "2026-09-26",
+                  "family": "swim",
+                  "signal": "caution",
+                  "activity_id": 20337309419,
+                  "caution_terms": [
+                    "trött"
+                  ],
+                  "supportive_terms": []
+                },
+                {
+                  "date": "2026-09-26",
+                  "family": "enduro",
+                  "signal": "supportive",
+                  "activity_id": 20337767421,
+                  "caution_terms": [],
+                  "supportive_terms": [
+                    "pigg"
+                  ]
+                },
+                {
+                  "date": "2026-09-27",
+                  "family": "run",
+                  "signal": "caution",
+                  "activity_id": 20350203020,
+                  "caution_terms": [
+                    "väldigt sliten",
+                    "sliten",
+                    "tunga ben"
+                  ],
+                  "supportive_terms": []
+                }
+              ],
+              "window_complete": true,
+              "causal_interpretation": "not_inferred"
+            }
+          }
+        ],
+        "absorbed_value": null,
+        "latest_exposure": {
+          "date": "2026-09-24",
+          "metric": "duration_minutes",
+          "dose_value": 82.93,
+          "activity_id": 20314473143,
+          "direct_response": {
+            "signal": "supportive",
+            "rpe_values": [
+              6.0,
+              4.0
+            ],
+            "caution_terms": [],
+            "supportive_terms": [
+              "pigg"
+            ]
+          },
+          "response_status": "tolerated_with_recovery_caution",
+          "repeat_supported": true,
+          "recovery_context_24_72h": {
+            "signal": "caution",
+            "observations": [
+              {
+                "date": "2026-09-25",
+                "family": "run",
+                "signal": "supportive",
+                "activity_id": 20326850936,
+                "caution_terms": [],
+                "supportive_terms": [
+                  "pigg"
+                ]
+              },
+              {
+                "date": "2026-09-26",
+                "family": "swim",
+                "signal": "caution",
+                "activity_id": 20337309419,
+                "caution_terms": [
+                  "trött"
+                ],
+                "supportive_terms": []
+              },
+              {
+                "date": "2026-09-26",
+                "family": "enduro",
+                "signal": "supportive",
+                "activity_id": 20337767421,
+                "caution_terms": [],
+                "supportive_terms": [
+                  "pigg"
+                ]
+              },
+              {
+                "date": "2026-09-27",
+                "family": "run",
+                "signal": "caution",
+                "activity_id": 20350203020,
+                "caution_terms": [
+                  "väldigt sliten",
+                  "sliten",
+                  "tunga ben"
+                ],
+                "supportive_terms": []
+              }
+            ],
+            "window_complete": true,
+            "causal_interpretation": "not_inferred"
+          }
+        },
+        "tolerated_value": 131.38,
+        "progression_ready": false,
+        "demonstrated_value": 131.38,
+        "progression_reason": "Dos har demonstrerats/tolererats men saknar ännu upprepad stödjande respons för att klassas som absorberad."
+      },
+      "run_threshold": {
+        "metric": "work_minutes",
+        "exposures": [
+          {
+            "date": "2026-08-25",
+            "metric": "work_minutes",
+            "dose_value": 24.0,
+            "activity_id": 19897382163,
+            "direct_response": {
+              "signal": "supportive",
+              "rpe_values": [],
+              "caution_terms": [],
+              "supportive_terms": [
+                "stark"
+              ]
+            },
+            "response_status": "tolerated",
+            "repeat_supported": false,
+            "recovery_context_24_72h": {
+              "signal": "unobserved",
+              "observations": [],
+              "window_complete": true,
+              "causal_interpretation": "not_inferred"
+            }
+          },
+          {
+            "date": "2026-09-08",
+            "metric": "work_minutes",
+            "dose_value": 32.0,
+            "activity_id": 20092166843,
+            "direct_response": {
+              "signal": "neutral",
+              "rpe_values": [],
+              "caution_terms": [],
+              "supportive_terms": []
+            },
+            "response_status": "tolerated",
+            "repeat_supported": true,
+            "recovery_context_24_72h": {
+              "signal": "unobserved",
+              "observations": [],
+              "window_complete": true,
+              "causal_interpretation": "not_inferred"
+            }
+          },
+          {
+            "date": "2026-09-22",
+            "metric": "work_minutes",
+            "dose_value": 32.0,
+            "activity_id": 20284663236,
+            "direct_response": {
+              "signal": "supportive",
+              "rpe_values": [
+                6.0
+              ],
+              "caution_terms": [],
+              "supportive_terms": [
+                "kunde gjort mer",
+                "riktigt bra",
+                "god kontroll",
+                "kände mig stark",
+                "stark"
+              ]
+            },
+            "response_status": "absorbed",
+            "repeat_supported": true,
+            "recovery_context_24_72h": {
+              "signal": "supportive",
+              "observations": [
+                {
+                  "date": "2026-09-23",
+                  "family": "swim",
+                  "signal": "supportive",
+                  "activity_id": 20300494236,
+                  "caution_terms": [],
+                  "supportive_terms": [
+                    "kunde gjort mer"
+                  ]
+                },
+                {
+                  "date": "2026-09-24",
+                  "family": "bike",
+                  "signal": "supportive",
+                  "activity_id": 20314473143,
+                  "caution_terms": [],
+                  "supportive_terms": [
+                    "pigg"
+                  ]
+                },
+                {
+                  "date": "2026-09-25",
+                  "family": "run",
+                  "signal": "supportive",
+                  "activity_id": 20326850936,
+                  "caution_terms": [],
+                  "supportive_terms": [
+                    "pigg"
+                  ]
+                }
+              ],
+              "window_complete": true,
+              "causal_interpretation": "not_inferred"
+            }
+          }
+        ],
+        "absorbed_value": 32.0,
+        "latest_exposure": {
+          "date": "2026-09-22",
+          "metric": "work_minutes",
+          "dose_value": 32.0,
+          "activity_id": 20284663236,
+          "direct_response": {
+            "signal": "supportive",
+            "rpe_values": [
+              6.0
+            ],
+            "caution_terms": [],
+            "supportive_terms": [
+              "kunde gjort mer",
+              "riktigt bra",
+              "god kontroll",
+              "kände mig stark",
+              "stark"
+            ]
+          },
+          "response_status": "absorbed",
+          "repeat_supported": true,
+          "recovery_context_24_72h": {
+            "signal": "supportive",
+            "observations": [
+              {
+                "date": "2026-09-23",
+                "family": "swim",
+                "signal": "supportive",
+                "activity_id": 20300494236,
+                "caution_terms": [],
+                "supportive_terms": [
+                  "kunde gjort mer"
+                ]
+              },
+              {
+                "date": "2026-09-24",
+                "family": "bike",
+                "signal": "supportive",
+                "activity_id": 20314473143,
+                "caution_terms": [],
+                "supportive_terms": [
+                  "pigg"
+                ]
+              },
+              {
+                "date": "2026-09-25",
+                "family": "run",
+                "signal": "supportive",
+                "activity_id": 20326850936,
+                "caution_terms": [],
+                "supportive_terms": [
+                  "pigg"
+                ]
+              }
+            ],
+            "window_complete": true,
+            "causal_interpretation": "not_inferred"
+          }
+        },
+        "tolerated_value": 32.0,
+        "progression_ready": true,
+        "demonstrated_value": 32.0,
+        "progression_reason": "Upprepad jämförbar dos med stödjande respons ger stöd för att dosen är absorberad."
+      },
+      "swim_threshold": {
+        "metric": "distance_m",
+        "exposures": [
+          {
+            "date": "2026-08-29",
+            "metric": "distance_m",
+            "dose_value": 4000.0,
+            "activity_id": 19946705399,
+            "direct_response": {
+              "signal": "neutral",
+              "rpe_values": [],
+              "caution_terms": [],
+              "supportive_terms": []
+            },
+            "response_status": "tolerated",
+            "repeat_supported": false,
+            "recovery_context_24_72h": {
+              "signal": "supportive",
+              "observations": [
+                {
+                  "date": "2026-09-01",
+                  "family": "run",
+                  "signal": "supportive",
+                  "activity_id": 19994118756,
+                  "caution_terms": [],
+                  "supportive_terms": [
+                    "pigg"
+                  ]
+                }
+              ],
+              "window_complete": true,
+              "causal_interpretation": "not_inferred"
+            }
+          }
+        ],
+        "absorbed_value": null,
+        "latest_exposure": {
+          "date": "2026-08-29",
+          "metric": "distance_m",
+          "dose_value": 4000.0,
+          "activity_id": 19946705399,
+          "direct_response": {
+            "signal": "neutral",
+            "rpe_values": [],
+            "caution_terms": [],
+            "supportive_terms": []
+          },
+          "response_status": "tolerated",
+          "repeat_supported": false,
+          "recovery_context_24_72h": {
+            "signal": "supportive",
+            "observations": [
+              {
+                "date": "2026-09-01",
+                "family": "run",
+                "signal": "supportive",
+                "activity_id": 19994118756,
+                "caution_terms": [],
+                "supportive_terms": [
+                  "pigg"
+                ]
+              }
+            ],
+            "window_complete": true,
+            "causal_interpretation": "not_inferred"
+          }
+        },
+        "tolerated_value": 4000.0,
+        "progression_ready": false,
+        "demonstrated_value": 4000.0,
+        "progression_reason": "Dos har demonstrerats/tolererats men saknar ännu upprepad stödjande respons för att klassas som absorberad."
+      },
+      "run_hill_quality": {
+        "metric": "repetitions",
+        "exposures": [
+          {
+            "date": "2026-09-04",
+            "metric": "repetitions",
+            "dose_value": 18.0,
+            "activity_id": 20036445971,
+            "direct_response": {
+              "signal": "neutral",
+              "rpe_values": [],
+              "caution_terms": [],
+              "supportive_terms": []
+            },
+            "response_status": "tolerated",
+            "repeat_supported": false,
+            "recovery_context_24_72h": {
+              "signal": "supportive",
+              "observations": [
+                {
+                  "date": "2026-09-06",
+                  "family": "run",
+                  "signal": "supportive",
+                  "activity_id": 20057585521,
+                  "caution_terms": [],
+                  "supportive_terms": [
+                    "pigg"
+                  ]
+                }
+              ],
+              "window_complete": true,
+              "causal_interpretation": "not_inferred"
+            }
+          },
+          {
+            "date": "2026-09-11",
+            "metric": "repetitions",
+            "dose_value": 21.0,
+            "activity_id": 20133500464,
+            "direct_response": {
+              "signal": "neutral",
+              "rpe_values": [],
+              "caution_terms": [],
+              "supportive_terms": []
+            },
+            "response_status": "tolerated",
+            "repeat_supported": false,
+            "recovery_context_24_72h": {
+              "signal": "unobserved",
+              "observations": [],
+              "window_complete": true,
+              "causal_interpretation": "not_inferred"
+            }
+          },
+          {
+            "date": "2026-09-18",
+            "metric": "repetitions",
+            "dose_value": 24.0,
+            "activity_id": 20229568713,
+            "direct_response": {
+              "signal": "supportive",
+              "rpe_values": [],
+              "caution_terms": [],
+              "supportive_terms": [
+                "superpigg",
+                "pigg"
+              ]
+            },
+            "response_status": "absorbed",
+            "repeat_supported": true,
+            "recovery_context_24_72h": {
+              "signal": "supportive",
+              "observations": [
+                {
+                  "date": "2026-09-21",
+                  "family": "enduro",
+                  "signal": "supportive",
+                  "activity_id": 20271537143,
+                  "caution_terms": [],
+                  "supportive_terms": [
+                    "pigg"
+                  ]
+                },
+                {
+                  "date": "2026-09-21",
+                  "family": "strength",
+                  "signal": "supportive",
+                  "activity_id": 20272196080,
+                  "caution_terms": [],
+                  "supportive_terms": [
+                    "pigg"
+                  ]
+                }
+              ],
+              "window_complete": true,
+              "causal_interpretation": "not_inferred"
+            }
+          },
+          {
+            "date": "2026-09-25",
+            "metric": "repetitions",
+            "dose_value": 24.0,
+            "activity_id": 20326850936,
+            "direct_response": {
+              "signal": "supportive",
+              "rpe_values": [
+                6.0
+              ],
+              "caution_terms": [],
+              "supportive_terms": [
+                "pigg"
+              ]
+            },
+            "response_status": "tolerated_with_recovery_caution",
+            "repeat_supported": true,
+            "recovery_context_24_72h": {
+              "signal": "caution",
+              "observations": [
+                {
+                  "date": "2026-09-26",
+                  "family": "swim",
+                  "signal": "caution",
+                  "activity_id": 20337309419,
+                  "caution_terms": [
+                    "trött"
+                  ],
+                  "supportive_terms": []
+                },
+                {
+                  "date": "2026-09-26",
+                  "family": "enduro",
+                  "signal": "supportive",
+                  "activity_id": 20337767421,
+                  "caution_terms": [],
+                  "supportive_terms": [
+                    "pigg"
+                  ]
+                },
+                {
+                  "date": "2026-09-27",
+                  "family": "run",
+                  "signal": "caution",
+                  "activity_id": 20350203020,
+                  "caution_terms": [
+                    "väldigt sliten",
+                    "sliten",
+                    "tunga ben"
+                  ],
+                  "supportive_terms": []
+                },
+                {
+                  "date": "2026-09-28",
+                  "family": "enduro",
+                  "signal": "supportive",
+                  "activity_id": 20367593813,
+                  "caution_terms": [],
+                  "supportive_terms": [
+                    "pigg"
+                  ]
+                },
+                {
+                  "date": "2026-09-28",
+                  "family": "strength",
+                  "signal": "supportive",
+                  "activity_id": 20368346174,
+                  "caution_terms": [],
+                  "supportive_terms": [
+                    "pigg"
+                  ]
+                }
+              ],
+              "window_complete": true,
+              "causal_interpretation": "not_inferred"
+            }
+          }
+        ],
+        "absorbed_value": 24.0,
+        "latest_exposure": {
+          "date": "2026-09-25",
+          "metric": "repetitions",
+          "dose_value": 24.0,
+          "activity_id": 20326850936,
+          "direct_response": {
+            "signal": "supportive",
+            "rpe_values": [
+              6.0
+            ],
+            "caution_terms": [],
+            "supportive_terms": [
+              "pigg"
+            ]
+          },
+          "response_status": "tolerated_with_recovery_caution",
+          "repeat_supported": true,
+          "recovery_context_24_72h": {
+            "signal": "caution",
+            "observations": [
+              {
+                "date": "2026-09-26",
+                "family": "swim",
+                "signal": "caution",
+                "activity_id": 20337309419,
+                "caution_terms": [
+                  "trött"
+                ],
+                "supportive_terms": []
+              },
+              {
+                "date": "2026-09-26",
+                "family": "enduro",
+                "signal": "supportive",
+                "activity_id": 20337767421,
+                "caution_terms": [],
+                "supportive_terms": [
+                  "pigg"
+                ]
+              },
+              {
+                "date": "2026-09-27",
+                "family": "run",
+                "signal": "caution",
+                "activity_id": 20350203020,
+                "caution_terms": [
+                  "väldigt sliten",
+                  "sliten",
+                  "tunga ben"
+                ],
+                "supportive_terms": []
+              },
+              {
+                "date": "2026-09-28",
+                "family": "enduro",
+                "signal": "supportive",
+                "activity_id": 20367593813,
+                "caution_terms": [],
+                "supportive_terms": [
+                  "pigg"
+                ]
+              },
+              {
+                "date": "2026-09-28",
+                "family": "strength",
+                "signal": "supportive",
+                "activity_id": 20368346174,
+                "caution_terms": [],
+                "supportive_terms": [
+                  "pigg"
+                ]
+              }
+            ],
+            "window_complete": true,
+            "causal_interpretation": "not_inferred"
+          }
+        },
+        "tolerated_value": 24.0,
+        "progression_ready": false,
+        "demonstrated_value": 24.0,
+        "progression_reason": "Senaste exponeringen har stödjande passrespons men 24–72 h-kontexten innehåller en varningssignal; kausalitet antas inte."
+      },
+      "run_easy_distance": {
+        "metric": "duration_minutes",
+        "exposures": [
+          {
+            "date": "2026-08-28",
+            "metric": "duration_minutes",
+            "dose_value": 50.6,
+            "activity_id": 19939732259,
+            "direct_response": {
+              "signal": "unknown",
+              "rpe_values": [],
+              "caution_terms": [],
+              "supportive_terms": []
+            },
+            "response_status": "tolerated",
+            "repeat_supported": true,
+            "recovery_context_24_72h": {
+              "signal": "unobserved",
+              "observations": [],
+              "window_complete": true,
+              "causal_interpretation": "not_inferred"
+            }
+          },
+          {
+            "date": "2026-08-30",
+            "metric": "duration_minutes",
+            "dose_value": 103.23,
+            "activity_id": 19960743008,
+            "direct_response": {
+              "signal": "unknown",
+              "rpe_values": [],
+              "caution_terms": [],
+              "supportive_terms": []
+            },
+            "response_status": "tolerated",
+            "repeat_supported": true,
+            "recovery_context_24_72h": {
+              "signal": "supportive",
+              "observations": [
+                {
+                  "date": "2026-09-01",
+                  "family": "run",
+                  "signal": "supportive",
+                  "activity_id": 19994118756,
+                  "caution_terms": [],
+                  "supportive_terms": [
+                    "pigg"
+                  ]
+                }
+              ],
+              "window_complete": true,
+              "causal_interpretation": "not_inferred"
+            }
+          },
+          {
+            "date": "2026-09-01",
+            "metric": "duration_minutes",
+            "dose_value": 50.48,
+            "activity_id": 19994118756,
+            "direct_response": {
+              "signal": "supportive",
+              "rpe_values": [],
+              "caution_terms": [],
+              "supportive_terms": [
+                "pigg"
+              ]
+            },
+            "response_status": "absorbed",
+            "repeat_supported": true,
+            "recovery_context_24_72h": {
+              "signal": "unobserved",
+              "observations": [],
+              "window_complete": true,
+              "causal_interpretation": "not_inferred"
+            }
+          },
+          {
+            "date": "2026-09-06",
+            "metric": "duration_minutes",
+            "dose_value": 116.0,
+            "activity_id": 20057585521,
+            "direct_response": {
+              "signal": "supportive",
+              "rpe_values": [],
+              "caution_terms": [],
+              "supportive_terms": [
+                "pigg",
+                "kände mig stark",
+                "stark"
+              ]
+            },
+            "response_status": "absorbed",
+            "repeat_supported": true,
+            "recovery_context_24_72h": {
+              "signal": "unobserved",
+              "observations": [],
+              "window_complete": true,
+              "causal_interpretation": "not_inferred"
+            }
+          },
+          {
+            "date": "2026-09-13",
+            "metric": "duration_minutes",
+            "dose_value": 107.7,
+            "activity_id": 20157600319,
+            "direct_response": {
+              "signal": "unknown",
+              "rpe_values": [],
+              "caution_terms": [],
+              "supportive_terms": []
+            },
+            "response_status": "tolerated",
+            "repeat_supported": true,
+            "recovery_context_24_72h": {
+              "signal": "unobserved",
+              "observations": [],
+              "window_complete": true,
+              "causal_interpretation": "not_inferred"
+            }
+          },
+          {
+            "date": "2026-09-15",
+            "metric": "duration_minutes",
+            "dose_value": 64.05,
+            "activity_id": 20188628588,
+            "direct_response": {
+              "signal": "unknown",
+              "rpe_values": [],
+              "caution_terms": [],
+              "supportive_terms": []
+            },
+            "response_status": "tolerated",
+            "repeat_supported": false,
+            "recovery_context_24_72h": {
+              "signal": "supportive",
+              "observations": [
+                {
+                  "date": "2026-09-18",
+                  "family": "run",
+                  "signal": "supportive",
+                  "activity_id": 20229568713,
+                  "caution_terms": [],
+                  "supportive_terms": [
+                    "superpigg",
+                    "pigg"
+                  ]
+                }
+              ],
+              "window_complete": true,
+              "causal_interpretation": "not_inferred"
+            }
+          },
+          {
+            "date": "2026-09-20",
+            "metric": "duration_minutes",
+            "dose_value": 119.77,
+            "activity_id": 20254486837,
+            "direct_response": {
+              "signal": "unknown",
+              "rpe_values": [],
+              "caution_terms": [],
+              "supportive_terms": []
+            },
+            "response_status": "tolerated",
+            "repeat_supported": true,
+            "recovery_context_24_72h": {
+              "signal": "supportive",
+              "observations": [
+                {
+                  "date": "2026-09-21",
+                  "family": "enduro",
+                  "signal": "supportive",
+                  "activity_id": 20271537143,
+                  "caution_terms": [],
+                  "supportive_terms": [
+                    "pigg"
+                  ]
+                },
+                {
+                  "date": "2026-09-21",
+                  "family": "strength",
+                  "signal": "supportive",
+                  "activity_id": 20272196080,
+                  "caution_terms": [],
+                  "supportive_terms": [
+                    "pigg"
+                  ]
+                },
+                {
+                  "date": "2026-09-22",
+                  "family": "run",
+                  "signal": "supportive",
+                  "activity_id": 20284663236,
+                  "caution_terms": [],
+                  "supportive_terms": [
+                    "kunde gjort mer"
+                  ]
+                },
+                {
+                  "date": "2026-09-23",
+                  "family": "swim",
+                  "signal": "supportive",
+                  "activity_id": 20300494236,
+                  "caution_terms": [],
+                  "supportive_terms": [
+                    "kunde gjort mer"
+                  ]
+                }
+              ],
+              "window_complete": true,
+              "causal_interpretation": "not_inferred"
+            }
+          },
+          {
+            "date": "2026-09-27",
+            "metric": "duration_minutes",
+            "dose_value": 80.07,
+            "activity_id": 20350203020,
+            "direct_response": {
+              "signal": "caution",
+              "rpe_values": [
+                4.0
+              ],
+              "caution_terms": [
+                "väldigt sliten",
+                "sliten",
+                "tunga ben"
+              ],
+              "supportive_terms": []
+            },
+            "response_status": "caution",
+            "repeat_supported": true,
+            "recovery_context_24_72h": {
+              "signal": "supportive",
+              "observations": [
+                {
+                  "date": "2026-09-28",
+                  "family": "enduro",
+                  "signal": "supportive",
+                  "activity_id": 20367593813,
+                  "caution_terms": [],
+                  "supportive_terms": [
+                    "pigg"
+                  ]
+                },
+                {
+                  "date": "2026-09-28",
+                  "family": "strength",
+                  "signal": "supportive",
+                  "activity_id": 20368346174,
+                  "caution_terms": [],
+                  "supportive_terms": [
+                    "pigg"
+                  ]
+                }
+              ],
+              "window_complete": false,
+              "causal_interpretation": "not_inferred"
+            }
+          }
+        ],
+        "absorbed_value": 116.0,
+        "latest_exposure": {
+          "date": "2026-09-27",
+          "metric": "duration_minutes",
+          "dose_value": 80.07,
+          "activity_id": 20350203020,
+          "direct_response": {
+            "signal": "caution",
+            "rpe_values": [
+              4.0
+            ],
+            "caution_terms": [
+              "väldigt sliten",
+              "sliten",
+              "tunga ben"
+            ],
+            "supportive_terms": []
+          },
+          "response_status": "caution",
+          "repeat_supported": true,
+          "recovery_context_24_72h": {
+            "signal": "supportive",
+            "observations": [
+              {
+                "date": "2026-09-28",
+                "family": "enduro",
+                "signal": "supportive",
+                "activity_id": 20367593813,
+                "caution_terms": [],
+                "supportive_terms": [
+                  "pigg"
+                ]
+              },
+              {
+                "date": "2026-09-28",
+                "family": "strength",
+                "signal": "supportive",
+                "activity_id": 20368346174,
+                "caution_terms": [],
+                "supportive_terms": [
+                  "pigg"
+                ]
+              }
+            ],
+            "window_complete": false,
+            "causal_interpretation": "not_inferred"
+          }
+        },
+        "tolerated_value": 119.77,
+        "progression_ready": false,
+        "demonstrated_value": 119.77,
+        "progression_reason": "Senaste jämförbara exponeringen innehåller en explicit varningssignal från användaren."
+      },
+      "strength_unilateral": {
+        "metric": "duration_minutes",
+        "exposures": [
+          {
+            "date": "2026-08-13",
+            "metric": "duration_minutes",
+            "dose_value": 36.02,
+            "activity_id": 19729740029,
+            "direct_response": {
+              "signal": "unknown",
+              "rpe_values": [],
+              "caution_terms": [],
+              "supportive_terms": []
+            },
+            "response_status": "tolerated",
+            "repeat_supported": true,
+            "recovery_context_24_72h": {
+              "signal": "unobserved",
+              "observations": [],
+              "window_complete": true,
+              "causal_interpretation": "not_inferred"
+            }
+          },
+          {
+            "date": "2026-08-18",
+            "metric": "duration_minutes",
+            "dose_value": 35.75,
+            "activity_id": 19798624389,
+            "direct_response": {
+              "signal": "unknown",
+              "rpe_values": [],
+              "caution_terms": [],
+              "supportive_terms": []
+            },
+            "response_status": "tolerated",
+            "repeat_supported": true,
+            "recovery_context_24_72h": {
+              "signal": "unobserved",
+              "observations": [],
+              "window_complete": true,
+              "causal_interpretation": "not_inferred"
+            }
+          },
+          {
+            "date": "2026-08-24",
+            "metric": "duration_minutes",
+            "dose_value": 29.08,
+            "activity_id": 19883021281,
+            "direct_response": {
+              "signal": "unknown",
+              "rpe_values": [],
+              "caution_terms": [],
+              "supportive_terms": []
+            },
+            "response_status": "tolerated",
+            "repeat_supported": true,
+            "recovery_context_24_72h": {
+              "signal": "unobserved",
+              "observations": [],
+              "window_complete": true,
+              "causal_interpretation": "not_inferred"
+            }
+          },
+          {
+            "date": "2026-09-07",
+            "metric": "duration_minutes",
+            "dose_value": 27.65,
+            "activity_id": 20079150228,
+            "direct_response": {
+              "signal": "unknown",
+              "rpe_values": [],
+              "caution_terms": [],
+              "supportive_terms": []
+            },
+            "response_status": "tolerated",
+            "repeat_supported": true,
+            "recovery_context_24_72h": {
+              "signal": "unobserved",
+              "observations": [],
+              "window_complete": true,
+              "causal_interpretation": "not_inferred"
+            }
+          },
+          {
+            "date": "2026-09-14",
+            "metric": "duration_minutes",
+            "dose_value": 34.82,
+            "activity_id": 20175536586,
+            "direct_response": {
+              "signal": "unknown",
+              "rpe_values": [],
+              "caution_terms": [],
+              "supportive_terms": []
+            },
+            "response_status": "tolerated",
+            "repeat_supported": true,
+            "recovery_context_24_72h": {
+              "signal": "unobserved",
+              "observations": [],
+              "window_complete": true,
+              "causal_interpretation": "not_inferred"
+            }
+          },
+          {
+            "date": "2026-09-21",
+            "metric": "duration_minutes",
+            "dose_value": 33.57,
+            "activity_id": 20272196080,
+            "direct_response": {
+              "signal": "supportive",
+              "rpe_values": [
+                2.0,
+                4.0
+              ],
+              "caution_terms": [],
+              "supportive_terms": [
+                "pigg"
+              ]
+            },
+            "response_status": "absorbed",
+            "repeat_supported": true,
+            "recovery_context_24_72h": {
+              "signal": "supportive",
+              "observations": [
+                {
+                  "date": "2026-09-22",
+                  "family": "run",
+                  "signal": "supportive",
+                  "activity_id": 20284663236,
+                  "caution_terms": [],
+                  "supportive_terms": [
+                    "kunde gjort mer"
+                  ]
+                },
+                {
+                  "date": "2026-09-23",
+                  "family": "swim",
+                  "signal": "supportive",
+                  "activity_id": 20300494236,
+                  "caution_terms": [],
+                  "supportive_terms": [
+                    "kunde gjort mer"
+                  ]
+                },
+                {
+                  "date": "2026-09-24",
+                  "family": "bike",
+                  "signal": "supportive",
+                  "activity_id": 20314473143,
+                  "caution_terms": [],
+                  "supportive_terms": [
+                    "pigg"
+                  ]
+                }
+              ],
+              "window_complete": true,
+              "causal_interpretation": "not_inferred"
+            }
+          },
+          {
+            "date": "2026-09-28",
+            "metric": "duration_minutes",
+            "dose_value": 36.87,
+            "activity_id": 20368346174,
+            "direct_response": {
+              "signal": "supportive",
+              "rpe_values": [
+                6.0
+              ],
+              "caution_terms": [],
+              "supportive_terms": [
+                "pigg"
+              ]
+            },
+            "response_status": "absorbed",
+            "repeat_supported": true,
+            "recovery_context_24_72h": {
+              "signal": "unobserved",
+              "observations": [],
+              "window_complete": false,
+              "causal_interpretation": "not_inferred"
+            }
+          }
+        ],
+        "absorbed_value": 36.87,
+        "latest_exposure": {
+          "date": "2026-09-28",
+          "metric": "duration_minutes",
+          "dose_value": 36.87,
+          "activity_id": 20368346174,
+          "direct_response": {
+            "signal": "supportive",
+            "rpe_values": [
+              6.0
+            ],
+            "caution_terms": [],
+            "supportive_terms": [
+              "pigg"
+            ]
+          },
+          "response_status": "absorbed",
+          "repeat_supported": true,
+          "recovery_context_24_72h": {
+            "signal": "unobserved",
+            "observations": [],
+            "window_complete": false,
+            "causal_interpretation": "not_inferred"
+          }
+        },
+        "tolerated_value": 36.87,
+        "progression_ready": true,
+        "demonstrated_value": 36.87,
+        "progression_reason": "Upprepad jämförbar dos med stödjande respons ger stöd för att dosen är absorberad."
+      }
+    }
+  },
   "schema_version": 1,
   "recent_sessions": [
     {
@@ -491,7 +2292,7 @@
       }
     }
   },
-  "generated_at_utc": "2026-09-29T05:59:17.871535+00:00",
+  "generated_at_utc": "2026-09-29T07:38:38.776385+00:00",
   "recent_week_reviews": [
     {
       "summary": "Veckan innehöll konsekvent träning med fokus på löpkvalitet (tröskel och backintervaller) kompletterat av simning, MTB/Enduro och ett styrkepass; alla planerade löppass genomfördes och ett styrkepass flyttades/utelämnades i planutfallet.",
@@ -564,6 +2365,6 @@
       "next_week_implication": "Fortsätt principen: placera kvalitetspass där återhämtning mellan dem är möjlig och använd lågintensiva kompletteringar för volym utan att anta extra belastning från aktiviteter klassificerade som rekreation."
     }
   ],
-  "interpretation_boundary": "Dokumentet innehåller observerade fakta och uttryckliga användarrapporter. Det anger inte optimal belastning, återhämtning, skaderisk eller framtida träningsdos.",
+  "interpretation_boundary": "Dokumentet innehåller observerade fakta, uttryckliga användarrapporter och en konservativ klassificering av demonstrerad/tolererad/absorberad dos. 24–72 h-signaler är kontext och tillskrivs inte kausalt ett tidigare pass. Dokumentet anger inte optimal belastning, återhämtning, skaderisk eller framtida träningsdos.",
   "performance_fingerprints": []
 }

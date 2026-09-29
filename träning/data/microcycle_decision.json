@@ -3,64 +3,72 @@
     {
       "action": "establish",
       "day_index": 2,
-      "rationale": "Låg bensladd dag efter enduro; teknikprioriterat simpådrag för att bevara swim_technique utan mekanisk benstress.",
+      "rationale": "Dag efter fast enduro kräver låg benbelastning — etablera teknisk/aerob simsession utan progression (swim progression_ready=false).",
       "recipe_key": "swim_aerobic_technique",
       "evidence_refs": [
-        "Athlete_state: swim 2026-09-23 · 3 200 m",
-        "Mesocycle progression_axes: technical_quality (swim_technique)"
+        "recent_sessions:20300494236 2026-09-23 3200 m (god kontroll)",
+        "dose_response.swim_aerobic:demonstrated exposures 2026-09-19 4000m; 2026-09-16 3500m"
       ]
     },
     {
-      "action": "establish",
+      "action": "consolidate",
       "day_index": 3,
-      "rationale": "Säkerställ minst en styrka/core‑session enligt mesocycle‑guardrails för neuromuskulärt skydd utan att vara primär utvecklingsaxel.",
+      "rationale": "Skydda och bibehåll styrka/core enligt mesocycle‑guardrails; placeras med tillräckligt avstånd före tröskelpass.",
       "recipe_key": "strength_core",
       "evidence_refs": [
-        "Recent strength session 2026-09-21 (weight training)",
-        "Mesocycle guardrails: protect_strength_core_each_microcycle"
+        "recent_sessions:20368346174 2026-09-28 strength (absorbed)",
+        "mesocycle.guardrails: 'Säkerställ minst en styrke/core‑session per mikrocykel'"
       ]
     },
     {
       "action": "progress",
       "day_index": 4,
-      "rationale": "Progress: konservativ ökning av sim‑sessionens sammanhängande längd (aerobic_endurance) som blockets enda progressiva primära stimulus, stödd av upprepade 3–4k‑pass i athlete_state.",
-      "recipe_key": "swim_aerobic_endurance",
+      "rationale": "Blockets utvecklingsfokus: progress i run_threshold är motiverad — athlete_state visar progression_ready=true (absorberad 4×8); progression begränsas enligt guardrails.",
+      "recipe_key": "run_threshold",
       "evidence_refs": [
-        "Athlete_state: swim 2026-09-16 · 3 500 m",
-        "Athlete_state: swim 2026-09-19 · 4 000 m",
-        "Mesocycle progression_axes: session_duration (swim_aerobic)"
+        "dose_response.run_threshold:absorbed 32.0 (2026-09-22) activity_id=20284663236",
+        "mesocycle.progression_axes: 'work_duration — behåll 4×8‑struktur som bas'"
       ]
     },
     {
       "action": "consolidate",
       "day_index": 5,
-      "rationale": "Konsolidera kontrollerad tröskel (bevara 4×8‑karaktär) som primärt löpstimulus utan progression denna mikrocykel.",
-      "recipe_key": "run_threshold",
+      "rationale": "Andra simpasset med annan development_character (aerobic_endurance) för att uppfylla normal_swim_exposures=2 utan ökad intensitet.",
+      "recipe_key": "swim_aerobic_endurance",
       "evidence_refs": [
-        "run_threshold evidence: 2026-09-22 · 4×8 min",
-        "run_threshold evidence: 2026-09-08 · 4×8 min"
+        "recipe_profiles.swim_aerobic_endurance:option_ids (aerobic_endurance)",
+        "recent_sessions:2026-09-19 id=20239623463 4000 m"
       ]
     },
     {
-      "action": "establish",
-      "day_index": 7,
-      "rationale": "Etablera ett separat backkvalitetspass (inte samma karaktär som tröskel) för att upprätthålla run_hill_quality; placerat med en vilodag emellan för att undvika intilliggande löpstressorer.",
-      "recipe_key": "run_hill_quality",
+      "action": "consolidate",
+      "day_index": 6,
+      "rationale": "Behåll MTB/Enduro på underhållsnivå; placeras så att det inte ligger direkt intill löptröskel/back‑kvalitet.",
+      "recipe_key": "mtb_technical",
       "evidence_refs": [
-        "run_hill_quality evidence: 2026-09-25 · 3×8 backar",
-        "run_hill_quality evidence: 2026-09-18 · 3×8 backar"
+        "recent_sessions:2026-09-21 id=20271537143 enduro (teknisk, låg RPE)",
+        "mesocycle.goal_contributions: 'MTB/Enduro hålls aktivt men på underhållsnivå'"
       ]
     }
   ],
-  "source": "openai",
+  "source": "openai_repaired",
   "week_key": "2026-W41",
-  "rationale": "Utvecklingsval: progressa simmens aeroba session_duration som enda progressiva primära stimulus (konservativ ökning mot längre sammanhängande set), samtidigt som kontrollerad löptröskel konsolideras och styrka/core skyddas. Dag 1 är upptagen av enduro (blockerar planering); dag 2 måste ha låg bensbelastning. Två simexponeringar med olika development_character säkerställer krav för develop‑mikrocykeln. Minst en kalenderdag (dag 6) lämnas vilande.",
+  "rationale": "Reparerar förslaget så dag 1 (fast enduro) lämnas blockerad, dag 2 får låg benbelastning (sim), styrka placeras ej direkt efter enduro, två olika simpassen ingår, run_threshold progresseras endast där athlete_state stödjer det, MTB placeras ej intill tröskel och minst en kalenderdag lämnas fri. Uppfyller hard_requirements: alla primära kapaciteter täcks, 2 simexponeringar, minst en styrka/core, max run‑quality=1, minst en vilodag.",
   "week_start": "2026-10-05",
-  "source_hash": "b7709bad3ac98c82fdb3c857c4d3671751e48428d25c01d7b30e81b5697d0414",
+  "source_hash": "d0f218b4711a5ae68c6ca43800bde943876e946452c6c8de8bb67fde793167b6",
+  "guard_repair": {
+    "result": "accepted",
+    "attempted": true,
+    "initial_failures": [
+      "dag 1 är blockerad av fast endurobelastning",
+      "strength_core får inte ligga direkt dagen efter fast enduro när faktisk benbelastning ännu är okänd",
+      "för få simexponeringar inklusive faktiskt genomförda: 1 < 2"
+    ]
+  },
   "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
   "schema_version": 1,
-  "generated_at_utc": "2026-09-29T06:00:32.287381+00:00",
-  "planner_revision": 10,
+  "generated_at_utc": "2026-09-29T07:39:35.680881+00:00",
+  "planner_revision": 11,
   "competition_context": {
     "as_of": "2026-10-05",
     "event": "ÖTILLÖ Åland World Series",

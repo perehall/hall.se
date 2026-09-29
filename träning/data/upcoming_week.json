@@ -195,7 +195,7 @@
       "date": "2026-10-06",
       "label": "Tisdag",
       "sport": "swim",
-      "reason": "Låg bensladd dag efter enduro; teknikprioriterat simpådrag för att bevara swim_technique utan mekanisk benstress. Valet utgår från ett observerat värde 3200 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
+      "reason": "Dag efter fast enduro kräver låg benbelastning — etablera teknisk/aerob simsession utan progression (swim progression_ready=false). Absorberad nivå saknas; dosgolvet utgår konservativt från tolererad nivå 4000. Detta är inte bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
       "status": "preliminary",
       "session": "Simning · 3 200 m · aerob/teknik",
       "stimuli": [
@@ -561,7 +561,7 @@
       "date": "2026-10-07",
       "label": "Onsdag",
       "sport": "strength",
-      "reason": "Säkerställ minst en styrka/core‑session enligt mesocycle‑guardrails för neuromuskulärt skydd utan att vara primär utvecklingsaxel. Valet utgår från ett observerat värde 36.8667 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
+      "reason": "Skydda och bibehåll styrka/core enligt mesocycle‑guardrails; placeras med tillräckligt avstånd före tröskelpass. Dosgolvet utgår från absorberad nivå 36.87 i athlete_state.dose_response, inte från högsta genomförda värde. Veckobeslut: consolidate; materialiserad relation: hold.",
       "status": "preliminary",
       "session": "Styrka/core · ca 35 min · styrkemall",
       "stimuli": [
@@ -930,8 +930,354 @@
     {
       "date": "2026-10-08",
       "label": "Torsdag",
+      "sport": "run",
+      "reason": "Blockets utvecklingsfokus: progress i run_threshold är motiverad — athlete_state visar progression_ready=true (absorberad 4×8); progression begränsas enligt guardrails. Dosgolvet utgår från absorberad nivå 32 i athlete_state.dose_response, inte från högsta genomförda värde. Progression tillåts eftersom dose_response markerar progression_ready=true. Veckobeslut: progress; materialiserad relation: progress.",
+      "status": "preliminary",
+      "session": "Löpning · kontrollerad tröskel · 4 × 9 min / 90 s jogg",
+      "stimuli": [
+        "run_threshold"
+      ],
+      "dose_open": false,
+      "recipe_key": "run_threshold",
+      "device_sync": {
+        "status": "deferred",
+        "transport": "intervals_icu",
+        "source_hash": "4dd7440b45d435a9f3698718e65fedd24cd7006f155731365a83463c5f4f464c",
+        "device_delivery": "unverified"
+      },
+      "block_intent": "develop",
+      "dose_options": [
+        {
+          "id": "run-threshold-3x8",
+          "kind": "structured",
+          "value": 24,
+          "intent": "Etablerad kontrollerad struktur.",
+          "session": "Löpning · kontrollerad tröskel · 3 × 8 min / 90 s jogg"
+        },
+        {
+          "id": "run-threshold-3x10",
+          "kind": "structured",
+          "value": 30,
+          "intent": "Längre sammanhängande arbetstid med samma kontrollerade intensitetsavsikt.",
+          "session": "Löpning · kontrollerad tröskel · 3 × 10 min / 90 s jogg"
+        },
+        {
+          "id": "run-threshold-4x8",
+          "kind": "structured",
+          "value": 32,
+          "intent": "Alternativ struktur med något större total arbetstid; används bara när faktisk historik stödjer den.",
+          "session": "Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg"
+        },
+        {
+          "id": "run-threshold-4x9",
+          "kind": "structured",
+          "value": 36,
+          "intent": "Förgodkänt nästa arbetstidssteg från demonstrerade 4 × 8: fyra extra arbetsminuter med oförändrad kontrollerad intensitetsavsikt. Väljs endast när mesocykel/mikrocykel uttryckligen beslutar progression.",
+          "session": "Löpning · kontrollerad tröskel · 4 × 9 min / 90 s jogg"
+        }
+      ],
+      "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
+      "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc3",
+      "priority_role": "anchor",
+      "device_workout": {
+        "date": "2026-10-08",
+        "name": "Löpning · kontrollerad tröskel · 4 × 9 min / 90 s jogg",
+        "sport": "run",
+        "blocks": [
+          {
+            "name": "Arbetsdel",
+            "sets": 1,
+            "steps": [
+              {
+                "kind": "work",
+                "duration": {
+                  "kind": "time",
+                  "seconds": 540
+                },
+                "instruction": "Kontrollerad tröskel",
+                "intensity_class": "interval"
+              },
+              {
+                "kind": "recovery",
+                "duration": {
+                  "kind": "time",
+                  "seconds": 90
+                },
+                "press_lap": false,
+                "instruction": "Lugn jogg",
+                "intensity_class": "recovery",
+                "transport_reference_only": false
+              }
+            ],
+            "repetitions_per_set": 4
+          }
+        ],
+        "transport": "intervals_icu",
+        "external_id": "hall-device:2026-10-08:run:run_threshold_3",
+        "source_hash": "4dd7440b45d435a9f3698718e65fedd24cd7006f155731365a83463c5f4f464c",
+        "detail_level": "structured",
+        "provider_type": "Run",
+        "target_policy": "explicit_single_primary_only",
+        "schema_version": 1,
+        "source_candidate_id": "run-threshold-4x9"
+      },
+      "microcycle_day": 4,
+      "workout_design": {
+        "objective": {
+          "stimuli": [
+            "run_threshold"
+          ],
+          "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
+          "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc3",
+          "priority_role": "anchor",
+          "mesocycle_role": "primary",
+          "microcycle_slot": "run_threshold_3"
+        },
+        "selection": {
+          "method": "deterministic_constraint_scoring",
+          "reason_for_today": "Mikrocykelbeslutet valde progress och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
+          "preferred_dose_option_id": "run-threshold-4x9"
+        },
+        "candidates": [
+          {
+            "id": "run-threshold-4x9",
+            "dose": {
+              "kind": "structured",
+              "value": 36
+            },
+            "score": {
+              "basis": "deterministic_constraint_alignment",
+              "total": 100,
+              "breakdown": {
+                "mesocycle_alignment": 30,
+                "microcycle_alignment": 30,
+                "near_term_resolution": 10,
+                "progression_alignment": 15,
+                "prescription_specificity": 15
+              }
+            },
+            "intent": "Förgodkänt nästa arbetstidssteg från demonstrerade 4 × 8: fyra extra arbetsminuter med oförändrad kontrollerad intensitetsavsikt. Väljs endast när mesocykel/mikrocykel uttryckligen beslutar progression.",
+            "session": "Löpning · kontrollerad tröskel · 4 × 9 min / 90 s jogg",
+            "stimuli": [
+              "run_threshold"
+            ],
+            "prescription": {
+              "blocks": [
+                {
+                  "name": "Arbetsdel",
+                  "work": {
+                    "duration_s": 540,
+                    "repetitions": 4,
+                    "total_work_s": 2160
+                  },
+                  "recovery": {
+                    "duration_s": 90,
+                    "instruction": "Lugn jogg"
+                  },
+                  "intensity": "kontrollerad tröskel",
+                  "instruction": "Kontrollerad tröskel"
+                }
+              ],
+              "source": "structured_session",
+              "executable": true,
+              "completeness": "full"
+            },
+            "dose_option_id": "run-threshold-4x9"
+          },
+          {
+            "id": "run-threshold-4x8",
+            "dose": {
+              "kind": "structured",
+              "value": 32
+            },
+            "score": {
+              "basis": "deterministic_constraint_alignment",
+              "total": 63,
+              "breakdown": {
+                "mesocycle_alignment": 30,
+                "microcycle_alignment": 10,
+                "near_term_resolution": 0,
+                "progression_alignment": 8,
+                "prescription_specificity": 15
+              }
+            },
+            "intent": "Alternativ struktur med något större total arbetstid; används bara när faktisk historik stödjer den.",
+            "session": "Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg",
+            "stimuli": [
+              "run_threshold"
+            ],
+            "prescription": {
+              "blocks": [
+                {
+                  "name": "Arbetsdel",
+                  "work": {
+                    "duration_s": 480,
+                    "repetitions": 4,
+                    "total_work_s": 1920
+                  },
+                  "recovery": {
+                    "duration_s": 90,
+                    "instruction": "Lugn jogg"
+                  },
+                  "intensity": "kontrollerad tröskel",
+                  "instruction": "Kontrollerad tröskel"
+                }
+              ],
+              "source": "structured_session",
+              "executable": true,
+              "completeness": "full"
+            },
+            "dose_option_id": "run-threshold-4x8"
+          },
+          {
+            "id": "run-threshold-3x10",
+            "dose": {
+              "kind": "structured",
+              "value": 30
+            },
+            "score": {
+              "basis": "deterministic_constraint_alignment",
+              "total": 59,
+              "breakdown": {
+                "mesocycle_alignment": 30,
+                "microcycle_alignment": 10,
+                "near_term_resolution": 0,
+                "progression_alignment": 4,
+                "prescription_specificity": 15
+              }
+            },
+            "intent": "Längre sammanhängande arbetstid med samma kontrollerade intensitetsavsikt.",
+            "session": "Löpning · kontrollerad tröskel · 3 × 10 min / 90 s jogg",
+            "stimuli": [
+              "run_threshold"
+            ],
+            "prescription": {
+              "blocks": [
+                {
+                  "name": "Arbetsdel",
+                  "work": {
+                    "duration_s": 600,
+                    "repetitions": 3,
+                    "total_work_s": 1800
+                  },
+                  "recovery": {
+                    "duration_s": 90,
+                    "instruction": "Lugn jogg"
+                  },
+                  "intensity": "kontrollerad tröskel",
+                  "instruction": "Kontrollerad tröskel"
+                }
+              ],
+              "source": "structured_session",
+              "executable": true,
+              "completeness": "full"
+            },
+            "dose_option_id": "run-threshold-3x10"
+          },
+          {
+            "id": "run-threshold-3x8",
+            "dose": {
+              "kind": "structured",
+              "value": 24
+            },
+            "score": {
+              "basis": "deterministic_constraint_alignment",
+              "total": 59,
+              "breakdown": {
+                "mesocycle_alignment": 30,
+                "microcycle_alignment": 10,
+                "near_term_resolution": 0,
+                "progression_alignment": 4,
+                "prescription_specificity": 15
+              }
+            },
+            "intent": "Etablerad kontrollerad struktur.",
+            "session": "Löpning · kontrollerad tröskel · 3 × 8 min / 90 s jogg",
+            "stimuli": [
+              "run_threshold"
+            ],
+            "prescription": {
+              "blocks": [
+                {
+                  "name": "Arbetsdel",
+                  "work": {
+                    "duration_s": 480,
+                    "repetitions": 3,
+                    "total_work_s": 1440
+                  },
+                  "recovery": {
+                    "duration_s": 90,
+                    "instruction": "Lugn jogg"
+                  },
+                  "intensity": "kontrollerad tröskel",
+                  "instruction": "Kontrollerad tröskel"
+                }
+              ],
+              "source": "structured_session",
+              "executable": true,
+              "completeness": "full"
+            },
+            "dose_option_id": "run-threshold-3x8"
+          }
+        ],
+        "schema_version": 1,
+        "near_term_context": {
+          "load_dimensions": [
+            "cardiovascular",
+            "mechanical"
+          ],
+          "selection_uses_only_preapproved_doses": true
+        },
+        "selected_candidate_id": "run-threshold-4x9",
+        "progression_from_previous": {
+          "reason": "Mikrocykelbeslutet valde progress och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
+          "relation": "progress",
+          "demonstrated_floor_option_id": "run-threshold-4x8"
+        }
+      },
+      "dose_resolution": {
+        "kind": "structured",
+        "state": "baseline",
+        "value": 36,
+        "option_id": "run-threshold-4x9"
+      },
+      "load_dimensions": [
+        "cardiovascular",
+        "mechanical"
+      ],
+      "microcycle_slot": "run_threshold_3",
+      "planning_status": "preliminary",
+      "development_step": {
+        "reason": "Mikrocykelbeslutet valde progress och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
+        "relation": "progress",
+        "option_id": "run-threshold-4x9",
+        "microcycle": 3
+      },
+      "microcycle_index": 3,
+      "development_focus": "Jämn, kontrollerad tröskelkaraktär. Progression ska främst öka absorberbar arbetstid, inte jaga högre intensitet.",
+      "baseline_option_id": "run-threshold-4x9",
+      "development_character": "run_threshold",
+      "performance_marker_id": "run-threshold-control",
+      "development_progression": {
+        "mode": "develop",
+        "source": "athlete_state",
+        "microcycle_plan": [
+          {
+            "reason": "Mikrocykelbeslutet valde progress och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
+            "relation": "progress",
+            "option_id": "run-threshold-4x9",
+            "microcycle": 3
+          }
+        ],
+        "demonstrated_floor_option_id": "run-threshold-4x8",
+        "same_dose_repeat_requires_reason": true
+      }
+    },
+    {
+      "date": "2026-10-09",
+      "label": "Fredag",
       "sport": "swim",
-      "reason": "Progress: konservativ ökning av sim‑sessionens sammanhängande längd (aerobic_endurance) som blockets enda progressiva primära stimulus, stödd av upprepade 3–4k‑pass i athlete_state. Valet utgår från ett observerat värde 3600 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Katalogen innehåller inget högre verifierat steg, därför konsolideras dosen. Veckobeslut: progress; materialiserad relation: hold.",
+      "reason": "Andra simpasset med annan development_character (aerobic_endurance) för att uppfylla normal_swim_exposures=2 utan ökad intensitet. Absorberad nivå saknas; dosgolvet utgår konservativt från tolererad nivå 4000. Detta är inte bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
       "status": "preliminary",
       "session": "Simning · 3 600 m · aerob uthållighet",
       "stimuli": [
@@ -942,6 +1288,79 @@
       "recipe_key": "swim_aerobic_endurance",
       "block_intent": "develop",
       "dose_options": [
+        {
+          "id": "swim-aerobic-endurance-3200",
+          "kind": "structured",
+          "value": 3200,
+          "intent": "Konsolideringsdos med samma aeroba uthållighetskaraktär. Används när absorberad respons ännu inte stödjer 3 600 m.",
+          "session": "Simning · 3 200 m · aerob uthållighet",
+          "watch_workout": {
+            "name": "Aerob uthållighet · längre block · 3 200 m",
+            "type": "Swim",
+            "blocks": [
+              {
+                "name": "Insim + teknik",
+                "steps": [
+                  {
+                    "kind": "swim",
+                    "text": "Lugn insim med fokus på linje och avslappning",
+                    "equipment": [],
+                    "intensity": "warmup",
+                    "distance_m": 600
+                  }
+                ]
+              },
+              {
+                "name": "Aerob uthållighet",
+                "steps": [
+                  {
+                    "kind": "swim",
+                    "text": "Stabil aerob rytm och bibehållen teknik genom hela blocket",
+                    "equipment": [],
+                    "intensity": "active",
+                    "distance_m": 500
+                  },
+                  {
+                    "kind": "rest",
+                    "duration_s": 30
+                  }
+                ],
+                "repeat": 4
+              },
+              {
+                "name": "Teknik + frekvens",
+                "steps": [
+                  {
+                    "kind": "swim",
+                    "text": "Avslappnad frekvens med stabil linje",
+                    "equipment": [],
+                    "intensity": "active",
+                    "distance_m": 100
+                  },
+                  {
+                    "kind": "rest",
+                    "duration_s": 20
+                  }
+                ],
+                "repeat": 4
+              },
+              {
+                "name": "Avsim",
+                "steps": [
+                  {
+                    "kind": "swim",
+                    "text": "Mycket lugnt avsim",
+                    "equipment": [],
+                    "intensity": "cooldown",
+                    "distance_m": 200
+                  }
+                ]
+              }
+            ],
+            "equipment": [],
+            "planned_distance_m": 3200
+          }
+        },
         {
           "id": "swim-aerobic-endurance-3600",
           "kind": "structured",
@@ -1020,7 +1439,7 @@
       "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc3",
       "priority_role": "anchor",
       "watch_workout": {
-        "id": "swim-2026-w41-2026-10-08-swim_aerobic_endurance_3",
+        "id": "swim-2026-w41-2026-10-09-swim_aerobic_endurance_4",
         "name": "Aerob uthållighet · längre block · 3 600 m",
         "type": "Swim",
         "blocks": [
@@ -1087,7 +1506,7 @@
         "sync_enabled": false,
         "planned_distance_m": 3600
       },
-      "microcycle_day": 4,
+      "microcycle_day": 5,
       "swim_equipment": {
         "planned": []
       },
@@ -1101,11 +1520,11 @@
           "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc3",
           "priority_role": "anchor",
           "mesocycle_role": "primary",
-          "microcycle_slot": "swim_aerobic_endurance_3"
+          "microcycle_slot": "swim_aerobic_endurance_4"
         },
         "selection": {
           "method": "deterministic_constraint_scoring",
-          "reason_for_today": "Mikrocykelbeslutet valde progress och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
+          "reason_for_today": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
           "preferred_dose_option_id": "swim-aerobic-endurance-3600"
         },
         "candidates": [
@@ -1191,6 +1610,89 @@
               "total_distance_m": 3600
             },
             "dose_option_id": "swim-aerobic-endurance-3600"
+          },
+          {
+            "id": "swim-aerobic-endurance-3200",
+            "dose": {
+              "kind": "structured",
+              "value": 3200
+            },
+            "score": {
+              "basis": "deterministic_constraint_alignment",
+              "total": 59,
+              "breakdown": {
+                "mesocycle_alignment": 30,
+                "microcycle_alignment": 10,
+                "near_term_resolution": 0,
+                "progression_alignment": 4,
+                "prescription_specificity": 15
+              }
+            },
+            "intent": "Konsolideringsdos med samma aeroba uthållighetskaraktär. Används när absorberad respons ännu inte stödjer 3 600 m.",
+            "session": "Simning · 3 200 m · aerob uthållighet",
+            "stimuli": [
+              "swim_aerobic",
+              "swim_technique"
+            ],
+            "prescription": {
+              "blocks": [
+                {
+                  "name": "Insim + teknik",
+                  "work": {
+                    "distance_m": 600,
+                    "repetitions": 1,
+                    "total_distance_m": 600
+                  },
+                  "equipment": [],
+                  "intensity": "warmup",
+                  "instruction": "Lugn insim med fokus på linje och avslappning"
+                },
+                {
+                  "name": "Aerob uthållighet",
+                  "work": {
+                    "distance_m": 500,
+                    "repetitions": 4,
+                    "total_distance_m": 2000
+                  },
+                  "recovery": {
+                    "duration_s": 30
+                  },
+                  "equipment": [],
+                  "intensity": "active",
+                  "instruction": "Stabil aerob rytm och bibehållen teknik genom hela blocket"
+                },
+                {
+                  "name": "Teknik + frekvens",
+                  "work": {
+                    "distance_m": 100,
+                    "repetitions": 4,
+                    "total_distance_m": 400
+                  },
+                  "recovery": {
+                    "duration_s": 20
+                  },
+                  "equipment": [],
+                  "intensity": "active",
+                  "instruction": "Avslappnad frekvens med stabil linje"
+                },
+                {
+                  "name": "Avsim",
+                  "work": {
+                    "distance_m": 200,
+                    "repetitions": 1,
+                    "total_distance_m": 200
+                  },
+                  "equipment": [],
+                  "intensity": "cooldown",
+                  "instruction": "Mycket lugnt avsim"
+                }
+              ],
+              "source": "watch_workout",
+              "executable": true,
+              "completeness": "full",
+              "total_distance_m": 3200
+            },
+            "dose_option_id": "swim-aerobic-endurance-3200"
           }
         ],
         "schema_version": 1,
@@ -1203,7 +1705,7 @@
         },
         "selected_candidate_id": "swim-aerobic-endurance-3600",
         "progression_from_previous": {
-          "reason": "Mikrocykelbeslutet valde progress och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
+          "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
           "relation": "hold",
           "demonstrated_floor_option_id": "swim-aerobic-endurance-3600"
         }
@@ -1218,10 +1720,10 @@
         "cardiovascular",
         "technical"
       ],
-      "microcycle_slot": "swim_aerobic_endurance_3",
+      "microcycle_slot": "swim_aerobic_endurance_4",
       "planning_status": "preliminary",
       "development_step": {
-        "reason": "Mikrocykelbeslutet valde progress och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
+        "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
         "relation": "hold",
         "option_id": "swim-aerobic-endurance-3600",
         "microcycle": 3
@@ -1235,7 +1737,7 @@
         "source": "athlete_state",
         "microcycle_plan": [
           {
-            "reason": "Mikrocykelbeslutet valde progress och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
+            "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
             "relation": "hold",
             "option_id": "swim-aerobic-endurance-3600",
             "microcycle": 3
@@ -1246,497 +1748,74 @@
       }
     },
     {
-      "date": "2026-10-09",
-      "label": "Fredag",
-      "sport": "run",
-      "reason": "Konsolidera kontrollerad tröskel (bevara 4×8‑karaktär) som primärt löpstimulus utan progression denna mikrocykel. Valet utgår från ett observerat värde 32 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
+      "date": "2026-10-10",
+      "label": "Lördag",
+      "sport": "bike",
+      "reason": "Behåll MTB/Enduro på underhållsnivå; placeras så att det inte ligger direkt intill löptröskel/back‑kvalitet. Absorberad nivå saknas; dosgolvet utgår konservativt från tolererad nivå 131.38. Detta är inte bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
       "status": "preliminary",
-      "session": "Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg",
+      "session": "MTB/XC · 90 min · teknik + lugn aerob stig",
       "stimuli": [
-        "run_threshold"
+        "mtb_technical",
+        "mtb_aerobic"
       ],
       "dose_open": false,
-      "recipe_key": "run_threshold",
+      "recipe_key": "mtb_technical",
       "device_sync": {
         "status": "deferred",
         "transport": "intervals_icu",
-        "source_hash": "fc4d2f57bf45a04696e469ddaf7e0211696b7ec4f0bd5bb6716e280005a247d0",
+        "source_hash": "579ed5f4dc93617e3fd0c4dd82f7507e8e831e6ce27a20d7aa35858105354e84",
         "device_delivery": "unverified"
       },
       "block_intent": "develop",
       "dose_options": [
         {
-          "id": "run-threshold-3x8",
-          "kind": "structured",
-          "value": 24,
-          "intent": "Etablerad kontrollerad struktur.",
-          "session": "Löpning · kontrollerad tröskel · 3 × 8 min / 90 s jogg"
+          "id": "mtb-tech-45",
+          "kind": "duration_minutes",
+          "value": 45,
+          "intent": "Kort teknisk exponering.",
+          "session": "MTB/XC · 45 min · teknik + lugn aerob stig"
         },
         {
-          "id": "run-threshold-3x10",
-          "kind": "structured",
-          "value": 30,
-          "intent": "Längre sammanhängande arbetstid med samma kontrollerade intensitetsavsikt.",
-          "session": "Löpning · kontrollerad tröskel · 3 × 10 min / 90 s jogg"
+          "id": "mtb-tech-60",
+          "kind": "duration_minutes",
+          "value": 60,
+          "intent": "Normal teknisk/aerob exponering.",
+          "session": "MTB/XC · 60 min · teknik + lugn aerob stig"
         },
         {
-          "id": "run-threshold-4x8",
-          "kind": "structured",
-          "value": 32,
-          "intent": "Alternativ struktur med något större total arbetstid; används bara när faktisk historik stödjer den.",
-          "session": "Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg"
+          "id": "mtb-tech-75",
+          "kind": "duration_minutes",
+          "value": 75,
+          "intent": "Progressionsalternativ när cykelbelastningen absorberas.",
+          "session": "MTB/XC · 75 min · teknik + lugn aerob stig"
         },
         {
-          "id": "run-threshold-4x9",
-          "kind": "structured",
-          "value": 36,
-          "intent": "Förgodkänt nästa arbetstidssteg från demonstrerade 4 × 8: fyra extra arbetsminuter med oförändrad kontrollerad intensitetsavsikt. Väljs endast när mesocykel/mikrocykel uttryckligen beslutar progression.",
-          "session": "Löpning · kontrollerad tröskel · 4 × 9 min / 90 s jogg"
-        }
-      ],
-      "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
-      "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc3",
-      "priority_role": "anchor",
-      "device_workout": {
-        "date": "2026-10-09",
-        "name": "Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg",
-        "sport": "run",
-        "blocks": [
-          {
-            "name": "Arbetsdel",
-            "sets": 1,
-            "steps": [
-              {
-                "kind": "work",
-                "duration": {
-                  "kind": "time",
-                  "seconds": 480
-                },
-                "instruction": "Kontrollerad tröskel",
-                "intensity_class": "interval"
-              },
-              {
-                "kind": "recovery",
-                "duration": {
-                  "kind": "time",
-                  "seconds": 90
-                },
-                "press_lap": false,
-                "instruction": "Lugn jogg",
-                "intensity_class": "recovery",
-                "transport_reference_only": false
-              }
-            ],
-            "repetitions_per_set": 4
-          }
-        ],
-        "transport": "intervals_icu",
-        "external_id": "hall-device:2026-10-09:run:run_threshold_4",
-        "source_hash": "fc4d2f57bf45a04696e469ddaf7e0211696b7ec4f0bd5bb6716e280005a247d0",
-        "detail_level": "structured",
-        "provider_type": "Run",
-        "target_policy": "explicit_single_primary_only",
-        "schema_version": 1,
-        "source_candidate_id": "run-threshold-4x8"
-      },
-      "microcycle_day": 5,
-      "workout_design": {
-        "objective": {
-          "stimuli": [
-            "run_threshold"
-          ],
-          "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
-          "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc3",
-          "priority_role": "anchor",
-          "mesocycle_role": "primary",
-          "microcycle_slot": "run_threshold_4"
-        },
-        "selection": {
-          "method": "deterministic_constraint_scoring",
-          "reason_for_today": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
-          "preferred_dose_option_id": "run-threshold-4x8"
-        },
-        "candidates": [
-          {
-            "id": "run-threshold-4x8",
-            "dose": {
-              "kind": "structured",
-              "value": 32
-            },
-            "score": {
-              "basis": "deterministic_constraint_alignment",
-              "total": 100,
-              "breakdown": {
-                "mesocycle_alignment": 30,
-                "microcycle_alignment": 30,
-                "near_term_resolution": 10,
-                "progression_alignment": 15,
-                "prescription_specificity": 15
-              }
-            },
-            "intent": "Alternativ struktur med något större total arbetstid; används bara när faktisk historik stödjer den.",
-            "session": "Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg",
-            "stimuli": [
-              "run_threshold"
-            ],
-            "prescription": {
-              "blocks": [
-                {
-                  "name": "Arbetsdel",
-                  "work": {
-                    "duration_s": 480,
-                    "repetitions": 4,
-                    "total_work_s": 1920
-                  },
-                  "recovery": {
-                    "duration_s": 90,
-                    "instruction": "Lugn jogg"
-                  },
-                  "intensity": "kontrollerad tröskel",
-                  "instruction": "Kontrollerad tröskel"
-                }
-              ],
-              "source": "structured_session",
-              "executable": true,
-              "completeness": "full"
-            },
-            "dose_option_id": "run-threshold-4x8"
-          },
-          {
-            "id": "run-threshold-3x10",
-            "dose": {
-              "kind": "structured",
-              "value": 30
-            },
-            "score": {
-              "basis": "deterministic_constraint_alignment",
-              "total": 59,
-              "breakdown": {
-                "mesocycle_alignment": 30,
-                "microcycle_alignment": 10,
-                "near_term_resolution": 0,
-                "progression_alignment": 4,
-                "prescription_specificity": 15
-              }
-            },
-            "intent": "Längre sammanhängande arbetstid med samma kontrollerade intensitetsavsikt.",
-            "session": "Löpning · kontrollerad tröskel · 3 × 10 min / 90 s jogg",
-            "stimuli": [
-              "run_threshold"
-            ],
-            "prescription": {
-              "blocks": [
-                {
-                  "name": "Arbetsdel",
-                  "work": {
-                    "duration_s": 600,
-                    "repetitions": 3,
-                    "total_work_s": 1800
-                  },
-                  "recovery": {
-                    "duration_s": 90,
-                    "instruction": "Lugn jogg"
-                  },
-                  "intensity": "kontrollerad tröskel",
-                  "instruction": "Kontrollerad tröskel"
-                }
-              ],
-              "source": "structured_session",
-              "executable": true,
-              "completeness": "full"
-            },
-            "dose_option_id": "run-threshold-3x10"
-          },
-          {
-            "id": "run-threshold-4x9",
-            "dose": {
-              "kind": "structured",
-              "value": 36
-            },
-            "score": {
-              "basis": "deterministic_constraint_alignment",
-              "total": 59,
-              "breakdown": {
-                "mesocycle_alignment": 30,
-                "microcycle_alignment": 10,
-                "near_term_resolution": 0,
-                "progression_alignment": 4,
-                "prescription_specificity": 15
-              }
-            },
-            "intent": "Förgodkänt nästa arbetstidssteg från demonstrerade 4 × 8: fyra extra arbetsminuter med oförändrad kontrollerad intensitetsavsikt. Väljs endast när mesocykel/mikrocykel uttryckligen beslutar progression.",
-            "session": "Löpning · kontrollerad tröskel · 4 × 9 min / 90 s jogg",
-            "stimuli": [
-              "run_threshold"
-            ],
-            "prescription": {
-              "blocks": [
-                {
-                  "name": "Arbetsdel",
-                  "work": {
-                    "duration_s": 540,
-                    "repetitions": 4,
-                    "total_work_s": 2160
-                  },
-                  "recovery": {
-                    "duration_s": 90,
-                    "instruction": "Lugn jogg"
-                  },
-                  "intensity": "kontrollerad tröskel",
-                  "instruction": "Kontrollerad tröskel"
-                }
-              ],
-              "source": "structured_session",
-              "executable": true,
-              "completeness": "full"
-            },
-            "dose_option_id": "run-threshold-4x9"
-          },
-          {
-            "id": "run-threshold-3x8",
-            "dose": {
-              "kind": "structured",
-              "value": 24
-            },
-            "score": {
-              "basis": "deterministic_constraint_alignment",
-              "total": 59,
-              "breakdown": {
-                "mesocycle_alignment": 30,
-                "microcycle_alignment": 10,
-                "near_term_resolution": 0,
-                "progression_alignment": 4,
-                "prescription_specificity": 15
-              }
-            },
-            "intent": "Etablerad kontrollerad struktur.",
-            "session": "Löpning · kontrollerad tröskel · 3 × 8 min / 90 s jogg",
-            "stimuli": [
-              "run_threshold"
-            ],
-            "prescription": {
-              "blocks": [
-                {
-                  "name": "Arbetsdel",
-                  "work": {
-                    "duration_s": 480,
-                    "repetitions": 3,
-                    "total_work_s": 1440
-                  },
-                  "recovery": {
-                    "duration_s": 90,
-                    "instruction": "Lugn jogg"
-                  },
-                  "intensity": "kontrollerad tröskel",
-                  "instruction": "Kontrollerad tröskel"
-                }
-              ],
-              "source": "structured_session",
-              "executable": true,
-              "completeness": "full"
-            },
-            "dose_option_id": "run-threshold-3x8"
-          }
-        ],
-        "schema_version": 1,
-        "near_term_context": {
-          "load_dimensions": [
-            "cardiovascular",
-            "mechanical"
-          ],
-          "selection_uses_only_preapproved_doses": true
-        },
-        "selected_candidate_id": "run-threshold-4x8",
-        "progression_from_previous": {
-          "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
-          "relation": "hold",
-          "demonstrated_floor_option_id": "run-threshold-4x8"
-        }
-      },
-      "dose_resolution": {
-        "kind": "structured",
-        "state": "baseline",
-        "value": 32,
-        "option_id": "run-threshold-4x8"
-      },
-      "load_dimensions": [
-        "cardiovascular",
-        "mechanical"
-      ],
-      "microcycle_slot": "run_threshold_4",
-      "planning_status": "preliminary",
-      "development_step": {
-        "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
-        "relation": "hold",
-        "option_id": "run-threshold-4x8",
-        "microcycle": 3
-      },
-      "microcycle_index": 3,
-      "development_focus": "Jämn, kontrollerad tröskelkaraktär. Progression ska främst öka absorberbar arbetstid, inte jaga högre intensitet.",
-      "baseline_option_id": "run-threshold-4x8",
-      "development_character": "run_threshold",
-      "performance_marker_id": "run-threshold-control",
-      "development_progression": {
-        "mode": "develop",
-        "source": "athlete_state",
-        "microcycle_plan": [
-          {
-            "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från athlete_state utan att höja flera belastningsvariabler samtidigt.",
-            "relation": "hold",
-            "option_id": "run-threshold-4x8",
-            "microcycle": 3
-          }
-        ],
-        "demonstrated_floor_option_id": "run-threshold-4x8",
-        "same_dose_repeat_requires_reason": true
-      }
-    },
-    {
-      "date": "2026-10-11",
-      "label": "Söndag",
-      "sport": "run",
-      "reason": "Etablera ett separat backkvalitetspass (inte samma karaktär som tröskel) för att upprätthålla run_hill_quality; placerat med en vilodag emellan för att undvika intilliggande löpstressorer. Valet utgår från ett observerat värde 24 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
-      "status": "preliminary",
-      "session": "Löpning · backkvalitet · 15 min lugnt + 3 × 8 × 150 m / lugn joggvila + 10 min lugnt",
-      "stimuli": [
-        "run_hill_quality"
-      ],
-      "dose_open": false,
-      "recipe_key": "run_hill_quality",
-      "device_sync": {
-        "status": "deferred",
-        "transport": "intervals_icu",
-        "source_hash": "81abc221817a174e5b6a12f6915df5b8573672034c02cfff324922f09186f54c",
-        "device_delivery": "unverified"
-      },
-      "block_intent": "develop",
-      "dose_options": [
-        {
-          "id": "run-hill-6x150",
-          "kind": "structured",
-          "value": 6,
-          "intent": "Tydligt reducerad reservdos. Får bara användas som tillfällig regression när faktisk närbelastning eller återhämtning motiverar det; aldrig som normal utvecklingsbaseline.",
-          "session": "Löpning · backkvalitet · 15 min lugnt + 6 × 150 m / full lugn nedjogg + 10 min lugnt"
-        },
-        {
-          "id": "run-hill-2x6x150",
-          "kind": "structured",
-          "value": 12,
-          "intent": "Demonstrerat kapacitetsgolv: 2 × 6 × 150 m har genomförts utan problem. I utvecklingsläge är detta golv, inte nästa utvecklingsmål.",
-          "session": "Löpning · backkvalitet · 15 min lugnt + 2 × 6 × 150 m / lugn joggvila + 10 min lugnt"
-        },
-        {
-          "id": "run-hill-2x7x150",
-          "kind": "structured",
-          "value": 14,
-          "intent": "Nästa konservativa utvecklingssteg från demonstrerade 2 × 6: endast repetitionsvolymen ökas, inte avsedd intensitet.",
-          "session": "Löpning · backkvalitet · 15 min lugnt + 2 × 7 × 150 m / lugn joggvila + 10 min lugnt"
-        },
-        {
-          "id": "run-hill-2x8x150",
-          "kind": "structured",
-          "value": 16,
-          "intent": "Följande progressionssteg när 2 × 7 är absorberat med bibehållen mekanik och utan oproportionerlig återhämtningskostnad.",
-          "session": "Löpning · backkvalitet · 15 min lugnt + 2 × 8 × 150 m / lugn joggvila + 10 min lugnt"
-        },
-        {
-          "id": "run-hill-3x6x150",
-          "kind": "structured",
-          "value": 18,
-          "intent": "Volymgolv från uttrycklig användarrapport: 3 × 6 = 18 genomförda backintervaller. 150 m är repetitionslängden i den framtida ordinationen; användarrapporten används inte för att påstå exakt längd på varje tidigare intervall.",
-          "session": "Löpning · backkvalitet · 15 min lugnt + 3 × 6 × 150 m / lugn joggvila + 10 min lugnt"
-        },
-        {
-          "id": "run-hill-3x7x150",
-          "kind": "structured",
-          "value": 21,
-          "intent": "Volymgolv från uttrycklig användarrapport: 3 × 7 = 21 genomförda backintervaller. 150 m är repetitionslängden i den framtida ordinationen; användarrapporten används inte för att påstå exakt längd på varje tidigare intervall.",
-          "session": "Löpning · backkvalitet · 15 min lugnt + 3 × 7 × 150 m / lugn joggvila + 10 min lugnt"
-        },
-        {
-          "id": "run-hill-3x8x150",
-          "kind": "structured",
-          "value": 24,
-          "intent": "Volymgolv från uttrycklig användarrapport: 3 × 8 = 24 genomförda backintervaller. 150 m är repetitionslängden i den framtida ordinationen; användarrapporten används inte för att påstå exakt längd på varje tidigare intervall.",
-          "session": "Löpning · backkvalitet · 15 min lugnt + 3 × 8 × 150 m / lugn joggvila + 10 min lugnt"
-        },
-        {
-          "id": "run-hill-3x9x150",
-          "kind": "structured",
-          "value": 27,
-          "intent": "Planerat utvecklingssteg från 3 × 8: endast repetitionsvolymen ökas. Avsedd intensitet och planerad repetitionslängd 150 m hålls oförändrade.",
-          "session": "Löpning · backkvalitet · 15 min lugnt + 3 × 9 × 150 m / lugn joggvila + 10 min lugnt"
-        },
-        {
-          "id": "run-hill-3x10x150",
-          "kind": "structured",
-          "value": 30,
-          "intent": "Planerat utvecklingssteg från 3 × 9: endast repetitionsvolymen ökas. Avsedd intensitet och planerad repetitionslängd 150 m hålls oförändrade.",
-          "session": "Löpning · backkvalitet · 15 min lugnt + 3 × 10 × 150 m / lugn joggvila + 10 min lugnt"
+          "id": "mtb-tech-90",
+          "kind": "duration_minutes",
+          "value": 90,
+          "intent": "Längre teknisk/aerob exponering med krav på marginal till löpkvalitet.",
+          "session": "MTB/XC · 90 min · teknik + lugn aerob stig"
         }
       ],
       "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
       "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc3",
       "priority_role": "flex",
       "device_workout": {
-        "date": "2026-10-11",
-        "name": "Löpning · backkvalitet · 15 min lugnt + 3 × 8 × 150 m / lugn joggvila + 10 min lugnt",
-        "sport": "run",
+        "date": "2026-10-10",
+        "name": "MTB/XC · 90 min · teknik + lugn aerob stig",
+        "sport": "bike",
         "blocks": [
           {
-            "name": "Uppvärmning",
+            "name": "MTB/XC",
             "sets": 1,
             "steps": [
               {
                 "kind": "work",
                 "duration": {
                   "kind": "time",
-                  "seconds": 900
+                  "seconds": 5400
                 },
-                "instruction": "Lugnt",
-                "intensity_class": "active"
-              }
-            ],
-            "repetitions_per_set": 1
-          },
-          {
-            "name": "Backkvalitet",
-            "sets": 3,
-            "steps": [
-              {
-                "kind": "work",
-                "duration": {
-                  "kind": "distance",
-                  "meters": 150
-                },
-                "instruction": "Kraftfull men kontrollerad löpning med bibehållen mekanik; ingen maximal sprint eller syrajakt.",
-                "intensity_class": "interval"
-              },
-              {
-                "kind": "recovery",
-                "duration": {
-                  "kind": "time",
-                  "seconds": 1
-                },
-                "press_lap": true,
-                "instruction": "Lugn joggvila",
-                "intensity_class": "recovery",
-                "transport_reference_only": true
-              }
-            ],
-            "repetitions_per_set": 8
-          },
-          {
-            "name": "Nedjogg",
-            "sets": 1,
-            "steps": [
-              {
-                "kind": "work",
-                "duration": {
-                  "kind": "time",
-                  "seconds": 600
-                },
-                "instruction": "Lugnt",
+                "instruction": "Blick, linjeval, bromspunkter och flyt före segmentjakt.",
                 "intensity_class": "active"
               }
             ],
@@ -1744,37 +1823,38 @@
           }
         ],
         "transport": "intervals_icu",
-        "external_id": "hall-device:2026-10-11:run:run_hill_quality_5",
-        "source_hash": "81abc221817a174e5b6a12f6915df5b8573672034c02cfff324922f09186f54c",
+        "external_id": "hall-device:2026-10-10:bike:mtb_technical_5",
+        "source_hash": "579ed5f4dc93617e3fd0c4dd82f7507e8e831e6ce27a20d7aa35858105354e84",
         "detail_level": "structured",
-        "provider_type": "Run",
+        "provider_type": "Ride",
         "target_policy": "explicit_single_primary_only",
         "schema_version": 1,
-        "source_candidate_id": "run-hill-3x8x150"
+        "source_candidate_id": "mtb-tech-90"
       },
-      "microcycle_day": 7,
+      "microcycle_day": 6,
       "workout_design": {
         "objective": {
           "stimuli": [
-            "run_hill_quality"
+            "mtb_technical",
+            "mtb_aerobic"
           ],
           "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
           "microcycle_id": "20260921-swim_aerobic-swim_technique-run_threshold:mc3",
           "priority_role": "flex",
           "mesocycle_role": "secondary",
-          "microcycle_slot": "run_hill_quality_5"
+          "microcycle_slot": "mtb_technical_5"
         },
         "selection": {
           "method": "deterministic_constraint_scoring",
-          "reason_for_today": "Volymgolv från uttrycklig användarrapport: 3 × 8 = 24 genomförda backintervaller. 150 m är repetitionslängden i den framtida ordinationen; användarrapporten används inte för att påstå exakt längd på varje tidigare intervall.",
-          "preferred_dose_option_id": "run-hill-3x8x150"
+          "reason_for_today": "Längre teknisk/aerob exponering med krav på marginal till löpkvalitet.",
+          "preferred_dose_option_id": "mtb-tech-90"
         },
         "candidates": [
           {
-            "id": "run-hill-3x8x150",
+            "id": "mtb-tech-90",
             "dose": {
-              "kind": "structured",
-              "value": 24
+              "kind": "duration_minutes",
+              "value": 90
             },
             "score": {
               "basis": "deterministic_constraint_alignment",
@@ -1787,56 +1867,34 @@
                 "prescription_specificity": 15
               }
             },
-            "intent": "Volymgolv från uttrycklig användarrapport: 3 × 8 = 24 genomförda backintervaller. 150 m är repetitionslängden i den framtida ordinationen; användarrapporten används inte för att påstå exakt längd på varje tidigare intervall.",
-            "session": "Löpning · backkvalitet · 15 min lugnt + 3 × 8 × 150 m / lugn joggvila + 10 min lugnt",
+            "intent": "Längre teknisk/aerob exponering med krav på marginal till löpkvalitet.",
+            "session": "MTB/XC · 90 min · teknik + lugn aerob stig",
             "stimuli": [
-              "run_hill_quality"
+              "mtb_technical",
+              "mtb_aerobic"
             ],
             "prescription": {
               "blocks": [
                 {
-                  "name": "Uppvärmning",
+                  "name": "MTB/XC",
                   "work": {
-                    "duration_s": 900
+                    "duration_s": 5400
                   },
-                  "intensity": "lugn",
-                  "instruction": "Lugnt"
-                },
-                {
-                  "name": "Backkvalitet",
-                  "work": {
-                    "sets": 3,
-                    "distance_m": 150,
-                    "total_repetitions": 24,
-                    "repetitions_per_set": 8,
-                    "total_work_distance_m": 3600
-                  },
-                  "recovery": {
-                    "instruction": "Lugn joggvila"
-                  },
-                  "intensity": "kraftfull men kontrollerad",
-                  "instruction": "Kraftfull men kontrollerad löpning med bibehållen mekanik; ingen maximal sprint eller syrajakt."
-                },
-                {
-                  "name": "Nedjogg",
-                  "work": {
-                    "duration_s": 600
-                  },
-                  "intensity": "lugn",
-                  "instruction": "Lugnt"
+                  "intensity": "lugn aerob/teknisk",
+                  "instruction": "Blick, linjeval, bromspunkter och flyt före segmentjakt."
                 }
               ],
-              "source": "structured_session",
+              "source": "duration_session",
               "executable": true,
               "completeness": "full"
             },
-            "dose_option_id": "run-hill-3x8x150"
+            "dose_option_id": "mtb-tech-90"
           },
           {
-            "id": "run-hill-3x7x150",
+            "id": "mtb-tech-75",
             "dose": {
-              "kind": "structured",
-              "value": 21
+              "kind": "duration_minutes",
+              "value": 75
             },
             "score": {
               "basis": "deterministic_constraint_alignment",
@@ -1849,56 +1907,34 @@
                 "prescription_specificity": 15
               }
             },
-            "intent": "Volymgolv från uttrycklig användarrapport: 3 × 7 = 21 genomförda backintervaller. 150 m är repetitionslängden i den framtida ordinationen; användarrapporten används inte för att påstå exakt längd på varje tidigare intervall.",
-            "session": "Löpning · backkvalitet · 15 min lugnt + 3 × 7 × 150 m / lugn joggvila + 10 min lugnt",
+            "intent": "Progressionsalternativ när cykelbelastningen absorberas.",
+            "session": "MTB/XC · 75 min · teknik + lugn aerob stig",
             "stimuli": [
-              "run_hill_quality"
+              "mtb_technical",
+              "mtb_aerobic"
             ],
             "prescription": {
               "blocks": [
                 {
-                  "name": "Uppvärmning",
+                  "name": "MTB/XC",
                   "work": {
-                    "duration_s": 900
+                    "duration_s": 4500
                   },
-                  "intensity": "lugn",
-                  "instruction": "Lugnt"
-                },
-                {
-                  "name": "Backkvalitet",
-                  "work": {
-                    "sets": 3,
-                    "distance_m": 150,
-                    "total_repetitions": 21,
-                    "repetitions_per_set": 7,
-                    "total_work_distance_m": 3150
-                  },
-                  "recovery": {
-                    "instruction": "Lugn joggvila"
-                  },
-                  "intensity": "kraftfull men kontrollerad",
-                  "instruction": "Kraftfull men kontrollerad löpning med bibehållen mekanik; ingen maximal sprint eller syrajakt."
-                },
-                {
-                  "name": "Nedjogg",
-                  "work": {
-                    "duration_s": 600
-                  },
-                  "intensity": "lugn",
-                  "instruction": "Lugnt"
+                  "intensity": "lugn aerob/teknisk",
+                  "instruction": "Blick, linjeval, bromspunkter och flyt före segmentjakt."
                 }
               ],
-              "source": "structured_session",
+              "source": "duration_session",
               "executable": true,
               "completeness": "full"
             },
-            "dose_option_id": "run-hill-3x7x150"
+            "dose_option_id": "mtb-tech-75"
           },
           {
-            "id": "run-hill-3x9x150",
+            "id": "mtb-tech-60",
             "dose": {
-              "kind": "structured",
-              "value": 27
+              "kind": "duration_minutes",
+              "value": 60
             },
             "score": {
               "basis": "deterministic_constraint_alignment",
@@ -1911,56 +1947,34 @@
                 "prescription_specificity": 15
               }
             },
-            "intent": "Planerat utvecklingssteg från 3 × 8: endast repetitionsvolymen ökas. Avsedd intensitet och planerad repetitionslängd 150 m hålls oförändrade.",
-            "session": "Löpning · backkvalitet · 15 min lugnt + 3 × 9 × 150 m / lugn joggvila + 10 min lugnt",
+            "intent": "Normal teknisk/aerob exponering.",
+            "session": "MTB/XC · 60 min · teknik + lugn aerob stig",
             "stimuli": [
-              "run_hill_quality"
+              "mtb_technical",
+              "mtb_aerobic"
             ],
             "prescription": {
               "blocks": [
                 {
-                  "name": "Uppvärmning",
+                  "name": "MTB/XC",
                   "work": {
-                    "duration_s": 900
+                    "duration_s": 3600
                   },
-                  "intensity": "lugn",
-                  "instruction": "Lugnt"
-                },
-                {
-                  "name": "Backkvalitet",
-                  "work": {
-                    "sets": 3,
-                    "distance_m": 150,
-                    "total_repetitions": 27,
-                    "repetitions_per_set": 9,
-                    "total_work_distance_m": 4050
-                  },
-                  "recovery": {
-                    "instruction": "Lugn joggvila"
-                  },
-                  "intensity": "kraftfull men kontrollerad",
-                  "instruction": "Kraftfull men kontrollerad löpning med bibehållen mekanik; ingen maximal sprint eller syrajakt."
-                },
-                {
-                  "name": "Nedjogg",
-                  "work": {
-                    "duration_s": 600
-                  },
-                  "intensity": "lugn",
-                  "instruction": "Lugnt"
+                  "intensity": "lugn aerob/teknisk",
+                  "instruction": "Blick, linjeval, bromspunkter och flyt före segmentjakt."
                 }
               ],
-              "source": "structured_session",
+              "source": "duration_session",
               "executable": true,
               "completeness": "full"
             },
-            "dose_option_id": "run-hill-3x9x150"
+            "dose_option_id": "mtb-tech-60"
           },
           {
-            "id": "run-hill-3x10x150",
+            "id": "mtb-tech-45",
             "dose": {
-              "kind": "structured",
-              "value": 30
+              "kind": "duration_minutes",
+              "value": 45
             },
             "score": {
               "basis": "deterministic_constraint_alignment",
@@ -1973,86 +1987,64 @@
                 "prescription_specificity": 15
               }
             },
-            "intent": "Planerat utvecklingssteg från 3 × 9: endast repetitionsvolymen ökas. Avsedd intensitet och planerad repetitionslängd 150 m hålls oförändrade.",
-            "session": "Löpning · backkvalitet · 15 min lugnt + 3 × 10 × 150 m / lugn joggvila + 10 min lugnt",
+            "intent": "Kort teknisk exponering.",
+            "session": "MTB/XC · 45 min · teknik + lugn aerob stig",
             "stimuli": [
-              "run_hill_quality"
+              "mtb_technical",
+              "mtb_aerobic"
             ],
             "prescription": {
               "blocks": [
                 {
-                  "name": "Uppvärmning",
+                  "name": "MTB/XC",
                   "work": {
-                    "duration_s": 900
+                    "duration_s": 2700
                   },
-                  "intensity": "lugn",
-                  "instruction": "Lugnt"
-                },
-                {
-                  "name": "Backkvalitet",
-                  "work": {
-                    "sets": 3,
-                    "distance_m": 150,
-                    "total_repetitions": 30,
-                    "repetitions_per_set": 10,
-                    "total_work_distance_m": 4500
-                  },
-                  "recovery": {
-                    "instruction": "Lugn joggvila"
-                  },
-                  "intensity": "kraftfull men kontrollerad",
-                  "instruction": "Kraftfull men kontrollerad löpning med bibehållen mekanik; ingen maximal sprint eller syrajakt."
-                },
-                {
-                  "name": "Nedjogg",
-                  "work": {
-                    "duration_s": 600
-                  },
-                  "intensity": "lugn",
-                  "instruction": "Lugnt"
+                  "intensity": "lugn aerob/teknisk",
+                  "instruction": "Blick, linjeval, bromspunkter och flyt före segmentjakt."
                 }
               ],
-              "source": "structured_session",
+              "source": "duration_session",
               "executable": true,
               "completeness": "full"
             },
-            "dose_option_id": "run-hill-3x10x150"
+            "dose_option_id": "mtb-tech-45"
           }
         ],
         "schema_version": 1,
         "near_term_context": {
           "load_dimensions": [
-            "mechanical",
+            "cardiovascular",
             "neuromuscular",
-            "cardiovascular"
+            "technical"
           ],
           "selection_uses_only_preapproved_doses": true
         },
-        "selected_candidate_id": "run-hill-3x8x150",
+        "selected_candidate_id": "mtb-tech-90",
         "progression_from_previous": {
-          "reason": "Volymgolv från uttrycklig användarrapport: 3 × 8 = 24 genomförda backintervaller. 150 m är repetitionslängden i den framtida ordinationen; användarrapporten används inte för att påstå exakt längd på varje tidigare intervall.",
+          "reason": "Längre teknisk/aerob exponering med krav på marginal till löpkvalitet.",
           "relation": "support",
           "demonstrated_floor_option_id": ""
         }
       },
       "dose_resolution": {
-        "kind": "structured",
+        "kind": "duration_minutes",
         "state": "baseline",
-        "value": 24,
-        "option_id": "run-hill-3x8x150"
+        "value": 90,
+        "option_id": "mtb-tech-90"
       },
       "load_dimensions": [
-        "mechanical",
+        "cardiovascular",
         "neuromuscular",
-        "cardiovascular"
+        "technical"
       ],
-      "microcycle_slot": "run_hill_quality_5",
+      "microcycle_slot": "mtb_technical_5",
       "planning_status": "preliminary",
       "microcycle_index": 3,
-      "development_focus": "Kraftfull men kontrollerad löpning med bibehållen mekanik; ingen maximal sprint eller syrajakt.",
-      "baseline_option_id": "run-hill-3x8x150",
-      "development_character": "run_hill_quality",
-      "performance_marker_id": "run-hill-mechanics"
+      "development_focus": "Blick, linjeval, bromspunkter och flyt före segmentjakt.",
+      "baseline_option_id": "mtb-tech-90",
+      "development_character": "mtb_technical",
+      "performance_marker_id": "mtb-technical-repeat"
     }
   ],
   "strength_template": [

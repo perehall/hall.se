@@ -8,17 +8,17 @@
           "Användarrapport: Palloff-press 10x3 på resp.sida , latsdrag med band 15x3, bulgarian splits 8x3, atomics med TRX, bänkrodd 12x3, dead bug, reverse plank RPE 6/10. Känsla: Pigg.",
           "Planstatus 2026-09-28: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
-        "summary": "Genomfört 37 min styrkepass med ett komplett core/ensidig ben‑fokus och RPE ~6; användaren rapporterar 'Pigg'.",
+        "summary": "Kort, kontrollerat styrkepass (≈37 min) genomfört med RPE 6/10 och användarkänsla 'pigg'.",
         "unknowns": [
-          "Detaljer om lokal muskelsmärta eller DOMS som kan påverka löppasset nästa dag",
-          "Vilken tid simningen nästa dag planeras utföras och användarens återhämtningsunderlaget/energinivå morgon‑eftermiddag"
+          "Detaljgrad i styrkepassets belastning per övning (vikter/pauser) saknas och skulle kunna påverka reduktionsbehov.",
+          "Subjektiv återhämtning nästa morgon kan fortfarande avvika trots pigg kvällskänsla."
         ],
         "confidence": "medium",
         "interpretations": [
-          "Passet uppfyller mesocykelns krav på styrka/core‑exponering utan uppenbar överbelastning.",
-          "Eftersom enduro tidigare samma dag räknas som faktisk extern benbelastning var styrkans inriktning (unilateralt + core) ett lämpligt skyddsstimulus utan att öka löp‑/simbelastning nästa dag."
+          "Styrkepasset var genomfört som planad skyddad stimulus (styrka/core) och tolererades väl; det ger ingen indikation att ta bort nästa dags lågmekaniska simpass.",
+          "Kombinationen: teknikenduro (låg RPE) + styrka kväll visar ökad mekanisk exponering samma dag men användarrapporter anger pigg känsla — konservativt bevara simsessionen utan upptrappning."
         ],
-        "load_interpretation": "Styrkepasset ligger som skyddad mekanisk/neuromuskulär stimulus efter eftermiddagens enduro och bedöms inte kräva automatisk vila."
+        "load_interpretation": "Inget i senaste styrkepasset eller närbelastningen visar behov av akut vila; enduro samma dag var tekniskt och låg RPE."
       },
       "auto_apply": {
         "note": "Ingen automatisk planändring.",
@@ -27,16 +27,16 @@
       "activity_id": 20368346174,
       "plan_action": {
         "action": "keep",
-        "reason": "Styrkepasset var kontrollerat och mesocykel skyddar styrka/core; planerad lågmekanisk simning är fortsatt lämplig nästa dag.",
+        "reason": "Styrka genomförd med måttlig RPE och samma dags enduro var tekniskt/låg RPE, så planerat lågmekaniskt simpass kan behållas.",
         "target_date": "2026-09-29",
         "dose_option_id": "",
-        "recommendation": "Behåll simningen 3 200 m som planerat; fokusera på teknisk känsla och undvik tung benbelastning före nästa löppass. Rapportera eventuella lokala benproblem eller onormal trötthet före morgondagens pass.",
+        "recommendation": "Behåll planerad simning 3 200 m aerob/teknik som planerat; håll det lågmekaniskt och prioritera teknisk kvalitet och känsla framför fart. Vid morgonrapport om trötta ben eller hög RPE från vila: avboka eller reducera till lätt teknikpass och meddela coach.",
         "requires_approval": false,
         "target_workout_key": "20260921-swim_aerobic-swim_technique-run_threshold:mc2:2026-09-29:swim_aerobic_technique_1"
       },
       "activity_date": "2026-09-28",
       "activity_name": "Styrketräning på kvällen",
-      "generated_at_utc": "2026-09-29T06:00:45.819973+00:00",
+      "generated_at_utc": "2026-09-29T07:39:55.972247+00:00",
       "analysis_contract": {
         "pipeline_version": 4,
         "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
@@ -1357,9 +1357,9 @@
       "performance_protocol_key": null
     }
   ],
-  "last_run_utc": "2026-09-29T06:00:45.819973+00:00",
+  "last_run_utc": "2026-09-29T07:39:55.972247+00:00",
   "contract_version": 16,
-  "last_trigger_hash": "dd7b9983643b14c7935ee837578d6d7c7716dc79f9723a0255004a6b4f45cdbc",
+  "last_trigger_hash": "bb540d045929774e117710e9218b99fa2f4f2f8978d7f349c81f146a3643bf07",
   "analysed_activity_ids": [
     "20367593813",
     "20350203020",
