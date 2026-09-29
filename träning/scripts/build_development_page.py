@@ -231,7 +231,6 @@ def publish_development_page():
         "Vägen dit",
         "Aktuellt utvecklingsblock",
         "Kapacitetskarta",
-        "Preliminär beslutspunkt",
     )
     missing = [marker for marker in required if marker not in document]
     if missing:
