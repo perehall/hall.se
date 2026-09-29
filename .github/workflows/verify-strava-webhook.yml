@@ -38,15 +38,30 @@ jobs:
           health_file=$(mktemp)
           live=0
           for attempt in 1 2 3 4 5 6 7 8 9 10 11 12; do
-            status=$(curl --silent --show-error --max-time 5               --output "$health_file"               --write-out '%{http_code}'               "$CALLBACK_ORIGIN/healthz" || true)
-            if [ "$status" = "200" ]; then
+            status=$(curl --silent --show-error --max-time 5 \
+              --output "$health_file" \
+              --write-out '%{http_code}' \
+              "$CALLBACK_ORIGIN/healthz" || true)
+            if [ "$status" = "200" ] && python - "$health_file" <<'PY'
+          import json, sys
+          with open(sys.argv[1], encoding="utf-8") as fh:
+              data = json.load(fh)
+          if data.get("athlete_profile_endpoint") != "/träning/training-api/profile":
+              raise SystemExit(1)
+          if data.get("training_input_direct_persistence_configured") is not True:
+              raise SystemExit(1)
+          PY
+            then
               live=1
               break
             fi
+            echo "Waiting for Worker deployment with athlete profile API (attempt $attempt/12)..."
             sleep 10
           done
           if [ "$live" != "1" ]; then
-            echo "::error::Strava webhook workers.dev route is not live."
+            echo "::error::Worker is reachable but the athlete profile API is not deployed with durable Supabase persistence."
+            echo "Last health response:"
+            cat "$health_file" || true
             exit 1
           fi
 
@@ -70,6 +85,9 @@ jobs:
               raise SystemExit("WEBHOOK_PATH_SECRET differs between GitHub and Worker runtime")
           if data.get("verify_token_fingerprint") != expected_verify:
               raise SystemExit("STRAVA verify token differs between GitHub and Worker runtime")
+          if data.get("athlete_profile_endpoint") != "/träning/training-api/profile":
+              raise SystemExit("Worker runtime does not expose the athlete profile API")
+          print("Worker runtime includes athlete profile API and durable Supabase persistence.")
           PY
 
           path_token=$(python -c 'import hashlib,os; print(hashlib.sha256(os.environ["PATH_SECRET"].strip().encode()).hexdigest()[:32])')
