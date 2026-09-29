@@ -712,6 +712,32 @@ class AdaptivePlanningTests(unittest.TestCase):
         self.assertEqual(relation, "hold")
         self.assertIn("blockeras", evidence)
 
+    def test_manual_starting_level_sets_conservative_first_dose_without_progression(self):
+        state = {"capability_facts": {}, "dose_response": {"by_capability": {}}}
+        starting_state = {
+            "schema_version": 1,
+            "status": "confirmed",
+            "source_mode": "manual",
+            "manual_state": {
+                "disciplines": {
+                    "run": {
+                        "sessions_per_week": 3,
+                        "long_run_minutes": 100,
+                    }
+                }
+            },
+            "confirmation": {"observed_representative": False},
+        }
+        recipe = self.catalog["recipes"]["run_easy_distance"]
+        selected, floor, _, relation, evidence = choose_option(
+            "run_easy_distance", recipe, "progress", state, starting_state
+        )
+        self.assertEqual(floor["id"], "run-easy-90")
+        self.assertEqual(selected["id"], "run-easy-90")
+        self.assertEqual(relation, "hold")
+        self.assertIn("startläge", evidence)
+        self.assertIn("inte som tolererad eller absorberad", evidence)
+
     def test_completed_threshold_is_credited_only_from_dated_capability_evidence(self):
         state = {
             "recent_sessions": [
