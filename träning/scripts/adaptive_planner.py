@@ -290,6 +290,9 @@ def completed_context_signature(context) -> str:
         "direct_capabilities": sorted(
             str(value) for value in (context.get("direct_capabilities") or [])
         ),
+        "planning_credits": sorted(
+            str(value) for value in (context.get("planning_credits") or [])
+        ),
         "capability_refs": capability_refs,
         "strength_exposures": int(context.get("strength_exposures") or 0),
         "swim_exposures": int(context.get("swim_exposures") or 0),
@@ -1045,6 +1048,25 @@ def completed_microcycle_context(athlete_state, target_start):
                 direct_capabilities.add(capability)
                 capability_refs.setdefault(capability, []).append(activity_id)
 
+    planning_credits = set(direct_capabilities)
+    planning_credit_refs = {
+        key: list(values)
+        for key, values in capability_refs.items()
+    }
+    for row in rows:
+        profile = row.get("training_profile") or {}
+        for capability in profile.get("planning_credits") or []:
+            capability = str(capability or "").strip()
+            if not capability:
+                continue
+            planning_credits.add(capability)
+            activity_id = str(row.get("id") or "")
+            if activity_id:
+                planning_credit_refs.setdefault(capability, []).append(activity_id)
+
+    for key in list(planning_credit_refs):
+        planning_credit_refs[key] = sorted(set(planning_credit_refs[key]))
+
     fixed_enduro = is_enduro_school_date(target_start)
     completed_slot_dates = {
         str(row.get("date"))
@@ -1068,11 +1090,15 @@ def completed_microcycle_context(athlete_state, target_start):
         "completed_slot_days": len(completed_slot_dates),
         "completed_day_indexes": completed_day_indexes,
         "direct_capabilities": sorted(direct_capabilities),
+        "planning_credits": sorted(planning_credits),
         "capability_refs": capability_refs,
+        "planning_credit_refs": planning_credit_refs,
         "activity_refs": sorted(activity_ids),
         "evidence_note": (
             "Familjeexponeringar kommer från faktiskt registrerade aktiviteter i målveckan. "
-            "Direkt kapabilitetskredit kräver daterad athlete_state-evidens från samma aktivitet."
+            "Direct_capabilities kräver daterad fysiologisk/kapabilitetsevidens. Planning_credits kan dessutom "
+            "komma från en durabel, entydig strukturell match mot ett närliggande planerat intent och används "
+            "för att undvika redundant framtida ordination utan att påstå mer fysiologi än underlaget stödjer."
         ),
     }
 
@@ -1163,6 +1189,7 @@ def fallback_microcycle(meso, policy, catalog, target_start, completed_context=N
     completed_swims = int(completed_context.get("swim_exposures") or 0)
     completed_strength = int(completed_context.get("strength_exposures") or 0)
     completed_direct = set(completed_context.get("direct_capabilities") or [])
+    completed_direct.update(completed_context.get("planning_credits") or [])
     profile_contract = profile_planning_contract(athlete_profile) if athlete_profile else {}
     allowed_profile_days = (
         set(profile_contract.get("available_days") or [])
@@ -1482,6 +1509,7 @@ def microcycle_guard_failures(result, meso, policy, catalog, target_start, compl
     completed_strength = int(completed_context.get("strength_exposures") or 0)
     completed_slot_days = int(completed_context.get("completed_slot_days") or 0)
     completed_direct = set(completed_context.get("direct_capabilities") or [])
+    completed_direct.update(completed_context.get("planning_credits") or [])
 
     for index, row in enumerate(slots):
         if not isinstance(row, dict):
@@ -1820,8 +1848,9 @@ def build_microcycle_source_payload(
             "completed_strength_exposures": int(
                 completed_context.get("strength_exposures") or 0
             ),
-            "completed_direct_capabilities": list(
-                completed_context.get("direct_capabilities") or []
+            "completed_direct_capabilities": sorted(
+                set(completed_context.get("direct_capabilities") or [])
+                | set(completed_context.get("planning_credits") or [])
             ),
             "max_run_quality_exposures": int(
                 policy["microcycle_policy"].get(
@@ -2480,7 +2509,12 @@ def materialize_strategy(goal, policy, meso, micro, catalog, athlete_state, goal
         if x in contract["protected_capacity"]
     ]
     completed_context = micro.get("completed_microcycle_context") or {}
-    completed_capabilities = list(completed_context.get("direct_capabilities") or [])
+    completed_capabilities = list(
+        dict.fromkeys(
+            list(completed_context.get("direct_capabilities") or [])
+            + list(completed_context.get("planning_credits") or [])
+        )
+    )
     if int(completed_context.get("strength_exposures") or 0) > 0:
         completed_capabilities.extend(["strength_unilateral", "strength_core"])
     if int(completed_context.get("swim_exposures") or 0) > 0:
