@@ -918,6 +918,10 @@ def render_week_context(snapshot: PresentationSnapshot) -> str:
     if model is None:
         return ""
 
+    state = str(snapshot.navigation.state or "").strip().lower()
+    heading = "Kommande vecka" if state == "kommande" else "Aktuell vecka"
+    aria_label = "Kommande veckas fokus" if state == "kommande" else "Aktuell veckas fokus"
+
     taxonomy = []
     for label, values in (
         ("Primärt", model.primary),
@@ -955,8 +959,8 @@ def render_week_context(snapshot: PresentationSnapshot) -> str:
         part for part in (model.meta_line, snapshot.week.status_summary) if part
     )
     return (
-        '<section class="v2-week-context" aria-label="Aktuell veckas fokus">'
-        '<h2>Aktuell vecka</h2>'
+        f'<section class="v2-week-context" aria-label="{html.escape(aria_label, quote=True)}">'
+        f'<h2>{html.escape(heading)}</h2>'
         f'<strong class="v2-week-focus">{html.escape(model.focus)}</strong>'
         f'<p class="v2-week-meta">{html.escape(week_meta)}</p>'
         f'{details}</section>'
@@ -1275,12 +1279,15 @@ def render_document(snapshot: PresentationSnapshot, *, title: str = "Träning") 
 
 
 def render_snapshot(snapshot: PresentationSnapshot) -> str:
-    feedback_script = FEEDBACK_SCRIPT if snapshot.today.outcomes else ""
+    is_current = str(snapshot.navigation.state or "").strip().lower() == "aktuell"
+    feedback_script = FEEDBACK_SCRIPT if is_current and snapshot.today.outcomes else ""
+    today = render_today(snapshot) if is_current else ""
+    week_status = render_week_status(snapshot) if is_current else ""
     return (
         render_navigation(snapshot)
-        + render_today(snapshot)
+        + today
         + render_week_context(snapshot)
-        + render_week_status(snapshot)
+        + week_status
         + render_week(snapshot)
         + feedback_script
     )
