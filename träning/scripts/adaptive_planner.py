@@ -1190,7 +1190,6 @@ def fallback_microcycle(meso, policy, catalog, target_start, completed_context=N
     completed_strength = int(completed_context.get("strength_exposures") or 0)
     completed_direct = set(completed_context.get("direct_capabilities") or [])
     completed_direct.update(completed_context.get("planning_credits") or [])
-    completed_direct.update(completed_context.get("planning_credits") or [])
     profile_contract = profile_planning_contract(athlete_profile) if athlete_profile else {}
     allowed_profile_days = (
         set(profile_contract.get("available_days") or [])
@@ -1510,6 +1509,7 @@ def microcycle_guard_failures(result, meso, policy, catalog, target_start, compl
     completed_strength = int(completed_context.get("strength_exposures") or 0)
     completed_slot_days = int(completed_context.get("completed_slot_days") or 0)
     completed_direct = set(completed_context.get("direct_capabilities") or [])
+    completed_direct.update(completed_context.get("planning_credits") or [])
 
     for index, row in enumerate(slots):
         if not isinstance(row, dict):
