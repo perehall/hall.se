@@ -632,6 +632,14 @@
       "source_hash": "023f6ae6d5afc341b6863d3d4d52275ecdf60173884a86511dd3615f2e4acbf1",
       "generated_at_utc": "2026-09-29T19:38:31.937204+00:00",
       "summary": "Åtgärdade konflikter: tog bort planerade slotar som kolliderade med fast enduro (dag 1) och som duplicerade redan genomförda primära/styrke‑exponeringar (run_threshold, strength_core). Behåller två simbassessioner (krav), en backkvalitet (inom max 2 run‑kvaliteter tillsammans med redan genomförd tröskel) och ett lugnt långt löppass. Slotantalet =4 (inom 4–7)."
+    },
+    {
+      "kind": "microcycle",
+      "decision_id": "2026-W40",
+      "source": "deterministic_fallback_after_repair_guard",
+      "source_hash": "862d3f38a7bdb3bb7c56376bdb2866ba88d6f497888b0e1bbf52219f775d63b6",
+      "generated_at_utc": "2026-09-29T19:44:02.634888+00:00",
+      "summary": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern."
     }
   ]
 }
