@@ -387,6 +387,9 @@ def build_mesocycle_next_week(promoted, strategy):
                 "microcycle_day": int(slot["day_index"]),
                 "microcycle_slot": slot["slot"],
             }
+            for field in ("recipe_key", "development_character", "block_intent"):
+                if slot.get(field):
+                    planned_day[field] = slot[field]
             if slot.get("optional_stimuli"):
                 planned_day["optional_stimuli"] = deepcopy(slot["optional_stimuli"])
             if slot.get("performance_marker_id"):
@@ -463,6 +466,9 @@ def build_mesocycle_next_week(promoted, strategy):
                 "microcycle_slot": slot["slot"],
                 "transition_review": True,
             }
+            for field in ("recipe_key", "development_character", "block_intent"):
+                if slot.get(field):
+                    planned_day[field] = slot[field]
             if slot.get("optional_stimuli"):
                 planned_day["optional_stimuli"] = deepcopy(slot["optional_stimuli"])
             if slot.get("performance_marker_id"):
