@@ -164,7 +164,7 @@
   },
   "current_mesocycle": {
     "id": "20260928-run_threshold-swim_aerobic-swim_technique",
-    "title": "Fortsatt etablerings-/byggblock — konservativ progress",
+    "title": "Fortsatt etablerings-/byggblock — konservativ konsolidering",
     "contract": {
       "primary": [
         "run_threshold",
@@ -173,8 +173,8 @@
       ],
       "principle": "Primära kapaciteter är mesocykelns utvecklingsuppdrag. Sekundära stimuli stödjer riktningen. Simning och styrka/core skyddas som kapacitet när de inte själva är primära. Enduro behandlas som faktisk extern belastning.",
       "secondary": [
-        "run_easy_distance",
         "run_hill_quality",
+        "run_easy_distance",
         "mtb_technical",
         "mtb_aerobic"
       ],
@@ -192,12 +192,12 @@
     },
     "end_date": "2026-10-25",
     "guardrails": [
-      "Ändra endast en belastningsvariabel åt gången; automatiska ökningar av volym/intensitet är förbjudna.",
-      "Faktisk belastning föregående och kommande 48–72 h måste beaktas innan hårdare pass eller progression; vid varningssignal avbryt progression.",
-      "Bevara minst en styrke/core‑session per mikrocykel; utebliven styrka kräver review.",
-      "Enduro/MTB räknas som faktisk extern belastning och kan kräva reduktion av andra benbelastande pass.",
-      "Swimrun‑specifik kombination/övergångsträning markeras som gap tills absorberingsindikatorer stödjer den.",
-      "Wellness eller en enskild bra dag får inte ensam motivera progression.",
+      "Ingen progression eller volymökning får motiveras enbart av wellness eller enstaka bra dag.",
+      "Ändra högst en belastningsvariabel åt gången; progression kräver explicit supportive 24–72 h‑respons och mesocykelbeslut.",
+      "Beakta faktisk belastning föregående och kommande 48–72 h innan hårdare pass eller progression; vid varningssignal avbryt progression.",
+      "Enduro/MTB räknas som faktisk extern belastning och ska vägas mot löp- och simstimuli; om behövligt flytta eller reducera andra benbelastande pass.",
+      "Skydda minst en styrke/core‑session per mikrocykel; utebliven styrka kräver review.",
+      "Swimrun‑specifika övergångs‑durability saknas i exekverbart recept och är markerad som gap — den ska inte improviseras utan planeras i ett senare block.",
       "Ingen progression får motiveras enbart av wellness eller träningsberedskap.",
       "Faktisk belastning föregående och kommande 2–3 dagar ska beaktas innan pass flyttas, läggs till eller görs hårdare.",
       "Enduro är faktisk träningsbelastning och får ersätta annan träning.",
@@ -205,7 +205,7 @@
       "Utvecklingspass ska progressa, konsolideras, reduceras eller bytas med explicit skäl; de får inte upprepas mekaniskt.",
       "Tidigare mikrocyklers recept- och doshistorik ska beaktas innan ett utvecklingspass upprepas oförändrat."
     ],
-    "hypothesis": "Atleten kan absorbera en enda, kontrollerad progression: öka run_threshold arbetstid till ~36 min per session samtidigt som simningen konsolideras vid ~3.2–3.6 km och styrka/core skyddas. Detta stärker både allroundprofilen och swimrun‑relevanta kapaciteter utan att öka total volym, förutsatt att 24–72 h‑respons förblir supportive/neutral; vid varningssignal avbryt progression.",
+    "hypothesis": "Atleten absorberar bättre genom en konservativ konsolidering: behåll run_threshold på absorberad nivå (32 min arbetstid/session), genomför två tekniska/aeroba simbassessioner (~3 200 m) per vecka och minst en styrke/core‑session per mikrocykel. Progression (t.ex. run 36 min eller sim 3 600 m) skall bara öppnas om 24–72 h‑respons är konsekvent supportive och inga varningssignaler ackumuleras.",
     "start_date": "2026-09-28",
     "periodization": {
       "wave": [
@@ -293,20 +293,20 @@
         ]
       },
       "microcycle_week_key": "2026-W40",
-      "starting_state_hash": null,
+      "starting_state_hash": "52ff32e9ef09bd337669bbf6347085139222e7abd6a7cec41efd516a62e45cfe",
       "athlete_profile_hash": "559e0b6e5a587d351baa65817f81e04e433d0d46aac60b57a73429fd5b43d1bc",
-      "mesocycle_source_hash": "2898ecb9ead80141c313c869d213eb811cda81672d2a544d5e4a470cf63ae024",
-      "microcycle_source_hash": "a830d36fded381a365f24ffdf8b9963cf36c3bc85370fb6dcc0260ff516fca4f",
+      "mesocycle_source_hash": "9fb730125d779e8644a8486faa35467fe547c33194d479bd24aed65dfcf81994",
+      "microcycle_source_hash": "7a5646876a161d88e2c25e1a15ac31142150afd5c400141af12ccfeb3b557e74",
       "mesocycle_decision_source": "openai",
       "microcycle_decision_source": "openai_repaired"
     },
     "evaluation_date": "2026-10-26",
     "goal_basis_hash": "30201a00f8ff4f10c913b8fbf2d31052418d4e0d3812c799ca49b56a38accdf9",
     "success_signals": [
-      "Genomförd 4×9 min tröskel (36 min arbetstid) med supportive 24–72 h‑respons (inga varningssignaler).",
-      "Minst 2 simexponeringar per mikrocykel på ~3 200–3 600 m med bibehållen teknikkänsla och RPE ≤6–7 (inga upprepade RPE8‑trötthetssvar).",
-      "Minst en dokumenterad styrke/core‑session per mikrocykel utförd enligt plan utan negativa 24–72 h‑efterverkningar.",
-      "Ett långt lugnt löppass (90–120 min) genomfört utan oproportionerlig negativ inverkan på följande tröskelpass.",
+      "Upprepade run_threshold‑sessioner på 32 min arbetstid med supportive 24–72 h‑respons (inga varningssignaler).",
+      "Minst 2 simbassessioner per mikrocykel ~3 200 m med bibehållen teknik och RPE ≤6–7 (inga upprepade RPE8‑trötthetssvar).",
+      "Minst en dokumenterad styrke/core‑session per mikrocykel utförd utan negativa 24–72 h‑efterverkningar.",
+      "Långt lugnt löppass (90–120 min) genomfört utan oproportionerlig negativ påverkan på efterföljande kvalitetspass.",
       "Ingen ackumulerad varningssignal i 24–72 h‑fönstret efter kombination av huvudpass (tröskel + sim + enduro)."
     ],
     "review_questions": [
@@ -316,7 +316,7 @@
       "Har utvecklingspassen faktiskt ändrat dos, struktur eller träningskaraktär enligt blockets avsikt, eller har samma pass upprepats utan tillräckligt skäl?",
       "Bör nästa mesocykel fortsätta, modifiera eller byta fokus utifrån faktisk respons snarare än föregående veckomall?"
     ],
-    "goal_contribution": "Behåll bred allroundbyggnad med skyddad simteknik/aerobitet och kontrollerad progression i löptröskel; styrka/core bibehålls och MTB/enduro hålls som stödjande belastning.",
+    "goal_contribution": "Fortsätta konsolidera primära kapaciteter (kontrollerad löptröskel, sim aerob/teknik) och bibehålla skyddad styrka/core samt MTB/enduro som stöd, samtidigt som swimrun‑specifika övergångs‑durability markeras som gap och skjuts till senare block.",
     "protected_stimuli": [
       "run_threshold",
       "swim_aerobic",
@@ -325,15 +325,15 @@
     "goal_contributions": [
       {
         "goal_id": "allround-athlete",
-        "tradeoff": "Medveten, tidsbegränsad förskjutning mot mer sim och tröskelminskar utrymmet för maximal MTB‑teknik/kvantitet under mesocykeln.",
+        "tradeoff": "Medveten, tidsbegränsad betoning på sim och kontrollerad löptröskelminskar utrymmet för maximal MTB‑teknik/kvantitet under mesocykeln.",
         "goal_type": "development",
-        "contribution": "Bibehålla och utveckla bred allroundprofil genom konsoliderad simteknik och aerob sim, regelbunden lång lugn löpning, kontrollerad ökning i löptröskel‑arbetstid och minst en styrke/core‑session per mikrocykel."
+        "contribution": "Bibehålla och utveckla en bred allroundprofil genom konsoliderad simteknik och aerob sim (2 pass/veckan ~3 200 m), regelbunden lång lugn löpning och bibehållen styrke/core‑exponering varje mikrocykel; behålla MTB/enduro som verklig belastning."
       },
       {
         "goal_id": "otillo-aland-2027-top10",
-        "tradeoff": "Swimrun‑specifik kombinationstålighet/övergångs‑durability adresseras inte i detta block utan markeras som gap och skjuts till senare; trade‑off är uttrycklig och tidsbegränsad.",
+        "tradeoff": "Swimrun‑specifik kombinationstålighet/övergångs‑durability adresseras inte i detta block utan markeras som gap och skjuts till senare; trade‑off är explicita och tidsbegränsade.",
         "goal_type": "performance",
-        "contribution": "Stärker swimrun‑relevanta komponenter: upprepad aerob simuthållighet med bibehållen teknik och ökad löptröskel‑tålighet för upprepade löpsegment."
+        "contribution": "Stärka swimrun‑relevanta komponenter genom upprepad aerob simuthållighet med bibehållen teknik och stabil löptröskel‑tålighet för upprepade löpsegment."
       }
     ],
     "progression_policy": {
@@ -355,8 +355,8 @@
       "development_key_sessions_must_progress_or_justify_hold": true
     },
     "supporting_stimuli": [
-      "run_easy_distance",
       "run_hill_quality",
+      "run_easy_distance",
       "mtb_technical",
       "mtb_aerobic",
       "swim_threshold",
@@ -410,7 +410,7 @@
       {
         "slot": "swim_aerobic_technique_1",
         "sport": "swim",
-        "reason": "Dag efter måndagens enduro kräver låg benbelastning; konsoliderar teknisk aerob sim för att adressera sim‑caution utan att progressa. Dose-response finns men saknar verifierad tolererad/absorberad nivå; lägsta katalogalternativ används som konservativ etableringspunkt. Veckobeslut: consolidate; materialiserad relation: hold.",
+        "reason": "Dag efter måndagens enduro kräver låg benbelastning — teknisk/aerob simbassession uppfyller swim_technique + swim_aerobic utan benstress. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: establish; materialiserad relation: establish.",
         "session": "Simning · 3 200 m · aerob/teknik",
         "stimuli": [
           "swim_aerobic",
@@ -526,11 +526,11 @@
         "development_character": "technique_aerobic",
         "development_progression": {
           "mode": "develop",
-          "source": "catalog",
+          "source": "starting_state",
           "microcycle_plan": [
             {
-              "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från verifierad träningsrespons, bekräftat startläge eller konservativ katalogbas utan att höja flera belastningsvariabler samtidigt.",
-              "relation": "hold",
+              "reason": "Mikrocykelbeslutet valde establish och dosen materialiserades från verifierad träningsrespons, bekräftat startläge eller konservativ katalogbas utan att höja flera belastningsvariabler samtidigt.",
+              "relation": "establish",
               "option_id": "swim-3200",
               "microcycle": 1
             }
@@ -541,85 +541,14 @@
         "progression_ceiling_reason": "Ingen högre förgodkänd dos finns i receptkatalogen. Fortsatt utveckling kräver nytt recept eller annan progressionsaxel, inte automatisk extrapolering."
       },
       {
-        "slot": "run_threshold_2",
+        "slot": "run_hill_quality_2",
         "sport": "run",
-        "reason": "Etablerar tröskelstimulus på absorberad nivå utan progression (konservativt p.g.a. senaste 24–72h‑varningssignaler). Dosgolvet utgår från absorberad nivå 32 i athlete_state.dose_response, inte från högsta genomförda värde. Veckobeslut: establish; materialiserad relation: hold.",
-        "session": "Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg",
-        "stimuli": [
-          "run_threshold"
-        ],
-        "day_index": 4,
-        "recipe_key": "run_threshold",
-        "block_intent": "establish",
-        "dose_options": [
-          {
-            "id": "run-threshold-3x8",
-            "kind": "structured",
-            "value": 24,
-            "intent": "Etablerad kontrollerad struktur.",
-            "session": "Löpning · kontrollerad tröskel · 3 × 8 min / 90 s jogg"
-          },
-          {
-            "id": "run-threshold-3x10",
-            "kind": "structured",
-            "value": 30,
-            "intent": "Längre sammanhängande arbetstid med samma kontrollerade intensitetsavsikt.",
-            "session": "Löpning · kontrollerad tröskel · 3 × 10 min / 90 s jogg"
-          },
-          {
-            "id": "run-threshold-4x8",
-            "kind": "structured",
-            "value": 32,
-            "intent": "Alternativ struktur med något större total arbetstid; används bara när faktisk historik stödjer den.",
-            "session": "Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg"
-          },
-          {
-            "id": "run-threshold-4x9",
-            "kind": "structured",
-            "value": 36,
-            "intent": "Förgodkänt nästa arbetstidssteg från demonstrerade 4 × 8: fyra extra arbetsminuter med oförändrad kontrollerad intensitetsavsikt. Väljs endast när mesocykel/mikrocykel uttryckligen beslutar progression.",
-            "session": "Löpning · kontrollerad tröskel · 4 × 9 min / 90 s jogg"
-          }
-        ],
-        "priority_role": "anchor",
-        "load_dimensions": [
-          "cardiovascular",
-          "mechanical"
-        ],
-        "development_focus": "Jämn, kontrollerad tröskelkaraktär. Progression ska främst öka absorberbar arbetstid, inte jaga högre intensitet.",
-        "baseline_option_id": "run-threshold-4x8",
-        "progression_criteria": [
-          "Ändra bara dos när faktisk träningsrespons eller mesocykelns progressionsbeslut ger sakligt stöd.",
-          "Wellness eller en enskild bra dag får inte ensam motivera belastningsökning.",
-          "Närliggande 2–3 dagars faktisk belastning ska kunna motivera hold, reduktion eller flytt."
-        ],
-        "development_character": "run_threshold",
-        "performance_marker_id": "run-threshold-control",
-        "development_progression": {
-          "mode": "develop",
-          "source": "athlete_state",
-          "microcycle_plan": [
-            {
-              "reason": "Mikrocykelbeslutet valde establish och dosen materialiserades från verifierad träningsrespons, bekräftat startläge eller konservativ katalogbas utan att höja flera belastningsvariabler samtidigt.",
-              "relation": "hold",
-              "option_id": "run-threshold-4x8",
-              "microcycle": 1
-            }
-          ],
-          "demonstrated_floor_option_id": "run-threshold-4x8",
-          "same_dose_repeat_requires_reason": true
-        },
-        "progression_target_option_id": "run-threshold-4x9"
-      },
-      {
-        "slot": "run_hill_quality_3",
-        "sport": "run",
-        "reason": "Kraft/neuromuskulär backstimulans placerad med ett dagsgap efter tröskel för att undvika intilliggande löpstressorer; konsolidering, inte ytterligare progression. Dosgolvet utgår från absorberad nivå 24 i athlete_state.dose_response, inte från högsta genomförda värde. Veckobeslut: consolidate; materialiserad relation: hold.",
+        "reason": "Bibehåller run_hill_quality som sekundär mekanisk/neuromuskulär kapacitet; placerad med lämpligt avstånd till run_threshold. Dosgolvet utgår från absorberad nivå 24 i athlete_state.dose_response, inte från högsta genomförda värde. Veckobeslut: consolidate; materialiserad relation: hold.",
         "session": "Löpning · backkvalitet · 15 min lugnt + 3 × 8 × 150 m / lugn joggvila + 10 min lugnt",
         "stimuli": [
           "run_hill_quality"
         ],
-        "day_index": 6,
+        "day_index": 3,
         "recipe_key": "run_hill_quality",
         "block_intent": "establish",
         "dose_options": [
@@ -704,15 +633,15 @@
         "performance_marker_id": "run-hill-mechanics"
       },
       {
-        "slot": "swim_aerobic_endurance_4",
+        "slot": "swim_aerobic_endurance_3",
         "sport": "swim",
-        "reason": "Andra simexponeringen i veckan för att uppfylla normalt antal simpass (2) och bibehålla aerob/teknisk kvalitet utan att eskalera tröskelbelastning. Dose-response finns men saknar verifierad tolererad/absorberad nivå; lägsta katalogalternativ används som konservativ etableringspunkt. Veckobeslut: consolidate; materialiserad relation: hold.",
+        "reason": "Andra simbassessionen med annan development_character för att uppfylla två simbassessioner/vecka och mesocykelns aeroba tekniska mål. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: establish; materialiserad relation: establish.",
         "session": "Simning · 3 200 m · aerob uthållighet",
         "stimuli": [
           "swim_aerobic",
           "swim_technique"
         ],
-        "day_index": 7,
+        "day_index": 4,
         "recipe_key": "swim_aerobic_endurance",
         "block_intent": "establish",
         "dose_options": [
@@ -878,11 +807,11 @@
         "development_character": "aerobic_endurance",
         "development_progression": {
           "mode": "develop",
-          "source": "catalog",
+          "source": "starting_state",
           "microcycle_plan": [
             {
-              "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från verifierad träningsrespons, bekräftat startläge eller konservativ katalogbas utan att höja flera belastningsvariabler samtidigt.",
-              "relation": "hold",
+              "reason": "Mikrocykelbeslutet valde establish och dosen materialiserades från verifierad träningsrespons, bekräftat startläge eller konservativ katalogbas utan att höja flera belastningsvariabler samtidigt.",
+              "relation": "establish",
               "option_id": "swim-aerobic-endurance-3200",
               "microcycle": 1
             }
@@ -891,6 +820,135 @@
           "same_dose_repeat_requires_reason": true
         },
         "progression_target_option_id": "swim-aerobic-endurance-3600"
+      },
+      {
+        "slot": "mtb_technical_4",
+        "sport": "bike",
+        "reason": "Underhållande mtb/teknik utan att ligga på måndagen; placerad så den inte ligger intill löpkvaliteter och väger mot enduro‑belastningen. Absorberad nivå saknas; dosgolvet utgår konservativt från tolererad nivå 73.23. Detta är inte bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
+        "session": "MTB/XC · 60 min · teknik + lugn aerob stig",
+        "stimuli": [
+          "mtb_technical",
+          "mtb_aerobic"
+        ],
+        "day_index": 5,
+        "recipe_key": "mtb_technical",
+        "block_intent": "establish",
+        "dose_options": [
+          {
+            "id": "mtb-tech-45",
+            "kind": "duration_minutes",
+            "value": 45,
+            "intent": "Kort teknisk exponering.",
+            "session": "MTB/XC · 45 min · teknik + lugn aerob stig"
+          },
+          {
+            "id": "mtb-tech-60",
+            "kind": "duration_minutes",
+            "value": 60,
+            "intent": "Normal teknisk/aerob exponering.",
+            "session": "MTB/XC · 60 min · teknik + lugn aerob stig"
+          },
+          {
+            "id": "mtb-tech-75",
+            "kind": "duration_minutes",
+            "value": 75,
+            "intent": "Progressionsalternativ när cykelbelastningen absorberas.",
+            "session": "MTB/XC · 75 min · teknik + lugn aerob stig"
+          },
+          {
+            "id": "mtb-tech-90",
+            "kind": "duration_minutes",
+            "value": 90,
+            "intent": "Längre teknisk/aerob exponering med krav på marginal till löpkvalitet.",
+            "session": "MTB/XC · 90 min · teknik + lugn aerob stig"
+          }
+        ],
+        "priority_role": "flex",
+        "load_dimensions": [
+          "cardiovascular",
+          "neuromuscular",
+          "technical"
+        ],
+        "development_focus": "Blick, linjeval, bromspunkter och flyt före segmentjakt.",
+        "baseline_option_id": "mtb-tech-60",
+        "progression_criteria": [
+          "Ändra bara dos när faktisk träningsrespons eller mesocykelns progressionsbeslut ger sakligt stöd.",
+          "Wellness eller en enskild bra dag får inte ensam motivera belastningsökning.",
+          "Närliggande 2–3 dagars faktisk belastning ska kunna motivera hold, reduktion eller flytt."
+        ],
+        "development_character": "mtb_technical",
+        "performance_marker_id": "mtb-technical-repeat"
+      },
+      {
+        "slot": "run_threshold_5",
+        "sport": "run",
+        "reason": "Konsolidera absorberad run_threshold (32 min) utan progression; schemalagd med god separation från andra löpkvaliteter och efter stödjande historik. Dosgolvet utgår från absorberad nivå 32 i athlete_state.dose_response, inte från högsta genomförda värde. Veckobeslut: consolidate; materialiserad relation: hold.",
+        "session": "Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg",
+        "stimuli": [
+          "run_threshold"
+        ],
+        "day_index": 7,
+        "recipe_key": "run_threshold",
+        "block_intent": "establish",
+        "dose_options": [
+          {
+            "id": "run-threshold-3x8",
+            "kind": "structured",
+            "value": 24,
+            "intent": "Etablerad kontrollerad struktur.",
+            "session": "Löpning · kontrollerad tröskel · 3 × 8 min / 90 s jogg"
+          },
+          {
+            "id": "run-threshold-3x10",
+            "kind": "structured",
+            "value": 30,
+            "intent": "Längre sammanhängande arbetstid med samma kontrollerade intensitetsavsikt.",
+            "session": "Löpning · kontrollerad tröskel · 3 × 10 min / 90 s jogg"
+          },
+          {
+            "id": "run-threshold-4x8",
+            "kind": "structured",
+            "value": 32,
+            "intent": "Alternativ struktur med något större total arbetstid; används bara när faktisk historik stödjer den.",
+            "session": "Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg"
+          },
+          {
+            "id": "run-threshold-4x9",
+            "kind": "structured",
+            "value": 36,
+            "intent": "Förgodkänt nästa arbetstidssteg från demonstrerade 4 × 8: fyra extra arbetsminuter med oförändrad kontrollerad intensitetsavsikt. Väljs endast när mesocykel/mikrocykel uttryckligen beslutar progression.",
+            "session": "Löpning · kontrollerad tröskel · 4 × 9 min / 90 s jogg"
+          }
+        ],
+        "priority_role": "anchor",
+        "load_dimensions": [
+          "cardiovascular",
+          "mechanical"
+        ],
+        "development_focus": "Jämn, kontrollerad tröskelkaraktär. Progression ska främst öka absorberbar arbetstid, inte jaga högre intensitet.",
+        "baseline_option_id": "run-threshold-4x8",
+        "progression_criteria": [
+          "Ändra bara dos när faktisk träningsrespons eller mesocykelns progressionsbeslut ger sakligt stöd.",
+          "Wellness eller en enskild bra dag får inte ensam motivera belastningsökning.",
+          "Närliggande 2–3 dagars faktisk belastning ska kunna motivera hold, reduktion eller flytt."
+        ],
+        "development_character": "run_threshold",
+        "performance_marker_id": "run-threshold-control",
+        "development_progression": {
+          "mode": "develop",
+          "source": "athlete_state",
+          "microcycle_plan": [
+            {
+              "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från verifierad träningsrespons, bekräftat startläge eller konservativ katalogbas utan att höja flera belastningsvariabler samtidigt.",
+              "relation": "hold",
+              "option_id": "run-threshold-4x8",
+              "microcycle": 1
+            }
+          ],
+          "demonstrated_floor_option_id": "run-threshold-4x8",
+          "same_dose_repeat_requires_reason": true
+        },
+        "progression_target_option_id": "run-threshold-4x9"
       }
     ],
     "microcycle_structure": {
@@ -934,7 +992,7 @@
     "source_goal": "supabase:training_goal_document",
     "source_policy": "data/planning_policy.json",
     "source_athlete_state": "data/athlete_state.json",
-    "source_starting_state": "none",
+    "source_starting_state": "supabase:athlete_starting_states",
     "source_mesocycle_decision": "data/mesocycle_decision.json",
     "source_microcycle_decision": "data/microcycle_decision.json"
   },

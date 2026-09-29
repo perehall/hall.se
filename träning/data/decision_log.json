@@ -592,6 +592,22 @@
       "source_hash": "a830d36fded381a365f24ffdf8b9963cf36c3bc85370fb6dcc0260ff516fca4f",
       "generated_at_utc": "2026-09-29T12:37:49.438545+00:00",
       "summary": "Åtgärdar guard‑failures genom att ta bort planerade slot som krockar med måndagens fasta enduro (dag 1) och genom att inte lägga till en styrke/core‑session som redan är genomförd i målveckan. Behåller alla primära kapabiliteter, två simexponeringar, minst en styrke/core‑exponering krediterad från genomfört pass, undviker intilliggande löpkvaliteter och respekterar låg benbelastning dag 2."
+    },
+    {
+      "kind": "mesocycle",
+      "decision_id": "20260928-run_threshold-swim_aerobic-swim_technique",
+      "source": "openai",
+      "source_hash": "9fb730125d779e8644a8486faa35467fe547c33194d479bd24aed65dfcf81994",
+      "generated_at_utc": "2026-09-29T13:47:10.652213+00:00",
+      "summary": "Fortsatt etablerings-/byggblock — konservativ konsolidering"
+    },
+    {
+      "kind": "microcycle",
+      "decision_id": "2026-W40",
+      "source": "openai_repaired",
+      "source_hash": "7a5646876a161d88e2c25e1a15ac31142150afd5c400141af12ccfeb3b557e74",
+      "generated_at_utc": "2026-09-29T13:49:08.555450+00:00",
+      "summary": "Reparerar guard‑missar: tar bort planerat pass på dag 1 (måste vara blocked av fast enduro) och tar bort redundant styrke/core‑slot eftersom ett styrkepass redan genomförts i målveckan. Behåller två olika simbassessioner (teknik + endurance) för att täcka swim_aerobic + swim_technique, skyddar run_threshold som primär kapacitet och bibehåller sekundär mtb_technical utan att placera det intill löpkvaliteter. Alla hard_requirements beaktade."
     }
   ]
 }
