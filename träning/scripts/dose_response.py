@@ -290,9 +290,11 @@ def build_dose_response(sessions, evidence, *, today):
 
             if direct == "caution":
                 status = "caution"
-            elif direct == "supportive" and repeated and recovery != "caution":
+            elif direct == "supportive" and repeated and not recovery["window_complete"]:
+                status = "tolerated_pending_recovery"
+            elif direct == "supportive" and repeated and recovery["signal"] != "caution":
                 status = "absorbed"
-            elif direct == "supportive" and repeated and recovery == "caution":
+            elif direct == "supportive" and repeated and recovery["signal"] == "caution":
                 status = "tolerated_with_recovery_caution"
             elif direct in {"supportive", "neutral"}:
                 status = "tolerated"
@@ -309,7 +311,7 @@ def build_dose_response(sessions, evidence, *, today):
             (
                 row["dose_value"]
                 for row in rows
-                if row["response_status"] in {"absorbed", "tolerated"}
+                if row["response_status"] in {"absorbed", "tolerated", "tolerated_pending_recovery"}
             ),
             default=None,
         )
@@ -334,6 +336,8 @@ def build_dose_response(sessions, evidence, *, today):
             reason = "Senaste jämförbara exponeringen är genomförd men saknar återkoppling; tystnad räknas inte som tolerans."
         elif absorbed is None:
             reason = "Dos har demonstrerats/tolererats men saknar ännu upprepad stödjande respons för att klassas som absorberad."
+        elif latest["response_status"] == "tolerated_pending_recovery":
+            reason = "Senaste jämförbara exponeringen har stödjande passrespons men 72 h-observationsfönstret är ännu inte komplett."
         elif latest["response_status"] == "tolerated_with_recovery_caution":
             reason = "Senaste exponeringen har stödjande passrespons men 24–72 h-kontexten innehåller en varningssignal; kausalitet antas inte."
         elif latest["dose_value"] < absorbed * 0.90:
