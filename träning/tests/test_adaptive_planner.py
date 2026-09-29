@@ -484,6 +484,63 @@ class AdaptivePlanningTests(unittest.TestCase):
         self.assertEqual(relation, "hold")
         self.assertIn("absorberad nivå 3200", evidence)
 
+    def test_demonstrated_max_without_feedback_cannot_raise_dose_floor(self):
+        state = {
+            "capability_facts": {
+                "swim_aerobic": {
+                    "longest_distance": {"distance_m": 4000}
+                }
+            },
+            "dose_response": {
+                "by_capability": {
+                    "swim_aerobic": {
+                        "demonstrated_value": 4000.0,
+                        "tolerated_value": None,
+                        "absorbed_value": None,
+                        "progression_ready": False,
+                        "progression_reason": "No feedback evidence.",
+                    }
+                }
+            },
+        }
+        recipe = self.catalog["recipes"]["swim_aerobic_endurance"]
+        selected, floor, _, relation, evidence = choose_option(
+            "swim_aerobic_endurance", recipe, "consolidate", state
+        )
+        self.assertEqual(floor["id"], "swim-aerobic-endurance-3200")
+        self.assertEqual(selected["id"], "swim-aerobic-endurance-3200")
+        self.assertEqual(relation, "hold")
+        self.assertIn("saknar verifierad tolererad/absorberad nivå", evidence)
+
+    def test_recent_supportive_repeat_waits_for_complete_72h_window(self):
+        activities = {
+            "activities": [
+                {
+                    "id": 107,
+                    "start_date_local": "2026-09-20T18:00:00",
+                    "sport_type": "WeightTraining",
+                    "classification": "training",
+                    "elapsed_time_s": 2100,
+                    "user_report": "RPE 5/10. Känsla: Pigg.",
+                },
+                {
+                    "id": 108,
+                    "start_date_local": "2026-09-28T18:00:00",
+                    "sport_type": "WeightTraining",
+                    "classification": "training",
+                    "elapsed_time_s": 2150,
+                    "user_report": "RPE 5/10. Känsla: Pigg.",
+                },
+            ]
+        }
+        state = build_state(activities, {"entries": []}, today=date(2026, 9, 29))
+        profile = state["dose_response"]["by_capability"]["strength_unilateral"]
+        self.assertEqual(
+            profile["latest_exposure"]["response_status"],
+            "tolerated_pending_recovery",
+        )
+        self.assertFalse(profile["progression_ready"])
+
     def test_repeated_supportive_threshold_response_becomes_absorbed(self):
         activities = {
             "activities": [
