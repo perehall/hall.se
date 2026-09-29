@@ -303,6 +303,8 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
     ["friday","Fredag"],["saturday","Lördag"],["sunday","Söndag"]
   ];
   const FACILITIES=[["pool","Simhall"],["gym","Gym"],["treadmill","Löpband"],["mtb","MTB"],["bike","Landsväg / gravel"],["indoor_bike","Cykeltrainer / inomhuscykel"],["ski","Skidor"]];
+  const STARTING_DISCIPLINES=[["run","Löpning"],["swim","Simning"],["bike","Cykel"],["mtb","MTB / stig"],["strength","Styrka"],["other","Annat"]];
+  const FAMILY_LABELS={run:"Löpning",swim:"Simning",bike:"Cykel",enduro:"Enduro",strength:"Styrka",other:"Övrigt"};
   let step=0;
   let profile=emptyProfile();
   let startingState=emptyStartingState();
@@ -408,10 +410,153 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
     for(const id of ["minDays","preferredDays","maxDays"]){
       el(id).innerHTML=[1,2,3,4,5,6,7].map(n=>`<option value="${n}">${n} dagar</option>`).join("");
     }
+    el("currentDays").innerHTML='<option value="">Vet inte / varierar</option>'+[0,1,2,3,4,5,6,7].map(n=>`<option value="${n}">${n} dagar</option>`).join("");
+  }
+
+  function formatHours(seconds){
+    const hours=Number(seconds||0)/3600;
+    return hours>=10?hours.toFixed(1)+" h":hours.toFixed(1).replace(".0","")+" h";
+  }
+
+  function observedSummaryHtml(candidate){
+    if(!candidate)return "";
+    const recent=candidate.recent_28d||{};
+    const families=recent.by_family||{};
+    const familyRows=Object.entries(families)
+      .filter(([,row])=>Number(row.activity_count||0)>0)
+      .sort((a,b)=>Number(b[1].time_s||0)-Number(a[1].time_s||0))
+      .map(([key,row])=>`<div class="starting-family"><span>${escapeHtml(FAMILY_LABELS[key]||key)}</span><span>${Number(row.activity_count||0)} pass · ${formatHours(row.time_s)}</span></div>`)
+      .join("");
+    return `<div class="starting-card">
+      <h2>Jag kan redan se din senaste träning</h2>
+      <p class="note" style="margin-top:0">Det här är observerade fakta från träningshistoriken, inte en bedömning av optimal belastning.</p>
+      <div class="starting-metrics">
+        <div class="starting-metric"><span>Senaste 28 dagar</span><strong>${Number(recent.activity_count||0)} pass</strong></div>
+        <div class="starting-metric"><span>Aktiva dagar</span><strong>${Number(recent.active_days||0)}</strong></div>
+        <div class="starting-metric"><span>Registrerad tid</span><strong>${formatHours(recent.time_s)}</strong></div>
+      </div>
+      ${familyRows?`<div class="starting-families">${familyRows}</div>`:""}
+      <div class="starting-choice">
+        <button type="button" id="useObserved">Ja, detta är representativt</button>
+        <button type="button" id="useManual">Nej, jag vill beskriva nuläget själv</button>
+      </div>
+    </div>`;
+  }
+
+  function disciplinePanelHtml(key,label,data){
+    const row=data||{};
+    const common=`
+      <label>Pass/vecka<input data-field="sessions_per_week" type="number" min="0" max="14" step="1" value="${escapeHtml(row.sessions_per_week??"")}"></label>
+      <label>Typisk passlängd<input data-field="typical_duration_minutes" type="number" min="0" max="600" step="5" value="${escapeHtml(row.typical_duration_minutes??"")}" placeholder="min"></label>`;
+    let extra="";
+    if(key==="run") extra=`
+      <label>Ungefär km/vecka<input data-field="weekly_distance_km" type="number" min="0" max="500" step="1" value="${escapeHtml(row.weekly_distance_km??"")}"></label>
+      <label>Längre pass<input data-field="long_run_minutes" type="number" min="0" max="600" step="5" value="${escapeHtml(row.long_run_minutes??"")}" placeholder="min"></label>
+      <label style="grid-column:1/-1">Färskt resultat, om du har<input data-field="recent_result" type="text" value="${escapeHtml(row.recent_result||"")}" placeholder="Exempel: 10 km 42:30"></label>`;
+    if(key==="swim") extra=`
+      <label>Typisk passdistans<input data-field="typical_distance_m" type="number" min="0" max="20000" step="100" value="${escapeHtml(row.typical_distance_m??"")}" placeholder="meter"></label>
+      <label>Bassänglängd<input data-field="pool_length_m" type="number" min="0" max="100" step="5" value="${escapeHtml(row.pool_length_m??"")}" placeholder="meter"></label>
+      <label style="grid-column:1/-1">Känd markör, om du har<input data-field="recent_result" type="text" value="${escapeHtml(row.recent_result||"")}" placeholder="Exempel: CSS 1:35/100 eller 400 m 6:10"></label>`;
+    if(key==="bike") extra=`
+      <label>FTP, om känd<input data-field="ftp_w" type="number" min="0" max="1000" step="1" value="${escapeHtml(row.ftp_w??"")}" placeholder="watt"></label>`;
+    if(key==="mtb") extra=`
+      <label>Terrängvana<select data-field="level">
+        <option value="" ${!row.level?"selected":""}>Välj om du vill</option>
+        <option value="new" ${row.level==="new"?"selected":""}>Ny i teknisk terräng</option>
+        <option value="some" ${row.level==="some"?"selected":""}>Viss vana</option>
+        <option value="experienced" ${row.level==="experienced"?"selected":""}>Van teknisk cyklist</option>
+      </select></label>`;
+    if(key==="strength") extra=`
+      <label>Vana<select data-field="level">
+        <option value="" ${!row.level?"selected":""}>Välj om du vill</option>
+        <option value="new" ${row.level==="new"?"selected":""}>Ny</option>
+        <option value="some" ${row.level==="some"?"selected":""}>Viss vana</option>
+        <option value="experienced" ${row.level==="experienced"?"selected":""}>Regelbunden / van</option>
+      </select></label>`;
+    if(key==="other") extra=`<label style="grid-column:1/-1">Beskriv kort<input data-field="notes" type="text" value="${escapeHtml(row.notes||"")}"></label>`;
+    return `<div class="discipline-panel" data-starting-discipline="${key}"><h3>${label}</h3><div class="compact-grid">${key==="other"?"":common}${extra}</div></div>`;
+  }
+
+  function renderStartingState(){
+    const observed=el("observedStarting");
+    observed.innerHTML=observedSummaryHtml(observedCandidate);
+    const manual=el("manualStarting");
+    const disciplines=startingState.manual_state.disciplines||{};
+    el("startingDisciplineChips").innerHTML=STARTING_DISCIPLINES.map(([key,label])=>`
+      <div class="chip"><input type="checkbox" id="start-${key}" value="${key}" ${disciplines[key]?"checked":""}><label for="start-${key}">${label}</label></div>`).join("");
+    el("disciplinePanels").innerHTML=STARTING_DISCIPLINES.map(([key,label])=>disciplinePanelHtml(key,label,disciplines[key])).join("");
+    el("trainingBackground").value=startingState.manual_state.training_background||"";
+    el("currentDays").value=startingState.manual_state.current_days_per_week??"";
+    el("startingNotes").value=startingState.manual_state.notes||"";
+
+    const showManual=startingState.source_mode==="manual"||!observedCandidate;
+    manual.classList.toggle("active",showManual);
+    if(observedCandidate){
+      el("useObserved")?.classList.toggle("selected",startingState.source_mode==="observed"&&startingState.confirmation.observed_representative===true);
+      el("useManual")?.classList.toggle("selected",showManual);
+      el("useObserved")?.addEventListener("click",()=>{
+        startingState.source_mode="observed";
+        startingState.confirmation.observed_representative=true;
+        manual.classList.remove("active");
+        el("useObserved").classList.add("selected");el("useManual").classList.remove("selected");
+      });
+      el("useManual")?.addEventListener("click",()=>{
+        startingState.source_mode="manual";
+        startingState.confirmation.observed_representative=false;
+        manual.classList.add("active");
+        el("useManual").classList.add("selected");el("useObserved").classList.remove("selected");
+      });
+    }else{
+      startingState.source_mode="manual";
+      startingState.confirmation.observed_representative=false;
+    }
+    document.querySelectorAll('#startingDisciplineChips input').forEach(input=>{
+      const panel=document.querySelector(`[data-starting-discipline="${input.value}"]`);
+      panel?.classList.toggle("active",input.checked);
+      input.addEventListener("change",()=>panel?.classList.toggle("active",input.checked));
+    });
+  }
+
+  function collectStartingState(){
+    startingState.manual_state.training_background=el("trainingBackground").value||null;
+    startingState.manual_state.current_days_per_week=el("currentDays").value===""?null:Number(el("currentDays").value);
+    startingState.manual_state.notes=el("startingNotes").value.trim();
+    const disciplines={};
+    document.querySelectorAll('#startingDisciplineChips input:checked').forEach(input=>{
+      const panel=document.querySelector(`[data-starting-discipline="${input.value}"]`);
+      const row={};
+      panel?.querySelectorAll("[data-field]").forEach(field=>{
+        let value=field.value;
+        if(field.type==="number")value=value===""?null:Number(value);
+        if(value!==""&&value!==null)row[field.dataset.field]=value;
+      });
+      disciplines[input.value]=row;
+    });
+    startingState.manual_state.disciplines=disciplines;
+  }
+
+  async function persistStartingState(status){
+    collectStartingState();
+    const payload=JSON.parse(JSON.stringify(startingState));
+    payload.status=status;
+    const response=await fetch(STARTING_STATE_API,{method:"PUT",headers:{"content-type":"application/json"},body:JSON.stringify(payload)});
+    if(!response.ok)throw new Error((await response.json().catch(()=>({}))).error||"starting_state_save_failed");
+    startingState.status=status;
+    return response.json();
+  }
+
+  function startingStateSummary(){
+    if(startingState.source_mode==="observed"){
+      const recent=(observedCandidate||startingState.observed_snapshot||{}).recent_28d||{};
+      return `Bekräftad från träningshistorik · ${Number(recent.activity_count||0)} pass / 28 dagar · ${Number(recent.active_days||0)} aktiva dagar`;
+    }
+    const disciplines=Object.keys(startingState.manual_state.disciplines||{}).map(key=>Object.fromEntries(STARTING_DISCIPLINES)[key]||key);
+    const days=startingState.manual_state.current_days_per_week;
+    return `Självrapporterat${days!=null?" · cirka "+days+" dagar/vecka":""}${disciplines.length?" · "+disciplines.join(", "):""}`;
   }
 
   function hydrateControls(){
-    renderGoals(); renderAvailability(); renderFacilities();
+    renderGoals(); renderAvailability(); renderFacilities(); renderStartingState();
     const f=profile.preferences.frequency;
     el("minDays").value=f.min_days||5;el("preferredDays").value=f.preferred_days||6;el("maxDays").value=f.max_days||7;
     document.querySelector(`input[name="double"][value="${profile.preferences.double_sessions||"sometimes"}"]`)?.click();
@@ -443,6 +588,15 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
     collect();
     if(step===1 && !profile.goals.some(goal=>goal.text.length>=3)){alert("Skriv minst ett mål.");return false}
     if(step===2){
+      collectStartingState();
+      if(startingState.source_mode==="observed"){
+        if(!observedCandidate||startingState.confirmation.observed_representative!==true){alert("Bekräfta om den observerade träningshistoriken är representativ, eller beskriv nuläget själv.");return false}
+      }else{
+        const manual=startingState.manual_state;
+        if(manual.current_days_per_week==null&&Object.keys(manual.disciplines||{}).length===0&&!manual.notes){alert("Beskriv åtminstone träningsfrekvens eller en träningsgren i ditt nuläge.");return false}
+      }
+    }
+    if(step===3){
       const f=profile.preferences.frequency;
       if(!(f.min_days<=f.preferred_days&&f.preferred_days<=f.max_days)){alert("Välj ett vanligt spann som innehåller antalet dagar du helst vill träna.");return false}
     }
@@ -478,10 +632,11 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
     const goals=profile.goals.filter(g=>g.text).map(g=>g.text+(g.target_date?" · "+g.target_date:""));
     const facilities=FACILITIES.filter(([key])=>profile.preferences.facilities.includes(key)).map(([,label])=>label).join(", ")||"Inget särskilt";
     const rows=[
-      ["Träningsfrekvens",`Helst ${f.preferred_days} dagar · vanligt spann ${f.min_days}–${f.max_days}`,2],
-      ["Normal tillgänglighet",formatAvailability(),3],["Dubbelpass",doubleLabel,4],["Vilodagar",restLabel,4],
-      ["Fasta aktiviteter",profile.constraints.fixed_commitments||"Inga angivna",5],["Tillgång",facilities,5],
-      ["Coachens frihet",autoLabel,7],["Övriga ramar",profile.constraints.other||"Inga angivna",6]
+      ["Startläge",startingStateSummary(),2],
+      ["Träningsfrekvens",`Helst ${f.preferred_days} dagar · vanligt spann ${f.min_days}–${f.max_days}`,3],
+      ["Normal tillgänglighet",formatAvailability(),4],["Dubbelpass",doubleLabel,5],["Vilodagar",restLabel,5],
+      ["Fasta aktiviteter",profile.constraints.fixed_commitments||"Inga angivna",6],["Tillgång",facilities,6],
+      ["Coachens frihet",autoLabel,8],["Övriga ramar",profile.constraints.other||"Inga angivna",7]
     ];
     const goalHtml=`<div class="summary-row"><div class="summary-label">Mål</div><div class="summary-value summary-goals">${goals.map(goal=>`<div class="summary-goal">${escapeHtml(goal)}</div>`).join("")}</div><button type="button" class="summary-edit" data-edit-step="1">Ändra</button></div>`;
     el("summary").innerHTML=goalHtml+rows.map(([label,value,editStep])=>`<div class="summary-row"><div class="summary-label">${escapeHtml(label)}</div><div class="summary-value">${escapeHtml(value)}</div><button type="button" class="summary-edit" data-edit-step="${editStep}">Ändra</button></div>`).join("");
