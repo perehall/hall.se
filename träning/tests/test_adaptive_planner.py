@@ -1802,7 +1802,7 @@ class AdaptivePlanningTests(unittest.TestCase):
                 {"day_index": 3, "recipe_key": "run_threshold", "action": "consolidate", "rationale": "threshold med marginal efter enduro", "evidence_refs": []},
                 {"day_index": 5, "recipe_key": "swim_aerobic_technique", "action": "establish", "rationale": "andra simexponeringen", "evidence_refs": []},
                 {"day_index": 5, "recipe_key": "strength_core", "action": "establish", "rationale": "separat styrkepass samma dag", "evidence_refs": []},
-                {"day_index": 7, "recipe_key": "run_easy_distance", "action": "consolidate", "rationale": "distance separerad från löpkvalitet", "evidence_refs": []},
+                {"day_index": 6, "recipe_key": "run_easy_distance", "action": "consolidate", "rationale": "distance separerad från löpkvalitet och från nästa fasta enduro", "evidence_refs": []},
             ],
         }
         replies = [invalid, repaired]
