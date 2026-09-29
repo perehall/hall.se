@@ -1214,6 +1214,7 @@ def fallback_microcycle(meso, policy, catalog, target_start, completed_context=N
     primaries = set(meso.get("primary_capabilities") or [])
     secondaries = set(meso.get("secondary_capabilities") or [])
     fixed_enduro = is_enduro_school_date(target_start)
+    next_fixed_enduro = is_enduro_school_date(target_start + timedelta(days=7))
     completed_context = completed_context or {}
     completed_swims = int(completed_context.get("swim_exposures") or 0)
     completed_strength = int(completed_context.get("strength_exposures") or 0)
@@ -1232,7 +1233,13 @@ def fallback_microcycle(meso, policy, catalog, target_start, completed_context=N
         "swim_aerobic_threshold": [2, 4, 6, 5, 3, 7] if fixed_enduro else [1, 3, 5, 2, 4, 6, 7],
         "run_threshold": [3, 4, 5, 6, 7] if fixed_enduro else [2, 3, 4, 5, 6, 7, 1],
         "run_hill_quality": [5, 6, 7, 4, 3] if fixed_enduro else [4, 5, 6, 7, 3, 2, 1],
-        "run_easy_distance": [7, 6, 5, 4, 3] if fixed_enduro else [7, 6, 5, 4, 3, 2, 1],
+        "run_easy_distance": (
+            [6, 5, 4, 3, 7]
+            if fixed_enduro and next_fixed_enduro
+            else [7, 6, 5, 4, 3]
+            if fixed_enduro
+            else [7, 6, 5, 4, 3, 2, 1]
+        ),
         "mtb_technical": [6, 7, 4, 5, 3] if fixed_enduro else [6, 7, 4, 5, 3, 2, 1],
         "strength_core": [5, 6, 4, 3, 7, 2] if fixed_enduro else [5, 6, 4, 3, 7, 2, 1],
     }
@@ -1462,6 +1469,17 @@ def microcycle_layout_failures(rows, catalog, target_start, athlete_profile=None
             f"{', '.join(blocked)} får inte ligga direkt dagen efter fast enduro när faktisk benbelastning ännu är okänd"
         )
 
+    next_fixed_enduro = is_enduro_school_date(target_start + timedelta(days=7))
+    if next_fixed_enduro:
+        blocked_before_enduro = recipes_on(7).intersection(
+            RUN_STRESS_RECIPES | {"mtb_technical", "strength_core"}
+        )
+        if blocked_before_enduro:
+            failures.append(
+                "tung benbelastning får inte planeras på söndagen direkt före nästa fasta enduro: "
+                + ", ".join(sorted(blocked_before_enduro))
+            )
+
     run_days = sorted(
         day for day in by_day if recipes_on(day).intersection(RUN_STRESS_RECIPES)
     )
@@ -1599,6 +1617,7 @@ def microcycle_guard_failures(result, meso, policy, catalog, target_start, compl
         )
 
     primaries = set(meso.get("primary_capabilities") or [])
+    secondaries = set(meso.get("secondary_capabilities") or [])
     block_context = mesocycle_block_context(meso, target_start, policy)
     if (
         block_context.get("block_intent") == "develop"
@@ -1624,6 +1643,7 @@ def microcycle_guard_failures(result, meso, policy, catalog, target_start, compl
     swim_exposures = 0
     strength_exposures = 0
     run_quality = 0
+    secondary_sessions = 0
 
     for row in valid_rows:
         recipe_key = row["recipe_key"]
@@ -1636,6 +1656,8 @@ def microcycle_guard_failures(result, meso, policy, catalog, target_start, compl
             strength_exposures += 1
         if {"run_threshold", "run_hill_quality"}.intersection(caps):
             run_quality += 1
+        if caps.intersection(secondaries) and not caps.intersection(primaries):
+            secondary_sessions += 1
 
         if row.get("action") == "progress" and (
             not caps.intersection(primaries) or recipe_key in SUPPORT_ONLY_RECIPES
@@ -1699,6 +1721,22 @@ def microcycle_guard_failures(result, meso, policy, catalog, target_start, compl
             f"{completed_run_quality + run_quality} löpkvalitet + "
             f"{future_fixed_enduro_reserve} reserverad fast enduro > {max_run_quality}. "
             "Framtida enduro ska räknas som verklig belastning tills utfallet är känt."
+        )
+
+    completed_secondary = completed_direct.intersection(secondaries)
+    if (
+        block_context.get("block_intent") == "develop"
+        and secondaries
+        and not completed_secondary
+        and secondary_sessions < 1
+    ):
+        failures.append(
+            "develop-mikrocykeln saknar sekundärt stödpass trots att sekundära kapaciteter är deklarerade; "
+            "planera ett absorberbart stödpass i stället för att lämna resten av veckan mekaniskt tom"
+        )
+    if future_fixed_enduro_reserve and secondary_sessions > 1:
+        failures.append(
+            "framtida fast enduro begränsar sekundär belastning till ett planerat stödpass tills utfallet är känt"
         )
 
     return failures
