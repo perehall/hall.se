@@ -2484,6 +2484,8 @@ def materialize_strategy(goal, policy, meso, micro, catalog, athlete_state, goal
             "microcycle_decision_source": micro.get("source"),
             "microcycle_source_hash": micro.get("source_hash"),
             "microcycle_week_key": micro.get("week_key"),
+            "athlete_profile_hash": meso.get("athlete_profile_hash"),
+            "starting_state_hash": meso.get("starting_state_hash"),
             "competition_context": deepcopy(meso.get("competition_context") or {}),
         },
     }
@@ -2491,6 +2493,11 @@ def materialize_strategy(goal, policy, meso, micro, catalog, athlete_state, goal
         "source_policy": "data/planning_policy.json",
         "source_goal": goal_runtime_source_label(runtime_source),
         "source_athlete_state": "data/athlete_state.json",
+        "source_starting_state": (
+            "supabase:athlete_starting_states"
+            if starting_state
+            else "none"
+        ),
         "source_mesocycle_decision": "data/mesocycle_decision.json",
         "source_microcycle_decision": "data/microcycle_decision.json",
         "principle": "training_strategy.json är en genererad kompatibilitetsprojektion och inte längre planeringens källa.",
