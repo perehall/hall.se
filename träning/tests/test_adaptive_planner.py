@@ -21,6 +21,7 @@ from adaptive_planner import (  # noqa: E402
     goal_hash,
     goal_runtime_source_label,
     materialize_strategy,
+    live_reconciliation_context,
     mesocycle_schema,
     mesocycle_is_valid,
     microcycle_guard_failures,
@@ -855,6 +856,142 @@ class AdaptivePlanningTests(unittest.TestCase):
             )
         )
 
+    def test_live_reconciliation_consumes_matching_planned_intent_without_refill(self):
+        plan = {
+            "meta": {"week_start": "2026-09-28", "week_end": "2026-10-04"},
+            "planned_workouts": [
+                {"date": "2026-09-29", "sport": "swim", "recipe_key": "swim_aerobic_technique", "stimuli": ["swim_aerobic", "swim_technique"], "status": "preliminary"},
+                {"date": "2026-09-30", "sport": "run", "recipe_key": "run_threshold", "stimuli": ["run_threshold"], "status": "preliminary"},
+                {"date": "2026-10-01", "sport": "swim", "recipe_key": "swim_aerobic_endurance", "stimuli": ["swim_aerobic", "swim_technique"], "status": "preliminary"},
+                {"date": "2026-10-04", "sport": "run", "recipe_key": "run_easy_distance", "stimuli": ["run_easy_distance"], "status": "preliminary"},
+            ],
+        }
+        completed = {
+            "activity_refs": ["20381137043"],
+            "capability_refs": {"run_threshold": ["20381137043"]},
+            "direct_capabilities": ["run_threshold"],
+            "completed_slot_days": 1,
+        }
+        context = live_reconciliation_context(
+            plan, completed, self.catalog, date(2026, 9, 29)
+        )
+        self.assertEqual(context["slot_count_max"], 3)
+        self.assertEqual(context["slot_count_min"], 3)
+        self.assertEqual(len(context["fulfilled_intents"]), 1)
+        self.assertEqual(
+            context["fulfilled_intents"][0]["capabilities"],
+            ["run_threshold"],
+        )
+        remaining = {
+            tuple(row["stimuli"]) for row in context["remaining_intents"]
+        }
+        self.assertNotIn(("run_threshold",), remaining)
+        self.assertTrue(context["needs_replan"])
+
+    def test_spontaneous_unmatched_strength_does_not_consume_plan_intent(self):
+        plan = {
+            "meta": {"week_start": "2026-09-28", "week_end": "2026-10-04"},
+            "planned_workouts": [
+                {"date": "2026-09-30", "sport": "run", "recipe_key": "run_threshold", "stimuli": ["run_threshold"], "status": "preliminary"},
+                {"date": "2026-10-01", "sport": "swim", "recipe_key": "swim_aerobic_technique", "stimuli": ["swim_aerobic", "swim_technique"], "status": "preliminary"},
+            ],
+        }
+        completed = {
+            "activity_refs": ["strength-1"],
+            "capability_refs": {"strength_unilateral": ["strength-1"]},
+            "direct_capabilities": ["strength_unilateral"],
+        }
+        context = live_reconciliation_context(
+            plan, completed, self.catalog, date(2026, 9, 29)
+        )
+        self.assertEqual(context["slot_count_max"], 2)
+        self.assertEqual(context["fulfilled_intents"], [])
+
+    def test_live_reconciliation_rejects_new_secondary_refill(self):
+        meso = {
+            "primary_capabilities": ["swim_aerobic", "swim_technique", "run_threshold"],
+            "secondary_capabilities": ["run_hill_quality", "run_easy_distance"],
+        }
+        context = {
+            "slot_count_min": 3,
+            "slot_count_max": 3,
+            "remaining_intents": [
+                {"intent_id": "swim-1", "stimuli": ["swim_aerobic", "swim_technique"]},
+                {"intent_id": "swim-2", "stimuli": ["swim_aerobic", "swim_technique"]},
+                {"intent_id": "long", "stimuli": ["run_easy_distance"]},
+            ],
+        }
+        proposal = {
+            "rationale": "refill",
+            "slots": [
+                {"day_index": 3, "recipe_key": "swim_aerobic_technique", "action": "establish", "rationale": "x", "evidence_refs": []},
+                {"day_index": 5, "recipe_key": "run_hill_quality", "action": "consolidate", "rationale": "x", "evidence_refs": []},
+                {"day_index": 6, "recipe_key": "swim_aerobic_endurance", "action": "establish", "rationale": "x", "evidence_refs": []},
+                {"day_index": 7, "recipe_key": "run_easy_distance", "action": "consolidate", "rationale": "x", "evidence_refs": []},
+            ],
+        }
+        failures = microcycle_guard_failures(
+            proposal,
+            meso,
+            self.policy,
+            self.catalog,
+            date(2026, 9, 28),
+            completed_context={
+                "strength_exposures": 1,
+                "direct_capabilities": ["run_threshold"],
+                "completed_slot_days": 1,
+            },
+            reconciliation_context=context,
+        )
+        self.assertTrue(any("för många framtida" in item for item in failures))
+        self.assertTrue(any("run_hill_quality" in item and "nytt stimulus" in item for item in failures))
+
+    def test_fallback_respects_live_reconciliation_intent_budget(self):
+        meso = {
+            "primary_capabilities": ["swim_aerobic", "swim_technique", "run_threshold"],
+            "secondary_capabilities": ["run_hill_quality", "run_easy_distance"],
+        }
+        context = {
+            "slot_count_min": 3,
+            "slot_count_max": 3,
+            "remaining_intents": [
+                {"intent_id": "swim-1", "stimuli": ["swim_aerobic", "swim_technique"]},
+                {"intent_id": "swim-2", "stimuli": ["swim_aerobic", "swim_technique"]},
+                {"intent_id": "long", "stimuli": ["run_easy_distance"]},
+            ],
+        }
+        result = fallback_microcycle(
+            meso,
+            self.policy,
+            self.catalog,
+            date(2026, 9, 28),
+            completed_context={
+                "strength_exposures": 1,
+                "direct_capabilities": ["run_threshold"],
+                "completed_slot_days": 1,
+            },
+            reconciliation_context=context,
+        )
+        recipes = [row["recipe_key"] for row in result["slots"]]
+        self.assertEqual(len(recipes), 3)
+        self.assertNotIn("run_hill_quality", recipes)
+        self.assertIn("run_easy_distance", recipes)
+        self.assertFalse(
+            microcycle_guard_failures(
+                result,
+                meso,
+                self.policy,
+                self.catalog,
+                date(2026, 9, 28),
+                completed_context={
+                    "strength_exposures": 1,
+                    "direct_capabilities": ["run_threshold"],
+                    "completed_slot_days": 1,
+                },
+                reconciliation_context=context,
+            )
+        )
+
     def test_multiple_independent_slots_may_share_a_calendar_day(self):
         meso = {
             "primary_capabilities": ["swim_aerobic", "swim_technique"],
@@ -1345,7 +1482,7 @@ class AdaptivePlanningTests(unittest.TestCase):
             "end_date": "2026-10-18",
             "goal_hash": goal_hash(self.goal),
         }
-        self.assertEqual(MICRO_PLANNER_REVISION, 13)
+        self.assertEqual(MICRO_PLANNER_REVISION, 14)
         stale_micro = {
             "planner_revision": 6,
             "week_start": "2026-09-28",
