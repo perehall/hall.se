@@ -634,6 +634,7 @@ test("completed athlete profile can start a durable canonical plan generation", 
         status: "queued",
         request_id: requestId,
         profile_revision: 7,
+        starting_state_revision: 3,
         created: true,
       }), { status: 200, headers: { "content-type": "application/json" } });
     }
@@ -659,6 +660,7 @@ test("completed athlete profile can start a durable canonical plan generation", 
   assert.equal(dispatchBody.event_type, "athlete-profile-plan-request");
   assert.equal(dispatchBody.client_payload.request_id, requestId);
   assert.equal(dispatchBody.client_payload.profile_revision, 7);
+  assert.equal(dispatchBody.client_payload.starting_state_revision, 3);
   assert.equal(calls.length, 2);
 });
 
