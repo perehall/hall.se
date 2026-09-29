@@ -291,6 +291,14 @@ begin
     raise exception 'complete_profile_required' using errcode = '22023';
   end if;
 
+  -- Profile and starting-state persistence are multi-athlete, but the current
+  -- activity/calendar runtime is still a single-athlete bridge. Fail closed
+  -- rather than allowing another athlete to inherit the default athlete's
+  -- observed history or calendar.
+  if not coalesce(v_profile.is_planning_default, false) then
+    raise exception 'multi_athlete_runtime_not_ready' using errcode = '55000';
+  end if;
+
   select * into v_start
   from training.athlete_starting_states
   where athlete_subject = p_athlete_subject
@@ -380,12 +388,16 @@ begin
       activated_at = now()
     where athlete_subject = v_request.athlete_subject;
 
-    update training.athlete_starting_states
-    set
-      active_state = v_request.starting_state_snapshot,
-      active_revision = v_request.starting_state_revision,
-      activated_at = now()
-    where athlete_subject = v_request.athlete_subject;
+    if v_request.starting_state_snapshot is not null
+       and v_request.starting_state_revision is not null
+    then
+      update training.athlete_starting_states
+      set
+        active_state = v_request.starting_state_snapshot,
+        active_revision = v_request.starting_state_revision,
+        activated_at = now()
+      where athlete_subject = v_request.athlete_subject;
+    end if;
   end if;
 
   return jsonb_build_object(
