@@ -35,6 +35,12 @@ class AthleteOnboardingPageTests(unittest.TestCase):
     def test_indoor_cycling_is_an_explicit_capability(self):
         self.assertIn('["indoor_bike","Cykeltrainer / inomhuscykel"]', self.page)
 
+    def test_summary_uses_regular_body_weight_and_visual_hierarchy(self):
+        self.assertIn(".summary-value{color:var(--text);font-size:.95rem;font-weight:400", self.page)
+        self.assertIn('class="summary-label"', self.page)
+        self.assertIn('class="summary-value summary-goals"', self.page)
+        self.assertNotIn(".summary-row strong", self.page)
+
     def test_summary_is_editable_and_generation_is_explicit(self):
         self.assertIn('class="summary-edit"', self.page)
         self.assertIn('data-edit-step', self.page)
