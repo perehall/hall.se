@@ -648,6 +648,14 @@
       "source_hash": "825d116240a91e6d6b5b1f73972928bb3c88c6affe532d26e37e84e969627b51",
       "generated_at_utc": "2026-09-29T20:07:48.742768+00:00",
       "summary": "Åtgärdar guard-fel genom att ta bort planerade dupliceringar på dag 1 (fast enduro), undvika redundant run_threshold och undvika ytterligare styrka då minst en styrke/core redan är genomförd. Behåller två simbassessioner, maximerar inte löpkvaliteter och ser till att dag 2 är låg benbelastning efter enduro. Totalt 4 slots (inom tillåtet intervall) och alla primära kapaciteter täcks direkt (run_threshold krediteras från genomförd session)."
+    },
+    {
+      "kind": "upcoming_microcycle",
+      "decision_id": "2026-W41",
+      "source": "openai_repaired",
+      "source_hash": "509e893ff8c07ca48daad9b3bc03ae82c84a932f7e9c86e41180360782e28152",
+      "generated_at_utc": "2026-09-29T20:32:32.628668+00:00",
+      "summary": "Ta bort planerat slot på dag 1 (konflikt med fast enduro) och behåll övriga val oförändrade så att hard_requirements uppfylls (2 simbassessioner, minst 1 styrka/core, alla primära kapaciteter täckta, max löpkvaliteter = 2, dag 2 låg benbelastning)."
     }
   ]
 }
