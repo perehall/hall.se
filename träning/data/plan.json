@@ -233,13 +233,18 @@
       "label": "Tisdag",
       "sport": "swim",
       "reason": "Lågmekanisk simexponering dagen efter fast enduro ger konkret plan utan att anta att benen är redo för ny benkvalitet. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: consolidate; materialiserad relation: hold.",
-      "status": "preliminary",
+      "status": "conditional",
       "session": "Simning · 3 200 m · aerob/teknik",
       "stimuli": [
         "swim_aerobic",
         "swim_technique"
       ],
       "dose_open": false,
+      "auto_coach": {
+        "action": "reduce",
+        "reason": "Dagens planerade simning ersattes av ett löppass med tröskelstruktur vilket ökar benbelastningen i korttidsfönstret.",
+        "applied_at_utc": "2026-09-29T19:47:53.439819+00:00"
+      },
       "recipe_key": "swim_aerobic_technique",
       "block_intent": "establish",
       "dose_options": [
@@ -568,6 +573,7 @@
         "technical"
       ],
       "microcycle_slot": "swim_aerobic_technique_1",
+      "coach_adjustment": "Skala ned passet. Skala dagens simpass till vila eller kort tekniskt återhämtningspass; om simning ändå görs, håll det ≤1 600–2 000 m med fokus på teknik och mekanisk belastning. Ingen progression eller extra löpning tills 24–48 h återhämtningssignal bekräftas.",
       "development_step": {
         "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från verifierad träningsrespons, bekräftat startläge eller konservativ katalogbas utan att höja flera belastningsvariabler samtidigt.",
         "relation": "hold",
@@ -575,6 +581,7 @@
         "microcycle": 1
       },
       "microcycle_index": 1,
+      "original_session": "Simning · 3 200 m · aerob/teknik",
       "development_focus": "Teknisk kvalitet och stabil aerob rytm; simningen ska kunna stödja helheten med låg mekanisk kostnad för benen.",
       "baseline_option_id": "swim-3200",
       "development_character": "technique_aerobic",
@@ -1082,9 +1089,9 @@
         "status": "synced",
         "transport": "intervals_icu",
         "source_hash": "06d94eed631d6037f578283b9fce27e8530dcfb04204bea214c6447063d4b3f2",
-        "updated_at_utc": "2026-09-29T19:44:24.816725+00:00",
+        "updated_at_utc": "2026-09-29T19:47:54.233462+00:00",
         "device_delivery": "unverified",
-        "verified_at_utc": "2026-09-29T19:44:24.816725+00:00",
+        "verified_at_utc": "2026-09-29T19:47:54.233462+00:00",
         "provider_event_id": 140052431
       },
       "block_intent": "establish",
