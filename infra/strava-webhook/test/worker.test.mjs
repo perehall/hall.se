@@ -524,6 +524,75 @@ test("athlete profile can be resumed from durable persistence", async () => {
   assert.equal(result.profile.current_step, 3);
 });
 
+test("completed athlete profile can start a durable canonical plan generation", async () => {
+  let dispatchBody;
+  const calls = [];
+  const requestId = "9d0fca58-4c4d-4ef9-9158-c7b81fd11c51";
+  const fakeFetch = async (url, init) => {
+    calls.push(url);
+    if (url.endsWith("/rest/v1/rpc/training_request_plan_generation")) {
+      const body = JSON.parse(init.body);
+      assert.match(body.p_athlete_subject, /^access:[0-9a-f]{32}$/);
+      return new Response(JSON.stringify({
+        status: "queued",
+        request_id: requestId,
+        profile_revision: 7,
+        created: true,
+      }), { status: 200, headers: { "content-type": "application/json" } });
+    }
+    assert.equal(url, "https://api.github.com/repos/perehall/hall.se/dispatches");
+    dispatchBody = JSON.parse(init.body);
+    return new Response(null, { status: 204 });
+  };
+
+  const request = new Request("https://xn--hll-qla.se/träning/training-api/profile/generate", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      "cf-access-jwt-assertion": "signed-access-jwt",
+      "cf-access-authenticated-user-email": "athlete@example.com",
+    },
+    body: "{}",
+  });
+  const response = await handleRequest(request, env, fakeFetch);
+  assert.equal(response.status, 200);
+  const body = await response.json();
+  assert.equal(body.status, "queued");
+  assert.equal(body.request_id, requestId);
+  assert.equal(dispatchBody.event_type, "athlete-profile-plan-request");
+  assert.equal(dispatchBody.client_payload.request_id, requestId);
+  assert.equal(dispatchBody.client_payload.profile_revision, 7);
+  assert.equal(calls.length, 2);
+});
+
+test("athlete can poll only their durable plan generation status", async () => {
+  const requestId = "9d0fca58-4c4d-4ef9-9158-c7b81fd11c51";
+  const fakeFetch = async (url, init) => {
+    assert.equal(url, "https://example.supabase.co/rest/v1/rpc/training_get_plan_generation");
+    const body = JSON.parse(init.body);
+    assert.equal(body.p_request_id, requestId);
+    assert.match(body.p_athlete_subject, /^access:[0-9a-f]{32}$/);
+    return new Response(JSON.stringify({
+      status: "running",
+      request_id: requestId,
+      profile_revision: 7,
+    }), { status: 200, headers: { "content-type": "application/json" } });
+  };
+  const request = new Request(
+    "https://xn--hll-qla.se/träning/training-api/profile/generate?id=" + requestId,
+    {
+      method: "GET",
+      headers: {
+        "cf-access-jwt-assertion": "signed-access-jwt",
+        "cf-access-authenticated-user-email": "athlete@example.com",
+      },
+    },
+  );
+  const response = await handleRequest(request, env, fakeFetch);
+  assert.equal(response.status, 200);
+  assert.equal((await response.json()).status, "running");
+});
+
 test("training GUI input rejects non-custom hostname before request processing", async () => {
   const request = new Request("https://hall-se.per-e-hall.workers.dev/träning/training-api/input", {
     method: "POST",
