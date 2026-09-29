@@ -56,9 +56,10 @@ class AthleteOnboardingPageTests(unittest.TestCase):
         self.assertIn('await persist("draft")', self.page)
         self.assertIn('await persist("complete")', self.page)
 
-    def test_page_does_not_claim_completed_profile_has_replanned(self):
+    def test_page_uses_real_generation_states_instead_of_fake_completion(self):
         self.assertNotIn("omplanering är köad", self.page)
-        self.assertIn("beständigt sparad", self.page)
+        self.assertIn("Du kan lämna sidan; körningen fortsätter beständigt i backend.", self.page)
+        self.assertIn("Ingen ny plan ska betraktas som publicerad.", self.page)
 
 
 if __name__ == "__main__":
