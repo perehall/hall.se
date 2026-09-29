@@ -72,11 +72,15 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
 .chip input{position:absolute;opacity:0}
 .chip label{display:inline-flex;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:10px 14px;font-size:.88rem;font-weight:620}
 .chip input:checked+label{background:#eef6ff;border-color:var(--accent);color:#005bb5}
-.summary{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:18px;overflow:hidden}
-.summary-row{display:grid;grid-template-columns:140px 1fr auto;gap:18px;align-items:start;background:var(--surface);padding:15px 16px}
-.summary-row span{color:var(--muted);font-size:.83rem;font-weight:650}
-.summary-row strong{font-size:.95rem;line-height:1.42;white-space:pre-line}
-.summary-edit{border:0;background:transparent;color:var(--accent);font-size:.82rem;font-weight:680;padding:2px 0}
+.summary{display:grid;gap:1px;background:#e5e5ea;border:1px solid #e5e5ea;border-radius:18px;overflow:hidden}
+.summary-row{display:grid;grid-template-columns:140px 1fr auto;gap:18px;align-items:start;background:var(--surface);padding:16px 16px}
+.summary-label{color:var(--muted);font-size:.78rem;font-weight:600;line-height:1.4}
+.summary-value{color:var(--text);font-size:.95rem;font-weight:400;line-height:1.5;white-space:pre-line;letter-spacing:-.005em}
+.summary-goals{display:grid;gap:10px}
+.summary-goal{font-weight:400}
+.summary-goal+.summary-goal{padding-top:10px;border-top:1px solid #f0f0f2}
+.summary-edit{border:0;background:transparent;color:var(--accent);font-size:.8rem;font-weight:600;line-height:1.4;padding:0}
+.summary-edit:hover{text-decoration:underline;text-underline-offset:3px}
 .generation{display:none;padding:54px 0 20px}
 .generation.active{display:block}
 .generation-card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:20px;margin-top:28px}
@@ -110,7 +114,7 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
   .shell{padding:18px 16px 110px}.topbar{margin-bottom:34px}.progress{margin-bottom:30px}
   .choice-grid{grid-template-columns:1fr}.freq-row{grid-template-columns:1fr}
   .dayrow{grid-template-columns:96px 1fr}.dayrow select{grid-column:1/-1}
-  .goal-meta{grid-template-columns:1fr}.summary-row{grid-template-columns:1fr auto;gap:5px}.summary-row span{grid-column:1/-1}
+  .goal-meta{grid-template-columns:1fr}.summary-row{grid-template-columns:1fr auto;gap:6px 12px}.summary-label{grid-column:1/-1}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
@@ -411,14 +415,16 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
     const doubleLabel={avoid:"Undvik helst",sometimes:"Okej vid behov",normal:"Helt normalt"}[profile.preferences.double_sessions];
     const restLabel={prefer_one:"Helst en träningsfri dag",load_driven:"Belastningen styr",none_required:"Ingen fast vilodag",fixed:"Fast vilodag"}[profile.preferences.rest_days];
     const autoLabel={propose:"Föreslå först",week_auto:"Optimera veckan",full_within_constraints:"Optimera fritt inom ramarna"}[profile.coach_autonomy];
-    const goals=profile.goals.filter(g=>g.text).map(g=>g.text+(g.target_date?" · "+g.target_date:"")).join("\n");
+    const goals=profile.goals.filter(g=>g.text).map(g=>g.text+(g.target_date?" · "+g.target_date:""));
     const facilities=FACILITIES.filter(([key])=>profile.preferences.facilities.includes(key)).map(([,label])=>label).join(", ")||"Inget särskilt";
-    el("summary").innerHTML=[
-      ["Mål",goals,1],["Träningsfrekvens",`Helst ${f.preferred_days} dagar · vanligt spann ${f.min_days}–${f.max_days}`,2],
+    const rows=[
+      ["Träningsfrekvens",`Helst ${f.preferred_days} dagar · vanligt spann ${f.min_days}–${f.max_days}`,2],
       ["Normal tillgänglighet",formatAvailability(),3],["Dubbelpass",doubleLabel,4],["Vilodagar",restLabel,4],
       ["Fasta aktiviteter",profile.constraints.fixed_commitments||"Inga angivna",5],["Tillgång",facilities,5],
       ["Coachens frihet",autoLabel,7],["Övriga ramar",profile.constraints.other||"Inga angivna",6]
-    ].map(([label,value,editStep])=>`<div class="summary-row"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong><button type="button" class="summary-edit" data-edit-step="${editStep}">Ändra</button></div>`).join("");
+    ];
+    const goalHtml=`<div class="summary-row"><div class="summary-label">Mål</div><div class="summary-value summary-goals">${goals.map(goal=>`<div class="summary-goal">${escapeHtml(goal)}</div>`).join("")}</div><button type="button" class="summary-edit" data-edit-step="1">Ändra</button></div>`;
+    el("summary").innerHTML=goalHtml+rows.map(([label,value,editStep])=>`<div class="summary-row"><div class="summary-label">${escapeHtml(label)}</div><div class="summary-value">${escapeHtml(value)}</div><button type="button" class="summary-edit" data-edit-step="${editStep}">Ändra</button></div>`).join("");
   }
 
   function showGeneration(){
