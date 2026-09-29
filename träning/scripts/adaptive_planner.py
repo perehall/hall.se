@@ -20,6 +20,7 @@ from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 from athlete_profile_source import load_athlete_profile_for_planner, planner_profile_view
+from athlete_starting_state_source import load_starting_state_for_planner, planner_starting_state_view
 from goal_contracts import planning_goal_hash, planning_goal_set
 from race_contracts import build_competition_context
 from rollover_week import (
@@ -139,6 +140,32 @@ WEEKDAY_KEYS = (
 def athlete_profile_hash(profile) -> str | None:
     view = planner_profile_view(profile)
     return canonical_hash(view) if view else None
+
+
+def athlete_starting_state_hash(starting_state) -> str | None:
+    view = planner_starting_state_view(starting_state)
+    return canonical_hash(view) if view else None
+
+
+def starting_state_value_for_recipe(recipe_key, starting_state):
+    """Return a user-declared establishment marker, never tolerance evidence."""
+    view = planner_starting_state_view(starting_state) or {}
+    manual = view.get("manual_state") or {}
+    disciplines = manual.get("disciplines") or {}
+
+    def numeric(discipline, field):
+        value = (disciplines.get(discipline) or {}).get(field)
+        return float(value) if isinstance(value, (int, float)) and value > 0 else None
+
+    if recipe_key == "run_easy_distance":
+        return numeric("run", "long_run_minutes") or numeric("run", "typical_duration_minutes")
+    if recipe_key in {"swim_aerobic_technique", "swim_aerobic_endurance", "swim_aerobic_threshold"}:
+        return numeric("swim", "typical_distance_m")
+    if recipe_key == "mtb_technical":
+        return numeric("mtb", "typical_duration_minutes") or numeric("bike", "typical_duration_minutes")
+    if recipe_key == "strength_core":
+        return numeric("strength", "typical_duration_minutes")
+    return None
 
 
 def profile_planning_contract(profile):
@@ -734,7 +761,7 @@ def fallback_mesocycle(goal, policy, previous, target_start=None):
     }
 
 
-def generate_mesocycle(goal, policy, athlete_state, previous, target_start, athlete_profile=None, *, request_fn=None):
+def generate_mesocycle(goal, policy, athlete_state, previous, target_start, athlete_profile=None, starting_state=None, *, request_fn=None):
     caps = capability_keys(policy)
     competition_context = build_competition_context(
         goal,
@@ -747,6 +774,7 @@ def generate_mesocycle(goal, policy, athlete_state, previous, target_start, athl
         "goal": goal,
         "declared_athlete_profile": declared_profile,
         "declared_profile_contract": profile_planning_contract(athlete_profile) if athlete_profile else None,
+        "confirmed_starting_state": planner_starting_state_view(starting_state),
         "goal_set": goal_rows,
         "competition_context": competition_context,
         "policy": {
@@ -768,7 +796,7 @@ def generate_mesocycle(goal, policy, athlete_state, previous, target_start, athl
     system = (
         "Du är mesocykelplaneraren i ett uthållighets-/allroundsystem. "
         "Välj vad som ska utvecklas nu; skriv inte en veckoplan och ordinera inte exakta pass. "
-        "Planeringsauktoriteten består av goal_set tillsammans med declared_athlete_profile.goals. Den deklarerade profilen är användarens förstahandskälla för fria/multipla mål, praktiska ramar och preferenser; den får inte ersättas av AI-antaganden. Aktiva development-goals med role=enduring anger vilken atlet som byggs och får inte ersättas implicit av ett prestationsmål. "
+        "Planeringsauktoriteten består av goal_set tillsammans med declared_athlete_profile.goals. Den deklarerade profilen är användarens förstahandskälla för fria/multipla mål, praktiska ramar och preferenser; den får inte ersättas av AI-antaganden. confirmed_starting_state beskriver bekräftat startläge. Observerad del är fakta från historik; manuell del är självrapport och får användas för konservativ etablering men aldrig behandlas som absorberad dos eller ensam motivera progression. Aktiva development-goals med role=enduring anger vilken atlet som byggs och får inte ersättas implicit av ett prestationsmål. "
         "Aktiva performance-goals, inklusive A-mål, får styra betoning, konfliktlösning och successivt ökande specificitet men läggs ovanpå den varaktiga målbilden. "
         "Du måste fylla goal_contributions för varje aktivt mål och beskriva eventuell trade-off uttryckligen. "
         "competition_context innehåller verifierat tävlingsdatum, publicerad banprofil och exakt tid kvar till loppet; dessa fakta ska användas när du väljer vad som behöver utvecklas nu. "
@@ -862,6 +890,7 @@ def generate_mesocycle(goal, policy, athlete_state, previous, target_start, athl
             "evaluation_date": (end + timedelta(days=1)).isoformat(),
             "competition_context": competition_context,
             "athlete_profile_hash": athlete_profile_hash(athlete_profile),
+            "starting_state_hash": athlete_starting_state_hash(starting_state),
         }
     )
     result["id"] = (
@@ -872,7 +901,7 @@ def generate_mesocycle(goal, policy, athlete_state, previous, target_start, athl
     return result
 
 
-def mesocycle_is_valid(decision, goal, target_start, profile_hash_value=None):
+def mesocycle_is_valid(decision, goal, target_start, profile_hash_value=None, starting_state_hash_value=None):
     if not isinstance(decision, dict):
         return False
     try:
@@ -881,6 +910,7 @@ def mesocycle_is_valid(decision, goal, target_start, profile_hash_value=None):
             and decision.get("planner_revision") == PLANNER_REVISION
             and decision.get("goal_hash") == goal_hash(goal)
             and decision.get("athlete_profile_hash") == profile_hash_value
+            and decision.get("starting_state_hash") == starting_state_hash_value
             and iso(decision["start_date"]) <= target_start <= iso(decision["end_date"])
             and bool(decision.get("primary_capabilities"))
         )
