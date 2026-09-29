@@ -1147,7 +1147,7 @@ body{margin:0;background:var(--bg);color:var(--text);line-height:1.45;letter-spa
 ::selection{background:var(--accent-soft)}:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .v2-shell{width:min(100%,720px);margin:auto;padding:24px 16px 64px}
 .v2-shell a{color:inherit}.v2-shell-main{display:block}
-.v2-shell-meta{display:flex;justify-content:flex-end;margin:0 2px 8px;font-size:.68rem;color:var(--muted)}
+.v2-shell-meta{display:flex;justify-content:flex-end;gap:14px;margin:0 2px 8px;font-size:.68rem;color:var(--muted)}
 .v2-shell-meta a{text-decoration:none;font-weight:650}
 .v2-shell-meta a:hover{text-decoration:underline;text-underline-offset:3px}
 
@@ -1275,7 +1275,7 @@ def render_document(snapshot: PresentationSnapshot, *, title: str = "Träning") 
         '<meta name="viewport" content="width=device-width,initial-scale=1">'
         f'<title>{html.escape(title)}</title><style>{V2_SHELL_CSS}</style></head><body>'
         '<div class="v2-shell">'
-        '<div class="v2-shell-meta"><a href="/träning/malbild-2027/" data-v2-goal-link>Målbild 2027 →</a></div>'
+        '<div class="v2-shell-meta"><a href="/träning/onboarding/" data-v2-profile-link>Träningsprofil</a><a href="/träning/malbild-2027/" data-v2-goal-link>Målbild 2027 →</a></div>'
         f'<main class="v2-shell-main">{body}</main>'
         f'{render_reference_tools()}'
         '</div></body></html>'

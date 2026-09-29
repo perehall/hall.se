@@ -2,6 +2,7 @@ const DEFAULT_REPOSITORY = "perehall/hall.se";
 const DEFAULT_EVENT_TYPE = "strava-activity-event";
 const DEFAULT_TRAINING_INPUT_EVENT_TYPE = "training-input-event";
 const TRAINING_INPUT_PATH = "/träning/training-api/input";
+const ATHLETE_PROFILE_PATH = "/träning/training-api/profile";
 const DEFAULT_TRAINING_INPUT_HOST = "xn--hll-qla.se";
 const TRAINING_INPUT_OPERATIONS = new Set(["ADD_FEEDBACK", "UPDATE_COMPLETED_WORKOUT", "ADD_SPONTANEOUS_WORKOUT", "REPORT_PAIN", "REPORT_FATIGUE", "NATURAL_LANGUAGE"]);
 const TRAINING_INPUT_FEELINGS = new Set(["fresh", "tired", "strong_legs", "heavy_legs", "pain", "could_do_more"]);
@@ -9,6 +10,8 @@ const DEFAULT_GITHUB_API_VERSION = "2026-03-10";
 const DEFAULT_TIMEOUT_MS = 1500;
 const DEFAULT_SUPABASE_PROJECT_URL = "https://izzevnhgtsvffpkccoai.supabase.co";
 const TRAINING_FEEDBACK_RPC_PATH = "/rest/v1/rpc/training_submit_activity_feedback";
+const ATHLETE_PROFILE_GET_RPC_PATH = "/rest/v1/rpc/training_get_athlete_profile";
+const ATHLETE_PROFILE_UPSERT_RPC_PATH = "/rest/v1/rpc/training_upsert_athlete_profile";
 const DEFAULT_SUPABASE_TIMEOUT_MS = 2500;
 
 function jsonResponse(body, status = 200) {
@@ -33,6 +36,299 @@ function supabaseSecretKey(env) {
 
 function directTrainingInputPersistenceConfigured(env) {
   return configured(supabaseSecretKey(env));
+}
+
+function accessAssertion(request) {
+  return String(request.headers.get("cf-access-jwt-assertion") || "").trim();
+}
+
+function decodeAccessClaim(assertion) {
+  try {
+    const parts = assertion.split(".");
+    if (parts.length < 2) return {};
+    const normalized = parts[1].replace(/-/g, "+").replace(/_/g, "/");
+    const padded = normalized + "=".repeat((4 - (normalized.length % 4)) % 4);
+    return JSON.parse(atob(padded));
+  } catch {
+    return {};
+  }
+}
+
+async function athleteSubjectFromRequest(request) {
+  const assertion = accessAssertion(request);
+  if (!assertion) return "";
+  const claim = decodeAccessClaim(assertion);
+  const identity = String(
+    request.headers.get("cf-access-authenticated-user-email")
+      || claim.email
+      || claim.sub
+      || ""
+  ).trim().toLowerCase();
+  if (!identity) return "";
+  return "access:" + (await sha256Hex("cf-access:" + identity)).slice(0, 32);
+}
+
+function validIsoDate(value) {
+  return typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value);
+}
+
+export function validateAthleteProfile(payload) {
+  if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
+    return { ok: false, status: 400, reason: "invalid_profile" };
+  }
+  const allowed = new Set([
+    "schema_version", "status", "current_step", "goals", "availability",
+    "preferences", "constraints", "coach_autonomy",
+  ]);
+  if (Object.keys(payload).some((key) => !allowed.has(key))) {
+    return { ok: false, status: 400, reason: "unexpected_profile_fields" };
+  }
+  if (payload.schema_version !== 1) {
+    return { ok: false, status: 400, reason: "invalid_profile_version" };
+  }
+  if (!["draft", "complete"].includes(payload.status)) {
+    return { ok: false, status: 400, reason: "invalid_profile_status" };
+  }
+  if (!Number.isInteger(payload.current_step) || payload.current_step < 0 || payload.current_step > 8) {
+    return { ok: false, status: 400, reason: "invalid_profile_step" };
+  }
+
+  const goals = payload.goals ?? [];
+  if (!Array.isArray(goals) || goals.length > 8) {
+    return { ok: false, status: 400, reason: "invalid_goals" };
+  }
+  for (const goal of goals) {
+    if (!goal || typeof goal !== "object" || Array.isArray(goal)) {
+      return { ok: false, status: 400, reason: "invalid_goal" };
+    }
+    const goalKeys = new Set(["text", "target_date", "importance"]);
+    if (Object.keys(goal).some((key) => !goalKeys.has(key))) {
+      return { ok: false, status: 400, reason: "invalid_goal" };
+    }
+    if (typeof goal.text !== "string" || goal.text.trim().length < 3 || goal.text.length > 500) {
+      return { ok: false, status: 400, reason: "invalid_goal_text" };
+    }
+    if (goal.target_date != null && goal.target_date !== "" && !validIsoDate(goal.target_date)) {
+      return { ok: false, status: 400, reason: "invalid_goal_date" };
+    }
+    if (goal.importance != null && !["primary", "equal", "secondary"].includes(goal.importance)) {
+      return { ok: false, status: 400, reason: "invalid_goal_importance" };
+    }
+  }
+
+  const availability = payload.availability ?? {};
+  if (!availability || typeof availability !== "object" || Array.isArray(availability)) {
+    return { ok: false, status: 400, reason: "invalid_availability" };
+  }
+  const days = new Set(["monday","tuesday","wednesday","thursday","friday","saturday","sunday"]);
+  for (const [day, value] of Object.entries(availability)) {
+    if (!days.has(day) || !value || typeof value !== "object" || Array.isArray(value)) {
+      return { ok: false, status: 400, reason: "invalid_availability" };
+    }
+    if (typeof value.available !== "boolean") {
+      return { ok: false, status: 400, reason: "invalid_availability" };
+    }
+    if (value.minutes != null && (!Number.isInteger(value.minutes) || value.minutes < 15 || value.minutes > 480)) {
+      return { ok: false, status: 400, reason: "invalid_availability_minutes" };
+    }
+  }
+
+  const preferences = payload.preferences ?? {};
+  if (!preferences || typeof preferences !== "object" || Array.isArray(preferences)) {
+    return { ok: false, status: 400, reason: "invalid_preferences" };
+  }
+  const preferenceKeys = new Set(["frequency","double_sessions","rest_days","facilities","likes","dislikes"]);
+  if (Object.keys(preferences).some((key) => !preferenceKeys.has(key))) {
+    return { ok: false, status: 400, reason: "invalid_preferences" };
+  }
+  const frequency = preferences.frequency ?? {};
+  if (!frequency || typeof frequency !== "object" || Array.isArray(frequency)) {
+    return { ok: false, status: 400, reason: "invalid_frequency" };
+  }
+  const frequencyKeys = new Set(["preferred_days","min_days","max_days"]);
+  if (Object.keys(frequency).some((key) => !frequencyKeys.has(key))) {
+    return { ok: false, status: 400, reason: "invalid_frequency" };
+  }
+  const frequencyValues = ["preferred_days","min_days","max_days"].map((key) => frequency[key]);
+  if (frequencyValues.some((value) => value != null && (!Number.isInteger(value) || value < 1 || value > 7))) {
+    return { ok: false, status: 400, reason: "invalid_frequency" };
+  }
+  if (frequencyValues.every((value) => Number.isInteger(value))) {
+    if (!(frequency.min_days <= frequency.preferred_days && frequency.preferred_days <= frequency.max_days)) {
+      return { ok: false, status: 400, reason: "invalid_frequency_order" };
+    }
+  }
+  if (preferences.double_sessions != null && !["avoid","sometimes","normal"].includes(preferences.double_sessions)) {
+    return { ok: false, status: 400, reason: "invalid_double_sessions" };
+  }
+  if (preferences.rest_days != null && !["fixed","prefer_one","load_driven","none_required"].includes(preferences.rest_days)) {
+    return { ok: false, status: 400, reason: "invalid_rest_days" };
+  }
+  if (preferences.facilities != null) {
+    if (!Array.isArray(preferences.facilities) || preferences.facilities.length > 20 ||
+        preferences.facilities.some((value) => typeof value !== "string" || value.length > 64)) {
+      return { ok: false, status: 400, reason: "invalid_facilities" };
+    }
+  }
+  for (const key of ["likes", "dislikes"]) {
+    if (preferences[key] != null && (typeof preferences[key] !== "string" || preferences[key].length > 800)) {
+      return { ok: false, status: 400, reason: "invalid_preferences_text" };
+    }
+  }
+
+  const constraints = payload.constraints ?? {};
+  if (!constraints || typeof constraints !== "object" || Array.isArray(constraints)) {
+    return { ok: false, status: 400, reason: "invalid_constraints" };
+  }
+  const constraintKeys = new Set(["fixed_commitments","other"]);
+  if (Object.keys(constraints).some((key) => !constraintKeys.has(key))) {
+    return { ok: false, status: 400, reason: "invalid_constraints" };
+  }
+  for (const key of constraintKeys) {
+    if (constraints[key] != null && (typeof constraints[key] !== "string" || constraints[key].length > 1200)) {
+      return { ok: false, status: 400, reason: "invalid_constraints" };
+    }
+  }
+
+  if (!["propose","week_auto","full_within_constraints"].includes(payload.coach_autonomy)) {
+    return { ok: false, status: 400, reason: "invalid_coach_autonomy" };
+  }
+  if (payload.status === "complete") {
+    if (goals.length < 1) return { ok: false, status: 400, reason: "goal_required" };
+    if (!frequencyValues.every((value) => Number.isInteger(value))) {
+      return { ok: false, status: 400, reason: "frequency_required" };
+    }
+  }
+
+  return {
+    ok: true,
+    profile: {
+      schema_version: 1,
+      status: payload.status,
+      current_step: payload.current_step,
+      goals: goals.map((goal) => ({
+        text: goal.text.trim(),
+        target_date: goal.target_date || null,
+        importance: goal.importance || "equal",
+      })),
+      availability,
+      preferences: {
+        frequency,
+        double_sessions: preferences.double_sessions || null,
+        rest_days: preferences.rest_days || null,
+        facilities: Array.from(new Set(preferences.facilities || [])),
+        likes: String(preferences.likes || "").trim(),
+        dislikes: String(preferences.dislikes || "").trim(),
+      },
+      constraints: {
+        fixed_commitments: String(constraints.fixed_commitments || "").trim(),
+        other: String(constraints.other || "").trim(),
+      },
+      coach_autonomy: payload.coach_autonomy,
+    },
+  };
+}
+
+async function supabaseRpc(path, body, env, fetchImpl = fetch) {
+  const secretKey = supabaseSecretKey(env);
+  if (!configured(secretKey)) throw new Error("Supabase secret key is not configured");
+  const projectUrl = configured(env.SUPABASE_PROJECT_URL)
+    ? env.SUPABASE_PROJECT_URL.trim().replace(/\/$/, "")
+    : DEFAULT_SUPABASE_PROJECT_URL;
+  const timeoutMs = Number(env.SUPABASE_TIMEOUT_MS || DEFAULT_SUPABASE_TIMEOUT_MS);
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort("supabase_profile_timeout"), timeoutMs);
+  try {
+    const response = await fetchImpl(projectUrl + path, {
+      method: "POST",
+      signal: controller.signal,
+      headers: {
+        apikey: secretKey,
+        "content-type": "application/json",
+        "user-agent": "hall-se-athlete-profile-worker",
+      },
+      body: JSON.stringify(body),
+    });
+    if (!response.ok) {
+      const responseBody = (await response.text()).slice(0, 500);
+      throw new Error(`Supabase profile RPC failed: HTTP ${response.status} ${responseBody}`);
+    }
+    return await response.json();
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+async function handleAthleteProfileRequest(request, env, fetchImpl, executionContext = null) {
+  const url = new URL(request.url);
+  const allowedHost = configured(env.TRAINING_INPUT_HOST)
+    ? env.TRAINING_INPUT_HOST.trim().toLowerCase()
+    : DEFAULT_TRAINING_INPUT_HOST;
+  if (url.hostname.toLowerCase() !== allowedHost) return jsonResponse({ error: "not_found" }, 404);
+  if (!accessAssertion(request)) return jsonResponse({ error: "access_required" }, 401);
+
+  const athleteSubject = await athleteSubjectFromRequest(request);
+  if (!athleteSubject) return jsonResponse({ error: "access_identity_required" }, 401);
+
+  if (request.method === "GET") {
+    try {
+      const result = await supabaseRpc(
+        ATHLETE_PROFILE_GET_RPC_PATH,
+        { p_athlete_subject: athleteSubject },
+        env,
+        fetchImpl,
+      );
+      return jsonResponse(result);
+    } catch (error) {
+      console.error("ATHLETE_PROFILE_READ_FAILED", String(error));
+      return jsonResponse({ error: "profile_read_failed" }, 503);
+    }
+  }
+
+  if (request.method !== "PUT") return jsonResponse({ error: "method_not_allowed" }, 405);
+
+  let raw;
+  try {
+    raw = await request.text();
+  } catch {
+    return jsonResponse({ error: "invalid_body" }, 400);
+  }
+  if (raw.length > 32768) return jsonResponse({ error: "payload_too_large" }, 413);
+
+  let payload;
+  try {
+    payload = JSON.parse(raw);
+  } catch {
+    return jsonResponse({ error: "invalid_json" }, 400);
+  }
+  const validation = validateAthleteProfile(payload);
+  if (!validation.ok) return jsonResponse({ error: validation.reason }, validation.status);
+
+  let result;
+  try {
+    result = await supabaseRpc(
+      ATHLETE_PROFILE_UPSERT_RPC_PATH,
+      {
+        p_athlete_subject: athleteSubject,
+        p_profile: validation.profile,
+        p_set_planning_default: validation.profile.status === "complete",
+      },
+      env,
+      fetchImpl,
+    );
+  } catch (error) {
+    console.error("ATHLETE_PROFILE_SAVE_FAILED", String(error));
+    return jsonResponse({ error: "profile_save_failed" }, 503);
+  }
+
+  if (validation.profile.status !== "complete") {
+    return jsonResponse({ ...result, processing: "draft_saved" });
+  }
+
+  // Completion is deliberately only a durable profile write in v1. The coach
+  // must not reinterpret goals or replan until the declared-profile planning
+  // contract is connected and verified end-to-end.
+  return jsonResponse({ ...result, processing: "profile_saved" });
 }
 
 async function sha256Hex(value) {
@@ -378,6 +674,7 @@ export async function handleRequest(request, env, fetchImpl = fetch, executionCo
       github_dispatch_configured: configured(env.GITHUB_DISPATCH_TOKEN),
       training_input_direct_persistence_configured: directTrainingInputPersistenceConfigured(env),
       training_input_endpoint: TRAINING_INPUT_PATH,
+      athlete_profile_endpoint: ATHLETE_PROFILE_PATH,
       webhook_path_fingerprint: await secretFingerprint(env.WEBHOOK_PATH_SECRET),
       verify_token_fingerprint: await secretFingerprint(env.STRAVA_VERIFY_TOKEN),
     });
@@ -385,6 +682,9 @@ export async function handleRequest(request, env, fetchImpl = fetch, executionCo
 
   if (decodeURIComponent(url.pathname) === TRAINING_INPUT_PATH) {
     return handleTrainingInputRequest(request, env, fetchImpl, executionContext);
+  }
+  if (decodeURIComponent(url.pathname) === ATHLETE_PROFILE_PATH) {
+    return handleAthleteProfileRequest(request, env, fetchImpl, executionContext);
   }
 
   const webhookPath = await expectedWebhookPath(env);

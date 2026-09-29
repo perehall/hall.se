@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 
-import { handleRequest, webhookPathTokenFromSecret } from "../src/worker.mjs";
+import { handleRequest, validateAthleteProfile, webhookPathTokenFromSecret } from "../src/worker.mjs";
 
 const env = {
   WEBHOOK_PATH_SECRET: "path-secret",
@@ -344,6 +344,152 @@ test("training GUI input rejects operations outside the allowlist", async () => 
   assert.equal(response.status, 400);
 });
 
+
+test("athlete profile validation keeps goals and life constraints separate from observed capacity", () => {
+  const result = validateAthleteProfile({
+    schema_version: 1,
+    status: "complete",
+    current_step: 8,
+    goals: [
+      { text: "Bli bättre på MTB och springa starkt.", target_date: null, importance: "equal" },
+      { text: "Topp 10 på ett swimrun 2027.", target_date: "2027-08-14", importance: "primary" },
+    ],
+    availability: {
+      monday: { available: true, minutes: 120 },
+      tuesday: { available: true, minutes: 90 },
+    },
+    preferences: {
+      frequency: { preferred_days: 6, min_days: 5, max_days: 7 },
+      double_sessions: "sometimes",
+      rest_days: "load_driven",
+      facilities: ["pool", "gym", "mtb"],
+      likes: "Teknisk terräng",
+      dislikes: "",
+    },
+    constraints: { fixed_commitments: "Enduro måndag", other: "" },
+    coach_autonomy: "week_auto",
+  });
+  assert.equal(result.ok, true);
+  assert.equal(result.profile.preferences.frequency.preferred_days, 6);
+  assert.equal(result.profile.goals.length, 2);
+});
+
+test("athlete profile draft is persisted without triggering replanning", async () => {
+  const calls = [];
+  let body;
+  const fakeFetch = async (url, init) => {
+    calls.push(url);
+    assert.equal(url, "https://example.supabase.co/rest/v1/rpc/training_upsert_athlete_profile");
+    body = JSON.parse(init.body);
+    return new Response(JSON.stringify({
+      status: "saved",
+      revision: 2,
+      profile_status: "draft",
+      planning_default: false,
+    }), { status: 200, headers: { "content-type": "application/json" } });
+  };
+  const request = new Request("https://xn--hll-qla.se/träning/training-api/profile", {
+    method: "PUT",
+    headers: {
+      "content-type": "application/json",
+      "cf-access-jwt-assertion": "signed-access-jwt",
+      "cf-access-authenticated-user-email": "athlete@example.com",
+    },
+    body: JSON.stringify({
+      schema_version: 1,
+      status: "draft",
+      current_step: 2,
+      goals: [{ text: "Bli allroundtränad.", target_date: null, importance: "equal" }],
+      availability: {},
+      preferences: { frequency: {}, facilities: [] },
+      constraints: { fixed_commitments: "", other: "" },
+      coach_autonomy: "week_auto",
+    }),
+  });
+  const response = await handleRequest(request, env, fakeFetch);
+  assert.equal(response.status, 200);
+  const responseBody = await response.json();
+  assert.equal(responseBody.processing, "draft_saved");
+  assert.equal(calls.length, 1);
+  assert.match(body.p_athlete_subject, /^access:[0-9a-f]{32}$/);
+  assert.equal(body.p_set_planning_default, false);
+});
+
+test("completed athlete profile persists as planning-ready without premature replan", async () => {
+  const calls = [];
+  let persistBody;
+  const fakeFetch = async (url, init) => {
+    calls.push(url);
+    assert.equal(url, "https://example.supabase.co/rest/v1/rpc/training_upsert_athlete_profile");
+    persistBody = JSON.parse(init.body);
+    return new Response(JSON.stringify({
+      status: "saved",
+      revision: 3,
+      profile_status: "complete",
+      planning_default: true,
+    }), { status: 200, headers: { "content-type": "application/json" } });
+  };
+  const request = new Request("https://xn--hll-qla.se/träning/training-api/profile", {
+    method: "PUT",
+    headers: {
+      "content-type": "application/json",
+      "cf-access-jwt-assertion": "signed-access-jwt",
+      "cf-access-authenticated-user-email": "athlete@example.com",
+    },
+    body: JSON.stringify({
+      schema_version: 1,
+      status: "complete",
+      current_step: 8,
+      goals: [{ text: "Bli en stark allroundatlet.", target_date: null, importance: "equal" }],
+      availability: { monday: { available: true, minutes: 90 } },
+      preferences: {
+        frequency: { preferred_days: 6, min_days: 5, max_days: 7 },
+        double_sessions: "sometimes",
+        rest_days: "load_driven",
+        facilities: ["pool", "gym"],
+        likes: "",
+        dislikes: "",
+      },
+      constraints: { fixed_commitments: "", other: "" },
+      coach_autonomy: "week_auto",
+    }),
+  });
+  const response = await handleRequest(request, env, fakeFetch);
+  assert.equal(response.status, 200);
+  assert.equal((await response.json()).processing, "profile_saved");
+  assert.equal(persistBody.p_set_planning_default, true);
+  assert.equal(calls.length, 1);
+});
+
+test("athlete profile can be resumed from durable persistence", async () => {
+  const fakeFetch = async (url, init) => {
+    assert.equal(url, "https://example.supabase.co/rest/v1/rpc/training_get_athlete_profile");
+    const body = JSON.parse(init.body);
+    assert.match(body.p_athlete_subject, /^access:[0-9a-f]{32}$/);
+    return new Response(JSON.stringify({
+      status: "found",
+      revision: 4,
+      profile: {
+        schema_version: 1,
+        status: "draft",
+        current_step: 3,
+        goals: [{ text: "Testmål", target_date: null, importance: "equal" }],
+      },
+    }), { status: 200, headers: { "content-type": "application/json" } });
+  };
+  const request = new Request("https://xn--hll-qla.se/träning/training-api/profile", {
+    method: "GET",
+    headers: {
+      "cf-access-jwt-assertion": "signed-access-jwt",
+      "cf-access-authenticated-user-email": "athlete@example.com",
+    },
+  });
+  const response = await handleRequest(request, env, fakeFetch);
+  assert.equal(response.status, 200);
+  const result = await response.json();
+  assert.equal(result.status, "found");
+  assert.equal(result.profile.current_step, 3);
+});
 
 test("training GUI input rejects non-custom hostname before request processing", async () => {
   const request = new Request("https://hall-se.per-e-hall.workers.dev/träning/training-api/input", {

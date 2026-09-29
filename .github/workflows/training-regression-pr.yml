@@ -5,6 +5,7 @@ on:
     paths:
       - "träning/**"
       - "supabase/**"
+      - "infra/strava-webhook/**"
       - ".github/workflows/training-regression-pr.yml"
 
 permissions:
@@ -31,6 +32,10 @@ jobs:
 
       - name: Run deterministic training regression suite
         run: python "träning/scripts/run_regression_tests.py"
+
+      - name: Test Access-protected training API worker
+        working-directory: infra/strava-webhook
+        run: npm test
 
       - name: Report architecture v2 cutover readiness
         run: PYTHONPATH="träning" python "träning/v2_cutover_readiness.py"

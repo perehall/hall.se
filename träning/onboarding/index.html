@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>Träningsprofil</title>
+<style>
+:root{
+  --bg:#f5f5f7;--surface:#fff;--text:#1d1d1f;--muted:#6e6e73;--line:#d2d2d7;
+  --accent:#0071e3;--accent-pressed:#0062c4;--soft:#f2f2f7;--danger:#b42318;
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+html{background:var(--bg);color:var(--text)}
+body{margin:0;min-height:100vh;-webkit-font-smoothing:antialiased}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+.shell{width:min(100%,760px);margin:0 auto;padding:24px 20px calc(120px + env(safe-area-inset-bottom))}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:52px}
+.brand{font-size:.82rem;font-weight:650;letter-spacing:.01em;color:var(--muted)}
+.close{color:var(--accent);text-decoration:none;font-size:.94rem;font-weight:600}
+.progress{height:4px;background:#dedee3;border-radius:99px;overflow:hidden;margin-bottom:42px}
+.progress>span{display:block;height:100%;background:var(--accent);border-radius:inherit;transition:width .28s ease}
+.step{display:none;animation:enter .24s ease}
+.step.active{display:block}
+.eyebrow{font-size:.82rem;font-weight:700;color:var(--accent);margin:0 0 12px}
+h1{font-size:clamp(2.1rem,7vw,3.4rem);line-height:1.02;letter-spacing:-.045em;margin:0 0 16px;font-weight:720}
+.lead{font-size:1.08rem;line-height:1.5;color:var(--muted);max-width:620px;margin:0 0 34px}
+.note{font-size:.9rem;line-height:1.45;color:var(--muted);margin:18px 0 0}
+.field{margin:0 0 22px}
+.field label,.section-label{display:block;font-size:.84rem;font-weight:700;margin:0 0 8px}
+.textbox,textarea,select{
+  width:100%;border:1px solid var(--line);background:var(--surface);color:var(--text);
+  border-radius:14px;padding:14px 15px;outline:none;transition:border-color .15s,box-shadow .15s;
+}
+textarea{min-height:112px;resize:vertical;line-height:1.45}
+.textbox:focus,textarea:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(0,113,227,.11)}
+.goal-list{display:grid;gap:14px}
+.goal-item{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:15px}
+.goal-item textarea{border:0;padding:4px 2px;box-shadow:none;min-height:80px}
+.goal-meta{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:end;margin-top:10px}
+.goal-meta label{font-size:.74rem;color:var(--muted)}
+.goal-meta input,.goal-meta select{margin-top:5px;width:100%;border:1px solid var(--line);border-radius:10px;padding:9px;background:#fff}
+.icon-button{border:0;background:transparent;color:var(--muted);font-size:1.2rem;padding:10px}
+.add{border:0;background:transparent;color:var(--accent);font-weight:650;padding:10px 2px;margin-top:5px}
+.choice-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.choice{position:relative}
+.choice input{position:absolute;opacity:0;pointer-events:none}
+.choice label{
+  display:flex;min-height:58px;align-items:center;justify-content:center;text-align:center;
+  border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:11px;
+  font-weight:620;font-size:.94rem;transition:.15s;
+}
+.choice input:checked+label{border-color:var(--accent);background:#eef6ff;color:#005bb5;box-shadow:inset 0 0 0 1px var(--accent)}
+.freq-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.freq-box{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px}
+.freq-box span{display:block;color:var(--muted);font-size:.76rem;font-weight:650;margin-bottom:8px}
+.freq-box select{border:0;padding:4px 0;font-size:1.35rem;font-weight:700;background:transparent;box-shadow:none}
+.availability{border-top:1px solid var(--line)}
+.dayrow{display:grid;grid-template-columns:120px 1fr 150px;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.dayname{font-weight:650}
+.switch{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:.88rem}
+.switch input{width:20px;height:20px;accent-color:var(--accent)}
+.dayrow select{padding:10px 12px;border-radius:11px}
+.chips{display:flex;flex-wrap:wrap;gap:9px}
+.chip{position:relative}
+.chip input{position:absolute;opacity:0}
+.chip label{display:inline-flex;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:10px 14px;font-size:.88rem;font-weight:620}
+.chip input:checked+label{background:#eef6ff;border-color:var(--accent);color:#005bb5}
+.summary{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.summary-row{display:grid;grid-template-columns:150px 1fr;gap:18px;background:var(--surface);padding:15px 16px}
+.summary-row span{color:var(--muted);font-size:.83rem;font-weight:650}
+.summary-row strong{font-size:.95rem;line-height:1.42;white-space:pre-line}
+.status{min-height:24px;color:var(--muted);font-size:.84rem;margin-top:16px}
+.status.error{color:var(--danger)}
+.footer{
+  position:fixed;left:0;right:0;bottom:0;background:rgba(245,245,247,.88);
+  backdrop-filter:saturate(180%) blur(18px);border-top:1px solid rgba(0,0,0,.08);
+  padding:12px max(20px,env(safe-area-inset-left)) calc(12px + env(safe-area-inset-bottom));
+}
+.footer-inner{width:min(100%,720px);margin:auto;display:flex;gap:12px;justify-content:space-between}
+.btn{border:0;border-radius:14px;padding:13px 20px;font-weight:680;min-width:112px}
+.btn.secondary{background:transparent;color:var(--accent)}
+.btn.primary{background:var(--accent);color:#fff;margin-left:auto}
+.btn.primary:active{background:var(--accent-pressed)}
+.btn:disabled{opacity:.45;cursor:default}
+.saved{display:none;text-align:center;padding:80px 0}
+.saved.active{display:block}
+.saved .check{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;background:#e8f7ed;color:#16853d;font-size:2rem;margin:0 auto 24px}
+.saved h1{font-size:2.4rem}
+@keyframes enter{from{opacity:.25;transform:translateY(5px)}to{opacity:1;transform:none}}
+@media(max-width:600px){
+  .shell{padding:18px 16px 110px}.topbar{margin-bottom:34px}.progress{margin-bottom:30px}
+  .choice-grid{grid-template-columns:1fr}.freq-row{grid-template-columns:1fr}
+  .dayrow{grid-template-columns:96px 1fr}.dayrow select{grid-column:1/-1}
+  .goal-meta{grid-template-columns:1fr}.summary-row{grid-template-columns:1fr;gap:5px}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="topbar"><div class="brand">Träningsprofil</div><a class="close" href="/träning/">Stäng</a></header>
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+
+  <main id="flow">
+    <section class="step" data-step="0">
+      <p class="eyebrow">Din träning, dina ramar</p>
+      <h1>Berätta vart du vill.</h1>
+      <p class="lead">Du anger mål och sådant bara du känner till om ditt liv och dina preferenser. Coachmotorn använder faktisk träningshistorik för kapacitet och dos — den ska inte gissa.</p>
+      <p class="note">Det tar några minuter. Ditt utkast sparas när du går vidare och kan fortsättas senare.</p>
+    </section>
+
+    <section class="step" data-step="1">
+      <p class="eyebrow">1 · Mål</p>
+      <h1>Vad vill du få ut av din träning?</h1>
+      <p class="lead">Skriv som du tänker. Målen får vara flera, konkreta eller lurviga. Du behöver inte formulera dem som en coach.</p>
+      <div id="goalList" class="goal-list"></div>
+      <button class="add" id="addGoal" type="button">＋ Lägg till ett mål</button>
+    </section>
+
+    <section class="step" data-step="2">
+      <p class="eyebrow">2 · Frekvens</p>
+      <h1>Hur ofta vill du normalt träna?</h1>
+      <p class="lead">Det här beskriver din preferens — inte vad systemet antar att du klarar. Kapaciteten bedöms från faktisk träning och återkoppling.</p>
+      <div class="freq-row">
+        <label class="freq-box"><span>Minst acceptabelt</span><select id="minDays"></select></label>
+        <label class="freq-box"><span>Helst</span><select id="preferredDays"></select></label>
+        <label class="freq-box"><span>Som mest normalt</span><select id="maxDays"></select></label>
+      </div>
+    </section>
+
+    <section class="step" data-step="3">
+      <p class="eyebrow">3 · Tillgänglighet</p>
+      <h1>När kan träningen få plats?</h1>
+      <p class="lead">Ange en normal vecka. Detta är praktiska ramar, inte ett låst schema. Tillfälliga ändringar ska vara enkla att göra senare.</p>
+      <div id="availability" class="availability"></div>
+    </section>
+
+    <section class="step" data-step="4">
+      <p class="eyebrow">4 · Fördelning</p>
+      <h1>Hur vill du att veckan ska kännas?</h1>
+      <div class="field">
+        <span class="section-label">Två pass samma dag</span>
+        <div class="choice-grid">
+          <div class="choice"><input type="radio" id="doubleAvoid" name="double" value="avoid"><label for="doubleAvoid">Undvik helst</label></div>
+          <div class="choice"><input type="radio" id="doubleSometimes" name="double" value="sometimes"><label for="doubleSometimes">Okej vid behov</label></div>
+          <div class="choice"><input type="radio" id="doubleNormal" name="double" value="normal"><label for="doubleNormal">Helt normalt</label></div>
+        </div>
+      </div>
+      <div class="field" style="margin-top:28px">
+        <span class="section-label">Helt träningsfria dagar</span>
+        <div class="choice-grid">
+          <div class="choice"><input type="radio" id="restPrefer" name="rest" value="prefer_one"><label for="restPrefer">Helst en per vecka</label></div>
+          <div class="choice"><input type="radio" id="restLoad" name="rest" value="load_driven"><label for="restLoad">Låt belastningen styra</label></div>
+          <div class="choice"><input type="radio" id="restNone" name="rest" value="none_required"><label for="restNone">Ingen fast behövs</label></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="step" data-step="5">
+      <p class="eyebrow">5 · Verkligheten</p>
+      <h1>Vad finns redan i kalendern?</h1>
+      <div class="field"><label for="fixedCommitments">Återkommande aktiviteter</label><textarea id="fixedCommitments" placeholder="Exempel: Enduro måndagar, klubbträning onsdag kväll..."></textarea></div>
+      <span class="section-label">Vad har du normalt tillgång till?</span>
+      <div class="chips" id="facilityChips"></div>
+    </section>
+
+    <section class="step" data-step="6">
+      <p class="eyebrow">6 · Preferenser</p>
+      <h1>Vad gör träningen hållbar för dig?</h1>
+      <div class="field"><label for="likes">Sånt du gärna vill ha mer av</label><textarea id="likes" placeholder="Träningsformer, miljöer eller pass du gillar. Valfritt."></textarea></div>
+      <div class="field"><label for="dislikes">Sånt du helst undviker</label><textarea id="dislikes" placeholder="Valfritt."></textarea></div>
+      <div class="field"><label for="otherConstraints">Något coachen alltid måste ta hänsyn till?</label><textarea id="otherConstraints" placeholder="Praktiska begränsningar, skador eller andra viktiga ramar. Valfritt."></textarea></div>
+    </section>
+
+    <section class="step" data-step="7">
+      <p class="eyebrow">7 · Omplanering</p>
+      <h1>Hur mycket frihet ska coachen ha?</h1>
+      <p class="lead">Du ska alltid kunna ändra själv. Detta styr hur automatiskt coachen får reagera när verkligheten avviker från planen.</p>
+      <div class="choice-grid">
+        <div class="choice"><input type="radio" id="autoPropose" name="autonomy" value="propose"><label for="autoPropose">Föreslå först</label></div>
+        <div class="choice"><input type="radio" id="autoWeek" name="autonomy" value="week_auto"><label for="autoWeek">Optimera veckan</label></div>
+        <div class="choice"><input type="radio" id="autoFull" name="autonomy" value="full_within_constraints"><label for="autoFull">Optimera fritt inom mina ramar</label></div>
+      </div>
+      <p class="note">“Optimera veckan” betyder att coachen får flytta, byta eller ta bort pass när ny information kräver det, men dina hårda ramar ligger fast.</p>
+    </section>
+
+    <section class="step" data-step="8">
+      <p class="eyebrow">Klart att granska</p>
+      <h1>Så här har jag förstått dig.</h1>
+      <p class="lead">Det här blir coachmotorns deklarerade ramverk. Faktisk kapacitet och återhämtning kommer fortfarande från din träningsdata.</p>
+      <div id="summary" class="summary"></div>
+      <div id="saveStatus" class="status" role="status"></div>
+    </section>
+  </main>
+
+  <section id="saved" class="saved">
+    <div class="check">✓</div><h1>Profilen är sparad.</h1>
+    <p class="lead" style="margin-left:auto;margin-right:auto">Din profil är nu beständigt sparad. Nästa steg är att koppla den deklarerade profilen till coachmotorns planeringskontrakt innan den får ändra träningen.</p>
+    <a class="btn primary" style="display:inline-block;text-decoration:none" href="/träning/">Till träningsplanen</a>
+  </section>
+</div>
+
+<footer class="footer" id="footer"><div class="footer-inner">
+  <button class="btn secondary" id="backBtn" type="button">Tillbaka</button>
+  <button class="btn primary" id="nextBtn" type="button">Fortsätt</button>
+</div></footer>
+
+<script>
+(() => {
+  const API="/träning/training-api/profile";
+  const TOTAL=8;
+  const DAYS=[
+    ["monday","Måndag"],["tuesday","Tisdag"],["wednesday","Onsdag"],["thursday","Torsdag"],
+    ["friday","Fredag"],["saturday","Lördag"],["sunday","Söndag"]
+  ];
+  const FACILITIES=[["pool","Simhall"],["gym","Gym"],["treadmill","Löpband"],["mtb","MTB"],["bike","Landsväg / gravel"],["ski","Skidor"]];
+  let step=0;
+  let profile=emptyProfile();
+
+  function emptyProfile(){
+    const availability={};
+    DAYS.forEach(([key])=>availability[key]={available:true,minutes:null});
+    return {
+      schema_version:1,status:"draft",current_step:0,
+      goals:[{text:"",target_date:null,importance:"equal"}],
+      availability,
+      preferences:{
+        frequency:{preferred_days:6,min_days:5,max_days:7},
+        double_sessions:"sometimes",rest_days:"load_driven",facilities:[],likes:"",dislikes:""
+      },
+      constraints:{fixed_commitments:"",other:""},
+      coach_autonomy:"week_auto"
+    };
+  }
+
+  function el(id){return document.getElementById(id)}
+  function escapeHtml(value){return String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[ch]))}
+  function setStep(value){
+    step=Math.max(0,Math.min(TOTAL,value));
+    document.querySelectorAll(".step").forEach(node=>node.classList.toggle("active",Number(node.dataset.step)===step));
+    el("progressBar").style.width=((step/TOTAL)*100)+"%";
+    el("backBtn").style.visibility=step===0?"hidden":"visible";
+    el("nextBtn").textContent=step===TOTAL?"Spara profil":"Fortsätt";
+    if(step===TOTAL) renderSummary();
+    window.scrollTo({top:0,behavior:"smooth"});
+  }
+
+  function renderGoals(){
+    el("goalList").innerHTML=profile.goals.map((goal,i)=>`
+      <div class="goal-item" data-goal="${i}">
+        <textarea aria-label="Mål ${i+1}" placeholder="Exempel: Jag vill bli en stark allroundatlet...">${escapeHtml(goal.text)}</textarea>
+        <div class="goal-meta">
+          <label>Måldatum, om det finns<input type="date" value="${escapeHtml(goal.target_date||"")}"></label>
+          <label>Vikt<select>
+            <option value="equal" ${goal.importance==="equal"?"selected":""}>Likvärdigt</option>
+            <option value="primary" ${goal.importance==="primary"?"selected":""}>Särskilt viktigt</option>
+            <option value="secondary" ${goal.importance==="secondary"?"selected":""}>Sekundärt</option>
+          </select></label>
+          ${profile.goals.length>1?'<button class="icon-button" type="button" aria-label="Ta bort mål">×</button>':""}
+        </div>
+      </div>`).join("");
+  }
+
+  function readGoals(){
+    profile.goals=[...document.querySelectorAll(".goal-item")].map(item=>({
+      text:item.querySelector("textarea").value.trim(),
+      target_date:item.querySelector('input[type="date"]').value||null,
+      importance:item.querySelector("select").value
+    })).filter(goal=>goal.text);
+    if(!profile.goals.length) profile.goals=[{text:"",target_date:null,importance:"equal"}];
+  }
+
+  function renderAvailability(){
+    el("availability").innerHTML=DAYS.map(([key,label])=>{
+      const row=profile.availability[key]||{available:true,minutes:null};
+      return `<div class="dayrow" data-day="${key}">
+        <div class="dayname">${label}</div>
+        <label class="switch"><input type="checkbox" ${row.available?"checked":""}> Möjlig</label>
+        <select aria-label="Tillgänglig tid ${label}" ${row.available?"":"disabled"}>
+          <option value="" ${row.minutes==null?"selected":""}>Flexibelt</option>
+          ${[30,45,60,90,120,180,240].map(m=>`<option value="${m}" ${row.minutes===m?"selected":""}>${m<60?m+" min":(m/60)+" h"}</option>`).join("")}
+        </select>
+      </div>`;
+    }).join("");
+    document.querySelectorAll(".dayrow").forEach(row=>{
+      const check=row.querySelector("input"), select=row.querySelector("select");
+      check.addEventListener("change",()=>{select.disabled=!check.checked});
+    });
+  }
+
+  function readAvailability(){
+    document.querySelectorAll(".dayrow").forEach(row=>{
+      const check=row.querySelector("input"), select=row.querySelector("select");
+      profile.availability[row.dataset.day]={available:check.checked,minutes:select.value?Number(select.value):null};
+    });
+  }
+
+  function renderFacilities(){
+    el("facilityChips").innerHTML=FACILITIES.map(([key,label])=>`
+      <div class="chip"><input type="checkbox" id="fac-${key}" value="${key}" ${profile.preferences.facilities.includes(key)?"checked":""}>
+      <label for="fac-${key}">${label}</label></div>`).join("");
+  }
+
+  function populateDaySelects(){
+    for(const id of ["minDays","preferredDays","maxDays"]){
+      el(id).innerHTML=[1,2,3,4,5,6,7].map(n=>`<option value="${n}">${n} dagar</option>`).join("");
+    }
+  }
+
+  function hydrateControls(){
+    renderGoals(); renderAvailability(); renderFacilities();
+    const f=profile.preferences.frequency;
+    el("minDays").value=f.min_days||5;el("preferredDays").value=f.preferred_days||6;el("maxDays").value=f.max_days||7;
+    document.querySelector(`input[name="double"][value="${profile.preferences.double_sessions||"sometimes"}"]`)?.click();
+    document.querySelector(`input[name="rest"][value="${profile.preferences.rest_days||"load_driven"}"]`)?.click();
+    document.querySelector(`input[name="autonomy"][value="${profile.coach_autonomy||"week_auto"}"]`)?.click();
+    el("fixedCommitments").value=profile.constraints.fixed_commitments||"";
+    el("likes").value=profile.preferences.likes||"";
+    el("dislikes").value=profile.preferences.dislikes||"";
+    el("otherConstraints").value=profile.constraints.other||"";
+  }
+
+  function collect(){
+    readGoals(); readAvailability();
+    profile.preferences.frequency={
+      min_days:Number(el("minDays").value),preferred_days:Number(el("preferredDays").value),max_days:Number(el("maxDays").value)
+    };
+    profile.preferences.double_sessions=document.querySelector('input[name="double"]:checked')?.value||"sometimes";
+    profile.preferences.rest_days=document.querySelector('input[name="rest"]:checked')?.value||"load_driven";
+    profile.preferences.facilities=[...document.querySelectorAll('#facilityChips input:checked')].map(x=>x.value);
+    profile.preferences.likes=el("likes").value.trim();
+    profile.preferences.dislikes=el("dislikes").value.trim();
+    profile.constraints.fixed_commitments=el("fixedCommitments").value.trim();
+    profile.constraints.other=el("otherConstraints").value.trim();
+    profile.coach_autonomy=document.querySelector('input[name="autonomy"]:checked')?.value||"week_auto";
+    profile.current_step=step;
+  }
+
+  function validateCurrent(){
+    collect();
+    if(step===1 && !profile.goals.some(goal=>goal.text.length>=3)){alert("Skriv minst ett mål.");return false}
+    if(step===2){
+      const f=profile.preferences.frequency;
+      if(!(f.min_days<=f.preferred_days&&f.preferred_days<=f.max_days)){alert("Välj ett intervall där min ≤ helst ≤ max.");return false}
+    }
+    return true;
+  }
+
+  async function persist(status){
+    collect();
+    const payload=JSON.parse(JSON.stringify(profile));
+    payload.status=status;
+    payload.current_step=step;
+    const response=await fetch(API,{method:"PUT",headers:{"content-type":"application/json"},body:JSON.stringify(payload)});
+    if(!response.ok) throw new Error((await response.json().catch(()=>({}))).error||"save_failed");
+    profile.status=status;
+    return response.json();
+  }
+
+  function formatAvailability(){
+    const labels=[];
+    DAYS.forEach(([key,label])=>{
+      const d=profile.availability[key];
+      if(d?.available) labels.push(label+(d.minutes?" "+d.minutes+" min":""));
+    });
+    return labels.join(" · ")||"Ingen normal tillgänglighet angiven";
+  }
+
+  function renderSummary(){
+    collect();
+    const f=profile.preferences.frequency;
+    const doubleLabel={avoid:"Undvik helst",sometimes:"Okej vid behov",normal:"Helt normalt"}[profile.preferences.double_sessions];
+    const restLabel={prefer_one:"Helst en träningsfri dag",load_driven:"Belastningen styr",none_required:"Ingen fast vilodag",fixed:"Fast vilodag"}[profile.preferences.rest_days];
+    const autoLabel={propose:"Föreslå först",week_auto:"Optimera veckan",full_within_constraints:"Optimera fritt inom ramarna"}[profile.coach_autonomy];
+    const goals=profile.goals.filter(g=>g.text).map(g=>g.text+(g.target_date?" · "+g.target_date:"")).join("\n");
+    const facilities=FACILITIES.filter(([key])=>profile.preferences.facilities.includes(key)).map(([,label])=>label).join(", ")||"Inget särskilt";
+    el("summary").innerHTML=[
+      ["Mål",goals],["Träningsfrekvens",`${f.preferred_days} dagar helst · ${f.min_days}–${f.max_days} acceptabelt`],
+      ["Normal tillgänglighet",formatAvailability()],["Dubbelpass",doubleLabel],["Vilodagar",restLabel],
+      ["Fasta aktiviteter",profile.constraints.fixed_commitments||"Inga angivna"],["Tillgång",facilities],
+      ["Coachens frihet",autoLabel],["Övriga ramar",profile.constraints.other||"Inga angivna"]
+    ].map(([label,value])=>`<div class="summary-row"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong></div>`).join("");
+  }
+
+  async function load(){
+    populateDaySelects();
+    try{
+      const response=await fetch(API,{headers:{"accept":"application/json"}});
+      if(response.ok){
+        const body=await response.json();
+        if(body.status==="found"&&body.profile){
+          profile=Object.assign(emptyProfile(),body.profile);
+          profile.preferences=Object.assign(emptyProfile().preferences,body.profile.preferences||{});
+          profile.preferences.frequency=Object.assign(emptyProfile().preferences.frequency,(body.profile.preferences||{}).frequency||{});
+          profile.constraints=Object.assign(emptyProfile().constraints,body.profile.constraints||{});
+          profile.availability=Object.assign(emptyProfile().availability,body.profile.availability||{});
+          step=Math.max(0,Math.min(TOTAL,Number(profile.current_step)||0));
+          if(profile.status==="complete") step=TOTAL;
+        }
+      }
+    }catch(e){console.warn("Profile resume unavailable",e)}
+    hydrateControls();setStep(step);
+  }
+
+  el("addGoal").addEventListener("click",()=>{readGoals();if(profile.goals.length<8){profile.goals.push({text:"",target_date:null,importance:"equal"});renderGoals()}});
+  el("goalList").addEventListener("click",e=>{if(e.target.matches(".icon-button")){readGoals();const i=Number(e.target.closest(".goal-item").dataset.goal);profile.goals.splice(i,1);renderGoals()}});
+  el("backBtn").addEventListener("click",()=>{collect();setStep(step-1)});
+  el("nextBtn").addEventListener("click",async()=>{
+    if(!validateCurrent())return;
+    el("nextBtn").disabled=true;el("saveStatus").className="status";el("saveStatus").textContent="";
+    try{
+      if(step<TOTAL){
+        profile.current_step=step+1;
+        await persist("draft");
+        setStep(step+1);
+      }else{
+        el("saveStatus").textContent="Sparar träningsprofil…";
+        await persist("complete");
+        el("flow").style.display="none";el("footer").style.display="none";el("progressBar").style.width="100%";el("saved").classList.add("active");
+      }
+    }catch(e){
+      const target=el("saveStatus");target.className="status error";target.textContent="Kunde inte spara. Försök igen.";
+      console.error(e);
+    }finally{el("nextBtn").disabled=false}
+  });
+  load();
+})();
+</script>
+</body>
+</html>
