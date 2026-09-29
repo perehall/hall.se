@@ -73,9 +73,21 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
 .chip label{display:inline-flex;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:10px 14px;font-size:.88rem;font-weight:620}
 .chip input:checked+label{background:#eef6ff;border-color:var(--accent);color:#005bb5}
 .summary{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:18px;overflow:hidden}
-.summary-row{display:grid;grid-template-columns:150px 1fr;gap:18px;background:var(--surface);padding:15px 16px}
+.summary-row{display:grid;grid-template-columns:140px 1fr auto;gap:18px;align-items:start;background:var(--surface);padding:15px 16px}
 .summary-row span{color:var(--muted);font-size:.83rem;font-weight:650}
 .summary-row strong{font-size:.95rem;line-height:1.42;white-space:pre-line}
+.summary-edit{border:0;background:transparent;color:var(--accent);font-size:.82rem;font-weight:680;padding:2px 0}
+.generation{display:none;padding:54px 0 20px}
+.generation.active{display:block}
+.generation-card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:20px;margin-top:28px}
+.generation-state{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);color:var(--muted)}
+.generation-state:last-child{border-bottom:0}
+.generation-state.active{color:var(--text);font-weight:650}
+.generation-state.done{color:#16853d}
+.dot{width:10px;height:10px;border-radius:50%;background:#c7c7cc;flex:0 0 auto}
+.generation-state.active .dot{background:var(--accent);box-shadow:0 0 0 5px rgba(0,113,227,.10)}
+.generation-state.done .dot{background:#16853d}
+.generation-actions{display:flex;gap:12px;justify-content:center;margin-top:24px}
 .status{min-height:24px;color:var(--muted);font-size:.84rem;margin-top:16px}
 .status.error{color:var(--danger)}
 .footer{
@@ -98,7 +110,7 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
   .shell{padding:18px 16px 110px}.topbar{margin-bottom:34px}.progress{margin-bottom:30px}
   .choice-grid{grid-template-columns:1fr}.freq-row{grid-template-columns:1fr}
   .dayrow{grid-template-columns:96px 1fr}.dayrow select{grid-column:1/-1}
-  .goal-meta{grid-template-columns:1fr}.summary-row{grid-template-columns:1fr;gap:5px}
+  .goal-meta{grid-template-columns:1fr}.summary-row{grid-template-columns:1fr auto;gap:5px}.summary-row span{grid-column:1/-1}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
@@ -207,10 +219,18 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
     </section>
   </main>
 
-  <section id="saved" class="saved">
-    <div class="check">✓</div><h1>Profilen är sparad.</h1>
-    <p class="lead" style="margin-left:auto;margin-right:auto">Din profil är nu beständigt sparad. Nästa steg är att koppla den deklarerade profilen till coachmotorns planeringskontrakt innan den får ändra träningen.</p>
-    <a class="btn primary" style="display:inline-block;text-decoration:none" href="/träning/">Till träningsplanen</a>
+  <section id="generation" class="generation">
+    <p class="eyebrow">Din plan</p>
+    <h1 id="generationTitle">Skapar din träningsplan.</h1>
+    <p class="lead" id="generationLead">Profilen är sparad. Nu kör coachmotorn den kanoniska planeringen mot dina mål, ramar och faktiska träningsdata.</p>
+    <div class="generation-card">
+      <div class="generation-state done" id="gen-profile"><span class="dot"></span><span>Träningsprofil sparad</span></div>
+      <div class="generation-state active" id="gen-queued"><span class="dot"></span><span>Planeringskörning köad</span></div>
+      <div class="generation-state" id="gen-running"><span class="dot"></span><span>Coachmotorn bygger träningsblock och vecka</span></div>
+      <div class="generation-state" id="gen-complete"><span class="dot"></span><span>Planen är genererad och publicering är startad</span></div>
+    </div>
+    <div id="generationStatus" class="status" role="status"></div>
+    <div class="generation-actions" id="generationActions"></div>
   </section>
 </div>
 
@@ -222,6 +242,7 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
 <script>
 (() => {
   const API="/träning/training-api/profile";
+  const GENERATE_API="/träning/training-api/profile/generate";
   const TOTAL=8;
   const DAYS=[
     ["monday","Måndag"],["tuesday","Tisdag"],["wednesday","Onsdag"],["thursday","Torsdag"],
@@ -230,6 +251,8 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
   const FACILITIES=[["pool","Simhall"],["gym","Gym"],["treadmill","Löpband"],["mtb","MTB"],["bike","Landsväg / gravel"],["indoor_bike","Cykeltrainer / inomhuscykel"],["ski","Skidor"]];
   let step=0;
   let profile=emptyProfile();
+  let returnToSummary=false;
+  let generationRequestId=null;
 
   function emptyProfile(){
     const availability={};
@@ -254,7 +277,9 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
     document.querySelectorAll(".step").forEach(node=>node.classList.toggle("active",Number(node.dataset.step)===step));
     el("progressBar").style.width=((step/TOTAL)*100)+"%";
     el("backBtn").style.visibility=step===0?"hidden":"visible";
-    el("nextBtn").textContent=step===TOTAL?"Spara profil":"Fortsätt";
+    el("nextBtn").textContent=step===TOTAL
+      ?"Skapa min träningsplan"
+      :(returnToSummary?"Tillbaka till sammanfattning":"Fortsätt");
     if(step===TOTAL) renderSummary();
     window.scrollTo({top:0,behavior:"smooth"});
   }
@@ -389,11 +414,82 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
     const goals=profile.goals.filter(g=>g.text).map(g=>g.text+(g.target_date?" · "+g.target_date:"")).join("\n");
     const facilities=FACILITIES.filter(([key])=>profile.preferences.facilities.includes(key)).map(([,label])=>label).join(", ")||"Inget särskilt";
     el("summary").innerHTML=[
-      ["Mål",goals],["Träningsfrekvens",`Helst ${f.preferred_days} dagar · vanligt spann ${f.min_days}–${f.max_days}`],
-      ["Normal tillgänglighet",formatAvailability()],["Dubbelpass",doubleLabel],["Vilodagar",restLabel],
-      ["Fasta aktiviteter",profile.constraints.fixed_commitments||"Inga angivna"],["Tillgång",facilities],
-      ["Coachens frihet",autoLabel],["Övriga ramar",profile.constraints.other||"Inga angivna"]
-    ].map(([label,value])=>`<div class="summary-row"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong></div>`).join("");
+      ["Mål",goals,1],["Träningsfrekvens",`Helst ${f.preferred_days} dagar · vanligt spann ${f.min_days}–${f.max_days}`,2],
+      ["Normal tillgänglighet",formatAvailability(),3],["Dubbelpass",doubleLabel,4],["Vilodagar",restLabel,4],
+      ["Fasta aktiviteter",profile.constraints.fixed_commitments||"Inga angivna",5],["Tillgång",facilities,5],
+      ["Coachens frihet",autoLabel,7],["Övriga ramar",profile.constraints.other||"Inga angivna",6]
+    ].map(([label,value,editStep])=>`<div class="summary-row"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong><button type="button" class="summary-edit" data-edit-step="${editStep}">Ändra</button></div>`).join("");
+  }
+
+  function showGeneration(){
+    el("flow").style.display="none";
+    el("footer").style.display="none";
+    el("generation").classList.add("active");
+    el("progressBar").style.width="100%";
+    window.scrollTo({top:0,behavior:"smooth"});
+  }
+
+  function setGenerationState(status){
+    const queued=el("gen-queued"), running=el("gen-running"), complete=el("gen-complete");
+    [queued,running,complete].forEach(node=>node.className="generation-state");
+    queued.classList.add("done");
+    if(status==="queued"){
+      queued.className="generation-state active";
+    }else if(status==="running"){
+      queued.className="generation-state done";
+      running.className="generation-state active";
+    }else if(status==="completed"){
+      queued.className="generation-state done";
+      running.className="generation-state done";
+      complete.className="generation-state done";
+      el("generationTitle").textContent="Din träningsplan är klar.";
+      el("generationLead").textContent="Coachmotorn har byggt planen från din deklarerade profil och faktisk träningsdata.";
+      el("generationActions").innerHTML='<a class="btn primary" style="text-decoration:none" href="/träning/">Öppna träningsplanen</a>';
+    }else if(status==="failed"){
+      el("generationTitle").textContent="Planen kunde inte skapas.";
+      el("generationLead").textContent="Din profil är sparad, men planeringskörningen misslyckades. Ingen ny plan ska betraktas som publicerad.";
+      el("generationStatus").className="status error";
+      el("generationStatus").textContent="Planeringskörningen misslyckades.";
+      el("generationActions").innerHTML='<button class="btn primary" id="retryGeneration" type="button">Försök igen</button>';
+      el("retryGeneration").addEventListener("click",()=>startGeneration());
+    }
+  }
+
+  async function pollGeneration(requestId){
+    generationRequestId=requestId;
+    for(let attempt=0;attempt<150;attempt++){
+      await new Promise(resolve=>setTimeout(resolve,2000));
+      let response;
+      try{
+        response=await fetch(GENERATE_API+"?id="+encodeURIComponent(requestId),{headers:{"accept":"application/json"}});
+      }catch{
+        continue;
+      }
+      if(!response.ok) continue;
+      const body=await response.json();
+      setGenerationState(body.status);
+      if(body.status==="completed"||body.status==="failed") return body;
+    }
+    el("generationStatus").textContent="Planeringen fortsätter i bakgrunden. Du kan återvända till träningssidan senare.";
+    return null;
+  }
+
+  async function startGeneration(){
+    showGeneration();
+    setGenerationState("queued");
+    el("generationStatus").className="status";
+    el("generationStatus").textContent="Startar en riktig planeringskörning…";
+    el("generationActions").innerHTML="";
+    const response=await fetch(GENERATE_API,{method:"POST",headers:{"content-type":"application/json"},body:"{}"});
+    if(!response.ok){
+      setGenerationState("failed");
+      return;
+    }
+    const body=await response.json();
+    generationRequestId=body.request_id;
+    setGenerationState(body.status||"queued");
+    el("generationStatus").textContent="Du kan lämna sidan; körningen fortsätter beständigt i backend.";
+    await pollGeneration(body.request_id);
   }
 
   async function load(){
@@ -416,6 +512,13 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
     hydrateControls();setStep(step);
   }
 
+  el("summary").addEventListener("click",e=>{
+    const button=e.target.closest("[data-edit-step]");
+    if(!button)return;
+    collect();
+    returnToSummary=true;
+    setStep(Number(button.dataset.editStep));
+  });
   el("addGoal").addEventListener("click",()=>{readGoals();if(profile.goals.length<8){profile.goals.push({text:"",target_date:null,importance:"equal"});renderGoals()}});
   el("goalList").addEventListener("click",e=>{if(e.target.matches(".icon-button")){readGoals();const i=Number(e.target.closest(".goal-item").dataset.goal);profile.goals.splice(i,1);renderGoals()}});
   el("backBtn").addEventListener("click",()=>{collect();setStep(step-1)});
@@ -424,13 +527,21 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
     el("nextBtn").disabled=true;el("saveStatus").className="status";el("saveStatus").textContent="";
     try{
       if(step<TOTAL){
-        profile.current_step=step+1;
-        await persist("draft");
-        setStep(step+1);
+        if(returnToSummary){
+          profile.current_step=TOTAL;
+          await persist("complete");
+          returnToSummary=false;
+          setStep(TOTAL);
+        }else{
+          profile.current_step=step+1;
+          await persist("draft");
+          setStep(step+1);
+        }
       }else{
         el("saveStatus").textContent="Sparar träningsprofil…";
+        profile.current_step=TOTAL;
         await persist("complete");
-        el("flow").style.display="none";el("footer").style.display="none";el("progressBar").style.width="100%";el("saved").classList.add("active");
+        await startGeneration();
       }
     }catch(e){
       const target=el("saveStatus");target.className="status error";target.textContent="Kunde inte spara. Försök igen.";
