@@ -555,7 +555,8 @@ class AdaptivePlanningTests(unittest.TestCase):
         )
         recipes = [row["recipe_key"] for row in result["slots"]]
         self.assertNotIn("run_threshold", recipes)
-        self.assertEqual(recipes.count("swim_aerobic_technique"), 2)
+        self.assertEqual(recipes.count("swim_aerobic_technique"), 1)
+        self.assertIn("swim_aerobic_endurance", recipes)
         self.assertIn("run_easy_distance", recipes)
         self.assertFalse(
             microcycle_guard_failures(
@@ -701,7 +702,7 @@ class AdaptivePlanningTests(unittest.TestCase):
             "end_date": "2026-10-18",
             "goal_hash": goal_hash(self.goal),
         }
-        self.assertEqual(MICRO_PLANNER_REVISION, 9)
+        self.assertEqual(MICRO_PLANNER_REVISION, 10)
         stale_micro = {
             "planner_revision": 6,
             "week_start": "2026-09-28",
