@@ -914,6 +914,35 @@ class AdaptivePlanningTests(unittest.TestCase):
         )
         self.assertTrue(any("direkt intill MTB/XC" in item for item in failures))
 
+    def test_mesocycle_profile_hash_must_match_activation_boundary(self):
+        from adaptive_planner import mesocycle_is_valid
+
+        decision = {
+            "schema_version": 1,
+            "planner_revision": 6,
+            "goal_hash": goal_hash(self.goal),
+            "athlete_profile_hash": "a" * 64,
+            "start_date": "2026-10-05",
+            "end_date": "2026-11-01",
+            "primary_capabilities": ["run_threshold"],
+        }
+        self.assertTrue(
+            mesocycle_is_valid(
+                decision, self.goal, date(2026, 10, 5), "a" * 64
+            )
+        )
+        self.assertFalse(
+            mesocycle_is_valid(
+                decision, self.goal, date(2026, 10, 5), None
+            )
+        )
+        decision["athlete_profile_hash"] = None
+        self.assertTrue(
+            mesocycle_is_valid(
+                decision, self.goal, date(2026, 10, 5), None
+            )
+        )
+
     def test_profile_contract_keeps_declared_inputs_separate(self):
         profile = {
             "schema_version": 1,
