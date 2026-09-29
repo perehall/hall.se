@@ -77,6 +77,11 @@ class AthleteProfileSqlTests(unittest.TestCase):
         self.assertIn("active_state = v_request.starting_state_snapshot", self.starting_state_sql)
         self.assertIn("active_starting_state_revision", self.starting_state_sql)
 
+    def test_non_default_athlete_generation_fails_closed_until_runtime_is_tenant_scoped(self):
+        self.assertIn("multi_athlete_runtime_not_ready", self.starting_state_sql)
+        self.assertIn("v_profile.is_planning_default", self.starting_state_sql)
+        self.assertIn("single-athlete bridge", self.starting_state_sql)
+
     def test_frequency_contract_is_explicit(self):
         self.assertIn("preferred_days", self.sql)
         self.assertIn("min_days", self.sql)
