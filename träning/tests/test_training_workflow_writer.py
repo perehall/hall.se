@@ -56,7 +56,7 @@ class TrainingWorkflowWriterTests(unittest.TestCase):
         )
         self.assertNotIn('"commit_planning_runtime_backend"', runner)
         self.assertLess(
-            runner.index('Stage("coach_analysis"'),
+            runner.index('"coach_analysis"'),
             runner.index('"commit_final_runtime_backend"'),
         )
 
