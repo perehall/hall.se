@@ -415,6 +415,7 @@ async function handleAthletePlanGenerationRequest(request, env, fetchImpl) {
 
   const event = {
     request_id: requestId,
+    profile_revision: generation.profile_revision,
     event_key: "athlete-plan:" + requestId,
     source: "athlete-profile-v1",
   };
