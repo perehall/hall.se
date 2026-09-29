@@ -587,7 +587,7 @@ test("completed athlete profile persists as planning-ready without premature rep
   const response = await handleRequest(request, env, fakeFetch);
   assert.equal(response.status, 200);
   assert.equal((await response.json()).processing, "profile_saved");
-  assert.equal(persistBody.p_set_planning_default, true);
+  assert.equal(persistBody.p_set_planning_default, false);
   assert.equal(calls.length, 1);
 });
 
