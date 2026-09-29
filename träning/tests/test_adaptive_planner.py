@@ -435,6 +435,55 @@ class AdaptivePlanningTests(unittest.TestCase):
         self.assertEqual(relation, "hold")
         self.assertIn("absorberad nivå 3200", evidence)
 
+    def test_missing_feedback_is_demonstrated_not_tolerated(self):
+        activities = {
+            "activities": [
+                {
+                    "id": 104,
+                    "start_date_local": "2026-09-10T18:00:00",
+                    "sport_type": "Swim",
+                    "classification": "training",
+                    "elapsed_time_s": 3550,
+                    "distance_m": 3200,
+                    "user_report": "Bra kontroll. RPE 6/10. Känsla: Pigg.",
+                },
+                {
+                    "id": 105,
+                    "start_date_local": "2026-09-17T18:00:00",
+                    "sport_type": "Swim",
+                    "classification": "training",
+                    "elapsed_time_s": 3560,
+                    "distance_m": 3200,
+                    "user_report": "God kontroll. RPE 6/10. Känsla: Kunde gjort mer.",
+                },
+                {
+                    "id": 106,
+                    "start_date_local": "2026-09-24T18:00:00",
+                    "sport_type": "Swim",
+                    "classification": "training",
+                    "elapsed_time_s": 4700,
+                    "distance_m": 4000,
+                    "user_report": None,
+                },
+            ]
+        }
+        state = build_state(activities, {"entries": []}, today=date(2026, 9, 29))
+        profile = state["dose_response"]["by_capability"]["swim_aerobic"]
+        self.assertEqual(profile["demonstrated_value"], 4000.0)
+        self.assertEqual(profile["tolerated_value"], 3200.0)
+        self.assertEqual(profile["absorbed_value"], 3200.0)
+        self.assertEqual(profile["latest_exposure"]["response_status"], "demonstrated")
+        self.assertFalse(profile["progression_ready"])
+
+        recipe = self.catalog["recipes"]["swim_aerobic_endurance"]
+        selected, floor, _, relation, evidence = choose_option(
+            "swim_aerobic_endurance", recipe, "progress", state
+        )
+        self.assertEqual(floor["id"], "swim-aerobic-endurance-3200")
+        self.assertEqual(selected["id"], "swim-aerobic-endurance-3200")
+        self.assertEqual(relation, "hold")
+        self.assertIn("absorberad nivå 3200", evidence)
+
     def test_repeated_supportive_threshold_response_becomes_absorbed(self):
         activities = {
             "activities": [
