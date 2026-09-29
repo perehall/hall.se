@@ -415,26 +415,20 @@ test("athlete profile draft is persisted without triggering replanning", async (
   assert.equal(body.p_set_planning_default, false);
 });
 
-test("completed athlete profile persists before a privacy-minimal replan dispatch", async () => {
+test("completed athlete profile persists as planning-ready without premature replan", async () => {
   const calls = [];
   let persistBody;
-  let dispatchBody;
-  const background = [];
   const fakeFetch = async (url, init) => {
     calls.push(url);
-    if (url.includes("training_upsert_athlete_profile")) {
-      persistBody = JSON.parse(init.body);
-      return new Response(JSON.stringify({
-        status: "saved",
-        revision: 3,
-        profile_status: "complete",
-        planning_default: true,
-      }), { status: 200, headers: { "content-type": "application/json" } });
-    }
-    dispatchBody = JSON.parse(init.body);
-    return new Response(null, { status: 204 });
+    assert.equal(url, "https://example.supabase.co/rest/v1/rpc/training_upsert_athlete_profile");
+    persistBody = JSON.parse(init.body);
+    return new Response(JSON.stringify({
+      status: "saved",
+      revision: 3,
+      profile_status: "complete",
+      planning_default: true,
+    }), { status: 200, headers: { "content-type": "application/json" } });
   };
-  const ctx = { waitUntil(promise) { background.push(promise); } };
   const request = new Request("https://xn--hll-qla.se/träning/training-api/profile", {
     method: "PUT",
     headers: {
@@ -460,17 +454,11 @@ test("completed athlete profile persists before a privacy-minimal replan dispatc
       coach_autonomy: "week_auto",
     }),
   });
-  const response = await handleRequest(request, env, fakeFetch, ctx);
+  const response = await handleRequest(request, env, fakeFetch);
   assert.equal(response.status, 200);
-  assert.equal((await response.json()).processing, "queued");
+  assert.equal((await response.json()).processing, "profile_saved");
   assert.equal(persistBody.p_set_planning_default, true);
-  assert.equal(background.length, 1);
-  await background[0];
-  assert.equal(dispatchBody.event_type, "athlete-profile-event");
-  assert.deepEqual(Object.keys(dispatchBody.client_payload).sort(), [
-    "event_key", "profile_status", "source", "submitted_at",
-  ]);
-  assert.match(dispatchBody.client_payload.event_key, /^athlete-profile:/);
+  assert.equal(calls.length, 1);
 });
 
 test("athlete profile can be resumed from durable persistence", async () => {
