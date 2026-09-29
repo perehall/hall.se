@@ -12,6 +12,7 @@ sys.path.insert(0, str(SCRIPTS))
 
 from adaptive_planner import (  # noqa: E402
     MICRO_PLANNER_REVISION,
+    build_upcoming_strategy_after_active_replan,
     choose_option,
     completed_context_signature,
     completed_microcycle_context,
@@ -66,6 +67,85 @@ class AdaptivePlanningTests(unittest.TestCase):
         encoded = json.dumps(schema, sort_keys=True)
         self.assertNotIn("uniqueItems", encoded)
         self.assertIn('"goal_contributions"', encoded)
+
+    def test_active_replan_builds_upcoming_week_with_its_own_empty_completed_context(self):
+        meso = json.loads(
+            (ROOT / "data" / "mesocycle_decision.json").read_text(encoding="utf-8")
+        )
+        # This unit test deliberately omits the persisted athlete-profile/start-state
+        # documents. Keep the mesocycle authority consistent with that fixture;
+        # production passes the actual hashes on both sides.
+        meso["athlete_profile_hash"] = None
+        meso["starting_state_hash"] = None
+        athlete_state = {
+            "recent_sessions": [
+                {
+                    "id": "threshold-current",
+                    "date": "2026-09-29",
+                    "family": "run",
+                    "classification": "training",
+                },
+                {
+                    "id": "strength-current",
+                    "date": "2026-09-28",
+                    "family": "strength",
+                    "classification": "training",
+                },
+            ],
+            "capability_facts": {
+                "run_threshold": {
+                    "evidence": [
+                        {
+                            "activity_id": "threshold-current",
+                            "date": "2026-09-29",
+                            "work_minutes": 32,
+                        }
+                    ]
+                },
+                "strength_unilateral": {
+                    "evidence": [
+                        {
+                            "activity_id": "strength-current",
+                            "date": "2026-09-28",
+                        }
+                    ]
+                },
+            },
+            "dose_response": {},
+        }
+
+        def fail_model(_body):
+            raise RuntimeError("offline test")
+
+        future_strategy, trace = build_upcoming_strategy_after_active_replan(
+            goal=self.goal,
+            policy=self.policy,
+            meso=meso,
+            catalog=self.catalog,
+            athlete_state=athlete_state,
+            target_start=date(2026, 9, 28),
+            goal_runtime_source={"source": "json_fallback"},
+            request_fn=fail_model,
+        )
+
+        self.assertIsNotNone(future_strategy)
+        self.assertEqual(trace["week_start"], "2026-10-05")
+        self.assertEqual(trace["completed_context"]["activity_refs"], [])
+        self.assertEqual(trace["completed_context"]["direct_capabilities"], [])
+        self.assertEqual(trace["completed_context"]["planning_credits"], [])
+        protected = future_strategy["current_mesocycle"]["capacity_protection"]
+        self.assertEqual(protected["completed_current_microcycle"], [])
+
+        recipes = {
+            row["recipe_key"]
+            for row in future_strategy["current_mesocycle"]["microcycle_template"]
+        }
+        self.assertIn("run_threshold", recipes)
+        self.assertIn("strength_core", recipes)
+        self.assertTrue(
+            {"swim_aerobic_technique", "swim_aerobic_endurance", "swim_aerobic_threshold"}
+            & recipes
+        )
 
     def test_active_mesocycle_targets_upcoming_week_not_current_copy(self):
         plan = {

@@ -2834,6 +2834,113 @@ def reconcile_unaffected_future_workouts(
     return reconciled
 
 
+def build_target_microcycle(
+    *,
+    meso,
+    goal,
+    policy,
+    catalog,
+    athlete_state,
+    target_start,
+    athlete_profile=None,
+    starting_state=None,
+    existing_micro=None,
+    request_fn=None,
+):
+    """Resolve one microcycle against only that week's completed context.
+
+    Completed training is week-scoped. A live-week replan must never carry its
+    completed capabilities into the next microcycle merely because both weeks
+    belong to the same mesocycle.
+    """
+    completed_context = completed_microcycle_context(athlete_state, target_start)
+    source_payload = build_microcycle_source_payload(
+        meso,
+        goal,
+        policy,
+        catalog,
+        athlete_state,
+        target_start,
+        athlete_profile=athlete_profile,
+        starting_state=starting_state,
+        completed_context=completed_context,
+    )
+    source_hash_value = canonical_hash(source_payload)
+    if microcycle_is_valid(
+        existing_micro or {},
+        meso,
+        target_start,
+        source_hash_value,
+    ):
+        return deepcopy(existing_micro), completed_context, False
+
+    decision = generate_microcycle(
+        meso,
+        goal,
+        policy,
+        catalog,
+        athlete_state,
+        target_start,
+        athlete_profile=athlete_profile,
+        starting_state=starting_state,
+        request_fn=request_fn,
+    )
+    return decision, completed_context, True
+
+
+def build_upcoming_strategy_after_active_replan(
+    *,
+    goal,
+    policy,
+    meso,
+    catalog,
+    athlete_state,
+    target_start,
+    goal_runtime_source,
+    athlete_profile=None,
+    starting_state=None,
+    request_fn=None,
+):
+    """Build the next week from its own microcycle decision, never the live one."""
+    next_start = target_start + timedelta(days=7)
+    if not mesocycle_is_valid(
+        meso,
+        goal,
+        next_start,
+        athlete_profile_hash(athlete_profile),
+        athlete_starting_state_hash(starting_state),
+    ):
+        return None, None
+
+    future_micro, future_completed, _ = build_target_microcycle(
+        meso=meso,
+        goal=goal,
+        policy=policy,
+        catalog=catalog,
+        athlete_state=athlete_state,
+        target_start=next_start,
+        athlete_profile=athlete_profile,
+        starting_state=starting_state,
+        existing_micro=None,
+        request_fn=request_fn,
+    )
+    future_strategy = materialize_strategy(
+        goal,
+        policy,
+        meso,
+        future_micro,
+        catalog,
+        athlete_state,
+        goal_runtime_source=goal_runtime_source,
+        starting_state=starting_state,
+    )
+    return future_strategy, {
+        "week_start": next_start.isoformat(),
+        "completed_context": future_completed,
+        "microcycle": future_micro,
+    }
+
+
 def rebuild_calendar(
     plan,
     strategy,
@@ -2842,6 +2949,7 @@ def rebuild_calendar(
     *,
     today=None,
     completed_context=None,
+    upcoming_strategy=None,
 ):
     if active_replan:
         source = previous_archived_plan(target_start)
@@ -2861,7 +2969,10 @@ def rebuild_calendar(
                 today=today,
                 completed_context=completed_context,
             )
-        upcoming = build_mesocycle_next_week(rebuilt, strategy)
+        upcoming = build_mesocycle_next_week(
+            rebuilt,
+            upcoming_strategy or strategy,
+        )
         write_json(PLAN_FILE, rebuilt)
         write_json(UPCOMING_FILE, upcoming)
         return "active_and_upcoming"
@@ -2981,31 +3092,19 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
         write_json(MESO_FILE, meso)
         append_decision_log("mesocycle", meso)
 
-    completed_context = completed_microcycle_context(athlete_state, target_start)
-    micro_source_payload = build_microcycle_source_payload(
-        meso,
-        goal,
-        policy,
-        catalog,
-        athlete_state,
-        target_start,
+    micro, completed_context, micro_changed = build_target_microcycle(
+        meso=meso,
+        goal=goal,
+        policy=policy,
+        catalog=catalog,
+        athlete_state=athlete_state,
+        target_start=target_start,
         athlete_profile=athlete_profile,
         starting_state=starting_state,
-        completed_context=completed_context,
+        existing_micro=micro,
+        request_fn=micro_request_fn,
     )
-    micro_digest = canonical_hash(micro_source_payload)
-    if not microcycle_is_valid(micro, meso, target_start, micro_digest):
-        micro = generate_microcycle(
-            meso,
-            goal,
-            policy,
-            catalog,
-            athlete_state,
-            target_start,
-            athlete_profile=athlete_profile,
-            starting_state=starting_state,
-            request_fn=micro_request_fn,
-        )
+    if micro_changed:
         write_json(MICRO_FILE, micro)
         append_decision_log("microcycle", micro)
 
@@ -3020,6 +3119,27 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
         starting_state=starting_state,
     )
     write_json(STRATEGY_FILE, strategy)
+
+    upcoming_strategy = None
+    if active_replan:
+        upcoming_strategy, upcoming_trace = build_upcoming_strategy_after_active_replan(
+            goal=goal,
+            policy=policy,
+            meso=meso,
+            catalog=catalog,
+            athlete_state=athlete_state,
+            target_start=target_start,
+            goal_runtime_source=goal_runtime_source,
+            athlete_profile=athlete_profile,
+            starting_state=starting_state,
+            request_fn=micro_request_fn,
+        )
+        if upcoming_trace is not None:
+            append_decision_log(
+                "upcoming_microcycle",
+                upcoming_trace["microcycle"],
+            )
+
     scope = rebuild_calendar(
         plan,
         strategy,
@@ -3027,6 +3147,7 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
         active_replan,
         today=today,
         completed_context=current_completed_context,
+        upcoming_strategy=upcoming_strategy,
     )
 
     print(
