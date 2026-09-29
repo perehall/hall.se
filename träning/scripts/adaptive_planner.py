@@ -1801,7 +1801,11 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
                     "repair_error": str(exc)[:400],
                     "result": "fallback",
                 }
-                raw = fallback_microcycle(meso, policy, catalog, target_start, completed_context=completed_context)
+                raw = fallback_microcycle(
+                    meso, policy, catalog, target_start,
+                    completed_context=completed_context,
+                    athlete_profile=athlete_profile,
+                )
 
     normalized, model_valid = validate_and_normalize_micro(
         raw, meso, policy, catalog, target_start,
@@ -2421,6 +2425,27 @@ def rebuild_calendar(plan, strategy, target_start, active_replan):
 
 def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
     goal, goal_runtime_source = load_goal_for_planner(GOAL_FILE)
+    athlete_profile, athlete_profile_source = load_athlete_profile_for_planner()
+    profile_hash_value = athlete_profile_hash(athlete_profile)
+    explicit_profile_generation = (
+        str(os.environ.get("ATHLETE_PROFILE_PLAN_REQUEST") or "").strip().lower() == "true"
+    )
+    expected_profile_revision = str(
+        os.environ.get("ATHLETE_PROFILE_EXPECTED_REVISION") or ""
+    ).strip()
+    if explicit_profile_generation and not athlete_profile:
+        raise RuntimeError(
+            "Adaptive planering: explicit profilgenerering kräver en komplett beständigt sparad atletprofil"
+        )
+    if (
+        explicit_profile_generation
+        and expected_profile_revision
+        and str(athlete_profile_source.get("revision") or "") != expected_profile_revision
+    ):
+        raise RuntimeError(
+            "Adaptive planering: atletprofilen ändrades efter genereringsbegäran; skapa planen igen från aktuell profil"
+        )
+
     policy = load_json(POLICY_FILE, {})
     catalog = load_json(CATALOG_FILE, {})
     athlete_state = load_json(ATHLETE_STATE_FILE, {})
@@ -2440,13 +2465,14 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
         plan, upcoming, meso, today, goal=goal, microcycle_decision=micro
     )
 
-    if not mesocycle_is_valid(meso, goal, target_start):
+    if not mesocycle_is_valid(meso, goal, target_start, profile_hash_value):
         meso = generate_mesocycle(
             goal,
             policy,
             athlete_state,
             previous_mesocycle(current_strategy),
             target_start,
+            athlete_profile=athlete_profile,
             request_fn=meso_request_fn,
         )
         write_json(MESO_FILE, meso)
@@ -2455,6 +2481,8 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
     completed_context = completed_microcycle_context(athlete_state, target_start)
     micro_source_payload = {
         "week_start": target_start.isoformat(),
+        "declared_athlete_profile": planner_profile_view(athlete_profile),
+        "declared_profile_contract": profile_planning_contract(athlete_profile) if athlete_profile else {},
         "completed_microcycle_context": completed_context,
         "competition_context": build_competition_context(
             goal,
@@ -2478,6 +2506,7 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
             for key, value in catalog["recipes"].items()
         },
         "fixed_enduro_day_1": is_enduro_school_date(target_start),
+        "athlete_profile_hash": profile_hash_value,
     }
     micro_digest = canonical_hash(micro_source_payload)
     if not microcycle_is_valid(micro, meso, target_start, micro_digest):
@@ -2488,6 +2517,7 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
             catalog,
             athlete_state,
             target_start,
+            athlete_profile=athlete_profile,
             request_fn=micro_request_fn,
         )
         write_json(MICRO_FILE, micro)
@@ -2510,6 +2540,8 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
         f"mesocycle={meso['id']} source={meso['source']} "
         f"microcycle={micro['week_key']} source={micro['source']} "
         f"goal_source={goal_runtime_source['source']} "
+        f"profile_source={athlete_profile_source.get('source')} "
+        f"profile_revision={athlete_profile_source.get('revision')} "
         f"calendar={scope}."
     )
     return 0
