@@ -1683,10 +1683,22 @@ def microcycle_guard_failures(result, meso, policy, catalog, target_start, compl
 
     max_run_quality = int(policy["microcycle_policy"].get("max_run_quality_exposures", 2))
     completed_run_quality = len(completed_direct.intersection({"run_threshold", "run_hill_quality"}))
-    total_run_quality = completed_run_quality + run_quality
+    # A future fixed Enduro session is real but as-yet unobserved lower-body load.
+    # Reserve one quality-capacity slot until that session has actually happened.
+    # Once completed, the near-term planner can use the observed outcome instead
+    # of permanently treating Enduro as equivalent to a run-quality workout.
+    future_fixed_enduro_reserve = (
+        1
+        if fixed_enduro and int(completed_context.get("enduro_exposures") or 0) == 0
+        else 0
+    )
+    total_run_quality = completed_run_quality + run_quality + future_fixed_enduro_reserve
     if total_run_quality > max_run_quality:
         failures.append(
-            f"för många löpkvalitetsexponeringar inklusive faktiskt genomförda: {total_run_quality} > {max_run_quality}"
+            "för hög förhandskoncentration av benkvalitet: "
+            f"{completed_run_quality + run_quality} löpkvalitet + "
+            f"{future_fixed_enduro_reserve} reserverad fast enduro > {max_run_quality}. "
+            "Framtida enduro ska räknas som verklig belastning tills utfallet är känt."
         )
 
     return failures
