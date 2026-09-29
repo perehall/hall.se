@@ -286,7 +286,7 @@ def build_dose_response(sessions, evidence, *, today):
         for row in rows:
             repeated = _comparable_count(rows, row["dose_value"]) >= 2
             direct = row["direct_response"]["signal"]
-            recovery = row["recovery_context_24_72h"]["signal"]
+            recovery = row["recovery_context_24_72h"]
 
             if direct == "caution":
                 status = "caution"
