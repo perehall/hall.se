@@ -223,8 +223,8 @@
       "dose_open": false,
       "auto_coach": {
         "action": "reduce",
-        "reason": "Flera senaste dagars benbelastning + genomfört löppass ersätter planerad lågmekanisk simexponering som riskerar att lägga onödig total belastning.",
-        "applied_at_utc": "2026-09-29T17:09:10.795067+00:00"
+        "reason": "Flera benbelastande aktiviteter senaste 48–72 h och avvikelse från plan motiverar konservativ hantering av dagens planerade simning.",
+        "applied_at_utc": "2026-09-29T17:20:29.243688+00:00"
       },
       "recipe_key": "swim_aerobic_technique",
       "block_intent": "establish",
@@ -554,7 +554,7 @@
         "technical"
       ],
       "microcycle_slot": "swim_aerobic_technique_1",
-      "coach_adjustment": "Skala ned passet. Byt dagens planerade simning (3 200 m) mot aktiv återhämtning: lätt sim 1 200–1 500 m eller 30–40 min mycket lätt teknikfokus; inga hårda set. Håll intensitet mycket låg och prioritera rörlighet och teknik.",
+      "coach_adjustment": "Skala ned passet. Skala ner dagens planerade simning till en reducerad teknik/aerob session: välj dose_option swim-3200 men håll intensiteten lugn och kapa eventuella extra tekniska sprintar; eller flytta huvudserien till nästa godkända simdag om du känner trötta ben. Övervaka subjektiv benkänsla morgon 2026-09-30 och rapportera innan återställning till full dos.",
       "development_step": {
         "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från verifierad träningsrespons, bekräftat startläge eller konservativ katalogbas utan att höja flera belastningsvariabler samtidigt.",
         "relation": "hold",
@@ -597,9 +597,9 @@
         "status": "synced",
         "transport": "intervals_icu",
         "source_hash": "8823720772feaa90f87477a0a0839c160b4a14fd61ca3333ff3a74a4c9925344",
-        "updated_at_utc": "2026-09-29T17:09:12.492868+00:00",
+        "updated_at_utc": "2026-09-29T17:20:30.081882+00:00",
         "device_delivery": "unverified",
-        "verified_at_utc": "2026-09-29T17:09:12.492868+00:00",
+        "verified_at_utc": "2026-09-29T17:20:30.081882+00:00",
         "provider_event_id": 140014351
       },
       "block_intent": "establish",
@@ -1418,9 +1418,9 @@
         "status": "synced",
         "transport": "intervals_icu",
         "source_hash": "06d94eed631d6037f578283b9fce27e8530dcfb04204bea214c6447063d4b3f2",
-        "updated_at_utc": "2026-09-29T17:09:12.682233+00:00",
+        "updated_at_utc": "2026-09-29T17:20:30.261716+00:00",
         "device_delivery": "unverified",
-        "verified_at_utc": "2026-09-29T17:09:12.682233+00:00",
+        "verified_at_utc": "2026-09-29T17:20:30.261716+00:00",
         "provider_event_id": 140014352
       },
       "block_intent": "establish",

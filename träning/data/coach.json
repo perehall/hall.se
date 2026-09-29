@@ -7,17 +7,17 @@
           "Löpning: 13,14 km · 1:02:35 · 112 m+ · snittpuls 146,1 · maxpuls 162.",
           "Planerat simpass 3200 m; genomfört 13135.4 m."
         ],
-        "summary": "13.1 km kontrollerad löptur med snittpuls 146 och upprepade ~4:15–4:23/km 1 km-segment mot slutet indikerar kapacitet att hålla snabbare fart i delar av passet.",
+        "summary": "13.1 km kontrollerad löpning med stegvis snabbare 1-km-avsnitt mot slutet; passet visar god genomförbarhet men avvikelse från planerad simning idag.",
         "unknowns": [
-          "Subjektiv känsla efter passet saknas i användarrapporten och kan förändra återhämtningsbedömningen",
-          "Detaljer om terräng/progression i dagens löpning (t.ex. backar) saknas och påverkar mekanisk belastningsbedömning"
+          "Subjektiv återhämtning/benstatus efter dagens pass (user_report saknas)",
+          "Exakt avsikt/intensitet för dagens snabba km (struktur ej klassificerad som intervaller)"
         ],
         "confidence": "medium",
         "interpretations": [
-          "Passet visar att du kunde genomföra delar i högre fart än snittet — användbart för löpkapacitet men ersätter inte planerad teknisk simexponering.",
-          "Eftersom veckans faktiska närbelastning redan innehåller flera benbelastande pass, riskerar ett nytt benkrävande kvalitetspass imorgon att skapa ackumulerad lokal belastning om inget anpassas."
+          "Passet bekräftar att du kunde genomföra längre löpning och sekvenser av snabbare km—det är en genomförbar kvalitetsindikator för löpningen för dagen",
+          "Med flera benbelastande sessioner senaste 48–72 h och ett högre ansträngningssimpass (RPE8) två dagar tidigare är det rimligt att vara konservativ med morgondagens simdos eller dess timing"
         ],
-        "load_interpretation": "Senaste 3 dagars fönster visar flera dagars träning (enduro, styrka, terränglöpning) så dagens löpning lägger ytterligare ben- och kardiovaskulär belastning som bör vägas mot planerad simning imorgon."
+        "load_interpretation": "Långvarigt löppass följt av två tidigare enduro-/styrkepass senaste 48–72 h; potentiell ackumulering av benbelastning finns att beakta inför planerad simning i morgon."
       },
       "auto_apply": {
         "note": "Konservativ ändring applicerad på 2026-09-29: reduce.",
@@ -26,16 +26,16 @@
       "activity_id": 20381137043,
       "plan_action": {
         "action": "reduce",
-        "reason": "Flera senaste dagars benbelastning + genomfört löppass ersätter planerad lågmekanisk simexponering som riskerar att lägga onödig total belastning.",
+        "reason": "Flera benbelastande aktiviteter senaste 48–72 h och avvikelse från plan motiverar konservativ hantering av dagens planerade simning.",
         "target_date": "2026-09-29",
         "dose_option_id": "",
-        "recommendation": "Byt dagens planerade simning (3 200 m) mot aktiv återhämtning: lätt sim 1 200–1 500 m eller 30–40 min mycket lätt teknikfokus; inga hårda set. Håll intensitet mycket låg och prioritera rörlighet och teknik.",
+        "recommendation": "Skala ner dagens planerade simning till en reducerad teknik/aerob session: välj dose_option swim-3200 men håll intensiteten lugn och kapa eventuella extra tekniska sprintar; eller flytta huvudserien till nästa godkända simdag om du känner trötta ben. Övervaka subjektiv benkänsla morgon 2026-09-30 och rapportera innan återställning till full dos.",
         "requires_approval": false,
         "target_workout_key": "20260928-run_threshold-swim_aerobic-swim_technique:mc1:2026-09-29:swim_aerobic_technique_1"
       },
       "activity_date": "2026-09-29",
       "activity_name": "Löpning på eftermiddagen",
-      "generated_at_utc": "2026-09-29T17:09:10.797202+00:00",
+      "generated_at_utc": "2026-09-29T17:20:29.245778+00:00",
       "analysis_contract": {
         "pipeline_version": 4,
         "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
@@ -1370,9 +1370,9 @@
       "performance_protocol_key": null
     }
   ],
-  "last_run_utc": "2026-09-29T17:09:10.797202+00:00",
+  "last_run_utc": "2026-09-29T17:20:29.245778+00:00",
   "contract_version": 16,
-  "last_trigger_hash": "2e44bb2e894b312f31fa2f6aa4f37c6b61de2111dacddae1f53ee3f2a5832aab",
+  "last_trigger_hash": "65fb482e96b07cd86aec84a6ad0d1e292f0edc23540e387510e79e2ff30e9013",
   "analysed_activity_ids": [
     "20367593813",
     "20350203020",
