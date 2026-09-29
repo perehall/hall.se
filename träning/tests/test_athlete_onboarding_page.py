@@ -33,6 +33,14 @@ class AthleteOnboardingPageTests(unittest.TestCase):
         self.assertIn('await persistStartingState("confirmed")', self.page)
         self.assertIn('profile.status==="complete"&&startingState.status!=="confirmed"', self.page)
 
+    def test_observed_starting_state_shows_capacity_markers_not_only_volume(self):
+        self.assertIn("Observerade kapacitetsmarkörer", self.page)
+        self.assertIn("Löptröskel", self.page)
+        self.assertIn("Längsta lugna löpning", self.page)
+        self.assertIn("längsta observerade pass", self.page)
+        self.assertIn("absorberad", self.page)
+        self.assertIn("tolererad", self.page)
+
     def test_manual_starting_state_has_sport_specific_fields(self):
         for marker in (
             "Ungefär km/vecka",
