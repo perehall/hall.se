@@ -716,9 +716,12 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
   async function load(){
     populateDaySelects();
     try{
-      const response=await fetch(API,{headers:{"accept":"application/json"}});
-      if(response.ok){
-        const body=await response.json();
+      const [profileResponse,startingResponse]=await Promise.all([
+        fetch(API,{headers:{"accept":"application/json"}}),
+        fetch(STARTING_STATE_API,{headers:{"accept":"application/json"}})
+      ]);
+      if(profileResponse.ok){
+        const body=await profileResponse.json();
         if(body.status==="found"&&body.profile){
           profile=Object.assign(emptyProfile(),body.profile);
           profile.preferences=Object.assign(emptyProfile().preferences,body.profile.preferences||{});
@@ -726,10 +729,23 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
           profile.constraints=Object.assign(emptyProfile().constraints,body.profile.constraints||{});
           profile.availability=Object.assign(emptyProfile().availability,body.profile.availability||{});
           step=Math.max(0,Math.min(TOTAL,Number(profile.current_step)||0));
-          if(profile.status==="complete") step=TOTAL;
+          if(profile.status==="complete")step=TOTAL;
         }
       }
-    }catch(e){console.warn("Profile resume unavailable",e)}
+      if(startingResponse.ok){
+        const body=await startingResponse.json();
+        observedCandidate=body.observed_candidate||null;
+        if(body.status==="found"&&body.starting_state){
+          startingState=Object.assign(emptyStartingState(),body.starting_state);
+          startingState.manual_state=Object.assign(emptyStartingState().manual_state,body.starting_state.manual_state||{});
+          startingState.manual_state.disciplines=Object.assign({},(body.starting_state.manual_state||{}).disciplines||{});
+          startingState.confirmation=Object.assign(emptyStartingState().confirmation,body.starting_state.confirmation||{});
+        }else if(observedCandidate){
+          startingState.source_mode="observed";
+        }
+      }
+      if(profile.status==="complete"&&startingState.status!=="confirmed")step=2;
+    }catch(e){console.warn("Onboarding resume unavailable",e)}
     hydrateControls();setStep(step);
   }
 
@@ -742,12 +758,13 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
   });
   el("addGoal").addEventListener("click",()=>{readGoals();if(profile.goals.length<8){profile.goals.push({text:"",target_date:null,importance:"equal"});renderGoals()}});
   el("goalList").addEventListener("click",e=>{if(e.target.matches(".icon-button")){readGoals();const i=Number(e.target.closest(".goal-item").dataset.goal);profile.goals.splice(i,1);renderGoals()}});
-  el("backBtn").addEventListener("click",()=>{collect();setStep(step-1)});
+  el("backBtn").addEventListener("click",()=>{collect();if(step===2)collectStartingState();setStep(step-1)});
   el("nextBtn").addEventListener("click",async()=>{
     if(!validateCurrent())return;
     el("nextBtn").disabled=true;el("saveStatus").className="status";el("saveStatus").textContent="";
     try{
       if(step<TOTAL){
+        if(step===2)await persistStartingState("confirmed");
         if(returnToSummary){
           profile.current_step=TOTAL;
           await persist("complete");
@@ -759,9 +776,10 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
           setStep(step+1);
         }
       }else{
-        el("saveStatus").textContent="Sparar träningsprofil…";
+        el("saveStatus").textContent="Sparar träningsprofil och startläge…";
         profile.current_step=TOTAL;
         await persist("complete");
+        if(startingState.status!=="confirmed")await persistStartingState("confirmed");
         await startGeneration();
       }
     }catch(e){
