@@ -123,7 +123,107 @@
     "missing_protected_capabilities": [
       "strength_unilateral",
       "strength_core"
-    ]
+    ],
+    "reconciliation_contract": {
+      "version": 1,
+      "week_start": "2026-09-28",
+      "origin_intents": [
+        {
+          "intent_id": "2026-09-29:swim_aerobic_technique_1:1",
+          "date": "2026-09-29",
+          "sport": "swim",
+          "recipe_key": "swim_aerobic_technique",
+          "microcycle_slot": "swim_aerobic_technique_1",
+          "stimuli": [
+            "swim_aerobic",
+            "swim_technique"
+          ]
+        },
+        {
+          "intent_id": "2026-09-30:run_threshold_2:2",
+          "date": "2026-09-30",
+          "sport": "run",
+          "recipe_key": "run_threshold",
+          "microcycle_slot": "run_threshold_2",
+          "stimuli": [
+            "run_threshold"
+          ]
+        },
+        {
+          "intent_id": "2026-10-01:swim_aerobic_endurance_3:3",
+          "date": "2026-10-01",
+          "sport": "swim",
+          "recipe_key": "swim_aerobic_endurance",
+          "microcycle_slot": "swim_aerobic_endurance_3",
+          "stimuli": [
+            "swim_aerobic",
+            "swim_technique"
+          ]
+        },
+        {
+          "intent_id": "2026-10-04:run_easy_distance_4:4",
+          "date": "2026-10-04",
+          "sport": "run",
+          "recipe_key": "run_easy_distance",
+          "microcycle_slot": "run_easy_distance_4",
+          "stimuli": [
+            "run_easy_distance"
+          ]
+        }
+      ],
+      "completed_context_signature": "",
+      "fulfilled_intents": [],
+      "remaining_intents": [
+        {
+          "intent_id": "2026-09-29:swim_aerobic_technique_1:1",
+          "date": "2026-09-29",
+          "sport": "swim",
+          "recipe_key": "swim_aerobic_technique",
+          "microcycle_slot": "swim_aerobic_technique_1",
+          "stimuli": [
+            "swim_aerobic",
+            "swim_technique"
+          ]
+        },
+        {
+          "intent_id": "2026-09-30:run_threshold_2:2",
+          "date": "2026-09-30",
+          "sport": "run",
+          "recipe_key": "run_threshold",
+          "microcycle_slot": "run_threshold_2",
+          "stimuli": [
+            "run_threshold"
+          ]
+        },
+        {
+          "intent_id": "2026-10-01:swim_aerobic_endurance_3:3",
+          "date": "2026-10-01",
+          "sport": "swim",
+          "recipe_key": "swim_aerobic_endurance",
+          "microcycle_slot": "swim_aerobic_endurance_3",
+          "stimuli": [
+            "swim_aerobic",
+            "swim_technique"
+          ]
+        },
+        {
+          "intent_id": "2026-10-04:run_easy_distance_4:4",
+          "date": "2026-10-04",
+          "sport": "run",
+          "recipe_key": "run_easy_distance",
+          "microcycle_slot": "run_easy_distance_4",
+          "stimuli": [
+            "run_easy_distance"
+          ]
+        }
+      ],
+      "allowed_recipe_keys": [],
+      "slot_count_min": 0,
+      "slot_count_max": 4,
+      "force_reconcile": true,
+      "needs_replan": true,
+      "principle": "Omplanering får flytta eller ersätta kvarvarande intentioner men får inte öka antalet fysiska pass bara för att ett stimulus genomfördes tidigare än planerat."
+    }
   },
   "schema_version": 3,
   "planned_workouts": [
