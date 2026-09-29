@@ -72,6 +72,11 @@ class AdaptivePlanningTests(unittest.TestCase):
         meso = json.loads(
             (ROOT / "data" / "mesocycle_decision.json").read_text(encoding="utf-8")
         )
+        # This unit test deliberately omits the persisted athlete-profile/start-state
+        # documents. Keep the mesocycle authority consistent with that fixture;
+        # production passes the actual hashes on both sides.
+        meso["athlete_profile_hash"] = None
+        meso["starting_state_hash"] = None
         athlete_state = {
             "recent_sessions": [
                 {
