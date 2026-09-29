@@ -68,6 +68,7 @@ class AthleteProfileSqlTests(unittest.TestCase):
         self.assertIn("presentation threshold", self.starting_state_sql)
         self.assertIn("not a physiological", self.starting_state_sql)
         self.assertIn("observed_starting_state_requires_confirmation", self.starting_state_sql)
+        self.assertIn("v_state->'load_windows'->'windows'->'recent_28d'", self.starting_state_sql)
 
     def test_generation_freezes_profile_and_starting_state_together(self):
         self.assertIn("starting_state_revision bigint", self.starting_state_sql)
