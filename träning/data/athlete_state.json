@@ -927,65 +927,46 @@
               "window_complete": true,
               "causal_interpretation": "not_inferred"
             }
+          },
+          {
+            "date": "2026-09-29",
+            "metric": "work_minutes",
+            "dose_value": 32.0,
+            "activity_id": 20381137043,
+            "direct_response": {
+              "signal": "neutral",
+              "rpe_values": [],
+              "caution_terms": [],
+              "supportive_terms": []
+            },
+            "response_status": "tolerated",
+            "repeat_supported": true,
+            "recovery_context_24_72h": {
+              "signal": "unobserved",
+              "observations": [],
+              "window_complete": false,
+              "causal_interpretation": "not_inferred"
+            }
           }
         ],
         "absorbed_value": 32.0,
         "latest_exposure": {
-          "date": "2026-09-22",
+          "date": "2026-09-29",
           "metric": "work_minutes",
           "dose_value": 32.0,
-          "activity_id": 20284663236,
+          "activity_id": 20381137043,
           "direct_response": {
-            "signal": "supportive",
-            "rpe_values": [
-              6.0
-            ],
+            "signal": "neutral",
+            "rpe_values": [],
             "caution_terms": [],
-            "supportive_terms": [
-              "kunde gjort mer",
-              "riktigt bra",
-              "god kontroll",
-              "kände mig stark",
-              "stark"
-            ]
+            "supportive_terms": []
           },
-          "response_status": "absorbed",
+          "response_status": "tolerated",
           "repeat_supported": true,
           "recovery_context_24_72h": {
-            "signal": "supportive",
-            "observations": [
-              {
-                "date": "2026-09-23",
-                "family": "swim",
-                "signal": "supportive",
-                "activity_id": 20300494236,
-                "caution_terms": [],
-                "supportive_terms": [
-                  "kunde gjort mer"
-                ]
-              },
-              {
-                "date": "2026-09-24",
-                "family": "bike",
-                "signal": "supportive",
-                "activity_id": 20314473143,
-                "caution_terms": [],
-                "supportive_terms": [
-                  "pigg"
-                ]
-              },
-              {
-                "date": "2026-09-25",
-                "family": "run",
-                "signal": "supportive",
-                "activity_id": 20326850936,
-                "caution_terms": [],
-                "supportive_terms": [
-                  "pigg"
-                ]
-              }
-            ],
-            "window_complete": true,
+            "signal": "unobserved",
+            "observations": [],
+            "window_complete": false,
             "causal_interpretation": "not_inferred"
           }
         },
@@ -1329,6 +1310,26 @@
         "metric": "duration_minutes",
         "exposures": [
           {
+            "date": "2026-08-28",
+            "metric": "duration_minutes",
+            "dose_value": 50.6,
+            "activity_id": 19939732259,
+            "direct_response": {
+              "signal": "unknown",
+              "rpe_values": [],
+              "caution_terms": [],
+              "supportive_terms": []
+            },
+            "response_status": "demonstrated",
+            "repeat_supported": true,
+            "recovery_context_24_72h": {
+              "signal": "unobserved",
+              "observations": [],
+              "window_complete": true,
+              "causal_interpretation": "not_inferred"
+            }
+          },
+          {
             "date": "2026-08-30",
             "metric": "duration_minutes",
             "dose_value": 103.23,
@@ -1437,7 +1438,7 @@
               "supportive_terms": []
             },
             "response_status": "demonstrated",
-            "repeat_supported": true,
+            "repeat_supported": false,
             "recovery_context_24_72h": {
               "signal": "supportive",
               "observations": [
@@ -1564,45 +1565,52 @@
               "window_complete": false,
               "causal_interpretation": "not_inferred"
             }
-          },
-          {
-            "date": "2026-09-29",
-            "metric": "duration_minutes",
-            "dose_value": 62.58,
-            "activity_id": 20381137043,
-            "direct_response": {
-              "signal": "unknown",
-              "rpe_values": [],
-              "caution_terms": [],
-              "supportive_terms": []
-            },
-            "response_status": "demonstrated",
-            "repeat_supported": true,
-            "recovery_context_24_72h": {
-              "signal": "unobserved",
-              "observations": [],
-              "window_complete": false,
-              "causal_interpretation": "not_inferred"
-            }
           }
         ],
         "absorbed_value": 116.0,
         "latest_exposure": {
-          "date": "2026-09-29",
+          "date": "2026-09-27",
           "metric": "duration_minutes",
-          "dose_value": 62.58,
-          "activity_id": 20381137043,
+          "dose_value": 80.07,
+          "activity_id": 20350203020,
           "direct_response": {
-            "signal": "unknown",
-            "rpe_values": [],
-            "caution_terms": [],
+            "signal": "caution",
+            "rpe_values": [
+              4.0
+            ],
+            "caution_terms": [
+              "väldigt sliten",
+              "sliten",
+              "tunga ben"
+            ],
             "supportive_terms": []
           },
-          "response_status": "demonstrated",
+          "response_status": "caution",
           "repeat_supported": true,
           "recovery_context_24_72h": {
-            "signal": "unobserved",
-            "observations": [],
+            "signal": "supportive",
+            "observations": [
+              {
+                "date": "2026-09-28",
+                "family": "enduro",
+                "signal": "supportive",
+                "activity_id": 20367593813,
+                "caution_terms": [],
+                "supportive_terms": [
+                  "pigg"
+                ]
+              },
+              {
+                "date": "2026-09-28",
+                "family": "strength",
+                "signal": "supportive",
+                "activity_id": 20368346174,
+                "caution_terms": [],
+                "supportive_terms": [
+                  "pigg"
+                ]
+              }
+            ],
             "window_complete": false,
             "causal_interpretation": "not_inferred"
           }
@@ -1610,7 +1618,7 @@
         "tolerated_value": 116.0,
         "progression_ready": false,
         "demonstrated_value": 119.77,
-        "progression_reason": "Senaste jämförbara exponeringen är genomförd men saknar återkoppling; tystnad räknas inte som tolerans."
+        "progression_reason": "Senaste jämförbara exponeringen innehåller en explicit varningssignal från användaren."
       },
       "strength_unilateral": {
         "metric": "duration_minutes",
@@ -2132,10 +2140,10 @@
     {
       "id": 20381137043,
       "date": "2026-09-29",
-      "label": "Run",
+      "label": "Löpning · 4 × 8 min",
       "family": "run",
       "distance_m": 13135.4,
-      "user_report": null,
+      "user_report": "Spontant löppass: 4 × 8 min / 90 s joggvila. Samma 4 × 8/90-struktur som veckans planerade kontrollerade löptröskel.",
       "max_heartrate": 162.0,
       "classification": "training",
       "elapsed_time_s": 3755,
@@ -2187,6 +2195,15 @@
           "protocol": "4x8min",
           "capability": "run_threshold",
           "activity_id": 20284663236,
+          "work_minutes": 32.0
+        },
+        {
+          "date": "2026-09-29",
+          "kind": "explicit_user_report",
+          "text": "Spontant löppass: 4 × 8 min / 90 s joggvila. Samma 4 × 8/90-struktur som veckans planerade kontrollerade löptröskel.",
+          "protocol": "4x8min",
+          "capability": "run_threshold",
+          "activity_id": 20381137043,
           "work_minutes": 32.0
         }
       ]
@@ -2265,7 +2282,7 @@
       }
     }
   },
-  "generated_at_utc": "2026-09-29T17:20:01.445944+00:00",
+  "generated_at_utc": "2026-09-29T18:35:14.893763+00:00",
   "recent_week_reviews": [
     {
       "summary": "Veckan innehöll konsekvent träning med fokus på löpkvalitet (tröskel och backintervaller) kompletterat av simning, MTB/Enduro och ett styrkepass; alla planerade löppass genomfördes och ett styrkepass flyttades/utelämnades i planutfallet.",

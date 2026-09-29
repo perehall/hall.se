@@ -1,10 +1,10 @@
 {
-  "last_sync_utc": "2026-09-29T17:17:42.014460+00:00",
+  "last_sync_utc": "2026-09-29T18:33:23.912397+00:00",
   "schema_version": 2,
   "activity_semantics": {
     "changed_ids": [],
     "schema_version": 1,
-    "overrides_applied": 22,
+    "overrides_applied": 23,
     "auto_rules_applied": 11,
     "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
     "override_ids_present": [
@@ -29,7 +29,8 @@
       "20337767421",
       "20350203020",
       "20367593813",
-      "20368346174"
+      "20368346174",
+      "20381137043"
     ],
     "workout_analysis_contract_version": 3
   },
@@ -52,12 +53,17 @@
       "sport_type": "Run",
       "start_date": "2026-09-29T15:58:24Z",
       "device_name": "Garmin Forerunner 970",
+      "user_report": "Spontant löppass: 4 × 8 min / 90 s joggvila. Samma 4 × 8/90-struktur som veckans planerade kontrollerade löptröskel.",
       "average_watts": 287.5,
+      "display_label": "Löpning · 4 × 8 min",
       "max_heartrate": 162.0,
       "moving_time_s": 3755,
+      "classification": "training",
       "elapsed_time_s": 3755,
       "start_date_local": "2026-09-29T17:58:24Z",
       "average_heartrate": 146.1,
+      "source_sport_type": "Run",
+      "classification_reason": "Användarbekräftad spontan 4 × 8 min / 90 s-löpning. Strukturen motsvarar veckans planerade kontrollerade tröskelstimulus och ska behandlas som faktisk belastning före fortsatt planering.",
       "total_elevation_gain_m": 112.0,
       "weighted_average_watts": 291,
       "workout_analysis_context": {
@@ -156,9 +162,9 @@
         "enduro": null,
         "sport_type": "Run",
         "activity_id": 20381137043,
-        "user_report": "",
-        "display_label": "Run",
-        "classification": null,
+        "user_report": "Spontant löppass: 4 × 8 min / 90 s joggvila. Samma 4 × 8/90-struktur som veckans planerade kontrollerade löptröskel.",
+        "display_label": "Löpning · 4 × 8 min",
+        "classification": "training",
         "contract_version": 3,
         "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806"
       },

@@ -4,38 +4,38 @@
       "model": "gpt-5-mini",
       "assessment": {
         "facts": [
-          "Löpning: 13,14 km · 1:02:35 · 112 m+ · snittpuls 146,1 · maxpuls 162.",
-          "Planerat simpass 3200 m; genomfört 13135.4 m."
+          "Löpning · 4 × 8 min: 13,14 km · 1:02:35 · 112 m+ · snittpuls 146,1 · maxpuls 162.",
+          "Användarrapport: Spontant löppass: 4 × 8 min / 90 s joggvila. Samma 4 × 8/90-struktur som veckans planerade kontrollerade löptröskel."
         ],
-        "summary": "13.1 km kontrollerad löpning med stegvis snabbare 1-km-avsnitt mot slutet; passet visar god genomförbarhet men avvikelse från planerad simning idag.",
+        "summary": "Genomfört spontant 4×8 min med 90 s joggvila; passet följde användarrapportens struktur och visar kontrollerad prestation med stigande puls i senare 1‑km lappar.",
         "unknowns": [
-          "Subjektiv återhämtning/benstatus efter dagens pass (user_report saknas)",
-          "Exakt avsikt/intensitet för dagens snabba km (struktur ej klassificerad som intervaller)"
+          "Subjektiv dagskänsla de kommande 24–72 h",
+          "Detaljerad intensitet per 8‑min intervall (effekt/zonskalning saknas)"
         ],
         "confidence": "medium",
         "interpretations": [
-          "Passet bekräftar att du kunde genomföra längre löpning och sekvenser av snabbare km—det är en genomförbar kvalitetsindikator för löpningen för dagen",
-          "Med flera benbelastande sessioner senaste 48–72 h och ett högre ansträngningssimpass (RPE8) två dagar tidigare är det rimligt att vara konservativ med morgondagens simdos eller dess timing"
+          "Passet bekräftar att 4×8/90‑struktur kan genomföras idag utan uppenbar oförmåga; senare repetitioner hade högre pulsnivå vilket indikerar tröskelnära arbete eller accelererande ansträngning.",
+          "Givet föregående 48–72 h belastning (enduro, simning med RPE8, terränglöpning, styrka) bör normalplansskydd (nästa simpass 2026‑09‑30) bevaras om inte subjek­tiva varningssignaler uppstår inom 24–72 h."
         ],
-        "load_interpretation": "Långvarigt löppass följt av två tidigare enduro-/styrkepass senaste 48–72 h; potentiell ackumulering av benbelastning finns att beakta inför planerad simning i morgon."
+        "load_interpretation": "Full återhämtning från dagens pass är ännu inte verifierad."
       },
       "auto_apply": {
-        "note": "Konservativ ändring applicerad på 2026-09-29: reduce.",
-        "applied": true
+        "note": "Ingen automatisk planändring.",
+        "applied": false
       },
       "activity_id": 20381137043,
       "plan_action": {
-        "action": "reduce",
-        "reason": "Flera benbelastande aktiviteter senaste 48–72 h och avvikelse från plan motiverar konservativ hantering av dagens planerade simning.",
-        "target_date": "2026-09-29",
+        "action": "keep",
+        "reason": "Passet visar genomförbar 4×8‑struktur utan tydliga omedelbara varningssignaler och simpasset är anchor i mikrocykeln.",
+        "target_date": "2026-09-30",
         "dose_option_id": "",
-        "recommendation": "Skala ner dagens planerade simning till en reducerad teknik/aerob session: välj dose_option swim-3200 men håll intensiteten lugn och kapa eventuella extra tekniska sprintar; eller flytta huvudserien till nästa godkända simdag om du känner trötta ben. Övervaka subjektiv benkänsla morgon 2026-09-30 och rapportera innan återställning till full dos.",
+        "recommendation": "Behåll planerad simning 2026‑09‑30 (Simning · 3 200 m · aerob/teknik). Följ egen återhämtningsrapport; om trötthet eller oförmåga uppstår inom 24–72 h, be om omprövning.",
         "requires_approval": false,
-        "target_workout_key": "20260928-run_threshold-swim_aerobic-swim_technique:mc1:2026-09-29:swim_aerobic_technique_1"
+        "target_workout_key": "20260928-run_threshold-swim_aerobic-swim_technique:mc1:2026-09-30:swim_aerobic_technique_1"
       },
       "activity_date": "2026-09-29",
       "activity_name": "Löpning på eftermiddagen",
-      "generated_at_utc": "2026-09-29T17:20:29.245778+00:00",
+      "generated_at_utc": "2026-09-29T18:38:06.307755+00:00",
       "analysis_contract": {
         "pipeline_version": 4,
         "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
@@ -1370,9 +1370,9 @@
       "performance_protocol_key": null
     }
   ],
-  "last_run_utc": "2026-09-29T17:20:29.245778+00:00",
+  "last_run_utc": "2026-09-29T18:38:06.307755+00:00",
   "contract_version": 16,
-  "last_trigger_hash": "65fb482e96b07cd86aec84a6ad0d1e292f0edc23540e387510e79e2ff30e9013",
+  "last_trigger_hash": "7ba58a11781daa6382d6773ecf9ab66d1e122ceb8637fb9791d848a97d4188a8",
   "analysed_activity_ids": [
     "20367593813",
     "20350203020",
