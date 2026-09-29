@@ -322,7 +322,8 @@
           }
         }
       ],
-      "catalog_note": "Fullt exekverbart lågmekaniskt aerob/teknik-recept. Garmin/Intervals-transporten lägger automatiskt Press LAP-setvila mellan huvudblocken."
+      "catalog_note": "Fullt exekverbart lågmekaniskt aerob/teknik-recept. Garmin/Intervals-transporten lägger automatiskt Press LAP-setvila mellan huvudblocken.",
+      "development_character": "technique_aerobic"
     },
     "strength_core": {
       "sport": "strength",
@@ -476,7 +477,98 @@
           }
         }
       ],
-      "catalog_note": "Separat etablerat kvalitetsrecept. Det får väljas när mikrocykeln behöver swim_threshold; det ska inte behandlas som nästa linjära distanssteg från swim_aerobic_technique. Garmin/Intervals-transporten lägger Press LAP-setvila mellan huvudblocken."
+      "catalog_note": "Separat etablerat kvalitetsrecept. Det får väljas när mikrocykeln behöver swim_threshold; det ska inte behandlas som nästa linjära distanssteg från swim_aerobic_technique. Garmin/Intervals-transporten lägger Press LAP-setvila mellan huvudblocken.",
+      "development_character": "controlled_threshold"
+    },
+    "swim_aerobic_endurance": {
+      "sport": "swim",
+      "stimuli": [
+        "swim_aerobic",
+        "swim_technique"
+      ],
+      "priority_role": "flex",
+      "load_dimensions": [
+        "cardiovascular",
+        "technical"
+      ],
+      "development_character": "aerobic_endurance",
+      "development_focus": "Utveckla simuthållighet genom längre sammanhängande aeroba block med stabil teknik, utan att samtidigt lägga till ett tröskelfokus.",
+      "options": [
+        {
+          "id": "swim-aerobic-endurance-3600",
+          "kind": "structured",
+          "value": 3600,
+          "session": "Simning · 3 600 m · aerob uthållighet",
+          "intent": "Konservativ alternativ passkaraktär inom redan demonstrerad totaldistans 3 200–4 000 m. Utvecklar längre aeroba block utan att höja den avsedda intensiteten.",
+          "watch_workout": {
+            "type": "Swim",
+            "equipment": [],
+            "name": "Aerob uthållighet · längre block · 3 600 m",
+            "planned_distance_m": 3600,
+            "blocks": [
+              {
+                "name": "Insim + teknik",
+                "steps": [
+                  {
+                    "kind": "swim",
+                    "text": "Lugn insim med fokus på linje och avslappning",
+                    "distance_m": 600,
+                    "intensity": "warmup",
+                    "equipment": []
+                  }
+                ]
+              },
+              {
+                "name": "Aerob uthållighet",
+                "repeat": 4,
+                "steps": [
+                  {
+                    "kind": "swim",
+                    "text": "Stabil aerob rytm och bibehållen teknik genom hela blocket",
+                    "distance_m": 600,
+                    "intensity": "active",
+                    "equipment": []
+                  },
+                  {
+                    "kind": "rest",
+                    "duration_s": 30
+                  }
+                ]
+              },
+              {
+                "name": "Teknik + frekvens",
+                "repeat": 4,
+                "steps": [
+                  {
+                    "kind": "swim",
+                    "text": "Avslappnad frekvens med stabil linje",
+                    "distance_m": 100,
+                    "intensity": "active",
+                    "equipment": []
+                  },
+                  {
+                    "kind": "rest",
+                    "duration_s": 20
+                  }
+                ]
+              },
+              {
+                "name": "Avsim",
+                "steps": [
+                  {
+                    "kind": "swim",
+                    "text": "Mycket lugnt avsim",
+                    "distance_m": 200,
+                    "intensity": "cooldown",
+                    "equipment": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "catalog_note": "Separat aerob utvecklingskaraktär. Totaldistansen ligger inom redan demonstrerad 3,2–4,0 km-nivå; receptet antar ingen ny fart, puls eller tröskel och ska inte användas som automatisk volymökning."
     }
   }
 }
