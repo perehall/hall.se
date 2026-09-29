@@ -1631,8 +1631,12 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
         target_start,
         policy.get("event_horizon_policy"),
     )
+    declared_profile = planner_profile_view(athlete_profile)
+    profile_contract = profile_planning_contract(athlete_profile) if athlete_profile else {}
     source_payload = {
         "week_start": target_start.isoformat(),
+        "declared_athlete_profile": declared_profile,
+        "declared_profile_contract": profile_contract,
         "competition_context": competition_context,
         "completed_microcycle_context": completed_context,
         "block_context": mesocycle_block_context(meso, target_start, policy),
@@ -1670,18 +1674,25 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
             "completed_direct_capabilities": list(completed_context.get("direct_capabilities") or []),
             "max_run_quality_exposures": int(policy["microcycle_policy"].get("max_run_quality_exposures", 2)),
             "slot_count_min": 4,
-            "slot_count_max": 5 if is_enduro_school_date(target_start) else 6,
+            "slot_count_max": 7,
             "day_1_blocked_by_enduro": is_enduro_school_date(target_start),
             "day_after_fixed_enduro_requires_low_leg_load": is_enduro_school_date(target_start),
             "adjacent_run_stressors_forbidden": True,
-            "at_least_one_calendar_day_without_planned_training": True,
+            "declared_unavailable_days": list(profile_contract.get("unavailable_days") or []),
+            "declared_preferred_active_days": profile_contract.get("preferred_active_days"),
+            "declared_normal_active_day_range": [
+                profile_contract.get("min_active_days"),
+                profile_contract.get("max_active_days"),
+            ],
+            "declared_double_session_preference": profile_contract.get("double_sessions"),
+            "declared_rest_day_preference": profile_contract.get("rest_days"),
             "automatic_progress_requires_absorbed_dose": True,
         },
     }
     digest = canonical_hash(source_payload)
     system = (
         "Du komponerar en sjudagars mikrocykel från ett redan fattat mesocykelbeslut. "
-        "Mesocykeln har redan vägt hela goal_set; mikrocykeln får inte omtolka A-målet som enda mål. "
+        "Mesocykeln har redan vägt hela målportföljen; mikrocykeln får inte omtolka A-målet som enda mål. declared_athlete_profile och declared_profile_contract är atletens egna uppgifter och får inte ersättas av AI-antaganden. "
         "Ett enskilt sjudagarsfönster behöver inte uttrycka varje mål eller disciplin, men det får inte systematiskt radera kapaciteter som mesocykeln håller sekundära, underhållna eller skyddade. "
         "competition_context beskriver det verifierade A-loppet och tid kvar. Den får påverka specificitet inom mesocykelns beslut men är aldrig i sig skäl att lägga till träning eller öka dos. "
         "Välj endast dag, stimulusrecept och åtgärden establish/progress/consolidate/reduce. "
@@ -1699,8 +1710,10 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
         "Planera inte om samma primära stimulus en gång till bara för att den ursprungliga kalenderdagen låg senare i veckan. "
         "Lägg inte löptröskel, backkvalitet eller lång löpdistans två dagar i rad. När dag 1 är fast enduro ska dag 2 ha låg benbelastning; "
         "lägg inte löp- eller MTB-belastning där innan faktiskt enduroutfall är känt. MTB/XC får inte ligga direkt intill löptröskel eller backkvalitet; "
-        "sekundär cykelbelastning ska utgå hellre än att kompromissa ett primärt löpstimulus. Lämna minst en kalenderdag utan planerad träning. "
-        "Flera självständiga pass får ligga samma kalenderdag när belastningsordningen motiverar det; varje slot är alltid ett eget pass. Datum är inte passidentitet. "
+        "sekundär cykelbelastning ska utgå hellre än att kompromissa ett primärt löpstimulus. "
+        "Det finns ingen generell regel om obligatorisk vilodag. Fördela redan motiverade stimuli mot atletens deklarerade frekvens och tillgänglighet utan att lägga till träning bara för att fylla en ledig dag. "
+        "Om dubbelpass bara är okej ibland ska befintliga stimuli normalt spridas till en tillgänglig tom dag innan de klustras. "
+        "Flera självständiga pass får ligga samma kalenderdag när belastningsordningen eller atletens preferens motiverar det; varje slot är alltid ett eget pass. Datum är inte passidentitet. "
         "Om swim_threshold behövs finns ett separat etablerat 4 000 m-recept; behandla det som kvalitetsrecept, inte som automatisk distansprogression från det aeroba 3 200 m-passet. "
         "Enduro dag 1 är faktisk belastning och blockerar annan planering den dagen. "
         "athlete_state.dose_response skiljer demonstrerad, tolererad och absorberad dos. Progress får bara väljas när relevant capability har progression_ready=true; "
@@ -1721,14 +1734,20 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
         )
         source = "openai"
     except Exception as exc:
-        raw = fallback_microcycle(meso, policy, catalog, target_start, completed_context=completed_context)
+        raw = fallback_microcycle(
+            meso, policy, catalog, target_start,
+            completed_context=completed_context,
+            athlete_profile=athlete_profile,
+        )
         raw["rationale"] += f" Modellbedömning saknades: {str(exc)[:220]}"
         source = "deterministic_fallback"
 
     repair_metadata = None
     if source == "openai":
         initial_failures = microcycle_guard_failures(
-            raw, meso, policy, catalog, target_start, completed_context=completed_context
+            raw, meso, policy, catalog, target_start,
+            completed_context=completed_context,
+            athlete_profile=athlete_profile,
         )
         if initial_failures:
             repair_payload = deepcopy(source_payload)
@@ -1749,7 +1768,9 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
                     request_fn=request_fn,
                 )
                 repaired_failures = microcycle_guard_failures(
-                    repaired, meso, policy, catalog, target_start, completed_context=completed_context
+                    repaired, meso, policy, catalog, target_start,
+                    completed_context=completed_context,
+                    athlete_profile=athlete_profile,
                 )
                 if not repaired_failures:
                     raw = repaired
@@ -1767,7 +1788,11 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
                         "repair_failures": repaired_failures,
                         "result": "fallback",
                     }
-                    raw = fallback_microcycle(meso, policy, catalog, target_start, completed_context=completed_context)
+                    raw = fallback_microcycle(
+                        meso, policy, catalog, target_start,
+                        completed_context=completed_context,
+                        athlete_profile=athlete_profile,
+                    )
             except Exception as exc:
                 source = "deterministic_fallback_after_repair_error"
                 repair_metadata = {
@@ -1779,13 +1804,19 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
                 raw = fallback_microcycle(meso, policy, catalog, target_start, completed_context=completed_context)
 
     normalized, model_valid = validate_and_normalize_micro(
-        raw, meso, policy, catalog, target_start, completed_context=completed_context
+        raw, meso, policy, catalog, target_start,
+        completed_context=completed_context,
+        athlete_profile=athlete_profile,
     )
     if source in {"openai", "openai_repaired"} and not model_valid:
         # Defensive backstop. A proposal accepted above must still pass the
         # normalizer used by publication.
         source = "deterministic_fallback_after_normalization_guard"
-        normalized = fallback_microcycle(meso, policy, catalog, target_start, completed_context=completed_context)
+        normalized = fallback_microcycle(
+            meso, policy, catalog, target_start,
+            completed_context=completed_context,
+            athlete_profile=athlete_profile,
+        )
         repair_metadata = repair_metadata or {
             "attempted": False,
             "result": "fallback",
@@ -1807,6 +1838,7 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
             "mesocycle_id": meso["id"],
             "competition_context": competition_context,
             "completed_microcycle_context": completed_context,
+            "athlete_profile_hash": athlete_profile_hash(athlete_profile),
         }
     )
     if repair_metadata is not None:
