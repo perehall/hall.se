@@ -4,6 +4,53 @@
       "model": "gpt-5-mini",
       "assessment": {
         "facts": [
+          "WeightTraining: 36:52 · snittpuls 80 · maxpuls 116.",
+          "Användarrapport: Palloff-press 10x3 på resp.sida , latsdrag med band 15x3, bulgarian splits 8x3, atomics med TRX, bänkrodd 12x3, dead bug, reverse plank RPE 6/10. Känsla: Pigg.",
+          "Planstatus 2026-09-28: dagen är markerad genomförd i coachens beslutsunderlag."
+        ],
+        "summary": "Kort styrke/core‑pass (≈37 min) genomfört med RPE 6/10 och subjektiv känsla 'pigg', kompletterar dagens tekniska enduro utan uppenbar negativ effekt.",
+        "unknowns": [
+          "Eventuell lokal muskeltrötthet i ben efter bulgarian splits som inte syns i data",
+          "Subjektiv återhämtning nästa morgon kan påverka simkvaliteten"
+        ],
+        "confidence": "medium",
+        "interpretations": [
+          "Passet uppfyller mesocykelns skyddade styrke/core‑stimulus och stärker neuromuskulär bas utan att tillföra betydande mekanisk benbelastning.",
+          "I kombination med dagens enduro finns ingen objektiv indikation att morgondagens planerade simning (3 200 m) behöver ändras."
+        ],
+        "load_interpretation": "Styrkepasset är lågmekanisk relativt enduron och kräver i sig ingen reducering av planerade nästkommande pass."
+      },
+      "auto_apply": {
+        "note": "Ingen automatisk planändring.",
+        "applied": false
+      },
+      "activity_id": 20368346174,
+      "plan_action": {
+        "action": "keep",
+        "reason": "Styrkepasset var kontrollerat och lågmekaniskt och dagens enduro var tekniskt/relativt låg RPE, så planerad simning kan behållas.",
+        "target_date": "2026-09-29",
+        "dose_option_id": "",
+        "recommendation": "Genomför planerad simning 3 200 m som planerat; prioritera teknisk kvalitet och håll benen mekaniskt lätta (inga tunga sprint‑ eller benslag). Om du känner oväntad lokal trötthet eller försämrad teknik morgonen efter—rapportera eller vila istället.",
+        "requires_approval": false,
+        "target_workout_key": "20260921-swim_aerobic-swim_technique-run_threshold:mc2:2026-09-29:swim_aerobic_technique_1"
+      },
+      "activity_date": "2026-09-28",
+      "activity_name": "Styrketräning på kvällen",
+      "generated_at_utc": "2026-09-29T05:34:22.191535+00:00",
+      "analysis_contract": {
+        "pipeline_version": 4,
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
+        "analysis_code_sha256": "3323209316fd3786118440b80471660165354ea9f5a4df5bc883275747d2cc5e",
+        "plan_comparison_version": 3,
+        "workout_context_version": 3
+      },
+      "performance_marker_id": null,
+      "performance_protocol_key": null
+    },
+    {
+      "model": "gpt-5-mini",
+      "assessment": {
+        "facts": [
           "Löpband · 4 × 8 min Tempo: 13,14 km · 1:02:20 · snittpuls 137,3 · maxpuls 163.",
           "Användarrapport: Löpband 4 × 8 min Tempo enligt Garmin. Sista intervallen krävde lite mental ansträngning trots att pulsen bara låg runt 162 bpm i slutet."
         ],
@@ -128,53 +175,6 @@
       "activity_date": "2026-09-26",
       "activity_name": "Enduro vid lunch",
       "generated_at_utc": "2026-09-28T20:11:09.661317+00:00",
-      "analysis_contract": {
-        "pipeline_version": 4,
-        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
-        "analysis_code_sha256": "3323209316fd3786118440b80471660165354ea9f5a4df5bc883275747d2cc5e",
-        "plan_comparison_version": 3,
-        "workout_context_version": 3
-      },
-      "performance_marker_id": null,
-      "performance_protocol_key": null
-    },
-    {
-      "model": "gpt-5-mini",
-      "assessment": {
-        "facts": [
-          "WeightTraining: 36:52 · snittpuls 80 · maxpuls 116.",
-          "Användarrapport: Palloff-press 10x3 på resp.sida , latsdrag med band 15x3, bulgarian splits 8x3, atomics med TRX, bänkrodd 12x3, dead bug, reverse plank RPE 6/10. Känsla: Pigg.",
-          "Planstatus 2026-09-28: dagen är markerad genomförd i coachens beslutsunderlag."
-        ],
-        "summary": "Genomfört 37 min styrkepass med stabil RPE 6 och subjektivt pigg känsla; kompletterar dagens tekniska enduro utan synliga problem.",
-        "unknowns": [
-          "Subjektiv bentrötthet vid uppvaknande nästa dag",
-          "Eventuell lokal muskelömhet efter bulgarian splits som kan påverka löp-/simkvalitet"
-        ],
-        "confidence": "medium",
-        "interpretations": [
-          "Passet levererade skyddad styrka/core utan hög lokal trötthet och stöder mesocykelns skyddade kapacitet.",
-          "I kombination med dagens enduro (teknikpass RPE 4) betyder detta att planerat lågmekaniskt simpass i morgon kan behållas om ingen ökande trötthet rapporteras."
-        ],
-        "load_interpretation": "Styrkepasset utgör mekanisk/neuromuskulär underhållsexponering efter eftermiddagens enduro; ingen akut reduktion av kommande simpass indikerad."
-      },
-      "auto_apply": {
-        "note": "Ingen automatisk planändring.",
-        "applied": false
-      },
-      "activity_id": 20368346174,
-      "plan_action": {
-        "action": "keep",
-        "reason": "Styrkepasset var kontrollerat och lågmekaniskt, och dagens enduro var tekniskt/av låg RPE — därför bevaras planerad lågmekanisk simning nästa dag.",
-        "target_date": "2026-09-29",
-        "dose_option_id": "",
-        "recommendation": "Behåll simningen 2026-09-29 enligt plan (3 200 m aerob/teknik). Rapportera morgondagens benkänsla vid uppvärmning; om du känner ovanlig trötthet eller ömhet, begär reducerad dos.",
-        "requires_approval": false,
-        "target_workout_key": "20260921-swim_aerobic-swim_technique-run_threshold:mc2:2026-09-29:swim_aerobic_technique_1"
-      },
-      "activity_date": "2026-09-28",
-      "activity_name": "Styrketräning på kvällen",
-      "generated_at_utc": "2026-09-28T19:52:49.318213+00:00",
       "analysis_contract": {
         "pipeline_version": 4,
         "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
@@ -1357,9 +1357,9 @@
       "performance_protocol_key": null
     }
   ],
-  "last_run_utc": "2026-09-29T01:48:48.777624+00:00",
+  "last_run_utc": "2026-09-29T05:34:22.191535+00:00",
   "contract_version": 16,
-  "last_trigger_hash": "030a6465cbcb74ad4e34505f9d0077b6d10537c49321038a3eb08ec5e5faa970",
+  "last_trigger_hash": "b876293b0ea55c1b4306f6c073d173774d18411e55be8b9536f7fe45025352e7",
   "analysed_activity_ids": [
     "20367593813",
     "20350203020",
