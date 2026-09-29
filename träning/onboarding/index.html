@@ -53,10 +53,14 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
   font-weight:620;font-size:.94rem;transition:.15s;
 }
 .choice input:checked+label{border-color:var(--accent);background:#eef6ff;color:#005bb5;box-shadow:inset 0 0 0 1px var(--accent)}
-.freq-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.freq-row{display:grid;grid-template-columns:1fr 2fr;gap:12px}
 .freq-box{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px}
 .freq-box span{display:block;color:var(--muted);font-size:.76rem;font-weight:650;margin-bottom:8px}
 .freq-box select{border:0;padding:4px 0;font-size:1.35rem;font-weight:700;background:transparent;box-shadow:none}
+.freq-range{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:end}
+.freq-range-sep{padding:0 2px 9px;color:var(--muted);font-weight:650}
+.freq-range label{display:block}
+.freq-range small{display:block;color:var(--muted);font-size:.7rem;font-weight:650;margin-bottom:4px}
 .availability{border-top:1px solid var(--line)}
 .dayrow{display:grid;grid-template-columns:120px 1fr 150px;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
 .dayname{font-weight:650}
@@ -122,12 +126,18 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
 
     <section class="step" data-step="2">
       <p class="eyebrow">2 · Frekvens</p>
-      <h1>Hur ofta vill du normalt träna?</h1>
-      <p class="lead">Det här beskriver din preferens — inte vad systemet antar att du klarar. Kapaciteten bedöms från faktisk träning och återkoppling.</p>
+      <h1>Hur många dagar per vecka vill du normalt träna?</h1>
+      <p class="lead">Ange vad du helst vill ha och vilket spann som fortfarande känns som en normal träningsvecka. Det beskriver din preferens — kapaciteten bedöms separat från faktisk träning och återkoppling.</p>
       <div class="freq-row">
-        <label class="freq-box"><span>Minst acceptabelt</span><select id="minDays"></select></label>
         <label class="freq-box"><span>Helst</span><select id="preferredDays"></select></label>
-        <label class="freq-box"><span>Som mest normalt</span><select id="maxDays"></select></label>
+        <div class="freq-box">
+          <span>Vanligt spann</span>
+          <div class="freq-range">
+            <label><small>Från</small><select id="minDays"></select></label>
+            <div class="freq-range-sep">–</div>
+            <label><small>Till</small><select id="maxDays"></select></label>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -161,9 +171,10 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
 
     <section class="step" data-step="5">
       <p class="eyebrow">5 · Verkligheten</p>
-      <h1>Vad finns redan i kalendern?</h1>
+      <h1>Vilka återkommande aktiviteter ska planen ta hänsyn till?</h1>
+      <p class="lead">Sådant som redan är en del av din normala vecka ska räknas in i belastningen, inte läggas ovanpå planen.</p>
       <div class="field"><label for="fixedCommitments">Återkommande aktiviteter</label><textarea id="fixedCommitments" placeholder="Exempel: Enduro måndagar, klubbträning onsdag kväll..."></textarea></div>
-      <span class="section-label">Vad har du normalt tillgång till?</span>
+      <span class="section-label">Vilken träningsmiljö och utrustning har du normalt tillgång till?</span>
       <div class="chips" id="facilityChips"></div>
     </section>
 
@@ -216,7 +227,7 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
     ["monday","Måndag"],["tuesday","Tisdag"],["wednesday","Onsdag"],["thursday","Torsdag"],
     ["friday","Fredag"],["saturday","Lördag"],["sunday","Söndag"]
   ];
-  const FACILITIES=[["pool","Simhall"],["gym","Gym"],["treadmill","Löpband"],["mtb","MTB"],["bike","Landsväg / gravel"],["ski","Skidor"]];
+  const FACILITIES=[["pool","Simhall"],["gym","Gym"],["treadmill","Löpband"],["mtb","MTB"],["bike","Landsväg / gravel"],["indoor_bike","Cykeltrainer / inomhuscykel"],["ski","Skidor"]];
   let step=0;
   let profile=emptyProfile();
 
@@ -344,7 +355,7 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
     if(step===1 && !profile.goals.some(goal=>goal.text.length>=3)){alert("Skriv minst ett mål.");return false}
     if(step===2){
       const f=profile.preferences.frequency;
-      if(!(f.min_days<=f.preferred_days&&f.preferred_days<=f.max_days)){alert("Välj ett intervall där min ≤ helst ≤ max.");return false}
+      if(!(f.min_days<=f.preferred_days&&f.preferred_days<=f.max_days)){alert("Välj ett vanligt spann som innehåller antalet dagar du helst vill träna.");return false}
     }
     return true;
   }
@@ -378,7 +389,7 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
     const goals=profile.goals.filter(g=>g.text).map(g=>g.text+(g.target_date?" · "+g.target_date:"")).join("\n");
     const facilities=FACILITIES.filter(([key])=>profile.preferences.facilities.includes(key)).map(([,label])=>label).join(", ")||"Inget särskilt";
     el("summary").innerHTML=[
-      ["Mål",goals],["Träningsfrekvens",`${f.preferred_days} dagar helst · ${f.min_days}–${f.max_days} acceptabelt`],
+      ["Mål",goals],["Träningsfrekvens",`Helst ${f.preferred_days} dagar · vanligt spann ${f.min_days}–${f.max_days}`],
       ["Normal tillgänglighet",formatAvailability()],["Dubbelpass",doubleLabel],["Vilodagar",restLabel],
       ["Fasta aktiviteter",profile.constraints.fixed_commitments||"Inga angivna"],["Tillgång",facilities],
       ["Coachens frihet",autoLabel],["Övriga ramar",profile.constraints.other||"Inga angivna"]
