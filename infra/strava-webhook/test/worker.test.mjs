@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 
-import { handleRequest, validateAthleteProfile, webhookPathTokenFromSecret } from "../src/worker.mjs";
+import { handleRequest, validateAthleteProfile, validateAthleteStartingState, webhookPathTokenFromSecret } from "../src/worker.mjs";
 
 const env = {
   WEBHOOK_PATH_SECRET: "path-secret",
@@ -407,6 +407,103 @@ test("blank goal placeholder is rejected for completed onboarding", () => {
   assert.equal(result.reason, "invalid_goal_text");
 });
 
+test("observed starting state requires explicit athlete confirmation", () => {
+  const invalid = validateAthleteStartingState({
+    schema_version: 1,
+    status: "confirmed",
+    source_mode: "observed",
+    manual_state: { disciplines: {} },
+    confirmation: { observed_representative: false },
+  });
+  assert.equal(invalid.ok, false);
+  assert.equal(invalid.reason, "observed_confirmation_required");
+
+  const valid = validateAthleteStartingState({
+    schema_version: 1,
+    status: "confirmed",
+    source_mode: "observed",
+    manual_state: { disciplines: {} },
+    confirmation: { observed_representative: true },
+  });
+  assert.equal(valid.ok, true);
+});
+
+test("manual starting state accepts sparse discipline facts without inventing performance", () => {
+  const result = validateAthleteStartingState({
+    schema_version: 1,
+    status: "confirmed",
+    source_mode: "manual",
+    manual_state: {
+      training_background: "some",
+      current_days_per_week: 4,
+      disciplines: {
+        run: {
+          sessions_per_week: 3,
+          weekly_distance_km: 30,
+          long_run_minutes: 80,
+          recent_result: "10 km 45:00",
+        },
+      },
+      notes: "",
+    },
+    confirmation: { observed_representative: false },
+  });
+  assert.equal(result.ok, true);
+  assert.equal(result.startingState.manual_state.disciplines.run.long_run_minutes, 80);
+});
+
+test("athlete starting state API reads observed candidate and persists confirmation", async () => {
+  let putBody;
+  const fakeFetch = async (url, init) => {
+    if (url.endsWith("/rest/v1/rpc/training_get_athlete_starting_state")) {
+      return new Response(JSON.stringify({
+        status: "not_found",
+        observed_candidate: {
+          source: "observed_training_history",
+          recent_28d: { activity_count: 20, active_days: 18, time_s: 72000 },
+        },
+      }), { status: 200, headers: { "content-type": "application/json" } });
+    }
+    assert.equal(url, "https://example.supabase.co/rest/v1/rpc/training_upsert_athlete_starting_state");
+    putBody = JSON.parse(init.body);
+    return new Response(JSON.stringify({ status: "saved", revision: 1 }), {
+      status: 200,
+      headers: { "content-type": "application/json" },
+    });
+  };
+
+  const getRequest = new Request("https://xn--hll-qla.se/träning/training-api/profile/starting-state", {
+    method: "GET",
+    headers: {
+      "cf-access-jwt-assertion": "signed-access-jwt",
+      "cf-access-authenticated-user-email": "athlete@example.com",
+    },
+  });
+  const getResponse = await handleRequest(getRequest, env, fakeFetch);
+  assert.equal(getResponse.status, 200);
+  assert.equal((await getResponse.json()).observed_candidate.recent_28d.activity_count, 20);
+
+  const putRequest = new Request("https://xn--hll-qla.se/träning/training-api/profile/starting-state", {
+    method: "PUT",
+    headers: {
+      "content-type": "application/json",
+      "cf-access-jwt-assertion": "signed-access-jwt",
+      "cf-access-authenticated-user-email": "athlete@example.com",
+    },
+    body: JSON.stringify({
+      schema_version: 1,
+      status: "confirmed",
+      source_mode: "observed",
+      manual_state: { disciplines: {} },
+      confirmation: { observed_representative: true },
+    }),
+  });
+  const putResponse = await handleRequest(putRequest, env, fakeFetch);
+  assert.equal(putResponse.status, 200);
+  assert.match(putBody.p_athlete_subject, /^access:[0-9a-f]{32}$/);
+  assert.equal(putBody.p_state.source_mode, "observed");
+});
+
 test("athlete profile draft is persisted without triggering replanning", async () => {
   const calls = [];
   let body;
@@ -490,7 +587,7 @@ test("completed athlete profile persists as planning-ready without premature rep
   const response = await handleRequest(request, env, fakeFetch);
   assert.equal(response.status, 200);
   assert.equal((await response.json()).processing, "profile_saved");
-  assert.equal(persistBody.p_set_planning_default, true);
+  assert.equal(persistBody.p_set_planning_default, false);
   assert.equal(calls.length, 1);
 });
 
@@ -537,6 +634,7 @@ test("completed athlete profile can start a durable canonical plan generation", 
         status: "queued",
         request_id: requestId,
         profile_revision: 7,
+        starting_state_revision: 3,
         created: true,
       }), { status: 200, headers: { "content-type": "application/json" } });
     }
@@ -562,6 +660,7 @@ test("completed athlete profile can start a durable canonical plan generation", 
   assert.equal(dispatchBody.event_type, "athlete-profile-plan-request");
   assert.equal(dispatchBody.client_payload.request_id, requestId);
   assert.equal(dispatchBody.client_payload.profile_revision, 7);
+  assert.equal(dispatchBody.client_payload.starting_state_revision, 3);
   assert.equal(calls.length, 2);
 });
 

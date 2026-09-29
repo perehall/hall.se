@@ -22,6 +22,7 @@ from adaptive_planner import (  # noqa: E402
     goal_runtime_source_label,
     materialize_strategy,
     mesocycle_schema,
+    mesocycle_is_valid,
     microcycle_guard_failures,
     microcycle_is_valid,
     microcycle_layout_failures,
@@ -712,6 +713,32 @@ class AdaptivePlanningTests(unittest.TestCase):
         self.assertEqual(relation, "hold")
         self.assertIn("blockeras", evidence)
 
+    def test_manual_starting_level_sets_conservative_first_dose_without_progression(self):
+        state = {"capability_facts": {}, "dose_response": {"by_capability": {}}}
+        starting_state = {
+            "schema_version": 1,
+            "status": "confirmed",
+            "source_mode": "manual",
+            "manual_state": {
+                "disciplines": {
+                    "run": {
+                        "sessions_per_week": 3,
+                        "long_run_minutes": 100,
+                    }
+                }
+            },
+            "confirmation": {"observed_representative": False},
+        }
+        recipe = self.catalog["recipes"]["run_easy_distance"]
+        selected, floor, _, relation, evidence = choose_option(
+            "run_easy_distance", recipe, "progress", state, starting_state
+        )
+        self.assertEqual(floor["id"], "run-easy-90")
+        self.assertEqual(selected["id"], "run-easy-90")
+        self.assertEqual(relation, "hold")
+        self.assertIn("startläge", evidence)
+        self.assertIn("inte som tolererad eller absorberad", evidence)
+
     def test_completed_threshold_is_credited_only_from_dated_capability_evidence(self):
         state = {
             "recent_sessions": [
@@ -940,6 +967,36 @@ class AdaptivePlanningTests(unittest.TestCase):
         self.assertTrue(
             mesocycle_is_valid(
                 decision, self.goal, date(2026, 10, 5), None
+            )
+        )
+
+    def test_starting_state_hash_invalidates_mesocycle_authority(self):
+        decision = {
+            "schema_version": 1,
+            "planner_revision": 6,
+            "goal_hash": goal_hash(self.goal),
+            "athlete_profile_hash": "a" * 64,
+            "starting_state_hash": "b" * 64,
+            "start_date": "2026-10-05",
+            "end_date": "2026-11-01",
+            "primary_capabilities": ["run_threshold"],
+        }
+        self.assertTrue(
+            mesocycle_is_valid(
+                decision,
+                self.goal,
+                date(2026, 10, 5),
+                "a" * 64,
+                "b" * 64,
+            )
+        )
+        self.assertFalse(
+            mesocycle_is_valid(
+                decision,
+                self.goal,
+                date(2026, 10, 5),
+                "a" * 64,
+                "c" * 64,
             )
         )
 

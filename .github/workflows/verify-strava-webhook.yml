@@ -48,6 +48,8 @@ jobs:
               data = json.load(fh)
           if data.get("athlete_profile_endpoint") != "/träning/training-api/profile":
               raise SystemExit(1)
+          if data.get("athlete_starting_state_endpoint") != "/träning/training-api/profile/starting-state":
+              raise SystemExit(1)
           if data.get("athlete_plan_generation_endpoint") != "/träning/training-api/profile/generate":
               raise SystemExit(1)
           if data.get("training_input_direct_persistence_configured") is not True:
@@ -89,9 +91,11 @@ jobs:
               raise SystemExit("STRAVA verify token differs between GitHub and Worker runtime")
           if data.get("athlete_profile_endpoint") != "/träning/training-api/profile":
               raise SystemExit("Worker runtime does not expose the athlete profile API")
+          if data.get("athlete_starting_state_endpoint") != "/träning/training-api/profile/starting-state":
+              raise SystemExit("Worker runtime does not expose athlete starting-state API")
           if data.get("athlete_plan_generation_endpoint") != "/träning/training-api/profile/generate":
               raise SystemExit("Worker runtime does not expose athlete plan generation API")
-          print("Worker runtime includes athlete profile + plan generation APIs and durable Supabase persistence.")
+          print("Worker runtime includes athlete profile + starting-state + plan generation APIs and durable Supabase persistence.")
           PY
 
           path_token=$(python -c 'import hashlib,os; print(hashlib.sha256(os.environ["PATH_SECRET"].strip().encode()).hexdigest()[:32])')

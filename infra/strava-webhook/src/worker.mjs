@@ -4,6 +4,7 @@ const DEFAULT_TRAINING_INPUT_EVENT_TYPE = "training-input-event";
 const DEFAULT_ATHLETE_PLAN_EVENT_TYPE = "athlete-profile-plan-request";
 const TRAINING_INPUT_PATH = "/träning/training-api/input";
 const ATHLETE_PROFILE_PATH = "/träning/training-api/profile";
+const ATHLETE_STARTING_STATE_PATH = "/träning/training-api/profile/starting-state";
 const ATHLETE_PLAN_GENERATE_PATH = "/träning/training-api/profile/generate";
 const DEFAULT_TRAINING_INPUT_HOST = "xn--hll-qla.se";
 const TRAINING_INPUT_OPERATIONS = new Set(["ADD_FEEDBACK", "UPDATE_COMPLETED_WORKOUT", "ADD_SPONTANEOUS_WORKOUT", "REPORT_PAIN", "REPORT_FATIGUE", "NATURAL_LANGUAGE"]);
@@ -14,6 +15,8 @@ const DEFAULT_SUPABASE_PROJECT_URL = "https://izzevnhgtsvffpkccoai.supabase.co";
 const TRAINING_FEEDBACK_RPC_PATH = "/rest/v1/rpc/training_submit_activity_feedback";
 const ATHLETE_PROFILE_GET_RPC_PATH = "/rest/v1/rpc/training_get_athlete_profile";
 const ATHLETE_PROFILE_UPSERT_RPC_PATH = "/rest/v1/rpc/training_upsert_athlete_profile";
+const ATHLETE_STARTING_STATE_GET_RPC_PATH = "/rest/v1/rpc/training_get_athlete_starting_state";
+const ATHLETE_STARTING_STATE_UPSERT_RPC_PATH = "/rest/v1/rpc/training_upsert_athlete_starting_state";
 const ATHLETE_PLAN_REQUEST_RPC_PATH = "/rest/v1/rpc/training_request_plan_generation";
 const ATHLETE_PLAN_GET_RPC_PATH = "/rest/v1/rpc/training_get_plan_generation";
 const ATHLETE_PLAN_STATUS_RPC_PATH = "/rest/v1/rpc/training_set_plan_generation_status";
@@ -94,7 +97,7 @@ export function validateAthleteProfile(payload) {
   if (!["draft", "complete"].includes(payload.status)) {
     return { ok: false, status: 400, reason: "invalid_profile_status" };
   }
-  if (!Number.isInteger(payload.current_step) || payload.current_step < 0 || payload.current_step > 8) {
+  if (!Number.isInteger(payload.current_step) || payload.current_step < 0 || payload.current_step > 9) {
     return { ok: false, status: 400, reason: "invalid_profile_step" };
   }
 
@@ -278,6 +281,179 @@ async function supabaseRpc(path, body, env, fetchImpl = fetch) {
   }
 }
 
+export function validateAthleteStartingState(payload) {
+  if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
+    return { ok: false, status: 400, reason: "invalid_starting_state" };
+  }
+  const allowed = new Set(["schema_version","status","source_mode","manual_state","confirmation"]);
+  if (Object.keys(payload).some((key) => !allowed.has(key))) {
+    return { ok: false, status: 400, reason: "unexpected_starting_state_fields" };
+  }
+  if (payload.schema_version !== 1) {
+    return { ok: false, status: 400, reason: "invalid_starting_state_version" };
+  }
+  if (!["draft","confirmed"].includes(payload.status)) {
+    return { ok: false, status: 400, reason: "invalid_starting_state_status" };
+  }
+  if (!["observed","manual","hybrid"].includes(payload.source_mode)) {
+    return { ok: false, status: 400, reason: "invalid_starting_state_source" };
+  }
+
+  const manual = payload.manual_state ?? {};
+  if (!manual || typeof manual !== "object" || Array.isArray(manual)) {
+    return { ok: false, status: 400, reason: "invalid_manual_starting_state" };
+  }
+  const manualKeys = new Set(["training_background","current_days_per_week","disciplines","notes"]);
+  if (Object.keys(manual).some((key) => !manualKeys.has(key))) {
+    return { ok: false, status: 400, reason: "invalid_manual_starting_state" };
+  }
+  if (manual.training_background != null &&
+      !["new","some","experienced"].includes(manual.training_background)) {
+    return { ok: false, status: 400, reason: "invalid_training_background" };
+  }
+  if (manual.current_days_per_week != null &&
+      (!Number.isInteger(manual.current_days_per_week) || manual.current_days_per_week < 0 || manual.current_days_per_week > 7)) {
+    return { ok: false, status: 400, reason: "invalid_current_training_days" };
+  }
+  if (manual.notes != null && (typeof manual.notes !== "string" || manual.notes.length > 1200)) {
+    return { ok: false, status: 400, reason: "invalid_starting_state_notes" };
+  }
+
+  const disciplines = manual.disciplines ?? {};
+  if (!disciplines || typeof disciplines !== "object" || Array.isArray(disciplines)) {
+    return { ok: false, status: 400, reason: "invalid_starting_disciplines" };
+  }
+  const allowedDisciplines = new Set(["run","swim","bike","mtb","strength","other"]);
+  for (const [key, value] of Object.entries(disciplines)) {
+    if (!allowedDisciplines.has(key) || !value || typeof value !== "object" || Array.isArray(value)) {
+      return { ok: false, status: 400, reason: "invalid_starting_discipline" };
+    }
+    const allowedFields = new Set([
+      "sessions_per_week","weekly_distance_km","typical_duration_minutes","long_run_minutes",
+      "typical_distance_m","pool_length_m","ftp_w","recent_result","level","notes"
+    ]);
+    if (Object.keys(value).some((field) => !allowedFields.has(field))) {
+      return { ok: false, status: 400, reason: "invalid_starting_discipline_field" };
+    }
+    for (const field of ["sessions_per_week","weekly_distance_km","typical_duration_minutes","long_run_minutes","typical_distance_m","pool_length_m","ftp_w"]) {
+      if (value[field] != null && (typeof value[field] !== "number" || !Number.isFinite(value[field]) || value[field] < 0 || value[field] > 100000)) {
+        return { ok: false, status: 400, reason: "invalid_starting_discipline_value" };
+      }
+    }
+    for (const field of ["recent_result","level","notes"]) {
+      if (value[field] != null && (typeof value[field] !== "string" || value[field].length > 600)) {
+        return { ok: false, status: 400, reason: "invalid_starting_discipline_text" };
+      }
+    }
+  }
+
+  const confirmation = payload.confirmation ?? {};
+  if (!confirmation || typeof confirmation !== "object" || Array.isArray(confirmation)) {
+    return { ok: false, status: 400, reason: "invalid_starting_confirmation" };
+  }
+  const confirmationKeys = new Set(["observed_representative","notes"]);
+  if (Object.keys(confirmation).some((key) => !confirmationKeys.has(key))) {
+    return { ok: false, status: 400, reason: "invalid_starting_confirmation" };
+  }
+  if (confirmation.observed_representative != null && typeof confirmation.observed_representative !== "boolean") {
+    return { ok: false, status: 400, reason: "invalid_observed_confirmation" };
+  }
+  if (confirmation.notes != null && (typeof confirmation.notes !== "string" || confirmation.notes.length > 800)) {
+    return { ok: false, status: 400, reason: "invalid_starting_confirmation_notes" };
+  }
+
+  if (payload.status === "confirmed") {
+    if (payload.source_mode === "observed" && confirmation.observed_representative !== true) {
+      return { ok: false, status: 400, reason: "observed_confirmation_required" };
+    }
+    if (payload.source_mode === "manual" && Object.keys(disciplines).length === 0 &&
+        manual.current_days_per_week == null && !String(manual.notes || "").trim()) {
+      return { ok: false, status: 400, reason: "manual_starting_state_required" };
+    }
+  }
+
+  return {
+    ok: true,
+    startingState: {
+      schema_version: 1,
+      status: payload.status,
+      source_mode: payload.source_mode,
+      manual_state: {
+        training_background: manual.training_background || null,
+        current_days_per_week: manual.current_days_per_week ?? null,
+        disciplines,
+        notes: String(manual.notes || "").trim(),
+      },
+      confirmation: {
+        observed_representative: confirmation.observed_representative === true,
+        notes: String(confirmation.notes || "").trim(),
+      },
+    },
+  };
+}
+
+async function handleAthleteStartingStateRequest(request, env, fetchImpl) {
+  const url = new URL(request.url);
+  const allowedHost = configured(env.TRAINING_INPUT_HOST)
+    ? env.TRAINING_INPUT_HOST.trim().toLowerCase()
+    : DEFAULT_TRAINING_INPUT_HOST;
+  if (url.hostname.toLowerCase() !== allowedHost) return jsonResponse({ error: "not_found" }, 404);
+  if (!accessAssertion(request)) return jsonResponse({ error: "access_required" }, 401);
+
+  const athleteSubject = await athleteSubjectFromRequest(request);
+  if (!athleteSubject) return jsonResponse({ error: "access_identity_required" }, 401);
+
+  if (request.method === "GET") {
+    try {
+      const result = await supabaseRpc(
+        ATHLETE_STARTING_STATE_GET_RPC_PATH,
+        { p_athlete_subject: athleteSubject },
+        env,
+        fetchImpl,
+      );
+      return jsonResponse(result);
+    } catch (error) {
+      console.error("ATHLETE_STARTING_STATE_READ_FAILED", String(error));
+      return jsonResponse({ error: "starting_state_read_failed" }, 503);
+    }
+  }
+
+  if (request.method !== "PUT") return jsonResponse({ error: "method_not_allowed" }, 405);
+
+  let raw;
+  try {
+    raw = await request.text();
+  } catch {
+    return jsonResponse({ error: "invalid_body" }, 400);
+  }
+  if (raw.length > 32768) return jsonResponse({ error: "payload_too_large" }, 413);
+
+  let payload;
+  try {
+    payload = JSON.parse(raw);
+  } catch {
+    return jsonResponse({ error: "invalid_json" }, 400);
+  }
+  const validation = validateAthleteStartingState(payload);
+  if (!validation.ok) return jsonResponse({ error: validation.reason }, validation.status);
+
+  try {
+    const result = await supabaseRpc(
+      ATHLETE_STARTING_STATE_UPSERT_RPC_PATH,
+      {
+        p_athlete_subject: athleteSubject,
+        p_state: validation.startingState,
+      },
+      env,
+      fetchImpl,
+    );
+    return jsonResponse(result);
+  } catch (error) {
+    console.error("ATHLETE_STARTING_STATE_SAVE_FAILED", String(error));
+    return jsonResponse({ error: "starting_state_save_failed" }, 503);
+  }
+}
+
 async function handleAthleteProfileRequest(request, env, fetchImpl, executionContext = null) {
   const url = new URL(request.url);
   const allowedHost = configured(env.TRAINING_INPUT_HOST)
@@ -330,7 +506,9 @@ async function handleAthleteProfileRequest(request, env, fetchImpl, executionCon
       {
         p_athlete_subject: athleteSubject,
         p_profile: validation.profile,
-        p_set_planning_default: validation.profile.status === "complete",
+        // Browser onboarding is per athlete. It must never promote a user to the
+        // legacy single-athlete planning_default bridge.
+        p_set_planning_default: false,
       },
       env,
       fetchImpl,
@@ -409,6 +587,7 @@ async function handleAthletePlanGenerationRequest(request, env, fetchImpl) {
       status: generation.status,
       request_id: requestId,
       profile_revision: generation.profile_revision,
+      starting_state_revision: generation.starting_state_revision,
       processing: generation.status === "running" ? "running" : "queued",
     });
   }
@@ -416,6 +595,7 @@ async function handleAthletePlanGenerationRequest(request, env, fetchImpl) {
   const event = {
     request_id: requestId,
     profile_revision: generation.profile_revision,
+    starting_state_revision: generation.starting_state_revision,
     event_key: "athlete-plan:" + requestId,
     source: "athlete-profile-v1",
   };
@@ -449,6 +629,7 @@ async function handleAthletePlanGenerationRequest(request, env, fetchImpl) {
     status: "queued",
     request_id: requestId,
     profile_revision: generation.profile_revision,
+    starting_state_revision: generation.starting_state_revision,
     processing: "queued",
   });
 }
@@ -797,6 +978,7 @@ export async function handleRequest(request, env, fetchImpl = fetch, executionCo
       training_input_direct_persistence_configured: directTrainingInputPersistenceConfigured(env),
       training_input_endpoint: TRAINING_INPUT_PATH,
       athlete_profile_endpoint: ATHLETE_PROFILE_PATH,
+      athlete_starting_state_endpoint: ATHLETE_STARTING_STATE_PATH,
       athlete_plan_generation_endpoint: ATHLETE_PLAN_GENERATE_PATH,
       webhook_path_fingerprint: await secretFingerprint(env.WEBHOOK_PATH_SECRET),
       verify_token_fingerprint: await secretFingerprint(env.STRAVA_VERIFY_TOKEN),
@@ -808,6 +990,9 @@ export async function handleRequest(request, env, fetchImpl = fetch, executionCo
   }
   if (decodeURIComponent(url.pathname) === ATHLETE_PROFILE_PATH) {
     return handleAthleteProfileRequest(request, env, fetchImpl, executionContext);
+  }
+  if (decodeURIComponent(url.pathname) === ATHLETE_STARTING_STATE_PATH) {
+    return handleAthleteStartingStateRequest(request, env, fetchImpl);
   }
   if (decodeURIComponent(url.pathname) === ATHLETE_PLAN_GENERATE_PATH) {
     return handleAthletePlanGenerationRequest(request, env, fetchImpl);
