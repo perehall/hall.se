@@ -3,12 +3,14 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 MIGRATION = ROOT / "supabase" / "migrations" / "20260929094500_athlete_onboarding_profile.sql"
+GENERATION_MIGRATION = ROOT / "supabase" / "migrations" / "20260929123000_plan_generation_requests.sql"
 
 
 class AthleteProfileSqlTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.sql = MIGRATION.read_text(encoding="utf-8").lower()
+        cls.generation_sql = GENERATION_MIGRATION.read_text(encoding="utf-8").lower()
 
     def test_profile_is_per_athlete_and_backend_only(self):
         self.assertIn("create table if not exists training.athlete_profiles", self.sql)
@@ -24,6 +26,16 @@ class AthleteProfileSqlTests(unittest.TestCase):
         self.assertIn("set search_path = ''", self.sql)
         self.assertIn("grant execute on function public.training_get_athlete_profile(text) to service_role", self.sql)
         self.assertIn("grant execute on function public.training_upsert_athlete_profile(text, jsonb, boolean) to service_role", self.sql)
+
+    def test_plan_generation_is_durable_and_backend_only(self):
+        self.assertIn("create table if not exists training.plan_generation_requests", self.generation_sql)
+        self.assertIn("profile_revision bigint not null", self.generation_sql)
+        self.assertIn("status text not null default 'queued'", self.generation_sql)
+        self.assertIn("enable row level security", self.generation_sql)
+        self.assertIn("revoke all on training.plan_generation_requests from public, anon, authenticated", self.generation_sql)
+        self.assertIn("training_request_plan_generation", self.generation_sql)
+        self.assertIn("training_get_plan_generation", self.generation_sql)
+        self.assertIn("training_set_plan_generation_status", self.generation_sql)
 
     def test_frequency_contract_is_explicit(self):
         self.assertIn("preferred_days", self.sql)
