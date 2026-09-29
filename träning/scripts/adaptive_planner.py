@@ -50,7 +50,7 @@ MODEL = os.environ.get("OPENAI_MODEL", "gpt-5-mini")
 MESO_SCHEMA_VERSION = 1
 MICRO_SCHEMA_VERSION = 1
 PLANNER_REVISION = 6
-MICRO_PLANNER_REVISION = 12
+MICRO_PLANNER_REVISION = 13
 
 CAPABILITY_TO_RECIPE = {
     "run_threshold": "run_threshold",
@@ -273,6 +273,35 @@ def mesocycle_block_context(meso, target_start, policy):
     }
 
 
+def completed_context_signature(context) -> str:
+    """Hash only factual completed-training semantics that may change planning."""
+    context = context or {}
+    capability_refs = {
+        str(capability): sorted(str(value) for value in (refs or []))
+        for capability, refs in sorted(
+            (context.get("capability_refs") or {}).items(),
+            key=lambda item: str(item[0]),
+        )
+    }
+    payload = {
+        "activity_refs": sorted(
+            str(value) for value in (context.get("activity_refs") or [])
+        ),
+        "direct_capabilities": sorted(
+            str(value) for value in (context.get("direct_capabilities") or [])
+        ),
+        "capability_refs": capability_refs,
+        "strength_exposures": int(context.get("strength_exposures") or 0),
+        "swim_exposures": int(context.get("swim_exposures") or 0),
+        "enduro_exposures": int(context.get("enduro_exposures") or 0),
+        "completed_slot_days": int(context.get("completed_slot_days") or 0),
+        "completed_day_indexes": sorted(
+            int(value) for value in (context.get("completed_day_indexes") or [])
+        ),
+    }
+    return canonical_hash(payload)
+
+
 def target_week(plan, upcoming, today):
     plan_meta = plan.get("meta") or {}
     up_meta = upcoming.get("meta") or {}
@@ -292,15 +321,23 @@ def target_week(plan, upcoming, today):
     return upcoming_start, False
 
 
-def resolve_planning_target(plan, upcoming, mesocycle_decision, today, goal=None, microcycle_decision=None):
+def resolve_planning_target(
+    plan,
+    upcoming,
+    mesocycle_decision,
+    today,
+    goal=None,
+    microcycle_decision=None,
+    current_completed_context=None,
+):
     """Choose the week the adaptive engine is allowed to plan.
 
     A generated mesocycle is authoritative for its full declared duration.
-    Once a live microcycle has started, planner/schema revisions are not allowed
-    to reshuffle that active week. Such revisions apply to the upcoming
-    microcycle; near-term coaching and explicit user input own changes inside the
-    live week. This keeps planning architecture changes from masquerading as
-    athlete-driven adaptation.
+    Planner/schema revisions alone must not reshuffle a started week. New
+    canonical training evidence is different: when completed activity evidence
+    or its interpreted capability changes inside the live week, that week is
+    deliberately reopened so the remaining stimuli can be reconciled against
+    what was actually done.
     """
     target_start, active_replan = target_week(plan, upcoming, today)
     meta = plan.get("meta") or {}
@@ -314,6 +351,33 @@ def resolve_planning_target(plan, upcoming, mesocycle_decision, today, goal=None
 
     current_id = str(meta.get("mesocycle_id") or "").strip()
     decision_id = str((mesocycle_decision or {}).get("id") or "").strip()
+
+    # A started microcycle is normally stable, but actual training is first-class
+    # state. Reopen the live week whenever the factual completed-context changes.
+    # The comparison intentionally includes capability attribution, not only
+    # activity ids, so later explicit feedback (for example "4×8 tröskel") can
+    # reclassify an already imported generic run and trigger a real replan.
+    if plan_start <= today <= plan_end and current_completed_context is not None:
+        current_context_hash = completed_context_signature(current_completed_context)
+        previous_context = (
+            (microcycle_decision or {}).get("completed_microcycle_context") or {}
+        )
+        previous_context_hash = completed_context_signature(previous_context)
+        micro_week_start = str(
+            (microcycle_decision or {}).get("week_start") or ""
+        ).strip()
+        current_has_training = bool(
+            (current_completed_context or {}).get("activity_refs")
+            or (current_completed_context or {}).get("direct_capabilities")
+            or int((current_completed_context or {}).get("strength_exposures") or 0)
+            or int((current_completed_context or {}).get("swim_exposures") or 0)
+            or int((current_completed_context or {}).get("enduro_exposures") or 0)
+        )
+        if current_has_training and (
+            micro_week_start != plan_start.isoformat()
+            or current_context_hash != previous_context_hash
+        ):
+            return plan_start, True
 
     # A canonical goal change is the explicit exception to mesocycle authority.
     # On the first day of the live microcycle we can rebuild the whole week
@@ -2636,8 +2700,26 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
         today = iso(today)
     meso = load_json(MESO_FILE, {})
     micro = load_json(MICRO_FILE, {})
+
+    current_completed_context = None
+    try:
+        live_start = iso((plan.get("meta") or {})["week_start"])
+        live_end = iso((plan.get("meta") or {})["week_end"])
+        if live_start <= today <= live_end:
+            current_completed_context = completed_microcycle_context(
+                athlete_state, live_start
+            )
+    except (KeyError, TypeError, ValueError):
+        current_completed_context = None
+
     target_start, active_replan = resolve_planning_target(
-        plan, upcoming, meso, today, goal=goal, microcycle_decision=micro
+        plan,
+        upcoming,
+        meso,
+        today,
+        goal=goal,
+        microcycle_decision=micro,
+        current_completed_context=current_completed_context,
     )
 
     if not mesocycle_is_valid(

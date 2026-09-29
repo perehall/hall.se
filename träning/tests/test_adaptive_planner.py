@@ -1096,6 +1096,143 @@ class AdaptivePlanningTests(unittest.TestCase):
         self.assertEqual(day2["recipe_key"], "swim_aerobic_technique")
         self.assertNotIn("mtb_technical", [row["recipe_key"] for row in slots])
 
+    def test_changed_completed_semantics_reopen_started_current_week(self):
+        plan = {
+            "meta": {
+                "week_start": "2026-09-28",
+                "week_end": "2026-10-04",
+                "mesocycle_id": "meso-live",
+                "microcycle_index": 1,
+                "microcycle_total": 4,
+                "requires_mesocycle_review": False,
+            }
+        }
+        upcoming = {"meta": {"week_start": "2026-10-05", "week_end": "2026-10-11"}}
+        meso = {
+            "id": "meso-live",
+            "start_date": "2026-09-28",
+            "end_date": "2026-10-25",
+            "goal_hash": goal_hash(self.goal),
+        }
+        micro = {
+            "week_start": "2026-09-28",
+            "mesocycle_id": "meso-live",
+            "completed_microcycle_context": {
+                "activity_refs": ["20381137043"],
+                "direct_capabilities": [],
+                "capability_refs": {},
+            },
+        }
+        current_context = {
+            "activity_refs": ["20381137043"],
+            "direct_capabilities": ["run_threshold"],
+            "capability_refs": {"run_threshold": ["20381137043"]},
+        }
+
+        target, active_replan = resolve_planning_target(
+            plan,
+            upcoming,
+            meso,
+            date(2026, 9, 29),
+            goal=self.goal,
+            microcycle_decision=micro,
+            current_completed_context=current_context,
+        )
+
+        self.assertEqual(target, date(2026, 9, 28))
+        self.assertTrue(active_replan)
+
+    def test_new_completed_activity_reopens_started_current_week(self):
+        plan = {
+            "meta": {
+                "week_start": "2026-09-28",
+                "week_end": "2026-10-04",
+                "mesocycle_id": "meso-live",
+                "microcycle_index": 1,
+                "microcycle_total": 4,
+                "requires_mesocycle_review": False,
+            }
+        }
+        upcoming = {"meta": {"week_start": "2026-10-05", "week_end": "2026-10-11"}}
+        meso = {
+            "id": "meso-live",
+            "start_date": "2026-09-28",
+            "end_date": "2026-10-25",
+            "goal_hash": goal_hash(self.goal),
+        }
+        micro = {
+            "week_start": "2026-09-28",
+            "mesocycle_id": "meso-live",
+            "completed_microcycle_context": {
+                "activity_refs": ["20367593813"],
+                "direct_capabilities": [],
+                "capability_refs": {},
+                "enduro_exposures": 1,
+            },
+        }
+        current_context = {
+            "activity_refs": ["20367593813", "20381137043"],
+            "direct_capabilities": [],
+            "capability_refs": {},
+            "enduro_exposures": 1,
+        }
+
+        target, active_replan = resolve_planning_target(
+            plan,
+            upcoming,
+            meso,
+            date(2026, 9, 29),
+            goal=self.goal,
+            microcycle_decision=micro,
+            current_completed_context=current_context,
+        )
+
+        self.assertEqual(target, date(2026, 9, 28))
+        self.assertTrue(active_replan)
+
+    def test_unchanged_completed_context_keeps_started_week_stable(self):
+        plan = {
+            "meta": {
+                "week_start": "2026-09-28",
+                "week_end": "2026-10-04",
+                "mesocycle_id": "meso-live",
+                "microcycle_index": 1,
+                "microcycle_total": 4,
+                "requires_mesocycle_review": False,
+            }
+        }
+        upcoming = {"meta": {"week_start": "2026-10-05", "week_end": "2026-10-11"}}
+        meso = {
+            "id": "meso-live",
+            "start_date": "2026-09-28",
+            "end_date": "2026-10-25",
+            "goal_hash": goal_hash(self.goal),
+        }
+        context = {
+            "activity_refs": ["20367593813"],
+            "direct_capabilities": [],
+            "capability_refs": {},
+            "enduro_exposures": 1,
+        }
+        micro = {
+            "week_start": "2026-09-28",
+            "mesocycle_id": "meso-live",
+            "completed_microcycle_context": context,
+        }
+
+        target, active_replan = resolve_planning_target(
+            plan,
+            upcoming,
+            meso,
+            date(2026, 9, 29),
+            goal=self.goal,
+            microcycle_decision=micro,
+            current_completed_context=context,
+        )
+
+        self.assertEqual(target, date(2026, 10, 5))
+        self.assertFalse(active_replan)
+
     def test_micro_planner_revision_does_not_rebuild_started_current_week(self):
         plan = {
             "meta": {
@@ -1114,7 +1251,7 @@ class AdaptivePlanningTests(unittest.TestCase):
             "end_date": "2026-10-18",
             "goal_hash": goal_hash(self.goal),
         }
-        self.assertEqual(MICRO_PLANNER_REVISION, 12)
+        self.assertEqual(MICRO_PLANNER_REVISION, 13)
         stale_micro = {
             "planner_revision": 6,
             "week_start": "2026-09-28",
