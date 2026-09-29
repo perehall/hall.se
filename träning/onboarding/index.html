@@ -243,7 +243,7 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
     document.querySelectorAll(".step").forEach(node=>node.classList.toggle("active",Number(node.dataset.step)===step));
     el("progressBar").style.width=((step/TOTAL)*100)+"%";
     el("backBtn").style.visibility=step===0?"hidden":"visible";
-    el("nextBtn").textContent=step===TOTAL?"Spara och bygg om planen":"Fortsätt";
+    el("nextBtn").textContent=step===TOTAL?"Spara profil":"Fortsätt";
     if(step===TOTAL) renderSummary();
     window.scrollTo({top:0,behavior:"smooth"});
   }
