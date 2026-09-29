@@ -13,6 +13,7 @@ class AthleteOnboardingPageTests(unittest.TestCase):
     def test_onboarding_has_core_declared_inputs(self):
         for text in (
             "Vad vill du få ut av din träning?",
+            "Var står du idag?",
             "Hur många dagar per vecka vill du normalt träna?",
             "När kan träningen få plats?",
             "Två pass samma dag",
@@ -22,6 +23,26 @@ class AthleteOnboardingPageTests(unittest.TestCase):
             "Så här har jag förstått dig.",
         ):
             self.assertIn(text, self.page)
+
+    def test_starting_state_is_adaptive_and_explicitly_confirmed(self):
+        self.assertIn('const STARTING_STATE_API="/träning/training-api/profile/starting-state"', self.page)
+        self.assertIn("Jag kan redan se din senaste träning", self.page)
+        self.assertIn("Ja, detta är representativt", self.page)
+        self.assertIn("Nej, jag vill beskriva nuläget själv", self.page)
+        self.assertIn("Självrapporterad nivå används bara för en konservativ första etablering", self.page)
+        self.assertIn('await persistStartingState("confirmed")', self.page)
+        self.assertIn('profile.status==="complete"&&startingState.status!=="confirmed"', self.page)
+
+    def test_manual_starting_state_has_sport_specific_fields(self):
+        for marker in (
+            "Ungefär km/vecka",
+            "Längre pass",
+            "Typisk passdistans",
+            "Bassänglängd",
+            "FTP, om känd",
+            "Terrängvana",
+        ):
+            self.assertIn(marker, self.page)
 
     def test_frequency_is_expressed_as_preferred_plus_normal_range(self):
         self.assertIn("Helst", self.page)
