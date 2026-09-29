@@ -126,6 +126,7 @@ jobs:
           TRAINING_INPUT_PAYLOAD: ${{ toJson(github.event.client_payload) }}
           TRAINING_INPUT_EVENT: ${{ github.event.action == 'training-input-event' && 'true' || 'false' }}
           ATHLETE_PROFILE_PLAN_REQUEST: ${{ github.event.action == 'athlete-profile-plan-request' && 'true' || 'false' }}
+          ATHLETE_PROFILE_PLAN_REQUEST_ID: ${{ github.event.client_payload.request_id }}
           ATHLETE_PROFILE_EXPECTED_REVISION: ${{ github.event.client_payload.profile_revision }}
         run: |
           if [ "${{ github.event.action }}" = "strava-activity-event" ]; then
@@ -216,7 +217,11 @@ jobs:
         run: echo "Training update complete; site content was unchanged, so no Pages deployment is needed."
 
       - name: Mark athlete plan generation completed
-        if: success() && github.event.action == 'athlete-profile-plan-request'
+        if: >-
+          success() &&
+          github.event.action == 'athlete-profile-plan-request' &&
+          steps.canonical_pipeline.outputs.publication == 'success' &&
+          steps.commit_changes.outputs.retry != 'true'
         env:
           SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
           PLAN_GENERATION_REQUEST_ID: ${{ github.event.client_payload.request_id }}
@@ -226,7 +231,14 @@ jobs:
             --status completed
 
       - name: Mark athlete plan generation failed
-        if: failure() && github.event.action == 'athlete-profile-plan-request'
+        if: >-
+          always() &&
+          github.event.action == 'athlete-profile-plan-request' &&
+          (
+            failure() ||
+            steps.canonical_pipeline.outputs.publication != 'success' ||
+            steps.commit_changes.outputs.retry == 'true'
+          )
         env:
           SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
           PLAN_GENERATION_REQUEST_ID: ${{ github.event.client_payload.request_id }}
