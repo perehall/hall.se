@@ -2547,35 +2547,16 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
         append_decision_log("mesocycle", meso)
 
     completed_context = completed_microcycle_context(athlete_state, target_start)
-    micro_source_payload = {
-        "week_start": target_start.isoformat(),
-        "declared_athlete_profile": planner_profile_view(athlete_profile),
-        "declared_profile_contract": profile_planning_contract(athlete_profile) if athlete_profile else {},
-        "completed_microcycle_context": completed_context,
-        "competition_context": build_competition_context(
-            goal,
-            target_start,
-            policy.get("event_horizon_policy"),
-        ),
-        "mesocycle": meso,
-        "goal": goal,
-        "goal_set": planning_goal_set(goal),
-        "multi_goal_policy": policy.get("multi_goal_policy"),
-        "microcycle_policy": policy.get("microcycle_policy"),
-        "decision_guards": policy.get("decision_guards"),
-        "athlete_state": sanitize_athlete_state(athlete_state),
-        "recipe_profiles": {
-            key: {
-                "stimuli": sorted(recipe_capabilities(value)),
-                "load_dimensions": list(value.get("load_dimensions") or []),
-                "development_focus": value.get("development_focus"),
-                "option_ids": [item.get("id") for item in (value.get("options") or [])],
-            }
-            for key, value in catalog["recipes"].items()
-        },
-        "fixed_enduro_day_1": is_enduro_school_date(target_start),
-        "athlete_profile_hash": profile_hash_value,
-    }
+    micro_source_payload = build_microcycle_source_payload(
+        meso,
+        goal,
+        policy,
+        catalog,
+        athlete_state,
+        target_start,
+        athlete_profile=athlete_profile,
+        completed_context=completed_context,
+    )
     micro_digest = canonical_hash(micro_source_payload)
     if not microcycle_is_valid(micro, meso, target_start, micro_digest):
         micro = generate_microcycle(
