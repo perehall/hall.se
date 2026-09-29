@@ -294,8 +294,12 @@ def build_dose_response(sessions, evidence, *, today):
                 status = "absorbed"
             elif direct == "supportive" and repeated and recovery == "caution":
                 status = "tolerated_with_recovery_caution"
-            else:
+            elif direct in {"supportive", "neutral"}:
                 status = "tolerated"
+            else:
+                # Silence proves only that the dose was completed. It is not
+                # evidence that the athlete tolerated or absorbed it.
+                status = "demonstrated"
 
             row["repeat_supported"] = repeated
             row["response_status"] = status
@@ -318,8 +322,7 @@ def build_dose_response(sessions, evidence, *, today):
         progression_ready = bool(
             absorbed is not None
             and latest is not None
-            and latest["direct_response"]["signal"] != "caution"
-            and latest["response_status"] != "tolerated_with_recovery_caution"
+            and latest["response_status"] in {"absorbed", "tolerated"}
             and latest["dose_value"] >= absorbed * 0.90
         )
 
@@ -327,6 +330,8 @@ def build_dose_response(sessions, evidence, *, today):
             reason = "Ingen verifierad exponering finns."
         elif latest["direct_response"]["signal"] == "caution":
             reason = "Senaste jämförbara exponeringen innehåller en explicit varningssignal från användaren."
+        elif latest["response_status"] == "demonstrated":
+            reason = "Senaste jämförbara exponeringen är genomförd men saknar återkoppling; tystnad räknas inte som tolerans."
         elif absorbed is None:
             reason = "Dos har demonstrerats/tolererats men saknar ännu upprepad stödjande respons för att klassas som absorberad."
         elif latest["response_status"] == "tolerated_with_recovery_caution":
