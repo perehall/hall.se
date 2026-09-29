@@ -31,12 +31,9 @@ def _read_from_database(
             if generation_request_id:
                 cur.execute(
                     """
-                    select p.profile, p.revision, p.updated_at
+                    select r.profile_snapshot, r.profile_revision, r.requested_at
                     from training.plan_generation_requests r
-                    join training.athlete_profiles p
-                      on p.athlete_subject = r.athlete_subject
                     where r.id = %s::uuid
-                      and p.status = 'complete'
                     limit 1
                     """,
                     (generation_request_id,),
@@ -44,10 +41,10 @@ def _read_from_database(
             else:
                 cur.execute(
                     """
-                    select profile, revision, updated_at
+                    select active_profile, active_revision, activated_at
                     from training.athlete_profiles
                     where is_planning_default
-                      and status = 'complete'
+                      and active_profile is not null
                     limit 1
                     """
                 )
@@ -93,7 +90,7 @@ def load_athlete_profile_for_planner(
             "reason": (
                 "generation_request_profile_missing"
                 if generation_request_id
-                else "complete_profile_missing"
+                else "active_profile_missing"
             ),
         }
     if payload.get("schema_version") != 1 or payload.get("status") != "complete":
@@ -107,9 +104,9 @@ def load_athlete_profile_for_planner(
         "source": "supabase_db",
         "verified": True,
         "reason": (
-            "generation_request_profile"
+            "generation_request_profile_snapshot"
             if generation_request_id
-            else "complete_profile"
+            else "active_profile"
         ),
         "revision": revision,
         "updated_at": updated_at.isoformat() if hasattr(updated_at, "isoformat") else updated_at,
