@@ -68,7 +68,7 @@ begin
     return null;
   end if;
 
-  v_recent := coalesce(v_state->'load_windows'->'recent_28d', '{}'::jsonb);
+  v_recent := coalesce(v_state->'load_windows'->'windows'->'recent_28d', '{}'::jsonb);
   v_count := coalesce((v_recent->>'activity_count')::integer, 0);
 
   -- Four recent activities is merely a presentation threshold for offering
