@@ -2016,7 +2016,7 @@ def demonstrated_value(recipe_key, athlete_state):
     return None
 
 
-def choose_option(recipe_key, recipe, action, athlete_state):
+def choose_option(recipe_key, recipe, action, athlete_state, starting_state=None):
     options = [
         item for item in recipe.get("options") or []
         if isinstance(item.get("value"), (int, float))
@@ -2040,18 +2040,32 @@ def choose_option(recipe_key, recipe, action, athlete_state):
     if trusted is None and profile is None:
         trusted = float(observed) if isinstance(observed, (int, float)) else None
 
+    starting_value = starting_state_value_for_recipe(recipe_key, starting_state)
+
     if trusted is None:
-        floor_index = 0
-        evidence = (
-            (
-                "Dose-response finns men saknar verifierad tolererad/absorberad nivå; "
-                "lägsta katalogalternativ används som konservativ etableringspunkt."
+        if isinstance(starting_value, (int, float)):
+            eligible = [
+                index for index, item in enumerate(options)
+                if float(item["value"]) <= float(starting_value) * 1.02
+            ]
+            floor_index = max(eligible) if eligible else 0
+            evidence = (
+                f"Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger "
+                f"{float(starting_value):g} i receptets dosvariabel; närmaste konservativa katalogsteg används "
+                "endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos."
             )
-            if profile is not None
-            else
-            "Ingen verifierad dosmarkör finns; lägsta katalogalternativ används som etableringspunkt, "
-            "inte som fastställd optimal dos."
-        )
+        else:
+            floor_index = 0
+            evidence = (
+                (
+                    "Dose-response finns men saknar verifierad tolererad/absorberad nivå; "
+                    "lägsta katalogalternativ används som konservativ etableringspunkt."
+                )
+                if profile is not None
+                else
+                "Ingen verifierad dosmarkör finns; lägsta katalogalternativ används som etableringspunkt, "
+                "inte som fastställd optimal dos."
+            )
     else:
         eligible = [
             index for index, item in enumerate(options)
@@ -2143,7 +2157,7 @@ def microcycle_index(meso, target_start):
     return ((target_start - start).days // 7) + 1
 
 
-def materialize_template(meso, micro, policy, catalog, athlete_state):
+def materialize_template(meso, micro, policy, catalog, athlete_state, starting_state=None):
     contract = mesocycle_contract(meso, policy)
     primary = set(contract["primary"])
     protected = set(contract["protected_capacity"])
@@ -2157,7 +2171,7 @@ def materialize_template(meso, micro, policy, catalog, athlete_state):
         recipe = catalog["recipes"][recipe_key]
         caps = recipe_capabilities(recipe)
         selected, floor, next_option, relation, evidence = choose_option(
-            recipe_key, recipe, decision["action"], athlete_state
+            recipe_key, recipe, decision["action"], athlete_state, starting_state
         )
 
         if recipe_key in SUPPORT_ONLY_RECIPES:
@@ -2205,7 +2219,16 @@ def materialize_template(meso, micro, policy, catalog, athlete_state):
                 "mode": "develop",
                 "demonstrated_floor_option_id": floor["id"],
                 "same_dose_repeat_requires_reason": True,
-                "source": "athlete_state",
+                "source": (
+                    "athlete_state"
+                    if (
+                        ((response_profile_for_recipe(recipe_key, athlete_state) or {}).get("absorbed_value") is not None)
+                        or ((response_profile_for_recipe(recipe_key, athlete_state) or {}).get("tolerated_value") is not None)
+                    )
+                    else "starting_state"
+                    if starting_state_value_for_recipe(recipe_key, starting_state) is not None
+                    else "catalog"
+                ),
                 "microcycle_plan": [
                     {
                         "microcycle": index,
@@ -2213,7 +2236,8 @@ def materialize_template(meso, micro, policy, catalog, athlete_state):
                         "relation": relation,
                         "reason": (
                             f"Mikrocykelbeslutet valde {decision['action']} och dosen materialiserades "
-                            f"från athlete_state utan att höja flera belastningsvariabler samtidigt."
+                            f"från verifierad träningsrespons, bekräftat startläge eller konservativ katalogbas "
+                            f"utan att höja flera belastningsvariabler samtidigt."
                         ),
                     }
                 ],
@@ -2328,7 +2352,7 @@ def goal_runtime_source_label(runtime_source):
     )
 
 
-def materialize_strategy(goal, policy, meso, micro, catalog, athlete_state, goal_runtime_source=None):
+def materialize_strategy(goal, policy, meso, micro, catalog, athlete_state, goal_runtime_source=None, starting_state=None):
     strategy = deepcopy(policy["strategy_base"])
     strategy["schema_version"] = int(policy["compatibility_strategy_schema_version"])
     digest = goal_hash(goal)
@@ -2367,7 +2391,7 @@ def materialize_strategy(goal, policy, meso, micro, catalog, athlete_state, goal
         ),
     }
 
-    template, contract = materialize_template(meso, micro, policy, catalog, athlete_state)
+    template, contract = materialize_template(meso, micro, policy, catalog, athlete_state, starting_state)
     required_each = [
         x for x in REQUIRED_EACH_MICROCYCLE
         if x in contract["protected_capacity"]
