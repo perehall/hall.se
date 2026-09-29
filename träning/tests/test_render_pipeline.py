@@ -75,18 +75,22 @@ class RenderPipelineTests(unittest.TestCase):
         self.assertNotIn("run_legacy_parity_pipeline", source)
         self.assertNotIn("publish_v2_preview", source)
         self.assertIn("publish_v2_current_page()", source)
+        self.assertIn("publish_v2_upcoming_page()", source)
 
-    def test_production_main_publishes_only_v2(self):
+    def test_production_main_publishes_current_and_upcoming_v2(self):
         import render_training_site
 
-        original_publish = render_training_site.publish_v2_current_page
+        original_current = render_training_site.publish_v2_current_page
+        original_upcoming = render_training_site.publish_v2_upcoming_page
         calls = []
         try:
-            render_training_site.publish_v2_current_page = lambda: calls.append("v2")
+            render_training_site.publish_v2_current_page = lambda: calls.append("current")
+            render_training_site.publish_v2_upcoming_page = lambda: calls.append("upcoming")
             self.assertEqual(main(), 0)
         finally:
-            render_training_site.publish_v2_current_page = original_publish
-        self.assertEqual(calls, ["v2"])
+            render_training_site.publish_v2_current_page = original_current
+            render_training_site.publish_v2_upcoming_page = original_upcoming
+        self.assertEqual(calls, ["current", "upcoming"])
 
     def test_production_renderer_uses_stockholm_calendar_date(self):
         source = (SCRIPTS / "render_training_site.py").read_text(encoding="utf-8")

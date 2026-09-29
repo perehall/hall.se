@@ -26,7 +26,7 @@ from training_core.repositories.weather import FileWeatherRepository
 ROOT = Path(__file__).resolve().parent
 
 
-def build_snapshot(today: date):
+def build_snapshot(today: date, *, current_date: date | None = None):
     repository = PostgresPresentationRepository.from_environment()
     archive_repository = ManifestWeekArchiveRepository(
         ROOT / "data" / "weeks" / "index.json"
@@ -37,6 +37,7 @@ def build_snapshot(today: date):
     snapshot = build_presentation_snapshot(
         repository,
         today=today,
+        current_date=current_date,
         archive_repository=archive_repository,
         weather_repository=weather_repository,
         context_repository=context_repository,

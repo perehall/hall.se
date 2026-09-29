@@ -53,12 +53,14 @@ def build_presentation_snapshot(
     repository: PresentationRepository,
     *,
     today: date,
+    current_date: date | None = None,
     archive_repository: WeekArchiveRepository | None = None,
     weather_repository: WeatherRepository | None = None,
     context_repository: PlanningContextRepository | None = None,
     icon_repository: SportIconRepository | None = None,
 ) -> PresentationSnapshot:
     week_start, week_end = week_bounds(today)
+    current_start, _ = week_bounds(current_date or today)
     read_end = max(week_end, today + timedelta(days=7))
     plan = repository.planned_days(week_start, read_end)
     activities = repository.completed_activities(week_start, week_end)
@@ -85,7 +87,7 @@ def build_presentation_snapshot(
         ),
         navigation=build_week_navigation(
             viewed_start=week_start,
-            current_start=week_start,
+            current_start=current_start,
             planned_days=(day.local_date for day in plan),
             published_weeks=published,
         ),

@@ -542,5 +542,21 @@ class PresentationSliceTests(unittest.TestCase):
         self.assertIn(">SMHI</a>", render_snapshot(snapshot))
 
 
+
+    def test_future_week_uses_current_week_as_navigation_anchor_and_has_no_today_card(self):
+        snapshot = build_presentation_snapshot(
+            FakeRepository(),
+            today=date(2026, 9, 28),
+            current_date=date(2026, 9, 26),
+        )
+        self.assertEqual(snapshot.navigation.state, "kommande")
+        rendered = render_snapshot(snapshot)
+        self.assertIn("· kommande", rendered)
+        self.assertIn('aria-label="Kommande veckas pass"', rendered)
+        self.assertIn('href="/träning/"', rendered)
+        self.assertIn("Simning · aerob", rendered)
+        self.assertNotIn('class="v2-today"', rendered)
+
+
 if __name__ == "__main__":
     unittest.main()
