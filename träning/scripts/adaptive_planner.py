@@ -330,6 +330,7 @@ def resolve_planning_target(
     goal=None,
     microcycle_decision=None,
     current_completed_context=None,
+    reconciliation_context=None,
 ):
     """Choose the week the adaptive engine is allowed to plan.
 
@@ -352,6 +353,13 @@ def resolve_planning_target(
 
     current_id = str(meta.get("mesocycle_id") or "").strip()
     decision_id = str((mesocycle_decision or {}).get("id") or "").strip()
+
+    if (
+        plan_start <= today <= plan_end
+        and reconciliation_context
+        and reconciliation_context.get("needs_replan") is True
+    ):
+        return plan_start, True
 
     # A started microcycle is normally stable, but actual training is first-class
     # state. Reopen the live week whenever the factual completed-context changes.
@@ -2858,21 +2866,40 @@ def previous_archived_plan(target_start):
     return plan
 
 
-def rebuild_calendar(plan, strategy, target_start, active_replan):
+def rebuild_calendar(
+    plan, strategy, target_start, active_replan, reconciliation_context=None
+):
     if active_replan:
         source = previous_archived_plan(target_start)
         if source is None:
             raise RuntimeError(
                 "Adaptive planering: aktiv övergångsvecka behöver föregående arkiverade vecka för gissningsfri återbyggnad."
             )
+        existing_upcoming = load_json(UPCOMING_FILE, {})
+        expected_upcoming_start = target_start + timedelta(days=7)
+        try:
+            existing_upcoming_start = iso((existing_upcoming.get("meta") or {})["week_start"])
+        except (KeyError, TypeError, ValueError):
+            existing_upcoming_start = None
+        if existing_upcoming_start != expected_upcoming_start:
+            raise RuntimeError(
+                "Adaptive planering: aktiv omplanering kräver en redan publicerad, sammanhängande kommande vecka; "
+                "den får inte byggas om från aktuell veckas reducerade template."
+            )
+
         preview = build_mesocycle_next_week(source, strategy)
         rebuilt = promote_upcoming(preview)
         if iso(rebuilt["meta"]["week_start"]) != target_start:
             raise RuntimeError("Adaptive planering: återbyggd aktiv vecka fick fel startdatum")
-        upcoming = build_mesocycle_next_week(rebuilt, strategy)
+        if reconciliation_context:
+            contract = deepcopy(reconciliation_context)
+            contract["needs_replan"] = False
+            contract["force_reconcile"] = False
+            rebuilt.setdefault("meta", {})["reconciliation_contract"] = contract
         write_json(PLAN_FILE, rebuilt)
-        write_json(UPCOMING_FILE, upcoming)
-        return "active_and_upcoming"
+        # Plan inertia: an active-week correction must not rewrite the already
+        # published upcoming microcycle from a reduced current-week template.
+        return "active_only_preserve_upcoming"
 
     preview = build_mesocycle_next_week(plan, strategy)
     if iso(preview["meta"]["week_start"]) != target_start:
@@ -2963,6 +2990,12 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
     except (KeyError, TypeError, ValueError):
         current_completed_context = None
 
+    live_reconciliation = None
+    if current_completed_context is not None:
+        live_reconciliation = live_reconciliation_context(
+            plan, current_completed_context, catalog, today
+        )
+
     target_start, active_replan = resolve_planning_target(
         plan,
         upcoming,
@@ -2971,6 +3004,7 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
         goal=goal,
         microcycle_decision=micro,
         current_completed_context=current_completed_context,
+        reconciliation_context=live_reconciliation,
     )
 
     if not mesocycle_is_valid(
@@ -2990,6 +3024,13 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
         append_decision_log("mesocycle", meso)
 
     completed_context = completed_microcycle_context(athlete_state, target_start)
+    active_reconciliation = (
+        live_reconciliation
+        if active_replan
+        and live_reconciliation
+        and target_start == iso((plan.get("meta") or {})["week_start"])
+        else None
+    )
     micro_source_payload = build_microcycle_source_payload(
         meso,
         goal,
@@ -3000,6 +3041,7 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
         athlete_profile=athlete_profile,
         starting_state=starting_state,
         completed_context=completed_context,
+        reconciliation_context=active_reconciliation,
     )
     micro_digest = canonical_hash(micro_source_payload)
     if not microcycle_is_valid(micro, meso, target_start, micro_digest):
@@ -3012,6 +3054,7 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
             target_start,
             athlete_profile=athlete_profile,
             starting_state=starting_state,
+            reconciliation_context=active_reconciliation,
             request_fn=micro_request_fn,
         )
         write_json(MICRO_FILE, micro)
@@ -3028,7 +3071,13 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
         starting_state=starting_state,
     )
     write_json(STRATEGY_FILE, strategy)
-    scope = rebuild_calendar(plan, strategy, target_start, active_replan)
+    scope = rebuild_calendar(
+        plan,
+        strategy,
+        target_start,
+        active_replan,
+        reconciliation_context=active_reconciliation,
+    )
 
     print(
         "Adaptive planning OK: "
