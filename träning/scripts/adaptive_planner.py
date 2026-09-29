@@ -1053,9 +1053,11 @@ def fallback_microcycle(meso, policy, catalog, target_start, completed_context=N
     completed_swims = int(completed_context.get("swim_exposures") or 0)
     completed_strength = int(completed_context.get("strength_exposures") or 0)
     completed_direct = set(completed_context.get("direct_capabilities") or [])
+    profile_contract = profile_planning_contract(athlete_profile) if athlete_profile else {}
+    allowed_profile_days = set(profile_contract.get("available_days") or range(1, 8))
     slots = []
 
-    preferred_days = {
+    recipe_day_preferences = {
         "swim_aerobic_technique": [2, 4, 6, 1, 5, 3, 7] if fixed_enduro else [1, 3, 5, 2, 4, 6, 7],
         "swim_aerobic_threshold": [2, 4, 6, 5, 3, 7] if fixed_enduro else [1, 3, 5, 2, 4, 6, 7],
         "run_threshold": [3, 4, 5, 6, 7] if fixed_enduro else [2, 3, 4, 5, 6, 7, 1],
@@ -1089,7 +1091,7 @@ def fallback_microcycle(meso, policy, catalog, target_start, completed_context=N
         if not allow_repeat and any(row["recipe_key"] == recipe for row in slots):
             return True
 
-        configured = list(preferred_days.get(recipe, range(1, 8)))
+        configured = list(recipe_day_preferences.get(recipe, range(1, 8)))
         if preferred_same_day in configured:
             configured.remove(preferred_same_day)
             configured.insert(0, preferred_same_day)
@@ -1108,10 +1110,12 @@ def fallback_microcycle(meso, policy, catalog, target_start, completed_context=N
             ]
 
         for day in candidate_days:
+            if day not in allowed_profile_days:
+                continue
             if fixed_enduro and day == 1:
                 continue
             conflicts = microcycle_layout_failures(
-                candidate_rows(day, recipe), catalog, target_start
+                candidate_rows(day, recipe), catalog, target_start, athlete_profile=athlete_profile
             )
             if conflicts:
                 continue
@@ -1217,7 +1221,11 @@ def fallback_microcycle(meso, policy, catalog, target_start, completed_context=N
             "strength_core",
             "Skydda styrka/core som ett självständigt pass; samlokalisera med simning endast när mikrocykelns belastningsordning motiverar det.",
             action="establish",
-            preferred_same_day=latest_swim_day,
+            preferred_same_day=(
+                latest_swim_day
+                if profile_contract.get("double_sessions") == "normal"
+                else None
+            ),
         )
 
     # A race-relevant easy-distance exposure is useful when it fits safely, but
@@ -1314,13 +1322,33 @@ def microcycle_layout_failures(rows, catalog, target_start, athlete_profile=None
                 )
                 break
 
+    profile_contract = profile_planning_contract(athlete_profile) if athlete_profile else {}
+    unavailable = set(profile_contract.get("unavailable_days") or [])
+    for day in sorted(set(by_day).intersection(unavailable)):
+        failures.append(
+            f"dag {day} innehåller planerad träning trots att atleten har markerat dagen som otillgänglig"
+        )
+
     occupied = set(by_day)
     if fixed_enduro:
         occupied.add(1)
-    if len(occupied) >= 7:
+
+    double_days = sorted(day for day, items in by_day.items() if len(items) > 1)
+    double_preference = profile_contract.get("double_sessions")
+    if double_days and double_preference == "avoid":
         failures.append(
-            "mikrocykeln fyller alla sju dagar trots att ledig dag aldrig är ett eget skäl att lägga till träning"
+            "dubbelpass planeras trots att atleten har valt att dubbelpass helst ska undvikas"
         )
+    elif double_days and double_preference == "sometimes":
+        available_days = set(profile_contract.get("available_days") or range(1, 8))
+        if fixed_enduro:
+            available_days.add(1)
+        unused_available = sorted(available_days - occupied)
+        if unused_available:
+            failures.append(
+                "dubbelpass klustras samtidigt som en deklarerat tillgänglig träningsdag lämnas oanvänd; "
+                "fördela befintliga stimuli innan dubbelpass används"
+            )
     return failures
 
 
@@ -1358,9 +1386,42 @@ def microcycle_guard_failures(result, meso, policy, catalog, target_start, compl
     if len(valid_rows) < minimum:
         failures.append(f"för få giltiga träningsslots: {len(valid_rows)} < {minimum}")
 
-    for failure in microcycle_layout_failures(valid_rows, catalog, target_start):
+    for failure in microcycle_layout_failures(
+        valid_rows, catalog, target_start, athlete_profile=athlete_profile
+    ):
         if failure not in failures:
             failures.append(failure)
+
+    profile_contract = profile_planning_contract(athlete_profile) if athlete_profile else {}
+    active_days = {
+        int(day)
+        for day in (completed_context.get("completed_day_indexes") or [])
+        if isinstance(day, int) and 1 <= day <= 7
+    }
+    active_days.update(row["day_index"] for row in valid_rows)
+    if fixed_enduro:
+        active_days.add(1)
+
+    min_active = profile_contract.get("min_active_days")
+    max_active = profile_contract.get("max_active_days")
+    distributable_exposures = (
+        len(valid_rows)
+        + len(set(completed_context.get("completed_day_indexes") or []))
+        + (1 if fixed_enduro else 0)
+    )
+    if isinstance(max_active, int) and len(active_days) > max_active:
+        failures.append(
+            f"planen använder {len(active_days)} aktiva dagar, över atletens deklarerade normala max {max_active}"
+        )
+    if (
+        isinstance(min_active, int)
+        and len(active_days) < min_active
+        and distributable_exposures >= min_active
+    ):
+        failures.append(
+            f"planen klustrar till {len(active_days)} aktiva dagar trots att befintliga exponeringar kan "
+            f"fördelas över atletens deklarerade normala spann från {min_active} dagar"
+        )
 
     primaries = set(meso.get("primary_capabilities") or [])
     block_context = mesocycle_block_context(meso, target_start, policy)
@@ -1513,9 +1574,14 @@ def validate_and_normalize_micro(result, meso, policy, catalog, target_start, co
         catalog,
         target_start,
         completed_context=completed_context,
+        athlete_profile=athlete_profile,
     )
     if not valid:
-        return fallback_microcycle(meso, policy, catalog, target_start, completed_context=completed_context), False
+        return fallback_microcycle(
+            meso, policy, catalog, target_start,
+            completed_context=completed_context,
+            athlete_profile=athlete_profile,
+        ), False
     return {"rationale": str(result.get("rationale") or "").strip(), "slots": sorted(cleaned, key=lambda x: x["day_index"])}, True
 
 
