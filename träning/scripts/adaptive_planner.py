@@ -173,6 +173,7 @@ def profile_planning_contract(profile):
         return int(value) if isinstance(value, int) and 1 <= value <= 7 else None
 
     return {
+        "availability_declared": bool(availability),
         "available_days": allowed_days,
         "unavailable_days": unavailable_days,
         "available_minutes": available_minutes,
@@ -1054,7 +1055,11 @@ def fallback_microcycle(meso, policy, catalog, target_start, completed_context=N
     completed_strength = int(completed_context.get("strength_exposures") or 0)
     completed_direct = set(completed_context.get("direct_capabilities") or [])
     profile_contract = profile_planning_contract(athlete_profile) if athlete_profile else {}
-    allowed_profile_days = set(profile_contract.get("available_days") or range(1, 8))
+    allowed_profile_days = (
+        set(profile_contract.get("available_days") or [])
+        if profile_contract.get("availability_declared")
+        else set(range(1, 8))
+    )
     slots = []
 
     recipe_day_preferences = {
@@ -1340,7 +1345,11 @@ def microcycle_layout_failures(rows, catalog, target_start, athlete_profile=None
             "dubbelpass planeras trots att atleten har valt att dubbelpass helst ska undvikas"
         )
     elif double_days and double_preference == "sometimes":
-        available_days = set(profile_contract.get("available_days") or range(1, 8))
+        available_days = (
+            set(profile_contract.get("available_days") or [])
+            if profile_contract.get("availability_declared")
+            else set(range(1, 8))
+        )
         if fixed_enduro:
             available_days.add(1)
         unused_available = sorted(available_days - occupied)
