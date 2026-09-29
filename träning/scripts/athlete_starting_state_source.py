@@ -42,10 +42,12 @@ def _read_starting_state(
             else:
                 cur.execute(
                     """
-                    select active_state, active_revision, activated_at
-                    from training.athlete_starting_states
-                    where active_state is not null
-                    order by activated_at desc
+                    select s.active_state, s.active_revision, s.activated_at
+                    from training.athlete_starting_states s
+                    join training.athlete_profiles p
+                      on p.athlete_subject = s.athlete_subject
+                    where p.is_planning_default
+                      and s.active_state is not null
                     limit 1
                     """
                 )
