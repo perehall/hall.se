@@ -266,7 +266,7 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
     <section class="step" data-step="9">
       <p class="eyebrow">Klart att granska</p>
       <h1>Så här har jag förstått dig.</h1>
-      <p class="lead">Det här blir coachmotorns deklarerade ramverk. Faktisk kapacitet och återhämtning kommer fortfarande från din träningsdata.</p>
+      <p class="lead">Det här blir coachmotorns utgångspunkt. Startläget används för den första etableringen; därefter får faktisk träning och återkoppling successivt större vikt.</p>
       <div id="summary" class="summary"></div>
       <div id="saveStatus" class="status" role="status"></div>
     </section>
@@ -275,7 +275,7 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
   <section id="generation" class="generation">
     <p class="eyebrow">Din plan</p>
     <h1 id="generationTitle">Skapar din träningsplan.</h1>
-    <p class="lead" id="generationLead">Profilen är sparad. Nu kör coachmotorn den kanoniska planeringen mot dina mål, ramar och faktiska träningsdata.</p>
+    <p class="lead" id="generationLead">Profil och startläge är sparade. Nu kör coachmotorn den kanoniska planeringen mot dina mål, ramar, bekräftade startläge och faktisk träningsdata.</p>
     <div class="generation-card">
       <div class="generation-state done" id="gen-profile"><span class="dot"></span><span>Träningsprofil sparad</span></div>
       <div class="generation-state active" id="gen-queued"><span class="dot"></span><span>Planeringskörning köad</span></div>
@@ -418,6 +418,55 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
     return hours>=10?hours.toFixed(1)+" h":hours.toFixed(1).replace(".0","")+" h";
   }
 
+  function formatStartingMetric(metric,value){
+    const number=Number(value);
+    if(!Number.isFinite(number))return null;
+    if(metric==="distance_m")return Math.round(number)+" m";
+    if(metric==="duration_minutes")return Math.round(number)+" min";
+    if(metric==="work_minutes")return Math.round(number)+" arbetsmin";
+    if(metric==="repetitions")return Math.round(number)+" repetitioner";
+    return String(Math.round(number*10)/10);
+  }
+
+  function startingCapabilityRows(candidate){
+    const facts=candidate.capability_facts||{};
+    const responses=candidate.dose_response||{};
+    const rows=[];
+    const add=(label,value,qualifier)=>{
+      if(value)rows.push(`<div class="starting-family"><span>${escapeHtml(label)}</span><span>${escapeHtml(value+(qualifier?" · "+qualifier:""))}</span></div>`);
+    };
+
+    const threshold=responses.run_threshold||{};
+    const thresholdValue=threshold.absorbed_value??threshold.tolerated_value;
+    if(thresholdValue!=null){
+      add("Löptröskel",formatStartingMetric(threshold.metric,thresholdValue),threshold.absorbed_value!=null?"absorberad":"tolererad");
+    }
+
+    const longRun=(facts.run_easy_distance||{}).longest_duration||{};
+    if(Number(longRun.elapsed_time_s)>0){
+      add("Längsta lugna löpning",Math.round(Number(longRun.elapsed_time_s)/60)+" min","observerad");
+    }
+
+    const swimFact=(facts.swim_aerobic||{}).longest_distance||{};
+    if(Number(swimFact.distance_m)>0){
+      add("Simning",Math.round(Number(swimFact.distance_m))+" m","längsta observerade pass");
+    }
+
+    const hill=responses.run_hill_quality||{};
+    const hillValue=hill.absorbed_value??hill.tolerated_value;
+    if(hillValue!=null){
+      add("Backkvalitet",formatStartingMetric(hill.metric,hillValue),hill.absorbed_value!=null?"absorberad":"tolererad");
+    }
+
+    const mtb=responses.mtb_technical||{};
+    const mtbValue=mtb.absorbed_value??mtb.tolerated_value;
+    if(mtbValue!=null){
+      add("MTB",formatStartingMetric(mtb.metric,mtbValue),mtb.absorbed_value!=null?"absorberad":"tolererad");
+    }
+
+    return rows.join("");
+  }
+
   function observedSummaryHtml(candidate){
     if(!candidate)return "";
     const recent=candidate.recent_28d||{};
@@ -427,15 +476,17 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
       .sort((a,b)=>Number(b[1].time_s||0)-Number(a[1].time_s||0))
       .map(([key,row])=>`<div class="starting-family"><span>${escapeHtml(FAMILY_LABELS[key]||key)}</span><span>${Number(row.activity_count||0)} pass · ${formatHours(row.time_s)}</span></div>`)
       .join("");
+    const capabilityRows=startingCapabilityRows(candidate);
     return `<div class="starting-card">
       <h2>Jag kan redan se din senaste träning</h2>
-      <p class="note" style="margin-top:0">Det här är observerade fakta från träningshistoriken, inte en bedömning av optimal belastning.</p>
+      <p class="note" style="margin-top:0">Det här är observerade fakta från träningshistoriken. De beskriver startläget men är inte en bedömning av optimal framtida belastning.</p>
       <div class="starting-metrics">
         <div class="starting-metric"><span>Senaste 28 dagar</span><strong>${Number(recent.activity_count||0)} pass</strong></div>
         <div class="starting-metric"><span>Aktiva dagar</span><strong>${Number(recent.active_days||0)}</strong></div>
         <div class="starting-metric"><span>Registrerad tid</span><strong>${formatHours(recent.time_s)}</strong></div>
       </div>
-      ${familyRows?`<div class="starting-families">${familyRows}</div>`:""}
+      ${familyRows?`<div class="section-label">Träningsfördelning</div><div class="starting-families">${familyRows}</div>`:""}
+      ${capabilityRows?`<div class="section-label" style="margin-top:16px">Observerade kapacitetsmarkörer</div><div class="starting-families">${capabilityRows}</div>`:""}
       <div class="starting-choice">
         <button type="button" id="useObserved">Ja, detta är representativt</button>
         <button type="button" id="useManual">Nej, jag vill beskriva nuläget själv</button>
@@ -547,7 +598,7 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
 
   function startingStateSummary(){
     if(startingState.source_mode==="observed"){
-      const recent=(observedCandidate||startingState.observed_snapshot||{}).recent_28d||{};
+      const recent=(startingState.observed_snapshot||observedCandidate||{}).recent_28d||{};
       return `Bekräftad från träningshistorik · ${Number(recent.activity_count||0)} pass / 28 dagar · ${Number(recent.active_days||0)} aktiva dagar`;
     }
     const disciplines=Object.keys(startingState.manual_state.disciplines||{}).map(key=>Object.fromEntries(STARTING_DISCIPLINES)[key]||key);
@@ -664,7 +715,7 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
       running.className="generation-state done";
       complete.className="generation-state done";
       el("generationTitle").textContent="Din träningsplan är klar.";
-      el("generationLead").textContent="Coachmotorn har byggt planen från din deklarerade profil och faktisk träningsdata.";
+      el("generationLead").textContent="Coachmotorn har byggt planen från din profil, ditt bekräftade startläge och faktisk träningsdata.";
       el("generationActions").innerHTML='<a class="btn primary" style="text-decoration:none" href="/träning/">Öppna träningsplanen</a>';
     }else if(status==="failed"){
       el("generationTitle").textContent="Planen kunde inte skapas.";
