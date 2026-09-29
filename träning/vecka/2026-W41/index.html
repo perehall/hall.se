@@ -1,1140 +1,133 @@
-<!doctype html>
-<html lang="sv">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#F6F7F5">
-<title>Träningsplan · vecka 41 · preliminär</title>
-<style>
-:root{--bg:#f5f7fb;--card:#fff;--text:#0f172a;--muted:#64748b;--line:#e2e8f0;--accent:#2563eb;--green:#15803d;--green-soft:#dcfce7;--amber:#a16207;--amber-soft:#fef3c7;--purple:#6d28d9;--purple-soft:#f3e8ff;--shadow:0 8px 24px rgba(15,23,42,.06)}
-*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);line-height:1.45}
-.wrap{width:min(100%,760px);margin:auto;padding:20px 16px 56px}header{padding:8px 2px 18px}
-.eyebrow{text-transform:uppercase;letter-spacing:.12em;font-size:.76rem;font-weight:800;color:var(--accent);margin-bottom:6px}
-h1{font-size:clamp(2rem,8vw,3.2rem);line-height:1;margin:0 0 8px;letter-spacing:-.04em}.sub{color:var(--muted);font-size:.96rem}
-.hero{background:#0f172a;color:#fff;border-radius:20px;padding:18px 20px;margin:8px 0 18px;box-shadow:var(--shadow)}.hero h2{margin:4px 0 5px}.hero p{margin:0;color:#cbd5e1}
-.dashboard{display:grid;gap:12px;margin:0 0 24px}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.metric{background:#fff;border:1px solid var(--line);border-radius:16px;padding:13px 14px;box-shadow:var(--shadow)}.metric strong{display:block;font-size:1.22rem;line-height:1.15}.metric span{display:block;color:var(--muted);font-size:.78rem;margin-top:4px}
-.dashboard-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.dashboard-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:15px 16px;box-shadow:var(--shadow)}.dashboard-title{font-size:.78rem;font-weight:900;text-transform:uppercase;letter-spacing:.07em;color:#475569;margin-bottom:12px}.dashboard-empty{color:var(--muted);font-size:.88rem}
-.sport-row+.sport-row{margin-top:10px}.sport-head{display:flex;justify-content:space-between;gap:12px;font-size:.84rem}.sport-head strong{font-size:.8rem}.sport-track{height:7px;background:#e2e8f0;border-radius:999px;overflow:hidden;margin-top:5px}.sport-fill{height:100%;background:var(--accent);border-radius:999px}
-.week-status{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.week-day{text-align:center;border-radius:10px;padding:5px 2px}.week-day.today{background:#eff6ff}.week-day-label{font-size:.68rem;font-weight:800;color:var(--muted);margin-bottom:4px}.week-day-dot{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;margin:auto;font-size:.78rem;font-weight:900}.dashboard-legend{color:var(--muted);font-size:.7rem;margin-top:10px;line-height:1.5}
-.next-item{padding:10px 0}.next-item+.next-item{border-top:1px solid var(--line)}.next-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:3px}.next-coach{color:var(--purple);font-size:.82rem;margin-top:4px}
-.section{font-size:1.22rem;margin:28px 0 12px}.day{background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px;margin:12px 0;box-shadow:var(--shadow)}
-.daytop{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:10px}.dow{font-size:.82rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}.date{color:var(--muted);font-size:.85rem}
-.session{font-size:1.2rem;font-weight:800;margin:4px 0 6px}.reason{color:#334155;font-size:.95rem}.badge{border-radius:999px;padding:5px 9px;font-size:.7rem;font-weight:800;white-space:nowrap}
-.fixed{background:var(--green-soft);color:var(--green)}.planned{background:#dbeafe;color:#1d4ed8}.conditional{background:var(--amber-soft);color:var(--amber)}.open{background:#e2e8f0;color:#475569}
-.pass{margin-top:14px;padding-top:14px;border-top:1px solid var(--line);display:grid;gap:7px}.pass-title{font-weight:800}.decision{margin-top:13px;padding:12px 13px;background:#f8fafc;border-radius:13px;border:1px solid var(--line)}.decision strong{display:block;margin-bottom:4px}.coach-adjust{border-color:#ddd6fe;background:#faf5ff}
-.coach{margin-top:16px;padding:14px;border-radius:16px;background:var(--purple-soft);border:1px solid #ddd6fe}.coach-title{font-size:.75rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:var(--purple);margin-bottom:5px}.coach-summary{font-weight:800;margin-bottom:5px}.coach-load{color:#4c1d95;font-size:.92rem}.coach-details{margin-top:10px}.coach-details summary{cursor:pointer;font-weight:700}.coach-grid{display:grid;gap:8px;margin-top:8px;font-size:.88rem}.coach-grid ul{margin:4px 0 0;padding-left:18px}.coach-action{margin-top:10px;padding-top:10px;border-top:1px solid #ddd6fe;font-size:.9rem}.coach-action span{color:#4c1d95}.coach-action small{color:#6b21a8}
-.principles{display:grid;gap:10px}.principle{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px}footer{color:var(--muted);font-size:.82rem;padding-top:26px}
-@media (max-width:620px){.dashboard-grid{grid-template-columns:1fr}.metrics{gap:7px}.metric{padding:12px 10px}.metric strong{font-size:1.05rem}}
-
-/* training-ux-v1 */
-.today-pill{display:inline-block;margin-right:7px;padding:2px 7px;border-radius:999px;background:#0f172a;color:#fff;font-size:.62rem;letter-spacing:.08em;vertical-align:1px}
-.swim-workout{margin:8px 0 10px;padding:12px 13px;border:1px solid #bfdbfe;background:#f8fbff;border-radius:14px}.swim-workout.compact{margin:7px 0 3px;padding:10px 11px}.swim-session-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}.swim-session-head strong{font-size:1.02rem}.swim-meta{color:#64748b;font-size:.82rem;font-weight:700}.swim-set-list{display:grid;gap:5px;margin-top:9px}.swim-set-list.compact{gap:4px;margin-top:7px}.swim-set-row{display:grid;grid-template-columns:minmax(72px,max-content) 1fr;gap:10px;align-items:baseline;font-size:.91rem;line-height:1.35}.swim-set-list.compact .swim-set-row{font-size:.84rem}.swim-dose{font-weight:850;font-variant-numeric:tabular-nums;color:#1e3a8a}
-.coach{padding:16px;background:#f8f5ff}.coach-title{font-size:.78rem;margin-bottom:9px}.coach-summary{background:#fff;border:1px solid #ddd6fe;border-radius:12px;padding:11px 12px;margin:0;font-size:.96rem;line-height:1.5}.coach-load{margin-top:9px;padding:10px 12px;border-radius:12px;background:#f3e8ff;color:#4c1d95;font-size:.88rem;line-height:1.45}.coach-load:before{content:"Närbelastning";display:block;margin-bottom:3px;font-size:.68rem;font-weight:900;text-transform:uppercase;letter-spacing:.07em;color:#6d28d9}.coach-details{margin-top:9px;padding:9px 11px;border-radius:11px;background:#fff;border:1px solid #e9d5ff}.coach-details summary{font-size:.83rem;color:#5b21b6}.coach-grid{line-height:1.45}.coach-grid li+li{margin-top:5px}.coach-action{margin-top:9px;padding:11px 12px;border:1px solid #ddd6fe;border-radius:12px;background:#fff;line-height:1.45}.coach-action>strong{display:inline-block;margin-bottom:4px;color:#5b21b6}.coach-action span{display:block;margin-top:4px;color:#3b0764}.coach-action small{display:block;margin-top:5px;color:#7e22ce}
-@media (max-width:620px){.swim-set-row{grid-template-columns:minmax(66px,max-content) 1fr;gap:8px}.coach{padding:13px}}
-
-
-/* weekly-history-v1 */
-.week-nav{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;margin:-4px 0 16px;padding:9px 10px;border:1px solid #e2e8f0;border-radius:14px;background:#fff;box-shadow:0 6px 18px rgba(15,23,42,.04)}
-.week-nav a{color:#1d4ed8;text-decoration:none;font-size:.82rem;font-weight:800}.week-nav .next{text-align:right}.week-nav-center{text-align:center;line-height:1.15}.week-nav-center strong{display:block;font-size:.86rem}.week-nav-center span{display:block;margin-top:3px;color:#64748b;font-size:.59rem;font-weight:900;letter-spacing:.1em}.week-nav-spacer{display:block}.history-summary{color:#475569;font-size:.9rem;line-height:1.5}
-@media (max-width:520px){.week-nav{grid-template-columns:1fr auto 1fr;padding:8px}.week-nav a{font-size:.75rem}.week-nav-center strong{font-size:.8rem}}
-
-
-
-/* upcoming-week-preview-v3 */
-.preview-metrics{grid-template-columns:repeat(4,1fr)}
-.preview-focus{color:#334155;font-size:.94rem;line-height:1.5}
-.preview-note{margin-top:8px;color:#64748b;font-size:.82rem}
-.swim-equipment-line{margin:6px 0 0;color:#475569;font-size:.82rem}.swim-equipment-line strong{color:#334155}
-.reference-tools{display:flex;justify-content:flex-start;margin:12px 0 8px}.reference-chip{appearance:none;border:1px solid #cbd5e1;background:#fff;color:#334155;border-radius:999px;padding:9px 13px;font:inherit;font-size:.82rem;font-weight:800;cursor:pointer;box-shadow:0 3px 10px rgba(15,23,42,.04)}
-.strength-window{position:fixed;inset:auto;width:min(520px,calc(100vw - 32px));max-height:calc(100vh - 32px);left:50%;top:50%;transform:translate(-50%,-50%);margin:0;border:1px solid #e2e8f0;border-radius:18px;padding:0;background:#fff;color:#0f172a;box-shadow:0 24px 70px rgba(15,23,42,.28);overflow:auto}.strength-window::backdrop{background:rgba(15,23,42,.38)}.sheet-inner{padding:0 18px 18px}.sheet-head{position:sticky;top:0;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 -18px 8px;padding:14px 18px 10px;background:#fff;border-bottom:1px solid #f1f5f9;cursor:move;touch-action:none;user-select:none}.sheet-head h2{font-size:1.1rem;margin:0}.sheet-close{appearance:none;border:0;background:#f1f5f9;color:#334155;border-radius:999px;padding:7px 10px;font:inherit;font-size:.78rem;font-weight:800;cursor:pointer}.sheet-note{margin:0 0 10px;color:#64748b;font-size:.8rem}.strength-list{margin:0;padding:0;list-style:none;display:grid;gap:0}.strength-list li{padding:10px 0;border-top:1px solid #e2e8f0;font-size:.9rem;line-height:1.38}.strength-list li:first-child{border-top:0}
-@media (max-width:620px){.preview-metrics{grid-template-columns:repeat(2,1fr)}.reference-tools{margin-top:10px}.strength-window{width:min(100% - 16px,720px);max-height:min(78vh,680px);left:50%!important;top:auto!important;bottom:0;transform:translateX(-50%)!important;border:0;border-radius:22px 22px 0 0}.sheet-inner{padding:0 18px calc(20px + env(safe-area-inset-bottom))}.sheet-head{cursor:default;touch-action:auto}}
-/* week-header-layout-v8 */
-.header-meta-line{display:flex;flex-wrap:wrap;gap:4px;color:#94a3b8;font-size:.76rem;line-height:1.4}.header-updated,.header-status{color:#94a3b8;font-size:inherit;font-weight:500}.week-period{font-weight:600;color:#64748b;white-space:nowrap}
-.hero.week-focus-card{padding:16px 18px}.week-focus-title{margin:0!important;font-size:1.06rem;line-height:1.35;letter-spacing:-.01em;font-weight:700}.week-focus-details{margin-top:8px}.week-focus-details>summary{cursor:pointer;list-style:none;color:#94a3b8;font-size:.76rem;font-weight:600}.week-focus-details>summary::-webkit-details-marker{display:none}.week-focus-details>summary:after{content:" +"}.week-focus-details[open]>summary:after{content:" −"}.week-focus-details p{margin:8px 0 0!important;color:#cbd5e1!important;font-size:.88rem;line-height:1.5}
-@media (max-width:520px){.header-meta-line{font-size:.72rem}.hero.week-focus-card{padding:14px 16px}.week-focus-title{font-size:1rem}.week-focus-details p{font-size:.84rem}}
-/* workout-prescription-v1 */
-.development-focus{margin-top:11px;padding:10px 12px;border:1px solid #c7d2fe;border-radius:12px;background:#f8faff;display:grid;gap:3px}.development-focus strong{color:#4338ca;font-size:.68rem;font-weight:900;text-transform:uppercase;letter-spacing:.07em}.development-focus span{color:#312e81;font-size:.88rem;line-height:1.42}
-.workout-prescription{margin:10px 0 4px;padding:10px 12px;border:1px solid #dbe4f0;border-radius:12px;background:#fff;display:grid;gap:0}.workout-prescription-head{font-size:.72rem;font-weight:800;color:#475569;margin-bottom:3px}.workout-prescription-row{display:grid;grid-template-columns:minmax(72px,auto) 1fr;gap:10px;padding:7px 0;border-top:1px solid #eef2f7;align-items:start}.workout-prescription-row:first-of-type{border-top:0}.workout-prescription-dose{font-weight:800;color:#0f172a;white-space:nowrap}.workout-prescription-text{color:#334155;line-height:1.38}.workout-prescription-recovery{color:#64748b}.future-compact .workout-prescription,.past-completed .workout-prescription,.today-completed .workout-prescription{display:none}
-@media (max-width:520px){.workout-prescription-row{grid-template-columns:68px 1fr;gap:8px}.workout-prescription{padding:9px 10px}}
-/* workout-prescription-v1 */
-/* device-sync-ui-v1 */
-.device-sync-state{display:flex;align-items:center;gap:6px;width:max-content;max-width:100%;margin:7px 0 4px;padding:4px 8px;border:1px solid #d8dee8;border-radius:999px;background:#f8fafc;color:#475569;font-size:.68rem;font-weight:800;line-height:1.2}.device-sync-state svg{width:13px;height:13px;flex:0 0 auto}.device-sync-state.pending{color:#64748b}.device-sync-state.error{border-color:#f1c7c7;background:#fffafa;color:#991b1b}.future-compact .device-sync-state,.past-completed .device-sync-state,.today-completed .device-sync-state{display:none}
-/* workout-card-v2 */
-.day.workout-card-v2{border-radius:15px;border-color:#e5eaf1;padding:16px 17px;box-shadow:0 1px 2px rgba(15,23,42,.035),0 6px 16px rgba(15,23,42,.025)}
-.day.workout-card-v2.card-v2-today{border-color:#bfdbfe;box-shadow:inset 3px 0 0 #2563eb,0 1px 2px rgba(15,23,42,.035),0 6px 16px rgba(15,23,42,.025)}
-.workout-card-v2 .daytop{margin-bottom:10px}.workout-card-v2 .session{margin:0 0 2px}.workout-card-v2 .session-title{letter-spacing:-.012em}
-.workout-card-v2 .workout-prescription{margin:13px 0 3px;padding:0;border:0;border-radius:0;background:transparent;display:grid;grid-template-columns:max-content minmax(0,1fr);column-gap:0;row-gap:0}.workout-card-v2 .workout-prescription-head{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.workout-card-v2 .workout-prescription-row{display:contents}.workout-card-v2 .workout-prescription-dose{font-weight:800;color:#0f172a;font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap;padding:5px 13px 5px 0;line-height:1.35;letter-spacing:-.01em}.workout-card-v2 .workout-prescription-text{min-width:0;color:#334155;line-height:1.38;padding:5px 0 5px 14px;border-left:1px solid #e2e8f0}
-.workout-card-v2 .development-focus{display:flex;align-items:flex-start;gap:8px;margin-top:10px;padding:8px 0 0;border:0;border-top:1px solid #f1f5f9;border-radius:0;background:transparent}.workout-card-v2 .development-focus strong{flex:0 0 auto;margin-top:1px;padding:2px 7px;border-radius:999px;background:#f1f5f9;color:#64748b;font-size:.68rem;font-weight:750;text-transform:none;letter-spacing:0}.workout-card-v2 .development-focus span{min-width:0;color:#475569;font-size:.84rem;line-height:1.42}
-.card-v2-footer{display:flex;align-items:center;gap:12px;margin-top:13px;padding-top:9px;border-top:1px solid #eef2f7;min-height:26px}.card-v2-footer .day-why{margin:0}.card-v2-footer .day-why>summary{font-size:.76rem;font-weight:600;color:#64748b}.card-v2-footer .device-sync-state{margin:0 0 0 auto;padding:0;border:0;border-radius:0;background:transparent;color:#64748b;font-size:.68rem;font-weight:650}.card-v2-footer .device-sync-state.pending{color:#64748b}.card-v2-footer .device-sync-state.error{background:transparent;border:0;color:#991b1b}.card-v2-footer .device-sync-state svg{width:12px;height:12px}
-.day.workout-card-v2.past-completed,.day.workout-card-v2.future-compact{padding:11px 12px;border-radius:14px;box-shadow:0 1px 2px rgba(15,23,42,.025)}.past-completed .card-v2-footer,.future-compact .card-v2-footer,.today-completed .card-v2-footer{display:none}
-@media (max-width:520px){.day.workout-card-v2{padding:14px 15px;border-radius:14px}.day.workout-card-v2.past-completed,.day.workout-card-v2.future-compact{padding:10px 11px}.workout-card-v2 .workout-prescription-dose{padding:4px 10px 4px 0;font-size:.92rem}.workout-card-v2 .workout-prescription-text{padding:4px 0 4px 10px}.workout-card-v2 .development-focus{gap:6px}.card-v2-footer{gap:9px;margin-top:11px;padding-top:8px}}
-/* workout-card-v2 */
-
-/* week-shell-v1 */
-html{scrollbar-gutter:stable}
-body{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.42}
-.wrap{width:min(100%,720px)!important;max-width:720px;margin:0 auto;padding:20px 16px 56px}
-header{padding:8px 2px 18px}
-.eyebrow{font-size:.76rem;line-height:1.2}
-h1{font-size:clamp(2rem,8vw,3.2rem);line-height:1;margin:0 0 8px;letter-spacing:-.04em}
-.sub{font-size:.96rem;line-height:1.4}
-.hero{border-radius:20px;padding:18px 20px;margin:8px 0 18px}
-.hero h2{font-size:1.08rem;line-height:1.35}
-.section{font-size:1.22rem;line-height:1.3;margin:28px 0 12px}
-.day{border-radius:20px;padding:16px 17px;margin:12px 0}
-.daytop{margin-bottom:10px}
-.dow{font-size:.82rem;line-height:1.25}
-.date{font-size:.85rem;line-height:1.3}
-.session{font-size:1.2rem;line-height:1.28;margin:4px 0 6px}
-.reason{font-size:.9rem;line-height:1.48}
-.week-nav{grid-template-columns:1fr auto 1fr;gap:10px;margin:-4px 0 16px;padding:9px 10px;border-radius:14px}
-.week-nav a{font-size:.82rem;line-height:1.25}
-.week-nav-center strong{font-size:.86rem;line-height:1.15}
-.week-nav-center span{font-size:.59rem;line-height:1.15}
-.reference-tools{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-start;margin:12px 0 8px}
-.reference-chip{appearance:none;border:1px solid #cbd5e1;background:#fff;color:#334155;border-radius:999px;padding:9px 13px;font:inherit;font-size:.82rem;font-weight:800;line-height:1.2;cursor:pointer;box-shadow:0 3px 10px rgba(15,23,42,.04)}
-.system-window{position:fixed;inset:auto;width:min(520px,calc(100vw - 32px));max-height:calc(100vh - 32px);left:50%;top:50%;transform:translate(-50%,-50%);margin:0;border:1px solid #e2e8f0;border-radius:18px;padding:0;background:#fff;color:#0f172a;box-shadow:0 24px 70px rgba(15,23,42,.28);overflow:auto}
-.system-window::backdrop{background:rgba(15,23,42,.38)}
-.system-inner{padding:0 18px 18px}
-.system-head{position:sticky;top:0;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 -18px 8px;padding:14px 18px 10px;background:#fff;border-bottom:1px solid #f1f5f9;cursor:move;touch-action:none;user-select:none}
-.system-head h2{font-size:1.1rem;line-height:1.25;margin:0}
-.system-close{appearance:none;border:0;background:#f1f5f9;color:#334155;border-radius:999px;padding:7px 10px;font:inherit;font-size:.78rem;font-weight:800;cursor:pointer}
-.system-lead{margin:10px 0 8px;color:#334155;font-size:.92rem;line-height:1.45}
-.system-list{margin:0;padding:0;list-style:none}
-.system-list li{padding:9px 0;border-top:1px solid #e2e8f0;color:#475569;font-size:.86rem;line-height:1.42}
-.system-list li:first-child{border-top:0}
-.system-list strong{color:#0f172a}
-.goal-page .card{border-radius:20px;padding:17px;margin:12px 0}
-.goal-page .goal{grid-template-columns:1fr;gap:16px}
-.goal-page .goal p{font-size:.95rem;line-height:1.48}
-.goal-page .title{font-size:1.08rem;line-height:1.3;margin-bottom:12px}
-.goal-page .goal-back-row{margin:0 0 12px}
-.goal-page .mountain{min-height:290px}
-@media (max-width:620px){
-  .wrap{width:100%!important;max-width:720px;padding:20px 13px 56px}
-  .day{border-radius:17px;padding:15px}
-  .week-nav{padding:8px}
-  .week-nav a{font-size:.75rem}
-  .week-nav-center strong{font-size:.8rem}
-  .system-window{width:min(100% - 16px,720px);max-height:min(78vh,680px);left:50%!important;top:auto!important;bottom:0;transform:translateX(-50%)!important;border:0;border-radius:22px 22px 0 0}
-  .system-inner{padding:0 18px calc(20px + env(safe-area-inset-bottom))}
-  .system-head{cursor:default;touch-action:auto}
-}
-
-/* quiet-performance-v1:start */
+<!doctype html><html lang="sv"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Träning · Vecka 41</title><style>
 :root{
-  --qp-canvas:#F6F7F5;
-  --qp-surface:#FCFCFB;
-  --qp-elevated:#FFFFFF;
-  --qp-text:#171918;
-  --qp-secondary:#5E6661;
-  --qp-tertiary:#69706B;
-  --qp-label:var(--qp-tertiary);
-  --qp-text-primary:var(--qp-text);
-  --qp-text-secondary:var(--qp-secondary);
-  --qp-text-label:var(--qp-label);
-  --qp-surface-subtle:#FCFCFB;
-  --qp-surface-muted:#F6F7F5;
-  --qp-border-subtle:#E4E7E3;
-  --qp-line:#E4E7E3;
-  --qp-line-soft:#ECEEEB;
-  --qp-accent:#5964E8;
-  --qp-accent-soft:#F1F2FD;
-  --qp-green:#287A54;
-  --qp-green-soft:#EDF7F1;
-  --qp-amber:#946200;
-  --qp-amber-soft:#FFF6DD;
-  --qp-red:#B54747;
-  --qp-red-soft:#FFF1F0;
-  --bg:var(--qp-canvas);
-  --card:var(--qp-surface);
-  --text:var(--qp-text);
-  --muted:var(--qp-secondary);
-  --line:var(--qp-line);
-  --accent:var(--qp-accent);
-  --green:var(--qp-green);
-  --green-soft:var(--qp-green-soft);
-  --amber:var(--qp-amber);
-  --amber-soft:var(--qp-amber-soft);
-  --purple:var(--qp-accent);
-  --purple-soft:var(--qp-accent-soft);
-  --shadow:none;
   color-scheme:light;
-}
-body.quiet-performance{
-  background:var(--qp-canvas);
-  color:var(--qp-text);
+  --bg:#F6F7F5;--card:#FCFCFB;--elevated:#FFFFFF;
+  --text:#171918;--secondary:#5E6661;--muted:#69706B;
+  --line:#E4E7E3;--line-soft:#ECEEEB;--accent:#5964E8;
+  --accent-soft:#F1F2FD;--green:#287A54;--green-soft:#EDF7F1;
   font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",sans-serif;
-  letter-spacing:-.005em;
+  color:var(--text);background:var(--bg)
 }
-body.quiet-performance ::selection{background:var(--qp-accent-soft)}
-body.quiet-performance :focus-visible{outline:2px solid var(--qp-accent);outline-offset:2px}
-body.quiet-performance .wrap{padding-top:24px;padding-bottom:64px}
-body.quiet-performance header{padding-bottom:20px}
-body.quiet-performance .eyebrow{color:var(--qp-tertiary);font-weight:650;letter-spacing:.09em}
-body.quiet-performance h1{font-size:clamp(1.9rem,7vw,2.75rem);font-weight:650;letter-spacing:-.045em}
-body.quiet-performance .sub,
-body.quiet-performance .header-meta-line,
-body.quiet-performance .header-updated,
-body.quiet-performance .header-status{color:var(--qp-tertiary)}
-body.quiet-performance .week-period{color:var(--qp-secondary)}
-body.quiet-performance .section{font-size:1.12rem;font-weight:650;letter-spacing:-.018em;margin-top:30px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);line-height:1.45;letter-spacing:-.005em}
+::selection{background:var(--accent-soft)}:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.v2-shell{width:min(100%,720px);margin:auto;padding:24px 16px 64px}
+.v2-shell a{color:inherit}.v2-shell-main{display:block}
+.v2-shell-meta{display:flex;justify-content:flex-end;margin:0 2px 8px;font-size:.68rem;color:var(--muted)}
+.v2-shell-meta a{text-decoration:none;font-weight:650}
+.v2-shell-meta a:hover{text-decoration:underline;text-underline-offset:3px}
 
-/* Editorial week focus: important, but not another floating card. */
-body.quiet-performance .hero,
-body.quiet-performance .hero.week-focus-card{
-  margin:8px 0 22px;
-  padding:3px 0 3px 15px;
-  border:0;
-  border-left:2px solid var(--qp-accent);
-  border-radius:0;
-  background:transparent;
-  color:var(--qp-text);
-  box-shadow:none;
-}
-body.quiet-performance .hero h2,
-body.quiet-performance .week-focus-title{color:var(--qp-text);font-weight:600}
-body.quiet-performance .hero p,
-body.quiet-performance .week-focus-details p{color:var(--qp-text-secondary)!important}
-body.quiet-performance .week-focus-details>summary{color:var(--qp-text-label)}
-body.quiet-performance .week-focus-mesocycle-idea strong{
-  color:var(--qp-text-label)!important;
-  font-weight:650;
-}
+.v2-week-nav{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:14px;padding:2px 0 12px;border:0;border-bottom:1px solid var(--line);background:transparent}
+.v2-week-link{font-size:.78rem;font-weight:650;color:var(--secondary)!important;text-decoration:none;white-space:nowrap}
+.v2-week-link.next{text-align:right}.v2-week-link:hover{color:var(--text)!important}.v2-week-link.disabled{visibility:hidden}
+.v2-week-current{text-align:center;line-height:1.15}.v2-week-current strong{display:block;font-size:.92rem;font-weight:780;letter-spacing:-.01em}
+.v2-week-current span{display:block;margin-top:3px;color:var(--muted);font-size:.68rem;font-weight:600}
 
-/* Overview surfaces use hairlines and spacing instead of elevation. */
-body.quiet-performance .dashboard{gap:10px;margin-bottom:26px}
-body.quiet-performance .metrics{gap:8px}
-body.quiet-performance .metric,
-body.quiet-performance .dashboard-card{
-  background:var(--qp-surface);
-  border:1px solid var(--qp-line);
-  border-radius:13px;
-  box-shadow:none;
-}
-body.quiet-performance .metric{padding:12px 13px}
-body.quiet-performance .metric strong{font-size:1.12rem;font-weight:650;letter-spacing:-.02em}
-body.quiet-performance .metric span,
-body.quiet-performance .dashboard-empty{color:var(--qp-tertiary)}
-body.quiet-performance .dashboard-title{
-  color:var(--qp-tertiary);
-  font-size:.7rem;
-  font-weight:650;
-  letter-spacing:.075em;
-}
-body.quiet-performance .sport-head{color:var(--qp-secondary)}
-body.quiet-performance .sport-head strong{color:var(--qp-text);font-weight:600}
-body.quiet-performance .sport-track{height:5px;background:var(--qp-line-soft)}
-body.quiet-performance .sport-fill{background:var(--qp-accent)}
-body.quiet-performance .week-day.today{background:var(--qp-accent-soft)}
-body.quiet-performance .week-day-label,
-body.quiet-performance .dashboard-legend{color:var(--qp-tertiary)}
-body.quiet-performance .next-item+.next-item{border-color:var(--qp-line-soft)}
-body.quiet-performance .next-item:hover{background:var(--qp-canvas)}
-body.quiet-performance .next-coach{color:var(--qp-secondary)}
+.v2-today{margin-top:18px;padding:18px 20px 17px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.74);box-shadow:0 8px 24px rgba(15,23,42,.045)}
+.v2-kicker{text-transform:uppercase;letter-spacing:.075em;font-size:.66rem;font-weight:800;color:var(--muted);margin:0 0 8px}
+.v2-today-title{font-size:1.28rem;line-height:1.28;letter-spacing:-.022em;margin:0;display:flex;align-items:center;gap:9px;font-weight:760}
+.v2-today-details{margin:7px 0 0;padding-left:30px;color:var(--secondary);font-size:.8rem}.v2-today-details li{margin:3px 0}
+.v2-today-weather{color:var(--secondary);font-size:.76rem;margin:9px 0 0 30px}
+.v2-next{margin:13px 0 0;color:var(--secondary);font-size:.78rem}.v2-next span{font-size:.68rem;font-weight:800;color:var(--muted);text-transform:uppercase;margin-right:5px}
 
-/* Today / next: one subtle accent, never a blue panel. */
-body.quiet-performance .brain-today{
-  background:#FAFAFE;
-  border:1px solid var(--qp-line);
-  border-radius:14px;
-  box-shadow:inset 2px 0 0 var(--qp-accent);
-  padding:16px 17px;
-}
-body.quiet-performance .brain-kicker{color:var(--qp-secondary);font-weight:600}
-body.quiet-performance .brain-headline{color:var(--qp-text);font-size:1.14rem;font-weight:650;letter-spacing:-.018em}
-body.quiet-performance .brain-subline{color:var(--qp-secondary)}
-body.quiet-performance .brain-weather,
-body.quiet-performance .brain-extra{
-  margin-top:11px;
-  padding:9px 0 0;
-  border:0;
-  border-top:1px solid var(--qp-line-soft);
-  border-radius:0;
-  background:transparent;
-}
-body.quiet-performance .brain-weather-label,
-body.quiet-performance .brain-next-label{color:var(--qp-tertiary);font-weight:650}
-body.quiet-performance .brain-weather-note{color:var(--qp-secondary)}
-body.quiet-performance .brain-next{border-color:var(--qp-line-soft)}
-body.quiet-performance .brain-status{font-weight:650;letter-spacing:.01em}
+.v2-week-context{margin-top:42px;padding:0 2px 2px;border:0;background:transparent}
+.v2-week-context h2{font-size:1.24rem;margin:0;letter-spacing:-.018em;font-weight:700}
+.v2-week-focus{display:block;margin-top:6px;font-size:.94rem;font-weight:670;line-height:1.4;letter-spacing:-.008em}
+.v2-week-meta{margin:4px 0 0;color:var(--muted);font-size:.72rem;line-height:1.4}
+.v2-week-context-plan{margin-top:8px}.v2-week-context-plan summary{display:inline-block;cursor:pointer;list-style:none;color:var(--secondary);font-size:.68rem;font-weight:600;line-height:1.35;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;text-decoration-color:var(--line)}
+.v2-week-context-plan summary::-webkit-details-marker{display:none}.v2-week-context-plan summary:hover{color:var(--text);text-decoration-color:currentColor}
+.v2-week-context-plan-body{margin-top:8px;padding:0 0 0 12px;border-left:1px solid var(--line);color:var(--secondary);font-size:.78rem;line-height:1.5}
+.v2-week-context-plan-body p{margin:0}.v2-week-context-plan-body p+p{margin-top:8px}
 
-/* Workout cards: flat, precise and dose-led. */
-body.quiet-performance .day,
-body.quiet-performance .day.workout-card-v2{
-  background:var(--qp-surface);
-  border:1px solid var(--qp-line);
-  border-radius:14px;
-  box-shadow:none;
-}
-body.quiet-performance .day.workout-card-v2.card-v2-today{
-  background:#FAFAFE;
-  border-color:var(--qp-line);
-  box-shadow:inset 2px 0 0 var(--qp-accent);
-}
-body.quiet-performance .day.workout-card-v2.past-completed,
-body.quiet-performance .day.workout-card-v2.future-compact{box-shadow:none}
-body.quiet-performance .dow{color:var(--qp-secondary);font-weight:650;letter-spacing:.065em}
-body.quiet-performance .date,
-body.quiet-performance .session-meta{color:var(--qp-tertiary)}
-body.quiet-performance .session,
-body.quiet-performance .session-title,
-body.quiet-performance .session-with-icon{color:var(--qp-text);font-weight:650}
-body.quiet-performance .reason{color:var(--qp-secondary)}
-body.quiet-performance .workout-card-v2 .workout-prescription-dose{color:var(--qp-text);font-weight:650}
-body.quiet-performance .workout-card-v2 .workout-prescription-text{color:var(--qp-secondary);border-left-color:var(--qp-line)}
-body.quiet-performance .workout-card-v2 .development-focus{border-top-color:var(--qp-line-soft)}
-body.quiet-performance .workout-card-v2 .development-focus strong{
-  margin-top:2px;
-  padding:0;
-  border-radius:0;
-  background:transparent;
-  color:var(--qp-tertiary);
-  font-size:.65rem;
-  font-weight:650;
-  letter-spacing:.055em;
-  text-transform:uppercase;
-}
-body.quiet-performance .workout-card-v2 .development-focus span{color:var(--qp-secondary)}
-body.quiet-performance .card-v2-footer{border-top-color:var(--qp-line-soft)}
-body.quiet-performance .card-v2-footer .day-why>summary,
-body.quiet-performance .card-v2-footer .device-sync-state{color:var(--qp-tertiary);font-weight:600}
-body.quiet-performance .workout-history,
-body.quiet-performance .swim-workout{
-  border-color:var(--qp-line);
-  background:var(--qp-canvas);
-  border-radius:12px;
-}
-body.quiet-performance .swim-dose{color:var(--qp-text);font-weight:650}
-body.quiet-performance .swim-meta,
-body.quiet-performance .workout-history-note,
-body.quiet-performance .workout-equipment{color:var(--qp-secondary)}
+.v2-week-status{margin:2px 0 20px;border:0;background:transparent}
+.v2-week-status summary{cursor:pointer;list-style:none;color:var(--muted);font-size:.7rem;font-weight:620;padding:3px 0}
+.v2-week-status summary::-webkit-details-marker{display:none}.v2-week-status summary:after{content:" +"}.v2-week-status[open] summary:after{content:" −"}
+.v2-week-status-body{margin-top:8px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+.v2-week-metrics{display:flex;gap:16px;flex-wrap:wrap;color:var(--secondary);font-size:.8rem}
+.v2-week-sports{margin-top:10px}.v2-week-sports h3{font-size:.72rem;color:var(--muted);margin:0 0 5px}
+.v2-week-sport{display:flex;justify-content:space-between;border-top:1px solid var(--line-soft);padding:6px 0;font-size:.78rem}
 
-/* Only genuine state remains pill-shaped and coloured. */
-body.quiet-performance .badge{font-weight:650;letter-spacing:.015em}
-body.quiet-performance .fixed{background:var(--qp-green-soft);color:var(--qp-green)}
-body.quiet-performance .planned{background:var(--qp-accent-soft);color:#454FC7}
-body.quiet-performance .conditional,
-body.quiet-performance .brain-status{background:var(--qp-amber-soft);color:var(--qp-amber)}
-body.quiet-performance .open{background:var(--qp-line-soft);color:var(--qp-secondary)}
-body.quiet-performance .device-sync-state.error{color:var(--qp-red)}
+.v2-week{position:relative;margin:18px 0 30px}
+.v2-week>ol{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.v2-week-card{position:relative;display:block;margin:0;padding:16px 17px;border:1px solid #e5eaf1;border-radius:15px;background:var(--elevated);box-shadow:0 1px 2px rgba(15,23,42,.035),0 6px 16px rgba(15,23,42,.025)}
+.v2-week-day+.v2-week-day{border-top:1px solid var(--line)}
+.v2-week-day:before,.v2-week-dayhead:after{display:none}
+.v2-week-dayhead{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto;column-gap:12px;align-items:center;min-width:0;padding:0}
+.v2-week-dow{grid-column:1;grid-row:1;display:block;color:var(--secondary);font-size:.72rem;font-weight:750;letter-spacing:.055em;text-transform:uppercase;white-space:nowrap}
+.v2-week-date{grid-column:1;grid-row:2;display:block;margin-top:2px;color:var(--muted);font-size:.7rem}
+.v2-week-state{grid-column:2;grid-row:1 / span 2;align-self:start;display:block;margin:0;padding:4px 8px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:.6rem;font-weight:760;letter-spacing:.04em;line-height:1.2;text-transform:uppercase}
+.v2-week-day[data-state="completed"] .v2-week-state{border-color:#bddfcb;background:var(--green-soft);color:var(--green)}
+.v2-week-day[data-state="fixed"] .v2-week-state{border-color:#c9cdf8;background:var(--accent-soft);color:var(--accent)}
+.v2-week-daybody{min-width:0;margin-top:14px}
+.v2-week-session{display:flex;align-items:center;gap:8px;font-size:1.03rem;font-weight:760;line-height:1.3}
+.v2-week-actual-summary{margin-top:8px;color:var(--secondary);font-size:.8rem;font-weight:650;line-height:1.35;font-variant-numeric:tabular-nums}
+.v2-week-actual-details{display:grid;gap:3px;margin-top:7px;padding-top:7px;border-top:1px solid var(--line-soft);color:var(--muted);font-size:.74rem;line-height:1.4;font-variant-numeric:tabular-nums}
+.v2-rest-day{color:var(--muted);font-weight:620}
+.v2-week-weather{color:var(--muted);font-size:.72rem;margin-top:8px}.v2-weather-source{color:var(--muted);font-size:.68rem;margin:8px 2px 0}
 
-/* Icons identify function; they do not create a second colour system. */
-body.quiet-performance .sport-icon,
-body.quiet-performance .watch-sync .watch-icon,
-body.quiet-performance .completed-session-with-icon .sport-icon{color:var(--qp-secondary)}
-body.quiet-performance .manual-activity{border-color:var(--qp-line);background:transparent}
-body.quiet-performance .manual-activity-class{color:var(--qp-tertiary)}
+.v2-sport-icon{display:inline-block;width:1.25em;height:1.25em;max-width:1.25em;max-height:1.25em;flex:0 0 1.25em;vertical-align:-.18em;color:var(--secondary)}
+.v2-sport-icons{display:inline-flex;align-items:center;gap:5px;flex:0 0 auto}.v2-watch-icon{width:13px;height:13px;flex:0 0 13px}
+.v2-device-sync{display:flex;align-items:center;gap:5px;color:var(--muted);font-size:.7rem;margin-top:6px}
 
-/* Coach content is information, not a purple sub-product. */
-body.quiet-performance .coach,
-body.quiet-performance .coach.yoda-v2{
-  background:var(--qp-surface);
-  border:1px solid var(--qp-line);
-  border-radius:12px;
-  box-shadow:none;
-}
-body.quiet-performance .coach-title,
-body.quiet-performance .coach-decision>span:first-child,
-body.quiet-performance .coach-target,
-body.quiet-performance .coach-next-label,
-body.quiet-performance .coach-full-summary strong,
-body.quiet-performance .coach-reason strong{color:var(--qp-tertiary);font-weight:650}
-body.quiet-performance .coach-decision strong{color:var(--qp-text);font-weight:650}
-body.quiet-performance .yoda-v2 .coach-summary,
-body.quiet-performance .coach-full-summary,
-body.quiet-performance .coach-reason{color:var(--qp-secondary)}
-body.quiet-performance .coach-next,
-body.quiet-performance .coach-why,
-body.quiet-performance .yoda-v2 .coach-details,
-body.quiet-performance .yoda-v2 .coach-load{
-  background:var(--qp-canvas);
-  border-color:var(--qp-line);
-  color:var(--qp-secondary);
-}
-body.quiet-performance .coach-why>summary,
-body.quiet-performance .yoda-v2 .coach-details summary,
-body.quiet-performance .coach-apply{color:var(--qp-secondary)}
+.v2-planned-workouts{display:grid;gap:10px;margin-top:14px}
+.v2-planned-workout{border:1px solid var(--line);border-radius:13px;padding:12px;background:var(--elevated)}
+.v2-week-planned-list{display:grid;gap:0}
+.v2-week-planned-workout{border:0;background:transparent;padding:0 0 13px}
+.v2-week-planned-workout+.v2-week-planned-workout{padding-top:15px;border-top:1px solid var(--line-soft)}
+.v2-planned-workout header,.v2-week-planned-workout header{display:flex;align-items:center;gap:8px;font-size:.98rem;line-height:1.3}
+.v2-workout-components{margin:5px 0 0;color:var(--muted);font-size:.76rem}
 
-/* Navigation and utilities look like controls, not badges. */
-body.quiet-performance .week-nav{
-  background:transparent;
-  border-color:var(--qp-line);
-  border-radius:12px;
-  box-shadow:none;
-}
-body.quiet-performance .week-nav a{color:var(--qp-accent);font-weight:600}
-body.quiet-performance .week-nav-center span{color:var(--qp-tertiary)}
-body.quiet-performance .reference-chip,
-body.quiet-performance .goal-page-link a,
-body.quiet-performance .goal-back-row a{
-  background:var(--qp-surface);
-  border-color:var(--qp-line);
-  border-radius:10px;
-  box-shadow:none;
-  color:var(--qp-secondary);
-  font-weight:600;
-}
-body.quiet-performance .reference-chip:hover,
-body.quiet-performance .goal-page-link a:hover,
-body.quiet-performance .goal-back-row a:hover{background:var(--qp-elevated);color:var(--qp-text)}
+.v2-prescription{margin:13px 0 3px;padding:0;border:0;background:transparent}
+.v2-prescription h2{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.v2-prescription-grid{display:grid;grid-template-columns:max-content minmax(0,1fr);column-gap:0;row-gap:0}
+.v2-prescription-row{display:contents}
+.v2-prescription-dose{font-weight:800;color:var(--text);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap;padding:5px 13px 5px 0;line-height:1.35;letter-spacing:-.01em}
+.v2-prescription-text{min-width:0;color:var(--secondary);line-height:1.38;padding:5px 0 5px 14px;border-left:1px solid var(--line)}
+.v2-prescription-list ul{margin:0;padding:0;list-style:none}.v2-prescription-list li{padding:4px 0;color:var(--secondary);font-size:.79rem;line-height:1.42}
+.v2-development-focus{display:flex;align-items:flex-start;gap:8px;margin-top:10px;padding:8px 0 0;border-top:1px solid var(--line-soft)}
+.v2-development-focus strong{flex:0 0 auto;margin-top:1px;padding:2px 7px;border-radius:999px;background:#f1f5f9;color:var(--muted);font-size:.68rem;font-weight:750}
+.v2-development-focus span{min-width:0;color:var(--secondary);font-size:.84rem;line-height:1.42}
+.v2-card-footer{display:flex;align-items:center;gap:12px;margin-top:13px;padding-top:9px;border-top:1px solid var(--line-soft);min-height:26px}
+.v2-card-footer .v2-rationale{margin:0;border:0;border-radius:0;background:transparent;overflow:visible}
+.v2-card-footer .v2-rationale summary{padding:0;color:var(--muted);font-size:.76rem;font-weight:600}
+.v2-card-footer .v2-rationale p{padding:8px 0 0;margin:0}
+.v2-card-footer .v2-device-sync{margin:0 0 0 auto}
+.v2-rationale,.v2-completed-context{margin-top:10px;border:1px solid var(--line-soft);border-radius:11px;background:var(--card);overflow:hidden}
+.v2-rationale summary,.v2-completed-context summary{cursor:pointer;list-style:none;padding:9px 11px;color:var(--secondary);font-size:.72rem;font-weight:650}
+.v2-rationale summary::-webkit-details-marker,.v2-completed-context summary::-webkit-details-marker{display:none}
+.v2-rationale summary:after,.v2-completed-context summary:after{content:" +"}.v2-rationale[open] summary:after,.v2-completed-context[open] summary:after{content:" −"}
+.v2-rationale p{margin:0;padding:0 11px 9px;color:var(--secondary);font-size:.76rem;line-height:1.45}.v2-rationale p+p{padding-top:0}
+.v2-completed-context-body{padding:0 11px 10px}.v2-original-workout{display:flex;align-items:center;gap:7px;margin:6px 0;font-size:.78rem;color:var(--secondary)}
 
-/* History / evaluation blocks inherit the same quiet hierarchy. */
-body.quiet-performance .week-activity-insight,
-body.quiet-performance .week-review,
-body.quiet-performance .decision,
-body.quiet-performance .feedback-loop{
-  background:var(--qp-canvas);
-  border-color:var(--qp-line);
-  box-shadow:none;
-}
-body.quiet-performance .week-activity-insight-kicker,
-body.quiet-performance .week-activity-user-report span{color:var(--qp-tertiary)}
-body.quiet-performance .week-activity-user-report{border-top-color:var(--qp-line);color:var(--qp-secondary)}
+.v2-completed-outcomes{display:grid;gap:12px;margin-top:12px}.v2-activity-outcome{padding:12px 0;border-top:1px solid var(--line-soft)}
+.v2-outcome-title{display:flex;align-items:center;gap:8px;font-size:1rem;margin:0}.v2-outcome-row{margin-top:12px}
+.v2-outcome-label{display:block;color:var(--muted);font-size:.66rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;margin-bottom:3px}
+.v2-outcome-row p{margin:3px 0;color:var(--secondary);font-size:.82rem}
+.v2-feedback-compact{display:flex;align-items:center;gap:8px}.v2-feedback-toggle{font:inherit;border:0;background:transparent;padding:0;color:var(--accent);font-size:.72rem;font-weight:650;cursor:pointer}
+.v2-feedback-note{margin:6px 0;color:var(--secondary)}.v2-feedback-status{display:block;margin-top:4px;color:var(--muted);font-size:.7rem}
+.v2-feedback-panel{margin-top:10px;padding-top:10px;border-top:1px solid var(--line-soft)}
+.v2-feedback-label{display:block;color:var(--muted);font-size:.68rem;font-weight:700;margin:6px 0 4px}
+.v2-feedback-options{display:flex;flex-wrap:wrap;gap:6px;margin:5px 0 10px}.v2-feedback-chip{border:1px solid var(--line);background:var(--elevated);border-radius:999px;padding:6px 9px}
+.v2-feedback-chip[aria-pressed="true"]{background:var(--accent-soft);border-color:#c9cdf8}
+.v2-feedback textarea{width:100%;min-height:90px;margin-top:5px;border:1px solid var(--line);border-radius:10px;padding:9px;font:inherit;background:var(--elevated)}
+.v2-feedback-actions{display:flex;gap:8px;margin-top:8px}.v2-feedback-actions button{font:inherit}
 
-/* Goal hierarchy: same product, same visual grammar. */
-body.quiet-performance.goal-page .card{
-  background:var(--qp-surface);
-  border-color:var(--qp-line);
-  border-radius:14px;
-  box-shadow:none;
-}
-body.quiet-performance.goal-page .title,
-body.quiet-performance.goal-page .current-path h2{color:var(--qp-text);font-weight:650}
-body.quiet-performance.goal-page .goal p,
-body.quiet-performance.goal-page .current-purpose,
-body.quiet-performance.goal-page .mesocycle-why p{color:var(--qp-secondary)}
-body.quiet-performance.goal-page .goal-note,
-body.quiet-performance.goal-page .current-meta,
-body.quiet-performance.goal-page .section-kicker,
-body.quiet-performance.goal-page .role-row span,
-body.quiet-performance.goal-page .calendar-note{color:var(--qp-tertiary)!important}
-body.quiet-performance.goal-page .system-step,
-body.quiet-performance.goal-page .role-list,
-body.quiet-performance.goal-page .role-row,
-body.quiet-performance.goal-page .decision-principle{border-color:var(--qp-line-soft)}
-body.quiet-performance.goal-page .system-step-num{background:var(--qp-accent-soft);color:var(--qp-accent);font-weight:650}
-body.quiet-performance.goal-page .system-step p,
-body.quiet-performance.goal-page .decision-principle span{color:var(--qp-secondary)}
-body.quiet-performance.goal-page .goal-change{
-  background:transparent;
-  color:var(--qp-text);
-  border-left:2px solid var(--qp-accent);
-}
-body.quiet-performance.goal-page .goal-change p{color:var(--qp-secondary)}
+.v2-manual-activity{margin-top:10px;padding:10px 0;border-top:1px solid var(--line-soft)}
+.v2-manual-activity header,.v2-history-activity header{display:flex;align-items:center;gap:7px}.v2-manual-activity p{color:var(--secondary);font-size:.78rem}
+.v2-reference-tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:26px;padding-top:14px;border-top:1px solid var(--line-soft)}
+.v2-reference-tools button,.v2-reference-dialog button{font:inherit}.v2-reference-tools button{border:0;background:transparent;padding:4px 0;color:var(--muted);font-size:.72rem;font-weight:650;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.v2-reference-dialog{width:min(520px,calc(100vw - 32px));max-height:calc(100vh - 32px);border:1px solid var(--line);border-radius:18px;padding:18px;background:var(--elevated)}
+.v2-reference-dialog::backdrop{background:rgba(15,23,42,.32)}.v2-reference-dialog form{float:right}
 
-/* Modal elevation is intentional: it is the only truly elevated surface. */
-body.quiet-performance .system-window{
-  background:var(--qp-elevated);
-  color:var(--qp-text);
-  border-color:var(--qp-line);
-  border-radius:16px;
-  box-shadow:0 24px 64px rgba(23,25,24,.14);
-}
-body.quiet-performance .system-window::backdrop{background:rgba(23,25,24,.32)}
-body.quiet-performance .system-head{background:var(--qp-elevated);border-bottom-color:var(--qp-line-soft)}
-body.quiet-performance .system-head h2{font-weight:650}
-body.quiet-performance .system-close{background:var(--qp-canvas);color:var(--qp-secondary);font-weight:600}
-body.quiet-performance .system-lead{color:var(--qp-secondary)}
-body.quiet-performance .system-list li{border-top-color:var(--qp-line);color:var(--qp-secondary)}
-body.quiet-performance .system-list strong{color:var(--qp-text)}
-body.quiet-performance footer{color:var(--qp-tertiary)}
+.v2-history-header,.v2-week-review,.v2-history-day{padding:18px;border:1px solid var(--line);border-radius:16px;background:var(--card)}
+.v2-history-days{display:grid;gap:12px}.v2-history-activity{padding:12px 0;border-top:1px solid var(--line-soft)}.v2-history-activity:first-child{border-top:0}
 
 @media(max-width:620px){
-  body.quiet-performance .wrap{padding-top:20px;padding-bottom:56px}
-  body.quiet-performance h1{font-size:2rem}
-  body.quiet-performance .day,
-  body.quiet-performance .day.workout-card-v2{border-radius:13px}
-  body.quiet-performance .brain-today{border-radius:13px}
-  body.quiet-performance .metric,
-  body.quiet-performance .dashboard-card{border-radius:12px}
+  .v2-shell{padding:20px 13px 56px}.v2-week-nav{gap:8px}.v2-week-link{font-size:.72rem}.v2-week-current{display:grid;gap:0}.v2-week-current strong{font-size:.86rem}.v2-week-current span{font-size:.64rem}
+  .v2-today{margin-top:15px;padding:16px 15px 15px;border-radius:16px}.v2-today-title{font-size:1.16rem}.v2-today-weather{margin-left:29px;font-size:.74rem}
+  .v2-week-context{margin-top:34px;padding:0 1px 2px}
+  .v2-week-card{padding:15px;border-radius:15px}.v2-week-dayhead{column-gap:8px}.v2-week-state{font-size:.57rem;padding:4px 7px}
+  .v2-week-weather{font-size:.7rem}.v2-weather-source{margin-left:2px}
+  .v2-planned-workout{padding:11px}.v2-week-planned-workout header{font-size:.94rem}.v2-prescription-dose{padding:4px 10px 4px 0;font-size:.92rem}.v2-prescription-text{padding:4px 0 4px 10px}.v2-development-focus{gap:6px}.v2-reference-dialog{width:calc(100vw - 16px);max-height:78vh}
 }
-/* quiet-performance-v1:end */
-/* quiet-performance-v2:start */
-/* Current decision is an editorial section, not another card. */
-body.quiet-performance.qp-current .wrap{max-width:700px!important}
-body.quiet-performance.qp-current header{padding-bottom:14px}
-body.quiet-performance.qp-current .training-brain{
-  margin:2px 0 24px;
-  padding:0 0 22px;
-  border-bottom:1px solid var(--qp-line);
-}
-body.quiet-performance.qp-current .brain-today{
-  padding:0;
-  background:transparent;
-  border:0;
-  border-radius:0;
-  box-shadow:none;
-}
-body.quiet-performance.qp-current .brain-topline{
-  position:sticky;
-  top:0;
-  z-index:24;
-  margin:0 0 10px;
-  padding:7px 0 8px;
-  border-bottom:1px solid var(--qp-line-soft);
-  background:rgba(246,247,245,.94);
-  -webkit-backdrop-filter:blur(10px);
-  backdrop-filter:blur(10px);
-}
-body.quiet-performance.qp-current .brain-kicker{
-  color:var(--qp-tertiary);
-  font-size:.69rem;
-  font-weight:650;
-  letter-spacing:.075em;
-  text-transform:uppercase;
-}
-body.quiet-performance.qp-current .brain-status{
-  padding:0;
-  border:0;
-  border-radius:0;
-  background:transparent;
-  color:var(--qp-tertiary);
-  font-size:.66rem;
-  font-weight:600;
-}
-body.quiet-performance.qp-current .brain-headline{font-size:1.22rem;font-weight:650}
-body.quiet-performance.qp-current .brain-subline{margin-top:4px;font-size:.82rem}
-body.quiet-performance.qp-current .brain-weather,
-body.quiet-performance.qp-current .brain-extra{
-  margin:12px 0 0;
-  padding:9px 0 0 12px;
-  border:0;
-  border-left:1px solid var(--qp-line);
-  border-radius:0;
-  background:transparent;
-}
-body.quiet-performance.qp-current .brain-weather-label,
-body.quiet-performance.qp-current .brain-extra-label{
-  margin-bottom:3px;
-  color:var(--qp-tertiary);
-  font-size:.67rem;
-  font-weight:650;
-  letter-spacing:.055em;
-  text-transform:uppercase;
-}
-body.quiet-performance.qp-current .brain-weather strong,
-body.quiet-performance.qp-current .brain-extra strong{
-  color:var(--qp-text);
-  font-size:.86rem;
-  font-weight:600;
-}
-body.quiet-performance.qp-current .brain-weather-note,
-body.quiet-performance.qp-current .brain-extra-note{
-  margin-top:3px;
-  color:var(--qp-secondary);
-  font-size:.77rem;
-}
-body.quiet-performance.qp-current .brain-next{
-  display:grid;
-  grid-template-columns:88px minmax(0,1fr);
-  column-gap:12px;
-  row-gap:2px;
-  margin-top:15px;
-  padding-top:12px;
-}
-body.quiet-performance.qp-current .brain-next-label{
-  grid-row:1 / span 2;
-  align-self:start;
-  margin:2px 0 0;
-  font-size:.67rem;
-  letter-spacing:.06em;
-  text-transform:uppercase;
-}
-body.quiet-performance.qp-current .brain-next strong{font-size:.91rem;font-weight:600}
-body.quiet-performance.qp-current .brain-note{margin:0;font-size:.76rem;color:var(--qp-tertiary)}
-body.quiet-performance.qp-current .brain-why-details>summary{color:var(--qp-tertiary);font-size:.73rem}
-
-/* Strategy follows execution, as a quiet editorial note. */
-body.quiet-performance.qp-current .hero.week-focus-card{
-  margin:0 0 24px;
-  padding:0 0 0 13px;
-  border-left-width:1px;
-}
-body.quiet-performance.qp-current .week-focus-title{font-size:.98rem;font-weight:600}
-body.quiet-performance.qp-current .week-focus-mesocycle-meta{font-size:.69rem}
-body.quiet-performance.qp-current .week-focus-details>summary{font-size:.71rem}
-
-/* The overview is now a signal strip, not five more cards. */
-body.quiet-performance.qp-current .dashboard{
-  gap:0;
-  margin:0 0 27px;
-  padding:13px 0 15px;
-  border-top:1px solid var(--qp-line);
-  border-bottom:1px solid var(--qp-line);
-}
-body.quiet-performance.qp-current .metrics{
-  display:flex;
-  gap:0;
-  align-items:baseline;
-  margin:0;
-}
-body.quiet-performance.qp-current .metric{
-  display:flex;
-  align-items:baseline;
-  gap:5px;
-  min-width:0;
-  padding:0 14px;
-  border:0;
-  border-left:1px solid var(--qp-line-soft);
-  border-radius:0;
-  background:transparent;
-}
-body.quiet-performance.qp-current .metric:first-child{padding-left:0;border-left:0}
-body.quiet-performance.qp-current .metric strong{display:inline;font-size:.94rem;font-weight:650}
-body.quiet-performance.qp-current .metric span{display:inline;margin:0;font-size:.7rem;white-space:nowrap}
-body.quiet-performance.qp-current .dashboard-grid{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
-  gap:22px;
-  margin-top:13px;
-}
-body.quiet-performance.qp-current .dashboard-card{
-  padding:0;
-  border:0;
-  border-radius:0;
-  background:transparent;
-}
-body.quiet-performance.qp-current .dashboard-title{margin-bottom:8px;font-size:.64rem}
-body.quiet-performance.qp-current .sport-row+.sport-row{margin-top:7px}
-body.quiet-performance.qp-current .sport-head{font-size:.76rem}
-body.quiet-performance.qp-current .sport-head strong{font-size:.72rem}
-body.quiet-performance.qp-current .sport-track{height:3px;margin-top:3px}
-body.quiet-performance.qp-current .week-day{padding:2px 1px}
-body.quiet-performance.qp-current .week-day.today{background:transparent}
-body.quiet-performance.qp-current .week-day-label{font-size:.61rem}
-body.quiet-performance.qp-current .week-day-dot{width:23px;height:23px;font-size:.68rem}
-body.quiet-performance.qp-current .dashboard-legend{margin-top:7px;font-size:.64rem;line-height:1.38}
-body.quiet-performance.qp-current .dashboard-legend small{color:var(--qp-tertiary)}
-
-/* Day list is a hierarchy: actionable cards > contextual rows. */
-body.quiet-performance.qp-current .section{margin:27px 0 9px;font-size:1.03rem}
-body.quiet-performance.qp-current .day.workout-card-v2{margin:9px 0}
-body.quiet-performance.qp-current .day.workout-card-v2.past-completed,
-body.quiet-performance.qp-current .day.workout-card-v2.future-compact{
-  margin:0;
-  padding:11px 2px;
-  border:0;
-  border-top:1px solid var(--qp-line-soft);
-  border-radius:0;
-  background:transparent;
-}
-body.quiet-performance.qp-current .day.workout-card-v2.past-completed:first-of-type,
-body.quiet-performance.qp-current .day.workout-card-v2.future-compact:first-of-type{border-top-color:transparent}
-body.quiet-performance.qp-current .past-completed .session,
-body.quiet-performance.qp-current .future-compact .session{font-size:.96rem}
-body.quiet-performance.qp-current .past-completed .dow,
-body.quiet-performance.qp-current .future-compact .dow{font-size:.72rem}
-body.quiet-performance.qp-current .past-completed .date,
-body.quiet-performance.qp-current .future-compact .date{font-size:.74rem}
-
-/* Quiet statuses: background colour is reserved for a state that needs attention. */
-body.quiet-performance.qp-current .badge.planned,
-body.quiet-performance.qp-current .badge.open{
-  padding-left:0;
-  padding-right:0;
-  background:transparent;
-  color:var(--qp-tertiary);
-}
-body.quiet-performance.qp-current .badge.fixed{background:var(--qp-green-soft);color:var(--qp-green)}
-body.quiet-performance.qp-current .badge.conditional{background:var(--qp-amber-soft);color:var(--qp-amber)}
-
-/* Secondary coach/history surfaces should read like annotations, not cards. */
-body.quiet-performance.qp-current .coach,
-body.quiet-performance.qp-current .coach.yoda-v2,
-body.quiet-performance.qp-current .week-activity-insight{
-  border-left:1px solid var(--qp-line);
-  border-right:0;
-  border-top:0;
-  border-bottom:0;
-  border-radius:0;
-  background:transparent;
-  padding-left:12px;
-}
-
-/* Historical pages use the same progressive-disclosure principle. */
-body.quiet-performance.qp-history .metric,
-body.quiet-performance.qp-history .dashboard-card{box-shadow:none}
-body.quiet-performance.qp-history .day.workout-card-v2.past-completed{
-  box-shadow:none;
-  background:transparent;
-}
-
-@media(max-width:620px){
-  body.quiet-performance.qp-current .brain-topline{padding:6px 0 7px}
-  body.quiet-performance.qp-current .brain-next{grid-template-columns:72px minmax(0,1fr);column-gap:9px}
-  body.quiet-performance.qp-current .metrics{justify-content:space-between}
-  body.quiet-performance.qp-current .metric{padding:0 9px;gap:4px}
-  body.quiet-performance.qp-current .metric strong{font-size:.88rem}
-  body.quiet-performance.qp-current .metric span{font-size:.64rem}
-  body.quiet-performance.qp-current .dashboard-grid{grid-template-columns:1fr;gap:13px}
-
-  body.quiet-performance.qp-current .dashboard{padding:11px 0 13px}
-}
-/* quiet-performance-v2:end */
-/* future-workout-shell-v1 */
-.day.future-workout-applied>.session,
-.day.future-workout-applied>.swim-workout,
-.day.future-workout-applied>.workout-prescription,
-.day.future-workout-applied>.development-focus,
-.day.future-workout-applied>.next-weather,
-.day.future-workout-applied>.swim-equipment-line,
-.day.future-workout-applied>.card-v2-footer{display:none!important}
-.future-workout-shell{color:var(--qp-text,#111827)}
-.future-workout-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
-.future-workout-title{display:flex;align-items:center;gap:8px;min-width:0;color:var(--qp-text,#111827);font-size:1.07rem;font-weight:820;line-height:1.3;letter-spacing:-.016em}
-.future-workout-title .sport-icon{width:20px;height:20px;flex:0 0 auto;color:var(--qp-secondary,#59636f)}
-.future-workout-title .icon-swim,.future-workout-title .icon-bike,.future-workout-title .icon-enduro,.future-workout-title .icon-strength{width:22px}
-.future-workout-title-text{min-width:0}
-.future-workout-meta{margin-top:3px;color:var(--qp-secondary,#64748b);font-size:.8rem;line-height:1.38}
-.future-workout-weather{display:flex;align-items:center;gap:5px;margin-top:9px;color:var(--qp-secondary,#59636f);font-size:.76rem;line-height:1.4}
-.future-workout-weather .weather-label{color:var(--qp-tertiary,#64748b)}
-.future-workout-weather .weather-icon{width:16px!important;height:16px!important;margin-right:1px!important}
-.future-workout-panel{margin-top:12px;border:1px solid var(--qp-line,#e2e8f0);border-radius:15px;background:rgba(255,255,255,.7);overflow:hidden}
-.future-workout-section{padding:12px 13px}
-.future-workout-section+.future-workout-section{border-top:1px solid var(--qp-line-soft,#eef2f4)}
-.future-workout-label{display:block;margin-bottom:5px;color:var(--qp-tertiary,#64748b);font-size:.63rem;font-weight:850;letter-spacing:.065em;text-transform:uppercase}
-.future-workout-panel .workout-prescription{display:grid!important;grid-template-columns:max-content minmax(0,1fr)!important;margin:0!important;padding:0!important;border:0!important;background:transparent!important}
-.future-workout-panel .workout-prescription-head{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
-.future-workout-panel .workout-prescription-row{display:contents!important}
-.future-workout-panel .workout-prescription-dose{padding:5px 12px 5px 0!important;color:var(--qp-text,#111827)!important;font-size:.9rem!important;font-weight:800!important;line-height:1.35!important;text-align:right!important;white-space:nowrap!important;font-variant-numeric:tabular-nums}
-.future-workout-panel .workout-prescription-text{min-width:0;padding:5px 0 5px 12px!important;border-left:1px solid var(--qp-line,#e2e8f0)!important;color:var(--qp-secondary,#475569)!important;font-size:.82rem!important;line-height:1.42!important}
-.future-workout-simple{margin:0;color:var(--qp-secondary,#475569);font-size:.82rem;line-height:1.45}
-.future-workout-focus{margin:0;color:var(--qp-secondary,#475569);font-size:.82rem;line-height:1.45}
-.future-workout-details{margin-top:11px;border:1px solid var(--qp-line,#e2e8f0);border-radius:15px;background:rgba(255,255,255,.5)}
-.future-workout-details>summary{position:relative;cursor:pointer;list-style:none;padding:11px 38px 11px 13px}
-.future-workout-details>summary::-webkit-details-marker{display:none}
-.future-workout-details>summary:after{content:"⌄";position:absolute;right:14px;top:50%;transform:translateY(-53%);color:var(--qp-tertiary,#64748b);font-size:1rem}
-.future-workout-details[open]>summary:after{content:"⌃"}
-.future-workout-details-title{display:block;color:var(--qp-text,#111827);font-size:.83rem;font-weight:800}
-.future-workout-details-subtitle{display:block;margin-top:2px;color:var(--qp-tertiary,#64748b);font-size:.71rem}
-.future-workout-details-body{padding:0 13px 12px;border-top:1px solid var(--qp-line-soft,#eef2f4)}
-.future-workout-detail{padding-top:10px}
-.future-workout-detail+.future-workout-detail{margin-top:9px;border-top:1px solid var(--qp-line-soft,#eef2f4)}
-.future-workout-detail-label{display:block;margin-bottom:4px;color:var(--qp-tertiary,#64748b);font-size:.63rem;font-weight:850;letter-spacing:.06em;text-transform:uppercase}
-.future-workout-detail p{margin:0;color:var(--qp-secondary,#475569);font-size:.78rem;line-height:1.46}
-.future-workout-sync{display:inline-flex;align-items:center;gap:5px;color:var(--qp-tertiary,#64748b);font-size:.72rem;font-weight:650}
-.future-workout-sync svg{width:13px;height:13px}
-@media(max-width:620px){
-  .future-workout-panel,.future-workout-details{border-radius:13px}
-  .future-workout-section{padding:11px 12px}
-  .future-workout-panel .workout-prescription-dose{padding-right:9px!important;font-size:.86rem!important}
-  .future-workout-panel .workout-prescription-text{padding-left:9px!important;font-size:.79rem!important}
-}
-/* unified-week-navigation-v1 */
-.top-week-nav{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
-  align-items:center;
-  gap:14px;
-  margin:0;
-  padding:2px 0 12px;
-  border-bottom:1px solid var(--qp-line,#e2e8f0);
-}
-.top-week-link{
-  color:var(--qp-secondary,#59636f);
-  font-size:.78rem;
-  font-weight:650;
-  text-decoration:none;
-  white-space:nowrap;
-}
-.top-week-link.next{text-align:right}
-.top-week-link:hover{color:var(--qp-text,#111827)}
-.top-week-link.disabled{color:var(--qp-tertiary,#94a3b8);font-weight:550}
-.top-week-current{
-  display:flex;
-  align-items:baseline;
-  justify-content:center;
-  gap:6px;
-  min-width:0;
-  text-align:center;
-}
-.top-week-current strong{font-size:.92rem;font-weight:780;letter-spacing:-.01em}
-.top-week-current span{color:var(--qp-tertiary,#64748b);font-size:.73rem;white-space:nowrap}
-@media(max-width:620px){
-  .top-week-nav{gap:8px}
-  .top-week-link{font-size:.72rem}
-  .top-week-current{display:grid;gap:0}
-  .top-week-current strong{font-size:.86rem}
-  .top-week-current span{font-size:.67rem}
-}
-/* unified-week-page-shell-v1 */
-.week-context-header{
-  margin-top:38px;
-  padding:0 2px 2px;
-}
-.week-context-header .section{
-  margin:0;
-  font-size:1.24rem;
-  letter-spacing:-.018em;
-}
-.week-context-focus{
-  display:block;
-  margin-top:6px;
-  font-size:.94rem;
-  font-weight:670;
-  line-height:1.4;
-  letter-spacing:-.008em;
-}
-.week-context-meta{
-  margin-top:4px;
-  color:var(--qp-tertiary,#64748b);
-  font-size:.72rem;
-  line-height:1.4;
-}
-.week-context-header .top-details{margin-top:8px}
-.week-context-header .week-context-plan>summary{
-  display:inline-block;
-  cursor:pointer;
-  list-style:none;
-  color:var(--qp-secondary,#59636f);
-  font-size:.68rem;
-  font-weight:600;
-  line-height:1.35;
-  text-decoration:underline;
-  text-decoration-thickness:1px;
-  text-underline-offset:3px;
-  text-decoration-color:var(--qp-line,#cbd5e1);
-}
-.week-context-header .week-context-plan>summary::-webkit-details-marker{display:none}
-.week-context-header .week-context-plan>summary:hover{
-  color:var(--qp-text,#111827);
-  text-decoration-color:currentColor;
-}
-.week-context-header .week-context-plan>summary:after{content:""}
-.week-context-header .week-context-plan[open]>summary:after{content:""}
-.week-context-header + .week-status-expander{
-  margin-top:2px;
-  margin-bottom:20px;
-}
-.week-status-expander{
-  margin:2px 0 20px;
-}
-.week-status-expander>summary{
-  cursor:pointer;
-  list-style:none;
-  color:var(--qp-tertiary,#64748b);
-  font-size:.7rem;
-  font-weight:620;
-  padding:3px 0;
-  line-height:1.35;
-}
-.week-status-expander>summary::-webkit-details-marker{display:none}
-.week-status-expander>summary:after{content:" +"}
-.week-status-expander[open]>summary:after{content:" −"}
-.week-status-body{margin-top:8px}
-.week-status-expander .dashboard{margin:0}
-.week-page-history>.week-review{margin-top:8px}
-@media(max-width:620px){
-  .week-context-header{margin-top:32px;padding:0 1px 2px}
-  .week-context-header .section{font-size:1.16rem}
-  .week-context-focus{font-size:.9rem}
-}
-/* all-week-pass-icons-v1 */
-.week-pass-session{
-  display:flex!important;
-  align-items:flex-start!important;
-  gap:8px!important;
-}
-.week-pass-icon-group{
-  display:inline-flex;
-  align-items:center;
-  gap:4px;
-  flex:0 0 auto;
-  padding-top:1px;
-  color:var(--qp-secondary,#64748b);
-}
-.week-pass-icon-group .sport-icon{
-  width:19px;
-  height:19px;
-  flex:0 0 auto;
-}
-.week-pass-icon-group .icon-swim,
-.week-pass-icon-group .icon-bike,
-.week-pass-icon-group .icon-enduro,
-.week-pass-icon-group .icon-strength{width:21px}
-.week-pass-session-text{min-width:0}
-@media(max-width:620px){
-  .week-pass-icon-group .sport-icon{width:18px;height:18px}
-  .week-pass-icon-group .icon-swim,
-  .week-pass-icon-group .icon-bike,
-  .week-pass-icon-group .icon-enduro,
-  .week-pass-icon-group .icon-strength{width:20px}
-}
-</style>
-</head>
-<body class="quiet-performance qp-history week-page-future"><div class="wrap">
-<nav class="top-week-nav" aria-label="Veckonavigering"><a class="top-week-link prev" href="/träning/">‹ Vecka 40</a><div class="top-week-current"><strong>Vecka 41</strong><span>5–11 okt · preliminär</span></div><span class="top-week-link next disabled">Vecka 42 ›</span></nav>
-<section class="week-context-header"><h2 class="section">Kommande vecka</h2><strong class="week-context-focus">Sim aerob/teknik + kontrollerad löptröskel</strong><div class="week-context-meta">Preliminär · mikrocykel 3 av 4 · 1 fast · 0 planerat · 4 preliminärt · 2 öppet</div><details class="top-details week-context-plan"><summary>Planidé</summary><div class="top-details-body"><p>Fortsätt utveckla simmens aeroba kapacitet och teknik samtidigt som kontrollerad löptröskel och löptålighet bibehålls. Styrka/core skyddas; MTB/Enduro hålls på underhållsnivå och räknas som faktisk extern belastning. Tävlingsmålet (ÖTILLÖ Åland 2027) får ökad vikt i kapacitetsval (mer sim + bibehållen löpning) men blocket undviker tävlingsspecifika kombinations‑/övergångsövningar tills faktiska absorberingsindikatorer och närmare tidpunkt motiverar dem. Mikrocykeln är preliminär men konkret: varje planerat pass har en användbar grundplan. Faktisk belastning och återhämtning används för att behålla eller justera planen, inte för att skapa den i sista stund. Kalenderveckan är bara visningen.</p></div></details></section>
-<details class="week-status-expander"><summary>Planstatus</summary><div class="week-status-body"><section class="dashboard" aria-label="Planöversikt nästa vecka">
-  <div class="metrics preview-metrics">
-    <div class="metric"><strong>1</strong><span>fast</span></div>
-    <div class="metric"><strong>0</strong><span>planerat</span></div>
-    <div class="metric"><strong>4</strong><span>preliminärt</span></div>
-    <div class="metric"><strong>2</strong><span>öppet</span></div>
-  </div>
-  <div class="dashboard-card">
-    <div class="dashboard-title">Veckans fokus</div>
-    <div class="preview-focus">Mikrocykel 3 av 4 i aktuell mesocykel. Skyddade stimuli: swim_aerobic, swim_technique, run_threshold. Grundpassen är konkreta och får inte ökas automatiskt; progression kräver explicita kriterier och justering kräver stöd i fler-dagars faktisk information. Styrka/core är skyddad kapacitet och får inte falla ur som restpost.</div>
-    <div class="preview-note">Preliminär plan: detaljer och belastning ändras när faktisk träning och återhämtning från föregående dagar är kända.</div>
-  </div>
-</section></div></details>
-<div class="day workout-card-v2" id="dag-2026-10-05">
-  <div class="daytop">
-    <div><div class="dow">Måndag</div><div class="date">2026-10-05</div></div>
-    <div class="badge fixed">FAST</div>
-  </div>
-  <div class="session week-pass-session"><span class="week-pass-icon-group" data-week-pass-icons="enduro"><svg class="sport-icon icon-enduro" aria-hidden="true" viewBox="0 0 640 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M280 32c-13.3 0-24 10.7-24 24s10.7 24 24 24l57.7 0 16.4 30.3L256 192l-45.3-45.3c-12-12-28.3-18.7-45.3-18.7L64 128c-17.7 0-32 14.3-32 32l0 32 96 0c88.4 0 160 71.6 160 160c0 11-1.1 21.7-3.2 32l70.4 0c-2.1-10.3-3.2-21-3.2-32c0-52.2 25-98.6 63.7-127.8l15.4 28.6C402.4 276.3 384 312 384 352c0 70.7 57.3 128 128 128s128-57.3 128-128s-57.3-128-128-128c-13.5 0-26.5 2.1-38.7 6L418.2 128l61.8 0c17.7 0 32-14.3 32-32l0-32c0-17.7-14.3-32-32-32l-20.4 0c-7.5 0-14.7 2.6-20.5 7.4L391.7 78.9l-14-26c-7-12.9-20.5-21-35.2-21L280 32zM462.7 311.2l28.2 52.2c6.3 11.7 20.9 16 32.5 9.7s16-20.9 9.7-32.5l-28.2-52.2c2.3-.3 4.7-.4 7.1-.4c35.3 0 64 28.7 64 64s-28.7 64-64 64s-64-28.7-64-64c0-15.5 5.5-29.7 14.7-40.8zM187.3 376c-9.5 23.5-32.5 40-59.3 40c-35.3 0-64-28.7-64-64s28.7-64 64-64c26.9 0 49.9 16.5 59.3 40l66.4 0C242.5 268.8 190.5 224 128 224C57.3 224 0 281.3 0 352s57.3 128 128 128c62.5 0 114.5-44.8 125.8-104l-66.4 0zM128 384a32 32 0 1 0 0-64 32 32 0 1 0 0 64z"/></svg></span><span class="week-pass-session-text">Enduroskola · fast tillfälle</span></div>
-
-
-<div class="development-focus"><strong>Fokus:</strong><span>Teknisk kvalitet och avslappnad körning; faktisk belastning styr efterföljande pass.</span></div><div class="card-v2-footer"><details class="day-why"><summary>Motivering</summary><div class="reason">Fast återkommande enduroskola, totalt åtta måndagar från 24/8. Enduron räknas som faktisk träningsbelastning; övrig träning runt dagen anpassas efter utfallet.</div></details></div></div><div class="day workout-card-v2" id="dag-2026-10-06">
-  <div class="daytop">
-    <div><div class="dow">Tisdag</div><div class="date">2026-10-06</div></div>
-    <div class="badge conditional">KAN ÄNDRAS</div>
-  </div>
-  <div class="session week-pass-session"><span class="week-pass-icon-group" data-week-pass-icons="swim"><svg class="sport-icon icon-swim" aria-hidden="true" viewBox="0 0 576 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M309.5 178.4 447.9 297.1c-1.6.9-3.2 2-4.8 3-18 12.4-40.1 20.3-59.2 20.3-19.6 0-40.8-7.7-59.2-20.3-22.1-15.5-51.6-15.5-73.7 0-17.1 11.8-38 20.3-59.2 20.3-10.1 0-21.1-2.2-31.9-6.2C163.1 193.2 262.2 96 384 96h64c17.7 0 32 14.3 32 32s-14.3 32-32 32h-64c-26.9 0-52.3 6.6-74.5 18.4zM160 160A64 64 0 1 1 32 160a64 64 0 1 1 128 0zM306.5 325.9C329 341.4 356.5 352 384 352c26.9 0 55.4-10.8 77.4-26.1 11.9-8.5 28.1-7.8 39.2 1.7 14.4 11.9 32.5 21 50.6 25.2 17.2 4 27.9 21.2 23.9 38.4s-21.2 27.9-38.4 23.9c-24.5-5.7-44.9-16.5-58.2-25C449.5 405.7 417 416 384 416c-31.9 0-60.6-9.9-80.4-18.9-5.8-2.7-11.1-5.3-15.6-7.7-4.5 2.4-9.7 5.1-15.6 7.7-19.8 9-48.5 18.9-80.4 18.9-33 0-65.5-10.3-94.5-25.8-13.4 8.4-33.7 19.3-58.2 25-17.2 4-34.4-6.7-38.4-23.9s6.7-34.4 23.9-38.4c18.1-4.2 36.2-13.3 50.6-25.2 11.1-9.4 27.3-10.1 39.2-1.7C136.7 341.2 165.1 352 192 352c27.5 0 55-10.6 77.5-26.1 11.1-7.9 25.9-7.9 37 0z"/></svg></span><span class="week-pass-session-text">Simning · 3 200 m · aerob/teknik</span></div>
-  <div class="swim-equipment-line"><strong>Redskap:</strong> utan redskap</div>
-  <div class="workout-prescription"><div class="workout-prescription-head">Passupplägg</div><div class="workout-prescription-row"><span class="workout-prescription-dose">400 m</span><span class="workout-prescription-text">Lugn insim · utan redskap</span></div><div class="workout-prescription-row"><span class="workout-prescription-dose">6×50 m</span><span class="workout-prescription-text">Stabil linje, kontrollerad rotation · utan redskap · v 15 s</span></div><div class="workout-prescription-row"><span class="workout-prescription-dose">4×500 m</span><span class="workout-prescription-text">Stadigt aerob med stabil kroppslinje · utan redskap · v 30 s</span></div><div class="workout-prescription-row"><span class="workout-prescription-dose">6×50 m</span><span class="workout-prescription-text">Avslappnad frekvens med bibehållen linje · utan redskap · v 15 s</span></div><div class="workout-prescription-row"><span class="workout-prescription-dose">200 m</span><span class="workout-prescription-text">Mycket lugnt avsim · utan redskap</span></div></div>
-<div class="development-focus"><strong>Fokus:</strong><span>Teknisk kvalitet och stabil aerob rytm; simningen ska kunna stödja helheten med låg mekanisk kostnad för benen.</span></div><div class="card-v2-footer"><details class="day-why"><summary>Motivering</summary><div class="reason">Lågmekanisk simexponering dagen efter fast enduro ger konkret plan utan att anta att benen är redo för ny benkvalitet. Valet utgår från ett observerat värde 3200 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.</div></details></div></div><div class="day workout-card-v2" id="dag-2026-10-07">
-  <div class="daytop">
-    <div><div class="dow">Onsdag</div><div class="date">2026-10-07</div></div>
-    <div class="badge conditional">KAN ÄNDRAS</div>
-  </div>
-  <div class="session week-pass-session"><span class="week-pass-icon-group" data-week-pass-icons="run"><svg class="sport-icon icon-run" aria-hidden="true" viewBox="0 0 448 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M320 48a48 48 0 1 0-96 0 48 48 0 1 0 96 0zM125.7 175.5c9.9-9.9 23.4-15.5 37.5-15.5 1.9 0 3.8.1 5.6.3L137.6 254c-9.3 28 1.7 58.8 26.8 74.5l86.2 53.9-25.4 88.8c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l28.7-100.4c5.9-20.6-2.6-42.6-20.7-53.9L238 299l30.9-82.4 5.1 12.3C289 264.7 323.9 288 362.7 288H384c17.7 0 32-14.3 32-32s-14.3-32-32-32h-21.3c-12.9 0-24.6-7.8-29.5-19.7l-6.3-15c-14.6-35.1-44.1-61.9-80.5-73.1l-48.7-15c-11.1-3.4-22.7-5.2-34.4-5.2-31 0-60.8 12.3-82.7 34.3l-23.2 23.1c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l23.1-23.1zM91.2 352H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h69.6c19 0 36.2-11.2 43.9-28.5l11.5-25.9-9.5-6c-17.5-10.9-30.5-26.8-37.9-44.9L91.2 352z"/></svg></span><span class="week-pass-session-text">Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg</span></div>
-
-  <div class="workout-prescription"><div class="workout-prescription-head">Passupplägg</div><div class="workout-prescription-row"><span class="workout-prescription-dose">4×8 min</span><span class="workout-prescription-text">Kontrollerad tröskel · vila 90 s · Lugn jogg</span></div></div>
-<div class="development-focus"><strong>Fokus:</strong><span>Jämn, kontrollerad tröskelkaraktär. Progression ska främst öka absorberbar arbetstid, inte jaga högre intensitet.</span></div><div class="card-v2-footer"><details class="day-why"><summary>Motivering</summary><div class="reason">Realiserar mesocykelns primära kapacitet run_threshold med säker separation från annan benbelastning. Valet utgår från ett observerat värde 32 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.</div></details></div></div><div class="day workout-card-v2" id="dag-2026-10-08">
-  <div class="daytop">
-    <div><div class="dow">Torsdag</div><div class="date">2026-10-08</div></div>
-    <div class="badge conditional">KAN ÄNDRAS</div>
-  </div>
-  <div class="session week-pass-session"><span class="week-pass-icon-group" data-week-pass-icons="swim"><svg class="sport-icon icon-swim" aria-hidden="true" viewBox="0 0 576 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M309.5 178.4 447.9 297.1c-1.6.9-3.2 2-4.8 3-18 12.4-40.1 20.3-59.2 20.3-19.6 0-40.8-7.7-59.2-20.3-22.1-15.5-51.6-15.5-73.7 0-17.1 11.8-38 20.3-59.2 20.3-10.1 0-21.1-2.2-31.9-6.2C163.1 193.2 262.2 96 384 96h64c17.7 0 32 14.3 32 32s-14.3 32-32 32h-64c-26.9 0-52.3 6.6-74.5 18.4zM160 160A64 64 0 1 1 32 160a64 64 0 1 1 128 0zM306.5 325.9C329 341.4 356.5 352 384 352c26.9 0 55.4-10.8 77.4-26.1 11.9-8.5 28.1-7.8 39.2 1.7 14.4 11.9 32.5 21 50.6 25.2 17.2 4 27.9 21.2 23.9 38.4s-21.2 27.9-38.4 23.9c-24.5-5.7-44.9-16.5-58.2-25C449.5 405.7 417 416 384 416c-31.9 0-60.6-9.9-80.4-18.9-5.8-2.7-11.1-5.3-15.6-7.7-4.5 2.4-9.7 5.1-15.6 7.7-19.8 9-48.5 18.9-80.4 18.9-33 0-65.5-10.3-94.5-25.8-13.4 8.4-33.7 19.3-58.2 25-17.2 4-34.4-6.7-38.4-23.9s6.7-34.4 23.9-38.4c18.1-4.2 36.2-13.3 50.6-25.2 11.1-9.4 27.3-10.1 39.2-1.7C136.7 341.2 165.1 352 192 352c27.5 0 55-10.6 77.5-26.1 11.1-7.9 25.9-7.9 37 0z"/></svg></span><span class="week-pass-session-text">Simning · 3 200 m · aerob/teknik</span></div>
-  <div class="swim-equipment-line"><strong>Redskap:</strong> utan redskap</div>
-  <div class="workout-prescription"><div class="workout-prescription-head">Passupplägg</div><div class="workout-prescription-row"><span class="workout-prescription-dose">400 m</span><span class="workout-prescription-text">Lugn insim · utan redskap</span></div><div class="workout-prescription-row"><span class="workout-prescription-dose">6×50 m</span><span class="workout-prescription-text">Stabil linje, kontrollerad rotation · utan redskap · v 15 s</span></div><div class="workout-prescription-row"><span class="workout-prescription-dose">4×500 m</span><span class="workout-prescription-text">Stadigt aerob med stabil kroppslinje · utan redskap · v 30 s</span></div><div class="workout-prescription-row"><span class="workout-prescription-dose">6×50 m</span><span class="workout-prescription-text">Avslappnad frekvens med bibehållen linje · utan redskap · v 15 s</span></div><div class="workout-prescription-row"><span class="workout-prescription-dose">200 m</span><span class="workout-prescription-text">Mycket lugnt avsim · utan redskap</span></div></div>
-<div class="development-focus"><strong>Fokus:</strong><span>Teknisk kvalitet och stabil aerob rytm; simningen ska kunna stödja helheten med låg mekanisk kostnad för benen.</span></div><div class="card-v2-footer"><details class="day-why"><summary>Motivering</summary><div class="reason">Lägg en ren lågmekanisk simexponering som ett självständigt pass. Valet utgår från ett observerat värde 3200 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.</div></details></div></div><div class="day workout-card-v2" id="dag-2026-10-09">
-  <div class="daytop">
-    <div><div class="dow">Fredag</div><div class="date">2026-10-09</div></div>
-    <div class="badge open">INTE BESTÄMT</div>
-  </div>
-  <div class="session">Vilodag</div>
-
-
-<div class="card-v2-footer"><details class="day-why"><summary>Motivering</summary><div class="reason">Ingen träning är planerad som standard på denna dag. En ledig dag är inte i sig skäl att lägga till ett pass; eventuell ändring ska tjäna mikrocykeln och bygga på faktisk information.</div></details></div></div><div class="day workout-card-v2" id="dag-2026-10-10">
-  <div class="daytop">
-    <div><div class="dow">Lördag</div><div class="date">2026-10-10</div></div>
-    <div class="badge open">INTE BESTÄMT</div>
-  </div>
-  <div class="session">Vilodag</div>
-
-
-<div class="card-v2-footer"><details class="day-why"><summary>Motivering</summary><div class="reason">Ingen träning är planerad som standard på denna dag. En ledig dag är inte i sig skäl att lägga till ett pass; eventuell ändring ska tjäna mikrocykeln och bygga på faktisk information.</div></details></div></div><div class="day workout-card-v2" id="dag-2026-10-11">
-  <div class="daytop">
-    <div><div class="dow">Söndag</div><div class="date">2026-10-11</div></div>
-    <div class="badge conditional">KAN ÄNDRAS</div>
-  </div>
-  <div class="session week-pass-session"><span class="week-pass-icon-group" data-week-pass-icons="run"><svg class="sport-icon icon-run" aria-hidden="true" viewBox="0 0 448 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M320 48a48 48 0 1 0-96 0 48 48 0 1 0 96 0zM125.7 175.5c9.9-9.9 23.4-15.5 37.5-15.5 1.9 0 3.8.1 5.6.3L137.6 254c-9.3 28 1.7 58.8 26.8 74.5l86.2 53.9-25.4 88.8c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l28.7-100.4c5.9-20.6-2.6-42.6-20.7-53.9L238 299l30.9-82.4 5.1 12.3C289 264.7 323.9 288 362.7 288H384c17.7 0 32-14.3 32-32s-14.3-32-32-32h-21.3c-12.9 0-24.6-7.8-29.5-19.7l-6.3-15c-14.6-35.1-44.1-61.9-80.5-73.1l-48.7-15c-11.1-3.4-22.7-5.2-34.4-5.2-31 0-60.8 12.3-82.7 34.3l-23.2 23.1c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l23.1-23.1zM91.2 352H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h69.6c19 0 36.2-11.2 43.9-28.5l11.5-25.9-9.5-6c-17.5-10.9-30.5-26.8-37.9-44.9L91.2 352z"/></svg></span><span class="week-pass-session-text">Löpning · lugn distans · 120 min</span></div>
-
-  <div class="workout-prescription"><div class="workout-prescription-head">Passupplägg</div><div class="workout-prescription-row"><span class="workout-prescription-dose">120 min</span><span class="workout-prescription-text">Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt.</span></div></div>
-<div class="card-v2-footer"><details class="day-why"><summary>Motivering</summary><div class="reason">Behåll lugn löptålighet med separation från löpkvalitet. Valet utgår från ett observerat värde 119.767 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.</div></details></div></div>
-<div class="reference-tools">
-  <button class="reference-chip" type="button" onclick="openStrengthWindow()">Styrkemall</button>
-  <button class="reference-chip" type="button" onclick="openTrainingSystemInfo()">Om systemet</button>
-</div>
-<dialog id="strengthSheet" class="strength-window" aria-labelledby="strengthWindowTitle">
-  <div class="sheet-inner">
-    <div class="sheet-head" id="strengthDragHandle"><h2 id="strengthWindowTitle">Styrkemall</h2><button class="sheet-close" type="button" onclick="document.getElementById('strengthSheet').close()">Stäng</button></div>
-    <p class="sheet-note">Referens. Aktuellt styrkebeslut styrs av veckoplanen.</p>
-    <ul class="strength-list"><li>Liten dos explosivitet/plyometri när omkringliggande belastning tillåter.</li><li>Bulgarian split squat som huvudalternativ för unilateral benstyrka.</li><li>Marklyft eller RDL som normal höftdominant huvudövning.</li><li>Vad + soleus regelbundet.</li><li>Enarmsrodd + press som huvuddrag/press.</li><li>Välj två bålövningar; låt inte accessoarer tränga undan huvudstyrkan.</li></ul>
-  <div class="development-focus"><strong>Utvecklingsfokus</strong><span>Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt.</span></div></div>
-</dialog>
-<script>
-function openStrengthWindow() {
-  const dialog = document.getElementById('strengthSheet');
-  dialog.style.left = '50%';
-  dialog.style.top = '50%';
-  dialog.style.transform = 'translate(-50%,-50%)';
-  dialog.showModal();
-}
-(function() {
-  const dialog = document.getElementById('strengthSheet');
-  const handle = document.getElementById('strengthDragHandle');
-  let dragging = false;
-  let offsetX = 0;
-  let offsetY = 0;
-  function desktop() { return window.matchMedia('(min-width: 621px)').matches; }
-  function clamp(value, min, max) { return Math.min(Math.max(value, min), max); }
-  handle.addEventListener('pointerdown', (event) => {
-    if (!desktop() || event.target.closest('button')) return;
-    const rect = dialog.getBoundingClientRect();
-    dialog.style.transform = 'none';
-    dialog.style.left = rect.left + 'px';
-    dialog.style.top = rect.top + 'px';
-    offsetX = event.clientX - rect.left;
-    offsetY = event.clientY - rect.top;
-    dragging = true;
-    handle.setPointerCapture(event.pointerId);
-  });
-  handle.addEventListener('pointermove', (event) => {
-    if (!dragging || !desktop()) return;
-    const rect = dialog.getBoundingClientRect();
-    const margin = 8;
-    const maxLeft = Math.max(margin, window.innerWidth - rect.width - margin);
-    const maxTop = Math.max(margin, window.innerHeight - rect.height - margin);
-    dialog.style.left = clamp(event.clientX - offsetX, margin, maxLeft) + 'px';
-    dialog.style.top = clamp(event.clientY - offsetY, margin, maxTop) + 'px';
-  });
-  function stopDrag(event) {
-    if (!dragging) return;
-    dragging = false;
-    if (event.pointerId !== undefined && handle.hasPointerCapture(event.pointerId)) handle.releasePointerCapture(event.pointerId);
-  }
-  handle.addEventListener('pointerup', stopDrag);
-  handle.addEventListener('pointercancel', stopDrag);
-  window.addEventListener('resize', () => {
-    if (!dialog.open || !desktop()) return;
-    const rect = dialog.getBoundingClientRect();
-    const margin = 8;
-    dialog.style.transform = 'none';
-    dialog.style.left = clamp(rect.left, margin, Math.max(margin, window.innerWidth - rect.width - margin)) + 'px';
-    dialog.style.top = clamp(rect.top, margin, Math.max(margin, window.innerHeight - rect.height - margin)) + 'px';
-  });
-})();
-</script>
-
-
-<dialog id="trainingSystemSheet" class="system-window" aria-labelledby="trainingSystemTitle">
-  <div class="system-inner">
-    <div class="system-head" id="trainingSystemDragHandle">
-      <h2 id="trainingSystemTitle">Om träningssystemet</h2>
-      <button class="system-close" type="button" onclick="document.getElementById('trainingSystemSheet').close()">Stäng</button>
-    </div>
-    <p class="system-lead"><strong>Målbilden anger vart. Mesocykeln väljer utvecklingsväg. Mikrocykeln organiserar arbetet. Varje pass ska tjäna kedjan.</strong></p>
-    <ul class="system-list">
-      <li><strong>Målbild:</strong> den långsiktiga riktningen är överordnad. Om målbilden ändras ska mesocykeln, mikrocyklerna och passen omprövas nedåt i kedjan.</li>
-      <li><strong>Mesocykel:</strong> flerveckors planeringsmotor. Den väljer utvecklingsfokus, skyddade stimuli, stödjande träning, progressionsregler och vad som ska utvärderas.</li>
-      <li><strong>Mikrocykel:</strong> den korta operativa träningscykeln. Den organiserar mesocykelns stimuli till en absorberbar följd av pass, vila och öppna beslut. I nuläget är den sju dagar.</li>
-      <li><strong>Kalendervecka:</strong> endast presentations- och navigeringslager. Mikrocykeln visas måndag–söndag för enkelhet, men veckan är inte ett träningsmål eller en egen planeringsnivå.</li>
-      <li><strong>Navigering 2–3 dagar:</strong> genomförd träning, återhämtning, fasta åtaganden och andra faktiska omständigheter kan omorganisera mikrocykeln. När ett pass blir dagens pass ska stimuluset normalt översättas till konkret duration, distans eller passstruktur när underlaget räcker; annars visas uttryckligen att dosbeslut saknas. Vägen ändras — inte riktningen.</li>
-      <li><strong>Pass:</strong> det enskilda passet verkställer ett tydligt stimulus eller en stödjande roll. Om passet ändras skyddas i första hand stimuluset, inte exakt passform eller veckodag.</li>
-      <li><strong>Återkoppling:</strong> faktisk respons går tillbaka uppåt. Mikrocykeln justeras löpande och mesocykeln utvärderas mot målbilden.</li>
-      <li><strong>Data:</strong> Strava ger genomförd träning, Garmin via Intervals.icu privat återhämtningskontext och SMHI väder.</li>
-      <!-- backend-status-ui-v1:start -->
-<li class="backend-status-row" data-backend-status-row>
-  <strong>Backend:</strong> <span data-training-backend-status>Kontrollerar Supabase…</span>
-</li>
-<!-- backend-status-ui-v1:end -->
-    </ul>
-  </div>
-</dialog><!-- backend-status-ui-v1:start -->
-<script>
-(function() {
-  const row = document.querySelector('[data-backend-status-row]');
-  const target = document.querySelector('[data-training-backend-status]');
-  if (!row || !target) return;
-
-  const publishableKey = "";
-  const endpoint = "https://izzevnhgtsvffpkccoai.supabase.co/rest/v1/rpc/training_backend_status";
-  if (!publishableKey) {
-    row.hidden = true;
-    return;
-  }
-
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 5000);
-
-  fetch(endpoint, {
-    method: 'POST',
-    headers: {
-      'apikey': publishableKey,
-      'Content-Type': 'application/json'
-    },
-    body: '{}',
-    cache: 'no-store',
-    signal: controller.signal
-  })
-    .then((response) => {
-      if (!response.ok) throw new Error('HTTP ' + response.status);
-      return response.json();
-    })
-    .then((data) => {
-      if (!data || data.status !== 'ok') {
-        target.textContent = 'Supabase · avvikelse';
-        return;
-      }
-      target.textContent = 'Supabase · OK';
-      const details = [];
-      if (Number.isInteger(data.current_workouts)) {
-        details.push(data.current_workouts + ' aktuella pass');
-      }
-      if (data.snapshot) details.push('snapshot ' + data.snapshot);
-      if (data.last_sync_at) {
-        const when = new Date(data.last_sync_at);
-        if (!Number.isNaN(when.getTime())) {
-          details.push('synkad ' + when.toLocaleString('sv-SE'));
-        }
-      }
-      if (details.length) target.title = details.join(' · ');
-    })
-    .catch(() => {
-      target.textContent = 'Supabase · status ej tillgänglig';
-    })
-    .finally(() => clearTimeout(timeout));
-})();
-</script>
-<!-- backend-status-ui-v1:end -->
-<script>
-function openTrainingSystemInfo() {
-  const dialog = document.getElementById('trainingSystemSheet');
-  dialog.style.left = '50%';
-  dialog.style.top = '50%';
-  dialog.style.transform = 'translate(-50%,-50%)';
-  dialog.showModal();
-}
-(function() {
-  const dialog = document.getElementById('trainingSystemSheet');
-  const handle = document.getElementById('trainingSystemDragHandle');
-  let dragging = false;
-  let offsetX = 0;
-  let offsetY = 0;
-  function desktop() { return window.matchMedia('(min-width: 621px)').matches; }
-  function clamp(value, min, max) { return Math.min(Math.max(value, min), max); }
-  handle.addEventListener('pointerdown', (event) => {
-    if (!desktop() || event.target.closest('button')) return;
-    const rect = dialog.getBoundingClientRect();
-    dialog.style.transform = 'none';
-    dialog.style.left = rect.left + 'px';
-    dialog.style.top = rect.top + 'px';
-    offsetX = event.clientX - rect.left;
-    offsetY = event.clientY - rect.top;
-    dragging = true;
-    handle.setPointerCapture(event.pointerId);
-  });
-  handle.addEventListener('pointermove', (event) => {
-    if (!dragging || !desktop()) return;
-    const rect = dialog.getBoundingClientRect();
-    const margin = 8;
-    const maxLeft = Math.max(margin, window.innerWidth - rect.width - margin);
-    const maxTop = Math.max(margin, window.innerHeight - rect.height - margin);
-    dialog.style.left = clamp(event.clientX - offsetX, margin, maxLeft) + 'px';
-    dialog.style.top = clamp(event.clientY - offsetY, margin, maxTop) + 'px';
-  });
-  function stopDrag(event) {
-    if (!dragging) return;
-    dragging = false;
-    if (event.pointerId !== undefined && handle.hasPointerCapture(event.pointerId)) handle.releasePointerCapture(event.pointerId);
-  }
-  handle.addEventListener('pointerup', stopDrag);
-  handle.addEventListener('pointercancel', stopDrag);
-  window.addEventListener('resize', () => {
-    if (!dialog.open || !desktop()) return;
-    const rect = dialog.getBoundingClientRect();
-    const margin = 8;
-    dialog.style.transform = 'none';
-    dialog.style.left = clamp(rect.left, margin, Math.max(margin, window.innerWidth - rect.width - margin)) + 'px';
-    dialog.style.top = clamp(rect.top, margin, Math.max(margin, window.innerHeight - rect.height - margin)) + 'px';
-  });
-})();
-</script>
-
-<footer>Preliminär framtidsplan. Faktisk belastning och återhämtning styr kommande justeringar. · <a href="/cdn-cgi/access/logout" style="color:inherit">Logga ut</a></footer>
-</div></body></html>
+</style></head><body><div class="v2-shell"><div class="v2-shell-meta"><a href="/träning/malbild-2027/" data-v2-goal-link>Målbild 2027 →</a></div><main class="v2-shell-main"><nav class="v2-week-nav" aria-label="Veckonavigering"><a class="v2-week-link prev" href="/träning/">‹ Vecka 40</a><div class="v2-week-current"><strong>Vecka 41</strong><span>5–11 okt · kommande</span></div><span class="v2-week-link next disabled"></span></nav><section class="v2-week-context" aria-label="Kommande veckas fokus"><h2>Kommande vecka</h2><strong class="v2-week-focus">Sim aerob/teknik + kontrollerad löptröskel</strong><p class="v2-week-meta">Byggblock · mikrocykel 3 av 4 · 0 pass · 0:00 · 0 träningsdagar</p><details class="v2-week-context-plan"><summary>Planidé</summary><div class="v2-week-context-plan-body"><p>Fortsätt utveckla simmens aeroba kapacitet och teknik samtidigt som kontrollerad löptröskel och löptålighet bibehålls. Styrka/core skyddas; MTB/Enduro hålls på underhållsnivå och räknas som faktisk extern belastning. Tävlingsmålet (ÖTILLÖ Åland 2027) får ökad vikt i kapacitetsval (mer sim + bibehållen löpning) men blocket undviker tävlingsspecifika kombinations‑/övergångsövningar tills faktiska absorberingsindikatorer och närmare tidpunkt motiverar dem. Mikrocykeln är preliminär men konkret: varje planerat pass har en användbar grundplan. Faktisk belastning och återhämtning används för att behålla eller justera planen, inte för att skapa den i sista stund. Kalenderveckan är bara visningen.</p><p><strong>Mesocykelhypotes:</strong> Athleten har aktuell bevisad simexponering (flera 3–4k‑pass) och stabil löpkontinuitet (långa distanspass, återkommande 4×8 tröskel och ökande backserier) vilket tillåter en konservativ progression i simteknik/aerobitet och konsolidering av tröskel. Skyddad styrka/core minskar risk för neuromuskulär regression. Swimrun‑specifika övergångs‑/kombinationstålighetsgap kvarstår och kräver explicit recept innan införande.</p><p><strong>Primärt:</strong> sim aerob, simteknik, kontrollerad löptröskel · <strong>Sekundärt:</strong> lugn löpdistans, backstyrka/löpekonomi, MTB aerob, MTB teknik · <strong>Underhåll:</strong> kontrollerad simtröskel · <strong>Skyddat:</strong> unilateral styrka, core, plyometri</p></div></details></section><section class="v2-week" aria-label="Kommande veckas pass" data-start="2026-10-05" data-end="2026-10-11"><ol><li class="v2-week-day v2-week-card" data-date="2026-10-05" data-state="fixed"><div class="v2-week-dayhead"><span class="v2-week-dow">Måndag</span><span class="v2-week-date">5 okt</span><span class="v2-week-state">Fast</span></div><div class="v2-week-daybody"><div class="v2-week-planned-list"><article class="v2-week-planned-workout" data-workout-key="20260921-swim_aerobic-swim_technique-run_threshold:mc3:2026-10-05:fixed_enduro_school"><header><span class="v2-sport-icons" data-sport-icons="enduro"><svg class="v2-sport-icon icon-enduro" data-sport-icon="enduro" aria-hidden="true" viewBox="0 0 640 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M280 32c-13.3 0-24 10.7-24 24s10.7 24 24 24l57.7 0 16.4 30.3L256 192l-45.3-45.3c-12-12-28.3-18.7-45.3-18.7L64 128c-17.7 0-32 14.3-32 32l0 32 96 0c88.4 0 160 71.6 160 160c0 11-1.1 21.7-3.2 32l70.4 0c-2.1-10.3-3.2-21-3.2-32c0-52.2 25-98.6 63.7-127.8l15.4 28.6C402.4 276.3 384 312 384 352c0 70.7 57.3 128 128 128s128-57.3 128-128s-57.3-128-128-128c-13.5 0-26.5 2.1-38.7 6L418.2 128l61.8 0c17.7 0 32-14.3 32-32l0-32c0-17.7-14.3-32-32-32l-20.4 0c-7.5 0-14.7 2.6-20.5 7.4L391.7 78.9l-14-26c-7-12.9-20.5-21-35.2-21L280 32zM462.7 311.2l28.2 52.2c6.3 11.7 20.9 16 32.5 9.7s16-20.9 9.7-32.5l-28.2-52.2c2.3-.3 4.7-.4 7.1-.4c35.3 0 64 28.7 64 64s-28.7 64-64 64s-64-28.7-64-64c0-15.5 5.5-29.7 14.7-40.8zM187.3 376c-9.5 23.5-32.5 40-59.3 40c-35.3 0-64-28.7-64-64s28.7-64 64-64c26.9 0 49.9 16.5 59.3 40l66.4 0C242.5 268.8 190.5 224 128 224C57.3 224 0 281.3 0 352s57.3 128 128 128c62.5 0 114.5-44.8 125.8-104l-66.4 0zM128 384a32 32 0 1 0 0-64 32 32 0 1 0 0 64z"/></svg></span><strong>Enduroskola · fast tillfälle</strong></header><section class="v2-prescription v2-prescription-list"><h2>Passupplägg</h2><ul><li>Fast/externt strukturerat pass · extern struktur · Teknisk kvalitet och avslappnad körning; faktisk belastning styr efterföljande pass.</li></ul></section><div class="v2-development-focus"><strong>Fokus:</strong><span>Teknisk kvalitet och avslappnad körning; faktisk belastning styr efterföljande pass.</span></div><div class="v2-card-footer"><details class="v2-rationale"><summary>Motivering</summary><p>Fast återkommande enduroskola, totalt åtta måndagar från 24/8. Enduron räknas som faktisk träningsbelastning; övrig träning runt dagen anpassas efter utfallet.</p></details></div></article></div></div></li><li class="v2-week-day v2-week-card" data-date="2026-10-06" data-state="preliminary"><div class="v2-week-dayhead"><span class="v2-week-dow">Tisdag</span><span class="v2-week-date">6 okt</span><span class="v2-week-state">Preliminärt</span></div><div class="v2-week-daybody"><div class="v2-week-planned-list"><article class="v2-week-planned-workout" data-workout-key="20260921-swim_aerobic-swim_technique-run_threshold:mc3:2026-10-06:swim_aerobic_technique_1"><header><span class="v2-sport-icons" data-sport-icons="swim"><svg class="v2-sport-icon icon-swim" data-sport-icon="swim" aria-hidden="true" viewBox="0 0 576 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M309.5 178.4 447.9 297.1c-1.6.9-3.2 2-4.8 3-18 12.4-40.1 20.3-59.2 20.3-19.6 0-40.8-7.7-59.2-20.3-22.1-15.5-51.6-15.5-73.7 0-17.1 11.8-38 20.3-59.2 20.3-10.1 0-21.1-2.2-31.9-6.2C163.1 193.2 262.2 96 384 96h64c17.7 0 32 14.3 32 32s-14.3 32-32 32h-64c-26.9 0-52.3 6.6-74.5 18.4zM160 160A64 64 0 1 1 32 160a64 64 0 1 1 128 0zM306.5 325.9C329 341.4 356.5 352 384 352c26.9 0 55.4-10.8 77.4-26.1 11.9-8.5 28.1-7.8 39.2 1.7 14.4 11.9 32.5 21 50.6 25.2 17.2 4 27.9 21.2 23.9 38.4s-21.2 27.9-38.4 23.9c-24.5-5.7-44.9-16.5-58.2-25C449.5 405.7 417 416 384 416c-31.9 0-60.6-9.9-80.4-18.9-5.8-2.7-11.1-5.3-15.6-7.7-4.5 2.4-9.7 5.1-15.6 7.7-19.8 9-48.5 18.9-80.4 18.9-33 0-65.5-10.3-94.5-25.8-13.4 8.4-33.7 19.3-58.2 25-17.2 4-34.4-6.7-38.4-23.9s6.7-34.4 23.9-38.4c18.1-4.2 36.2-13.3 50.6-25.2 11.1-9.4 27.3-10.1 39.2-1.7C136.7 341.2 165.1 352 192 352c27.5 0 55-10.6 77.5-26.1 11.1-7.9 25.9-7.9 37 0z"/></svg></span><strong>Simning · 3 200 m · aerob/teknik</strong></header><section class="v2-prescription v2-prescription-grid"><h2>Passupplägg</h2><div class="v2-prescription-row"><span class="v2-prescription-dose">400 m</span><span class="v2-prescription-text">Lugn insim · utan redskap</span></div><div class="v2-prescription-row"><span class="v2-prescription-dose">6×50 m</span><span class="v2-prescription-text">Stabil linje, kontrollerad rotation · utan redskap · v 15 s</span></div><div class="v2-prescription-row"><span class="v2-prescription-dose">4×500 m</span><span class="v2-prescription-text">Stadigt aerob med stabil kroppslinje · utan redskap · v 30 s</span></div><div class="v2-prescription-row"><span class="v2-prescription-dose">6×50 m</span><span class="v2-prescription-text">Avslappnad frekvens med bibehållen linje · utan redskap · v 15 s</span></div><div class="v2-prescription-row"><span class="v2-prescription-dose">200 m</span><span class="v2-prescription-text">Mycket lugnt avsim · utan redskap</span></div></section><div class="v2-development-focus"><strong>Fokus:</strong><span>Teknisk kvalitet och stabil aerob rytm; simningen ska kunna stödja helheten med låg mekanisk kostnad för benen.</span></div><div class="v2-card-footer"><details class="v2-rationale"><summary>Motivering</summary><p>Låg bensladd dag efter enduro; teknikprioriterat simpådrag för att bevara swim_technique utan mekanisk benstress. Valet utgår från ett observerat värde 3200 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.</p></details></div></article></div></div></li><li class="v2-week-day v2-week-card" data-date="2026-10-07" data-state="preliminary"><div class="v2-week-dayhead"><span class="v2-week-dow">Onsdag</span><span class="v2-week-date">7 okt</span><span class="v2-week-state">Preliminärt</span></div><div class="v2-week-daybody"><div class="v2-week-planned-list"><article class="v2-week-planned-workout" data-workout-key="20260921-swim_aerobic-swim_technique-run_threshold:mc3:2026-10-07:strength_core_2"><header><span class="v2-sport-icons" data-sport-icons="strength"><svg class="v2-sport-icon icon-strength" data-sport-icon="strength" aria-hidden="true" viewBox="0 0 640 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M96 64c0-17.7 14.3-32 32-32h32c17.7 0 32 14.3 32 32v160 64 160c0 17.7-14.3 32-32 32h-32c-17.7 0-32-14.3-32-32v-64H64c-17.7 0-32-14.3-32-32v-64c-17.7 0-32-14.3-32-32s14.3-32 32-32v-64c0-17.7 14.3-32 32-32h32V64zm448 0v64h32c17.7 0 32 14.3 32 32v64c17.7 0 32 14.3 32 32s-14.3 32-32 32v64c0 17.7-14.3 32-32 32h-32v64c0 17.7-14.3 32-32 32h-32c-17.7 0-32-14.3-32-32V288 224 64c0-17.7 14.3-32 32-32h32c17.7 0 32 14.3 32 32zM416 224v64H224v-64h192z"/></svg></span><strong>Styrka/core · ca 35 min · styrkemall</strong></header><section class="v2-prescription v2-prescription-grid"><h2>Passupplägg</h2><div class="v2-prescription-row"><span class="v2-prescription-dose">35 min</span><span class="v2-prescription-text">Styrka/core inom vald tidsram</span></div><div class="v2-prescription-row"><span class="v2-prescription-dose">—</span><span class="v2-prescription-text">Liten dos explosivitet/plyometri när omkringliggande belastning tillåter.</span></div><div class="v2-prescription-row"><span class="v2-prescription-dose">—</span><span class="v2-prescription-text">Bulgarian split squat som huvudalternativ för unilateral benstyrka.</span></div><div class="v2-prescription-row"><span class="v2-prescription-dose">—</span><span class="v2-prescription-text">Marklyft eller RDL som normal höftdominant huvudövning.</span></div><div class="v2-prescription-row"><span class="v2-prescription-dose">—</span><span class="v2-prescription-text">Vad + soleus regelbundet.</span></div><div class="v2-prescription-row"><span class="v2-prescription-dose">—</span><span class="v2-prescription-text">Enarmsrodd + press som huvuddrag/press.</span></div><div class="v2-prescription-row"><span class="v2-prescription-dose">—</span><span class="v2-prescription-text">Välj två bålövningar; låt inte accessoarer tränga undan huvudstyrkan.</span></div></section><div class="v2-development-focus"><strong>Fokus:</strong><span>Kontrollerad unilateral benstyrka, höftdominant arbete och bål. Plyometri endast när benen är mekaniskt fräscha.</span></div><div class="v2-card-footer"><details class="v2-rationale"><summary>Motivering</summary><p>Säkerställ minst en styrka/core‑session enligt mesocycle‑guardrails för neuromuskulärt skydd utan att vara primär utvecklingsaxel. Valet utgår från ett observerat värde 36.8667 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.</p></details></div></article></div></div></li><li class="v2-week-day v2-week-card" data-date="2026-10-08" data-state="preliminary"><div class="v2-week-dayhead"><span class="v2-week-dow">Torsdag</span><span class="v2-week-date">8 okt</span><span class="v2-week-state">Preliminärt</span></div><div class="v2-week-daybody"><div class="v2-week-planned-list"><article class="v2-week-planned-workout" data-workout-key="20260921-swim_aerobic-swim_technique-run_threshold:mc3:2026-10-08:swim_aerobic_endurance_3"><header><span class="v2-sport-icons" data-sport-icons="swim"><svg class="v2-sport-icon icon-swim" data-sport-icon="swim" aria-hidden="true" viewBox="0 0 576 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M309.5 178.4 447.9 297.1c-1.6.9-3.2 2-4.8 3-18 12.4-40.1 20.3-59.2 20.3-19.6 0-40.8-7.7-59.2-20.3-22.1-15.5-51.6-15.5-73.7 0-17.1 11.8-38 20.3-59.2 20.3-10.1 0-21.1-2.2-31.9-6.2C163.1 193.2 262.2 96 384 96h64c17.7 0 32 14.3 32 32s-14.3 32-32 32h-64c-26.9 0-52.3 6.6-74.5 18.4zM160 160A64 64 0 1 1 32 160a64 64 0 1 1 128 0zM306.5 325.9C329 341.4 356.5 352 384 352c26.9 0 55.4-10.8 77.4-26.1 11.9-8.5 28.1-7.8 39.2 1.7 14.4 11.9 32.5 21 50.6 25.2 17.2 4 27.9 21.2 23.9 38.4s-21.2 27.9-38.4 23.9c-24.5-5.7-44.9-16.5-58.2-25C449.5 405.7 417 416 384 416c-31.9 0-60.6-9.9-80.4-18.9-5.8-2.7-11.1-5.3-15.6-7.7-4.5 2.4-9.7 5.1-15.6 7.7-19.8 9-48.5 18.9-80.4 18.9-33 0-65.5-10.3-94.5-25.8-13.4 8.4-33.7 19.3-58.2 25-17.2 4-34.4-6.7-38.4-23.9s6.7-34.4 23.9-38.4c18.1-4.2 36.2-13.3 50.6-25.2 11.1-9.4 27.3-10.1 39.2-1.7C136.7 341.2 165.1 352 192 352c27.5 0 55-10.6 77.5-26.1 11.1-7.9 25.9-7.9 37 0z"/></svg></span><strong>Simning · 3 600 m · aerob uthållighet</strong></header><section class="v2-prescription v2-prescription-grid"><h2>Passupplägg</h2><div class="v2-prescription-row"><span class="v2-prescription-dose">600 m</span><span class="v2-prescription-text">Lugn insim med fokus på linje och avslappning · utan redskap</span></div><div class="v2-prescription-row"><span class="v2-prescription-dose">4×600 m</span><span class="v2-prescription-text">Stabil aerob rytm och bibehållen teknik genom hela blocket · utan redskap · v 30 s</span></div><div class="v2-prescription-row"><span class="v2-prescription-dose">4×100 m</span><span class="v2-prescription-text">Avslappnad frekvens med stabil linje · utan redskap · v 20 s</span></div><div class="v2-prescription-row"><span class="v2-prescription-dose">200 m</span><span class="v2-prescription-text">Mycket lugnt avsim · utan redskap</span></div></section><div class="v2-development-focus"><strong>Fokus:</strong><span>Utveckla simuthållighet genom längre sammanhängande aeroba block med stabil teknik, utan att samtidigt lägga till ett tröskelfokus.</span></div><div class="v2-card-footer"><details class="v2-rationale"><summary>Motivering</summary><p>Progress: konservativ ökning av sim‑sessionens sammanhängande längd (aerobic_endurance) som blockets enda progressiva primära stimulus, stödd av upprepade 3–4k‑pass i athlete_state. Valet utgår från ett observerat värde 3600 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Katalogen innehåller inget högre verifierat steg, därför konsolideras dosen. Veckobeslut: progress; materialiserad relation: hold.</p></details></div></article></div></div></li><li class="v2-week-day v2-week-card" data-date="2026-10-09" data-state="preliminary"><div class="v2-week-dayhead"><span class="v2-week-dow">Fredag</span><span class="v2-week-date">9 okt</span><span class="v2-week-state">Preliminärt</span></div><div class="v2-week-daybody"><div class="v2-week-planned-list"><article class="v2-week-planned-workout" data-workout-key="20260921-swim_aerobic-swim_technique-run_threshold:mc3:2026-10-09:run_threshold_4"><header><span class="v2-sport-icons" data-sport-icons="run"><svg class="v2-sport-icon icon-run" data-sport-icon="run" aria-hidden="true" viewBox="0 0 448 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M320 48a48 48 0 1 0-96 0 48 48 0 1 0 96 0zM125.7 175.5c9.9-9.9 23.4-15.5 37.5-15.5 1.9 0 3.8.1 5.6.3L137.6 254c-9.3 28 1.7 58.8 26.8 74.5l86.2 53.9-25.4 88.8c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l28.7-100.4c5.9-20.6-2.6-42.6-20.7-53.9L238 299l30.9-82.4 5.1 12.3C289 264.7 323.9 288 362.7 288H384c17.7 0 32-14.3 32-32s-14.3-32-32-32h-21.3c-12.9 0-24.6-7.8-29.5-19.7l-6.3-15c-14.6-35.1-44.1-61.9-80.5-73.1l-48.7-15c-11.1-3.4-22.7-5.2-34.4-5.2-31 0-60.8 12.3-82.7 34.3l-23.2 23.1c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l23.1-23.1zM91.2 352H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h69.6c19 0 36.2-11.2 43.9-28.5l11.5-25.9-9.5-6c-17.5-10.9-30.5-26.8-37.9-44.9L91.2 352z"/></svg></span><strong>Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg</strong></header><section class="v2-prescription v2-prescription-grid"><h2>Passupplägg</h2><div class="v2-prescription-row"><span class="v2-prescription-dose">4×8 min</span><span class="v2-prescription-text">Kontrollerad tröskel · vila 90 s · Lugn jogg</span></div></section><div class="v2-development-focus"><strong>Fokus:</strong><span>Jämn, kontrollerad tröskelkaraktär. Progression ska främst öka absorberbar arbetstid, inte jaga högre intensitet.</span></div><div class="v2-card-footer"><details class="v2-rationale"><summary>Motivering</summary><p>Konsolidera kontrollerad tröskel (bevara 4×8‑karaktär) som primärt löpstimulus utan progression denna mikrocykel. Valet utgår från ett observerat värde 32 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.</p></details></div></article></div></div></li><li class="v2-week-day v2-week-card" data-date="2026-10-10" data-state="open"><div class="v2-week-dayhead"><span class="v2-week-dow">Lördag</span><span class="v2-week-date">10 okt</span><span class="v2-week-state">Vilodag</span></div><div class="v2-week-daybody"><strong class="v2-week-session v2-rest-day">Vilodag</strong></div></li><li class="v2-week-day v2-week-card" data-date="2026-10-11" data-state="preliminary"><div class="v2-week-dayhead"><span class="v2-week-dow">Söndag</span><span class="v2-week-date">11 okt</span><span class="v2-week-state">Preliminärt</span></div><div class="v2-week-daybody"><div class="v2-week-planned-list"><article class="v2-week-planned-workout" data-workout-key="20260921-swim_aerobic-swim_technique-run_threshold:mc3:2026-10-11:run_hill_quality_5"><header><span class="v2-sport-icons" data-sport-icons="run"><svg class="v2-sport-icon icon-run" data-sport-icon="run" aria-hidden="true" viewBox="0 0 448 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M320 48a48 48 0 1 0-96 0 48 48 0 1 0 96 0zM125.7 175.5c9.9-9.9 23.4-15.5 37.5-15.5 1.9 0 3.8.1 5.6.3L137.6 254c-9.3 28 1.7 58.8 26.8 74.5l86.2 53.9-25.4 88.8c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l28.7-100.4c5.9-20.6-2.6-42.6-20.7-53.9L238 299l30.9-82.4 5.1 12.3C289 264.7 323.9 288 362.7 288H384c17.7 0 32-14.3 32-32s-14.3-32-32-32h-21.3c-12.9 0-24.6-7.8-29.5-19.7l-6.3-15c-14.6-35.1-44.1-61.9-80.5-73.1l-48.7-15c-11.1-3.4-22.7-5.2-34.4-5.2-31 0-60.8 12.3-82.7 34.3l-23.2 23.1c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l23.1-23.1zM91.2 352H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h69.6c19 0 36.2-11.2 43.9-28.5l11.5-25.9-9.5-6c-17.5-10.9-30.5-26.8-37.9-44.9L91.2 352z"/></svg></span><strong>Löpning · backkvalitet · 15 min lugnt + 3 × 8 × 150 m / lugn joggvila + 10 min lugnt</strong></header><section class="v2-prescription v2-prescription-grid"><h2>Passupplägg</h2><div class="v2-prescription-row"><span class="v2-prescription-dose">15 min</span><span class="v2-prescription-text">Lugnt</span></div><div class="v2-prescription-row"><span class="v2-prescription-dose">3×8×150 m</span><span class="v2-prescription-text">Kraftfull men kontrollerad löpning med bibehållen mekanik; ingen maximal sprint eller syrajakt. · Lugn joggvila</span></div><div class="v2-prescription-row"><span class="v2-prescription-dose">10 min</span><span class="v2-prescription-text">Lugnt</span></div></section><div class="v2-development-focus"><strong>Fokus:</strong><span>Kraftfull men kontrollerad löpning med bibehållen mekanik; ingen maximal sprint eller syrajakt.</span></div><div class="v2-card-footer"><details class="v2-rationale"><summary>Motivering</summary><p>Etablera ett separat backkvalitetspass (inte samma karaktär som tröskel) för att upprätthålla run_hill_quality; placerat med en vilodag emellan för att undvika intilliggande löpstressorer. Valet utgår från ett observerat värde 24 i athlete_state för receptets dosvariabel; värdet används som kapacitetsfakta, inte som bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.</p></details></div></article></div></div></li></ol></section></main><nav class="v2-reference-tools" aria-label="Referenser"><button type="button" data-v2-open-reference="strength">Styrkemall</button><button type="button" data-v2-open-reference="system">Om systemet</button></nav><dialog id="v2-strength-reference" class="v2-reference-dialog"><form method="dialog"><button aria-label="Stäng">Stäng</button></form><h2>Styrkemall</h2><p>Referens. Aktuellt styrkebeslut styrs av mesocykeln, mikrocykelns ordning och faktisk närbelastning.</p><ul><li>Liten dos explosivitet/plyometri när omkringliggande belastning tillåter.</li><li>Bulgarian split squat som huvudalternativ för unilateral benstyrka.</li><li>Marklyft eller RDL som normal höftdominant huvudövning.</li><li>Vad + soleus regelbundet.</li><li>Enarmsrodd + press som huvuddrag/press.</li><li>Välj två bålövningar; låt inte accessoarer tränga undan huvudstyrkan.</li></ul></dialog><dialog id="v2-system-reference" class="v2-reference-dialog"><form method="dialog"><button aria-label="Stäng">Stäng</button></form><h2>Om träningssystemet</h2><p><strong>Målbilden anger vart. Mesocykeln väljer utvecklingsväg. Mikrocykeln organiserar arbetet.</strong></p><ul><li><strong>Målbild:</strong> Den långsiktiga riktningen är överordnad. Ändrad målbild kräver omprövning nedåt i planeringskedjan.</li><li><strong>Mesocykel:</strong> Flerveckors planeringsmotor för utvecklingsfokus, skyddade stimuli, progression och utvärdering.</li><li><strong>Mikrocykel:</strong> Organiserar arbetet till en absorberbar följd av pass, vila och öppna beslut.</li><li><strong>Pass:</strong> Verkställer ett tydligt stimulus eller en stödjande roll; stimuluset skyddas före exakt passform eller veckodag.</li><li><strong>Återkoppling:</strong> Faktisk respons går tillbaka uppåt och kan justera mikrocykel och mesocykel.</li></ul></dialog><script>document.querySelectorAll("[data-v2-open-reference]").forEach((b)=>b.addEventListener("click",()=>document.getElementById("v2-"+b.dataset.v2OpenReference+"-reference").showModal()));</script></div></body></html>
