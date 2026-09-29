@@ -13,9 +13,11 @@ from collections import defaultdict
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
+from canonical_plan import planned_workouts as canonical_planned_workouts
 from coach_rules import activity_family, activity_local_date
 from dose_response import build_dose_response, build_load_windows
 from supabase_activity_backend import load_activities_for_runtime
+from training_profile import build_training_profile
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
@@ -23,6 +25,8 @@ ACTIVITIES_FILE = DATA / "activities.json"
 PERFORMANCE_FILE = DATA / "performance_history.json"
 REVIEWS_DIR = DATA / "week_reviews"
 OUTPUT_FILE = DATA / "athlete_state.json"
+PLAN_FILE = DATA / "plan.json"
+UPCOMING_FILE = DATA / "upcoming_week.json"
 SCHEMA_VERSION = 1
 LOOKBACK_DAYS = 56
 
@@ -140,11 +144,26 @@ def recent_reviews(limit=6):
     return rows
 
 
-def build_state(activities_state, performance_history, *, today=None, lookback_days=LOOKBACK_DAYS):
+def build_state(
+    activities_state,
+    performance_history,
+    *,
+    today=None,
+    lookback_days=LOOKBACK_DAYS,
+    planned_workouts=None,
+    previous_state=None,
+):
     today = today or date.today()
     if isinstance(today, str):
         today = date.fromisoformat(today)
     start = today - timedelta(days=lookback_days - 1)
+
+    planned_workouts = list(planned_workouts or [])
+    previous_profiles = {
+        str(row.get("id")): row.get("training_profile")
+        for row in ((previous_state or {}).get("recent_sessions") or [])
+        if row.get("id") is not None and isinstance(row.get("training_profile"), dict)
+    }
 
     selected = []
     for activity in activities_state.get("activities") or []:
@@ -161,6 +180,7 @@ def build_state(activities_state, performance_history, *, today=None, lookback_d
 
     summary = defaultdict(lambda: {"activity_count": 0, "time_s": 0, "distance_m": 0.0, "active_days": set()})
     recent_sessions = []
+    activity_by_id = {}
     evidence = []
     for day, activity in selected:
         family = activity_family(activity) or str(activity.get("sport_type") or "other").lower()
@@ -173,6 +193,7 @@ def build_state(activities_state, performance_history, *, today=None, lookback_d
             row["distance_m"] += distance
         row["active_days"].add(day.isoformat())
 
+        activity_by_id[str(activity.get("id"))] = activity
         recent_sessions.append(
             {
                 "id": activity.get("id"),
@@ -222,6 +243,23 @@ def build_state(activities_state, performance_history, *, today=None, lookback_d
                         "comparison": entry.get("comparison"),
                     }
                 )
+
+    performance_by_activity = {
+        str(entry.get("activity_id")): entry
+        for entry in performance
+        if entry.get("activity_id") is not None
+    }
+    for row in recent_sessions:
+        activity_id = str(row.get("id") or "")
+        activity = activity_by_id.get(activity_id)
+        if not activity:
+            continue
+        row["training_profile"] = build_training_profile(
+            activity,
+            planned_workouts=planned_workouts,
+            performance_entry=performance_by_activity.get(activity_id),
+            previous_profile=previous_profiles.get(activity_id),
+        )
 
     # Sport-specific observed ranges. These are facts, not prescriptions.
     run_sessions = [row for row in recent_sessions if row["family"] == "run" and row["classification"] != "recreation"]
@@ -303,7 +341,19 @@ def build_state(activities_state, performance_history, *, today=None, lookback_d
 def main():
     activities, activity_source = load_activities_for_runtime(ACTIVITIES_FILE)
     performance = load_json(PERFORMANCE_FILE, {"entries": []})
-    state = build_state(activities, performance)
+    previous_state = load_json(OUTPUT_FILE, {})
+    plan = load_json(PLAN_FILE, {})
+    upcoming = load_json(UPCOMING_FILE, {})
+    planned = [
+        *canonical_planned_workouts(plan, context="athlete-state current plan"),
+        *canonical_planned_workouts(upcoming, context="athlete-state upcoming plan"),
+    ]
+    state = build_state(
+        activities,
+        performance,
+        planned_workouts=planned,
+        previous_state=previous_state,
+    )
     write_json(OUTPUT_FILE, state)
     print(
         "Athlete state OK: "
