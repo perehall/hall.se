@@ -2502,11 +2502,22 @@ def rebuild_calendar(plan, strategy, target_start, active_replan):
 
 def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
     goal, goal_runtime_source = load_goal_for_planner(GOAL_FILE)
-    athlete_profile, athlete_profile_source = load_athlete_profile_for_planner()
-    profile_hash_value = athlete_profile_hash(athlete_profile)
     explicit_profile_generation = (
         str(os.environ.get("ATHLETE_PROFILE_PLAN_REQUEST") or "").strip().lower() == "true"
     )
+    generation_request_id = str(
+        os.environ.get("ATHLETE_PROFILE_PLAN_REQUEST_ID") or ""
+    ).strip()
+    if explicit_profile_generation and not generation_request_id:
+        raise RuntimeError(
+            "Adaptive planering: explicit profilgenerering saknar request-id"
+        )
+    athlete_profile, athlete_profile_source = load_athlete_profile_for_planner(
+        generation_request_id=(
+            generation_request_id if explicit_profile_generation else None
+        )
+    )
+    profile_hash_value = athlete_profile_hash(athlete_profile)
     expected_profile_revision = str(
         os.environ.get("ATHLETE_PROFILE_EXPECTED_REVISION") or ""
     ).strip()
