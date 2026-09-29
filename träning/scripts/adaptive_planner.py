@@ -733,7 +733,7 @@ def fallback_mesocycle(goal, policy, previous, target_start=None):
     }
 
 
-def generate_mesocycle(goal, policy, athlete_state, previous, target_start, *, request_fn=None):
+def generate_mesocycle(goal, policy, athlete_state, previous, target_start, athlete_profile=None, *, request_fn=None):
     caps = capability_keys(policy)
     competition_context = build_competition_context(
         goal,
@@ -741,8 +741,11 @@ def generate_mesocycle(goal, policy, athlete_state, previous, target_start, *, r
         policy.get("event_horizon_policy"),
     )
     goal_rows = planning_goal_set(goal)
+    declared_profile = planner_profile_view(athlete_profile)
     source_payload = {
         "goal": goal,
+        "declared_athlete_profile": declared_profile,
+        "declared_profile_contract": profile_planning_contract(athlete_profile) if athlete_profile else None,
         "goal_set": goal_rows,
         "competition_context": competition_context,
         "policy": {
@@ -764,7 +767,7 @@ def generate_mesocycle(goal, policy, athlete_state, previous, target_start, *, r
     system = (
         "Du är mesocykelplaneraren i ett uthållighets-/allroundsystem. "
         "Välj vad som ska utvecklas nu; skriv inte en veckoplan och ordinera inte exakta pass. "
-        "Planeringsauktoriteten är goal_set som en samtidig målportfölj. Aktiva development-goals med role=enduring anger vilken atlet som byggs och får inte ersättas implicit av ett prestationsmål. "
+        "Planeringsauktoriteten består av goal_set tillsammans med declared_athlete_profile.goals. Den deklarerade profilen är användarens förstahandskälla för fria/multipla mål, praktiska ramar och preferenser; den får inte ersättas av AI-antaganden. Aktiva development-goals med role=enduring anger vilken atlet som byggs och får inte ersättas implicit av ett prestationsmål. "
         "Aktiva performance-goals, inklusive A-mål, får styra betoning, konfliktlösning och successivt ökande specificitet men läggs ovanpå den varaktiga målbilden. "
         "Du måste fylla goal_contributions för varje aktivt mål och beskriva eventuell trade-off uttryckligen. "
         "competition_context innehåller verifierat tävlingsdatum, publicerad banprofil och exakt tid kvar till loppet; dessa fakta ska användas när du väljer vad som behöver utvecklas nu. "
@@ -857,6 +860,7 @@ def generate_mesocycle(goal, policy, athlete_state, previous, target_start, *, r
             "end_date": end.isoformat(),
             "evaluation_date": (end + timedelta(days=1)).isoformat(),
             "competition_context": competition_context,
+            "athlete_profile_hash": athlete_profile_hash(athlete_profile),
         }
     )
     result["id"] = (
@@ -867,7 +871,7 @@ def generate_mesocycle(goal, policy, athlete_state, previous, target_start, *, r
     return result
 
 
-def mesocycle_is_valid(decision, goal, target_start):
+def mesocycle_is_valid(decision, goal, target_start, profile_hash_value=None):
     if not isinstance(decision, dict):
         return False
     try:
@@ -875,6 +879,7 @@ def mesocycle_is_valid(decision, goal, target_start):
             decision.get("schema_version") == MESO_SCHEMA_VERSION
             and decision.get("planner_revision") == PLANNER_REVISION
             and decision.get("goal_hash") == goal_hash(goal)
+            and (profile_hash_value is None or decision.get("athlete_profile_hash") == profile_hash_value)
             and iso(decision["start_date"]) <= target_start <= iso(decision["end_date"])
             and bool(decision.get("primary_capabilities"))
         )
