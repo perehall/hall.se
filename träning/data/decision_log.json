@@ -552,6 +552,22 @@
       "source_hash": "771eea980fa2672e9e978257deb51bdc2995ca5f24c5844f0d08bea9001360c9",
       "generated_at_utc": "2026-09-29T11:27:44.795569+00:00",
       "summary": "Reparerar konflikt där långt lugnt löppass låg direkt intill MTB/XC (dag 6 vs 7). Flyttar run_easy_distance till dag 5 och swim_aerobic_endurance till dag 6 så att: 1) löpet ligger ≥48 h från tröskel (dag 3→5), 2) löp och MTB inte är intilliggande, 3) dag 2 efter det fasta enduroblocket förblir låg benbelastning. Behåller mesocykelbeslut (enda progression = run_threshold) och uppfyller hard_requirements (minst 2 sim, minst 1 styrka/core, max run quality osv.)."
+    },
+    {
+      "kind": "mesocycle",
+      "decision_id": "20260928-swim_aerobic-swim_technique-run_threshold",
+      "source": "openai",
+      "source_hash": "9358830615c7bd3c1f47bd1eaa6edc4a13863aba2b72bd6a872db6927fd974b5",
+      "generated_at_utc": "2026-09-29T11:30:21.436708+00:00",
+      "summary": "Fortsatt etablerings‑/byggblock — konservativ progress"
+    },
+    {
+      "kind": "microcycle",
+      "decision_id": "2026-W40",
+      "source": "openai_repaired",
+      "source_hash": "1de0139a541b3f011ef6143da5284f95b2a9a7d4143adab0899860028c04e1a9",
+      "generated_at_utc": "2026-09-29T11:31:49.501704+00:00",
+      "summary": "Tar bort planerat styrkepass på dag 2 (reparerar guard_failures). Styrka/core krediteras från redan genomfört styrkepass i målveckan; undviker styrka dagen efter fast enduro. Behåller två simexponeringar, en kontrollerad progression för run_threshold och ett långt lugnt löppass senare i veckan — uppfyller mesocykelns krav och hard_requirements."
     }
   ]
 }
