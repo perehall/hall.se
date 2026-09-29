@@ -880,7 +880,7 @@ def mesocycle_is_valid(decision, goal, target_start, profile_hash_value=None):
             decision.get("schema_version") == MESO_SCHEMA_VERSION
             and decision.get("planner_revision") == PLANNER_REVISION
             and decision.get("goal_hash") == goal_hash(goal)
-            and (profile_hash_value is None or decision.get("athlete_profile_hash") == profile_hash_value)
+            and decision.get("athlete_profile_hash") == profile_hash_value
             and iso(decision["start_date"]) <= target_start <= iso(decision["end_date"])
             and bool(decision.get("primary_capabilities"))
         )
