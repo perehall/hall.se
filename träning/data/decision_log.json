@@ -504,6 +504,14 @@
       "source_hash": "2fc68de3528a27e4f39bc578c2475e5b61a1dc845684872635cd17bd9ed6ee18",
       "generated_at_utc": "2026-09-28T19:09:06.696864+00:00",
       "summary": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern. Modellbedömning saknades: Planeringsmodellen misslyckades: OpenAI HTTP 429: {\n  \"error\": {\n    \"message\": \"You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.\",\n    \""
+    },
+    {
+      "kind": "microcycle",
+      "decision_id": "2026-W41",
+      "source": "openai_repaired",
+      "source_hash": "a1708332326f5d92df45496144c9b386742ee8550ede21f2d62afa9319baeca0",
+      "generated_at_utc": "2026-09-29T01:48:31.784496+00:00",
+      "summary": "Reparerar förslaget för att eliminera konflikt mot regeln om dag‑2 efter fast enduro och säkerställer alla hard_requirements: två simpass, minst en styrke/core‑session, alla primära kapaciteter direkt täckta, max två löpkvaliteter, minst en vilodag och endast en primär progression (tröskel). Flyttade styrka från dag 2 till dag 5, gjorde dag 3 vilodag och behöll sim på låg benbelastningsdag 2."
     }
   ]
 }

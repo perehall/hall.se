@@ -1,64 +1,76 @@
 {
   "slots": [
     {
-      "action": "progress",
+      "action": "consolidate",
       "day_index": 2,
-      "rationale": "Dag efter enduro = låg benbelastning; progress för sim (primärt mesocykelstimulus) stöds av upprepade 3–4k‑pass i faktalagret.",
+      "rationale": "Låg benbelastning direkt efter fast enduro; konsolidera teknisk 3 200m‑sim för swim_aerobic + swim_technique utan att belasta benen.",
       "recipe_key": "swim_aerobic_technique",
       "evidence_refs": [
-        "20203770266",
-        "20239623463",
-        "20300494236"
+        "athlete_state:recent_sessions:2026-09-23 Swim 3200 activity_id 20300494236",
+        "mesocycle:progression_axes:swim_aerobic",
+        "mesocycle:success_signals:Minst 2 simexponeringar per mikrocykel"
       ]
     },
     {
-      "action": "consolidate",
-      "day_index": 3,
-      "rationale": "Skydda styrka/core enligt mesocycle‑guardrail; genomföra mekanisk/neuromuskulär underhållssession när benen är relativt fräscha.",
-      "recipe_key": "strength_core",
-      "evidence_refs": [
-        "20368346174",
-        "20272196080"
-      ]
-    },
-    {
-      "action": "consolidate",
+      "action": "progress",
       "day_index": 4,
-      "rationale": "Bevara kontrollerad 4×8‑tröskel (primärt löpstimuluspår) utan extra progression; placerat så att långt lugnt löppass får ≥48 h återhämtning.",
+      "rationale": "Endast primär progression här — konservativ ökning av tröskelarbetsvolym stöds av upprepade kontrollerade 4×8‑pass i athlete_state.",
       "recipe_key": "run_threshold",
       "evidence_refs": [
-        "20284663236",
-        "20239623463"
+        "capability_facts:run_threshold:2026-09-22 activity_id 20284663236",
+        "capability_facts:run_threshold:2026-09-08 activity_id 20092166843",
+        "mesocycle:progression_axes:work_duration (run_threshold)"
+      ]
+    },
+    {
+      "action": "consolidate",
+      "day_index": 5,
+      "rationale": "Skydda mekanisk/neuromuskulär bas med ett konserverande styrke/core‑pass placerat bort från dag‑2 efter enduro och inte direkt före eller efter intensiv löpkvalitet.",
+      "recipe_key": "strength_core",
+      "evidence_refs": [
+        "athlete_state:recent_sessions:2026-09-28 WeightTraining activity_id 20368346174",
+        "mesocycle:guardrails:Protect strength/core per microcycle",
+        "mesocycle:development_goals:strength/core protection"
       ]
     },
     {
       "action": "establish",
       "day_index": 6,
-      "rationale": "Ett långt lugnt löppass (tålighet) etableras ≥48 h efter tröskel för att möta tävlingskravet på löptålighet.",
-      "recipe_key": "run_easy_distance",
+      "rationale": "Andra simpasset i veckan: längre aerobt pass med kontrollerad tröskeldel (4 000m‑profil) för att uppfylla två simexponeringar och mesocykelns teknik- och aerobmål.",
+      "recipe_key": "swim_aerobic_threshold",
       "evidence_refs": [
-        "20254486837"
+        "capability_facts:swim_threshold:2026-08-29 activity_id 19946705399",
+        "athlete_state:recent_sessions:2026-09-19 Swim 4000 activity_id 20239623463",
+        "mesocycle:success_signals:Minst 2 simexponeringar per mikrocykel"
       ]
     },
     {
-      "action": "consolidate",
+      "action": "establish",
       "day_index": 7,
-      "rationale": "Andra simexponeringen för att befästa aerob kvalitet och teknik utan att öka intensitet/volym; behandlas som kvalitetsrepetition.",
-      "recipe_key": "swim_aerobic_threshold",
+      "rationale": "Backkvalitet etableras ≥48 h efter tröskel för kraft/mekanik utan att skapa angränsande run‑stressor; håller max två löpkvaliteter för veckan.",
+      "recipe_key": "run_hill_quality",
       "evidence_refs": [
-        "19946705399",
-        "20239623463"
+        "capability_facts:run_hill_quality:2026-09-25 activity_id 20326850936",
+        "capability_facts:run_hill_quality:2026-09-18 activity_id 20229568713",
+        "mesocycle:guardrails:Avoid adjacent run stressors"
       ]
     }
   ],
-  "source": "openai",
+  "source": "openai_repaired",
   "week_key": "2026-W41",
-  "rationale": "Planen följer mesocykelns prioritering (sim + kontrollerad tröskel) och mesocycle‑guardrails: två simexponeringar, skyddad styrka/core, minst ett tröskelstimulus och ett lugnt långt löppass placerat ≥48 h från tröskel. Dag 1 är blockad av faktisk enduro; dag 2 hålls låg benbelastning. Minst en kalenderdag är vilodag (dag 5). Totalt 5 slots (inom 4–5).",
+  "rationale": "Reparerar förslaget för att eliminera konflikt mot regeln om dag‑2 efter fast enduro och säkerställer alla hard_requirements: två simpass, minst en styrke/core‑session, alla primära kapaciteter direkt täckta, max två löpkvaliteter, minst en vilodag och endast en primär progression (tröskel). Flyttade styrka från dag 2 till dag 5, gjorde dag 3 vilodag och behöll sim på låg benbelastningsdag 2.",
   "week_start": "2026-10-05",
-  "source_hash": "2fc68de3528a27e4f39bc578c2475e5b61a1dc845684872635cd17bd9ed6ee18",
+  "source_hash": "a1708332326f5d92df45496144c9b386742ee8550ede21f2d62afa9319baeca0",
+  "guard_repair": {
+    "result": "accepted",
+    "attempted": true,
+    "initial_failures": [
+      "strength_core får inte ligga direkt dagen efter fast enduro när faktisk benbelastning ännu är okänd"
+    ]
+  },
   "mesocycle_id": "20260921-swim_aerobic-swim_technique-run_threshold",
   "schema_version": 1,
-  "generated_at_utc": "2026-09-28T20:55:26.447178+00:00",
+  "generated_at_utc": "2026-09-29T01:48:31.784496+00:00",
   "planner_revision": 9,
   "competition_context": {
     "as_of": "2026-10-05",
