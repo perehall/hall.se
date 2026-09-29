@@ -91,6 +91,45 @@ class TrainingProfileTests(unittest.TestCase):
         self.assertEqual(profile["planning_credits"], [])
         self.assertTrue(profile["uncertainties"])
 
+    def test_detects_work_blocks_split_across_provider_laps_like_real_run(self):
+        activity = {
+            "id": 101,
+            "sport_type": "Run",
+            "classification": "training",
+            "start_date_local": "2026-09-29T18:00:00",
+            "user_report": "",
+            "laps": [
+                lap(1, 322, 1000, 3.11),
+                lap(2, 316, 979, 3.10),
+                lap(3, 225, 655, 2.91),
+                lap(4, 257, 1000, 3.89),
+                lap(5, 228, 874, 3.83),
+                lap(6, 92, 279, 3.03),
+                lap(7, 258, 1000, 3.88),
+                lap(8, 226, 898, 3.97),
+                lap(9, 91, 246, 2.71),
+                lap(10, 257, 1000, 3.89),
+                lap(11, 227, 877, 3.86),
+                lap(12, 108, 307, 2.84),
+                lap(13, 263, 1000, 3.80),
+                lap(14, 253, 1000, 3.95),
+                lap(15, 321, 1000, 3.12),
+                lap(16, 156, 503, 3.22),
+            ],
+        }
+        structure = run_time_interval_structure(activity)
+        self.assertTrue(structure["structured"])
+        self.assertEqual(structure["repetitions"], 4)
+        self.assertLess(abs(structure["representative_work_duration_s"] - 480), 45)
+        self.assertLess(abs(structure["representative_recovery_duration_s"] - 90), 20)
+
+        profile = build_training_profile(
+            activity,
+            planned_workouts=[threshold_plan()],
+        )
+        self.assertEqual(profile["planning_credits"], ["run_threshold"])
+        self.assertEqual(profile["stimuli"], [])
+
     def test_unique_nearby_plan_structure_creates_planning_credit_without_physiology_claim(self):
         activity = four_by_eight_activity()
         profile = build_training_profile(
