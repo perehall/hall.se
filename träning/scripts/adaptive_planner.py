@@ -50,7 +50,8 @@ MODEL = os.environ.get("OPENAI_MODEL", "gpt-5-mini")
 MESO_SCHEMA_VERSION = 1
 MICRO_SCHEMA_VERSION = 1
 PLANNER_REVISION = 6
-MICRO_PLANNER_REVISION = 13
+MICRO_PLANNER_REVISION = 14
+RECONCILIATION_CONTRACT_VERSION = 1
 
 CAPABILITY_TO_RECIPE = {
     "run_threshold": "run_threshold",
@@ -613,7 +614,9 @@ def mesocycle_schema(capabilities):
     }
 
 
-def microcycle_schema(recipe_keys):
+def microcycle_schema(recipe_keys, *, min_slots=4, max_slots=7):
+    min_slots = max(0, int(min_slots))
+    max_slots = max(min_slots, int(max_slots))
     return {
         "type": "object",
         "additionalProperties": False,
@@ -621,7 +624,8 @@ def microcycle_schema(recipe_keys):
             "rationale": {"type": "string"},
             "slots": {
                 "type": "array",
-                "minItems": 4,
+                "minItems": min_slots,
+                "maxItems": max_slots,
                 "items": {
                     "type": "object",
                     "additionalProperties": False,
@@ -1088,6 +1092,179 @@ def infer_recipe_key(workout, catalog):
     return None
 
 
+def reconciliation_intent(workout, index):
+    """Project one mutable planned workout into a stable training-intent record."""
+    if not isinstance(workout, dict):
+        return None
+    if workout.get("manual_lock") is True or workout.get("planning_status") == "fixed":
+        return None
+    if workout.get("classification") == "recreation":
+        return None
+    if workout.get("status") in {"completed", "rest", "open"}:
+        return None
+    stimuli = sorted({str(value) for value in (workout.get("stimuli") or []) if str(value).strip()})
+    if not stimuli:
+        return None
+    slot = str(workout.get("microcycle_slot") or "").strip()
+    recipe_key = str(workout.get("recipe_key") or "").strip()
+    date_value = str(workout.get("date") or "").strip()
+    explicit = str(workout.get("workout_key") or "").strip()
+    intent_id = explicit or f"{date_value}:{slot or recipe_key or workout.get('sport') or 'workout'}:{index}"
+    return {
+        "intent_id": intent_id,
+        "date": date_value,
+        "sport": str(workout.get("sport") or ""),
+        "recipe_key": recipe_key,
+        "microcycle_slot": slot,
+        "stimuli": stimuli,
+    }
+
+
+def _match_completed_capabilities_to_intents(origin_intents, completed_context):
+    """Match each actual activity to at most one original plan intent."""
+    by_activity = {}
+    for capability, refs in (completed_context.get("capability_refs") or {}).items():
+        for activity_id in refs or []:
+            by_activity.setdefault(str(activity_id), set()).add(str(capability))
+
+    unmatched = {str(item["intent_id"]): item for item in origin_intents}
+    fulfilled = []
+    for activity_id in sorted(by_activity):
+        capabilities = by_activity[activity_id]
+        candidates = []
+        for intent_id, intent in unmatched.items():
+            stimuli = set(intent.get("stimuli") or [])
+            overlap = capabilities.intersection(stimuli)
+            if not overlap:
+                continue
+            candidates.append(
+                (
+                    len(overlap),
+                    -len(stimuli - capabilities),
+                    intent_id,
+                    sorted(overlap),
+                )
+            )
+        if not candidates:
+            continue
+        _overlap_count, _extra_count, intent_id, overlap = max(candidates)
+        fulfilled.append(
+            {
+                "intent_id": intent_id,
+                "activity_id": activity_id,
+                "capabilities": overlap,
+                "relation": "fulfilled",
+            }
+        )
+        unmatched.pop(intent_id, None)
+
+    remaining = [
+        item for item in origin_intents
+        if str(item.get("intent_id")) in unmatched
+    ]
+    return fulfilled, remaining
+
+
+def live_reconciliation_context(plan, completed_context, catalog, today):
+    """Freeze live-week intent scope and reconcile actual training against it.
+
+    The origin is persisted with the active plan. Replanning may move or
+    substitute a remaining stimulus, but it may not silently add a new physical
+    workout after an original intent has already been fulfilled.
+    """
+    meta = plan.get("meta") or {}
+    week_start = str(meta.get("week_start") or "")
+    existing = meta.get("reconciliation_contract") or {}
+    existing_valid = (
+        isinstance(existing, dict)
+        and existing.get("version") == RECONCILIATION_CONTRACT_VERSION
+        and existing.get("week_start") == week_start
+        and isinstance(existing.get("origin_intents"), list)
+    )
+
+    if existing_valid:
+        origin_intents = deepcopy(existing.get("origin_intents") or [])
+    else:
+        today_text = today.isoformat() if isinstance(today, date) else str(today)
+        origin_intents = []
+        for index, workout in enumerate(plan.get("planned_workouts") or []):
+            if str(workout.get("date") or "") < today_text:
+                continue
+            intent = reconciliation_intent(workout, index)
+            if intent is not None:
+                origin_intents.append(intent)
+
+    fulfilled, remaining = _match_completed_capabilities_to_intents(
+        origin_intents, completed_context or {}
+    )
+    remaining_stimuli = {
+        stimulus
+        for intent in remaining
+        for stimulus in (intent.get("stimuli") or [])
+    }
+    allowed_recipe_keys = sorted(
+        key
+        for key, recipe in (catalog.get("recipes") or {}).items()
+        if recipe_capabilities(recipe).intersection(remaining_stimuli)
+    )
+    minimum = max(0, 4 - int((completed_context or {}).get("completed_slot_days") or 0))
+    maximum = len(remaining)
+    current_signature = completed_context_signature(completed_context or {})
+    previous_signature = str(existing.get("completed_context_signature") or "") if existing_valid else ""
+    requires_initial_reconciliation = bool(
+        not existing_valid
+        and fulfilled
+    )
+    force_reconcile = bool(existing.get("force_reconcile")) if existing_valid else False
+    return {
+        "version": RECONCILIATION_CONTRACT_VERSION,
+        "week_start": week_start,
+        "origin_intents": origin_intents,
+        "fulfilled_intents": fulfilled,
+        "remaining_intents": remaining,
+        "allowed_recipe_keys": allowed_recipe_keys,
+        "slot_count_min": min(minimum, maximum),
+        "slot_count_max": maximum,
+        "completed_context_signature": current_signature,
+        "needs_replan": bool(
+            force_reconcile
+            or requires_initial_reconciliation
+            or (existing_valid and previous_signature and previous_signature != current_signature)
+        ),
+        "principle": (
+            "Omplanering får flytta eller ersätta kvarvarande intentioner men får inte öka "
+            "antalet fysiska pass bara för att ett stimulus genomfördes tidigare än planerat."
+        ),
+    }
+
+
+def reconciliation_slot_failures(rows, catalog, reconciliation_context):
+    """Ensure proposed slots map one-to-one to remaining live-week intents."""
+    if not reconciliation_context:
+        return []
+    remaining = {
+        str(item.get("intent_id")): item
+        for item in (reconciliation_context.get("remaining_intents") or [])
+    }
+    failures = []
+    for row in sorted(rows, key=lambda item: (item.get("day_index", 0), item.get("recipe_key", ""))):
+        recipe = (catalog.get("recipes") or {}).get(row.get("recipe_key")) or {}
+        capabilities = recipe_capabilities(recipe)
+        candidates = []
+        for intent_id, intent in remaining.items():
+            overlap = capabilities.intersection(set(intent.get("stimuli") or []))
+            if overlap:
+                candidates.append((len(overlap), -len(set(intent.get("stimuli") or []) - capabilities), intent_id))
+        if not candidates:
+            failures.append(
+                f"{row.get('recipe_key')} skapar ett nytt stimulus/pass som inte motsvarar någon kvarvarande planintention"
+            )
+            continue
+        _score, _extra, intent_id = max(candidates)
+        remaining.pop(intent_id, None)
+    return failures
+
+
 def mesocycle_history_context(meso, target_start, catalog):
     """Read up to three earlier microcycles in this block as planning memory."""
     try:
@@ -1148,7 +1325,10 @@ def mesocycle_history_context(meso, target_start, catalog):
     return history[-3:]
 
 
-def fallback_microcycle(meso, policy, catalog, target_start, completed_context=None, athlete_profile=None):
+def fallback_microcycle(
+    meso, policy, catalog, target_start,
+    completed_context=None, athlete_profile=None, reconciliation_context=None
+):
     """Conservative composition from requirements, not from calendar fill.
 
     Fixed Enduro consumes a real training day. Secondary capabilities are not a
@@ -1170,6 +1350,11 @@ def fallback_microcycle(meso, policy, catalog, target_start, completed_context=N
         else set(range(1, 8))
     )
     slots = []
+    slot_maximum = (
+        int(reconciliation_context.get("slot_count_max"))
+        if reconciliation_context and reconciliation_context.get("slot_count_max") is not None
+        else 7
+    )
 
     recipe_day_preferences = {
         "swim_aerobic_technique": [2, 4, 6, 1, 5, 3, 7] if fixed_enduro else [1, 3, 5, 2, 4, 6, 7],
@@ -1200,7 +1385,7 @@ def fallback_microcycle(meso, policy, catalog, target_start, completed_context=N
         allow_repeat=False,
         preferred_same_day=None,
     ):
-        if recipe not in catalog["recipes"]:
+        if recipe not in catalog["recipes"] or len(slots) >= slot_maximum:
             return False
         if not allow_repeat and any(row["recipe_key"] == recipe for row in slots):
             return True
@@ -1228,8 +1413,14 @@ def fallback_microcycle(meso, policy, catalog, target_start, completed_context=N
                 continue
             if fixed_enduro and day == 1:
                 continue
+            proposed_rows = candidate_rows(day, recipe)
             conflicts = microcycle_layout_failures(
-                candidate_rows(day, recipe), catalog, target_start, athlete_profile=athlete_profile
+                proposed_rows, catalog, target_start, athlete_profile=athlete_profile
+            )
+            conflicts.extend(
+                reconciliation_slot_failures(
+                    proposed_rows, catalog, reconciliation_context
+                )
             )
             if conflicts:
                 continue
@@ -1470,7 +1661,10 @@ def microcycle_layout_failures(rows, catalog, target_start, athlete_profile=None
     return failures
 
 
-def microcycle_guard_failures(result, meso, policy, catalog, target_start, completed_context=None, athlete_profile=None):
+def microcycle_guard_failures(
+    result, meso, policy, catalog, target_start,
+    completed_context=None, athlete_profile=None, reconciliation_context=None
+):
     """Return explicit structural violations without silently repairing the model output."""
     recipes = catalog["recipes"]
     slots = result.get("slots") or []
@@ -1500,9 +1694,24 @@ def microcycle_guard_failures(result, meso, policy, catalog, target_start, compl
             continue
         valid_rows.append(row)
 
-    minimum = max(0, 4 - completed_slot_days)
+    minimum = (
+        int(reconciliation_context.get("slot_count_min"))
+        if reconciliation_context and reconciliation_context.get("slot_count_min") is not None
+        else max(0, 4 - completed_slot_days)
+    )
+    maximum = (
+        int(reconciliation_context.get("slot_count_max"))
+        if reconciliation_context and reconciliation_context.get("slot_count_max") is not None
+        else 7
+    )
     if len(valid_rows) < minimum:
         failures.append(f"för få giltiga träningsslots: {len(valid_rows)} < {minimum}")
+    if len(valid_rows) > maximum:
+        failures.append(f"för många framtida träningsslots efter reconciliation: {len(valid_rows)} > {maximum}")
+
+    for failure in reconciliation_slot_failures(valid_rows, catalog, reconciliation_context):
+        if failure not in failures:
+            failures.append(failure)
 
     for failure in microcycle_layout_failures(
         valid_rows, catalog, target_start, athlete_profile=athlete_profile
@@ -1635,7 +1844,10 @@ def microcycle_guard_failures(result, meso, policy, catalog, target_start, compl
     return failures
 
 
-def validate_and_normalize_micro(result, meso, policy, catalog, target_start, completed_context=None, athlete_profile=None):
+def validate_and_normalize_micro(
+    result, meso, policy, catalog, target_start,
+    completed_context=None, athlete_profile=None, reconciliation_context=None
+):
     recipes = catalog["recipes"]
     cleaned = []
     primaries = set(meso.get("primary_capabilities") or [])
@@ -1693,12 +1905,14 @@ def validate_and_normalize_micro(result, meso, policy, catalog, target_start, co
         target_start,
         completed_context=completed_context,
         athlete_profile=athlete_profile,
+        reconciliation_context=reconciliation_context,
     )
     if not valid:
         return fallback_microcycle(
             meso, policy, catalog, target_start,
             completed_context=completed_context,
             athlete_profile=athlete_profile,
+            reconciliation_context=reconciliation_context,
         ), False
     return {"rationale": str(result.get("rationale") or "").strip(), "slots": sorted(cleaned, key=lambda x: x["day_index"])}, True
 
@@ -1752,6 +1966,7 @@ def build_microcycle_source_payload(
     athlete_profile=None,
     starting_state=None,
     completed_context=None,
+    reconciliation_context=None,
 ):
     completed_context = completed_context or completed_microcycle_context(
         athlete_state, target_start
@@ -1772,6 +1987,7 @@ def build_microcycle_source_payload(
         "confirmed_starting_state": planner_starting_state_view(starting_state),
         "competition_context": competition_context,
         "completed_microcycle_context": completed_context,
+        "live_reconciliation_context": reconciliation_context,
         "block_context": mesocycle_block_context(meso, target_start, policy),
         "mesocycle_history": mesocycle_history_context(
             meso, target_start, catalog
@@ -1828,8 +2044,14 @@ def build_microcycle_source_payload(
                     "max_run_quality_exposures", 2
                 )
             ),
-            "slot_count_min": 4,
-            "slot_count_max": 7,
+            "slot_count_min": (
+                int(reconciliation_context.get("slot_count_min"))
+                if reconciliation_context else 4
+            ),
+            "slot_count_max": (
+                int(reconciliation_context.get("slot_count_max"))
+                if reconciliation_context else 7
+            ),
             "day_1_blocked_by_enduro": is_enduro_school_date(target_start),
             "day_after_fixed_enduro_requires_low_leg_load": is_enduro_school_date(
                 target_start
@@ -1863,6 +2085,7 @@ def generate_microcycle(
     target_start,
     athlete_profile=None,
     starting_state=None,
+    reconciliation_context=None,
     *,
     request_fn=None,
 ):
@@ -1877,6 +2100,7 @@ def generate_microcycle(
         athlete_profile=athlete_profile,
         starting_state=starting_state,
         completed_context=completed_context,
+        reconciliation_context=reconciliation_context,
     )
     competition_context = source_payload["competition_context"]
     digest = canonical_hash(source_payload)
@@ -1910,14 +2134,16 @@ def generate_microcycle(
         "ett genomfört maxvärde är aldrig i sig progressionsstöd. 24–72 h-signaler är återhämtningskontext utan antagen kausalitet. "
         "athlete_state.load_windows är faktiska durations-/exponeringsfönster och får användas för att upptäcka ackumulerad belastning, men är inte TSS eller ett återhämtningsmått. "
         "Progress får bara väljas för ett primärt mesocykelstimulus och ska ha stöd i athlete_state; annars välj consolidate/establish. "
-        "En ledig dag är inte ett skäl att fylla kalendern. Kontrollera slutligen själv att varje hard_requirement är uppfyllt innan du svarar."
+        "En ledig dag är inte ett skäl att fylla kalendern. Om live_reconciliation_context finns är dess remaining_intents och slot_count_max hårda planstabilitetsgränser: flytta eller ersätt kvarvarande stimulus vid behov men skapa aldrig ett extra pass för att fylla en frigjord dag. Kontrollera slutligen själv att varje hard_requirement är uppfyllt innan du svarar."
     )
     try:
         raw = call_structured(
             system,
             source_payload,
             microcycle_schema(
-                sorted(catalog["recipes"])
+                sorted(catalog["recipes"]),
+                min_slots=source_payload["hard_requirements"]["slot_count_min"],
+                max_slots=source_payload["hard_requirements"]["slot_count_max"],
             ),
             "microcycle_decision",
             request_fn=request_fn,
@@ -1928,6 +2154,7 @@ def generate_microcycle(
             meso, policy, catalog, target_start,
             completed_context=completed_context,
             athlete_profile=athlete_profile,
+            reconciliation_context=reconciliation_context,
         )
         raw["rationale"] += f" Modellbedömning saknades: {str(exc)[:220]}"
         source = "deterministic_fallback"
@@ -1938,6 +2165,7 @@ def generate_microcycle(
             raw, meso, policy, catalog, target_start,
             completed_context=completed_context,
             athlete_profile=athlete_profile,
+            reconciliation_context=reconciliation_context,
         )
         if initial_failures:
             repair_payload = deepcopy(source_payload)
@@ -1952,7 +2180,9 @@ def generate_microcycle(
                     system + " Detta är ett reparationsförsök efter deterministisk guard; varje angivet fel måste lösas.",
                     repair_payload,
                     microcycle_schema(
-                        sorted(catalog["recipes"])
+                        sorted(catalog["recipes"]),
+                        min_slots=source_payload["hard_requirements"]["slot_count_min"],
+                        max_slots=source_payload["hard_requirements"]["slot_count_max"],
                     ),
                     "microcycle_decision_repair",
                     request_fn=request_fn,
@@ -1961,6 +2191,7 @@ def generate_microcycle(
                     repaired, meso, policy, catalog, target_start,
                     completed_context=completed_context,
                     athlete_profile=athlete_profile,
+                    reconciliation_context=reconciliation_context,
                 )
                 if not repaired_failures:
                     raw = repaired
@@ -1982,6 +2213,7 @@ def generate_microcycle(
                         meso, policy, catalog, target_start,
                         completed_context=completed_context,
                         athlete_profile=athlete_profile,
+                        reconciliation_context=reconciliation_context,
                     )
             except Exception as exc:
                 source = "deterministic_fallback_after_repair_error"
@@ -1995,12 +2227,14 @@ def generate_microcycle(
                     meso, policy, catalog, target_start,
                     completed_context=completed_context,
                     athlete_profile=athlete_profile,
+                    reconciliation_context=reconciliation_context,
                 )
 
     normalized, model_valid = validate_and_normalize_micro(
         raw, meso, policy, catalog, target_start,
         completed_context=completed_context,
         athlete_profile=athlete_profile,
+        reconciliation_context=reconciliation_context,
     )
     if source in {"openai", "openai_repaired"} and not model_valid:
         # Defensive backstop. A proposal accepted above must still pass the
@@ -2010,6 +2244,7 @@ def generate_microcycle(
             meso, policy, catalog, target_start,
             completed_context=completed_context,
             athlete_profile=athlete_profile,
+            reconciliation_context=reconciliation_context,
         )
         repair_metadata = repair_metadata or {
             "attempted": False,
@@ -2032,6 +2267,7 @@ def generate_microcycle(
             "mesocycle_id": meso["id"],
             "competition_context": competition_context,
             "completed_microcycle_context": completed_context,
+            "reconciliation_context": reconciliation_context,
             "athlete_profile_hash": athlete_profile_hash(athlete_profile),
             "starting_state_hash": athlete_starting_state_hash(starting_state),
         }
@@ -2049,7 +2285,7 @@ def microcycle_is_valid(decision, meso, target_start, source_hash_value=None):
         and decision.get("planner_revision") == MICRO_PLANNER_REVISION
         and decision.get("week_start") == target_start.isoformat()
         and decision.get("mesocycle_id") == meso.get("id")
-        and bool(decision.get("slots"))
+        and isinstance(decision.get("slots"), list)
         and (source_hash_value is None or decision.get("source_hash") == source_hash_value)
     )
 
