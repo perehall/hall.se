@@ -19,6 +19,7 @@ from copy import deepcopy
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
+from athlete_profile_source import load_athlete_profile_for_planner, planner_profile_view
 from goal_contracts import planning_goal_hash, planning_goal_set
 from race_contracts import build_competition_context
 from rollover_week import (
@@ -47,8 +48,8 @@ WEEKS_DIR = DATA / "weeks"
 MODEL = os.environ.get("OPENAI_MODEL", "gpt-5-mini")
 MESO_SCHEMA_VERSION = 1
 MICRO_SCHEMA_VERSION = 1
-PLANNER_REVISION = 5
-MICRO_PLANNER_REVISION = 11
+PLANNER_REVISION = 6
+MICRO_PLANNER_REVISION = 12
 
 CAPABILITY_TO_RECIPE = {
     "run_threshold": "run_threshold",
@@ -128,6 +129,64 @@ def canonical_hash(payload) -> str:
 
 def goal_hash(goal) -> str:
     return planning_goal_hash(goal)
+
+
+WEEKDAY_KEYS = (
+    "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"
+)
+
+
+def athlete_profile_hash(profile) -> str | None:
+    view = planner_profile_view(profile)
+    return canonical_hash(view) if view else None
+
+
+def profile_planning_contract(profile):
+    """Normalize only user-declared planning inputs.
+
+    Availability is a hard life constraint. Frequency, double-session and rest
+    settings are declared planning preferences; they are never inferred from
+    training history. Observed capacity remains exclusively in athlete_state.
+    """
+    view = planner_profile_view(profile) or {}
+    availability = view.get("availability") or {}
+    preferences = view.get("preferences") or {}
+    frequency = preferences.get("frequency") or {}
+
+    allowed_days = []
+    unavailable_days = []
+    available_minutes = {}
+    for index, key in enumerate(WEEKDAY_KEYS, start=1):
+        row = availability.get(key)
+        if not isinstance(row, dict):
+            continue
+        if row.get("available") is False:
+            unavailable_days.append(index)
+            continue
+        allowed_days.append(index)
+        minutes = row.get("minutes")
+        if isinstance(minutes, int):
+            available_minutes[index] = minutes
+
+    def day_value(name):
+        value = frequency.get(name)
+        return int(value) if isinstance(value, int) and 1 <= value <= 7 else None
+
+    return {
+        "available_days": allowed_days,
+        "unavailable_days": unavailable_days,
+        "available_minutes": available_minutes,
+        "preferred_active_days": day_value("preferred_days"),
+        "min_active_days": day_value("min_days"),
+        "max_active_days": day_value("max_days"),
+        "double_sessions": preferences.get("double_sessions"),
+        "rest_days": preferences.get("rest_days"),
+        "facilities": list(preferences.get("facilities") or []),
+        "fixed_commitments": str((view.get("constraints") or {}).get("fixed_commitments") or "").strip(),
+        "other_constraints": str((view.get("constraints") or {}).get("other") or "").strip(),
+        "coach_autonomy": view.get("coach_autonomy"),
+        "declared_goals": list(view.get("goals") or []),
+    }
 
 
 def sanitize_athlete_state(state):
