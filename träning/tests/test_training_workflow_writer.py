@@ -46,9 +46,19 @@ class TrainingWorkflowWriterTests(unittest.TestCase):
         self.assertIn("promote_activity_backend", runner)
         self.assertIn("supabase_activity_backend.py", runner)
         self.assertIn("commit_athlete_runtime_backend", runner)
-        self.assertIn("commit_planning_runtime_backend", runner)
+        self.assertNotIn("commit_planning_runtime_backend", runner)
         self.assertIn("commit_final_runtime_backend", runner)
         self.assertIn("supabase_runtime_state.py", runner)
+
+    def test_visible_plan_is_not_promoted_before_required_coach_stage(self):
+        runner = (REPO_ROOT / "träning" / "scripts" / "training_job_runner.py").read_text(
+            encoding="utf-8"
+        )
+        self.assertNotIn('"commit_planning_runtime_backend"', runner)
+        self.assertLess(
+            runner.index('"coach_analysis"'),
+            runner.index('"commit_final_runtime_backend"'),
+        )
 
     def test_generated_snapshots_are_never_rebased_and_conflicts_retry_cleanly(self):
         update = self.update_job_text()

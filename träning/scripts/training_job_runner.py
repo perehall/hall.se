@@ -97,10 +97,6 @@ def build_stages(ingest_mode: str) -> list[Stage]:
         Stage("validate_rollover", python_stage("validate_training_data.py")),
         Stage("materialize_workout_designs", python_stage("materialize_workout_designs.py")),
         Stage("validate_workout_designs", python_stage("validate_workout_designs.py")),
-        Stage(
-            "commit_planning_runtime_backend",
-            python_stage("supabase_runtime_state.py", "--scope", "planning"),
-        ),
         Stage("sync_weather", python_stage("sync_weather.py")),
         Stage(
             "load_wellness_context",
@@ -127,6 +123,10 @@ def build_stages(ingest_mode: str) -> list[Stage]:
             "commit_final_runtime_backend",
             python_stage("supabase_runtime_state.py", "--scope", "final"),
         ),
+        # The plan remains local/candidate state until every required planning and
+        # coaching stage has passed. Only commit_final_runtime_backend publishes the
+        # visible planning snapshot, preventing half-completed pipelines from
+        # replacing the live plan.
         # Publication is failure-isolated from canonical state. A broken renderer
         # rolls back all presentation mutations and degrades the run instead of
         # invalidating already committed activity/planning state.

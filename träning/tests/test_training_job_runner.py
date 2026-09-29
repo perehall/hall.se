@@ -53,9 +53,9 @@ class TrainingJobRunnerTests(unittest.TestCase):
         self.assertLess(keys.index("commit_athlete_runtime_backend"), keys.index("adaptive_planning"))
         self.assertLess(keys.index("adaptive_planning"), keys.index("validate_adaptive_plan"))
         self.assertLess(keys.index("adaptive_planning"), keys.index("rollover_calendar"))
-        self.assertLess(keys.index("validate_workout_designs"), keys.index("commit_planning_runtime_backend"))
-        self.assertLess(keys.index("commit_planning_runtime_backend"), keys.index("sync_weather"))
-        self.assertLess(keys.index("commit_planning_runtime_backend"), keys.index("coach_analysis"))
+        self.assertNotIn("commit_planning_runtime_backend", keys)
+        self.assertLess(keys.index("validate_workout_designs"), keys.index("sync_weather"))
+        self.assertLess(keys.index("validate_workout_designs"), keys.index("coach_analysis"))
         self.assertLess(keys.index("rollover_calendar"), keys.index("apply_plan_overrides"))
         self.assertLess(keys.index("apply_plan_overrides"), keys.index("validate_rollover"))
         self.assertLess(keys.index("rollover_calendar"), keys.index("sync_weather"))
@@ -71,7 +71,6 @@ class TrainingJobRunnerTests(unittest.TestCase):
         stages = {stage.key: stage for stage in build_stages("event")}
         for key, scope in (
             ("commit_athlete_runtime_backend", "athlete"),
-            ("commit_planning_runtime_backend", "planning"),
             ("commit_final_runtime_backend", "final"),
         ):
             stage = stages[key]
@@ -187,9 +186,12 @@ class TrainingJobRunnerTests(unittest.TestCase):
     def test_training_input_requires_coach_analysis_before_publication(self):
         with patch.dict(os.environ, {"TRAINING_INPUT_EVENT": "true"}, clear=False):
             stages = {stage.key: stage for stage in build_stages("reconcile")}
+            keys = self.stage_keys("reconcile")
         coach = stages["coach_analysis"]
         self.assertFalse(coach.optional)
         self.assertEqual(coach.attempts, 1)
+        self.assertNotIn("commit_planning_runtime_backend", keys)
+        self.assertLess(keys.index("coach_analysis"), keys.index("commit_final_runtime_backend"))
 
     def test_persist_token_requires_repository_at_execution_time(self):
         stage = next(

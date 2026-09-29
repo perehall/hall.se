@@ -21,6 +21,7 @@ from pathlib import Path
 
 from athlete_profile_source import load_athlete_profile_for_planner, planner_profile_view
 from athlete_starting_state_source import load_starting_state_for_planner, planner_starting_state_view
+from canonical_plan import planned_workouts as canonical_planned_workouts
 from goal_contracts import planning_goal_hash, planning_goal_set
 from race_contracts import build_competition_context
 from rollover_week import (
@@ -299,6 +300,13 @@ def completed_context_signature(context) -> str:
             )
         ),
         "capability_refs": capability_refs,
+        "capability_day_indexes": {
+            str(key): sorted(
+                int(value) for value in (values or [])
+                if isinstance(value, int)
+            )
+            for key, values in sorted((context.get("capability_day_indexes") or {}).items())
+        },
         "strength_exposures": int(context.get("strength_exposures") or 0),
         "swim_exposures": int(context.get("swim_exposures") or 0),
         "enduro_exposures": int(context.get("enduro_exposures") or 0),
@@ -1033,6 +1041,7 @@ def completed_microcycle_context(athlete_state, target_start):
     }
     direct_capabilities = set()
     capability_refs = {}
+    capability_day_indexes = {}
     for capability, facts in (athlete_state.get("capability_facts") or {}).items():
         if not isinstance(facts, dict):
             continue
@@ -1052,6 +1061,9 @@ def completed_microcycle_context(athlete_state, target_start):
             if target_start <= evidence_date <= end and activity_id in activity_ids:
                 direct_capabilities.add(capability)
                 capability_refs.setdefault(capability, []).append(activity_id)
+                capability_day_indexes.setdefault(capability, set()).add(
+                    (evidence_date - target_start).days + 1
+                )
 
     planning_credits = set(direct_capabilities)
     planning_credit_refs = {
@@ -1065,6 +1077,14 @@ def completed_microcycle_context(athlete_state, target_start):
             if not capability:
                 continue
             planning_credits.add(capability)
+            try:
+                row_day = iso(row.get("date"))
+            except (TypeError, ValueError):
+                row_day = None
+            if row_day is not None:
+                capability_day_indexes.setdefault(capability, set()).add(
+                    (row_day - target_start).days + 1
+                )
             activity_id = str(row.get("id") or "")
             if activity_id:
                 planning_credit_refs.setdefault(capability, []).append(activity_id)
@@ -1098,6 +1118,10 @@ def completed_microcycle_context(athlete_state, target_start):
         "planning_credits": sorted(planning_credits),
         "capability_refs": capability_refs,
         "planning_credit_refs": planning_credit_refs,
+        "capability_day_indexes": {
+            key: sorted(values)
+            for key, values in sorted(capability_day_indexes.items())
+        },
         "activity_refs": sorted(activity_ids),
         "evidence_note": (
             "Familjeexponeringar kommer från faktiskt registrerade aktiviteter i målveckan. "
@@ -2661,7 +2685,164 @@ def previous_archived_plan(target_start):
     return plan
 
 
-def rebuild_calendar(plan, strategy, target_start, active_replan):
+def _workout_date(workout):
+    try:
+        return iso(workout.get("date"))
+    except (TypeError, ValueError):
+        return None
+
+
+def _workout_identity_match(left, right):
+    left_recipe = str(left.get("recipe_key") or "").strip()
+    right_recipe = str(right.get("recipe_key") or "").strip()
+    if left_recipe and right_recipe:
+        return left_recipe == right_recipe
+    return (
+        str(left.get("sport") or "").lower() == str(right.get("sport") or "").lower()
+        and set(left.get("stimuli") or []) == set(right.get("stimuli") or [])
+    )
+
+
+def _actual_context_changed(plan, completed_context):
+    previous = (
+        (((plan.get("meta") or {}).get("capacity_protection") or {}).get("completed_context"))
+        or {}
+    )
+    return completed_context_signature(previous) != completed_context_signature(
+        completed_context or {}
+    )
+
+
+def reconcile_unaffected_future_workouts(
+    current_plan,
+    rebuilt,
+    *,
+    target_start,
+    today,
+    completed_context,
+):
+    """Preserve unrelated future intents during an actual-driven live replan."""
+    if not _actual_context_changed(current_plan, completed_context):
+        return rebuilt
+
+    credits = set(completed_context.get("direct_capabilities") or [])
+    credits.update(completed_context.get("planning_credits") or [])
+    day_map = completed_context.get("capability_day_indexes") or {}
+    completed_run_quality_days = {
+        int(day)
+        for capability in ("run_threshold", "run_hill_quality")
+        for day in (day_map.get(capability) or [])
+        if isinstance(day, int)
+    }
+
+    preserved = []
+    for workout in canonical_planned_workouts(
+        current_plan,
+        context="active-replan current plan",
+    ):
+        workout_day = _workout_date(workout)
+        if workout_day is None or workout_day <= today:
+            continue
+        if not target_start <= workout_day <= target_start + timedelta(days=6):
+            continue
+        if (
+            workout.get("activity_id")
+            or workout.get("activity_ids")
+            or workout.get("planning_status") == "completed"
+        ):
+            continue
+
+        stimuli = {
+            str(value)
+            for value in (workout.get("stimuli") or [])
+            if str(value)
+        }
+        if stimuli and stimuli.issubset(credits):
+            continue
+
+        recipe_key = str(workout.get("recipe_key") or "").strip()
+        day_index = (workout_day - target_start).days + 1
+        if (
+            is_enduro_school_date(target_start)
+            and day_index == 2
+            and recipe_key in DAY_AFTER_ENDURO_BLOCKED_RECIPES
+        ):
+            continue
+        if (
+            recipe_key in (RUN_STRESS_RECIPES | {"mtb_technical"})
+            and any(
+                abs(day_index - completed_day) <= 1
+                for completed_day in completed_run_quality_days
+            )
+        ):
+            continue
+        preserved.append(deepcopy(workout))
+
+    if not preserved:
+        return rebuilt
+
+    reconciled = deepcopy(rebuilt)
+    future = list(
+        canonical_planned_workouts(
+            reconciled,
+            context="active-replan rebuilt plan",
+        )
+    )
+    for old in preserved:
+        matching = [
+            (index, row)
+            for index, row in enumerate(future)
+            if _workout_identity_match(old, row)
+        ]
+        if matching:
+            old_day = _workout_date(old)
+            index, _ = min(
+                matching,
+                key=lambda item: (
+                    abs((_workout_date(item[1]) - old_day).days)
+                    if _workout_date(item[1]) is not None and old_day is not None
+                    else 999
+                ),
+            )
+            future[index] = old
+        else:
+            future.append(old)
+
+    future.sort(
+        key=lambda row: (
+            str(row.get("date") or ""),
+            int(row.get("microcycle_day") or 99),
+            str(row.get("microcycle_slot") or row.get("recipe_key") or ""),
+        )
+    )
+    reconciled["planned_workouts"] = future
+    reconciled.setdefault("meta", {})["live_reconciliation"] = {
+        "policy": "preserve_unaffected_future_intents",
+        "preserved_workout_keys": [
+            str(
+                row.get("workout_key")
+                or row.get("microcycle_slot")
+                or row.get("recipe_key")
+                or ""
+            )
+            for row in preserved
+        ],
+        "completed_context_signature": completed_context_signature(
+            completed_context or {}
+        ),
+    }
+    return reconciled
+
+
+def rebuild_calendar(
+    plan,
+    strategy,
+    target_start,
+    active_replan,
+    *,
+    today=None,
+    completed_context=None,
+):
     if active_replan:
         source = previous_archived_plan(target_start)
         if source is None:
@@ -2672,6 +2853,14 @@ def rebuild_calendar(plan, strategy, target_start, active_replan):
         rebuilt = promote_upcoming(preview)
         if iso(rebuilt["meta"]["week_start"]) != target_start:
             raise RuntimeError("Adaptive planering: återbyggd aktiv vecka fick fel startdatum")
+        if today is not None and completed_context is not None:
+            rebuilt = reconcile_unaffected_future_workouts(
+                plan,
+                rebuilt,
+                target_start=target_start,
+                today=today,
+                completed_context=completed_context,
+            )
         upcoming = build_mesocycle_next_week(rebuilt, strategy)
         write_json(PLAN_FILE, rebuilt)
         write_json(UPCOMING_FILE, upcoming)
@@ -2831,7 +3020,14 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
         starting_state=starting_state,
     )
     write_json(STRATEGY_FILE, strategy)
-    scope = rebuild_calendar(plan, strategy, target_start, active_replan)
+    scope = rebuild_calendar(
+        plan,
+        strategy,
+        target_start,
+        active_replan,
+        today=today,
+        completed_context=current_completed_context,
+    )
 
     print(
         "Adaptive planning OK: "

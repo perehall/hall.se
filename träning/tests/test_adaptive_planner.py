@@ -28,6 +28,7 @@ from adaptive_planner import (  # noqa: E402
     microcycle_is_valid,
     microcycle_layout_failures,
     profile_planning_contract,
+    reconcile_unaffected_future_workouts,
     resolve_planning_target,
     target_week,
     validate_and_normalize_micro,
@@ -1388,6 +1389,144 @@ class AdaptivePlanningTests(unittest.TestCase):
 
         self.assertEqual(target, date(2026, 9, 28))
         self.assertTrue(active_replan)
+
+    def test_actual_driven_replan_preserves_unrelated_future_swim_and_removes_fulfilled_threshold(self):
+        previous_context = {
+            "activity_refs": ["enduro"],
+            "direct_capabilities": [],
+            "planning_credits": [],
+            "capability_refs": {},
+            "capability_day_indexes": {},
+            "enduro_exposures": 1,
+        }
+        current = {
+            "meta": {
+                "week_start": "2026-09-28",
+                "week_end": "2026-10-04",
+                "capacity_protection": {"completed_context": previous_context},
+            },
+            "planned_workouts": [
+                {
+                    "date": "2026-09-30",
+                    "sport": "run",
+                    "recipe_key": "run_threshold",
+                    "microcycle_slot": "run_threshold_1",
+                    "stimuli": ["run_threshold"],
+                    "session": "4 x 8",
+                },
+                {
+                    "date": "2026-10-01",
+                    "sport": "swim",
+                    "recipe_key": "swim_aerobic_technique",
+                    "microcycle_slot": "swim_1",
+                    "stimuli": ["swim_aerobic", "swim_technique"],
+                    "session": "Simning",
+                },
+                {
+                    "date": "2026-10-02",
+                    "sport": "run",
+                    "recipe_key": "run_hill_quality",
+                    "microcycle_slot": "hill_1",
+                    "stimuli": ["run_hill_quality"],
+                    "session": "Backe",
+                },
+            ],
+        }
+        rebuilt = {
+            "meta": {"week_start": "2026-09-28", "week_end": "2026-10-04"},
+            "planned_workouts": [
+                {
+                    "date": "2026-10-04",
+                    "sport": "run",
+                    "recipe_key": "run_easy_distance",
+                    "microcycle_slot": "long_1",
+                    "stimuli": ["run_easy_distance"],
+                    "session": "Lugn distans",
+                }
+            ],
+        }
+        completed = {
+            "activity_refs": ["enduro", "actual-threshold"],
+            "direct_capabilities": ["run_threshold"],
+            "planning_credits": ["run_threshold"],
+            "capability_refs": {"run_threshold": ["actual-threshold"]},
+            "capability_day_indexes": {"run_threshold": [2]},
+            "enduro_exposures": 1,
+            "completed_day_indexes": [2],
+        }
+
+        result = reconcile_unaffected_future_workouts(
+            current,
+            rebuilt,
+            target_start=date(2026, 9, 28),
+            today=date(2026, 9, 29),
+            completed_context=completed,
+        )
+        rows = {
+            (row.get("date"), row.get("recipe_key"))
+            for row in result["planned_workouts"]
+        }
+        self.assertNotIn(("2026-09-30", "run_threshold"), rows)
+        self.assertIn(("2026-10-01", "swim_aerobic_technique"), rows)
+        self.assertIn(("2026-10-02", "run_hill_quality"), rows)
+        self.assertIn(("2026-10-04", "run_easy_distance"), rows)
+
+    def test_actual_driven_replan_does_not_preserve_adjacent_run_stressor(self):
+        previous_context = {
+            "activity_refs": [],
+            "direct_capabilities": [],
+            "planning_credits": [],
+            "capability_refs": {},
+            "capability_day_indexes": {},
+        }
+        current = {
+            "meta": {
+                "week_start": "2026-09-28",
+                "week_end": "2026-10-04",
+                "capacity_protection": {"completed_context": previous_context},
+            },
+            "planned_workouts": [
+                {
+                    "date": "2026-09-30",
+                    "sport": "run",
+                    "recipe_key": "run_hill_quality",
+                    "microcycle_slot": "hill_1",
+                    "stimuli": ["run_hill_quality"],
+                    "session": "Backe",
+                },
+                {
+                    "date": "2026-09-30",
+                    "sport": "swim",
+                    "recipe_key": "swim_aerobic_technique",
+                    "microcycle_slot": "swim_1",
+                    "stimuli": ["swim_aerobic", "swim_technique"],
+                    "session": "Simning",
+                },
+            ],
+        }
+        rebuilt = {
+            "meta": {"week_start": "2026-09-28", "week_end": "2026-10-04"},
+            "planned_workouts": [],
+        }
+        completed = {
+            "activity_refs": ["actual-threshold"],
+            "direct_capabilities": ["run_threshold"],
+            "planning_credits": ["run_threshold"],
+            "capability_refs": {"run_threshold": ["actual-threshold"]},
+            "capability_day_indexes": {"run_threshold": [2]},
+            "completed_day_indexes": [2],
+        }
+
+        result = reconcile_unaffected_future_workouts(
+            current,
+            rebuilt,
+            target_start=date(2026, 9, 28),
+            today=date(2026, 9, 29),
+            completed_context=completed,
+        )
+        recipes = [row.get("recipe_key") for row in result["planned_workouts"]]
+        self.assertNotIn("run_hill_quality", recipes)
+        self.assertIn("swim_aerobic_technique", recipes)
 
     def test_micro_planner_revision_does_not_rebuild_started_current_week(self):
         plan = {
