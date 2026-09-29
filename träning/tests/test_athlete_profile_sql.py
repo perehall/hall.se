@@ -4,6 +4,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 MIGRATION = ROOT / "supabase" / "migrations" / "20260929094500_athlete_onboarding_profile.sql"
 GENERATION_MIGRATION = ROOT / "supabase" / "migrations" / "20260929123000_plan_generation_requests.sql"
+ACTIVATION_MIGRATION = ROOT / "supabase" / "migrations" / "20260929132000_profile_activation_boundary.sql"
 
 
 class AthleteProfileSqlTests(unittest.TestCase):
@@ -11,6 +12,7 @@ class AthleteProfileSqlTests(unittest.TestCase):
     def setUpClass(cls):
         cls.sql = MIGRATION.read_text(encoding="utf-8").lower()
         cls.generation_sql = GENERATION_MIGRATION.read_text(encoding="utf-8").lower()
+        cls.activation_sql = ACTIVATION_MIGRATION.read_text(encoding="utf-8").lower()
 
     def test_profile_is_per_athlete_and_backend_only(self):
         self.assertIn("create table if not exists training.athlete_profiles", self.sql)
@@ -36,6 +38,20 @@ class AthleteProfileSqlTests(unittest.TestCase):
         self.assertIn("training_request_plan_generation", self.generation_sql)
         self.assertIn("training_get_plan_generation", self.generation_sql)
         self.assertIn("training_set_plan_generation_status", self.generation_sql)
+
+    def test_profile_activation_is_separate_from_profile_save(self):
+        self.assertIn("active_profile jsonb", self.activation_sql)
+        self.assertIn("active_revision bigint", self.activation_sql)
+        self.assertIn("profile_snapshot jsonb", self.activation_sql)
+        self.assertIn("v_profile.profile", self.activation_sql)
+        self.assertIn("active_profile = v_request.profile_snapshot", self.activation_sql)
+        self.assertIn("active_revision = v_request.profile_revision", self.activation_sql)
+        self.assertIn("if p_status = 'completed' then", self.activation_sql)
+
+    def test_generation_snapshot_becomes_immutable_planning_input(self):
+        self.assertIn("alter column profile_snapshot set not null", self.activation_sql)
+        self.assertIn("jsonb_typeof(profile_snapshot) = 'object'", self.activation_sql)
+        self.assertIn("profile revision it was created from", self.activation_sql)
 
     def test_frequency_contract_is_explicit(self):
         self.assertIn("preferred_days", self.sql)
