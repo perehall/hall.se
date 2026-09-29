@@ -61,6 +61,28 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
 .freq-range-sep{padding:0 2px 9px;color:var(--muted);font-weight:650}
 .freq-range label{display:block}
 .freq-range small{display:block;color:var(--muted);font-size:.7rem;font-weight:650;margin-bottom:4px}
+.starting-card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:18px}
+.starting-card h2{font-size:1.08rem;margin:0 0 8px;letter-spacing:-.015em}
+.starting-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0}
+.starting-metric{background:var(--soft);border-radius:13px;padding:12px}
+.starting-metric span{display:block;color:var(--muted);font-size:.72rem;font-weight:600;margin-bottom:4px}
+.starting-metric strong{font-size:1.08rem;font-weight:650}
+.starting-families{display:grid;gap:1px;background:#ececf0;border-radius:14px;overflow:hidden;margin:14px 0}
+.starting-family{display:flex;justify-content:space-between;gap:12px;background:var(--surface);padding:10px 12px;font-size:.87rem}
+.starting-family span:last-child{color:var(--muted)}
+.starting-choice{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+.starting-choice button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:10px 14px;font-weight:620}
+.starting-choice button.selected{border-color:var(--accent);background:#eef6ff;color:#005bb5}
+.manual-starting{display:none;margin-top:24px}
+.manual-starting.active{display:block}
+.discipline-panels{display:grid;gap:12px;margin-top:16px}
+.discipline-panel{display:none;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:15px}
+.discipline-panel.active{display:block}
+.discipline-panel h3{font-size:.94rem;margin:0 0 13px}
+.compact-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.compact-grid label{font-size:.75rem;font-weight:650;color:var(--muted)}
+.compact-grid input,.compact-grid select{margin-top:6px;width:100%;border:1px solid var(--line);border-radius:11px;padding:10px;background:#fff}
+.starting-boundary{font-size:.82rem;line-height:1.45;color:var(--muted);margin-top:14px}
 .availability{border-top:1px solid var(--line)}
 .dayrow{display:grid;grid-template-columns:120px 1fr 150px;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
 .dayname{font-weight:650}
@@ -112,7 +134,7 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
 @keyframes enter{from{opacity:.25;transform:translateY(5px)}to{opacity:1;transform:none}}
 @media(max-width:600px){
   .shell{padding:18px 16px 110px}.topbar{margin-bottom:34px}.progress{margin-bottom:30px}
-  .choice-grid{grid-template-columns:1fr}.freq-row{grid-template-columns:1fr}
+  .choice-grid{grid-template-columns:1fr}.freq-row{grid-template-columns:1fr}.starting-metrics{grid-template-columns:1fr}.compact-grid{grid-template-columns:1fr}
   .dayrow{grid-template-columns:96px 1fr}.dayrow select{grid-column:1/-1}
   .goal-meta{grid-template-columns:1fr}.summary-row{grid-template-columns:1fr auto;gap:6px 12px}.summary-label{grid-column:1/-1}
 }
@@ -141,7 +163,34 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
     </section>
 
     <section class="step" data-step="2">
-      <p class="eyebrow">2 · Frekvens</p>
+      <p class="eyebrow">2 · Startläge</p>
+      <h1>Var står du idag?</h1>
+      <p class="lead">Om det finns tillräcklig träningshistorik visar jag vad jag faktiskt kan observera. Du bekräftar om den är representativ. Saknas historik beskriver du nuläget själv.</p>
+      <div id="observedStarting"></div>
+      <div id="manualStarting" class="manual-starting">
+        <div class="field">
+          <label for="trainingBackground">Träningsbakgrund</label>
+          <select id="trainingBackground">
+            <option value="">Välj om du vill</option>
+            <option value="new">Relativt ny till regelbunden träning</option>
+            <option value="some">Har tränat regelbundet ett tag</option>
+            <option value="experienced">Lång träningsbakgrund</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="currentDays">Hur många dagar per vecka tränar du ungefär idag?</label>
+          <select id="currentDays"><option value="">Vet inte / varierar</option></select>
+        </div>
+        <span class="section-label">Vilka träningsformer beskriver ditt nuläge?</span>
+        <div class="chips" id="startingDisciplineChips"></div>
+        <div class="discipline-panels" id="disciplinePanels"></div>
+        <div class="field" style="margin-top:16px"><label for="startingNotes">Något viktigt om nuläget?</label><textarea id="startingNotes" placeholder="Valfritt. Exempel: återkommer efter uppehåll, nyligen ökat volymen, tekniskt ny på MTB..."></textarea></div>
+      </div>
+      <p class="starting-boundary">Självrapporterad nivå används bara för en konservativ första etablering. Den räknas inte som tolererad eller absorberad träningsdos och kan inte ensam utlösa progression.</p>
+    </section>
+
+    <section class="step" data-step="3">
+      <p class="eyebrow">3 · Frekvens</p>
       <h1>Hur många dagar per vecka vill du normalt träna?</h1>
       <p class="lead">Ange vad du helst vill ha och vilket spann som fortfarande känns som en normal träningsvecka. Det beskriver din preferens — kapaciteten bedöms separat från faktisk träning och återkoppling.</p>
       <div class="freq-row">
@@ -246,8 +295,9 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
 <script>
 (() => {
   const API="/träning/training-api/profile";
+  const STARTING_STATE_API="/träning/training-api/profile/starting-state";
   const GENERATE_API="/träning/training-api/profile/generate";
-  const TOTAL=8;
+  const TOTAL=9;
   const DAYS=[
     ["monday","Måndag"],["tuesday","Tisdag"],["wednesday","Onsdag"],["thursday","Torsdag"],
     ["friday","Fredag"],["saturday","Lördag"],["sunday","Söndag"]
@@ -255,8 +305,18 @@ textarea{min-height:112px;resize:vertical;line-height:1.45}
   const FACILITIES=[["pool","Simhall"],["gym","Gym"],["treadmill","Löpband"],["mtb","MTB"],["bike","Landsväg / gravel"],["indoor_bike","Cykeltrainer / inomhuscykel"],["ski","Skidor"]];
   let step=0;
   let profile=emptyProfile();
+  let startingState=emptyStartingState();
+  let observedCandidate=null;
   let returnToSummary=false;
   let generationRequestId=null;
+
+  function emptyStartingState(){
+    return {
+      schema_version:1,status:"draft",source_mode:"manual",
+      manual_state:{training_background:null,current_days_per_week:null,disciplines:{},notes:""},
+      confirmation:{observed_representative:false,notes:""}
+    };
+  }
 
   function emptyProfile(){
     const availability={};
