@@ -555,7 +555,8 @@ class AdaptivePlanningTests(unittest.TestCase):
         )
         recipes = [row["recipe_key"] for row in result["slots"]]
         self.assertNotIn("run_threshold", recipes)
-        self.assertEqual(recipes.count("swim_aerobic_technique"), 1)\n        self.assertIn("swim_aerobic_endurance", recipes)
+        self.assertEqual(recipes.count("swim_aerobic_technique"), 1)
+        self.assertIn("swim_aerobic_endurance", recipes)
         self.assertIn("run_easy_distance", recipes)
         self.assertFalse(
             microcycle_guard_failures(
