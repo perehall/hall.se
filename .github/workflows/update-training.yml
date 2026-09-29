@@ -128,6 +128,7 @@ jobs:
           ATHLETE_PROFILE_PLAN_REQUEST: ${{ github.event.action == 'athlete-profile-plan-request' && 'true' || 'false' }}
           ATHLETE_PROFILE_PLAN_REQUEST_ID: ${{ github.event.client_payload.request_id }}
           ATHLETE_PROFILE_EXPECTED_REVISION: ${{ github.event.client_payload.profile_revision }}
+          ATHLETE_STARTING_STATE_EXPECTED_REVISION: ${{ github.event.client_payload.starting_state_revision }}
         run: |
           if [ "${{ github.event.action }}" = "strava-activity-event" ]; then
             ingest_mode=event
