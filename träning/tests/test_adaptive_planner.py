@@ -902,6 +902,44 @@ class AdaptivePlanningTests(unittest.TestCase):
             [row["recipe_key"] for row in result["slots"]],
         )
 
+    def test_future_fixed_enduro_reserves_one_run_quality_slot_until_completed(self):
+        meso = json.loads(
+            (ROOT / "data" / "mesocycle_decision.json").read_text(encoding="utf-8")
+        )
+        proposal = {
+            "slots": [
+                {"day_index": 2, "recipe_key": "swim_aerobic_technique", "action": "consolidate"},
+                {"day_index": 3, "recipe_key": "run_threshold", "action": "consolidate"},
+                {"day_index": 4, "recipe_key": "strength_core", "action": "establish"},
+                {"day_index": 5, "recipe_key": "run_hill_quality", "action": "consolidate"},
+                {"day_index": 6, "recipe_key": "swim_aerobic_endurance", "action": "establish"},
+                {"day_index": 7, "recipe_key": "run_easy_distance", "action": "consolidate"},
+            ]
+        }
+        future_failures = microcycle_guard_failures(
+            proposal,
+            meso,
+            self.policy,
+            self.catalog,
+            date(2026, 10, 5),
+            completed_context={},
+        )
+        self.assertTrue(
+            any("reserverad fast enduro" in failure for failure in future_failures)
+        )
+
+        completed_enduro_failures = microcycle_guard_failures(
+            proposal,
+            meso,
+            self.policy,
+            self.catalog,
+            date(2026, 10, 5),
+            completed_context={"enduro_exposures": 1},
+        )
+        self.assertFalse(
+            any("reserverad fast enduro" in failure for failure in completed_enduro_failures)
+        )
+
     def test_generic_run_without_capability_evidence_is_not_credited_as_threshold(self):
         state = {
             "recent_sessions": [
