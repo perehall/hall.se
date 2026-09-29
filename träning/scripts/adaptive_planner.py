@@ -941,6 +941,13 @@ def completed_microcycle_context(athlete_state, target_start):
         for row in rows
         if not (fixed_enduro and str(row.get("date")) == target_start.isoformat())
     }
+    completed_day_indexes = sorted(
+        {
+            (iso(day_value) - target_start).days + 1
+            for day_value in completed_slot_dates
+            if day_value
+        }
+    )
     strength_rows = [row for row in rows if row.get("family") == "strength"]
     swim_rows = [row for row in rows if row.get("family") == "swim"]
     enduro_rows = [row for row in rows if row.get("family") == "enduro"]
@@ -949,6 +956,7 @@ def completed_microcycle_context(athlete_state, target_start):
         "swim_exposures": len(swim_rows),
         "enduro_exposures": len(enduro_rows),
         "completed_slot_days": len(completed_slot_dates),
+        "completed_day_indexes": completed_day_indexes,
         "direct_capabilities": sorted(direct_capabilities),
         "capability_refs": capability_refs,
         "activity_refs": sorted(activity_ids),
