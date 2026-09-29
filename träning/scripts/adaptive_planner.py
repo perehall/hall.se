@@ -1624,23 +1624,38 @@ def normalize_progress_actions_from_absorption(microcycle, athlete_state):
     return normalized
 
 
-def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start, athlete_profile=None, *, request_fn=None):
-    completed_context = completed_microcycle_context(athlete_state, target_start)
+def build_microcycle_source_payload(
+    meso,
+    goal,
+    policy,
+    catalog,
+    athlete_state,
+    target_start,
+    athlete_profile=None,
+    completed_context=None,
+):
+    completed_context = completed_context or completed_microcycle_context(
+        athlete_state, target_start
+    )
     competition_context = build_competition_context(
         goal,
         target_start,
         policy.get("event_horizon_policy"),
     )
     declared_profile = planner_profile_view(athlete_profile)
-    profile_contract = profile_planning_contract(athlete_profile) if athlete_profile else {}
-    source_payload = {
+    profile_contract = (
+        profile_planning_contract(athlete_profile) if athlete_profile else {}
+    )
+    return {
         "week_start": target_start.isoformat(),
         "declared_athlete_profile": declared_profile,
         "declared_profile_contract": profile_contract,
         "competition_context": competition_context,
         "completed_microcycle_context": completed_context,
         "block_context": mesocycle_block_context(meso, target_start, policy),
-        "mesocycle_history": mesocycle_history_context(meso, target_start, catalog),
+        "mesocycle_history": mesocycle_history_context(
+            meso, target_start, catalog
+        ),
         "fixed_enduro_day_1": is_enduro_school_date(target_start),
         "goal": {
             "goal": goal.get("goal"),
@@ -1661,34 +1676,87 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
                 "load_dimensions": list(value.get("load_dimensions") or []),
                 "development_focus": value.get("development_focus"),
                 "development_character": value.get("development_character") or key,
-                "option_ids": [item.get("id") for item in (value.get("options") or [])],
+                "option_ids": [
+                    item.get("id") for item in (value.get("options") or [])
+                ],
             }
             for key, value in catalog["recipes"].items()
         },
         "hard_requirements": {
             "cover_all_primary_capabilities_directly": True,
-            "normal_swim_exposures": int(policy["microcycle_policy"].get("normal_swim_exposures", 2)),
-            "completed_swim_exposures": int(completed_context.get("swim_exposures") or 0),
-            "strength_core_exposures_min": 1 if policy["microcycle_policy"].get("protect_strength_core_each_microcycle") else 0,
-            "completed_strength_exposures": int(completed_context.get("strength_exposures") or 0),
-            "completed_direct_capabilities": list(completed_context.get("direct_capabilities") or []),
-            "max_run_quality_exposures": int(policy["microcycle_policy"].get("max_run_quality_exposures", 2)),
+            "normal_swim_exposures": int(
+                policy["microcycle_policy"].get("normal_swim_exposures", 2)
+            ),
+            "completed_swim_exposures": int(
+                completed_context.get("swim_exposures") or 0
+            ),
+            "strength_core_exposures_min": (
+                1
+                if policy["microcycle_policy"].get(
+                    "protect_strength_core_each_microcycle"
+                )
+                else 0
+            ),
+            "completed_strength_exposures": int(
+                completed_context.get("strength_exposures") or 0
+            ),
+            "completed_direct_capabilities": list(
+                completed_context.get("direct_capabilities") or []
+            ),
+            "max_run_quality_exposures": int(
+                policy["microcycle_policy"].get(
+                    "max_run_quality_exposures", 2
+                )
+            ),
             "slot_count_min": 4,
             "slot_count_max": 7,
             "day_1_blocked_by_enduro": is_enduro_school_date(target_start),
-            "day_after_fixed_enduro_requires_low_leg_load": is_enduro_school_date(target_start),
+            "day_after_fixed_enduro_requires_low_leg_load": is_enduro_school_date(
+                target_start
+            ),
             "adjacent_run_stressors_forbidden": True,
-            "declared_unavailable_days": list(profile_contract.get("unavailable_days") or []),
-            "declared_preferred_active_days": profile_contract.get("preferred_active_days"),
+            "declared_unavailable_days": list(
+                profile_contract.get("unavailable_days") or []
+            ),
+            "declared_preferred_active_days": profile_contract.get(
+                "preferred_active_days"
+            ),
             "declared_normal_active_day_range": [
                 profile_contract.get("min_active_days"),
                 profile_contract.get("max_active_days"),
             ],
-            "declared_double_session_preference": profile_contract.get("double_sessions"),
+            "declared_double_session_preference": profile_contract.get(
+                "double_sessions"
+            ),
             "declared_rest_day_preference": profile_contract.get("rest_days"),
             "automatic_progress_requires_absorbed_dose": True,
         },
     }
+
+
+def generate_microcycle(
+    meso,
+    goal,
+    policy,
+    catalog,
+    athlete_state,
+    target_start,
+    athlete_profile=None,
+    *,
+    request_fn=None,
+):
+    completed_context = completed_microcycle_context(athlete_state, target_start)
+    source_payload = build_microcycle_source_payload(
+        meso,
+        goal,
+        policy,
+        catalog,
+        athlete_state,
+        target_start,
+        athlete_profile=athlete_profile,
+        completed_context=completed_context,
+    )
+    competition_context = source_payload["competition_context"]
     digest = canonical_hash(source_payload)
     system = (
         "Du komponerar en sjudagars mikrocykel från ett redan fattat mesocykelbeslut. "
