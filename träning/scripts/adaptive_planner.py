@@ -291,7 +291,12 @@ def completed_context_signature(context) -> str:
             str(value) for value in (context.get("direct_capabilities") or [])
         ),
         "planning_credits": sorted(
-            str(value) for value in (context.get("planning_credits") or [])
+            str(value)
+            for value in (
+                context.get("planning_credits")
+                or context.get("direct_capabilities")
+                or []
+            )
         ),
         "capability_refs": capability_refs,
         "strength_exposures": int(context.get("strength_exposures") or 0),
