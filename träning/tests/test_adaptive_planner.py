@@ -902,6 +902,84 @@ class AdaptivePlanningTests(unittest.TestCase):
             [row["recipe_key"] for row in result["slots"]],
         )
 
+    def test_future_enduro_develop_week_requires_one_but_not_two_secondary_sessions(self):
+        meso = json.loads(
+            (ROOT / "data" / "mesocycle_decision.json").read_text(encoding="utf-8")
+        )
+        required_only = {
+            "slots": [
+                {"day_index": 2, "recipe_key": "swim_aerobic_technique", "action": "consolidate"},
+                {"day_index": 3, "recipe_key": "run_threshold", "action": "consolidate"},
+                {"day_index": 4, "recipe_key": "strength_core", "action": "establish"},
+                {"day_index": 6, "recipe_key": "swim_aerobic_endurance", "action": "establish"},
+            ]
+        }
+        failures = microcycle_guard_failures(
+            required_only,
+            meso,
+            self.policy,
+            self.catalog,
+            date(2026, 10, 5),
+            completed_context={},
+        )
+        self.assertTrue(
+            any("saknar sekundärt stödpass" in failure for failure in failures)
+        )
+
+        one_secondary = deepcopy(required_only)
+        one_secondary["slots"].append(
+            {"day_index": 6, "recipe_key": "run_easy_distance", "action": "consolidate"}
+        )
+        failures = microcycle_guard_failures(
+            one_secondary,
+            meso,
+            self.policy,
+            self.catalog,
+            date(2026, 10, 5),
+            completed_context={},
+        )
+        self.assertFalse(
+            any("saknar sekundärt stödpass" in failure for failure in failures)
+        )
+        self.assertFalse(
+            any("begränsar sekundär belastning" in failure for failure in failures)
+        )
+
+        two_secondary = deepcopy(one_secondary)
+        two_secondary["slots"].append(
+            {"day_index": 5, "recipe_key": "mtb_technical", "action": "consolidate"}
+        )
+        failures = microcycle_guard_failures(
+            two_secondary,
+            meso,
+            self.policy,
+            self.catalog,
+            date(2026, 10, 5),
+            completed_context={},
+        )
+        self.assertTrue(
+            any("begränsar sekundär belastning" in failure for failure in failures)
+        )
+
+    def test_heavy_sunday_is_rejected_before_next_fixed_enduro(self):
+        failures = microcycle_layout_failures(
+            [{"day_index": 7, "recipe_key": "run_easy_distance"}],
+            self.catalog,
+            date(2026, 10, 5),
+        )
+        self.assertTrue(
+            any("söndagen direkt före nästa fasta enduro" in failure for failure in failures)
+        )
+
+        swim_only = microcycle_layout_failures(
+            [{"day_index": 7, "recipe_key": "swim_aerobic_endurance"}],
+            self.catalog,
+            date(2026, 10, 5),
+        )
+        self.assertFalse(
+            any("söndagen direkt före nästa fasta enduro" in failure for failure in swim_only)
+        )
+
     def test_future_fixed_enduro_reserves_one_run_quality_slot_until_completed(self):
         meso = json.loads(
             (ROOT / "data" / "mesocycle_decision.json").read_text(encoding="utf-8")
