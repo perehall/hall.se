@@ -254,14 +254,16 @@
       "consolidate",
       "reduce"
     ],
-    "principle": "Mikrocykeln komponeras från mesocykelns kapacitetskrav och aktuell belastning. Ledig kalenderdag är aldrig ett eget skäl att lägga till träning."
+    "principle": "Mikrocykeln komponeras från mesocykelns kapacitetskrav och aktuell belastning. Ledig kalenderdag är aldrig ett eget skäl att lägga till träning.",
+    "require_distinct_development_character_in_develop_microcycles": true
   },
   "decision_guards": [
     "Ingen progression får motiveras enbart av wellness eller träningsberedskap.",
     "Faktisk belastning föregående och kommande 2–3 dagar ska beaktas innan pass flyttas, läggs till eller görs hårdare.",
     "Enduro är faktisk träningsbelastning och får ersätta annan träning.",
     "Saknad evidens ska ge osäkerhet eller konservativt beslut, inte påhittade värden.",
-    "Utvecklingspass ska progressa, konsolideras, reduceras eller bytas med explicit skäl; de får inte upprepas mekaniskt."
+    "Utvecklingspass ska progressa, konsolideras, reduceras eller bytas med explicit skäl; de får inte upprepas mekaniskt.",
+    "Tidigare mikrocyklers recept- och doshistorik ska beaktas innan ett utvecklingspass upprepas oförändrat."
   ],
   "migration_seed": {
     "previous_mesocycle_id": "run-threshold-hill-4w",
@@ -293,5 +295,42 @@
     "mesocycle_must_cover_every_active_goal": true,
     "microcycle_need_not_express_every_goal_every_week": true,
     "principle": "Planeringen optimerar en målportfölj. Varaktiga utvecklingsmål anger vilken atlet som byggs; tidsatta prestationsmål ändrar betoning och specificitet. Ett A-mål får inte implicit ersätta den varaktiga målbilden."
+  },
+  "periodization_policy": {
+    "principle": "Blockets utvecklingssyfte ska styra passkaraktär och progression. Ett utvecklingsblock får inte reduceras till att samma bra pass återkommer oförändrat; etablering, utveckling och konsolidering ska vara synliga i mikrocyklerna utan att kalendern ensam driver belastning.",
+    "microcycle_wave_by_duration": {
+      "3": [
+        "establish",
+        "develop",
+        "consolidate"
+      ],
+      "4": [
+        "establish",
+        "develop",
+        "develop",
+        "consolidate"
+      ],
+      "5": [
+        "establish",
+        "develop",
+        "develop",
+        "consolidate",
+        "review"
+      ]
+    },
+    "intent_definitions": {
+      "establish": "Etablera eller återetablera blockets nyckelstimuli på demonstrerad och absorberbar nivå.",
+      "develop": "Utveckla en primär kapacitet genom en sakligt motiverad ändring av dos, intervallstruktur, teknisk uppgift eller annan uttryckligen definierad progressionsaxel.",
+      "consolidate": "Stabilisera blockets vinster, behåll kvalitet och skapa absorptionsutrymme; progression är inte ett krav.",
+      "review": "Samla jämförbar respons inför nästa mesocykel och undvik ny automatisk belastningsökning."
+    },
+    "rules": [
+      "Mikrocykelns block_intent ska följa mesocykelns belastningsvåg och ingå i planeringsunderlaget.",
+      "Tidigare mikrocyklers planerade recept, doser och faktiska genomförande ska ingå i beslutsunderlaget när de finns.",
+      "I develop-mikrocykler ska ett primärt utvecklingspass progressa längs en definierad axel eller ha ett uttryckligt datastött skäl för hold/konsolidering.",
+      "Samma primära recept och samma dos får inte återkomma mekaniskt genom utvecklingsveckor bara för att passet fungerat tidigare.",
+      "När två utvecklingsexponeringar för samma gren ryms i samma mikrocykel ska de normalt ha olika development_character om katalogen innehåller absorberbara alternativ.",
+      "Sista mikrocykeln i blocket används för konsolidering eller review; detta innebär inte en mekanisk deload utan att faktisk belastning och respons avgör om dos ska reduceras."
+    ]
   }
 }
