@@ -24,6 +24,12 @@ class AthleteOnboardingPageTests(unittest.TestCase):
         ):
             self.assertIn(text, self.page)
 
+    def test_starting_state_backend_failure_fails_closed(self):
+        self.assertIn("starting_state_backend_unavailable", self.page)
+        self.assertIn("Startläget kunde inte laddas", self.page)
+        self.assertIn("Inga antaganden görs", self.page)
+        self.assertIn("if(!startingStateBackendReady)", self.page)
+
     def test_starting_state_is_adaptive_and_explicitly_confirmed(self):
         self.assertIn('const STARTING_STATE_API="/träning/training-api/profile/starting-state"', self.page)
         self.assertIn("Jag kan redan se din senaste träning", self.page)
