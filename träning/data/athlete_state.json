@@ -934,12 +934,16 @@
             "dose_value": 32.0,
             "activity_id": 20381137043,
             "direct_response": {
-              "signal": "neutral",
-              "rpe_values": [],
+              "signal": "supportive",
+              "rpe_values": [
+                6.0
+              ],
               "caution_terms": [],
-              "supportive_terms": []
+              "supportive_terms": [
+                "stark"
+              ]
             },
-            "response_status": "tolerated",
+            "response_status": "tolerated_pending_recovery",
             "repeat_supported": true,
             "recovery_context_24_72h": {
               "signal": "unobserved",
@@ -956,12 +960,16 @@
           "dose_value": 32.0,
           "activity_id": 20381137043,
           "direct_response": {
-            "signal": "neutral",
-            "rpe_values": [],
+            "signal": "supportive",
+            "rpe_values": [
+              6.0
+            ],
             "caution_terms": [],
-            "supportive_terms": []
+            "supportive_terms": [
+              "stark"
+            ]
           },
-          "response_status": "tolerated",
+          "response_status": "tolerated_pending_recovery",
           "repeat_supported": true,
           "recovery_context_24_72h": {
             "signal": "unobserved",
@@ -971,9 +979,9 @@
           }
         },
         "tolerated_value": 32.0,
-        "progression_ready": true,
+        "progression_ready": false,
         "demonstrated_value": 32.0,
-        "progression_reason": "Upprepad jämförbar dos med stödjande respons ger stöd för att dosen är absorberad."
+        "progression_reason": "Senaste jämförbara exponeringen har stödjande passrespons men 72 h-observationsfönstret är ännu inte komplett."
       },
       "swim_threshold": {
         "metric": "distance_m",
@@ -1849,6 +1857,34 @@
       "classification": "training",
       "elapsed_time_s": 4300,
       "elevation_gain_m": 264.0,
+      "training_profile": {
+        "stimuli": [
+          {
+            "key": "run_hill_quality",
+            "dose": {
+              "protocol": "3x7",
+              "repetitions": 21
+            },
+            "source": "explicit_user_report",
+            "status": "confirmed",
+            "confidence": "high"
+          }
+        ],
+        "activity_id": 20133500464,
+        "source_hash": "fa5924cbef5b6886afcdc3017ec6056d18213546fc6b9cbc953ef8e310b50975",
+        "uncertainties": [],
+        "intent_matches": [],
+        "schema_version": 1,
+        "planning_credits": [
+          "run_hill_quality"
+        ],
+        "observed_structure": {
+          "run_time_intervals": {
+            "structured": false
+          }
+        },
+        "interpretation_boundary": "Observerad struktur är mätdata. Fysiologiska stimulus kräver explicit evidens. Planning credit från strukturell intent-match betyder att den genomförda dosen kan ersätta ett entydigt närliggande planerat pass; det påstår inte mer om fysiologisk intensitet än källorna stödjer."
+      },
       "average_heartrate": 144.3
     },
     {
@@ -1862,6 +1898,21 @@
       "classification": "training",
       "elapsed_time_s": 13578,
       "elevation_gain_m": 1490.4,
+      "training_profile": {
+        "stimuli": [],
+        "activity_id": 20144331562,
+        "source_hash": "ccb1ed49bababc53f3ca3941723ddb119e5ce24725c69b5c620d32071bf16321",
+        "uncertainties": [],
+        "intent_matches": [],
+        "schema_version": 1,
+        "planning_credits": [],
+        "observed_structure": {
+          "run_time_intervals": {
+            "structured": false
+          }
+        },
+        "interpretation_boundary": "Observerad struktur är mätdata. Fysiologiska stimulus kräver explicit evidens. Planning credit från strukturell intent-match betyder att den genomförda dosen kan ersätta ett entydigt närliggande planerat pass; det påstår inte mer om fysiologisk intensitet än källorna stödjer."
+      },
       "average_heartrate": 124.9
     },
     {
@@ -1875,6 +1926,21 @@
       "classification": "training",
       "elapsed_time_s": 1854,
       "elevation_gain_m": 41.0,
+      "training_profile": {
+        "stimuli": [],
+        "activity_id": 20153873263,
+        "source_hash": "b785bf4fd23a26bd7a9cdb1d2aef6b3976d85fc372bcb53f9b8466fb29e97550",
+        "uncertainties": [],
+        "intent_matches": [],
+        "schema_version": 1,
+        "planning_credits": [],
+        "observed_structure": {
+          "run_time_intervals": {
+            "structured": false
+          }
+        },
+        "interpretation_boundary": "Observerad struktur är mätdata. Fysiologiska stimulus kräver explicit evidens. Planning credit från strukturell intent-match betyder att den genomförda dosen kan ersätta ett entydigt närliggande planerat pass; det påstår inte mer om fysiologisk intensitet än källorna stödjer."
+      },
       "average_heartrate": 82.4
     },
     {
@@ -1888,6 +1954,21 @@
       "classification": "training",
       "elapsed_time_s": 6462,
       "elevation_gain_m": 237.0,
+      "training_profile": {
+        "stimuli": [],
+        "activity_id": 20157600319,
+        "source_hash": "067ee4f8bd60f7b45980feb1464f80d18e14b5e5624df35fbeb66c2c6604f894",
+        "uncertainties": [],
+        "intent_matches": [],
+        "schema_version": 1,
+        "planning_credits": [],
+        "observed_structure": {
+          "run_time_intervals": {
+            "structured": false
+          }
+        },
+        "interpretation_boundary": "Observerad struktur är mätdata. Fysiologiska stimulus kräver explicit evidens. Planning credit från strukturell intent-match betyder att den genomförda dosen kan ersätta ett entydigt närliggande planerat pass; det påstår inte mer om fysiologisk intensitet än källorna stödjer."
+      },
       "average_heartrate": 137.2
     },
     {
@@ -1901,6 +1982,21 @@
       "classification": "training",
       "elapsed_time_s": 2089,
       "elevation_gain_m": 0,
+      "training_profile": {
+        "stimuli": [],
+        "activity_id": 20175536586,
+        "source_hash": "5a3edcd0ef0de077db0291286ab594b0a4999e0215be985911a3fd91f1c70cc0",
+        "uncertainties": [],
+        "intent_matches": [],
+        "schema_version": 1,
+        "planning_credits": [],
+        "observed_structure": {
+          "run_time_intervals": {
+            "structured": false
+          }
+        },
+        "interpretation_boundary": "Observerad struktur är mätdata. Fysiologiska stimulus kräver explicit evidens. Planning credit från strukturell intent-match betyder att den genomförda dosen kan ersätta ett entydigt närliggande planerat pass; det påstår inte mer om fysiologisk intensitet än källorna stödjer."
+      },
       "average_heartrate": 74.8
     },
     {
@@ -1914,6 +2010,21 @@
       "classification": "training",
       "elapsed_time_s": 5344,
       "elevation_gain_m": 222.2,
+      "training_profile": {
+        "stimuli": [],
+        "activity_id": 20175917270,
+        "source_hash": "06a60018199ccc2f955a3553e7973546d96e7f08099e0f50f43026a847748e8b",
+        "uncertainties": [],
+        "intent_matches": [],
+        "schema_version": 1,
+        "planning_credits": [],
+        "observed_structure": {
+          "run_time_intervals": {
+            "structured": false
+          }
+        },
+        "interpretation_boundary": "Observerad struktur är mätdata. Fysiologiska stimulus kräver explicit evidens. Planning credit från strukturell intent-match betyder att den genomförda dosen kan ersätta ett entydigt närliggande planerat pass; det påstår inte mer om fysiologisk intensitet än källorna stödjer."
+      },
       "average_heartrate": 107.0
     },
     {
@@ -1927,6 +2038,21 @@
       "classification": "training",
       "elapsed_time_s": 3843,
       "elevation_gain_m": 106.0,
+      "training_profile": {
+        "stimuli": [],
+        "activity_id": 20188628588,
+        "source_hash": "1eb1598de6293e1c562177b991eab1c5da7dfc4d465ef1ace50f4e43b7d12ac9",
+        "uncertainties": [],
+        "intent_matches": [],
+        "schema_version": 1,
+        "planning_credits": [],
+        "observed_structure": {
+          "run_time_intervals": {
+            "structured": false
+          }
+        },
+        "interpretation_boundary": "Observerad struktur är mätdata. Fysiologiska stimulus kräver explicit evidens. Planning credit från strukturell intent-match betyder att den genomförda dosen kan ersätta ett entydigt närliggande planerat pass; det påstår inte mer om fysiologisk intensitet än källorna stödjer."
+      },
       "average_heartrate": 143.3
     },
     {
@@ -1940,6 +2066,21 @@
       "classification": "training",
       "elapsed_time_s": 4323,
       "elevation_gain_m": 0,
+      "training_profile": {
+        "stimuli": [],
+        "activity_id": 20203770266,
+        "source_hash": "6eaa011c8a4dd665b036ea262edde1a294990574e0702cba5cfe575f62c58e2e",
+        "uncertainties": [],
+        "intent_matches": [],
+        "schema_version": 1,
+        "planning_credits": [],
+        "observed_structure": {
+          "run_time_intervals": {
+            "structured": false
+          }
+        },
+        "interpretation_boundary": "Observerad struktur är mätdata. Fysiologiska stimulus kräver explicit evidens. Planning credit från strukturell intent-match betyder att den genomförda dosen kan ersätta ett entydigt närliggande planerat pass; det påstår inte mer om fysiologisk intensitet än källorna stödjer."
+      },
       "average_heartrate": 127.8
     },
     {
@@ -1953,6 +2094,21 @@
       "classification": "training",
       "elapsed_time_s": 4635,
       "elevation_gain_m": 209.0,
+      "training_profile": {
+        "stimuli": [],
+        "activity_id": 20218282169,
+        "source_hash": "2c179434e508bbb4f70984d7cc940c52503db92777fd8af1b492913df436d0ae",
+        "uncertainties": [],
+        "intent_matches": [],
+        "schema_version": 1,
+        "planning_credits": [],
+        "observed_structure": {
+          "run_time_intervals": {
+            "structured": false
+          }
+        },
+        "interpretation_boundary": "Observerad struktur är mätdata. Fysiologiska stimulus kräver explicit evidens. Planning credit från strukturell intent-match betyder att den genomförda dosen kan ersätta ett entydigt närliggande planerat pass; det påstår inte mer om fysiologisk intensitet än källorna stödjer."
+      },
       "average_heartrate": 127.1
     },
     {
@@ -1966,6 +2122,34 @@
       "classification": "training",
       "elapsed_time_s": 4676,
       "elevation_gain_m": 266.0,
+      "training_profile": {
+        "stimuli": [
+          {
+            "key": "run_hill_quality",
+            "dose": {
+              "protocol": "3x8",
+              "repetitions": 24
+            },
+            "source": "explicit_user_report",
+            "status": "confirmed",
+            "confidence": "high"
+          }
+        ],
+        "activity_id": 20229568713,
+        "source_hash": "b670925b18f9f9575f54d4de0eafd7ef7938b6512845deddf9e580f4de686969",
+        "uncertainties": [],
+        "intent_matches": [],
+        "schema_version": 1,
+        "planning_credits": [
+          "run_hill_quality"
+        ],
+        "observed_structure": {
+          "run_time_intervals": {
+            "structured": false
+          }
+        },
+        "interpretation_boundary": "Observerad struktur är mätdata. Fysiologiska stimulus kräver explicit evidens. Planning credit från strukturell intent-match betyder att den genomförda dosen kan ersätta ett entydigt närliggande planerat pass; det påstår inte mer om fysiologisk intensitet än källorna stödjer."
+      },
       "average_heartrate": 141.3
     },
     {
@@ -1979,6 +2163,21 @@
       "classification": "training",
       "elapsed_time_s": 4730,
       "elevation_gain_m": 0,
+      "training_profile": {
+        "stimuli": [],
+        "activity_id": 20239623463,
+        "source_hash": "831f661a7b17305e00316e4785e52777091b82a410c18de155377924bfa7bb22",
+        "uncertainties": [],
+        "intent_matches": [],
+        "schema_version": 1,
+        "planning_credits": [],
+        "observed_structure": {
+          "run_time_intervals": {
+            "structured": false
+          }
+        },
+        "interpretation_boundary": "Observerad struktur är mätdata. Fysiologiska stimulus kräver explicit evidens. Planning credit från strukturell intent-match betyder att den genomförda dosen kan ersätta ett entydigt närliggande planerat pass; det påstår inte mer om fysiologisk intensitet än källorna stödjer."
+      },
       "average_heartrate": 130.1
     },
     {
@@ -1992,6 +2191,21 @@
       "classification": "training",
       "elapsed_time_s": 7186,
       "elevation_gain_m": 267.0,
+      "training_profile": {
+        "stimuli": [],
+        "activity_id": 20254486837,
+        "source_hash": "9cf3cca3ca5edd53b905eea5f096831175125ec44ce9f97722de2f6626f833cc",
+        "uncertainties": [],
+        "intent_matches": [],
+        "schema_version": 1,
+        "planning_credits": [],
+        "observed_structure": {
+          "run_time_intervals": {
+            "structured": false
+          }
+        },
+        "interpretation_boundary": "Observerad struktur är mätdata. Fysiologiska stimulus kräver explicit evidens. Planning credit från strukturell intent-match betyder att den genomförda dosen kan ersätta ett entydigt närliggande planerat pass; det påstår inte mer om fysiologisk intensitet än källorna stödjer."
+      },
       "average_heartrate": 138.9
     },
     {
@@ -2005,6 +2219,21 @@
       "classification": "training",
       "elapsed_time_s": 5809,
       "elevation_gain_m": 391.6,
+      "training_profile": {
+        "stimuli": [],
+        "activity_id": 20271537143,
+        "source_hash": "4594c5c269d0d551018811855659f3a8e5dda887acac8c94ed24e47ee194e22f",
+        "uncertainties": [],
+        "intent_matches": [],
+        "schema_version": 1,
+        "planning_credits": [],
+        "observed_structure": {
+          "run_time_intervals": {
+            "structured": false
+          }
+        },
+        "interpretation_boundary": "Observerad struktur är mätdata. Fysiologiska stimulus kräver explicit evidens. Planning credit från strukturell intent-match betyder att den genomförda dosen kan ersätta ett entydigt närliggande planerat pass; det påstår inte mer om fysiologisk intensitet än källorna stödjer."
+      },
       "average_heartrate": 101.2
     },
     {
@@ -2018,6 +2247,21 @@
       "classification": "training",
       "elapsed_time_s": 2014,
       "elevation_gain_m": 0,
+      "training_profile": {
+        "stimuli": [],
+        "activity_id": 20272196080,
+        "source_hash": "9642a0fd3707f34e31b5826fbde87904795b362028e287f2bcf08dee66e522f3",
+        "uncertainties": [],
+        "intent_matches": [],
+        "schema_version": 1,
+        "planning_credits": [],
+        "observed_structure": {
+          "run_time_intervals": {
+            "structured": false
+          }
+        },
+        "interpretation_boundary": "Observerad struktur är mätdata. Fysiologiska stimulus kräver explicit evidens. Planning credit från strukturell intent-match betyder att den genomförda dosen kan ersätta ett entydigt närliggande planerat pass; det påstår inte mer om fysiologisk intensitet än källorna stödjer."
+      },
       "average_heartrate": 79.3
     },
     {
@@ -2031,6 +2275,34 @@
       "classification": "training",
       "elapsed_time_s": 3687,
       "elevation_gain_m": 105.0,
+      "training_profile": {
+        "stimuli": [
+          {
+            "key": "run_threshold",
+            "dose": {
+              "protocol": "4x8min",
+              "work_minutes": 32.0
+            },
+            "source": "explicit_user_report",
+            "status": "confirmed",
+            "confidence": "high"
+          }
+        ],
+        "activity_id": 20284663236,
+        "source_hash": "60633bb5b0648ab2140212d83a1341d56fd699d4327cc1ac8d7c2ab6d97b6f5e",
+        "uncertainties": [],
+        "intent_matches": [],
+        "schema_version": 1,
+        "planning_credits": [
+          "run_threshold"
+        ],
+        "observed_structure": {
+          "run_time_intervals": {
+            "structured": false
+          }
+        },
+        "interpretation_boundary": "Observerad struktur är mätdata. Fysiologiska stimulus kräver explicit evidens. Planning credit från strukturell intent-match betyder att den genomförda dosen kan ersätta ett entydigt närliggande planerat pass; det påstår inte mer om fysiologisk intensitet än källorna stödjer."
+      },
       "average_heartrate": 145.4
     },
     {
@@ -2044,6 +2316,21 @@
       "classification": "training",
       "elapsed_time_s": 3537,
       "elevation_gain_m": 0,
+      "training_profile": {
+        "stimuli": [],
+        "activity_id": 20300494236,
+        "source_hash": "316ccf42d4bed267f04b081784aeea3a4e6d29f857d3f64627416bac54484baa",
+        "uncertainties": [],
+        "intent_matches": [],
+        "schema_version": 1,
+        "planning_credits": [],
+        "observed_structure": {
+          "run_time_intervals": {
+            "structured": false
+          }
+        },
+        "interpretation_boundary": "Observerad struktur är mätdata. Fysiologiska stimulus kräver explicit evidens. Planning credit från strukturell intent-match betyder att den genomförda dosen kan ersätta ett entydigt närliggande planerat pass; det påstår inte mer om fysiologisk intensitet än källorna stödjer."
+      },
       "average_heartrate": 133.5
     },
     {
@@ -2057,6 +2344,21 @@
       "classification": "training",
       "elapsed_time_s": 4976,
       "elevation_gain_m": 207.0,
+      "training_profile": {
+        "stimuli": [],
+        "activity_id": 20314473143,
+        "source_hash": "588c2eae7b32f9c1d3b88641ac869312243c6f99a558715e357327926713ec2b",
+        "uncertainties": [],
+        "intent_matches": [],
+        "schema_version": 1,
+        "planning_credits": [],
+        "observed_structure": {
+          "run_time_intervals": {
+            "structured": false
+          }
+        },
+        "interpretation_boundary": "Observerad struktur är mätdata. Fysiologiska stimulus kräver explicit evidens. Planning credit från strukturell intent-match betyder att den genomförda dosen kan ersätta ett entydigt närliggande planerat pass; det påstår inte mer om fysiologisk intensitet än källorna stödjer."
+      },
       "average_heartrate": 126.4
     },
     {
@@ -2070,6 +2372,34 @@
       "classification": "training",
       "elapsed_time_s": 4567,
       "elevation_gain_m": 277.0,
+      "training_profile": {
+        "stimuli": [
+          {
+            "key": "run_hill_quality",
+            "dose": {
+              "protocol": "3x8",
+              "repetitions": 24
+            },
+            "source": "explicit_user_report",
+            "status": "confirmed",
+            "confidence": "high"
+          }
+        ],
+        "activity_id": 20326850936,
+        "source_hash": "50a4de58ac51cfa1d22b92ba4de7ec76f4d294561c07525e469b99be741c6c96",
+        "uncertainties": [],
+        "intent_matches": [],
+        "schema_version": 1,
+        "planning_credits": [
+          "run_hill_quality"
+        ],
+        "observed_structure": {
+          "run_time_intervals": {
+            "structured": false
+          }
+        },
+        "interpretation_boundary": "Observerad struktur är mätdata. Fysiologiska stimulus kräver explicit evidens. Planning credit från strukturell intent-match betyder att den genomförda dosen kan ersätta ett entydigt närliggande planerat pass; det påstår inte mer om fysiologisk intensitet än källorna stödjer."
+      },
       "average_heartrate": 141.6
     },
     {
@@ -2083,6 +2413,21 @@
       "classification": "training",
       "elapsed_time_s": 3822,
       "elevation_gain_m": 0,
+      "training_profile": {
+        "stimuli": [],
+        "activity_id": 20337309419,
+        "source_hash": "147c69a4dccf963d0267b2cb14d78ef12cf961342ba08fd63e747f2b02c81749",
+        "uncertainties": [],
+        "intent_matches": [],
+        "schema_version": 1,
+        "planning_credits": [],
+        "observed_structure": {
+          "run_time_intervals": {
+            "structured": false
+          }
+        },
+        "interpretation_boundary": "Observerad struktur är mätdata. Fysiologiska stimulus kräver explicit evidens. Planning credit från strukturell intent-match betyder att den genomförda dosen kan ersätta ett entydigt närliggande planerat pass; det påstår inte mer om fysiologisk intensitet än källorna stödjer."
+      },
       "average_heartrate": 112.9
     },
     {
@@ -2096,6 +2441,21 @@
       "classification": "training",
       "elapsed_time_s": 6062,
       "elevation_gain_m": 527.2,
+      "training_profile": {
+        "stimuli": [],
+        "activity_id": 20337767421,
+        "source_hash": "a676c18711434b5edd0cd82aab2637ae6c38e8b77cbebbfc7d18391193de274d",
+        "uncertainties": [],
+        "intent_matches": [],
+        "schema_version": 1,
+        "planning_credits": [],
+        "observed_structure": {
+          "run_time_intervals": {
+            "structured": false
+          }
+        },
+        "interpretation_boundary": "Observerad struktur är mätdata. Fysiologiska stimulus kräver explicit evidens. Planning credit från strukturell intent-match betyder att den genomförda dosen kan ersätta ett entydigt närliggande planerat pass; det påstår inte mer om fysiologisk intensitet än källorna stödjer."
+      },
       "average_heartrate": 125.1
     },
     {
@@ -2109,6 +2469,21 @@
       "classification": "training",
       "elapsed_time_s": 4804,
       "elevation_gain_m": 198.0,
+      "training_profile": {
+        "stimuli": [],
+        "activity_id": 20350203020,
+        "source_hash": "51d201799c9c1da133a1e40de5f6ccd4eb2a520e7a7ce0ca58eba84d822c2b73",
+        "uncertainties": [],
+        "intent_matches": [],
+        "schema_version": 1,
+        "planning_credits": [],
+        "observed_structure": {
+          "run_time_intervals": {
+            "structured": false
+          }
+        },
+        "interpretation_boundary": "Observerad struktur är mätdata. Fysiologiska stimulus kräver explicit evidens. Planning credit från strukturell intent-match betyder att den genomförda dosen kan ersätta ett entydigt närliggande planerat pass; det påstår inte mer om fysiologisk intensitet än källorna stödjer."
+      },
       "average_heartrate": 130.8
     },
     {
@@ -2122,6 +2497,21 @@
       "classification": "training",
       "elapsed_time_s": 5892,
       "elevation_gain_m": 478.0,
+      "training_profile": {
+        "stimuli": [],
+        "activity_id": 20367593813,
+        "source_hash": "c9a82d743ecedde5f397b3b907d8d964f37bf8dc0b3c552af77cd4f7f2ce6c00",
+        "uncertainties": [],
+        "intent_matches": [],
+        "schema_version": 1,
+        "planning_credits": [],
+        "observed_structure": {
+          "run_time_intervals": {
+            "structured": false
+          }
+        },
+        "interpretation_boundary": "Observerad struktur är mätdata. Fysiologiska stimulus kräver explicit evidens. Planning credit från strukturell intent-match betyder att den genomförda dosen kan ersätta ett entydigt närliggande planerat pass; det påstår inte mer om fysiologisk intensitet än källorna stödjer."
+      },
       "average_heartrate": 118.2
     },
     {
@@ -2135,6 +2525,21 @@
       "classification": "training",
       "elapsed_time_s": 2212,
       "elevation_gain_m": 0,
+      "training_profile": {
+        "stimuli": [],
+        "activity_id": 20368346174,
+        "source_hash": "254fc19f0c2597267075213ad47e9664613725e755e4d4f076aac316dd8f8a50",
+        "uncertainties": [],
+        "intent_matches": [],
+        "schema_version": 1,
+        "planning_credits": [],
+        "observed_structure": {
+          "run_time_intervals": {
+            "structured": false
+          }
+        },
+        "interpretation_boundary": "Observerad struktur är mätdata. Fysiologiska stimulus kräver explicit evidens. Planning credit från strukturell intent-match betyder att den genomförda dosen kan ersätta ett entydigt närliggande planerat pass; det påstår inte mer om fysiologisk intensitet än källorna stödjer."
+      },
       "average_heartrate": 80.0
     },
     {
@@ -2143,11 +2548,88 @@
       "label": "Löpning · 4 × 8 min",
       "family": "run",
       "distance_m": 13135.4,
-      "user_report": "Spontant löppass: 4 × 8 min / 90 s joggvila. Samma 4 × 8/90-struktur som veckans planerade kontrollerade löptröskel.",
+      "user_report": "Spontant löppass: 4 × 8 min / 90 s joggvila. Samma 4 × 8/90-struktur som veckans planerade kontrollerade löptröskel. Spontant löppass: 4 × 8 min / 90 s joggvila. Samma 4 × 8/90-struktur som veckans planerade kontrollerade löptröskel. RPE 6/10. Känsla: Starka ben.",
       "max_heartrate": 162.0,
       "classification": "training",
       "elapsed_time_s": 3755,
       "elevation_gain_m": 112.0,
+      "training_profile": {
+        "stimuli": [],
+        "activity_id": 20381137043,
+        "source_hash": "f54186f8ce885d3966a9219a2328016d539b2fc756db84a969df36bb8ecd502d",
+        "uncertainties": [
+          "Intervallstruktur observerad men fysiologiskt stimulus kan inte fastställas från tillgänglig evidens."
+        ],
+        "intent_matches": [],
+        "schema_version": 1,
+        "planning_credits": [],
+        "observed_structure": {
+          "run_time_intervals": {
+            "structured": true,
+            "repetitions": 4,
+            "work_blocks": [
+              {
+                "speed_m_s": 3.864,
+                "distance_m": 1873.9,
+                "duration_s": 485.0,
+                "lap_indices": [
+                  9,
+                  10
+                ],
+                "average_watts": 304.5,
+                "average_heartrate": 150.4
+              },
+              {
+                "speed_m_s": 3.921,
+                "distance_m": 1897.7,
+                "duration_s": 484.0,
+                "lap_indices": [
+                  12,
+                  13
+                ],
+                "average_watts": 315.1,
+                "average_heartrate": 155.4
+              },
+              {
+                "speed_m_s": 3.878,
+                "distance_m": 1876.9,
+                "duration_s": 484.0,
+                "lap_indices": [
+                  15,
+                  16
+                ],
+                "average_watts": 305.0,
+                "average_heartrate": 157.8
+              },
+              {
+                "speed_m_s": 3.876,
+                "distance_m": 2000.0,
+                "duration_s": 516.0,
+                "lap_indices": [
+                  18,
+                  19
+                ],
+                "average_watts": 310.8,
+                "average_heartrate": 156.6
+              }
+            ],
+            "total_work_s": 1969.0,
+            "detection_basis": "Repeated multi-minute faster blocks separated by locally slower 45–180 s recovery laps; edge blocks are selected against the duration established by complete middle blocks.",
+            "recovery_lap_indices": [
+              11,
+              14,
+              17
+            ],
+            "interpretation_limits": [
+              "The structure does not by itself establish physiological intensity.",
+              "A threshold/tempo/VO2 label requires explicit evidence or an unambiguous nearby planned-intent match."
+            ],
+            "representative_work_duration_s": 484.5,
+            "representative_recovery_duration_s": 92.0
+          }
+        },
+        "interpretation_boundary": "Observerad struktur är mätdata. Fysiologiska stimulus kräver explicit evidens. Planning credit från strukturell intent-match betyder att den genomförda dosen kan ersätta ett entydigt närliggande planerat pass; det påstår inte mer om fysiologisk intensitet än källorna stödjer."
+      },
       "average_heartrate": 146.1
     }
   ],
@@ -2200,7 +2682,7 @@
         {
           "date": "2026-09-29",
           "kind": "explicit_user_report",
-          "text": "Spontant löppass: 4 × 8 min / 90 s joggvila. Samma 4 × 8/90-struktur som veckans planerade kontrollerade löptröskel.",
+          "text": "Spontant löppass: 4 × 8 min / 90 s joggvila. Samma 4 × 8/90-struktur som veckans planerade kontrollerade löptröskel. Spontant löppass: 4 × 8 min / 90 s joggvila. Samma 4 × 8/90-struktur som veckans planerade kontrollerade löptröskel. RPE 6/10. Känsla: Starka ben.",
           "protocol": "4x8min",
           "capability": "run_threshold",
           "activity_id": 20381137043,
@@ -2282,7 +2764,7 @@
       }
     }
   },
-  "generated_at_utc": "2026-09-29T18:35:14.893763+00:00",
+  "generated_at_utc": "2026-09-29T19:36:10.303124+00:00",
   "recent_week_reviews": [
     {
       "summary": "Veckan innehöll konsekvent träning med fokus på löpkvalitet (tröskel och backintervaller) kompletterat av simning, MTB/Enduro och ett styrkepass; alla planerade löppass genomfördes och ett styrkepass flyttades/utelämnades i planutfallet.",

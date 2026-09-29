@@ -5,37 +5,38 @@
       "assessment": {
         "facts": [
           "Löpning · 4 × 8 min: 13,14 km · 1:02:35 · 112 m+ · snittpuls 146,1 · maxpuls 162.",
-          "Användarrapport: Spontant löppass: 4 × 8 min / 90 s joggvila. Samma 4 × 8/90-struktur som veckans planerade kontrollerade löptröskel."
+          "Användarrapport: Spontant löppass: 4 × 8 min / 90 s joggvila. Samma 4 × 8/90-struktur som veckans planerade kontrollerade löptröskel. Spontant löppass: 4 × 8 min / 90 s joggvila. Samma 4 × 8/90-struktur som veckans planerade kontrollerade löptröskel. RPE 6/10. Känsla: Starka ben.",
+          "Planerat simpass 3200 m; genomfört 13135.4 m."
         ],
-        "summary": "Genomfört spontant 4×8 min med 90 s joggvila; passet följde användarrapportens struktur och visar kontrollerad prestation med stigande puls i senare 1‑km lappar.",
+        "summary": "Genomfört spontant 4×8 min strukturpass med kontrollerad RPE (6/10) och snittpuls 146; passet liknar veckans planerade löptröskel men ersatte dagens simning.",
         "unknowns": [
-          "Subjektiv dagskänsla de kommande 24–72 h",
-          "Detaljerad intensitet per 8‑min intervall (effekt/zonskalning saknas)"
+          "Hur atletens subjektiva återhämtning utvecklas de kommande 24–72 h.",
+          "Exakt om tränaren vill byta simsessionen till ett senare datum eller bibehålla dosen."
         ],
         "confidence": "medium",
         "interpretations": [
-          "Passet bekräftar att 4×8/90‑struktur kan genomföras idag utan uppenbar oförmåga; senare repetitioner hade högre pulsnivå vilket indikerar tröskelnära arbete eller accelererande ansträngning.",
-          "Givet föregående 48–72 h belastning (enduro, simning med RPE8, terränglöpning, styrka) bör normalplansskydd (nästa simpass 2026‑09‑30) bevaras om inte subjek­tiva varningssignaler uppstår inom 24–72 h."
+          "Passet visar att löpkapacitet för 4×8min kunde genomföras utan hög RPE och med stark lokal känsla — innebär konkret löpbelastning, inte simstimulus.",
+          "Eftersom passet ersatte planerad simning och rolling_load visar flera närliggande intensiva/tekniska aktiviteter, bör nästa 48–72 h skyddas mot ytterligare hög benbelastning."
         ],
-        "load_interpretation": "Full återhämtning från dagens pass är ännu inte verifierad."
+        "load_interpretation": "Kardiovaskulärt och mekaniskt adderar dagens löppass betydande benbelastning i 48–72 h‑fönstret jämfört med planerad simbassession."
       },
       "auto_apply": {
-        "note": "Ingen automatisk planändring.",
-        "applied": false
+        "note": "Konservativ ändring applicerad på 2026-09-29: reduce.",
+        "applied": true
       },
       "activity_id": 20381137043,
       "plan_action": {
-        "action": "keep",
-        "reason": "Passet visar genomförbar 4×8‑struktur utan tydliga omedelbara varningssignaler och simpasset är anchor i mikrocykeln.",
-        "target_date": "2026-09-30",
+        "action": "reduce",
+        "reason": "Dagens löppass ersatte planerad simbassession och introducerar benbelastning som konflikter med planens anchor‑sim samma dag.",
+        "target_date": "2026-09-29",
         "dose_option_id": "",
-        "recommendation": "Behåll planerad simning 2026‑09‑30 (Simning · 3 200 m · aerob/teknik). Följ egen återhämtningsrapport; om trötthet eller oförmåga uppstår inom 24–72 h, be om omprövning.",
+        "recommendation": "Avvakta med dagens simning; markera simpasset som reducerat/inställt för 2026-09-29 och flytta fullgörandet till nästa tillåtna simbassession i planen. Ingen ökning av belastning de närmaste 48–72 timmarna; prioritera vila eller mycket lätt teknikorienterad sim vid behov.",
         "requires_approval": false,
-        "target_workout_key": "20260928-run_threshold-swim_aerobic-swim_technique:mc1:2026-09-30:swim_aerobic_technique_1"
+        "target_workout_key": "20260928-run_threshold-swim_aerobic-swim_technique:mc1:2026-09-29:swim_aerobic_technique_1"
       },
       "activity_date": "2026-09-29",
       "activity_name": "Löpning på eftermiddagen",
-      "generated_at_utc": "2026-09-29T18:38:06.307755+00:00",
+      "generated_at_utc": "2026-09-29T19:38:46.519667+00:00",
       "analysis_contract": {
         "pipeline_version": 4,
         "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
@@ -1370,9 +1371,9 @@
       "performance_protocol_key": null
     }
   ],
-  "last_run_utc": "2026-09-29T18:38:06.307755+00:00",
+  "last_run_utc": "2026-09-29T19:38:46.519667+00:00",
   "contract_version": 16,
-  "last_trigger_hash": "7ba58a11781daa6382d6773ecf9ab66d1e122ceb8637fb9791d848a97d4188a8",
+  "last_trigger_hash": "d66524da84cabbadc5104ecb1e1185a6512ff93cf9eda525e2450eb875a05d9a",
   "analysed_activity_ids": [
     "20367593813",
     "20350203020",

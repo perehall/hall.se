@@ -624,6 +624,14 @@
       "source_hash": "21cd22fd535dbb5bcf1837808c49afe3b3eeb5d3594551f21c52232432f4816e",
       "generated_at_utc": "2026-09-29T18:37:48.756743+00:00",
       "summary": "Reparerar så att dag 1 (fast enduro) inte planeras om och så att redan genomförda primära stimuli inte dupliceras. Tar bort planerad run_threshold och extra styrkepass (båda redan genomförda denna mikrocykel), behåller två simbassessioner enligt mesocykelkrav och lägger endast en extra löpkvalitet (så max_run_quality ≤2 när tidigare run_threshold räknas med). Placerar passen på dagar utan redan utförd aktivitet och respekterar låg benbelastning nära enduro samt krav på minst 4 slots."
+    },
+    {
+      "kind": "microcycle",
+      "decision_id": "2026-W40",
+      "source": "openai_repaired",
+      "source_hash": "023f6ae6d5afc341b6863d3d4d52275ecdf60173884a86511dd3615f2e4acbf1",
+      "generated_at_utc": "2026-09-29T19:38:31.937204+00:00",
+      "summary": "Åtgärdade konflikter: tog bort planerade slotar som kolliderade med fast enduro (dag 1) och som duplicerade redan genomförda primära/styrke‑exponeringar (run_threshold, strength_core). Behåller två simbassessioner (krav), en backkvalitet (inom max 2 run‑kvaliteter tillsammans med redan genomförd tröskel) och ett lugnt långt löppass. Slotantalet =4 (inom 4–7)."
     }
   ]
 }

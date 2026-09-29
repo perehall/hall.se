@@ -76,7 +76,7 @@
           "20368346174",
           "20381137043"
         ],
-        "evidence_note": "Familjeexponeringar kommer från faktiskt registrerade aktiviteter i målveckan. Direkt kapabilitetskredit kräver daterad athlete_state-evidens från samma aktivitet.",
+        "evidence_note": "Familjeexponeringar kommer från faktiskt registrerade aktiviteter i målveckan. Direct_capabilities kräver daterad fysiologisk/kapabilitetsevidens. Planning_credits kan dessutom komma från en durabel, entydig strukturell match mot ett närliggande planerat intent och används för att undvika redundant framtida ordination utan att påstå mer fysiologi än underlaget stödjer.",
         "swim_exposures": 0,
         "capability_refs": {
           "run_threshold": [
@@ -87,12 +87,24 @@
           ]
         },
         "enduro_exposures": 1,
+        "planning_credits": [
+          "run_threshold",
+          "strength_unilateral"
+        ],
         "strength_exposures": 1,
         "completed_slot_days": 1,
         "direct_capabilities": [
           "run_threshold",
           "strength_unilateral"
         ],
+        "planning_credit_refs": {
+          "run_threshold": [
+            "20381137043"
+          ],
+          "strength_unilateral": [
+            "20368346174"
+          ]
+        },
         "completed_day_indexes": [
           2
         ]
@@ -217,17 +229,22 @@
       "development_focus": "Teknisk kvalitet och avslappnad körning; faktisk belastning styr efterföljande pass."
     },
     {
-      "date": "2026-09-30",
-      "label": "Onsdag",
+      "date": "2026-09-29",
+      "label": "Tisdag",
       "sport": "swim",
-      "reason": "Första av två tekniska/aeroba simbassessioner; placerad efter redan utförda tidiga dagars belastning för låg benpåverkan och teknikkontroll enligt mesocykel. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: establish; materialiserad relation: establish.",
-      "status": "preliminary",
+      "reason": "Dag efter fast enduro kräver låg benbelastning; etablera teknisk/aerob simbassession för mesocykelns 2×/vecka‑krav. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: establish; materialiserad relation: establish.",
+      "status": "conditional",
       "session": "Simning · 3 200 m · aerob/teknik",
       "stimuli": [
         "swim_aerobic",
         "swim_technique"
       ],
       "dose_open": false,
+      "auto_coach": {
+        "action": "reduce",
+        "reason": "Dagens löppass ersatte planerad simbassession och introducerar benbelastning som konflikter med planens anchor‑sim samma dag.",
+        "applied_at_utc": "2026-09-29T19:38:46.517428+00:00"
+      },
       "recipe_key": "swim_aerobic_technique",
       "block_intent": "establish",
       "dose_options": [
@@ -326,7 +343,7 @@
       "microcycle_id": "20260928-run_threshold-swim_aerobic-swim_technique:mc1",
       "priority_role": "anchor",
       "watch_workout": {
-        "id": "swim-2026-w40-2026-09-30-swim_aerobic_technique_1",
+        "id": "swim-2026-w40-2026-09-29-swim_aerobic_technique_1",
         "name": "Aerob/teknik · kroppslinje och rotation · 3 200 m",
         "type": "Swim",
         "blocks": [
@@ -410,7 +427,7 @@
         "sync_enabled": false,
         "planned_distance_m": 3200
       },
-      "microcycle_day": 3,
+      "microcycle_day": 2,
       "swim_equipment": {
         "planned": []
       },
@@ -556,6 +573,7 @@
         "technical"
       ],
       "microcycle_slot": "swim_aerobic_technique_1",
+      "coach_adjustment": "Skala ned passet. Avvakta med dagens simning; markera simpasset som reducerat/inställt för 2026-09-29 och flytta fullgörandet till nästa tillåtna simbassession i planen. Ingen ökning av belastning de närmaste 48–72 timmarna; prioritera vila eller mycket lätt teknikorienterad sim vid behov.",
       "development_step": {
         "reason": "Mikrocykelbeslutet valde establish och dosen materialiserades från verifierad träningsrespons, bekräftat startläge eller konservativ katalogbas utan att höja flera belastningsvariabler samtidigt.",
         "relation": "establish",
@@ -563,6 +581,7 @@
         "microcycle": 1
       },
       "microcycle_index": 1,
+      "original_session": "Simning · 3 200 m · aerob/teknik",
       "development_focus": "Teknisk kvalitet och stabil aerob rytm; simningen ska kunna stödja helheten med låg mekanisk kostnad för benen.",
       "baseline_option_id": "swim-3200",
       "development_character": "technique_aerobic",
@@ -585,7 +604,7 @@
       "date": "2026-10-02",
       "label": "Fredag",
       "sport": "run",
-      "reason": "En löpkvalitet denna mikrocykel (consolidate) för att bibehålla kraft/mekanik utan att överskrida max_run_quality när tidigare run_threshold räknas med. Dosgolvet utgår från absorberad nivå 24 i athlete_state.dose_response, inte från högsta genomförda värde. Veckobeslut: consolidate; materialiserad relation: hold.",
+      "reason": "Bibehåll backkvalitet på absorberad/rekommenderad reps‑nivå utan progression; undvik klustring nära redan utförd tröskel. Dosgolvet utgår från absorberad nivå 24 i athlete_state.dose_response, inte från högsta genomförda värde. Veckobeslut: consolidate; materialiserad relation: hold.",
       "status": "preliminary",
       "session": "Löpning · backkvalitet · 15 min lugnt + 3 × 8 × 150 m / lugn joggvila + 10 min lugnt",
       "stimuli": [
@@ -597,9 +616,9 @@
         "status": "synced",
         "transport": "intervals_icu",
         "source_hash": "3173a11d865d944fc7f3dcdbb047c9878e097e8850b395490b41ff713327fac1",
-        "updated_at_utc": "2026-09-29T18:38:07.627676+00:00",
+        "updated_at_utc": "2026-09-29T19:38:47.229986+00:00",
         "device_delivery": "unverified",
-        "verified_at_utc": "2026-09-29T18:38:07.627676+00:00",
+        "verified_at_utc": "2026-09-29T19:38:47.229986+00:00",
         "provider_event_id": 140037740
       },
       "block_intent": "establish",
@@ -1050,7 +1069,7 @@
       "date": "2026-10-03",
       "label": "Lördag",
       "sport": "swim",
-      "reason": "Andra simbassessionen för konservativ aerob/teknisk stabilisering (~3 200 m) enligt mesocykelens normalexponeringer. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: establish; materialiserad relation: establish.",
+      "reason": "Andra simbassessionen för konservativ aerob volym och teknikkontroll (fullgör 2×/vecka). Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: establish; materialiserad relation: establish.",
       "status": "preliminary",
       "session": "Simning · 3 200 m · aerob uthållighet",
       "stimuli": [
@@ -1523,7 +1542,7 @@
       "date": "2026-10-04",
       "label": "Söndag",
       "sport": "run",
-      "reason": "Långt lugnt löppass för löptålighet placerat med tillräckligt avstånd från andra löpkvaliteter och utan att upprepa absorberad tröskeldos. Dosgolvet utgår från absorberad nivå 116 i athlete_state.dose_response, inte från högsta genomförda värde. Veckobeslut: establish; materialiserad relation: hold.",
+      "reason": "Lugn långt löppass för löptålighet och återhämtning utan att lägga ytterligare kvalitet nära andra löppass. Dosgolvet utgår från absorberad nivå 116 i athlete_state.dose_response, inte från högsta genomförda värde. Veckobeslut: consolidate; materialiserad relation: hold.",
       "status": "preliminary",
       "session": "Löpning · lugn distans · 105 min",
       "stimuli": [
@@ -1535,9 +1554,9 @@
         "status": "synced",
         "transport": "intervals_icu",
         "source_hash": "06d94eed631d6037f578283b9fce27e8530dcfb04204bea214c6447063d4b3f2",
-        "updated_at_utc": "2026-09-29T18:38:08.069336+00:00",
+        "updated_at_utc": "2026-09-29T19:38:47.365497+00:00",
         "device_delivery": "unverified",
-        "verified_at_utc": "2026-09-29T18:38:08.069336+00:00",
+        "verified_at_utc": "2026-09-29T19:38:47.365497+00:00",
         "provider_event_id": 140014352
       },
       "block_intent": "establish",
