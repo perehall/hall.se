@@ -969,6 +969,36 @@ class AdaptivePlanningTests(unittest.TestCase):
             )
         )
 
+    def test_starting_state_hash_invalidates_mesocycle_authority(self):
+        decision = {
+            "schema_version": 1,
+            "planner_revision": 6,
+            "goal_hash": goal_hash(self.goal),
+            "athlete_profile_hash": "a" * 64,
+            "starting_state_hash": "b" * 64,
+            "start_date": "2026-10-05",
+            "end_date": "2026-11-01",
+            "primary_capabilities": ["run_threshold"],
+        }
+        self.assertTrue(
+            mesocycle_is_valid(
+                decision,
+                self.goal,
+                date(2026, 10, 5),
+                "a" * 64,
+                "b" * 64,
+            )
+        )
+        self.assertFalse(
+            mesocycle_is_valid(
+                decision,
+                self.goal,
+                date(2026, 10, 5),
+                "a" * 64,
+                "c" * 64,
+            )
+        )
+
     def test_profile_contract_keeps_declared_inputs_separate(self):
         profile = {
             "schema_version": 1,
