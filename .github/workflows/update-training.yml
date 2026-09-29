@@ -6,6 +6,7 @@ on:
     types:
       - strava-activity-event
       - training-input-event
+      - athlete-profile-plan-request
   push:
     branches:
       - main
@@ -92,6 +93,16 @@ jobs:
       - name: Install Supabase backend dependency
         run: python -m pip install --disable-pip-version-check "psycopg[binary]>=3.2,<4"
 
+      - name: Mark athlete plan generation running
+        if: github.event.action == 'athlete-profile-plan-request'
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+          PLAN_GENERATION_REQUEST_ID: ${{ github.event.client_payload.request_id }}
+        run: |
+          python "träning/scripts/plan_generation_status.py" \
+            --request-id "$PLAN_GENERATION_REQUEST_ID" \
+            --status running
+
       - name: Run canonical training update pipeline
         id: canonical_pipeline
         env:
@@ -114,6 +125,8 @@ jobs:
           TRAINING_INPUT_MODEL: gpt-5-mini
           TRAINING_INPUT_PAYLOAD: ${{ toJson(github.event.client_payload) }}
           TRAINING_INPUT_EVENT: ${{ github.event.action == 'training-input-event' && 'true' || 'false' }}
+          ATHLETE_PROFILE_PLAN_REQUEST: ${{ github.event.action == 'athlete-profile-plan-request' && 'true' || 'false' }}
+          ATHLETE_PROFILE_EXPECTED_REVISION: ${{ github.event.client_payload.profile_revision }}
         run: |
           if [ "${{ github.event.action }}" = "strava-activity-event" ]; then
             ingest_mode=event
@@ -201,3 +214,24 @@ jobs:
       - name: Confirm no deployment needed
         if: steps.commit_changes.outputs.changed != 'true' && steps.commit_changes.outputs.retry != 'true'
         run: echo "Training update complete; site content was unchanged, so no Pages deployment is needed."
+
+      - name: Mark athlete plan generation completed
+        if: success() && github.event.action == 'athlete-profile-plan-request'
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+          PLAN_GENERATION_REQUEST_ID: ${{ github.event.client_payload.request_id }}
+        run: |
+          python "träning/scripts/plan_generation_status.py" \
+            --request-id "$PLAN_GENERATION_REQUEST_ID" \
+            --status completed
+
+      - name: Mark athlete plan generation failed
+        if: failure() && github.event.action == 'athlete-profile-plan-request'
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+          PLAN_GENERATION_REQUEST_ID: ${{ github.event.client_payload.request_id }}
+        run: |
+          python "träning/scripts/plan_generation_status.py" \
+            --request-id "$PLAN_GENERATION_REQUEST_ID" \
+            --status failed \
+            --error "canonical_training_pipeline_failed"
