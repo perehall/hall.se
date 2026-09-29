@@ -32,6 +32,8 @@ class CutoverContractTests(unittest.TestCase):
         source = Path(ROOT / "training_core" / "presentation" / "renderer.py").read_text(encoding="utf-8")
         self.assertIn("def render_document(", source)
         self.assertIn('data-v2-goal-link', source)
+        self.assertIn('data-v2-profile-link', source)
+        self.assertIn('/träning/onboarding/', source)
         self.assertIn("Styrkemall", source)
         self.assertIn("Om systemet", source)
         self.assertIn('name="viewport"', source)
