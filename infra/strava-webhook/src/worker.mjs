@@ -1,8 +1,10 @@
 const DEFAULT_REPOSITORY = "perehall/hall.se";
 const DEFAULT_EVENT_TYPE = "strava-activity-event";
 const DEFAULT_TRAINING_INPUT_EVENT_TYPE = "training-input-event";
+const DEFAULT_ATHLETE_PLAN_EVENT_TYPE = "athlete-profile-plan-request";
 const TRAINING_INPUT_PATH = "/träning/training-api/input";
 const ATHLETE_PROFILE_PATH = "/träning/training-api/profile";
+const ATHLETE_PLAN_GENERATE_PATH = "/träning/training-api/profile/generate";
 const DEFAULT_TRAINING_INPUT_HOST = "xn--hll-qla.se";
 const TRAINING_INPUT_OPERATIONS = new Set(["ADD_FEEDBACK", "UPDATE_COMPLETED_WORKOUT", "ADD_SPONTANEOUS_WORKOUT", "REPORT_PAIN", "REPORT_FATIGUE", "NATURAL_LANGUAGE"]);
 const TRAINING_INPUT_FEELINGS = new Set(["fresh", "tired", "strong_legs", "heavy_legs", "pain", "could_do_more"]);
@@ -12,6 +14,9 @@ const DEFAULT_SUPABASE_PROJECT_URL = "https://izzevnhgtsvffpkccoai.supabase.co";
 const TRAINING_FEEDBACK_RPC_PATH = "/rest/v1/rpc/training_submit_activity_feedback";
 const ATHLETE_PROFILE_GET_RPC_PATH = "/rest/v1/rpc/training_get_athlete_profile";
 const ATHLETE_PROFILE_UPSERT_RPC_PATH = "/rest/v1/rpc/training_upsert_athlete_profile";
+const ATHLETE_PLAN_REQUEST_RPC_PATH = "/rest/v1/rpc/training_request_plan_generation";
+const ATHLETE_PLAN_GET_RPC_PATH = "/rest/v1/rpc/training_get_plan_generation";
+const ATHLETE_PLAN_STATUS_RPC_PATH = "/rest/v1/rpc/training_set_plan_generation_status";
 const DEFAULT_SUPABASE_TIMEOUT_MS = 2500;
 
 function jsonResponse(body, status = 200) {
@@ -343,6 +348,109 @@ async function handleAthleteProfileRequest(request, env, fetchImpl, executionCon
   // must not reinterpret goals or replan until the declared-profile planning
   // contract is connected and verified end-to-end.
   return jsonResponse({ ...result, processing: "profile_saved" });
+}
+
+function validUuid(value) {
+  return typeof value === "string"
+    && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
+}
+
+async function handleAthletePlanGenerationRequest(request, env, fetchImpl) {
+  const url = new URL(request.url);
+  const allowedHost = configured(env.TRAINING_INPUT_HOST)
+    ? env.TRAINING_INPUT_HOST.trim().toLowerCase()
+    : DEFAULT_TRAINING_INPUT_HOST;
+  if (url.hostname.toLowerCase() !== allowedHost) return jsonResponse({ error: "not_found" }, 404);
+  if (!accessAssertion(request)) return jsonResponse({ error: "access_required" }, 401);
+
+  const athleteSubject = await athleteSubjectFromRequest(request);
+  if (!athleteSubject) return jsonResponse({ error: "access_identity_required" }, 401);
+
+  if (request.method === "GET") {
+    const requestId = String(url.searchParams.get("id") || "").trim();
+    if (!validUuid(requestId)) return jsonResponse({ error: "invalid_request_id" }, 400);
+    try {
+      const result = await supabaseRpc(
+        ATHLETE_PLAN_GET_RPC_PATH,
+        { p_athlete_subject: athleteSubject, p_request_id: requestId },
+        env,
+        fetchImpl,
+      );
+      return jsonResponse(result);
+    } catch (error) {
+      console.error("ATHLETE_PLAN_STATUS_FAILED", String(error));
+      return jsonResponse({ error: "generation_status_failed" }, 503);
+    }
+  }
+
+  if (request.method !== "POST") return jsonResponse({ error: "method_not_allowed" }, 405);
+
+  let generation;
+  try {
+    generation = await supabaseRpc(
+      ATHLETE_PLAN_REQUEST_RPC_PATH,
+      { p_athlete_subject: athleteSubject },
+      env,
+      fetchImpl,
+    );
+  } catch (error) {
+    console.error("ATHLETE_PLAN_REQUEST_FAILED", String(error));
+    return jsonResponse({ error: "plan_request_failed" }, 503);
+  }
+
+  const requestId = String(generation?.request_id || "");
+  if (!validUuid(requestId)) {
+    console.error("ATHLETE_PLAN_REQUEST_INVALID_ACK", JSON.stringify(generation || {}));
+    return jsonResponse({ error: "plan_request_invalid_ack" }, 503);
+  }
+
+  if (generation.created !== true) {
+    return jsonResponse({
+      status: generation.status,
+      request_id: requestId,
+      profile_revision: generation.profile_revision,
+      processing: generation.status === "running" ? "running" : "queued",
+    });
+  }
+
+  const event = {
+    request_id: requestId,
+    profile_revision: generation.profile_revision,
+    event_key: "athlete-plan:" + requestId,
+    source: "athlete-profile-v1",
+  };
+  const eventType = configured(env.ATHLETE_PLAN_EVENT_TYPE)
+    ? env.ATHLETE_PLAN_EVENT_TYPE.trim()
+    : DEFAULT_ATHLETE_PLAN_EVENT_TYPE;
+
+  try {
+    await dispatchToGitHub(event, env, fetchImpl, eventType);
+  } catch (error) {
+    console.error("ATHLETE_PLAN_DISPATCH_FAILED", requestId, String(error));
+    try {
+      await supabaseRpc(
+        ATHLETE_PLAN_STATUS_RPC_PATH,
+        {
+          p_request_id: requestId,
+          p_status: "failed",
+          p_error: "dispatch_failed",
+          p_result_week_key: null,
+        },
+        env,
+        fetchImpl,
+      );
+    } catch (statusError) {
+      console.error("ATHLETE_PLAN_FAILURE_STATUS_FAILED", requestId, String(statusError));
+    }
+    return jsonResponse({ error: "plan_dispatch_failed", request_id: requestId }, 503);
+  }
+
+  return jsonResponse({
+    status: "queued",
+    request_id: requestId,
+    profile_revision: generation.profile_revision,
+    processing: "queued",
+  });
 }
 
 async function sha256Hex(value) {
@@ -689,6 +797,7 @@ export async function handleRequest(request, env, fetchImpl = fetch, executionCo
       training_input_direct_persistence_configured: directTrainingInputPersistenceConfigured(env),
       training_input_endpoint: TRAINING_INPUT_PATH,
       athlete_profile_endpoint: ATHLETE_PROFILE_PATH,
+      athlete_plan_generation_endpoint: ATHLETE_PLAN_GENERATE_PATH,
       webhook_path_fingerprint: await secretFingerprint(env.WEBHOOK_PATH_SECRET),
       verify_token_fingerprint: await secretFingerprint(env.STRAVA_VERIFY_TOKEN),
     });
@@ -699,6 +808,9 @@ export async function handleRequest(request, env, fetchImpl = fetch, executionCo
   }
   if (decodeURIComponent(url.pathname) === ATHLETE_PROFILE_PATH) {
     return handleAthleteProfileRequest(request, env, fetchImpl, executionContext);
+  }
+  if (decodeURIComponent(url.pathname) === ATHLETE_PLAN_GENERATE_PATH) {
+    return handleAthletePlanGenerationRequest(request, env, fetchImpl);
   }
 
   const webhookPath = await expectedWebhookPath(env);

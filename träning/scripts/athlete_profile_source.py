@@ -14,6 +14,7 @@ from typing import Any, Callable
 def _read_from_database(
     database_url: str,
     *,
+    generation_request_id: str | None = None,
     connect_fn: Callable[..., Any] | None = None,
 ) -> tuple[Any, Any, Any]:
     if connect_fn is None:
@@ -27,15 +28,29 @@ def _read_from_database(
     ) as conn:
         with conn.cursor() as cur:
             cur.execute("set transaction read only")
-            cur.execute(
-                """
-                select profile, revision, updated_at
-                from training.athlete_profiles
-                where is_planning_default
-                  and status = 'complete'
-                limit 1
-                """
-            )
+            if generation_request_id:
+                cur.execute(
+                    """
+                    select p.profile, p.revision, p.updated_at
+                    from training.plan_generation_requests r
+                    join training.athlete_profiles p
+                      on p.athlete_subject = r.athlete_subject
+                    where r.id = %s::uuid
+                      and p.status = 'complete'
+                    limit 1
+                    """,
+                    (generation_request_id,),
+                )
+            else:
+                cur.execute(
+                    """
+                    select profile, revision, updated_at
+                    from training.athlete_profiles
+                    where is_planning_default
+                      and status = 'complete'
+                    limit 1
+                    """
+                )
             row = cur.fetchone()
             conn.rollback()
     if row is None:
@@ -45,6 +60,7 @@ def _read_from_database(
 
 def load_athlete_profile_for_planner(
     *,
+    generation_request_id: str | None = None,
     db_connect: Callable[..., Any] | None = None,
     env: dict[str, str] | None = None,
 ) -> tuple[dict[str, Any] | None, dict[str, Any]]:
@@ -60,6 +76,7 @@ def load_athlete_profile_for_planner(
     try:
         payload, revision, updated_at = _read_from_database(
             database_url,
+            generation_request_id=generation_request_id,
             connect_fn=db_connect,
         )
     except Exception as exc:
@@ -73,7 +90,11 @@ def load_athlete_profile_for_planner(
         return None, {
             "source": "supabase_db",
             "verified": True,
-            "reason": "complete_profile_missing",
+            "reason": (
+                "generation_request_profile_missing"
+                if generation_request_id
+                else "complete_profile_missing"
+            ),
         }
     if payload.get("schema_version") != 1 or payload.get("status") != "complete":
         return None, {
@@ -85,7 +106,11 @@ def load_athlete_profile_for_planner(
     return payload, {
         "source": "supabase_db",
         "verified": True,
-        "reason": "complete_profile",
+        "reason": (
+            "generation_request_profile"
+            if generation_request_id
+            else "complete_profile"
+        ),
         "revision": revision,
         "updated_at": updated_at.isoformat() if hasattr(updated_at, "isoformat") else updated_at,
     }
