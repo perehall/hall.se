@@ -48,7 +48,7 @@ MODEL = os.environ.get("OPENAI_MODEL", "gpt-5-mini")
 MESO_SCHEMA_VERSION = 1
 MICRO_SCHEMA_VERSION = 1
 PLANNER_REVISION = 5
-MICRO_PLANNER_REVISION = 9
+MICRO_PLANNER_REVISION = 10
 
 CAPABILITY_TO_RECIPE = {
     "run_threshold": "run_threshold",
@@ -134,6 +134,45 @@ def week_key(start):
         start = iso(start)
     y, w, _ = start.isocalendar()
     return f"{y}-W{w:02d}"
+
+
+def mesocycle_block_context(meso, target_start, policy):
+    """Return this microcycle's intended role inside the mesocycle.
+
+    The wave is a planning intent, never an automatic load prescription.
+    Actual dose still comes from demonstrated athlete state and near-term load.
+    """
+    try:
+        duration = int(meso.get("duration_weeks") or 0)
+        index = ((target_start - iso(meso["start_date"])).days // 7) + 1
+    except (KeyError, TypeError, ValueError):
+        duration = 0
+        index = 1
+
+    configured = (
+        ((policy.get("periodization_policy") or {}).get("microcycle_wave_by_duration") or {})
+        .get(str(duration))
+    )
+    if isinstance(configured, list) and len(configured) == duration and duration > 0:
+        wave = [str(item) for item in configured]
+    elif duration == 3:
+        wave = ["establish", "develop", "consolidate"]
+    elif duration == 5:
+        wave = ["establish", "develop", "develop", "consolidate", "review"]
+    else:
+        wave = ["establish", "develop", "develop", "consolidate"]
+
+    index = max(1, min(index, len(wave)))
+    intent = wave[index - 1]
+    definitions = (policy.get("periodization_policy") or {}).get("intent_definitions") or {}
+    return {
+        "microcycle_index": index,
+        "microcycle_total": len(wave),
+        "block_intent": intent,
+        "wave": wave,
+        "intent_definition": str(definitions.get(intent) or ""),
+        "principle": str((policy.get("periodization_policy") or {}).get("principle") or ""),
+    }
 
 
 def target_week(plan, upcoming, today):
@@ -845,6 +884,77 @@ def completed_microcycle_context(athlete_state, target_start):
     }
 
 
+def infer_recipe_key(workout, catalog):
+    explicit = str((workout or {}).get("recipe_key") or "").strip()
+    if explicit in (catalog.get("recipes") or {}):
+        return explicit
+    slot = str((workout or {}).get("microcycle_slot") or "").strip()
+    for key in sorted((catalog.get("recipes") or {}), key=len, reverse=True):
+        if slot == key or slot.startswith(key + "_"):
+            return key
+    return None
+
+
+def mesocycle_history_context(meso, target_start, catalog):
+    """Read up to three earlier microcycles in this block as planning memory."""
+    try:
+        start = iso(meso["start_date"])
+    except (KeyError, TypeError, ValueError):
+        return []
+
+    current_plan = load_json(PLAN_FILE, {})
+    history = []
+    week_start = start
+    while week_start < target_start:
+        document = {}
+        current_meta = current_plan.get("meta") or {}
+        if current_meta.get("week_start") == week_start.isoformat():
+            document = current_plan
+        else:
+            snapshot = load_json(WEEKS_DIR / f"{week_key(week_start)}.json", {})
+            document = snapshot.get("plan") or {}
+
+        meta = document.get("meta") or {}
+        if document and (
+            not meta.get("mesocycle_id")
+            or meta.get("mesocycle_id") == meso.get("id")
+        ):
+            workouts = []
+            for workout in document.get("planned_workouts") or []:
+                recipe_key = infer_recipe_key(workout, catalog)
+                recipe = ((catalog.get("recipes") or {}).get(recipe_key) or {})
+                workouts.append(
+                    {
+                        "date": workout.get("date"),
+                        "sport": workout.get("sport"),
+                        "recipe_key": recipe_key,
+                        "development_character": (
+                            workout.get("development_character")
+                            or recipe.get("development_character")
+                            or recipe_key
+                        ),
+                        "baseline_option_id": workout.get("baseline_option_id"),
+                        "stimuli": list(workout.get("stimuli") or []),
+                        "session": workout.get("session"),
+                        "completed": bool(
+                            workout.get("activity_id")
+                            or workout.get("activity_ids")
+                            or workout.get("planning_status") == "completed"
+                        ),
+                    }
+                )
+            history.append(
+                {
+                    "week_start": week_start.isoformat(),
+                    "microcycle_index": meta.get("microcycle_index"),
+                    "workouts": workouts,
+                }
+            )
+        week_start += timedelta(days=7)
+
+    return history[-3:]
+
+
 def fallback_microcycle(meso, policy, catalog, target_start, completed_context=None):
     """Conservative composition from requirements, not from calendar fill.
 
@@ -983,12 +1093,37 @@ def fallback_microcycle(meso, policy, catalog, target_start, completed_context=N
     latest_swim_day = None
     while swim_count < required_swims:
         before = len(slots)
-        if not add_recipe(
-            "swim_aerobic_technique",
-            "Lägg en ren lågmekanisk simexponering som ett självständigt pass.",
-            action="establish",
-            allow_repeat=True,
-        ):
+        already_planned = {row["recipe_key"] for row in slots}
+        candidates = [
+            key
+            for key in (
+                "swim_aerobic_endurance",
+                "swim_aerobic_technique",
+                "swim_aerobic_threshold",
+            )
+            if key in catalog["recipes"] and key not in already_planned
+        ]
+        if not candidates:
+            candidates = [
+                key
+                for key in ("swim_aerobic_technique", "swim_aerobic_endurance")
+                if key in catalog["recipes"]
+            ]
+
+        added = False
+        for recipe_key in candidates:
+            if add_recipe(
+                recipe_key,
+                (
+                    "Lägg en självständig simexponering med en annan utvecklingskaraktär än veckans "
+                    "övriga simpass när katalog och belastningsordning stödjer det."
+                ),
+                action="establish",
+                allow_repeat=False,
+            ):
+                added = True
+                break
+        if not added:
             break
         swim_count += 1
         if len(slots) > before:
@@ -1145,6 +1280,27 @@ def microcycle_guard_failures(result, meso, policy, catalog, target_start, compl
             failures.append(failure)
 
     primaries = set(meso.get("primary_capabilities") or [])
+    block_context = mesocycle_block_context(meso, target_start, policy)
+    if (
+        block_context.get("block_intent") == "develop"
+        and policy["microcycle_policy"].get(
+            "require_distinct_development_character_in_develop_microcycles"
+        )
+    ):
+        recipe_counts = {}
+        for row in valid_rows:
+            recipe_key = row["recipe_key"]
+            caps = recipe_capabilities(recipes[recipe_key])
+            if recipe_key in SUPPORT_ONLY_RECIPES or not caps.intersection(primaries):
+                continue
+            recipe_counts[recipe_key] = recipe_counts.get(recipe_key, 0) + 1
+        for recipe_key, count in recipe_counts.items():
+            if count > 1:
+                failures.append(
+                    f"{recipe_key} upprepas {count} gånger i en develop-mikrocykel; "
+                    "samma utvecklingsrecept får inte dupliceras mekaniskt"
+                )
+
     direct_primary_caps = set()
     swim_exposures = 0
     strength_exposures = 0
@@ -1291,6 +1447,8 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
         "week_start": target_start.isoformat(),
         "competition_context": competition_context,
         "completed_microcycle_context": completed_context,
+        "block_context": mesocycle_block_context(meso, target_start, policy),
+        "mesocycle_history": mesocycle_history_context(meso, target_start, catalog),
         "fixed_enduro_day_1": is_enduro_school_date(target_start),
         "goal": {
             "goal": goal.get("goal"),
@@ -1310,6 +1468,7 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
                 "stimuli": sorted(recipe_capabilities(value)),
                 "load_dimensions": list(value.get("load_dimensions") or []),
                 "development_focus": value.get("development_focus"),
+                "development_character": value.get("development_character") or key,
                 "option_ids": [item.get("id") for item in (value.get("options") or [])],
             }
             for key, value in catalog["recipes"].items()
@@ -1339,6 +1498,10 @@ def generate_microcycle(meso, goal, policy, catalog, athlete_state, target_start
         "Välj endast dag, stimulusrecept och åtgärden establish/progress/consolidate/reduce. "
         "Du får inte hitta på exakta farter, pulser, watt eller doser; deterministisk kod väljer sedan dos från observerad historik och receptkatalog. "
         "Föregående veckas schema ska inte kopieras av slentrian. Kontrollera konflikt mellan mekaniska/kardiovaskulära stimuli och fasta åtaganden. "
+        "block_context anger mikrocykelns roll i blocket och mesocycle_history visar tidigare planerade recept och doser. Historiken är evidens om vad som redan ordinerats, inte ett skäl att automatiskt öka belastningen. "
+        "I en develop-mikrocykel ska ett primärt utvecklingsstimulus progressa längs mesocykelns definierade axel eller ha ett uttryckligt datastött skäl att konsolidera. "
+        "Samma primära recept och samma passkaraktär får inte upprepas mekaniskt genom utvecklingsveckor. Om två utvecklande simexponeringar planeras och katalogen erbjuder absorberbara alternativ ska de normalt ha olika development_character. "
+        "I consolidate/review får ett jämförbart pass medvetet återkomma för stabilisering eller utvärdering, men skälet ska framgå. "
         "Output måste uppfylla hard_requirements i underlaget: alla primära kapaciteter ska täckas direkt, "
         "normalantalet simexponeringar ska finnas, minst en styrka/core-exponering ska finnas när policyn kräver det, "
         "och antalet löpkvalitetsexponeringar får inte överskrida maxgränsen. "
@@ -1493,6 +1656,9 @@ def demonstrated_value(recipe_key, athlete_state):
     if recipe_key == "swim_aerobic_technique":
         value = ((facts.get("swim_aerobic") or {}).get("longest_distance") or {}).get("distance_m")
         return min(float(value), 3200.0) if isinstance(value, (int, float)) else None
+    if recipe_key == "swim_aerobic_endurance":
+        value = ((facts.get("swim_aerobic") or {}).get("longest_distance") or {}).get("distance_m")
+        return min(float(value), 3600.0) if isinstance(value, (int, float)) else None
     if recipe_key == "swim_aerobic_threshold":
         values = [
             item.get("distance_m")
@@ -1592,7 +1758,9 @@ def materialize_template(meso, micro, policy, catalog, athlete_state):
     contract = mesocycle_contract(meso, policy)
     primary = set(contract["primary"])
     protected = set(contract["protected_capacity"])
-    index = microcycle_index(meso, iso(micro["week_start"]))
+    target_start = iso(micro["week_start"])
+    index = microcycle_index(meso, target_start)
+    block_context = mesocycle_block_context(meso, target_start, policy)
     template = []
 
     for ordinal, decision in enumerate(sorted(micro["slots"], key=lambda x: x["day_index"]), start=1):
@@ -1616,6 +1784,9 @@ def materialize_template(meso, micro, policy, catalog, athlete_state):
 
         slot = {
             "slot": f"{recipe_key}_{ordinal}",
+            "recipe_key": recipe_key,
+            "development_character": recipe.get("development_character") or recipe_key,
+            "block_intent": block_context.get("block_intent"),
             "sport": recipe["sport"],
             "priority_role": role,
             "stimuli": deepcopy(recipe.get("stimuli") or []),
@@ -1853,6 +2024,11 @@ def materialize_strategy(goal, policy, meso, micro, catalog, athlete_state, goal
                 "Plyometri är skyddad över blocket men genomförs bara när den kan absorberas utan konflikt med löp-/MTB-kvalitet.",
             ],
         },
+        "periodization": mesocycle_block_context(
+            meso,
+            iso(micro["week_start"]),
+            policy,
+        ),
         "progression_policy": {
             "automatic_load_increase": False,
             "keep_intensity_controlled": True,
@@ -1869,6 +2045,7 @@ def materialize_strategy(goal, policy, meso, micro, catalog, athlete_state, goal
             "regression_below_demonstrated_floor_requires_reason": True,
             "maintenance_sessions_may_repeat_without_progression": True,
             "max_consecutive_development_repeats_without_reason": 1,
+            "unchanged_development_recipe_repeat_requires_reason": True,
         },
         "success_signals": list(meso.get("success_signals") or []),
         "guardrails": list(meso.get("guardrails") or []) + list(policy.get("decision_guards") or []),
@@ -1876,6 +2053,7 @@ def materialize_strategy(goal, policy, meso, micro, catalog, athlete_state, goal
             "Har mesocykelns primära kapaciteter fått återkommande, absorberbara stimuli?",
             "Talar jämförbara pass och uttryckliga användarrapporter för progression, konsolidering eller behov av ändrad riktning?",
             "Har skyddad sim- och styrkekapacitet kunnat behållas utan att tränga undan primära stimuli?",
+            "Har utvecklingspassen faktiskt ändrat dos, struktur eller träningskaraktär enligt blockets avsikt, eller har samma pass upprepats utan tillräckligt skäl?",
             "Bör nästa mesocykel fortsätta, modifiera eller byta fokus utifrån faktisk respons snarare än föregående veckomall?",
         ],
         "microcycle_structure": {
