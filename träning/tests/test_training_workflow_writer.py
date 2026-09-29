@@ -98,6 +98,7 @@ class TrainingWorkflowWriterTests(unittest.TestCase):
         self.assertIn("Mark athlete plan generation running", update)
         self.assertIn("ATHLETE_PROFILE_PLAN_REQUEST:", update)
         self.assertIn("ATHLETE_PROFILE_EXPECTED_REVISION:", update)
+        self.assertIn("ATHLETE_STARTING_STATE_EXPECTED_REVISION:", update)
         self.assertIn("plan_generation_status.py", update)
         self.assertIn("--status completed", update)
         self.assertIn("--status failed", update)
