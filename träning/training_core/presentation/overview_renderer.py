@@ -742,53 +742,34 @@ def _week_html(
     )
     expected = _expected_intent(model, week.start)
     materialized = week.planned_count > 0 or relation != "future"
-    rest_days = max(0, 7 - week.planned_training_days)
     blueprint = _expected_blueprint(model, week.start)
     forward = _expected_forward_week(model, week.start)
-    if relation == "future" and week.planned_count == 0:
-        if forward is not None and forward.planning_level == "preliminary":
-            metrics = ["Preliminär dagstruktur · exakta dagar/doser ej låsta"]
-        elif forward is not None and forward.planning_level == "block_sketch":
-            metrics = ["Blockskiss · nästa beslut tas vid checkpoint"]
-        elif blueprint is not None:
-            metrics = ["Grundplan finns · detaljdagar ej materialiserade"]
-        else:
-            metrics = ["Planeringsunderlag saknas"]
-    else:
-        metrics = [
-            f"Plan {week.planned_count} pass",
-            f"Utfört {week.completed_count}",
-        ]
-        if week.completed_count:
-            metrics.append(week.actual_duration)
-            if week.actual_distance_m > 0:
-                metrics.append(week.actual_distance)
-        if relation != "past":
-            metrics.append(f"{rest_days} planerade vilodagar")
-    metric_text = " · ".join(metrics)
 
-    observed_intent = week.block_intents[0] if len(week.block_intents) == 1 else ""
-    intent = observed_intent or (expected.intent if expected else "") or (
-        forward.block_intent if forward is not None else ""
-    )
-    progress_bits = []
-    if week.primary_progress_count:
-        progress_bits.append(f"{week.primary_progress_count} primär progression")
-    if week.primary_hold_count:
-        progress_bits.append(f"{week.primary_hold_count} primär hold")
-    if week.primary_establish_count:
-        progress_bits.append(f"{week.primary_establish_count} etablering")
-    intent_meta = " · ".join(progress_bits)
-    intent_html = (
-        '<div class="overview-week-intent">'
-        f'<strong>{_e(_intent_label(intent))}</strong>'
-        + (f'<span>{_e(intent_meta)}</span>' if intent_meta else "")
-        + '</div>'
-        if intent else ""
-    )
+    if relation == "past":
+        status = "Genomförd"
+        status_class = "completed"
+    elif relation == "current":
+        status = "Aktuell"
+        status_class = "current"
+    elif week.planned_count > 0:
+        status = "Planerad"
+        status_class = "planned"
+    elif forward is not None and forward.planning_level == "preliminary":
+        status = "Preliminär"
+        status_class = "preliminary"
+    elif forward is not None and forward.planning_level == "block_sketch":
+        status = "Blockskiss"
+        status_class = "block-sketch"
+    else:
+        status = "Öppen"
+        status_class = "open"
+
+    summary = _week_summary(week, relation, forward)
+    focus = _week_focus(model, week, forward, blueprint, expected)
+
     if relation == "future" and week.planned_count == 0 and forward is not None:
         if forward.planning_level == "preliminary":
-            days = _forward_preliminary_html(forward, week.start)
+            days = _forward_preliminary_html(forward, week.start, registry)
             display_mode = "forward-preliminary-mode"
         else:
             days = _forward_block_sketch_html(forward)
@@ -803,43 +784,31 @@ def _week_html(
                 current_date=current_date,
                 registry=registry,
                 materialized=materialized,
+                forward=forward,
+                plan_status=status,
             )
             for day in week.days
         )
         display_mode = ""
 
-    commitment = (
-        "Planerad"
-        if relation == "future" and week.planned_count > 0
-        else forward.planning_label
-        if relation == "future" and forward is not None
-        else ""
-    )
-    commitment_html = (
-        f'<span class="overview-commitment level-{_e((forward.planning_level if forward else "planned"))}">'
-        f'{_e(commitment)}</span>'
-        if commitment else ""
-    )
-    week_heading = (
-        f'<strong>V{week.week_number}</strong>{commitment_html}'
-        f'<span>{week.start.day} {MONTH_SHORT[week.start.month - 1]} – '
+    heading = (
+        '<div class="overview-week-titleline">'
+        f'<strong>V{week.week_number}</strong>'
+        f'<span class="overview-status-chip status-{_e(status_class)}">{_e(status.upper())}</span>'
+        '</div>'
+        f'<span class="overview-week-dates">{week.start.day} {MONTH_SHORT[week.start.month - 1]} – '
         f'{week.end.day} {MONTH_SHORT[week.end.month - 1]}</span>'
     )
     if relation != "future" or week.planned_count > 0:
-        week_heading = (
-            f'<a href="{_week_url(week.start, current_week_start)}">'
-            f'{week_heading}</a>'
-        )
-    else:
-        week_heading = f'<div class="overview-week-label">{week_heading}</div>'
+        heading = f'<a href="{_week_url(week.start, current_week_start)}">{heading}</a>'
 
     return (
         f'<section class="overview-week relation-{relation}" data-week="{_e(week.iso_key)}">'
         '<header class="overview-week-summary">'
-        f'{week_heading}'
-        f'<p>{_e(metric_text)}</p>'
-        f'{intent_html}'
-        '</header>'
+        f'{heading}'
+        f'<p class="overview-week-metrics">{_e(summary)}</p>'
+        + (f'<p class="overview-week-focus">{_e(focus)}</p>' if focus else "")
+        + '</header>'
         f'<div class="overview-week-days {display_mode}">{days}</div>'
         '</section>'
     )
