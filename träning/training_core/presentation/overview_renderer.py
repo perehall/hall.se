@@ -236,7 +236,7 @@ def _expected_forward_week(model: TrainingOverviewReadModel, week_start: date):
     return None
 
 
-def _forward_preliminary_html(forward, week_start: date) -> str:
+def _forward_preliminary_html(forward, week_start: date, registry: SportIconRegistry | None) -> str:
     by_day = {}
     for slot in forward.slots:
         by_day.setdefault(slot.day_index, []).append(slot)
@@ -246,24 +246,43 @@ def _forward_preliminary_html(forward, week_start: date) -> str:
         local_date = week_start.fromordinal(week_start.toordinal() + day_index - 1)
         cards = []
         for slot in by_day.get(day_index, ()):
-            intent = PROGRESSION_INTENT_LABELS.get(
-                slot.progression_intent,
-                slot.progression_intent,
+            full_session = slot.baseline_session or slot.label
+            title = _short_workout_title(
+                full_session,
+                slot.recipe_key,
+                slot.sport,
+                slot.label,
             )
-            baseline = (
-                f'<small><b>Bas:</b> {_e(slot.baseline_session)}</small>'
-                if slot.baseline_session else ""
+            chip, chip_class = _progress_chip(
+                intent=slot.progression_intent,
+                role=slot.role,
             )
-            target = (
-                f'<small class="overview-target"><b>Villkorat mål:</b> '
-                f'{_e(slot.conditional_target_session)}</small>'
-                if slot.conditional_target_session else ""
+            chip_html = (
+                f'<span class="overview-pass-chip chip-{_e(chip_class)}">{_e(chip)}</span>'
+                if chip else ""
             )
+            role = ROLE_LABELS.get(slot.role, slot.role)
+            attrs = _detail_button_attrs(
+                title=title,
+                full_session=full_session,
+                role=role,
+                status=forward.planning_label,
+                development=PROGRESSION_INTENT_LABELS.get(
+                    slot.progression_intent,
+                    slot.progression_intent,
+                ),
+                baseline=slot.baseline_session,
+                target=slot.conditional_target_session,
+                why=forward.decision_gate,
+            )
+            icon_key = sport_icon_key(slot.sport)
+            icon_html = _icon(registry, icon_key) if icon_key else ""
             cards.append(
-                '<article class="overview-forward-slot">'
-                f'<strong>{_e(slot.label)}</strong>'
-                f'<span>{_e(intent)}</span>{baseline}{target}'
-                '</article>'
+                f'<button class="overview-workout planned preliminary" {attrs}>'
+                f'{icon_html}'
+                '<span class="overview-workout-copy">'
+                f'<strong>{_e(title)}</strong>{chip_html}'
+                '</span></button>'
             )
         body = "".join(cards) or '<span class="overview-forward-open">Öppen</span>'
         cells.append(
@@ -278,48 +297,64 @@ def _forward_preliminary_html(forward, week_start: date) -> str:
 
 
 def _forward_block_sketch_html(forward) -> str:
-    primary = "".join(
-        '<article class="overview-sketch-card">'
-        f'<strong>{_e(item.capability_label)}</strong>'
-        f'<span>{_e(item.direction)}</span>'
-        + (
-            '<small><b>Passfamiljer:</b> '
-            + _e(" · ".join(item.candidate_recipe_characters))
-            + '</small>'
-            if item.candidate_recipe_characters else ""
+    primary_labels = [
+        item.capability_label for item in forward.capability_directions
+        if item.capability_label
+    ]
+    characters = []
+    for item in forward.capability_directions:
+        for value in item.candidate_recipe_characters:
+            short = _short_character(value)
+            if short and short not in characters:
+                characters.append(short)
+
+    support_labels = [
+        item.capability_label for item in forward.support_candidates
+        if item.capability_label
+    ]
+    protected_labels = list(dict.fromkeys(forward.protected_capabilities))
+
+    def chips(values, kind):
+        return "".join(
+            f'<span class="overview-sketch-chip sketch-{kind}">{_e(value)}</span>'
+            for value in values
         )
-        + '</article>'
-        for item in forward.capability_directions
-    )
-    support = "".join(
-        '<article class="overview-sketch-card support">'
-        f'<strong>{_e(item.capability_label)}</strong>'
-        + (
-            '<span>'
-            + _e(" · ".join(item.candidate_recipe_characters))
-            + '</span>'
-            if item.candidate_recipe_characters else ""
+
+    groups = []
+    if primary_labels:
+        groups.append(
+            '<div class="overview-sketch-group"><span>Primärt</span>'
+            f'<div>{chips(primary_labels, "primary")}</div></div>'
         )
-        + '</article>'
-        for item in forward.support_candidates
-    )
-    protected = (
-        '<p><b>Skyddas:</b> '
-        + _e(" · ".join(forward.protected_capabilities))
-        + '</p>'
-        if forward.protected_capabilities else ""
+    if characters:
+        groups.append(
+            '<div class="overview-sketch-group"><span>Passkaraktärer</span>'
+            f'<div>{chips(characters[:6], "character")}</div></div>'
+        )
+    if support_labels:
+        groups.append(
+            '<div class="overview-sketch-group"><span>Stöd</span>'
+            f'<div>{chips(support_labels, "support")}</div></div>'
+        )
+    if protected_labels:
+        groups.append(
+            '<div class="overview-sketch-group"><span>Skyddas</span>'
+            f'<div>{chips(protected_labels, "protected")}</div></div>'
+        )
+
+    title = (
+        "Blockreview"
+        if forward.block_intent == "review"
+        else "Nästa block"
     )
     return (
         '<div class="overview-forward-sketch">'
-        '<div class="overview-blueprint-head">'
+        '<div class="overview-sketch-heading">'
+        f'<strong>{_e(title)}</strong>'
         f'<span>{_e(forward.planning_label)}</span>'
-        f'<strong>{_e(forward.title)}</strong>'
-        f'<small>{_e(forward.decision_gate)}</small>'
         '</div>'
-        f'<div class="overview-sketch-primary">{primary}</div>'
-        + (f'<div class="overview-sketch-support">{support}</div>' if support else "")
-        + protected
-        + '</div>'
+        f'<div class="overview-sketch-groups">{"".join(groups)}</div>'
+        '</div>'
     )
 
 
