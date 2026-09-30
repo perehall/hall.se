@@ -329,13 +329,34 @@ def desired_workouts(documents, oldest, newest):
     return result
 
 
-def mark_status(documents, workout, *, status, event_id=None, error=None):
+def sync_state_for(documents, workout):
+    external_id = workout.get("external_id")
+    for document in documents.values():
+        for planned in planned_workouts(document):
+            candidate = planned.get("device_workout") or {}
+            if candidate.get("external_id") != external_id:
+                continue
+            raw = planned.get("device_sync")
+            return raw if isinstance(raw, dict) else {}
+    return {}
+
+
+def mark_status(
+    documents,
+    workout,
+    *,
+    status,
+    event_id=None,
+    error=None,
+    downstream_retry=False,
+):
     now = datetime.now(timezone.utc).isoformat()
     for document in documents.values():
         for planned in planned_workouts(document):
             candidate = planned.get("device_workout") or {}
             if candidate.get("external_id") != workout.get("external_id"):
                 continue
+            previous = planned.get("device_sync") or {}
             sync = {
                 "status": status,
                 "transport": "intervals_icu",
@@ -343,6 +364,16 @@ def mark_status(documents, workout, *, status, event_id=None, error=None):
                 "device_delivery": "unverified",
                 "updated_at_utc": now,
             }
+            # A same-day idempotent re-submit is a downstream handoff retry,
+            # not proof that Garmin Connect or the physical watch received it.
+            # Persist it per source hash so repeated training jobs do not spam
+            # the transport while a newly changed workout still gets one retry.
+            for key in ("downstream_retry_source_hash", "downstream_retry_at_utc"):
+                if previous.get(key):
+                    sync[key] = previous[key]
+            if downstream_retry and status == "synced":
+                sync["downstream_retry_source_hash"] = workout["source_hash"]
+                sync["downstream_retry_at_utc"] = now
             if event_id is not None:
                 sync["provider_event_id"] = event_id
             if status == "synced":
@@ -392,11 +423,31 @@ def reconcile(documents, auth, oldest, newest):
         )
         print(f"DEVICE_SYNC_DELETE stale={len(stale_ids)}")
 
+    downstream_retry_ids = set()
+    for workout in desired:
+        external_id = workout["external_id"]
+        payload = desired_payloads[external_id]
+        if workout.get("date") != oldest:
+            continue
+        if not event_matches(existing_owned.get(external_id), payload):
+            continue
+        sync_state = sync_state_for(documents, workout)
+        if sync_state.get("source_hash") != workout.get("source_hash"):
+            continue
+        if sync_state.get("downstream_retry_source_hash") == workout.get("source_hash"):
+            continue
+        downstream_retry_ids.add(external_id)
+
     upserts = [
         payload
         for external_id, payload in desired_payloads.items()
-        if not event_matches(existing_owned.get(external_id), payload)
+        if (
+            not event_matches(existing_owned.get(external_id), payload)
+            or external_id in downstream_retry_ids
+        )
     ]
+    if downstream_retry_ids:
+        print(f"DEVICE_SYNC_DOWNSTREAM_RETRY count={len(downstream_retry_ids)}")
     if upserts:
         data = request_json(
             BULK_UPSERT_URL,
@@ -432,7 +483,13 @@ def reconcile(documents, auth, oldest, newest):
             if not isinstance(stored, dict):
                 raise IntervalsSyncError("readback gav oväntat svarformat")
             verify_semantics(stored, workout)
-            mark_status(documents, workout, status="synced", event_id=event["id"])
+            mark_status(
+                documents,
+                workout,
+                status="synced",
+                event_id=event["id"],
+                downstream_retry=workout["external_id"] in downstream_retry_ids,
+            )
             print(
                 f'DEVICE_SYNC_OK date={workout["date"]} sport={workout["sport"]} '
                 f'external_id={workout["external_id"]}'
