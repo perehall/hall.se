@@ -35,6 +35,7 @@ class OverviewPlannedWorkoutReadModel:
     development_relation: str
     development_reason: str
     prescription_rows: tuple[PrescriptionRow, ...]
+    linked_provider_activity_id: str
 
 
 @dataclass(frozen=True)
@@ -329,6 +330,7 @@ def _planned_model(workout: PlannedWorkout) -> OverviewPlannedWorkoutReadModel:
             workout.reason or development_step.get("reason") or ""
         ).strip(),
         prescription_rows=prescription_rows(payload),
+        linked_provider_activity_id=str(workout.linked_provider_activity_id or "").strip(),
     )
 
 
