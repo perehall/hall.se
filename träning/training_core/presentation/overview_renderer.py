@@ -202,6 +202,90 @@ def _detail_button_attrs(**values) -> str:
     return " ".join(attrs)
 
 
+def _weather_icon_svg(symbol_code: int | None) -> str:
+    if symbol_code is None:
+        return ""
+    sun = (
+        '<circle cx="12" cy="12" r="3.4"/>'
+        '<path d="M12 3v2M12 19v2M3 12h2M19 12h2'
+        'M5.6 5.6 7 7M17 17l1.4 1.4M18.4 5.6 17 7M7 17l-1.4 1.4"/>'
+    )
+    cloud = '<path d="M6.5 18h10.2a3.6 3.6 0 0 0 .3-7.2A5.2 5.2 0 0 0 7.1 10a4 4 0 0 0-.6 8Z"/>'
+    partly = (
+        '<circle cx="8" cy="8" r="2.6"/>'
+        '<path d="M8 3V1.8M3 8H1.8M4.5 4.5l-.9-.9"/>'
+        '<path d="M7 19h10.1a3.5 3.5 0 0 0 .2-7A5 5 0 0 0 8 11.2 3.9 3.9 0 0 0 7 19Z"/>'
+    )
+    rain = cloud + '<path d="M8.5 20l-.7 1.4M12.5 20l-.7 1.4M16.5 20l-.7 1.4"/>'
+    snow = cloud + '<path d="M9 20v2M8 21h2M14 20v2M13 21h2"/>'
+    sleet = cloud + '<path d="M8.5 20l-.7 1.4M13 20v2M12 21h2"/>'
+    thunder = cloud + '<path d="m13 18.5-2 3h2L12 24l3-3.8h-2l1-1.7"/>'
+    fog = '<path d="M4 8h16M2.5 12h15M6 16h15M3 20h12"/>'
+
+    code = int(symbol_code)
+    if code == 1:
+        body = sun
+    elif code in {2, 3, 4}:
+        body = partly
+    elif code in {5, 6}:
+        body = cloud
+    elif code == 7:
+        body = fog
+    elif code in {8, 9, 10, 18, 19, 20}:
+        body = rain
+    elif code in {11, 21}:
+        body = thunder
+    elif code in {12, 13, 14, 22, 23, 24}:
+        body = sleet
+    elif code in {15, 16, 17, 25, 26, 27}:
+        body = snow
+    else:
+        body = cloud
+    return (
+        '<svg class="overview-weather-icon" aria-hidden="true" viewBox="0 0 24 24" '
+        'fill="none" stroke="currentColor" stroke-width="1.7" '
+        'stroke-linecap="round" stroke-linejoin="round">'
+        + body
+        + '</svg>'
+    )
+
+
+def _weather_header_html(weather) -> str:
+    if weather is None:
+        return ""
+
+    temperatures = []
+    if weather.temperature_min_c is not None:
+        temperatures.append(int(round(weather.temperature_min_c)))
+    if weather.temperature_max_c is not None:
+        high = int(round(weather.temperature_max_c))
+        if not temperatures or high != temperatures[0]:
+            temperatures.append(high)
+    temperature = (
+        f"{temperatures[0]}–{temperatures[1]}°"
+        if len(temperatures) == 2
+        else f"{temperatures[0]}°"
+        if temperatures
+        else ""
+    )
+    precipitation = (
+        f"{int(round(weather.precip_probability_max_pct))}%"
+        if weather.precip_probability_max_pct is not None
+        else ""
+    )
+    visible = " · ".join(value for value in (temperature, precipitation) if value)
+    if not visible and weather.condition:
+        visible = weather.condition
+    stale = " · äldre data" if weather.stale else ""
+    title = weather.summary + stale if weather.summary else visible + stale
+    return (
+        f'<span class="overview-day-weather" title="{_e(title)}">'
+        f'{_weather_icon_svg(weather.symbol_code)}'
+        f'<span>{_e(visible)}</span>'
+        '</span>'
+    )
+
+
 def _expected_intent(model: TrainingOverviewReadModel, week_start: date):
     block = model.context.active_block if model.context else None
     if block is None:
@@ -236,7 +320,12 @@ def _expected_forward_week(model: TrainingOverviewReadModel, week_start: date):
     return None
 
 
-def _forward_preliminary_html(forward, week_start: date, registry: SportIconRegistry | None) -> str:
+def _forward_preliminary_html(
+    forward,
+    week_start: date,
+    registry: SportIconRegistry | None,
+    weather_by_date=None,
+) -> str:
     by_day = {}
     for slot in forward.slots:
         by_day.setdefault(slot.day_index, []).append(slot)
@@ -285,10 +374,14 @@ def _forward_preliminary_html(forward, week_start: date, registry: SportIconRegi
                 '</span></button>'
             )
         body = "".join(cards) or '<span class="overview-forward-open">Öppen</span>'
+        weather = (weather_by_date or {}).get(local_date)
         cells.append(
             '<div class="overview-day forward-preliminary">'
             '<div class="overview-day-head">'
+            '<div class="overview-day-date">'
             f'<span>{WEEKDAY_SHORT[day_index - 1]}</span><b>{local_date.day}</b>'
+            '</div>'
+            f'{_weather_header_html(weather)}'
             '</div>'
             f'<div class="overview-day-body">{body}</div>'
             '</div>'
@@ -642,8 +735,11 @@ def _day_html(
     return (
         f'<div class="{" ".join(classes)}" data-date="{day.local_date.isoformat()}">'
         '<div class="overview-day-head">'
+        '<div class="overview-day-date">'
         f'<span>{WEEKDAY_SHORT[day.local_date.weekday()]}</span>'
         f'<b>{day.local_date.day}</b>'
+        '</div>'
+        f'{_weather_header_html(day.weather)}'
         '</div>'
         f'<div class="overview-day-body">{body}</div>'
         '</div>'
@@ -764,7 +860,16 @@ def _week_html(
 
     if relation == "future" and week.planned_count == 0 and forward is not None:
         if forward.planning_level == "preliminary":
-            days = _forward_preliminary_html(forward, week.start, registry)
+            days = _forward_preliminary_html(
+                forward,
+                week.start,
+                registry,
+                weather_by_date={
+                    day.local_date: day.weather
+                    for day in week.days
+                    if day.weather is not None
+                },
+            )
             display_mode = "forward-preliminary-mode"
         else:
             days = _forward_block_sketch_html(forward)
