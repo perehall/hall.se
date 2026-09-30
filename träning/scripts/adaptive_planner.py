@@ -1450,7 +1450,7 @@ def fallback_microcycle(
     # A race-relevant easy-distance exposure is useful when it fits safely, but
     # other secondary capabilities are deliberately not all forced into the week.
     secondary_added = False
-    if "run_easy_distance" in secondaries or "run_easy_distance" in primaries:
+    if "run_easy_distance" in secondaries and "run_easy_distance" not in primaries:
         secondary_added = add_recipe(
             "run_easy_distance",
             "Behåll lugn löptålighet med separation från löpkvalitet.",
