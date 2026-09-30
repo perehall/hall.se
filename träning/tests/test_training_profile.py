@@ -241,5 +241,57 @@ class TrainingProfileTests(unittest.TestCase):
         self.assertEqual(profile["planning_credits"], [])
         self.assertEqual(profile["intent_matches"], [])
 
+    def test_explicit_strength_exercises_confirm_unilateral_and_core(self):
+        activity = {
+            "id": 600,
+            "sport_type": "WeightTraining",
+            "classification": "training",
+            "start_date_local": "2026-09-28T18:00:00",
+            "elapsed_time_s": 2212,
+            "user_report": "Pallof press 3x10, Bulgarian split squats 3x8, dead bug och reverse plank. RPE 6/10. Pigg.",
+            "laps": [],
+        }
+        profile = build_training_profile(activity)
+        self.assertEqual(
+            profile["planning_credits"],
+            ["strength_core", "strength_unilateral"],
+        )
+        self.assertEqual(
+            {row["key"] for row in profile["stimuli"]},
+            {"strength_core", "strength_unilateral"},
+        )
+
+    def test_explicit_easy_trail_report_confirms_easy_distance(self):
+        activity = {
+            "id": 601,
+            "sport_type": "TrailRun",
+            "classification": "training",
+            "start_date_local": "2026-09-27T10:00:00",
+            "elapsed_time_s": 4800,
+            "distance_m": 13400,
+            "user_report": "Gick ut väldigt lugnt och försökte hålla pulsen runt 130. RPE 4/10.",
+            "laps": [],
+        }
+        profile = build_training_profile(activity)
+        self.assertEqual(profile["planning_credits"], ["run_easy_distance"])
+        self.assertEqual(profile["stimuli"][0]["dose"]["duration_minutes"], 80.0)
+
+    def test_explicit_calm_trail_mtb_confirms_technical_and_aerobic_intent(self):
+        activity = {
+            "id": 602,
+            "sport_type": "MountainBikeRide",
+            "classification": "training",
+            "start_date_local": "2026-09-24T18:00:00",
+            "elapsed_time_s": 4800,
+            "distance_m": 19000,
+            "user_report": "80 min lugn stig-MTB. Bra flyt, ingen fartjakt. RPE 4/10.",
+            "laps": [],
+        }
+        profile = build_training_profile(activity)
+        self.assertEqual(
+            profile["planning_credits"],
+            ["mtb_aerobic", "mtb_technical"],
+        )
+
 if __name__ == "__main__":
     unittest.main()

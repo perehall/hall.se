@@ -26,6 +26,22 @@ RUN_TYPES = {"Run", "TrailRun", "VirtualRun"}
 SWIM_TYPES = {"Swim"}
 BIKE_TYPES = {"Ride", "MountainBikeRide", "VirtualRide"}
 STRENGTH_TYPES = {"WeightTraining", "Workout"}
+STRENGTH_UNILATERAL_WORD = re.compile(
+    r"\b(bulgarian|split[ -]?squat|utfall|step[ -]?up)\w*\b",
+    re.IGNORECASE,
+)
+CORE_WORD = re.compile(
+    r"\b(pallof|dead[ -]?bug|planka|plank|atomic|trx)\w*\b",
+    re.IGNORECASE,
+)
+MTB_TECHNICAL_WORD = re.compile(
+    r"\b(stig|teknisk|teknik|flyt|linjeval|sten|berghäll)\w*\b",
+    re.IGNORECASE,
+)
+EASY_INTENT_WORD = re.compile(
+    r"\b(lugn|lugnt|väldigt lugnt|ingen fartjakt|aerob)\b",
+    re.IGNORECASE,
+)
 DURATION_SESSION_RE = re.compile(r"(?<![×x])\b(?P<minutes>\d{2,3})\s*min\b", re.IGNORECASE)
 DISTANCE_SESSION_RE = re.compile(r"\b(?P<distance>\d[\d ]{2,})\s*m\b", re.IGNORECASE)
 THRESHOLD_WORD = re.compile(r"\b(trösk\w*|threshold|tempo)\b", re.IGNORECASE)
@@ -497,8 +513,16 @@ def nearby_structural_intent_matches(activity, planned_workouts, observed):
 def _explicit_stimuli(activity):
     report = str(activity.get("user_report") or "").strip()
     lower = report.lower()
+    sport_type = str(activity.get("sport_type") or "")
     result = []
-    if str(activity.get("sport_type") or "") in RUN_TYPES:
+
+    def duration_minutes():
+        value = _num(activity.get("elapsed_time_s"))
+        if value is None:
+            value = _num(activity.get("moving_time_s"))
+        return round(value / 60.0, 1) if value is not None and value > 0 else None
+
+    if sport_type in RUN_TYPES:
         match = TIME_INTERVAL_REPORT.search(report)
         if match and THRESHOLD_WORD.search(report):
             count = int(match.group("count"))
@@ -531,7 +555,26 @@ def _explicit_stimuli(activity):
                     },
                 }
             )
-    if str(activity.get("sport_type") or "") in SWIM_TYPES:
+        if (
+            not THRESHOLD_WORD.search(report)
+            and "back" not in lower
+            and (
+                "lugn distans" in lower
+                or "väldigt lugnt" in lower
+                or "hålla pulsen runt" in lower
+            )
+        ):
+            result.append(
+                {
+                    "key": "run_easy_distance",
+                    "status": "confirmed",
+                    "confidence": "high",
+                    "source": "explicit_user_report",
+                    "dose": {"duration_minutes": duration_minutes()},
+                }
+            )
+
+    if sport_type in SWIM_TYPES:
         if "trösk" in lower or "threshold" in lower:
             result.append(
                 {
@@ -539,9 +582,56 @@ def _explicit_stimuli(activity):
                     "status": "confirmed",
                     "confidence": "high",
                     "source": "explicit_user_report",
-                    "dose": {},
+                    "dose": {
+                        "distance_m": _num(activity.get("distance_m")),
+                    },
                 }
             )
+
+    if sport_type in BIKE_TYPES and report:
+        if MTB_TECHNICAL_WORD.search(report):
+            result.append(
+                {
+                    "key": "mtb_technical",
+                    "status": "confirmed",
+                    "confidence": "high",
+                    "source": "explicit_user_report",
+                    "dose": {"duration_minutes": duration_minutes()},
+                }
+            )
+        if sport_type == "MountainBikeRide" and EASY_INTENT_WORD.search(report):
+            result.append(
+                {
+                    "key": "mtb_aerobic",
+                    "status": "confirmed",
+                    "confidence": "high",
+                    "source": "explicit_user_report",
+                    "dose": {"duration_minutes": duration_minutes()},
+                }
+            )
+
+    if sport_type in STRENGTH_TYPES and report:
+        if STRENGTH_UNILATERAL_WORD.search(report):
+            result.append(
+                {
+                    "key": "strength_unilateral",
+                    "status": "confirmed",
+                    "confidence": "high",
+                    "source": "explicit_user_report",
+                    "dose": {"duration_minutes": duration_minutes()},
+                }
+            )
+        if CORE_WORD.search(report):
+            result.append(
+                {
+                    "key": "strength_core",
+                    "status": "confirmed",
+                    "confidence": "high",
+                    "source": "explicit_user_report",
+                    "dose": {"duration_minutes": duration_minutes()},
+                }
+            )
+
     return result
 
 

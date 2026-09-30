@@ -1326,11 +1326,10 @@ def completed_microcycle_context(athlete_state, target_start):
     for capability, facts in (athlete_state.get("capability_facts") or {}).items():
         if not isinstance(facts, dict):
             continue
+        # Only explicitly capability-labelled evidence belongs in
+        # direct_capabilities. Generic longest-distance/duration facts are
+        # descriptive sport history and must not silently become physiology.
         evidence_rows = list(facts.get("evidence") or [])
-        for field in ("longest_distance", "longest_duration"):
-            item = facts.get(field)
-            if isinstance(item, dict):
-                evidence_rows.append(item)
         for item in evidence_rows:
             if not isinstance(item, dict):
                 continue
@@ -1406,7 +1405,7 @@ def completed_microcycle_context(athlete_state, target_start):
         "activity_refs": sorted(activity_ids),
         "evidence_note": (
             "Familjeexponeringar kommer från faktiskt registrerade aktiviteter i målveckan. "
-            "Direct_capabilities kräver daterad fysiologisk/kapabilitetsevidens. Planning_credits kan dessutom "
+            "Direct_capabilities kräver explicit daterad kapabilitetsevidens. Planning_credits kan dessutom "
             "komma från en durabel, entydig strukturell match mot ett närliggande planerat intent och används "
             "för att undvika redundant framtida ordination utan att påstå mer fysiologi än underlaget stödjer."
         ),
@@ -1748,7 +1747,10 @@ def fallback_microcycle(
         ),
         "",
     )
-    if "run_easy_distance" in secondaries or "run_easy_distance" in primaries:
+    if (
+        ("run_easy_distance" in secondaries or "run_easy_distance" in primaries)
+        and "run_easy_distance" not in completed_direct
+    ):
         run_support = next(
             (
                 str(item.get("recipe_key") or "")
@@ -1764,7 +1766,9 @@ def fallback_microcycle(
             "Behåll lugn löptålighet med separation från löpkvalitet. Blueprint får variera passkaraktären men skapar inte en extra belastningsexponering.",
             action="consolidate",
         )
-    elif planned_support:
+    elif planned_support and not recipe_capabilities(
+        catalog["recipes"][planned_support]
+    ).intersection(completed_direct):
         secondary_added = add_recipe(
             planned_support,
             "Blockets preliminära grundplan föreslår denna stödjande passkaraktär; den tas bara med när ingen redan planerad exponering fyller samma stödroll och belastningsordningen tillåter.",
@@ -1776,7 +1780,7 @@ def fallback_microcycle(
     # secondary long-run work plus fixed Enduro.
     if not secondary_added:
         for cap in ("run_hill_quality", "mtb_technical", "mtb_aerobic"):
-            if cap not in secondaries:
+            if cap not in secondaries or cap in completed_direct:
                 continue
             recipe = CAPABILITY_TO_RECIPE.get(cap)
             if recipe and add_recipe(
