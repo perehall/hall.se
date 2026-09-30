@@ -30,6 +30,7 @@ class PlannedWorkout:
     development_focus: str = ""
     payload: dict | None = None
     workout_key: str = ""
+    linked_provider_activity_id: str = ""
 
     @property
     def components(self) -> tuple[WorkoutComponent, ...]:
