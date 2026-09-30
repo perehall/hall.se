@@ -2156,6 +2156,7 @@ def generate_microcycle(
                     repaired, meso, policy, catalog, target_start,
                     completed_context=completed_context,
                     athlete_profile=athlete_profile,
+                    planning_date=planning_date,
                 )
                 if not repaired_failures:
                     raw = repaired
@@ -2177,6 +2178,7 @@ def generate_microcycle(
                         meso, policy, catalog, target_start,
                         completed_context=completed_context,
                         athlete_profile=athlete_profile,
+                        planning_date=planning_date,
                     )
             except Exception as exc:
                 source = "deterministic_fallback_after_repair_error"
@@ -2190,6 +2192,7 @@ def generate_microcycle(
                     meso, policy, catalog, target_start,
                     completed_context=completed_context,
                     athlete_profile=athlete_profile,
+                    planning_date=planning_date,
                 )
 
     normalized, model_valid = validate_and_normalize_micro(
