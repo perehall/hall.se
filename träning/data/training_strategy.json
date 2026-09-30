@@ -333,6 +333,376 @@
       "microcycle_decision_source": "openai_repaired"
     },
     "evaluation_date": "2026-10-26",
+    "forward_horizon": [
+      {
+        "slots": [
+          {
+            "role": "external_fixed",
+            "label": "Enduroskola · fast tillfälle",
+            "sport": "enduro",
+            "day_index": 1,
+            "recipe_key": "",
+            "baseline_session": "",
+            "progression_intent": "fixed_external_load",
+            "conditional_target_session": ""
+          },
+          {
+            "role": "primary",
+            "label": "Sim · aerob uthållighet",
+            "sport": "swim",
+            "day_index": 2,
+            "recipe_key": "swim_aerobic_endurance",
+            "baseline_session": "Simning · 3 200 m · aerob uthållighet",
+            "progression_intent": "vary_structure",
+            "conditional_target_session": ""
+          },
+          {
+            "role": "primary",
+            "label": "Löptröskel · kortare repetitioner",
+            "sport": "run",
+            "day_index": 3,
+            "recipe_key": "run_threshold_short_reps",
+            "baseline_session": "Löpning · kontrollerad tröskel · 5 × 6 min / 60 s jogg",
+            "progression_intent": "vary_structure",
+            "conditional_target_session": ""
+          },
+          {
+            "role": "primary_companion",
+            "label": "Sim · grepp/teknik + aerob",
+            "sport": "swim",
+            "day_index": 4,
+            "recipe_key": "swim_aerobic_skills",
+            "baseline_session": "Simning · 3 200 m · grepp/teknik + aerob",
+            "progression_intent": "vary_structure",
+            "conditional_target_session": ""
+          },
+          {
+            "role": "protected",
+            "label": "Styrka/core · unilateral + bål",
+            "sport": "strength",
+            "day_index": 5,
+            "recipe_key": "strength_core",
+            "baseline_session": "",
+            "progression_intent": "protect",
+            "conditional_target_session": ""
+          },
+          {
+            "role": "supporting_candidate",
+            "label": "Lugn löpdistans · stig/grus",
+            "sport": "run",
+            "day_index": 6,
+            "recipe_key": "run_easy_trail",
+            "baseline_session": "",
+            "progression_intent": "support_if_absorbable",
+            "conditional_target_session": ""
+          }
+        ],
+        "title": "Preliminär mikrocykel 2 av 4",
+        "source": "active_mesocycle_projection",
+        "week_end": "2026-10-11",
+        "week_start": "2026-10-05",
+        "block_intent": "develop",
+        "day_precision": "provisional",
+        "decision_gate": "Exakta dagar och doser får ändras av faktisk belastning och respons. Passkaraktär och blockriktning är den planerade utgångspunkten.",
+        "planning_label": "Preliminär",
+        "planning_level": "preliminary"
+      },
+      {
+        "slots": [
+          {
+            "role": "external_fixed",
+            "label": "Enduroskola · fast tillfälle",
+            "sport": "enduro",
+            "day_index": 1,
+            "recipe_key": "",
+            "baseline_session": "",
+            "progression_intent": "fixed_external_load",
+            "conditional_target_session": ""
+          },
+          {
+            "role": "primary",
+            "label": "Sim · grepp/teknik + aerob",
+            "sport": "swim",
+            "day_index": 2,
+            "recipe_key": "swim_aerobic_skills",
+            "baseline_session": "Simning · 3 200 m · grepp/teknik + aerob",
+            "progression_intent": "progress_if_ready",
+            "conditional_target_session": "Simning · 3 600 m · grepp/teknik + aerob"
+          },
+          {
+            "role": "primary",
+            "label": "Löptröskel · längre repetitioner",
+            "sport": "run",
+            "day_index": 3,
+            "recipe_key": "run_threshold",
+            "baseline_session": "Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg",
+            "progression_intent": "progress_if_ready",
+            "conditional_target_session": "Löpning · kontrollerad tröskel · 4 × 9 min / 90 s jogg"
+          },
+          {
+            "role": "primary_companion",
+            "label": "Sim · aerob uthållighet",
+            "sport": "swim",
+            "day_index": 4,
+            "recipe_key": "swim_aerobic_endurance",
+            "baseline_session": "Simning · 3 200 m · aerob uthållighet",
+            "progression_intent": "vary_structure",
+            "conditional_target_session": ""
+          },
+          {
+            "role": "protected",
+            "label": "Styrka/core · unilateral + bål",
+            "sport": "strength",
+            "day_index": 5,
+            "recipe_key": "strength_core",
+            "baseline_session": "",
+            "progression_intent": "protect",
+            "conditional_target_session": ""
+          },
+          {
+            "role": "anchor",
+            "label": "Lugn löpdistans · jämn",
+            "sport": "run",
+            "day_index": 7,
+            "recipe_key": "run_easy_distance",
+            "baseline_session": "",
+            "progression_intent": "consolidate",
+            "conditional_target_session": ""
+          }
+        ],
+        "title": "Preliminär mikrocykel 3 av 4",
+        "source": "active_mesocycle_projection",
+        "week_end": "2026-10-18",
+        "week_start": "2026-10-12",
+        "block_intent": "develop",
+        "day_precision": "provisional",
+        "decision_gate": "Exakta dagar och doser får ändras av faktisk belastning och respons. Passkaraktär och blockriktning är den planerade utgångspunkten.",
+        "planning_label": "Preliminär",
+        "planning_level": "preliminary"
+      },
+      {
+        "slots": [
+          {
+            "role": "primary_companion",
+            "label": "Sim · grepp/teknik + aerob",
+            "sport": "swim",
+            "day_index": 1,
+            "recipe_key": "swim_aerobic_skills",
+            "baseline_session": "Simning · 3 200 m · grepp/teknik + aerob",
+            "progression_intent": "consolidate",
+            "conditional_target_session": ""
+          },
+          {
+            "role": "primary",
+            "label": "Löptröskel · längre repetitioner",
+            "sport": "run",
+            "day_index": 2,
+            "recipe_key": "run_threshold",
+            "baseline_session": "Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg",
+            "progression_intent": "consolidate",
+            "conditional_target_session": ""
+          },
+          {
+            "role": "primary",
+            "label": "Sim · aerob teknik",
+            "sport": "swim",
+            "day_index": 3,
+            "recipe_key": "swim_aerobic_technique",
+            "baseline_session": "Simning · 3 200 m · aerob/teknik",
+            "progression_intent": "consolidate",
+            "conditional_target_session": ""
+          },
+          {
+            "role": "protected",
+            "label": "Styrka/core · unilateral + bål",
+            "sport": "strength",
+            "day_index": 5,
+            "recipe_key": "strength_core",
+            "baseline_session": "",
+            "progression_intent": "protect",
+            "conditional_target_session": ""
+          },
+          {
+            "role": "anchor",
+            "label": "Lugn löpdistans · jämn",
+            "sport": "run",
+            "day_index": 7,
+            "recipe_key": "run_easy_distance",
+            "baseline_session": "",
+            "progression_intent": "consolidate",
+            "conditional_target_session": ""
+          }
+        ],
+        "title": "Preliminär mikrocykel 4 av 4",
+        "source": "active_mesocycle_projection",
+        "week_end": "2026-10-25",
+        "week_start": "2026-10-19",
+        "block_intent": "consolidate",
+        "day_precision": "provisional",
+        "decision_gate": "Exakta dagar och doser får ändras av faktisk belastning och respons. Passkaraktär och blockriktning är den planerade utgångspunkten.",
+        "planning_label": "Preliminär",
+        "planning_level": "preliminary"
+      },
+      {
+        "title": "Blockreview · besluta nästa riktning",
+        "source": "post_mesocycle_conditional_sketch",
+        "week_end": "2026-11-01",
+        "week_start": "2026-10-26",
+        "block_intent": "review",
+        "day_precision": "none",
+        "decision_gate": "Ny mesocykel beslutas tidigast vid checkpoint 2026-10-26. Skissen visar vilka kapaciteter och passfamiljer som står i kön; den låser inte dagar, doser eller ett fysiologiskt utfall innan review.",
+        "planning_label": "Blockskiss",
+        "planning_level": "block_sketch",
+        "support_candidates": [
+          {
+            "label": "Backstyrka / löpekonomi",
+            "capability": "run_hill_quality",
+            "candidate_recipe_characters": [
+              "Backkvalitet · klustrade 150 m-reps",
+              "Backkvalitet · sammanhängande 150 m-reps"
+            ]
+          },
+          {
+            "label": "Lugn löpdistans / tålighet",
+            "capability": "run_easy_distance",
+            "candidate_recipe_characters": [
+              "Lugn löpdistans · jämn",
+              "Lugn löpdistans · stig/grus"
+            ]
+          }
+        ],
+        "capability_directions": [
+          {
+            "label": "Kontrollerad löptröskel",
+            "direction": "Fortsätt eller konsolidera tills blockreview visar stöd för progression eller byte av utvecklingsaxel.",
+            "capability": "run_threshold",
+            "evidence_state_now": "absorbed",
+            "progression_ready_now": false,
+            "candidate_recipe_characters": [
+              "Löptröskel · längre repetitioner",
+              "Löptröskel · kortare repetitioner"
+            ]
+          },
+          {
+            "label": "Sim aerob kapacitet",
+            "direction": "Fortsätt eller konsolidera tills blockreview visar stöd för progression eller byte av utvecklingsaxel.",
+            "capability": "swim_aerobic",
+            "evidence_state_now": "demonstrated",
+            "progression_ready_now": false,
+            "candidate_recipe_characters": [
+              "Sim · aerob teknik",
+              "Sim · aerob uthållighet",
+              "Sim · grepp/teknik + aerob"
+            ]
+          },
+          {
+            "label": "Simteknik",
+            "direction": "Fortsätt eller konsolidera tills blockreview visar stöd för progression eller byte av utvecklingsaxel.",
+            "capability": "swim_technique",
+            "evidence_state_now": "observed",
+            "progression_ready_now": false,
+            "candidate_recipe_characters": [
+              "Sim · aerob teknik",
+              "Sim · grepp/teknik + aerob",
+              "Sim · aerob uthållighet"
+            ]
+          }
+        ],
+        "protected_capabilities": [
+          {
+            "label": "Unilateral benstyrka",
+            "capability": "strength_unilateral"
+          },
+          {
+            "label": "Core",
+            "capability": "strength_core"
+          },
+          {
+            "label": "Plyometrisk exponering",
+            "capability": "plyometric"
+          }
+        ]
+      },
+      {
+        "title": "Nästa block · villkorad riktning",
+        "source": "post_mesocycle_conditional_sketch",
+        "week_end": "2026-11-08",
+        "week_start": "2026-11-02",
+        "block_intent": "conditional_build",
+        "day_precision": "none",
+        "decision_gate": "Ny mesocykel beslutas tidigast vid checkpoint 2026-10-26. Skissen visar vilka kapaciteter och passfamiljer som står i kön; den låser inte dagar, doser eller ett fysiologiskt utfall innan review.",
+        "planning_label": "Blockskiss",
+        "planning_level": "block_sketch",
+        "support_candidates": [
+          {
+            "label": "Lugn löpdistans / tålighet",
+            "capability": "run_easy_distance",
+            "candidate_recipe_characters": [
+              "Lugn löpdistans · jämn",
+              "Lugn löpdistans · stig/grus"
+            ]
+          },
+          {
+            "label": "MTB teknisk fart",
+            "capability": "mtb_technical",
+            "candidate_recipe_characters": [
+              "MTB/XC · teknik och flyt"
+            ]
+          }
+        ],
+        "capability_directions": [
+          {
+            "label": "Kontrollerad löptröskel",
+            "direction": "Fortsätt eller konsolidera tills blockreview visar stöd för progression eller byte av utvecklingsaxel.",
+            "capability": "run_threshold",
+            "evidence_state_now": "absorbed",
+            "progression_ready_now": false,
+            "candidate_recipe_characters": [
+              "Löptröskel · längre repetitioner",
+              "Löptröskel · kortare repetitioner"
+            ]
+          },
+          {
+            "label": "Sim aerob kapacitet",
+            "direction": "Fortsätt eller konsolidera tills blockreview visar stöd för progression eller byte av utvecklingsaxel.",
+            "capability": "swim_aerobic",
+            "evidence_state_now": "demonstrated",
+            "progression_ready_now": false,
+            "candidate_recipe_characters": [
+              "Sim · aerob teknik",
+              "Sim · aerob uthållighet",
+              "Sim · grepp/teknik + aerob"
+            ]
+          },
+          {
+            "label": "Simteknik",
+            "direction": "Fortsätt eller konsolidera tills blockreview visar stöd för progression eller byte av utvecklingsaxel.",
+            "capability": "swim_technique",
+            "evidence_state_now": "observed",
+            "progression_ready_now": false,
+            "candidate_recipe_characters": [
+              "Sim · aerob teknik",
+              "Sim · grepp/teknik + aerob",
+              "Sim · aerob uthållighet"
+            ]
+          }
+        ],
+        "protected_capabilities": [
+          {
+            "label": "Unilateral benstyrka",
+            "capability": "strength_unilateral"
+          },
+          {
+            "label": "Core",
+            "capability": "strength_core"
+          },
+          {
+            "label": "Plyometrisk exponering",
+            "capability": "plyometric"
+          }
+        ]
+      }
+    ],
     "goal_basis_hash": "30201a00f8ff4f10c913b8fbf2d31052418d4e0d3812c799ca49b56a38accdf9",
     "success_signals": [
       "Upprepade run_threshold‑sessioner på 32 min arbetstid med supportive 24–72 h‑respons (inga varningssignaler).",
@@ -1390,6 +1760,376 @@
       ],
       "duration_weeks": null,
       "evaluation_date": "2026-10-26",
+      "forward_horizon": [
+        {
+          "slots": [
+            {
+              "role": "external_fixed",
+              "label": "Enduroskola · fast tillfälle",
+              "sport": "enduro",
+              "day_index": 1,
+              "recipe_key": "",
+              "baseline_session": "",
+              "progression_intent": "fixed_external_load",
+              "conditional_target_session": ""
+            },
+            {
+              "role": "primary",
+              "label": "Sim · aerob uthållighet",
+              "sport": "swim",
+              "day_index": 2,
+              "recipe_key": "swim_aerobic_endurance",
+              "baseline_session": "Simning · 3 200 m · aerob uthållighet",
+              "progression_intent": "vary_structure",
+              "conditional_target_session": ""
+            },
+            {
+              "role": "primary",
+              "label": "Löptröskel · kortare repetitioner",
+              "sport": "run",
+              "day_index": 3,
+              "recipe_key": "run_threshold_short_reps",
+              "baseline_session": "Löpning · kontrollerad tröskel · 5 × 6 min / 60 s jogg",
+              "progression_intent": "vary_structure",
+              "conditional_target_session": ""
+            },
+            {
+              "role": "primary_companion",
+              "label": "Sim · grepp/teknik + aerob",
+              "sport": "swim",
+              "day_index": 4,
+              "recipe_key": "swim_aerobic_skills",
+              "baseline_session": "Simning · 3 200 m · grepp/teknik + aerob",
+              "progression_intent": "vary_structure",
+              "conditional_target_session": ""
+            },
+            {
+              "role": "protected",
+              "label": "Styrka/core · unilateral + bål",
+              "sport": "strength",
+              "day_index": 5,
+              "recipe_key": "strength_core",
+              "baseline_session": "",
+              "progression_intent": "protect",
+              "conditional_target_session": ""
+            },
+            {
+              "role": "supporting_candidate",
+              "label": "Lugn löpdistans · stig/grus",
+              "sport": "run",
+              "day_index": 6,
+              "recipe_key": "run_easy_trail",
+              "baseline_session": "",
+              "progression_intent": "support_if_absorbable",
+              "conditional_target_session": ""
+            }
+          ],
+          "title": "Preliminär mikrocykel 2 av 4",
+          "source": "active_mesocycle_projection",
+          "week_end": "2026-10-11",
+          "week_start": "2026-10-05",
+          "block_intent": "develop",
+          "day_precision": "provisional",
+          "decision_gate": "Exakta dagar och doser får ändras av faktisk belastning och respons. Passkaraktär och blockriktning är den planerade utgångspunkten.",
+          "planning_label": "Preliminär",
+          "planning_level": "preliminary"
+        },
+        {
+          "slots": [
+            {
+              "role": "external_fixed",
+              "label": "Enduroskola · fast tillfälle",
+              "sport": "enduro",
+              "day_index": 1,
+              "recipe_key": "",
+              "baseline_session": "",
+              "progression_intent": "fixed_external_load",
+              "conditional_target_session": ""
+            },
+            {
+              "role": "primary",
+              "label": "Sim · grepp/teknik + aerob",
+              "sport": "swim",
+              "day_index": 2,
+              "recipe_key": "swim_aerobic_skills",
+              "baseline_session": "Simning · 3 200 m · grepp/teknik + aerob",
+              "progression_intent": "progress_if_ready",
+              "conditional_target_session": "Simning · 3 600 m · grepp/teknik + aerob"
+            },
+            {
+              "role": "primary",
+              "label": "Löptröskel · längre repetitioner",
+              "sport": "run",
+              "day_index": 3,
+              "recipe_key": "run_threshold",
+              "baseline_session": "Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg",
+              "progression_intent": "progress_if_ready",
+              "conditional_target_session": "Löpning · kontrollerad tröskel · 4 × 9 min / 90 s jogg"
+            },
+            {
+              "role": "primary_companion",
+              "label": "Sim · aerob uthållighet",
+              "sport": "swim",
+              "day_index": 4,
+              "recipe_key": "swim_aerobic_endurance",
+              "baseline_session": "Simning · 3 200 m · aerob uthållighet",
+              "progression_intent": "vary_structure",
+              "conditional_target_session": ""
+            },
+            {
+              "role": "protected",
+              "label": "Styrka/core · unilateral + bål",
+              "sport": "strength",
+              "day_index": 5,
+              "recipe_key": "strength_core",
+              "baseline_session": "",
+              "progression_intent": "protect",
+              "conditional_target_session": ""
+            },
+            {
+              "role": "anchor",
+              "label": "Lugn löpdistans · jämn",
+              "sport": "run",
+              "day_index": 7,
+              "recipe_key": "run_easy_distance",
+              "baseline_session": "",
+              "progression_intent": "consolidate",
+              "conditional_target_session": ""
+            }
+          ],
+          "title": "Preliminär mikrocykel 3 av 4",
+          "source": "active_mesocycle_projection",
+          "week_end": "2026-10-18",
+          "week_start": "2026-10-12",
+          "block_intent": "develop",
+          "day_precision": "provisional",
+          "decision_gate": "Exakta dagar och doser får ändras av faktisk belastning och respons. Passkaraktär och blockriktning är den planerade utgångspunkten.",
+          "planning_label": "Preliminär",
+          "planning_level": "preliminary"
+        },
+        {
+          "slots": [
+            {
+              "role": "primary_companion",
+              "label": "Sim · grepp/teknik + aerob",
+              "sport": "swim",
+              "day_index": 1,
+              "recipe_key": "swim_aerobic_skills",
+              "baseline_session": "Simning · 3 200 m · grepp/teknik + aerob",
+              "progression_intent": "consolidate",
+              "conditional_target_session": ""
+            },
+            {
+              "role": "primary",
+              "label": "Löptröskel · längre repetitioner",
+              "sport": "run",
+              "day_index": 2,
+              "recipe_key": "run_threshold",
+              "baseline_session": "Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg",
+              "progression_intent": "consolidate",
+              "conditional_target_session": ""
+            },
+            {
+              "role": "primary",
+              "label": "Sim · aerob teknik",
+              "sport": "swim",
+              "day_index": 3,
+              "recipe_key": "swim_aerobic_technique",
+              "baseline_session": "Simning · 3 200 m · aerob/teknik",
+              "progression_intent": "consolidate",
+              "conditional_target_session": ""
+            },
+            {
+              "role": "protected",
+              "label": "Styrka/core · unilateral + bål",
+              "sport": "strength",
+              "day_index": 5,
+              "recipe_key": "strength_core",
+              "baseline_session": "",
+              "progression_intent": "protect",
+              "conditional_target_session": ""
+            },
+            {
+              "role": "anchor",
+              "label": "Lugn löpdistans · jämn",
+              "sport": "run",
+              "day_index": 7,
+              "recipe_key": "run_easy_distance",
+              "baseline_session": "",
+              "progression_intent": "consolidate",
+              "conditional_target_session": ""
+            }
+          ],
+          "title": "Preliminär mikrocykel 4 av 4",
+          "source": "active_mesocycle_projection",
+          "week_end": "2026-10-25",
+          "week_start": "2026-10-19",
+          "block_intent": "consolidate",
+          "day_precision": "provisional",
+          "decision_gate": "Exakta dagar och doser får ändras av faktisk belastning och respons. Passkaraktär och blockriktning är den planerade utgångspunkten.",
+          "planning_label": "Preliminär",
+          "planning_level": "preliminary"
+        },
+        {
+          "title": "Blockreview · besluta nästa riktning",
+          "source": "post_mesocycle_conditional_sketch",
+          "week_end": "2026-11-01",
+          "week_start": "2026-10-26",
+          "block_intent": "review",
+          "day_precision": "none",
+          "decision_gate": "Ny mesocykel beslutas tidigast vid checkpoint 2026-10-26. Skissen visar vilka kapaciteter och passfamiljer som står i kön; den låser inte dagar, doser eller ett fysiologiskt utfall innan review.",
+          "planning_label": "Blockskiss",
+          "planning_level": "block_sketch",
+          "support_candidates": [
+            {
+              "label": "Backstyrka / löpekonomi",
+              "capability": "run_hill_quality",
+              "candidate_recipe_characters": [
+                "Backkvalitet · klustrade 150 m-reps",
+                "Backkvalitet · sammanhängande 150 m-reps"
+              ]
+            },
+            {
+              "label": "Lugn löpdistans / tålighet",
+              "capability": "run_easy_distance",
+              "candidate_recipe_characters": [
+                "Lugn löpdistans · jämn",
+                "Lugn löpdistans · stig/grus"
+              ]
+            }
+          ],
+          "capability_directions": [
+            {
+              "label": "Kontrollerad löptröskel",
+              "direction": "Fortsätt eller konsolidera tills blockreview visar stöd för progression eller byte av utvecklingsaxel.",
+              "capability": "run_threshold",
+              "evidence_state_now": "absorbed",
+              "progression_ready_now": false,
+              "candidate_recipe_characters": [
+                "Löptröskel · längre repetitioner",
+                "Löptröskel · kortare repetitioner"
+              ]
+            },
+            {
+              "label": "Sim aerob kapacitet",
+              "direction": "Fortsätt eller konsolidera tills blockreview visar stöd för progression eller byte av utvecklingsaxel.",
+              "capability": "swim_aerobic",
+              "evidence_state_now": "demonstrated",
+              "progression_ready_now": false,
+              "candidate_recipe_characters": [
+                "Sim · aerob teknik",
+                "Sim · aerob uthållighet",
+                "Sim · grepp/teknik + aerob"
+              ]
+            },
+            {
+              "label": "Simteknik",
+              "direction": "Fortsätt eller konsolidera tills blockreview visar stöd för progression eller byte av utvecklingsaxel.",
+              "capability": "swim_technique",
+              "evidence_state_now": "observed",
+              "progression_ready_now": false,
+              "candidate_recipe_characters": [
+                "Sim · aerob teknik",
+                "Sim · grepp/teknik + aerob",
+                "Sim · aerob uthållighet"
+              ]
+            }
+          ],
+          "protected_capabilities": [
+            {
+              "label": "Unilateral benstyrka",
+              "capability": "strength_unilateral"
+            },
+            {
+              "label": "Core",
+              "capability": "strength_core"
+            },
+            {
+              "label": "Plyometrisk exponering",
+              "capability": "plyometric"
+            }
+          ]
+        },
+        {
+          "title": "Nästa block · villkorad riktning",
+          "source": "post_mesocycle_conditional_sketch",
+          "week_end": "2026-11-08",
+          "week_start": "2026-11-02",
+          "block_intent": "conditional_build",
+          "day_precision": "none",
+          "decision_gate": "Ny mesocykel beslutas tidigast vid checkpoint 2026-10-26. Skissen visar vilka kapaciteter och passfamiljer som står i kön; den låser inte dagar, doser eller ett fysiologiskt utfall innan review.",
+          "planning_label": "Blockskiss",
+          "planning_level": "block_sketch",
+          "support_candidates": [
+            {
+              "label": "Lugn löpdistans / tålighet",
+              "capability": "run_easy_distance",
+              "candidate_recipe_characters": [
+                "Lugn löpdistans · jämn",
+                "Lugn löpdistans · stig/grus"
+              ]
+            },
+            {
+              "label": "MTB teknisk fart",
+              "capability": "mtb_technical",
+              "candidate_recipe_characters": [
+                "MTB/XC · teknik och flyt"
+              ]
+            }
+          ],
+          "capability_directions": [
+            {
+              "label": "Kontrollerad löptröskel",
+              "direction": "Fortsätt eller konsolidera tills blockreview visar stöd för progression eller byte av utvecklingsaxel.",
+              "capability": "run_threshold",
+              "evidence_state_now": "absorbed",
+              "progression_ready_now": false,
+              "candidate_recipe_characters": [
+                "Löptröskel · längre repetitioner",
+                "Löptröskel · kortare repetitioner"
+              ]
+            },
+            {
+              "label": "Sim aerob kapacitet",
+              "direction": "Fortsätt eller konsolidera tills blockreview visar stöd för progression eller byte av utvecklingsaxel.",
+              "capability": "swim_aerobic",
+              "evidence_state_now": "demonstrated",
+              "progression_ready_now": false,
+              "candidate_recipe_characters": [
+                "Sim · aerob teknik",
+                "Sim · aerob uthållighet",
+                "Sim · grepp/teknik + aerob"
+              ]
+            },
+            {
+              "label": "Simteknik",
+              "direction": "Fortsätt eller konsolidera tills blockreview visar stöd för progression eller byte av utvecklingsaxel.",
+              "capability": "swim_technique",
+              "evidence_state_now": "observed",
+              "progression_ready_now": false,
+              "candidate_recipe_characters": [
+                "Sim · aerob teknik",
+                "Sim · grepp/teknik + aerob",
+                "Sim · aerob uthållighet"
+              ]
+            }
+          ],
+          "protected_capabilities": [
+            {
+              "label": "Unilateral benstyrka",
+              "capability": "strength_unilateral"
+            },
+            {
+              "label": "Core",
+              "capability": "strength_core"
+            },
+            {
+              "label": "Plyometrisk exponering",
+              "capability": "plyometric"
+            }
+          ]
+        }
+      ],
       "success_signals": [
         "Upprepade run_threshold‑sessioner på 32 min arbetstid med supportive 24–72 h‑respons (inga varningssignaler).",
         "Minst 2 simbassessioner per mikrocykel ~3 200 m med bibehållen teknik och RPE ≤6–7 (inga upprepade RPE8‑trötthetssvar).",

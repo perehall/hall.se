@@ -252,18 +252,13 @@
       "label": "Onsdag",
       "sport": "swim",
       "reason": "Etablera teknisk/aerob simbassession enligt blueprint och säkra två simbassessioner denna vecka; håll baseline pga senaste sim RPE8. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: establish; materialiserad relation: establish.",
-      "status": "conditional",
+      "status": "preliminary",
       "session": "Simning · 3 200 m · grepp/teknik + aerob",
       "stimuli": [
         "swim_aerobic",
         "swim_technique"
       ],
       "dose_open": false,
-      "auto_coach": {
-        "action": "reduce",
-        "reason": "Ackumulerad belastning senaste 48–72 h och planerat simbassessionens anchor‑status kräver konservativ avlastning.",
-        "applied_at_utc": "2026-09-30T10:51:05.135108+00:00"
-      },
       "recipe_key": "swim_aerobic_skills",
       "block_intent": "establish",
       "dose_options": [
@@ -779,7 +774,6 @@
         "technical"
       ],
       "microcycle_slot": "swim_aerobic_skills_1",
-      "coach_adjustment": "Skala ned passet. Reducera morgondagens simbassession från 3 200 m till alternativet 3 200 m med tydligt teknisk/lågintensiv profil: håll totalvolym men skala ner intensiteten—fokusera på teknik, kortare huvudserier och längre viloperioder; om du känner trötthet, avboka och vila istället.",
       "development_step": {
         "reason": "Mikrocykelbeslutet valde establish och dosen materialiserades från verifierad träningsrespons, bekräftat startläge eller konservativ katalogbas utan att höja flera belastningsvariabler samtidigt.",
         "relation": "establish",
@@ -787,7 +781,6 @@
         "microcycle": 1
       },
       "microcycle_index": 1,
-      "original_session": "Simning · 3 200 m · grepp/teknik + aerob",
       "development_focus": "Teknisk variation med fokus på grepp och avslappnad frekvens inbäddat i ett aerobt pass. Syftet är annan teknikuppgift, inte högre intensitet.",
       "baseline_option_id": "swim-aerobic-skills-3200",
       "development_character": "technique_catch_aerobic",
@@ -822,9 +815,9 @@
         "status": "synced",
         "transport": "intervals_icu",
         "source_hash": "eafabf6fd91800eab307c017b9f7d00b6f473417e10ec6f56184d02bf21b7dbe",
-        "updated_at_utc": "2026-09-30T10:51:06.740882+00:00",
+        "updated_at_utc": "2026-09-30T11:25:27.206422+00:00",
         "device_delivery": "unverified",
-        "verified_at_utc": "2026-09-30T10:51:06.740882+00:00",
+        "verified_at_utc": "2026-09-30T11:25:27.206422+00:00",
         "provider_event_id": 140193695
       },
       "block_intent": "establish",
@@ -1117,9 +1110,9 @@
         "status": "synced",
         "transport": "intervals_icu",
         "source_hash": "d5f222458fe5be6baedeccc8da583d332e9bc4d99126c040a9f69eed6ce1c2ad",
-        "updated_at_utc": "2026-09-30T10:51:07.053830+00:00",
+        "updated_at_utc": "2026-09-30T11:25:27.470342+00:00",
         "device_delivery": "unverified",
-        "verified_at_utc": "2026-09-30T10:51:07.053830+00:00",
+        "verified_at_utc": "2026-09-30T11:25:27.470342+00:00",
         "provider_event_id": 140193696
       },
       "block_intent": "establish",
