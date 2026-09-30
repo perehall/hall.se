@@ -166,6 +166,19 @@ def _day_model(forecast, *, stale: bool) -> DayWeatherReadModel:
     )
 
 
+def build_daily_weather_models(
+    snapshot: WeatherSnapshot | None,
+) -> tuple[DayWeatherReadModel, ...]:
+    """Normalize every available forecast day without applying plan filtering."""
+    if snapshot is None:
+        return ()
+    stale = snapshot.status != "ok"
+    return tuple(
+        _day_model(forecast, stale=stale)
+        for forecast in sorted(snapshot.daily, key=lambda item: item.local_date)
+    )
+
+
 def build_weather_read_model(
     *,
     plan: Iterable[PlannedDay],
@@ -183,16 +196,11 @@ def build_weather_read_model(
     for day in plan:
         plan_by_date.setdefault(day.local_date, []).append(day)
     forecasts = []
-    for forecast in snapshot.daily:
+    for forecast in build_daily_weather_models(snapshot):
         workouts = plan_by_date.get(forecast.local_date) or []
         if not any(day_is_outdoor(day) for day in workouts):
             continue
-        forecasts.append(
-            _day_model(
-                forecast,
-                stale=snapshot.status != "ok",
-            )
-        )
+        forecasts.append(forecast)
     return WeatherReadModel(
         status=snapshot.status,
         source=snapshot.source,
