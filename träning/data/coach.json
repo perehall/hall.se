@@ -7,17 +7,17 @@
           "Löpning · 4 × 8 min: 13,14 km · 1:02:35 · 112 m+ · snittpuls 146,1 · maxpuls 162.",
           "Användarrapport: Spontant löppass: 4 × 8 min / 90 s joggvila. Samma 4 × 8/90-struktur som veckans planerade kontrollerade löptröskel. Spontant löppass: 4 × 8 min / 90 s joggvila. Samma 4 × 8/90-struktur som veckans planerade kontrollerade löptröskel. Bra kontroll, kände mig stark RPE 6/10. Känsla: Starka ben."
         ],
-        "summary": "Kontrollerat spontanpass: 4×8 min/90 s genomfört stabilt med RPE 6 och känsla av starka ben; snittpuls 146 bpm, topp 162 bpm över 13.1 km.",
+        "summary": "Genomförde spontant 4×8 min med 90 s joggvila; bra kontroll och RPE 6/10, snittfart 4:46/km och snittpuls 146 bpm.",
         "unknowns": [
-          "Exakt 24–72 h‑respons (återhämtningsunderlaget/DOMS nästa dag) som krävs för att öppna progression.",
-          "Detaljer om intervallfart vs planerat tröskeltempo (plan_comparison saknar matchning)."
+          "Hur du känner dig 24–48 h efter passet (påverkar nästa löppass).",
+          "Om avsikten var att detta skulle ersätta planerat run_threshold eller vara extra; plan_comparison visade att passet inte matchade ett planerat workout_id."
         ],
         "confidence": "medium",
         "interpretations": [
-          "Passet visar god kontroll över avsett tröskelformat och indikerar tolererad intensitet för denna enkla upprepning, vilket stöder konsolidering men inte progression.",
-          "Givet föregående enduro + styrka och planerade simpass inom 48–72 h bör inget ökat löpstimulus eller högre dos väljas nu."
+          "Passet visar att du kunde genomföra planerad 4×8/90‑struktur med god kontroll och upplevd styrka — positivt för run_threshold‑stimulit.",
+          "Eftersom mikrocykeln redan innehöll flera benbelastningar (trail, enduro, styrka) bör kommande 48–72 h följas innan progressionsbeslut; risken är att upprepad tröskel minskar absorberbar marginal."
         ],
-        "load_interpretation": "Senaste 48–72 h innehåller flera benbelastande sessioner (trail, enduro, styrka + dagens kvalitet); konservativt håller planen utan progression."
+        "load_interpretation": "Passet ligger i linje med veckans tröskelstimulus men är en extra liknande exponering efter flera senaste benbelastande dagar; 48–72 h-observation rekommenderas."
       },
       "auto_apply": {
         "note": "Ingen automatisk planändring.",
@@ -26,16 +26,16 @@
       "activity_id": 20381137043,
       "plan_action": {
         "action": "keep",
-        "reason": "Ingen varningssignal eller negativ ackumulering i 24–72 h som motiverar vila eller reduktion; bevara veckans etableringsdos för simning.",
+        "reason": "Ingen omedelbar skada eller varningssignal, och plan kräver två simbassessioner denna vecka; simningen är skyddad anchor.",
         "target_date": "2026-09-30",
         "dose_option_id": "",
-        "recommendation": "Följ plan: genomför simning 2026-09-30 enligt dos 3 200 m som planerat; prioritera återhämtning (återhämtningsunderlaget, lätt rörlighet) fram till simpasset.",
+        "recommendation": "Behåll planerad simning 2026-09-30 (3200 m) som schemalagt; vila eller mycket lätt aktivitet resten av dagen efter simningen om du känner kvarvarande lokal trötthet. Om du känner ökad trötthet inom 24–48 h, överväg att skjuta simningen till ett senare allowed_target_date och begär review.",
         "requires_approval": false,
         "target_workout_key": "20260928-run_threshold-swim_aerobic-swim_technique:mc1:2026-09-30:swim_aerobic_skills_1"
       },
       "activity_date": "2026-09-29",
       "activity_name": "Löpning på eftermiddagen",
-      "generated_at_utc": "2026-09-30T12:47:39.290172+00:00",
+      "generated_at_utc": "2026-09-30T12:51:32.815494+00:00",
       "analysis_contract": {
         "pipeline_version": 4,
         "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
@@ -1370,9 +1370,9 @@
       "performance_protocol_key": null
     }
   ],
-  "last_run_utc": "2026-09-30T12:47:39.290172+00:00",
+  "last_run_utc": "2026-09-30T12:51:32.815494+00:00",
   "contract_version": 16,
-  "last_trigger_hash": "57ad9e37561f16d1f6777a8e8d0a8b9726ec8a5951162b37989cd18ead17c901",
+  "last_trigger_hash": "ffb55035d99b65b489406c474f344783391fdaf9b1b697e6fb1971985b866601",
   "analysed_activity_ids": [
     "20367593813",
     "20350203020",
