@@ -7,17 +7,17 @@
           "Simning · 3 700 m · 3 × (20 × 50 m): 3,70 km · 1:08:02 · snittpuls 128,8 · maxpuls 149.",
           "Användarrapport: 200 m insim. 3 × 50 m rotation med dolme, v 15 s. 2 × 75 m (1–2–3), v 15 s. Huvudserie: 3 × (20 × 50 m) med dolme + paddlar, cirka 35 s/50 m, v 15 s, serievila 90 s. 200 m avbad. Totalt 3 700 m. Genomfördes manuellt eftersom dagens planerade strukturerade simpass inte hann synkas till Garmin-klockan före start."
         ],
-        "summary": "Genomfört strukturerat simpass 3 700 m med stabil 60×50m huvudserie (~1:08–1:10/100m) och stigande puls mot slutet; sessionen visar god genomförbarhet av dagens tekniska/aeroba belastning.",
+        "summary": "Genomfört strukturerat simpass 3 700 m med huvudserie 3×(20×50 m) och stabila 50 m‑set runt 1:08–1:10/100m; passet avslutat enligt användarrapport.",
         "unknowns": [
-          "Subjektiv återhämtning nästa morgon (24 h) och effekt på torsdagens planerade backkvalitet.",
-          "Om dagens simning ska räknas som verifierad etablerad dos för veckans simplan krävs mesocykelbekräftelse."
+          "Subjektiv återhämtning 24–72 h efter detta långa simpass.",
+          "Eventuell lokal muskeltrötthet i ben/axlar som kan påverka löp-/styrkepass."
         ],
         "confidence": "medium",
         "interpretations": [
-          "Passet etablerar att du klarar längre teknisk/aerob volym (~3 700 m) utan uppenbar teknikförsämring inom setet.",
-          "Högre genomsnittspuls mot senare 50:or indikerar ackumulerad ansträngning som kan påverka kommande benbelastning (löp/back) inom 48–72 h."
+          "Stabilt genomförd huvudserie med konsekventa 50 m‑farter och stigande puls mot slutet indikerar tolererad aerob/teknisk belastning i passet.",
+          "Eftersom mikrocykeln planerar ytterligare simpass (2026-10-02) och sim är anchor denna vecka bör nästa sim hållas konservativ enligt planens dosbeslut."
         ],
-        "load_interpretation": "Kardiovaskulär och teknisk belastning var tydlig under huvudserien; inom 24–72 h bör övriga benbelastande kvalitetspass beaktas (löpning/back)."
+        "load_interpretation": "Simningen är en aerob/teknisk exponering i mikrocykeln och bör vägas mot planerade simpass de kommande 48–72 h."
       },
       "auto_apply": {
         "note": "Ingen automatisk planändring.",
@@ -25,17 +25,17 @@
       },
       "activity_id": 20396959391,
       "plan_action": {
-        "action": "review",
-        "reason": "Den föreslagna automatiska planändringen kunde inte kopplas entydigt till ett tillåtet målpass.",
-        "target_date": "",
+        "action": "keep",
+        "reason": "Passet visar tolererad simexponering och ingen omedelbar varningssignal som kräver reducering eller vila; planens prioriteringar och 24–72h‑fönster ska beaktas innan ändring.",
+        "target_date": "2026-10-01",
         "dose_option_id": "",
-        "recommendation": "Behåll nuvarande plan; ingen automatisk ändring görs. Bedöm nästa beslutsmogna pass när underlaget räcker.",
+        "recommendation": "Behåll planerat löppass 2026-10-01 (backkvalitet) som preliminärt; bevaka subjektiv återhämtning och lokal trötthet de kommande 24–72 timmarna och rapportera om RPE ökar eller smärta uppstår.",
         "requires_approval": false,
-        "target_workout_key": ""
+        "target_workout_key": "20260928-run_threshold-swim_aerobic-swim_technique:mc1:2026-10-01:run_hill_quality_1"
       },
       "activity_date": "2026-09-30",
       "activity_name": "Simning på kvällen",
-      "generated_at_utc": "2026-09-30T19:44:06.265776+00:00",
+      "generated_at_utc": "2026-09-30T19:47:45.295334+00:00",
       "analysis_contract": {
         "pipeline_version": 4,
         "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
@@ -1371,9 +1371,9 @@
       "performance_protocol_key": null
     }
   ],
-  "last_run_utc": "2026-09-30T19:44:06.265776+00:00",
+  "last_run_utc": "2026-09-30T19:47:45.295334+00:00",
   "contract_version": 16,
-  "last_trigger_hash": "c4488eac3cb4d118c21e89634f15bb3afe811220829fc1e08c35fbdeeb52d8b3",
+  "last_trigger_hash": "97b4b083447cf55464764a49b86ac44ea652a0f65960f7cce0436aea6d89c6e1",
   "analysed_activity_ids": [
     "20367593813",
     "20350203020",
