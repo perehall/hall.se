@@ -759,7 +759,26 @@ def _day_html(
     )
 
 
-def _week_summary(week, relation: str, forward) -> str:
+def _summary_sport_key(value: str) -> str:
+    raw = str(value or "").strip().lower()
+    aliases = {
+        "running": "run",
+        "trailrun": "run",
+        "virtualrun": "run",
+        "swimming": "swim",
+        "ride": "bike",
+        "virtualride": "bike",
+        "mountainbikeride": "bike",
+        "mtb": "bike",
+        "xc": "bike",
+        "weighttraining": "strength",
+        "strength_training": "strength",
+        "emountainbikeride": "enduro",
+    }
+    return aliases.get(raw, raw)
+
+
+def _week_summary(week, relation: str, forward, current_date: date) -> str:
     if relation == "past":
         bits = [f"{week.completed_count} pass"]
         if week.completed_count and week.actual_duration_s:
@@ -768,13 +787,71 @@ def _week_summary(week, relation: str, forward) -> str:
             bits.append(week.actual_distance)
         return " · ".join(bits)
 
-    if week.planned_count > 0:
+    if relation == "current":
+        # Current week is a hybrid of fact and plan:
+        # - completed activities are the truth for elapsed days,
+        # - today's still-unmatched planned sessions remain part of the week,
+        # - future planned sessions remain part of the week.
+        # This prevents old planned rows from being double-counted after a
+        # spontaneous/replacement workout while keeping genuine multi-pass days.
+        total = 0
+        key_count = 0
+        sport_counts = {}
+
+        def add_sport(value: str) -> None:
+            sport = _summary_sport_key(value)
+            if sport:
+                sport_counts[sport] = sport_counts.get(sport, 0) + 1
+
+        for day in week.days:
+            actual_counts = {}
+            for activity in day.actual_activities:
+                total += 1
+                sport = _summary_sport_key(activity.sport_family)
+                if sport:
+                    sport_counts[sport] = sport_counts.get(sport, 0) + 1
+                    actual_counts[sport] = actual_counts.get(sport, 0) + 1
+
+            if day.local_date < current_date:
+                # Past plan rows are historical intent, not remaining weekly load.
+                # Match only to preserve key-session classification where possible.
+                for workout in day.planned_workouts:
+                    sport = _summary_sport_key(workout.sport)
+                    if actual_counts.get(sport, 0) > 0:
+                        actual_counts[sport] -= 1
+                        if workout.priority_role == "anchor":
+                            key_count += 1
+                continue
+
+            if day.local_date == current_date:
+                # An actual session replaces one same-sport planned session.
+                # Additional planned sessions of another sport (or an extra
+                # same-sport session) remain counted as outstanding.
+                for workout in day.planned_workouts:
+                    sport = _summary_sport_key(workout.sport)
+                    if actual_counts.get(sport, 0) > 0:
+                        actual_counts[sport] -= 1
+                        if workout.priority_role == "anchor":
+                            key_count += 1
+                        continue
+                    total += 1
+                    add_sport(workout.sport)
+                    if workout.priority_role == "anchor":
+                        key_count += 1
+                continue
+
+            for workout in day.planned_workouts:
+                total += 1
+                add_sport(workout.sport)
+                if workout.priority_role == "anchor":
+                    key_count += 1
+    elif week.planned_count > 0:
         workouts = list(week.planned_workouts)
         total = len(workouts)
         key_count = sum(item.priority_role == "anchor" for item in workouts)
         sport_counts = {}
         for item in workouts:
-            sport = str(item.sport or "").lower()
+            sport = _summary_sport_key(item.sport)
             sport_counts[sport] = sport_counts.get(sport, 0) + 1
     elif forward is not None and forward.planning_level == "preliminary":
         slots = list(forward.slots)
@@ -782,7 +859,7 @@ def _week_summary(week, relation: str, forward) -> str:
         key_count = sum(slot.role == "primary" for slot in slots)
         sport_counts = {}
         for slot in slots:
-            sport = str(slot.sport or "").lower()
+            sport = _summary_sport_key(slot.sport)
             sport_counts[sport] = sport_counts.get(sport, 0) + 1
     else:
         return "Riktning efter blockreview"
@@ -790,13 +867,17 @@ def _week_summary(week, relation: str, forward) -> str:
     bits = [f"{total} pass"]
     if key_count:
         bits.append(f"{key_count} nyckelpass")
-    for sport, label in (("swim", "sim"), ("strength", "styrka"), ("bike", "cykel"), ("enduro", "enduro")):
+    for sport, label in (
+        ("run", "löp"),
+        ("swim", "sim"),
+        ("bike", "cykel"),
+        ("strength", "styrka"),
+        ("enduro", "enduro"),
+    ):
         count = sport_counts.get(sport, 0)
         if count:
             bits.append(f"{count} {label}")
-        if len(bits) >= 4:
-            break
-    return " · ".join(bits[:4])
+    return " · ".join(bits)
 
 
 def _week_focus(model: TrainingOverviewReadModel, week, forward, blueprint, expected) -> str:
@@ -868,7 +949,7 @@ def _week_html(
         status = "Öppen"
         status_class = "open"
 
-    summary = _week_summary(week, relation, forward)
+    summary = _week_summary(week, relation, forward, current_date)
     focus = _week_focus(model, week, forward, blueprint, expected)
 
     if relation == "future" and week.planned_count == 0 and forward is not None:
