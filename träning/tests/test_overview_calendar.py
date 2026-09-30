@@ -607,6 +607,19 @@ class TrainingOverviewTests(unittest.TestCase):
         self.assertIn("overview-detail-prescription-dose", document)
         self.assertIn("overview-detail-prescription-text", document)
         self.assertIn("fillPrescription(trigger.dataset.prescription)", document)
+        self.assertIn(
+            ".overview-detail-prescription{margin:0;padding:14px 0 15px;border:0;border-bottom:1px solid var(--line-soft);border-radius:0;background:transparent}",
+            document,
+        )
+        self.assertIn(
+            ".overview-detail-prescription-grid{display:grid;grid-template-columns:80px minmax(0,1fr)",
+            document,
+        )
+        self.assertIn(".overview-detail-prescription-row{display:contents}", document)
+        self.assertNotIn(
+            ".overview-detail-prescription{margin-top:16px;padding:14px 14px 12px;border:1px solid var(--line)",
+            document,
+        )
 
     def test_renderer_applies_compact_scan_first_ui_contract(self):
         model = self.build()
