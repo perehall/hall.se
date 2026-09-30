@@ -1164,6 +1164,66 @@ def render_overview_document(
     )
     start_label = f"{model.start.day} {MONTH_SHORT[model.start.month - 1]}"
     end_label = f"{model.end.day} {MONTH_SHORT[model.end.month - 1]} {model.end.year}"
+
+    detail_dialog = (
+        '<dialog class="overview-detail" id="overview-detail" aria-labelledby="overview-detail-title">'
+        '<div class="overview-detail-shell">'
+        '<div class="overview-detail-head"><div>'
+        '<span id="overview-detail-status">Passdetalj</span>'
+        '<h2 id="overview-detail-title">Pass</h2>'
+        '</div><button class="overview-detail-close" type="button" aria-label="Stäng">×</button></div>'
+        '<div class="overview-detail-grid">'
+        '<div class="overview-detail-row" data-detail-row="full-session"><span>Pass</span><p></p></div>'
+        '<div class="overview-detail-row" data-detail-row="role"><span>Roll</span><p></p></div>'
+        '<div class="overview-detail-row" data-detail-row="development"><span>Utveckling</span><p></p></div>'
+        '<div class="overview-detail-row" data-detail-row="baseline"><span>Bas</span><p></p></div>'
+        '<div class="overview-detail-row" data-detail-row="target"><span>Villkorat nästa steg</span><p></p></div>'
+        '<div class="overview-detail-row" data-detail-row="why"><span>Varför?</span><p></p></div>'
+        '</div></div></dialog>'
+    )
+    detail_script = r"""
+<script>
+(() => {
+  const dialog = document.getElementById('overview-detail');
+  if (!dialog) return;
+  const title = document.getElementById('overview-detail-title');
+  const status = document.getElementById('overview-detail-status');
+  const rows = {
+    fullSession: dialog.querySelector('[data-detail-row="full-session"]'),
+    role: dialog.querySelector('[data-detail-row="role"]'),
+    development: dialog.querySelector('[data-detail-row="development"]'),
+    baseline: dialog.querySelector('[data-detail-row="baseline"]'),
+    target: dialog.querySelector('[data-detail-row="target"]'),
+    why: dialog.querySelector('[data-detail-row="why"]')
+  };
+  const fill = (row, value) => {
+    const text = (value || '').trim();
+    row.hidden = !text;
+    const p = row.querySelector('p');
+    if (p) p.textContent = text;
+  };
+  document.addEventListener('click', (event) => {
+    const trigger = event.target.closest('[data-overview-detail]');
+    if (!trigger) return;
+    title.textContent = trigger.dataset.title || 'Pass';
+    status.textContent = trigger.dataset.status || 'Passdetalj';
+    fill(rows.fullSession, trigger.dataset.fullSession);
+    fill(rows.role, trigger.dataset.role);
+    fill(rows.development, trigger.dataset.development);
+    fill(rows.baseline, trigger.dataset.baseline);
+    fill(rows.target, trigger.dataset.target);
+    fill(rows.why, trigger.dataset.why);
+    if (typeof dialog.showModal === 'function') dialog.showModal();
+    else dialog.setAttribute('open', '');
+  });
+  dialog.querySelector('.overview-detail-close').addEventListener('click', () => dialog.close());
+  dialog.addEventListener('click', (event) => {
+    if (event.target === dialog) dialog.close();
+  });
+})();
+</script>
+"""
+
     return (
         '<!doctype html><html lang="sv"><head><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width,initial-scale=1">'
@@ -1178,12 +1238,14 @@ def render_overview_document(
         '<header class="overview-hero"><div>'
         '<div class="overview-kicker">Coachens planeringsyta</div>'
         '<h1>Översikt</h1>'
-        '<p>Åtta veckor i samma vy. Plan och utfall visas sida vid sida så att rytm, '
-        'multipass, vilodagar, planeringshorisont och koppling till utvecklingsblocket går att granska utan att lämna kalendern.</p>'
+        '<p>2 veckor bakåt · aktuell vecka · 5 veckor framåt</p>'
         '</div>'
         f'<span class="overview-range">{_e(start_label)} – {_e(end_label)}</span></header>'
         f'{_context_html(model)}'
         f'<main class="overview-calendar" aria-label="Åtta veckors träningsöversikt">{weeks}</main>'
         f'{_review_html(model)}'
-        '</div></body></html>'
+        f'{detail_dialog}'
+        '</div>'
+        f'{detail_script}'
+        '</body></html>'
     )
