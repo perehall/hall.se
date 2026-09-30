@@ -1326,11 +1326,10 @@ def completed_microcycle_context(athlete_state, target_start):
     for capability, facts in (athlete_state.get("capability_facts") or {}).items():
         if not isinstance(facts, dict):
             continue
+        # Only explicitly capability-labelled evidence belongs in
+        # direct_capabilities. Generic longest-distance/duration facts are
+        # descriptive sport history and must not silently become physiology.
         evidence_rows = list(facts.get("evidence") or [])
-        for field in ("longest_distance", "longest_duration"):
-            item = facts.get(field)
-            if isinstance(item, dict):
-                evidence_rows.append(item)
         for item in evidence_rows:
             if not isinstance(item, dict):
                 continue
@@ -1406,7 +1405,7 @@ def completed_microcycle_context(athlete_state, target_start):
         "activity_refs": sorted(activity_ids),
         "evidence_note": (
             "Familjeexponeringar kommer från faktiskt registrerade aktiviteter i målveckan. "
-            "Direct_capabilities kräver daterad fysiologisk/kapabilitetsevidens. Planning_credits kan dessutom "
+            "Direct_capabilities kräver explicit daterad kapabilitetsevidens. Planning_credits kan dessutom "
             "komma från en durabel, entydig strukturell match mot ett närliggande planerat intent och används "
             "för att undvika redundant framtida ordination utan att påstå mer fysiologi än underlaget stödjer."
         ),
