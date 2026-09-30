@@ -939,6 +939,27 @@ class AdaptivePlanningTests(unittest.TestCase):
             [row["recipe_key"] for row in result["slots"]],
         )
 
+    def test_future_develop_fallback_satisfies_its_own_structural_guards(self):
+        meso = json.loads(
+            (ROOT / "data" / "mesocycle_decision.json").read_text(encoding="utf-8")
+        )
+        result = fallback_microcycle(
+            meso,
+            self.policy,
+            self.catalog,
+            date(2026, 10, 5),
+            completed_context={},
+        )
+        failures = microcycle_guard_failures(
+            result,
+            meso,
+            self.policy,
+            self.catalog,
+            date(2026, 10, 5),
+            completed_context={},
+        )
+        self.assertFalse(failures, msg=json.dumps(result, ensure_ascii=False, indent=2))
+
     def test_future_enduro_develop_week_requires_one_but_not_two_secondary_sessions(self):
         meso = json.loads(
             (ROOT / "data" / "mesocycle_decision.json").read_text(encoding="utf-8")
