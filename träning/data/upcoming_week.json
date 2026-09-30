@@ -199,7 +199,7 @@
       "date": "2026-10-06",
       "label": "Tisdag",
       "sport": "swim",
-      "reason": "Dag efter fast enduro kräver låg benbelastning; konsolidera teknisk/aerob simbassession enligt mesocykel. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: consolidate; materialiserad relation: hold.",
+      "reason": "Dag efter fast enduro ska ha låg benbelastning; konsolidera teknisk/aerob simbassession enligt mesocykelns hypotes och undvik volymprogression pga senaste swim RPE8‑signal. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: consolidate; materialiserad relation: hold.",
       "status": "preliminary",
       "session": "Simning · 3 200 m · aerob/teknik",
       "stimuli": [
@@ -565,7 +565,7 @@
       "date": "2026-10-07",
       "label": "Onsdag",
       "sport": "strength",
-      "reason": "Skydda minst en styrke/core‑session denna mikrocykel enligt policy och mesocykel‑guardrail. Dosgolvet utgår från absorberad nivå 33.57 i athlete_state.dose_response, inte från högsta genomförda värde. Veckobeslut: establish; materialiserad relation: hold.",
+      "reason": "Skydda minst en styrke/core‑session per mikrocykel; placeras med relativt fräscha ben för mekanisk nytta. Dosgolvet utgår från absorberad nivå 33.57 i athlete_state.dose_response, inte från högsta genomförda värde. Veckobeslut: establish; materialiserad relation: hold.",
       "status": "preliminary",
       "session": "Styrka/core · 25 min · styrkemall",
       "stimuli": [
@@ -935,7 +935,7 @@
       "date": "2026-10-08",
       "label": "Torsdag",
       "sport": "run",
-      "reason": "Konsolidera absorberad löptröskel (32 min); progression ej vald då progression_ready=false och 72h‑fönster ej komplett. Dosgolvet utgår från absorberad nivå 32 i athlete_state.dose_response, inte från högsta genomförda värde. Veckobeslut: consolidate; materialiserad relation: hold.",
+      "reason": "Bibehåll absorberad tröskel (32 min arbetstid) utan progression — 72h‑stöd är ej komplett; undvik att flytta tröskel nära enduro eller andra tunga löppass. Dosgolvet utgår från absorberad nivå 32 i athlete_state.dose_response, inte från högsta genomförda värde. Veckobeslut: consolidate; materialiserad relation: hold.",
       "status": "preliminary",
       "session": "Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg",
       "stimuli": [
@@ -1281,7 +1281,7 @@
       "date": "2026-10-09",
       "label": "Fredag",
       "sport": "swim",
-      "reason": "Andra simbassessionen i veckan — aerobic endurance‑variant för variation och stabilisering enligt mesocykel. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: consolidate; materialiserad relation: hold.",
+      "reason": "Andra simbassessionen i veckan med annan development_character (aerobic_endurance) för att uppfylla normal_swim_exposures=2 och undvika mekanisk repetition av samma passtyp. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: consolidate; materialiserad relation: hold.",
       "status": "preliminary",
       "session": "Simning · 3 200 m · aerob uthållighet",
       "stimuli": [
@@ -1755,7 +1755,7 @@
       "date": "2026-10-10",
       "label": "Lördag",
       "sport": "run",
-      "reason": "Lugn längre löpning för hållbarhet/tålighet placerad så att den inte ligger intill tröskel eller MTB och inte på söndagen före måndagens fasta enduro. Dosgolvet utgår från absorberad nivå 116 i athlete_state.dose_response, inte från högsta genomförda värde. Veckobeslut: establish; materialiserad relation: hold.",
+      "reason": "Lugn, längre löpning för löptålighet och allround‑underhåll; placerad på lördag (dag 6) för att undvika tung benbelastning på söndagen och för att inte ligga intill tröskel (ej daglig adjacens). Dosgolvet utgår från absorberad nivå 116 i athlete_state.dose_response, inte från högsta genomförda värde. Veckobeslut: establish; materialiserad relation: hold.",
       "status": "preliminary",
       "session": "Löpning · lugn distans · 105 min",
       "stimuli": [

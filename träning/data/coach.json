@@ -7,17 +7,17 @@
           "Löpning · 4 × 8 min: 13,14 km · 1:02:35 · 112 m+ · snittpuls 146,1 · maxpuls 162.",
           "Användarrapport: Spontant löppass: 4 × 8 min / 90 s joggvila. Samma 4 × 8/90-struktur som veckans planerade kontrollerade löptröskel. Spontant löppass: 4 × 8 min / 90 s joggvila. Samma 4 × 8/90-struktur som veckans planerade kontrollerade löptröskel. Bra kontroll, kände mig stark RPE 6/10. Känsla: Starka ben."
         ],
-        "summary": "Genomfört spontan 4×8/90-tröskelstruktur med god kontroll och RPE 6/10; stark känsla i benen och stabil pulsrespons i intervallblocken.",
+        "summary": "Genomfört spontant 4×8 min (32 min arbetstid) med god kontroll och RPE 6/10; snabbare km-lappar visar konsekvent genomförande.",
         "unknowns": [
-          "24–72h‑respons (återhämtningsunderlaget/åkänsla) efter detta pass är ännu ej rapporterad.",
-          "Detaljer om inom‑intervall intensitetsmål kontra planerat tröskelintensitet saknas."
+          "Exakt 24–72 h‑respons efter passet (trötthet nästa dag) saknas.",
+          "Om användaren har lokal muskelömhet som inte rapporterats kan det påverka styrkeplanen."
         ],
         "confidence": "medium",
         "interpretations": [
-          "Passet bekräftar att löptröskel‑struktur på 4×8 genomfördes kontrollerat och tolererades väl i sessionen, vilket är relevant för att hålla run_threshold som planerat.",
-          "Eftersom föregående 48–72h redan innehöll enduro, styrka och ett tungt trailpass bör nästa två dagar övervakas men kräver inte automatiskt reduktion utan konservativt behållande av simanchorn."
+          "Passet bekräftar att 4×8/90 (32 min) kan genomföras kontrollerat och stödjer bevarande av run_threshold-stimulus.",
+          "Givet senaste 72‑timmars mix (enduro + styrka + terräng) är ingen akut reduktion nödvändig, men simningen planerad 2026-09-30 bör behållas som lågmekanisk enligt mesocykel."
         ],
-        "load_interpretation": "Inget som talar för att planerade simpass i morgon behöver tas bort; senaste 48–72h innehåller flera benbelastande pass men inga varningssignaler kräver vila."
+        "load_interpretation": "Närbelastning sista 72 h innehåller enduro, styrka och lång terränglöpning; inget som kräver omedelbar vila men skyddade simpass står kvar."
       },
       "auto_apply": {
         "note": "Ingen automatisk planändring.",
@@ -26,16 +26,16 @@
       "activity_id": 20381137043,
       "plan_action": {
         "action": "keep",
-        "reason": "Senaste passet var kontrollerat och tolererades väl samma dag utan varningssignaler i 48–72h‑fönstret.",
+        "reason": "Passet genomförde avsett run_threshold‑arbete utan varningssignal och mesocykel prioriterar simning som anchor.",
         "target_date": "2026-09-30",
         "dose_option_id": "",
-        "recommendation": "Behåll planerad simning 2026-09-30 3 200 m; håll intensiteten aerob och var beredd att reducera till alternativ 3 200→3 200/konservativt om subjektiv trötthet uppstår morgonen efter.",
+        "recommendation": "Behåll planerad simning 2026-09-30 (3 200 m, mekanisk kostnad). Om du känner ömhet eller ökad trötthet nästa dag, meddela så att dosen kan reduceras.",
         "requires_approval": false,
         "target_workout_key": "20260928-run_threshold-swim_aerobic-swim_technique:mc1:2026-09-30:swim_aerobic_endurance_1"
       },
       "activity_date": "2026-09-29",
       "activity_name": "Löpning på eftermiddagen",
-      "generated_at_utc": "2026-09-30T06:15:15.199671+00:00",
+      "generated_at_utc": "2026-09-30T06:44:25.249589+00:00",
       "analysis_contract": {
         "pipeline_version": 4,
         "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
@@ -1370,9 +1370,9 @@
       "performance_protocol_key": null
     }
   ],
-  "last_run_utc": "2026-09-30T06:15:15.199671+00:00",
+  "last_run_utc": "2026-09-30T06:44:25.249589+00:00",
   "contract_version": 16,
-  "last_trigger_hash": "52d13795e6b1c9d3ce0cd8e5f005803c06e7aa2fef7e09818f49ecade3da9805",
+  "last_trigger_hash": "55fa29afd1852ac71195b3284ac0f8266066b08066834ddfaa0b764cb228ea62",
   "analysed_activity_ids": [
     "20367593813",
     "20350203020",
