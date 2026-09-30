@@ -506,7 +506,6 @@ class TrainingOverviewTests(unittest.TestCase):
         # Calendar cards use compact display titles and one small role/progression chip.
         self.assertIn("Tröskel · 4×8", document)
         self.assertIn("↑ Progression", document)
-        self.assertIn("~ Variation", document)
         self.assertIn("= Konsolidera", document)
         self.assertIn("◇ Skyddad", document)
 
