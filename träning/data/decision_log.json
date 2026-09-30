@@ -840,6 +840,22 @@
       "source_hash": "e7f9c1aebef46d4a05a89eb3f73cdadfdc911398429d16e72d8ad0fd27a43cc5",
       "generated_at_utc": "2026-09-30T19:21:22.074252+00:00",
       "summary": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern."
+    },
+    {
+      "kind": "microcycle",
+      "decision_id": "2026-W40",
+      "source": "openai_repaired",
+      "source_hash": "824961d8899742ac5eb57107f24fe9265d1cb62bdbdad647ea55e02cd6e1cc75",
+      "generated_at_utc": "2026-09-30T19:42:44.675924+00:00",
+      "summary": "Ta bort duplicerad run_threshold-slot och minska koncentrationen av löpkvalitet nära redan genomförda pass och fasta endurodagar. Behåll två simbassessioner totalt (en redan genomförd + en planerad teknisk/aerob session), skydda styrka/core (redan krediterad), och bevara MTB som sekundär kapacitet. Placera inga nya pass på stängda dagar (1–2) eller som skapar intilliggande löpstressorer; välj reducerad back‑exponering framför ytterligare tröskelprogression."
+    },
+    {
+      "kind": "upcoming_microcycle",
+      "decision_id": "2026-W41",
+      "source": "openai_repaired",
+      "source_hash": "e81edbad4f8c348f1a3514bbdd487e6499329a197e1e5508590edea329ba5c89",
+      "generated_at_utc": "2026-09-30T19:43:58.538602+00:00",
+      "summary": "Åtgärd: eliminera konflikt (tung benbelastning på söndag före måndagens fasta enduro) genom att flytta det lugna trail‑löppasset från dag 7 till dag 6. Behåller övriga val (2×sim, styrka/core, korta tröskelreps) enligt current_microcycle_blueprint; inga dosprogressioner eftersom progression_ready=false för primära kapaciteter."
     }
   ]
 }

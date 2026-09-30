@@ -1,42 +1,62 @@
 {
   "slots": [
     {
-      "action": "consolidate",
+      "action": "reduce",
       "day_index": 4,
-      "rationale": "Lågmekanisk simexponering dagen efter fast enduro följer blockets planerade passkaraktär utan att anta att benen är redo för ny benkvalitet.",
+      "rationale": "Minska mängden backkvalitet denna vecka för att undvika överkoncentration av löpkvalitet i kombination med fasta enduro‑pass och nyliga backsessioner; bevaka 24–72h‑signal före framtida konsolidering eller progression.",
+      "recipe_key": "run_hill_quality",
+      "evidence_refs": [
+        "20326850936",
+        "20229568713"
+      ]
+    },
+    {
+      "action": "establish",
+      "day_index": 5,
+      "rationale": "Fullfölja veckans normala två simbassessioner med teknisk/aerob inriktning på konservativ nivå; undvik progression pga senaste sim‑caution.",
       "recipe_key": "swim_aerobic_technique",
       "evidence_refs": [
-        "mesocycle.primary_capabilities"
+        "20300494236",
+        "20337309419"
+      ]
+    },
+    {
+      "action": "establish",
+      "day_index": 6,
+      "rationale": "Lägga ett lugnt, terrängspecifikt tålighetspass istället för ytterligare tröskel/backkvalitet för att stödja run‑kapacitet utan att öka löpkvalitetskoncentrationen eller skapa intilliggande stressorer.",
+      "recipe_key": "run_easy_trail",
+      "evidence_refs": [
+        "20381137043",
+        "20350203020"
       ]
     },
     {
       "action": "consolidate",
-      "day_index": 5,
-      "rationale": "Blockets preliminära grundplan föreslår denna stödjande passkaraktär; den tas bara med när ingen redan planerad exponering fyller samma stödroll och belastningsordningen tillåter.",
-      "recipe_key": "run_hill_quality",
+      "day_index": 7,
+      "rationale": "Behålla MTB/aerob uthållighet som skyddad sekundär kapacitet utan att kompromettera löppasset; konsoliderande karaktär efter veckans tröskel/terrängplanering.",
+      "recipe_key": "mtb_aerobic_endurance",
       "evidence_refs": [
-        "planning_policy.microcycle_policy"
+        "20314473143",
+        "20367593813"
       ]
     }
   ],
-  "source": "deterministic_fallback_after_repair_guard",
+  "source": "openai_repaired",
   "week_key": "2026-W40",
-  "rationale": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern.",
+  "rationale": "Ta bort duplicerad run_threshold-slot och minska koncentrationen av löpkvalitet nära redan genomförda pass och fasta endurodagar. Behåll två simbassessioner totalt (en redan genomförd + en planerad teknisk/aerob session), skydda styrka/core (redan krediterad), och bevara MTB som sekundär kapacitet. Placera inga nya pass på stängda dagar (1–2) eller som skapar intilliggande löpstressorer; välj reducerad back‑exponering framför ytterligare tröskelprogression.",
   "week_start": "2026-09-28",
-  "source_hash": "2b02428f32fc2aae46d3e1819e1f1f6672f4084bc338876329b5492bc5860ad4",
+  "source_hash": "824961d8899742ac5eb57107f24fe9265d1cb62bdbdad647ea55e02cd6e1cc75",
   "guard_repair": {
-    "result": "fallback",
+    "result": "accepted",
     "attempted": true,
-    "repair_failures": [
-      "tung benbelastning får inte planeras på söndagen direkt före nästa fasta enduro: mtb_technical"
-    ],
     "initial_failures": [
-      "tung benbelastning får inte planeras på söndagen direkt före nästa fasta enduro: run_easy_trail"
+      "run_threshold är redundant: primärt stimulus är redan faktiskt genomfört i mikrocykeln run_threshold",
+      "för hög förhandskoncentration av benkvalitet: 3 löpkvalitet + 0 reserverad fast enduro > 2. Framtida enduro ska räknas som verklig belastning tills utfallet är känt."
     ]
   },
   "mesocycle_id": "20260928-run_threshold-swim_aerobic-swim_technique",
   "schema_version": 1,
-  "generated_at_utc": "2026-09-30T19:19:45.674318+00:00",
+  "generated_at_utc": "2026-09-30T19:42:44.675924+00:00",
   "planner_revision": 17,
   "competition_context": {
     "as_of": "2026-09-28",
