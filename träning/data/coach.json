@@ -7,17 +7,17 @@
           "Löpning · 4 × 8 min: 13,14 km · 1:02:35 · 112 m+ · snittpuls 146,1 · maxpuls 162.",
           "Användarrapport: Spontant löppass: 4 × 8 min / 90 s joggvila. Samma 4 × 8/90-struktur som veckans planerade kontrollerade löptröskel. Spontant löppass: 4 × 8 min / 90 s joggvila. Samma 4 × 8/90-struktur som veckans planerade kontrollerade löptröskel. Bra kontroll, kände mig stark RPE 6/10. Känsla: Starka ben."
         ],
-        "summary": "Genomfört spontant 4×8 min (≈13.1 km, snittpuls 146) med god kontroll och RPE 6/10; starka ben enligt användaren.",
+        "summary": "Genomfört spontant 4×8 min (90 s jogg) med stabil kontroll och RPE 6/10; snittpuls 146 bpm och flera 1‑km‑lappar runt 4:17–4:23 visar kontrollerad arbetskvalitet.",
         "unknowns": [
-          "Exakt intensitet i varje 8‑min‑rep kan inte verifieras ur short_intervals (structured=false).",
-          "24–72h återhämtningsrespons efter kombinationen (enduro+styrka+tröskel) är ännu inte observerad."
+          "24–72 h återhämtningsrespons (subjektivt nästa dag)",
+          "exakt intern belastningssammanslagning med föregående enduro+styrka under 48 h"
         ],
         "confidence": "medium",
         "interpretations": [
-          "Passet bekräftar att du kan genomföra tröskel‑liknande 4×8min med god kontroll och RPE 6, vilket stödjer fortsatt konservativ konsolidering av run_threshold.",
-          "Föregående två dagar innehöll teknisk enduro och styrka plus ett tungt terrängpass tidigare i veckan; därför bör kommande planerade simning i morgon inte trappas upp utan hållas enligt recept."
+          "Passet bekräftar förmåga att genomföra planerad 4×8/90‑struktur med god kontroll och RPE 6, vilket stödjer att träskelstimulus absorberades denna session.",
+          "Eftersom detta pass duplicerar veckans prioriterade run_threshold‑stimulus bör kommande 48–72 h‑fönster beaktas innan eventuell progression eller ytterligare hård löpning."
         ],
-        "load_interpretation": "Inget omedelbart behov att avbryta plan; passet ligger nära planerad tröskelstruktur men var spontant och följdes av två dagar med annan belastning."
+        "load_interpretation": "Passet är ett kompletterande kontrollerat tröskelstimulus som ligger nära veckans planerade löpjobb och tolererades väl samma dag."
       },
       "auto_apply": {
         "note": "Ingen automatisk planändring.",
@@ -26,16 +26,16 @@
       "activity_id": 20381137043,
       "plan_action": {
         "action": "keep",
-        "reason": "Passet tolererades väl men föregående dagar hade betydande benbelastning, så planens simsession bör hållas konservativt enligt blueprint.",
+        "reason": "Mikrocykelns sim‑anchor bör genomföras; senaste löppasset var kontrollerat och tolererades väl samma dag.",
         "target_date": "2026-09-30",
         "dose_option_id": "",
-        "recommendation": "Behåll morgondagens simning 3 200 m enligt plan (ingen volymökning). Säg till om du känner ovanlig trötthet eller smärta innan simpasset så omprövar vi.",
+        "recommendation": "Fortsätt enligt plan: genomför simning 3 200 m som planerat i morgon; håll simmen teknisk/aerob och undvik högre intensitet. Utvärdera återhämtning morgondagen innan du gör ändring.",
         "requires_approval": false,
         "target_workout_key": "20260928-run_threshold-swim_aerobic-swim_technique:mc1:2026-09-30:swim_aerobic_skills_1"
       },
       "activity_date": "2026-09-29",
       "activity_name": "Löpning på eftermiddagen",
-      "generated_at_utc": "2026-09-30T14:35:23.441056+00:00",
+      "generated_at_utc": "2026-09-30T16:34:33.288636+00:00",
       "analysis_contract": {
         "pipeline_version": 4,
         "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
@@ -1370,9 +1370,9 @@
       "performance_protocol_key": null
     }
   ],
-  "last_run_utc": "2026-09-30T14:35:23.441056+00:00",
+  "last_run_utc": "2026-09-30T16:34:33.288636+00:00",
   "contract_version": 16,
-  "last_trigger_hash": "e9e57afc4387bbce4a7f7b5bd30ee6a97e8ab0f510c1fa6b8e9280a843622539",
+  "last_trigger_hash": "8dd1150e77d187e669069ba6b6929147274a68274b8de3c8e62ec959c1fcb6fd",
   "analysed_activity_ids": [
     "20367593813",
     "20350203020",
