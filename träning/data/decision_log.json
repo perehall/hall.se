@@ -712,6 +712,22 @@
       "source_hash": "5a4f3fa20b33acf83cc2086a5ff26c48778ef71b6384809ecd328a97aed7860a",
       "generated_at_utc": "2026-09-30T07:53:17.012681+00:00",
       "summary": "Ta bort tung MTB på dag 7 och minska förkoncentration av benkvalitet genom att byta ut planerat run_hill_quality mot run_easy_distance. Behåll två simbassessioner, skyddad styrka/core och konsoliderad run_threshold. Detta eliminerar identifierade guard_failures (söndags-MTB före enduro och 3 samtidiga benkvalitetsstressorer) samt respekterar dag‑2 låg benbelastning och förbud mot intilliggande löpkvaliteter."
+    },
+    {
+      "kind": "microcycle",
+      "decision_id": "2026-W40",
+      "source": "deterministic_fallback_after_repair_guard",
+      "source_hash": "574a6c7c78479f97100475786092e1c772d024dadec2017d678ec08d64d7acf9",
+      "generated_at_utc": "2026-09-30T08:27:05.952033+00:00",
+      "summary": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern."
+    },
+    {
+      "kind": "upcoming_microcycle",
+      "decision_id": "2026-W41",
+      "source": "openai_repaired",
+      "source_hash": "3305a00ea796dbbfc5507b15e30506ca42d7ddf1ff7a62f57d0aecd53509e485",
+      "generated_at_utc": "2026-09-30T08:27:46.220889+00:00",
+      "summary": "Reparera konflikter genom att flytta löppasset från söndag (dag 7) till lördag (dag 6) och byta plats på veckans andra simbassession så att inga tunga benbelastningar hamnar dagen före fast måndags‑enduro. Behåller blueprint‑intentioner, två simbassessioner och skyddad styrka; avstår progression för tröskel enligt dose_response."
     }
   ]
 }
