@@ -132,13 +132,42 @@ def archived_planned_workouts(*, today=None, lookback_days=LOOKBACK_DAYS, weeks_
 
     for path in sorted(weeks_dir.glob("????-W??.json")):
         document = load_json(path, {})
+        workouts = []
         try:
             workouts = canonical_planned_workouts(
                 document,
                 context=f"athlete-state archive {path.name}",
             )
         except Exception:
-            continue
+            workouts = []
+
+        # Archives created before canonical planned_workouts was introduced keep
+        # an explicit immutable legacy_plan_days collection. Using that
+        # collection for retrospective evidence migration is safe: it stores
+        # the actual historical session, sport and stimuli that were published
+        # at the time. We never infer workouts from generic calendar days.
+        if not workouts:
+            for index, row in enumerate(document.get("legacy_plan_days") or []):
+                if not isinstance(row, dict):
+                    continue
+                sport = str(row.get("sport") or "").strip().lower()
+                session = str(row.get("session") or "").strip()
+                date_value = str(row.get("date") or "").strip()
+                stimuli = [
+                    str(value)
+                    for value in (row.get("stimuli") or [])
+                    if str(value).strip()
+                ]
+                if not date_value or not session or sport in {"", "open", "rest"} or not stimuli:
+                    continue
+                migrated = dict(row)
+                migrated["workout_key"] = (
+                    str(row.get("workout_key") or "").strip()
+                    or f"archive:{path.stem}:legacy:{date_value}:{index + 1}"
+                )
+                migrated["archive_evidence_source"] = "legacy_plan_days"
+                workouts.append(migrated)
+
         for workout in workouts:
             try:
                 day = date.fromisoformat(str(workout.get("date") or ""))
