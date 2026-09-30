@@ -2035,6 +2035,8 @@ def build_forward_planning_horizon(
                     }
                     for key in FIXED_PROTECTED_CAPACITY
                     if key in CAPABILITY_REGISTRY
+                    and key not in primary
+                    and key not in secondary
                 ],
                 "decision_gate": (
                     f"Ny mesocykel beslutas tidigast vid checkpoint {meso.get('evaluation_date')}. "
