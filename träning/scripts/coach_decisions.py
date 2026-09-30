@@ -131,54 +131,97 @@ def diff_planned_workouts(before_plan: dict, after_plan: dict) -> list[dict]:
         )
     )
     after_by_key = _identity_candidates(after)
+    used_before = set()
     used_after = set()
     changes = []
 
-    for old in before:
+    # First pass: stable workout identity. This is the only basis on which a
+    # calendar move may be called a reschedule.
+    for old_index, old in enumerate(before):
         key = _workout_key(old)
         matches = [
             index for index in after_by_key.get(key, [])
             if index not in used_after
         ]
-        if matches:
-            index = min(
-                matches,
-                key=lambda value: abs(
-                    (
-                        date.fromisoformat(str(after[value].get("date")))
-                        - date.fromisoformat(str(old.get("date")))
-                    ).days
-                )
-                if old.get("date") and after[value].get("date")
-                else 999,
-            )
-            new = after[index]
-            used_after.add(index)
-            old_snapshot = _workout_snapshot(old)
-            new_snapshot = _workout_snapshot(new)
-            if old_snapshot == new_snapshot:
-                continue
-            moved = old_snapshot["date"] != new_snapshot["date"]
-            recipe_changed = (
-                old_snapshot["recipe_key"] != new_snapshot["recipe_key"]
-                or old_snapshot["session"] != new_snapshot["session"]
-            )
-            change_type = (
-                "replaced"
-                if recipe_changed
-                else "rescheduled"
-                if moved
-                else "modified"
-            )
-            changes.append(
-                {
-                    "change_type": change_type,
-                    "before": old_snapshot,
-                    "after": new_snapshot,
-                }
-            )
+        if not matches:
             continue
+        index = min(
+            matches,
+            key=lambda value: abs(
+                (
+                    date.fromisoformat(str(after[value].get("date")))
+                    - date.fromisoformat(str(old.get("date")))
+                ).days
+            )
+            if old.get("date") and after[value].get("date")
+            else 999,
+        )
+        new = after[index]
+        used_before.add(old_index)
+        used_after.add(index)
+        old_snapshot = _workout_snapshot(old)
+        new_snapshot = _workout_snapshot(new)
+        if old_snapshot == new_snapshot:
+            continue
+        moved = old_snapshot["date"] != new_snapshot["date"]
+        recipe_changed = (
+            old_snapshot["recipe_key"] != new_snapshot["recipe_key"]
+            or old_snapshot["session"] != new_snapshot["session"]
+        )
+        change_type = (
+            "replaced"
+            if recipe_changed
+            else "rescheduled"
+            if moved
+            else "modified"
+        )
+        changes.append(
+            {
+                "change_type": change_type,
+                "before": old_snapshot,
+                "after": new_snapshot,
+            }
+        )
 
+    # Second pass: a unique same-day, same-sport, overlapping-stimulus pair may
+    # be called a replacement. This supports deliberate recipe changes while
+    # failing closed for ambiguous multipass days.
+    for old_index, old in enumerate(before):
+        if old_index in used_before:
+            continue
+        old_snapshot = _workout_snapshot(old)
+        candidates = []
+        old_stimuli = set(old_snapshot.get("stimuli") or [])
+        for new_index, new in enumerate(after):
+            if new_index in used_after:
+                continue
+            new_snapshot = _workout_snapshot(new)
+            new_stimuli = set(new_snapshot.get("stimuli") or [])
+            if old_snapshot.get("date") != new_snapshot.get("date"):
+                continue
+            if str(old_snapshot.get("sport") or "").lower() != str(
+                new_snapshot.get("sport") or ""
+            ).lower():
+                continue
+            if not old_stimuli.intersection(new_stimuli):
+                continue
+            candidates.append((new_index, new_snapshot))
+        if len(candidates) != 1:
+            continue
+        new_index, new_snapshot = candidates[0]
+        used_before.add(old_index)
+        used_after.add(new_index)
+        changes.append(
+            {
+                "change_type": "replaced",
+                "before": old_snapshot,
+                "after": new_snapshot,
+            }
+        )
+
+    for old_index, old in enumerate(before):
+        if old_index in used_before:
+            continue
         changes.append(
             {
                 "change_type": "removed",
@@ -187,8 +230,8 @@ def diff_planned_workouts(before_plan: dict, after_plan: dict) -> list[dict]:
             }
         )
 
-    for index, row in enumerate(after):
-        if index in used_after:
+    for new_index, row in enumerate(after):
+        if new_index in used_after:
             continue
         changes.append(
             {
@@ -375,6 +418,8 @@ def build_coach_decisions(
             slot=slot,
             changes=affected,
         )
+        if decision == "hold" and new_state.get("progression_reason_code"):
+            reason_code = str(new_state["progression_reason_code"])
         state_changed = previous_state is not None and previous_state != new_state
         meaningful = bool(
             capability in completed
