@@ -70,6 +70,10 @@ class DayWeatherReadModel:
     wind: str
     stale: bool
     summary: str
+    temperature_min_c: float | None = None
+    temperature_max_c: float | None = None
+    precip_probability_max_pct: float | None = None
+    wind_max_ms: float | None = None
 
 
 @dataclass(frozen=True)
@@ -163,6 +167,10 @@ def _day_model(forecast, *, stale: bool) -> DayWeatherReadModel:
         wind=wind,
         stale=stale,
         summary=summary,
+        temperature_min_c=forecast.temperature_min_c,
+        temperature_max_c=forecast.temperature_max_c,
+        precip_probability_max_pct=forecast.precip_probability_max_pct,
+        wind_max_ms=forecast.wind_max_ms,
     )
 
 
