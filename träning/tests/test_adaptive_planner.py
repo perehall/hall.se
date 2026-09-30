@@ -197,7 +197,7 @@ class AdaptivePlanningTests(unittest.TestCase):
             "id": "meso-live",
             "start_date": "2026-09-28",
             "end_date": "2026-10-25",
-            "goal_hash": planning_goal_hash(self.goal),
+            "goal_hash": goal_hash(self.goal),
         }
         target, active_replan = resolve_planning_target(
             plan,
