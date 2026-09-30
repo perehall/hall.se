@@ -768,6 +768,22 @@
       "source_hash": "938ff43e928e8ca7aee0c9f5781afe0ff209eae45edf43e14e3e5d7b849334e2",
       "generated_at_utc": "2026-09-30T09:43:26.627784+00:00",
       "summary": "Behåller tidigare förslag men lägger till en absorberbar stödexponering (MTB teknik) för att åtgärda guard_failure om bristande breddsexponering. Övriga slots behålls oförändrade för att uppfylla hard_requirements (primära kapaciteter, 2×sim, minst 1 styrka/core, max löpkvaliteter) och blockets develop‑intention."
+    },
+    {
+      "kind": "microcycle",
+      "decision_id": "2026-W40",
+      "source": "openai",
+      "source_hash": "34586210958d3165301a3dbb58853af89f360048a8e0f595eba8f60c88ed4169",
+      "generated_at_utc": "2026-09-30T09:54:00.729140+00:00",
+      "summary": "Tidigare faktiska exponeringar (stärkta av completed_microcycle_context) täcker kontrollerad löptröskel och ett styrkepass i de stängda dagarna; därför upprepar vi inte run_threshold. Med hänsyn till 24–72h‑varningar i simdata undviker vi progression och planerar två konservativa simbassessioner (teknik + uthållighet) för att uppfylla mesocykelkravet om 2 simexponeringar. Styrka/core är redan dokumenterat utfört denna mikrocykel och krävs inte igen. För att bevara allroundprofilen lägger vi in ett MTB‑teknikpass och en lugn terrängdistanslöpning som underhållande/absorberbara stimuli. Alla val tar hänsyn till stängda dagar (1–2), dag‑efter‑enduro‑regel och recovery‑signaler; ingen progression väljs eftersom capability.progression_ready=false för primära axlar."
+    },
+    {
+      "kind": "upcoming_microcycle",
+      "decision_id": "2026-W41",
+      "source": "deterministic_fallback_after_repair_guard",
+      "source_hash": "6d0feb56272aa8b5483631e4792dbb5d12a81f68b8b3c25cb5c346d652990c5f",
+      "generated_at_utc": "2026-09-30T09:55:04.968977+00:00",
+      "summary": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern."
     }
   ]
 }
