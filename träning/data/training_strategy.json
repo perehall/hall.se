@@ -328,9 +328,9 @@
       "starting_state_hash": "52ff32e9ef09bd337669bbf6347085139222e7abd6a7cec41efd516a62e45cfe",
       "athlete_profile_hash": "559e0b6e5a587d351baa65817f81e04e433d0d46aac60b57a73429fd5b43d1bc",
       "mesocycle_source_hash": "9fb730125d779e8644a8486faa35467fe547c33194d479bd24aed65dfcf81994",
-      "microcycle_source_hash": "825d116240a91e6d6b5b1f73972928bb3c88c6affe532d26e37e84e969627b51",
+      "microcycle_source_hash": "2f6b849fee71effa43473073d0321982296d687c6f3b1b69ccc6e0a26a48451e",
       "mesocycle_decision_source": "openai",
-      "microcycle_decision_source": "openai_repaired"
+      "microcycle_decision_source": "deterministic_fallback_after_repair_guard"
     },
     "evaluation_date": "2026-10-26",
     "goal_basis_hash": "30201a00f8ff4f10c913b8fbf2d31052418d4e0d3812c799ca49b56a38accdf9",
@@ -470,7 +470,7 @@
       {
         "slot": "swim_aerobic_technique_1",
         "sport": "swim",
-        "reason": "Låg benbelastningsdag efter fast enduro — tekniskt aerob simbasspass som första av två veckosessioner för att prioritera teknik och låg mekanisk kostnad. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: establish; materialiserad relation: establish.",
+        "reason": "Lågmekanisk simexponering dagen efter fast enduro ger konkret plan utan att anta att benen är redo för ny benkvalitet. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: consolidate; materialiserad relation: hold.",
         "session": "Simning · 3 200 m · aerob/teknik",
         "stimuli": [
           "swim_aerobic",
@@ -589,8 +589,8 @@
           "source": "starting_state",
           "microcycle_plan": [
             {
-              "reason": "Mikrocykelbeslutet valde establish och dosen materialiserades från verifierad träningsrespons, bekräftat startläge eller konservativ katalogbas utan att höja flera belastningsvariabler samtidigt.",
-              "relation": "establish",
+              "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från verifierad träningsrespons, bekräftat startläge eller konservativ katalogbas utan att höja flera belastningsvariabler samtidigt.",
+              "relation": "hold",
               "option_id": "swim-3200",
               "microcycle": 1
             }
@@ -601,107 +601,15 @@
         "progression_ceiling_reason": "Ingen högre förgodkänd dos finns i receptkatalogen. Fortsatt utveckling kräver nytt recept eller annan progressionsaxel, inte automatisk extrapolering."
       },
       {
-        "slot": "run_hill_quality_2",
-        "sport": "run",
-        "reason": "Bibehålla neuromuskulär kraft/kvantitet utan att överskrida max löpkvaliteter; placerat så det inte ligger intill redan genomförd tröskel. Dosgolvet utgår från absorberad nivå 24 i athlete_state.dose_response, inte från högsta genomförda värde. Veckobeslut: establish; materialiserad relation: hold.",
-        "session": "Löpning · backkvalitet · 15 min lugnt + 3 × 8 × 150 m / lugn joggvila + 10 min lugnt",
-        "stimuli": [
-          "run_hill_quality"
-        ],
-        "day_index": 5,
-        "recipe_key": "run_hill_quality",
-        "block_intent": "establish",
-        "dose_options": [
-          {
-            "id": "run-hill-6x150",
-            "kind": "structured",
-            "value": 6,
-            "intent": "Tydligt reducerad reservdos. Får bara användas som tillfällig regression när faktisk närbelastning eller återhämtning motiverar det; aldrig som normal utvecklingsbaseline.",
-            "session": "Löpning · backkvalitet · 15 min lugnt + 6 × 150 m / full lugn nedjogg + 10 min lugnt"
-          },
-          {
-            "id": "run-hill-2x6x150",
-            "kind": "structured",
-            "value": 12,
-            "intent": "Demonstrerat kapacitetsgolv: 2 × 6 × 150 m har genomförts utan problem. I utvecklingsläge är detta golv, inte nästa utvecklingsmål.",
-            "session": "Löpning · backkvalitet · 15 min lugnt + 2 × 6 × 150 m / lugn joggvila + 10 min lugnt"
-          },
-          {
-            "id": "run-hill-2x7x150",
-            "kind": "structured",
-            "value": 14,
-            "intent": "Nästa konservativa utvecklingssteg från demonstrerade 2 × 6: endast repetitionsvolymen ökas, inte avsedd intensitet.",
-            "session": "Löpning · backkvalitet · 15 min lugnt + 2 × 7 × 150 m / lugn joggvila + 10 min lugnt"
-          },
-          {
-            "id": "run-hill-2x8x150",
-            "kind": "structured",
-            "value": 16,
-            "intent": "Följande progressionssteg när 2 × 7 är absorberat med bibehållen mekanik och utan oproportionerlig återhämtningskostnad.",
-            "session": "Löpning · backkvalitet · 15 min lugnt + 2 × 8 × 150 m / lugn joggvila + 10 min lugnt"
-          },
-          {
-            "id": "run-hill-3x6x150",
-            "kind": "structured",
-            "value": 18,
-            "intent": "Volymgolv från uttrycklig användarrapport: 3 × 6 = 18 genomförda backintervaller. 150 m är repetitionslängden i den framtida ordinationen; användarrapporten används inte för att påstå exakt längd på varje tidigare intervall.",
-            "session": "Löpning · backkvalitet · 15 min lugnt + 3 × 6 × 150 m / lugn joggvila + 10 min lugnt"
-          },
-          {
-            "id": "run-hill-3x7x150",
-            "kind": "structured",
-            "value": 21,
-            "intent": "Volymgolv från uttrycklig användarrapport: 3 × 7 = 21 genomförda backintervaller. 150 m är repetitionslängden i den framtida ordinationen; användarrapporten används inte för att påstå exakt längd på varje tidigare intervall.",
-            "session": "Löpning · backkvalitet · 15 min lugnt + 3 × 7 × 150 m / lugn joggvila + 10 min lugnt"
-          },
-          {
-            "id": "run-hill-3x8x150",
-            "kind": "structured",
-            "value": 24,
-            "intent": "Volymgolv från uttrycklig användarrapport: 3 × 8 = 24 genomförda backintervaller. 150 m är repetitionslängden i den framtida ordinationen; användarrapporten används inte för att påstå exakt längd på varje tidigare intervall.",
-            "session": "Löpning · backkvalitet · 15 min lugnt + 3 × 8 × 150 m / lugn joggvila + 10 min lugnt"
-          },
-          {
-            "id": "run-hill-3x9x150",
-            "kind": "structured",
-            "value": 27,
-            "intent": "Planerat utvecklingssteg från 3 × 8: endast repetitionsvolymen ökas. Avsedd intensitet och planerad repetitionslängd 150 m hålls oförändrade.",
-            "session": "Löpning · backkvalitet · 15 min lugnt + 3 × 9 × 150 m / lugn joggvila + 10 min lugnt"
-          },
-          {
-            "id": "run-hill-3x10x150",
-            "kind": "structured",
-            "value": 30,
-            "intent": "Planerat utvecklingssteg från 3 × 9: endast repetitionsvolymen ökas. Avsedd intensitet och planerad repetitionslängd 150 m hålls oförändrade.",
-            "session": "Löpning · backkvalitet · 15 min lugnt + 3 × 10 × 150 m / lugn joggvila + 10 min lugnt"
-          }
-        ],
-        "priority_role": "flex",
-        "load_dimensions": [
-          "mechanical",
-          "neuromuscular",
-          "cardiovascular"
-        ],
-        "development_focus": "Kraftfull men kontrollerad löpning med bibehållen mekanik; ingen maximal sprint eller syrajakt.",
-        "baseline_option_id": "run-hill-3x8x150",
-        "progression_criteria": [
-          "Ändra bara dos när faktisk träningsrespons eller mesocykelns progressionsbeslut ger sakligt stöd.",
-          "Wellness eller en enskild bra dag får inte ensam motivera belastningsökning.",
-          "Närliggande 2–3 dagars faktisk belastning ska kunna motivera hold, reduktion eller flytt."
-        ],
-        "development_character": "run_hill_quality",
-        "performance_marker_id": "run-hill-mechanics"
-      },
-      {
-        "slot": "swim_aerobic_endurance_3",
+        "slot": "swim_aerobic_endurance_2",
         "sport": "swim",
-        "reason": "Andra simbassessionen (aerob uthållighet) för att uppfylla normalt antal simbassessioner och stabilisera teknisk kvalitet utan volymprogression. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: establish; materialiserad relation: establish.",
+        "reason": "Lägg en självständig simexponering med en annan utvecklingskaraktär än veckans övriga simpass när katalog och belastningsordning stödjer det. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: establish; materialiserad relation: establish.",
         "session": "Simning · 3 200 m · aerob uthållighet",
         "stimuli": [
           "swim_aerobic",
           "swim_technique"
         ],
-        "day_index": 6,
+        "day_index": 3,
         "recipe_key": "swim_aerobic_endurance",
         "block_intent": "establish",
         "dose_options": [
@@ -882,14 +790,14 @@
         "progression_target_option_id": "swim-aerobic-endurance-3600"
       },
       {
-        "slot": "run_easy_distance_4",
+        "slot": "run_easy_distance_3",
         "sport": "run",
-        "reason": "Lugn längre distans i slutet av veckan för löptålighet/återhämtning; placerad så att den inte blir två dagar i rad med tröskel/backkvalitet. Dosgolvet utgår från absorberad nivå 116 i athlete_state.dose_response, inte från högsta genomförda värde. Veckobeslut: establish; materialiserad relation: hold.",
+        "reason": "Behåll lugn löptålighet med separation från löpkvalitet. Dosgolvet utgår från absorberad nivå 116 i athlete_state.dose_response, inte från högsta genomförda värde. Veckobeslut: consolidate; materialiserad relation: hold.",
         "session": "Löpning · lugn distans · 105 min",
         "stimuli": [
           "run_easy_distance"
         ],
-        "day_index": 7,
+        "day_index": 6,
         "recipe_key": "run_easy_distance",
         "block_intent": "establish",
         "dose_options": [
@@ -1006,7 +914,7 @@
     "north_star_role": "Den långsiktiga målportföljen är överordnad: varaktiga utvecklingsmål anger vilken atlet som ska byggas, medan tidsatta prestationsmål lägger till prioritering och specificitet."
   },
   "development_roadmap": {
-    "as_of": "2026-09-29",
+    "as_of": "2026-09-30",
     "timeline": [
       {
         "id": "active-block",

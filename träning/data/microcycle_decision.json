@@ -1,67 +1,52 @@
 {
   "slots": [
     {
-      "action": "establish",
+      "action": "consolidate",
       "day_index": 2,
-      "rationale": "Låg benbelastningsdag efter fast enduro — tekniskt aerob simbasspass som första av två veckosessioner för att prioritera teknik och låg mekanisk kostnad.",
+      "rationale": "Lågmekanisk simexponering dagen efter fast enduro ger konkret plan utan att anta att benen är redo för ny benkvalitet.",
       "recipe_key": "swim_aerobic_technique",
       "evidence_refs": [
-        "activity:20300494236",
-        "activity:20337309419",
-        "athlete_state.swim_aerobic.demonstrated_value=4000.0"
+        "mesocycle.primary_capabilities"
       ]
     },
     {
       "action": "establish",
-      "day_index": 5,
-      "rationale": "Bibehålla neuromuskulär kraft/kvantitet utan att överskrida max löpkvaliteter; placerat så det inte ligger intill redan genomförd tröskel.",
-      "recipe_key": "run_hill_quality",
-      "evidence_refs": [
-        "activity:20326850936",
-        "activity:20229568713",
-        "athlete_state.run_hill_quality.absorbed_value=24.0"
-      ]
-    },
-    {
-      "action": "establish",
-      "day_index": 6,
-      "rationale": "Andra simbassessionen (aerob uthållighet) för att uppfylla normalt antal simbassessioner och stabilisera teknisk kvalitet utan volymprogression.",
+      "day_index": 3,
+      "rationale": "Lägg en självständig simexponering med en annan utvecklingskaraktär än veckans övriga simpass när katalog och belastningsordning stödjer det.",
       "recipe_key": "swim_aerobic_endurance",
       "evidence_refs": [
-        "activity:20239623463",
-        "activity:20300494236",
-        "recipe_profiles:swim_aerobic_endurance"
+        "mesocycle.primary_capabilities"
       ]
     },
     {
-      "action": "establish",
-      "day_index": 7,
-      "rationale": "Lugn längre distans i slutet av veckan för löptålighet/återhämtning; placerad så att den inte blir två dagar i rad med tröskel/backkvalitet.",
+      "action": "consolidate",
+      "day_index": 6,
+      "rationale": "Behåll lugn löptålighet med separation från löpkvalitet.",
       "recipe_key": "run_easy_distance",
       "evidence_refs": [
-        "activity:20254486837",
-        "athlete_state.run_easy_distance.absorbed_value=116.0"
+        "planning_policy.microcycle_policy"
       ]
     }
   ],
-  "source": "openai_repaired",
+  "source": "deterministic_fallback_after_repair_guard",
   "week_key": "2026-W40",
-  "rationale": "Åtgärdar guard-fel genom att ta bort planerade dupliceringar på dag 1 (fast enduro), undvika redundant run_threshold och undvika ytterligare styrka då minst en styrke/core redan är genomförd. Behåller två simbassessioner, maximerar inte löpkvaliteter och ser till att dag 2 är låg benbelastning efter enduro. Totalt 4 slots (inom tillåtet intervall) och alla primära kapaciteter täcks direkt (run_threshold krediteras från genomförd session).",
+  "rationale": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern.",
   "week_start": "2026-09-28",
-  "source_hash": "825d116240a91e6d6b5b1f73972928bb3c88c6affe532d26e37e84e969627b51",
+  "source_hash": "2f6b849fee71effa43473073d0321982296d687c6f3b1b69ccc6e0a26a48451e",
   "guard_repair": {
-    "result": "accepted",
+    "result": "fallback",
     "attempted": true,
+    "repair_failures": [
+      "strength_core är redundant: styrka/core är redan faktiskt genomförd i mikrocykeln"
+    ],
     "initial_failures": [
-      "dag 1 är blockerad av fast endurobelastning",
-      "run_threshold är redundant: primärt stimulus är redan faktiskt genomfört i mikrocykeln run_threshold",
-      "strength_core är redundant: styrka/core är redan faktiskt genomförd i mikrocykeln",
-      "för många löpkvalitetsexponeringar inklusive faktiskt genomförda: 3 > 2"
+      "tung benbelastning får inte planeras på söndagen direkt före nästa fasta enduro: run_easy_distance",
+      "strength_core är redundant: styrka/core är redan faktiskt genomförd i mikrocykeln"
     ]
   },
   "mesocycle_id": "20260928-run_threshold-swim_aerobic-swim_technique",
   "schema_version": 1,
-  "generated_at_utc": "2026-09-29T20:07:48.742768+00:00",
+  "generated_at_utc": "2026-09-30T01:17:39.459254+00:00",
   "planner_revision": 13,
   "competition_context": {
     "as_of": "2026-09-28",
