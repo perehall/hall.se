@@ -1275,7 +1275,7 @@ def render_document(snapshot: PresentationSnapshot, *, title: str = "Träning") 
         '<meta name="viewport" content="width=device-width,initial-scale=1">'
         f'<title>{html.escape(title)}</title><style>{V2_SHELL_CSS}</style></head><body>'
         '<div class="v2-shell">'
-        '<div class="v2-shell-meta"><a href="/träning/onboarding/" data-v2-profile-link>Träningsprofil</a><a href="/träning/utveckling/" data-v2-goal-link>Mål &amp; utveckling →</a></div>'
+        '<div class="v2-shell-meta"><a href="/träning/oversikt/" data-v2-overview-link>Översikt</a><a href="/träning/onboarding/" data-v2-profile-link>Träningsprofil</a><a href="/träning/utveckling/" data-v2-goal-link>Mål &amp; utveckling →</a></div>'
         f'<main class="v2-shell-main">{body}</main>'
         f'{render_reference_tools()}'
         '</div></body></html>'
