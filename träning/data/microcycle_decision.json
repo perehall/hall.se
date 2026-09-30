@@ -3,57 +3,59 @@
     {
       "action": "establish",
       "day_index": 3,
-      "rationale": "Etablerar teknisk/aerob simbassession tidigt i veckan för att säkra swim_technique + swim_aerobic utan att belasta benen efter nyss genomförda löppass.",
+      "rationale": "Etablera teknisk/aerob simbassession tidigt i veckan för att prioritera kvalitet utan att försöka öka volym/intensitet.",
       "recipe_key": "swim_aerobic_technique",
       "evidence_refs": [
-        "20300494236",
-        "20337309419",
-        "20239623463"
+        "mesocycle.id=20260928-run_threshold-swim_aerobic-swim_technique",
+        "mesocycle.progression_axes:swim_technique",
+        "hard_requirements.normal_swim_exposures=2",
+        "dose_response.swim_aerobic.latest_exposure=2026-09-26 (caution)"
       ]
     },
     {
       "action": "consolidate",
       "day_index": 4,
-      "rationale": "Lugn löpning för att bibehålla löptålighet/kondition utan att försöka progressa tröskel; tar hänsyn till senaste tröskelpass och 24–72h‑kontext.",
-      "recipe_key": "run_easy_distance",
+      "rationale": "Bibehålla MTB/Enduro‑kapacitet som sekundär utveckling utan att kompromissa primära sim-/löpbegär; välj teknisk, kontrollerad exponering.",
+      "recipe_key": "mtb_technical",
       "evidence_refs": [
-        "20254486837",
-        "20350203020",
-        "20381137043"
+        "block_context.goal: bevara MTB/enduro som stöd",
+        "athlete_state.mtb_technical.latest_exposure=2026-09-24",
+        "mesocycle.guardrails:Enduro räknas som faktisk extern belastning"
       ]
     },
     {
       "action": "establish",
       "day_index": 5,
-      "rationale": "Andra simbassessionen i veckan för att uppfylla normal_swim_exposures och konsolidera aerob simkapacitet med fokus på teknik och stabil RPE.",
+      "rationale": "Andra simbassessionen (aerob uthållighet) för att uppfylla mesocykelns norm (2×/vecka) med konservativ volyminriktning.",
       "recipe_key": "swim_aerobic_endurance",
       "evidence_refs": [
-        "20300494236",
-        "20203770266",
-        "20337309419"
+        "mesocycle.progression_axes:swim_aerobic",
+        "recipe_profiles.swim_aerobic_endurance:option_ids",
+        "dose_response.swim_aerobic.progression_ready=false",
+        "hard_requirements.normal_swim_exposures=2"
       ]
     },
     {
       "action": "consolidate",
       "day_index": 6,
-      "rationale": "Bibehåller MTB/Enduro‑kapacitet som sekundärt mål i blocket utan att kompromettera primära löp-/simstimuli; placerad efter swim för acceptabel benbelastningsfördelning.",
-      "recipe_key": "mtb_technical",
+      "rationale": "Lugn längre löpning för löptålighet och allround‑underhåll; konsolidera snarare än progressa tröskel (run_threshold redan direkt täckt detta mikrocykel).",
+      "recipe_key": "run_easy_distance",
       "evidence_refs": [
-        "20314473143",
-        "20337767421",
-        "20218282169"
+        "completed_microcycle_context.direct_capabilities includes run_threshold",
+        "athlete_state.run_easy_distance.latest_exposure=2026-09-27 (caution)",
+        "mesocycle.goal_contribution:allround-athlete"
       ]
     }
   ],
   "source": "openai",
   "week_key": "2026-W40",
-  "rationale": "Följer mesocykelns etableringsfokus och hard_requirements: säkerställer direkt täckning av primära kapaciteter (swim_aerobic + swim_technique planeras; run_threshold finns i completed_credits), levererar normalt antal simbassessioner (2), undviker progression (progression_ready = false) och skyddar styrka (redan genomfört). Val av dagar tar hänsyn till stängda/passerade dagar (1–2), senaste 24–72h‑varningssignaler för sim och löpning och undviker att klustra högre löpbelastning nära tidigare tröskel/back‑exponering. Slot‑antal (1 genomfört + 4 planerade =5) ligger inom 4–7.",
+  "rationale": "Konservativ, mesocykel‑alignerad etableringsvecka: skydda redan genomförd styrka och absorberad tröskel, genomför två simbassessioner (teknik + aerob‑uthållighet) enligt mesocykelns krav, behåll MTB som sekundärt underhåll och ett lugnt distanslöppass för löptålighet. Ingen progression av primära axlar p.g.a. 24–72h varningssignaler och att run_threshold inte är progression_ready.",
   "week_start": "2026-09-28",
   "source_hash": "1b21e95db554af2ce8ba3211e2f354801661c390cdcf56dc28fc8daa37825c1d",
   "mesocycle_id": "20260928-run_threshold-swim_aerobic-swim_technique",
   "schema_version": 1,
-  "generated_at_utc": "2026-09-30T07:43:18.270865+00:00",
-  "planner_revision": 14,
+  "generated_at_utc": "2026-09-30T07:51:46.116364+00:00",
+  "planner_revision": 15,
   "competition_context": {
     "as_of": "2026-09-28",
     "event": "ÖTILLÖ Åland World Series",

@@ -240,7 +240,7 @@
       "date": "2026-09-30",
       "label": "Onsdag",
       "sport": "swim",
-      "reason": "Etablerar teknisk/aerob simbassession tidigt i veckan för att säkra swim_technique + swim_aerobic utan att belasta benen efter nyss genomförda löppass. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: establish; materialiserad relation: establish.",
+      "reason": "Etablera teknisk/aerob simbassession tidigt i veckan för att prioritera kvalitet utan att försöka öka volym/intensitet. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: establish; materialiserad relation: establish.",
       "status": "preliminary",
       "session": "Simning · 3 200 m · aerob/teknik",
       "stimuli": [
@@ -604,60 +604,54 @@
     {
       "date": "2026-10-01",
       "label": "Torsdag",
-      "sport": "run",
-      "reason": "Lugn löpning för att bibehålla löptålighet/kondition utan att försöka progressa tröskel; tar hänsyn till senaste tröskelpass och 24–72h‑kontext. Dosgolvet utgår från absorberad nivå 116 i athlete_state.dose_response, inte från högsta genomförda värde. Veckobeslut: consolidate; materialiserad relation: hold.",
+      "sport": "bike",
+      "reason": "Bibehålla MTB/Enduro‑kapacitet som sekundär utveckling utan att kompromissa primära sim-/löpbegär; välj teknisk, kontrollerad exponering. Absorberad nivå saknas; dosgolvet utgår konservativt från tolererad nivå 73.23. Detta är inte bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
       "status": "preliminary",
-      "session": "Löpning · lugn distans · 105 min",
+      "session": "MTB/XC · 60 min · teknik + lugn aerob stig",
       "stimuli": [
-        "run_easy_distance"
+        "mtb_technical",
+        "mtb_aerobic"
       ],
       "dose_open": false,
-      "recipe_key": "run_easy_distance",
+      "recipe_key": "mtb_technical",
       "device_sync": {
         "status": "synced",
         "transport": "intervals_icu",
-        "source_hash": "527ba07e14e03e4e4ce7b8c71fd46c527ba24e7454fbe4ab2679710f9467b7ba",
-        "updated_at_utc": "2026-09-30T07:44:40.920240+00:00",
+        "source_hash": "037bfb00bc99d19a3dc40696569b43eec8f597f0c97d243fe652fb2f85339715",
+        "updated_at_utc": "2026-09-30T07:53:24.761832+00:00",
         "device_delivery": "unverified",
-        "verified_at_utc": "2026-09-30T07:44:40.920240+00:00",
-        "provider_event_id": 140151989
+        "verified_at_utc": "2026-09-30T07:53:24.761832+00:00",
+        "provider_event_id": 140154006
       },
       "block_intent": "establish",
       "dose_options": [
         {
-          "id": "run-easy-60",
+          "id": "mtb-tech-45",
+          "kind": "duration_minutes",
+          "value": 45,
+          "intent": "Kort teknisk exponering.",
+          "session": "MTB/XC · 45 min · teknik + lugn aerob stig"
+        },
+        {
+          "id": "mtb-tech-60",
           "kind": "duration_minutes",
           "value": 60,
-          "intent": "Reducerad/etablerande distansdos.",
-          "session": "Löpning · lugn distans · 60 min"
+          "intent": "Normal teknisk/aerob exponering.",
+          "session": "MTB/XC · 60 min · teknik + lugn aerob stig"
         },
         {
-          "id": "run-easy-75",
+          "id": "mtb-tech-75",
           "kind": "duration_minutes",
           "value": 75,
-          "intent": "Normal kontrollerad distansdos.",
-          "session": "Löpning · lugn distans · 75 min"
+          "intent": "Progressionsalternativ när cykelbelastningen absorberas.",
+          "session": "MTB/XC · 75 min · teknik + lugn aerob stig"
         },
         {
-          "id": "run-easy-90",
+          "id": "mtb-tech-90",
           "kind": "duration_minutes",
           "value": 90,
-          "intent": "Progressionsalternativ när 75 min absorberats.",
-          "session": "Löpning · lugn distans · 90 min"
-        },
-        {
-          "id": "run-easy-105",
-          "kind": "duration_minutes",
-          "value": 105,
-          "intent": "Längre distansalternativ när historiken stödjer det.",
-          "session": "Löpning · lugn distans · 105 min"
-        },
-        {
-          "id": "run-easy-120",
-          "kind": "duration_minutes",
-          "value": 120,
-          "intent": "Lång distansdos som kräver stöd i faktisk tålighet och närbelastning.",
-          "session": "Löpning · lugn distans · 120 min"
+          "intent": "Längre teknisk/aerob exponering med krav på marginal till löpkvalitet.",
+          "session": "MTB/XC · 90 min · teknik + lugn aerob stig"
         }
       ],
       "mesocycle_id": "20260928-run_threshold-swim_aerobic-swim_technique",
@@ -665,20 +659,20 @@
       "priority_role": "flex",
       "device_workout": {
         "date": "2026-10-01",
-        "name": "Löpning · lugn distans · 105 min",
-        "sport": "run",
+        "name": "MTB/XC · 60 min · teknik + lugn aerob stig",
+        "sport": "bike",
         "blocks": [
           {
-            "name": "Pass",
+            "name": "MTB/XC",
             "sets": 1,
             "steps": [
               {
                 "kind": "work",
                 "duration": {
                   "kind": "time",
-                  "seconds": 6300
+                  "seconds": 3600
                 },
-                "instruction": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt.",
+                "instruction": "Blick, linjeval, bromspunkter och flyt före segmentjakt.",
                 "intensity_class": "active"
               }
             ],
@@ -686,37 +680,38 @@
           }
         ],
         "transport": "intervals_icu",
-        "external_id": "hall-device:2026-10-01:run:run_easy_distance_2",
-        "source_hash": "527ba07e14e03e4e4ce7b8c71fd46c527ba24e7454fbe4ab2679710f9467b7ba",
+        "external_id": "hall-device:2026-10-01:bike:mtb_technical_2",
+        "source_hash": "037bfb00bc99d19a3dc40696569b43eec8f597f0c97d243fe652fb2f85339715",
         "detail_level": "structured",
-        "provider_type": "Run",
+        "provider_type": "Ride",
         "target_policy": "explicit_single_primary_only",
         "schema_version": 1,
-        "source_candidate_id": "run-easy-105"
+        "source_candidate_id": "mtb-tech-60"
       },
       "microcycle_day": 4,
       "workout_design": {
         "objective": {
           "stimuli": [
-            "run_easy_distance"
+            "mtb_technical",
+            "mtb_aerobic"
           ],
           "mesocycle_id": "20260928-run_threshold-swim_aerobic-swim_technique",
           "microcycle_id": "20260928-run_threshold-swim_aerobic-swim_technique:mc1",
           "priority_role": "flex",
           "mesocycle_role": "secondary",
-          "microcycle_slot": "run_easy_distance_2"
+          "microcycle_slot": "mtb_technical_2"
         },
         "selection": {
           "method": "deterministic_constraint_scoring",
-          "reason_for_today": "Längre distansalternativ när historiken stödjer det.",
-          "preferred_dose_option_id": "run-easy-105"
+          "reason_for_today": "Normal teknisk/aerob exponering.",
+          "preferred_dose_option_id": "mtb-tech-60"
         },
         "candidates": [
           {
-            "id": "run-easy-105",
+            "id": "mtb-tech-60",
             "dose": {
               "kind": "duration_minutes",
-              "value": 105
+              "value": 60
             },
             "score": {
               "basis": "deterministic_constraint_alignment",
@@ -729,33 +724,34 @@
                 "prescription_specificity": 15
               }
             },
-            "intent": "Längre distansalternativ när historiken stödjer det.",
-            "session": "Löpning · lugn distans · 105 min",
+            "intent": "Normal teknisk/aerob exponering.",
+            "session": "MTB/XC · 60 min · teknik + lugn aerob stig",
             "stimuli": [
-              "run_easy_distance"
+              "mtb_technical",
+              "mtb_aerobic"
             ],
             "prescription": {
               "blocks": [
                 {
-                  "name": "Pass",
+                  "name": "MTB/XC",
                   "work": {
-                    "duration_s": 6300
+                    "duration_s": 3600
                   },
-                  "intensity": "lugn",
-                  "instruction": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt."
+                  "intensity": "lugn aerob/teknisk",
+                  "instruction": "Blick, linjeval, bromspunkter och flyt före segmentjakt."
                 }
               ],
               "source": "duration_session",
               "executable": true,
               "completeness": "full"
             },
-            "dose_option_id": "run-easy-105"
+            "dose_option_id": "mtb-tech-60"
           },
           {
-            "id": "run-easy-120",
+            "id": "mtb-tech-45",
             "dose": {
               "kind": "duration_minutes",
-              "value": 120
+              "value": 45
             },
             "score": {
               "basis": "deterministic_constraint_alignment",
@@ -768,69 +764,31 @@
                 "prescription_specificity": 15
               }
             },
-            "intent": "Lång distansdos som kräver stöd i faktisk tålighet och närbelastning.",
-            "session": "Löpning · lugn distans · 120 min",
+            "intent": "Kort teknisk exponering.",
+            "session": "MTB/XC · 45 min · teknik + lugn aerob stig",
             "stimuli": [
-              "run_easy_distance"
+              "mtb_technical",
+              "mtb_aerobic"
             ],
             "prescription": {
               "blocks": [
                 {
-                  "name": "Pass",
+                  "name": "MTB/XC",
                   "work": {
-                    "duration_s": 7200
+                    "duration_s": 2700
                   },
-                  "intensity": "lugn",
-                  "instruction": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt."
+                  "intensity": "lugn aerob/teknisk",
+                  "instruction": "Blick, linjeval, bromspunkter och flyt före segmentjakt."
                 }
               ],
               "source": "duration_session",
               "executable": true,
               "completeness": "full"
             },
-            "dose_option_id": "run-easy-120"
+            "dose_option_id": "mtb-tech-45"
           },
           {
-            "id": "run-easy-90",
-            "dose": {
-              "kind": "duration_minutes",
-              "value": 90
-            },
-            "score": {
-              "basis": "deterministic_constraint_alignment",
-              "total": 70,
-              "breakdown": {
-                "mesocycle_alignment": 30,
-                "microcycle_alignment": 10,
-                "near_term_resolution": 0,
-                "progression_alignment": 15,
-                "prescription_specificity": 15
-              }
-            },
-            "intent": "Progressionsalternativ när 75 min absorberats.",
-            "session": "Löpning · lugn distans · 90 min",
-            "stimuli": [
-              "run_easy_distance"
-            ],
-            "prescription": {
-              "blocks": [
-                {
-                  "name": "Pass",
-                  "work": {
-                    "duration_s": 5400
-                  },
-                  "intensity": "lugn",
-                  "instruction": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt."
-                }
-              ],
-              "source": "duration_session",
-              "executable": true,
-              "completeness": "full"
-            },
-            "dose_option_id": "run-easy-90"
-          },
-          {
-            "id": "run-easy-75",
+            "id": "mtb-tech-75",
             "dose": {
               "kind": "duration_minutes",
               "value": 75
@@ -846,40 +804,82 @@
                 "prescription_specificity": 15
               }
             },
-            "intent": "Normal kontrollerad distansdos.",
-            "session": "Löpning · lugn distans · 75 min",
+            "intent": "Progressionsalternativ när cykelbelastningen absorberas.",
+            "session": "MTB/XC · 75 min · teknik + lugn aerob stig",
             "stimuli": [
-              "run_easy_distance"
+              "mtb_technical",
+              "mtb_aerobic"
             ],
             "prescription": {
               "blocks": [
                 {
-                  "name": "Pass",
+                  "name": "MTB/XC",
                   "work": {
                     "duration_s": 4500
                   },
-                  "intensity": "lugn",
-                  "instruction": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt."
+                  "intensity": "lugn aerob/teknisk",
+                  "instruction": "Blick, linjeval, bromspunkter och flyt före segmentjakt."
                 }
               ],
               "source": "duration_session",
               "executable": true,
               "completeness": "full"
             },
-            "dose_option_id": "run-easy-75"
+            "dose_option_id": "mtb-tech-75"
+          },
+          {
+            "id": "mtb-tech-90",
+            "dose": {
+              "kind": "duration_minutes",
+              "value": 90
+            },
+            "score": {
+              "basis": "deterministic_constraint_alignment",
+              "total": 70,
+              "breakdown": {
+                "mesocycle_alignment": 30,
+                "microcycle_alignment": 10,
+                "near_term_resolution": 0,
+                "progression_alignment": 15,
+                "prescription_specificity": 15
+              }
+            },
+            "intent": "Längre teknisk/aerob exponering med krav på marginal till löpkvalitet.",
+            "session": "MTB/XC · 90 min · teknik + lugn aerob stig",
+            "stimuli": [
+              "mtb_technical",
+              "mtb_aerobic"
+            ],
+            "prescription": {
+              "blocks": [
+                {
+                  "name": "MTB/XC",
+                  "work": {
+                    "duration_s": 5400
+                  },
+                  "intensity": "lugn aerob/teknisk",
+                  "instruction": "Blick, linjeval, bromspunkter och flyt före segmentjakt."
+                }
+              ],
+              "source": "duration_session",
+              "executable": true,
+              "completeness": "full"
+            },
+            "dose_option_id": "mtb-tech-90"
           }
         ],
         "schema_version": 1,
         "near_term_context": {
           "load_dimensions": [
             "cardiovascular",
-            "mechanical"
+            "neuromuscular",
+            "technical"
           ],
           "selection_uses_only_preapproved_doses": true
         },
-        "selected_candidate_id": "run-easy-105",
+        "selected_candidate_id": "mtb-tech-60",
         "progression_from_previous": {
-          "reason": "Längre distansalternativ när historiken stödjer det.",
+          "reason": "Normal teknisk/aerob exponering.",
           "relation": "support",
           "demonstrated_floor_option_id": ""
         }
@@ -887,24 +887,26 @@
       "dose_resolution": {
         "kind": "duration_minutes",
         "state": "baseline",
-        "value": 105,
-        "option_id": "run-easy-105"
+        "value": 60,
+        "option_id": "mtb-tech-60"
       },
       "load_dimensions": [
         "cardiovascular",
-        "mechanical"
+        "neuromuscular",
+        "technical"
       ],
-      "microcycle_slot": "run_easy_distance_2",
+      "microcycle_slot": "mtb_technical_2",
       "microcycle_index": 1,
-      "development_focus": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt.",
-      "baseline_option_id": "run-easy-105",
-      "development_character": "run_easy_distance"
+      "development_focus": "Blick, linjeval, bromspunkter och flyt före segmentjakt.",
+      "baseline_option_id": "mtb-tech-60",
+      "development_character": "mtb_technical",
+      "performance_marker_id": "mtb-technical-repeat"
     },
     {
       "date": "2026-10-02",
       "label": "Fredag",
       "sport": "swim",
-      "reason": "Andra simbassessionen i veckan för att uppfylla normal_swim_exposures och konsolidera aerob simkapacitet med fokus på teknik och stabil RPE. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: establish; materialiserad relation: establish.",
+      "reason": "Andra simbassessionen (aerob uthållighet) för att uppfylla mesocykelns norm (2×/vecka) med konservativ volyminriktning. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: establish; materialiserad relation: establish.",
       "status": "preliminary",
       "session": "Simning · 3 200 m · aerob uthållighet",
       "stimuli": [
@@ -1376,54 +1378,60 @@
     {
       "date": "2026-10-03",
       "label": "Lördag",
-      "sport": "bike",
-      "reason": "Bibehåller MTB/Enduro‑kapacitet som sekundärt mål i blocket utan att kompromettera primära löp-/simstimuli; placerad efter swim för acceptabel benbelastningsfördelning. Absorberad nivå saknas; dosgolvet utgår konservativt från tolererad nivå 73.23. Detta är inte bevis för optimal framtida belastning. Veckobeslut: consolidate; materialiserad relation: hold.",
+      "sport": "run",
+      "reason": "Lugn längre löpning för löptålighet och allround‑underhåll; konsolidera snarare än progressa tröskel (run_threshold redan direkt täckt detta mikrocykel). Dosgolvet utgår från absorberad nivå 116 i athlete_state.dose_response, inte från högsta genomförda värde. Veckobeslut: consolidate; materialiserad relation: hold.",
       "status": "preliminary",
-      "session": "MTB/XC · 60 min · teknik + lugn aerob stig",
+      "session": "Löpning · lugn distans · 105 min",
       "stimuli": [
-        "mtb_technical",
-        "mtb_aerobic"
+        "run_easy_distance"
       ],
       "dose_open": false,
-      "recipe_key": "mtb_technical",
+      "recipe_key": "run_easy_distance",
       "device_sync": {
         "status": "synced",
         "transport": "intervals_icu",
-        "source_hash": "a5841ecff87ec44c954518d020f899bf56d5e20517368ccd38ce195186bbe871",
-        "updated_at_utc": "2026-09-30T07:44:41.103739+00:00",
+        "source_hash": "b22429cb088acda3f62d7efde585805c69b94446848403d8244cfdf9be57da7b",
+        "updated_at_utc": "2026-09-30T07:53:25.165008+00:00",
         "device_delivery": "unverified",
-        "verified_at_utc": "2026-09-30T07:44:41.103739+00:00",
-        "provider_event_id": 140151990
+        "verified_at_utc": "2026-09-30T07:53:25.165008+00:00",
+        "provider_event_id": 140154007
       },
       "block_intent": "establish",
       "dose_options": [
         {
-          "id": "mtb-tech-45",
-          "kind": "duration_minutes",
-          "value": 45,
-          "intent": "Kort teknisk exponering.",
-          "session": "MTB/XC · 45 min · teknik + lugn aerob stig"
-        },
-        {
-          "id": "mtb-tech-60",
+          "id": "run-easy-60",
           "kind": "duration_minutes",
           "value": 60,
-          "intent": "Normal teknisk/aerob exponering.",
-          "session": "MTB/XC · 60 min · teknik + lugn aerob stig"
+          "intent": "Reducerad/etablerande distansdos.",
+          "session": "Löpning · lugn distans · 60 min"
         },
         {
-          "id": "mtb-tech-75",
+          "id": "run-easy-75",
           "kind": "duration_minutes",
           "value": 75,
-          "intent": "Progressionsalternativ när cykelbelastningen absorberas.",
-          "session": "MTB/XC · 75 min · teknik + lugn aerob stig"
+          "intent": "Normal kontrollerad distansdos.",
+          "session": "Löpning · lugn distans · 75 min"
         },
         {
-          "id": "mtb-tech-90",
+          "id": "run-easy-90",
           "kind": "duration_minutes",
           "value": 90,
-          "intent": "Längre teknisk/aerob exponering med krav på marginal till löpkvalitet.",
-          "session": "MTB/XC · 90 min · teknik + lugn aerob stig"
+          "intent": "Progressionsalternativ när 75 min absorberats.",
+          "session": "Löpning · lugn distans · 90 min"
+        },
+        {
+          "id": "run-easy-105",
+          "kind": "duration_minutes",
+          "value": 105,
+          "intent": "Längre distansalternativ när historiken stödjer det.",
+          "session": "Löpning · lugn distans · 105 min"
+        },
+        {
+          "id": "run-easy-120",
+          "kind": "duration_minutes",
+          "value": 120,
+          "intent": "Lång distansdos som kräver stöd i faktisk tålighet och närbelastning.",
+          "session": "Löpning · lugn distans · 120 min"
         }
       ],
       "mesocycle_id": "20260928-run_threshold-swim_aerobic-swim_technique",
@@ -1431,20 +1439,20 @@
       "priority_role": "flex",
       "device_workout": {
         "date": "2026-10-03",
-        "name": "MTB/XC · 60 min · teknik + lugn aerob stig",
-        "sport": "bike",
+        "name": "Löpning · lugn distans · 105 min",
+        "sport": "run",
         "blocks": [
           {
-            "name": "MTB/XC",
+            "name": "Pass",
             "sets": 1,
             "steps": [
               {
                 "kind": "work",
                 "duration": {
                   "kind": "time",
-                  "seconds": 3600
+                  "seconds": 6300
                 },
-                "instruction": "Blick, linjeval, bromspunkter och flyt före segmentjakt.",
+                "instruction": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt.",
                 "intensity_class": "active"
               }
             ],
@@ -1452,38 +1460,37 @@
           }
         ],
         "transport": "intervals_icu",
-        "external_id": "hall-device:2026-10-03:bike:mtb_technical_4",
-        "source_hash": "a5841ecff87ec44c954518d020f899bf56d5e20517368ccd38ce195186bbe871",
+        "external_id": "hall-device:2026-10-03:run:run_easy_distance_4",
+        "source_hash": "b22429cb088acda3f62d7efde585805c69b94446848403d8244cfdf9be57da7b",
         "detail_level": "structured",
-        "provider_type": "Ride",
+        "provider_type": "Run",
         "target_policy": "explicit_single_primary_only",
         "schema_version": 1,
-        "source_candidate_id": "mtb-tech-60"
+        "source_candidate_id": "run-easy-105"
       },
       "microcycle_day": 6,
       "workout_design": {
         "objective": {
           "stimuli": [
-            "mtb_technical",
-            "mtb_aerobic"
+            "run_easy_distance"
           ],
           "mesocycle_id": "20260928-run_threshold-swim_aerobic-swim_technique",
           "microcycle_id": "20260928-run_threshold-swim_aerobic-swim_technique:mc1",
           "priority_role": "flex",
           "mesocycle_role": "secondary",
-          "microcycle_slot": "mtb_technical_4"
+          "microcycle_slot": "run_easy_distance_4"
         },
         "selection": {
           "method": "deterministic_constraint_scoring",
-          "reason_for_today": "Normal teknisk/aerob exponering.",
-          "preferred_dose_option_id": "mtb-tech-60"
+          "reason_for_today": "Längre distansalternativ när historiken stödjer det.",
+          "preferred_dose_option_id": "run-easy-105"
         },
         "candidates": [
           {
-            "id": "mtb-tech-60",
+            "id": "run-easy-105",
             "dose": {
               "kind": "duration_minutes",
-              "value": 60
+              "value": 105
             },
             "score": {
               "basis": "deterministic_constraint_alignment",
@@ -1496,34 +1503,33 @@
                 "prescription_specificity": 15
               }
             },
-            "intent": "Normal teknisk/aerob exponering.",
-            "session": "MTB/XC · 60 min · teknik + lugn aerob stig",
+            "intent": "Längre distansalternativ när historiken stödjer det.",
+            "session": "Löpning · lugn distans · 105 min",
             "stimuli": [
-              "mtb_technical",
-              "mtb_aerobic"
+              "run_easy_distance"
             ],
             "prescription": {
               "blocks": [
                 {
-                  "name": "MTB/XC",
+                  "name": "Pass",
                   "work": {
-                    "duration_s": 3600
+                    "duration_s": 6300
                   },
-                  "intensity": "lugn aerob/teknisk",
-                  "instruction": "Blick, linjeval, bromspunkter och flyt före segmentjakt."
+                  "intensity": "lugn",
+                  "instruction": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt."
                 }
               ],
               "source": "duration_session",
               "executable": true,
               "completeness": "full"
             },
-            "dose_option_id": "mtb-tech-60"
+            "dose_option_id": "run-easy-105"
           },
           {
-            "id": "mtb-tech-45",
+            "id": "run-easy-120",
             "dose": {
               "kind": "duration_minutes",
-              "value": 45
+              "value": 120
             },
             "score": {
               "basis": "deterministic_constraint_alignment",
@@ -1536,71 +1542,30 @@
                 "prescription_specificity": 15
               }
             },
-            "intent": "Kort teknisk exponering.",
-            "session": "MTB/XC · 45 min · teknik + lugn aerob stig",
+            "intent": "Lång distansdos som kräver stöd i faktisk tålighet och närbelastning.",
+            "session": "Löpning · lugn distans · 120 min",
             "stimuli": [
-              "mtb_technical",
-              "mtb_aerobic"
+              "run_easy_distance"
             ],
             "prescription": {
               "blocks": [
                 {
-                  "name": "MTB/XC",
+                  "name": "Pass",
                   "work": {
-                    "duration_s": 2700
+                    "duration_s": 7200
                   },
-                  "intensity": "lugn aerob/teknisk",
-                  "instruction": "Blick, linjeval, bromspunkter och flyt före segmentjakt."
+                  "intensity": "lugn",
+                  "instruction": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt."
                 }
               ],
               "source": "duration_session",
               "executable": true,
               "completeness": "full"
             },
-            "dose_option_id": "mtb-tech-45"
+            "dose_option_id": "run-easy-120"
           },
           {
-            "id": "mtb-tech-75",
-            "dose": {
-              "kind": "duration_minutes",
-              "value": 75
-            },
-            "score": {
-              "basis": "deterministic_constraint_alignment",
-              "total": 70,
-              "breakdown": {
-                "mesocycle_alignment": 30,
-                "microcycle_alignment": 10,
-                "near_term_resolution": 0,
-                "progression_alignment": 15,
-                "prescription_specificity": 15
-              }
-            },
-            "intent": "Progressionsalternativ när cykelbelastningen absorberas.",
-            "session": "MTB/XC · 75 min · teknik + lugn aerob stig",
-            "stimuli": [
-              "mtb_technical",
-              "mtb_aerobic"
-            ],
-            "prescription": {
-              "blocks": [
-                {
-                  "name": "MTB/XC",
-                  "work": {
-                    "duration_s": 4500
-                  },
-                  "intensity": "lugn aerob/teknisk",
-                  "instruction": "Blick, linjeval, bromspunkter och flyt före segmentjakt."
-                }
-              ],
-              "source": "duration_session",
-              "executable": true,
-              "completeness": "full"
-            },
-            "dose_option_id": "mtb-tech-75"
-          },
-          {
-            "id": "mtb-tech-90",
+            "id": "run-easy-90",
             "dose": {
               "kind": "duration_minutes",
               "value": 90
@@ -1616,42 +1581,79 @@
                 "prescription_specificity": 15
               }
             },
-            "intent": "Längre teknisk/aerob exponering med krav på marginal till löpkvalitet.",
-            "session": "MTB/XC · 90 min · teknik + lugn aerob stig",
+            "intent": "Progressionsalternativ när 75 min absorberats.",
+            "session": "Löpning · lugn distans · 90 min",
             "stimuli": [
-              "mtb_technical",
-              "mtb_aerobic"
+              "run_easy_distance"
             ],
             "prescription": {
               "blocks": [
                 {
-                  "name": "MTB/XC",
+                  "name": "Pass",
                   "work": {
                     "duration_s": 5400
                   },
-                  "intensity": "lugn aerob/teknisk",
-                  "instruction": "Blick, linjeval, bromspunkter och flyt före segmentjakt."
+                  "intensity": "lugn",
+                  "instruction": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt."
                 }
               ],
               "source": "duration_session",
               "executable": true,
               "completeness": "full"
             },
-            "dose_option_id": "mtb-tech-90"
+            "dose_option_id": "run-easy-90"
+          },
+          {
+            "id": "run-easy-75",
+            "dose": {
+              "kind": "duration_minutes",
+              "value": 75
+            },
+            "score": {
+              "basis": "deterministic_constraint_alignment",
+              "total": 70,
+              "breakdown": {
+                "mesocycle_alignment": 30,
+                "microcycle_alignment": 10,
+                "near_term_resolution": 0,
+                "progression_alignment": 15,
+                "prescription_specificity": 15
+              }
+            },
+            "intent": "Normal kontrollerad distansdos.",
+            "session": "Löpning · lugn distans · 75 min",
+            "stimuli": [
+              "run_easy_distance"
+            ],
+            "prescription": {
+              "blocks": [
+                {
+                  "name": "Pass",
+                  "work": {
+                    "duration_s": 4500
+                  },
+                  "intensity": "lugn",
+                  "instruction": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt."
+                }
+              ],
+              "source": "duration_session",
+              "executable": true,
+              "completeness": "full"
+            },
+            "dose_option_id": "run-easy-75"
           }
         ],
         "schema_version": 1,
         "near_term_context": {
           "load_dimensions": [
             "cardiovascular",
-            "neuromuscular",
-            "technical"
+            "mechanical"
           ],
           "selection_uses_only_preapproved_doses": true
         },
-        "selected_candidate_id": "mtb-tech-60",
+        "selected_candidate_id": "run-easy-105",
         "progression_from_previous": {
-          "reason": "Normal teknisk/aerob exponering.",
+          "reason": "Längre distansalternativ när historiken stödjer det.",
           "relation": "support",
           "demonstrated_floor_option_id": ""
         }
@@ -1659,20 +1661,18 @@
       "dose_resolution": {
         "kind": "duration_minutes",
         "state": "baseline",
-        "value": 60,
-        "option_id": "mtb-tech-60"
+        "value": 105,
+        "option_id": "run-easy-105"
       },
       "load_dimensions": [
         "cardiovascular",
-        "neuromuscular",
-        "technical"
+        "mechanical"
       ],
-      "microcycle_slot": "mtb_technical_4",
+      "microcycle_slot": "run_easy_distance_4",
       "microcycle_index": 1,
-      "development_focus": "Blick, linjeval, bromspunkter och flyt före segmentjakt.",
-      "baseline_option_id": "mtb-tech-60",
-      "development_character": "mtb_technical",
-      "performance_marker_id": "mtb-technical-repeat"
+      "development_focus": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt.",
+      "baseline_option_id": "run-easy-105",
+      "development_character": "run_easy_distance"
     }
   ],
   "strength_template": [
