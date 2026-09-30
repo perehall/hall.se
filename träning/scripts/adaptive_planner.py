@@ -519,8 +519,21 @@ def build_development_blueprint(
     return rows
 
 
-def development_blueprint_for_week(meso, policy, catalog, target_start):
-    for row in build_development_blueprint(meso, policy, catalog):
+def development_blueprint_for_week(
+    meso,
+    policy,
+    catalog,
+    target_start,
+    athlete_state=None,
+    starting_state=None,
+):
+    for row in build_development_blueprint(
+        meso,
+        policy,
+        catalog,
+        athlete_state=athlete_state,
+        starting_state=starting_state,
+    ):
         if row.get("week_start") == target_start.isoformat():
             return row
     return None
@@ -2436,7 +2449,12 @@ def build_microcycle_source_payload(
             starting_state=starting_state,
         ),
         "current_microcycle_blueprint": development_blueprint_for_week(
-            meso, policy, catalog, target_start
+            meso,
+            policy,
+            catalog,
+            target_start,
+            athlete_state=athlete_state,
+            starting_state=starting_state,
         ),
         "mesocycle_history": mesocycle_history_context(
             meso, target_start, catalog
