@@ -1998,6 +1998,11 @@ def align_fallback_progression_with_block_intent(
 
     candidates.sort(key=lambda item: (item[0], item[1], item[3]))
 
+    # Idempotence matters because a deterministic fallback can pass through
+    # normalization more than once. Never create a second progression.
+    if any(slot.get("action") == "progress" for _, _, slot, _, _ in candidates):
+        return result
+
     # One progression axis at a time is the conservative deterministic default.
     for _, _, slot, recipe_key, recipe in candidates:
         profile = response_profile_for_recipe(recipe_key, athlete_state)
@@ -2339,6 +2344,16 @@ def generate_microcycle(
         athlete_profile=athlete_profile,
         planning_date=planning_date,
     )
+    if source.startswith("deterministic_fallback"):
+        normalized = align_fallback_progression_with_block_intent(
+            normalized,
+            meso,
+            policy,
+            catalog,
+            athlete_state,
+            target_start,
+            starting_state=starting_state,
+        )
     if source in {"openai", "openai_repaired"} and not model_valid:
         # Defensive backstop. A proposal accepted above must still pass the
         # normalizer used by publication.
