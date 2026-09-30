@@ -6,20 +6,18 @@ from dataclasses import dataclass
 
 
 STATUS_COPY = {
-    "pending": "Klocksync väntar",
-    "synced": "Klocksync skickad",
-    "error": "Klocksync fel",
+    "pending": "Intervals-sync väntar",
+    "synced": "Verifierad i Intervals",
+    "error": "Intervals-sync fel",
 }
 
 STATUS_HELP = {
-    "pending": "Strukturerat pass väntar på transport via Intervals.icu till Garmin.",
+    "pending": "Strukturerat pass väntar på verifierad transport till Intervals.icu. Garmin- och klockleverans är ännu inte verifierad.",
     "synced": (
-        "Passet är verifierat i Intervals.icu och kan därifrån skickas vidare "
-        "till Garmin; leverans till själva klockan kan inte verifieras av träningssystemet."
+        "Passet och dess struktur är verifierade i Intervals.icu. Garmin Connect och den fysiska klockan ligger utanför träningssystemets verifierbara leveranskedja."
     ),
     "error": (
-        "Transporten via Intervals.icu misslyckades senast och försöks igen "
-        "i nästa träningsjobb."
+        "Transporten till Intervals.icu misslyckades senast. Passet ska inte betraktas som levererat till Garmin eller klockan."
     ),
 }
 
