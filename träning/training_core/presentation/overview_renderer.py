@@ -29,6 +29,14 @@ AXIS_LABELS = {
     "technical_quality": "teknisk kvalitet",
     "consistency": "kontinuitet",
 }
+PROGRESSION_INTENT_LABELS = {
+    "establish": "Etablera",
+    "vary_structure": "Variera passkaraktär",
+    "progress_if_ready": "Planerad progression om responsen stödjer",
+    "consolidate": "Konsolidera",
+    "protect": "Skyddad kapacitet",
+    "support_if_absorbable": "Stöd om belastningen tillåter",
+}
 
 
 def _e(value: object) -> str:
@@ -57,6 +65,57 @@ def _expected_intent(model: TrainingOverviewReadModel, week_start: date):
 
 def _intent_label(value: str) -> str:
     return INTENT_LABELS.get(str(value or "").strip(), str(value or "").strip())
+
+
+def _expected_blueprint(model: TrainingOverviewReadModel, week_start: date):
+    block = model.context.active_block if model.context else None
+    if block is None:
+        return None
+    for item in block.development_blueprint:
+        if item.start_date == week_start.isoformat():
+            return item
+    return None
+
+
+def _blueprint_html(blueprint) -> str:
+    if blueprint is None:
+        return '<div class="overview-blueprint-empty">Grundplan saknas.</div>'
+
+    def card(item, extra_class=""):
+        intent = PROGRESSION_INTENT_LABELS.get(
+            item.progression_intent,
+            item.progression_intent,
+        )
+        return (
+            f'<article class="overview-blueprint-card {extra_class}">'
+            f'<strong>{_e(item.label)}</strong>'
+            f'<span>{_e(intent)}</span>'
+            '</article>'
+        )
+
+    primary = "".join(card(item) for item in blueprint.planned_variants)
+    protected = "".join(
+        card(item, "protected")
+        for item in blueprint.protected_variants
+    )
+    support = "".join(
+        card(item, "support")
+        for item in blueprint.supporting_candidates
+    )
+    return (
+        '<div class="overview-week-blueprint">'
+        '<div class="overview-blueprint-head">'
+        '<span>Preliminär grundplan</span>'
+        '<small>Passkaraktär och progression är planerade. Exakt dag och dos materialiseras senare.</small>'
+        '</div>'
+        f'<div class="overview-blueprint-primary">{primary}</div>'
+        + (
+            '<div class="overview-blueprint-secondary">'
+            f'{protected}{support}</div>'
+            if protected or support else ""
+        )
+        + '</div>'
+    )
 
 
 def _week_url(week_start: date, current_week_start: date) -> str:
@@ -243,8 +302,13 @@ def _week_html(
     expected = _expected_intent(model, week.start)
     materialized = week.planned_count > 0 or relation != "future"
     rest_days = max(0, 7 - week.planned_training_days)
+    blueprint = _expected_blueprint(model, week.start)
     if relation == "future" and week.planned_count == 0:
-        metrics = ["Detaljplan ej materialiserad"]
+        metrics = [
+            "Grundplan finns · detaljdagar ej materialiserade"
+            if blueprint is not None
+            else "Detaljplan ej materialiserad"
+        ]
     else:
         metrics = [
             f"Plan {week.planned_count} pass",
@@ -275,14 +339,18 @@ def _week_html(
         + '</div>'
         if intent else ""
     )
-    days = "".join(
-        _day_html(
-            day,
-            current_date=current_date,
-            registry=registry,
-            materialized=materialized,
+    days = (
+        _blueprint_html(blueprint)
+        if relation == "future" and week.planned_count == 0 and blueprint is not None
+        else "".join(
+            _day_html(
+                day,
+                current_date=current_date,
+                registry=registry,
+                materialized=materialized,
+            )
+            for day in week.days
         )
-        for day in week.days
     )
     return (
         f'<section class="overview-week relation-{relation}" data-week="{_e(week.iso_key)}">'
@@ -294,7 +362,7 @@ def _week_html(
         f'<p>{_e(metric_text)}</p>'
         f'{intent_html}'
         '</header>'
-        f'<div class="overview-week-days">{days}</div>'
+        f'<div class="overview-week-days{" blueprint-mode" if relation == "future" and week.planned_count == 0 and blueprint is not None else ""}">{days}</div>'
         '</section>'
     )
 
@@ -488,6 +556,18 @@ a{color:inherit}.overview-shell{width:min(1500px,100%);margin:auto;padding:24px 
 .overview-week-intent{margin-top:8px;padding-top:7px;border-top:1px solid var(--line-soft)}
 .overview-week-intent strong{display:block;font-size:.68rem}.overview-week-intent span{margin-top:2px;font-size:.62rem}
 .overview-week-days{display:grid;grid-template-columns:repeat(7,minmax(125px,1fr));min-width:875px}
+.overview-week-days.blueprint-mode{display:block;min-width:875px}
+.overview-week-blueprint{min-height:126px;padding:12px 14px;display:grid;grid-template-columns:180px minmax(0,1fr);gap:12px;align-items:start}
+.overview-blueprint-head span{display:block;font-size:.66rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--secondary)}
+.overview-blueprint-head small{display:block;margin-top:4px;font-size:.62rem;line-height:1.35;color:var(--muted)}
+.overview-blueprint-primary,.overview-blueprint-secondary{display:flex;flex-wrap:wrap;gap:7px}
+.overview-blueprint-secondary{grid-column:2;margin-top:-4px}
+.overview-blueprint-card{min-width:150px;max-width:230px;padding:8px 9px;border-radius:10px;background:#F2F4F8;border:1px solid var(--line-soft)}
+.overview-blueprint-card.protected{background:var(--accent-soft)}
+.overview-blueprint-card.support{background:var(--elevated)}
+.overview-blueprint-card strong{display:block;font-size:.68rem;line-height:1.3}
+.overview-blueprint-card span{display:block;margin-top:3px;font-size:.59rem;line-height:1.3;color:var(--muted)}
+.overview-blueprint-empty{padding:14px;color:var(--muted);font-size:.7rem}
 .overview-day{min-height:126px;padding:10px 9px;border-left:1px solid var(--line-soft);position:relative}
 .overview-day:first-child{border-left:0}.overview-day.today{box-shadow:inset 0 0 0 2px var(--accent);z-index:1}
 .overview-day-head{display:flex;align-items:baseline;justify-content:space-between;gap:6px;margin-bottom:9px}
