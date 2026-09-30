@@ -276,8 +276,7 @@ def _weather_header_html(weather) -> str:
     visible = " · ".join(value for value in (temperature, precipitation) if value)
     if not visible and weather.condition:
         visible = weather.condition
-    stale = " · äldre data" if weather.stale else ""
-    title = weather.summary + stale if weather.summary else visible + stale
+    title = weather.summary or visible
     return (
         f'<span class="overview-day-weather" title="{_e(title)}">'
         f'{_weather_icon_svg(weather.symbol_code)}'
