@@ -52,7 +52,7 @@ MODEL = os.environ.get("OPENAI_MODEL", "gpt-5-mini")
 MESO_SCHEMA_VERSION = 1
 MICRO_SCHEMA_VERSION = 1
 PLANNER_REVISION = 6
-MICRO_PLANNER_REVISION = 15
+MICRO_PLANNER_REVISION = 16
 
 CAPABILITY_TO_RECIPE = {
     "run_threshold": "run_threshold",
@@ -70,11 +70,16 @@ CAPABILITY_TO_RECIPE = {
 
 RECIPE_TO_RESPONSE_CAPABILITY = {
     "run_threshold": "run_threshold",
+    "run_threshold_short_reps": "run_threshold",
     "run_hill_quality": "run_hill_quality",
+    "run_hill_continuous": "run_hill_quality",
     "run_easy_distance": "run_easy_distance",
+    "run_easy_trail": "run_easy_distance",
     "mtb_technical": "mtb_technical",
+    "mtb_aerobic_endurance": "mtb_technical",
     "swim_aerobic_technique": "swim_aerobic",
     "swim_aerobic_endurance": "swim_aerobic",
+    "swim_aerobic_skills": "swim_aerobic",
     "swim_aerobic_threshold": "swim_threshold",
     "strength_core": "strength_unilateral",
 }
@@ -110,8 +115,19 @@ PRIMARY_CAPABILITIES_WITH_EXECUTABLE_RECIPES = {
     "swim_threshold",
 }
 SUPPORT_ONLY_RECIPES = {"strength_core"}
-RUN_STRESS_RECIPES = {"run_threshold", "run_hill_quality", "run_easy_distance"}
-DAY_AFTER_ENDURO_BLOCKED_RECIPES = RUN_STRESS_RECIPES | {"mtb_technical", "strength_core"}
+RUN_STRESS_RECIPES = {
+    "run_threshold",
+    "run_threshold_short_reps",
+    "run_hill_quality",
+    "run_hill_continuous",
+    "run_easy_distance",
+    "run_easy_trail",
+}
+DAY_AFTER_ENDURO_BLOCKED_RECIPES = RUN_STRESS_RECIPES | {
+    "mtb_technical",
+    "mtb_aerobic_endurance",
+    "strength_core",
+}
 
 
 def load_json(path: Path, fallback):
@@ -159,11 +175,12 @@ def starting_state_value_for_recipe(recipe_key, starting_state):
         value = (disciplines.get(discipline) or {}).get(field)
         return float(value) if isinstance(value, (int, float)) and value > 0 else None
 
-    if recipe_key == "run_easy_distance":
+    response_capability = RECIPE_TO_RESPONSE_CAPABILITY.get(recipe_key)
+    if response_capability == "run_easy_distance":
         return numeric("run", "long_run_minutes") or numeric("run", "typical_duration_minutes")
-    if recipe_key in {"swim_aerobic_technique", "swim_aerobic_endurance", "swim_aerobic_threshold"}:
+    if response_capability in {"swim_aerobic", "swim_threshold"}:
         return numeric("swim", "typical_distance_m")
-    if recipe_key == "mtb_technical":
+    if response_capability == "mtb_technical":
         return numeric("mtb", "typical_duration_minutes") or numeric("bike", "typical_duration_minutes")
     if recipe_key == "strength_core":
         return numeric("strength", "typical_duration_minutes")
@@ -287,6 +304,191 @@ def mesocycle_block_context(meso, target_start, policy):
         "intent_definition": str(definitions.get(intent) or ""),
         "principle": str((policy.get("periodization_policy") or {}).get("principle") or ""),
     }
+
+
+def recipe_family_for_capability(catalog, capability):
+    families = catalog.get("capability_recipe_families") or {}
+    configured = families.get(capability) or []
+    recipes = catalog.get("recipes") or {}
+    valid = [
+        key for key in configured
+        if key in recipes and capability in recipe_capabilities(recipes[key])
+    ]
+    if valid:
+        return valid
+    fallback = CAPABILITY_TO_RECIPE.get(capability)
+    return [fallback] if fallback in recipes else []
+
+
+def _blueprint_family_index(block_context, family_size):
+    if family_size <= 1:
+        return 0
+    intent = str(block_context.get("block_intent") or "")
+    index = int(block_context.get("microcycle_index") or 1)
+    if intent == "establish":
+        return 0
+    if intent == "develop":
+        develop_ordinal = sum(
+            1
+            for item in (block_context.get("wave") or [])[:index]
+            if item == "develop"
+        )
+        if develop_ordinal == 1:
+            return 1 % family_size
+        return min(2, family_size - 1)
+    return 0
+
+
+def build_development_blueprint(meso, policy, catalog):
+    """Publish the mesocycle's intended workout-character progression.
+
+    This is the coach's ground plan, not a frozen calendar. It deliberately
+    separates planned variation/progression from near-term dose authorization:
+    future develop weeks may state progress_if_ready even though exact dose is
+    decided only when athlete response and adjacent load are known.
+    """
+    try:
+        start = iso(meso["start_date"])
+        duration = int(meso.get("duration_weeks") or 0)
+    except (KeyError, TypeError, ValueError):
+        return []
+
+    recipes = catalog.get("recipes") or {}
+    normal_swims = int((policy.get("microcycle_policy") or {}).get("normal_swim_exposures", 2))
+    rows = []
+    for offset in range(max(0, duration)):
+        week_start = start + timedelta(days=7 * offset)
+        context = mesocycle_block_context(meso, week_start, policy)
+        intent = context.get("block_intent")
+        variants = []
+        covered = set()
+
+        for capability in meso.get("primary_capabilities") or []:
+            if capability in covered:
+                continue
+            family = recipe_family_for_capability(catalog, capability)
+            if not family:
+                continue
+            family_index = _blueprint_family_index(context, len(family))
+            recipe_key = family[family_index]
+            recipe = recipes[recipe_key]
+            stimuli = set(recipe_capabilities(recipe))
+            covered.update(stimuli.intersection(set(meso.get("primary_capabilities") or [])))
+            variants.append(
+                {
+                    "role": "primary",
+                    "capability": capability,
+                    "recipe_key": recipe_key,
+                    "development_character": recipe.get("development_character") or recipe_key,
+                    "label": recipe.get("blueprint_label") or (recipe.get("options") or [{}])[0].get("session") or recipe_key,
+                    "progression_intent": (
+                        "establish"
+                        if intent == "establish"
+                        else "vary_structure"
+                        if intent == "develop" and int(context.get("microcycle_index") or 1) == 2
+                        else "progress_if_ready"
+                        if intent == "develop"
+                        else "consolidate"
+                    ),
+                }
+            )
+
+        # When aerobic/technical swim is a primary block objective, the normal
+        # two-swim rhythm gets its own planned character variation rather than
+        # silently repeating the same recipe.
+        swim_primary = {"swim_aerobic", "swim_technique"}.intersection(
+            set(meso.get("primary_capabilities") or [])
+        )
+        if swim_primary and normal_swims >= 2:
+            existing_swim = [
+                item["recipe_key"]
+                for item in variants
+                if (recipes.get(item["recipe_key"]) or {}).get("sport") == "swim"
+            ]
+            swim_family = recipe_family_for_capability(catalog, "swim_aerobic")
+            alternatives = [key for key in swim_family if key not in existing_swim]
+            if alternatives:
+                preferred_index = min(offset, len(alternatives) - 1)
+                recipe_key = alternatives[preferred_index]
+                recipe = recipes[recipe_key]
+                variants.append(
+                    {
+                        "role": "primary_companion",
+                        "capability": "swim_aerobic",
+                        "recipe_key": recipe_key,
+                        "development_character": recipe.get("development_character") or recipe_key,
+                        "label": recipe.get("blueprint_label") or (recipe.get("options") or [{}])[0].get("session") or recipe_key,
+                        "progression_intent": (
+                            "establish"
+                            if intent == "establish"
+                            else "vary_structure"
+                            if intent == "develop"
+                            else "consolidate"
+                        ),
+                    }
+                )
+
+        # One rotating supporting candidate makes the broader all-round plan
+        # visible without turning every secondary capability into a weekly
+        # checklist. Near-term planning may omit it when load does not fit.
+        secondary = list(meso.get("secondary_capabilities") or [])
+        supporting = []
+        if secondary:
+            capability = secondary[offset % len(secondary)]
+            family = recipe_family_for_capability(catalog, capability)
+            if family:
+                recipe_key = family[_blueprint_family_index(context, len(family))]
+                recipe = recipes[recipe_key]
+                supporting.append(
+                    {
+                        "role": "supporting_candidate",
+                        "capability": capability,
+                        "recipe_key": recipe_key,
+                        "development_character": recipe.get("development_character") or recipe_key,
+                        "label": recipe.get("blueprint_label") or (recipe.get("options") or [{}])[0].get("session") or recipe_key,
+                        "progression_intent": "support_if_absorbable",
+                    }
+                )
+
+        protected = []
+        if (policy.get("microcycle_policy") or {}).get("protect_strength_core_each_microcycle"):
+            recipe = recipes.get("strength_core") or {}
+            protected.append(
+                {
+                    "role": "protected",
+                    "capability": "strength_core",
+                    "recipe_key": "strength_core",
+                    "development_character": recipe.get("development_character") or "strength_core",
+                    "label": recipe.get("blueprint_label") or "Styrka/core",
+                    "progression_intent": "protect",
+                }
+            )
+
+        rows.append(
+            {
+                "microcycle_index": offset + 1,
+                "week_start": week_start.isoformat(),
+                "week_end": (week_start + timedelta(days=6)).isoformat(),
+                "block_intent": intent,
+                "intent_definition": context.get("intent_definition"),
+                "planned_variants": variants,
+                "supporting_candidates": supporting,
+                "protected_variants": protected,
+                "principle": (
+                    "Passkaraktären är planerad på blocknivå. Exakt dag och dos materialiseras nära passet; "
+                    "progress_if_ready får bara bli faktisk dosprogression när dose_response och 2–3 dagars "
+                    "belastningskontext stödjer det."
+                ),
+            }
+        )
+    return rows
+
+
+def development_blueprint_for_week(meso, policy, catalog, target_start):
+    for row in build_development_blueprint(meso, policy, catalog):
+        if row.get("week_start") == target_start.isoformat():
+            return row
+    return None
 
 
 def completed_context_signature(context) -> str:
@@ -1272,9 +1474,13 @@ def fallback_microcycle(
 
     recipe_day_preferences = {
         "swim_aerobic_technique": [2, 4, 6, 1, 5, 3, 7] if fixed_enduro else [1, 3, 5, 2, 4, 6, 7],
+        "swim_aerobic_endurance": [2, 4, 6, 5, 3, 7] if fixed_enduro else [1, 3, 5, 2, 4, 6, 7],
+        "swim_aerobic_skills": [2, 4, 6, 5, 3, 7] if fixed_enduro else [1, 3, 5, 2, 4, 6, 7],
         "swim_aerobic_threshold": [2, 4, 6, 5, 3, 7] if fixed_enduro else [1, 3, 5, 2, 4, 6, 7],
         "run_threshold": [3, 4, 5, 6, 7] if fixed_enduro else [2, 3, 4, 5, 6, 7, 1],
+        "run_threshold_short_reps": [3, 4, 5, 6, 7] if fixed_enduro else [2, 3, 4, 5, 6, 7, 1],
         "run_hill_quality": [5, 6, 7, 4, 3] if fixed_enduro else [4, 5, 6, 7, 3, 2, 1],
+        "run_hill_continuous": [5, 6, 7, 4, 3] if fixed_enduro else [4, 5, 6, 7, 3, 2, 1],
         "run_easy_distance": (
             [6, 5, 4, 3, 7]
             if fixed_enduro and next_fixed_enduro
@@ -1282,7 +1488,15 @@ def fallback_microcycle(
             if fixed_enduro
             else [7, 6, 5, 4, 3, 2, 1]
         ),
+        "run_easy_trail": (
+            [6, 5, 4, 3, 7]
+            if fixed_enduro and next_fixed_enduro
+            else [7, 6, 5, 4, 3]
+            if fixed_enduro
+            else [7, 6, 5, 4, 3, 2, 1]
+        ),
         "mtb_technical": [6, 7, 4, 5, 3] if fixed_enduro else [6, 7, 4, 5, 3, 2, 1],
+        "mtb_aerobic_endurance": [6, 7, 4, 5, 3] if fixed_enduro else [6, 7, 4, 5, 3, 2, 1],
         "strength_core": [5, 6, 4, 3, 7, 2] if fixed_enduro else [5, 6, 4, 3, 7, 2, 1],
     }
 
@@ -1357,20 +1571,40 @@ def fallback_microcycle(
             return True
         return False
 
+    blueprint = development_blueprint_for_week(meso, policy, catalog, target_start) or {}
+    blueprint_primary = {
+        str(item.get("capability") or ""): str(item.get("recipe_key") or "")
+        for item in (blueprint.get("planned_variants") or [])
+        if isinstance(item, dict)
+    }
+
     # Low-mechanical swim is the conservative default immediately after fixed
-    # Enduro and directly covers both swim_aerobic and swim_technique.
+    # Enduro, but choose this microcycle's planned swim character when it is a
+    # low-mechanical aerobic/technical recipe.
     if fixed_enduro and {"swim_aerobic", "swim_technique"}.intersection(primaries):
-        add_recipe(
+        planned_swim = next(
+            (
+                str(item.get("recipe_key") or "")
+                for item in (blueprint.get("planned_variants") or [])
+                if isinstance(item, dict)
+                and (catalog.get("recipes") or {}).get(str(item.get("recipe_key") or ""), {}).get("sport") == "swim"
+                and "swim_threshold" not in recipe_capabilities(
+                    (catalog.get("recipes") or {}).get(str(item.get("recipe_key") or ""), {})
+                )
+            ),
             "swim_aerobic_technique",
-            "Lågmekanisk simexponering dagen efter fast enduro ger konkret plan utan att anta att benen är redo för ny benkvalitet.",
+        )
+        add_recipe(
+            planned_swim if planned_swim in catalog["recipes"] else "swim_aerobic_technique",
+            "Lågmekanisk simexponering dagen efter fast enduro följer blockets planerade passkaraktär utan att anta att benen är redo för ny benkvalitet.",
         )
 
-    # Cover each primary with an executable direct recipe.
+    # Cover each primary with the mesocycle blueprint's intended recipe character.
     for cap in meso.get("primary_capabilities") or []:
         if cap in completed_direct:
             continue
-        direct_recipe = CAPABILITY_TO_RECIPE.get(cap)
-        if not direct_recipe:
+        direct_recipe = blueprint_primary.get(cap) or CAPABILITY_TO_RECIPE.get(cap)
+        if not direct_recipe or direct_recipe not in catalog["recipes"]:
             continue
         if any(
             cap in recipe_capabilities(catalog["recipes"][row["recipe_key"]])
@@ -1402,12 +1636,17 @@ def fallback_microcycle(
     while swim_count < required_swims:
         before = len(slots)
         already_planned = {row["recipe_key"] for row in slots}
+        blueprint_swims = [
+            str(item.get("recipe_key") or "")
+            for item in (blueprint.get("planned_variants") or [])
+            if isinstance(item, dict)
+            and (catalog.get("recipes") or {}).get(str(item.get("recipe_key") or ""), {}).get("sport") == "swim"
+        ]
         candidates = [
             key
             for key in (
-                "swim_aerobic_endurance",
-                "swim_aerobic_technique",
-                "swim_aerobic_threshold",
+                blueprint_swims
+                + ["swim_aerobic_endurance", "swim_aerobic_skills", "swim_aerobic_technique", "swim_aerobic_threshold"]
             )
             if key in catalog["recipes"] and key not in already_planned
         ]
@@ -1452,7 +1691,22 @@ def fallback_microcycle(
     # A race-relevant easy-distance exposure is useful when it fits safely, but
     # other secondary capabilities are deliberately not all forced into the week.
     secondary_added = False
-    if "run_easy_distance" in secondaries or "run_easy_distance" in primaries:
+    planned_support = next(
+        (
+            str(item.get("recipe_key") or "")
+            for item in (blueprint.get("supporting_candidates") or [])
+            if isinstance(item, dict)
+            and str(item.get("recipe_key") or "") in catalog["recipes"]
+        ),
+        "",
+    )
+    if planned_support:
+        secondary_added = add_recipe(
+            planned_support,
+            "Blockets preliminära grundplan väljer denna stödjande passkaraktär; den tas bara med när mikrocykelns belastningsordning tillåter.",
+            action="consolidate",
+        )
+    elif "run_easy_distance" in secondaries or "run_easy_distance" in primaries:
         secondary_added = add_recipe(
             "run_easy_distance",
             "Behåll lugn löptålighet med separation från löpkvalitet.",
@@ -2098,6 +2352,10 @@ def build_microcycle_source_payload(
         "competition_context": competition_context,
         "completed_microcycle_context": completed_context,
         "block_context": mesocycle_block_context(meso, target_start, policy),
+        "development_blueprint": build_development_blueprint(meso, policy, catalog),
+        "current_microcycle_blueprint": development_blueprint_for_week(
+            meso, policy, catalog, target_start
+        ),
         "mesocycle_history": mesocycle_history_context(
             meso, target_start, catalog
         ),
@@ -2219,6 +2477,7 @@ def generate_microcycle(
         "Du får inte hitta på exakta farter, pulser, watt eller doser; deterministisk kod väljer sedan dos från observerad historik och receptkatalog. "
         "Föregående veckas schema ska inte kopieras av slentrian. Kontrollera konflikt mellan mekaniska/kardiovaskulära stimuli och fasta åtaganden. "
         "block_context anger mikrocykelns roll i blocket och mesocycle_history visar tidigare planerade recept och doser. Historiken är evidens om vad som redan ordinerats, inte ett skäl att automatiskt öka belastningen. "
+        "development_blueprint är mesocykelns preliminära grundplan för passkaraktär genom hela blocket. current_microcycle_blueprint ska normalt styra vilket receptformat som används för primära stimuli, så att utvecklingen innehåller planerad variation och inte samma pass av slentrian. Avvik bara när faktisk belastning, återhämtning, tillgänglighet eller hårda guards ger sakligt skäl och förklara avvikelsen. Blueprintens progress_if_ready är en planerad riktning, aldrig tillstånd att öka dos utan progression_ready=true. "
         "I en develop-mikrocykel ska ett primärt utvecklingsstimulus progressa längs mesocykelns definierade axel eller ha ett uttryckligt datastött skäl att konsolidera. "
         "Samma primära recept och samma passkaraktär får inte upprepas mekaniskt genom utvecklingsveckor. Om två utvecklande simexponeringar planeras och katalogen erbjuder absorberbara alternativ ska de normalt ha olika development_character. "
         "I consolidate/review får ett jämförbart pass medvetet återkomma för stabilisering eller utvärdering, men skälet ska framgå. "
@@ -2456,33 +2715,39 @@ def microcycle_is_valid(decision, meso, target_start, source_hash_value=None):
 
 def demonstrated_value(recipe_key, athlete_state):
     facts = athlete_state.get("capability_facts") or {}
-    if recipe_key == "run_threshold":
+    capability = RECIPE_TO_RESPONSE_CAPABILITY.get(recipe_key)
+    if capability == "run_threshold":
         values = [
             item.get("work_minutes")
             for item in (facts.get("run_threshold") or {}).get("evidence") or []
             if isinstance(item.get("work_minutes"), (int, float))
         ]
         return max(values) if values else None
-    if recipe_key == "run_hill_quality":
+    if capability == "run_hill_quality":
         values = [
             item.get("repetitions")
             for item in (facts.get("run_hill_quality") or {}).get("evidence") or []
             if isinstance(item.get("repetitions"), (int, float))
         ]
         return max(values) if values else None
-    if recipe_key == "run_easy_distance":
+    if capability == "run_easy_distance":
         value = ((facts.get("run_easy_distance") or {}).get("longest_duration") or {}).get("elapsed_time_s")
         return float(value) / 60.0 if isinstance(value, (int, float)) else None
-    if recipe_key == "mtb_technical":
+    if capability == "mtb_technical":
         value = ((facts.get("mtb_technical") or {}).get("longest_duration") or {}).get("elapsed_time_s")
         return float(value) / 60.0 if isinstance(value, (int, float)) else None
-    if recipe_key == "swim_aerobic_technique":
+    if capability == "swim_aerobic":
         value = ((facts.get("swim_aerobic") or {}).get("longest_distance") or {}).get("distance_m")
-        return min(float(value), 3200.0) if isinstance(value, (int, float)) else None
-    if recipe_key == "swim_aerobic_endurance":
-        value = ((facts.get("swim_aerobic") or {}).get("longest_distance") or {}).get("distance_m")
-        return min(float(value), 3600.0) if isinstance(value, (int, float)) else None
-    if recipe_key == "swim_aerobic_threshold":
+        ceiling = max(
+            [
+                float(item.get("value"))
+                for item in ((load_json(CATALOG_FILE, {}).get("recipes") or {}).get(recipe_key) or {}).get("options") or []
+                if isinstance(item.get("value"), (int, float))
+            ]
+            or [float(value) if isinstance(value, (int, float)) else 0.0]
+        )
+        return min(float(value), ceiling) if isinstance(value, (int, float)) else None
+    if capability == "swim_threshold":
         values = [
             item.get("distance_m")
             for item in (facts.get("swim_threshold") or {}).get("evidence") or []
@@ -2493,7 +2758,6 @@ def demonstrated_value(recipe_key, athlete_state):
         value = ((facts.get("strength_unilateral") or {}).get("longest_duration") or {}).get("elapsed_time_s")
         return float(value) / 60.0 if isinstance(value, (int, float)) else None
     return None
-
 
 def choose_option(recipe_key, recipe, action, athlete_state, starting_state=None):
     options = [
@@ -2927,6 +3191,9 @@ def materialize_strategy(goal, policy, meso, micro, catalog, athlete_state, goal
             meso,
             iso(micro["week_start"]),
             policy,
+        ),
+        "development_blueprint": build_development_blueprint(
+            meso, policy, catalog
         ),
         "progression_policy": {
             "automatic_load_increase": False,
