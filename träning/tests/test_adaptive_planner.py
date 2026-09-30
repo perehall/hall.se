@@ -973,6 +973,93 @@ class AdaptivePlanningTests(unittest.TestCase):
             msg=json.dumps(result, ensure_ascii=False, indent=2),
         )
 
+    def test_develop_fallback_progresses_one_primary_when_absorption_supports_it(self):
+        meso = {
+            "id": "meso-test",
+            "start_date": "2026-09-28",
+            "duration_weeks": 4,
+            "primary_capabilities": ["run_threshold", "swim_aerobic", "swim_technique"],
+            "secondary_capabilities": ["run_easy_distance"],
+        }
+        athlete_state = {
+            "capability_facts": {
+                "run_threshold": {
+                    "evidence": [{"work_minutes": 32.0, "kind": "explicit_user_report"}]
+                }
+            },
+            "dose_response": {
+                "by_capability": {
+                    "run_threshold": {
+                        "absorbed_value": 32.0,
+                        "tolerated_value": 32.0,
+                        "progression_ready": True,
+                        "progression_reason": "Repeated supportive response.",
+                    }
+                }
+            },
+        }
+        result = fallback_microcycle(
+            meso,
+            self.policy,
+            self.catalog,
+            date(2026, 10, 5),
+            completed_context={},
+            athlete_state=athlete_state,
+        )
+        primary_progressions = [
+            row for row in result["slots"]
+            if row["action"] == "progress"
+        ]
+        self.assertEqual(len(primary_progressions), 1)
+        self.assertEqual(primary_progressions[0]["recipe_key"], "run_threshold")
+        self.assertTrue(
+            any("progression_ready=true" in ref for ref in primary_progressions[0]["evidence_refs"])
+        )
+
+    def test_develop_fallback_records_data_backed_hold_when_progression_is_not_ready(self):
+        meso = {
+            "id": "meso-test",
+            "start_date": "2026-09-28",
+            "duration_weeks": 4,
+            "primary_capabilities": ["run_threshold", "swim_aerobic", "swim_technique"],
+            "secondary_capabilities": ["run_easy_distance"],
+        }
+        athlete_state = {
+            "capability_facts": {
+                "run_threshold": {
+                    "evidence": [{"work_minutes": 32.0, "kind": "explicit_user_report"}]
+                }
+            },
+            "dose_response": {
+                "by_capability": {
+                    "run_threshold": {
+                        "absorbed_value": 32.0,
+                        "tolerated_value": 32.0,
+                        "progression_ready": False,
+                        "progression_reason": "Senaste jämförbara exponeringen innehåller en varningssignal.",
+                    }
+                }
+            },
+        }
+        result = fallback_microcycle(
+            meso,
+            self.policy,
+            self.catalog,
+            date(2026, 10, 5),
+            completed_context={},
+            athlete_state=athlete_state,
+        )
+        self.assertFalse(any(row["action"] == "progress" for row in result["slots"]))
+        threshold = next(
+            row for row in result["slots"]
+            if row["recipe_key"] == "run_threshold"
+        )
+        self.assertIn("Develop-vecka konsolideras", threshold["rationale"])
+        self.assertIn("varningssignal", threshold["rationale"])
+        self.assertTrue(
+            any(ref.endswith(":hold") for ref in threshold["evidence_refs"])
+        )
+
     def test_future_develop_fallback_satisfies_its_own_structural_guards(self):
         meso = json.loads(
             (ROOT / "data" / "mesocycle_decision.json").read_text(encoding="utf-8")
