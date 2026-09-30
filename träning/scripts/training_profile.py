@@ -22,6 +22,7 @@ from statistics import mean, median
 
 
 PROFILE_SCHEMA_VERSION = 1
+INTENT_MATCHER_REVISION = 2
 RUN_TYPES = {"Run", "TrailRun", "VirtualRun"}
 SWIM_TYPES = {"Swim"}
 BIKE_TYPES = {"Ride", "MountainBikeRide", "VirtualRide"}
@@ -684,6 +685,7 @@ def build_training_profile(
     if (
         isinstance(previous_profile, dict)
         and previous_profile.get("source_hash") == source_hash
+        and int(previous_profile.get("intent_matcher_revision") or 0) == INTENT_MATCHER_REVISION
     ):
         durable_matches = [
             dict(row)
@@ -730,6 +732,7 @@ def build_training_profile(
 
     return {
         "schema_version": PROFILE_SCHEMA_VERSION,
+        "intent_matcher_revision": INTENT_MATCHER_REVISION,
         "activity_id": activity.get("id"),
         "source_hash": source_hash,
         "observed_structure": observed,
