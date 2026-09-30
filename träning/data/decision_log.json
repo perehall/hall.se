@@ -784,6 +784,22 @@
       "source_hash": "6d0feb56272aa8b5483631e4792dbb5d12a81f68b8b3c25cb5c346d652990c5f",
       "generated_at_utc": "2026-09-30T09:55:04.968977+00:00",
       "summary": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern."
+    },
+    {
+      "kind": "microcycle",
+      "decision_id": "2026-W40",
+      "source": "openai_repaired",
+      "source_hash": "40b3a224a82fa3f1c994c842d938a445d7ebe3b1c0864bd7d0ba24ad83972191",
+      "generated_at_utc": "2026-09-30T10:50:35.684499+00:00",
+      "summary": "Ta bort duplicerade strength_core och run_threshold eftersom dessa kapaciteter redan är dokumenterat genomförda i mikrocykeln; lägg i stället kompletterande, icke‑redundanta slots så hard_requirements (min 4 slots, 2 simbassessioner, täckning av primära kapaciteter) uppfylls. Åtgärder är konservativa (establish) pga öppna 24–72h‑fönster och senaste varningssignal i sim."
+    },
+    {
+      "kind": "upcoming_microcycle",
+      "decision_id": "2026-W41",
+      "source": "openai",
+      "source_hash": "b6ad41248735c3586397a92dea7203f06be21708f7e884aaf8773510d7e78af9",
+      "generated_at_utc": "2026-09-30T10:50:59.191027+00:00",
+      "summary": "Följer blockets develop‑blueprint och mesocycle‑guardrails: måndagens fasta enduro blockerar dag 1 och gör dag 2 till låg benbelastning (svimpass). Progression valdes inte eftersom capability progressions_ready=false och 24–72h‑fönster innehåller varningssignaler; istället introduceras planerad variationsstruktur (establish) för primära recept och skyddad styrka/core inkluderas. Två simbassessioner med olika development_character säkerställer blueprint‑kravet på distinkt teknisk variation. Alla primära kapaciteter täcks direkt, minst ett styrke/core‑pass ingår och antal löpkvaliteter hålls ≤ maxgräns."
     }
   ]
 }

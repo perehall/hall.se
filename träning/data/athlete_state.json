@@ -995,28 +995,6 @@
         "metric": "duration_minutes",
         "exposures": [
           {
-            "date": "2026-09-07",
-            "metric": "duration_minutes",
-            "dose_value": 27.65,
-            "activity_id": 20079150228,
-            "evidence_basis": "confirmed_or_plan_matched",
-            "direct_response": {
-              "signal": "unknown",
-              "rpe_values": [],
-              "caution_terms": [],
-              "supportive_terms": []
-            },
-            "evidence_policy": "plan_matched_or_explicit",
-            "response_status": "demonstrated",
-            "repeat_supported": false,
-            "recovery_context_24_72h": {
-              "signal": "unobserved",
-              "observations": [],
-              "window_complete": true,
-              "causal_interpretation": "not_inferred"
-            }
-          },
-          {
             "date": "2026-09-21",
             "metric": "duration_minutes",
             "dose_value": 33.57,
@@ -1794,61 +1772,6 @@
         "metric": "duration_minutes",
         "exposures": [
           {
-            "date": "2026-09-04",
-            "metric": "duration_minutes",
-            "dose_value": 66.47,
-            "activity_id": 20036445971,
-            "evidence_basis": "confirmed_or_plan_matched",
-            "direct_response": {
-              "signal": "neutral",
-              "rpe_values": [],
-              "caution_terms": [],
-              "supportive_terms": []
-            },
-            "evidence_policy": "plan_matched_or_explicit",
-            "response_status": "tolerated",
-            "repeat_supported": true,
-            "recovery_context_24_72h": {
-              "signal": "supportive",
-              "observations": [
-                {
-                  "date": "2026-09-06",
-                  "family": "run",
-                  "signal": "supportive",
-                  "activity_id": 20057585521,
-                  "caution_terms": [],
-                  "supportive_terms": [
-                    "pigg"
-                  ]
-                }
-              ],
-              "window_complete": true,
-              "causal_interpretation": "not_inferred"
-            }
-          },
-          {
-            "date": "2026-09-08",
-            "metric": "duration_minutes",
-            "dose_value": 62.33,
-            "activity_id": 20092166843,
-            "evidence_basis": "confirmed_or_plan_matched",
-            "direct_response": {
-              "signal": "neutral",
-              "rpe_values": [],
-              "caution_terms": [],
-              "supportive_terms": []
-            },
-            "evidence_policy": "plan_matched_or_explicit",
-            "response_status": "tolerated",
-            "repeat_supported": true,
-            "recovery_context_24_72h": {
-              "signal": "unobserved",
-              "observations": [],
-              "window_complete": true,
-              "causal_interpretation": "not_inferred"
-            }
-          },
-          {
             "date": "2026-09-11",
             "metric": "duration_minutes",
             "dose_value": 71.67,
@@ -2129,28 +2052,6 @@
       "strength_unilateral": {
         "metric": "duration_minutes",
         "exposures": [
-          {
-            "date": "2026-09-07",
-            "metric": "duration_minutes",
-            "dose_value": 27.65,
-            "activity_id": 20079150228,
-            "evidence_basis": "confirmed_or_plan_matched",
-            "direct_response": {
-              "signal": "unknown",
-              "rpe_values": [],
-              "caution_terms": [],
-              "supportive_terms": []
-            },
-            "evidence_policy": "plan_matched_or_explicit",
-            "response_status": "demonstrated",
-            "repeat_supported": false,
-            "recovery_context_24_72h": {
-              "signal": "unobserved",
-              "observations": [],
-              "window_complete": true,
-              "causal_interpretation": "not_inferred"
-            }
-          },
           {
             "date": "2026-09-21",
             "metric": "duration_minutes",
@@ -2548,7 +2449,7 @@
               "swim_technique"
             ],
             "evidence": {
-              "basis": "comparable_scalar_dose",
+              "basis": "same_day_comparable_scalar_dose",
               "metric": "distance_m",
               "expected_value": 3200.0,
               "matching_basis": "same_discipline_and_comparable_planned_dose",
@@ -2907,7 +2808,7 @@
               "swim_technique"
             ],
             "evidence": {
-              "basis": "comparable_scalar_dose",
+              "basis": "same_day_comparable_scalar_dose",
               "metric": "distance_m",
               "expected_value": 3200.0,
               "matching_basis": "same_discipline_and_comparable_planned_dose",
@@ -3370,12 +3271,6 @@
       },
       "verified_exposures": [
         {
-          "date": "2026-09-07",
-          "family": "strength",
-          "source": "plan_matched",
-          "activity_id": 20079150228
-        },
-        {
           "date": "2026-09-09",
           "family": "swim",
           "source": "plan_matched",
@@ -3406,7 +3301,7 @@
           "activity_id": 20337309419
         }
       ],
-      "verified_exposure_count": 6
+      "verified_exposure_count": 5
     },
     "mtb_technical": {
       "session_count": 7,
@@ -3501,12 +3396,6 @@
     "strength_core": {
       "verified_exposures": [
         {
-          "date": "2026-09-07",
-          "family": "strength",
-          "source": "plan_matched",
-          "activity_id": 20079150228
-        },
-        {
           "date": "2026-09-21",
           "family": "strength",
           "source": "confirmed_stimulus",
@@ -3519,16 +3408,10 @@
           "activity_id": 20368346174
         }
       ],
-      "verified_exposure_count": 3
+      "verified_exposure_count": 2
     },
     "swim_technique": {
       "verified_exposures": [
-        {
-          "date": "2026-09-07",
-          "family": "strength",
-          "source": "plan_matched",
-          "activity_id": 20079150228
-        },
         {
           "date": "2026-09-09",
           "family": "swim",
@@ -3560,7 +3443,7 @@
           "activity_id": 20337309419
         }
       ],
-      "verified_exposure_count": 6
+      "verified_exposure_count": 5
     },
     "swim_threshold": {
       "evidence": [
@@ -3668,18 +3551,6 @@
       },
       "verified_exposures": [
         {
-          "date": "2026-09-04",
-          "family": "run",
-          "source": "plan_matched",
-          "activity_id": 20036445971
-        },
-        {
-          "date": "2026-09-08",
-          "family": "run",
-          "source": "plan_matched",
-          "activity_id": 20092166843
-        },
-        {
           "date": "2026-09-11",
           "family": "run",
           "source": "plan_matched",
@@ -3716,7 +3587,7 @@
           "activity_id": 20381137043
         }
       ],
-      "verified_exposure_count": 8
+      "verified_exposure_count": 6
     },
     "strength_unilateral": {
       "session_count": 7,
@@ -3726,12 +3597,6 @@
         "elapsed_time_s": 2212
       },
       "verified_exposures": [
-        {
-          "date": "2026-09-07",
-          "family": "strength",
-          "source": "plan_matched",
-          "activity_id": 20079150228
-        },
         {
           "date": "2026-09-21",
           "family": "strength",
@@ -3745,10 +3610,10 @@
           "activity_id": 20368346174
         }
       ],
-      "verified_exposure_count": 3
+      "verified_exposure_count": 2
     }
   },
-  "generated_at_utc": "2026-09-30T09:52:51.169403+00:00",
+  "generated_at_utc": "2026-09-30T10:49:16.495959+00:00",
   "capability_states": {
     "model": "capability_feedback_state_v1",
     "principle": "Kvantitativ progression kräver verifierad capability-evidens och dose-response. Teknikförmågor kan vara observerade men blir inte automatiskt progressionsredo från tid eller distans.",
@@ -3854,14 +3719,6 @@
         "progression_reason": "Senaste jämförbara exponeringen innehåller en explicit varningssignal från användaren.",
         "verified_exposures": [
           {
-            "date": "2026-09-07",
-            "family": "strength",
-            "source": "plan_matched",
-            "distance_m": 0.0,
-            "activity_id": 20079150228,
-            "elapsed_time_s": 1659
-          },
-          {
             "date": "2026-09-09",
             "family": "swim",
             "source": "plan_matched",
@@ -3903,7 +3760,7 @@
           }
         ],
         "progression_reason_code": "direct_caution",
-        "verified_exposure_count": 6,
+        "verified_exposure_count": 5,
         "latest_verified_exposure": {
           "date": "2026-09-26",
           "family": "swim",
@@ -4044,14 +3901,6 @@
         "progression_reason": "Senaste jämförbara exponeringen har stödjande passrespons men 72 h-observationsfönstret är ännu inte komplett.",
         "verified_exposures": [
           {
-            "date": "2026-09-07",
-            "family": "strength",
-            "source": "plan_matched",
-            "distance_m": 0.0,
-            "activity_id": 20079150228,
-            "elapsed_time_s": 1659
-          },
-          {
             "date": "2026-09-21",
             "family": "strength",
             "source": "confirmed_stimulus",
@@ -4069,7 +3918,7 @@
           }
         ],
         "progression_reason_code": "recovery_window_open",
-        "verified_exposure_count": 3,
+        "verified_exposure_count": 2,
         "latest_verified_exposure": {
           "date": "2026-09-28",
           "family": "strength",
@@ -4099,14 +3948,6 @@
         "demonstrated_value": null,
         "progression_reason": "Kapaciteten har verifierad exponering, men progression kan inte avgöras från tid/distans utan kvalitativ eller specifik teknisk evidens.",
         "verified_exposures": [
-          {
-            "date": "2026-09-07",
-            "family": "strength",
-            "source": "plan_matched",
-            "distance_m": 0.0,
-            "activity_id": 20079150228,
-            "elapsed_time_s": 1659
-          },
           {
             "date": "2026-09-09",
             "family": "swim",
@@ -4149,7 +3990,7 @@
           }
         ],
         "progression_reason_code": "qualitative_capability_requires_quality_review",
-        "verified_exposure_count": 6,
+        "verified_exposure_count": 5,
         "latest_verified_exposure": {
           "date": "2026-09-26",
           "family": "swim",
@@ -4302,22 +4143,6 @@
         "progression_reason": "Senaste jämförbara exponeringen har stödjande passrespons men 72 h-observationsfönstret är ännu inte komplett.",
         "verified_exposures": [
           {
-            "date": "2026-09-04",
-            "family": "run",
-            "source": "plan_matched",
-            "distance_m": 12681.6,
-            "activity_id": 20036445971,
-            "elapsed_time_s": 3988
-          },
-          {
-            "date": "2026-09-08",
-            "family": "run",
-            "source": "plan_matched",
-            "distance_m": 13143.4,
-            "activity_id": 20092166843,
-            "elapsed_time_s": 3740
-          },
-          {
             "date": "2026-09-11",
             "family": "run",
             "source": "plan_matched",
@@ -4367,7 +4192,7 @@
           }
         ],
         "progression_reason_code": "recovery_window_open",
-        "verified_exposure_count": 8,
+        "verified_exposure_count": 6,
         "latest_verified_exposure": {
           "date": "2026-09-29",
           "family": "run",
@@ -4397,14 +4222,6 @@
         "progression_reason": "Senaste jämförbara exponeringen har stödjande passrespons men 72 h-observationsfönstret är ännu inte komplett.",
         "verified_exposures": [
           {
-            "date": "2026-09-07",
-            "family": "strength",
-            "source": "plan_matched",
-            "distance_m": 0.0,
-            "activity_id": 20079150228,
-            "elapsed_time_s": 1659
-          },
-          {
             "date": "2026-09-21",
             "family": "strength",
             "source": "confirmed_stimulus",
@@ -4422,7 +4239,7 @@
           }
         ],
         "progression_reason_code": "recovery_window_open",
-        "verified_exposure_count": 3,
+        "verified_exposure_count": 2,
         "latest_verified_exposure": {
           "date": "2026-09-28",
           "family": "strength",
