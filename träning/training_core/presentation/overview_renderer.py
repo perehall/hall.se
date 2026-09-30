@@ -788,15 +788,18 @@ def _week_summary(week, relation: str, forward, current_date: date) -> str:
         return " · ".join(bits)
 
     if relation == "current":
-        # Current week is a hybrid of fact and plan:
-        # - completed activities are the truth for elapsed days,
-        # - today's still-unmatched planned sessions remain part of the week,
-        # - future planned sessions remain part of the week.
-        # This prevents old planned rows from being double-counted after a
-        # spontaneous/replacement workout while keeping genuine multi-pass days.
+        # Current week is fact + remaining plan, keyed by the canonical
+        # planned_workouts.linked_activity_id relationship. No date/sport
+        # heuristic is allowed to decide whether an activity fulfilled a plan row.
         total = 0
         key_count = 0
         sport_counts = {}
+        actual_ids = {
+            str(activity.provider_activity_id)
+            for day in week.days
+            for activity in day.actual_activities
+            if str(activity.provider_activity_id)
+        }
 
         def add_sport(value: str) -> None:
             sport = _summary_sport_key(value)
@@ -804,43 +807,25 @@ def _week_summary(week, relation: str, forward, current_date: date) -> str:
                 sport_counts[sport] = sport_counts.get(sport, 0) + 1
 
         for day in week.days:
-            actual_counts = {}
             for activity in day.actual_activities:
                 total += 1
-                sport = _summary_sport_key(activity.sport_family)
-                if sport:
-                    sport_counts[sport] = sport_counts.get(sport, 0) + 1
-                    actual_counts[sport] = actual_counts.get(sport, 0) + 1
-
-            if day.local_date < current_date:
-                # Past plan rows are historical intent, not remaining weekly load.
-                # Match only to preserve key-session classification where possible.
-                for workout in day.planned_workouts:
-                    sport = _summary_sport_key(workout.sport)
-                    if actual_counts.get(sport, 0) > 0:
-                        actual_counts[sport] -= 1
-                        if workout.priority_role == "anchor":
-                            key_count += 1
-                continue
-
-            if day.local_date == current_date:
-                # An actual session replaces one same-sport planned session.
-                # Additional planned sessions of another sport (or an extra
-                # same-sport session) remain counted as outstanding.
-                for workout in day.planned_workouts:
-                    sport = _summary_sport_key(workout.sport)
-                    if actual_counts.get(sport, 0) > 0:
-                        actual_counts[sport] -= 1
-                        if workout.priority_role == "anchor":
-                            key_count += 1
-                        continue
-                    total += 1
-                    add_sport(workout.sport)
-                    if workout.priority_role == "anchor":
-                        key_count += 1
-                continue
+                add_sport(activity.sport_family)
 
             for workout in day.planned_workouts:
+                fulfilled = (
+                    bool(workout.linked_provider_activity_id)
+                    and workout.linked_provider_activity_id in actual_ids
+                )
+                if fulfilled:
+                    if workout.priority_role == "anchor":
+                        key_count += 1
+                    continue
+
+                if day.local_date < current_date:
+                    # An unfulfilled plan row on an elapsed day is historical
+                    # intent, not part of the remaining current-week workload.
+                    continue
+
                 total += 1
                 add_sport(workout.sport)
                 if workout.priority_role == "anchor":
