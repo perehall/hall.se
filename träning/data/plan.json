@@ -393,7 +393,7 @@
                 "athlete_direction": 100
               }
             },
-            "intent": "Genomför ursprungligen planerat aerob/teknikpass.",
+            "intent": "Teknisk lateral variant på etablerad aerob totaldistans.",
             "session": "Simning · 3 200 m · grepp/teknik + aerob",
             "stimuli": [
               "swim_aerobic",
@@ -403,83 +403,73 @@
               "blocks": [
                 {
                   "name": "Insim + teknik",
-                  "steps": [
-                    {
-                      "kind": "swim",
-                      "text": "Lugn insim med fokus på avslappning och linje",
-                      "equipment": [],
-                      "intensity": "warmup",
-                      "distance_m": 600
-                    }
-                  ]
+                  "work": {
+                    "distance_m": 600,
+                    "repetitions": 1,
+                    "total_distance_m": 600
+                  },
+                  "equipment": [],
+                  "intensity": "warmup",
+                  "instruction": "Lugn insim med fokus på avslappning och linje"
                 },
                 {
                   "name": "Grepp",
-                  "steps": [
-                    {
-                      "kind": "swim",
-                      "text": "Rent isätt och tidigt kontrollerat grepp",
-                      "equipment": [],
-                      "intensity": "active",
-                      "distance_m": 50
-                    },
-                    {
-                      "kind": "rest",
-                      "duration_s": 15
-                    }
-                  ],
-                  "repeat": 8
+                  "work": {
+                    "distance_m": 50,
+                    "repetitions": 8,
+                    "total_distance_m": 400
+                  },
+                  "recovery": {
+                    "duration_s": 15
+                  },
+                  "equipment": [],
+                  "intensity": "active",
+                  "instruction": "Rent isätt och tidigt kontrollerat grepp"
                 },
                 {
                   "name": "Aerob",
-                  "steps": [
-                    {
-                      "kind": "swim",
-                      "text": "Stabil aerob rytm med bibehållet grepp",
-                      "equipment": [],
-                      "intensity": "active",
-                      "distance_m": 400
-                    },
-                    {
-                      "kind": "rest",
-                      "duration_s": 25
-                    }
-                  ],
-                  "repeat": 4
+                  "work": {
+                    "distance_m": 400,
+                    "repetitions": 4,
+                    "total_distance_m": 1600
+                  },
+                  "recovery": {
+                    "duration_s": 25
+                  },
+                  "equipment": [],
+                  "intensity": "active",
+                  "instruction": "Stabil aerob rytm med bibehållet grepp"
                 },
                 {
                   "name": "Frekvens",
-                  "steps": [
-                    {
-                      "kind": "swim",
-                      "text": "Avslappnad frekvens utan att tappa linje eller grepp",
-                      "equipment": [],
-                      "intensity": "active",
-                      "distance_m": 50
-                    },
-                    {
-                      "kind": "rest",
-                      "duration_s": 15
-                    }
-                  ],
-                  "repeat": 8
+                  "work": {
+                    "distance_m": 50,
+                    "repetitions": 8,
+                    "total_distance_m": 400
+                  },
+                  "recovery": {
+                    "duration_s": 15
+                  },
+                  "equipment": [],
+                  "intensity": "active",
+                  "instruction": "Avslappnad frekvens utan att tappa linje eller grepp"
                 },
                 {
                   "name": "Avsim",
-                  "steps": [
-                    {
-                      "kind": "swim",
-                      "text": "Mycket lugnt avsim",
-                      "equipment": [],
-                      "intensity": "cooldown",
-                      "distance_m": 200
-                    }
-                  ]
+                  "work": {
+                    "distance_m": 200,
+                    "repetitions": 1,
+                    "total_distance_m": 200
+                  },
+                  "equipment": [],
+                  "intensity": "cooldown",
+                  "instruction": "Mycket lugnt avsim"
                 }
               ],
-              "source": "restored_planned_session",
+              "source": "watch_workout",
               "executable": true,
-              "completeness": "complete"
+              "completeness": "full",
+              "total_distance_m": 3200
             },
             "dose_option_id": "swim-aerobic-skills-3200"
           }
