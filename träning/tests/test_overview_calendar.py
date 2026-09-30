@@ -486,7 +486,7 @@ class TrainingOverviewTests(unittest.TestCase):
             "work_duration",
         )
 
-    def test_renderer_shows_plan_actual_and_missing_future_horizon(self):
+    def test_renderer_applies_compact_scan_first_ui_contract(self):
         model = self.build()
         document = render_overview_document(
             model,
@@ -494,31 +494,42 @@ class TrainingOverviewTests(unittest.TestCase):
             sport_icons=None,
         )
         self.assertIn('class="overview-calendar"', document)
-        self.assertIn("Löpning · 4×8 min tröskel", document)
-        self.assertIn("Simning · aerob/teknik", document)
-        self.assertIn("Planeringshorisont", document)
-        self.assertIn("Blockrytm", document)
-        self.assertIn("Progressionslogik", document)
-        self.assertIn("1 primär progression", document)
-        self.assertIn("Etablera", document)
-        self.assertIn("Utveckla", document)
-        self.assertIn("Konsolidera", document)
-        self.assertIn("Löptröskel · längre repetitioner", document)
-        self.assertIn("Sim · grepp/teknik + aerob", document)
-        self.assertIn("Planerad progression om responsen stödjer", document)
-        self.assertIn("Villkorat mål:", document)
-        self.assertIn("4 × 9 min", document)
-        self.assertIn("Preliminär dagstruktur · exakta dagar/doser ej låsta", document)
-        self.assertIn("Blockskiss · nästa beslut tas vid checkpoint", document)
-        self.assertIn("Preliminär", document)
-        self.assertIn("Blockskiss", document)
-        self.assertIn("Blockreview · besluta nästa riktning", document)
-        self.assertIn("Nästa block · villkorad riktning", document)
-        self.assertIn("5 av 5 kommande veckor har planeringsinnehåll", document)
-        self.assertNotIn("Planeringsunderlag saknas", document)
-        self.assertNotIn("7 planerade vilodagar", document)
-        self.assertIn("ÖTILLÖ Åland World Series · Topp-10", document)
+        self.assertIn('class="overview-planbar"', document)
+        self.assertIn("2 veckor bakåt · aktuell vecka · 5 veckor framåt", document)
+
+        # One explicit planning-status chip per visible semantic level.
+        self.assertIn(">AKTUELL</span>", document)
+        self.assertIn(">PLANERAD</span>", document)
+        self.assertIn(">PRELIMINÄR</span>", document)
+        self.assertIn(">BLOCKSKISS</span>", document)
+
+        # Calendar cards use compact display titles and one small role/progression chip.
+        self.assertIn("Tröskel · 4×8", document)
+        self.assertIn("↑ Progression", document)
+        self.assertIn("~ Variation", document)
+        self.assertIn("= Konsolidera", document)
+        self.assertIn("◇ Skyddad", document)
+
+        # Explanatory payload is retained for on-demand detail, not rendered as open prose.
+        self.assertIn('id="overview-detail"', document)
+        self.assertIn('data-baseline="Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg"', document)
+        self.assertIn('data-target="Löpning · kontrollerad tröskel · 4 × 9 min / 90 s jogg"', document)
+        self.assertNotIn("<small><b>Bas:</b>", document)
+        self.assertNotIn("Villkorat mål:", document)
+        self.assertNotIn("Preliminär dagstruktur · exakta dagar/doser ej låsta", document)
+        self.assertNotIn("planerade vilodagar", document)
+
+        # Block sketches are roadmap/chip based rather than paragraph-heavy.
+        self.assertIn('class="overview-sketch-groups"', document)
+        self.assertIn('class="overview-sketch-chip sketch-primary"', document)
+        self.assertIn('class="overview-sketch-chip sketch-support"', document)
+        self.assertIn("Blockreview", document)
+        self.assertIn("Nästa block", document)
+
+        # Review remains available but secondary/collapsed.
         self.assertIn("Granska plan", document)
+        self.assertIn("Planeringshorisont", document)
+        self.assertIn("5 av 5 kommande veckor har planeringsinnehåll", document)
 
 
 if __name__ == "__main__":
