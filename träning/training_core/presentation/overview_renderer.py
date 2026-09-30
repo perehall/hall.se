@@ -488,13 +488,23 @@ def _week_html(
         f'{_e(commitment)}</span>'
         if commitment else ""
     )
+    week_heading = (
+        f'<strong>V{week.week_number}</strong>{commitment_html}'
+        f'<span>{week.start.day} {MONTH_SHORT[week.start.month - 1]} – '
+        f'{week.end.day} {MONTH_SHORT[week.end.month - 1]}</span>'
+    )
+    if relation != "future" or week.planned_count > 0:
+        week_heading = (
+            f'<a href="{_week_url(week.start, current_week_start)}">'
+            f'{week_heading}</a>'
+        )
+    else:
+        week_heading = f'<div class="overview-week-label">{week_heading}</div>'
+
     return (
         f'<section class="overview-week relation-{relation}" data-week="{_e(week.iso_key)}">'
         '<header class="overview-week-summary">'
-        f'<a href="{_week_url(week.start, current_week_start)}">'
-        f'<strong>V{week.week_number}</strong>{commitment_html}'
-        f'<span>{week.start.day} {MONTH_SHORT[week.start.month - 1]} – '
-        f'{week.end.day} {MONTH_SHORT[week.end.month - 1]}</span></a>'
+        f'{week_heading}'
         f'<p>{_e(metric_text)}</p>'
         f'{intent_html}'
         '</header>'
@@ -712,7 +722,7 @@ a{color:inherit}.overview-shell{width:min(1500px,100%);margin:auto;padding:24px 
 .overview-week{display:grid;grid-template-columns:165px minmax(0,1fr);border-top:1px solid var(--line)}
 .overview-week:first-child{border-top:0}.overview-week.relation-current{background:#FAFAFF;box-shadow:inset 3px 0 0 var(--accent)}
 .overview-week-summary{padding:14px 14px;border-right:1px solid var(--line);background:rgba(255,255,255,.46)}
-.overview-week-summary a{text-decoration:none}.overview-week-summary strong{display:block;font-size:1.05rem}.overview-week-summary span{display:block;margin-top:2px;color:var(--muted);font-size:.68rem}
+.overview-week-summary a{text-decoration:none}.overview-week-label{color:inherit}.overview-week-summary strong{display:block;font-size:1.05rem}.overview-week-summary span{display:block;margin-top:2px;color:var(--muted);font-size:.68rem}
 .overview-week-summary p{margin:10px 0 0;color:var(--secondary);font-size:.7rem;line-height:1.5}
 .overview-week-intent{margin-top:8px;padding-top:7px;border-top:1px solid var(--line-soft)}
 .overview-week-intent strong{display:block;font-size:.68rem}.overview-week-intent span{margin-top:2px;font-size:.62rem}
