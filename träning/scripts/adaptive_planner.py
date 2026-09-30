@@ -25,6 +25,9 @@ from canonical_plan import planned_workouts as canonical_planned_workouts
 from capability_registry import (
     CAPABILITY_REGISTRY,
     capability_default_recipe,
+    capability_evidence_policy,
+    capability_metric,
+    capability_progression_axes,
     capability_recipe_family,
     response_capability_for_recipe,
     validate_registry_against_catalog,
@@ -2259,6 +2262,12 @@ def response_profile_for_recipe(recipe_key, athlete_state):
     capability = RECIPE_TO_RESPONSE_CAPABILITY.get(recipe_key)
     if not capability:
         return None
+    state_profile = (
+        ((athlete_state.get("capability_states") or {}).get("by_capability") or {})
+        .get(capability)
+    )
+    if isinstance(state_profile, dict):
+        return state_profile
     return (
         ((athlete_state.get("dose_response") or {}).get("by_capability") or {})
         .get(capability)
@@ -3150,6 +3159,11 @@ def generated_capability_portfolio(policy, meso):
     result = deepcopy(policy["strategy_base"].get("capability_portfolio") or [])
     for item in result:
         key = item.get("key")
+        if key in CAPABILITY_REGISTRY:
+            item["response_metric"] = capability_metric(key)
+            item["evidence_policy"] = capability_evidence_policy(key)
+            item["progression_axes"] = list(capability_progression_axes(key))
+            item["recipe_family"] = list(capability_recipe_family(key))
         if key in primary:
             item["mode"] = "develop"
             item["priority"] = 1
