@@ -174,6 +174,9 @@ class OverviewBlueprintVariantReadModel:
     development_character: str
     label: str
     progression_intent: str
+    baseline_session: str
+    conditional_target_session: str
+    target_condition: str
 
 
 @dataclass(frozen=True)
@@ -360,6 +363,11 @@ def build_overview_context(roadmap: dict | None) -> OverviewPlanContextReadModel
                 development_character=str(row.get("development_character") or "").strip(),
                 label=str(row.get("label") or "").strip(),
                 progression_intent=str(row.get("progression_intent") or "").strip(),
+                baseline_session=str(row.get("baseline_session") or "").strip(),
+                conditional_target_session=str(
+                    row.get("conditional_target_session") or ""
+                ).strip(),
+                target_condition=str(row.get("target_condition") or "").strip(),
             )
 
         development_blueprint = tuple(

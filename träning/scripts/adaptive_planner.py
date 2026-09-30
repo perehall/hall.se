@@ -337,7 +337,13 @@ def _blueprint_family_index(block_context, family_size):
     return 0
 
 
-def build_development_blueprint(meso, policy, catalog):
+def build_development_blueprint(
+    meso,
+    policy,
+    catalog,
+    athlete_state=None,
+    starting_state=None,
+):
     """Publish the mesocycle's intended workout-character progression.
 
     This is the coach's ground plan, not a frozen calendar. It deliberately
@@ -353,6 +359,33 @@ def build_development_blueprint(meso, policy, catalog):
 
     recipes = catalog.get("recipes") or {}
     normal_swims = int((policy.get("microcycle_policy") or {}).get("normal_swim_exposures", 2))
+
+    def dose_plan(recipe_key, recipe, progression_intent):
+        if athlete_state is None:
+            return {}
+        try:
+            selected, floor, next_option, _, _ = choose_option(
+                recipe_key,
+                recipe,
+                "consolidate",
+                athlete_state,
+                starting_state,
+            )
+        except (KeyError, RuntimeError, TypeError, ValueError):
+            return {}
+        result = {
+            "baseline_option_id": str(selected.get("id") or ""),
+            "baseline_session": str(selected.get("session") or ""),
+        }
+        if progression_intent == "progress_if_ready" and next_option is not None:
+            result.update(
+                {
+                    "conditional_target_option_id": str(next_option.get("id") or ""),
+                    "conditional_target_session": str(next_option.get("session") or ""),
+                    "target_condition": "progression_ready_and_absorbable_context",
+                }
+            )
+        return result
     rows = []
     for offset in range(max(0, duration)):
         week_start = start + timedelta(days=7 * offset)
@@ -372,6 +405,15 @@ def build_development_blueprint(meso, policy, catalog):
             recipe = recipes[recipe_key]
             stimuli = set(recipe_capabilities(recipe))
             covered.update(stimuli.intersection(set(meso.get("primary_capabilities") or [])))
+            progression_intent = (
+                "establish"
+                if intent == "establish"
+                else "vary_structure"
+                if intent == "develop" and int(context.get("microcycle_index") or 1) == 2
+                else "progress_if_ready"
+                if intent == "develop"
+                else "consolidate"
+            )
             variants.append(
                 {
                     "role": "primary",
@@ -379,15 +421,8 @@ def build_development_blueprint(meso, policy, catalog):
                     "recipe_key": recipe_key,
                     "development_character": recipe.get("development_character") or recipe_key,
                     "label": recipe.get("blueprint_label") or (recipe.get("options") or [{}])[0].get("session") or recipe_key,
-                    "progression_intent": (
-                        "establish"
-                        if intent == "establish"
-                        else "vary_structure"
-                        if intent == "develop" and int(context.get("microcycle_index") or 1) == 2
-                        else "progress_if_ready"
-                        if intent == "develop"
-                        else "consolidate"
-                    ),
+                    "progression_intent": progression_intent,
+                    **dose_plan(recipe_key, recipe, progression_intent),
                 }
             )
 
@@ -409,6 +444,13 @@ def build_development_blueprint(meso, policy, catalog):
                 preferred_index = min(offset, len(alternatives) - 1)
                 recipe_key = alternatives[preferred_index]
                 recipe = recipes[recipe_key]
+                companion_intent = (
+                    "establish"
+                    if intent == "establish"
+                    else "vary_structure"
+                    if intent == "develop"
+                    else "consolidate"
+                )
                 variants.append(
                     {
                         "role": "primary_companion",
@@ -416,13 +458,8 @@ def build_development_blueprint(meso, policy, catalog):
                         "recipe_key": recipe_key,
                         "development_character": recipe.get("development_character") or recipe_key,
                         "label": recipe.get("blueprint_label") or (recipe.get("options") or [{}])[0].get("session") or recipe_key,
-                        "progression_intent": (
-                            "establish"
-                            if intent == "establish"
-                            else "vary_structure"
-                            if intent == "develop"
-                            else "consolidate"
-                        ),
+                        "progression_intent": companion_intent,
+                        **dose_plan(recipe_key, recipe, companion_intent),
                     }
                 )
 
@@ -482,8 +519,21 @@ def build_development_blueprint(meso, policy, catalog):
     return rows
 
 
-def development_blueprint_for_week(meso, policy, catalog, target_start):
-    for row in build_development_blueprint(meso, policy, catalog):
+def development_blueprint_for_week(
+    meso,
+    policy,
+    catalog,
+    target_start,
+    athlete_state=None,
+    starting_state=None,
+):
+    for row in build_development_blueprint(
+        meso,
+        policy,
+        catalog,
+        athlete_state=athlete_state,
+        starting_state=starting_state,
+    ):
         if row.get("week_start") == target_start.isoformat():
             return row
     return None
@@ -2391,9 +2441,20 @@ def build_microcycle_source_payload(
         "competition_context": competition_context,
         "completed_microcycle_context": completed_context,
         "block_context": mesocycle_block_context(meso, target_start, policy),
-        "development_blueprint": build_development_blueprint(meso, policy, catalog),
+        "development_blueprint": build_development_blueprint(
+            meso,
+            policy,
+            catalog,
+            athlete_state=athlete_state,
+            starting_state=starting_state,
+        ),
         "current_microcycle_blueprint": development_blueprint_for_week(
-            meso, policy, catalog, target_start
+            meso,
+            policy,
+            catalog,
+            target_start,
+            athlete_state=athlete_state,
+            starting_state=starting_state,
         ),
         "mesocycle_history": mesocycle_history_context(
             meso, target_start, catalog
@@ -3232,7 +3293,11 @@ def materialize_strategy(goal, policy, meso, micro, catalog, athlete_state, goal
             policy,
         ),
         "development_blueprint": build_development_blueprint(
-            meso, policy, catalog
+            meso,
+            policy,
+            catalog,
+            athlete_state=athlete_state,
+            starting_state=starting_state,
         ),
         "progression_policy": {
             "automatic_load_increase": False,

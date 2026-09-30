@@ -86,10 +86,20 @@ def _blueprint_html(blueprint) -> str:
             item.progression_intent,
             item.progression_intent,
         )
+        baseline = (
+            f'<small><b>Bas:</b> {_e(item.baseline_session)}</small>'
+            if item.baseline_session else ""
+        )
+        target = (
+            f'<small class="overview-target"><b>Villkorat mål:</b> '
+            f'{_e(item.conditional_target_session)}</small>'
+            if item.conditional_target_session else ""
+        )
         return (
             f'<article class="overview-blueprint-card {extra_class}">'
             f'<strong>{_e(item.label)}</strong>'
             f'<span>{_e(intent)}</span>'
+            f'{baseline}{target}'
             '</article>'
         )
 
@@ -567,6 +577,8 @@ a{color:inherit}.overview-shell{width:min(1500px,100%);margin:auto;padding:24px 
 .overview-blueprint-card.support{background:var(--elevated)}
 .overview-blueprint-card strong{display:block;font-size:.68rem;line-height:1.3}
 .overview-blueprint-card span{display:block;margin-top:3px;font-size:.59rem;line-height:1.3;color:var(--muted)}
+.overview-blueprint-card small{display:block;margin-top:5px;font-size:.58rem;line-height:1.35;color:var(--secondary)}
+.overview-blueprint-card small.overview-target{padding-top:4px;border-top:1px solid var(--line-soft)}
 .overview-blueprint-empty{padding:14px;color:var(--muted);font-size:.7rem}
 .overview-day{min-height:126px;padding:10px 9px;border-left:1px solid var(--line-soft);position:relative}
 .overview-day:first-child{border-left:0}.overview-day.today{box-shadow:inset 0 0 0 2px var(--accent);z-index:1}
