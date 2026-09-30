@@ -24,9 +24,9 @@ WATCH_ICON = (
 )
 
 STATUS_COPY = {
-    "synced": "Klocksync skickad",
-    "pending": "Klocksync väntar",
-    "error": "Klocksync fel",
+    "synced": "Verifierad i Intervals",
+    "pending": "Intervals-sync väntar",
+    "error": "Intervals-sync fel",
 }
 
 
@@ -51,12 +51,12 @@ def chip(day):
     if not label:
         return ""
     title = (
-        "Passet är verifierat i Intervals.icu och kan därifrån skickas vidare till Garmin; "
-        "leverans till själva klockan kan inte verifieras av träningssystemet."
+        "Passet och dess struktur är verifierade i Intervals.icu. Garmin Connect och den fysiska "
+        "klockan ligger utanför träningssystemets verifierbara leveranskedja."
         if status == "synced"
-        else "Strukturerat pass väntar på transport via Intervals.icu till Garmin."
+        else "Strukturerat pass väntar på verifierad transport till Intervals.icu. Garmin- och klockleverans är ännu inte verifierad."
         if status == "pending"
-        else "Transporten via Intervals.icu misslyckades senast och försöks igen i nästa träningsjobb."
+        else "Transporten till Intervals.icu misslyckades senast. Passet ska inte betraktas som levererat till Garmin eller klockan."
     )
     return (
         f'<div class="device-sync-state {html.escape(status)}" title="{html.escape(title)}">'
