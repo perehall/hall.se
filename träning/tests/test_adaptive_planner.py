@@ -12,6 +12,7 @@ sys.path.insert(0, str(SCRIPTS))
 
 from adaptive_planner import (  # noqa: E402
     MICRO_PLANNER_REVISION,
+    align_fallback_progression_with_block_intent,
     build_upcoming_strategy_after_active_replan,
     choose_option,
     completed_context_signature,
@@ -1060,6 +1061,59 @@ class AdaptivePlanningTests(unittest.TestCase):
             any(ref.endswith(":hold") for ref in threshold["evidence_refs"])
         )
 
+    def test_develop_hold_alignment_is_idempotent_across_normalization_passes(self):
+        meso = {
+            "id": "meso-test",
+            "start_date": "2026-09-28",
+            "duration_weeks": 4,
+            "primary_capabilities": ["run_threshold", "swim_aerobic", "swim_technique"],
+            "secondary_capabilities": ["run_easy_distance"],
+        }
+        athlete_state = {
+            "capability_facts": {
+                "run_threshold": {
+                    "evidence": [{"work_minutes": 32.0, "kind": "explicit_user_report"}]
+                }
+            },
+            "dose_response": {
+                "by_capability": {
+                    "run_threshold": {
+                        "absorbed_value": 32.0,
+                        "tolerated_value": 32.0,
+                        "progression_ready": False,
+                        "progression_reason": "72 h-observationsfönstret är ännu inte komplett.",
+                    }
+                }
+            },
+        }
+        once = fallback_microcycle(
+            meso,
+            self.policy,
+            self.catalog,
+            date(2026, 10, 5),
+            completed_context={},
+            athlete_state=athlete_state,
+        )
+        twice = align_fallback_progression_with_block_intent(
+            once,
+            meso,
+            self.policy,
+            self.catalog,
+            athlete_state,
+            date(2026, 10, 5),
+        )
+        threshold = next(row for row in twice["slots"] if row["recipe_key"] == "run_threshold")
+        self.assertEqual(
+            threshold["rationale"].count("Develop-vecka konsolideras för detta primära stimulus"),
+            1,
+        )
+        self.assertEqual(
+            threshold["evidence_refs"].count(
+                "athlete_state.dose_response:run_threshold:hold"
+            ),
+            1,
+        )
+
     def test_future_develop_fallback_satisfies_its_own_structural_guards(self):
         meso = json.loads(
             (ROOT / "data" / "mesocycle_decision.json").read_text(encoding="utf-8")
@@ -1975,7 +2029,7 @@ class AdaptivePlanningTests(unittest.TestCase):
             "end_date": "2026-10-18",
             "goal_hash": goal_hash(self.goal),
         }
-        self.assertEqual(MICRO_PLANNER_REVISION, 14)
+        self.assertEqual(MICRO_PLANNER_REVISION, 15)
         stale_micro = {
             "planner_revision": 6,
             "week_start": "2026-09-28",

@@ -52,7 +52,7 @@ MODEL = os.environ.get("OPENAI_MODEL", "gpt-5-mini")
 MESO_SCHEMA_VERSION = 1
 MICRO_SCHEMA_VERSION = 1
 PLANNER_REVISION = 6
-MICRO_PLANNER_REVISION = 14
+MICRO_PLANNER_REVISION = 15
 
 CAPABILITY_TO_RECIPE = {
     "run_threshold": "run_threshold",
@@ -2049,15 +2049,16 @@ def align_fallback_progression_with_block_intent(
                 reason = "Ingen högre förgodkänd dos finns i receptkatalogen."
         if not reason:
             reason = "Verifierat stöd för progression saknas."
+        refs = list(slot.get("evidence_refs") or [])
+        marker = f"athlete_state.dose_response:{recipe_key}:hold"
+        if marker in refs:
+            continue
         slot["rationale"] = (
             str(slot.get("rationale") or "").rstrip()
             + " Develop-vecka konsolideras för detta primära stimulus: "
             + reason
         ).strip()
-        refs = list(slot.get("evidence_refs") or [])
-        marker = f"athlete_state.dose_response:{recipe_key}:hold"
-        if marker not in refs:
-            refs.append(marker)
+        refs.append(marker)
         slot["evidence_refs"] = refs[:6]
 
     return result
