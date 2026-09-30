@@ -1975,7 +1975,7 @@ class AdaptivePlanningTests(unittest.TestCase):
             "end_date": "2026-10-18",
             "goal_hash": goal_hash(self.goal),
         }
-        self.assertEqual(MICRO_PLANNER_REVISION, 13)
+        self.assertEqual(MICRO_PLANNER_REVISION, 14)
         stale_micro = {
             "planner_revision": 6,
             "week_start": "2026-09-28",
