@@ -439,7 +439,7 @@ def _workout_key(workout):
     return f"{micro}:{date_value}:{slot}" if micro and date_value and slot else ""
 
 
-def nearby_structural_intent_matches(activity, planned_workouts, observed):
+def nearby_structural_intent_matches(activity, planned_workouts, observed, confirmed_stimuli=()):
     activity_day = _activity_date(activity)
     if activity_day is None or activity.get("plan_relation") == "separate":
         return []
@@ -459,13 +459,22 @@ def nearby_structural_intent_matches(activity, planned_workouts, observed):
         evidence = _run_plan_match(activity, workout, observed)
         basis = "run_interval_structure"
         if evidence is None:
+            # Scalar dose alone is weak evidence. It may recover the intent of
+            # a same-day planned session, but it must not bridge calendar days.
+            # A moved session needs explicit capability evidence or a stronger
+            # structural match.
+            if day_delta != 0:
+                continue
             evidence = _scalar_plan_match(activity, workout)
-            basis = "comparable_scalar_dose"
+            basis = "same_day_comparable_scalar_dose"
         if evidence is None:
             continue
 
         stimuli = [str(value) for value in (workout.get("stimuli") or []) if str(value)]
         if not stimuli:
+            continue
+        confirmed = {str(value) for value in confirmed_stimuli if str(value)}
+        if confirmed and confirmed.isdisjoint(stimuli):
             continue
         dose_error = float(evidence.get("relative_error") or 0.0)
         candidates.append(
@@ -688,6 +697,11 @@ def build_training_profile(
         activity,
         planned_workouts,
         observed["run_time_intervals"],
+        confirmed_stimuli=[
+            row["key"]
+            for row in stimuli
+            if row.get("status") == "confirmed" and row.get("key")
+        ],
     )
     keyed = {}
     for row in [*durable_matches, *fresh_matches]:
