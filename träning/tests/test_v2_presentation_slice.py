@@ -166,6 +166,40 @@ class PresentationSliceTests(unittest.TestCase):
         self.assertIn('data-workout-key="strength-1"', rendered)
         self.assertEqual(rendered.count('class="v2-planned-workout"'), 2)
 
+    def test_planned_today_preserves_synced_device_status_on_overview(self):
+        source_hash = "abc123"
+        class SyncedRepository:
+            def planned_days(self, start, end):
+                return [
+                    PlannedDay(
+                        date(2026, 9, 30),
+                        "Simning · 3 200 m · grepp/teknik + aerob",
+                        "swim",
+                        "planned",
+                        workout_key="swim-synced",
+                        payload={
+                            "device_workout": {"source_hash": source_hash},
+                            "device_sync": {
+                                "status": "synced",
+                                "transport": "intervals_icu",
+                                "source_hash": source_hash,
+                                "device_delivery": "unverified",
+                            },
+                        },
+                    )
+                ]
+
+            def completed_activities(self, start, end):
+                return []
+
+        snapshot = build_presentation_snapshot(
+            SyncedRepository(), today=date(2026, 9, 30)
+        )
+        rendered = render_today(snapshot)
+        self.assertIn('data-device-sync="synced"', rendered)
+        self.assertIn('class="v2-watch-icon"', rendered)
+        self.assertIn("Klocksync skickad", rendered)
+
     def test_week_renders_multiple_same_day_workouts_as_independent_cards(self):
         class MultiRepository:
             def planned_days(self, start, end):
