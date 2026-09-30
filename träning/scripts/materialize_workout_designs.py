@@ -56,7 +56,7 @@ def preferred_option_id(workout):
 
 def preserve_runtime_watch_fields(canonical, existing):
     refreshed = deepcopy(canonical)
-    for field in ("id", "sync_enabled"):
+    for field in ("id", "sync_enabled", "external_id"):
         if field in (existing or {}):
             refreshed[field] = deepcopy(existing[field])
     return refreshed
