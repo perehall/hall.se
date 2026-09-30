@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 
 SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
@@ -76,8 +77,9 @@ class RenderPipelineTests(unittest.TestCase):
         self.assertNotIn("publish_v2_preview", source)
         self.assertIn("publish_v2_current_page()", source)
         self.assertIn("publish_v2_upcoming_page()", source)
+        self.assertIn("publish_overview_page()", source)
 
-    def test_production_main_publishes_current_and_upcoming_v2(self):
+    def test_production_main_publishes_current_upcoming_overview_and_development(self):
         import render_training_site
 
         original_current = render_training_site.publish_v2_current_page
@@ -86,11 +88,18 @@ class RenderPipelineTests(unittest.TestCase):
         try:
             render_training_site.publish_v2_current_page = lambda: calls.append("current")
             render_training_site.publish_v2_upcoming_page = lambda: calls.append("upcoming")
-            self.assertEqual(main(), 0)
+            with patch(
+                "build_overview_page.publish_overview_page",
+                lambda: calls.append("overview"),
+            ), patch(
+                "build_development_page.publish_development_page",
+                lambda: calls.append("development"),
+            ):
+                self.assertEqual(main(), 0)
         finally:
             render_training_site.publish_v2_current_page = original_current
             render_training_site.publish_v2_upcoming_page = original_upcoming
-        self.assertEqual(calls, ["current", "upcoming"])
+        self.assertEqual(calls, ["current", "upcoming", "overview", "development"])
 
     def test_production_renderer_uses_stockholm_calendar_date(self):
         source = (SCRIPTS / "render_training_site.py").read_text(encoding="utf-8")
