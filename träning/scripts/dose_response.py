@@ -20,6 +20,13 @@ import re
 from collections import defaultdict
 from datetime import date, timedelta
 
+from capability_registry import (
+    CAPABILITY_REGISTRY,
+    capability_discipline,
+    capability_metric,
+    capability_evidence_policy,
+)
+
 RPE_RE = re.compile(r"\brpe\s*(?P<value>\d+(?:[.,]\d+)?)\s*(?:/\s*10)?", re.IGNORECASE)
 
 SUPPORTIVE_TERMS = (
@@ -70,14 +77,11 @@ RECOVERY_CAUTION_TERMS = (
 )
 
 CAPABILITY_METRIC = {
-    "run_threshold": "work_minutes",
-    "run_hill_quality": "repetitions",
-    "run_easy_distance": "duration_minutes",
-    "swim_aerobic": "distance_m",
-    "swim_threshold": "distance_m",
-    "mtb_technical": "duration_minutes",
-    "strength_unilateral": "duration_minutes",
+    key: capability_metric(key)
+    for key in CAPABILITY_REGISTRY
+    if capability_metric(key)
 }
+
 
 
 def _number(value):
@@ -207,11 +211,42 @@ def _session_distance(row):
     return _number(row.get("distance_m"))
 
 
+def _profile_capabilities(row):
+    profile = row.get("training_profile") or {}
+    confirmed = {
+        str(item.get("key"))
+        for item in (profile.get("stimuli") or [])
+        if isinstance(item, dict)
+        and item.get("status") == "confirmed"
+        and str(item.get("key") or "")
+    }
+    credits = {
+        str(value)
+        for value in (profile.get("planning_credits") or [])
+        if str(value or "")
+    }
+    return confirmed | credits
+
+
+def _metric_from_session(row, capability):
+    metric = capability_metric(capability)
+    if metric == "duration_minutes":
+        return _session_duration_minutes(row)
+    if metric == "distance_m":
+        return _session_distance(row)
+    return None
+
+
 def _candidate_exposures(sessions, evidence):
-    threshold = _evidence_by_activity(evidence, "run_threshold", "work_minutes")
-    hills = _evidence_by_activity(evidence, "run_hill_quality", "repetitions")
-    swim_threshold = _evidence_by_activity(evidence, "swim_threshold", "distance_m")
-    quality_run_ids = set(threshold) | set(hills)
+    explicit = {
+        capability: _evidence_by_activity(
+            evidence,
+            capability,
+            metric,
+        )
+        for capability, metric in CAPABILITY_METRIC.items()
+        if metric in {"work_minutes", "repetitions", "distance_m"}
+    }
 
     exposures = defaultdict(list)
     for row in sessions:
@@ -222,29 +257,50 @@ def _candidate_exposures(sessions, evidence):
         if not activity_id:
             continue
 
-        if activity_id in threshold:
-            exposures["run_threshold"].append((row, threshold[activity_id]))
-        if activity_id in hills:
-            exposures["run_hill_quality"].append((row, hills[activity_id]))
-        if activity_id in swim_threshold:
-            exposures["swim_threshold"].append((row, swim_threshold[activity_id]))
+        profile_caps = _profile_capabilities(row)
+        for capability, metric in CAPABILITY_METRIC.items():
+            explicit_value = (explicit.get(capability) or {}).get(activity_id)
+            if explicit_value is not None:
+                exposures[capability].append(
+                    (
+                        row,
+                        explicit_value,
+                        "explicit_or_performance_evidence",
+                    )
+                )
+                continue
 
-        if family == "run" and activity_id not in quality_run_ids:
-            value = _session_duration_minutes(row)
-            if value is not None:
-                exposures["run_easy_distance"].append((row, value))
-        if family == "swim" and activity_id not in swim_threshold:
-            value = _session_distance(row)
-            if value is not None:
-                exposures["swim_aerobic"].append((row, value))
-        if family == "bike":
-            value = _session_duration_minutes(row)
-            if value is not None:
-                exposures["mtb_technical"].append((row, value))
-        if family == "strength":
-            value = _session_duration_minutes(row)
-            if value is not None:
-                exposures["strength_unilateral"].append((row, value))
+            if capability not in profile_caps:
+                # External load may be observed directly; all training
+                # capabilities require explicit or unambiguous plan-linked
+                # stimulus evidence before they enter dose-response.
+                if capability == "enduro_technical" and family == "enduro":
+                    value = _metric_from_session(row, capability)
+                    if value is not None:
+                        exposures[capability].append(
+                            (row, value, "external_observed")
+                        )
+                continue
+
+            expected_family = capability_discipline(capability)
+            family_matches = (
+                family == expected_family
+                or (expected_family == "bike" and family == "bike")
+                or (expected_family == "strength" and family == "strength")
+            )
+            if not family_matches:
+                continue
+
+            value = _metric_from_session(row, capability)
+            if value is None:
+                continue
+            exposures[capability].append(
+                (
+                    row,
+                    value,
+                    "confirmed_or_plan_matched",
+                )
+            )
 
     return exposures
 
@@ -268,7 +324,7 @@ def build_dose_response(sessions, evidence, *, today):
 
     for capability, pairs in sorted(candidates.items()):
         rows = []
-        for session, value in pairs:
+        for session, value, evidence_basis in pairs:
             response = direct_response(session.get("user_report"))
             recovery = recovery_context(session.get("date"), sessions, today=today)
             rows.append(
@@ -277,6 +333,8 @@ def build_dose_response(sessions, evidence, *, today):
                     "date": session.get("date"),
                     "dose_value": round(float(value), 2),
                     "metric": CAPABILITY_METRIC[capability],
+                    "evidence_basis": evidence_basis,
+                    "evidence_policy": capability_evidence_policy(capability),
                     "direct_response": response,
                     "recovery_context_24_72h": recovery,
                 }
@@ -329,35 +387,80 @@ def build_dose_response(sessions, evidence, *, today):
         )
 
         if not rows:
+            reason_code = "missing_exposure"
             reason = "Ingen verifierad exponering finns."
         elif latest["direct_response"]["signal"] == "caution":
+            reason_code = "direct_caution"
             reason = "Senaste jämförbara exponeringen innehåller en explicit varningssignal från användaren."
         elif latest["response_status"] == "demonstrated":
+            reason_code = "missing_feedback"
             reason = "Senaste jämförbara exponeringen är genomförd men saknar återkoppling; tystnad räknas inte som tolerans."
         elif absorbed is None:
+            reason_code = "not_yet_absorbed"
             reason = "Dos har demonstrerats/tolererats men saknar ännu upprepad stödjande respons för att klassas som absorberad."
         elif latest["response_status"] == "tolerated_pending_recovery":
+            reason_code = "recovery_window_open"
             reason = "Senaste jämförbara exponeringen har stödjande passrespons men 72 h-observationsfönstret är ännu inte komplett."
         elif latest["response_status"] == "tolerated_with_recovery_caution":
+            reason_code = "recovery_context_caution"
             reason = "Senaste exponeringen har stödjande passrespons men 24–72 h-kontexten innehåller en varningssignal; kausalitet antas inte."
         elif latest["dose_value"] < absorbed * 0.90:
+            reason_code = "latest_below_absorbed_floor"
             reason = "Senaste jämförbara dos ligger tydligt under tidigare absorberad nivå."
         else:
+            reason_code = "absorbed_supportive_repeat"
             reason = "Upprepad jämförbar dos med stödjande respons ger stöd för att dosen är absorberad."
+
+        if progression_ready:
+            progression_state = "ready"
+        elif latest is None:
+            progression_state = "establish"
+        else:
+            progression_state = "hold"
+
+        evidence_state = (
+            "absorbed"
+            if absorbed is not None
+            else "tolerated"
+            if tolerated is not None
+            else "demonstrated"
+            if demonstrated is not None
+            else "missing"
+        )
 
         by_capability[capability] = {
             "metric": CAPABILITY_METRIC[capability],
             "demonstrated_value": demonstrated,
             "tolerated_value": tolerated,
             "absorbed_value": absorbed,
+            "evidence_state": evidence_state,
+            "progression_state": progression_state,
             "progression_ready": progression_ready,
+            "progression_reason_code": reason_code,
             "progression_reason": reason,
             "latest_exposure": latest,
             "exposures": rows[-8:],
         }
 
+    for capability, metric in CAPABILITY_METRIC.items():
+        if capability in by_capability:
+            continue
+        by_capability[capability] = {
+            "metric": metric,
+            "demonstrated_value": None,
+            "tolerated_value": None,
+            "absorbed_value": None,
+            "evidence_state": "missing",
+            "progression_state": "establish",
+            "progression_ready": False,
+            "progression_reason_code": "missing_exposure",
+            "progression_reason": "Ingen verifierad exponering finns.",
+            "latest_exposure": None,
+            "exposures": [],
+        }
+
     return {
-        "model": "demonstrated_tolerated_absorbed_v1",
+        "model": "demonstrated_tolerated_absorbed_v2",
         "principle": (
             "Genomförd dos är inte samma sak som absorberad dos. Automatisk progression kräver "
             "upprepad jämförbar exponering med stödjande användarrespons; 24–72 h-signaler används "

@@ -24,6 +24,10 @@ from statistics import mean, median
 PROFILE_SCHEMA_VERSION = 1
 RUN_TYPES = {"Run", "TrailRun", "VirtualRun"}
 SWIM_TYPES = {"Swim"}
+BIKE_TYPES = {"Ride", "MountainBikeRide", "VirtualRide"}
+STRENGTH_TYPES = {"WeightTraining", "Workout"}
+DURATION_SESSION_RE = re.compile(r"(?<![×x])\b(?P<minutes>\d{2,3})\s*min\b", re.IGNORECASE)
+DISTANCE_SESSION_RE = re.compile(r"\b(?P<distance>\d[\d ]{2,})\s*m\b", re.IGNORECASE)
 THRESHOLD_WORD = re.compile(r"\b(trösk\w*|threshold|tempo)\b", re.IGNORECASE)
 TIME_INTERVAL_REPORT = re.compile(
     r"(?P<count>\d+)\s*[x×]\s*(?P<minutes>\d+(?:[.,]\d+)?)\s*min",
@@ -328,6 +332,87 @@ def _run_plan_match(activity, workout, observed):
     }
 
 
+def _activity_discipline(activity):
+    sport = str(activity.get("sport_type") or "")
+    if sport in RUN_TYPES:
+        return "run"
+    if sport in SWIM_TYPES:
+        return "swim"
+    if sport in BIKE_TYPES:
+        return "bike"
+    if sport in STRENGTH_TYPES:
+        return "strength"
+    if sport == "Enduro":
+        return "enduro"
+    return ""
+
+
+def _planned_scalar_target(workout):
+    sport = str(workout.get("sport") or "").lower()
+    session = str(workout.get("session") or "")
+    stimuli = set(str(value) for value in (workout.get("stimuli") or []))
+
+    if sport == "swim":
+        match = DISTANCE_SESSION_RE.search(session)
+        if match:
+            return "distance_m", float(match.group("distance").replace(" ", ""))
+        return None
+
+    if sport == "run" and stimuli.intersection({"run_threshold", "run_hill_quality"}):
+        return None
+
+    if sport in {"run", "bike", "strength"}:
+        matches = list(DURATION_SESSION_RE.finditer(session))
+        if len(matches) == 1:
+            return "duration_minutes", float(matches[0].group("minutes"))
+    return None
+
+
+def _actual_scalar(activity, metric):
+    if metric == "distance_m":
+        value = _num(activity.get("distance_m"))
+        return value if value is not None and value > 0 else None
+    if metric == "duration_minutes":
+        value = _num(activity.get("elapsed_time_s"))
+        if value is None:
+            value = _num(activity.get("moving_time_s"))
+        return value / 60.0 if value is not None and value > 0 else None
+    return None
+
+
+def _scalar_plan_match(activity, workout):
+    activity_discipline = _activity_discipline(activity)
+    workout_discipline = str(workout.get("sport") or "").lower()
+    if activity_discipline != workout_discipline:
+        return None
+
+    target = _planned_scalar_target(workout)
+    if target is None:
+        return None
+    metric, expected = target
+    observed = _actual_scalar(activity, metric)
+    if observed is None or expected <= 0:
+        return None
+
+    relative_error = abs(observed - expected) / expected
+    limit = 0.10 if metric == "distance_m" else 0.22
+    absolute_ok = (
+        abs(observed - expected) <= 150.0
+        if metric == "distance_m"
+        else abs(observed - expected) <= 15.0
+    )
+    if relative_error > limit and not absolute_ok:
+        return None
+
+    return {
+        "metric": metric,
+        "expected_value": round(expected, 2),
+        "observed_value": round(observed, 2),
+        "relative_error": round(relative_error, 4),
+        "matching_basis": "same_discipline_and_comparable_planned_dose",
+    }
+
+
 def _workout_key(workout):
     explicit = str(workout.get("workout_key") or "").strip()
     if explicit:
@@ -340,10 +425,10 @@ def _workout_key(workout):
 
 def nearby_structural_intent_matches(activity, planned_workouts, observed):
     activity_day = _activity_date(activity)
-    if activity_day is None:
+    if activity_day is None or activity.get("plan_relation") == "separate":
         return []
 
-    matches = []
+    candidates = []
     for workout in planned_workouts or []:
         if not isinstance(workout, dict):
             continue
@@ -354,13 +439,20 @@ def nearby_structural_intent_matches(activity, planned_workouts, observed):
         day_delta = (workout_day - activity_day).days
         if abs(day_delta) > 3:
             continue
-        structural = _run_plan_match(activity, workout, observed)
-        if structural is None:
+
+        evidence = _run_plan_match(activity, workout, observed)
+        basis = "run_interval_structure"
+        if evidence is None:
+            evidence = _scalar_plan_match(activity, workout)
+            basis = "comparable_scalar_dose"
+        if evidence is None:
             continue
+
         stimuli = [str(value) for value in (workout.get("stimuli") or []) if str(value)]
         if not stimuli:
             continue
-        matches.append(
+        dose_error = float(evidence.get("relative_error") or 0.0)
+        candidates.append(
             {
                 "workout_key": _workout_key(workout),
                 "target_date": workout_day.isoformat(),
@@ -368,12 +460,38 @@ def nearby_structural_intent_matches(activity, planned_workouts, observed):
                 "stimuli": stimuli,
                 "relation": "fulfills_planned_dose",
                 "confidence": "high",
-                "evidence": structural,
+                "evidence": {**evidence, "basis": basis},
+                "_rank": (abs(day_delta), dose_error),
             }
         )
 
-    # Fail closed: two structurally identical nearby intents are ambiguous.
-    return matches if len(matches) == 1 else []
+    if not candidates:
+        return []
+
+    structural = [
+        row for row in candidates
+        if (row.get("evidence") or {}).get("basis") == "run_interval_structure"
+    ]
+    # Repeated interval shapes can be structurally identical across multiple
+    # nearby planned days. Calendar proximity alone is not enough to claim
+    # which physiological intent the activity fulfilled.
+    if len(structural) > 1:
+        return []
+    if len(structural) == 1:
+        result = dict(structural[0])
+        result.pop("_rank", None)
+        return [result]
+
+    candidates.sort(key=lambda row: (row["_rank"], row["workout_key"]))
+    best_rank = candidates[0]["_rank"]
+    best = [row for row in candidates if row["_rank"] == best_rank]
+    # Scalar dose matching may use date/dose closeness only when exactly one
+    # candidate is best. Equal candidates remain ambiguous.
+    if len(best) != 1:
+        return []
+    result = dict(best[0])
+    result.pop("_rank", None)
+    return [result]
 
 
 def _explicit_stimuli(activity):

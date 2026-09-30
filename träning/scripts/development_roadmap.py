@@ -113,6 +113,23 @@ def _has_fact(fact):
 
 
 def _evidence_state(key, athlete_state):
+    capability_state = (
+        ((athlete_state.get("capability_states") or {}).get("by_capability") or {})
+        .get(key) or {}
+    )
+    if capability_state:
+        state = str(capability_state.get("evidence_state") or "")
+        reason = str(capability_state.get("progression_reason") or "").strip()
+        summaries = {
+            "absorbed": "Absorberad nivå finns dokumenterad i capability-state.",
+            "tolerated": "Tolererad nivå finns dokumenterad; absorption är ännu inte fastställd.",
+            "demonstrated": "Genomförd nivå finns dokumenterad; det är inte samma sak som absorberad kapacitet.",
+            "observed": "Verifierad exponering finns, men kapaciteten kräver kvalitativ/specifik bedömning snarare än automatisk dosprogression.",
+            "missing": "Tillräcklig verifierad baslinje saknas för en säker kapacitetsbedömning.",
+        }
+        if state in summaries:
+            return state, summaries[state] + (f" {reason}" if reason else "")
+
     dose = (((athlete_state.get("dose_response") or {}).get("by_capability") or {}).get(key) or {})
     if dose.get("absorbed_value") is not None:
         return "absorbed", "Absorberad nivå finns dokumenterad i faktalagret."
@@ -211,6 +228,17 @@ def build_development_roadmap(strategy, policy, athlete_state):
                 "mode": item.get("mode"),
                 "evidence_state": evidence_state,
                 "evidence_summary": evidence_summary,
+                "progression_state": (
+                    ((((athlete_state.get("capability_states") or {}).get("by_capability") or {}).get(key) or {}).get("progression_state"))
+                ),
+                "progression_ready": bool(
+                    ((((athlete_state.get("capability_states") or {}).get("by_capability") or {}).get(key) or {}).get("progression_ready") is True)
+                ),
+                "progression_reason": (
+                    ((((athlete_state.get("capability_states") or {}).get("by_capability") or {}).get(key) or {}).get("progression_reason"))
+                ),
+                "progression_axes": deepcopy(item.get("progression_axes") or []),
+                "recipe_family": deepcopy(item.get("recipe_family") or []),
                 "next_review_date": meso.get("evaluation_date") if role in {"primary", "secondary"} else None,
             }
         )

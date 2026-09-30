@@ -22,6 +22,16 @@ from pathlib import Path
 from athlete_profile_source import load_athlete_profile_for_planner, planner_profile_view
 from athlete_starting_state_source import load_starting_state_for_planner, planner_starting_state_view
 from canonical_plan import planned_workouts as canonical_planned_workouts
+from capability_registry import (
+    CAPABILITY_REGISTRY,
+    capability_default_recipe,
+    capability_evidence_policy,
+    capability_metric,
+    capability_progression_axes,
+    capability_recipe_family,
+    response_capability_for_recipe,
+    validate_registry_against_catalog,
+)
 from goal_contracts import planning_goal_hash, planning_goal_set
 from development_roadmap import build_development_roadmap
 from race_contracts import build_competition_context
@@ -52,37 +62,24 @@ MODEL = os.environ.get("OPENAI_MODEL", "gpt-5-mini")
 MESO_SCHEMA_VERSION = 1
 MICRO_SCHEMA_VERSION = 1
 PLANNER_REVISION = 6
-MICRO_PLANNER_REVISION = 16
+MICRO_PLANNER_REVISION = 17
 
 CAPABILITY_TO_RECIPE = {
-    "run_threshold": "run_threshold",
-    "run_hill_quality": "run_hill_quality",
-    "run_easy_distance": "run_easy_distance",
-    "mtb_technical": "mtb_technical",
-    "mtb_aerobic": "mtb_technical",
-    "swim_aerobic": "swim_aerobic_technique",
-    "swim_technique": "swim_aerobic_technique",
-    "swim_threshold": "swim_aerobic_threshold",
-    "strength_unilateral": "strength_core",
-    "strength_core": "strength_core",
-    "plyometric": "strength_core",
+    key: capability_default_recipe(key)
+    for key in CAPABILITY_REGISTRY
+    if capability_default_recipe(key)
 }
 
 RECIPE_TO_RESPONSE_CAPABILITY = {
-    "run_threshold": "run_threshold",
-    "run_threshold_short_reps": "run_threshold",
-    "run_hill_quality": "run_hill_quality",
-    "run_hill_continuous": "run_hill_quality",
-    "run_easy_distance": "run_easy_distance",
-    "run_easy_trail": "run_easy_distance",
-    "mtb_technical": "mtb_technical",
-    "mtb_aerobic_endurance": "mtb_technical",
-    "swim_aerobic_technique": "swim_aerobic",
-    "swim_aerobic_endurance": "swim_aerobic",
-    "swim_aerobic_skills": "swim_aerobic",
-    "swim_aerobic_threshold": "swim_threshold",
-    "strength_core": "strength_unilateral",
+    recipe_key: response_capability_for_recipe(recipe_key)
+    for recipe_key in {
+        recipe
+        for spec in CAPABILITY_REGISTRY.values()
+        for recipe in (spec.get("recipe_family") or ())
+    }
+    if response_capability_for_recipe(recipe_key)
 }
+
 
 FIXED_PROTECTED_CAPACITY = (
     "strength_unilateral",
@@ -180,7 +177,7 @@ def starting_state_value_for_recipe(recipe_key, starting_state):
         return numeric("run", "long_run_minutes") or numeric("run", "typical_duration_minutes")
     if response_capability in {"swim_aerobic", "swim_threshold"}:
         return numeric("swim", "typical_distance_m")
-    if response_capability == "mtb_technical":
+    if response_capability in {"mtb_technical", "mtb_aerobic"}:
         return numeric("mtb", "typical_duration_minutes") or numeric("bike", "typical_duration_minutes")
     if recipe_key == "strength_core":
         return numeric("strength", "typical_duration_minutes")
@@ -307,12 +304,15 @@ def mesocycle_block_context(meso, target_start, policy):
 
 
 def recipe_family_for_capability(catalog, capability):
-    families = catalog.get("capability_recipe_families") or {}
-    configured = families.get(capability) or []
     recipes = catalog.get("recipes") or {}
+    configured = capability_recipe_family(capability)
     valid = [
         key for key in configured
-        if key in recipes and capability in recipe_capabilities(recipes[key])
+        if key in recipes
+        and (
+            capability in recipe_capabilities(recipes[key])
+            or capability in set(recipes[key].get("optional_stimuli") or [])
+        )
     ]
     if valid:
         return valid
@@ -2262,6 +2262,12 @@ def response_profile_for_recipe(recipe_key, athlete_state):
     capability = RECIPE_TO_RESPONSE_CAPABILITY.get(recipe_key)
     if not capability:
         return None
+    state_profile = (
+        ((athlete_state.get("capability_states") or {}).get("by_capability") or {})
+        .get(capability)
+    )
+    if isinstance(state_profile, dict):
+        return state_profile
     return (
         ((athlete_state.get("dose_response") or {}).get("by_capability") or {})
         .get(capability)
@@ -2816,6 +2822,13 @@ def microcycle_is_valid(decision, meso, target_start, source_hash_value=None):
 def demonstrated_value(recipe_key, athlete_state, recipe=None):
     facts = athlete_state.get("capability_facts") or {}
     capability = RECIPE_TO_RESPONSE_CAPABILITY.get(recipe_key)
+    capability_state = (
+        ((athlete_state.get("capability_states") or {}).get("by_capability") or {})
+        .get(capability or "") or {}
+    )
+    state_value = capability_state.get("demonstrated_value")
+    if isinstance(state_value, (int, float)):
+        return float(state_value)
     if capability == "run_threshold":
         values = [
             item.get("work_minutes")
@@ -2833,8 +2846,9 @@ def demonstrated_value(recipe_key, athlete_state, recipe=None):
     if capability == "run_easy_distance":
         value = ((facts.get("run_easy_distance") or {}).get("longest_duration") or {}).get("elapsed_time_s")
         return float(value) / 60.0 if isinstance(value, (int, float)) else None
-    if capability == "mtb_technical":
-        value = ((facts.get("mtb_technical") or {}).get("longest_duration") or {}).get("elapsed_time_s")
+    if capability in {"mtb_technical", "mtb_aerobic"}:
+        fact_key = capability if capability in facts else "mtb_technical"
+        value = ((facts.get(fact_key) or {}).get("longest_duration") or {}).get("elapsed_time_s")
         return float(value) / 60.0 if isinstance(value, (int, float)) else None
     if capability == "swim_aerobic":
         value = ((facts.get("swim_aerobic") or {}).get("longest_distance") or {}).get("distance_m")
@@ -3153,6 +3167,11 @@ def generated_capability_portfolio(policy, meso):
     result = deepcopy(policy["strategy_base"].get("capability_portfolio") or [])
     for item in result:
         key = item.get("key")
+        if key in CAPABILITY_REGISTRY:
+            item["response_metric"] = capability_metric(key)
+            item["evidence_policy"] = capability_evidence_policy(key)
+            item["progression_axes"] = list(capability_progression_axes(key))
+            item["recipe_family"] = list(capability_recipe_family(key))
         if key in primary:
             item["mode"] = "develop"
             item["priority"] = 1
@@ -3761,6 +3780,11 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
 
     policy = load_json(POLICY_FILE, {})
     catalog = load_json(CATALOG_FILE, {})
+    registry_failures = validate_registry_against_catalog(catalog)
+    if registry_failures:
+        raise RuntimeError(
+            "Capability registry/catalog mismatch: " + " | ".join(registry_failures)
+        )
     athlete_state = load_json(ATHLETE_STATE_FILE, {})
     plan = load_json(PLAN_FILE, {})
     upcoming = load_json(UPCOMING_FILE, {})

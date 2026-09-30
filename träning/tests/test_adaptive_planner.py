@@ -544,7 +544,35 @@ class AdaptivePlanningTests(unittest.TestCase):
                 },
             ]
         }
-        state = build_state(activities, {"entries": []}, today=date(2026, 9, 29))
+        planned = [
+            {
+                "date": "2026-09-16",
+                "sport": "swim",
+                "workout_key": "swim-100",
+                "session": "Simning · 3 200 m · aerob uthållighet",
+                "stimuli": ["swim_aerobic"],
+            },
+            {
+                "date": "2026-09-23",
+                "sport": "swim",
+                "workout_key": "swim-101",
+                "session": "Simning · 3 200 m · aerob uthållighet",
+                "stimuli": ["swim_aerobic"],
+            },
+            {
+                "date": "2026-09-26",
+                "sport": "swim",
+                "workout_key": "swim-103",
+                "session": "Simning · 3 000 m · aerob uthållighet",
+                "stimuli": ["swim_aerobic"],
+            },
+        ]
+        state = build_state(
+            activities,
+            {"entries": []},
+            today=date(2026, 9, 29),
+            planned_workouts=planned,
+        )
         profile = state["dose_response"]["by_capability"]["swim_aerobic"]
         self.assertEqual(profile["absorbed_value"], 3200.0)
         self.assertEqual(profile["latest_exposure"]["direct_response"]["signal"], "caution")
@@ -591,7 +619,35 @@ class AdaptivePlanningTests(unittest.TestCase):
                 },
             ]
         }
-        state = build_state(activities, {"entries": []}, today=date(2026, 9, 29))
+        planned = [
+            {
+                "date": "2026-09-10",
+                "sport": "swim",
+                "workout_key": "swim-104",
+                "session": "Simning · 3 200 m · aerob uthållighet",
+                "stimuli": ["swim_aerobic"],
+            },
+            {
+                "date": "2026-09-17",
+                "sport": "swim",
+                "workout_key": "swim-105",
+                "session": "Simning · 3 200 m · aerob uthållighet",
+                "stimuli": ["swim_aerobic"],
+            },
+            {
+                "date": "2026-09-24",
+                "sport": "swim",
+                "workout_key": "swim-106",
+                "session": "Simning · 4 000 m · aerob uthållighet",
+                "stimuli": ["swim_aerobic"],
+            },
+        ]
+        state = build_state(
+            activities,
+            {"entries": []},
+            today=date(2026, 9, 29),
+            planned_workouts=planned,
+        )
         profile = state["dose_response"]["by_capability"]["swim_aerobic"]
         self.assertEqual(profile["demonstrated_value"], 4000.0)
         self.assertEqual(profile["tolerated_value"], 3200.0)
@@ -657,7 +713,28 @@ class AdaptivePlanningTests(unittest.TestCase):
                 },
             ]
         }
-        state = build_state(activities, {"entries": []}, today=date(2026, 9, 29))
+        planned = [
+            {
+                "date": "2026-09-20",
+                "sport": "strength",
+                "workout_key": "strength-107",
+                "session": "Styrka/core · ca 35 min · styrkemall",
+                "stimuli": ["strength_unilateral", "strength_core"],
+            },
+            {
+                "date": "2026-09-28",
+                "sport": "strength",
+                "workout_key": "strength-108",
+                "session": "Styrka/core · ca 35 min · styrkemall",
+                "stimuli": ["strength_unilateral", "strength_core"],
+            },
+        ]
+        state = build_state(
+            activities,
+            {"entries": []},
+            today=date(2026, 9, 29),
+            planned_workouts=planned,
+        )
         profile = state["dose_response"]["by_capability"]["strength_unilateral"]
         self.assertEqual(
             profile["latest_exposure"]["response_status"],
@@ -2037,7 +2114,7 @@ class AdaptivePlanningTests(unittest.TestCase):
             "end_date": "2026-10-18",
             "goal_hash": goal_hash(self.goal),
         }
-        self.assertEqual(MICRO_PLANNER_REVISION, 16)
+        self.assertEqual(MICRO_PLANNER_REVISION, 17)
         stale_micro = {
             "planner_revision": 6,
             "week_start": "2026-09-28",
