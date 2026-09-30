@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 import html
+import re
 from datetime import date
 
 from training_core.presentation.overview import TrainingOverviewReadModel
 from training_core.repositories.icons import SportIconRegistry
+from training_core.presentation.sport_identity import sport_icon_key
 
 
 WEEKDAY_SHORT = ("Mån", "Tis", "Ons", "Tor", "Fre", "Lör", "Sön")
@@ -53,6 +55,151 @@ def _fmt_date(value: str) -> str:
     except ValueError:
         return value
     return f"{parsed.day} {MONTH_SHORT[parsed.month - 1]} {parsed.year}"
+
+
+
+SESSION_INTERVAL_RE = re.compile(r"(?P<count>\d+)\s*[×x]\s*(?P<minutes>\d+(?:[.,]\d+)?)\s*min", re.IGNORECASE)
+DISTANCE_RE = re.compile(r"(?P<distance>\d[\d ]{2,})\s*m\b", re.IGNORECASE)
+DURATION_RE = re.compile(r"(?P<minutes>\d{2,3})\s*min\b", re.IGNORECASE)
+HILL_RE = re.compile(r"(?:(?P<sets>\d+)\s*[×x]\s*)?(?P<reps>\d+)\s*[×x]\s*150\s*m", re.IGNORECASE)
+
+ROLE_LABELS = {
+    "primary": "Primärt utvecklingspass",
+    "anchor": "Primärt utvecklingspass",
+    "support": "Stödpass",
+    "supporting_candidate": "Stödpass",
+    "protected": "Skyddad kapacitet",
+    "protected_support": "Skyddad kapacitet",
+    "external_fixed": "Fast extern belastning",
+}
+
+
+def _trim(value: str, limit: int = 76) -> str:
+    value = " ".join(str(value or "").split())
+    if len(value) <= limit:
+        return value
+    return value[: max(1, limit - 1)].rstrip() + "…"
+
+
+def _first_distance(value: str) -> str:
+    match = DISTANCE_RE.search(str(value or ""))
+    return match.group("distance").replace(" ", "") if match else ""
+
+
+def _first_duration(value: str) -> str:
+    match = DURATION_RE.search(str(value or ""))
+    return match.group("minutes") if match else ""
+
+
+def _short_workout_title(session: str, recipe_key: str = "", sport: str = "", fallback: str = "") -> str:
+    raw = " ".join(str(session or fallback or "").split())
+    key = str(recipe_key or "").strip()
+    distance = _first_distance(raw)
+    duration = _first_duration(raw)
+    interval = SESSION_INTERVAL_RE.search(raw)
+    hill = HILL_RE.search(raw)
+
+    if key in {"run_threshold", "run_threshold_short_reps"} or ("trösk" in raw.lower() and interval):
+        if interval:
+            count = interval.group("count")
+            minutes = interval.group("minutes").replace(",", ".")
+            return f"Tröskel · {count}×{minutes}"
+        return "Tröskel"
+
+    if key in {"run_hill_quality", "run_hill_continuous"} or "back" in raw.lower():
+        if hill:
+            sets = hill.group("sets")
+            reps = hill.group("reps")
+            return f"Backe · {sets + '×' if sets else ''}{reps}×150"
+        return "Backe"
+
+    if key == "run_easy_trail" or ("stig" in raw.lower() and str(sport).lower() == "run"):
+        return f"Lugn stig · {duration} min" if duration else "Lugn stig"
+
+    if key == "run_easy_distance":
+        return f"Lugn distans · {duration} min" if duration else "Lugn distans"
+
+    if key == "swim_aerobic_endurance":
+        return f"Aerob sim · {distance}" if distance else "Aerob sim"
+    if key == "swim_aerobic_skills":
+        return f"Grepp + aerob · {distance}" if distance else "Grepp + aerob"
+    if key == "swim_aerobic_technique":
+        return f"Aerob + teknik · {distance}" if distance else "Aerob + teknik"
+    if key == "swim_aerobic_threshold":
+        return f"Simtröskel · {distance}" if distance else "Simtröskel"
+
+    if key == "mtb_technical":
+        return f"MTB teknik · {duration} min" if duration else "MTB teknik"
+    if key == "mtb_aerobic_endurance":
+        return f"MTB aerob · {duration} min" if duration else "MTB aerob"
+
+    if key == "strength_core" or str(sport).lower() == "strength":
+        return f"Styrka + core · {duration} min" if duration else "Styrka + core"
+
+    if str(sport).lower() == "enduro" or "enduro" in raw.lower():
+        return "Enduro"
+
+    cleaned = raw
+    for prefix in ("Löpning · ", "Simning · ", "MTB/XC · ", "Styrka/core · "):
+        if cleaned.startswith(prefix):
+            cleaned = cleaned[len(prefix):]
+    return _trim(cleaned or str(fallback or sport or "Pass"), 34)
+
+
+def _short_character(value: str) -> str:
+    raw = " ".join(str(value or "").split())
+    replacements = (
+        ("Löptröskel · längre repetitioner", "Tröskel · längre rep"),
+        ("Löptröskel · kortare repetitioner", "Tröskel · kortare rep"),
+        ("Sim · aerob uthållighet", "Aerob sim"),
+        ("Sim · aerob teknik", "Aerob + teknik"),
+        ("Sim · grepp/teknik + aerob", "Grepp + aerob"),
+        ("Backkvalitet · klustrade 150 m-reps", "Backe · klustrade reps"),
+        ("Backkvalitet · sammanhängande 150 m-reps", "Backe · sammanhängande"),
+        ("Lugn löpdistans · jämn", "Lugn distans"),
+        ("Lugn löpdistans · stig/grus", "Lugn stig/grus"),
+        ("MTB/XC · teknik och flyt", "MTB teknik/flyt"),
+        ("MTB/XC · aerob uthållighet", "MTB aerob"),
+        ("Styrka/core · unilateral + bål", "Styrka + core"),
+    )
+    for source, target in replacements:
+        if raw == source:
+            return target
+    return _trim(raw, 30)
+
+
+def _progress_chip(intent: str = "", relation: str = "", state: str = "", role: str = "") -> tuple[str, str]:
+    if state == "fixed" or intent == "fixed_external_load" or role == "external_fixed":
+        return "Låst", "fixed"
+    mapping = {
+        "progress_if_ready": ("↑ Progression", "progress"),
+        "vary_structure": ("~ Variation", "variation"),
+        "consolidate": ("= Konsolidera", "consolidate"),
+        "establish": ("• Etablera", "establish"),
+        "support_if_absorbable": ("◇ Stöd", "support"),
+        "protect": ("◇ Skyddad", "protected"),
+    }
+    if intent in mapping:
+        return mapping[intent]
+    if relation == "progress":
+        return "↑ Progression", "progress"
+    if relation == "establish":
+        return "• Etablera", "establish"
+    if role in {"support", "supporting_candidate"}:
+        return "◇ Stöd", "support"
+    if role in {"protected", "protected_support"}:
+        return "◇ Skyddad", "protected"
+    return "", ""
+
+
+def _detail_button_attrs(**values) -> str:
+    attrs = ['type="button"', 'data-overview-detail="1"']
+    for key, value in values.items():
+        if value is None or str(value).strip() == "":
+            continue
+        attr = "data-" + key.replace("_", "-")
+        attrs.append(f'{attr}="{_e(value)}"')
+    return " ".join(attrs)
 
 
 def _expected_intent(model: TrainingOverviewReadModel, week_start: date):
