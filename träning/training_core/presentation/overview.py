@@ -253,7 +253,9 @@ def _planned_model(workout: PlannedWorkout) -> OverviewPlannedWorkoutReadModel:
         block_intent=str(payload.get("block_intent") or "").strip(),
         development_character=str(payload.get("development_character") or "").strip(),
         development_relation=str(development_step.get("relation") or "").strip(),
-        development_reason=str(development_step.get("reason") or "").strip(),
+        development_reason=str(
+            workout.reason or development_step.get("reason") or ""
+        ).strip(),
     )
 
 
