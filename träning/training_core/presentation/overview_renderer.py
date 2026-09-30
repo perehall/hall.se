@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import html
+import json
 import re
 from datetime import date
 
@@ -190,6 +191,18 @@ def _progress_chip(intent: str = "", relation: str = "", state: str = "", role: 
     if role in {"protected", "protected_support"}:
         return "◇ Skyddad", "protected"
     return "", ""
+
+
+def _prescription_json(rows) -> str:
+    return json.dumps(
+        [
+            {"dose": str(row.dose or ""), "instruction": str(row.instruction or "")}
+            for row in rows or ()
+            if str(row.dose or "").strip() or str(row.instruction or "").strip()
+        ],
+        ensure_ascii=False,
+        separators=(",", ":"),
+    )
 
 
 def _detail_button_attrs(**values) -> str:
@@ -640,6 +653,7 @@ def _planned_item(
         status=status,
         development=workout.development_focus,
         why=workout.development_reason,
+        prescription=_prescription_json(workout.prescription_rows),
     )
     return (
         f'<button class="overview-workout planned state-{_e(workout.state)}" '
@@ -1230,10 +1244,19 @@ a{color:inherit}
 .overview-detail-head span{display:block;color:var(--muted);font-size:.58rem;text-transform:uppercase;letter-spacing:.055em;font-weight:760}
 .overview-detail-head h2{margin:4px 0 0;font-size:1.25rem;letter-spacing:-.025em}
 .overview-detail-close{appearance:none;border:1px solid var(--line);background:var(--card);border-radius:999px;width:32px;height:32px;cursor:pointer;font-size:1rem}
-.overview-detail-grid{display:grid;gap:12px;margin-top:22px}
+.overview-detail-session{margin-top:18px;padding-bottom:13px;border-bottom:1px solid var(--line-soft)}
+.overview-detail-session>span,.overview-detail-prescription>span,.overview-detail-row>span{display:block;color:var(--muted);font-size:.57rem;text-transform:uppercase;letter-spacing:.05em;font-weight:760}
+.overview-detail-session>p{margin:5px 0 0;color:var(--text);font-size:.86rem;line-height:1.42;font-weight:650}
+.overview-detail-session[hidden]{display:none}
+.overview-detail-prescription{margin-top:16px;padding:14px 14px 12px;border:1px solid var(--line);border-radius:13px;background:var(--card)}
+.overview-detail-prescription[hidden]{display:none}
+.overview-detail-prescription-grid{display:grid;margin-top:7px}
+.overview-detail-prescription-row{display:grid;grid-template-columns:max-content minmax(0,1fr);align-items:start}
+.overview-detail-prescription-dose{font-weight:800;color:var(--text);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap;padding:6px 13px 6px 0;line-height:1.35;letter-spacing:-.01em}
+.overview-detail-prescription-text{min-width:0;color:var(--secondary);line-height:1.4;padding:6px 0 6px 14px;border-left:1px solid var(--line)}
+.overview-detail-grid{display:grid;gap:12px;margin-top:18px}
 .overview-detail-row{padding-top:11px;border-top:1px solid var(--line-soft)}
 .overview-detail-row:first-child{padding-top:0;border-top:0}
-.overview-detail-row>span{display:block;color:var(--muted);font-size:.57rem;text-transform:uppercase;letter-spacing:.05em;font-weight:760}
 .overview-detail-row>p{margin:4px 0 0;color:var(--secondary);font-size:.78rem;line-height:1.45}
 .overview-detail-row[hidden]{display:none}
 
@@ -1280,8 +1303,12 @@ def render_overview_document(
         '<span id="overview-detail-status">Passdetalj</span>'
         '<h2 id="overview-detail-title">Pass</h2>'
         '</div><button class="overview-detail-close" type="button" aria-label="Stäng">×</button></div>'
+        '<div class="overview-detail-session" data-detail-row="full-session"><span>Pass</span><p></p></div>'
+        '<section class="overview-detail-prescription" data-detail-prescription hidden>'
+        '<span>Passupplägg</span>'
+        '<div class="overview-detail-prescription-grid"></div>'
+        '</section>'
         '<div class="overview-detail-grid">'
-        '<div class="overview-detail-row" data-detail-row="full-session"><span>Pass</span><p></p></div>'
         '<div class="overview-detail-row" data-detail-row="role"><span>Roll</span><p></p></div>'
         '<div class="overview-detail-row" data-detail-row="development"><span>Utveckling</span><p></p></div>'
         '<div class="overview-detail-row" data-detail-row="baseline"><span>Bas</span><p></p></div>'
@@ -1304,11 +1331,38 @@ def render_overview_document(
     target: dialog.querySelector('[data-detail-row="target"]'),
     why: dialog.querySelector('[data-detail-row="why"]')
   };
+  const prescription = dialog.querySelector('[data-detail-prescription]');
+  const prescriptionGrid = prescription.querySelector('.overview-detail-prescription-grid');
+
   const fill = (row, value) => {
     const text = (value || '').trim();
     row.hidden = !text;
     const p = row.querySelector('p');
     if (p) p.textContent = text;
+  };
+
+  const fillPrescription = (raw) => {
+    prescriptionGrid.replaceChildren();
+    let rows = [];
+    if ((raw || '').trim()) {
+      try { rows = JSON.parse(raw); }
+      catch (error) { console.debug('OVERVIEW_PRESCRIPTION_PARSE_FAILED', error); }
+    }
+    rows
+      .filter((item) => item && (item.dose || item.instruction))
+      .forEach((item) => {
+        const row = document.createElement('div');
+        row.className = 'overview-detail-prescription-row';
+        const dose = document.createElement('span');
+        dose.className = 'overview-detail-prescription-dose';
+        dose.textContent = item.dose || '—';
+        const instruction = document.createElement('span');
+        instruction.className = 'overview-detail-prescription-text';
+        instruction.textContent = item.instruction || '';
+        row.append(dose, instruction);
+        prescriptionGrid.append(row);
+      });
+    prescription.hidden = prescriptionGrid.children.length === 0;
   };
   document.addEventListener('click', (event) => {
     const trigger = event.target.closest('[data-overview-detail]');
@@ -1316,6 +1370,7 @@ def render_overview_document(
     title.textContent = trigger.dataset.title || 'Pass';
     status.textContent = trigger.dataset.status || 'Passdetalj';
     fill(rows.fullSession, trigger.dataset.fullSession);
+    fillPrescription(trigger.dataset.prescription);
     fill(rows.role, trigger.dataset.role);
     fill(rows.development, trigger.dataset.development);
     fill(rows.baseline, trigger.dataset.baseline);

@@ -37,6 +37,40 @@ class TrainingOverviewTests(unittest.TestCase):
                         "relation": "hold",
                         "reason": "Etableringsvecka på absorberad nivå.",
                     },
+                    "workout_design": {
+                        "selected_candidate_id": "run-threshold-4x8",
+                        "candidates": [
+                            {
+                                "id": "run-threshold-4x8",
+                                "session": "Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg",
+                                "prescription": {
+                                    "executable": True,
+                                    "completeness": "full",
+                                    "blocks": [
+                                        {
+                                            "name": "Uppvärmning",
+                                            "work": {"duration_s": 900},
+                                            "instruction": "Lugn uppvärmning",
+                                        },
+                                        {
+                                            "name": "Arbetsdel",
+                                            "work": {"repetitions": 4, "duration_s": 480},
+                                            "instruction": "Kontrollerad tröskel",
+                                            "recovery": {
+                                                "duration_s": 90,
+                                                "instruction": "Lugn jogg",
+                                            },
+                                        },
+                                        {
+                                            "name": "Nedjogg",
+                                            "work": {"duration_s": 600},
+                                            "instruction": "Lugn nedjogg",
+                                        },
+                                    ],
+                                },
+                            }
+                        ],
+                    },
                 },
             ),
             PlannedWorkout(
@@ -539,6 +573,40 @@ class TrainingOverviewTests(unittest.TestCase):
             document,
         )
         self.assertNotIn('class="v2-week-weather"', document)
+
+    def test_detail_uses_same_structured_prescription_rows_as_week_view(self):
+        model = self.build()
+        current_week = next(
+            week for week in model.weeks if week.start == date(2026, 9, 28)
+        )
+        workout = next(
+            item for item in current_week.planned_workouts
+            if item.workout_key == "run-threshold"
+        )
+        self.assertEqual(
+            [(row.dose, row.instruction) for row in workout.prescription_rows],
+            [
+                ("15 min", "Lugn uppvärmning"),
+                ("4×8 min", "Kontrollerad tröskel · vila 90 s · Lugn jogg"),
+                ("10 min", "Lugn nedjogg"),
+            ],
+        )
+
+        document = render_overview_document(
+            model,
+            current_date=self.current,
+            sport_icons=None,
+        )
+        self.assertIn('data-detail-prescription', document)
+        self.assertIn("Passupplägg", document)
+        self.assertIn("overview-detail-prescription-grid", document)
+        self.assertIn(
+            'data-prescription="[{&quot;dose&quot;:&quot;15 min&quot;,&quot;instruction&quot;:&quot;Lugn uppvärmning&quot;}',
+            document,
+        )
+        self.assertIn("overview-detail-prescription-dose", document)
+        self.assertIn("overview-detail-prescription-text", document)
+        self.assertIn("fillPrescription(trigger.dataset.prescription)", document)
 
     def test_renderer_applies_compact_scan_first_ui_contract(self):
         model = self.build()
