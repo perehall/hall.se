@@ -137,6 +137,44 @@ def _status_for_date(day, as_of):
     return "planned"
 
 
+def _microcycle_wave(meso, policy):
+    try:
+        duration = int(meso.get("duration_weeks") or 0)
+    except (TypeError, ValueError):
+        duration = 0
+    configured = (
+        ((policy.get("periodization_policy") or {}).get("microcycle_wave_by_duration") or {})
+        .get(str(duration))
+    )
+    if isinstance(configured, list) and len(configured) == duration and duration > 0:
+        return tuple(str(item) for item in configured)
+    if duration == 3:
+        return ("establish", "develop", "consolidate")
+    if duration == 5:
+        return ("establish", "develop", "develop", "consolidate", "review")
+    return ("establish", "develop", "develop", "consolidate")
+
+
+def _microcycle_intents(meso, policy):
+    start = _iso(meso.get("start_date"))
+    if start is None:
+        return []
+    definitions = (policy.get("periodization_policy") or {}).get("intent_definitions") or {}
+    rows = []
+    for offset, intent in enumerate(_microcycle_wave(meso, policy)):
+        week_start = start + timedelta(days=offset * 7)
+        rows.append(
+            {
+                "index": offset + 1,
+                "intent": intent,
+                "definition": str(definitions.get(intent) or ""),
+                "start_date": week_start.isoformat(),
+                "end_date": (week_start + timedelta(days=6)).isoformat(),
+            }
+        )
+    return rows
+
+
 def build_development_roadmap(strategy, policy, athlete_state):
     """Build a read-only explanation layer from already-decided planning state."""
     goal_contract = strategy.get("goal_contract") or {}
@@ -194,6 +232,9 @@ def build_development_roadmap(strategy, policy, athlete_state):
         "maintenance_capabilities": deepcopy(contract.get("maintenance") or []),
         "protected_capabilities": deepcopy(contract.get("protected_capacity") or []),
         "external_load": deepcopy(contract.get("external_load") or []),
+        "duration_weeks": meso.get("duration_weeks"),
+        "progression_axes": deepcopy(meso.get("progression_axes") or []),
+        "microcycle_intents": _microcycle_intents(meso, policy),
     }
 
     as_of = _iso((athlete_state.get("fact_window") or {}).get("end"))

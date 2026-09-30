@@ -26,7 +26,17 @@ class TrainingOverviewTests(unittest.TestCase):
                 status="planned",
                 workout_key="run-threshold",
                 development_focus="Kontrollerad löptröskel",
-                payload={"stimuli": ["run_threshold"]},
+                payload={
+                    "stimuli": ["run_threshold"],
+                    "recipe_key": "run_threshold",
+                    "priority_role": "anchor",
+                    "block_intent": "establish",
+                    "development_character": "controlled_threshold",
+                    "development_step": {
+                        "relation": "hold",
+                        "reason": "Etableringsvecka på absorberad nivå.",
+                    },
+                },
             ),
             PlannedWorkout(
                 local_date=date(2026, 9, 30),
@@ -35,7 +45,17 @@ class TrainingOverviewTests(unittest.TestCase):
                 status="planned",
                 workout_key="swim-aerobic",
                 development_focus="Sim aerob kapacitet",
-                payload={"stimuli": ["swim_aerobic", "swim_technique"]},
+                payload={
+                    "stimuli": ["swim_aerobic", "swim_technique"],
+                    "recipe_key": "swim_aerobic_technique",
+                    "priority_role": "anchor",
+                    "block_intent": "establish",
+                    "development_character": "technique_aerobic",
+                    "development_step": {
+                        "relation": "establish",
+                        "reason": "Etablera simstimulus.",
+                    },
+                },
             ),
             PlannedWorkout(
                 local_date=date(2026, 10, 3),
@@ -53,7 +73,50 @@ class TrainingOverviewTests(unittest.TestCase):
                 sport="strength",
                 status="planned",
                 workout_key="strength",
-                payload={"stimuli": ["strength_core"]},
+                payload={
+                    "stimuli": ["strength_core"],
+                    "recipe_key": "strength_core",
+                    "priority_role": "protected_support",
+                    "block_intent": "develop",
+                },
+            ),
+            PlannedWorkout(
+                local_date=date(2026, 10, 7),
+                session="Löpning · tröskelprogression",
+                sport="run",
+                status="planned",
+                workout_key="run-threshold-progress",
+                development_focus="Kontrollerad löptröskel",
+                payload={
+                    "stimuli": ["run_threshold"],
+                    "recipe_key": "run_threshold",
+                    "priority_role": "anchor",
+                    "block_intent": "develop",
+                    "development_character": "controlled_threshold",
+                    "development_step": {
+                        "relation": "progress",
+                        "reason": "Dose-response stödjer ett förgodkänt steg.",
+                    },
+                },
+            ),
+            PlannedWorkout(
+                local_date=date(2026, 10, 9),
+                session="Simning · aerob/teknik",
+                sport="swim",
+                status="planned",
+                workout_key="swim-develop",
+                development_focus="Sim aerob kapacitet",
+                payload={
+                    "stimuli": ["swim_aerobic", "swim_technique"],
+                    "recipe_key": "swim_aerobic_technique",
+                    "priority_role": "anchor",
+                    "block_intent": "develop",
+                    "development_character": "technique_aerobic",
+                    "development_step": {
+                        "relation": "hold",
+                        "reason": "Teknisk kvalitet konsolideras medan löptröskeln progressas.",
+                    },
+                },
             ),
         )
         self.activities = (
@@ -95,6 +158,48 @@ class TrainingOverviewTests(unittest.TestCase):
                 "primary_capabilities": ["run_threshold", "swim_aerobic"],
                 "secondary_capabilities": [],
                 "protected_capabilities": [],
+                "progression_axes": [
+                    {
+                        "capability": "run_threshold",
+                        "axis": "work_duration",
+                        "objective": "Öka arbetstid stegvis när responsen stödjer det.",
+                    },
+                    {
+                        "capability": "swim_aerobic",
+                        "axis": "consistency",
+                        "objective": "Bygg stabil aerob simkapacitet.",
+                    },
+                ],
+                "microcycle_intents": [
+                    {
+                        "index": 1,
+                        "intent": "establish",
+                        "definition": "Etablera nyckelstimuli.",
+                        "start_date": "2026-09-28",
+                        "end_date": "2026-10-04",
+                    },
+                    {
+                        "index": 2,
+                        "intent": "develop",
+                        "definition": "Utveckla primär kapacitet.",
+                        "start_date": "2026-10-05",
+                        "end_date": "2026-10-11",
+                    },
+                    {
+                        "index": 3,
+                        "intent": "develop",
+                        "definition": "Utveckla primär kapacitet.",
+                        "start_date": "2026-10-12",
+                        "end_date": "2026-10-18",
+                    },
+                    {
+                        "index": 4,
+                        "intent": "consolidate",
+                        "definition": "Stabilisera blockets vinster.",
+                        "start_date": "2026-10-19",
+                        "end_date": "2026-10-25",
+                    },
+                ],
             },
         }
 
@@ -137,6 +242,14 @@ class TrainingOverviewTests(unittest.TestCase):
             ("Kontrollerad löptröskel", "Sim aerob kapacitet"),
         )
         self.assertEqual(model.context.goals[0].target_date, "2027-08-14")
+        self.assertEqual(
+            [item.intent for item in model.context.active_block.microcycle_intents],
+            ["establish", "develop", "develop", "consolidate"],
+        )
+        self.assertEqual(
+            model.context.active_block.progression_axes[0].axis,
+            "work_duration",
+        )
 
     def test_renderer_shows_plan_actual_and_missing_future_horizon(self):
         model = self.build()
@@ -149,7 +262,14 @@ class TrainingOverviewTests(unittest.TestCase):
         self.assertIn("Löpning · 4×8 min tröskel", document)
         self.assertIn("Simning · aerob/teknik", document)
         self.assertIn("Planeringshorisont", document)
-        self.assertIn("saknar planerade träningspass", document)
+        self.assertIn("Blockrytm", document)
+        self.assertIn("Progressionslogik", document)
+        self.assertIn("1 primär progression", document)
+        self.assertIn("Etablera", document)
+        self.assertIn("Utveckla", document)
+        self.assertIn("Konsolidera", document)
+        self.assertIn("Ej detaljplanerad", document)
+        self.assertNotIn("7 planerade vilodagar", document)
         self.assertIn("ÖTILLÖ Åland World Series · Topp-10", document)
         self.assertIn("Granska plan", document)
 

@@ -25,6 +25,12 @@ class OverviewPlannedWorkoutReadModel:
     icon_keys: tuple[str, ...]
     development_focus: str
     stimuli: tuple[str, ...]
+    recipe_key: str
+    priority_role: str
+    block_intent: str
+    development_character: str
+    development_relation: str
+    development_reason: str
 
 
 @dataclass(frozen=True)
@@ -95,6 +101,69 @@ class OverviewWeekReadModel:
     def actual_distance(self) -> str:
         return format_distance(self.actual_distance_m)
 
+    @property
+    def planned_workouts(self) -> tuple[OverviewPlannedWorkoutReadModel, ...]:
+        return tuple(
+            workout
+            for day in self.days
+            for workout in day.planned_workouts
+        )
+
+    @property
+    def block_intents(self) -> tuple[str, ...]:
+        return tuple(
+            dict.fromkeys(
+                workout.block_intent
+                for workout in self.planned_workouts
+                if workout.block_intent
+            )
+        )
+
+    @property
+    def primary_workouts(self) -> tuple[OverviewPlannedWorkoutReadModel, ...]:
+        return tuple(
+            workout for workout in self.planned_workouts
+            if workout.priority_role == "anchor"
+        )
+
+    @property
+    def primary_progress_count(self) -> int:
+        return sum(
+            workout.development_relation == "progress"
+            for workout in self.primary_workouts
+        )
+
+    @property
+    def primary_hold_count(self) -> int:
+        return sum(
+            workout.development_relation == "hold"
+            for workout in self.primary_workouts
+        )
+
+    @property
+    def primary_establish_count(self) -> int:
+        return sum(
+            workout.development_relation == "establish"
+            for workout in self.primary_workouts
+        )
+
+
+@dataclass(frozen=True)
+class OverviewProgressionAxisReadModel:
+    capability_key: str
+    capability_label: str
+    axis: str
+    objective: str
+
+
+@dataclass(frozen=True)
+class OverviewMicrocycleIntentReadModel:
+    index: int
+    intent: str
+    definition: str
+    start_date: str
+    end_date: str
+
 
 @dataclass(frozen=True)
 class OverviewGoalReadModel:
@@ -109,9 +178,12 @@ class OverviewBlockReadModel:
     start_date: str
     end_date: str
     evaluation_date: str
+    primary_capability_keys: tuple[str, ...]
     primary_capabilities: tuple[str, ...]
     secondary_capabilities: tuple[str, ...]
     protected_capabilities: tuple[str, ...]
+    progression_axes: tuple[OverviewProgressionAxisReadModel, ...]
+    microcycle_intents: tuple[OverviewMicrocycleIntentReadModel, ...]
 
 
 @dataclass(frozen=True)
@@ -165,6 +237,9 @@ def _planned_model(workout: PlannedWorkout) -> OverviewPlannedWorkoutReadModel:
     stimuli = payload.get("stimuli") or ()
     if not isinstance(stimuli, (list, tuple)):
         stimuli = ()
+    development_step = payload.get("development_step") or {}
+    if not isinstance(development_step, dict):
+        development_step = {}
     return OverviewPlannedWorkoutReadModel(
         workout_key=workout.workout_key,
         session=workout.session,
@@ -173,6 +248,14 @@ def _planned_model(workout: PlannedWorkout) -> OverviewPlannedWorkoutReadModel:
         icon_keys=planned_icon_keys(sport=workout.sport, payload=payload),
         development_focus=str(workout.development_focus or "").strip(),
         stimuli=tuple(str(item) for item in stimuli if str(item).strip()),
+        recipe_key=str(payload.get("recipe_key") or "").strip(),
+        priority_role=str(payload.get("priority_role") or "").strip(),
+        block_intent=str(payload.get("block_intent") or "").strip(),
+        development_character=str(payload.get("development_character") or "").strip(),
+        development_relation=str(development_step.get("relation") or "").strip(),
+        development_reason=str(
+            workout.reason or development_step.get("reason") or ""
+        ).strip(),
     )
 
 
@@ -214,14 +297,45 @@ def build_overview_context(roadmap: dict | None) -> OverviewPlanContextReadModel
             for key in (keys or ())
             if str(key).strip()
         )
+        primary_keys = tuple(
+            str(key) for key in (block_raw.get("primary_capabilities") or ())
+            if str(key).strip()
+        )
+        progression_axes = tuple(
+            OverviewProgressionAxisReadModel(
+                capability_key=str(row.get("capability") or "").strip(),
+                capability_label=capability_labels.get(
+                    str(row.get("capability") or ""),
+                    str(row.get("capability") or ""),
+                ),
+                axis=str(row.get("axis") or "").strip(),
+                objective=str(row.get("objective") or "").strip(),
+            )
+            for row in block_raw.get("progression_axes") or ()
+            if isinstance(row, dict) and str(row.get("capability") or "").strip()
+        )
+        microcycle_intents = tuple(
+            OverviewMicrocycleIntentReadModel(
+                index=int(row.get("index") or 0),
+                intent=str(row.get("intent") or "").strip(),
+                definition=str(row.get("definition") or "").strip(),
+                start_date=str(row.get("start_date") or "").strip(),
+                end_date=str(row.get("end_date") or "").strip(),
+            )
+            for row in block_raw.get("microcycle_intents") or ()
+            if isinstance(row, dict) and int(row.get("index") or 0) > 0
+        )
         block = OverviewBlockReadModel(
             title=str(block_raw.get("title") or "").strip(),
             start_date=str(block_raw.get("start_date") or "").strip(),
             end_date=str(block_raw.get("end_date") or "").strip(),
             evaluation_date=str(block_raw.get("evaluation_date") or "").strip(),
-            primary_capabilities=labels(block_raw.get("primary_capabilities")),
+            primary_capability_keys=primary_keys,
+            primary_capabilities=labels(primary_keys),
             secondary_capabilities=labels(block_raw.get("secondary_capabilities")),
             protected_capabilities=labels(block_raw.get("protected_capabilities")),
+            progression_axes=progression_axes,
+            microcycle_intents=microcycle_intents,
         )
 
     return OverviewPlanContextReadModel(

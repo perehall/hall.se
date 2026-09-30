@@ -52,7 +52,7 @@ MODEL = os.environ.get("OPENAI_MODEL", "gpt-5-mini")
 MESO_SCHEMA_VERSION = 1
 MICRO_SCHEMA_VERSION = 1
 PLANNER_REVISION = 6
-MICRO_PLANNER_REVISION = 13
+MICRO_PLANNER_REVISION = 14
 
 CAPABILITY_TO_RECIPE = {
     "run_threshold": "run_threshold",
@@ -1242,6 +1242,8 @@ def fallback_microcycle(
     completed_context=None,
     athlete_profile=None,
     planning_date=None,
+    athlete_state=None,
+    starting_state=None,
 ):
     """Conservative composition from requirements, not from calendar fill.
 
@@ -1472,13 +1474,24 @@ def fallback_microcycle(
             ):
                 break
 
-    return {
+    result = {
         "rationale": (
             "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, "
             "respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern."
         ),
         "slots": sorted(slots, key=lambda row: row["day_index"]),
     }
+    if athlete_state is not None:
+        result = align_fallback_progression_with_block_intent(
+            result,
+            meso,
+            policy,
+            catalog,
+            athlete_state,
+            target_start,
+            starting_state=starting_state,
+        )
+    return result
 
 
 def microcycle_layout_failures(
@@ -1941,6 +1954,115 @@ def normalize_progress_actions_from_absorption(microcycle, athlete_state):
     return normalized
 
 
+def align_fallback_progression_with_block_intent(
+    microcycle,
+    meso,
+    policy,
+    catalog,
+    athlete_state,
+    target_start,
+    *,
+    starting_state=None,
+):
+    """Make deterministic fallback respect the mesocycle wave without guessing load.
+
+    A develop microcycle may advance at most one primary dose and only when the
+    canonical dose-response model explicitly marks that recipe progression-ready
+    and the recipe catalog already contains a higher approved step. Otherwise
+    the fallback keeps the dose and records the factual hold reason.
+    """
+    result = deepcopy(microcycle)
+    block_context = mesocycle_block_context(meso, target_start, policy)
+    if block_context.get("block_intent") != "develop":
+        return result
+
+    recipes = catalog.get("recipes") or {}
+    primary_order = {
+        key: index
+        for index, key in enumerate(meso.get("primary_capabilities") or [])
+    }
+
+    candidates = []
+    for slot in result.get("slots") or []:
+        recipe_key = str(slot.get("recipe_key") or "")
+        recipe = recipes.get(recipe_key) or {}
+        caps = recipe_capabilities(recipe)
+        matched = [
+            cap for cap in caps
+            if cap in primary_order and recipe_key not in SUPPORT_ONLY_RECIPES
+        ]
+        if not matched:
+            continue
+        rank = min(primary_order[cap] for cap in matched)
+        candidates.append((rank, int(slot.get("day_index") or 99), slot, recipe_key, recipe))
+
+    candidates.sort(key=lambda item: (item[0], item[1], item[3]))
+
+    # Idempotence matters because a deterministic fallback can pass through
+    # normalization more than once. Never create a second progression.
+    if any(slot.get("action") == "progress" for _, _, slot, _, _ in candidates):
+        return result
+
+    # One progression axis at a time is the conservative deterministic default.
+    for _, _, slot, recipe_key, recipe in candidates:
+        profile = response_profile_for_recipe(recipe_key, athlete_state)
+        if not (profile and profile.get("progression_ready") is True):
+            continue
+        _, _, _, relation, evidence = choose_option(
+            recipe_key,
+            recipe,
+            "progress",
+            athlete_state,
+            starting_state,
+        )
+        if relation != "progress":
+            continue
+        slot["action"] = "progress"
+        slot["rationale"] = (
+            str(slot.get("rationale") or "").rstrip()
+            + " Develop-vecka: ett primärt stimulus progressas exakt ett förgodkänt "
+              "katalogsteg eftersom dose_response anger progression_ready=true."
+        ).strip()
+        refs = list(slot.get("evidence_refs") or [])
+        marker = f"athlete_state.dose_response:{recipe_key}:progression_ready=true"
+        if marker not in refs:
+            refs.append(marker)
+        slot["evidence_refs"] = refs[:6]
+        return result
+
+    # No safe catalog progression is available. Keep the planned primary work,
+    # but make the hold rationale inspectable rather than silently static.
+    for _, _, slot, recipe_key, recipe in candidates:
+        if slot.get("action") not in {"consolidate", "establish"}:
+            continue
+        profile = response_profile_for_recipe(recipe_key, athlete_state)
+        reason = str((profile or {}).get("progression_reason") or "").strip()
+        if profile and profile.get("progression_ready") is True:
+            _, _, _, relation, evidence = choose_option(
+                recipe_key,
+                recipe,
+                "progress",
+                athlete_state,
+                starting_state,
+            )
+            if relation == "hold":
+                reason = "Ingen högre förgodkänd dos finns i receptkatalogen."
+        if not reason:
+            reason = "Verifierat stöd för progression saknas."
+        slot["rationale"] = (
+            str(slot.get("rationale") or "").rstrip()
+            + " Develop-vecka konsolideras för detta primära stimulus: "
+            + reason
+        ).strip()
+        refs = list(slot.get("evidence_refs") or [])
+        marker = f"athlete_state.dose_response:{recipe_key}:hold"
+        if marker not in refs:
+            refs.append(marker)
+        slot["evidence_refs"] = refs[:6]
+
+    return result
+
+
 def build_microcycle_source_payload(
     meso,
     goal,
@@ -2137,6 +2259,8 @@ def generate_microcycle(
             completed_context=completed_context,
             athlete_profile=athlete_profile,
             planning_date=planning_date,
+            athlete_state=athlete_state,
+            starting_state=starting_state,
         )
         raw["rationale"] += f" Modellbedömning saknades: {str(exc)[:220]}"
         source = "deterministic_fallback"
@@ -2194,6 +2318,8 @@ def generate_microcycle(
                         completed_context=completed_context,
                         athlete_profile=athlete_profile,
                         planning_date=planning_date,
+                        athlete_state=athlete_state,
+                        starting_state=starting_state,
                     )
             except Exception as exc:
                 source = "deterministic_fallback_after_repair_error"
@@ -2208,6 +2334,8 @@ def generate_microcycle(
                     completed_context=completed_context,
                     athlete_profile=athlete_profile,
                     planning_date=planning_date,
+                    athlete_state=athlete_state,
+                    starting_state=starting_state,
                 )
 
     normalized, model_valid = validate_and_normalize_micro(
@@ -2216,6 +2344,16 @@ def generate_microcycle(
         athlete_profile=athlete_profile,
         planning_date=planning_date,
     )
+    if source.startswith("deterministic_fallback"):
+        normalized = align_fallback_progression_with_block_intent(
+            normalized,
+            meso,
+            policy,
+            catalog,
+            athlete_state,
+            target_start,
+            starting_state=starting_state,
+        )
     if source in {"openai", "openai_repaired"} and not model_valid:
         # Defensive backstop. A proposal accepted above must still pass the
         # normalizer used by publication.
@@ -2225,6 +2363,8 @@ def generate_microcycle(
             completed_context=completed_context,
             athlete_profile=athlete_profile,
             planning_date=planning_date,
+            athlete_state=athlete_state,
+            starting_state=starting_state,
         )
         repair_metadata = repair_metadata or {
             "attempted": False,
@@ -2250,6 +2390,8 @@ def generate_microcycle(
             completed_context=completed_context,
             athlete_profile=athlete_profile,
             planning_date=planning_date,
+            athlete_state=athlete_state,
+            starting_state=starting_state,
         )
         fallback_failures = microcycle_guard_failures(
             final_fallback,

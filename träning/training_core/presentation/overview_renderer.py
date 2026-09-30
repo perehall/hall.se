@@ -15,6 +15,21 @@ MONTH_SHORT = (
     "jul", "aug", "sep", "okt", "nov", "dec",
 )
 
+INTENT_LABELS = {
+    "establish": "Etablera",
+    "develop": "Utveckla",
+    "consolidate": "Konsolidera",
+    "review": "Utvärdera",
+}
+AXIS_LABELS = {
+    "work_duration": "arbetstid",
+    "repetitions": "repetitioner",
+    "session_duration": "passlängd",
+    "frequency": "frekvens",
+    "technical_quality": "teknisk kvalitet",
+    "consistency": "kontinuitet",
+}
+
 
 def _e(value: object) -> str:
     return html.escape(str(value or ""))
@@ -28,6 +43,20 @@ def _fmt_date(value: str) -> str:
     except ValueError:
         return value
     return f"{parsed.day} {MONTH_SHORT[parsed.month - 1]} {parsed.year}"
+
+
+def _expected_intent(model: TrainingOverviewReadModel, week_start: date):
+    block = model.context.active_block if model.context else None
+    if block is None:
+        return None
+    for item in block.microcycle_intents:
+        if item.start_date == week_start.isoformat():
+            return item
+    return None
+
+
+def _intent_label(value: str) -> str:
+    return INTENT_LABELS.get(str(value or "").strip(), str(value or "").strip())
 
 
 def _week_url(week_start: date, current_week_start: date) -> str:
@@ -82,12 +111,27 @@ def _context_html(model: TrainingOverviewReadModel) -> str:
             value for value in (_fmt_date(block.start_date), _fmt_date(block.end_date)) if value
         )
         checkpoint = _fmt_date(block.evaluation_date)
+        axes = " · ".join(
+            f"{axis.capability_label}: {AXIS_LABELS.get(axis.axis, axis.axis)}"
+            for axis in block.progression_axes
+            if axis.capability_label and axis.axis
+        )
+        wave = "".join(
+            '<div class="overview-wave-step'
+            + (' current' if item.start_date == model.current_week_start.isoformat() else '')
+            + '">'
+            f'<b>V{item.index}</b><span>{_e(_intent_label(item.intent))}</span>'
+            '</div>'
+            for item in block.microcycle_intents
+        )
         block_html = (
             '<div class="overview-context-block">'
             '<span>Aktuellt utvecklingsblock</span>'
             f'<strong>{_e(block.title or "Aktivt block")}</strong>'
             f'<small>{_e(dates)}</small>'
             f'<p><b>Primärt nu:</b> {_e(primary)}</p>'
+            + (f'<p><b>Progressionsaxlar:</b> {_e(axes)}</p>' if axes else "")
+            + (f'<div class="overview-block-wave">{wave}</div>' if wave else "")
             + (f'<p><b>Nästa checkpoint:</b> {_e(checkpoint)}</p>' if checkpoint else "")
             + '</div>'
         )
@@ -142,7 +186,13 @@ def _actual_item(activity, registry: SportIconRegistry | None) -> str:
     )
 
 
-def _day_html(day, *, current_date: date, registry: SportIconRegistry | None) -> str:
+def _day_html(
+    day,
+    *,
+    current_date: date,
+    registry: SportIconRegistry | None,
+    materialized: bool,
+) -> str:
     classes = ["overview-day", f"state-{day.state}"]
     if day.local_date == current_date:
         classes.append("today")
@@ -160,7 +210,11 @@ def _day_html(day, *, current_date: date, registry: SportIconRegistry | None) ->
     elif planned:
         body = f'<div class="overview-layer planned-layer">{planned}</div>'
     else:
-        body = '<span class="overview-rest">Vila</span>'
+        body = (
+            '<span class="overview-rest">Vila</span>'
+            if materialized or day.local_date <= current_date
+            else '<span class="overview-unplanned">Ej detaljplanerad</span>'
+        )
 
     return (
         f'<div class="{" ".join(classes)}" data-date="{day.local_date.isoformat()}">'
@@ -176,6 +230,7 @@ def _day_html(day, *, current_date: date, registry: SportIconRegistry | None) ->
 def _week_html(
     week,
     *,
+    model: TrainingOverviewReadModel,
     current_date: date,
     current_week_start: date,
     registry: SportIconRegistry | None,
@@ -185,20 +240,48 @@ def _week_html(
         else "past" if week.end < current_date
         else "future"
     )
+    expected = _expected_intent(model, week.start)
+    materialized = week.planned_count > 0 or relation != "future"
     rest_days = max(0, 7 - week.planned_training_days)
-    metrics = [
-        f"Plan {week.planned_count} pass",
-        f"Utfört {week.completed_count}",
-    ]
-    if week.completed_count:
-        metrics.append(week.actual_duration)
-        if week.actual_distance_m > 0:
-            metrics.append(week.actual_distance)
-    if relation != "past":
-        metrics.append(f"{rest_days} planerade vilodagar")
+    if relation == "future" and week.planned_count == 0:
+        metrics = ["Detaljplan ej materialiserad"]
+    else:
+        metrics = [
+            f"Plan {week.planned_count} pass",
+            f"Utfört {week.completed_count}",
+        ]
+        if week.completed_count:
+            metrics.append(week.actual_duration)
+            if week.actual_distance_m > 0:
+                metrics.append(week.actual_distance)
+        if relation != "past":
+            metrics.append(f"{rest_days} planerade vilodagar")
     metric_text = " · ".join(metrics)
+
+    observed_intent = week.block_intents[0] if len(week.block_intents) == 1 else ""
+    intent = observed_intent or (expected.intent if expected else "")
+    progress_bits = []
+    if week.primary_progress_count:
+        progress_bits.append(f"{week.primary_progress_count} primär progression")
+    if week.primary_hold_count:
+        progress_bits.append(f"{week.primary_hold_count} primär hold")
+    if week.primary_establish_count:
+        progress_bits.append(f"{week.primary_establish_count} etablering")
+    intent_meta = " · ".join(progress_bits)
+    intent_html = (
+        '<div class="overview-week-intent">'
+        f'<strong>{_e(_intent_label(intent))}</strong>'
+        + (f'<span>{_e(intent_meta)}</span>' if intent_meta else "")
+        + '</div>'
+        if intent else ""
+    )
     days = "".join(
-        _day_html(day, current_date=current_date, registry=registry)
+        _day_html(
+            day,
+            current_date=current_date,
+            registry=registry,
+            materialized=materialized,
+        )
         for day in week.days
     )
     return (
@@ -209,6 +292,7 @@ def _week_html(
         f'<span>{week.start.day} {MONTH_SHORT[week.start.month - 1]} – '
         f'{week.end.day} {MONTH_SHORT[week.end.month - 1]}</span></a>'
         f'<p>{_e(metric_text)}</p>'
+        f'{intent_html}'
         '</header>'
         f'<div class="overview-week-days">{days}</div>'
         '</section>'
@@ -217,8 +301,14 @@ def _week_html(
 
 def _review_html(model: TrainingOverviewReadModel) -> str:
     future_weeks = [week for week in model.weeks if week.start > model.current_week_start]
-    future_with_plan = [week for week in future_weeks if week.planned_count > 0]
-    missing = [week for week in future_weeks if week.planned_count == 0]
+    block = model.context.active_block if model.context else None
+    active_future = [
+        week for week in future_weeks
+        if _expected_intent(model, week.start) is not None
+    ]
+    materialized_active = [week for week in active_future if week.planned_count > 0]
+    missing_active = [week for week in active_future if week.planned_count == 0]
+
     multipass_days = [
         day
         for week in model.weeks
@@ -227,11 +317,100 @@ def _review_html(model: TrainingOverviewReadModel) -> str:
     ]
     fixed_count = sum(week.fixed_count for week in model.weeks)
 
+    rhythm_mismatches = []
+    progression_issues = []
+    primary_coverage_issues = []
+    progression_notes = []
+    for week in materialized_active:
+        expected = _expected_intent(model, week.start)
+        observed = set(week.block_intents)
+        if expected and observed and observed != {expected.intent}:
+            rhythm_mismatches.append(
+                f"V{week.week_number}: väntat {_intent_label(expected.intent)}, "
+                f"materialiserat {', '.join(_intent_label(value) for value in sorted(observed))}"
+            )
+        elif expected and not observed:
+            rhythm_mismatches.append(
+                f"V{week.week_number}: block_intent saknas i materialiserade pass"
+            )
+
+        if expected and expected.intent == "develop":
+            anchors = week.primary_workouts
+            if week.primary_progress_count:
+                progression_notes.append(
+                    f"V{week.week_number}: {week.primary_progress_count} primär progression"
+                )
+            elif anchors:
+                explicit_holds = [
+                    workout for workout in anchors
+                    if workout.development_relation in {"hold", "establish"}
+                    and workout.development_reason
+                ]
+                if len(explicit_holds) == len(anchors):
+                    progression_notes.append(
+                        f"V{week.week_number}: primära pass hålls/etableras med explicit skäl"
+                    )
+                else:
+                    progression_issues.append(
+                        f"V{week.week_number}: develop-vecka saknar både primär progression och fullständig hold-motivering"
+                    )
+            else:
+                progression_issues.append(
+                    f"V{week.week_number}: develop-vecka saknar materialiserat primärt utvecklingspass"
+                )
+
+        if block is not None:
+            planned_stimuli = {
+                stimulus
+                for workout in week.planned_workouts
+                for stimulus in workout.stimuli
+            }
+            missing_primary = [
+                key for key in block.primary_capability_keys
+                if key not in planned_stimuli
+            ]
+            if missing_primary:
+                primary_coverage_issues.append(
+                    f"V{week.week_number}: saknar {', '.join(missing_primary)}"
+                )
+
     rows = [
         (
             "Planeringshorisont",
-            f"{len(future_with_plan)} av {len(future_weeks)} synliga framtidsveckor har planerade pass.",
-            "attention" if missing else "ok",
+            (
+                f"{len(materialized_active)} av {len(active_future)} återstående mikrocykler "
+                "i aktuellt block är detaljplanerade."
+                if active_future
+                else "Aktuellt block har ingen återstående framtida mikrocykel i den synliga perioden."
+            ),
+            "attention" if missing_active and not materialized_active else "neutral",
+        ),
+        (
+            "Blockrytm",
+            (
+                "Materialiserade mikrocykler följer blockets etablera/utveckla/konsolidera-roll."
+                if not rhythm_mismatches
+                else " · ".join(rhythm_mismatches)
+            ),
+            "ok" if not rhythm_mismatches else "attention",
+        ),
+        (
+            "Progressionslogik",
+            (
+                " · ".join(progression_notes)
+                if progression_notes and not progression_issues
+                else " · ".join(progression_issues or ["Ingen framtida develop-mikrocykel är ännu materialiserad."])
+            ),
+            "attention" if progression_issues else "neutral",
+        ),
+        (
+            "Primär täckning",
+            (
+                "Alla materialiserade framtidsveckor i blocket täcker blockets primära kapaciteter."
+                if not primary_coverage_issues
+                else " · ".join(primary_coverage_issues)
+            ),
+            "ok" if not primary_coverage_issues else "attention",
         ),
         (
             "Multipass",
@@ -244,13 +423,14 @@ def _review_html(model: TrainingOverviewReadModel) -> str:
             "neutral",
         ),
     ]
-    if missing:
-        labels = ", ".join(f"V{week.week_number}" for week in missing)
+    if missing_active:
+        labels = ", ".join(f"V{week.week_number}" for week in missing_active)
         rows.append(
             (
-                "Ej materialiserad plan",
-                f"{labels} saknar planerade träningspass i den kanoniska databasen. Översikten fyller inte ut dem med antaganden.",
-                "attention",
+                "Ej detaljplanerad",
+                f"{labels} ligger i det beslutade blocket men saknar ännu materialiserade pass. "
+                "De visas därför inte som viloveckor.",
+                "neutral",
             )
         )
 
@@ -263,8 +443,8 @@ def _review_html(model: TrainingOverviewReadModel) -> str:
         '<details class="overview-review">'
         '<summary>Granska plan</summary>'
         '<div class="overview-review-copy">'
-        '<p>Strukturkontrollen visar endast sådant som kan härledas direkt ur planens kanoniska data. '
-        'Den klassar ännu inte belastning som bra eller dålig utan strukturerade dos-/intensitetsmått.</p>'
+        '<p>Kontrollen jämför den materialiserade kalendern mot mesocykelns egna strukturerade beslut: '
+        'blockroll, primära stimuli och explicit progress/hold. Den sätter inget fysiologiskt totalscore.</p>'
         f'<div class="overview-review-grid">{content}</div></div></details>'
     )
 
@@ -293,6 +473,10 @@ a{color:inherit}.overview-shell{width:min(1500px,100%);margin:auto;padding:24px 
 .overview-context strong{display:block;margin-top:5px;font-size:.98rem}.overview-context small{display:block;color:var(--muted);font-size:.72rem;margin-top:3px}
 .overview-context p{margin:9px 0 0;color:var(--secondary);font-size:.78rem}
 .overview-context p+p{margin-top:4px}.overview-context-goals>div{display:grid;gap:7px;margin-top:8px}
+.overview-block-wave{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;margin-top:11px}
+.overview-wave-step{padding:7px 6px;border:1px solid var(--line-soft);border-radius:9px;background:var(--elevated)}
+.overview-wave-step.current{border-color:#c9cdf8;background:var(--accent-soft)}
+.overview-wave-step b{display:block;font-size:.64rem}.overview-wave-step span{margin-top:2px;font-size:.58rem;text-transform:none;letter-spacing:0}
 .overview-goal{padding:8px 0;border-top:1px solid var(--line-soft)}.overview-goal:first-child{border-top:0;padding-top:0}
 .overview-goal strong{font-size:.82rem;margin:0}.overview-goal span{font-size:.7rem;text-transform:none;letter-spacing:0;margin-top:2px}
 .overview-calendar{border:1px solid var(--line);border-radius:18px;overflow:hidden;background:var(--card)}
@@ -301,6 +485,8 @@ a{color:inherit}.overview-shell{width:min(1500px,100%);margin:auto;padding:24px 
 .overview-week-summary{padding:14px 14px;border-right:1px solid var(--line);background:rgba(255,255,255,.46)}
 .overview-week-summary a{text-decoration:none}.overview-week-summary strong{display:block;font-size:1.05rem}.overview-week-summary span{display:block;margin-top:2px;color:var(--muted);font-size:.68rem}
 .overview-week-summary p{margin:10px 0 0;color:var(--secondary);font-size:.7rem;line-height:1.5}
+.overview-week-intent{margin-top:8px;padding-top:7px;border-top:1px solid var(--line-soft)}
+.overview-week-intent strong{display:block;font-size:.68rem}.overview-week-intent span{margin-top:2px;font-size:.62rem}
 .overview-week-days{display:grid;grid-template-columns:repeat(7,minmax(125px,1fr));min-width:875px}
 .overview-day{min-height:126px;padding:10px 9px;border-left:1px solid var(--line-soft);position:relative}
 .overview-day:first-child{border-left:0}.overview-day.today{box-shadow:inset 0 0 0 2px var(--accent);z-index:1}
@@ -314,7 +500,7 @@ a{color:inherit}.overview-shell{width:min(1500px,100%);margin:auto;padding:24px 
 .overview-workout strong{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;font-size:.7rem;line-height:1.32}
 .overview-focus,.overview-facts{display:block;margin-top:3px;color:var(--muted);font-size:.61rem;line-height:1.28}
 .overview-icon{width:13px;height:13px;flex:0 0 13px;color:var(--secondary);margin-top:1px}.overview-icons{display:flex;gap:2px}
-.overview-rest{display:block;color:#9AA09C;font-size:.67rem;padding-top:4px}.overview-empty{color:var(--muted);font-size:.76rem}
+.overview-rest{display:block;color:#9AA09C;font-size:.67rem;padding-top:4px}.overview-unplanned{display:block;color:var(--muted);font-size:.64rem;padding-top:4px;font-style:italic}.overview-empty{color:var(--muted);font-size:.76rem}
 .overview-review{margin-top:18px;border:1px solid var(--line);border-radius:16px;background:var(--card);overflow:hidden}
 .overview-review>summary{cursor:pointer;list-style:none;padding:14px 16px;font-size:.8rem;font-weight:760}
 .overview-review>summary::-webkit-details-marker{display:none}.overview-review>summary:after{content:" +";color:var(--muted)}
@@ -347,6 +533,7 @@ def render_overview_document(
     weeks = "".join(
         _week_html(
             week,
+            model=model,
             current_date=current_date,
             current_week_start=model.current_week_start,
             registry=sport_icons,

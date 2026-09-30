@@ -53,7 +53,15 @@ class DevelopmentRoadmapTests(unittest.TestCase):
                 "start_date": "2026-09-28",
                 "end_date": "2026-10-25",
                 "evaluation_date": "2026-10-26",
+                "duration_weeks": 4,
                 "hypothesis": "Stabil kontinuitet före större progression.",
+                "progression_axes": [
+                    {
+                        "capability": "run_threshold",
+                        "axis": "work_duration",
+                        "objective": "Öka arbetstid stegvis när responsen stödjer det.",
+                    }
+                ],
                 "goal_contribution": "Utveckla relevant kapacitet utan att tappa bredd.",
                 "goal_contributions": [
                     {"goal_id": "allround", "contribution": "Behåll bredd.", "tradeoff": "Ingen."},
@@ -71,6 +79,16 @@ class DevelopmentRoadmapTests(unittest.TestCase):
             },
         }
         self.policy = {
+            "periodization_policy": {
+                "microcycle_wave_by_duration": {
+                    "4": ["establish", "develop", "develop", "consolidate"]
+                },
+                "intent_definitions": {
+                    "establish": "Etablera.",
+                    "develop": "Utveckla.",
+                    "consolidate": "Konsolidera.",
+                },
+            },
             "event_horizon_policy": {
                 "specificity_build_review_days": 168,
                 "race_specific_review_days": 84,
@@ -120,6 +138,16 @@ class DevelopmentRoadmapTests(unittest.TestCase):
         run = next(row for row in roadmap["capabilities"] if row["key"] == "run_threshold")
         self.assertEqual(run["evidence_state"], "demonstrated")
         self.assertIn("inte samma sak", run["evidence_summary"])
+
+    def test_active_block_exposes_progression_wave_and_axes(self):
+        roadmap = build_development_roadmap(self.strategy, self.policy, self.athlete_state)
+        block = roadmap["active_block"]
+        self.assertEqual(
+            [row["intent"] for row in block["microcycle_intents"]],
+            ["establish", "develop", "develop", "consolidate"],
+        )
+        self.assertEqual(block["microcycle_intents"][1]["start_date"], "2026-10-05")
+        self.assertEqual(block["progression_axes"][0]["axis"], "work_duration")
 
     def test_declared_profile_goals_remain_visible(self):
         roadmap = build_development_roadmap(self.strategy, self.policy, self.athlete_state)
