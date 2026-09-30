@@ -2698,15 +2698,6 @@ def build_microcycle_source_payload(
             athlete_state=athlete_state,
             starting_state=starting_state,
         ),
-        "forward_horizon": build_forward_planning_horizon(
-            meso,
-            policy,
-            catalog,
-            athlete_state,
-            iso(micro["week_start"]),
-            starting_state=starting_state,
-            weeks=5,
-        ),
         "current_microcycle_blueprint": development_blueprint_for_week(
             meso,
             policy,
@@ -3570,6 +3561,15 @@ def materialize_strategy(goal, policy, meso, micro, catalog, athlete_state, goal
             catalog,
             athlete_state=athlete_state,
             starting_state=starting_state,
+        ),
+        "forward_horizon": build_forward_planning_horizon(
+            meso,
+            policy,
+            catalog,
+            athlete_state,
+            iso(micro["week_start"]),
+            starting_state=starting_state,
+            weeks=5,
         ),
         "progression_policy": {
             "automatic_load_increase": False,
