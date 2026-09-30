@@ -12,6 +12,7 @@ from typing import Iterable
 
 from training_core.domain.weather import WeatherSnapshot
 from training_core.domain.workouts import PlannedWorkout, planned_training_workouts
+from training_core.presentation.prescription import PrescriptionRow, prescription_rows
 from training_core.presentation.sport_identity import activity_icon_key, planned_icon_keys
 from training_core.presentation.today import CompletedActivity
 from training_core.presentation.weather import DayWeatherReadModel, build_daily_weather_models
@@ -33,6 +34,7 @@ class OverviewPlannedWorkoutReadModel:
     development_character: str
     development_relation: str
     development_reason: str
+    prescription_rows: tuple[PrescriptionRow, ...]
 
 
 @dataclass(frozen=True)
@@ -326,6 +328,7 @@ def _planned_model(workout: PlannedWorkout) -> OverviewPlannedWorkoutReadModel:
         development_reason=str(
             workout.reason or development_step.get("reason") or ""
         ).strip(),
+        prescription_rows=prescription_rows(payload),
     )
 
 
