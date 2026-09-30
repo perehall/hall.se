@@ -14,6 +14,8 @@ from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 from canonical_plan import planned_workouts as canonical_planned_workouts
+from capability_registry import CAPABILITY_REGISTRY
+from capability_state import build_capability_states
 from coach_rules import activity_family, activity_local_date
 from dose_response import build_dose_response, build_load_windows
 from supabase_activity_backend import load_activities_for_runtime
@@ -311,7 +313,42 @@ def build_state(
         },
     }
 
+    profile_exposures = {key: [] for key in CAPABILITY_REGISTRY}
+    for row in recent_sessions:
+        profile = row.get("training_profile") or {}
+        confirmed = {
+            str(item.get("key"))
+            for item in (profile.get("stimuli") or [])
+            if isinstance(item, dict)
+            and item.get("status") == "confirmed"
+            and str(item.get("key") or "")
+        }
+        credits = {
+            str(value)
+            for value in (profile.get("planning_credits") or [])
+            if str(value or "")
+        }
+        for capability in sorted((confirmed | credits).intersection(CAPABILITY_REGISTRY)):
+            profile_exposures[capability].append(
+                {
+                    "activity_id": row.get("id"),
+                    "date": row.get("date"),
+                    "source": (
+                        "confirmed_stimulus"
+                        if capability in confirmed
+                        else "plan_matched"
+                    ),
+                    "family": row.get("family"),
+                }
+            )
+
+    for capability in CAPABILITY_REGISTRY:
+        fact = capability_facts.setdefault(capability, {})
+        fact["verified_exposures"] = profile_exposures.get(capability, [])[-12:]
+        fact["verified_exposure_count"] = len(profile_exposures.get(capability, []))
+
     dose_response = build_dose_response(recent_sessions, evidence, today=today)
+    capability_states = build_capability_states(recent_sessions, dose_response)
     load_windows = build_load_windows(recent_sessions, today=today)
 
     return {
@@ -326,12 +363,13 @@ def build_state(
         "recent_sessions": recent_sessions[-24:],
         "capability_facts": capability_facts,
         "dose_response": dose_response,
+        "capability_states": capability_states,
         "load_windows": load_windows,
         "performance_fingerprints": performance[-12:],
         "recent_week_reviews": recent_reviews(),
         "interpretation_boundary": (
             "Dokumentet innehåller observerade fakta, uttryckliga användarrapporter och en konservativ "
-            "klassificering av demonstrerad/tolererad/absorberad dos. 24–72 h-signaler är kontext och "
+            "klassificering av demonstrerad/tolererad/absorberad dos samt verifierad capability-state. 24–72 h-signaler är kontext och "
             "tillskrivs inte kausalt ett tidigare pass. Dokumentet anger inte optimal belastning, "
             "återhämtning, skaderisk eller framtida träningsdos."
         ),
