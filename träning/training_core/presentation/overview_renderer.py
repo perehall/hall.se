@@ -1244,19 +1244,19 @@ a{color:inherit}
 .overview-detail-head span{display:block;color:var(--muted);font-size:.58rem;text-transform:uppercase;letter-spacing:.055em;font-weight:760}
 .overview-detail-head h2{margin:4px 0 0;font-size:1.25rem;letter-spacing:-.025em}
 .overview-detail-close{appearance:none;border:1px solid var(--line);background:var(--card);border-radius:999px;width:32px;height:32px;cursor:pointer;font-size:1rem}
-.overview-detail-session{margin-top:18px;padding-bottom:13px;border-bottom:1px solid var(--line-soft)}
+.overview-detail-session{margin-top:18px;padding:0 0 14px;border-bottom:1px solid var(--line-soft)}
 .overview-detail-session>span,.overview-detail-prescription>span,.overview-detail-row>span{display:block;color:var(--muted);font-size:.57rem;text-transform:uppercase;letter-spacing:.05em;font-weight:760}
 .overview-detail-session>p{margin:5px 0 0;color:var(--text);font-size:.86rem;line-height:1.42;font-weight:650}
 .overview-detail-session[hidden]{display:none}
-.overview-detail-prescription{margin-top:16px;padding:14px 14px 12px;border:1px solid var(--line);border-radius:13px;background:var(--card)}
+.overview-detail-prescription{margin:0;padding:14px 0 15px;border:0;border-bottom:1px solid var(--line-soft);border-radius:0;background:transparent}
 .overview-detail-prescription[hidden]{display:none}
-.overview-detail-prescription-grid{display:grid;margin-top:7px}
-.overview-detail-prescription-row{display:grid;grid-template-columns:max-content minmax(0,1fr);align-items:start}
-.overview-detail-prescription-dose{font-weight:800;color:var(--text);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap;padding:6px 13px 6px 0;line-height:1.35;letter-spacing:-.01em}
-.overview-detail-prescription-text{min-width:0;color:var(--secondary);line-height:1.4;padding:6px 0 6px 14px;border-left:1px solid var(--line)}
-.overview-detail-grid{display:grid;gap:12px;margin-top:18px}
-.overview-detail-row{padding-top:11px;border-top:1px solid var(--line-soft)}
-.overview-detail-row:first-child{padding-top:0;border-top:0}
+.overview-detail-prescription-grid{display:grid;grid-template-columns:80px minmax(0,1fr);margin-top:7px}
+.overview-detail-prescription-row{display:contents}
+.overview-detail-prescription-dose{font-weight:760;color:var(--text);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap;padding:6px 12px 6px 0;line-height:1.38;letter-spacing:-.01em}
+.overview-detail-prescription-text{min-width:0;color:var(--secondary);font-size:.78rem;line-height:1.42;padding:6px 0 6px 12px;border-left:1px solid var(--line-soft)}
+.overview-detail-grid{display:grid;gap:0;margin-top:0}
+.overview-detail-row{padding:14px 0;border-bottom:1px solid var(--line-soft)}
+.overview-detail-row:last-child{border-bottom:0}
 .overview-detail-row>p{margin:4px 0 0;color:var(--secondary);font-size:.78rem;line-height:1.45}
 .overview-detail-row[hidden]{display:none}
 
@@ -1273,6 +1273,9 @@ a{color:inherit}
 @media(max-width:620px){
   .overview-review-grid{grid-template-columns:1fr}
   .overview-detail{width:100%}
+  .overview-detail-prescription-grid{grid-template-columns:72px minmax(0,1fr)}
+  .overview-detail-prescription-dose{padding-right:10px}
+  .overview-detail-prescription-text{padding-left:10px}
 }
 """
 
