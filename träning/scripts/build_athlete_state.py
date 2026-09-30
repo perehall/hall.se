@@ -29,6 +29,7 @@ REVIEWS_DIR = DATA / "week_reviews"
 OUTPUT_FILE = DATA / "athlete_state.json"
 PLAN_FILE = DATA / "plan.json"
 UPCOMING_FILE = DATA / "upcoming_week.json"
+WEEKS_DIR = DATA / "weeks"
 SCHEMA_VERSION = 1
 LOOKBACK_DAYS = 56
 
@@ -118,6 +119,47 @@ def explicit_report_evidence(activity):
             }
         )
     return evidence
+
+
+def archived_planned_workouts(*, today=None, lookback_days=LOOKBACK_DAYS, weeks_dir=WEEKS_DIR):
+    today = today or date.today()
+    if isinstance(today, str):
+        today = date.fromisoformat(today)
+    start = today - timedelta(days=lookback_days - 1)
+    rows = []
+    if not weeks_dir.exists():
+        return rows
+
+    for path in sorted(weeks_dir.glob("????-W??.json")):
+        document = load_json(path, {})
+        try:
+            workouts = canonical_planned_workouts(
+                document,
+                context=f"athlete-state archive {path.name}",
+            )
+        except Exception:
+            continue
+        for workout in workouts:
+            try:
+                day = date.fromisoformat(str(workout.get("date") or ""))
+            except (TypeError, ValueError):
+                continue
+            if start <= day <= today:
+                rows.append(workout)
+
+    deduped = {}
+    for workout in rows:
+        identity = str(workout.get("workout_key") or "").strip()
+        if not identity:
+            identity = "|".join(
+                [
+                    str(workout.get("date") or ""),
+                    str(workout.get("microcycle_slot") or ""),
+                    str(workout.get("session") or ""),
+                ]
+            )
+        deduped[identity] = workout
+    return list(deduped.values())
 
 
 def recent_reviews(limit=6):
@@ -382,7 +424,9 @@ def main():
     previous_state = load_json(OUTPUT_FILE, {})
     plan = load_json(PLAN_FILE, {})
     upcoming = load_json(UPCOMING_FILE, {})
+    today = date.today()
     planned = [
+        *archived_planned_workouts(today=today),
         *canonical_planned_workouts(plan, context="athlete-state current plan"),
         *canonical_planned_workouts(upcoming, context="athlete-state upcoming plan"),
     ]
@@ -391,6 +435,7 @@ def main():
         performance,
         planned_workouts=planned,
         previous_state=previous_state,
+        today=today,
     )
     write_json(OUTPUT_FILE, state)
     print(
