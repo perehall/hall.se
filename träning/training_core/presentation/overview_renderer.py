@@ -974,12 +974,16 @@ def _review_html(model: TrainingOverviewReadModel) -> str:
         f'<p>{_e(copy)}</p></article>'
         for label, copy, state in rows
     )
+    attention_count = sum(state == "attention" for _, _, state in rows)
+    summary = (
+        f"Granska plan · {attention_count} saker att kontrollera"
+        if attention_count
+        else "Granska plan ✓"
+    )
     return (
         '<details class="overview-review">'
-        '<summary>Granska plan</summary>'
+        f'<summary>{_e(summary)}</summary>'
         '<div class="overview-review-copy">'
-        '<p>Kontrollen jämför den materialiserade kalendern mot mesocykelns egna strukturerade beslut: '
-        'blockroll, primära stimuli och explicit progress/hold. Den sätter inget fysiologiskt totalscore.</p>'
         f'<div class="overview-review-grid">{content}</div></div></details>'
     )
 
