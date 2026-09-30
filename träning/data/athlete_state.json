@@ -1772,28 +1772,6 @@
         "metric": "duration_minutes",
         "exposures": [
           {
-            "date": "2026-09-11",
-            "metric": "duration_minutes",
-            "dose_value": 71.67,
-            "activity_id": 20133500464,
-            "evidence_basis": "confirmed_or_plan_matched",
-            "direct_response": {
-              "signal": "neutral",
-              "rpe_values": [],
-              "caution_terms": [],
-              "supportive_terms": []
-            },
-            "evidence_policy": "plan_matched_or_explicit",
-            "response_status": "tolerated",
-            "repeat_supported": true,
-            "recovery_context_24_72h": {
-              "signal": "unobserved",
-              "observations": [],
-              "window_complete": true,
-              "causal_interpretation": "not_inferred"
-            }
-          },
-          {
             "date": "2026-09-15",
             "metric": "duration_minutes",
             "dose_value": 64.05,
@@ -3518,12 +3496,6 @@
       },
       "verified_exposures": [
         {
-          "date": "2026-09-11",
-          "family": "run",
-          "source": "plan_matched",
-          "activity_id": 20133500464
-        },
-        {
           "date": "2026-09-15",
           "family": "run",
           "source": "plan_matched",
@@ -3554,7 +3526,7 @@
           "activity_id": 20381137043
         }
       ],
-      "verified_exposure_count": 6
+      "verified_exposure_count": 5
     },
     "strength_unilateral": {
       "session_count": 7,
@@ -3580,7 +3552,7 @@
       "verified_exposure_count": 2
     }
   },
-  "generated_at_utc": "2026-09-30T18:26:18.845622+00:00",
+  "generated_at_utc": "2026-09-30T19:17:55.103375+00:00",
   "capability_states": {
     "model": "capability_feedback_state_v1",
     "principle": "Kvantitativ progression kräver verifierad capability-evidens och dose-response. Teknikförmågor kan vara observerade men blir inte automatiskt progressionsredo från tid eller distans.",
@@ -4110,14 +4082,6 @@
         "progression_reason": "Senaste jämförbara exponeringen har stödjande passrespons men 72 h-observationsfönstret är ännu inte komplett.",
         "verified_exposures": [
           {
-            "date": "2026-09-11",
-            "family": "run",
-            "source": "plan_matched",
-            "distance_m": 13667.0,
-            "activity_id": 20133500464,
-            "elapsed_time_s": 4300
-          },
-          {
             "date": "2026-09-15",
             "family": "run",
             "source": "plan_matched",
@@ -4159,7 +4123,7 @@
           }
         ],
         "progression_reason_code": "recovery_window_open",
-        "verified_exposure_count": 6,
+        "verified_exposure_count": 5,
         "latest_verified_exposure": {
           "date": "2026-09-29",
           "family": "run",
