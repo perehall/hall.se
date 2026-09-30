@@ -81,6 +81,7 @@ class PostgresPresentationRepositoryTests(unittest.TestCase):
                     ]
                 },
                 "m1:mc1:2026-09-27:run_threshold",
+                "20367593813",
             )
         ]
         factory = CapturingFactory(rows)
@@ -92,11 +93,13 @@ class PostgresPresentationRepositoryTests(unittest.TestCase):
             days[0].workout_key,
             "m1:mc1:2026-09-27:run_threshold",
         )
+        self.assertEqual(days[0].linked_provider_activity_id, "20367593813")
         self.assertEqual(
             days[0].payload["manual_activities"][0]["session"],
             "Styrka/core · 25 min",
         )
-        self.assertIn("where is_current", factory.last_query)
+        self.assertIn("where p.is_current", factory.last_query)
+        self.assertIn("p.linked_activity_id", factory.last_query)
 
     def test_same_date_workouts_are_returned_independently(self):
         rows = [
@@ -111,6 +114,7 @@ class PostgresPresentationRepositoryTests(unittest.TestCase):
                 "Aerob simning.",
                 {},
                 "m1:mc2:swim",
+                "",
             ),
             (
                 date(2026, 10, 2),
@@ -123,6 +127,7 @@ class PostgresPresentationRepositoryTests(unittest.TestCase):
                 "Styrka/core.",
                 {},
                 "m1:mc2:strength",
+                "",
             ),
         ]
         repo = PostgresPresentationRepository(CapturingFactory(rows))
