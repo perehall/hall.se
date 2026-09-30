@@ -328,9 +328,9 @@
       "starting_state_hash": "52ff32e9ef09bd337669bbf6347085139222e7abd6a7cec41efd516a62e45cfe",
       "athlete_profile_hash": "559e0b6e5a587d351baa65817f81e04e433d0d46aac60b57a73429fd5b43d1bc",
       "mesocycle_source_hash": "9fb730125d779e8644a8486faa35467fe547c33194d479bd24aed65dfcf81994",
-      "microcycle_source_hash": "41459dbc4350453b0f476ab39bf22a3c8f48dca9d192a632e4403fe80c576f6b",
+      "microcycle_source_hash": "30179c11fac5f1a3c087554cb6245443741145b338362c44b31ed256f1293f14",
       "mesocycle_decision_source": "openai",
-      "microcycle_decision_source": "openai_repaired"
+      "microcycle_decision_source": "deterministic_fallback_after_repair_guard"
     },
     "evaluation_date": "2026-10-26",
     "goal_basis_hash": "30201a00f8ff4f10c913b8fbf2d31052418d4e0d3812c799ca49b56a38accdf9",
@@ -470,13 +470,13 @@
       {
         "slot": "swim_aerobic_technique_1",
         "sport": "swim",
-        "reason": "Etablera teknisk aerob simbassession enligt blueprint; undvik progress p.g.a. senaste simvarningssignaler. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: establish; materialiserad relation: establish.",
+        "reason": "Lågmekanisk simexponering dagen efter fast enduro följer blockets planerade passkaraktär utan att anta att benen är redo för ny benkvalitet. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: consolidate; materialiserad relation: hold.",
         "session": "Simning · 3 200 m · aerob/teknik",
         "stimuli": [
           "swim_aerobic",
           "swim_technique"
         ],
-        "day_index": 3,
+        "day_index": 4,
         "recipe_key": "swim_aerobic_technique",
         "block_intent": "establish",
         "dose_options": [
@@ -589,8 +589,8 @@
           "source": "starting_state",
           "microcycle_plan": [
             {
-              "reason": "Mikrocykelbeslutet valde establish och dosen materialiserades från verifierad träningsrespons, bekräftat startläge eller konservativ katalogbas utan att höja flera belastningsvariabler samtidigt.",
-              "relation": "establish",
+              "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från verifierad träningsrespons, bekräftat startläge eller konservativ katalogbas utan att höja flera belastningsvariabler samtidigt.",
+              "relation": "hold",
               "option_id": "swim-3200",
               "microcycle": 1
             }
@@ -601,120 +601,71 @@
         "progression_ceiling_reason": "Ingen högre förgodkänd dos finns i receptkatalogen. Fortsatt utveckling kräver nytt recept eller annan progressionsaxel, inte automatisk extrapolering."
       },
       {
-        "slot": "mtb_aerobic_endurance_2",
-        "sport": "bike",
-        "reason": "Lägg in en lugn MTB/aerob‑exponering för att bevara MTB‑kapacitet och ge absorberbar belastning utan att öka benstress nära fasta enduro‑dagar. Absorberad nivå saknas; dosgolvet utgår konservativt från tolererad nivå 73.23. Detta är inte bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
-        "session": "MTB/XC · 60 min · lugn aerob stig/grus",
-        "stimuli": [
-          "mtb_aerobic"
-        ],
-        "day_index": 4,
-        "recipe_key": "mtb_aerobic_endurance",
-        "block_intent": "establish",
-        "dose_options": [
-          {
-            "id": "mtb-aerobic-60",
-            "kind": "duration_minutes",
-            "value": 60,
-            "intent": "Kort aerob cykelexponering.",
-            "session": "MTB/XC · 60 min · lugn aerob stig/grus"
-          },
-          {
-            "id": "mtb-aerobic-75",
-            "kind": "duration_minutes",
-            "value": 75,
-            "intent": "Normal aerob cykelexponering.",
-            "session": "MTB/XC · 75 min · lugn aerob stig/grus"
-          },
-          {
-            "id": "mtb-aerobic-90",
-            "kind": "duration_minutes",
-            "value": 90,
-            "intent": "Längre aerob cykelexponering när helhetsbelastningen tillåter.",
-            "session": "MTB/XC · 90 min · lugn aerob stig/grus"
-          },
-          {
-            "id": "mtb-aerobic-105",
-            "kind": "duration_minutes",
-            "value": 105,
-            "intent": "Förgodkänt längre steg som kräver stöd i faktisk tålighet.",
-            "session": "MTB/XC · 105 min · lugn aerob stig/grus"
-          }
-        ],
-        "priority_role": "flex",
-        "load_dimensions": [
-          "cardiovascular",
-          "technical"
-        ],
-        "development_focus": "Jämn aerob cykling på lättare stig/grus. Fokus är uthållighet och jämn belastning, inte tekniska segment eller fartjakt.",
-        "baseline_option_id": "mtb-aerobic-60",
-        "progression_criteria": [
-          "Ändra bara dos när faktisk träningsrespons eller mesocykelns progressionsbeslut ger sakligt stöd.",
-          "Wellness eller en enskild bra dag får inte ensam motivera belastningsökning.",
-          "Närliggande 2–3 dagars faktisk belastning ska kunna motivera hold, reduktion eller flytt."
-        ],
-        "development_character": "aerobic_endurance"
-      },
-      {
-        "slot": "run_easy_trail_3",
+        "slot": "run_easy_distance_2",
         "sport": "run",
-        "reason": "Lugn stigdistans för att bibehålla löptålighet och mekanisk kontinuitet utan att introducera backkvalitet nära varningsfönster. Dosgolvet utgår från absorberad nivå 116 i athlete_state.dose_response, inte från högsta genomförda värde. Veckobeslut: consolidate; materialiserad relation: hold.",
-        "session": "Löpning · lugn stig/grus · 105 min",
+        "reason": "Behåll lugn löptålighet med separation från löpkvalitet. Blueprint får variera passkaraktären men skapar inte en extra belastningsexponering. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 120 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: consolidate; materialiserad relation: hold.",
+        "session": "Löpning · lugn distans · 120 min",
         "stimuli": [
           "run_easy_distance"
         ],
         "day_index": 5,
-        "recipe_key": "run_easy_trail",
+        "recipe_key": "run_easy_distance",
         "block_intent": "establish",
         "dose_options": [
           {
-            "id": "run-easy-trail-75",
+            "id": "run-easy-60",
+            "kind": "duration_minutes",
+            "value": 60,
+            "intent": "Reducerad/etablerande distansdos.",
+            "session": "Löpning · lugn distans · 60 min"
+          },
+          {
+            "id": "run-easy-75",
             "kind": "duration_minutes",
             "value": 75,
-            "intent": "Lateral terrängvariant med kontrollerad varaktighet.",
-            "session": "Löpning · lugn stig/grus · 75 min"
+            "intent": "Normal kontrollerad distansdos.",
+            "session": "Löpning · lugn distans · 75 min"
           },
           {
-            "id": "run-easy-trail-90",
+            "id": "run-easy-90",
             "kind": "duration_minutes",
             "value": 90,
-            "intent": "Lateral terrängvariant med kontrollerad varaktighet.",
-            "session": "Löpning · lugn stig/grus · 90 min"
+            "intent": "Progressionsalternativ när 75 min absorberats.",
+            "session": "Löpning · lugn distans · 90 min"
           },
           {
-            "id": "run-easy-trail-105",
+            "id": "run-easy-105",
             "kind": "duration_minutes",
             "value": 105,
-            "intent": "Lateral terrängvariant nära längre etablerad distansdos.",
-            "session": "Löpning · lugn stig/grus · 105 min"
+            "intent": "Längre distansalternativ när historiken stödjer det.",
+            "session": "Löpning · lugn distans · 105 min"
           },
           {
-            "id": "run-easy-trail-120",
+            "id": "run-easy-120",
             "kind": "duration_minutes",
             "value": 120,
-            "intent": "Längre terrängdos endast när faktisk tålighet och närbelastning stödjer den.",
-            "session": "Löpning · lugn stig/grus · 120 min"
+            "intent": "Lång distansdos som kräver stöd i faktisk tålighet och närbelastning.",
+            "session": "Löpning · lugn distans · 120 min"
           }
         ],
         "priority_role": "flex",
         "load_dimensions": [
           "cardiovascular",
-          "mechanical",
-          "technical"
+          "mechanical"
         ],
-        "development_focus": "Lugn tålighetslöpning på stig/grus med terrängvariation men utan fartjakt. Terräng väljs så att passet förblir aerobt och absorberbart.",
-        "baseline_option_id": "run-easy-trail-105",
+        "development_focus": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt.",
+        "baseline_option_id": "run-easy-120",
         "progression_criteria": [
           "Ändra bara dos när faktisk träningsrespons eller mesocykelns progressionsbeslut ger sakligt stöd.",
           "Wellness eller en enskild bra dag får inte ensam motivera belastningsökning.",
           "Närliggande 2–3 dagars faktisk belastning ska kunna motivera hold, reduktion eller flytt."
         ],
-        "development_character": "easy_trail"
+        "development_character": "easy_steady"
       },
       {
-        "slot": "swim_aerobic_endurance_4",
+        "slot": "swim_aerobic_endurance_3",
         "sport": "swim",
-        "reason": "Etablera andra veckans aeroba simbassession (uthållighet/teknik) enligt blueprint på konservativ nivå med hänsyn till mixed 24–72h‑signal. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: establish; materialiserad relation: establish.",
+        "reason": "Lägg en självständig simexponering med en annan utvecklingskaraktär än veckans övriga simpass när katalog och belastningsordning stödjer det. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: establish; materialiserad relation: establish.",
         "session": "Simning · 3 200 m · aerob uthållighet",
         "stimuli": [
           "swim_aerobic",
@@ -1621,9 +1572,21 @@
         "role": "primary",
         "label": "Kontrollerad löptröskel",
         "role_label": "Utvecklas nu",
+        "recipe_family": [
+          "run_threshold",
+          "run_threshold_short_reps"
+        ],
         "evidence_state": "absorbed",
-        "evidence_summary": "Absorberad nivå finns dokumenterad i faktalagret.",
-        "next_review_date": "2026-10-26"
+        "evidence_summary": "Absorberad nivå finns dokumenterad i capability-state. Senaste jämförbara exponeringen har stödjande passrespons men 72 h-observationsfönstret är ännu inte komplett.",
+        "next_review_date": "2026-10-26",
+        "progression_axes": [
+          "work_duration",
+          "interval_structure",
+          "consistency"
+        ],
+        "progression_ready": false,
+        "progression_state": "hold",
+        "progression_reason": "Senaste jämförbara exponeringen har stödjande passrespons men 72 h-observationsfönstret är ännu inte komplett."
       },
       {
         "key": "run_hill_quality",
@@ -1631,9 +1594,21 @@
         "role": "secondary",
         "label": "Backstyrka / löpekonomi",
         "role_label": "Stödjande utveckling",
+        "recipe_family": [
+          "run_hill_quality",
+          "run_hill_continuous"
+        ],
         "evidence_state": "absorbed",
-        "evidence_summary": "Absorberad nivå finns dokumenterad i faktalagret.",
-        "next_review_date": "2026-10-26"
+        "evidence_summary": "Absorberad nivå finns dokumenterad i capability-state. Senaste exponeringen har stödjande passrespons men 24–72 h-kontexten innehåller en varningssignal; kausalitet antas inte.",
+        "next_review_date": "2026-10-26",
+        "progression_axes": [
+          "repetitions",
+          "set_structure",
+          "consistency"
+        ],
+        "progression_ready": false,
+        "progression_state": "hold",
+        "progression_reason": "Senaste exponeringen har stödjande passrespons men 24–72 h-kontexten innehåller en varningssignal; kausalitet antas inte."
       },
       {
         "key": "run_easy_distance",
@@ -1641,9 +1616,21 @@
         "role": "secondary",
         "label": "Lugn löpdistans / tålighet",
         "role_label": "Stödjande utveckling",
-        "evidence_state": "absorbed",
-        "evidence_summary": "Absorberad nivå finns dokumenterad i faktalagret.",
-        "next_review_date": "2026-10-26"
+        "recipe_family": [
+          "run_easy_distance",
+          "run_easy_trail"
+        ],
+        "evidence_state": "missing",
+        "evidence_summary": "Tillräcklig verifierad baslinje saknas för en säker kapacitetsbedömning. Ingen verifierad exponering finns.",
+        "next_review_date": "2026-10-26",
+        "progression_axes": [
+          "session_duration",
+          "terrain_specificity",
+          "consistency"
+        ],
+        "progression_ready": false,
+        "progression_state": "establish",
+        "progression_reason": "Ingen verifierad exponering finns."
       },
       {
         "key": "mtb_technical",
@@ -1651,9 +1638,20 @@
         "role": "secondary",
         "label": "MTB teknisk fart",
         "role_label": "Stödjande utveckling",
-        "evidence_state": "tolerated",
-        "evidence_summary": "Tolererad nivå finns dokumenterad; absorption är ännu inte fastställd.",
-        "next_review_date": "2026-10-26"
+        "recipe_family": [
+          "mtb_technical"
+        ],
+        "evidence_state": "missing",
+        "evidence_summary": "Tillräcklig verifierad baslinje saknas för en säker kapacitetsbedömning. Ingen verifierad exponering finns.",
+        "next_review_date": "2026-10-26",
+        "progression_axes": [
+          "technical_quality",
+          "session_duration",
+          "specificity"
+        ],
+        "progression_ready": false,
+        "progression_state": "establish",
+        "progression_reason": "Ingen verifierad exponering finns."
       },
       {
         "key": "mtb_aerobic",
@@ -1661,9 +1659,21 @@
         "role": "secondary",
         "label": "MTB/XC aerob kapacitet",
         "role_label": "Stödjande utveckling",
+        "recipe_family": [
+          "mtb_aerobic_endurance",
+          "mtb_technical"
+        ],
         "evidence_state": "missing",
-        "evidence_summary": "Tillräcklig observerad baslinje saknas för en säker kapacitetsbedömning.",
-        "next_review_date": "2026-10-26"
+        "evidence_summary": "Tillräcklig verifierad baslinje saknas för en säker kapacitetsbedömning. Ingen verifierad exponering finns.",
+        "next_review_date": "2026-10-26",
+        "progression_axes": [
+          "session_duration",
+          "consistency",
+          "specificity"
+        ],
+        "progression_ready": false,
+        "progression_state": "establish",
+        "progression_reason": "Ingen verifierad exponering finns."
       },
       {
         "key": "strength_unilateral",
@@ -1671,9 +1681,20 @@
         "role": "protected_capacity",
         "label": "Unilateral benstyrka",
         "role_label": "Skyddad kapacitet",
-        "evidence_state": "absorbed",
-        "evidence_summary": "Absorberad nivå finns dokumenterad i faktalagret.",
-        "next_review_date": null
+        "recipe_family": [
+          "strength_core"
+        ],
+        "evidence_state": "missing",
+        "evidence_summary": "Tillräcklig verifierad baslinje saknas för en säker kapacitetsbedömning. Ingen verifierad exponering finns.",
+        "next_review_date": null,
+        "progression_axes": [
+          "exercise_quality",
+          "volume",
+          "consistency"
+        ],
+        "progression_ready": false,
+        "progression_state": "establish",
+        "progression_reason": "Ingen verifierad exponering finns."
       },
       {
         "key": "strength_core",
@@ -1681,9 +1702,20 @@
         "role": "protected_capacity",
         "label": "Core",
         "role_label": "Skyddad kapacitet",
+        "recipe_family": [
+          "strength_core"
+        ],
         "evidence_state": "missing",
-        "evidence_summary": "Tillräcklig observerad baslinje saknas för en säker kapacitetsbedömning.",
-        "next_review_date": null
+        "evidence_summary": "Tillräcklig verifierad baslinje saknas för en säker kapacitetsbedömning. Ingen verifierad exponering finns.",
+        "next_review_date": null,
+        "progression_axes": [
+          "exercise_quality",
+          "volume",
+          "consistency"
+        ],
+        "progression_ready": false,
+        "progression_state": "establish",
+        "progression_reason": "Ingen verifierad exponering finns."
       },
       {
         "key": "plyometric",
@@ -1691,9 +1723,20 @@
         "role": "protected_capacity",
         "label": "Plyometrisk exponering",
         "role_label": "Skyddad kapacitet",
+        "recipe_family": [
+          "strength_core"
+        ],
         "evidence_state": "missing",
-        "evidence_summary": "Tillräcklig observerad baslinje saknas för en säker kapacitetsbedömning.",
-        "next_review_date": null
+        "evidence_summary": "Tillräcklig verifierad baslinje saknas för en säker kapacitetsbedömning. Ingen verifierad exponering finns.",
+        "next_review_date": null,
+        "progression_axes": [
+          "contacts",
+          "technical_quality",
+          "reactivity"
+        ],
+        "progression_ready": false,
+        "progression_state": "establish",
+        "progression_reason": "Ingen verifierad exponering finns."
       },
       {
         "key": "swim_aerobic",
@@ -1701,9 +1744,22 @@
         "role": "primary",
         "label": "Sim aerob kapacitet",
         "role_label": "Utvecklas nu",
-        "evidence_state": "demonstrated",
-        "evidence_summary": "Genomförd nivå finns dokumenterad; det är inte samma sak som absorberad kapacitet.",
-        "next_review_date": "2026-10-26"
+        "recipe_family": [
+          "swim_aerobic_technique",
+          "swim_aerobic_endurance",
+          "swim_aerobic_skills"
+        ],
+        "evidence_state": "missing",
+        "evidence_summary": "Tillräcklig verifierad baslinje saknas för en säker kapacitetsbedömning. Ingen verifierad exponering finns.",
+        "next_review_date": "2026-10-26",
+        "progression_axes": [
+          "distance",
+          "consistency",
+          "technical_quality"
+        ],
+        "progression_ready": false,
+        "progression_state": "establish",
+        "progression_reason": "Ingen verifierad exponering finns."
       },
       {
         "key": "swim_technique",
@@ -1711,9 +1767,21 @@
         "role": "primary",
         "label": "Simteknik",
         "role_label": "Utvecklas nu",
+        "recipe_family": [
+          "swim_aerobic_technique",
+          "swim_aerobic_skills",
+          "swim_aerobic_endurance"
+        ],
         "evidence_state": "missing",
-        "evidence_summary": "Tillräcklig observerad baslinje saknas för en säker kapacitetsbedömning.",
-        "next_review_date": "2026-10-26"
+        "evidence_summary": "Tillräcklig verifierad baslinje saknas för en säker kapacitetsbedömning. Ingen verifierad exponering finns.",
+        "next_review_date": "2026-10-26",
+        "progression_axes": [
+          "technical_quality",
+          "consistency"
+        ],
+        "progression_ready": false,
+        "progression_state": "establish",
+        "progression_reason": "Ingen verifierad exponering finns."
       },
       {
         "key": "swim_threshold",
@@ -1721,9 +1789,19 @@
         "role": "maintenance",
         "label": "Kontrollerad simtröskel",
         "role_label": "Underhåll",
+        "recipe_family": [
+          "swim_aerobic_threshold"
+        ],
         "evidence_state": "tolerated",
-        "evidence_summary": "Tolererad nivå finns dokumenterad; absorption är ännu inte fastställd.",
-        "next_review_date": null
+        "evidence_summary": "Tolererad nivå finns dokumenterad; absorption är ännu inte fastställd. Dos har demonstrerats/tolererats men saknar ännu upprepad stödjande respons för att klassas som absorberad.",
+        "next_review_date": null,
+        "progression_axes": [
+          "threshold_volume",
+          "consistency"
+        ],
+        "progression_ready": false,
+        "progression_state": "hold",
+        "progression_reason": "Dos har demonstrerats/tolererats men saknar ännu upprepad stödjande respons för att klassas som absorberad."
       },
       {
         "key": "enduro_technical",
@@ -1731,9 +1809,17 @@
         "role": "external_load",
         "label": "Enduroteknik",
         "role_label": "Extern belastning",
-        "evidence_state": "missing",
-        "evidence_summary": "Tillräcklig observerad baslinje saknas för en säker kapacitetsbedömning.",
-        "next_review_date": null
+        "recipe_family": [],
+        "evidence_state": "absorbed",
+        "evidence_summary": "Absorberad nivå finns dokumenterad i capability-state. Senaste jämförbara exponeringen har stödjande passrespons men 72 h-observationsfönstret är ännu inte komplett.",
+        "next_review_date": null,
+        "progression_axes": [
+          "technical_quality",
+          "duration"
+        ],
+        "progression_ready": false,
+        "progression_state": "hold",
+        "progression_reason": "Senaste jämförbara exponeringen har stödjande passrespons men 72 h-observationsfönstret är ännu inte komplett."
       }
     ],
     "schema_version": 1,
@@ -1863,73 +1949,196 @@
       "key": "run_threshold",
       "mode": "develop",
       "label": "Kontrollerad löptröskel",
-      "priority": 1
+      "priority": 1,
+      "recipe_family": [
+        "run_threshold",
+        "run_threshold_short_reps"
+      ],
+      "evidence_policy": "confirmed_or_plan_matched",
+      "response_metric": "work_minutes",
+      "progression_axes": [
+        "work_duration",
+        "interval_structure",
+        "consistency"
+      ]
     },
     {
       "key": "run_hill_quality",
       "mode": "maintain_develop",
       "label": "Backstyrka / löpekonomi",
-      "priority": 2
+      "priority": 2,
+      "recipe_family": [
+        "run_hill_quality",
+        "run_hill_continuous"
+      ],
+      "evidence_policy": "confirmed_or_plan_matched",
+      "response_metric": "repetitions",
+      "progression_axes": [
+        "repetitions",
+        "set_structure",
+        "consistency"
+      ]
     },
     {
       "key": "run_easy_distance",
       "mode": "maintain_develop",
       "label": "Lugn löpdistans / tålighet",
-      "priority": 2
+      "priority": 2,
+      "recipe_family": [
+        "run_easy_distance",
+        "run_easy_trail"
+      ],
+      "evidence_policy": "plan_matched_or_explicit",
+      "response_metric": "duration_minutes",
+      "progression_axes": [
+        "session_duration",
+        "terrain_specificity",
+        "consistency"
+      ]
     },
     {
       "key": "mtb_technical",
       "mode": "maintain_develop",
       "label": "MTB teknisk fart",
-      "priority": 2
+      "priority": 2,
+      "recipe_family": [
+        "mtb_technical"
+      ],
+      "evidence_policy": "plan_matched_or_explicit",
+      "response_metric": "duration_minutes",
+      "progression_axes": [
+        "technical_quality",
+        "session_duration",
+        "specificity"
+      ]
     },
     {
       "key": "mtb_aerobic",
       "mode": "maintain_develop",
       "label": "MTB/XC aerob kapacitet",
-      "priority": 2
+      "priority": 2,
+      "recipe_family": [
+        "mtb_aerobic_endurance",
+        "mtb_technical"
+      ],
+      "evidence_policy": "plan_matched_or_explicit",
+      "response_metric": "duration_minutes",
+      "progression_axes": [
+        "session_duration",
+        "consistency",
+        "specificity"
+      ]
     },
     {
       "key": "strength_unilateral",
       "mode": "maintain_develop",
       "label": "Unilateral benstyrka",
-      "priority": 3
+      "priority": 3,
+      "recipe_family": [
+        "strength_core"
+      ],
+      "evidence_policy": "plan_matched_or_explicit",
+      "response_metric": "duration_minutes",
+      "progression_axes": [
+        "exercise_quality",
+        "volume",
+        "consistency"
+      ]
     },
     {
       "key": "strength_core",
       "mode": "maintain_develop",
       "label": "Core",
-      "priority": 3
+      "priority": 3,
+      "recipe_family": [
+        "strength_core"
+      ],
+      "evidence_policy": "plan_matched_or_explicit",
+      "response_metric": "duration_minutes",
+      "progression_axes": [
+        "exercise_quality",
+        "volume",
+        "consistency"
+      ]
     },
     {
       "key": "plyometric",
       "mode": "develop_cautiously",
       "label": "Plyometrisk exponering",
-      "priority": 3
+      "priority": 3,
+      "recipe_family": [
+        "strength_core"
+      ],
+      "evidence_policy": "explicit_only",
+      "response_metric": null,
+      "progression_axes": [
+        "contacts",
+        "technical_quality",
+        "reactivity"
+      ]
     },
     {
       "key": "swim_aerobic",
       "mode": "develop",
       "label": "Sim aerob kapacitet",
-      "priority": 1
+      "priority": 1,
+      "recipe_family": [
+        "swim_aerobic_technique",
+        "swim_aerobic_endurance",
+        "swim_aerobic_skills"
+      ],
+      "evidence_policy": "plan_matched_or_explicit",
+      "response_metric": "distance_m",
+      "progression_axes": [
+        "distance",
+        "consistency",
+        "technical_quality"
+      ]
     },
     {
       "key": "swim_technique",
       "mode": "develop",
       "label": "Simteknik",
-      "priority": 1
+      "priority": 1,
+      "recipe_family": [
+        "swim_aerobic_technique",
+        "swim_aerobic_skills",
+        "swim_aerobic_endurance"
+      ],
+      "evidence_policy": "plan_matched_or_explicit",
+      "response_metric": null,
+      "progression_axes": [
+        "technical_quality",
+        "consistency"
+      ]
     },
     {
       "key": "swim_threshold",
       "mode": "supporting",
       "label": "Kontrollerad simtröskel",
-      "priority": 4
+      "priority": 4,
+      "recipe_family": [
+        "swim_aerobic_threshold"
+      ],
+      "evidence_policy": "confirmed_or_plan_matched",
+      "response_metric": "distance_m",
+      "progression_axes": [
+        "threshold_volume",
+        "consistency"
+      ]
     },
     {
       "key": "enduro_technical",
       "mode": "supporting",
       "label": "Enduroteknik",
-      "priority": 5
+      "priority": 5,
+      "recipe_family": [],
+      "evidence_policy": "external_observed",
+      "response_metric": "duration_minutes",
+      "progression_axes": [
+        "technical_quality",
+        "duration"
+      ]
     }
   ],
   "performance_marker_policy": {
