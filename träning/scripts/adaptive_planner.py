@@ -22,6 +22,11 @@ from pathlib import Path
 from athlete_profile_source import load_athlete_profile_for_planner, planner_profile_view
 from athlete_starting_state_source import load_starting_state_for_planner, planner_starting_state_view
 from canonical_plan import planned_workouts as canonical_planned_workouts
+from coach_decisions import (
+    append_coach_decisions,
+    build_coach_decisions,
+    load_coach_decision_ledger,
+)
 from capability_registry import (
     CAPABILITY_REGISTRY,
     capability_default_recipe,
@@ -57,6 +62,7 @@ STRATEGY_FILE = DATA / "training_strategy.json"
 MESO_FILE = DATA / "mesocycle_decision.json"
 MICRO_FILE = DATA / "microcycle_decision.json"
 DECISION_LOG_FILE = DATA / "decision_log.json"
+COACH_DECISIONS_FILE = DATA / "coach_decisions.json"
 WEEKS_DIR = DATA / "weeks"
 
 MODEL = os.environ.get("OPENAI_MODEL", "gpt-5-mini")
@@ -4072,6 +4078,8 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
         microcycle_decision=micro,
         current_completed_context=current_completed_context,
     )
+    target_calendar_before = deepcopy(plan if active_replan else upcoming)
+    coach_ledger_before = load_coach_decision_ledger(COACH_DECISIONS_FILE)
 
     if not mesocycle_is_valid(
         meso, goal, target_start, profile_hash_value, starting_state_hash_value
@@ -4153,6 +4161,33 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
         upcoming_strategy=upcoming_strategy,
     )
 
+    target_calendar_after = load_json(
+        PLAN_FILE if active_replan else UPCOMING_FILE,
+        {},
+    )
+    coach_decisions = build_coach_decisions(
+        today=today,
+        target_start=target_start,
+        before_plan=target_calendar_before,
+        after_plan=target_calendar_after,
+        micro=micro,
+        catalog=catalog,
+        athlete_state=athlete_state,
+        completed_context=completed_context,
+        previous_entries=coach_ledger_before.get("entries") or [],
+        capability_labels={
+            key: capability_label(key)
+            for key in CAPABILITY_REGISTRY
+        },
+        active_replan=active_replan,
+        micro_changed=micro_changed,
+        explicit_profile_generation=explicit_profile_generation,
+    )
+    appended_coach_decisions = append_coach_decisions(
+        COACH_DECISIONS_FILE,
+        coach_decisions,
+    )
+
     print(
         "Adaptive planning OK: "
         f"mesocycle={meso['id']} source={meso['source']} "
@@ -4162,7 +4197,7 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
         f"profile_revision={athlete_profile_source.get('revision')} "
         f"starting_state_source={starting_state_source.get('source')} "
         f"starting_state_revision={starting_state_source.get('revision')} "
-        f"calendar={scope}."
+        f"calendar={scope} coach_decisions={appended_coach_decisions}."
     )
     return 0
 
