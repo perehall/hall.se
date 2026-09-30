@@ -255,26 +255,21 @@
       "label": "Torsdag",
       "sport": "run",
       "reason": "Minska mängden backkvalitet denna vecka för att undvika överkoncentration av löpkvalitet i kombination med fasta enduro‑pass och nyliga backsessioner; bevaka 24–72h‑signal före framtida konsolidering eller progression. Dosgolvet utgår från absorberad nivå 24 i athlete_state.dose_response, inte från högsta genomförda värde. Veckobeslut: reduce; materialiserad relation: reduce.",
-      "status": "conditional",
-      "session": "Löpning · backkvalitet · 15 min lugnt + 2 × 6 × 150 m / lugn joggvila + 10 min lugnt",
+      "status": "preliminary",
+      "session": "Löpning · backkvalitet · 15 min lugnt + 3 × 7 × 150 m / lugn joggvila + 10 min lugnt",
       "stimuli": [
         "run_hill_quality"
       ],
       "dose_open": false,
-      "auto_coach": {
-        "action": "reduce",
-        "reason": "Kombination av omfattande simvolym idag och flera benbelastande pass senaste 48–72 h talar för att dämpa torsdagens backkvalitet.",
-        "applied_at_utc": "2026-09-30T19:57:02.966355+00:00"
-      },
       "recipe_key": "run_hill_quality",
       "device_sync": {
         "status": "synced",
         "transport": "intervals_icu",
-        "source_hash": "b04f27ea999954de7a412aad99afb65c5b9ae84cf722dda3285272e0d4f70dc7",
-        "updated_at_utc": "2026-09-30T19:57:05.060383+00:00",
+        "source_hash": "b65e76a48c3079a99c804c6a7f37fb6046b26e7c9d756b1290446b6514d375cb",
+        "updated_at_utc": "2026-09-30T20:05:05.636434+00:00",
         "device_delivery": "unverified",
-        "verified_at_utc": "2026-09-30T19:57:05.060383+00:00",
-        "provider_event_id": 140310828
+        "verified_at_utc": "2026-09-30T20:05:05.636434+00:00",
+        "provider_event_id": 140315994
       },
       "block_intent": "establish",
       "dose_options": [
@@ -347,7 +342,7 @@
       "priority_role": "flex",
       "device_workout": {
         "date": "2026-10-01",
-        "name": "Löpning · backkvalitet · 15 min lugnt + 2 × 6 × 150 m / lugn joggvila + 10 min lugnt",
+        "name": "Löpning · backkvalitet · 15 min lugnt + 3 × 7 × 150 m / lugn joggvila + 10 min lugnt",
         "sport": "run",
         "blocks": [
           {
@@ -368,7 +363,7 @@
           },
           {
             "name": "Backkvalitet",
-            "sets": 2,
+            "sets": 3,
             "steps": [
               {
                 "kind": "work",
@@ -391,7 +386,7 @@
                 "transport_reference_only": true
               }
             ],
-            "repetitions_per_set": 6
+            "repetitions_per_set": 7
           },
           {
             "name": "Nedjogg",
@@ -412,12 +407,12 @@
         ],
         "transport": "intervals_icu",
         "external_id": "hall-device:2026-10-01:run:run_hill_quality_1",
-        "source_hash": "b04f27ea999954de7a412aad99afb65c5b9ae84cf722dda3285272e0d4f70dc7",
+        "source_hash": "b65e76a48c3079a99c804c6a7f37fb6046b26e7c9d756b1290446b6514d375cb",
         "detail_level": "structured",
         "provider_type": "Run",
         "target_policy": "explicit_single_primary_only",
         "schema_version": 1,
-        "source_candidate_id": "run-hill-2x6x150"
+        "source_candidate_id": "run-hill-3x7x150"
       },
       "microcycle_day": 4,
       "workout_design": {
@@ -433,15 +428,15 @@
         },
         "selection": {
           "method": "deterministic_constraint_scoring",
-          "reason_for_today": "Kombination av omfattande simvolym idag och flera benbelastande pass senaste 48–72 h talar för att dämpa torsdagens backkvalitet.",
-          "preferred_dose_option_id": "run-hill-2x6x150"
+          "reason_for_today": "Volymgolv från uttrycklig användarrapport: 3 × 7 = 21 genomförda backintervaller. 150 m är repetitionslängden i den framtida ordinationen; användarrapporten används inte för att påstå exakt längd på varje tidigare intervall.",
+          "preferred_dose_option_id": "run-hill-3x7x150"
         },
         "candidates": [
           {
-            "id": "run-hill-2x6x150",
+            "id": "run-hill-3x7x150",
             "dose": {
               "kind": "structured",
-              "value": 12
+              "value": 21
             },
             "score": {
               "basis": "deterministic_constraint_alignment",
@@ -454,8 +449,8 @@
                 "prescription_specificity": 15
               }
             },
-            "intent": "Demonstrerat kapacitetsgolv: 2 × 6 × 150 m har genomförts utan problem. I utvecklingsläge är detta golv, inte nästa utvecklingsmål.",
-            "session": "Löpning · backkvalitet · 15 min lugnt + 2 × 6 × 150 m / lugn joggvila + 10 min lugnt",
+            "intent": "Volymgolv från uttrycklig användarrapport: 3 × 7 = 21 genomförda backintervaller. 150 m är repetitionslängden i den framtida ordinationen; användarrapporten används inte för att påstå exakt längd på varje tidigare intervall.",
+            "session": "Löpning · backkvalitet · 15 min lugnt + 3 × 7 × 150 m / lugn joggvila + 10 min lugnt",
             "stimuli": [
               "run_hill_quality"
             ],
@@ -472,73 +467,11 @@
                 {
                   "name": "Backkvalitet",
                   "work": {
-                    "sets": 2,
+                    "sets": 3,
                     "distance_m": 150,
-                    "total_repetitions": 12,
-                    "repetitions_per_set": 6,
-                    "total_work_distance_m": 1800
-                  },
-                  "recovery": {
-                    "instruction": "Lugn joggvila"
-                  },
-                  "intensity": "kraftfull men kontrollerad",
-                  "instruction": "Kraftfull men kontrollerad löpning med bibehållen mekanik; ingen maximal sprint eller syrajakt."
-                },
-                {
-                  "name": "Nedjogg",
-                  "work": {
-                    "duration_s": 600
-                  },
-                  "intensity": "lugn",
-                  "instruction": "Lugnt"
-                }
-              ],
-              "source": "structured_session",
-              "executable": true,
-              "completeness": "full"
-            },
-            "dose_option_id": "run-hill-2x6x150"
-          },
-          {
-            "id": "run-hill-2x7x150",
-            "dose": {
-              "kind": "structured",
-              "value": 14
-            },
-            "score": {
-              "basis": "deterministic_constraint_alignment",
-              "total": 70,
-              "breakdown": {
-                "mesocycle_alignment": 30,
-                "microcycle_alignment": 10,
-                "near_term_resolution": 0,
-                "progression_alignment": 15,
-                "prescription_specificity": 15
-              }
-            },
-            "intent": "Nästa konservativa utvecklingssteg från demonstrerade 2 × 6: endast repetitionsvolymen ökas, inte avsedd intensitet.",
-            "session": "Löpning · backkvalitet · 15 min lugnt + 2 × 7 × 150 m / lugn joggvila + 10 min lugnt",
-            "stimuli": [
-              "run_hill_quality"
-            ],
-            "prescription": {
-              "blocks": [
-                {
-                  "name": "Uppvärmning",
-                  "work": {
-                    "duration_s": 900
-                  },
-                  "intensity": "lugn",
-                  "instruction": "Lugnt"
-                },
-                {
-                  "name": "Backkvalitet",
-                  "work": {
-                    "sets": 2,
-                    "distance_m": 150,
-                    "total_repetitions": 14,
+                    "total_repetitions": 21,
                     "repetitions_per_set": 7,
-                    "total_work_distance_m": 2100
+                    "total_work_distance_m": 3150
                   },
                   "recovery": {
                     "instruction": "Lugn joggvila"
@@ -559,69 +492,7 @@
               "executable": true,
               "completeness": "full"
             },
-            "dose_option_id": "run-hill-2x7x150"
-          },
-          {
-            "id": "run-hill-2x8x150",
-            "dose": {
-              "kind": "structured",
-              "value": 16
-            },
-            "score": {
-              "basis": "deterministic_constraint_alignment",
-              "total": 70,
-              "breakdown": {
-                "mesocycle_alignment": 30,
-                "microcycle_alignment": 10,
-                "near_term_resolution": 0,
-                "progression_alignment": 15,
-                "prescription_specificity": 15
-              }
-            },
-            "intent": "Följande progressionssteg när 2 × 7 är absorberat med bibehållen mekanik och utan oproportionerlig återhämtningskostnad.",
-            "session": "Löpning · backkvalitet · 15 min lugnt + 2 × 8 × 150 m / lugn joggvila + 10 min lugnt",
-            "stimuli": [
-              "run_hill_quality"
-            ],
-            "prescription": {
-              "blocks": [
-                {
-                  "name": "Uppvärmning",
-                  "work": {
-                    "duration_s": 900
-                  },
-                  "intensity": "lugn",
-                  "instruction": "Lugnt"
-                },
-                {
-                  "name": "Backkvalitet",
-                  "work": {
-                    "sets": 2,
-                    "distance_m": 150,
-                    "total_repetitions": 16,
-                    "repetitions_per_set": 8,
-                    "total_work_distance_m": 2400
-                  },
-                  "recovery": {
-                    "instruction": "Lugn joggvila"
-                  },
-                  "intensity": "kraftfull men kontrollerad",
-                  "instruction": "Kraftfull men kontrollerad löpning med bibehållen mekanik; ingen maximal sprint eller syrajakt."
-                },
-                {
-                  "name": "Nedjogg",
-                  "work": {
-                    "duration_s": 600
-                  },
-                  "intensity": "lugn",
-                  "instruction": "Lugnt"
-                }
-              ],
-              "source": "structured_session",
-              "executable": true,
-              "completeness": "full"
-            },
-            "dose_option_id": "run-hill-2x8x150"
+            "dose_option_id": "run-hill-3x7x150"
           },
           {
             "id": "run-hill-3x6x150",
@@ -684,6 +555,130 @@
               "completeness": "full"
             },
             "dose_option_id": "run-hill-3x6x150"
+          },
+          {
+            "id": "run-hill-3x8x150",
+            "dose": {
+              "kind": "structured",
+              "value": 24
+            },
+            "score": {
+              "basis": "deterministic_constraint_alignment",
+              "total": 70,
+              "breakdown": {
+                "mesocycle_alignment": 30,
+                "microcycle_alignment": 10,
+                "near_term_resolution": 0,
+                "progression_alignment": 15,
+                "prescription_specificity": 15
+              }
+            },
+            "intent": "Volymgolv från uttrycklig användarrapport: 3 × 8 = 24 genomförda backintervaller. 150 m är repetitionslängden i den framtida ordinationen; användarrapporten används inte för att påstå exakt längd på varje tidigare intervall.",
+            "session": "Löpning · backkvalitet · 15 min lugnt + 3 × 8 × 150 m / lugn joggvila + 10 min lugnt",
+            "stimuli": [
+              "run_hill_quality"
+            ],
+            "prescription": {
+              "blocks": [
+                {
+                  "name": "Uppvärmning",
+                  "work": {
+                    "duration_s": 900
+                  },
+                  "intensity": "lugn",
+                  "instruction": "Lugnt"
+                },
+                {
+                  "name": "Backkvalitet",
+                  "work": {
+                    "sets": 3,
+                    "distance_m": 150,
+                    "total_repetitions": 24,
+                    "repetitions_per_set": 8,
+                    "total_work_distance_m": 3600
+                  },
+                  "recovery": {
+                    "instruction": "Lugn joggvila"
+                  },
+                  "intensity": "kraftfull men kontrollerad",
+                  "instruction": "Kraftfull men kontrollerad löpning med bibehållen mekanik; ingen maximal sprint eller syrajakt."
+                },
+                {
+                  "name": "Nedjogg",
+                  "work": {
+                    "duration_s": 600
+                  },
+                  "intensity": "lugn",
+                  "instruction": "Lugnt"
+                }
+              ],
+              "source": "structured_session",
+              "executable": true,
+              "completeness": "full"
+            },
+            "dose_option_id": "run-hill-3x8x150"
+          },
+          {
+            "id": "run-hill-2x8x150",
+            "dose": {
+              "kind": "structured",
+              "value": 16
+            },
+            "score": {
+              "basis": "deterministic_constraint_alignment",
+              "total": 70,
+              "breakdown": {
+                "mesocycle_alignment": 30,
+                "microcycle_alignment": 10,
+                "near_term_resolution": 0,
+                "progression_alignment": 15,
+                "prescription_specificity": 15
+              }
+            },
+            "intent": "Följande progressionssteg när 2 × 7 är absorberat med bibehållen mekanik och utan oproportionerlig återhämtningskostnad.",
+            "session": "Löpning · backkvalitet · 15 min lugnt + 2 × 8 × 150 m / lugn joggvila + 10 min lugnt",
+            "stimuli": [
+              "run_hill_quality"
+            ],
+            "prescription": {
+              "blocks": [
+                {
+                  "name": "Uppvärmning",
+                  "work": {
+                    "duration_s": 900
+                  },
+                  "intensity": "lugn",
+                  "instruction": "Lugnt"
+                },
+                {
+                  "name": "Backkvalitet",
+                  "work": {
+                    "sets": 2,
+                    "distance_m": 150,
+                    "total_repetitions": 16,
+                    "repetitions_per_set": 8,
+                    "total_work_distance_m": 2400
+                  },
+                  "recovery": {
+                    "instruction": "Lugn joggvila"
+                  },
+                  "intensity": "kraftfull men kontrollerad",
+                  "instruction": "Kraftfull men kontrollerad löpning med bibehållen mekanik; ingen maximal sprint eller syrajakt."
+                },
+                {
+                  "name": "Nedjogg",
+                  "work": {
+                    "duration_s": 600
+                  },
+                  "intensity": "lugn",
+                  "instruction": "Lugnt"
+                }
+              ],
+              "source": "structured_session",
+              "executable": true,
+              "completeness": "full"
+            },
+            "dose_option_id": "run-hill-2x8x150"
           }
         ],
         "schema_version": 1,
@@ -695,21 +690,18 @@
           ],
           "selection_uses_only_preapproved_doses": true
         },
-        "selected_candidate_id": "run-hill-2x6x150",
+        "selected_candidate_id": "run-hill-3x7x150",
         "progression_from_previous": {
-          "reason": "Kombination av omfattande simvolym idag och flera benbelastande pass senaste 48–72 h talar för att dämpa torsdagens backkvalitet.",
+          "reason": "Volymgolv från uttrycklig användarrapport: 3 × 7 = 21 genomförda backintervaller. 150 m är repetitionslängden i den framtida ordinationen; användarrapporten används inte för att påstå exakt längd på varje tidigare intervall.",
           "relation": "support",
           "demonstrated_floor_option_id": ""
         }
       },
       "dose_resolution": {
         "kind": "structured",
-        "basis": "Kombination av omfattande simvolym idag och flera benbelastande pass senaste 48–72 h talar för att dämpa torsdagens backkvalitet.",
-        "state": "resolved",
-        "value": 12,
-        "source": "near_term_ai_revision",
-        "option_id": "run-hill-2x6x150",
-        "applied_at_utc": "2026-09-30T19:57:02.966355+00:00"
+        "state": "baseline",
+        "value": 21,
+        "option_id": "run-hill-3x7x150"
       },
       "load_dimensions": [
         "mechanical",
@@ -717,9 +709,7 @@
         "cardiovascular"
       ],
       "microcycle_slot": "run_hill_quality_1",
-      "coach_adjustment": "Skala ned passet. Skala ner dosen för 2026-10-01 till run-hill-2x6x150 (12 reps totalt) eller välj run-hill-3x6x150 (18 reps) om du känner dig mycket pigg morgonen innan; håll intensiteten kontrollerad och prioritera mekanik.",
       "microcycle_index": 1,
-      "original_session": "Löpning · backkvalitet · 15 min lugnt + 3 × 7 × 150 m / lugn joggvila + 10 min lugnt",
       "development_focus": "Kraftfull men kontrollerad löpning med bibehållen mekanik; ingen maximal sprint eller syrajakt.",
       "baseline_option_id": "run-hill-3x7x150",
       "development_character": "hill_clustered_reps",
@@ -1106,10 +1096,10 @@
         "status": "synced",
         "transport": "intervals_icu",
         "source_hash": "6c1be131201b963f12b230bfb31bd2b3b1b9d173c534d05db476c83037d7782b",
-        "updated_at_utc": "2026-09-30T19:57:05.249208+00:00",
+        "updated_at_utc": "2026-09-30T20:05:05.821132+00:00",
         "device_delivery": "unverified",
-        "verified_at_utc": "2026-09-30T19:57:05.249208+00:00",
-        "provider_event_id": 140310829
+        "verified_at_utc": "2026-09-30T20:05:05.821132+00:00",
+        "provider_event_id": 140315995
       },
       "block_intent": "establish",
       "dose_options": [
@@ -1400,10 +1390,10 @@
         "status": "synced",
         "transport": "intervals_icu",
         "source_hash": "e13e20a872ce2e8e53c7dc84e65f3a87f0ca7d64dea0cdc6c509798ca7794beb",
-        "updated_at_utc": "2026-09-30T19:57:05.734963+00:00",
+        "updated_at_utc": "2026-09-30T20:05:06.311332+00:00",
         "device_delivery": "unverified",
-        "verified_at_utc": "2026-09-30T19:57:05.734963+00:00",
-        "provider_event_id": 140310830
+        "verified_at_utc": "2026-09-30T20:05:06.311332+00:00",
+        "provider_event_id": 140315996
       },
       "block_intent": "establish",
       "dose_options": [

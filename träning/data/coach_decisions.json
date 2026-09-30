@@ -2533,6 +2533,78 @@
       },
       "affected_workouts": [],
       "summary": "Simteknik: progression hålls. Kapaciteten har verifierad exponering, men progression kan inte avgöras från tid/distans utan kvalitativ eller specifik teknisk evidens."
+    },
+    {
+      "schema_version": 1,
+      "decision_id": "5ee54f3433241642cc4cecde461ed803213645e5e4e0a2143d82e1daa54a176f",
+      "generated_at_utc": "2026-09-30T20:04:51.081665+00:00",
+      "planning_date": "2026-09-30",
+      "week_start": "2026-09-28",
+      "capability": "run_hill_quality",
+      "trigger": "live_replan",
+      "decision": "reduce",
+      "reason_code": "planner_reduce",
+      "previous_state": {
+        "evidence_state": "absorbed",
+        "progression_state": "hold",
+        "progression_ready": false,
+        "progression_reason_code": "recovery_context_caution",
+        "progression_reason": "Senaste exponeringen har stödjande passrespons men 24–72 h-kontexten innehåller en varningssignal; kausalitet antas inte.",
+        "demonstrated_value": 24.0,
+        "tolerated_value": 24.0,
+        "absorbed_value": 24.0
+      },
+      "new_state": {
+        "evidence_state": "absorbed",
+        "progression_state": "hold",
+        "progression_ready": false,
+        "progression_reason_code": "recovery_context_caution",
+        "progression_reason": "Senaste exponeringen har stödjande passrespons men 24–72 h-kontexten innehåller en varningssignal; kausalitet antas inte.",
+        "demonstrated_value": 24.0,
+        "tolerated_value": 24.0,
+        "absorbed_value": 24.0
+      },
+      "evidence": {
+        "activity_refs": [],
+        "microcycle_source_hash": "824961d8899742ac5eb57107f24fe9265d1cb62bdbdad647ea55e02cd6e1cc75",
+        "microcycle_week_key": "2026-W40",
+        "slot_action": "reduce",
+        "slot_recipe_key": "run_hill_quality",
+        "slot_evidence_refs": [
+          "20326850936",
+          "20229568713"
+        ],
+        "capability_reason_code": "recovery_context_caution",
+        "completed_context_signature": "36ec14448052b9ff5bb74c6951c573ebc17b182a3bc0884f9ccbe0ab6c74f5d3"
+      },
+      "affected_workouts": [
+        {
+          "change_type": "replaced",
+          "before": {
+            "workout_key": "run_hill_quality_1",
+            "date": "2026-10-01",
+            "sport": "run",
+            "recipe_key": "run_hill_quality",
+            "session": "Löpning · backkvalitet · 15 min lugnt + 2 × 6 × 150 m / lugn joggvila + 10 min lugnt",
+            "stimuli": [
+              "run_hill_quality"
+            ],
+            "planning_status": null
+          },
+          "after": {
+            "workout_key": "run_hill_quality_1",
+            "date": "2026-10-01",
+            "sport": "run",
+            "recipe_key": "run_hill_quality",
+            "session": "Löpning · backkvalitet · 15 min lugnt + 3 × 7 × 150 m / lugn joggvila + 10 min lugnt",
+            "stimuli": [
+              "run_hill_quality"
+            ],
+            "planning_status": null
+          }
+        }
+      ],
+      "summary": "Backstyrka / löpekonomi: belastningen reduceras i den materialiserade mikrocykeln."
     }
   ]
 }
