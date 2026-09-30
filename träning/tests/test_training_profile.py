@@ -207,8 +207,52 @@ class TrainingProfileTests(unittest.TestCase):
         self.assertEqual(profile["intent_matches"][0]["confidence"], "high")
         self.assertEqual(
             profile["intent_matches"][0]["evidence"]["basis"],
-            "comparable_scalar_dose",
+            "same_day_comparable_scalar_dose",
         )
+
+    def test_scalar_dose_match_does_not_bridge_calendar_days(self):
+        activity = {
+            "id": 502,
+            "sport_type": "Run",
+            "classification": "training",
+            "start_date_local": "2026-09-29T18:00:00",
+            "elapsed_time_s": 3755,
+            "distance_m": 13135,
+            "user_report": "",
+            "laps": [],
+        }
+        planned = [{
+            "date": "2026-09-27",
+            "sport": "run",
+            "workout_key": "run-easy-60",
+            "session": "Löpning · lugn distans · 60 min",
+            "stimuli": ["run_easy_distance"],
+        }]
+        profile = build_training_profile(activity, planned_workouts=planned)
+        self.assertEqual(profile["planning_credits"], [])
+        self.assertEqual(profile["intent_matches"], [])
+
+    def test_explicit_threshold_cannot_be_scalar_matched_to_easy_run(self):
+        activity = {
+            "id": 503,
+            "sport_type": "Run",
+            "classification": "training",
+            "start_date_local": "2026-09-29T18:00:00",
+            "elapsed_time_s": 3755,
+            "distance_m": 13135,
+            "user_report": "4 x 8 min tröskel. Bra kontroll. RPE 6/10.",
+            "laps": [],
+        }
+        planned = [{
+            "date": "2026-09-29",
+            "sport": "run",
+            "workout_key": "run-easy-same-day",
+            "session": "Löpning · lugn distans · 60 min",
+            "stimuli": ["run_easy_distance"],
+        }]
+        profile = build_training_profile(activity, planned_workouts=planned)
+        self.assertEqual(profile["planning_credits"], ["run_threshold"])
+        self.assertEqual(profile["intent_matches"], [])
 
     def test_two_equally_plausible_swims_fail_closed_without_planning_credit(self):
         activity = {
