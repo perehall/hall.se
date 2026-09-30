@@ -11,6 +11,23 @@ from __future__ import annotations
 from copy import deepcopy
 
 
+RECIPE_RESPONSE_OWNER = {
+    "run_threshold": "run_threshold",
+    "run_threshold_short_reps": "run_threshold",
+    "run_hill_quality": "run_hill_quality",
+    "run_hill_continuous": "run_hill_quality",
+    "run_easy_distance": "run_easy_distance",
+    "run_easy_trail": "run_easy_distance",
+    "mtb_technical": "mtb_technical",
+    "mtb_aerobic_endurance": "mtb_aerobic",
+    "swim_aerobic_technique": "swim_aerobic",
+    "swim_aerobic_endurance": "swim_aerobic",
+    "swim_aerobic_skills": "swim_aerobic",
+    "swim_aerobic_threshold": "swim_threshold",
+    "strength_core": "strength_unilateral",
+}
+
+
 CAPABILITY_REGISTRY = {
     "run_threshold": {
         "label": "Kontrollerad löptröskel",
@@ -177,19 +194,7 @@ def response_capability(key: str) -> str:
 
 
 def response_capability_for_recipe(recipe_key: str):
-    recipe_key = str(recipe_key or "")
-    matches = []
-    for key, spec in CAPABILITY_REGISTRY.items():
-        if recipe_key not in (spec.get("recipe_family") or ()):
-            continue
-        response_key = str(spec.get("response_alias") or key)
-        if spec.get("response_metric") is None:
-            continue
-        matches.append(response_key)
-    # Several capabilities can share one executable recipe (e.g. strength/core
-    # or aerobic+technical swim). The response owner must still be unique.
-    unique = tuple(dict.fromkeys(matches))
-    return unique[0] if len(unique) == 1 else None
+    return RECIPE_RESPONSE_OWNER.get(str(recipe_key or ""))
 
 
 def validate_registry_against_catalog(catalog: dict) -> list[str]:
