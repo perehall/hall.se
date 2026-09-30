@@ -423,27 +423,59 @@ def reconcile(documents, auth, oldest, newest):
         )
         print(f"DEVICE_SYNC_DELETE stale={len(stale_ids)}")
 
+    # Intervals upsert can update an existing calendar event in place without
+    # necessarily creating a fresh downstream handoff to Garmin. That is unsafe
+    # for changed structured workouts: the transport can look correct in
+    # Intervals while Garmin still has the old workout (or no workout at all).
+    #
+    # A pending workout with an already-owned external_id therefore represents
+    # a transport replacement, not an in-place update. The same rule is used
+    # for the single current-day downstream retry. Delete first, then recreate
+    # the event so downstream integrations receive a fresh event lifecycle.
+    replacement_ids = set()
     downstream_retry_ids = set()
     for workout in desired:
         external_id = workout["external_id"]
         payload = desired_payloads[external_id]
-        if workout.get("date") != oldest:
-            continue
-        if not event_matches(existing_owned.get(external_id), payload):
+        existing = existing_owned.get(external_id)
+        if not existing:
             continue
         sync_state = sync_state_for(documents, workout)
+
+        if sync_state.get("status") == "pending":
+            replacement_ids.add(external_id)
+            continue
+
+        if workout.get("date") != oldest:
+            continue
+        if not event_matches(existing, payload):
+            continue
         if sync_state.get("source_hash") != workout.get("source_hash"):
             continue
         if sync_state.get("downstream_retry_source_hash") == workout.get("source_hash"):
             continue
+        replacement_ids.add(external_id)
         downstream_retry_ids.add(external_id)
+
+    if replacement_ids:
+        replace_payload = [
+            {"external_id": external_id}
+            for external_id in sorted(replacement_ids)
+        ]
+        request_json(
+            BULK_DELETE_URL,
+            auth,
+            method="PUT",
+            payload_data=json.dumps(replace_payload).encode("utf-8"),
+        )
+        print(f"DEVICE_SYNC_REPLACE count={len(replacement_ids)}")
 
     upserts = [
         payload
         for external_id, payload in desired_payloads.items()
         if (
             not event_matches(existing_owned.get(external_id), payload)
-            or external_id in downstream_retry_ids
+            or external_id in replacement_ids
         )
     ]
     if downstream_retry_ids:

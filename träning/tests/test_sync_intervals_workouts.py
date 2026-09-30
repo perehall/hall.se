@@ -322,6 +322,78 @@ class IntervalsWorkoutSyncTests(unittest.TestCase):
         self.assertTrue(any(url == sync.BULK_DELETE_URL for url, _, _ in calls))
         self.assertTrue(any(url == sync.BULK_UPSERT_URL for url, _, _ in calls))
 
+    def test_reconcile_replaces_existing_event_when_materialized_sync_is_pending(self):
+        day = run_day()
+        workout = compile_device_workout(day)
+        day["device_workout"] = workout
+        day["device_sync"] = {
+            "status": "pending",
+            "transport": "intervals_icu",
+            "source_hash": workout["source_hash"],
+            "device_delivery": "unverified",
+        }
+        documents = {
+            "plan": {"planned_workouts": [day]},
+            "upcoming": {"planned_workouts": []},
+        }
+        desired_payload = sync.payload_for(workout)
+        existing = [{"id": 99, **desired_payload}]
+        stored = {
+            "id": 100,
+            "category": "WORKOUT",
+            "workout_doc": {
+                "steps": [
+                    {
+                        "reps": 3,
+                        "steps": [
+                            {
+                                "intensity": "interval",
+                                "duration": 600,
+                                "text": "Kontrollerad tröskel",
+                            },
+                            {
+                                "intensity": "rest",
+                                "duration": 90,
+                                "text": "Lugn jogg",
+                            },
+                        ],
+                    }
+                ]
+            },
+        }
+        refreshed = [{"id": 100, **desired_payload}]
+        list_calls = 0
+        calls = []
+
+        def fake_request(url, auth, *, method="GET", payload_data=None):
+            nonlocal list_calls
+            calls.append((url, method, payload_data))
+            if url.startswith(sync.API_BASE + "/events?"):
+                list_calls += 1
+                return existing if list_calls == 1 else refreshed
+            if url == sync.BULK_DELETE_URL:
+                return 1
+            if url == sync.BULK_UPSERT_URL:
+                return refreshed
+            if url == sync.API_BASE + "/events/100":
+                return stored
+            self.fail(f"Unexpected request: {method} {url}")
+
+        with patch("sync_intervals_workouts.request_json", side_effect=fake_request):
+            desired, deleted, upserted = sync.reconcile(
+                documents,
+                "AUTH",
+                "2026-09-15",
+                "2026-09-21",
+            )
+
+        self.assertEqual((desired, deleted, upserted), (1, 0, 1))
+        self.assertEqual(day["device_sync"]["status"], "synced")
+        self.assertEqual(day["device_sync"]["provider_event_id"], 100)
+        self.assertTrue(any(url == sync.BULK_DELETE_URL for url, _, _ in calls))
+        self.assertTrue(any(url == sync.BULK_UPSERT_URL for url, _, _ in calls))
+        self.assertNotIn("downstream_retry_source_hash", day["device_sync"])
+
     def test_reconcile_retries_matching_current_day_once_per_source_hash(self):
         day = run_day()
         workout = compile_device_workout(day)
@@ -371,6 +443,8 @@ class IntervalsWorkoutSyncTests(unittest.TestCase):
             if url.startswith(sync.API_BASE + "/events?"):
                 list_calls += 1
                 return existing
+            if url == sync.BULK_DELETE_URL:
+                return 1
             if url == sync.BULK_UPSERT_URL:
                 return existing
             if url == sync.API_BASE + "/events/99":
@@ -391,6 +465,7 @@ class IntervalsWorkoutSyncTests(unittest.TestCase):
             workout["source_hash"],
         )
         self.assertIn("downstream_retry_at_utc", day["device_sync"])
+        self.assertTrue(any(url == sync.BULK_DELETE_URL for url, _, _ in calls))
         self.assertTrue(any(url == sync.BULK_UPSERT_URL for url, _, _ in calls))
 
         list_calls = 0
