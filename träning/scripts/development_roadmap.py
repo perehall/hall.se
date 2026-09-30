@@ -264,6 +264,7 @@ def build_development_roadmap(strategy, policy, athlete_state):
         "progression_axes": deepcopy(meso.get("progression_axes") or []),
         "microcycle_intents": _microcycle_intents(meso, policy),
         "development_blueprint": deepcopy(meso.get("development_blueprint") or []),
+        "forward_horizon": deepcopy(meso.get("forward_horizon") or []),
     }
 
     as_of = _iso((athlete_state.get("fact_window") or {}).get("end"))

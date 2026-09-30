@@ -11,6 +11,7 @@ sys.path.insert(0, str(SCRIPTS))
 
 from adaptive_planner import (  # noqa: E402
     build_development_blueprint,
+    build_forward_planning_horizon,
     fallback_microcycle,
     materialize_template,
     mesocycle_block_context,
@@ -93,6 +94,70 @@ class PeriodizedDevelopmentTests(unittest.TestCase):
         )
         self.assertTrue(all(len(chars) >= 2 for chars in swim_character_sets))
         self.assertNotEqual(swim_character_sets[0], swim_character_sets[1])
+
+    def test_forward_horizon_covers_five_weeks_with_declining_commitment(self):
+        meso = {
+            "id": "test-forward-block",
+            "start_date": "2026-09-28",
+            "end_date": "2026-10-25",
+            "duration_weeks": 4,
+            "evaluation_date": "2026-10-26",
+            "primary_capabilities": ["run_threshold", "swim_aerobic", "swim_technique"],
+            "secondary_capabilities": ["run_easy_distance", "mtb_technical"],
+        }
+        athlete_state = {
+            "capability_states": {
+                "by_capability": {
+                    "run_threshold": {
+                        "evidence_state": "absorbed",
+                        "progression_ready": False,
+                    },
+                    "swim_aerobic": {
+                        "evidence_state": "demonstrated",
+                        "progression_ready": False,
+                    },
+                    "swim_technique": {
+                        "evidence_state": "observed",
+                        "progression_ready": False,
+                    },
+                }
+            }
+        }
+        horizon = build_forward_planning_horizon(
+            meso,
+            self.policy,
+            self.catalog,
+            athlete_state,
+            date(2026, 9, 28),
+            weeks=5,
+        )
+        self.assertEqual(len(horizon), 5)
+        self.assertEqual(
+            [row["week_start"] for row in horizon],
+            [
+                "2026-10-05",
+                "2026-10-12",
+                "2026-10-19",
+                "2026-10-26",
+                "2026-11-02",
+            ],
+        )
+        self.assertEqual(
+            [row["planning_level"] for row in horizon],
+            ["preliminary", "preliminary", "preliminary", "block_sketch", "block_sketch"],
+        )
+        self.assertTrue(all(row["slots"] for row in horizon[:3]))
+        self.assertTrue(
+            all(
+                slot["day_index"] in range(1, 8)
+                for row in horizon[:3]
+                for slot in row["slots"]
+            )
+        )
+        self.assertEqual(horizon[3]["title"], "Blockreview · besluta nästa riktning")
+        self.assertTrue(horizon[3]["capability_directions"])
+        self.assertIn("2026-10-26", horizon[3]["decision_gate"])
+        self.assertFalse(any("slots" in row for row in horizon[3:]))
 
     def test_blueprint_exposes_conditional_next_dose_without_authorizing_it(self):
         meso = {

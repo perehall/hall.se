@@ -26,6 +26,7 @@ from capability_registry import (
     CAPABILITY_REGISTRY,
     capability_default_recipe,
     capability_evidence_policy,
+    capability_label,
     capability_metric,
     capability_progression_axes,
     capability_recipe_family,
@@ -1810,6 +1811,245 @@ def fallback_microcycle(
     return result
 
 
+def build_forward_planning_horizon(
+    meso,
+    policy,
+    catalog,
+    athlete_state,
+    anchor_week_start,
+    *,
+    starting_state=None,
+    weeks=5,
+):
+    """Build a rolling future planning contract with declining commitment.
+
+    Weeks that still belong to the active mesocycle get a provisional
+    day-level microcycle projection. Weeks beyond the active mesocycle become a
+    block sketch with explicit decision gates instead of empty calendar space or
+    invented exact sessions.
+    """
+    if isinstance(anchor_week_start, str):
+        anchor_week_start = iso(anchor_week_start)
+    try:
+        meso_end = iso(meso["end_date"])
+    except (KeyError, TypeError, ValueError):
+        return []
+
+    blueprints = {
+        str(row.get("week_start") or ""): row
+        for row in build_development_blueprint(
+            meso,
+            policy,
+            catalog,
+            athlete_state=athlete_state,
+            starting_state=starting_state,
+        )
+        if isinstance(row, dict)
+    }
+    capability_states = (
+        ((athlete_state.get("capability_states") or {}).get("by_capability") or {})
+    )
+    primary = list(meso.get("primary_capabilities") or [])
+    secondary = list(meso.get("secondary_capabilities") or [])
+    recipes = catalog.get("recipes") or {}
+    rows = []
+
+    def variant_preview(blueprint, recipe_key):
+        variants = [
+            item
+            for group in ("planned_variants", "supporting_candidates", "protected_variants")
+            for item in (blueprint.get(group) or [])
+            if isinstance(item, dict) and item.get("recipe_key") == recipe_key
+        ]
+        return variants[0] if variants else {}
+
+    def recipe_label(recipe_key):
+        recipe = recipes.get(recipe_key) or {}
+        return str(
+            recipe.get("blueprint_label")
+            or ((recipe.get("options") or [{}])[0].get("session"))
+            or recipe_key
+        )
+
+    for offset in range(1, int(weeks) + 1):
+        week_start = anchor_week_start + timedelta(days=7 * offset)
+        week_end = week_start + timedelta(days=6)
+
+        if week_start <= meso_end:
+            blueprint = blueprints.get(week_start.isoformat()) or {}
+            projected = fallback_microcycle(
+                meso,
+                policy,
+                catalog,
+                week_start,
+                completed_context={},
+                athlete_state=athlete_state,
+                starting_state=starting_state,
+            )
+            slots = []
+            if is_enduro_school_date(week_start):
+                slots.append(
+                    {
+                        "day_index": 1,
+                        "role": "external_fixed",
+                        "sport": "enduro",
+                        "recipe_key": "",
+                        "label": "Enduroskola · fast tillfälle",
+                        "progression_intent": "fixed_external_load",
+                        "baseline_session": "",
+                        "conditional_target_session": "",
+                    }
+                )
+
+            for slot in projected.get("slots") or []:
+                recipe_key = str(slot.get("recipe_key") or "")
+                recipe = recipes.get(recipe_key) or {}
+                variant = variant_preview(blueprint, recipe_key)
+                progression_intent = str(
+                    variant.get("progression_intent")
+                    or (
+                        "progress_if_ready"
+                        if slot.get("action") == "progress"
+                        else "consolidate"
+                        if slot.get("action") == "consolidate"
+                        else "establish"
+                    )
+                )
+                slots.append(
+                    {
+                        "day_index": int(slot.get("day_index") or 0),
+                        "role": str(variant.get("role") or recipe.get("priority_role") or "support"),
+                        "sport": str(recipe.get("sport") or ""),
+                        "recipe_key": recipe_key,
+                        "label": str(variant.get("label") or recipe_label(recipe_key)),
+                        "progression_intent": progression_intent,
+                        "baseline_session": str(variant.get("baseline_session") or ""),
+                        "conditional_target_session": str(
+                            variant.get("conditional_target_session") or ""
+                        ),
+                    }
+                )
+
+            rows.append(
+                {
+                    "week_start": week_start.isoformat(),
+                    "week_end": week_end.isoformat(),
+                    "planning_level": "preliminary",
+                    "planning_label": "Preliminär",
+                    "day_precision": "provisional",
+                    "block_intent": str(blueprint.get("block_intent") or ""),
+                    "title": (
+                        f"Preliminär mikrocykel {blueprint.get('microcycle_index')} "
+                        f"av {meso.get('duration_weeks')}"
+                    ),
+                    "slots": sorted(
+                        slots,
+                        key=lambda item: (
+                            int(item.get("day_index") or 99),
+                            str(item.get("recipe_key") or item.get("label") or ""),
+                        ),
+                    ),
+                    "decision_gate": (
+                        "Exakta dagar och doser får ändras av faktisk belastning och respons. "
+                        "Passkaraktär och blockriktning är den planerade utgångspunkten."
+                    ),
+                    "source": "active_mesocycle_projection",
+                }
+            )
+            continue
+
+        beyond_index = max(1, ((week_start - meso_end).days + 6) // 7)
+        capability_directions = []
+        for key in primary:
+            state = capability_states.get(key) or {}
+            ready = state.get("progression_ready") is True
+            evidence_state = str(state.get("evidence_state") or "missing")
+            if ready:
+                direction = (
+                    "Om blockreview bekräftar fortsatt absorption: kandidat för nästa "
+                    "förgodkända steg eller ny progressionsaxel."
+                )
+            elif evidence_state == "missing":
+                direction = (
+                    "Nästa block måste först etablera/verifiera kapaciteten innan "
+                    "belastningsprogression kan beslutas."
+                )
+            else:
+                direction = (
+                    "Fortsätt eller konsolidera tills blockreview visar stöd för "
+                    "progression eller byte av utvecklingsaxel."
+                )
+            family = [
+                recipe_label(recipe_key)
+                for recipe_key in capability_recipe_family(key)
+                if recipe_key in recipes
+            ]
+            capability_directions.append(
+                {
+                    "capability": key,
+                    "label": capability_label(key),
+                    "direction": direction,
+                    "candidate_recipe_characters": family[:3],
+                    "progression_ready_now": ready,
+                    "evidence_state_now": evidence_state,
+                }
+            )
+
+        support_candidates = []
+        if secondary:
+            start_index = (beyond_index - 1) % len(secondary)
+            ordered = secondary[start_index:] + secondary[:start_index]
+            for key in ordered[:2]:
+                family = [
+                    recipe_label(recipe_key)
+                    for recipe_key in capability_recipe_family(key)
+                    if recipe_key in recipes
+                ]
+                support_candidates.append(
+                    {
+                        "capability": key,
+                        "label": capability_label(key),
+                        "candidate_recipe_characters": family[:2],
+                    }
+                )
+
+        rows.append(
+            {
+                "week_start": week_start.isoformat(),
+                "week_end": week_end.isoformat(),
+                "planning_level": "block_sketch",
+                "planning_label": "Blockskiss",
+                "day_precision": "none",
+                "block_intent": "review" if beyond_index == 1 else "conditional_build",
+                "title": (
+                    "Blockreview · besluta nästa riktning"
+                    if beyond_index == 1
+                    else "Nästa block · villkorad riktning"
+                ),
+                "capability_directions": capability_directions,
+                "support_candidates": support_candidates,
+                "protected_capabilities": [
+                    {
+                        "capability": key,
+                        "label": capability_label(key),
+                    }
+                    for key in FIXED_PROTECTED_CAPACITY
+                    if key in CAPABILITY_REGISTRY
+                    and key not in primary
+                    and key not in secondary
+                ],
+                "decision_gate": (
+                    f"Ny mesocykel beslutas tidigast vid checkpoint {meso.get('evaluation_date')}. "
+                    "Skissen visar vilka kapaciteter och passfamiljer som står i kön; den "
+                    "låser inte dagar, doser eller ett fysiologiskt utfall innan review."
+                ),
+                "source": "post_mesocycle_conditional_sketch",
+            }
+        )
+
+    return rows
+
+
 def microcycle_layout_failures(
     rows, catalog, target_start, athlete_profile=None, planning_date=None
 ):
@@ -3321,6 +3561,15 @@ def materialize_strategy(goal, policy, meso, micro, catalog, athlete_state, goal
             catalog,
             athlete_state=athlete_state,
             starting_state=starting_state,
+        ),
+        "forward_horizon": build_forward_planning_horizon(
+            meso,
+            policy,
+            catalog,
+            athlete_state,
+            iso(micro["week_start"]),
+            starting_state=starting_state,
+            weeks=5,
         ),
         "progression_policy": {
             "automatic_load_increase": False,

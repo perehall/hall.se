@@ -307,6 +307,134 @@ class TrainingOverviewTests(unittest.TestCase):
                         "principle": "test",
                     },
                 ],
+                "forward_horizon": [
+                    {
+                        "week_start": "2026-10-12",
+                        "week_end": "2026-10-18",
+                        "planning_level": "preliminary",
+                        "planning_label": "Preliminär",
+                        "day_precision": "provisional",
+                        "block_intent": "develop",
+                        "title": "Preliminär mikrocykel 3 av 4",
+                        "slots": [
+                            {
+                                "day_index": 2,
+                                "role": "primary",
+                                "sport": "run",
+                                "recipe_key": "run_threshold",
+                                "label": "Löptröskel · längre repetitioner",
+                                "progression_intent": "progress_if_ready",
+                                "baseline_session": "Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg",
+                                "conditional_target_session": "Löpning · kontrollerad tröskel · 4 × 9 min / 90 s jogg",
+                            },
+                            {
+                                "day_index": 4,
+                                "role": "primary",
+                                "sport": "swim",
+                                "recipe_key": "swim_aerobic_skills",
+                                "label": "Sim · grepp/teknik + aerob",
+                                "progression_intent": "progress_if_ready",
+                                "baseline_session": "Simning · 3 200 m · grepp/teknik + aerob",
+                                "conditional_target_session": "Simning · 3 600 m · grepp/teknik + aerob",
+                            },
+                        ],
+                        "capability_directions": [],
+                        "support_candidates": [],
+                        "protected_capabilities": [],
+                        "decision_gate": "Exakta dagar och doser är preliminära.",
+                        "source": "active_mesocycle_projection",
+                    },
+                    {
+                        "week_start": "2026-10-19",
+                        "week_end": "2026-10-25",
+                        "planning_level": "preliminary",
+                        "planning_label": "Preliminär",
+                        "day_precision": "provisional",
+                        "block_intent": "consolidate",
+                        "title": "Preliminär mikrocykel 4 av 4",
+                        "slots": [
+                            {
+                                "day_index": 3,
+                                "role": "primary",
+                                "sport": "run",
+                                "recipe_key": "run_threshold",
+                                "label": "Löptröskel · längre repetitioner",
+                                "progression_intent": "consolidate",
+                                "baseline_session": "Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg",
+                                "conditional_target_session": "",
+                            }
+                        ],
+                        "capability_directions": [],
+                        "support_candidates": [],
+                        "protected_capabilities": [],
+                        "decision_gate": "Konsolidera före blockreview.",
+                        "source": "active_mesocycle_projection",
+                    },
+                    {
+                        "week_start": "2026-10-26",
+                        "week_end": "2026-11-01",
+                        "planning_level": "block_sketch",
+                        "planning_label": "Blockskiss",
+                        "day_precision": "none",
+                        "block_intent": "review",
+                        "title": "Blockreview · besluta nästa riktning",
+                        "slots": [],
+                        "capability_directions": [
+                            {
+                                "capability": "run_threshold",
+                                "label": "Kontrollerad löptröskel",
+                                "direction": "Fortsätt eller konsolidera tills blockreview visar stöd för progression.",
+                                "candidate_recipe_characters": [
+                                    "Löptröskel · längre repetitioner",
+                                    "Löptröskel · kortare repetitioner"
+                                ],
+                                "progression_ready_now": False,
+                                "evidence_state_now": "absorbed",
+                            }
+                        ],
+                        "support_candidates": [
+                            {
+                                "capability": "run_easy_distance",
+                                "label": "Lugn löpdistans / tålighet",
+                                "direction": "",
+                                "candidate_recipe_characters": ["Lugn löpdistans · stig/grus"],
+                                "progression_ready_now": False,
+                                "evidence_state_now": "",
+                            }
+                        ],
+                        "protected_capabilities": [
+                            {"capability": "strength_core", "label": "Core"}
+                        ],
+                        "decision_gate": "Ny mesocykel beslutas vid checkpoint 2026-10-26.",
+                        "source": "post_mesocycle_conditional_sketch",
+                    },
+                    {
+                        "week_start": "2026-11-02",
+                        "week_end": "2026-11-08",
+                        "planning_level": "block_sketch",
+                        "planning_label": "Blockskiss",
+                        "day_precision": "none",
+                        "block_intent": "conditional_build",
+                        "title": "Nästa block · villkorad riktning",
+                        "slots": [],
+                        "capability_directions": [
+                            {
+                                "capability": "swim_aerobic",
+                                "label": "Sim aerob kapacitet",
+                                "direction": "Fortsätt eller konsolidera tills blockreview visar stöd för progression.",
+                                "candidate_recipe_characters": ["Sim · aerob uthållighet"],
+                                "progression_ready_now": False,
+                                "evidence_state_now": "demonstrated",
+                            }
+                        ],
+                        "support_candidates": [],
+                        "protected_capabilities": [
+                            {"capability": "strength_core", "label": "Core"}
+                        ],
+                        "decision_gate": "Ingen dag eller dos låses före review.",
+                        "source": "post_mesocycle_conditional_sketch",
+                    },
+                ],
             },
         }
 
@@ -375,13 +503,19 @@ class TrainingOverviewTests(unittest.TestCase):
         self.assertIn("Etablera", document)
         self.assertIn("Utveckla", document)
         self.assertIn("Konsolidera", document)
-        self.assertIn("Preliminär grundplan", document)
         self.assertIn("Löptröskel · längre repetitioner", document)
         self.assertIn("Sim · grepp/teknik + aerob", document)
         self.assertIn("Planerad progression om responsen stödjer", document)
         self.assertIn("Villkorat mål:", document)
         self.assertIn("4 × 9 min", document)
-        self.assertIn("Grundplan finns · detaljdagar ej materialiserade", document)
+        self.assertIn("Preliminär dagstruktur · exakta dagar/doser ej låsta", document)
+        self.assertIn("Blockskiss · nästa beslut tas vid checkpoint", document)
+        self.assertIn("Preliminär", document)
+        self.assertIn("Blockskiss", document)
+        self.assertIn("Blockreview · besluta nästa riktning", document)
+        self.assertIn("Nästa block · villkorad riktning", document)
+        self.assertIn("5 av 5 kommande veckor har planeringsinnehåll", document)
+        self.assertNotIn("Planeringsunderlag saknas", document)
         self.assertNotIn("7 planerade vilodagar", document)
         self.assertIn("ÖTILLÖ Åland World Series · Topp-10", document)
         self.assertIn("Granska plan", document)
