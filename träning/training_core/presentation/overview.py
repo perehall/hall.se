@@ -192,6 +192,45 @@ class OverviewBlueprintWeekReadModel:
 
 
 @dataclass(frozen=True)
+class OverviewForwardSlotReadModel:
+    day_index: int
+    role: str
+    sport: str
+    recipe_key: str
+    label: str
+    progression_intent: str
+    baseline_session: str
+    conditional_target_session: str
+
+
+@dataclass(frozen=True)
+class OverviewCapabilityDirectionReadModel:
+    capability_key: str
+    capability_label: str
+    direction: str
+    candidate_recipe_characters: tuple[str, ...]
+    progression_ready_now: bool
+    evidence_state_now: str
+
+
+@dataclass(frozen=True)
+class OverviewForwardWeekReadModel:
+    start_date: str
+    end_date: str
+    planning_level: str
+    planning_label: str
+    day_precision: str
+    block_intent: str
+    title: str
+    slots: tuple[OverviewForwardSlotReadModel, ...]
+    capability_directions: tuple[OverviewCapabilityDirectionReadModel, ...]
+    support_candidates: tuple[OverviewCapabilityDirectionReadModel, ...]
+    protected_capabilities: tuple[str, ...]
+    decision_gate: str
+    source: str
+
+
+@dataclass(frozen=True)
 class OverviewGoalReadModel:
     label: str
     target: str
@@ -211,6 +250,7 @@ class OverviewBlockReadModel:
     progression_axes: tuple[OverviewProgressionAxisReadModel, ...]
     microcycle_intents: tuple[OverviewMicrocycleIntentReadModel, ...]
     development_blueprint: tuple[OverviewBlueprintWeekReadModel, ...]
+    forward_horizon: tuple[OverviewForwardWeekReadModel, ...]
 
 
 @dataclass(frozen=True)
@@ -396,6 +436,85 @@ def build_overview_context(roadmap: dict | None) -> OverviewPlanContextReadModel
             for row in block_raw.get("development_blueprint") or ()
             if isinstance(row, dict) and int(row.get("microcycle_index") or 0) > 0
         )
+        def forward_direction(row):
+            capability_key = str(row.get("capability") or "").strip()
+            return OverviewCapabilityDirectionReadModel(
+                capability_key=capability_key,
+                capability_label=capability_labels.get(
+                    capability_key,
+                    str(row.get("label") or capability_key).strip(),
+                ),
+                direction=str(row.get("direction") or "").strip(),
+                candidate_recipe_characters=tuple(
+                    str(value)
+                    for value in row.get("candidate_recipe_characters") or ()
+                    if str(value).strip()
+                ),
+                progression_ready_now=bool(
+                    row.get("progression_ready_now") is True
+                ),
+                evidence_state_now=str(
+                    row.get("evidence_state_now") or ""
+                ).strip(),
+            )
+
+        forward_horizon = tuple(
+            OverviewForwardWeekReadModel(
+                start_date=str(row.get("week_start") or "").strip(),
+                end_date=str(row.get("week_end") or "").strip(),
+                planning_level=str(row.get("planning_level") or "").strip(),
+                planning_label=str(row.get("planning_label") or "").strip(),
+                day_precision=str(row.get("day_precision") or "").strip(),
+                block_intent=str(row.get("block_intent") or "").strip(),
+                title=str(row.get("title") or "").strip(),
+                slots=tuple(
+                    OverviewForwardSlotReadModel(
+                        day_index=int(item.get("day_index") or 0),
+                        role=str(item.get("role") or "").strip(),
+                        sport=str(item.get("sport") or "").strip(),
+                        recipe_key=str(item.get("recipe_key") or "").strip(),
+                        label=str(item.get("label") or "").strip(),
+                        progression_intent=str(
+                            item.get("progression_intent") or ""
+                        ).strip(),
+                        baseline_session=str(
+                            item.get("baseline_session") or ""
+                        ).strip(),
+                        conditional_target_session=str(
+                            item.get("conditional_target_session") or ""
+                        ).strip(),
+                    )
+                    for item in row.get("slots") or ()
+                    if isinstance(item, dict)
+                    and int(item.get("day_index") or 0) in range(1, 8)
+                ),
+                capability_directions=tuple(
+                    forward_direction(item)
+                    for item in row.get("capability_directions") or ()
+                    if isinstance(item, dict)
+                ),
+                support_candidates=tuple(
+                    forward_direction(item)
+                    for item in row.get("support_candidates") or ()
+                    if isinstance(item, dict)
+                ),
+                protected_capabilities=tuple(
+                    capability_labels.get(
+                        str(item.get("capability") or ""),
+                        str(item.get("label") or item.get("capability") or ""),
+                    )
+                    for item in row.get("protected_capabilities") or ()
+                    if isinstance(item, dict)
+                    and str(item.get("capability") or item.get("label") or "").strip()
+                ),
+                decision_gate=str(row.get("decision_gate") or "").strip(),
+                source=str(row.get("source") or "").strip(),
+            )
+            for row in block_raw.get("forward_horizon") or ()
+            if isinstance(row, dict)
+            and str(row.get("week_start") or "").strip()
+        )
+
         block = OverviewBlockReadModel(
             title=str(block_raw.get("title") or "").strip(),
             start_date=str(block_raw.get("start_date") or "").strip(),
@@ -408,6 +527,7 @@ def build_overview_context(roadmap: dict | None) -> OverviewPlanContextReadModel
             progression_axes=progression_axes,
             microcycle_intents=microcycle_intents,
             development_blueprint=development_blueprint,
+            forward_horizon=forward_horizon,
         )
 
     return OverviewPlanContextReadModel(
