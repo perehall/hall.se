@@ -496,6 +496,75 @@ class TrainingOverviewTests(unittest.TestCase):
         self.assertEqual(current_day.state, "completed")
         self.assertEqual(current_week.fixed_count, 1)
 
+    def test_current_week_summary_combines_completed_truth_with_remaining_plan(self):
+        plan = (
+            PlannedWorkout(
+                local_date=date(2026, 9, 28),
+                session="Enduro · fast tillfälle",
+                sport="enduro",
+                status="planned",
+                planning_status="fixed",
+                manual_lock=True,
+                workout_key="monday-enduro",
+            ),
+            PlannedWorkout(
+                local_date=date(2026, 10, 1),
+                session="Löpning · backe",
+                sport="run",
+                status="planned",
+                workout_key="thursday-hills",
+                payload={"priority_role": "anchor"},
+            ),
+            PlannedWorkout(
+                local_date=date(2026, 10, 2),
+                session="Simning · aerob + teknik",
+                sport="swim",
+                status="planned",
+                workout_key="friday-swim",
+            ),
+            PlannedWorkout(
+                local_date=date(2026, 10, 3),
+                session="Löpning · lugn stig",
+                sport="run",
+                status="planned",
+                workout_key="saturday-run",
+            ),
+            PlannedWorkout(
+                local_date=date(2026, 10, 4),
+                session="MTB aerob",
+                sport="bike",
+                status="planned",
+                workout_key="sunday-bike",
+            ),
+        )
+        activities = (
+            CompletedActivity("mon-enduro", date(2026, 9, 28), "Enduro", "enduro", 5400),
+            CompletedActivity("mon-strength", date(2026, 9, 28), "Styrka", "strength", 2200),
+            CompletedActivity("tue-run", date(2026, 9, 29), "Löpning · 4×8 min", "run", 3755, 13140),
+            CompletedActivity("wed-swim", date(2026, 9, 30), "Simning", "swim", 4082, 3700),
+        )
+        model = build_training_overview(
+            start=date(2026, 9, 28),
+            end=date(2026, 10, 4),
+            current_date=date(2026, 9, 30),
+            plan=plan,
+            activities=activities,
+        )
+        document = render_overview_document(
+            model,
+            current_date=date(2026, 9, 30),
+            sport_icons=None,
+        )
+
+        self.assertIn(
+            "8 pass · 1 nyckelpass · 3 löp · 2 sim · 1 cykel · 1 styrka · 1 enduro",
+            document,
+        )
+        self.assertNotIn(
+            "5 pass · 1 nyckelpass · 1 sim · 1 cykel",
+            document,
+        )
+
     def test_week_facts_do_not_invent_planned_load(self):
         model = self.build()
         past_week = next(week for week in model.weeks if week.start == date(2026, 9, 21))
