@@ -1294,8 +1294,12 @@ def render_overview_document(
         '<span id="overview-detail-status">Passdetalj</span>'
         '<h2 id="overview-detail-title">Pass</h2>'
         '</div><button class="overview-detail-close" type="button" aria-label="Stäng">×</button></div>'
+        '<div class="overview-detail-session" data-detail-row="full-session"><span>Pass</span><p></p></div>'
+        '<section class="overview-detail-prescription" data-detail-prescription hidden>'
+        '<span>Passupplägg</span>'
+        '<div class="overview-detail-prescription-grid"></div>'
+        '</section>'
         '<div class="overview-detail-grid">'
-        '<div class="overview-detail-row" data-detail-row="full-session"><span>Pass</span><p></p></div>'
         '<div class="overview-detail-row" data-detail-row="role"><span>Roll</span><p></p></div>'
         '<div class="overview-detail-row" data-detail-row="development"><span>Utveckling</span><p></p></div>'
         '<div class="overview-detail-row" data-detail-row="baseline"><span>Bas</span><p></p></div>'
@@ -1318,11 +1322,38 @@ def render_overview_document(
     target: dialog.querySelector('[data-detail-row="target"]'),
     why: dialog.querySelector('[data-detail-row="why"]')
   };
+  const prescription = dialog.querySelector('[data-detail-prescription]');
+  const prescriptionGrid = prescription.querySelector('.overview-detail-prescription-grid');
+
   const fill = (row, value) => {
     const text = (value || '').trim();
     row.hidden = !text;
     const p = row.querySelector('p');
     if (p) p.textContent = text;
+  };
+
+  const fillPrescription = (raw) => {
+    prescriptionGrid.replaceChildren();
+    let rows = [];
+    if ((raw || '').trim()) {
+      try { rows = JSON.parse(raw); }
+      catch (error) { console.debug('OVERVIEW_PRESCRIPTION_PARSE_FAILED', error); }
+    }
+    rows
+      .filter((item) => item && (item.dose || item.instruction))
+      .forEach((item) => {
+        const row = document.createElement('div');
+        row.className = 'overview-detail-prescription-row';
+        const dose = document.createElement('span');
+        dose.className = 'overview-detail-prescription-dose';
+        dose.textContent = item.dose || '—';
+        const instruction = document.createElement('span');
+        instruction.className = 'overview-detail-prescription-text';
+        instruction.textContent = item.instruction || '';
+        row.append(dose, instruction);
+        prescriptionGrid.append(row);
+      });
+    prescription.hidden = prescriptionGrid.children.length === 0;
   };
   document.addEventListener('click', (event) => {
     const trigger = event.target.closest('[data-overview-detail]');
@@ -1330,6 +1361,7 @@ def render_overview_document(
     title.textContent = trigger.dataset.title || 'Pass';
     status.textContent = trigger.dataset.status || 'Passdetalj';
     fill(rows.fullSession, trigger.dataset.fullSession);
+    fillPrescription(trigger.dataset.prescription);
     fill(rows.role, trigger.dataset.role);
     fill(rows.development, trigger.dataset.development);
     fill(rows.baseline, trigger.dataset.baseline);
