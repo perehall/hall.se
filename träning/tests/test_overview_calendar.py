@@ -252,6 +252,9 @@ class TrainingOverviewTests(unittest.TestCase):
                                 "development_character": "threshold_long_reps",
                                 "label": "Löptröskel · längre repetitioner",
                                 "progression_intent": "progress_if_ready",
+                                "baseline_session": "Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg",
+                                "conditional_target_session": "Löpning · kontrollerad tröskel · 4 × 9 min / 90 s jogg",
+                                "target_condition": "progression_ready_and_absorbable_context",
                             },
                             {
                                 "role": "primary",
@@ -376,6 +379,8 @@ class TrainingOverviewTests(unittest.TestCase):
         self.assertIn("Löptröskel · längre repetitioner", document)
         self.assertIn("Sim · grepp/teknik + aerob", document)
         self.assertIn("Planerad progression om responsen stödjer", document)
+        self.assertIn("Villkorat mål:", document)
+        self.assertIn("4 × 9 min", document)
         self.assertIn("Grundplan finns · detaljdagar ej materialiserade", document)
         self.assertNotIn("7 planerade vilodagar", document)
         self.assertIn("ÖTILLÖ Åland World Series · Topp-10", document)
