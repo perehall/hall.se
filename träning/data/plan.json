@@ -252,7 +252,7 @@
       "label": "Onsdag",
       "sport": "swim",
       "reason": "Etablera teknisk/aerob simbassession enligt blueprint och säkra två simbassessioner denna vecka; håll baseline pga senaste sim RPE8. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: establish; materialiserad relation: establish.",
-      "status": "preliminary",
+      "status": "planned",
       "session": "Simning · 3 200 m · grepp/teknik + aerob",
       "stimuli": [
         "swim_aerobic",
@@ -260,6 +260,15 @@
       ],
       "dose_open": false,
       "recipe_key": "swim_aerobic_skills",
+      "device_sync": {
+        "status": "synced",
+        "transport": "intervals_icu",
+        "source_hash": "d99db01ffe6721b7698efd24c680f3c44bf7d811d0845ddcce95a46a15778192",
+        "updated_at_utc": "2026-09-30T16:51:41.194122+00:00",
+        "device_delivery": "unverified",
+        "verified_at_utc": "2026-09-30T16:51:41.194122+00:00",
+        "provider_event_id": 140274147
+      },
       "block_intent": "establish",
       "dose_options": [
         {
@@ -528,8 +537,137 @@
           }
         ],
         "equipment": [],
-        "sync_enabled": false,
+        "external_id": "hall-device:2026-09-30:swim:swim_aerobic_skills_1",
+        "sync_enabled": true,
         "planned_distance_m": 3200
+      },
+      "device_workout": {
+        "date": "2026-09-30",
+        "name": "Simning · 3 200 m · grepp/teknik + aerob",
+        "sport": "swim",
+        "blocks": [
+          {
+            "name": "Insim + teknik",
+            "sets": 1,
+            "steps": [
+              {
+                "kind": "work",
+                "duration": {
+                  "kind": "distance",
+                  "meters": 600
+                },
+                "instruction": "Lugn insim med fokus på avslappning och linje · utan redskap",
+                "intensity_class": "warmup"
+              }
+            ],
+            "repetitions_per_set": 1
+          },
+          {
+            "name": "Grepp",
+            "sets": 1,
+            "steps": [
+              {
+                "kind": "work",
+                "duration": {
+                  "kind": "distance",
+                  "meters": 50
+                },
+                "instruction": "Rent isätt och tidigt kontrollerat grepp · utan redskap",
+                "intensity_class": "interval"
+              },
+              {
+                "kind": "recovery",
+                "duration": {
+                  "kind": "time",
+                  "seconds": 15
+                },
+                "press_lap": false,
+                "instruction": "Vila",
+                "intensity_class": "recovery",
+                "transport_reference_only": false
+              }
+            ],
+            "repetitions_per_set": 8
+          },
+          {
+            "name": "Aerob",
+            "sets": 1,
+            "steps": [
+              {
+                "kind": "work",
+                "duration": {
+                  "kind": "distance",
+                  "meters": 400
+                },
+                "instruction": "Stabil aerob rytm med bibehållet grepp · utan redskap",
+                "intensity_class": "interval"
+              },
+              {
+                "kind": "recovery",
+                "duration": {
+                  "kind": "time",
+                  "seconds": 25
+                },
+                "press_lap": false,
+                "instruction": "Vila",
+                "intensity_class": "recovery",
+                "transport_reference_only": false
+              }
+            ],
+            "repetitions_per_set": 4
+          },
+          {
+            "name": "Frekvens",
+            "sets": 1,
+            "steps": [
+              {
+                "kind": "work",
+                "duration": {
+                  "kind": "distance",
+                  "meters": 50
+                },
+                "instruction": "Avslappnad frekvens utan att tappa linje eller grepp · utan redskap",
+                "intensity_class": "interval"
+              },
+              {
+                "kind": "recovery",
+                "duration": {
+                  "kind": "time",
+                  "seconds": 15
+                },
+                "press_lap": false,
+                "instruction": "Vila",
+                "intensity_class": "recovery",
+                "transport_reference_only": false
+              }
+            ],
+            "repetitions_per_set": 8
+          },
+          {
+            "name": "Avsim",
+            "sets": 1,
+            "steps": [
+              {
+                "kind": "work",
+                "duration": {
+                  "kind": "distance",
+                  "meters": 200
+                },
+                "instruction": "Mycket lugnt avsim · utan redskap",
+                "intensity_class": "cooldown"
+              }
+            ],
+            "repetitions_per_set": 1
+          }
+        ],
+        "transport": "intervals_icu",
+        "external_id": "hall-device:2026-09-30:swim:swim_aerobic_skills_1",
+        "source_hash": "d99db01ffe6721b7698efd24c680f3c44bf7d811d0845ddcce95a46a15778192",
+        "detail_level": "structured",
+        "provider_type": "Swim",
+        "target_policy": "explicit_single_primary_only",
+        "schema_version": 1,
+        "source_candidate_id": "swim-aerobic-skills-3200"
       },
       "microcycle_day": 3,
       "swim_equipment": {
@@ -773,7 +911,12 @@
         "cardiovascular",
         "technical"
       ],
+      "manual_override": {
+        "note": "Användaren bekräftade 2026-09-30 att det planerade 3 200 m-passet grepp/teknik + aerob ska genomföras idag och synkas som strukturerat pass till Garmin.",
+        "source": "user_confirmed"
+      },
       "microcycle_slot": "swim_aerobic_skills_1",
+      "planning_status": "fixed",
       "development_step": {
         "reason": "Mikrocykelbeslutet valde establish och dosen materialiserades från verifierad träningsrespons, bekräftat startläge eller konservativ katalogbas utan att höja flera belastningsvariabler samtidigt.",
         "relation": "establish",
@@ -815,9 +958,9 @@
         "status": "synced",
         "transport": "intervals_icu",
         "source_hash": "eafabf6fd91800eab307c017b9f7d00b6f473417e10ec6f56184d02bf21b7dbe",
-        "updated_at_utc": "2026-09-30T16:34:34.734251+00:00",
+        "updated_at_utc": "2026-09-30T16:51:41.382466+00:00",
         "device_delivery": "unverified",
-        "verified_at_utc": "2026-09-30T16:34:34.734251+00:00",
+        "verified_at_utc": "2026-09-30T16:51:41.382466+00:00",
         "provider_event_id": 140193695
       },
       "block_intent": "establish",
@@ -1110,9 +1253,9 @@
         "status": "synced",
         "transport": "intervals_icu",
         "source_hash": "d5f222458fe5be6baedeccc8da583d332e9bc4d99126c040a9f69eed6ce1c2ad",
-        "updated_at_utc": "2026-09-30T16:34:34.941011+00:00",
+        "updated_at_utc": "2026-09-30T16:51:41.886452+00:00",
         "device_delivery": "unverified",
-        "verified_at_utc": "2026-09-30T16:34:34.941011+00:00",
+        "verified_at_utc": "2026-09-30T16:51:41.886452+00:00",
         "provider_event_id": 140193696
       },
       "block_intent": "establish",

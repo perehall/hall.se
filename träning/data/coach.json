@@ -7,17 +7,17 @@
           "Löpning · 4 × 8 min: 13,14 km · 1:02:35 · 112 m+ · snittpuls 146,1 · maxpuls 162.",
           "Användarrapport: Spontant löppass: 4 × 8 min / 90 s joggvila. Samma 4 × 8/90-struktur som veckans planerade kontrollerade löptröskel. Spontant löppass: 4 × 8 min / 90 s joggvila. Samma 4 × 8/90-struktur som veckans planerade kontrollerade löptröskel. Bra kontroll, kände mig stark RPE 6/10. Känsla: Starka ben."
         ],
-        "summary": "Genomfört spontant 4×8 min (90 s jogg) med stabil kontroll och RPE 6/10; snittpuls 146 bpm och flera 1‑km‑lappar runt 4:17–4:23 visar kontrollerad arbetskvalitet.",
+        "summary": "Genomfört spontant 4×8 min (90 s joggvila) med kontrollerad känsla och god kraft i benen; snittpuls 146 bpm och snabbare 1‑km‑lappar visar starka arbetsblock.",
         "unknowns": [
-          "24–72 h återhämtningsrespons (subjektivt nästa dag)",
-          "exakt intern belastningssammanslagning med föregående enduro+styrka under 48 h"
+          "Detaljerad inre intensitetsfördelning inom varje 8‑min‑rep saknas i performance_context",
+          "Subjektiv återhämtning 24–72 h efter dagens pass är ännu okänd"
         ],
         "confidence": "medium",
         "interpretations": [
-          "Passet bekräftar förmåga att genomföra planerad 4×8/90‑struktur med god kontroll och RPE 6, vilket stödjer att träskelstimulus absorberades denna session.",
-          "Eftersom detta pass duplicerar veckans prioriterade run_threshold‑stimulus bör kommande 48–72 h‑fönster beaktas innan eventuell progression eller ytterligare hård löpning."
+          "Passet visar att planerat tröskelarbete kan genomföras med god kontroll och RPE 6/10, vilket stödjer att dosen är absorberbar men inte bevisar progression.",
+          "Givet föregående dagars faktiska belastning (enduro + styrka + trail) är det konservativt att hålla nästa planerade simpass oförändrat och undvika att öka löpdos/introducera progression inom 24–72 h."
         ],
-        "load_interpretation": "Passet är ett kompletterande kontrollerat tröskelstimulus som ligger nära veckans planerade löpjobb och tolererades väl samma dag."
+        "load_interpretation": "Senaste 72 timmarna innehåller löpning, enduro och styrka; kombinationen talar för bevara planen utan progression idag."
       },
       "auto_apply": {
         "note": "Ingen automatisk planändring.",
@@ -26,16 +26,16 @@
       "activity_id": 20381137043,
       "plan_action": {
         "action": "keep",
-        "reason": "Mikrocykelns sim‑anchor bör genomföras; senaste löppasset var kontrollerat och tolererades väl samma dag.",
+        "reason": "Passet tolererades väl och föregående 48–72 h innehåller redan benbelastning, så planens simpass bör behållas utan ändring.",
         "target_date": "2026-09-30",
         "dose_option_id": "",
-        "recommendation": "Fortsätt enligt plan: genomför simning 3 200 m som planerat i morgon; håll simmen teknisk/aerob och undvik högre intensitet. Utvärdera återhämtning morgondagen innan du gör ändring.",
+        "recommendation": "Fortsätt enligt plan: genomför onsdagens simning 3 200 m enligt schemat; undvik att lägga till extra benkvalitet de närmaste 48–72 timmarna.",
         "requires_approval": false,
         "target_workout_key": "20260928-run_threshold-swim_aerobic-swim_technique:mc1:2026-09-30:swim_aerobic_skills_1"
       },
       "activity_date": "2026-09-29",
       "activity_name": "Löpning på eftermiddagen",
-      "generated_at_utc": "2026-09-30T16:34:33.288636+00:00",
+      "generated_at_utc": "2026-09-30T16:51:39.132102+00:00",
       "analysis_contract": {
         "pipeline_version": 4,
         "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
@@ -1370,9 +1370,9 @@
       "performance_protocol_key": null
     }
   ],
-  "last_run_utc": "2026-09-30T16:34:33.288636+00:00",
+  "last_run_utc": "2026-09-30T16:51:39.132102+00:00",
   "contract_version": 16,
-  "last_trigger_hash": "8dd1150e77d187e669069ba6b6929147274a68274b8de3c8e62ec959c1fcb6fd",
+  "last_trigger_hash": "83cd3179df9236f581704627c724d53b144b50dd5a6deee2f723a79d30dd1da1",
   "analysed_activity_ids": [
     "20367593813",
     "20350203020",
