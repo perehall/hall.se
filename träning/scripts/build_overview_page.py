@@ -21,6 +21,7 @@ from training_core.presentation.today import CompletedActivity
 from training_core.repositories.archive import ManifestWeekArchiveRepository
 from training_core.repositories.icons import FileSportIconRepository
 from training_core.repositories.presentation import PostgresPresentationRepository
+from training_core.repositories.weather import FileWeatherRepository
 
 
 DATA = ROOT / "data"
@@ -119,6 +120,7 @@ def build_overview(local_date: date):
 
     current_repository = PostgresPresentationRepository.from_environment()
     archive_repository = ManifestWeekArchiveRepository(DATA / "weeks" / "index.json")
+    weather_snapshot = FileWeatherRepository(DATA / "weather.json").current()
 
     historical_end = current_week_start - timedelta(days=1)
     historical_plan = _archived_plan_rows(archive_repository, start, historical_end)
@@ -134,6 +136,7 @@ def build_overview(local_date: date):
         plan=tuple(historical_plan) + tuple(current_plan),
         activities=tuple(historical_activities) + tuple(current_activities),
         roadmap=_roadmap(),
+        weather_snapshot=weather_snapshot,
     )
     icons = FileSportIconRepository(DATA / "sport_icons.json").current()
     return model, icons
