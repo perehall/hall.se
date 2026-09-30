@@ -521,17 +521,46 @@ def _context_html(model: TrainingOverviewReadModel) -> str:
 
 
 
-def _planned_item(workout, registry: SportIconRegistry | None) -> str:
-    focus = (
-        f'<span class="overview-focus">{_e(workout.development_focus)}</span>'
-        if workout.development_focus else ""
+def _planned_item(
+    workout,
+    registry: SportIconRegistry | None,
+    *,
+    progression_intent: str = "",
+    plan_status: str = "",
+) -> str:
+    title = _short_workout_title(
+        workout.session,
+        workout.recipe_key,
+        workout.sport,
+        workout.session,
+    )
+    chip, chip_class = _progress_chip(
+        intent=progression_intent,
+        relation=workout.development_relation,
+        state=workout.state,
+        role=workout.priority_role,
+    )
+    chip_html = (
+        f'<span class="overview-pass-chip chip-{_e(chip_class)}">{_e(chip)}</span>'
+        if chip else ""
+    )
+    role = ROLE_LABELS.get(workout.priority_role, workout.priority_role)
+    status = plan_status or ("Fast" if workout.state == "fixed" else "Planerad")
+    attrs = _detail_button_attrs(
+        title=title,
+        full_session=workout.session,
+        role=role,
+        status=status,
+        development=workout.development_focus,
+        why=workout.development_reason,
     )
     return (
-        f'<div class="overview-workout planned state-{_e(workout.state)}" '
-        f'data-workout-key="{_e(workout.workout_key)}">'
+        f'<button class="overview-workout planned state-{_e(workout.state)}" '
+        f'data-workout-key="{_e(workout.workout_key)}" {attrs}>'
         f'{_icon_group(registry, workout.icon_keys)}'
-        f'<span class="overview-workout-copy"><strong>{_e(workout.session)}</strong>{focus}</span>'
-        '</div>'
+        '<span class="overview-workout-copy">'
+        f'<strong>{_e(title)}</strong>{chip_html}'
+        '</span></button>'
     )
 
 
@@ -542,13 +571,33 @@ def _actual_item(activity, registry: SportIconRegistry | None) -> str:
     if activity.duration_s > 0:
         facts.append(activity.duration)
     detail = " · ".join(facts)
-    return (
-        '<div class="overview-workout actual">'
-        f'{_icon(registry, activity.icon_key)}'
-        f'<span class="overview-workout-copy"><strong>{_e(activity.label)}</strong>'
-        + (f'<span class="overview-facts">{_e(detail)}</span>' if detail else "")
-        + '</span></div>'
+    title = _trim(activity.label or "Genomfört pass", 28)
+    attrs = _detail_button_attrs(
+        title=title,
+        full_session=activity.label,
+        status="Genomfört",
+        development=detail,
     )
+    return (
+        f'<button class="overview-workout actual" {attrs}>'
+        f'{_icon(registry, activity.icon_key)}'
+        '<span class="overview-workout-copy">'
+        f'<strong>{_e(title)}</strong>'
+        '<span class="overview-pass-chip chip-completed">✓ Genomfört</span>'
+        + (f'<span class="overview-facts">{_e(detail)}</span>' if detail else "")
+        + '</span></button>'
+    )
+
+
+def _forward_slot_intent(forward, local_date: date, recipe_key: str) -> str:
+    if forward is None or forward.planning_level != "preliminary":
+        return ""
+    day_index = local_date.weekday() + 1
+    matches = [
+        slot for slot in forward.slots
+        if slot.day_index == day_index and slot.recipe_key == recipe_key
+    ]
+    return matches[0].progression_intent if len(matches) == 1 else ""
 
 
 def _day_html(
@@ -557,12 +606,26 @@ def _day_html(
     current_date: date,
     registry: SportIconRegistry | None,
     materialized: bool,
+    forward=None,
+    plan_status: str = "",
 ) -> str:
     classes = ["overview-day", f"state-{day.state}"]
     if day.local_date == current_date:
         classes.append("today")
     actual = "".join(_actual_item(item, registry) for item in day.actual_activities)
-    planned = "".join(_planned_item(item, registry) for item in day.planned_workouts)
+    planned = "".join(
+        _planned_item(
+            item,
+            registry,
+            progression_intent=_forward_slot_intent(
+                forward,
+                day.local_date,
+                item.recipe_key,
+            ),
+            plan_status=plan_status,
+        )
+        for item in day.planned_workouts
+    )
 
     if actual and planned:
         body = (
@@ -578,7 +641,7 @@ def _day_html(
         body = (
             '<span class="overview-rest">Vila</span>'
             if materialized or day.local_date <= current_date
-            else '<span class="overview-unplanned">Ej detaljplanerad</span>'
+            else '<span class="overview-unplanned">Öppen</span>'
         )
 
     return (
@@ -590,6 +653,78 @@ def _day_html(
         f'<div class="overview-day-body">{body}</div>'
         '</div>'
     )
+
+
+def _week_summary(week, relation: str, forward) -> str:
+    if relation == "past":
+        bits = [f"{week.completed_count} pass"]
+        if week.completed_count and week.actual_duration_s:
+            bits.append(week.actual_duration)
+        if week.actual_distance_m > 0:
+            bits.append(week.actual_distance)
+        return " · ".join(bits)
+
+    if week.planned_count > 0:
+        workouts = list(week.planned_workouts)
+        total = len(workouts)
+        key_count = sum(item.priority_role == "anchor" for item in workouts)
+        sport_counts = {}
+        for item in workouts:
+            sport = str(item.sport or "").lower()
+            sport_counts[sport] = sport_counts.get(sport, 0) + 1
+    elif forward is not None and forward.planning_level == "preliminary":
+        slots = list(forward.slots)
+        total = len(slots)
+        key_count = sum(slot.role == "primary" for slot in slots)
+        sport_counts = {}
+        for slot in slots:
+            sport = str(slot.sport or "").lower()
+            sport_counts[sport] = sport_counts.get(sport, 0) + 1
+    else:
+        return "Riktning efter blockreview"
+
+    bits = [f"{total} pass"]
+    if key_count:
+        bits.append(f"{key_count} nyckelpass")
+    for sport, label in (("swim", "sim"), ("strength", "styrka"), ("bike", "cykel"), ("enduro", "enduro")):
+        count = sport_counts.get(sport, 0)
+        if count:
+            bits.append(f"{count} {label}")
+        if len(bits) >= 4:
+            break
+    return " · ".join(bits[:4])
+
+
+def _week_focus(model: TrainingOverviewReadModel, week, forward, blueprint, expected) -> str:
+    if forward is not None and forward.planning_level == "block_sketch":
+        labels = [item.capability_label for item in forward.capability_directions if item.capability_label]
+        prefix = "Blockreview" if forward.block_intent == "review" else "Nästa block"
+        return _trim(
+            "Fokus: " + prefix + (f" · {' + '.join(labels[:2])}" if labels else ""),
+            80,
+        )
+
+    labels = []
+    if blueprint is not None:
+        for item in blueprint.planned_variants:
+            if item.capability_label and item.capability_label not in labels:
+                labels.append(item.capability_label)
+    if not labels and model.context and model.context.active_block:
+        labels = list(model.context.active_block.primary_capabilities[:2])
+
+    intent = _intent_label(
+        week.block_intents[0]
+        if len(week.block_intents) == 1
+        else expected.intent if expected else forward.block_intent if forward else ""
+    )
+    if not intent and not labels:
+        return ""
+    value = intent
+    if labels:
+        value += (" · " if value else "") + " + ".join(labels[:2])
+    return _trim(f"Fokus: {value}", 80)
+
+
 
 
 def _week_html(
