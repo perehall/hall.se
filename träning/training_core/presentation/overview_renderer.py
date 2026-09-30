@@ -1161,9 +1161,13 @@ a{color:inherit}
 .overview-day{min-height:104px;padding:8px 7px;border-left:1px solid var(--line-soft);position:relative}
 .overview-day:first-child{border-left:0}
 .overview-day.today{box-shadow:inset 0 0 0 2px var(--accent);z-index:1}
-.overview-day-head{display:flex;align-items:baseline;justify-content:space-between;gap:6px;margin-bottom:7px}
-.overview-day-head span{font-size:.57rem;color:var(--muted);font-weight:760;text-transform:uppercase;letter-spacing:.04em}
-.overview-day-head b{font-size:.65rem;color:var(--secondary)}
+.overview-day-head{display:flex;align-items:center;justify-content:space-between;gap:5px;margin-bottom:7px;min-height:18px}
+.overview-day-date{display:flex;align-items:baseline;gap:5px;min-width:0}
+.overview-day-date>span{font-size:.57rem;color:var(--muted);font-weight:760;text-transform:uppercase;letter-spacing:.04em}
+.overview-day-date>b{font-size:.65rem;color:var(--secondary)}
+.overview-day-weather{display:inline-flex;align-items:center;gap:2px;min-width:0;color:var(--muted);font-size:.53rem;font-weight:650;line-height:1;white-space:nowrap}
+.overview-day-weather>span{font-size:inherit;color:inherit;font-weight:inherit;text-transform:none;letter-spacing:0}
+.overview-weather-icon{width:13px;height:13px;flex:0 0 13px;color:var(--secondary)}
 .overview-day-body,.overview-layer{display:grid;gap:5px}
 .overview-plan-label{color:var(--muted);font-size:.52rem;font-weight:760;text-transform:uppercase;letter-spacing:.05em;margin-top:1px}
 
