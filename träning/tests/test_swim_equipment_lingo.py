@@ -102,7 +102,8 @@ class SwimEquipmentLingoTests(unittest.TestCase):
                     ],
                     "watch_workout": {
                         "id": "dated-workout-id",
-                        "sync_enabled": False,
+                        "sync_enabled": True,
+                        "external_id": "hall-device:2026-09-25:swim:swim-4000",
                         "type": "Swim",
                         "equipment": ["paddles", "pull_buoy"],
                         "planned_distance_m": 4000,
@@ -155,7 +156,11 @@ class SwimEquipmentLingoTests(unittest.TestCase):
         step = workout["dose_options"][0]["watch_workout"]["blocks"][0]["steps"][0]
         self.assertEqual(step["equipment"], ["paddles", "pull_buoy"])
         self.assertEqual(workout["watch_workout"]["id"], "dated-workout-id")
-        self.assertFalse(workout["watch_workout"]["sync_enabled"])
+        self.assertTrue(workout["watch_workout"]["sync_enabled"])
+        self.assertEqual(
+            workout["watch_workout"]["external_id"],
+            "hall-device:2026-09-25:swim:swim-4000",
+        )
         self.assertEqual(
             workout["swim_equipment"]["planned"],
             ["paddles", "pull_buoy"],
