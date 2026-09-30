@@ -333,9 +333,7 @@ def _blueprint_family_index(block_context, family_size):
             for item in (block_context.get("wave") or [])[:index]
             if item == "develop"
         )
-        if develop_ordinal == 1:
-            return 1 % family_size
-        return min(2, family_size - 1)
+        return develop_ordinal % family_size
     return 0
 
 
@@ -1969,6 +1967,37 @@ def microcycle_guard_failures(
                     "samma utvecklingsrecept får inte dupliceras mekaniskt"
                 )
 
+    blueprint = development_blueprint_for_week(
+        meso, policy, catalog, target_start
+    ) or {}
+    expected_primary_recipe_keys = {
+        str(item.get("recipe_key") or "")
+        for item in (blueprint.get("planned_variants") or [])
+        if isinstance(item, dict) and str(item.get("recipe_key") or "") in recipes
+    }
+    if (
+        policy["microcycle_policy"].get("require_mesocycle_blueprint_alignment")
+        and expected_primary_recipe_keys
+    ):
+        for capability in sorted(primaries - completed_direct):
+            matching = [
+                row
+                for row in valid_rows
+                if row["recipe_key"] in expected_primary_recipe_keys
+                and capability in recipe_capabilities(recipes[row["recipe_key"]])
+            ]
+            if not matching:
+                expected = sorted(
+                    key
+                    for key in expected_primary_recipe_keys
+                    if capability in recipe_capabilities(recipes[key])
+                )
+                if expected:
+                    failures.append(
+                        f"primär kapacitet {capability} avviker från mesocykelns planerade passkaraktär; "
+                        f"förväntat recept ur {', '.join(expected)}"
+                    )
+
     direct_primary_caps = set()
     swim_exposures = 0
     strength_exposures = 0
@@ -2713,7 +2742,7 @@ def microcycle_is_valid(decision, meso, target_start, source_hash_value=None):
     )
 
 
-def demonstrated_value(recipe_key, athlete_state):
+def demonstrated_value(recipe_key, athlete_state, recipe=None):
     facts = athlete_state.get("capability_facts") or {}
     capability = RECIPE_TO_RESPONSE_CAPABILITY.get(recipe_key)
     if capability == "run_threshold":
@@ -2738,15 +2767,15 @@ def demonstrated_value(recipe_key, athlete_state):
         return float(value) / 60.0 if isinstance(value, (int, float)) else None
     if capability == "swim_aerobic":
         value = ((facts.get("swim_aerobic") or {}).get("longest_distance") or {}).get("distance_m")
-        ceiling = max(
-            [
-                float(item.get("value"))
-                for item in ((load_json(CATALOG_FILE, {}).get("recipes") or {}).get(recipe_key) or {}).get("options") or []
-                if isinstance(item.get("value"), (int, float))
-            ]
-            or [float(value) if isinstance(value, (int, float)) else 0.0]
-        )
-        return min(float(value), ceiling) if isinstance(value, (int, float)) else None
+        option_values = [
+            float(item.get("value"))
+            for item in ((recipe or {}).get("options") or [])
+            if isinstance(item.get("value"), (int, float))
+        ]
+        ceiling = max(option_values) if option_values else None
+        if not isinstance(value, (int, float)):
+            return None
+        return min(float(value), ceiling) if ceiling is not None else float(value)
     if capability == "swim_threshold":
         values = [
             item.get("distance_m")
@@ -2768,7 +2797,7 @@ def choose_option(recipe_key, recipe, action, athlete_state, starting_state=None
         raise RuntimeError(f"Recept {recipe_key!r} saknar numeriska dosalternativ")
     options = sorted(options, key=lambda item: (float(item["value"]), str(item.get("id") or "")))
 
-    observed = demonstrated_value(recipe_key, athlete_state)
+    observed = demonstrated_value(recipe_key, athlete_state, recipe)
     profile = response_profile_for_recipe(recipe_key, athlete_state)
     absorbed = (profile or {}).get("absorbed_value")
     tolerated = (profile or {}).get("tolerated_value")
