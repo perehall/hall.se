@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import html
+import json
 import re
 from datetime import date
 
@@ -190,6 +191,18 @@ def _progress_chip(intent: str = "", relation: str = "", state: str = "", role: 
     if role in {"protected", "protected_support"}:
         return "◇ Skyddad", "protected"
     return "", ""
+
+
+def _prescription_json(rows) -> str:
+    return json.dumps(
+        [
+            {"dose": str(row.dose or ""), "instruction": str(row.instruction or "")}
+            for row in rows or ()
+            if str(row.dose or "").strip() or str(row.instruction or "").strip()
+        ],
+        ensure_ascii=False,
+        separators=(",", ":"),
+    )
 
 
 def _detail_button_attrs(**values) -> str:
@@ -640,6 +653,7 @@ def _planned_item(
         status=status,
         development=workout.development_focus,
         why=workout.development_reason,
+        prescription=_prescription_json(workout.prescription_rows),
     )
     return (
         f'<button class="overview-workout planned state-{_e(workout.state)}" '
