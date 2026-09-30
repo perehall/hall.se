@@ -1015,7 +1015,7 @@ class AdaptivePlanningTests(unittest.TestCase):
             completed_context={},
         )
         self.assertTrue(
-            any("saknar sekundärt stödpass" in failure for failure in failures)
+            any("saknar stödjande breddsexponering" in failure for failure in failures)
         )
 
         one_secondary = deepcopy(required_only)
@@ -1031,7 +1031,7 @@ class AdaptivePlanningTests(unittest.TestCase):
             completed_context={},
         )
         self.assertFalse(
-            any("saknar sekundärt stödpass" in failure for failure in failures)
+            any("saknar stödjande breddsexponering" in failure for failure in failures)
         )
         self.assertFalse(
             any("begränsar sekundär belastning" in failure for failure in failures)
