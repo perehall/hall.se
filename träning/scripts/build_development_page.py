@@ -183,7 +183,7 @@ section{margin-top:50px}.section-head{display:flex;align-items:flex-end;justify-
         '<meta name="viewport" content="width=device-width,initial-scale=1">'
         '<title>Mål & utveckling · Träning</title>'
         f'<style>{css}</style></head><body><div class="shell">'
-        '<nav class="topnav"><a href="/träning/">Aktuell vecka</a><a href="/träning/onboarding/">Träningsprofil</a></nav>'
+        '<nav class="topnav"><a href="/träning/">Aktuell vecka</a><a href="/träning/oversikt/">Översikt</a><a href="/träning/onboarding/">Träningsprofil</a></nav>'
         '<header class="hero"><div class="kicker">Coachens utvecklingsplan</div>'
         '<h1>Mål & utveckling</h1>'
         '<p>Här går planen att följa hela vägen från dina mål till vilka kapaciteter som utvecklas nu, varför blocket ser ut som det gör och när nästa större beslut tas.</p>'
