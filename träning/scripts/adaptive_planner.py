@@ -22,6 +22,13 @@ from pathlib import Path
 from athlete_profile_source import load_athlete_profile_for_planner, planner_profile_view
 from athlete_starting_state_source import load_starting_state_for_planner, planner_starting_state_view
 from canonical_plan import planned_workouts as canonical_planned_workouts
+from capability_registry import (
+    CAPABILITY_REGISTRY,
+    capability_default_recipe,
+    capability_recipe_family,
+    response_capability_for_recipe,
+    validate_registry_against_catalog,
+)
 from goal_contracts import planning_goal_hash, planning_goal_set
 from development_roadmap import build_development_roadmap
 from race_contracts import build_competition_context
@@ -55,34 +62,21 @@ PLANNER_REVISION = 6
 MICRO_PLANNER_REVISION = 16
 
 CAPABILITY_TO_RECIPE = {
-    "run_threshold": "run_threshold",
-    "run_hill_quality": "run_hill_quality",
-    "run_easy_distance": "run_easy_distance",
-    "mtb_technical": "mtb_technical",
-    "mtb_aerobic": "mtb_technical",
-    "swim_aerobic": "swim_aerobic_technique",
-    "swim_technique": "swim_aerobic_technique",
-    "swim_threshold": "swim_aerobic_threshold",
-    "strength_unilateral": "strength_core",
-    "strength_core": "strength_core",
-    "plyometric": "strength_core",
+    key: capability_default_recipe(key)
+    for key in CAPABILITY_REGISTRY
+    if capability_default_recipe(key)
 }
 
 RECIPE_TO_RESPONSE_CAPABILITY = {
-    "run_threshold": "run_threshold",
-    "run_threshold_short_reps": "run_threshold",
-    "run_hill_quality": "run_hill_quality",
-    "run_hill_continuous": "run_hill_quality",
-    "run_easy_distance": "run_easy_distance",
-    "run_easy_trail": "run_easy_distance",
-    "mtb_technical": "mtb_technical",
-    "mtb_aerobic_endurance": "mtb_technical",
-    "swim_aerobic_technique": "swim_aerobic",
-    "swim_aerobic_endurance": "swim_aerobic",
-    "swim_aerobic_skills": "swim_aerobic",
-    "swim_aerobic_threshold": "swim_threshold",
-    "strength_core": "strength_unilateral",
+    recipe_key: response_capability_for_recipe(recipe_key)
+    for recipe_key in {
+        recipe
+        for spec in CAPABILITY_REGISTRY.values()
+        for recipe in (spec.get("recipe_family") or ())
+    }
+    if response_capability_for_recipe(recipe_key)
 }
+
 
 FIXED_PROTECTED_CAPACITY = (
     "strength_unilateral",
@@ -307,12 +301,15 @@ def mesocycle_block_context(meso, target_start, policy):
 
 
 def recipe_family_for_capability(catalog, capability):
-    families = catalog.get("capability_recipe_families") or {}
-    configured = families.get(capability) or []
     recipes = catalog.get("recipes") or {}
+    configured = capability_recipe_family(capability)
     valid = [
         key for key in configured
-        if key in recipes and capability in recipe_capabilities(recipes[key])
+        if key in recipes
+        and (
+            capability in recipe_capabilities(recipes[key])
+            or capability in set(recipes[key].get("optional_stimuli") or [])
+        )
     ]
     if valid:
         return valid
@@ -3761,6 +3758,11 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
 
     policy = load_json(POLICY_FILE, {})
     catalog = load_json(CATALOG_FILE, {})
+    registry_failures = validate_registry_against_catalog(catalog)
+    if registry_failures:
+        raise RuntimeError(
+            "Capability registry/catalog mismatch: " + " | ".join(registry_failures)
+        )
     athlete_state = load_json(ATHLETE_STATE_FILE, {})
     plan = load_json(PLAN_FILE, {})
     upcoming = load_json(UPCOMING_FILE, {})
