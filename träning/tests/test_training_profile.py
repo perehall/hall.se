@@ -170,6 +170,46 @@ class TrainingProfileTests(unittest.TestCase):
         self.assertEqual(second["planning_credits"], ["run_threshold"])
         self.assertEqual(second["intent_matches"], first["intent_matches"])
 
+    def test_old_matcher_revision_does_not_preserve_now_invalid_durable_match(self):
+        activity = {
+            "id": 5020,
+            "sport_type": "Run",
+            "classification": "training",
+            "start_date_local": "2026-09-29T18:00:00",
+            "elapsed_time_s": 3755,
+            "distance_m": 13135,
+            "user_report": "",
+            "laps": [],
+        }
+        previous = {
+            "schema_version": 1,
+            "activity_id": 5020,
+            "source_hash": __import__("training_profile").activity_source_hash(activity),
+            "intent_matches": [
+                {
+                    "workout_key": "old-cross-day-easy",
+                    "target_date": "2026-09-27",
+                    "day_delta": -2,
+                    "stimuli": ["run_easy_distance"],
+                    "relation": "fulfills_planned_dose",
+                    "confidence": "high",
+                    "evidence": {
+                        "basis": "comparable_scalar_dose",
+                        "metric": "duration_minutes",
+                    },
+                }
+            ],
+            "planning_credits": ["run_easy_distance"],
+        }
+        profile = build_training_profile(
+            activity,
+            planned_workouts=[],
+            previous_profile=previous,
+        )
+        self.assertEqual(profile["intent_matcher_revision"], 2)
+        self.assertEqual(profile["intent_matches"], [])
+        self.assertEqual(profile["planning_credits"], [])
+
     def test_explicit_report_confirms_stimulus_independently_of_plan(self):
         activity = four_by_eight_activity(
             report="Spontant pass: 4 × 8 min tröskel, kontrollerat."
