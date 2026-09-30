@@ -26,6 +26,7 @@ class TrainingOverviewTests(unittest.TestCase):
                 sport="run",
                 status="planned",
                 workout_key="run-threshold",
+                linked_provider_activity_id="2",
                 development_focus="Kontrollerad löptröskel",
                 payload={
                     "stimuli": ["run_threshold"],
@@ -506,6 +507,7 @@ class TrainingOverviewTests(unittest.TestCase):
                 planning_status="fixed",
                 manual_lock=True,
                 workout_key="monday-enduro",
+                linked_provider_activity_id="mon-enduro",
             ),
             PlannedWorkout(
                 local_date=date(2026, 10, 1),
@@ -564,6 +566,59 @@ class TrainingOverviewTests(unittest.TestCase):
             "5 pass · 1 nyckelpass · 1 sim · 1 cykel",
             document,
         )
+
+    def test_current_week_summary_never_guesses_fulfillment_from_sport(self):
+        activity = CompletedActivity(
+            "today-swim",
+            date(2026, 9, 30),
+            "Simning",
+            "swim",
+            3600,
+            3000,
+        )
+        unlinked_plan = PlannedWorkout(
+            local_date=date(2026, 9, 30),
+            session="Simning · andra passet",
+            sport="swim",
+            status="planned",
+            workout_key="today-swim-plan",
+        )
+        unlinked_model = build_training_overview(
+            start=date(2026, 9, 28),
+            end=date(2026, 10, 4),
+            current_date=date(2026, 9, 30),
+            plan=(unlinked_plan,),
+            activities=(activity,),
+        )
+        unlinked_document = render_overview_document(
+            unlinked_model,
+            current_date=date(2026, 9, 30),
+            sport_icons=None,
+        )
+        self.assertIn("2 pass · 2 sim", unlinked_document)
+
+        linked_plan = PlannedWorkout(
+            local_date=date(2026, 9, 30),
+            session="Simning · planerat pass",
+            sport="swim",
+            status="planned",
+            workout_key="today-swim-plan",
+            linked_provider_activity_id="today-swim",
+        )
+        linked_model = build_training_overview(
+            start=date(2026, 9, 28),
+            end=date(2026, 10, 4),
+            current_date=date(2026, 9, 30),
+            plan=(linked_plan,),
+            activities=(activity,),
+        )
+        linked_document = render_overview_document(
+            linked_model,
+            current_date=date(2026, 9, 30),
+            sport_icons=None,
+        )
+        self.assertIn("1 pass · 1 sim", linked_document)
+        self.assertNotIn("2 pass · 2 sim", linked_document)
 
     def test_week_facts_do_not_invent_planned_load(self):
         model = self.build()
