@@ -369,15 +369,20 @@ def build_coach_decisions(
     capability_labels = capability_labels or {}
     completed = set(completed_context.get("direct_capabilities") or [])
     completed.update(completed_context.get("planning_credits") or [])
-    completed_refs = {
-        str(key): [str(value) for value in (values or [])]
-        for key, values in (completed_context.get("capability_refs") or {}).items()
-    }
+    completed_refs = {}
+    for source_key in ("capability_refs", "planning_credit_refs"):
+        for key, values in (completed_context.get(source_key) or {}).items():
+            capability = str(key)
+            bucket = completed_refs.setdefault(capability, [])
+            for value in values or []:
+                ref = str(value)
+                if ref and ref not in bucket:
+                    bucket.append(ref)
+    # Fail closed: a completed/planning-credited capability without its own
+    # provenance keeps an empty ref list. Never substitute every activity from
+    # the week, because that would falsely attribute unrelated sessions.
     for capability in completed:
-        completed_refs.setdefault(
-            capability,
-            [str(value) for value in (completed_context.get("activity_refs") or [])],
-        )
+        completed_refs.setdefault(capability, [])
 
     changes = diff_planned_workouts(before_plan, after_plan)
     micro_slots = list(micro.get("slots") or [])
