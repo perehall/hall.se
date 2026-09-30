@@ -306,6 +306,7 @@ class TrainingOverviewTests(unittest.TestCase):
                         "protected_variants": [],
                         "principle": "test",
                     },
+                ],
                 "forward_horizon": [
                     {
                         "week_start": "2026-10-12",
@@ -433,7 +434,6 @@ class TrainingOverviewTests(unittest.TestCase):
                         "decision_gate": "Ingen dag eller dos låses före review.",
                         "source": "post_mesocycle_conditional_sketch",
                     },
-                ],
                 ],
             },
         }
