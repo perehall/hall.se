@@ -447,63 +447,78 @@ def _context_html(model: TrainingOverviewReadModel) -> str:
     context = model.context
     if context is None:
         return (
-            '<section class="overview-context unavailable">'
-            '<div><span>Utvecklingsblock</span><strong>Kontext saknas</strong></div>'
-            '<p>Mål- och blockkopplingen kunde inte byggas från nuvarande planeringsdata.</p>'
+            '<section class="overview-planbar unavailable">'
+            '<strong>Planeringskontext saknas</strong>'
             '</section>'
         )
 
     block = context.active_block
-    block_html = ""
-    if block is not None:
-        primary = " · ".join(block.primary_capabilities) or "Ej specificerat"
-        dates = " – ".join(
-            value for value in (_fmt_date(block.start_date), _fmt_date(block.end_date)) if value
-        )
-        checkpoint = _fmt_date(block.evaluation_date)
-        axes = " · ".join(
-            f"{axis.capability_label}: {AXIS_LABELS.get(axis.axis, axis.axis)}"
-            for axis in block.progression_axes
-            if axis.capability_label and axis.axis
-        )
-        wave = "".join(
-            '<div class="overview-wave-step'
-            + (' current' if item.start_date == model.current_week_start.isoformat() else '')
-            + '">'
-            f'<b>V{item.index}</b><span>{_e(_intent_label(item.intent))}</span>'
-            '</div>'
-            for item in block.microcycle_intents
-        )
-        block_html = (
-            '<div class="overview-context-block">'
-            '<span>Aktuellt utvecklingsblock</span>'
-            f'<strong>{_e(block.title or "Aktivt block")}</strong>'
-            f'<small>{_e(dates)}</small>'
-            f'<p><b>Primärt nu:</b> {_e(primary)}</p>'
-            + (f'<p><b>Progressionsaxlar:</b> {_e(axes)}</p>' if axes else "")
-            + (f'<div class="overview-block-wave">{wave}</div>' if wave else "")
-            + (f'<p><b>Nästa checkpoint:</b> {_e(checkpoint)}</p>' if checkpoint else "")
-            + '</div>'
-        )
+    if block is None:
+        return ""
+
+    wave = "".join(
+        '<span class="overview-wave-step'
+        + (' current' if item.start_date == model.current_week_start.isoformat() else '')
+        + '">'
+        f'<b>{item.index}</b>{_e(_intent_label(item.intent))}'
+        '</span>'
+        for item in block.microcycle_intents
+    )
+    primary = "".join(
+        f'<span class="overview-capability-chip">{_e(value)}</span>'
+        for value in block.primary_capabilities
+    )
+    axes = " · ".join(
+        f"{axis.capability_label}: {AXIS_LABELS.get(axis.axis, axis.axis)}"
+        for axis in block.progression_axes
+        if axis.capability_label and axis.axis
+    )
+    checkpoint = _fmt_date(block.evaluation_date)
 
     goals = []
     for goal in context.goals[:3]:
-        meta = " · ".join(value for value in (goal.target, _fmt_date(goal.target_date)) if value)
-        goals.append(
-            '<article class="overview-goal">'
-            f'<strong>{_e(goal.label)}</strong>'
-            + (f'<span>{_e(meta)}</span>' if meta else "")
-            + '</article>'
+        meta = " · ".join(
+            value for value in (goal.target, _fmt_date(goal.target_date)) if value
         )
-    goals_html = "".join(goals) or '<p class="overview-empty">Inga kanoniska mål publicerade.</p>'
+        goals.append(
+            f'<li><strong>{_e(goal.label)}</strong>'
+            + (f'<span>{_e(meta)}</span>' if meta else "")
+            + '</li>'
+        )
+
+    details = []
+    if axes:
+        details.append(f'<p><b>Progressionsaxlar:</b> {_e(axes)}</p>')
+    if checkpoint:
+        details.append(f'<p><b>Checkpoint:</b> {_e(checkpoint)}</p>')
+    if goals:
+        details.append(
+            '<div class="overview-planbar-goals"><b>Mot mål</b><ul>'
+            + "".join(goals)
+            + '</ul></div>'
+        )
+
+    more = (
+        '<details class="overview-planbar-more"><summary>Planlogik</summary>'
+        f'<div>{"".join(details)}</div></details>'
+        if details else ""
+    )
 
     return (
-        '<section class="overview-context">'
-        f'{block_html}'
-        '<div class="overview-context-goals"><span>Mot mål</span>'
-        f'<div>{goals_html}</div></div>'
+        '<section class="overview-planbar">'
+        '<div class="overview-planbar-main">'
+        '<div class="overview-planbar-title">'
+        '<span>Aktuellt block</span>'
+        f'<strong>{_e(block.title or "Aktivt block")}</strong>'
+        f'<div class="overview-capability-chips">{primary}</div>'
+        '</div>'
+        f'<div class="overview-block-wave">{wave}</div>'
+        '</div>'
+        f'{more}'
         '</section>'
     )
+
+
 
 
 def _planned_item(workout, registry: SportIconRegistry | None) -> str:
