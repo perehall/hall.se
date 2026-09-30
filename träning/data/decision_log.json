@@ -808,6 +808,22 @@
       "source_hash": "1a55f302b2c5878e5e138da71507b1faf07c7e1bd9ef7921b29658f9f53054f7",
       "generated_at_utc": "2026-09-30T11:25:19.954938+00:00",
       "summary": "Reparerar förslaget genom att ta bort det planerade mtb_technical‑slotet på dag 1 (måndag) eftersom dag 1 är blockad av ett fast enduroåtagande. Bevarar övriga val från tidigare förslag som uppfyller mesocykelblueprint och hard_requirements: två simbassessioner, skyddad styrka/core, run_threshold‑exponering utan progression och ingen förbjuden närbelastning för löpning."
+    },
+    {
+      "kind": "microcycle",
+      "decision_id": "2026-W40",
+      "source": "openai_repaired",
+      "source_hash": "3506bc07e6e60c3172a4b3860e7aaa9ab53e71653c42a52b960a1a2434653390",
+      "generated_at_utc": "2026-09-30T18:28:14.397211+00:00",
+      "summary": "Åtgärdar två guard-fel: minskar tung teknisk MTB‑belastning dag 7 före fast endurodag 1, och undviker stapling av löpstressorer genom att byta ett planerat löppass till sim. Behåller mesocykelns etableringsprinciper (2 simbassessioner/vecka, skyddad styrka, konservativ löpdistribution)."
+    },
+    {
+      "kind": "upcoming_microcycle",
+      "decision_id": "2026-W41",
+      "source": "openai_repaired",
+      "source_hash": "01d13aa281c66f12b9430c01bef97ce0a25b7ee2c0cc22050417c10ec4268750",
+      "generated_at_utc": "2026-09-30T18:29:30.966920+00:00",
+      "summary": "Flyttar det planerade lugna löppasset från söndag (dag 7) till fredag (dag 5) för att undvika tung benbelastning omedelbart före måndagens fasta enduro. Övriga planerade slots kvarstår men förtydligas konservativt (ingen progression p.g.a. öppet 24–72h‑fönster)."
     }
   ]
 }
