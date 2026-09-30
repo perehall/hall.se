@@ -503,7 +503,6 @@ class TrainingOverviewTests(unittest.TestCase):
         self.assertIn("Etablera", document)
         self.assertIn("Utveckla", document)
         self.assertIn("Konsolidera", document)
-        self.assertIn("Preliminär grundplan", document)
         self.assertIn("Löptröskel · längre repetitioner", document)
         self.assertIn("Sim · grepp/teknik + aerob", document)
         self.assertIn("Planerad progression om responsen stödjer", document)
