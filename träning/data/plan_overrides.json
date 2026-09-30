@@ -442,6 +442,102 @@
           ]
         }
       }
+    },
+    {
+      "date": "2026-09-30",
+      "source": "user_confirmed",
+      "note": "Användaren bekräftade 2026-09-30 att det planerade 3 200 m-passet grepp/teknik + aerob ska genomföras idag och synkas som strukturerat pass till Garmin.",
+      "set": {
+        "status": "planned",
+        "planning_status": "fixed",
+        "session": "Simning · 3 200 m · grepp/teknik + aerob",
+        "sport": "swim",
+        "watch_workout": {
+          "id": "swim-2026-w40-2026-09-30-swim_aerobic_skills_1",
+          "name": "Grepp/teknik + aerob · 3 200 m",
+          "type": "Swim",
+          "blocks": [
+            {
+              "name": "Insim + teknik",
+              "steps": [
+                {
+                  "kind": "swim",
+                  "text": "Lugn insim med fokus på avslappning och linje",
+                  "equipment": [],
+                  "intensity": "warmup",
+                  "distance_m": 600
+                }
+              ]
+            },
+            {
+              "name": "Grepp",
+              "steps": [
+                {
+                  "kind": "swim",
+                  "text": "Rent isätt och tidigt kontrollerat grepp",
+                  "equipment": [],
+                  "intensity": "active",
+                  "distance_m": 50
+                },
+                {
+                  "kind": "rest",
+                  "duration_s": 15
+                }
+              ],
+              "repeat": 8
+            },
+            {
+              "name": "Aerob",
+              "steps": [
+                {
+                  "kind": "swim",
+                  "text": "Stabil aerob rytm med bibehållet grepp",
+                  "equipment": [],
+                  "intensity": "active",
+                  "distance_m": 400
+                },
+                {
+                  "kind": "rest",
+                  "duration_s": 25
+                }
+              ],
+              "repeat": 4
+            },
+            {
+              "name": "Frekvens",
+              "steps": [
+                {
+                  "kind": "swim",
+                  "text": "Avslappnad frekvens utan att tappa linje eller grepp",
+                  "equipment": [],
+                  "intensity": "active",
+                  "distance_m": 50
+                },
+                {
+                  "kind": "rest",
+                  "duration_s": 15
+                }
+              ],
+              "repeat": 8
+            },
+            {
+              "name": "Avsim",
+              "steps": [
+                {
+                  "kind": "swim",
+                  "text": "Mycket lugnt avsim",
+                  "equipment": [],
+                  "intensity": "cooldown",
+                  "distance_m": 200
+                }
+              ]
+            }
+          ],
+          "equipment": [],
+          "sync_enabled": true,
+          "planned_distance_m": 3200
+        }
+      }
     }
   ]
 }
