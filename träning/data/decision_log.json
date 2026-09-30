@@ -728,6 +728,22 @@
       "source_hash": "3305a00ea796dbbfc5507b15e30506ca42d7ddf1ff7a62f57d0aecd53509e485",
       "generated_at_utc": "2026-09-30T08:27:46.220889+00:00",
       "summary": "Reparera konflikter genom att flytta löppasset från söndag (dag 7) till lördag (dag 6) och byta plats på veckans andra simbassession så att inga tunga benbelastningar hamnar dagen före fast måndags‑enduro. Behåller blueprint‑intentioner, två simbassessioner och skyddad styrka; avstår progression för tröskel enligt dose_response."
+    },
+    {
+      "kind": "microcycle",
+      "decision_id": "2026-W40",
+      "source": "openai_repaired",
+      "source_hash": "41459dbc4350453b0f476ab39bf22a3c8f48dca9d192a632e4403fe80c576f6b",
+      "generated_at_utc": "2026-09-30T08:37:35.165251+00:00",
+      "summary": "Ta bort söndagens styrkepass (konflikt med krav på låg benbelastning före måndagens fasta enduro och redundans då styrka redan genomförts). Behåll de två planerade simbassessionerna och den lugna stiglöpningen; lägg till en MTB/aerob-session på torsdag för att uppfylla minimalt antal slots (4) och bevara MTB/enduro‑stimulans utan att kompromettera löp‑ eller simkvalitet."
+    },
+    {
+      "kind": "upcoming_microcycle",
+      "decision_id": "2026-W41",
+      "source": "deterministic_fallback_after_repair_guard",
+      "source_hash": "6f75adf2062ad63e720239d71111460f99c2ef7eaf72c3510a006c33839c5c38",
+      "generated_at_utc": "2026-09-30T08:38:51.755704+00:00",
+      "summary": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern."
     }
   ]
 }

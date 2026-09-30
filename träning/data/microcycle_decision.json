@@ -1,52 +1,64 @@
 {
   "slots": [
     {
-      "action": "consolidate",
-      "day_index": 4,
-      "rationale": "Lågmekanisk simexponering dagen efter fast enduro följer blockets planerade passkaraktär utan att anta att benen är redo för ny benkvalitet.",
+      "action": "establish",
+      "day_index": 3,
+      "rationale": "Etablera teknisk aerob simbassession enligt blueprint; undvik progress p.g.a. senaste simvarningssignaler.",
       "recipe_key": "swim_aerobic_technique",
       "evidence_refs": [
-        "mesocycle.primary_capabilities"
+        "20300494236",
+        "20337309419",
+        "mesocycle:20260928-run_threshold-swim_aerobic-swim_technique"
+      ]
+    },
+    {
+      "action": "establish",
+      "day_index": 4,
+      "rationale": "Lägg in en lugn MTB/aerob‑exponering för att bevara MTB‑kapacitet och ge absorberbar belastning utan att öka benstress nära fasta enduro‑dagar.",
+      "recipe_key": "mtb_aerobic_endurance",
+      "evidence_refs": [
+        "20314473143",
+        "20218282169"
       ]
     },
     {
       "action": "consolidate",
       "day_index": 5,
-      "rationale": "Behåll lugn löptålighet med separation från löpkvalitet. Blueprint får variera passkaraktären men skapar inte en extra belastningsexponering.",
-      "recipe_key": "run_easy_distance",
+      "rationale": "Lugn stigdistans för att bibehålla löptålighet och mekanisk kontinuitet utan att introducera backkvalitet nära varningsfönster.",
+      "recipe_key": "run_easy_trail",
       "evidence_refs": [
-        "planning_policy.microcycle_policy"
+        "20350203020",
+        "20254486837"
       ]
     },
     {
       "action": "establish",
       "day_index": 6,
-      "rationale": "Lägg en självständig simexponering med en annan utvecklingskaraktär än veckans övriga simpass när katalog och belastningsordning stödjer det.",
+      "rationale": "Etablera andra veckans aeroba simbassession (uthållighet/teknik) enligt blueprint på konservativ nivå med hänsyn till mixed 24–72h‑signal.",
       "recipe_key": "swim_aerobic_endurance",
       "evidence_refs": [
-        "mesocycle.primary_capabilities"
+        "20239623463",
+        "20300494236",
+        "mesocycle:20260928-run_threshold-swim_aerobic-swim_technique"
       ]
     }
   ],
-  "source": "deterministic_fallback_after_repair_guard",
+  "source": "openai_repaired",
   "week_key": "2026-W40",
-  "rationale": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern.",
+  "rationale": "Ta bort söndagens styrkepass (konflikt med krav på låg benbelastning före måndagens fasta enduro och redundans då styrka redan genomförts). Behåll de två planerade simbassessionerna och den lugna stiglöpningen; lägg till en MTB/aerob-session på torsdag för att uppfylla minimalt antal slots (4) och bevara MTB/enduro‑stimulans utan att kompromettera löp‑ eller simkvalitet.",
   "week_start": "2026-09-28",
-  "source_hash": "574a6c7c78479f97100475786092e1c772d024dadec2017d678ec08d64d7acf9",
+  "source_hash": "41459dbc4350453b0f476ab39bf22a3c8f48dca9d192a632e4403fe80c576f6b",
   "guard_repair": {
-    "result": "fallback",
+    "result": "accepted",
     "attempted": true,
-    "repair_failures": [
+    "initial_failures": [
       "tung benbelastning får inte planeras på söndagen direkt före nästa fasta enduro: strength_core",
       "strength_core är redundant: styrka/core är redan faktiskt genomförd i mikrocykeln"
-    ],
-    "initial_failures": [
-      "tung benbelastning får inte planeras på söndagen direkt före nästa fasta enduro: run_hill_continuous"
     ]
   },
   "mesocycle_id": "20260928-run_threshold-swim_aerobic-swim_technique",
   "schema_version": 1,
-  "generated_at_utc": "2026-09-30T08:27:05.952033+00:00",
+  "generated_at_utc": "2026-09-30T08:37:35.165251+00:00",
   "planner_revision": 16,
   "competition_context": {
     "as_of": "2026-09-28",

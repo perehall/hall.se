@@ -328,9 +328,9 @@
       "starting_state_hash": "52ff32e9ef09bd337669bbf6347085139222e7abd6a7cec41efd516a62e45cfe",
       "athlete_profile_hash": "559e0b6e5a587d351baa65817f81e04e433d0d46aac60b57a73429fd5b43d1bc",
       "mesocycle_source_hash": "9fb730125d779e8644a8486faa35467fe547c33194d479bd24aed65dfcf81994",
-      "microcycle_source_hash": "574a6c7c78479f97100475786092e1c772d024dadec2017d678ec08d64d7acf9",
+      "microcycle_source_hash": "41459dbc4350453b0f476ab39bf22a3c8f48dca9d192a632e4403fe80c576f6b",
       "mesocycle_decision_source": "openai",
-      "microcycle_decision_source": "deterministic_fallback_after_repair_guard"
+      "microcycle_decision_source": "openai_repaired"
     },
     "evaluation_date": "2026-10-26",
     "goal_basis_hash": "30201a00f8ff4f10c913b8fbf2d31052418d4e0d3812c799ca49b56a38accdf9",
@@ -470,13 +470,13 @@
       {
         "slot": "swim_aerobic_technique_1",
         "sport": "swim",
-        "reason": "Lågmekanisk simexponering dagen efter fast enduro följer blockets planerade passkaraktär utan att anta att benen är redo för ny benkvalitet. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: consolidate; materialiserad relation: hold.",
+        "reason": "Etablera teknisk aerob simbassession enligt blueprint; undvik progress p.g.a. senaste simvarningssignaler. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: establish; materialiserad relation: establish.",
         "session": "Simning · 3 200 m · aerob/teknik",
         "stimuli": [
           "swim_aerobic",
           "swim_technique"
         ],
-        "day_index": 4,
+        "day_index": 3,
         "recipe_key": "swim_aerobic_technique",
         "block_intent": "establish",
         "dose_options": [
@@ -589,8 +589,8 @@
           "source": "starting_state",
           "microcycle_plan": [
             {
-              "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från verifierad träningsrespons, bekräftat startläge eller konservativ katalogbas utan att höja flera belastningsvariabler samtidigt.",
-              "relation": "hold",
+              "reason": "Mikrocykelbeslutet valde establish och dosen materialiserades från verifierad träningsrespons, bekräftat startläge eller konservativ katalogbas utan att höja flera belastningsvariabler samtidigt.",
+              "relation": "establish",
               "option_id": "swim-3200",
               "microcycle": 1
             }
@@ -601,71 +601,120 @@
         "progression_ceiling_reason": "Ingen högre förgodkänd dos finns i receptkatalogen. Fortsatt utveckling kräver nytt recept eller annan progressionsaxel, inte automatisk extrapolering."
       },
       {
-        "slot": "run_easy_distance_2",
-        "sport": "run",
-        "reason": "Behåll lugn löptålighet med separation från löpkvalitet. Blueprint får variera passkaraktären men skapar inte en extra belastningsexponering. Dosgolvet utgår från absorberad nivå 116 i athlete_state.dose_response, inte från högsta genomförda värde. Veckobeslut: consolidate; materialiserad relation: hold.",
-        "session": "Löpning · lugn distans · 105 min",
+        "slot": "mtb_aerobic_endurance_2",
+        "sport": "bike",
+        "reason": "Lägg in en lugn MTB/aerob‑exponering för att bevara MTB‑kapacitet och ge absorberbar belastning utan att öka benstress nära fasta enduro‑dagar. Absorberad nivå saknas; dosgolvet utgår konservativt från tolererad nivå 73.23. Detta är inte bevis för optimal framtida belastning. Veckobeslut: establish; materialiserad relation: hold.",
+        "session": "MTB/XC · 60 min · lugn aerob stig/grus",
         "stimuli": [
-          "run_easy_distance"
+          "mtb_aerobic"
         ],
-        "day_index": 5,
-        "recipe_key": "run_easy_distance",
+        "day_index": 4,
+        "recipe_key": "mtb_aerobic_endurance",
         "block_intent": "establish",
         "dose_options": [
           {
-            "id": "run-easy-60",
+            "id": "mtb-aerobic-60",
             "kind": "duration_minutes",
             "value": 60,
-            "intent": "Reducerad/etablerande distansdos.",
-            "session": "Löpning · lugn distans · 60 min"
+            "intent": "Kort aerob cykelexponering.",
+            "session": "MTB/XC · 60 min · lugn aerob stig/grus"
           },
           {
-            "id": "run-easy-75",
+            "id": "mtb-aerobic-75",
             "kind": "duration_minutes",
             "value": 75,
-            "intent": "Normal kontrollerad distansdos.",
-            "session": "Löpning · lugn distans · 75 min"
+            "intent": "Normal aerob cykelexponering.",
+            "session": "MTB/XC · 75 min · lugn aerob stig/grus"
           },
           {
-            "id": "run-easy-90",
+            "id": "mtb-aerobic-90",
             "kind": "duration_minutes",
             "value": 90,
-            "intent": "Progressionsalternativ när 75 min absorberats.",
-            "session": "Löpning · lugn distans · 90 min"
+            "intent": "Längre aerob cykelexponering när helhetsbelastningen tillåter.",
+            "session": "MTB/XC · 90 min · lugn aerob stig/grus"
           },
           {
-            "id": "run-easy-105",
+            "id": "mtb-aerobic-105",
             "kind": "duration_minutes",
             "value": 105,
-            "intent": "Längre distansalternativ när historiken stödjer det.",
-            "session": "Löpning · lugn distans · 105 min"
-          },
-          {
-            "id": "run-easy-120",
-            "kind": "duration_minutes",
-            "value": 120,
-            "intent": "Lång distansdos som kräver stöd i faktisk tålighet och närbelastning.",
-            "session": "Löpning · lugn distans · 120 min"
+            "intent": "Förgodkänt längre steg som kräver stöd i faktisk tålighet.",
+            "session": "MTB/XC · 105 min · lugn aerob stig/grus"
           }
         ],
         "priority_role": "flex",
         "load_dimensions": [
           "cardiovascular",
-          "mechanical"
+          "technical"
         ],
-        "development_focus": "Lugn hållbar löpning. Tålighet byggs genom kontinuitet och absorberbar tid, inte fartjakt.",
-        "baseline_option_id": "run-easy-105",
+        "development_focus": "Jämn aerob cykling på lättare stig/grus. Fokus är uthållighet och jämn belastning, inte tekniska segment eller fartjakt.",
+        "baseline_option_id": "mtb-aerobic-60",
         "progression_criteria": [
           "Ändra bara dos när faktisk träningsrespons eller mesocykelns progressionsbeslut ger sakligt stöd.",
           "Wellness eller en enskild bra dag får inte ensam motivera belastningsökning.",
           "Närliggande 2–3 dagars faktisk belastning ska kunna motivera hold, reduktion eller flytt."
         ],
-        "development_character": "easy_steady"
+        "development_character": "aerobic_endurance"
       },
       {
-        "slot": "swim_aerobic_endurance_3",
+        "slot": "run_easy_trail_3",
+        "sport": "run",
+        "reason": "Lugn stigdistans för att bibehålla löptålighet och mekanisk kontinuitet utan att introducera backkvalitet nära varningsfönster. Dosgolvet utgår från absorberad nivå 116 i athlete_state.dose_response, inte från högsta genomförda värde. Veckobeslut: consolidate; materialiserad relation: hold.",
+        "session": "Löpning · lugn stig/grus · 105 min",
+        "stimuli": [
+          "run_easy_distance"
+        ],
+        "day_index": 5,
+        "recipe_key": "run_easy_trail",
+        "block_intent": "establish",
+        "dose_options": [
+          {
+            "id": "run-easy-trail-75",
+            "kind": "duration_minutes",
+            "value": 75,
+            "intent": "Lateral terrängvariant med kontrollerad varaktighet.",
+            "session": "Löpning · lugn stig/grus · 75 min"
+          },
+          {
+            "id": "run-easy-trail-90",
+            "kind": "duration_minutes",
+            "value": 90,
+            "intent": "Lateral terrängvariant med kontrollerad varaktighet.",
+            "session": "Löpning · lugn stig/grus · 90 min"
+          },
+          {
+            "id": "run-easy-trail-105",
+            "kind": "duration_minutes",
+            "value": 105,
+            "intent": "Lateral terrängvariant nära längre etablerad distansdos.",
+            "session": "Löpning · lugn stig/grus · 105 min"
+          },
+          {
+            "id": "run-easy-trail-120",
+            "kind": "duration_minutes",
+            "value": 120,
+            "intent": "Längre terrängdos endast när faktisk tålighet och närbelastning stödjer den.",
+            "session": "Löpning · lugn stig/grus · 120 min"
+          }
+        ],
+        "priority_role": "flex",
+        "load_dimensions": [
+          "cardiovascular",
+          "mechanical",
+          "technical"
+        ],
+        "development_focus": "Lugn tålighetslöpning på stig/grus med terrängvariation men utan fartjakt. Terräng väljs så att passet förblir aerobt och absorberbart.",
+        "baseline_option_id": "run-easy-trail-105",
+        "progression_criteria": [
+          "Ändra bara dos när faktisk träningsrespons eller mesocykelns progressionsbeslut ger sakligt stöd.",
+          "Wellness eller en enskild bra dag får inte ensam motivera belastningsökning.",
+          "Närliggande 2–3 dagars faktisk belastning ska kunna motivera hold, reduktion eller flytt."
+        ],
+        "development_character": "easy_trail"
+      },
+      {
+        "slot": "swim_aerobic_endurance_4",
         "sport": "swim",
-        "reason": "Lägg en självständig simexponering med en annan utvecklingskaraktär än veckans övriga simpass när katalog och belastningsordning stödjer det. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: establish; materialiserad relation: establish.",
+        "reason": "Etablera andra veckans aeroba simbassession (uthållighet/teknik) enligt blueprint på konservativ nivå med hänsyn till mixed 24–72h‑signal. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: establish; materialiserad relation: establish.",
         "session": "Simning · 3 200 m · aerob uthållighet",
         "stimuli": [
           "swim_aerobic",
@@ -870,6 +919,8 @@
             "label": "Löptröskel · längre repetitioner",
             "capability": "run_threshold",
             "recipe_key": "run_threshold",
+            "baseline_session": "Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg",
+            "baseline_option_id": "run-threshold-4x8",
             "progression_intent": "establish",
             "development_character": "threshold_long_reps"
           },
@@ -878,6 +929,8 @@
             "label": "Sim · aerob teknik",
             "capability": "swim_aerobic",
             "recipe_key": "swim_aerobic_technique",
+            "baseline_session": "Simning · 3 200 m · aerob/teknik",
+            "baseline_option_id": "swim-3200",
             "progression_intent": "establish",
             "development_character": "technique_aerobic"
           },
@@ -886,6 +939,8 @@
             "label": "Sim · aerob uthållighet",
             "capability": "swim_aerobic",
             "recipe_key": "swim_aerobic_endurance",
+            "baseline_session": "Simning · 3 200 m · aerob uthållighet",
+            "baseline_option_id": "swim-aerobic-endurance-3200",
             "progression_intent": "establish",
             "development_character": "aerobic_endurance"
           }
@@ -924,6 +979,8 @@
             "label": "Löptröskel · kortare repetitioner",
             "capability": "run_threshold",
             "recipe_key": "run_threshold_short_reps",
+            "baseline_session": "Löpning · kontrollerad tröskel · 5 × 6 min / 60 s jogg",
+            "baseline_option_id": "run-threshold-short-5x6",
             "progression_intent": "vary_structure",
             "development_character": "threshold_short_reps"
           },
@@ -932,6 +989,8 @@
             "label": "Sim · aerob uthållighet",
             "capability": "swim_aerobic",
             "recipe_key": "swim_aerobic_endurance",
+            "baseline_session": "Simning · 3 200 m · aerob uthållighet",
+            "baseline_option_id": "swim-aerobic-endurance-3200",
             "progression_intent": "vary_structure",
             "development_character": "aerobic_endurance"
           },
@@ -940,6 +999,8 @@
             "label": "Sim · grepp/teknik + aerob",
             "capability": "swim_aerobic",
             "recipe_key": "swim_aerobic_skills",
+            "baseline_session": "Simning · 3 200 m · grepp/teknik + aerob",
+            "baseline_option_id": "swim-aerobic-skills-3200",
             "progression_intent": "vary_structure",
             "development_character": "technique_catch_aerobic"
           }
@@ -978,22 +1039,34 @@
             "label": "Löptröskel · längre repetitioner",
             "capability": "run_threshold",
             "recipe_key": "run_threshold",
+            "baseline_session": "Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg",
+            "target_condition": "progression_ready_and_absorbable_context",
+            "baseline_option_id": "run-threshold-4x8",
             "progression_intent": "progress_if_ready",
-            "development_character": "threshold_long_reps"
+            "development_character": "threshold_long_reps",
+            "conditional_target_session": "Löpning · kontrollerad tröskel · 4 × 9 min / 90 s jogg",
+            "conditional_target_option_id": "run-threshold-4x9"
           },
           {
             "role": "primary",
             "label": "Sim · grepp/teknik + aerob",
             "capability": "swim_aerobic",
             "recipe_key": "swim_aerobic_skills",
+            "baseline_session": "Simning · 3 200 m · grepp/teknik + aerob",
+            "target_condition": "progression_ready_and_absorbable_context",
+            "baseline_option_id": "swim-aerobic-skills-3200",
             "progression_intent": "progress_if_ready",
-            "development_character": "technique_catch_aerobic"
+            "development_character": "technique_catch_aerobic",
+            "conditional_target_session": "Simning · 3 600 m · grepp/teknik + aerob",
+            "conditional_target_option_id": "swim-aerobic-skills-3600"
           },
           {
             "role": "primary_companion",
             "label": "Sim · aerob uthållighet",
             "capability": "swim_aerobic",
             "recipe_key": "swim_aerobic_endurance",
+            "baseline_session": "Simning · 3 200 m · aerob uthållighet",
+            "baseline_option_id": "swim-aerobic-endurance-3200",
             "progression_intent": "vary_structure",
             "development_character": "aerobic_endurance"
           }
@@ -1032,6 +1105,8 @@
             "label": "Löptröskel · längre repetitioner",
             "capability": "run_threshold",
             "recipe_key": "run_threshold",
+            "baseline_session": "Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg",
+            "baseline_option_id": "run-threshold-4x8",
             "progression_intent": "consolidate",
             "development_character": "threshold_long_reps"
           },
@@ -1040,6 +1115,8 @@
             "label": "Sim · aerob teknik",
             "capability": "swim_aerobic",
             "recipe_key": "swim_aerobic_technique",
+            "baseline_session": "Simning · 3 200 m · aerob/teknik",
+            "baseline_option_id": "swim-3200",
             "progression_intent": "consolidate",
             "development_character": "technique_aerobic"
           },
@@ -1048,6 +1125,8 @@
             "label": "Sim · grepp/teknik + aerob",
             "capability": "swim_aerobic",
             "recipe_key": "swim_aerobic_skills",
+            "baseline_session": "Simning · 3 200 m · grepp/teknik + aerob",
+            "baseline_option_id": "swim-aerobic-skills-3200",
             "progression_intent": "consolidate",
             "development_character": "technique_catch_aerobic"
           }
@@ -1285,6 +1364,8 @@
               "label": "Löptröskel · längre repetitioner",
               "capability": "run_threshold",
               "recipe_key": "run_threshold",
+              "baseline_session": "Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg",
+              "baseline_option_id": "run-threshold-4x8",
               "progression_intent": "establish",
               "development_character": "threshold_long_reps"
             },
@@ -1293,6 +1374,8 @@
               "label": "Sim · aerob teknik",
               "capability": "swim_aerobic",
               "recipe_key": "swim_aerobic_technique",
+              "baseline_session": "Simning · 3 200 m · aerob/teknik",
+              "baseline_option_id": "swim-3200",
               "progression_intent": "establish",
               "development_character": "technique_aerobic"
             },
@@ -1301,6 +1384,8 @@
               "label": "Sim · aerob uthållighet",
               "capability": "swim_aerobic",
               "recipe_key": "swim_aerobic_endurance",
+              "baseline_session": "Simning · 3 200 m · aerob uthållighet",
+              "baseline_option_id": "swim-aerobic-endurance-3200",
               "progression_intent": "establish",
               "development_character": "aerobic_endurance"
             }
@@ -1339,6 +1424,8 @@
               "label": "Löptröskel · kortare repetitioner",
               "capability": "run_threshold",
               "recipe_key": "run_threshold_short_reps",
+              "baseline_session": "Löpning · kontrollerad tröskel · 5 × 6 min / 60 s jogg",
+              "baseline_option_id": "run-threshold-short-5x6",
               "progression_intent": "vary_structure",
               "development_character": "threshold_short_reps"
             },
@@ -1347,6 +1434,8 @@
               "label": "Sim · aerob uthållighet",
               "capability": "swim_aerobic",
               "recipe_key": "swim_aerobic_endurance",
+              "baseline_session": "Simning · 3 200 m · aerob uthållighet",
+              "baseline_option_id": "swim-aerobic-endurance-3200",
               "progression_intent": "vary_structure",
               "development_character": "aerobic_endurance"
             },
@@ -1355,6 +1444,8 @@
               "label": "Sim · grepp/teknik + aerob",
               "capability": "swim_aerobic",
               "recipe_key": "swim_aerobic_skills",
+              "baseline_session": "Simning · 3 200 m · grepp/teknik + aerob",
+              "baseline_option_id": "swim-aerobic-skills-3200",
               "progression_intent": "vary_structure",
               "development_character": "technique_catch_aerobic"
             }
@@ -1393,22 +1484,34 @@
               "label": "Löptröskel · längre repetitioner",
               "capability": "run_threshold",
               "recipe_key": "run_threshold",
+              "baseline_session": "Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg",
+              "target_condition": "progression_ready_and_absorbable_context",
+              "baseline_option_id": "run-threshold-4x8",
               "progression_intent": "progress_if_ready",
-              "development_character": "threshold_long_reps"
+              "development_character": "threshold_long_reps",
+              "conditional_target_session": "Löpning · kontrollerad tröskel · 4 × 9 min / 90 s jogg",
+              "conditional_target_option_id": "run-threshold-4x9"
             },
             {
               "role": "primary",
               "label": "Sim · grepp/teknik + aerob",
               "capability": "swim_aerobic",
               "recipe_key": "swim_aerobic_skills",
+              "baseline_session": "Simning · 3 200 m · grepp/teknik + aerob",
+              "target_condition": "progression_ready_and_absorbable_context",
+              "baseline_option_id": "swim-aerobic-skills-3200",
               "progression_intent": "progress_if_ready",
-              "development_character": "technique_catch_aerobic"
+              "development_character": "technique_catch_aerobic",
+              "conditional_target_session": "Simning · 3 600 m · grepp/teknik + aerob",
+              "conditional_target_option_id": "swim-aerobic-skills-3600"
             },
             {
               "role": "primary_companion",
               "label": "Sim · aerob uthållighet",
               "capability": "swim_aerobic",
               "recipe_key": "swim_aerobic_endurance",
+              "baseline_session": "Simning · 3 200 m · aerob uthållighet",
+              "baseline_option_id": "swim-aerobic-endurance-3200",
               "progression_intent": "vary_structure",
               "development_character": "aerobic_endurance"
             }
@@ -1447,6 +1550,8 @@
               "label": "Löptröskel · längre repetitioner",
               "capability": "run_threshold",
               "recipe_key": "run_threshold",
+              "baseline_session": "Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg",
+              "baseline_option_id": "run-threshold-4x8",
               "progression_intent": "consolidate",
               "development_character": "threshold_long_reps"
             },
@@ -1455,6 +1560,8 @@
               "label": "Sim · aerob teknik",
               "capability": "swim_aerobic",
               "recipe_key": "swim_aerobic_technique",
+              "baseline_session": "Simning · 3 200 m · aerob/teknik",
+              "baseline_option_id": "swim-3200",
               "progression_intent": "consolidate",
               "development_character": "technique_aerobic"
             },
@@ -1463,6 +1570,8 @@
               "label": "Sim · grepp/teknik + aerob",
               "capability": "swim_aerobic",
               "recipe_key": "swim_aerobic_skills",
+              "baseline_session": "Simning · 3 200 m · grepp/teknik + aerob",
+              "baseline_option_id": "swim-aerobic-skills-3200",
               "progression_intent": "consolidate",
               "development_character": "technique_catch_aerobic"
             }
