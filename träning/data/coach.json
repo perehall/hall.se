@@ -7,17 +7,17 @@
           "Löpning · 4 × 8 min: 13,14 km · 1:02:35 · 112 m+ · snittpuls 146,1 · maxpuls 162.",
           "Användarrapport: Spontant löppass: 4 × 8 min / 90 s joggvila. Samma 4 × 8/90-struktur som veckans planerade kontrollerade löptröskel. Spontant löppass: 4 × 8 min / 90 s joggvila. Samma 4 × 8/90-struktur som veckans planerade kontrollerade löptröskel. Bra kontroll, kände mig stark RPE 6/10. Känsla: Starka ben."
         ],
-        "summary": "Genomfört spontant 4×8 min med 90 s joggvila; kontrollerat och RPE 6/10, kände sig stark.",
+        "summary": "Genomfört spontant 4×8 min (≈13.1 km, snittpuls 146) med god kontroll och RPE 6/10; starka ben enligt användaren.",
         "unknowns": [
-          "24–72 h-subjektiv respons efter passet",
-          "Exakt intensitetsfördelning inom varje 8‑min-rep (hjärtfrekvenskurva per rep)"
+          "Exakt intensitet i varje 8‑min‑rep kan inte verifieras ur short_intervals (structured=false).",
+          "24–72h återhämtningsrespons efter kombinationen (enduro+styrka+tröskel) är ännu inte observerad."
         ],
         "confidence": "medium",
         "interpretations": [
-          "Passet reproducerar veckans planerade tröskelstruktur och indikerar att den avsedda tröskelstimulan genomfördes tolererbart",
-          "Med föregående enduro och styrka inom 48 h finns ökad total benbelastning att beakta för kommande löp-/styrkepass"
+          "Passet bekräftar att du kan genomföra tröskel‑liknande 4×8min med god kontroll och RPE 6, vilket stödjer fortsatt konservativ konsolidering av run_threshold.",
+          "Föregående två dagar innehöll teknisk enduro och styrka plus ett tungt terrängpass tidigare i veckan; därför bör kommande planerade simning i morgon inte trappas upp utan hållas enligt recept."
         ],
-        "load_interpretation": "Passet var ett kvalitetspass som adderar ~32 min arbetsperiod tröskel-liknande stimulus utan akut varningssignal."
+        "load_interpretation": "Inget omedelbart behov att avbryta plan; passet ligger nära planerad tröskelstruktur men var spontant och följdes av två dagar med annan belastning."
       },
       "auto_apply": {
         "note": "Ingen automatisk planändring.",
@@ -26,16 +26,16 @@
       "activity_id": 20381137043,
       "plan_action": {
         "action": "keep",
-        "reason": "Passet var kontrollerat och tolererades väl same‑day, inga akuta varningssignaler i 0–24 h.",
+        "reason": "Passet tolererades väl men föregående dagar hade betydande benbelastning, så planens simsession bör hållas konservativt enligt blueprint.",
         "target_date": "2026-09-30",
         "dose_option_id": "",
-        "recommendation": "Behåll morgondagens simning (3 200 m teknisk/aerob) enligt plan; håll intensiteten teknisk och aerobt kontrollerad. Avvakta subjektiv 24–72 h‑respons innan eventuell progression eller ändring av kommande löppass/styrka.",
+        "recommendation": "Behåll morgondagens simning 3 200 m enligt plan (ingen volymökning). Säg till om du känner ovanlig trötthet eller smärta innan simpasset så omprövar vi.",
         "requires_approval": false,
         "target_workout_key": "20260928-run_threshold-swim_aerobic-swim_technique:mc1:2026-09-30:swim_aerobic_skills_1"
       },
       "activity_date": "2026-09-29",
       "activity_name": "Löpning på eftermiddagen",
-      "generated_at_utc": "2026-09-30T14:07:30.407985+00:00",
+      "generated_at_utc": "2026-09-30T14:35:23.441056+00:00",
       "analysis_contract": {
         "pipeline_version": 4,
         "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
@@ -1370,9 +1370,9 @@
       "performance_protocol_key": null
     }
   ],
-  "last_run_utc": "2026-09-30T14:07:30.407985+00:00",
+  "last_run_utc": "2026-09-30T14:35:23.441056+00:00",
   "contract_version": 16,
-  "last_trigger_hash": "6f685af43b896ad52dcb613ecc5927f082480e5b0fb95f628723b937fcb2cd56",
+  "last_trigger_hash": "e9e57afc4387bbce4a7f7b5bd30ee6a97e8ab0f510c1fa6b8e9280a843622539",
   "analysed_activity_ids": [
     "20367593813",
     "20350203020",
