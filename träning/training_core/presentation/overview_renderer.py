@@ -20,6 +20,7 @@ INTENT_LABELS = {
     "develop": "Utveckla",
     "consolidate": "Konsolidera",
     "review": "Utvärdera",
+    "conditional_build": "Villkorat bygge",
 }
 AXIS_LABELS = {
     "work_duration": "arbetstid",
@@ -36,6 +37,7 @@ PROGRESSION_INTENT_LABELS = {
     "consolidate": "Konsolidera",
     "protect": "Skyddad kapacitet",
     "support_if_absorbable": "Stöd om belastningen tillåter",
+    "fixed_external_load": "Fast extern belastning",
 }
 
 
@@ -75,6 +77,103 @@ def _expected_blueprint(model: TrainingOverviewReadModel, week_start: date):
         if item.start_date == week_start.isoformat():
             return item
     return None
+
+
+def _expected_forward_week(model: TrainingOverviewReadModel, week_start: date):
+    block = model.context.active_block if model.context else None
+    if block is None:
+        return None
+    for item in block.forward_horizon:
+        if item.start_date == week_start.isoformat():
+            return item
+    return None
+
+
+def _forward_preliminary_html(forward, week_start: date) -> str:
+    by_day = {}
+    for slot in forward.slots:
+        by_day.setdefault(slot.day_index, []).append(slot)
+
+    cells = []
+    for day_index in range(1, 8):
+        local_date = week_start.fromordinal(week_start.toordinal() + day_index - 1)
+        cards = []
+        for slot in by_day.get(day_index, ()):
+            intent = PROGRESSION_INTENT_LABELS.get(
+                slot.progression_intent,
+                slot.progression_intent,
+            )
+            baseline = (
+                f'<small><b>Bas:</b> {_e(slot.baseline_session)}</small>'
+                if slot.baseline_session else ""
+            )
+            target = (
+                f'<small class="overview-target"><b>Villkorat mål:</b> '
+                f'{_e(slot.conditional_target_session)}</small>'
+                if slot.conditional_target_session else ""
+            )
+            cards.append(
+                '<article class="overview-forward-slot">'
+                f'<strong>{_e(slot.label)}</strong>'
+                f'<span>{_e(intent)}</span>{baseline}{target}'
+                '</article>'
+            )
+        body = "".join(cards) or '<span class="overview-forward-open">Öppen</span>'
+        cells.append(
+            '<div class="overview-day forward-preliminary">'
+            '<div class="overview-day-head">'
+            f'<span>{WEEKDAY_SHORT[day_index - 1]}</span><b>{local_date.day}</b>'
+            '</div>'
+            f'<div class="overview-day-body">{body}</div>'
+            '</div>'
+        )
+    return "".join(cells)
+
+
+def _forward_block_sketch_html(forward) -> str:
+    primary = "".join(
+        '<article class="overview-sketch-card">'
+        f'<strong>{_e(item.capability_label)}</strong>'
+        f'<span>{_e(item.direction)}</span>'
+        + (
+            '<small><b>Passfamiljer:</b> '
+            + _e(" · ".join(item.candidate_recipe_characters))
+            + '</small>'
+            if item.candidate_recipe_characters else ""
+        )
+        + '</article>'
+        for item in forward.capability_directions
+    )
+    support = "".join(
+        '<article class="overview-sketch-card support">'
+        f'<strong>{_e(item.capability_label)}</strong>'
+        + (
+            '<span>'
+            + _e(" · ".join(item.candidate_recipe_characters))
+            + '</span>'
+            if item.candidate_recipe_characters else ""
+        )
+        + '</article>'
+        for item in forward.support_candidates
+    )
+    protected = (
+        '<p><b>Skyddas:</b> '
+        + _e(" · ".join(forward.protected_capabilities))
+        + '</p>'
+        if forward.protected_capabilities else ""
+    )
+    return (
+        '<div class="overview-forward-sketch">'
+        '<div class="overview-blueprint-head">'
+        f'<span>{_e(forward.planning_label)}</span>'
+        f'<strong>{_e(forward.title)}</strong>'
+        f'<small>{_e(forward.decision_gate)}</small>'
+        '</div>'
+        f'<div class="overview-sketch-primary">{primary}</div>'
+        + (f'<div class="overview-sketch-support">{support}</div>' if support else "")
+        + protected
+        + '</div>'
+    )
 
 
 def _blueprint_html(blueprint) -> str:
@@ -313,12 +412,16 @@ def _week_html(
     materialized = week.planned_count > 0 or relation != "future"
     rest_days = max(0, 7 - week.planned_training_days)
     blueprint = _expected_blueprint(model, week.start)
+    forward = _expected_forward_week(model, week.start)
     if relation == "future" and week.planned_count == 0:
-        metrics = [
-            "Grundplan finns · detaljdagar ej materialiserade"
-            if blueprint is not None
-            else "Detaljplan ej materialiserad"
-        ]
+        if forward is not None and forward.planning_level == "preliminary":
+            metrics = ["Preliminär dagstruktur · exakta dagar/doser ej låsta"]
+        elif forward is not None and forward.planning_level == "block_sketch":
+            metrics = ["Blockskiss · nästa beslut tas vid checkpoint"]
+        elif blueprint is not None:
+            metrics = ["Grundplan finns · detaljdagar ej materialiserade"]
+        else:
+            metrics = ["Planeringsunderlag saknas"]
     else:
         metrics = [
             f"Plan {week.planned_count} pass",
@@ -333,7 +436,9 @@ def _week_html(
     metric_text = " · ".join(metrics)
 
     observed_intent = week.block_intents[0] if len(week.block_intents) == 1 else ""
-    intent = observed_intent or (expected.intent if expected else "")
+    intent = observed_intent or (expected.intent if expected else "") or (
+        forward.block_intent if forward is not None else ""
+    )
     progress_bits = []
     if week.primary_progress_count:
         progress_bits.append(f"{week.primary_progress_count} primär progression")
@@ -349,10 +454,18 @@ def _week_html(
         + '</div>'
         if intent else ""
     )
-    days = (
-        _blueprint_html(blueprint)
-        if relation == "future" and week.planned_count == 0 and blueprint is not None
-        else "".join(
+    if relation == "future" and week.planned_count == 0 and forward is not None:
+        if forward.planning_level == "preliminary":
+            days = _forward_preliminary_html(forward, week.start)
+            display_mode = "forward-preliminary-mode"
+        else:
+            days = _forward_block_sketch_html(forward)
+            display_mode = "blueprint-mode"
+    elif relation == "future" and week.planned_count == 0 and blueprint is not None:
+        days = _blueprint_html(blueprint)
+        display_mode = "blueprint-mode"
+    else:
+        days = "".join(
             _day_html(
                 day,
                 current_date=current_date,
@@ -361,18 +474,31 @@ def _week_html(
             )
             for day in week.days
         )
+        display_mode = ""
+
+    commitment = (
+        "Planerad"
+        if relation == "future" and week.planned_count > 0
+        else forward.planning_label
+        if relation == "future" and forward is not None
+        else ""
+    )
+    commitment_html = (
+        f'<span class="overview-commitment level-{_e((forward.planning_level if forward else "planned"))}">'
+        f'{_e(commitment)}</span>'
+        if commitment else ""
     )
     return (
         f'<section class="overview-week relation-{relation}" data-week="{_e(week.iso_key)}">'
         '<header class="overview-week-summary">'
         f'<a href="{_week_url(week.start, current_week_start)}">'
-        f'<strong>V{week.week_number}</strong>'
+        f'<strong>V{week.week_number}</strong>{commitment_html}'
         f'<span>{week.start.day} {MONTH_SHORT[week.start.month - 1]} – '
         f'{week.end.day} {MONTH_SHORT[week.end.month - 1]}</span></a>'
         f'<p>{_e(metric_text)}</p>'
         f'{intent_html}'
         '</header>'
-        f'<div class="overview-week-days{" blueprint-mode" if relation == "future" and week.planned_count == 0 and blueprint is not None else ""}">{days}</div>'
+        f'<div class="overview-week-days {display_mode}">{days}</div>'
         '</section>'
     )
 
@@ -386,6 +512,31 @@ def _review_html(model: TrainingOverviewReadModel) -> str:
     ]
     materialized_active = [week for week in active_future if week.planned_count > 0]
     missing_active = [week for week in active_future if week.planned_count == 0]
+
+    visible_future = [
+        week for week in future_weeks[:5]
+    ]
+    horizon_coverage = [
+        week
+        for week in visible_future
+        if week.planned_count > 0
+        or _expected_forward_week(model, week.start) is not None
+        or _expected_blueprint(model, week.start) is not None
+    ]
+    horizon_levels = []
+    for week in visible_future:
+        if week.planned_count > 0:
+            horizon_levels.append(f"V{week.week_number} Planerad")
+            continue
+        forward = _expected_forward_week(model, week.start)
+        if forward is not None:
+            horizon_levels.append(
+                f"V{week.week_number} {forward.planning_label}"
+            )
+        elif _expected_blueprint(model, week.start) is not None:
+            horizon_levels.append(f"V{week.week_number} Preliminär")
+        else:
+            horizon_levels.append(f"V{week.week_number} saknas")
 
     multipass_days = [
         day
@@ -456,12 +607,12 @@ def _review_html(model: TrainingOverviewReadModel) -> str:
         (
             "Planeringshorisont",
             (
-                f"{len(materialized_active)} av {len(active_future)} återstående mikrocykler "
-                "i aktuellt block är detaljplanerade."
-                if active_future
-                else "Aktuellt block har ingen återstående framtida mikrocykel i den synliga perioden."
+                f"{len(horizon_coverage)} av {len(visible_future)} kommande veckor har "
+                "planeringsinnehåll: " + " · ".join(horizon_levels)
+                if visible_future
+                else "Ingen framtidsvecka finns i den synliga perioden."
             ),
-            "attention" if missing_active and not materialized_active else "neutral",
+            "attention" if len(horizon_coverage) != len(visible_future) else "neutral",
         ),
         (
             "Blockrytm",
@@ -567,6 +718,23 @@ a{color:inherit}.overview-shell{width:min(1500px,100%);margin:auto;padding:24px 
 .overview-week-intent strong{display:block;font-size:.68rem}.overview-week-intent span{margin-top:2px;font-size:.62rem}
 .overview-week-days{display:grid;grid-template-columns:repeat(7,minmax(125px,1fr));min-width:875px}
 .overview-week-days.blueprint-mode{display:block;min-width:875px}
+.overview-week-days.forward-preliminary-mode{display:grid}
+.overview-commitment{display:inline-flex;margin-left:7px;padding:2px 6px;border-radius:999px;background:var(--elevated);font-size:.56rem;font-weight:700;color:var(--secondary);vertical-align:middle}
+.overview-commitment.level-preliminary{background:#F2F4F8}
+.overview-commitment.level-block_sketch{background:var(--accent-soft)}
+.overview-forward-slot{margin-bottom:6px;padding:7px 8px;border:1px solid var(--line-soft);border-radius:9px;background:#F7F8FA}
+.overview-forward-slot strong{display:block;font-size:.65rem;line-height:1.28}
+.overview-forward-slot span,.overview-forward-slot small{display:block;margin-top:3px;font-size:.56rem;line-height:1.3;color:var(--muted)}
+.overview-forward-open{font-size:.6rem;color:var(--muted)}
+.overview-forward-sketch{min-height:140px;padding:13px 14px;display:grid;grid-template-columns:190px minmax(0,1fr);gap:12px}
+.overview-forward-sketch .overview-blueprint-head strong{display:block;margin-top:4px;font-size:.82rem}
+.overview-sketch-primary,.overview-sketch-support{display:flex;flex-wrap:wrap;gap:7px}
+.overview-sketch-support{grid-column:2}
+.overview-sketch-card{min-width:190px;max-width:280px;padding:8px 9px;border:1px solid var(--line-soft);border-radius:10px;background:#F2F4F8}
+.overview-sketch-card.support{background:var(--elevated)}
+.overview-sketch-card strong{display:block;font-size:.68rem}
+.overview-sketch-card span,.overview-sketch-card small{display:block;margin-top:4px;font-size:.58rem;line-height:1.35;color:var(--muted)}
+.overview-forward-sketch>p{grid-column:2;margin:0;font-size:.61rem;color:var(--secondary)}
 .overview-week-blueprint{min-height:126px;padding:12px 14px;display:grid;grid-template-columns:180px minmax(0,1fr);gap:12px;align-items:start}
 .overview-blueprint-head span{display:block;font-size:.66rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--secondary)}
 .overview-blueprint-head small{display:block;margin-top:4px;font-size:.62rem;line-height:1.35;color:var(--muted)}
