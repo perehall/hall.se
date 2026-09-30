@@ -1380,6 +1380,31 @@ class AdaptivePlanningTests(unittest.TestCase):
         self.assertNotIn("strength_unilateral", context["direct_capabilities"])
         self.assertNotIn("strength_unilateral", context["planning_credits"])
 
+    def test_fallback_does_not_repeat_completed_secondary_easy_distance(self):
+        meso = {
+            "primary_capabilities": ["swim_aerobic", "swim_technique", "run_threshold"],
+            "secondary_capabilities": ["run_easy_distance", "run_hill_quality"],
+            "start_date": "2026-09-21",
+            "duration_weeks": 4,
+        }
+        result = fallback_microcycle(
+            meso,
+            self.policy,
+            self.catalog,
+            date(2026, 9, 21),
+            completed_context={
+                "strength_exposures": 1,
+                "swim_exposures": 0,
+                "enduro_exposures": 1,
+                "direct_capabilities": [],
+                "planning_credits": ["run_easy_distance"],
+            },
+            planning_date=date(2026, 9, 27),
+        )
+        recipes = [row["recipe_key"] for row in result["slots"]]
+        self.assertNotIn("run_easy_distance", recipes)
+        self.assertNotIn("run_easy_trail", recipes)
+
     def test_completed_threshold_blocks_redundant_future_threshold(self):
         meso = {
             "primary_capabilities": ["swim_aerobic", "swim_technique", "run_threshold"],
