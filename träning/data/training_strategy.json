@@ -1665,8 +1665,10 @@
     "source_policy": "data/planning_policy.json",
     "source_athlete_state": "data/athlete_state.json",
     "source_starting_state": "supabase:athlete_starting_states",
+    "source_coach_decisions": "data/coach_decisions.json",
     "source_mesocycle_decision": "data/mesocycle_decision.json",
-    "source_microcycle_decision": "data/microcycle_decision.json"
+    "source_microcycle_decision": "data/microcycle_decision.json",
+    "coach_decision_schema_version": 1
   },
   "planning_hierarchy": {
     "order": [
