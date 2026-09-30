@@ -150,9 +150,11 @@ def publish_overview_page(local_date: date | None = None):
     required = (
         "<!doctype html>",
         'class="overview-shell"',
+        'class="overview-planbar"',
         'class="overview-calendar"',
+        'class="overview-status-chip',
+        'id="overview-detail"',
         "Granska plan",
-        "Aktuellt utvecklingsblock",
         "/träning/oversikt/",
     )
     missing = [marker for marker in required if marker not in document]
