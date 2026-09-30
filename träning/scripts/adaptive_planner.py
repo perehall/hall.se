@@ -1527,6 +1527,18 @@ def fallback_microcycle(
     )
     slots = []
 
+    max_run_quality = int(
+        policy["microcycle_policy"].get("max_run_quality_exposures", 2)
+    )
+    completed_run_quality = len(
+        completed_direct.intersection({"run_threshold", "run_hill_quality"})
+    )
+    unresolved_fixed_enduro_reserve = (
+        1
+        if fixed_enduro and int(completed_context.get("enduro_exposures") or 0) == 0
+        else 0
+    )
+
     recipe_day_preferences = {
         "swim_aerobic_technique": [2, 4, 6, 1, 5, 3, 7] if fixed_enduro else [1, 3, 5, 2, 4, 6, 7],
         "swim_aerobic_endurance": [2, 4, 6, 5, 3, 7] if fixed_enduro else [1, 3, 5, 2, 4, 6, 7],
@@ -1578,6 +1590,25 @@ def fallback_microcycle(
             return False
         if not allow_repeat and any(row["recipe_key"] == recipe for row in slots):
             return True
+
+        caps = recipe_capabilities(catalog["recipes"][recipe])
+        if {"run_threshold", "run_hill_quality"}.intersection(caps):
+            planned_run_quality = sum(
+                bool(
+                    {"run_threshold", "run_hill_quality"}.intersection(
+                        recipe_capabilities(catalog["recipes"][row["recipe_key"]])
+                    )
+                )
+                for row in slots
+            )
+            if (
+                completed_run_quality
+                + planned_run_quality
+                + unresolved_fixed_enduro_reserve
+                + 1
+                > max_run_quality
+            ):
+                return False
 
         configured = list(recipe_day_preferences.get(recipe, range(1, 8)))
         if preferred_same_day in configured:
