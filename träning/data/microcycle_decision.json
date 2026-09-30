@@ -1,19 +1,19 @@
 {
   "slots": [
     {
-      "action": "consolidate",
-      "day_index": 2,
-      "rationale": "Lågmekanisk simexponering dagen efter fast enduro ger konkret plan utan att anta att benen är redo för ny benkvalitet.",
-      "recipe_key": "swim_aerobic_technique",
+      "action": "establish",
+      "day_index": 3,
+      "rationale": "Lägg en självständig simexponering med en annan utvecklingskaraktär än veckans övriga simpass när katalog och belastningsordning stödjer det.",
+      "recipe_key": "swim_aerobic_endurance",
       "evidence_refs": [
         "mesocycle.primary_capabilities"
       ]
     },
     {
-      "action": "establish",
-      "day_index": 3,
-      "rationale": "Lägg en självständig simexponering med en annan utvecklingskaraktär än veckans övriga simpass när katalog och belastningsordning stödjer det.",
-      "recipe_key": "swim_aerobic_endurance",
+      "action": "consolidate",
+      "day_index": 4,
+      "rationale": "Lågmekanisk simexponering dagen efter fast enduro ger konkret plan utan att anta att benen är redo för ny benkvalitet.",
+      "recipe_key": "swim_aerobic_technique",
       "evidence_refs": [
         "mesocycle.primary_capabilities"
       ]
@@ -32,21 +32,20 @@
   "week_key": "2026-W40",
   "rationale": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern.",
   "week_start": "2026-09-28",
-  "source_hash": "2f6b849fee71effa43473073d0321982296d687c6f3b1b69ccc6e0a26a48451e",
+  "source_hash": "1b21e95db554af2ce8ba3211e2f354801661c390cdcf56dc28fc8daa37825c1d",
   "guard_repair": {
     "result": "fallback",
     "attempted": true,
     "repair_failures": [
-      "strength_core är redundant: styrka/core är redan faktiskt genomförd i mikrocykeln"
+      "tung benbelastning får inte planeras på söndagen direkt före nästa fasta enduro: run_easy_distance"
     ],
     "initial_failures": [
-      "tung benbelastning får inte planeras på söndagen direkt före nästa fasta enduro: run_easy_distance",
-      "strength_core är redundant: styrka/core är redan faktiskt genomförd i mikrocykeln"
+      "lång löpdistans får inte ligga direkt intill MTB/XC; den sekundära cykelexponeringen ska utgå eller flyttas"
     ]
   },
   "mesocycle_id": "20260928-run_threshold-swim_aerobic-swim_technique",
   "schema_version": 1,
-  "generated_at_utc": "2026-09-30T01:17:39.459254+00:00",
+  "generated_at_utc": "2026-09-30T06:13:06.371883+00:00",
   "planner_revision": 13,
   "competition_context": {
     "as_of": "2026-09-28",

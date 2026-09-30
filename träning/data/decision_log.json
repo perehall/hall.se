@@ -680,6 +680,22 @@
       "source_hash": "5288465cf351815cb710d890dde0ca1e73dd1a177808b9cc77bf2719a53d143c",
       "generated_at_utc": "2026-09-30T01:20:09.108247+00:00",
       "summary": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern."
+    },
+    {
+      "kind": "microcycle",
+      "decision_id": "2026-W40",
+      "source": "deterministic_fallback_after_repair_guard",
+      "source_hash": "1b21e95db554af2ce8ba3211e2f354801661c390cdcf56dc28fc8daa37825c1d",
+      "generated_at_utc": "2026-09-30T06:13:06.371883+00:00",
+      "summary": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern."
+    },
+    {
+      "kind": "upcoming_microcycle",
+      "decision_id": "2026-W41",
+      "source": "openai_repaired",
+      "source_hash": "3c25f9d83451492180112845e94e825722af84312e995c20c4a0ebc899bb34ed",
+      "generated_at_utc": "2026-09-30T06:15:08.469988+00:00",
+      "summary": "Åtgärdat konflikter: inga nya slotar på måndagen (fast enduro), dag 2 är låg benbelastning (sim), lång löpning ligger inte söndag före måndagens enduro och MTB/MTB‑teknik utelämnas denna mikrocykel för att undvika att ligga intill tröskel eller långdistans. Primära kapaciteter täcks (run_threshold + två simbassessioner med teknik), minst en styrke/core‑session finns och max‑/närhetsregler för löpstimuli respekteras."
     }
   ]
 }

@@ -237,371 +237,6 @@
       "development_focus": "Teknisk kvalitet och avslappnad körning; faktisk belastning styr efterföljande pass."
     },
     {
-      "date": "2026-09-29",
-      "label": "Tisdag",
-      "sport": "swim",
-      "reason": "Lågmekanisk simexponering dagen efter fast enduro ger konkret plan utan att anta att benen är redo för ny benkvalitet. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: consolidate; materialiserad relation: hold.",
-      "status": "preliminary",
-      "session": "Simning · 3 200 m · aerob/teknik",
-      "stimuli": [
-        "swim_aerobic",
-        "swim_technique"
-      ],
-      "dose_open": false,
-      "recipe_key": "swim_aerobic_technique",
-      "block_intent": "establish",
-      "dose_options": [
-        {
-          "id": "swim-3200",
-          "kind": "structured",
-          "value": 3200,
-          "intent": "Kortare etablerad simexponering.",
-          "session": "Simning · 3 200 m · aerob/teknik",
-          "watch_workout": {
-            "name": "Aerob/teknik · kroppslinje och rotation · 3 200 m",
-            "type": "Swim",
-            "blocks": [
-              {
-                "name": "Insim",
-                "steps": [
-                  {
-                    "kind": "swim",
-                    "text": "Lugn insim",
-                    "equipment": [],
-                    "intensity": "warmup",
-                    "distance_m": 400
-                  }
-                ]
-              },
-              {
-                "name": "Kroppslinje och rotation",
-                "steps": [
-                  {
-                    "kind": "swim",
-                    "text": "Stabil linje, kontrollerad rotation",
-                    "equipment": [],
-                    "intensity": "active",
-                    "distance_m": 50
-                  },
-                  {
-                    "kind": "rest",
-                    "duration_s": 15
-                  }
-                ],
-                "repeat": 6
-              },
-              {
-                "name": "Aerob",
-                "steps": [
-                  {
-                    "kind": "swim",
-                    "text": "Stadigt aerob med stabil kroppslinje",
-                    "equipment": [],
-                    "intensity": "active",
-                    "distance_m": 500
-                  },
-                  {
-                    "kind": "rest",
-                    "duration_s": 30
-                  }
-                ],
-                "repeat": 4
-              },
-              {
-                "name": "Frekvens",
-                "steps": [
-                  {
-                    "kind": "swim",
-                    "text": "Avslappnad frekvens med bibehållen linje",
-                    "equipment": [],
-                    "intensity": "active",
-                    "distance_m": 50
-                  },
-                  {
-                    "kind": "rest",
-                    "duration_s": 15
-                  }
-                ],
-                "repeat": 6
-              },
-              {
-                "name": "Avsim",
-                "steps": [
-                  {
-                    "kind": "swim",
-                    "text": "Mycket lugnt avsim",
-                    "equipment": [],
-                    "intensity": "cooldown",
-                    "distance_m": 200
-                  }
-                ]
-              }
-            ],
-            "equipment": [],
-            "planned_distance_m": 3200
-          }
-        }
-      ],
-      "mesocycle_id": "20260928-run_threshold-swim_aerobic-swim_technique",
-      "microcycle_id": "20260928-run_threshold-swim_aerobic-swim_technique:mc1",
-      "priority_role": "anchor",
-      "watch_workout": {
-        "id": "swim-2026-w40-2026-09-29-swim_aerobic_technique_1",
-        "name": "Aerob/teknik · kroppslinje och rotation · 3 200 m",
-        "type": "Swim",
-        "blocks": [
-          {
-            "name": "Insim",
-            "steps": [
-              {
-                "kind": "swim",
-                "text": "Lugn insim",
-                "equipment": [],
-                "intensity": "warmup",
-                "distance_m": 400
-              }
-            ]
-          },
-          {
-            "name": "Kroppslinje och rotation",
-            "steps": [
-              {
-                "kind": "swim",
-                "text": "Stabil linje, kontrollerad rotation",
-                "equipment": [],
-                "intensity": "active",
-                "distance_m": 50
-              },
-              {
-                "kind": "rest",
-                "duration_s": 15
-              }
-            ],
-            "repeat": 6
-          },
-          {
-            "name": "Aerob",
-            "steps": [
-              {
-                "kind": "swim",
-                "text": "Stadigt aerob med stabil kroppslinje",
-                "equipment": [],
-                "intensity": "active",
-                "distance_m": 500
-              },
-              {
-                "kind": "rest",
-                "duration_s": 30
-              }
-            ],
-            "repeat": 4
-          },
-          {
-            "name": "Frekvens",
-            "steps": [
-              {
-                "kind": "swim",
-                "text": "Avslappnad frekvens med bibehållen linje",
-                "equipment": [],
-                "intensity": "active",
-                "distance_m": 50
-              },
-              {
-                "kind": "rest",
-                "duration_s": 15
-              }
-            ],
-            "repeat": 6
-          },
-          {
-            "name": "Avsim",
-            "steps": [
-              {
-                "kind": "swim",
-                "text": "Mycket lugnt avsim",
-                "equipment": [],
-                "intensity": "cooldown",
-                "distance_m": 200
-              }
-            ]
-          }
-        ],
-        "equipment": [],
-        "sync_enabled": false,
-        "planned_distance_m": 3200
-      },
-      "microcycle_day": 2,
-      "swim_equipment": {
-        "planned": []
-      },
-      "workout_design": {
-        "objective": {
-          "stimuli": [
-            "swim_aerobic",
-            "swim_technique"
-          ],
-          "mesocycle_id": "20260928-run_threshold-swim_aerobic-swim_technique",
-          "microcycle_id": "20260928-run_threshold-swim_aerobic-swim_technique:mc1",
-          "priority_role": "anchor",
-          "mesocycle_role": "primary",
-          "microcycle_slot": "swim_aerobic_technique_1"
-        },
-        "selection": {
-          "method": "deterministic_constraint_scoring",
-          "reason_for_today": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från verifierad träningsrespons, bekräftat startläge eller konservativ katalogbas utan att höja flera belastningsvariabler samtidigt.",
-          "preferred_dose_option_id": "swim-3200"
-        },
-        "candidates": [
-          {
-            "id": "swim-3200",
-            "dose": {
-              "kind": "structured",
-              "value": 3200
-            },
-            "score": {
-              "basis": "deterministic_constraint_alignment",
-              "total": 100,
-              "breakdown": {
-                "mesocycle_alignment": 30,
-                "microcycle_alignment": 30,
-                "near_term_resolution": 10,
-                "progression_alignment": 15,
-                "prescription_specificity": 15
-              }
-            },
-            "intent": "Kortare etablerad simexponering.",
-            "session": "Simning · 3 200 m · aerob/teknik",
-            "stimuli": [
-              "swim_aerobic",
-              "swim_technique"
-            ],
-            "prescription": {
-              "blocks": [
-                {
-                  "name": "Insim",
-                  "work": {
-                    "distance_m": 400,
-                    "repetitions": 1,
-                    "total_distance_m": 400
-                  },
-                  "equipment": [],
-                  "intensity": "warmup",
-                  "instruction": "Lugn insim"
-                },
-                {
-                  "name": "Kroppslinje och rotation",
-                  "work": {
-                    "distance_m": 50,
-                    "repetitions": 6,
-                    "total_distance_m": 300
-                  },
-                  "recovery": {
-                    "duration_s": 15
-                  },
-                  "equipment": [],
-                  "intensity": "active",
-                  "instruction": "Stabil linje, kontrollerad rotation"
-                },
-                {
-                  "name": "Aerob",
-                  "work": {
-                    "distance_m": 500,
-                    "repetitions": 4,
-                    "total_distance_m": 2000
-                  },
-                  "recovery": {
-                    "duration_s": 30
-                  },
-                  "equipment": [],
-                  "intensity": "active",
-                  "instruction": "Stadigt aerob med stabil kroppslinje"
-                },
-                {
-                  "name": "Frekvens",
-                  "work": {
-                    "distance_m": 50,
-                    "repetitions": 6,
-                    "total_distance_m": 300
-                  },
-                  "recovery": {
-                    "duration_s": 15
-                  },
-                  "equipment": [],
-                  "intensity": "active",
-                  "instruction": "Avslappnad frekvens med bibehållen linje"
-                },
-                {
-                  "name": "Avsim",
-                  "work": {
-                    "distance_m": 200,
-                    "repetitions": 1,
-                    "total_distance_m": 200
-                  },
-                  "equipment": [],
-                  "intensity": "cooldown",
-                  "instruction": "Mycket lugnt avsim"
-                }
-              ],
-              "source": "watch_workout",
-              "executable": true,
-              "completeness": "full",
-              "total_distance_m": 3200
-            },
-            "dose_option_id": "swim-3200"
-          }
-        ],
-        "schema_version": 1,
-        "near_term_context": {
-          "load_dimensions": [
-            "cardiovascular",
-            "technical"
-          ],
-          "selection_uses_only_preapproved_doses": true
-        },
-        "selected_candidate_id": "swim-3200",
-        "progression_from_previous": {
-          "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från verifierad träningsrespons, bekräftat startläge eller konservativ katalogbas utan att höja flera belastningsvariabler samtidigt.",
-          "relation": "hold",
-          "demonstrated_floor_option_id": "swim-3200"
-        }
-      },
-      "dose_resolution": {
-        "kind": "structured",
-        "state": "baseline",
-        "value": 3200,
-        "option_id": "swim-3200"
-      },
-      "load_dimensions": [
-        "cardiovascular",
-        "technical"
-      ],
-      "microcycle_slot": "swim_aerobic_technique_1",
-      "development_step": {
-        "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från verifierad träningsrespons, bekräftat startläge eller konservativ katalogbas utan att höja flera belastningsvariabler samtidigt.",
-        "relation": "hold",
-        "option_id": "swim-3200",
-        "microcycle": 1
-      },
-      "microcycle_index": 1,
-      "development_focus": "Teknisk kvalitet och stabil aerob rytm; simningen ska kunna stödja helheten med låg mekanisk kostnad för benen.",
-      "baseline_option_id": "swim-3200",
-      "development_character": "technique_aerobic",
-      "development_progression": {
-        "mode": "develop",
-        "source": "starting_state",
-        "microcycle_plan": [
-          {
-            "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från verifierad träningsrespons, bekräftat startläge eller konservativ katalogbas utan att höja flera belastningsvariabler samtidigt.",
-            "relation": "hold",
-            "option_id": "swim-3200",
-            "microcycle": 1
-          }
-        ],
-        "demonstrated_floor_option_id": "swim-3200",
-        "same_dose_repeat_requires_reason": true
-      }
-    },
-    {
       "date": "2026-09-30",
       "label": "Onsdag",
       "sport": "swim",
@@ -767,7 +402,7 @@
       "microcycle_id": "20260928-run_threshold-swim_aerobic-swim_technique:mc1",
       "priority_role": "anchor",
       "watch_workout": {
-        "id": "swim-2026-w40-2026-09-30-swim_aerobic_endurance_2",
+        "id": "swim-2026-w40-2026-09-30-swim_aerobic_endurance_1",
         "name": "Aerob uthållighet · längre block · 3 200 m",
         "type": "Swim",
         "blocks": [
@@ -848,7 +483,7 @@
           "microcycle_id": "20260928-run_threshold-swim_aerobic-swim_technique:mc1",
           "priority_role": "anchor",
           "mesocycle_role": "primary",
-          "microcycle_slot": "swim_aerobic_endurance_2"
+          "microcycle_slot": "swim_aerobic_endurance_1"
         },
         "selection": {
           "method": "deterministic_constraint_scoring",
@@ -1048,7 +683,7 @@
         "cardiovascular",
         "technical"
       ],
-      "microcycle_slot": "swim_aerobic_endurance_2",
+      "microcycle_slot": "swim_aerobic_endurance_1",
       "development_step": {
         "reason": "Mikrocykelbeslutet valde establish och dosen materialiserades från verifierad träningsrespons, bekräftat startläge eller konservativ katalogbas utan att höja flera belastningsvariabler samtidigt.",
         "relation": "establish",
@@ -1075,6 +710,371 @@
       }
     },
     {
+      "date": "2026-10-01",
+      "label": "Torsdag",
+      "sport": "swim",
+      "reason": "Lågmekanisk simexponering dagen efter fast enduro ger konkret plan utan att anta att benen är redo för ny benkvalitet. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: consolidate; materialiserad relation: hold.",
+      "status": "preliminary",
+      "session": "Simning · 3 200 m · aerob/teknik",
+      "stimuli": [
+        "swim_aerobic",
+        "swim_technique"
+      ],
+      "dose_open": false,
+      "recipe_key": "swim_aerobic_technique",
+      "block_intent": "establish",
+      "dose_options": [
+        {
+          "id": "swim-3200",
+          "kind": "structured",
+          "value": 3200,
+          "intent": "Kortare etablerad simexponering.",
+          "session": "Simning · 3 200 m · aerob/teknik",
+          "watch_workout": {
+            "name": "Aerob/teknik · kroppslinje och rotation · 3 200 m",
+            "type": "Swim",
+            "blocks": [
+              {
+                "name": "Insim",
+                "steps": [
+                  {
+                    "kind": "swim",
+                    "text": "Lugn insim",
+                    "equipment": [],
+                    "intensity": "warmup",
+                    "distance_m": 400
+                  }
+                ]
+              },
+              {
+                "name": "Kroppslinje och rotation",
+                "steps": [
+                  {
+                    "kind": "swim",
+                    "text": "Stabil linje, kontrollerad rotation",
+                    "equipment": [],
+                    "intensity": "active",
+                    "distance_m": 50
+                  },
+                  {
+                    "kind": "rest",
+                    "duration_s": 15
+                  }
+                ],
+                "repeat": 6
+              },
+              {
+                "name": "Aerob",
+                "steps": [
+                  {
+                    "kind": "swim",
+                    "text": "Stadigt aerob med stabil kroppslinje",
+                    "equipment": [],
+                    "intensity": "active",
+                    "distance_m": 500
+                  },
+                  {
+                    "kind": "rest",
+                    "duration_s": 30
+                  }
+                ],
+                "repeat": 4
+              },
+              {
+                "name": "Frekvens",
+                "steps": [
+                  {
+                    "kind": "swim",
+                    "text": "Avslappnad frekvens med bibehållen linje",
+                    "equipment": [],
+                    "intensity": "active",
+                    "distance_m": 50
+                  },
+                  {
+                    "kind": "rest",
+                    "duration_s": 15
+                  }
+                ],
+                "repeat": 6
+              },
+              {
+                "name": "Avsim",
+                "steps": [
+                  {
+                    "kind": "swim",
+                    "text": "Mycket lugnt avsim",
+                    "equipment": [],
+                    "intensity": "cooldown",
+                    "distance_m": 200
+                  }
+                ]
+              }
+            ],
+            "equipment": [],
+            "planned_distance_m": 3200
+          }
+        }
+      ],
+      "mesocycle_id": "20260928-run_threshold-swim_aerobic-swim_technique",
+      "microcycle_id": "20260928-run_threshold-swim_aerobic-swim_technique:mc1",
+      "priority_role": "anchor",
+      "watch_workout": {
+        "id": "swim-2026-w40-2026-10-01-swim_aerobic_technique_2",
+        "name": "Aerob/teknik · kroppslinje och rotation · 3 200 m",
+        "type": "Swim",
+        "blocks": [
+          {
+            "name": "Insim",
+            "steps": [
+              {
+                "kind": "swim",
+                "text": "Lugn insim",
+                "equipment": [],
+                "intensity": "warmup",
+                "distance_m": 400
+              }
+            ]
+          },
+          {
+            "name": "Kroppslinje och rotation",
+            "steps": [
+              {
+                "kind": "swim",
+                "text": "Stabil linje, kontrollerad rotation",
+                "equipment": [],
+                "intensity": "active",
+                "distance_m": 50
+              },
+              {
+                "kind": "rest",
+                "duration_s": 15
+              }
+            ],
+            "repeat": 6
+          },
+          {
+            "name": "Aerob",
+            "steps": [
+              {
+                "kind": "swim",
+                "text": "Stadigt aerob med stabil kroppslinje",
+                "equipment": [],
+                "intensity": "active",
+                "distance_m": 500
+              },
+              {
+                "kind": "rest",
+                "duration_s": 30
+              }
+            ],
+            "repeat": 4
+          },
+          {
+            "name": "Frekvens",
+            "steps": [
+              {
+                "kind": "swim",
+                "text": "Avslappnad frekvens med bibehållen linje",
+                "equipment": [],
+                "intensity": "active",
+                "distance_m": 50
+              },
+              {
+                "kind": "rest",
+                "duration_s": 15
+              }
+            ],
+            "repeat": 6
+          },
+          {
+            "name": "Avsim",
+            "steps": [
+              {
+                "kind": "swim",
+                "text": "Mycket lugnt avsim",
+                "equipment": [],
+                "intensity": "cooldown",
+                "distance_m": 200
+              }
+            ]
+          }
+        ],
+        "equipment": [],
+        "sync_enabled": false,
+        "planned_distance_m": 3200
+      },
+      "microcycle_day": 4,
+      "swim_equipment": {
+        "planned": []
+      },
+      "workout_design": {
+        "objective": {
+          "stimuli": [
+            "swim_aerobic",
+            "swim_technique"
+          ],
+          "mesocycle_id": "20260928-run_threshold-swim_aerobic-swim_technique",
+          "microcycle_id": "20260928-run_threshold-swim_aerobic-swim_technique:mc1",
+          "priority_role": "anchor",
+          "mesocycle_role": "primary",
+          "microcycle_slot": "swim_aerobic_technique_2"
+        },
+        "selection": {
+          "method": "deterministic_constraint_scoring",
+          "reason_for_today": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från verifierad träningsrespons, bekräftat startläge eller konservativ katalogbas utan att höja flera belastningsvariabler samtidigt.",
+          "preferred_dose_option_id": "swim-3200"
+        },
+        "candidates": [
+          {
+            "id": "swim-3200",
+            "dose": {
+              "kind": "structured",
+              "value": 3200
+            },
+            "score": {
+              "basis": "deterministic_constraint_alignment",
+              "total": 100,
+              "breakdown": {
+                "mesocycle_alignment": 30,
+                "microcycle_alignment": 30,
+                "near_term_resolution": 10,
+                "progression_alignment": 15,
+                "prescription_specificity": 15
+              }
+            },
+            "intent": "Kortare etablerad simexponering.",
+            "session": "Simning · 3 200 m · aerob/teknik",
+            "stimuli": [
+              "swim_aerobic",
+              "swim_technique"
+            ],
+            "prescription": {
+              "blocks": [
+                {
+                  "name": "Insim",
+                  "work": {
+                    "distance_m": 400,
+                    "repetitions": 1,
+                    "total_distance_m": 400
+                  },
+                  "equipment": [],
+                  "intensity": "warmup",
+                  "instruction": "Lugn insim"
+                },
+                {
+                  "name": "Kroppslinje och rotation",
+                  "work": {
+                    "distance_m": 50,
+                    "repetitions": 6,
+                    "total_distance_m": 300
+                  },
+                  "recovery": {
+                    "duration_s": 15
+                  },
+                  "equipment": [],
+                  "intensity": "active",
+                  "instruction": "Stabil linje, kontrollerad rotation"
+                },
+                {
+                  "name": "Aerob",
+                  "work": {
+                    "distance_m": 500,
+                    "repetitions": 4,
+                    "total_distance_m": 2000
+                  },
+                  "recovery": {
+                    "duration_s": 30
+                  },
+                  "equipment": [],
+                  "intensity": "active",
+                  "instruction": "Stadigt aerob med stabil kroppslinje"
+                },
+                {
+                  "name": "Frekvens",
+                  "work": {
+                    "distance_m": 50,
+                    "repetitions": 6,
+                    "total_distance_m": 300
+                  },
+                  "recovery": {
+                    "duration_s": 15
+                  },
+                  "equipment": [],
+                  "intensity": "active",
+                  "instruction": "Avslappnad frekvens med bibehållen linje"
+                },
+                {
+                  "name": "Avsim",
+                  "work": {
+                    "distance_m": 200,
+                    "repetitions": 1,
+                    "total_distance_m": 200
+                  },
+                  "equipment": [],
+                  "intensity": "cooldown",
+                  "instruction": "Mycket lugnt avsim"
+                }
+              ],
+              "source": "watch_workout",
+              "executable": true,
+              "completeness": "full",
+              "total_distance_m": 3200
+            },
+            "dose_option_id": "swim-3200"
+          }
+        ],
+        "schema_version": 1,
+        "near_term_context": {
+          "load_dimensions": [
+            "cardiovascular",
+            "technical"
+          ],
+          "selection_uses_only_preapproved_doses": true
+        },
+        "selected_candidate_id": "swim-3200",
+        "progression_from_previous": {
+          "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från verifierad träningsrespons, bekräftat startläge eller konservativ katalogbas utan att höja flera belastningsvariabler samtidigt.",
+          "relation": "hold",
+          "demonstrated_floor_option_id": "swim-3200"
+        }
+      },
+      "dose_resolution": {
+        "kind": "structured",
+        "state": "baseline",
+        "value": 3200,
+        "option_id": "swim-3200"
+      },
+      "load_dimensions": [
+        "cardiovascular",
+        "technical"
+      ],
+      "microcycle_slot": "swim_aerobic_technique_2",
+      "development_step": {
+        "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från verifierad träningsrespons, bekräftat startläge eller konservativ katalogbas utan att höja flera belastningsvariabler samtidigt.",
+        "relation": "hold",
+        "option_id": "swim-3200",
+        "microcycle": 1
+      },
+      "microcycle_index": 1,
+      "development_focus": "Teknisk kvalitet och stabil aerob rytm; simningen ska kunna stödja helheten med låg mekanisk kostnad för benen.",
+      "baseline_option_id": "swim-3200",
+      "development_character": "technique_aerobic",
+      "development_progression": {
+        "mode": "develop",
+        "source": "starting_state",
+        "microcycle_plan": [
+          {
+            "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från verifierad träningsrespons, bekräftat startläge eller konservativ katalogbas utan att höja flera belastningsvariabler samtidigt.",
+            "relation": "hold",
+            "option_id": "swim-3200",
+            "microcycle": 1
+          }
+        ],
+        "demonstrated_floor_option_id": "swim-3200",
+        "same_dose_repeat_requires_reason": true
+      }
+    },
+    {
       "date": "2026-10-03",
       "label": "Lördag",
       "sport": "run",
@@ -1090,9 +1090,9 @@
         "status": "synced",
         "transport": "intervals_icu",
         "source_hash": "b22429cb088acda3f62d7efde585805c69b94446848403d8244cfdf9be57da7b",
-        "updated_at_utc": "2026-09-30T01:20:20.311542+00:00",
+        "updated_at_utc": "2026-09-30T06:15:16.312251+00:00",
         "device_delivery": "unverified",
-        "verified_at_utc": "2026-09-30T01:20:20.311542+00:00",
+        "verified_at_utc": "2026-09-30T06:15:16.312251+00:00",
         "provider_event_id": 140098674
       },
       "block_intent": "establish",
