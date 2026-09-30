@@ -2267,8 +2267,6 @@ def generate_microcycle(
             completed_context=completed_context,
             athlete_profile=athlete_profile,
             planning_date=planning_date,
-            athlete_state=athlete_state,
-            starting_state=starting_state,
         )
         if initial_failures:
             repair_payload = deepcopy(source_payload)
@@ -2315,12 +2313,6 @@ def generate_microcycle(
                         completed_context=completed_context,
                         athlete_profile=athlete_profile,
                         planning_date=planning_date,
-                    athlete_state=athlete_state,
-                    starting_state=starting_state,
-                        athlete_state=athlete_state,
-                        starting_state=starting_state,
-            athlete_state=athlete_state,
-            starting_state=starting_state,
                     )
             except Exception as exc:
                 source = "deterministic_fallback_after_repair_error"
@@ -2335,10 +2327,6 @@ def generate_microcycle(
                     completed_context=completed_context,
                     athlete_profile=athlete_profile,
                     planning_date=planning_date,
-                    athlete_state=athlete_state,
-                    starting_state=starting_state,
-            athlete_state=athlete_state,
-            starting_state=starting_state,
                 )
 
     normalized, model_valid = validate_and_normalize_micro(
@@ -2395,8 +2383,6 @@ def generate_microcycle(
             completed_context=completed_context,
             athlete_profile=athlete_profile,
             planning_date=planning_date,
-            athlete_state=athlete_state,
-            starting_state=starting_state,
         )
         if fallback_failures:
             raise RuntimeError(
