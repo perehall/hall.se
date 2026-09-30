@@ -1351,6 +1351,35 @@ class AdaptivePlanningTests(unittest.TestCase):
         context = completed_microcycle_context(state, date(2026, 9, 21))
         self.assertNotIn("run_threshold", context["direct_capabilities"])
 
+    def test_generic_strength_history_is_not_direct_capability_without_profile_evidence(self):
+        state = {
+            "recent_sessions": [
+                {
+                    "id": 8,
+                    "date": "2026-09-28",
+                    "family": "strength",
+                    "classification": "training",
+                    "training_profile": {
+                        "stimuli": [],
+                        "planning_credits": [],
+                    },
+                }
+            ],
+            "capability_facts": {
+                "strength_unilateral": {
+                    "longest_duration": {
+                        "activity_id": 8,
+                        "date": "2026-09-28",
+                        "elapsed_time_s": 2200,
+                    }
+                }
+            },
+        }
+        context = completed_microcycle_context(state, date(2026, 9, 28))
+        self.assertEqual(context["strength_exposures"], 1)
+        self.assertNotIn("strength_unilateral", context["direct_capabilities"])
+        self.assertNotIn("strength_unilateral", context["planning_credits"])
+
     def test_completed_threshold_blocks_redundant_future_threshold(self):
         meso = {
             "primary_capabilities": ["swim_aerobic", "swim_technique", "run_threshold"],
