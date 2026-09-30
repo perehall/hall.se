@@ -113,6 +113,11 @@ class TrainingWorkflowWriterTests(unittest.TestCase):
         self.assertIn("--status completed", update)
         self.assertIn("--status failed", update)
 
+    def test_coach_decision_ledger_is_part_of_atomic_training_commit(self):
+        update = self.update_job_text()
+        self.assertIn('"träning/data/coach_decisions.json"', update)
+        self.assertIn('"träning/scripts/**"', self.workflow_text())
+
     def test_generated_training_commit_dispatches_pages_explicitly(self):
         workflow = self.workflow_text()
 
