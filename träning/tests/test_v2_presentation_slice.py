@@ -198,7 +198,7 @@ class PresentationSliceTests(unittest.TestCase):
         rendered = render_today(snapshot)
         self.assertIn('data-device-sync="synced"', rendered)
         self.assertIn('class="v2-watch-icon"', rendered)
-        self.assertIn("Klocksync skickad", rendered)
+        self.assertIn("Verifierad i Intervals", rendered)
 
     def test_week_renders_multiple_same_day_workouts_as_independent_cards(self):
         class MultiRepository:
