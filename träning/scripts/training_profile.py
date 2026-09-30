@@ -467,10 +467,26 @@ def nearby_structural_intent_matches(activity, planned_workouts, observed):
 
     if not candidates:
         return []
+
+    structural = [
+        row for row in candidates
+        if (row.get("evidence") or {}).get("basis") == "run_interval_structure"
+    ]
+    # Repeated interval shapes can be structurally identical across multiple
+    # nearby planned days. Calendar proximity alone is not enough to claim
+    # which physiological intent the activity fulfilled.
+    if len(structural) > 1:
+        return []
+    if len(structural) == 1:
+        result = dict(structural[0])
+        result.pop("_rank", None)
+        return [result]
+
     candidates.sort(key=lambda row: (row["_rank"], row["workout_key"]))
     best_rank = candidates[0]["_rank"]
     best = [row for row in candidates if row["_rank"] == best_rank]
-    # Fail closed if two nearby workouts are equally plausible.
+    # Scalar dose matching may use date/dose closeness only when exactly one
+    # candidate is best. Equal candidates remain ambiguous.
     if len(best) != 1:
         return []
     result = dict(best[0])
