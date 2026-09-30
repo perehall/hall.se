@@ -65,23 +65,25 @@ class PostgresPresentationRepository:
 
     def planned_days(self, start: date, end: date) -> list[PlannedDay]:
         query = """
-            select scheduled_date, session, coalesce(sport,''), coalesce(status,''),
-                   coalesce(planning_status,''), coalesce(manual_lock,false),
-                   coalesce(reason,''), coalesce(development_focus,''),
-                   coalesce(payload,'{}'::jsonb), workout_key
-            from training.planned_workouts
-            where is_current
-              and scheduled_date between %s and %s
+            select p.scheduled_date, p.session, coalesce(p.sport,''), coalesce(p.status,''),
+                   coalesce(p.planning_status,''), coalesce(p.manual_lock,false),
+                   coalesce(p.reason,''), coalesce(p.development_focus,''),
+                   coalesce(p.payload,'{}'::jsonb), p.workout_key,
+                   coalesce(linked.provider_activity_id,'')
+            from training.planned_workouts p
+            left join training.activities linked on linked.id = p.linked_activity_id
+            where p.is_current
+              and p.scheduled_date between %s and %s
             order by
-              scheduled_date,
+              p.scheduled_date,
               coalesce(
                 case
-                  when jsonb_typeof(payload->'same_day_order') = 'number'
-                  then (payload->>'same_day_order')::integer
+                  when jsonb_typeof(p.payload->'same_day_order') = 'number'
+                  then (p.payload->>'same_day_order')::integer
                 end,
                 2147483647
               ),
-              workout_key
+              p.workout_key
         """
         with self.connection_factory() as conn, conn.cursor() as cur:
             cur.execute(query, (start, end))
@@ -98,6 +100,7 @@ class PostgresPresentationRepository:
                 development_focus=row[7],
                 payload=row[8] or {},
                 workout_key=row[9] or "",
+                linked_provider_activity_id=str(row[10] or ""),
             )
             for row in rows
         ]
