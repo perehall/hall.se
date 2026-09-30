@@ -1450,7 +1450,7 @@ def fallback_microcycle(
     # A race-relevant easy-distance exposure is useful when it fits safely, but
     # other secondary capabilities are deliberately not all forced into the week.
     secondary_added = False
-    if "run_easy_distance" in secondaries and "run_easy_distance" not in primaries:
+    if "run_easy_distance" in secondaries or "run_easy_distance" in primaries:
         secondary_added = add_recipe(
             "run_easy_distance",
             "Behåll lugn löptålighet med separation från löpkvalitet.",
@@ -1787,14 +1787,29 @@ def microcycle_guard_failures(
         )
 
     completed_secondary = completed_direct.intersection(secondaries)
+    # "Sekundärt stöd" är en funktion i mikrocykeln, inte en taxonomisk
+    # skyldighet att alltid lägga till ett recept klassat som secondary.
+    # Lugn distans kan redan bära den stödjande uthållighetsrollen även när
+    # mesocykeln har gjort run_easy_distance primär. Då ska vi inte tvinga in
+    # extra back-/MTB-belastning bara för att uppfylla en etikett.
+    planned_supporting_distance = any(
+        "run_easy_distance" in recipe_capabilities(recipes[row["recipe_key"]])
+        for row in valid_rows
+    )
+    completed_supporting_distance = "run_easy_distance" in completed_direct
+    has_supporting_breadth = bool(
+        completed_secondary
+        or secondary_sessions >= 1
+        or planned_supporting_distance
+        or completed_supporting_distance
+    )
     if (
         block_context.get("block_intent") == "develop"
         and secondaries
-        and not completed_secondary
-        and secondary_sessions < 1
+        and not has_supporting_breadth
     ):
         failures.append(
-            "develop-mikrocykeln saknar sekundärt stödpass trots att sekundära kapaciteter är deklarerade; "
+            "develop-mikrocykeln saknar stödjande breddsexponering trots att sekundära kapaciteter är deklarerade; "
             "planera ett absorberbart stödpass i stället för att lämna resten av veckan mekaniskt tom"
         )
     if future_fixed_enduro_reserve and secondary_sessions > 1:
