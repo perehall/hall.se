@@ -639,6 +639,148 @@
         }
       ],
       "summary": "Simteknik: inget materiellt planbeslut ändras. 1 workout-förändringar registrerades."
+    },
+    {
+      "schema_version": 1,
+      "decision_id": "e1dd7d2fb38a730e7651132c99f9641f5bf74a424a8076ddaaf915cd898c2aaf",
+      "generated_at_utc": "2026-09-30T16:55:34.534064+00:00",
+      "planning_date": "2026-09-30",
+      "week_start": "2026-09-28",
+      "capability": "swim_aerobic",
+      "trigger": "live_replan",
+      "decision": "no_change",
+      "reason_code": "no_material_change",
+      "previous_state": {
+        "evidence_state": "demonstrated",
+        "progression_state": "hold",
+        "progression_ready": false,
+        "progression_reason_code": "direct_caution",
+        "progression_reason": "Senaste jämförbara exponeringen innehåller en explicit varningssignal från användaren.",
+        "demonstrated_value": 3500.0,
+        "tolerated_value": null,
+        "absorbed_value": null
+      },
+      "new_state": {
+        "evidence_state": "demonstrated",
+        "progression_state": "hold",
+        "progression_ready": false,
+        "progression_reason_code": "direct_caution",
+        "progression_reason": "Senaste jämförbara exponeringen innehåller en explicit varningssignal från användaren.",
+        "demonstrated_value": 3500.0,
+        "tolerated_value": null,
+        "absorbed_value": null
+      },
+      "evidence": {
+        "activity_refs": [],
+        "microcycle_source_hash": "40b3a224a82fa3f1c994c842d938a445d7ebe3b1c0864bd7d0ba24ad83972191",
+        "microcycle_week_key": "2026-W40",
+        "slot_action": null,
+        "slot_recipe_key": null,
+        "slot_evidence_refs": [],
+        "capability_reason_code": "direct_caution",
+        "completed_context_signature": "0f726b349a503dbd5e059c2da426f37e40b74c08908bd65d2503648aed2ff93c"
+      },
+      "affected_workouts": [
+        {
+          "change_type": "modified",
+          "before": {
+            "workout_key": "swim_aerobic_skills_1",
+            "date": "2026-09-30",
+            "sport": "swim",
+            "recipe_key": "swim_aerobic_skills",
+            "session": "Simning · 3 200 m · grepp/teknik + aerob",
+            "stimuli": [
+              "swim_aerobic",
+              "swim_technique"
+            ],
+            "planning_status": "fixed"
+          },
+          "after": {
+            "workout_key": "swim_aerobic_skills_1",
+            "date": "2026-09-30",
+            "sport": "swim",
+            "recipe_key": "swim_aerobic_skills",
+            "session": "Simning · 3 200 m · grepp/teknik + aerob",
+            "stimuli": [
+              "swim_aerobic",
+              "swim_technique"
+            ],
+            "planning_status": null
+          }
+        }
+      ],
+      "summary": "Sim aerob kapacitet: inget materiellt planbeslut ändras. 1 workout-förändringar registrerades."
+    },
+    {
+      "schema_version": 1,
+      "decision_id": "0c54d338c7922ce03285d8cb798b7d3134c7de6ffda3ce6bcea4642878133f21",
+      "generated_at_utc": "2026-09-30T16:55:34.534064+00:00",
+      "planning_date": "2026-09-30",
+      "week_start": "2026-09-28",
+      "capability": "swim_technique",
+      "trigger": "live_replan",
+      "decision": "no_change",
+      "reason_code": "no_material_change",
+      "previous_state": {
+        "evidence_state": "observed",
+        "progression_state": "qualitative_review",
+        "progression_ready": false,
+        "progression_reason_code": "qualitative_capability_requires_quality_review",
+        "progression_reason": "Kapaciteten har verifierad exponering, men progression kan inte avgöras från tid/distans utan kvalitativ eller specifik teknisk evidens.",
+        "demonstrated_value": null,
+        "tolerated_value": null,
+        "absorbed_value": null
+      },
+      "new_state": {
+        "evidence_state": "observed",
+        "progression_state": "qualitative_review",
+        "progression_ready": false,
+        "progression_reason_code": "qualitative_capability_requires_quality_review",
+        "progression_reason": "Kapaciteten har verifierad exponering, men progression kan inte avgöras från tid/distans utan kvalitativ eller specifik teknisk evidens.",
+        "demonstrated_value": null,
+        "tolerated_value": null,
+        "absorbed_value": null
+      },
+      "evidence": {
+        "activity_refs": [],
+        "microcycle_source_hash": "40b3a224a82fa3f1c994c842d938a445d7ebe3b1c0864bd7d0ba24ad83972191",
+        "microcycle_week_key": "2026-W40",
+        "slot_action": null,
+        "slot_recipe_key": null,
+        "slot_evidence_refs": [],
+        "capability_reason_code": "qualitative_capability_requires_quality_review",
+        "completed_context_signature": "0f726b349a503dbd5e059c2da426f37e40b74c08908bd65d2503648aed2ff93c"
+      },
+      "affected_workouts": [
+        {
+          "change_type": "modified",
+          "before": {
+            "workout_key": "swim_aerobic_skills_1",
+            "date": "2026-09-30",
+            "sport": "swim",
+            "recipe_key": "swim_aerobic_skills",
+            "session": "Simning · 3 200 m · grepp/teknik + aerob",
+            "stimuli": [
+              "swim_aerobic",
+              "swim_technique"
+            ],
+            "planning_status": "fixed"
+          },
+          "after": {
+            "workout_key": "swim_aerobic_skills_1",
+            "date": "2026-09-30",
+            "sport": "swim",
+            "recipe_key": "swim_aerobic_skills",
+            "session": "Simning · 3 200 m · grepp/teknik + aerob",
+            "stimuli": [
+              "swim_aerobic",
+              "swim_technique"
+            ],
+            "planning_status": null
+          }
+        }
+      ],
+      "summary": "Simteknik: inget materiellt planbeslut ändras. 1 workout-förändringar registrerades."
     }
   ]
 }
