@@ -2227,10 +2227,37 @@ def generate_microcycle(
         planning_date=planning_date,
     )
     if final_failures:
-        raise RuntimeError(
-            "Adaptive planering: ingen giltig mikrocykel efter fallback/repair: "
-            + " | ".join(final_failures)
+        final_fallback = fallback_microcycle(
+            meso,
+            policy,
+            catalog,
+            target_start,
+            completed_context=completed_context,
+            athlete_profile=athlete_profile,
+            planning_date=planning_date,
         )
+        fallback_failures = microcycle_guard_failures(
+            final_fallback,
+            meso,
+            policy,
+            catalog,
+            target_start,
+            completed_context=completed_context,
+            athlete_profile=athlete_profile,
+            planning_date=planning_date,
+        )
+        if fallback_failures:
+            raise RuntimeError(
+                "Adaptive planering: deterministisk fallback är ogiltig: "
+                + " | ".join(fallback_failures)
+            )
+        normalized = final_fallback
+        source = "deterministic_fallback_after_final_guard"
+        repair_metadata = repair_metadata or {
+            "attempted": False,
+            "result": "fallback",
+        }
+        repair_metadata["final_guard_failures"] = final_failures
     normalized = normalize_progress_actions_from_absorption(
         normalized,
         athlete_state,
