@@ -70,6 +70,10 @@ class DayWeatherReadModel:
     wind: str
     stale: bool
     summary: str
+    temperature_min_c: float | None = None
+    temperature_max_c: float | None = None
+    precip_probability_max_pct: float | None = None
+    wind_max_ms: float | None = None
 
 
 @dataclass(frozen=True)
@@ -163,6 +167,23 @@ def _day_model(forecast, *, stale: bool) -> DayWeatherReadModel:
         wind=wind,
         stale=stale,
         summary=summary,
+        temperature_min_c=forecast.temperature_min_c,
+        temperature_max_c=forecast.temperature_max_c,
+        precip_probability_max_pct=forecast.precip_probability_max_pct,
+        wind_max_ms=forecast.wind_max_ms,
+    )
+
+
+def build_daily_weather_models(
+    snapshot: WeatherSnapshot | None,
+) -> tuple[DayWeatherReadModel, ...]:
+    """Normalize every available forecast day without applying plan filtering."""
+    if snapshot is None:
+        return ()
+    stale = snapshot.status != "ok"
+    return tuple(
+        _day_model(forecast, stale=stale)
+        for forecast in sorted(snapshot.daily, key=lambda item: item.local_date)
     )
 
 
@@ -183,16 +204,11 @@ def build_weather_read_model(
     for day in plan:
         plan_by_date.setdefault(day.local_date, []).append(day)
     forecasts = []
-    for forecast in snapshot.daily:
+    for forecast in build_daily_weather_models(snapshot):
         workouts = plan_by_date.get(forecast.local_date) or []
         if not any(day_is_outdoor(day) for day in workouts):
             continue
-        forecasts.append(
-            _day_model(
-                forecast,
-                stale=snapshot.status != "ok",
-            )
-        )
+        forecasts.append(forecast)
     return WeatherReadModel(
         status=snapshot.status,
         source=snapshot.source,

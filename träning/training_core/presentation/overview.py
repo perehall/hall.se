@@ -10,9 +10,11 @@ from dataclasses import dataclass
 from datetime import date, timedelta
 from typing import Iterable
 
+from training_core.domain.weather import WeatherSnapshot
 from training_core.domain.workouts import PlannedWorkout, planned_training_workouts
 from training_core.presentation.sport_identity import activity_icon_key, planned_icon_keys
 from training_core.presentation.today import CompletedActivity
+from training_core.presentation.weather import DayWeatherReadModel, build_daily_weather_models
 from training_core.presentation.week import format_distance, format_duration
 
 
@@ -57,6 +59,7 @@ class OverviewDayReadModel:
     planned_workouts: tuple[OverviewPlannedWorkoutReadModel, ...]
     actual_activities: tuple[OverviewActivityReadModel, ...]
     state: str
+    weather: DayWeatherReadModel | None = None
 
     @property
     def planned_count(self) -> int:
@@ -545,6 +548,7 @@ def build_training_overview(
     plan: Iterable[PlannedWorkout],
     activities: Iterable[CompletedActivity],
     roadmap: dict | None = None,
+    weather_snapshot: WeatherSnapshot | None = None,
 ) -> TrainingOverviewReadModel:
     if end < start:
         raise ValueError("overview end must not precede start")
@@ -568,6 +572,12 @@ def build_training_overview(
     for activity in activity_rows:
         activities_by_date.setdefault(activity.local_date, []).append(activity)
 
+    weather_by_date = {
+        item.local_date: item
+        for item in build_daily_weather_models(weather_snapshot)
+        if start <= item.local_date <= end
+    }
+
     current_week_start = current_date - timedelta(days=current_date.weekday())
     weeks: list[OverviewWeekReadModel] = []
     cursor = start
@@ -590,6 +600,7 @@ def build_training_overview(
                     planned_workouts=planned,
                     actual_activities=actual,
                     state=_day_state(planned, actual),
+                    weather=weather_by_date.get(local_date),
                 )
             )
 

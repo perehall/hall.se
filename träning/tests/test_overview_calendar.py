@@ -7,6 +7,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+from training_core.domain.weather import DailyWeatherForecast, WeatherSnapshot
 from training_core.domain.workouts import PlannedWorkout
 from training_core.presentation.overview import build_training_overview
 from training_core.presentation.overview_renderer import render_overview_document
@@ -438,7 +439,7 @@ class TrainingOverviewTests(unittest.TestCase):
             },
         }
 
-    def build(self):
+    def build(self, *, weather_snapshot=None):
         return build_training_overview(
             start=self.start,
             end=self.end,
@@ -446,6 +447,7 @@ class TrainingOverviewTests(unittest.TestCase):
             plan=self.plan,
             activities=self.activities,
             roadmap=self.roadmap,
+            weather_snapshot=weather_snapshot,
         )
 
     def test_eight_complete_weeks_and_multipass_are_preserved(self):
@@ -485,6 +487,58 @@ class TrainingOverviewTests(unittest.TestCase):
             model.context.active_block.progression_axes[0].axis,
             "work_duration",
         )
+
+    def test_weather_is_compact_in_day_header_and_not_a_new_text_row(self):
+        snapshot = WeatherSnapshot(
+            status="ok",
+            source="SMHI Open Data · SNOW1gv1",
+            fetched_at_utc="2026-09-30T12:30:00+00:00",
+            daily=(
+                DailyWeatherForecast(
+                    local_date=date(2026, 9, 30),
+                    location_name="Oxelösund",
+                    temperature_min_c=13.6,
+                    temperature_max_c=14.6,
+                    wind_max_ms=5.3,
+                    precip_probability_max_pct=0,
+                    symbol_code=6,
+                ),
+                DailyWeatherForecast(
+                    local_date=date(2026, 10, 1),
+                    location_name="Oxelösund",
+                    temperature_min_c=12.4,
+                    temperature_max_c=16.1,
+                    wind_max_ms=5.9,
+                    precip_probability_max_pct=26,
+                    symbol_code=1,
+                ),
+            ),
+        )
+        model = self.build(weather_snapshot=snapshot)
+        current_week = next(
+            week for week in model.weeks if week.start == date(2026, 9, 28)
+        )
+        today = next(
+            day for day in current_week.days if day.local_date == date(2026, 9, 30)
+        )
+        self.assertIsNotNone(today.weather)
+        self.assertEqual(today.weather.condition, "Mulet")
+        self.assertEqual(today.weather.precip_probability_max_pct, 0)
+
+        document = render_overview_document(
+            model,
+            current_date=self.current,
+            sport_icons=None,
+        )
+        self.assertIn('class="overview-day-weather"', document)
+        self.assertIn('class="overview-weather-icon"', document)
+        self.assertIn(">14–15° · 0%</span>", document)
+        self.assertIn(">12–16° · 26%</span>", document)
+        self.assertIn(
+            'title="Väder · Oxelösund · Mulet · 13,6–14,6 °C · nederbördsrisk max 0 % · vind max 5,3 m/s"',
+            document,
+        )
+        self.assertNotIn('class="v2-week-weather"', document)
 
     def test_renderer_applies_compact_scan_first_ui_contract(self):
         model = self.build()
