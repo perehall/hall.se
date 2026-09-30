@@ -94,6 +94,56 @@ class PeriodizedDevelopmentTests(unittest.TestCase):
         self.assertTrue(all(len(chars) >= 2 for chars in swim_character_sets))
         self.assertNotEqual(swim_character_sets[0], swim_character_sets[1])
 
+    def test_blueprint_exposes_conditional_next_dose_without_authorizing_it(self):
+        meso = {
+            "id": "test-run-block",
+            "start_date": "2026-09-28",
+            "end_date": "2026-10-25",
+            "duration_weeks": 4,
+            "primary_capabilities": ["run_threshold"],
+            "secondary_capabilities": ["run_easy_distance"],
+        }
+        athlete_state = {
+            "capability_facts": {
+                "run_threshold": {
+                    "evidence": [{"work_minutes": 32.0, "kind": "explicit_user_report"}]
+                }
+            },
+            "dose_response": {
+                "by_capability": {
+                    "run_threshold": {
+                        "absorbed_value": 32.0,
+                        "tolerated_value": 32.0,
+                        "progression_ready": False,
+                        "progression_reason": "72 h-observationsfönstret är ännu inte komplett.",
+                    }
+                }
+            },
+        }
+        blueprint = build_development_blueprint(
+            meso,
+            self.policy,
+            self.catalog,
+            athlete_state=athlete_state,
+        )
+        week3 = blueprint[2]
+        threshold = next(
+            row for row in week3["planned_variants"]
+            if row["capability"] == "run_threshold"
+        )
+        self.assertEqual(threshold["progression_intent"], "progress_if_ready")
+        self.assertEqual(threshold["baseline_option_id"], "run-threshold-4x8")
+        self.assertEqual(
+            threshold["conditional_target_option_id"],
+            "run-threshold-4x9",
+        )
+        self.assertIn("4 × 8", threshold["baseline_session"])
+        self.assertIn("4 × 9", threshold["conditional_target_session"])
+        self.assertEqual(
+            threshold["target_condition"],
+            "progression_ready_and_absorbable_context",
+        )
+
     def test_develop_fallback_uses_blueprint_recipe_family_not_same_threshold_format(self):
         meso = {
             "id": "test-run-block",
