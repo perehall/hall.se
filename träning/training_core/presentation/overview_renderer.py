@@ -360,52 +360,47 @@ def _forward_block_sketch_html(forward) -> str:
 
 def _blueprint_html(blueprint) -> str:
     if blueprint is None:
-        return '<div class="overview-blueprint-empty">Grundplan saknas.</div>'
+        return '<div class="overview-blueprint-empty">Planeringsunderlag saknas.</div>'
 
-    def card(item, extra_class=""):
-        intent = PROGRESSION_INTENT_LABELS.get(
-            item.progression_intent,
-            item.progression_intent,
+    def card(item):
+        title = _short_character(item.label)
+        chip, chip_class = _progress_chip(
+            intent=item.progression_intent,
+            role=item.role,
         )
-        baseline = (
-            f'<small><b>Bas:</b> {_e(item.baseline_session)}</small>'
-            if item.baseline_session else ""
+        chip_html = (
+            f'<span class="overview-pass-chip chip-{_e(chip_class)}">{_e(chip)}</span>'
+            if chip else ""
         )
-        target = (
-            f'<small class="overview-target"><b>Villkorat mål:</b> '
-            f'{_e(item.conditional_target_session)}</small>'
-            if item.conditional_target_session else ""
+        attrs = _detail_button_attrs(
+            title=title,
+            full_session=item.baseline_session or item.label,
+            role=ROLE_LABELS.get(item.role, item.role),
+            status="Preliminär",
+            development=item.capability_label,
+            baseline=item.baseline_session,
+            target=item.conditional_target_session,
         )
         return (
-            f'<article class="overview-blueprint-card {extra_class}">'
-            f'<strong>{_e(item.label)}</strong>'
-            f'<span>{_e(intent)}</span>'
-            f'{baseline}{target}'
-            '</article>'
+            f'<button class="overview-blueprint-card" {attrs}>'
+            f'<strong>{_e(title)}</strong>{chip_html}'
+            '</button>'
         )
 
-    primary = "".join(card(item) for item in blueprint.planned_variants)
-    protected = "".join(
-        card(item, "protected")
-        for item in blueprint.protected_variants
-    )
-    support = "".join(
-        card(item, "support")
-        for item in blueprint.supporting_candidates
-    )
+    cards = [
+        card(item)
+        for group in (
+            blueprint.planned_variants,
+            blueprint.protected_variants,
+            blueprint.supporting_candidates,
+        )
+        for item in group
+    ]
     return (
         '<div class="overview-week-blueprint">'
-        '<div class="overview-blueprint-head">'
-        '<span>Preliminär grundplan</span>'
-        '<small>Passkaraktär och progression är planerade. Exakt dag och dos materialiseras senare.</small>'
+        '<div class="overview-blueprint-head"><span>Preliminär</span></div>'
+        f'<div class="overview-blueprint-primary">{"".join(cards)}</div>'
         '</div>'
-        f'<div class="overview-blueprint-primary">{primary}</div>'
-        + (
-            '<div class="overview-blueprint-secondary">'
-            f'{protected}{support}</div>'
-            if protected or support else ""
-        )
-        + '</div>'
     )
 
 
