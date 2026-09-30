@@ -181,5 +181,65 @@ class TrainingProfileTests(unittest.TestCase):
         self.assertEqual(profile["stimuli"][0]["source"], "explicit_user_report")
 
 
+    def test_swim_same_day_comparable_dose_can_receive_planning_credit(self):
+        activity = {
+            "id": 500,
+            "sport_type": "Swim",
+            "classification": "training",
+            "start_date_local": "2026-10-06T18:00:00",
+            "distance_m": 3190,
+            "elapsed_time_s": 3900,
+            "user_report": "Bra kontroll.",
+            "laps": [],
+        }
+        planned = [{
+            "date": "2026-10-06",
+            "sport": "swim",
+            "workout_key": "swim-aerobic-1",
+            "session": "Simning · 3 200 m · grepp/teknik + aerob",
+            "stimuli": ["swim_aerobic", "swim_technique"],
+        }]
+        profile = build_training_profile(activity, planned_workouts=planned)
+        self.assertEqual(
+            profile["planning_credits"],
+            ["swim_aerobic", "swim_technique"],
+        )
+        self.assertEqual(profile["intent_matches"][0]["confidence"], "high")
+        self.assertEqual(
+            profile["intent_matches"][0]["evidence"]["basis"],
+            "comparable_scalar_dose",
+        )
+
+    def test_two_equally_plausible_swims_fail_closed_without_planning_credit(self):
+        activity = {
+            "id": 501,
+            "sport_type": "Swim",
+            "classification": "training",
+            "start_date_local": "2026-10-06T18:00:00",
+            "distance_m": 3200,
+            "elapsed_time_s": 3900,
+            "user_report": "",
+            "laps": [],
+        }
+        planned = [
+            {
+                "date": "2026-10-06",
+                "sport": "swim",
+                "workout_key": "swim-a",
+                "session": "Simning · 3 200 m · aerob uthållighet",
+                "stimuli": ["swim_aerobic"],
+            },
+            {
+                "date": "2026-10-06",
+                "sport": "swim",
+                "workout_key": "swim-b",
+                "session": "Simning · 3 200 m · grepp/teknik + aerob",
+                "stimuli": ["swim_aerobic", "swim_technique"],
+            },
+        ]
+        profile = build_training_profile(activity, planned_workouts=planned)
+        self.assertEqual(profile["planning_credits"], [])
+        self.assertEqual(profile["intent_matches"], [])
+
 if __name__ == "__main__":
     unittest.main()
