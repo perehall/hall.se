@@ -1698,16 +1698,26 @@ def fallback_microcycle(
         ),
         "",
     )
-    if planned_support:
+    if "run_easy_distance" in secondaries or "run_easy_distance" in primaries:
+        run_support = next(
+            (
+                str(item.get("recipe_key") or "")
+                for item in (blueprint.get("supporting_candidates") or [])
+                if isinstance(item, dict)
+                and item.get("capability") == "run_easy_distance"
+                and str(item.get("recipe_key") or "") in catalog["recipes"]
+            ),
+            "run_easy_distance",
+        )
         secondary_added = add_recipe(
-            planned_support,
-            "Blockets preliminära grundplan väljer denna stödjande passkaraktär; den tas bara med när mikrocykelns belastningsordning tillåter.",
+            run_support,
+            "Behåll lugn löptålighet med separation från löpkvalitet. Blueprint får variera passkaraktären men skapar inte en extra belastningsexponering.",
             action="consolidate",
         )
-    elif "run_easy_distance" in secondaries or "run_easy_distance" in primaries:
+    elif planned_support:
         secondary_added = add_recipe(
-            "run_easy_distance",
-            "Behåll lugn löptålighet med separation från löpkvalitet.",
+            planned_support,
+            "Blockets preliminära grundplan föreslår denna stödjande passkaraktär; den tas bara med när ingen redan planerad exponering fyller samma stödroll och belastningsordningen tillåter.",
             action="consolidate",
         )
 
