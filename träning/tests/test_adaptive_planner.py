@@ -939,6 +939,48 @@ class AdaptivePlanningTests(unittest.TestCase):
             [row["recipe_key"] for row in result["slots"]],
         )
 
+    def test_fallback_mesocycle_primary_long_run_does_not_mask_secondary_support(self):
+        meso = fallback_mesocycle(
+            self.goal,
+            self.policy,
+            {},
+            date(2026, 9, 28),
+        )
+        self.assertIn("run_easy_distance", meso["primary_capabilities"])
+        result = fallback_microcycle(
+            meso,
+            self.policy,
+            self.catalog,
+            date(2026, 10, 5),
+            completed_context={},
+        )
+        secondary = set(meso.get("secondary_capabilities") or [])
+        recipes = [
+            self.catalog["recipes"][row["recipe_key"]]
+            for row in result["slots"]
+        ]
+        self.assertTrue(
+            any(
+                set(recipe.get("stimuli") or []).intersection(secondary)
+                and not set(recipe.get("stimuli") or []).intersection(
+                    set(meso.get("primary_capabilities") or [])
+                )
+                for recipe in recipes
+            ),
+            msg=json.dumps(result, ensure_ascii=False, indent=2),
+        )
+        self.assertFalse(
+            microcycle_guard_failures(
+                result,
+                meso,
+                self.policy,
+                self.catalog,
+                date(2026, 10, 5),
+                completed_context={},
+            ),
+            msg=json.dumps(result, ensure_ascii=False, indent=2),
+        )
+
     def test_future_develop_fallback_satisfies_its_own_structural_guards(self):
         meso = json.loads(
             (ROOT / "data" / "mesocycle_decision.json").read_text(encoding="utf-8")
