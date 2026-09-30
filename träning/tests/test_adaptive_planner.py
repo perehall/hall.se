@@ -2340,6 +2340,14 @@ class AdaptivePlanningTests(unittest.TestCase):
             "data/mesocycle_decision.json",
         )
         self.assertEqual(
+            strategy["generated_planning"]["source_coach_decisions"],
+            "data/coach_decisions.json",
+        )
+        self.assertEqual(
+            strategy["generated_planning"]["coach_decision_schema_version"],
+            1,
+        )
+        self.assertEqual(
             next(
                 item["state"]
                 for item in strategy["strategic_readiness"]

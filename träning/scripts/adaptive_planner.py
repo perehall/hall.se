@@ -23,6 +23,7 @@ from athlete_profile_source import load_athlete_profile_for_planner, planner_pro
 from athlete_starting_state_source import load_starting_state_for_planner, planner_starting_state_view
 from canonical_plan import planned_workouts as canonical_planned_workouts
 from coach_decisions import (
+    COACH_DECISION_SCHEMA_VERSION,
     append_coach_decisions,
     build_coach_decisions,
     load_coach_decision_ledger,
@@ -3636,6 +3637,8 @@ def materialize_strategy(goal, policy, meso, micro, catalog, athlete_state, goal
         ),
         "source_mesocycle_decision": "data/mesocycle_decision.json",
         "source_microcycle_decision": "data/microcycle_decision.json",
+        "source_coach_decisions": "data/coach_decisions.json",
+        "coach_decision_schema_version": COACH_DECISION_SCHEMA_VERSION,
         "principle": "training_strategy.json är en genererad kompatibilitetsprojektion och inte längre planeringens källa.",
     }
     validate_training_strategy(strategy)
