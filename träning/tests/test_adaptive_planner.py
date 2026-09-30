@@ -173,6 +173,43 @@ class AdaptivePlanningTests(unittest.TestCase):
             microcycle_is_valid(micro, meso, date(2026, 9, 28), source_hash_value="new")
         )
 
+    def test_stranded_past_workout_reopens_live_week_for_rehoming(self):
+        plan = {
+            "meta": {
+                "week_start": "2026-09-28",
+                "week_end": "2026-10-04",
+                "mesocycle_id": "meso-live",
+                "microcycle_index": 1,
+                "microcycle_total": 4,
+                "requires_mesocycle_review": False,
+            },
+            "planned_workouts": [
+                {
+                    "date": "2026-09-29",
+                    "sport": "swim",
+                    "recipe_key": "swim_aerobic_technique",
+                    "planning_status": "preliminary",
+                }
+            ],
+        }
+        upcoming = {"meta": {"week_start": "2026-10-05", "week_end": "2026-10-11"}}
+        meso = {
+            "id": "meso-live",
+            "start_date": "2026-09-28",
+            "end_date": "2026-10-25",
+            "goal_hash": goal_hash(self.goal),
+        }
+        target, active_replan = resolve_planning_target(
+            plan,
+            upcoming,
+            meso,
+            date(2026, 9, 30),
+            goal=self.goal,
+            current_completed_context={},
+        )
+        self.assertEqual(target, date(2026, 9, 28))
+        self.assertTrue(active_replan)
+
     def test_first_day_goal_change_replans_current_week(self):
         plan = {
             "meta": {
@@ -902,6 +939,61 @@ class AdaptivePlanningTests(unittest.TestCase):
             [row["recipe_key"] for row in result["slots"]],
         )
 
+    def test_fallback_mesocycle_primary_long_run_counts_as_supporting_breadth(self):
+        meso = fallback_mesocycle(
+            self.goal,
+            self.policy,
+            {},
+            date(2026, 9, 28),
+        )
+        self.assertIn("run_easy_distance", meso["primary_capabilities"])
+        result = fallback_microcycle(
+            meso,
+            self.policy,
+            self.catalog,
+            date(2026, 10, 5),
+            completed_context={},
+        )
+        recipes = [row["recipe_key"] for row in result["slots"]]
+        self.assertIn("run_easy_distance", recipes)
+        self.assertNotIn(
+            "run_hill_quality",
+            recipes,
+            msg="Primärt långpass ska inte tvinga fram extra backkvalitet bara för att fylla secondary-taxonomin.",
+        )
+        self.assertFalse(
+            microcycle_guard_failures(
+                result,
+                meso,
+                self.policy,
+                self.catalog,
+                date(2026, 10, 5),
+                completed_context={},
+            ),
+            msg=json.dumps(result, ensure_ascii=False, indent=2),
+        )
+
+    def test_future_develop_fallback_satisfies_its_own_structural_guards(self):
+        meso = json.loads(
+            (ROOT / "data" / "mesocycle_decision.json").read_text(encoding="utf-8")
+        )
+        result = fallback_microcycle(
+            meso,
+            self.policy,
+            self.catalog,
+            date(2026, 10, 5),
+            completed_context={},
+        )
+        failures = microcycle_guard_failures(
+            result,
+            meso,
+            self.policy,
+            self.catalog,
+            date(2026, 10, 5),
+            completed_context={},
+        )
+        self.assertFalse(failures, msg=json.dumps(result, ensure_ascii=False, indent=2))
+
     def test_future_enduro_develop_week_requires_one_but_not_two_secondary_sessions(self):
         meso = json.loads(
             (ROOT / "data" / "mesocycle_decision.json").read_text(encoding="utf-8")
@@ -923,7 +1015,7 @@ class AdaptivePlanningTests(unittest.TestCase):
             completed_context={},
         )
         self.assertTrue(
-            any("saknar sekundärt stödpass" in failure for failure in failures)
+            any("saknar stödjande breddsexponering" in failure for failure in failures)
         )
 
         one_secondary = deepcopy(required_only)
@@ -939,7 +1031,7 @@ class AdaptivePlanningTests(unittest.TestCase):
             completed_context={},
         )
         self.assertFalse(
-            any("saknar sekundärt stödpass" in failure for failure in failures)
+            any("saknar stödjande breddsexponering" in failure for failure in failures)
         )
         self.assertFalse(
             any("begränsar sekundär belastning" in failure for failure in failures)
@@ -1061,6 +1153,60 @@ class AdaptivePlanningTests(unittest.TestCase):
             },
         )
         self.assertTrue(any("redundant" in item and "run_threshold" in item for item in failures))
+
+    def test_live_fallback_rehomes_workouts_to_today_or_future(self):
+        meso = {
+            "primary_capabilities": ["swim_aerobic", "swim_technique", "run_threshold"],
+            "secondary_capabilities": ["run_easy_distance"],
+        }
+        context = {
+            "strength_exposures": 1,
+            "swim_exposures": 0,
+            "enduro_exposures": 1,
+            "completed_slot_days": 1,
+            "completed_day_indexes": [2],
+            "direct_capabilities": ["run_threshold"],
+            "planning_credits": ["run_threshold", "strength_unilateral"],
+        }
+        result = fallback_microcycle(
+            meso,
+            self.policy,
+            self.catalog,
+            date(2026, 9, 28),
+            completed_context=context,
+            planning_date=date(2026, 9, 30),
+        )
+        days = [row["day_index"] for row in result["slots"]]
+        recipes = [row["recipe_key"] for row in result["slots"]]
+        self.assertTrue(all(day >= 3 for day in days))
+        self.assertIn("swim_aerobic_technique", recipes)
+        self.assertIn("swim_aerobic_endurance", recipes)
+        self.assertIn("run_easy_distance", recipes)
+
+    def test_guard_rejects_new_workout_on_elapsed_live_day(self):
+        meso = {
+            "primary_capabilities": ["swim_aerobic", "swim_technique"],
+            "secondary_capabilities": [],
+        }
+        proposal = {
+            "rationale": "past slot",
+            "slots": [
+                {"day_index": 2, "recipe_key": "swim_aerobic_technique", "action": "consolidate"},
+                {"day_index": 3, "recipe_key": "swim_aerobic_endurance", "action": "consolidate"},
+                {"day_index": 5, "recipe_key": "strength_core", "action": "establish"},
+                {"day_index": 6, "recipe_key": "run_easy_distance", "action": "consolidate"},
+            ],
+        }
+        failures = microcycle_guard_failures(
+            proposal,
+            meso,
+            self.policy,
+            self.catalog,
+            date(2026, 9, 28),
+            completed_context={},
+            planning_date=date(2026, 9, 30),
+        )
+        self.assertTrue(any("redan passerat" in item for item in failures))
 
     def test_fallback_credits_completed_threshold_and_strength(self):
         meso = {

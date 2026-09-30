@@ -229,6 +229,20 @@ def iso(value):
     return date.fromisoformat(str(value))
 
 
+def closed_planning_day_indexes(target_start, planning_date):
+    """Days strictly before the live planning date are immutable."""
+    if planning_date is None:
+        return set()
+    if isinstance(planning_date, str):
+        planning_date = iso(planning_date)
+    if not isinstance(planning_date, date):
+        return set()
+    delta = (planning_date - target_start).days
+    if delta <= 0:
+        return set()
+    return set(range(1, min(delta, 7) + 1))
+
+
 def week_key(start):
     if isinstance(start, str):
         start = iso(start)
@@ -368,6 +382,22 @@ def resolve_planning_target(
 
     current_id = str(meta.get("mesocycle_id") or "").strip()
     decision_id = str((mesocycle_decision or {}).get("id") or "").strip()
+
+    # A live plan may never strand an unfulfilled planned workout on an
+    # already elapsed date. That means a displaced session has been consumed by
+    # presentation time without being executed or deliberately re-homed.
+    if plan_start <= today <= plan_end:
+        for workout in plan.get("planned_workouts") or []:
+            workout_day = _workout_date(workout)
+            if workout_day is None or not (plan_start <= workout_day < today):
+                continue
+            completed = bool(
+                workout.get("activity_id")
+                or workout.get("activity_ids")
+                or workout.get("planning_status") == "completed"
+            )
+            if not completed:
+                return plan_start, True
 
     # A started microcycle is normally stable, but actual training is first-class
     # state. Reopen the live week whenever the factual completed-context changes.
@@ -1204,7 +1234,15 @@ def mesocycle_history_context(meso, target_start, catalog):
     return history[-3:]
 
 
-def fallback_microcycle(meso, policy, catalog, target_start, completed_context=None, athlete_profile=None):
+def fallback_microcycle(
+    meso,
+    policy,
+    catalog,
+    target_start,
+    completed_context=None,
+    athlete_profile=None,
+    planning_date=None,
+):
     """Conservative composition from requirements, not from calendar fill.
 
     Fixed Enduro consumes a real training day. Secondary capabilities are not a
@@ -1222,6 +1260,7 @@ def fallback_microcycle(meso, policy, catalog, target_start, completed_context=N
     completed_direct = set(completed_context.get("direct_capabilities") or [])
     completed_direct.update(completed_context.get("planning_credits") or [])
     profile_contract = profile_planning_contract(athlete_profile) if athlete_profile else {}
+    closed_days = closed_planning_day_indexes(target_start, planning_date)
     allowed_profile_days = (
         set(profile_contract.get("available_days") or [])
         if profile_contract.get("availability_declared")
@@ -1288,6 +1327,8 @@ def fallback_microcycle(meso, policy, catalog, target_start, completed_context=N
             ]
 
         for day in candidate_days:
+            if day in closed_days:
+                continue
             if day not in allowed_profile_days:
                 continue
             if fixed_enduro and day == 1:
@@ -1440,7 +1481,9 @@ def fallback_microcycle(meso, policy, catalog, target_start, completed_context=N
     }
 
 
-def microcycle_layout_failures(rows, catalog, target_start, athlete_profile=None):
+def microcycle_layout_failures(
+    rows, catalog, target_start, athlete_profile=None, planning_date=None
+):
     """Hard scheduling guards for known planned load adjacency.
 
     Calendar dates group workouts; they are not unique workout slots. Guards
@@ -1449,6 +1492,7 @@ def microcycle_layout_failures(rows, catalog, target_start, athlete_profile=None
     """
     failures = []
     fixed_enduro = is_enduro_school_date(target_start)
+    closed_days = closed_planning_day_indexes(target_start, planning_date)
     by_day = {}
     for row in rows:
         if (
@@ -1463,6 +1507,11 @@ def microcycle_layout_failures(rows, catalog, target_start, athlete_profile=None
             row["recipe_key"]
             for row in by_day.get(day, [])
         }
+
+    for day in sorted(set(by_day).intersection(closed_days)):
+        failures.append(
+            f"dag {day} har redan passerat i den aktiva mikrocykeln och får inte få ett nytt planerat pass"
+        )
 
     if fixed_enduro and recipes_on(2).intersection(DAY_AFTER_ENDURO_BLOCKED_RECIPES):
         blocked = sorted(recipes_on(2).intersection(DAY_AFTER_ENDURO_BLOCKED_RECIPES))
@@ -1545,7 +1594,16 @@ def microcycle_layout_failures(rows, catalog, target_start, athlete_profile=None
     return failures
 
 
-def microcycle_guard_failures(result, meso, policy, catalog, target_start, completed_context=None, athlete_profile=None):
+def microcycle_guard_failures(
+    result,
+    meso,
+    policy,
+    catalog,
+    target_start,
+    completed_context=None,
+    athlete_profile=None,
+    planning_date=None,
+):
     """Return explicit structural violations without silently repairing the model output."""
     recipes = catalog["recipes"]
     slots = result.get("slots") or []
@@ -1581,7 +1639,11 @@ def microcycle_guard_failures(result, meso, policy, catalog, target_start, compl
         failures.append(f"för få giltiga träningsslots: {len(valid_rows)} < {minimum}")
 
     for failure in microcycle_layout_failures(
-        valid_rows, catalog, target_start, athlete_profile=athlete_profile
+        valid_rows,
+        catalog,
+        target_start,
+        athlete_profile=athlete_profile,
+        planning_date=planning_date,
     ):
         if failure not in failures:
             failures.append(failure)
@@ -1725,14 +1787,29 @@ def microcycle_guard_failures(result, meso, policy, catalog, target_start, compl
         )
 
     completed_secondary = completed_direct.intersection(secondaries)
+    # "Sekundärt stöd" är en funktion i mikrocykeln, inte en taxonomisk
+    # skyldighet att alltid lägga till ett recept klassat som secondary.
+    # Lugn distans kan redan bära den stödjande uthållighetsrollen även när
+    # mesocykeln har gjort run_easy_distance primär. Då ska vi inte tvinga in
+    # extra back-/MTB-belastning bara för att uppfylla en etikett.
+    planned_supporting_distance = any(
+        "run_easy_distance" in recipe_capabilities(recipes[row["recipe_key"]])
+        for row in valid_rows
+    )
+    completed_supporting_distance = "run_easy_distance" in completed_direct
+    has_supporting_breadth = bool(
+        completed_secondary
+        or secondary_sessions >= 1
+        or planned_supporting_distance
+        or completed_supporting_distance
+    )
     if (
         block_context.get("block_intent") == "develop"
         and secondaries
-        and not completed_secondary
-        and secondary_sessions < 1
+        and not has_supporting_breadth
     ):
         failures.append(
-            "develop-mikrocykeln saknar sekundärt stödpass trots att sekundära kapaciteter är deklarerade; "
+            "develop-mikrocykeln saknar stödjande breddsexponering trots att sekundära kapaciteter är deklarerade; "
             "planera ett absorberbart stödpass i stället för att lämna resten av veckan mekaniskt tom"
         )
     if future_fixed_enduro_reserve and secondary_sessions > 1:
@@ -1743,7 +1820,16 @@ def microcycle_guard_failures(result, meso, policy, catalog, target_start, compl
     return failures
 
 
-def validate_and_normalize_micro(result, meso, policy, catalog, target_start, completed_context=None, athlete_profile=None):
+def validate_and_normalize_micro(
+    result,
+    meso,
+    policy,
+    catalog,
+    target_start,
+    completed_context=None,
+    athlete_profile=None,
+    planning_date=None,
+):
     recipes = catalog["recipes"]
     cleaned = []
     primaries = set(meso.get("primary_capabilities") or [])
@@ -1801,12 +1887,17 @@ def validate_and_normalize_micro(result, meso, policy, catalog, target_start, co
         target_start,
         completed_context=completed_context,
         athlete_profile=athlete_profile,
+        planning_date=planning_date,
     )
     if not valid:
         return fallback_microcycle(
-            meso, policy, catalog, target_start,
+            meso,
+            policy,
+            catalog,
+            target_start,
             completed_context=completed_context,
             athlete_profile=athlete_profile,
+            planning_date=planning_date,
         ), False
     return {"rationale": str(result.get("rationale") or "").strip(), "slots": sorted(cleaned, key=lambda x: x["day_index"])}, True
 
@@ -1860,6 +1951,7 @@ def build_microcycle_source_payload(
     athlete_profile=None,
     starting_state=None,
     completed_context=None,
+    planning_date=None,
 ):
     completed_context = completed_context or completed_microcycle_context(
         athlete_state, target_start
@@ -1873,8 +1965,10 @@ def build_microcycle_source_payload(
     profile_contract = (
         profile_planning_contract(athlete_profile) if athlete_profile else {}
     )
+    closed_days = sorted(closed_planning_day_indexes(target_start, planning_date))
     return {
         "week_start": target_start.isoformat(),
+        "planning_date": planning_date.isoformat() if isinstance(planning_date, date) else None,
         "declared_athlete_profile": declared_profile,
         "declared_profile_contract": profile_contract,
         "confirmed_starting_state": planner_starting_state_view(starting_state),
@@ -1958,6 +2052,8 @@ def build_microcycle_source_payload(
                 "double_sessions"
             ),
             "declared_rest_day_preference": profile_contract.get("rest_days"),
+            "closed_day_indexes": closed_days,
+            "past_days_are_immutable": True,
             "automatic_progress_requires_absorbed_dose": True,
         },
     }
@@ -1972,6 +2068,7 @@ def generate_microcycle(
     target_start,
     athlete_profile=None,
     starting_state=None,
+    planning_date=None,
     *,
     request_fn=None,
 ):
@@ -1986,6 +2083,7 @@ def generate_microcycle(
         athlete_profile=athlete_profile,
         starting_state=starting_state,
         completed_context=completed_context,
+        planning_date=planning_date,
     )
     competition_context = source_payload["competition_context"]
     digest = canonical_hash(source_payload)
@@ -2007,6 +2105,7 @@ def generate_microcycle(
         "Sekundära kapaciteter är inte en checklista och behöver inte alla förekomma varje vecka. "
         "completed_microcycle_context är faktisk träning i målveckan och ska krediteras mot krav och primära stimuli när direkt evidens finns. "
         "Planera inte om samma primära stimulus en gång till bara för att den ursprungliga kalenderdagen låg senare i veckan. "
+        "hard_requirements.closed_day_indexes är redan passerade dagar i en live-vecka och är immutabla: nya slots får aldrig läggas där. Ett undanträngt pass måste i stället omprövas och vid behov flyttas till en framtida absorberbar dag. "
         "Lägg inte löptröskel, backkvalitet eller lång löpdistans två dagar i rad. När dag 1 är fast enduro ska dag 2 ha låg benbelastning; "
         "lägg inte löp- eller MTB-belastning där innan faktiskt enduroutfall är känt. MTB/XC får inte ligga direkt intill löptröskel eller backkvalitet; "
         "sekundär cykelbelastning ska utgå hellre än att kompromissa ett primärt löpstimulus. "
@@ -2037,6 +2136,7 @@ def generate_microcycle(
             meso, policy, catalog, target_start,
             completed_context=completed_context,
             athlete_profile=athlete_profile,
+            planning_date=planning_date,
         )
         raw["rationale"] += f" Modellbedömning saknades: {str(exc)[:220]}"
         source = "deterministic_fallback"
@@ -2047,6 +2147,7 @@ def generate_microcycle(
             raw, meso, policy, catalog, target_start,
             completed_context=completed_context,
             athlete_profile=athlete_profile,
+            planning_date=planning_date,
         )
         if initial_failures:
             repair_payload = deepcopy(source_payload)
@@ -2070,6 +2171,7 @@ def generate_microcycle(
                     repaired, meso, policy, catalog, target_start,
                     completed_context=completed_context,
                     athlete_profile=athlete_profile,
+                    planning_date=planning_date,
                 )
                 if not repaired_failures:
                     raw = repaired
@@ -2091,6 +2193,7 @@ def generate_microcycle(
                         meso, policy, catalog, target_start,
                         completed_context=completed_context,
                         athlete_profile=athlete_profile,
+                        planning_date=planning_date,
                     )
             except Exception as exc:
                 source = "deterministic_fallback_after_repair_error"
@@ -2104,12 +2207,14 @@ def generate_microcycle(
                     meso, policy, catalog, target_start,
                     completed_context=completed_context,
                     athlete_profile=athlete_profile,
+                    planning_date=planning_date,
                 )
 
     normalized, model_valid = validate_and_normalize_micro(
         raw, meso, policy, catalog, target_start,
         completed_context=completed_context,
         athlete_profile=athlete_profile,
+        planning_date=planning_date,
     )
     if source in {"openai", "openai_repaired"} and not model_valid:
         # Defensive backstop. A proposal accepted above must still pass the
@@ -2119,12 +2224,55 @@ def generate_microcycle(
             meso, policy, catalog, target_start,
             completed_context=completed_context,
             athlete_profile=athlete_profile,
+            planning_date=planning_date,
         )
         repair_metadata = repair_metadata or {
             "attempted": False,
             "result": "fallback",
         }
         repair_metadata["normalization_guard_failed"] = True
+    final_failures = microcycle_guard_failures(
+        normalized,
+        meso,
+        policy,
+        catalog,
+        target_start,
+        completed_context=completed_context,
+        athlete_profile=athlete_profile,
+        planning_date=planning_date,
+    )
+    if final_failures:
+        final_fallback = fallback_microcycle(
+            meso,
+            policy,
+            catalog,
+            target_start,
+            completed_context=completed_context,
+            athlete_profile=athlete_profile,
+            planning_date=planning_date,
+        )
+        fallback_failures = microcycle_guard_failures(
+            final_fallback,
+            meso,
+            policy,
+            catalog,
+            target_start,
+            completed_context=completed_context,
+            athlete_profile=athlete_profile,
+            planning_date=planning_date,
+        )
+        if fallback_failures:
+            raise RuntimeError(
+                "Adaptive planering: deterministisk fallback är ogiltig: "
+                + " | ".join(fallback_failures)
+            )
+        normalized = final_fallback
+        source = "deterministic_fallback_after_final_guard"
+        repair_metadata = repair_metadata or {
+            "attempted": False,
+            "result": "fallback",
+        }
+        repair_metadata["final_guard_failures"] = final_failures
     normalized = normalize_progress_actions_from_absorption(
         normalized,
         athlete_state,
@@ -2899,6 +3047,7 @@ def build_target_microcycle(
     athlete_profile=None,
     starting_state=None,
     existing_micro=None,
+    planning_date=None,
     request_fn=None,
 ):
     """Resolve one microcycle against only that week's completed context.
@@ -2918,6 +3067,7 @@ def build_target_microcycle(
         athlete_profile=athlete_profile,
         starting_state=starting_state,
         completed_context=completed_context,
+        planning_date=planning_date,
     )
     source_hash_value = canonical_hash(source_payload)
     if microcycle_is_valid(
@@ -2937,6 +3087,7 @@ def build_target_microcycle(
         target_start,
         athlete_profile=athlete_profile,
         starting_state=starting_state,
+        planning_date=planning_date,
         request_fn=request_fn,
     )
     return decision, completed_context, True
@@ -3157,6 +3308,11 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
         athlete_profile=athlete_profile,
         starting_state=starting_state,
         existing_micro=micro,
+        planning_date=(
+            today
+            if target_start <= today <= target_start + timedelta(days=6)
+            else None
+        ),
         request_fn=micro_request_fn,
     )
     if micro_changed:
