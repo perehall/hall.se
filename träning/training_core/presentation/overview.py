@@ -166,6 +166,29 @@ class OverviewMicrocycleIntentReadModel:
 
 
 @dataclass(frozen=True)
+class OverviewBlueprintVariantReadModel:
+    role: str
+    capability_key: str
+    capability_label: str
+    recipe_key: str
+    development_character: str
+    label: str
+    progression_intent: str
+
+
+@dataclass(frozen=True)
+class OverviewBlueprintWeekReadModel:
+    index: int
+    start_date: str
+    end_date: str
+    block_intent: str
+    planned_variants: tuple[OverviewBlueprintVariantReadModel, ...]
+    supporting_candidates: tuple[OverviewBlueprintVariantReadModel, ...]
+    protected_variants: tuple[OverviewBlueprintVariantReadModel, ...]
+    principle: str
+
+
+@dataclass(frozen=True)
 class OverviewGoalReadModel:
     label: str
     target: str
@@ -184,6 +207,7 @@ class OverviewBlockReadModel:
     protected_capabilities: tuple[str, ...]
     progression_axes: tuple[OverviewProgressionAxisReadModel, ...]
     microcycle_intents: tuple[OverviewMicrocycleIntentReadModel, ...]
+    development_blueprint: tuple[OverviewBlueprintWeekReadModel, ...]
 
 
 @dataclass(frozen=True)
@@ -325,6 +349,45 @@ def build_overview_context(roadmap: dict | None) -> OverviewPlanContextReadModel
             for row in block_raw.get("microcycle_intents") or ()
             if isinstance(row, dict) and int(row.get("index") or 0) > 0
         )
+
+        def blueprint_variant(row):
+            capability_key = str(row.get("capability") or "").strip()
+            return OverviewBlueprintVariantReadModel(
+                role=str(row.get("role") or "").strip(),
+                capability_key=capability_key,
+                capability_label=capability_labels.get(capability_key, capability_key),
+                recipe_key=str(row.get("recipe_key") or "").strip(),
+                development_character=str(row.get("development_character") or "").strip(),
+                label=str(row.get("label") or "").strip(),
+                progression_intent=str(row.get("progression_intent") or "").strip(),
+            )
+
+        development_blueprint = tuple(
+            OverviewBlueprintWeekReadModel(
+                index=int(row.get("microcycle_index") or 0),
+                start_date=str(row.get("week_start") or "").strip(),
+                end_date=str(row.get("week_end") or "").strip(),
+                block_intent=str(row.get("block_intent") or "").strip(),
+                planned_variants=tuple(
+                    blueprint_variant(item)
+                    for item in row.get("planned_variants") or ()
+                    if isinstance(item, dict)
+                ),
+                supporting_candidates=tuple(
+                    blueprint_variant(item)
+                    for item in row.get("supporting_candidates") or ()
+                    if isinstance(item, dict)
+                ),
+                protected_variants=tuple(
+                    blueprint_variant(item)
+                    for item in row.get("protected_variants") or ()
+                    if isinstance(item, dict)
+                ),
+                principle=str(row.get("principle") or "").strip(),
+            )
+            for row in block_raw.get("development_blueprint") or ()
+            if isinstance(row, dict) and int(row.get("microcycle_index") or 0) > 0
+        )
         block = OverviewBlockReadModel(
             title=str(block_raw.get("title") or "").strip(),
             start_date=str(block_raw.get("start_date") or "").strip(),
@@ -336,6 +399,7 @@ def build_overview_context(roadmap: dict | None) -> OverviewPlanContextReadModel
             protected_capabilities=labels(block_raw.get("protected_capabilities")),
             progression_axes=progression_axes,
             microcycle_intents=microcycle_intents,
+            development_blueprint=development_blueprint,
         )
 
     return OverviewPlanContextReadModel(

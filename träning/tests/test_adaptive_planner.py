@@ -141,7 +141,9 @@ class AdaptivePlanningTests(unittest.TestCase):
             row["recipe_key"]
             for row in future_strategy["current_mesocycle"]["microcycle_template"]
         }
-        self.assertIn("run_threshold", recipes)
+        self.assertTrue(
+            {"run_threshold", "run_threshold_short_reps"} & recipes
+        )
         self.assertIn("strength_core", recipes)
         self.assertTrue(
             {"swim_aerobic_technique", "swim_aerobic_endurance", "swim_aerobic_threshold"}
@@ -1012,7 +1014,10 @@ class AdaptivePlanningTests(unittest.TestCase):
             if row["action"] == "progress"
         ]
         self.assertEqual(len(primary_progressions), 1)
-        self.assertEqual(primary_progressions[0]["recipe_key"], "run_threshold")
+        self.assertEqual(
+            primary_progressions[0]["recipe_key"],
+            "run_threshold_short_reps",
+        )
         self.assertTrue(
             any("progression_ready=true" in ref for ref in primary_progressions[0]["evidence_refs"])
         )
@@ -1053,7 +1058,7 @@ class AdaptivePlanningTests(unittest.TestCase):
         self.assertFalse(any(row["action"] == "progress" for row in result["slots"]))
         threshold = next(
             row for row in result["slots"]
-            if row["recipe_key"] == "run_threshold"
+            if row["recipe_key"] in {"run_threshold", "run_threshold_short_reps"}
         )
         self.assertIn("Develop-vecka konsolideras", threshold["rationale"])
         self.assertIn("varningssignal", threshold["rationale"])
@@ -1102,14 +1107,17 @@ class AdaptivePlanningTests(unittest.TestCase):
             athlete_state,
             date(2026, 10, 5),
         )
-        threshold = next(row for row in twice["slots"] if row["recipe_key"] == "run_threshold")
+        threshold = next(
+            row for row in twice["slots"]
+            if row["recipe_key"] in {"run_threshold", "run_threshold_short_reps"}
+        )
         self.assertEqual(
             threshold["rationale"].count("Develop-vecka konsolideras för detta primära stimulus"),
             1,
         )
         self.assertEqual(
             threshold["evidence_refs"].count(
-                "athlete_state.dose_response:run_threshold:hold"
+                f"athlete_state.dose_response:{threshold['recipe_key']}:hold"
             ),
             1,
         )
@@ -2029,7 +2037,7 @@ class AdaptivePlanningTests(unittest.TestCase):
             "end_date": "2026-10-18",
             "goal_hash": goal_hash(self.goal),
         }
-        self.assertEqual(MICRO_PLANNER_REVISION, 15)
+        self.assertEqual(MICRO_PLANNER_REVISION, 16)
         stale_micro = {
             "planner_revision": 6,
             "week_start": "2026-09-28",

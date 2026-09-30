@@ -10,6 +10,7 @@ SCRIPTS = ROOT / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
 from adaptive_planner import (  # noqa: E402
+    build_development_blueprint,
     fallback_microcycle,
     materialize_template,
     mesocycle_block_context,
@@ -47,6 +48,111 @@ class PeriodizedDevelopmentTests(unittest.TestCase):
             )
             self.assertEqual(context["block_intent"], intent)
             self.assertEqual(context["wave"], expected)
+
+    def test_blueprint_plans_variation_and_progression_before_detail_days_exist(self):
+        meso = {
+            "id": "test-mixed-block",
+            "start_date": "2026-09-28",
+            "end_date": "2026-10-25",
+            "duration_weeks": 4,
+            "primary_capabilities": ["run_threshold", "swim_aerobic", "swim_technique"],
+            "secondary_capabilities": ["run_easy_distance", "mtb_technical"],
+        }
+        blueprint = build_development_blueprint(meso, self.policy, self.catalog)
+        self.assertEqual(len(blueprint), 4)
+        self.assertEqual(
+            [row["block_intent"] for row in blueprint],
+            ["establish", "develop", "develop", "consolidate"],
+        )
+
+        run_recipes = []
+        run_intents = []
+        swim_character_sets = []
+        for row in blueprint:
+            run_item = next(
+                item for item in row["planned_variants"]
+                if item["capability"] == "run_threshold"
+            )
+            run_recipes.append(run_item["recipe_key"])
+            run_intents.append(run_item["progression_intent"])
+            swim_character_sets.append(
+                {
+                    item["development_character"]
+                    for item in row["planned_variants"]
+                    if item["recipe_key"].startswith("swim_")
+                }
+            )
+
+        self.assertEqual(
+            run_recipes,
+            ["run_threshold", "run_threshold_short_reps", "run_threshold", "run_threshold"],
+        )
+        self.assertEqual(
+            run_intents,
+            ["establish", "vary_structure", "progress_if_ready", "consolidate"],
+        )
+        self.assertTrue(all(len(chars) >= 2 for chars in swim_character_sets))
+        self.assertNotEqual(swim_character_sets[0], swim_character_sets[1])
+
+    def test_develop_fallback_uses_blueprint_recipe_family_not_same_threshold_format(self):
+        meso = {
+            "id": "test-run-block",
+            "start_date": "2026-09-28",
+            "end_date": "2026-10-25",
+            "duration_weeks": 4,
+            "primary_capabilities": ["run_threshold", "swim_aerobic", "swim_technique"],
+            "secondary_capabilities": ["run_easy_distance"],
+        }
+        result = fallback_microcycle(
+            meso,
+            self.policy,
+            self.catalog,
+            date(2026, 10, 5),
+            completed_context={},
+        )
+        recipes = [row["recipe_key"] for row in result["slots"]]
+        self.assertIn("run_threshold_short_reps", recipes)
+        self.assertNotIn("run_threshold", recipes)
+
+    def test_guard_rejects_off_blueprint_primary_recipe_in_develop_week(self):
+        meso = {
+            "id": "test-run-block",
+            "start_date": "2026-09-28",
+            "end_date": "2026-10-25",
+            "duration_weeks": 4,
+            "primary_capabilities": ["run_threshold"],
+            "secondary_capabilities": ["run_easy_distance"],
+        }
+        proposal = {
+            "rationale": "old repeated format",
+            "slots": [
+                {"day_index": 2, "recipe_key": "swim_aerobic_technique", "action": "establish", "rationale": "swim", "evidence_refs": []},
+                {"day_index": 3, "recipe_key": "run_threshold", "action": "consolidate", "rationale": "same old format", "evidence_refs": []},
+                {"day_index": 5, "recipe_key": "strength_core", "action": "establish", "rationale": "strength", "evidence_refs": []},
+                {"day_index": 6, "recipe_key": "swim_aerobic_endurance", "action": "establish", "rationale": "swim", "evidence_refs": []},
+                {"day_index": 7, "recipe_key": "run_easy_distance", "action": "consolidate", "rationale": "support", "evidence_refs": []},
+            ],
+        }
+        failures = microcycle_guard_failures(
+            proposal,
+            meso,
+            self.policy,
+            self.catalog,
+            date(2026, 10, 5),
+            completed_context={},
+        )
+        self.assertTrue(
+            any("avviker från mesocykelns planerade passkaraktär" in item for item in failures),
+            failures,
+        )
+
+    def test_recipe_families_offer_multiple_formats_for_key_capabilities(self):
+        families = self.catalog["capability_recipe_families"]
+        self.assertGreaterEqual(len(families["run_threshold"]), 2)
+        self.assertGreaterEqual(len(families["run_hill_quality"]), 2)
+        self.assertGreaterEqual(len(families["run_easy_distance"]), 2)
+        self.assertGreaterEqual(len(families["swim_aerobic"]), 3)
+        self.assertGreaterEqual(len(families["mtb_aerobic"]), 2)
 
     def test_fallback_uses_distinct_swim_characters_instead_of_duplicate_template(self):
         result = fallback_microcycle(

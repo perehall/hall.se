@@ -200,6 +200,110 @@ class TrainingOverviewTests(unittest.TestCase):
                         "end_date": "2026-10-25",
                     },
                 ],
+                "development_blueprint": [
+                    {
+                        "microcycle_index": 1,
+                        "week_start": "2026-09-28",
+                        "week_end": "2026-10-04",
+                        "block_intent": "establish",
+                        "planned_variants": [
+                            {
+                                "role": "primary",
+                                "capability": "run_threshold",
+                                "recipe_key": "run_threshold",
+                                "development_character": "threshold_long_reps",
+                                "label": "Löptröskel · längre repetitioner",
+                                "progression_intent": "establish",
+                            }
+                        ],
+                        "supporting_candidates": [],
+                        "protected_variants": [],
+                        "principle": "test",
+                    },
+                    {
+                        "microcycle_index": 2,
+                        "week_start": "2026-10-05",
+                        "week_end": "2026-10-11",
+                        "block_intent": "develop",
+                        "planned_variants": [
+                            {
+                                "role": "primary",
+                                "capability": "run_threshold",
+                                "recipe_key": "run_threshold_short_reps",
+                                "development_character": "threshold_short_reps",
+                                "label": "Löptröskel · kortare repetitioner",
+                                "progression_intent": "vary_structure",
+                            }
+                        ],
+                        "supporting_candidates": [],
+                        "protected_variants": [],
+                        "principle": "test",
+                    },
+                    {
+                        "microcycle_index": 3,
+                        "week_start": "2026-10-12",
+                        "week_end": "2026-10-18",
+                        "block_intent": "develop",
+                        "planned_variants": [
+                            {
+                                "role": "primary",
+                                "capability": "run_threshold",
+                                "recipe_key": "run_threshold",
+                                "development_character": "threshold_long_reps",
+                                "label": "Löptröskel · längre repetitioner",
+                                "progression_intent": "progress_if_ready",
+                            },
+                            {
+                                "role": "primary",
+                                "capability": "swim_aerobic",
+                                "recipe_key": "swim_aerobic_skills",
+                                "development_character": "technique_catch_aerobic",
+                                "label": "Sim · grepp/teknik + aerob",
+                                "progression_intent": "progress_if_ready",
+                            },
+                        ],
+                        "supporting_candidates": [
+                            {
+                                "role": "supporting_candidate",
+                                "capability": "run_easy_distance",
+                                "recipe_key": "run_easy_trail",
+                                "development_character": "easy_trail",
+                                "label": "Lugn löpdistans · stig/grus",
+                                "progression_intent": "support_if_absorbable",
+                            }
+                        ],
+                        "protected_variants": [
+                            {
+                                "role": "protected",
+                                "capability": "strength_core",
+                                "recipe_key": "strength_core",
+                                "development_character": "unilateral_core",
+                                "label": "Styrka/core · unilateral + bål",
+                                "progression_intent": "protect",
+                            }
+                        ],
+                        "principle": "test",
+                    },
+                    {
+                        "microcycle_index": 4,
+                        "week_start": "2026-10-19",
+                        "week_end": "2026-10-25",
+                        "block_intent": "consolidate",
+                        "planned_variants": [
+                            {
+                                "role": "primary",
+                                "capability": "run_threshold",
+                                "recipe_key": "run_threshold",
+                                "development_character": "threshold_long_reps",
+                                "label": "Löptröskel · längre repetitioner",
+                                "progression_intent": "consolidate",
+                            }
+                        ],
+                        "supporting_candidates": [],
+                        "protected_variants": [],
+                        "principle": "test",
+                    },
+                ],
             },
         }
 
@@ -268,7 +372,11 @@ class TrainingOverviewTests(unittest.TestCase):
         self.assertIn("Etablera", document)
         self.assertIn("Utveckla", document)
         self.assertIn("Konsolidera", document)
-        self.assertIn("Ej detaljplanerad", document)
+        self.assertIn("Preliminär grundplan", document)
+        self.assertIn("Löptröskel · längre repetitioner", document)
+        self.assertIn("Sim · grepp/teknik + aerob", document)
+        self.assertIn("Planerad progression om responsen stödjer", document)
+        self.assertIn("Grundplan finns · detaljdagar ej materialiserade", document)
         self.assertNotIn("7 planerade vilodagar", document)
         self.assertIn("ÖTILLÖ Åland World Series · Topp-10", document)
         self.assertIn("Granska plan", document)

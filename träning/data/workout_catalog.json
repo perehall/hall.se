@@ -43,7 +43,9 @@
           "session": "Löpning · kontrollerad tröskel · 4 × 9 min / 90 s jogg",
           "intent": "Förgodkänt nästa arbetstidssteg från demonstrerade 4 × 8: fyra extra arbetsminuter med oförändrad kontrollerad intensitetsavsikt. Väljs endast när mesocykel/mikrocykel uttryckligen beslutar progression."
         }
-      ]
+      ],
+      "development_character": "threshold_long_reps",
+      "blueprint_label": "Löptröskel · längre repetitioner"
     },
     "run_hill_quality": {
       "sport": "run",
@@ -122,7 +124,9 @@
           "session": "Löpning · backkvalitet · 15 min lugnt + 3 × 10 × 150 m / lugn joggvila + 10 min lugnt",
           "intent": "Planerat utvecklingssteg från 3 × 9: endast repetitionsvolymen ökas. Avsedd intensitet och planerad repetitionslängd 150 m hålls oförändrade."
         }
-      ]
+      ],
+      "development_character": "hill_clustered_reps",
+      "blueprint_label": "Backkvalitet · klustrade 150 m-reps"
     },
     "run_easy_distance": {
       "sport": "run",
@@ -171,7 +175,9 @@
           "session": "Löpning · lugn distans · 120 min",
           "intent": "Lång distansdos som kräver stöd i faktisk tålighet och närbelastning."
         }
-      ]
+      ],
+      "development_character": "easy_steady",
+      "blueprint_label": "Lugn löpdistans · jämn"
     },
     "mtb_technical": {
       "sport": "bike",
@@ -216,7 +222,9 @@
           "session": "MTB/XC · 90 min · teknik + lugn aerob stig",
           "intent": "Längre teknisk/aerob exponering med krav på marginal till löpkvalitet."
         }
-      ]
+      ],
+      "development_character": "technical_flow",
+      "blueprint_label": "MTB/XC · teknik och flyt"
     },
     "swim_aerobic_technique": {
       "sport": "swim",
@@ -323,7 +331,8 @@
         }
       ],
       "catalog_note": "Fullt exekverbart lågmekaniskt aerob/teknik-recept. Garmin/Intervals-transporten lägger automatiskt Press LAP-setvila mellan huvudblocken.",
-      "development_character": "technique_aerobic"
+      "development_character": "technique_aerobic",
+      "blueprint_label": "Sim · aerob teknik"
     },
     "strength_core": {
       "sport": "strength",
@@ -363,7 +372,9 @@
           "session": "Styrka/core · ca 45 min · styrkemall",
           "intent": "Utökad exponering när belastningen runt passet tillåter."
         }
-      ]
+      ],
+      "development_character": "unilateral_core",
+      "blueprint_label": "Styrka/core · unilateral + bål"
     },
     "swim_aerobic_threshold": {
       "sport": "swim",
@@ -478,7 +489,8 @@
         }
       ],
       "catalog_note": "Separat etablerat kvalitetsrecept. Det får väljas när mikrocykeln behöver swim_threshold; det ska inte behandlas som nästa linjära distanssteg från swim_aerobic_technique. Garmin/Intervals-transporten lägger Press LAP-setvila mellan huvudblocken.",
-      "development_character": "controlled_threshold"
+      "development_character": "controlled_threshold",
+      "blueprint_label": "Sim · aerob + kontrollerad tröskel"
     },
     "swim_aerobic_endurance": {
       "sport": "swim",
@@ -641,7 +653,416 @@
           }
         }
       ],
-      "catalog_note": "Separat aerob utvecklingskaraktär. Totaldistansen ligger inom redan demonstrerad 3,2–4,0 km-nivå; receptet antar ingen ny fart, puls eller tröskel och ska inte användas som automatisk volymökning."
+      "catalog_note": "Separat aerob utvecklingskaraktär. Totaldistansen ligger inom redan demonstrerad 3,2–4,0 km-nivå; receptet antar ingen ny fart, puls eller tröskel och ska inte användas som automatisk volymökning.",
+      "blueprint_label": "Sim · aerob uthållighet"
+    },
+    "run_threshold_short_reps": {
+      "sport": "run",
+      "stimuli": [
+        "run_threshold"
+      ],
+      "priority_role": "anchor",
+      "load_dimensions": [
+        "cardiovascular",
+        "mechanical"
+      ],
+      "performance_marker_id": "run-threshold-control",
+      "development_character": "threshold_short_reps",
+      "blueprint_label": "Löptröskel · kortare repetitioner",
+      "development_focus": "Kontrollerad tröskel med kortare arbetsrepetitioner. Varianten ska ge ett annat passformat utan att höja avsedd intensitet; total arbetstid styrs fortfarande av absorberad dos.",
+      "options": [
+        {
+          "id": "run-threshold-short-5x5",
+          "kind": "structured",
+          "value": 25,
+          "session": "Löpning · kontrollerad tröskel · 5 × 5 min / 60 s jogg",
+          "intent": "Lateral variant med kortare repetitioner och fortsatt kontrollerad intensitetsavsikt."
+        },
+        {
+          "id": "run-threshold-short-5x6",
+          "kind": "structured",
+          "value": 30,
+          "session": "Löpning · kontrollerad tröskel · 5 × 6 min / 60 s jogg",
+          "intent": "Kontrollerad variant nära etablerad total arbetstid utan att kräva högre intensitet."
+        },
+        {
+          "id": "run-threshold-short-6x6",
+          "kind": "structured",
+          "value": 36,
+          "session": "Löpning · kontrollerad tröskel · 6 × 6 min / 60 s jogg",
+          "intent": "Förgodkänt arbetstidssteg när run_threshold-response uttryckligen stödjer progression."
+        }
+      ]
+    },
+    "run_hill_continuous": {
+      "sport": "run",
+      "stimuli": [
+        "run_hill_quality"
+      ],
+      "priority_role": "anchor",
+      "load_dimensions": [
+        "mechanical",
+        "neuromuscular",
+        "cardiovascular"
+      ],
+      "performance_marker_id": "run-hill-mechanics",
+      "development_character": "hill_continuous_reps",
+      "blueprint_label": "Backkvalitet · sammanhängande 150 m-reps",
+      "development_focus": "Samma kontrollerade backmekanik som grundreceptet men utan fasta setblock. Varianten ändrar ackumuleringsmönstret, inte avsedd intensitet.",
+      "options": [
+        {
+          "id": "run-hill-cont-18x150",
+          "kind": "structured",
+          "value": 18,
+          "session": "Löpning · backkvalitet · 15 min lugnt + 18 × 150 m / lugn nedjogg + 10 min lugnt",
+          "intent": "Lateral strukturvariant vid 18 kvalitativa repetitioner."
+        },
+        {
+          "id": "run-hill-cont-21x150",
+          "kind": "structured",
+          "value": 21,
+          "session": "Löpning · backkvalitet · 15 min lugnt + 21 × 150 m / lugn nedjogg + 10 min lugnt",
+          "intent": "Lateral strukturvariant vid 21 kvalitativa repetitioner."
+        },
+        {
+          "id": "run-hill-cont-24x150",
+          "kind": "structured",
+          "value": 24,
+          "session": "Löpning · backkvalitet · 15 min lugnt + 24 × 150 m / lugn nedjogg + 10 min lugnt",
+          "intent": "Lateral strukturvariant vid 24 kvalitativa repetitioner; ingen automatisk ökning över verifierad nivå."
+        }
+      ]
+    },
+    "run_easy_trail": {
+      "sport": "run",
+      "stimuli": [
+        "run_easy_distance"
+      ],
+      "priority_role": "anchor",
+      "load_dimensions": [
+        "cardiovascular",
+        "mechanical",
+        "technical"
+      ],
+      "development_character": "easy_trail",
+      "blueprint_label": "Lugn löpdistans · stig/grus",
+      "development_focus": "Lugn tålighetslöpning på stig/grus med terrängvariation men utan fartjakt. Terräng väljs så att passet förblir aerobt och absorberbart.",
+      "options": [
+        {
+          "id": "run-easy-trail-75",
+          "kind": "duration_minutes",
+          "value": 75,
+          "session": "Löpning · lugn stig/grus · 75 min",
+          "intent": "Lateral terrängvariant med kontrollerad varaktighet."
+        },
+        {
+          "id": "run-easy-trail-90",
+          "kind": "duration_minutes",
+          "value": 90,
+          "session": "Löpning · lugn stig/grus · 90 min",
+          "intent": "Lateral terrängvariant med kontrollerad varaktighet."
+        },
+        {
+          "id": "run-easy-trail-105",
+          "kind": "duration_minutes",
+          "value": 105,
+          "session": "Löpning · lugn stig/grus · 105 min",
+          "intent": "Lateral terrängvariant nära längre etablerad distansdos."
+        },
+        {
+          "id": "run-easy-trail-120",
+          "kind": "duration_minutes",
+          "value": 120,
+          "session": "Löpning · lugn stig/grus · 120 min",
+          "intent": "Längre terrängdos endast när faktisk tålighet och närbelastning stödjer den."
+        }
+      ]
+    },
+    "mtb_aerobic_endurance": {
+      "sport": "bike",
+      "stimuli": [
+        "mtb_aerobic"
+      ],
+      "priority_role": "flex",
+      "load_dimensions": [
+        "cardiovascular",
+        "technical"
+      ],
+      "development_character": "aerobic_endurance",
+      "blueprint_label": "MTB/XC · aerob uthållighet",
+      "development_focus": "Jämn aerob cykling på lättare stig/grus. Fokus är uthållighet och jämn belastning, inte tekniska segment eller fartjakt.",
+      "options": [
+        {
+          "id": "mtb-aerobic-60",
+          "kind": "duration_minutes",
+          "value": 60,
+          "session": "MTB/XC · 60 min · lugn aerob stig/grus",
+          "intent": "Kort aerob cykelexponering."
+        },
+        {
+          "id": "mtb-aerobic-75",
+          "kind": "duration_minutes",
+          "value": 75,
+          "session": "MTB/XC · 75 min · lugn aerob stig/grus",
+          "intent": "Normal aerob cykelexponering."
+        },
+        {
+          "id": "mtb-aerobic-90",
+          "kind": "duration_minutes",
+          "value": 90,
+          "session": "MTB/XC · 90 min · lugn aerob stig/grus",
+          "intent": "Längre aerob cykelexponering när helhetsbelastningen tillåter."
+        },
+        {
+          "id": "mtb-aerobic-105",
+          "kind": "duration_minutes",
+          "value": 105,
+          "session": "MTB/XC · 105 min · lugn aerob stig/grus",
+          "intent": "Förgodkänt längre steg som kräver stöd i faktisk tålighet."
+        }
+      ]
+    },
+    "swim_aerobic_skills": {
+      "sport": "swim",
+      "stimuli": [
+        "swim_aerobic",
+        "swim_technique"
+      ],
+      "priority_role": "flex",
+      "load_dimensions": [
+        "cardiovascular",
+        "technical"
+      ],
+      "development_character": "technique_catch_aerobic",
+      "blueprint_label": "Sim · grepp/teknik + aerob",
+      "development_focus": "Teknisk variation med fokus på grepp och avslappnad frekvens inbäddat i ett aerobt pass. Syftet är annan teknikuppgift, inte högre intensitet.",
+      "options": [
+        {
+          "id": "swim-aerobic-skills-3200",
+          "kind": "structured",
+          "value": 3200,
+          "session": "Simning · 3 200 m · grepp/teknik + aerob",
+          "intent": "Teknisk lateral variant på etablerad aerob totaldistans.",
+          "watch_workout": {
+            "type": "Swim",
+            "equipment": [],
+            "name": "Grepp/teknik + aerob · 3 200 m",
+            "planned_distance_m": 3200,
+            "blocks": [
+              {
+                "name": "Insim + teknik",
+                "steps": [
+                  {
+                    "kind": "swim",
+                    "text": "Lugn insim med fokus på avslappning och linje",
+                    "distance_m": 600,
+                    "intensity": "warmup",
+                    "equipment": []
+                  }
+                ]
+              },
+              {
+                "name": "Grepp",
+                "repeat": 8,
+                "steps": [
+                  {
+                    "kind": "swim",
+                    "text": "Rent isätt och tidigt kontrollerat grepp",
+                    "distance_m": 50,
+                    "intensity": "active",
+                    "equipment": []
+                  },
+                  {
+                    "kind": "rest",
+                    "duration_s": 15
+                  }
+                ]
+              },
+              {
+                "name": "Aerob",
+                "repeat": 4,
+                "steps": [
+                  {
+                    "kind": "swim",
+                    "text": "Stabil aerob rytm med bibehållet grepp",
+                    "distance_m": 400,
+                    "intensity": "active",
+                    "equipment": []
+                  },
+                  {
+                    "kind": "rest",
+                    "duration_s": 25
+                  }
+                ]
+              },
+              {
+                "name": "Frekvens",
+                "repeat": 8,
+                "steps": [
+                  {
+                    "kind": "swim",
+                    "text": "Avslappnad frekvens utan att tappa linje eller grepp",
+                    "distance_m": 50,
+                    "intensity": "active",
+                    "equipment": []
+                  },
+                  {
+                    "kind": "rest",
+                    "duration_s": 15
+                  }
+                ]
+              },
+              {
+                "name": "Avsim",
+                "steps": [
+                  {
+                    "kind": "swim",
+                    "text": "Mycket lugnt avsim",
+                    "distance_m": 200,
+                    "intensity": "cooldown",
+                    "equipment": []
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "swim-aerobic-skills-3600",
+          "kind": "structured",
+          "value": 3600,
+          "session": "Simning · 3 600 m · grepp/teknik + aerob",
+          "intent": "Förgodkänt distanssteg med samma teknikuppgift när swim_aerobic-response stödjer progression.",
+          "watch_workout": {
+            "type": "Swim",
+            "equipment": [],
+            "name": "Grepp/teknik + aerob · 3 600 m",
+            "planned_distance_m": 3600,
+            "blocks": [
+              {
+                "name": "Insim + teknik",
+                "steps": [
+                  {
+                    "kind": "swim",
+                    "text": "Lugn insim med fokus på avslappning och linje",
+                    "distance_m": 600,
+                    "intensity": "warmup",
+                    "equipment": []
+                  }
+                ]
+              },
+              {
+                "name": "Grepp",
+                "repeat": 8,
+                "steps": [
+                  {
+                    "kind": "swim",
+                    "text": "Rent isätt och tidigt kontrollerat grepp",
+                    "distance_m": 50,
+                    "intensity": "active",
+                    "equipment": []
+                  },
+                  {
+                    "kind": "rest",
+                    "duration_s": 15
+                  }
+                ]
+              },
+              {
+                "name": "Aerob",
+                "repeat": 5,
+                "steps": [
+                  {
+                    "kind": "swim",
+                    "text": "Stabil aerob rytm med bibehållet grepp",
+                    "distance_m": 400,
+                    "intensity": "active",
+                    "equipment": []
+                  },
+                  {
+                    "kind": "rest",
+                    "duration_s": 25
+                  }
+                ]
+              },
+              {
+                "name": "Frekvens",
+                "repeat": 8,
+                "steps": [
+                  {
+                    "kind": "swim",
+                    "text": "Avslappnad frekvens utan att tappa linje eller grepp",
+                    "distance_m": 50,
+                    "intensity": "active",
+                    "equipment": []
+                  },
+                  {
+                    "kind": "rest",
+                    "duration_s": 15
+                  }
+                ]
+              },
+              {
+                "name": "Avsim",
+                "steps": [
+                  {
+                    "kind": "swim",
+                    "text": "Mycket lugnt avsim",
+                    "distance_m": 200,
+                    "intensity": "cooldown",
+                    "equipment": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "catalog_note": "Alternativt exekverbart aerob/teknik-recept för strukturell variation utan automatisk intensitetsökning."
     }
+  },
+  "capability_recipe_families": {
+    "run_threshold": [
+      "run_threshold",
+      "run_threshold_short_reps"
+    ],
+    "run_hill_quality": [
+      "run_hill_quality",
+      "run_hill_continuous"
+    ],
+    "run_easy_distance": [
+      "run_easy_distance",
+      "run_easy_trail"
+    ],
+    "mtb_technical": [
+      "mtb_technical",
+      "mtb_aerobic_endurance"
+    ],
+    "mtb_aerobic": [
+      "mtb_aerobic_endurance",
+      "mtb_technical"
+    ],
+    "swim_aerobic": [
+      "swim_aerobic_technique",
+      "swim_aerobic_endurance",
+      "swim_aerobic_skills"
+    ],
+    "swim_technique": [
+      "swim_aerobic_technique",
+      "swim_aerobic_skills",
+      "swim_aerobic_endurance"
+    ],
+    "swim_threshold": [
+      "swim_aerobic_threshold"
+    ],
+    "strength_unilateral": [
+      "strength_core"
+    ],
+    "strength_core": [
+      "strength_core"
+    ],
+    "plyometric": [
+      "strength_core"
+    ]
   }
 }
