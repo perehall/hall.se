@@ -296,6 +296,109 @@ class PlanningSolverV1Tests(unittest.TestCase):
         self.assertEqual(result.plan.workouts[0].local_date, date(2026, 10, 7))
         self.assertGreater(result.trace.rejected_candidates, 0)
 
+    def test_directional_recovery_window_can_differ_by_order(self):
+        threshold = option(
+            "run_threshold",
+            "threshold-32",
+            "run_threshold",
+            "run",
+            dimensions=(dim("cardiovascular", LoadDimensionLevel.HIGH),),
+            minutes=50,
+        )
+        fixed = FixedLoadCommitment(
+            commitment_id="mechanical-fixed",
+            local_date=START,
+            label="Fast mekanisk belastning",
+            load_dimensions=(dim("mechanical_leg", LoadDimensionLevel.HIGH),),
+            source_refs=("user:fixed",),
+            quantitative_load=(duration(60),),
+        )
+        compat = policy(
+            LoadCompatibilityRule(
+                rule_id="asymmetric-mechanical-cardio",
+                first_dimension="mechanical_leg",
+                first_min_level=LoadDimensionLevel.HIGH,
+                second_dimension="cardiovascular",
+                second_min_level=LoadDimensionLevel.HIGH,
+                min_calendar_separation_days=1,
+                min_first_to_second_days=3,
+                min_second_to_first_days=1,
+                same_day_order=SameDayOrderRule.FORBIDDEN,
+                source_refs=("policy:test",),
+            )
+        )
+        result = solve(
+            context(
+                (obligation("threshold", "run_threshold", "run_threshold"),),
+                (threshold,),
+                fixed=(fixed,),
+                compatibility=compat,
+            )
+        )
+        self.assertFalse(result.blocked)
+        self.assertEqual(result.plan.workouts[0].local_date, date(2026, 10, 8))
+
+    def test_reverse_direction_uses_its_own_shorter_window(self):
+        threshold = option(
+            "run_threshold",
+            "threshold-32",
+            "run_threshold",
+            "run",
+            dimensions=(dim("cardiovascular", LoadDimensionLevel.HIGH),),
+            minutes=50,
+        )
+        sunday = date(2026, 10, 11)
+        saturday = date(2026, 10, 10)
+        fixed = FixedLoadCommitment(
+            commitment_id="mechanical-fixed-sunday",
+            local_date=sunday,
+            label="Fast mekanisk belastning",
+            load_dimensions=(dim("mechanical_leg", LoadDimensionLevel.HIGH),),
+            source_refs=("user:fixed",),
+            quantitative_load=(duration(60),),
+        )
+        compat = policy(
+            LoadCompatibilityRule(
+                rule_id="asymmetric-mechanical-cardio",
+                first_dimension="mechanical_leg",
+                first_min_level=LoadDimensionLevel.HIGH,
+                second_dimension="cardiovascular",
+                second_min_level=LoadDimensionLevel.HIGH,
+                min_calendar_separation_days=1,
+                min_first_to_second_days=3,
+                min_second_to_first_days=1,
+                same_day_order=SameDayOrderRule.FORBIDDEN,
+                source_refs=("policy:test",),
+            )
+        )
+        availability = tuple(
+            DailyAvailability(
+                local_date=current_day,
+                available=current_day in {saturday, sunday},
+                source_refs=("user:availability",),
+            )
+            for current_day in (
+                date(2026, 10, 5),
+                date(2026, 10, 6),
+                date(2026, 10, 7),
+                date(2026, 10, 8),
+                date(2026, 10, 9),
+                saturday,
+                sunday,
+            )
+        )
+        result = solve(
+            context(
+                (obligation("threshold", "run_threshold", "run_threshold"),),
+                (threshold,),
+                fixed=(fixed,),
+                compatibility=compat,
+                availability=availability,
+            )
+        )
+        self.assertFalse(result.blocked)
+        self.assertEqual(result.plan.workouts[0].local_date, saturday)
+
     def test_preferred_active_days_cannot_create_filler(self):
         easy = option(
             "run_easy_distance",
