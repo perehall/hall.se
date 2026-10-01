@@ -3246,19 +3246,36 @@ def choose_option(recipe_key, recipe, action, athlete_state, starting_state=None
         trusted = float(observed) if isinstance(observed, (int, float)) else None
 
     starting_value = starting_state_value_for_recipe(recipe_key, starting_state)
+    demonstrated = (profile or {}).get("demonstrated_value")
+    demonstrated = (
+        float(demonstrated)
+        if isinstance(demonstrated, (int, float)) and demonstrated > 0
+        else None
+    )
 
     if trusted is None:
         if isinstance(starting_value, (int, float)):
+            establishment_ceiling = float(starting_value)
+            if demonstrated is not None:
+                establishment_ceiling = min(establishment_ceiling, demonstrated)
             eligible = [
                 index for index, item in enumerate(options)
-                if float(item["value"]) <= float(starting_value) * 1.02
+                if float(item["value"]) <= establishment_ceiling * 1.02
             ]
             floor_index = max(eligible) if eligible else 0
-            evidence = (
-                f"Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger "
-                f"{float(starting_value):g} i receptets dosvariabel; närmaste konservativa katalogsteg används "
-                "endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos."
-            )
+            if demonstrated is not None and demonstrated < float(starting_value):
+                evidence = (
+                    f"Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger "
+                    f"{float(starting_value):g}, men senaste verifierade demonstrerade nivå är "
+                    f"{demonstrated:g}. Den lägre nivån används som konservativt dos-tak tills faktisk "
+                    "tolerans/absorption är verifierad; startvärdet får inte överstyra färsk träningsrespons."
+                )
+            else:
+                evidence = (
+                    f"Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger "
+                    f"{float(starting_value):g} i receptets dosvariabel; närmaste konservativa katalogsteg används "
+                    "endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos."
+                )
         else:
             floor_index = 0
             evidence = (
