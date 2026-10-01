@@ -209,7 +209,20 @@ def materialize_catalog_document(
                         }
                         for dimension in dimensions
                     ],
-                    "quantitative_load": [],
+                    "quantitative_load": [
+                        {
+                            "scope": "planned",
+                            "subject": "mutable_training",
+                            "metric": "session_count",
+                            "unit": "sessions",
+                            "min_value": 1,
+                            "max_value": 1,
+                            "provenance_refs": [
+                                option_ref,
+                                "planning_v1:one_catalog_option_is_one_session",
+                            ],
+                        }
+                    ],
                     "source_refs": [
                         f"workout_catalog:recipe:{recipe_id}",
                         option_ref,
