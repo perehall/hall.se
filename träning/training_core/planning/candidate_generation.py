@@ -139,12 +139,28 @@ def _eligibility_keys(context: PlanValidationContext) -> set[tuple[str, str, str
     }
 
 
+def _option_fully_eligible(
+    option: ApprovedWorkoutOption,
+    eligibility: set[tuple[str, str, str]],
+) -> bool:
+    return all(
+        (option.recipe_id, option.dose_option_id, capability) in eligibility
+        for capability in option.capabilities
+    )
+
+
 def _contribution_for_obligation(
     option: ApprovedWorkoutOption,
     obligation: PlanningObligation,
     eligibility: set[tuple[str, str, str]],
 ) -> ObligationContribution | None:
     option_key = (option.recipe_id, option.dose_option_id)
+
+    # Multi-capability options are indivisible physical prescriptions. A
+    # workout cannot bypass an unsafe dose by claiming only its easiest
+    # capability as the obligation source.
+    if not _option_fully_eligible(option, eligibility):
+        return None
 
     if (
         obligation.capability in option.capabilities
@@ -250,10 +266,9 @@ def generate_candidate_atoms(
                 item.min_occurrences > 0
                 for item in placement_constraints
             )
-            option_is_eligible = any(
-                (option.recipe_id, option.dose_option_id, capability)
-                in eligibility
-                for capability in option.capabilities
+            option_is_eligible = _option_fully_eligible(
+                option,
+                eligibility,
             )
 
             if not contributions and not required_placement:
