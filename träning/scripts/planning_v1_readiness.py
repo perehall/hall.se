@@ -303,7 +303,7 @@ def build_readiness_report(
         ):
             continue
         if (
-            item.stage == "athlete_state"
+            item.stage == "observed_training"
             and "observed_training_source" in source_stages
         ):
             continue
