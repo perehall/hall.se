@@ -27,7 +27,6 @@ from training_core.planning import (  # noqa: E402
     LoadEstimate,
     ObligationContribution,
     ObservedLoadExposure,
-    ObservedLoadSample,
     ObservedObligationCredit,
     OptionEligibility,
     PlanContent,
@@ -337,7 +336,6 @@ def context(
     availability=(),
     closed_dates=(),
     observed_credits=(),
-    observed_load=(),
     observed_exposures=(),
     source_revision="source-1",
     history_from=date(2026, 9, 29),
@@ -360,7 +358,6 @@ def context(
         availability=tuple(availability),
         closed_dates=tuple(closed_dates),
         observed_obligation_credits=tuple(observed_credits),
-        observed_load_samples=tuple(observed_load),
         observed_load_exposures=tuple(observed_exposures),
     )
 
@@ -593,21 +590,27 @@ class FinalPlanningValidatorTests(unittest.TestCase):
         self.assertIn("OBSERVED_CREDIT_OUTSIDE_OBLIGATION_WINDOW", report.codes())
 
     def test_rolling_aggregate_load_includes_observed_fixed_and_planned(self):
-        observed = ObservedLoadSample(
+        observed = ObservedLoadExposure(
+            exposure_id="activity-load",
             local_date=date(2026, 10, 4),
-            load=load(
-                "global",
-                "training_duration",
-                "duration",
-                "minutes",
-                100,
-                100,
+            load_dimensions=(
+                dim("cardiovascular", LoadDimensionLevel.LOW),
+            ),
+            quantitative_load=(
+                load(
+                    "global",
+                    "training_duration",
+                    "duration",
+                    "minutes",
+                    100,
+                    100,
+                ),
             ),
             source_refs=("activity:load",),
         )
         report = validate_plan_content(
             valid_plan(),
-            context(observed_load=(observed,)),
+            context(observed_exposures=(observed,)),
         )
         # 100 observed + 120 fixed upper bound + 75 easy + 50 threshold = 345 > 300.
         self.assertIn("AGGREGATE_LOAD_EXCEEDED", report.codes())
