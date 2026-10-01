@@ -16,7 +16,10 @@ sys.path.insert(0, str(ROOT))
 from training_core.planning.models import (  # noqa: E402
     AggregateLoadEnvelope,
     CoverageRule,
+    FixedLoadCommitment,
     LoadBound,
+    LoadDimensionExposure,
+    LoadDimensionLevel,
     PlanAuthorityState,
     PlanAuthorityStatus,
     PlanningContractError,
@@ -138,6 +141,73 @@ class PlanningObligationTests(unittest.TestCase):
             item.max_exposures = 99  # type: ignore[misc]
 
 
+class FixedLoadCommitmentTests(unittest.TestCase):
+    def test_fixed_load_is_generic_and_date_scoped(self):
+        item = FixedLoadCommitment(
+            commitment_id="fixed-1",
+            local_date=date(2026, 10, 5),
+            label="Fast extern belastning",
+            load_dimensions=(
+                LoadDimensionExposure(
+                    dimension="mechanical_leg",
+                    level=LoadDimensionLevel.HIGH,
+                    provenance_refs=("user:confirmed",),
+                ),
+                LoadDimensionExposure(
+                    dimension="technical",
+                    level=LoadDimensionLevel.HIGH,
+                    provenance_refs=("user:confirmed",),
+                ),
+            ),
+            source_refs=("calendar:fixed-1",),
+            within_day_order=1,
+        )
+        self.assertEqual(item.local_date, date(2026, 10, 5))
+        self.assertEqual(item.load_dimensions[0].dimension, "mechanical_leg")
+
+    def test_fixed_load_requires_explicit_load_semantics(self):
+        with self.assertRaises(PlanningContractError):
+            FixedLoadCommitment(
+                commitment_id="fixed-1",
+                local_date=date(2026, 10, 5),
+                label="Extern belastning",
+                load_dimensions=(),
+                source_refs=("calendar:fixed-1",),
+            )
+
+    def test_fixed_load_rejects_duplicate_dimensions(self):
+        exposure = LoadDimensionExposure(
+            dimension="mechanical_leg",
+            level=LoadDimensionLevel.HIGH,
+            provenance_refs=("user:confirmed",),
+        )
+        with self.assertRaises(PlanningContractError):
+            FixedLoadCommitment(
+                commitment_id="fixed-1",
+                local_date=date(2026, 10, 5),
+                label="Extern belastning",
+                load_dimensions=(exposure, exposure),
+                source_refs=("calendar:fixed-1",),
+            )
+
+    def test_fixed_load_order_must_be_positive_when_known(self):
+        with self.assertRaises(PlanningContractError):
+            FixedLoadCommitment(
+                commitment_id="fixed-1",
+                local_date=date(2026, 10, 5),
+                label="Extern belastning",
+                load_dimensions=(
+                    LoadDimensionExposure(
+                        dimension="mechanical_leg",
+                        level=LoadDimensionLevel.MODERATE,
+                        provenance_refs=("user:confirmed",),
+                    ),
+                ),
+                source_refs=("calendar:fixed-1",),
+                within_day_order=0,
+            )
+
+
 class AggregateLoadEnvelopeTests(unittest.TestCase):
     def test_bound_requires_provenance(self):
         with self.assertRaises(PlanningContractError):
@@ -151,9 +221,13 @@ class AggregateLoadEnvelopeTests(unittest.TestCase):
         with self.assertRaises(PlanningContractError):
             bound(window_days=0)
 
-    def test_bound_requires_positive_ceiling(self):
+    def test_bound_allows_zero_ceiling(self):
+        result = bound(max_value=0)
+        self.assertEqual(result.max_value, 0)
+
+    def test_bound_rejects_negative_ceiling(self):
         with self.assertRaises(PlanningContractError):
-            bound(max_value=0)
+            bound(max_value=-1)
 
     def test_envelope_requires_at_least_one_bound(self):
         with self.assertRaises(PlanningContractError):
@@ -236,6 +310,8 @@ class PlanAuthorityStateTests(unittest.TestCase):
                 semantic_input_hash="inputhash",
                 strategy_revision_id="strategy-a",
                 engine_version="v1",
+                affected_from=date(2026, 10, 1),
+                affected_until=date(2026, 10, 7),
             )
 
     def test_current_state_cannot_carry_blocked_semantics(self):
@@ -246,6 +322,8 @@ class PlanAuthorityStateTests(unittest.TestCase):
                 semantic_input_hash="inputhash",
                 strategy_revision_id="strategy-a",
                 engine_version="v1",
+                affected_from=date(2026, 10, 1),
+                affected_until=date(2026, 10, 7),
                 plan_content_hash="planhash",
                 blocked_reason_codes=("NO_VALID_PLAN",),
             )
@@ -273,6 +351,8 @@ class PlanAuthorityStateTests(unittest.TestCase):
                 semantic_input_hash="newinput",
                 strategy_revision_id="strategy-a",
                 engine_version="v1",
+                affected_from=date(2026, 10, 1),
+                affected_until=date(2026, 10, 7),
             )
 
     def test_blocked_state_cannot_expose_current_content_hash(self):
@@ -283,7 +363,22 @@ class PlanAuthorityStateTests(unittest.TestCase):
                 semantic_input_hash="newinput",
                 strategy_revision_id="strategy-a",
                 engine_version="v1",
+                affected_from=date(2026, 10, 1),
+                affected_until=date(2026, 10, 7),
                 plan_content_hash="stale-plan",
+                blocked_reason_codes=("NO_VALID_PLAN",),
+            )
+
+    def test_affected_window_cannot_run_backwards(self):
+        with self.assertRaises(PlanningContractError):
+            PlanAuthorityState(
+                status=PlanAuthorityStatus.BLOCKED,
+                source_revision="43",
+                semantic_input_hash="newinput",
+                strategy_revision_id="strategy-a",
+                engine_version="v1",
+                affected_from=date(2026, 10, 8),
+                affected_until=date(2026, 10, 7),
                 blocked_reason_codes=("NO_VALID_PLAN",),
             )
 
