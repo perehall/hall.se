@@ -20,7 +20,6 @@ from .models import (
     LoadDimensionLevel,
     LoadEstimate,
     ObservedLoadExposure,
-    ObservedLoadSample,
     ObservedObligationCredit,
     OptionEligibility,
     PlanContent,
@@ -64,7 +63,6 @@ class PlanValidationContext:
     availability: tuple[DailyAvailability, ...] = ()
     closed_dates: tuple[date, ...] = ()
     observed_obligation_credits: tuple[ObservedObligationCredit, ...] = ()
-    observed_load_samples: tuple[ObservedLoadSample, ...] = ()
     observed_load_exposures: tuple[ObservedLoadExposure, ...] = ()
 
     def __post_init__(self) -> None:
@@ -141,11 +139,6 @@ class PlanValidationContext:
             self,
             "observed_obligation_credits",
             tuple(self.observed_obligation_credits),
-        )
-        object.__setattr__(
-            self,
-            "observed_load_samples",
-            tuple(self.observed_load_samples),
         )
         object.__setattr__(
             self,
@@ -918,8 +911,11 @@ def _validate_aggregate_load(
 ) -> None:
     dated_loads: list[tuple[date, LoadEstimate, str]] = []
 
-    for sample in context.observed_load_samples:
-        dated_loads.append((sample.local_date, sample.load, "observed"))
+    for exposure in context.observed_load_exposures:
+        for load in exposure.quantitative_load:
+            dated_loads.append(
+                (exposure.local_date, load, exposure.exposure_id)
+            )
 
     for workout in plan.workouts:
         for load in workout.quantitative_load:
