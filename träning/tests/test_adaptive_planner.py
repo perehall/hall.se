@@ -938,6 +938,45 @@ class AdaptivePlanningTests(unittest.TestCase):
         self.assertIn("startläge", evidence)
         self.assertIn("inte som tolererad eller absorberad", evidence)
 
+    def test_fresher_demonstrated_run_caps_higher_manual_starting_level(self):
+        state = {
+            "capability_facts": {},
+            "dose_response": {
+                "by_capability": {
+                    "run_easy_distance": {
+                        "demonstrated_value": 80.07,
+                        "tolerated_value": None,
+                        "absorbed_value": None,
+                        "progression_ready": False,
+                        "progression_reason": "Senaste jämförbara exponeringen innehåller en explicit varningssignal.",
+                        "progression_reason_code": "direct_caution",
+                    }
+                }
+            },
+        }
+        starting_state = {
+            "schema_version": 1,
+            "status": "confirmed",
+            "source_mode": "manual",
+            "manual_state": {
+                "disciplines": {
+                    "run": {
+                        "long_run_minutes": 120,
+                    }
+                }
+            },
+            "confirmation": {"observed_representative": False},
+        }
+        recipe = self.catalog["recipes"]["run_easy_distance"]
+        selected, floor, _, relation, evidence = choose_option(
+            "run_easy_distance", recipe, "consolidate", state, starting_state
+        )
+        self.assertEqual(floor["id"], "run-easy-75")
+        self.assertEqual(selected["id"], "run-easy-75")
+        self.assertEqual(relation, "hold")
+        self.assertIn("konservativt dos-tak", evidence)
+        self.assertIn("färsk träningsrespons", evidence)
+
     def test_completed_threshold_is_credited_only_from_dated_capability_evidence(self):
         state = {
             "recent_sessions": [
