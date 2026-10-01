@@ -34,20 +34,38 @@ END = date(2026, 10, 11)
 
 def explicit_state():
     return {
+        "fact_window": {
+            "start": "2026-10-01",
+            "end": "2026-10-11",
+        },
         "recent_sessions": [
             {
-                "id": 99,
+                "id": 1,
+                "date": "2026-10-06",
+                "classification": "training",
                 "family": "run",
                 "average_heartrate": 170,
                 "training_profile": {
                     "planning_credits": ["run_threshold"],
                 },
-            }
+            },
+            {
+                "id": 2,
+                "date": "2026-10-07",
+                "classification": "training",
+                "family": "run",
+                "average_heartrate": 130,
+                "training_profile": {
+                    "planning_credits": ["run_easy_distance"],
+                },
+            },
         ],
         "planning_engine_v1": {
             "schema_version": 1,
             "observed_training_revision": {
                 "revision_id": "observed-v1",
+                "coverage_from": "2026-10-06",
+                "coverage_through": "2026-10-07",
                 "source_refs": ["activity-semantics:v1"],
                 "capability_evidence": [
                     {
@@ -69,7 +87,7 @@ def explicit_state():
                 ],
                 "load_exposures": [
                     {
-                        "exposure_id": "activity-1",
+                        "exposure_id": "activity:1",
                         "local_date": "2026-10-06",
                         "load_dimensions": [
                             {
@@ -90,6 +108,29 @@ def explicit_state():
                             }
                         ],
                         "source_refs": ["activity:1"],
+                    },
+                    {
+                        "exposure_id": "activity:2",
+                        "local_date": "2026-10-07",
+                        "load_dimensions": [
+                            {
+                                "dimension": "mechanical_leg",
+                                "level": "unknown",
+                                "provenance_refs": ["activity:2", "load-review:unknown"],
+                            }
+                        ],
+                        "quantitative_load": [
+                            {
+                                "scope": "global",
+                                "subject": "training_duration",
+                                "metric": "duration",
+                                "unit": "minutes",
+                                "min_value": 60,
+                                "max_value": 60,
+                                "provenance_refs": ["activity:2"],
+                            }
+                        ],
+                        "source_refs": ["activity:2"],
                     }
                 ],
             },
@@ -161,10 +202,24 @@ class V1ObservedTrainingProjectionTests(unittest.TestCase):
         result = compile_observed_training_projection(explicit_state())
         self.assertEqual(result.revision_id, "observed-v1")
         self.assertEqual(len(result.capability_evidence), 2)
-        self.assertEqual(len(result.load_exposures), 1)
+        self.assertEqual(len(result.load_exposures), 2)
+        self.assertEqual(result.coverage_from, date(2026, 10, 6))
+        self.assertEqual(result.coverage_through, date(2026, 10, 7))
         self.assertEqual(
             result.load_exposures[0].load_dimensions[0].level,
             LoadDimensionLevel.UNKNOWN,
+        )
+
+    def test_missing_physical_training_activity_blocks_observed_projection(self):
+        document = explicit_state()
+        document["planning_engine_v1"]["observed_training_revision"]["load_exposures"] = [
+            document["planning_engine_v1"]["observed_training_revision"]["load_exposures"][0]
+        ]
+        with self.assertRaises(ObservedTrainingProjectionError) as raised:
+            compile_observed_training_projection(document)
+        self.assertEqual(
+            raised.exception.code,
+            "INCOMPLETE_V1_OBSERVED_LOAD_COVERAGE",
         )
 
     def test_legacy_planning_credit_and_heart_rate_cannot_substitute_for_v1_evidence(self):
