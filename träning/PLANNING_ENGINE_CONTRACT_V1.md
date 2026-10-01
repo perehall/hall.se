@@ -830,7 +830,8 @@ Before any live shadow solve, the application layer must materialize the followi
 - fixed commitments;
 - declared availability;
 - one explicit load-compatibility policy;
-- one explicit aggregate load envelope.
+- one explicit aggregate load envelope;
+- one explicit objective policy for schedule preferences and spacing.
 
 The bridge MUST fail closed when any required projection cannot be justified from canonical data.
 
