@@ -244,16 +244,21 @@ def materialize_execution_facts_document(
         ).encode("utf-8")
     ).hexdigest()
 
+    source_refs = list(
+        dict.fromkeys(
+            [
+                f"athlete_profile:revision:{profile_revision}",
+                f"fixed_commitments:{fixed_revision}",
+                *fixed_refs,
+            ]
+        )
+    )
     document = {
         "planning_engine_v1": {
             "schema_version": 1,
             "execution_facts_revision": {
                 "revision_id": f"execution:{digest}",
-                "source_refs": [
-                    f"athlete_profile:revision:{profile_revision}",
-                    f"fixed_commitments:{fixed_revision}",
-                    *fixed_refs,
-                ],
+                "source_refs": source_refs,
                 "fixed_commitments": commitments,
                 "availability": availability,
                 "closed_dates": closed_dates,
