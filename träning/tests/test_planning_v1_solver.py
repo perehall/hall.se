@@ -28,6 +28,7 @@ from training_core.planning.models import (  # noqa: E402
     LoadEstimate,
     OptionEligibility,
     PlanningObligation,
+    PlanningContractError,
     SameDayOrderRule,
     StrategyRevision,
     UnknownAggregatePolicy,
@@ -41,6 +42,11 @@ from training_core.planning.objectives import (  # noqa: E402
 from training_core.planning.solver import (  # noqa: E402
     PlanningSolveRequest,
     solve_planning_window,
+)
+from training_core.planning.requests import (  # noqa: E402
+    PlanChangeKind,
+    UserPlanChange,
+    compile_plan_change,
 )
 from training_core.planning.validation import PlanValidationContext  # noqa: E402
 
@@ -194,6 +200,7 @@ def context(
     availability=(),
     max_minutes=1000,
     eligibility_values=None,
+    placement=(),
 ):
     return PlanValidationContext(
         source_revision="source-1",
@@ -209,11 +216,18 @@ def context(
         ),
         fixed_commitments=tuple(fixed),
         compatibility_policy=compatibility or policy(),
+        placement_constraints=tuple(placement),
         availability=tuple(availability),
     )
 
 
-def solve(ctx, *, preferred_days=5, doubles=DoubleSessionPreference.SOMETIMES):
+def solve(
+    ctx,
+    *,
+    preferred_days=5,
+    doubles=DoubleSessionPreference.SOMETIMES,
+    previous_plan=None,
+):
     return solve_planning_window(
         PlanningSolveRequest(
             affected_from=START,
@@ -223,6 +237,7 @@ def solve(ctx, *, preferred_days=5, doubles=DoubleSessionPreference.SOMETIMES):
                 preferred_days=preferred_days,
                 doubles=doubles,
             ),
+            previous_plan=previous_plan,
         )
     )
 
@@ -684,6 +699,191 @@ class PlanningSolverV1Tests(unittest.TestCase):
             open_result.trace.semantic_input_hash,
             constrained_result.trace.semantic_input_hash,
         )
+
+    def test_user_move_is_solved_as_absolute_placement_constraints(self):
+        easy = option(
+            "run_easy_distance",
+            "easy-60",
+            "run_easy_distance",
+            "run",
+            dimensions=(dim("cardiovascular", LoadDimensionLevel.LOW),),
+        )
+        obligations = (
+            obligation("easy", "run_easy_distance", "run_easy_distance"),
+        )
+        base_context = context(obligations, (easy,))
+        base = solve(base_context)
+        self.assertFalse(base.blocked)
+        self.assertEqual(base.plan.workouts[0].local_date, START)
+
+        target = date(2026, 10, 8)
+        change = UserPlanChange(
+            request_id="move-1",
+            kind=PlanChangeKind.MOVE,
+            base_plan_hash=plan_content_hash(base.plan),
+            target_workout_id=base.plan.workouts[0].workout_id,
+            target_date=target,
+            source_refs=("user:test",),
+        )
+        placement = compile_plan_change(change, base.plan)
+        replanned = solve(
+            context(obligations, (easy,), placement=placement),
+            previous_plan=base.plan,
+        )
+        self.assertFalse(replanned.blocked)
+        self.assertEqual(len(replanned.plan.workouts), 1)
+        self.assertEqual(replanned.plan.workouts[0].local_date, target)
+        self.assertIn(
+            "user:move-1:move-to",
+            replanned.plan.workouts[0].constraint_ids,
+        )
+
+    def test_user_remove_removes_placement_not_strategy_obligation(self):
+        easy = option(
+            "run_easy_distance",
+            "easy-60",
+            "run_easy_distance",
+            "run",
+            dimensions=(dim("cardiovascular", LoadDimensionLevel.LOW),),
+        )
+        obligations = (
+            obligation("easy", "run_easy_distance", "run_easy_distance"),
+        )
+        base = solve(context(obligations, (easy,)))
+        change = UserPlanChange(
+            request_id="remove-1",
+            kind=PlanChangeKind.REMOVE,
+            base_plan_hash=plan_content_hash(base.plan),
+            target_workout_id=base.plan.workouts[0].workout_id,
+            source_refs=("user:test",),
+        )
+        placement = compile_plan_change(change, base.plan)
+        replanned = solve(
+            context(obligations, (easy,), placement=placement),
+            previous_plan=base.plan,
+        )
+        self.assertFalse(replanned.blocked)
+        self.assertEqual(len(replanned.plan.workouts), 1)
+        self.assertNotEqual(replanned.plan.workouts[0].local_date, START)
+        self.assertEqual(
+            replanned.objective_vector.required_deficit_by_tier[0],
+            0,
+        )
+
+    def test_user_add_can_require_second_identical_workout_without_calendar_hack(self):
+        easy = option(
+            "run_easy_distance",
+            "easy-60",
+            "run_easy_distance",
+            "run",
+            dimensions=(dim("cardiovascular", LoadDimensionLevel.LOW),),
+        )
+        obligations = (
+            obligation(
+                "easy",
+                "run_easy_distance",
+                "run_easy_distance",
+                minimum=1,
+                maximum=2,
+            ),
+        )
+        base = solve(context(obligations, (easy,), max_minutes=180))
+        target = base.plan.workouts[0].local_date
+        change = UserPlanChange(
+            request_id="add-1",
+            kind=PlanChangeKind.ADD,
+            base_plan_hash=plan_content_hash(base.plan),
+            target_date=target,
+            recipe_id="run_easy_distance",
+            dose_option_id="easy-60",
+            source_refs=("user:test",),
+        )
+        placement = compile_plan_change(change, base.plan)
+        replanned = solve(
+            context(
+                obligations,
+                (easy,),
+                max_minutes=180,
+                placement=placement,
+            ),
+            previous_plan=base.plan,
+        )
+        self.assertFalse(replanned.blocked)
+        same_day = [
+            item for item in replanned.plan.workouts
+            if item.local_date == target
+            and item.recipe_id == "run_easy_distance"
+            and item.dose_option_id == "easy-60"
+        ]
+        self.assertEqual(len(same_day), 2)
+
+    def test_user_add_that_breaks_hard_load_envelope_blocks(self):
+        easy = option(
+            "run_easy_distance",
+            "easy-60",
+            "run_easy_distance",
+            "run",
+            dimensions=(dim("cardiovascular", LoadDimensionLevel.LOW),),
+        )
+        obligations = (
+            obligation(
+                "easy",
+                "run_easy_distance",
+                "run_easy_distance",
+                minimum=1,
+                maximum=2,
+            ),
+        )
+        base = solve(context(obligations, (easy,), max_minutes=60))
+        change = UserPlanChange(
+            request_id="add-too-much",
+            kind=PlanChangeKind.ADD,
+            base_plan_hash=plan_content_hash(base.plan),
+            target_date=base.plan.workouts[0].local_date,
+            recipe_id="run_easy_distance",
+            dose_option_id="easy-60",
+            source_refs=("user:test",),
+        )
+        placement = compile_plan_change(change, base.plan)
+        replanned = solve(
+            context(
+                obligations,
+                (easy,),
+                max_minutes=60,
+                placement=placement,
+            ),
+            previous_plan=base.plan,
+        )
+        self.assertTrue(replanned.blocked)
+        self.assertIsNone(replanned.plan)
+        self.assertIn(
+            "AGGREGATE_LOAD_EXCEEDED",
+            replanned.authority_state.blocked_reason_codes,
+        )
+
+    def test_stale_user_change_is_rejected_before_solving(self):
+        easy = option(
+            "run_easy_distance",
+            "easy-60",
+            "run_easy_distance",
+            "run",
+            dimensions=(dim("cardiovascular", LoadDimensionLevel.LOW),),
+        )
+        base = solve(
+            context(
+                (obligation("easy", "run_easy_distance", "run_easy_distance"),),
+                (easy,),
+            )
+        )
+        change = UserPlanChange(
+            request_id="stale-remove",
+            kind=PlanChangeKind.REMOVE,
+            base_plan_hash="not-the-current-plan",
+            target_workout_id=base.plan.workouts[0].workout_id,
+            source_refs=("user:test",),
+        )
+        with self.assertRaises(PlanningContractError):
+            compile_plan_change(change, base.plan)
 
     def test_unavoidable_fixed_conflict_blocks_instead_of_publishing_invalid_plan(self):
         dummy = option(
