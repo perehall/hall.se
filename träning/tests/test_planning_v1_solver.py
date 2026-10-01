@@ -403,6 +403,41 @@ class PlanningSolverV1Tests(unittest.TestCase):
             by_recipe["strength"].within_day_order,
         )
 
+    def test_identical_recipe_can_exist_twice_on_same_day_when_strategy_requires_two_exposures(self):
+        easy = option(
+            "run_easy_distance",
+            "easy-60",
+            "run_easy_distance",
+            "run",
+            dimensions=(dim("cardiovascular", LoadDimensionLevel.LOW),),
+        )
+        target = date(2026, 10, 8)
+        result = solve(
+            context(
+                (
+                    obligation(
+                        "easy",
+                        "run_easy_distance",
+                        "run_easy_distance",
+                        minimum=2,
+                        maximum=2,
+                    ),
+                ),
+                (easy,),
+                availability=only_day_available(target),
+            ),
+            preferred_days=1,
+            doubles=DoubleSessionPreference.ALLOW,
+        )
+        self.assertFalse(result.blocked)
+        self.assertEqual(len(result.plan.workouts), 2)
+        self.assertEqual({item.local_date for item in result.plan.workouts}, {target})
+        self.assertEqual(
+            {(item.recipe_id, item.dose_option_id) for item in result.plan.workouts},
+            {("run_easy_distance", "easy-60")},
+        )
+        self.assertEqual(len({item.workout_id for item in result.plan.workouts}), 2)
+
     def test_partial_credit_can_require_two_distinct_exposures(self):
         mtb = option(
             "mtb_aerobic",
