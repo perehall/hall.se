@@ -595,29 +595,43 @@ def _validate_option_eligibility(
         for item in context.option_eligibility
     }
     catalog = _catalog_by_key(context.catalog_options)
+
     for workout in plan.workouts:
-        if not workout.obligation_contributions:
-            option = catalog.get((workout.recipe_id, workout.dose_option_id))
-            eligible_caps = {
-                capability
-                for recipe_id, dose_id, capability in allowed
-                if recipe_id == workout.recipe_id
-                and dose_id == workout.dose_option_id
-            }
-            if option is None or not eligible_caps.intersection(option.capabilities):
-                issues.append(
-                    ValidationIssue(
-                        "WORKOUT_OPTION_NOT_ELIGIBLE",
-                        "User-constrained workout is not athlete-eligible for any capability supplied by the approved option.",
-                        (
-                            workout.workout_id,
-                            workout.recipe_id,
-                            workout.dose_option_id,
-                        ),
-                    )
-                )
+        option = catalog.get((workout.recipe_id, workout.dose_option_id))
+        if option is None:
+            # Catalog ownership is validated separately.
             continue
 
+        missing_option_capabilities = tuple(
+            sorted(
+                capability
+                for capability in option.capabilities
+                if (
+                    workout.recipe_id,
+                    workout.dose_option_id,
+                    capability,
+                )
+                not in allowed
+            )
+        )
+        if missing_option_capabilities:
+            issues.append(
+                ValidationIssue(
+                    "WORKOUT_OPTION_NOT_ELIGIBLE",
+                    "Selected recipe/dose is not athlete-eligible across every capability carried by the physical workout.",
+                    (
+                        workout.workout_id,
+                        workout.recipe_id,
+                        workout.dose_option_id,
+                        *missing_option_capabilities,
+                    ),
+                )
+            )
+            continue
+
+        # Full-option eligibility above is stronger than contribution-specific
+        # eligibility. Keep this explicit assertion in validation so a future
+        # catalog/model change cannot accidentally weaken the contract.
         for contribution in workout.obligation_contributions:
             key = (
                 workout.recipe_id,
