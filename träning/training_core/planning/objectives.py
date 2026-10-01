@@ -514,7 +514,14 @@ def _variation_penalty(
     )
 
 
-def _canonical_tie_key(plan: PlanContent) -> tuple:
+def _canonical_tie_key(
+    plan: PlanContent,
+    context: ObjectiveContext,
+) -> tuple:
+    priorities = {
+        item.option_key: item.planning_priority
+        for item in context.catalog_options
+    }
     rows = []
     for workout in plan.workouts:
         contributions = tuple(
@@ -531,12 +538,13 @@ def _canonical_tie_key(plan: PlanContent) -> tuple:
         )
         rows.append(
             (
+                priorities[(workout.recipe_id, workout.dose_option_id)],
                 workout.local_date.isoformat(),
                 workout.within_day_order if workout.within_day_order is not None else 999,
-                workout.workout_id,
                 workout.recipe_id,
                 workout.dose_option_id,
                 contributions,
+                workout.workout_id,
             )
         )
     return tuple(sorted(rows))
@@ -577,7 +585,7 @@ def evaluate_objectives(
         schedule_double_penalty=double_penalty,
         variation_repeat_penalty=variation,
         discretionary_excess_by_tier=discretionary_excess,
-        canonical_tie_key=_canonical_tie_key(plan),
+        canonical_tie_key=_canonical_tie_key(plan, context),
     )
 
 
