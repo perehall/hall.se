@@ -933,6 +933,34 @@ def _validate_load_compatibility(
                     )
 
 
+def _observed_contribution_matches_obligation(
+    contribution,
+    obligation: PlanningObligation,
+) -> bool:
+    if contribution.source_capability == obligation.capability:
+        return (
+            contribution.kind is ContributionKind.DIRECT
+            and contribution.credit_numerator == 1
+            and contribution.credit_denominator == 1
+        )
+
+    partial = next(
+        (
+            rule
+            for rule in obligation.partial_coverage
+            if rule.source_capability == contribution.source_capability
+        ),
+        None,
+    )
+    if partial is None:
+        return False
+    return (
+        contribution.kind is ContributionKind.PARTIAL
+        and contribution.credit_numerator == partial.credit_numerator
+        and contribution.credit_denominator == partial.credit_denominator
+    )
+
+
 def _validate_obligation_maxima(
     plan: PlanContent,
     context: PlanValidationContext,
@@ -961,6 +989,36 @@ def _validate_obligation_maxima(
                     (
                         contribution.obligation_id,
                         observed.local_date.isoformat(),
+                    ),
+                )
+            )
+            continue
+        if not obligation.accepts_observed_basis(observed.basis):
+            issues.append(
+                ValidationIssue(
+                    "OBSERVED_CREDIT_BASIS_NOT_ACCEPTED",
+                    "Observed credit uses an evidence basis not accepted by this obligation.",
+                    (
+                        contribution.obligation_id,
+                        observed.basis.value,
+                    ),
+                )
+            )
+            continue
+        if not _observed_contribution_matches_obligation(
+            contribution,
+            obligation,
+        ):
+            issues.append(
+                ValidationIssue(
+                    "OBSERVED_CREDIT_SEMANTICS_MISMATCH",
+                    "Observed credit contribution does not match the obligation's direct or partial-coverage semantics.",
+                    (
+                        contribution.obligation_id,
+                        contribution.source_capability,
+                        contribution.kind.value,
+                        str(contribution.credit_numerator),
+                        str(contribution.credit_denominator),
                     ),
                 )
             )
