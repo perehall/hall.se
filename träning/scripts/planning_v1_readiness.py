@@ -144,6 +144,7 @@ def build_readiness_report(
     activity_loader: Callable[
         [date, date], tuple[list[dict[str, Any]], dict[str, Any]]
     ] = load_canonical_training_activities,
+    include_internal: bool = False,
 ) -> dict[str, Any]:
     """Inspect whether a real canonical shadow input can be assembled.
 
@@ -204,6 +205,8 @@ def build_readiness_report(
 
     observed_document: dict[str, Any] | None = None
     observed_metadata: dict[str, Any] = {}
+    history_from: date | None = None
+    history_through: date | None = None
     fact_window = athlete_state_source.get("fact_window")
     if not isinstance(fact_window, dict):
         source_blockers.append(
@@ -229,6 +232,8 @@ def build_readiness_report(
             )
         else:
             try:
+                history_from = coverage_from
+                history_through = coverage_through
                 activity_rows, observed_metadata = activity_loader(
                     coverage_from,
                     coverage_through,
@@ -365,7 +370,7 @@ def build_readiness_report(
             item["message"],
         ),
     )
-    return {
+    report = {
         "ready": result.ready and not source_blockers,
         "source_revision": source_revision,
         "window": {
@@ -432,6 +437,12 @@ def build_readiness_report(
         "solver_ran": False,
         "production_mutated": False,
     }
+    if include_internal:
+        report["_assembly_result"] = result
+        report["_history_from"] = history_from
+        report["_history_through"] = history_through
+        report["_future_context_through"] = context_through
+    return report
 
 
 def _iso_date(value: str) -> date:
