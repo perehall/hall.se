@@ -814,6 +814,33 @@ New production defects MUST normally expand a general property/constraint test. 
 
 ---
 
+## 16.1 Shadow-input readiness gate
+
+Shadow mode MUST NOT be fed by an implicit translation of legacy planner output.
+
+Before any live shadow solve, the application layer must materialize the following V1 projections directly from canonical sources, each with source revision and provenance:
+
+- one accepted `StrategyRevision` containing bounded planning obligations;
+- approved workout options with explicit load semantics and executable dose identity;
+- athlete-specific `OptionEligibility` derived without importing legacy planner decisions;
+- canonical observed obligation credits;
+- canonical observed categorical and quantitative load exposures;
+- fixed commitments;
+- declared availability;
+- one explicit load-compatibility policy;
+- one explicit aggregate load envelope.
+
+The bridge MUST fail closed when any required projection cannot be justified from canonical data.
+
+In particular, it is prohibited to:
+- infer weekly exposure minima/maxima from old calendar placement alone;
+- treat legacy planner output as evidence of athlete tolerance;
+- synthesize an aggregate load ceiling merely from a convenient recent total;
+- import `adaptive_planner.py` or any legacy reconciliation function to populate V1 contracts;
+- silently downgrade unknown load semantics to low load or compatibility.
+
+A shadow run is considered **input-ready** only when the complete `PlanningSolveRequest` can be reconstructed from these V1 projections without consulting legacy planning decisions except as the optional previous-plan stability input.
+
 ## 17. Cutover criteria
 
 The new engine MUST NOT become production authority until all conditions are met.
