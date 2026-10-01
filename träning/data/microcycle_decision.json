@@ -1,62 +1,44 @@
 {
   "slots": [
     {
-      "action": "reduce",
+      "action": "consolidate",
       "day_index": 4,
-      "rationale": "Minska mängden backkvalitet denna vecka för att undvika överkoncentration av löpkvalitet i kombination med fasta enduro‑pass och nyliga backsessioner; bevaka 24–72h‑signal före framtida konsolidering eller progression.",
-      "recipe_key": "run_hill_quality",
-      "evidence_refs": [
-        "20326850936",
-        "20229568713"
-      ]
-    },
-    {
-      "action": "establish",
-      "day_index": 5,
-      "rationale": "Fullfölja veckans normala två simbassessioner med teknisk/aerob inriktning på konservativ nivå; undvik progression pga senaste sim‑caution.",
+      "rationale": "Lågmekanisk simexponering dagen efter fast enduro följer blockets planerade passkaraktär utan att anta att benen är redo för ny benkvalitet.",
       "recipe_key": "swim_aerobic_technique",
       "evidence_refs": [
-        "20300494236",
-        "20337309419"
-      ]
-    },
-    {
-      "action": "establish",
-      "day_index": 6,
-      "rationale": "Lägga ett lugnt, terrängspecifikt tålighetspass istället för ytterligare tröskel/backkvalitet för att stödja run‑kapacitet utan att öka löpkvalitetskoncentrationen eller skapa intilliggande stressorer.",
-      "recipe_key": "run_easy_trail",
-      "evidence_refs": [
-        "20381137043",
-        "20350203020"
+        "mesocycle.primary_capabilities"
       ]
     },
     {
       "action": "consolidate",
-      "day_index": 7,
-      "rationale": "Behålla MTB/aerob uthållighet som skyddad sekundär kapacitet utan att kompromettera löppasset; konsoliderande karaktär efter veckans tröskel/terrängplanering.",
-      "recipe_key": "mtb_aerobic_endurance",
+      "day_index": 5,
+      "rationale": "Blockets preliminära grundplan föreslår denna stödjande passkaraktär; den tas bara med när ingen redan planerad exponering fyller samma stödroll och belastningsordningen tillåter.",
+      "recipe_key": "run_hill_quality",
       "evidence_refs": [
-        "20314473143",
-        "20367593813"
+        "planning_policy.microcycle_policy"
       ]
     }
   ],
-  "source": "openai_repaired",
+  "source": "deterministic_fallback_after_repair_guard",
   "week_key": "2026-W40",
-  "rationale": "Ta bort duplicerad run_threshold-slot och minska koncentrationen av löpkvalitet nära redan genomförda pass och fasta endurodagar. Behåll två simbassessioner totalt (en redan genomförd + en planerad teknisk/aerob session), skydda styrka/core (redan krediterad), och bevara MTB som sekundär kapacitet. Placera inga nya pass på stängda dagar (1–2) eller som skapar intilliggande löpstressorer; välj reducerad back‑exponering framför ytterligare tröskelprogression.",
+  "rationale": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern.",
   "week_start": "2026-09-28",
-  "source_hash": "824961d8899742ac5eb57107f24fe9265d1cb62bdbdad647ea55e02cd6e1cc75",
+  "source_hash": "b4d0aaf0872a4d8aea70414c4819f7c36ab419c76b1e40c6369719e19a98e587",
   "guard_repair": {
-    "result": "accepted",
+    "result": "fallback",
     "attempted": true,
+    "repair_failures": [
+      "tung benbelastning får inte planeras på söndagen direkt före nästa fasta enduro: strength_core",
+      "strength_core är redundant: styrka/core är redan faktiskt genomförd i mikrocykeln"
+    ],
     "initial_failures": [
-      "run_threshold är redundant: primärt stimulus är redan faktiskt genomfört i mikrocykeln run_threshold",
-      "för hög förhandskoncentration av benkvalitet: 3 löpkvalitet + 0 reserverad fast enduro > 2. Framtida enduro ska räknas som verklig belastning tills utfallet är känt."
+      "tung benbelastning får inte planeras på söndagen direkt före nästa fasta enduro: run_easy_distance",
+      "lång löpdistans får inte ligga direkt intill MTB/XC; den sekundära cykelexponeringen ska utgå eller flyttas"
     ]
   },
   "mesocycle_id": "20260928-run_threshold-swim_aerobic-swim_technique",
   "schema_version": 1,
-  "generated_at_utc": "2026-09-30T19:42:44.675924+00:00",
+  "generated_at_utc": "2026-10-01T01:16:09.770167+00:00",
   "planner_revision": 17,
   "competition_context": {
     "as_of": "2026-09-28",

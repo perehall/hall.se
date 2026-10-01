@@ -18,12 +18,6 @@
       "active_days": 10,
       "activity_count": 10
     },
-    "walk": {
-      "time_s": 23980,
-      "distance_m": 8569.8,
-      "active_days": 1,
-      "activity_count": 1
-    },
     "enduro": {
       "time_s": 59189,
       "distance_m": 211249.3,
@@ -50,26 +44,21 @@
     }
   },
   "fact_window": {
-    "end": "2026-09-30",
-    "start": "2026-08-06",
+    "end": "2026-10-01",
+    "start": "2026-08-07",
     "lookback_days": 56
   },
   "load_windows": {
     "windows": {
       "recent_7d": {
-        "end": "2026-09-30",
-        "start": "2026-09-24",
-        "time_s": 40172,
+        "end": "2026-10-01",
+        "start": "2026-09-25",
+        "time_s": 35196,
         "by_family": {
           "run": {
             "time_s": 13126,
             "active_days": 3,
             "activity_count": 3
-          },
-          "bike": {
-            "time_s": 4976,
-            "active_days": 1,
-            "activity_count": 1
           },
           "swim": {
             "time_s": 7904,
@@ -87,13 +76,13 @@
             "activity_count": 1
           }
         },
-        "active_days": 7,
-        "activity_count": 9
+        "active_days": 6,
+        "activity_count": 8
       },
       "recent_28d": {
-        "end": "2026-09-30",
-        "start": "2026-09-03",
-        "time_s": 160532,
+        "end": "2026-10-01",
+        "start": "2026-09-04",
+        "time_s": 152649,
         "by_family": {
           "run": {
             "time_s": 57968,
@@ -101,9 +90,9 @@
             "activity_count": 12
           },
           "bike": {
-            "time_s": 23742,
-            "active_days": 5,
-            "activity_count": 5
+            "time_s": 15859,
+            "active_days": 4,
+            "activity_count": 4
           },
           "swim": {
             "time_s": 28445,
@@ -121,13 +110,13 @@
             "activity_count": 4
           }
         },
-        "active_days": 28,
-        "activity_count": 34
+        "active_days": 27,
+        "activity_count": 33
       },
       "previous_7d": {
-        "end": "2026-09-23",
-        "start": "2026-09-17",
-        "time_s": 36274,
+        "end": "2026-09-24",
+        "start": "2026-09-18",
+        "time_s": 36615,
         "by_family": {
           "run": {
             "time_s": 15549,
@@ -135,7 +124,7 @@
             "activity_count": 3
           },
           "bike": {
-            "time_s": 4635,
+            "time_s": 4976,
             "active_days": 1,
             "activity_count": 1
           },
@@ -1069,17 +1058,17 @@
               ]
             },
             "evidence_policy": "plan_matched_or_explicit",
-            "response_status": "tolerated_pending_recovery",
+            "response_status": "absorbed",
             "repeat_supported": true,
             "recovery_context_24_72h": {
               "signal": "unobserved",
               "observations": [],
-              "window_complete": false,
+              "window_complete": true,
               "causal_interpretation": "not_inferred"
             }
           }
         ],
-        "absorbed_value": 33.57,
+        "absorbed_value": 36.87,
         "evidence_state": "absorbed",
         "latest_exposure": {
           "date": "2026-09-28",
@@ -1098,21 +1087,21 @@
             ]
           },
           "evidence_policy": "plan_matched_or_explicit",
-          "response_status": "tolerated_pending_recovery",
+          "response_status": "absorbed",
           "repeat_supported": true,
           "recovery_context_24_72h": {
             "signal": "unobserved",
             "observations": [],
-            "window_complete": false,
+            "window_complete": true,
             "causal_interpretation": "not_inferred"
           }
         },
         "tolerated_value": 36.87,
-        "progression_ready": false,
-        "progression_state": "hold",
+        "progression_ready": true,
+        "progression_state": "ready",
         "demonstrated_value": 36.87,
-        "progression_reason": "Senaste jämförbara exponeringen har stödjande passrespons men 72 h-observationsfönstret är ännu inte komplett.",
-        "progression_reason_code": "recovery_window_open"
+        "progression_reason": "Upprepad jämförbar dos med stödjande respons ger stöd för att dosen är absorberad.",
+        "progression_reason_code": "absorbed_supportive_repeat"
       },
       "swim_threshold": {
         "metric": "distance_m",
@@ -1451,17 +1440,17 @@
               ]
             },
             "evidence_policy": "external_observed",
-            "response_status": "tolerated_pending_recovery",
+            "response_status": "absorbed",
             "repeat_supported": true,
             "recovery_context_24_72h": {
               "signal": "unobserved",
               "observations": [],
-              "window_complete": false,
+              "window_complete": true,
               "causal_interpretation": "not_inferred"
             }
           }
         ],
-        "absorbed_value": 96.82,
+        "absorbed_value": 98.2,
         "evidence_state": "absorbed",
         "latest_exposure": {
           "date": "2026-09-28",
@@ -1480,21 +1469,21 @@
             ]
           },
           "evidence_policy": "external_observed",
-          "response_status": "tolerated_pending_recovery",
+          "response_status": "absorbed",
           "repeat_supported": true,
           "recovery_context_24_72h": {
             "signal": "unobserved",
             "observations": [],
-            "window_complete": false,
+            "window_complete": true,
             "causal_interpretation": "not_inferred"
           }
         },
         "tolerated_value": 98.2,
-        "progression_ready": false,
-        "progression_state": "hold",
+        "progression_ready": true,
+        "progression_state": "ready",
         "demonstrated_value": 226.3,
-        "progression_reason": "Senaste jämförbara exponeringen har stödjande passrespons men 72 h-observationsfönstret är ännu inte komplett.",
-        "progression_reason_code": "recovery_window_open"
+        "progression_reason": "Upprepad jämförbar dos med stödjande respons ger stöd för att dosen är absorberad.",
+        "progression_reason_code": "absorbed_supportive_repeat"
       },
       "run_hill_quality": {
         "metric": "repetitions",
@@ -2105,17 +2094,17 @@
               ]
             },
             "evidence_policy": "plan_matched_or_explicit",
-            "response_status": "tolerated_pending_recovery",
+            "response_status": "absorbed",
             "repeat_supported": true,
             "recovery_context_24_72h": {
               "signal": "unobserved",
               "observations": [],
-              "window_complete": false,
+              "window_complete": true,
               "causal_interpretation": "not_inferred"
             }
           }
         ],
-        "absorbed_value": 33.57,
+        "absorbed_value": 36.87,
         "evidence_state": "absorbed",
         "latest_exposure": {
           "date": "2026-09-28",
@@ -2134,21 +2123,21 @@
             ]
           },
           "evidence_policy": "plan_matched_or_explicit",
-          "response_status": "tolerated_pending_recovery",
+          "response_status": "absorbed",
           "repeat_supported": true,
           "recovery_context_24_72h": {
             "signal": "unobserved",
             "observations": [],
-            "window_complete": false,
+            "window_complete": true,
             "causal_interpretation": "not_inferred"
           }
         },
         "tolerated_value": 36.87,
-        "progression_ready": false,
-        "progression_state": "hold",
+        "progression_ready": true,
+        "progression_state": "ready",
         "demonstrated_value": 36.87,
-        "progression_reason": "Senaste jämförbara exponeringen har stödjande passrespons men 72 h-observationsfönstret är ännu inte komplett.",
-        "progression_reason_code": "recovery_window_open"
+        "progression_reason": "Upprepad jämförbar dos med stödjande respons ger stöd för att dosen är absorberad.",
+        "progression_reason_code": "absorbed_supportive_repeat"
       }
     }
   },
@@ -3552,7 +3541,7 @@
       "verified_exposure_count": 2
     }
   },
-  "generated_at_utc": "2026-09-30T20:26:47.894845+00:00",
+  "generated_at_utc": "2026-10-01T01:13:48.814094+00:00",
   "capability_states": {
     "model": "capability_feedback_state_v1",
     "principle": "Kvantitativ progression kräver verifierad capability-evidens och dose-response. Teknikförmågor kan vara observerade men blir inte automatiskt progressionsredo från tid eller distans.",
@@ -3826,7 +3815,7 @@
         "recipe_family": [
           "strength_core"
         ],
-        "absorbed_value": 33.57,
+        "absorbed_value": 36.87,
         "evidence_state": "absorbed",
         "tolerated_value": 36.87,
         "progression_axes": [
@@ -3834,10 +3823,10 @@
           "volume",
           "consistency"
         ],
-        "progression_ready": false,
-        "progression_state": "hold",
+        "progression_ready": true,
+        "progression_state": "ready",
         "demonstrated_value": 36.87,
-        "progression_reason": "Senaste jämförbara exponeringen har stödjande passrespons men 72 h-observationsfönstret är ännu inte komplett.",
+        "progression_reason": "Upprepad jämförbar dos med stödjande respons ger stöd för att dosen är absorberad.",
         "verified_exposures": [
           {
             "date": "2026-09-21",
@@ -3856,7 +3845,7 @@
             "elapsed_time_s": 2212
           }
         ],
-        "progression_reason_code": "recovery_window_open",
+        "progression_reason_code": "absorbed_supportive_repeat",
         "verified_exposure_count": 2,
         "latest_verified_exposure": {
           "date": "2026-09-28",
@@ -3981,19 +3970,19 @@
         "label": "Enduroteknik",
         "metric": "duration_minutes",
         "recipe_family": [],
-        "absorbed_value": 96.82,
+        "absorbed_value": 98.2,
         "evidence_state": "absorbed",
         "tolerated_value": 98.2,
         "progression_axes": [
           "technical_quality",
           "duration"
         ],
-        "progression_ready": false,
-        "progression_state": "hold",
+        "progression_ready": true,
+        "progression_state": "ready",
         "demonstrated_value": 226.3,
-        "progression_reason": "Senaste jämförbara exponeringen har stödjande passrespons men 72 h-observationsfönstret är ännu inte komplett.",
+        "progression_reason": "Upprepad jämförbar dos med stödjande respons ger stöd för att dosen är absorberad.",
         "verified_exposures": [],
-        "progression_reason_code": "recovery_window_open",
+        "progression_reason_code": "absorbed_supportive_repeat",
         "verified_exposure_count": 0,
         "latest_verified_exposure": null
       },
@@ -4139,7 +4128,7 @@
         "recipe_family": [
           "strength_core"
         ],
-        "absorbed_value": 33.57,
+        "absorbed_value": 36.87,
         "evidence_state": "absorbed",
         "tolerated_value": 36.87,
         "progression_axes": [
@@ -4147,10 +4136,10 @@
           "volume",
           "consistency"
         ],
-        "progression_ready": false,
-        "progression_state": "hold",
+        "progression_ready": true,
+        "progression_state": "ready",
         "demonstrated_value": 36.87,
-        "progression_reason": "Senaste jämförbara exponeringen har stödjande passrespons men 72 h-observationsfönstret är ännu inte komplett.",
+        "progression_reason": "Upprepad jämförbar dos med stödjande respons ger stöd för att dosen är absorberad.",
         "verified_exposures": [
           {
             "date": "2026-09-21",
@@ -4169,7 +4158,7 @@
             "elapsed_time_s": 2212
           }
         ],
-        "progression_reason_code": "recovery_window_open",
+        "progression_reason_code": "absorbed_supportive_repeat",
         "verified_exposure_count": 2,
         "latest_verified_exposure": {
           "date": "2026-09-28",
