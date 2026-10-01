@@ -44,6 +44,7 @@ class CandidateAtom:
     local_date: date
     option: ApprovedWorkoutOption
     contributions: tuple[ObligationContribution, ...]
+    instance_index: int = 1
 
     @property
     def key(self) -> tuple:
@@ -51,6 +52,7 @@ class CandidateAtom:
             self.local_date.isoformat(),
             self.option.recipe_id,
             self.option.dose_option_id,
+            self.instance_index,
             tuple(
                 (
                     item.obligation_id,
@@ -126,7 +128,7 @@ def _contribution_for_obligation(
     rule = sorted(
         partial,
         key=lambda item: (
-            -float(Fraction(item.credit_numerator, item.credit_denominator)),
+            -Fraction(item.credit_numerator, item.credit_denominator),
             item.source_capability,
         ),
     )[0]
@@ -182,13 +184,45 @@ def generate_candidate_atoms(
             if not contributions:
                 continue
 
-            atoms.append(
-                CandidateAtom(
-                    local_date=day,
-                    option=option,
-                    contributions=tuple(contributions),
+            obligation_by_id = {
+                item.obligation_id: item
+                for item in context.strategy.obligations
+            }
+            multiplicity = 1
+            for contribution in contributions:
+                obligation = obligation_by_id[contribution.obligation_id]
+                credit = _credit(contribution)
+                # Bound identical same-day instances from the obligation ceiling
+                # and exact per-workout credit. This preserves arbitrary 0..N
+                # multipass semantics without creating an unbounded domain.
+                needed = (
+                    Fraction(obligation.max_exposures, 1) + credit - Fraction(1, 10**9)
+                ) // credit
+                needed_int = int(needed)
+                if Fraction(needed_int, 1) * credit < obligation.max_exposures:
+                    needed_int += 1
+                multiplicity = max(multiplicity, needed_int)
+
+            if rule is not None and rule.max_sessions is not None:
+                fixed_count = sum(
+                    1
+                    for commitment in context.fixed_commitments
+                    if commitment.local_date == day
                 )
-            )
+                multiplicity = min(
+                    multiplicity,
+                    max(0, rule.max_sessions - fixed_count),
+                )
+
+            for instance_index in range(1, multiplicity + 1):
+                atoms.append(
+                    CandidateAtom(
+                        local_date=day,
+                        option=option,
+                        contributions=tuple(contributions),
+                        instance_index=instance_index,
+                    )
+                )
 
     return tuple(sorted(atoms, key=lambda item: item.key))
 
@@ -288,6 +322,11 @@ def enumerate_terminal_selections(
         for index in atom_indexes_by_obligation[target.obligation_id]:
             if index in selected_set:
                 continue
+            predecessor = _duplicate_predecessor_index(atoms, index)
+            if predecessor is not None and predecessor not in selected_set:
+                # Identical instances are symmetric. Requiring prefix selection
+                # keeps the search complete while removing duplicate permutations.
+                continue
             contribution = next(
                 item
                 for item in atoms[index].contributions
@@ -357,6 +396,31 @@ def _day_requires_order(workouts, commitments, policy) -> bool:
 def _workout_id(atom: CandidateAtom) -> str:
     raw = repr(atom.key).encode("utf-8")
     return "pv1-" + sha256(raw).hexdigest()[:20]
+
+
+def _duplicate_predecessor_index(
+    atoms: tuple[CandidateAtom, ...],
+    index: int,
+) -> int | None:
+    atom = atoms[index]
+    if atom.instance_index <= 1:
+        return None
+    predecessor_key = (
+        atom.local_date,
+        atom.option.recipe_id,
+        atom.option.dose_option_id,
+        atom.instance_index - 1,
+    )
+    for candidate_index, candidate in enumerate(atoms):
+        key = (
+            candidate.local_date,
+            candidate.option.recipe_id,
+            candidate.option.dose_option_id,
+            candidate.instance_index,
+        )
+        if key == predecessor_key:
+            return candidate_index
+    return None
 
 
 def _base_workouts(
