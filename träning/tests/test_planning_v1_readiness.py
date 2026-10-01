@@ -75,13 +75,29 @@ class PlanningV1ReadinessTests(unittest.TestCase):
         self.data = Path(self.tmp.name)
         for name in (
             "training_strategy.json",
-            "athlete_state.json",
             "planning_policy.json",
         ):
             (self.data / name).write_text(
                 json.dumps({"legacy": True}),
                 encoding="utf-8",
             )
+        (self.data / "athlete_state.json").write_text(
+            json.dumps(
+                {
+                    "fact_window": {
+                        "start": "2026-09-28",
+                        "end": "2026-10-01",
+                        "lookback_days": 4,
+                    },
+                    "recent_sessions": [],
+                    "capability_states": {
+                        "model": "test",
+                        "by_capability": {},
+                    },
+                }
+            ),
+            encoding="utf-8",
+        )
         (self.data / "workout_catalog.json").write_text(
             json.dumps(
                 {
@@ -116,6 +132,25 @@ class PlanningV1ReadinessTests(unittest.TestCase):
     def tearDown(self):
         self.tmp.cleanup()
 
+    @staticmethod
+    def activity_loader(coverage_from, coverage_through):
+        return [
+            {
+                "id": "run-1",
+                "date": "2026-09-29",
+                "sport_family": "run",
+                "classification": "training",
+                "elapsed_time_s": 3600.0,
+                "distance_m": 12000.0,
+            }
+        ], {
+            "source": "supabase_db",
+            "verified": True,
+            "coverage_from": coverage_from.isoformat(),
+            "coverage_through": coverage_through.isoformat(),
+            "training_activity_count": 1,
+        }
+
     def report(self, loader):
         return build_readiness_report(
             self.data,
@@ -123,6 +158,7 @@ class PlanningV1ReadinessTests(unittest.TestCase):
             affected_until=END,
             planning_date=date(2026, 10, 8),
             profile_loader=loader,
+            activity_loader=self.activity_loader,
         )
 
     def test_profile_and_execution_facts_are_built_from_owned_sources(self):
@@ -144,7 +180,6 @@ class PlanningV1ReadinessTests(unittest.TestCase):
         self.assertEqual(
             {
                 "MISSING_V1_STRATEGY_REVISION",
-                "MISSING_V1_OBSERVED_TRAINING",
                 "MISSING_V1_POLICY_PROJECTION",
             },
             codes,
@@ -152,6 +187,10 @@ class PlanningV1ReadinessTests(unittest.TestCase):
         self.assertEqual(
             report["source_status"]["catalog"],
             "materialized_from_owned_source",
+        )
+        self.assertEqual(
+            report["source_status"]["observed_training"]["status"],
+            "materialized_from_canonical_activities",
         )
         self.assertFalse(report["solver_ran"])
         self.assertFalse(report["production_mutated"])
