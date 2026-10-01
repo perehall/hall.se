@@ -19,6 +19,7 @@ from .candidate_generation import (
     enumerate_candidate_plans,
 )
 from .content import plan_content_hash
+from .input_hash import planning_input_hash
 from .models import (
     PlanAuthorityState,
     PlanAuthorityStatus,
@@ -39,7 +40,6 @@ ENGINE_VERSION = "planning-v1-solver-0.1"
 
 @dataclass(frozen=True)
 class PlanningSolveRequest:
-    semantic_input_hash: str
     affected_from: date
     affected_until: date
     validation_context: PlanValidationContext
@@ -48,8 +48,6 @@ class PlanningSolveRequest:
     engine_version: str = ENGINE_VERSION
 
     def __post_init__(self) -> None:
-        if not str(self.semantic_input_hash or "").strip():
-            raise PlanningContractError("semantic_input_hash must be non-empty")
         if not isinstance(self.affected_from, date) or not isinstance(
             self.affected_until, date
         ):
@@ -69,6 +67,16 @@ class PlanningSolveRequest:
             raise PlanningContractError(
                 "solve affected window ends after StrategyRevision"
             )
+
+    @property
+    def semantic_input_hash(self) -> str:
+        return planning_input_hash(
+            self.validation_context,
+            self.objective_policy,
+            self.affected_from,
+            self.affected_until,
+            self.previous_plan,
+        )
 
 
 @dataclass(frozen=True)
