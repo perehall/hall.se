@@ -226,6 +226,35 @@ class CoachScenarioHarnessTests(unittest.TestCase):
             )
         )
 
+    def test_completed_swim_is_not_followed_by_another_swim_when_a_spaced_slot_exists(self):
+        swim = self.activity(
+            "swim-wed",
+            "2026-09-30",
+            "Swim",
+            report="Strukturerat simpass 3 700 m.",
+            elapsed_time_s=4080,
+            distance_m=3700,
+        )
+        state = self.state_from([swim], today=date(2026, 10, 1))
+        completed, micro, failures = self.deterministic_micro(
+            state,
+            planning_date=date(2026, 10, 1),
+        )
+
+        self.assertEqual(failures, [])
+        self.assertEqual(completed["family_day_indexes"]["swim"], [3])
+        future_swim_days = [
+            row["day_index"]
+            for row in micro["slots"]
+            if self.catalog["recipes"][row["recipe_key"]].get("sport") == "swim"
+        ]
+        self.assertTrue(future_swim_days)
+        self.assertNotIn(
+            4,
+            future_swim_days,
+            "a completed Wednesday swim must not be followed by Thursday swim when a spaced valid slot exists",
+        )
+
     def test_positive_feedback_does_not_authorize_progression_before_absorption_contract(self):
         session = self.activity(
             "threshold-positive",
