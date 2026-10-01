@@ -17,6 +17,8 @@ def _dimension_payload(item):
 
 def _estimate_payload(item):
     return {
+        "scope": item.scope,
+        "subject": item.subject,
         "metric": item.metric,
         "unit": item.unit,
         "min_value": float(item.min_value),
@@ -61,7 +63,7 @@ def semantic_plan_payload(plan: PlanContent) -> dict:
                     _estimate_payload(item)
                     for item in sorted(
                         workout.quantitative_load,
-                        key=lambda item: (item.metric, item.unit),
+                        key=lambda item: (item.scope, item.subject, item.metric, item.unit),
                     )
                 ],
                 "within_day_order": workout.within_day_order,
@@ -85,7 +87,7 @@ def semantic_plan_payload(plan: PlanContent) -> dict:
                     _estimate_payload(load)
                     for load in sorted(
                         item.quantitative_load,
-                        key=lambda load: (load.metric, load.unit),
+                        key=lambda load: (load.scope, load.subject, load.metric, load.unit),
                     )
                 ],
                 "within_day_order": item.within_day_order,
