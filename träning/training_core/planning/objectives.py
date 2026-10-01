@@ -140,9 +140,9 @@ class ObjectiveContext:
 
 @dataclass(frozen=True)
 class ObjectiveVector:
-    # S1
+    # S1 + S2, interleaved by priority tier so lower tiers can never
+    # outrank breadth inside a higher tier.
     required_deficit_by_tier: tuple[Fraction, ...]
-    # S2
     unserved_required_by_tier: tuple[int, ...]
     max_required_deficit_by_tier: tuple[Fraction, ...]
     # S3
@@ -160,16 +160,22 @@ class ObjectiveVector:
     # S6
     variation_repeat_penalty: int
     # S7
-    optional_remaining_by_tier: tuple[Fraction, ...]
+    discretionary_excess_by_tier: tuple[Fraction, ...]
     # S8
     canonical_tie_key: tuple
 
     @property
     def sort_key(self) -> tuple:
+        obligation_priority = tuple(
+            (
+                self.required_deficit_by_tier[index],
+                self.unserved_required_by_tier[index],
+                self.max_required_deficit_by_tier[index],
+            )
+            for index in range(len(self.required_deficit_by_tier))
+        )
         return (
-            self.required_deficit_by_tier,
-            self.unserved_required_by_tier,
-            self.max_required_deficit_by_tier,
+            obligation_priority,
             self.spacing_shortfall_days,
             self.spacing_violation_pairs,
             self.stability_identity_churn,
@@ -180,7 +186,7 @@ class ObjectiveVector:
             self.schedule_preferred_distance,
             self.schedule_double_penalty,
             self.variation_repeat_penalty,
-            self.optional_remaining_by_tier,
+            self.discretionary_excess_by_tier,
             self.canonical_tie_key,
         )
 
@@ -229,7 +235,7 @@ def _tier_vectors(
     required_deficits: list[Fraction] = []
     unserved_counts: list[int] = []
     max_deficits: list[Fraction] = []
-    optional_remaining: list[Fraction] = []
+    discretionary_excess: list[Fraction] = []
 
     for tier in tiers:
         obligations = [
@@ -238,7 +244,7 @@ def _tier_vectors(
         ]
         deficits = []
         unserved = 0
-        optional_left = Fraction(0, 1)
+        excess = Fraction(0, 1)
 
         for obligation in obligations:
             achieved = credits.get(obligation.obligation_id, Fraction(0, 1))
@@ -250,22 +256,24 @@ def _tier_vectors(
                 deficits.append(deficit)
                 if achieved <= 0:
                     unserved += 1
-            else:
-                optional_left += max(
-                    Fraction(0, 1),
-                    Fraction(obligation.max_exposures, 1) - achieved,
-                )
+            # Exposure above the required minimum is discretionary. The
+            # conservative S7 objective prefers not to add it merely because
+            # capacity remains below max_exposures.
+            excess += max(
+                Fraction(0, 1),
+                achieved - Fraction(obligation.min_exposures, 1),
+            )
 
         required_deficits.append(sum(deficits, Fraction(0, 1)))
         unserved_counts.append(unserved)
         max_deficits.append(max(deficits, default=Fraction(0, 1)))
-        optional_remaining.append(optional_left)
+        discretionary_excess.append(excess)
 
     return (
         tuple(required_deficits),
         tuple(unserved_counts),
         tuple(max_deficits),
-        tuple(optional_remaining),
+        tuple(discretionary_excess),
     )
 
 
@@ -428,10 +436,14 @@ def _schedule_penalty(
 
 def _variation_penalty(
     plan: PlanContent,
-    options: tuple[ApprovedWorkoutOption, ...],
+    context: ObjectiveContext,
 ) -> int:
-    catalog = {item.option_key: item for item in options}
-    by_capability: dict[str, list[str]] = {}
+    catalog = {item.option_key: item for item in context.catalog_options}
+    obligations = {
+        item.obligation_id: item
+        for item in context.strategy.obligations
+    }
+    by_obligation: dict[str, list[str]] = {}
 
     for workout in plan.workouts:
         option = catalog.get((workout.recipe_id, workout.dose_option_id))
@@ -439,14 +451,17 @@ def _variation_penalty(
             continue
         character = str(option.development_character or "").strip() or option.recipe_id
         for contribution in workout.obligation_contributions:
-            by_capability.setdefault(
-                contribution.source_capability,
+            obligation = obligations.get(contribution.obligation_id)
+            if not obligation or not obligation.prefer_character_variation:
+                continue
+            by_obligation.setdefault(
+                contribution.obligation_id,
                 [],
             ).append(character)
 
     return sum(
         len(characters) - len(set(characters))
-        for characters in by_capability.values()
+        for characters in by_obligation.values()
     )
 
 
@@ -483,7 +498,7 @@ def evaluate_objectives(
     context: ObjectiveContext,
 ) -> ObjectiveVector:
     credits = _obligation_credits(plan, context)
-    required, unserved, max_deficit, optional_remaining = _tier_vectors(
+    required, unserved, max_deficit, discretionary_excess = _tier_vectors(
         context.strategy,
         credits,
     )
@@ -496,7 +511,7 @@ def evaluate_objectives(
         plan,
         context.policy.schedule,
     )
-    variation = _variation_penalty(plan, context.catalog_options)
+    variation = _variation_penalty(plan, context)
 
     return ObjectiveVector(
         required_deficit_by_tier=required,
@@ -512,7 +527,7 @@ def evaluate_objectives(
         schedule_preferred_distance=preferred_distance,
         schedule_double_penalty=double_penalty,
         variation_repeat_penalty=variation,
-        optional_remaining_by_tier=optional_remaining,
+        discretionary_excess_by_tier=discretionary_excess,
         canonical_tie_key=_canonical_tie_key(plan),
     )
 
