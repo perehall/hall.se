@@ -210,6 +210,7 @@ def context(
     placement=(),
     observed_credits=(),
     observed_exposures=(),
+    closed=(),
 ):
     return PlanValidationContext(
         source_revision="source-1",
@@ -229,6 +230,7 @@ def context(
         availability=tuple(availability),
         observed_obligation_credits=tuple(observed_credits),
         observed_load_exposures=tuple(observed_exposures),
+        closed_dates=tuple(closed),
     )
 
 
@@ -982,7 +984,7 @@ class PlanningSolverV1Tests(unittest.TestCase):
         )
 
         observed_threshold = ObservedObligationCredit(
-            local_date=date(2026, 10, 4),
+            local_date=date(2026, 10, 6),
             contribution=ObligationContribution(
                 obligation_id="threshold",
                 source_capability="run_threshold",
@@ -993,7 +995,7 @@ class PlanningSolverV1Tests(unittest.TestCase):
             source_refs=("activity:spontaneous-threshold",),
         )
         observed_swim = ObservedObligationCredit(
-            local_date=date(2026, 10, 3),
+            local_date=date(2026, 10, 5),
             contribution=ObligationContribution(
                 obligation_id="swim",
                 source_capability="swim_aerobic",
@@ -1005,7 +1007,7 @@ class PlanningSolverV1Tests(unittest.TestCase):
         )
         observed_load = ObservedLoadExposure(
             exposure_id="spontaneous-threshold-load",
-            local_date=date(2026, 10, 4),
+            local_date=date(2026, 10, 6),
             load_dimensions=threshold.load_dimensions,
             quantitative_load=threshold.quantitative_load,
             source_refs=("activity:spontaneous-threshold",),
@@ -1068,6 +1070,7 @@ class PlanningSolverV1Tests(unittest.TestCase):
                 compatibility=compat,
                 observed_credits=(observed_threshold, observed_swim),
                 observed_exposures=(observed_load,),
+                closed=(date(2026, 10, 5), date(2026, 10, 6)),
             ),
             previous_plan=previous,
         )
