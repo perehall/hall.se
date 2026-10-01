@@ -71,6 +71,15 @@ __all__ = [
     "ValidationIssue",
     "ValidationReport",
     "validate_plan_content",
+    "DoubleSessionPreference",
+    "ObjectiveContext",
+    "ObjectivePolicy",
+    "ObjectiveVector",
+    "SchedulePreferences",
+    "SpacingPreference",
+    "SpacingSubjectKind",
+    "evaluate_objectives",
+    "select_best_valid_plan",
 ]
 
 from .validation import (
@@ -78,4 +87,16 @@ from .validation import (
     ValidationIssue,
     ValidationReport,
     validate_plan_content,
+)
+
+from .objectives import (
+    DoubleSessionPreference,
+    ObjectiveContext,
+    ObjectivePolicy,
+    ObjectiveVector,
+    SchedulePreferences,
+    SpacingPreference,
+    SpacingSubjectKind,
+    evaluate_objectives,
+    select_best_valid_plan,
 )
