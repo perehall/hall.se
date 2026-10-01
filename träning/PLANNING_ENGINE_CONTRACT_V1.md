@@ -1,0 +1,735 @@
+# Planning Engine Contract v1
+
+Status: **proposed normative contract**.  
+Scope: replacement of the current adaptive planning engine.  
+Rule: production planning behaviour MUST NOT be changed to implement this contract until the contract itself has been reviewed and accepted.
+
+This document defines what the planning engine is allowed to know, decide and publish. It is intentionally stricter than the current implementation. The purpose is not to reproduce today's planner. The purpose is to create a planning core whose behaviour is predictable, inspectable and testable.
+
+Normative words **MUST**, **MUST NOT**, **SHOULD**, **SHOULD NOT** and **MAY** are used deliberately.
+
+---
+
+## 1. Core principle
+
+The planning authority is a single deterministic domain operation:
+
+```
+canonical facts
++ athlete/goal state
++ fixed commitments
++ declared availability/preferences
++ approved workout catalog
++ previous committed plan as a stability preference only
+        |
+        v
+candidate-plan generation
+        |
+        v
+hard-constraint validation
+        |
+        v
+lexicographic plan selection
+        |
+        v
+final invariant validation
+        |
+        v
+one atomic plan commit
+```
+
+After that commit, no downstream layer may add, remove, move, merge, split or alter training content.
+
+Weather, coaching text, rendering, device sync and publication are projections or advisory layers. If any of them requests a training-content change, the request MUST return through the same planning authority and the affected planning window MUST be solved and validated again.
+
+There is no post-planning "reconciliation" layer with independent authority.
+
+---
+
+## 2. Design goals
+
+The engine MUST be:
+
+1. **Safe by construction** — invalid plans cannot be committed.
+2. **Predictable** — the same canonical input and engine version produce the same plan and decision trace.
+3. **Explainable** — every planned workout can be traced back to goals, evidence, constraints and selection priorities.
+4. **Adaptive** — actual training can replace, satisfy, reduce, move or remove future work without relying on the old schedule as truth.
+5. **Conservative under uncertainty** — missing evidence never becomes invented capacity, recovery or tolerance.
+6. **Stable without being sticky** — an already valid future plan is preferred when equally good, but never preserved at the expense of stronger planning priorities.
+7. **Multipass-native** — a date is a container for 0..N independent workouts; multisport workouts are explicit ordered workouts, not accidental date-level composites.
+8. **Independent of presentation and providers** — no renderer, Strava vocabulary, Garmin/Intervals state or HTML structure participates in planning decisions.
+9. **Extensible without special cases** — new sports or fixed loads are represented through capabilities/load dimensions and data, not weekday/date/sport-specific branches.
+
+---
+
+## 3. Non-goals
+
+The engine MUST NOT:
+
+- diagnose injury, illness or recovery state from insufficient data;
+- invent threshold pace, HR, watts or exact training dose;
+- infer tolerance from completion alone;
+- equate different stimuli because their total duration is similar;
+- optimize for calendar fullness;
+- copy elite training templates directly;
+- use rendering concerns to change training;
+- use device-sync success/failure to determine physiological planning;
+- silently relax hard constraints to produce a prettier week.
+
+---
+
+## 4. Canonical inputs
+
+The solver receives one immutable `PlanningInput`. It MUST contain only typed canonical domain data.
+
+### 4.1 Athlete facts
+
+Examples:
+
+- canonical completed activities;
+- explicit activity semantics/capabilities;
+- explicit athlete feedback;
+- capability state: demonstrated, tolerated, absorbed;
+- progression readiness and evidence;
+- recent load/exposure windows;
+- available performance markers;
+- recovery/wellness context when explicitly available and permitted.
+
+Facts and interpretation MUST be distinguishable. A missing fact is `unknown`, never an assumed normal value.
+
+### 4.2 Goal state
+
+The engine receives the already resolved strategic/mesocycle intent:
+
+- primary development capabilities;
+- secondary capabilities;
+- protected/maintenance capacities;
+- competition context;
+- block intent: establish/develop/consolidate/review/reduce;
+- progression axes;
+- success criteria.
+
+The microcycle solver MUST NOT independently reinterpret the complete goal portfolio into a different strategy.
+
+### 4.3 Athlete-declared constraints and preferences
+
+Examples:
+
+- unavailable days/time windows;
+- preferred training frequency;
+- attitude to double sessions;
+- fixed personal commitments;
+- preferred surfaces/locations when relevant;
+- explicit user-confirmed future sessions.
+
+A declared availability restriction is a hard constraint. A frequency preference is normally a soft objective.
+
+### 4.4 Approved workout catalog
+
+The catalog is the sole source for executable dose options.
+
+A recipe MUST declare:
+
+- capabilities/stimuli trained;
+- load dimensions;
+- dose axis and approved dose options;
+- role eligibility;
+- compatibility metadata needed by constraints;
+- executable prescription if device materialization is expected.
+
+AI or planner code MUST NOT fabricate a missing dose step.
+
+### 4.5 External/fixed training load
+
+Enduro, races, group sessions and similar commitments are represented as generic `FixedLoadCommitment` objects.
+
+A fixed load MUST carry explicit load semantics, for example:
+
+- mechanical leg load;
+- cardiovascular load;
+- neuromuscular/plyometric load;
+- technical load;
+- upper-body load;
+- duration certainty/uncertainty;
+- expected recovery interaction category where established.
+
+The planner MUST NOT require code such as "if sport == enduro and weekday == Monday". Enduro is one data instance of a generic external-load model.
+
+### 4.6 Previous committed plan
+
+The previous plan is NOT a fact about what should still happen.
+
+It is used only for the soft objective **plan stability**. Any previous workout that conflicts with stronger priorities or newly observed facts is discarded by normal candidate selection. It is never reinserted afterward.
+
+---
+
+## 5. Planning window
+
+Planning operates on an **affected window**, not on an isolated date.
+
+The window MUST include:
+
+- all mutable dates whose workouts may change;
+- at least the preceding 3 calendar days as load/context evidence;
+- at least the following 3 calendar days for adjacency and fixed-commitment effects;
+- any additional dates required to close a constraint that crosses the initial boundary.
+
+Past completed dates are context only and immutable.
+
+The normal current-week planning operation SHOULD solve the complete active microcycle as one unit. Near a week boundary, the window MUST include enough of the following week to evaluate cross-boundary constraints.
+
+---
+
+## 6. Workout identity model
+
+A `PlannedWorkout` is an independently addressable physical workout.
+
+Minimum fields:
+
+- stable workout identity;
+- date;
+- ordered components if explicitly multisport;
+- recipe identity;
+- selected catalog dose option;
+- capabilities/stimuli;
+- load dimensions;
+- strategic role;
+- planning status;
+- fixed/manual constraint references;
+- decision-trace reference.
+
+Rules:
+
+- One date may contain 0..N independent workouts.
+- Independent swim + strength remain two workouts.
+- A brick, swimrun or triathlon session is one workout only when intentionally modeled with ordered components.
+- A date is never a workout identity.
+- Renderer grouping MUST NOT alter workout semantics.
+
+---
+
+## 7. Hard constraints
+
+A candidate violating any hard constraint is invalid and MUST NOT be committed.
+
+Hard constraints are central domain rules. They are not scattered post-processing checks.
+
+### H1. Actual-truth precedence
+
+Completed canonical activities are immutable facts and outrank prescription.
+
+The planner MUST NOT:
+
+- delete or rewrite completed activity truth;
+- present a planned session as completed instead;
+- re-prescribe an already satisfied stimulus merely because the originally planned calendar slot is still in the future.
+
+### H2. Past immutability
+
+Closed/past dates MUST NOT receive new planned workouts or be moved retrospectively.
+
+### H3. Fixed commitments
+
+A user-confirmed fixed commitment MUST remain in the plan unless the user explicitly changes/removes it or a higher-order safety state makes all planning fail closed for review.
+
+Fixed commitments are solver inputs, never downstream overrides.
+
+### H4. Availability
+
+No workout may be placed in a declared unavailable window.
+
+### H5. Catalog-only executable dose
+
+Every non-external planned workout MUST resolve to an approved recipe/dose option. No invented dose is permitted.
+
+### H6. Evidence-bound progression
+
+Automatic progression MUST require the capability's explicit progression readiness contract.
+
+Completion alone is not tolerance. Demonstrated maximum is not absorbed dose.
+
+When absorbed/tolerated evidence is absent, a self-reported starting level MAY act as an establishment ceiling, but fresher verified demonstrated evidence with caution MUST cap that starting level conservatively.
+
+### H7. Stimulus identity
+
+One capability may satisfy another only through an explicit capability mapping.
+
+Duration similarity, distance similarity or same sport MUST NOT create planning credit across unrelated stimuli.
+
+Example: a completed run-threshold session does not satisfy an easy-distance development obligation merely because total session time is comparable.
+
+### H8. Load compatibility
+
+Every planned day and adjacent-day combination MUST satisfy generic load-compatibility constraints based on load dimensions and recovery interaction, not sport names or weekdays.
+
+This includes same-day multipass compatibility.
+
+The constraint system MUST be able to express:
+
+- incompatible high mechanical-load clustering;
+- high-quality run adjacency restrictions;
+- external-load recovery interaction;
+- MTB/technical mechanical interaction;
+- strength/plyometric interference;
+- explicitly permitted low-conflict doubles.
+
+The catalog/load model owns these semantics.
+
+### H9. Cross-boundary validity
+
+A workout may not be valid merely because the conflicting workout falls outside the current calendar week. Constraints MUST operate across the full affected window.
+
+### H10. No silent hard-constraint relaxation
+
+If no valid candidate exists, the engine MUST return `NoValidPlan` with explicit unsatisfied constraints.
+
+It MUST NOT silently:
+- drop a fixed commitment;
+- invent capacity;
+- increase tolerated dose;
+- ignore availability;
+- weaken a load constraint.
+
+The previous committed plan remains published until a valid new plan is committed.
+
+### H11. Single-authority finality
+
+The plan that passes final invariant validation is the only plan allowed to be committed.
+
+No later stage may alter training content.
+
+### H12. Determinism
+
+Given:
+- identical canonical input,
+- identical catalog/policy versions,
+- identical engine version,
+
+the selected plan and machine-readable decision trace MUST be semantically identical regardless of input ordering, process timing or API response ordering.
+
+### H13. Canonical multipass integrity
+
+No migration or planner stage may merge independent same-day workouts or split one intentional multisport workout based on date or text parsing.
+
+### H14. Unknown-data conservatism
+
+Unknown recovery, tolerance, classification or capacity MUST NOT be converted into a positive claim.
+
+When a decision depends on missing evidence and no safe catalog option exists, the engine MUST hold/reduce/defer rather than invent.
+
+---
+
+## 8. Soft objectives and deterministic priority
+
+Among valid candidates, selection uses a **lexicographic objective vector**. We do not use an opaque weighted score whose trade-offs are difficult to predict.
+
+Earlier objectives always outrank later ones.
+
+### S1. Fulfil primary microcycle intent
+
+Maximize direct coverage of primary development capabilities that remain unsatisfied by actual completed work.
+
+### S2. Preserve required protected capacity
+
+Meet explicit mesocycle maintenance/protection commitments when compatible with S1 and hard constraints.
+
+### S3. Absorbable distribution
+
+Prefer better spacing of repeated/high-load stimuli and avoid unnecessary concentration of mechanical or quality load.
+
+### S4. Plan stability
+
+Minimize unnecessary changes to still-valid future workouts from the previous committed plan.
+
+This objective is deliberately below physiological/strategic validity. Stability never resurrects an inferior or conflicting old workout.
+
+### S5. Athlete schedule preferences
+
+Prefer declared training-frequency range and double-session preference without adding training solely to fill the calendar.
+
+### S6. Useful discipline/character variation
+
+Prefer planned variation when the mesocycle calls for development and valid catalog alternatives exist.
+
+### S7. Secondary/optional capacity
+
+Add secondary work only when already justified by strategy and compatible with all earlier objectives.
+
+### S8. Canonical tie-break
+
+When two candidates are still equivalent, select using stable canonical ordering:
+1. earlier recipe priority defined by the mesocycle/catalog;
+2. earlier valid date;
+3. stable recipe id;
+4. stable dose-option id.
+
+No randomness is permitted in production plan selection.
+
+---
+
+## 9. Candidate generation
+
+The engine SHOULD generate candidate **complete plans**, not greedily mutate one calendar day at a time.
+
+A valid implementation may use deterministic backtracking/search because the planning space is small.
+
+Conceptually:
+
+1. Determine remaining required/eligible stimuli from mesocycle intent minus valid actual-work credit.
+2. Determine allowable catalog recipes/doses from capability state.
+3. Create placement domains for every candidate workout.
+4. Include fixed commitments as immutable placements.
+5. Search combinations.
+6. Reject candidates immediately on hard-constraint violation.
+7. Calculate lexicographic objective vector for valid candidates.
+8. Select the best candidate deterministically.
+9. Run the complete final invariant suite again on the exact selected plan.
+10. Commit once.
+
+An optimizer library is optional. Correctness and inspectability matter more than sophistication.
+
+---
+
+## 10. Replanning semantics
+
+Replanning is a new solve, not mutation repair.
+
+Triggers may include:
+
+- new completed activity;
+- edited/corrected activity semantics;
+- athlete feedback;
+- changed availability;
+- changed fixed commitment;
+- relevant recovery input;
+- goal/mesocycle change;
+- explicit user request to move/add/remove a planned workout.
+
+Procedure:
+
+1. Persist/normalize the new canonical fact first.
+2. Rebuild athlete/capability facts.
+3. Determine affected planning window.
+4. Treat the previous future plan as a stability preference only.
+5. Re-solve the complete affected window.
+6. Validate the complete candidate.
+7. Commit atomically.
+8. Project the committed result to UI/device sync.
+
+There is no later "preserve unaffected workouts" mutation stage. Preservation is part of the S4 objective during the solve.
+
+### 10.1 Spontaneous actual workout
+
+A spontaneous workout is classified from canonical activity semantics.
+
+It may:
+- satisfy an intended stimulus;
+- partially satisfy a requirement when an explicit mapping says so;
+- add load that changes placement/dose of future work;
+- cause an originally planned workout to disappear.
+
+It MUST NOT trigger a simplistic "move the missed workout to the next free day" rule.
+
+### 10.2 Missed workout
+
+A missed workout is not automatically debt.
+
+The engine reassesses whether the stimulus is still needed inside the current mesocycle and whether it can be absorbed in the remaining window.
+
+### 10.3 User-requested move
+
+A requested move becomes an input constraint/request and is solved against the whole affected window. The UI MUST NOT directly rewrite the date.
+
+---
+
+## 11. AI boundary
+
+AI is advisory and constrained.
+
+AI MAY:
+- interpret qualitative athlete feedback;
+- propose strategic emphasis;
+- propose recipe character from an approved set;
+- explain trade-offs;
+- request a replan with structured reasons.
+
+AI MUST NOT:
+- write the canonical plan;
+- bypass hard constraints;
+- create a new dose;
+- create provider/device payloads as planning truth;
+- preserve/reinsert workouts after the solver;
+- determine whether final invariants pass.
+
+All AI proposals are untrusted inputs until deterministic validation succeeds.
+
+The engine MUST have a deterministic fallback that can produce a valid conservative plan or `NoValidPlan` without AI.
+
+---
+
+## 12. Decision trace
+
+Every committed plan MUST have a machine-readable `PlanningDecisionTrace`.
+
+At minimum:
+
+- engine/version hashes;
+- canonical input hash;
+- affected planning window;
+- completed-activity credits and why they count;
+- remaining primary/protected obligations;
+- hard constraints applied;
+- candidate count considered/rejected;
+- rejection reason codes;
+- selected objective vector;
+- for each planned workout:
+  - why this stimulus exists;
+  - why this recipe;
+  - why this dose;
+  - why this date;
+  - which alternatives lost and on which higher-priority objective;
+- differences from previous committed plan;
+- explicit reason for every removed/moved workout;
+- final invariant result.
+
+Public UI may summarize this, but the canonical trace remains inspectable.
+
+---
+
+## 13. Failure semantics
+
+The planner MUST fail closed.
+
+### `NoValidPlan`
+
+Returned when hard constraints make the requested planning intent impossible.
+
+Contains:
+- conflicting hard constraints;
+- involved dates/workouts/commitments;
+- what strategic obligations remain unsatisfied;
+- whether user input is required.
+
+### Technical failure
+
+A technical failure MUST NOT publish a partially mutated plan. The last committed valid plan remains authoritative.
+
+### Invariant failure
+
+Any final invariant failure is a programming defect and blocks commit.
+
+It is never auto-repaired downstream.
+
+---
+
+## 14. Architecture boundary
+
+New implementation lives under:
+
+```
+training_core/planning/
+  models.py
+  constraints/
+  candidate_generation.py
+  objectives.py
+  solver.py
+  validation.py
+  trace.py
+  service.py
+```
+
+Exact filenames may change, but responsibilities MUST remain separated.
+
+The new planning core MUST NOT:
+- import legacy `scripts/adaptive_planner.py`;
+- read/write `träning/data/*.json` directly;
+- import renderer/finalizer code;
+- invoke subprocesses;
+- call provider APIs;
+- depend on GitHub Actions;
+- mutate Supabase directly from domain code.
+
+Repositories/application services own persistence and transactions.
+
+---
+
+## 15. Mandatory test strategy
+
+Green example tests are necessary but not sufficient.
+
+### 15.1 Unit tests
+
+Every hard constraint and soft objective has direct unit tests.
+
+### 15.2 Property-based / generative tests
+
+Generate many combinations of:
+
+- 0..N workouts per day;
+- completed/spontaneous activities;
+- fixed external loads;
+- unavailable days;
+- capability states;
+- dose catalogs;
+- double-session preferences;
+- week-boundary positions;
+- prior committed plans.
+
+Minimum properties:
+
+1. Every committed result passes all hard invariants.
+2. Same semantic input always produces the same output.
+3. Re-running with no input change is idempotent.
+4. Past completed truth never changes.
+5. Input ordering does not change output.
+6. Independent same-day workouts never merge.
+7. No post-commit projection can change training content.
+8. Unsupported progression is impossible.
+9. Cross-stimulus scalar similarity never creates planning credit.
+10. If no valid plan exists, solver returns `NoValidPlan` rather than an invalid plan.
+
+The CI target is at least **10,000 generated planning cases** per full planning-core test run, using reproducible seeds.
+
+### 15.3 Metamorphic tests
+
+Examples:
+
+- shuffle activity/input order -> identical plan;
+- run identical replan twice -> identical plan;
+- add irrelevant history outside the evidence horizon -> identical plan;
+- add a spontaneous completed primary stimulus -> the same primary requirement cannot also remain merely because its old slot existed;
+- replace a completed workout with a different stimulus of equal duration -> planning credit changes according to semantics, not duration;
+- remove availability -> candidate space may expand, never by mutating past truth;
+- cross a Sunday/Monday week boundary -> adjacency constraints remain identical.
+
+### 15.4 Historical replay
+
+Replay all available canonical history up to the last 8 weeks through the new engine.
+
+The replay MUST:
+- never violate a hard invariant;
+- produce a complete decision trace at every replan point;
+- remain deterministic across repeated replay;
+- surface every `NoValidPlan` explicitly.
+
+Human review compares decisions with known training context; the test does not force the new engine to reproduce legacy decisions.
+
+---
+
+## 16. Curated scenario suite
+
+These scenarios are acceptance fixtures. Expected results should generally assert properties/intent, not brittle exact dates unless the date itself is the constraint under test.
+
+1. Normal week with no deviations.
+2. Spontaneous threshold workout before planned threshold.
+3. Spontaneous easy run before planned quality.
+4. Missed swim with enough remaining capacity.
+5. Missed swim with no absorbable remaining slot.
+6. Two completed activities on one day.
+7. Three planned independent workouts on one day when explicitly permitted.
+8. Explicit brick/multisport workout.
+9. Fixed external high-leg-load commitment.
+10. Fixed commitment immediately after the active week boundary.
+11. User unavailable day.
+12. User moves one future workout.
+13. New heavy/caution feedback after an easy-distance exposure.
+14. Completed workout without feedback: demonstrated but not automatically tolerated/absorbed.
+15. High onboarding/start value contradicted by fresher demonstrated evidence.
+16. Two swim exposures: spacing preferred when possible.
+17. Same-day swim + strength: allowed only from generic compatibility/preferences.
+18. Quality run + incompatible mechanical load: rejected by load dimensions.
+19. Equal-duration threshold vs easy-distance: no cross-credit.
+20. Completed enduro/external load replaces other load when needed; it is not automatically added on top.
+21. Week rollover with multipass.
+22. Plan re-run with no new facts: zero semantic changes.
+23. Prior plan contains a now-invalid old workout: stability objective cannot resurrect it.
+24. No valid placement exists: `NoValidPlan`.
+25. Unknown activity type: conservative semantics, no fabricated training credit.
+26. Reduced availability after plan commit: full affected-window replan.
+27. Goal/mesocycle transition.
+28. Develop microcycle with progression-ready=true: at most the permitted progression axis/step.
+29. Develop microcycle without progression evidence: explicit consolidation/hold.
+30. Device-sync failure after commit: canonical plan remains unchanged.
+
+New production defects MUST normally expand a general property/constraint test. A new scenario fixture is added only when it represents a genuinely distinct domain situation, not to patch one date/sport combination.
+
+---
+
+## 17. Cutover criteria
+
+The new engine MUST NOT become production authority until all conditions are met.
+
+### Code/architecture
+
+- New planning core has no dependency on legacy adaptive planner or JSON mutation pipeline.
+- There is exactly one training-content planning authority.
+- Manual overrides, coach suggestions and actual-driven replanning enter as solver inputs.
+- No stage after final plan commit can alter training content.
+- UI and device sync consume the same committed plan snapshot.
+
+### Verification
+
+- 100% hard-constraint unit tests green.
+- Curated scenario suite green.
+- At least 10,000 reproducible generated cases green.
+- Historical replay over all available history up to 8 weeks has zero hard-invariant breaches.
+- Deterministic replay produces identical semantic output on repeated runs.
+- Failure-injection tests prove no partial plan publication.
+
+### Shadow mode
+
+Before cutover, the new engine runs in shadow against real inputs.
+
+Required:
+- at least two complete live microcycles;
+- every replan event recorded with decision trace;
+- deliberate review of spontaneous-workout, multipass, fixed-load and week-boundary cases;
+- zero unexplained hard-invariant failures;
+- any surprising valid decision must be explainable from the documented objective order, not from hidden special cases.
+
+### Human acceptance
+
+A human reviewer must be able to answer for every changed workout:
+
+1. What new fact triggered this?
+2. Which obligation/constraint changed?
+3. Why was this workout kept/moved/removed?
+4. Which higher-priority objective defeated the alternatives?
+5. Did the final published/device plan come from this exact committed snapshot?
+
+If those answers are not available, cutover is blocked even if CI is green.
+
+---
+
+## 18. Migration rule
+
+The current planner remains production authority while the new engine is built.
+
+During migration:
+
+- do not add new planning behaviour to legacy unless required to keep production operational;
+- do not port legacy conditionals automatically;
+- every legacy behaviour must earn its place as a domain fact, hard constraint, soft objective or be deleted;
+- shadow output must never mutate production;
+- cutover is one authority switch, not a permanent hybrid of two planners.
+
+After cutover, remove the legacy planning/reconciliation paths rather than keeping them as fallback writers.
+
+---
+
+## 19. Definition of trustworthiness
+
+"Skottsäker" does not mean the engine always chooses the same workout a human coach would choose.
+
+It means:
+
+- it never violates its declared hard rules;
+- it never invents missing evidence;
+- it never hides conflicting constraints;
+- it cannot be changed after validation by another layer;
+- identical inputs produce identical decisions;
+- every decision has an inspectable reason;
+- unexpected real-life events cause a complete, bounded replan rather than patch accumulation;
+- when the system cannot produce a valid plan, it says so instead of fabricating one.
+
+That is the standard this engine must meet before it is trusted as autonomous planning authority.
