@@ -47,6 +47,8 @@ class ValidationReport:
 @dataclass(frozen=True)
 class PlanValidationContext:
     source_revision: str
+    history_from: date
+    history_through: date
     strategy: StrategyRevision
     catalog_options: tuple[ApprovedWorkoutOption, ...]
     fixed_commitments: tuple[FixedLoadCommitment, ...]
@@ -58,6 +60,11 @@ class PlanValidationContext:
         if not revision:
             raise PlanningContractError("validation source_revision must be non-empty")
         object.__setattr__(self, "source_revision", revision)
+
+        if not isinstance(self.history_from, date) or not isinstance(self.history_through, date):
+            raise PlanningContractError("validation history coverage must use dates")
+        if self.history_through < self.history_from:
+            raise PlanningContractError("validation history_through cannot precede history_from")
 
         options = tuple(self.catalog_options)
         keys = [item.option_key for item in options]
@@ -182,6 +189,48 @@ def _validate_header(
                     plan.affected_until.isoformat(),
                     context.strategy.valid_from.isoformat(),
                     context.strategy.valid_until.isoformat(),
+                ),
+            )
+        )
+
+
+def _validate_history_coverage(
+    plan: PlanContent,
+    context: PlanValidationContext,
+    issues: list[ValidationIssue],
+) -> None:
+    max_window = max(
+        (bound.window_days for bound in context.strategy.load_envelope.bounds),
+        default=1,
+    )
+    load_required_from = plan.affected_from - timedelta(days=max_window - 1)
+    obligation_required_from = min(
+        (
+            obligation.valid_from
+            for obligation in context.strategy.obligations
+            if obligation.valid_from < plan.affected_from
+        ),
+        default=plan.affected_from,
+    )
+    required_from = min(load_required_from, obligation_required_from)
+    required_through = plan.affected_from - timedelta(days=1)
+
+    if required_through < required_from:
+        return
+
+    if (
+        context.history_from > required_from
+        or context.history_through < required_through
+    ):
+        issues.append(
+            ValidationIssue(
+                "INSUFFICIENT_HISTORY_COVERAGE",
+                "Canonical observed history does not fully cover the horizon required by hard validation.",
+                (
+                    required_from.isoformat(),
+                    required_through.isoformat(),
+                    context.history_from.isoformat(),
+                    context.history_through.isoformat(),
                 ),
             )
         )
@@ -488,6 +537,7 @@ def validate_plan_content(
 
     issues: list[ValidationIssue] = []
     _validate_header(plan, context, issues)
+    _validate_history_coverage(plan, context, issues)
     _validate_fixed_commitments(plan, context, issues)
     _validate_catalog_and_contributions(plan, context, issues)
     _validate_obligation_maxima(plan, context, issues)
