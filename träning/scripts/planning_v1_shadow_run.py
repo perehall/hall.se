@@ -169,6 +169,7 @@ def run_live_shadow(
         else "skipped"
     )
     solved = result.solve_result
+    bundle = assembly.bundle
     return 0, {
         "readiness": {
             "ready": True,
@@ -184,6 +185,28 @@ def run_live_shadow(
         "semantic_input_hash": solved.authority_state.semantic_input_hash,
         "plan_content_hash": solved.authority_state.plan_content_hash,
         "workouts": _workout_summary(result),
+        "rejection_counts": [
+            {"code": code, "count": count}
+            for code, count in solved.trace.rejection_counts
+        ],
+        "availability": [
+            {
+                "date": item.local_date.isoformat(),
+                "available": item.available,
+                "max_sessions": item.max_sessions,
+                "max_duration_minutes": item.max_duration_minutes,
+            }
+            for item in bundle.availability
+        ],
+        "fixed_commitments": [
+            {
+                "commitment_id": item.commitment_id,
+                "date": item.local_date.isoformat(),
+                "label": item.label,
+            }
+            for item in bundle.fixed_commitments
+        ],
+        "closed_dates": [item.isoformat() for item in bundle.closed_dates],
         "planning_state_mutated": False,
         "audit_status": audit_status,
     }
