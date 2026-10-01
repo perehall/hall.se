@@ -183,6 +183,7 @@ def context(
     compatibility=None,
     availability=(),
     max_minutes=1000,
+    eligibility_values=None,
 ):
     return PlanValidationContext(
         source_revision="source-1",
@@ -191,7 +192,11 @@ def context(
         future_context_through=date(2026, 10, 12),
         strategy=strategy(obligations, max_minutes=max_minutes),
         catalog_options=tuple(options),
-        option_eligibility=eligibility(options),
+        option_eligibility=tuple(
+            eligibility(options)
+            if eligibility_values is None
+            else eligibility_values
+        ),
         fixed_commitments=tuple(fixed),
         compatibility_policy=compatibility or policy(),
         availability=tuple(availability),
@@ -549,6 +554,13 @@ class PlanningSolverV1Tests(unittest.TestCase):
             "bike",
             dimensions=(dim("mechanical_leg", LoadDimensionLevel.MODERATE),),
         )
+        direct_easy = option(
+            "run_easy_distance",
+            "easy-60",
+            "run_easy_distance",
+            "run",
+            dimensions=(dim("cardiovascular", LoadDimensionLevel.LOW),),
+        )
         easy = obligation(
             "easy",
             "run_easy_distance",
@@ -557,7 +569,19 @@ class PlanningSolverV1Tests(unittest.TestCase):
             maximum=1,
             partial=(CoverageRule("mtb_aerobic", 1, 2),),
         )
-        result = solve(context((easy,), (mtb,)), preferred_days=2)
+        mtb_only_eligibility = tuple(
+            item
+            for item in eligibility((mtb, direct_easy))
+            if item.recipe_id == "mtb_aerobic"
+        )
+        result = solve(
+            context(
+                (easy,),
+                (mtb, direct_easy),
+                eligibility_values=mtb_only_eligibility,
+            ),
+            preferred_days=2,
+        )
         self.assertFalse(result.blocked)
         self.assertEqual(len(result.plan.workouts), 2)
         self.assertEqual(
