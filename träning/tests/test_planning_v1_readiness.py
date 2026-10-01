@@ -75,7 +75,6 @@ class PlanningV1ReadinessTests(unittest.TestCase):
         self.data = Path(self.tmp.name)
         for name in (
             "training_strategy.json",
-            "workout_catalog.json",
             "athlete_state.json",
             "planning_policy.json",
         ):
@@ -83,6 +82,36 @@ class PlanningV1ReadinessTests(unittest.TestCase):
                 json.dumps({"legacy": True}),
                 encoding="utf-8",
             )
+        (self.data / "workout_catalog.json").write_text(
+            json.dumps(
+                {
+                    "schema_version": 1,
+                    "recipes": {
+                        "run_easy_distance": {
+                            "sport": "run",
+                            "stimuli": ["run_easy_distance"],
+                            "load_dimensions": ["cardiovascular"],
+                            "development_character": "easy",
+                            "options": [
+                                {
+                                    "id": "run-easy-60",
+                                    "value": 60,
+                                }
+                            ],
+                            "planning_v1": {
+                                "eligibility_basis": {
+                                    "run_easy_distance": {
+                                        "mode": "numeric",
+                                        "metric": "duration_minutes",
+                                    }
+                                }
+                            },
+                        }
+                    },
+                }
+            ),
+            encoding="utf-8",
+        )
 
     def tearDown(self):
         self.tmp.cleanup()
@@ -115,11 +144,14 @@ class PlanningV1ReadinessTests(unittest.TestCase):
         self.assertEqual(
             {
                 "MISSING_V1_STRATEGY_REVISION",
-                "MISSING_V1_CATALOG_PROJECTION",
                 "MISSING_V1_OBSERVED_TRAINING",
                 "MISSING_V1_POLICY_PROJECTION",
             },
             codes,
+        )
+        self.assertEqual(
+            report["source_status"]["catalog"],
+            "materialized_from_owned_source",
         )
         self.assertFalse(report["solver_ran"])
         self.assertFalse(report["production_mutated"])
