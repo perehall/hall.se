@@ -84,6 +84,7 @@ def semantic_planning_input_payload(
             item.unit,
             item.window_days,
             float(item.max_value),
+            item.requires_complete_coverage,
         )
         for item in strategy.load_envelope.bounds
     ]
