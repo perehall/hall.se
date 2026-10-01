@@ -370,6 +370,8 @@ def _selection_credits(
 def enumerate_terminal_selections(
     context: PlanValidationContext,
     atoms: tuple[CandidateAtom, ...],
+    affected_from: date,
+    affected_until: date,
     limits: CandidateGenerationLimits | None = None,
 ) -> tuple[tuple[int, ...], ...]:
     """Enumerate the complete anti-filler search domain.
@@ -385,7 +387,12 @@ def enumerate_terminal_selections(
     base = _observed_credits(context)
     obligations = tuple(
         sorted(
-            context.strategy.obligations,
+            (
+                item
+                for item in context.strategy.obligations
+                if item.valid_from <= affected_until
+                and item.valid_until >= affected_from
+            ),
             key=lambda item: (item.priority_tier, item.obligation_id),
         )
     )
@@ -697,7 +704,13 @@ def enumerate_candidate_plans(
 ) -> tuple[tuple[PlanContent, ...], CandidateGenerationStats]:
     limits = limits or CandidateGenerationLimits()
     atoms = generate_candidate_atoms(context, affected_from, affected_until)
-    selections = enumerate_terminal_selections(context, atoms, limits)
+    selections = enumerate_terminal_selections(
+        context,
+        atoms,
+        affected_from,
+        affected_until,
+        limits,
+    )
     inside_commitments = tuple(
         item for item in context.fixed_commitments
         if affected_from <= item.local_date <= affected_until
