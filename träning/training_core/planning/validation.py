@@ -86,6 +86,21 @@ class PlanValidationContext:
             raise PlanningContractError("validation catalog contains duplicate recipe/dose option")
         object.__setattr__(self, "catalog_options", options)
 
+        catalog_recipe_ids = {item.recipe_id for item in options}
+        missing_strategy_recipes = sorted(
+            {
+                recipe_id
+                for obligation in self.strategy.obligations
+                for recipe_id in obligation.recipe_family
+                if recipe_id not in catalog_recipe_ids
+            }
+        )
+        if missing_strategy_recipes:
+            raise PlanningContractError(
+                "StrategyRevision references recipe families missing from approved catalog: "
+                + ", ".join(missing_strategy_recipes)
+            )
+
         eligibility = tuple(self.option_eligibility)
         eligibility_keys = [
             (item.recipe_id, item.dose_option_id, item.capability)
@@ -98,12 +113,29 @@ class PlanValidationContext:
             raise PlanningContractError(
                 "option eligibility references recipe/dose outside approved catalog"
             )
+        catalog_by_key = {item.option_key: item for item in options}
+        for item in eligibility:
+            option = catalog_by_key[item.option_key]
+            if item.capability not in option.capabilities:
+                raise PlanningContractError(
+                    "option eligibility claims capability not provided by approved option: "
+                    f"{item.recipe_id}/{item.dose_option_id}/{item.capability}"
+                )
         object.__setattr__(self, "option_eligibility", eligibility)
 
         commitments = tuple(self.fixed_commitments)
         ids = [item.commitment_id for item in commitments]
         if len(set(ids)) != len(ids):
             raise PlanningContractError("validation context contains duplicate fixed commitment")
+        known_orders = [
+            (item.local_date, item.within_day_order)
+            for item in commitments
+            if item.within_day_order is not None
+        ]
+        if len(set(known_orders)) != len(known_orders):
+            raise PlanningContractError(
+                "fixed commitments contain duplicate known within-day order"
+            )
         object.__setattr__(self, "fixed_commitments", commitments)
         object.__setattr__(
             self,
