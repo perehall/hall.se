@@ -34,6 +34,7 @@ from .models import (
     SameDayOrderRule,
     UnknownAggregatePolicy,
     WorkoutComponentIntent,
+    WorkoutPlacementConstraint,
 )
 
 __all__ = [
@@ -64,6 +65,7 @@ __all__ = [
     "SameDayOrderRule",
     "UnknownAggregatePolicy",
     "WorkoutComponentIntent",
+    "WorkoutPlacementConstraint",
     "plan_content_hash",
     "semantic_plan_payload",
     "PlanValidationContext",
