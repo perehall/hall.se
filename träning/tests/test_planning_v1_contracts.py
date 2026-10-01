@@ -6,7 +6,7 @@ from __future__ import annotations
 import ast
 import sys
 import unittest
-from dataclasses import FrozenInstanceError
+from dataclasses import FrozenInstanceError, fields
 from datetime import date
 from pathlib import Path
 
@@ -155,6 +155,13 @@ class LoadBoundCoverageTests(unittest.TestCase):
 
 
 class LoadEstimateTests(unittest.TestCase):
+    def test_aggregate_coverage_semantics_belong_to_bound_not_estimate(self):
+        estimate_fields = {field.name for field in fields(LoadEstimate)}
+        bound_fields = {field.name for field in fields(LoadBound)}
+        self.assertNotIn("requires_complete_coverage", estimate_fields)
+        self.assertIn("requires_complete_coverage", bound_fields)
+
+
     def test_quantitative_load_preserves_uncertainty_interval(self):
         estimate = LoadEstimate(
             scope="global",
