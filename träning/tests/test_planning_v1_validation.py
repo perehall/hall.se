@@ -16,19 +16,26 @@ from training_core.planning import (  # noqa: E402
     ApprovedWorkoutOption,
     ContributionKind,
     CoverageRule,
+    DailyAvailability,
+    EligibilityKind,
     FixedLoadCommitment,
+    LoadCompatibilityPolicy,
+    LoadCompatibilityRule,
     LoadBound,
     LoadDimensionExposure,
     LoadDimensionLevel,
     LoadEstimate,
     ObligationContribution,
+    ObservedLoadExposure,
     ObservedLoadSample,
     ObservedObligationCredit,
+    OptionEligibility,
     PlanContent,
     PlannedTrainingWorkout,
     PlanningObligation,
     PlanValidationContext,
     StrategyRevision,
+    SameDayOrderRule,
     UnknownAggregatePolicy,
     WorkoutComponentIntent,
     validate_plan_content,
@@ -276,26 +283,84 @@ def valid_plan(*, workouts=None, commitments=None, source_revision="source-1", a
     )
 
 
+def compatibility_policy():
+    return LoadCompatibilityPolicy(
+        policy_id="compat-v1",
+        rules=(
+            LoadCompatibilityRule(
+                rule_id="high-cardio-spacing",
+                first_dimension="cardiovascular",
+                first_min_level=LoadDimensionLevel.HIGH,
+                second_dimension="cardiovascular",
+                second_min_level=LoadDimensionLevel.HIGH,
+                min_calendar_separation_days=2,
+                same_day_order=SameDayOrderRule.FORBIDDEN,
+                source_refs=("policy:test",),
+            ),
+            LoadCompatibilityRule(
+                rule_id="high-mechanical-to-high-cardio",
+                first_dimension="mechanical_leg",
+                first_min_level=LoadDimensionLevel.HIGH,
+                second_dimension="cardiovascular",
+                second_min_level=LoadDimensionLevel.HIGH,
+                min_calendar_separation_days=2,
+                same_day_order=SameDayOrderRule.FORBIDDEN,
+                source_refs=("policy:test",),
+            ),
+        ),
+        source_refs=("policy:test",),
+    )
+
+
+def eligibility_for(options):
+    return tuple(
+        OptionEligibility(
+            recipe_id=option.recipe_id,
+            dose_option_id=option.dose_option_id,
+            capability=capability,
+            kind=EligibilityKind.HOLD,
+            source_refs=("athlete_state:eligible",),
+        )
+        for option in options
+        for capability in option.capabilities
+    )
+
+
 def context(
     *,
     strategy_value=None,
     catalog=None,
     fixed=None,
+    eligibility=None,
+    compatibility=None,
+    availability=(),
+    closed_dates=(),
     observed_credits=(),
     observed_load=(),
+    observed_exposures=(),
     source_revision="source-1",
     history_from=date(2026, 9, 29),
     history_through=date(2026, 10, 4),
+    future_context_through=date(2026, 10, 12),
 ):
+    catalog_values = tuple(catalog or (option_easy(), option_threshold(), option_mtb()))
     return PlanValidationContext(
         source_revision=source_revision,
         history_from=history_from,
         history_through=history_through,
+        future_context_through=future_context_through,
         strategy=strategy_value or strategy(),
-        catalog_options=tuple(catalog or (option_easy(), option_threshold(), option_mtb())),
+        catalog_options=catalog_values,
+        option_eligibility=tuple(
+            eligibility if eligibility is not None else eligibility_for(catalog_values)
+        ),
         fixed_commitments=tuple(fixed if fixed is not None else (fixed_commitment(),)),
+        compatibility_policy=compatibility or compatibility_policy(),
+        availability=tuple(availability),
+        closed_dates=tuple(closed_dates),
         observed_obligation_credits=tuple(observed_credits),
         observed_load_samples=tuple(observed_load),
+        observed_load_exposures=tuple(observed_exposures),
     )
 
 
@@ -491,6 +556,170 @@ class FinalPlanningValidatorTests(unittest.TestCase):
         )
         # 100 observed + 120 fixed upper bound + 75 easy + 50 threshold = 345 > 300.
         self.assertIn("AGGREGATE_LOAD_EXCEEDED", report.codes())
+
+    def test_selected_option_must_be_athlete_eligible(self):
+        report = validate_plan_content(
+            valid_plan(),
+            context(
+                eligibility=(
+                    OptionEligibility(
+                        recipe_id="run_threshold",
+                        dose_option_id="run-threshold-4x8",
+                        capability="run_threshold",
+                        kind=EligibilityKind.HOLD,
+                        source_refs=("athlete_state:eligible",),
+                    ),
+                )
+            ),
+        )
+        self.assertIn("WORKOUT_OPTION_NOT_ELIGIBLE", report.codes())
+
+    def test_closed_date_cannot_receive_mutable_workout(self):
+        report = validate_plan_content(
+            valid_plan(),
+            context(closed_dates=(date(2026, 10, 6),)),
+        )
+        self.assertIn("WORKOUT_ON_CLOSED_DATE", report.codes())
+
+    def test_unavailable_date_rejects_training(self):
+        report = validate_plan_content(
+            valid_plan(),
+            context(
+                availability=(
+                    DailyAvailability(
+                        local_date=date(2026, 10, 6),
+                        available=False,
+                        source_refs=("user:availability",),
+                    ),
+                )
+            ),
+        )
+        self.assertIn("TRAINING_ON_UNAVAILABLE_DATE", report.codes())
+
+    def test_daily_session_limit_includes_fixed_and_planned_sessions(self):
+        easy = option_easy()
+        row = workout_from_option(
+            "easy-on-fixed-day",
+            AFFECTED_FROM,
+            easy,
+            direct("easy-distance", "run_easy_distance"),
+        )
+        report = validate_plan_content(
+            valid_plan(workouts=(row,)),
+            context(
+                availability=(
+                    DailyAvailability(
+                        local_date=AFFECTED_FROM,
+                        available=True,
+                        max_sessions=1,
+                        source_refs=("user:availability",),
+                    ),
+                )
+            ),
+        )
+        self.assertIn("AVAILABILITY_SESSION_LIMIT_EXCEEDED", report.codes())
+
+    def test_daily_duration_limit_uses_upper_bound_load(self):
+        report = validate_plan_content(
+            valid_plan(),
+            context(
+                availability=(
+                    DailyAvailability(
+                        local_date=AFFECTED_FROM,
+                        available=True,
+                        max_duration_minutes=100,
+                        source_refs=("user:availability",),
+                    ),
+                )
+            ),
+        )
+        # Fixed commitment is explicitly 60-120 min, so 100 min cannot be proven sufficient.
+        self.assertIn("AVAILABILITY_DURATION_EXCEEDED", report.codes())
+
+    def test_future_context_must_cover_cross_boundary_compatibility_horizon(self):
+        report = validate_plan_content(
+            valid_plan(),
+            context(future_context_through=AFFECTED_UNTIL),
+        )
+        self.assertIn("INSUFFICIENT_FUTURE_CONTEXT", report.codes())
+
+    def test_adjacent_high_cardio_exposures_violate_generic_spacing_rule(self):
+        threshold = option_threshold()
+        rows = (
+            workout_from_option(
+                "threshold-1",
+                date(2026, 10, 8),
+                threshold,
+                direct("threshold", "run_threshold"),
+            ),
+            workout_from_option(
+                "threshold-2",
+                date(2026, 10, 9),
+                threshold,
+                direct("threshold", "run_threshold"),
+            ),
+        )
+        report = validate_plan_content(
+            valid_plan(workouts=rows),
+            context(),
+        )
+        self.assertIn("LOAD_COMPATIBILITY_GAP_VIOLATION", report.codes())
+
+    def test_cross_boundary_future_fixed_load_is_checked(self):
+        threshold = option_threshold()
+        row = workout_from_option(
+            "threshold-sunday",
+            AFFECTED_UNTIL,
+            threshold,
+            direct("threshold", "run_threshold"),
+        )
+        future_fixed = FixedLoadCommitment(
+            commitment_id="future-high-mechanical",
+            local_date=date(2026, 10, 12),
+            label="Nästa periods fasta belastning",
+            load_dimensions=(
+                dim("mechanical_leg", LoadDimensionLevel.HIGH),
+            ),
+            quantitative_load=(
+                load("global", "training_duration", "duration", "minutes", 60, 90),
+            ),
+            source_refs=("user:confirmed",),
+        )
+        report = validate_plan_content(
+            valid_plan(workouts=(row,)),
+            context(fixed=(fixed_commitment(), future_fixed)),
+        )
+        self.assertIn("LOAD_COMPATIBILITY_GAP_VIOLATION", report.codes())
+
+    def test_same_day_order_rule_fails_closed_when_order_unknown(self):
+        policy = LoadCompatibilityPolicy(
+            policy_id="same-day-order",
+            rules=(
+                LoadCompatibilityRule(
+                    rule_id="mechanical-before-cardio",
+                    first_dimension="mechanical_leg",
+                    first_min_level=LoadDimensionLevel.HIGH,
+                    second_dimension="cardiovascular",
+                    second_min_level=LoadDimensionLevel.HIGH,
+                    min_calendar_separation_days=0,
+                    same_day_order=SameDayOrderRule.FIRST_BEFORE_SECOND,
+                    source_refs=("policy:test",),
+                ),
+            ),
+            source_refs=("policy:test",),
+        )
+        threshold = option_threshold()
+        row = workout_from_option(
+            "threshold-same-day",
+            AFFECTED_FROM,
+            threshold,
+            direct("threshold", "run_threshold"),
+        )
+        report = validate_plan_content(
+            valid_plan(workouts=(row,)),
+            context(compatibility=policy),
+        )
+        self.assertIn("LOAD_COMPATIBILITY_ORDER_UNKNOWN", report.codes())
 
     def test_plan_window_cannot_escape_strategy_revision(self):
         plan = valid_plan(affected_until=date(2026, 11, 2), workouts=())
