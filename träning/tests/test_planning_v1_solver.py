@@ -43,7 +43,7 @@ from training_core.planning.solver import (  # noqa: E402
     PlanningSolveRequest,
     solve_planning_window,
 )
-from training_core.planning.requests import (  # noqa: E402
+from training_core.planning.plan_changes import (  # noqa: E402
     PlanChangeKind,
     UserPlanChange,
     compile_plan_change,
