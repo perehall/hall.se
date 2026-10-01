@@ -34,7 +34,15 @@
           "kind": "structured",
           "value": 32,
           "session": "Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg",
-          "intent": "Alternativ struktur med något större total arbetstid; används bara när faktisk historik stödjer den."
+          "intent": "Alternativ struktur med något större total arbetstid; används bara när faktisk historik stödjer den.",
+          "planning_v1": {
+            "max_session_duration_minutes": 90,
+            "duration_cap_source_refs": [
+              "activity:20284663236:4x8:elapsed_3687s",
+              "activity:20381137043:4x8:elapsed_3755s",
+              "planning_v1:explicit_execution_cap:90m"
+            ]
+          }
         },
         {
           "id": "run-threshold-4x9",
@@ -363,6 +371,14 @@
                 ]
               }
             ]
+          },
+          "planning_v1": {
+            "max_session_duration_minutes": 90,
+            "duration_cap_source_refs": [
+              "activity:20300494236:3200m:elapsed_3537s",
+              "activity:20396959391:3700m:elapsed_4082s",
+              "planning_v1:explicit_execution_cap:90m"
+            ]
           }
         }
       ],
@@ -650,6 +666,14 @@
                   }
                 ]
               }
+            ]
+          },
+          "planning_v1": {
+            "max_session_duration_minutes": 90,
+            "duration_cap_source_refs": [
+              "activity:20300494236:3200m:elapsed_3537s",
+              "activity:20396959391:3700m:elapsed_4082s",
+              "planning_v1:explicit_execution_cap:90m"
             ]
           }
         },
@@ -1041,6 +1065,14 @@
                   }
                 ]
               }
+            ]
+          },
+          "planning_v1": {
+            "max_session_duration_minutes": 90,
+            "duration_cap_source_refs": [
+              "activity:20300494236:3200m:elapsed_3537s",
+              "activity:20396959391:3700m:elapsed_4082s",
+              "planning_v1:explicit_execution_cap:90m"
             ]
           }
         },
