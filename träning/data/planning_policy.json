@@ -256,7 +256,10 @@
     ],
     "principle": "Mikrocykeln komponeras från mesocykelns kapacitetskrav och aktuell belastning. Ledig kalenderdag är aldrig ett eget skäl att lägga till träning.",
     "require_distinct_development_character_in_develop_microcycles": true,
-    "require_mesocycle_blueprint_alignment": true
+    "require_mesocycle_blueprint_alignment": true,
+    "spread_repeated_session_families_when_possible": [
+      "swim"
+    ]
   },
   "decision_guards": [
     "Ingen progression får motiveras enbart av wellness eller träningsberedskap.",
