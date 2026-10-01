@@ -7,7 +7,10 @@ Only typed contracts live here until the new solver is implemented.
 from .models import (
     AggregateLoadEnvelope,
     CoverageRule,
+    FixedLoadCommitment,
     LoadBound,
+    LoadDimensionExposure,
+    LoadDimensionLevel,
     PlanAuthorityState,
     PlanAuthorityStatus,
     PlanningObligation,
@@ -18,7 +21,10 @@ from .models import (
 __all__ = [
     "AggregateLoadEnvelope",
     "CoverageRule",
+    "FixedLoadCommitment",
     "LoadBound",
+    "LoadDimensionExposure",
+    "LoadDimensionLevel",
     "PlanAuthorityState",
     "PlanAuthorityStatus",
     "PlanningObligation",
