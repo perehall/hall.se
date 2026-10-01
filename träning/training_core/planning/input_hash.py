@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+from datetime import timedelta
 
 from .content import plan_content_hash
 from .objectives import ObjectivePolicy
@@ -50,6 +51,46 @@ def semantic_planning_input_payload(
     """
 
     strategy = context.strategy
+
+    max_load_window = max(
+        (item.window_days for item in strategy.load_envelope.bounds),
+        default=1,
+    )
+    max_compat_gap = max(
+        (item.max_separation_days for item in context.compatibility_policy.rules),
+        default=0,
+    )
+    max_spacing_gap = max(
+        (item.desired_min_gap_days for item in objective_policy.spacing_preferences),
+        default=0,
+    )
+    history_required_from = affected_from - timedelta(
+        days=max(
+            max_load_window - 1,
+            max(0, max_compat_gap - 1),
+            max(0, max_spacing_gap - 1),
+        )
+    )
+    history_required_through = affected_from - timedelta(days=1)
+    future_required_through = affected_until + timedelta(
+        days=max(
+            max(0, max_compat_gap - 1),
+            max(0, max_spacing_gap - 1),
+        )
+    )
+
+    # Normalize coverage metadata to the evidence horizon that can actually
+    # affect this solve. Extra old/future coverage is provenance, not planning
+    # semantics. Insufficient coverage remains visible in the normalized range.
+    normalized_history_from = max(context.history_from, history_required_from)
+    normalized_history_through = min(
+        context.history_through,
+        history_required_through,
+    )
+    normalized_future_through = min(
+        context.future_context_through,
+        future_required_through,
+    )
     obligations = [
         {
             "id": item.obligation_id,
@@ -125,6 +166,7 @@ def semantic_planning_input_payload(
             "order": item.within_day_order,
         }
         for item in context.fixed_commitments
+        if affected_from <= item.local_date <= future_required_through
     ]
 
     compatibility = [
@@ -152,6 +194,7 @@ def semantic_planning_input_payload(
             else float(item.max_duration_minutes),
         )
         for item in context.availability
+        if affected_from <= item.local_date <= affected_until
     ]
 
     placement_constraints = [
@@ -184,6 +227,7 @@ def semantic_planning_input_payload(
             "order": item.within_day_order,
         }
         for item in context.observed_load_exposures
+        if history_required_from <= item.local_date <= affected_until
     ]
 
     spacing = [
@@ -199,9 +243,9 @@ def semantic_planning_input_payload(
     return {
         "affected_from": affected_from.isoformat(),
         "affected_until": affected_until.isoformat(),
-        "history_from": context.history_from.isoformat(),
-        "history_through": context.history_through.isoformat(),
-        "future_context_through": context.future_context_through.isoformat(),
+        "history_from": normalized_history_from.isoformat(),
+        "history_through": normalized_history_through.isoformat(),
+        "future_context_through": normalized_future_through.isoformat(),
         "strategy": {
             "revision_id": strategy.revision_id,
             "goal_set_hash": strategy.goal_set_hash,
@@ -225,7 +269,11 @@ def semantic_planning_input_payload(
         },
         "availability": sorted(availability),
         "placement_constraints": sorted(placement_constraints),
-        "closed_dates": sorted(day.isoformat() for day in context.closed_dates),
+        "closed_dates": sorted(
+            day.isoformat()
+            for day in context.closed_dates
+            if affected_from <= day <= affected_until
+        ),
         "observed_credits": sorted(observed_credits),
         "observed_load": sorted(observed_load, key=lambda item: item["id"]),
         "objective_policy": {
