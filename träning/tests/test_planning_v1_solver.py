@@ -206,7 +206,6 @@ def context(
 def solve(ctx, *, preferred_days=5, doubles=DoubleSessionPreference.SOMETIMES):
     return solve_planning_window(
         PlanningSolveRequest(
-            semantic_input_hash="input-hash",
             affected_from=START,
             affected_until=END,
             validation_context=ctx,
