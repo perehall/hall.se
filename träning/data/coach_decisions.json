@@ -3653,6 +3653,77 @@
       },
       "affected_workouts": [],
       "summary": "Simteknik: progression hålls. Kapaciteten har verifierad exponering, men progression kan inte avgöras från tid/distans utan kvalitativ eller specifik teknisk evidens."
+    },
+    {
+      "schema_version": 1,
+      "decision_id": "f2376429f7871e497c842c908e636955f771165d7a83cfdff3b43865fd6070d7",
+      "generated_at_utc": "2026-10-01T06:00:54.850114+00:00",
+      "planning_date": "2026-10-01",
+      "week_start": "2026-09-28",
+      "capability": "run_easy_distance",
+      "trigger": "live_replan",
+      "decision": "replace",
+      "reason_code": "plan_reconciled_replace",
+      "previous_state": {
+        "evidence_state": "demonstrated",
+        "progression_state": "hold",
+        "progression_ready": false,
+        "progression_reason_code": "direct_caution",
+        "progression_reason": "Senaste jämförbara exponeringen innehåller en explicit varningssignal från användaren.",
+        "demonstrated_value": 80.07,
+        "tolerated_value": null,
+        "absorbed_value": null
+      },
+      "new_state": {
+        "evidence_state": "demonstrated",
+        "progression_state": "hold",
+        "progression_ready": false,
+        "progression_reason_code": "direct_caution",
+        "progression_reason": "Senaste jämförbara exponeringen innehåller en explicit varningssignal från användaren.",
+        "demonstrated_value": 80.07,
+        "tolerated_value": null,
+        "absorbed_value": null
+      },
+      "evidence": {
+        "activity_refs": [],
+        "microcycle_source_hash": "36e222f4f5fadce0380ea701587bc1338ea2068847d9b49b3b53fcbd47320c46",
+        "microcycle_week_key": "2026-W40",
+        "slot_action": "consolidate",
+        "slot_recipe_key": "run_easy_distance",
+        "slot_evidence_refs": [
+          "planning_policy.microcycle_policy"
+        ],
+        "capability_reason_code": "direct_caution",
+        "completed_context_signature": "1411897c550ba441d86c2ff46b187bda1047e7f584bf1600003aa33bec3ad126"
+      },
+      "affected_workouts": [
+        {
+          "change_type": "replaced",
+          "before": {
+            "workout_key": "run_easy_distance_1",
+            "date": "2026-10-02",
+            "sport": "run",
+            "recipe_key": "run_easy_distance",
+            "session": "Löpning · lugn distans · 120 min",
+            "stimuli": [
+              "run_easy_distance"
+            ],
+            "planning_status": null
+          },
+          "after": {
+            "workout_key": "run_easy_distance_1",
+            "date": "2026-10-02",
+            "sport": "run",
+            "recipe_key": "run_easy_distance",
+            "session": "Löpning · lugn distans · 75 min",
+            "stimuli": [
+              "run_easy_distance"
+            ],
+            "planning_status": null
+          }
+        }
+      ],
+      "summary": "Lugn löpdistans / tålighet: passkaraktär eller recept ersätts efter omprövning av mikrocykeln."
     }
   ]
 }
