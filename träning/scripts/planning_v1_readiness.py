@@ -21,6 +21,7 @@ from training_core.application.planning_projection_assembly import (
 HERE = Path(__file__).resolve().parent
 DEFAULT_DATA = HERE.parent / "data"
 EXECUTION_FACTS_FILE = "planning_execution_facts.json"
+ATHLETE_PROFILE_FILE = "planning_athlete_profile.json"
 
 
 def _read_json(path: Path) -> dict[str, Any]:
@@ -52,6 +53,7 @@ def build_readiness_report(data_dir: Path = DEFAULT_DATA) -> dict[str, Any]:
         "strategy": _read_json(data_dir / "training_strategy.json"),
         "catalog": _read_json(data_dir / "workout_catalog.json"),
         "athlete_state": _read_json(data_dir / "athlete_state.json"),
+        "athlete_profile": _optional_json(data_dir / ATHLETE_PROFILE_FILE),
         "policy": _read_json(data_dir / "planning_policy.json"),
         "execution_facts": _optional_json(
             data_dir / EXECUTION_FACTS_FILE
@@ -63,6 +65,7 @@ def build_readiness_report(data_dir: Path = DEFAULT_DATA) -> dict[str, Any]:
         canonical_strategy=documents["strategy"],
         canonical_catalog=documents["catalog"],
         canonical_athlete_state=documents["athlete_state"],
+        canonical_athlete_profile=documents["athlete_profile"],
         canonical_policy=documents["policy"],
         canonical_execution_facts=documents["execution_facts"],
     )
