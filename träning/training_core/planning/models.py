@@ -232,24 +232,6 @@ class ObservedObligationCredit:
 
 
 @dataclass(frozen=True)
-class ObservedLoadSample:
-    """Dated canonical load evidence used in rolling aggregate validation."""
-
-    local_date: date
-    load: LoadEstimate
-    source_refs: tuple[str, ...]
-
-    def __post_init__(self) -> None:
-        if not isinstance(self.local_date, date):
-            raise PlanningContractError("observed load sample local_date must be a date")
-        object.__setattr__(
-            self,
-            "source_refs",
-            _unique_text_tuple(self.source_refs, "source_refs"),
-        )
-
-
-@dataclass(frozen=True)
 class WorkoutComponentIntent:
     """One ordered component of an intentionally multisport workout."""
 
@@ -572,12 +554,18 @@ class DailyAvailability:
 
 @dataclass(frozen=True)
 class ObservedLoadExposure:
-    """Completed categorical load used for cross-session compatibility checks."""
+    """One canonical completed-load exposure.
+
+    Categorical compatibility load and quantitative aggregate load live on the
+    same immutable exposure so history cannot be complete in one load layer and
+    silently missing in another.
+    """
 
     exposure_id: str
     local_date: date
     load_dimensions: tuple[LoadDimensionExposure, ...]
     source_refs: tuple[str, ...]
+    quantitative_load: tuple[LoadEstimate, ...] = ()
     within_day_order: int | None = None
 
     def __post_init__(self) -> None:
@@ -596,6 +584,16 @@ class ObservedLoadExposure:
                 "observed exposure contains duplicate load dimension"
             )
         object.__setattr__(self, "load_dimensions", dimensions)
+        quantitative = tuple(self.quantitative_load)
+        semantic_keys = [
+            (item.scope, item.subject, item.metric, item.unit)
+            for item in quantitative
+        ]
+        if len(set(semantic_keys)) != len(semantic_keys):
+            raise PlanningContractError(
+                "observed exposure contains duplicate quantitative load semantic"
+            )
+        object.__setattr__(self, "quantitative_load", quantitative)
         object.__setattr__(
             self,
             "source_refs",
