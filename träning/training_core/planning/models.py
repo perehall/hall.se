@@ -726,6 +726,7 @@ class PlanningObligation:
     source_refs: tuple[str, ...]
     progression_axes: tuple[str, ...] = ()
     partial_coverage: tuple[CoverageRule, ...] = ()
+    prefer_character_variation: bool = False
 
     def __post_init__(self) -> None:
         object.__setattr__(self, "obligation_id", _required_text(self.obligation_id, "obligation_id"))
