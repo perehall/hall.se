@@ -55,6 +55,52 @@ class CatalogMaterializerTests(unittest.TestCase):
             self.assertEqual(load.min_value, 1.0)
             self.assertEqual(load.max_value, 1.0)
 
+    def test_duration_based_options_get_exact_session_duration(self):
+        projection = compile_catalog_projection(
+            materialize_catalog_document(canonical_catalog())
+        )
+        strength = next(
+            item
+            for item in projection.approved_options
+            if item.dose_option_id == "strength-35"
+        )
+        duration = [
+            item
+            for item in strength.quantitative_load
+            if (
+                item.scope,
+                item.subject,
+                item.metric,
+                item.unit,
+            )
+            == ("global", "training_duration", "duration", "minutes")
+        ]
+        self.assertEqual(len(duration), 1)
+        self.assertEqual(duration[0].min_value, 35.0)
+        self.assertEqual(duration[0].max_value, 35.0)
+
+    def test_structured_option_does_not_invent_total_duration(self):
+        projection = compile_catalog_projection(
+            materialize_catalog_document(canonical_catalog())
+        )
+        threshold = next(
+            item
+            for item in projection.approved_options
+            if item.dose_option_id == "run-threshold-4x8"
+        )
+        self.assertFalse(
+            any(
+                (
+                    item.scope,
+                    item.subject,
+                    item.metric,
+                    item.unit,
+                )
+                == ("global", "training_duration", "duration", "minutes")
+                for item in threshold.quantitative_load
+            )
+        )
+
     def test_unknown_load_level_is_conservative_not_invented(self):
         projection = compile_catalog_projection(
             materialize_catalog_document(canonical_catalog())
