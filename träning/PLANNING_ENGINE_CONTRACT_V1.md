@@ -826,7 +826,7 @@ Before any live shadow solve, the application layer must materialize the followi
 - approved workout options with explicit load semantics, executable dose identity and capability-specific dose-evidence semantics;
 - athlete-specific `OptionEligibility` derived without importing legacy planner decisions; a multi-capability physical workout is eligible only when every capability carried by that option is eligible at that dose;
 - canonical observed capability evidence with explicit evidence basis; confirmed stimulus and structural intent-match are distinct, and structural match may satisfy an obligation only when that StrategyRevision explicitly opts in;
-- canonical observed categorical and quantitative load exposures; an explicitly unknown load level remains `UNKNOWN` and is handled conservatively rather than downgraded;
+- canonical observed categorical and quantitative load exposures, with an explicit covered date range and completeness proof against every canonical training activity in that range; an explicitly unknown load level remains `UNKNOWN` and is handled conservatively rather than downgraded;
 - fixed commitments;
 - declared availability;
 - closed dates;
