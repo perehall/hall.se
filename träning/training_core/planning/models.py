@@ -347,6 +347,7 @@ class ApprovedWorkoutOption:
     quantitative_load: tuple[LoadEstimate, ...]
     source_refs: tuple[str, ...]
     development_character: str = ""
+    planning_priority: int = 100
 
     def __post_init__(self) -> None:
         object.__setattr__(self, "recipe_id", _required_text(self.recipe_id, "catalog.recipe_id"))
@@ -365,6 +366,13 @@ class ApprovedWorkoutOption:
             "source_refs",
             _unique_text_tuple(self.source_refs, "catalog.source_refs"),
         )
+        if (
+            not isinstance(self.planning_priority, int)
+            or self.planning_priority < 0
+        ):
+            raise PlanningContractError(
+                "catalog.planning_priority must be a non-negative integer"
+            )
 
         components = tuple(self.components)
         if not components:
