@@ -904,6 +904,14 @@
       "source_hash": "f3088e5d5896ff1cc6f931280be240b2f34398460dd19f2345767625e103d52c",
       "generated_at_utc": "2026-10-01T05:45:12.303775+00:00",
       "summary": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern."
+    },
+    {
+      "kind": "upcoming_microcycle",
+      "decision_id": "2026-W41",
+      "source": "openai_repaired",
+      "source_hash": "37be24a3f41bcac9b689592ad06e06d3585ea1897ce3261b98a0cf2b580a83f0",
+      "generated_at_utc": "2026-10-01T05:48:50.711215+00:00",
+      "summary": "Reparerar tidigare förslag genom att ta bort planerat mtb_technical på dag 1 eftersom måndagen är blockerad av fast enduro. Behåller current_microcycle_blueprint (develop) och säkerställer mesocykelns hard_requirements: två simbassessioner, minst en styrke/core-session, låg benbelastning dag 2, ingen oönskad progress för kapaciteter utan stöd i athlete_state samt undvikande av intilliggande löp‑stressorer."
     }
   ]
 }
