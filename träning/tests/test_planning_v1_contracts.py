@@ -21,6 +21,7 @@ from training_core.planning.models import (  # noqa: E402
     LoadDimensionExposure,
     LoadDimensionLevel,
     LoadEstimate,
+    ObservedCreditBasis,
     PlanAuthorityState,
     PlanAuthorityStatus,
     PlanningContractError,
@@ -97,6 +98,36 @@ class PlanningObligationTests(unittest.TestCase):
         self.assertTrue(item.active_on(date(2026, 10, 11)))
         self.assertFalse(item.active_on(date(2026, 10, 12)))
         self.assertEqual(item.max_exposures, 2)
+
+    def test_observed_credit_defaults_to_confirmed_stimulus_only(self):
+        item = obligation()
+        self.assertEqual(
+            item.accepted_observed_bases,
+            (ObservedCreditBasis.CONFIRMED_STIMULUS,),
+        )
+        self.assertTrue(
+            item.accepts_observed_basis(
+                ObservedCreditBasis.CONFIRMED_STIMULUS
+            )
+        )
+        self.assertFalse(
+            item.accepts_observed_basis(
+                ObservedCreditBasis.STRUCTURAL_INTENT_MATCH
+            )
+        )
+
+    def test_structural_credit_requires_explicit_obligation_opt_in(self):
+        item = obligation(
+            accepted_observed_bases=(
+                ObservedCreditBasis.CONFIRMED_STIMULUS,
+                ObservedCreditBasis.STRUCTURAL_INTENT_MATCH,
+            )
+        )
+        self.assertTrue(
+            item.accepts_observed_basis(
+                ObservedCreditBasis.STRUCTURAL_INTENT_MATCH
+            )
+        )
 
     def test_max_exposures_cannot_be_below_minimum(self):
         with self.assertRaises(PlanningContractError):
