@@ -176,6 +176,11 @@ class ObjectiveVector:
         )
         return (
             obligation_priority,
+            # Anti-filler precedes all calendar/aesthetic preferences. Once
+            # required obligations are equally satisfied, a plan with less
+            # discretionary exposure always wins. A preferred active-day count
+            # can therefore distribute justified training, never create it.
+            self.discretionary_excess_by_tier,
             self.spacing_shortfall_days,
             self.spacing_violation_pairs,
             self.stability_identity_churn,
@@ -186,7 +191,6 @@ class ObjectiveVector:
             self.schedule_preferred_distance,
             self.schedule_double_penalty,
             self.variation_repeat_penalty,
-            self.discretionary_excess_by_tier,
             self.canonical_tie_key,
         )
 
