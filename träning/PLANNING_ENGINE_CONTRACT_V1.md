@@ -323,6 +323,8 @@ Every planned session and every relevant rolling interaction window MUST satisfy
 
 The horizon is defined by the constraint itself; it is NOT limited to adjacent days. Same-day, 24 h, 48 h, 72 h or longer interactions may exist when explicitly modeled.
 
+Compatibility MAY be asymmetric. A load dimension occurring before another may require a different separation than the reverse order; the engine MUST NOT collapse both directions into one symmetric rule when the policy distinguishes them.
+
 This includes same-day multipass compatibility, order and separation.
 
 The constraint system MUST be able to express:
