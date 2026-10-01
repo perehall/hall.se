@@ -15,7 +15,9 @@ from dataclasses import dataclass
 from datetime import date
 
 from .candidate_generation import (
+    CandidateGenerationLimits,
     CandidateGenerationStats,
+    CandidateSearchLimitExceeded,
     enumerate_candidate_plans,
 )
 from .content import plan_content_hash
@@ -46,6 +48,7 @@ class PlanningSolveRequest:
     objective_policy: ObjectivePolicy
     previous_plan: PlanContent | None = None
     engine_version: str = ENGINE_VERSION
+    generation_limits: CandidateGenerationLimits = CandidateGenerationLimits()
 
     def __post_init__(self) -> None:
         if not isinstance(self.affected_from, date) or not isinstance(
@@ -143,11 +146,57 @@ def _invalidated_workout_ids(request: PlanningSolveRequest) -> tuple[str, ...]:
 
 def solve_planning_window(request: PlanningSolveRequest) -> PlanningSolveResult:
     context = request.validation_context
-    candidates, generation = enumerate_candidate_plans(
-        context,
-        request.affected_from,
-        request.affected_until,
-    )
+    try:
+        candidates, generation = enumerate_candidate_plans(
+            context,
+            request.affected_from,
+            request.affected_until,
+            request.generation_limits,
+        )
+    except CandidateSearchLimitExceeded as exc:
+        authority = PlanAuthorityState(
+            status=PlanAuthorityStatus.BLOCKED,
+            source_revision=context.source_revision,
+            semantic_input_hash=request.semantic_input_hash,
+            strategy_revision_id=context.strategy.revision_id,
+            engine_version=request.engine_version,
+            affected_from=request.affected_from,
+            affected_until=request.affected_until,
+            previous_valid_plan_hash=(
+                plan_content_hash(request.previous_plan)
+                if request.previous_plan is not None
+                else None
+            ),
+            blocked_reason_codes=(
+                "SEARCH_SPACE_LIMIT_EXCEEDED",
+                f"SEARCH_STAGE_{exc.stage.upper()}",
+            ),
+            invalidated_workout_keys=_invalidated_workout_ids(request),
+            requires_user_input=False,
+        )
+        trace = PlanningSolveTrace(
+            source_revision=context.source_revision,
+            semantic_input_hash=request.semantic_input_hash,
+            engine_version=request.engine_version,
+            generation=exc.generation,
+            candidates_considered=0,
+            valid_candidates=0,
+            rejected_candidates=0,
+            rejection_counts=(
+                (
+                    "SEARCH_SPACE_LIMIT_EXCEEDED",
+                    exc.observed,
+                ),
+            ),
+            selected_plan_hash=None,
+        )
+        return PlanningSolveResult(
+            authority_state=authority,
+            plan=None,
+            objective_vector=None,
+            trace=trace,
+        )
+
     objective_context = _objective_context(request)
 
     valid: list[tuple[tuple, PlanContent, ObjectiveVector]] = []
