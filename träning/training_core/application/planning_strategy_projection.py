@@ -14,6 +14,7 @@ from training_core.planning.models import (
     AggregateLoadEnvelope,
     CoverageRule,
     LoadBound,
+    ObservedCreditBasis,
     PlanningContractError,
     PlanningObligation,
     StrategyRevision,
@@ -95,6 +96,13 @@ def _obligation(row: dict[str, Any], index: int) -> PlanningObligation:
         ),
         prefer_character_variation=bool(
             row.get("prefer_character_variation", False)
+        ),
+        accepted_observed_bases=tuple(
+            ObservedCreditBasis(value)
+            for value in _strings(
+                row.get("accepted_observed_bases"),
+                f"{field}.accepted_observed_bases",
+            )
         ),
     )
 
