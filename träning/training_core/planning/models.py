@@ -161,6 +161,161 @@ class FixedLoadCommitment:
 
 
 @dataclass(frozen=True)
+class WorkoutComponentIntent:
+    """One ordered component of an intentionally multisport workout."""
+
+    discipline: str
+    order: int
+
+    def __post_init__(self) -> None:
+        object.__setattr__(
+            self,
+            "discipline",
+            _required_text(self.discipline, "component.discipline"),
+        )
+        if not isinstance(self.order, int) or self.order <= 0:
+            raise PlanningContractError("component.order must be a positive integer")
+
+
+@dataclass(frozen=True)
+class PlannedTrainingWorkout:
+    """Immutable training content selected by the future solver."""
+
+    workout_id: str
+    local_date: date
+    recipe_id: str
+    dose_option_id: str
+    obligation_ids: tuple[str, ...]
+    components: tuple[WorkoutComponentIntent, ...]
+    load_dimensions: tuple[LoadDimensionExposure, ...]
+    quantitative_load: tuple[LoadEstimate, ...]
+    source_refs: tuple[str, ...]
+    within_day_order: int | None = None
+
+    def __post_init__(self) -> None:
+        object.__setattr__(
+            self,
+            "workout_id",
+            _required_text(self.workout_id, "workout_id"),
+        )
+        object.__setattr__(self, "recipe_id", _required_text(self.recipe_id, "recipe_id"))
+        object.__setattr__(
+            self,
+            "dose_option_id",
+            _required_text(self.dose_option_id, "dose_option_id"),
+        )
+        if not isinstance(self.local_date, date):
+            raise PlanningContractError("workout.local_date must be a date")
+
+        object.__setattr__(
+            self,
+            "obligation_ids",
+            _unique_text_tuple(self.obligation_ids, "obligation_ids"),
+        )
+        object.__setattr__(
+            self,
+            "source_refs",
+            _unique_text_tuple(self.source_refs, "source_refs"),
+        )
+
+        components = tuple(self.components)
+        if not components:
+            raise PlanningContractError("workout must contain at least one component")
+        orders = [item.order for item in components]
+        if len(set(orders)) != len(orders):
+            raise PlanningContractError("workout component orders must be unique")
+        if sorted(orders) != list(range(1, len(orders) + 1)):
+            raise PlanningContractError(
+                "workout component order must be contiguous starting at 1"
+            )
+        object.__setattr__(
+            self,
+            "components",
+            tuple(sorted(components, key=lambda item: item.order)),
+        )
+
+        dimensions = tuple(self.load_dimensions)
+        if not dimensions:
+            raise PlanningContractError("workout must declare load_dimensions")
+        if len({item.dimension for item in dimensions}) != len(dimensions):
+            raise PlanningContractError("workout contains duplicate load dimension")
+        object.__setattr__(self, "load_dimensions", dimensions)
+
+        quantitative = tuple(self.quantitative_load)
+        semantic_keys = [(item.metric, item.unit) for item in quantitative]
+        if len(set(semantic_keys)) != len(semantic_keys):
+            raise PlanningContractError(
+                "workout contains duplicate quantitative load metric/unit"
+            )
+        object.__setattr__(self, "quantitative_load", quantitative)
+
+        if self.within_day_order is not None:
+            if not isinstance(self.within_day_order, int) or self.within_day_order <= 0:
+                raise PlanningContractError(
+                    "workout.within_day_order must be a positive integer when supplied"
+                )
+
+
+@dataclass(frozen=True)
+class PlanContent:
+    """Exact immutable training prescription for one affected planning window."""
+
+    source_revision: str
+    strategy_revision_id: str
+    affected_from: date
+    affected_until: date
+    workouts: tuple[PlannedTrainingWorkout, ...]
+    fixed_commitments: tuple[FixedLoadCommitment, ...]
+
+    def __post_init__(self) -> None:
+        object.__setattr__(
+            self,
+            "source_revision",
+            _required_text(self.source_revision, "plan.source_revision"),
+        )
+        object.__setattr__(
+            self,
+            "strategy_revision_id",
+            _required_text(self.strategy_revision_id, "plan.strategy_revision_id"),
+        )
+        if not isinstance(self.affected_from, date) or not isinstance(self.affected_until, date):
+            raise PlanningContractError("plan affected_from and affected_until must be dates")
+        if self.affected_until < self.affected_from:
+            raise PlanningContractError("plan affected_until cannot precede affected_from")
+
+        workouts = tuple(self.workouts)
+        if len({item.workout_id for item in workouts}) != len(workouts):
+            raise PlanningContractError("plan contains duplicate workout_id")
+        for workout in workouts:
+            if not self.affected_from <= workout.local_date <= self.affected_until:
+                raise PlanningContractError(
+                    f"workout {workout.workout_id} lies outside affected window"
+                )
+
+        per_day_orders: dict[date, set[int]] = {}
+        for workout in workouts:
+            if workout.within_day_order is None:
+                continue
+            used = per_day_orders.setdefault(workout.local_date, set())
+            if workout.within_day_order in used:
+                raise PlanningContractError(
+                    f"duplicate within_day_order on {workout.local_date.isoformat()}"
+                )
+            used.add(workout.within_day_order)
+        object.__setattr__(self, "workouts", workouts)
+
+        commitments = tuple(self.fixed_commitments)
+        if len({item.commitment_id for item in commitments}) != len(commitments):
+            raise PlanningContractError("plan contains duplicate fixed commitment_id")
+        for commitment in commitments:
+            if not self.affected_from <= commitment.local_date <= self.affected_until:
+                raise PlanningContractError(
+                    f"fixed commitment {commitment.commitment_id} lies outside affected window"
+                )
+        object.__setattr__(self, "fixed_commitments", commitments)
+
+
+@dataclass(frozen=True)
 class CoverageRule:
     """Exact partial/full credit from one capability toward an obligation.
 
