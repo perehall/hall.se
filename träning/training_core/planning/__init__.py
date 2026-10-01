@@ -81,7 +81,9 @@ __all__ = [
     "SpacingSubjectKind",
     "evaluate_objectives",
     "select_best_valid_plan",
+    "CandidateGenerationLimits",
     "CandidateGenerationStats",
+    "CandidateSearchLimitExceeded",
     "generate_candidate_atoms",
     "enumerate_candidate_plans",
     "ENGINE_VERSION",
@@ -118,7 +120,9 @@ from .objectives import (
 
 
 from .candidate_generation import (
+    CandidateGenerationLimits,
     CandidateGenerationStats,
+    CandidateSearchLimitExceeded,
     enumerate_candidate_plans,
     generate_candidate_atoms,
 )
