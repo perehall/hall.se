@@ -160,6 +160,38 @@ class ExecutionFactsMaterializerTests(unittest.TestCase):
             LoadDimensionLevel.UNKNOWN,
         )
 
+    def test_past_commitment_inside_affected_window_is_not_replayed_as_future_fact(self):
+        typed = fixed_commitments()
+        typed["planning_engine_v1"]["fixed_commitments_revision"]["commitments"].insert(
+            0,
+            {
+                "commitment_id": "enduro-2026-10-06",
+                "local_date": "2026-10-06",
+                "label": "Enduro",
+                "load_dimensions": [
+                    {
+                        "dimension": "technical",
+                        "level": "unknown",
+                        "provenance_refs": ["user-confirmed:enduro-2026-10-06"],
+                    }
+                ],
+                "quantitative_load": [],
+                "source_refs": ["user-confirmed:enduro-2026-10-06"],
+            },
+        )
+        result = materialize_execution_facts(
+            canonical_profile_record=profile_record(),
+            canonical_fixed_commitments=typed,
+            affected_from=START,
+            affected_until=END,
+            future_context_through=date(2026, 10, 14),
+            planning_date=date(2026, 10, 8),
+        )
+        self.assertEqual(
+            [item.commitment_id for item in result.fixed_commitments],
+            ["enduro-2026-10-12"],
+        )
+
     def test_profile_free_text_commitment_is_never_parsed(self):
         typed = fixed_commitments()
         typed["planning_engine_v1"]["fixed_commitments_revision"]["commitments"] = []
