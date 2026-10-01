@@ -20,6 +20,7 @@ from training_core.planning.models import (  # noqa: E402
     LoadBound,
     LoadDimensionExposure,
     LoadDimensionLevel,
+    LoadEstimate,
     PlanAuthorityState,
     PlanAuthorityStatus,
     PlanningContractError,
@@ -141,6 +142,38 @@ class PlanningObligationTests(unittest.TestCase):
             item.max_exposures = 99  # type: ignore[misc]
 
 
+class LoadEstimateTests(unittest.TestCase):
+    def test_quantitative_load_preserves_uncertainty_interval(self):
+        estimate = LoadEstimate(
+            metric="duration",
+            unit="minutes",
+            min_value=60,
+            max_value=120,
+            provenance_refs=("user:fixed-commitment",),
+        )
+        self.assertEqual((estimate.min_value, estimate.max_value), (60, 120))
+
+    def test_quantitative_load_rejects_inverted_interval(self):
+        with self.assertRaises(PlanningContractError):
+            LoadEstimate(
+                metric="duration",
+                unit="minutes",
+                min_value=120,
+                max_value=60,
+                provenance_refs=("user:fixed-commitment",),
+            )
+
+    def test_quantitative_load_requires_provenance(self):
+        with self.assertRaises(PlanningContractError):
+            LoadEstimate(
+                metric="duration",
+                unit="minutes",
+                min_value=60,
+                max_value=120,
+                provenance_refs=(),
+            )
+
+
 class FixedLoadCommitmentTests(unittest.TestCase):
     def test_fixed_load_is_generic_and_date_scoped(self):
         item = FixedLoadCommitment(
@@ -160,6 +193,15 @@ class FixedLoadCommitmentTests(unittest.TestCase):
                 ),
             ),
             source_refs=("calendar:fixed-1",),
+            quantitative_load=(
+                LoadEstimate(
+                    metric="duration",
+                    unit="minutes",
+                    min_value=60,
+                    max_value=120,
+                    provenance_refs=("user:confirmed",),
+                ),
+            ),
             within_day_order=1,
         )
         self.assertEqual(item.local_date, date(2026, 10, 5))
