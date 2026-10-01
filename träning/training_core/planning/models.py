@@ -1,0 +1,352 @@
+"""Typed data contracts for Planning Engine v1.
+
+This module deliberately contains no solver, persistence, provider or rendering
+logic. It defines the minimum immutable objects that the future planning engine
+is allowed to consume and emit.
+
+The contracts are conservative:
+- obligations are bounded;
+- aggregate load bounds have explicit units and provenance;
+- plan authority is either current for one source revision or explicitly blocked;
+- strategy revisions are immutable inputs to execution planning.
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from datetime import date
+from enum import Enum
+from typing import Iterable
+
+
+class PlanningContractError(ValueError):
+    """Raised when a Planning Engine v1 domain contract is internally invalid."""
+
+
+def _required_text(value: str, field: str) -> str:
+    normalized = str(value or "").strip()
+    if not normalized:
+        raise PlanningContractError(f"{field} must be non-empty")
+    return normalized
+
+
+def _unique_text_tuple(values: Iterable[str], field: str, *, allow_empty: bool = False) -> tuple[str, ...]:
+    normalized = tuple(str(value or "").strip() for value in values)
+    if not allow_empty and not normalized:
+        raise PlanningContractError(f"{field} must not be empty")
+    if any(not value for value in normalized):
+        raise PlanningContractError(f"{field} contains an empty value")
+    if len(set(normalized)) != len(normalized):
+        raise PlanningContractError(f"{field} contains duplicates")
+    return normalized
+
+
+class UnknownAggregatePolicy(str, Enum):
+    """Policy when an aggregate load dimension lacks trusted evidence."""
+
+    BLOCK_INCREASE = "block_increase"
+    HOLD_ESTABLISHED_BASELINE = "hold_established_baseline"
+
+
+class PlanAuthorityStatus(str, Enum):
+    CURRENT = "current"
+    BLOCKED = "blocked"
+
+
+@dataclass(frozen=True)
+class CoverageRule:
+    """Exact partial/full credit from one capability toward an obligation.
+
+    Rational credit avoids hidden floating-point semantics. Examples:
+    1/1 = full credit, 1/2 = half exposure credit.
+    """
+
+    source_capability: str
+    credit_numerator: int
+    credit_denominator: int
+
+    def __post_init__(self) -> None:
+        object.__setattr__(
+            self,
+            "source_capability",
+            _required_text(self.source_capability, "coverage.source_capability"),
+        )
+        if not isinstance(self.credit_numerator, int) or self.credit_numerator <= 0:
+            raise PlanningContractError("coverage.credit_numerator must be a positive integer")
+        if not isinstance(self.credit_denominator, int) or self.credit_denominator <= 0:
+            raise PlanningContractError("coverage.credit_denominator must be a positive integer")
+        if self.credit_numerator > self.credit_denominator:
+            raise PlanningContractError("coverage credit cannot exceed one full exposure")
+
+    @property
+    def exact_credit(self) -> tuple[int, int]:
+        return self.credit_numerator, self.credit_denominator
+
+
+@dataclass(frozen=True)
+class PlanningObligation:
+    """One bounded training obligation from an immutable StrategyRevision."""
+
+    obligation_id: str
+    capability: str
+    role: str
+    priority_tier: int
+    min_exposures: int
+    max_exposures: int
+    recipe_family: tuple[str, ...]
+    valid_from: date
+    valid_until: date
+    source_refs: tuple[str, ...]
+    progression_axes: tuple[str, ...] = ()
+    partial_coverage: tuple[CoverageRule, ...] = ()
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "obligation_id", _required_text(self.obligation_id, "obligation_id"))
+        object.__setattr__(self, "capability", _required_text(self.capability, "capability"))
+        object.__setattr__(self, "role", _required_text(self.role, "role"))
+
+        if not isinstance(self.priority_tier, int) or self.priority_tier < 0:
+            raise PlanningContractError("priority_tier must be a non-negative integer")
+        if not isinstance(self.min_exposures, int) or self.min_exposures < 0:
+            raise PlanningContractError("min_exposures must be a non-negative integer")
+        if not isinstance(self.max_exposures, int) or self.max_exposures < 0:
+            raise PlanningContractError("max_exposures must be a non-negative integer")
+        if self.max_exposures < self.min_exposures:
+            raise PlanningContractError("max_exposures cannot be lower than min_exposures")
+        if self.max_exposures == 0:
+            raise PlanningContractError("an obligation with max_exposures=0 must not exist")
+
+        object.__setattr__(
+            self,
+            "recipe_family",
+            _unique_text_tuple(self.recipe_family, "recipe_family"),
+        )
+        object.__setattr__(
+            self,
+            "source_refs",
+            _unique_text_tuple(self.source_refs, "source_refs"),
+        )
+        object.__setattr__(
+            self,
+            "progression_axes",
+            _unique_text_tuple(
+                self.progression_axes,
+                "progression_axes",
+                allow_empty=True,
+            ),
+        )
+
+        if not isinstance(self.valid_from, date) or not isinstance(self.valid_until, date):
+            raise PlanningContractError("valid_from and valid_until must be dates")
+        if self.valid_until < self.valid_from:
+            raise PlanningContractError("valid_until cannot precede valid_from")
+
+        coverage = tuple(self.partial_coverage)
+        if len({rule.source_capability for rule in coverage}) != len(coverage):
+            raise PlanningContractError("partial_coverage contains duplicate source_capability")
+        if any(rule.source_capability == self.capability for rule in coverage):
+            raise PlanningContractError(
+                "partial_coverage must not restate the obligation's own capability"
+            )
+        object.__setattr__(self, "partial_coverage", coverage)
+
+    def active_on(self, day: date) -> bool:
+        return self.valid_from <= day <= self.valid_until
+
+
+@dataclass(frozen=True)
+class LoadBound:
+    """One aggregate load ceiling with explicit metric, unit and provenance."""
+
+    bound_id: str
+    scope: str
+    subject: str
+    metric: str
+    unit: str
+    window_days: int
+    max_value: float
+    provenance_refs: tuple[str, ...]
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "bound_id", _required_text(self.bound_id, "bound_id"))
+        object.__setattr__(self, "scope", _required_text(self.scope, "scope"))
+        object.__setattr__(self, "subject", _required_text(self.subject, "subject"))
+        object.__setattr__(self, "metric", _required_text(self.metric, "metric"))
+        object.__setattr__(self, "unit", _required_text(self.unit, "unit"))
+
+        if not isinstance(self.window_days, int) or self.window_days <= 0:
+            raise PlanningContractError("window_days must be a positive integer")
+        if isinstance(self.max_value, bool) or not isinstance(self.max_value, (int, float)):
+            raise PlanningContractError("max_value must be numeric")
+        if float(self.max_value) <= 0:
+            raise PlanningContractError("max_value must be > 0")
+
+        object.__setattr__(
+            self,
+            "provenance_refs",
+            _unique_text_tuple(self.provenance_refs, "provenance_refs"),
+        )
+
+    @property
+    def semantic_key(self) -> tuple[str, str, str, str, int]:
+        return self.scope, self.subject, self.metric, self.unit, self.window_days
+
+
+@dataclass(frozen=True)
+class AggregateLoadEnvelope:
+    """Versioned set of aggregate ceilings used by one StrategyRevision."""
+
+    envelope_id: str
+    bounds: tuple[LoadBound, ...]
+    unknown_policy: UnknownAggregatePolicy
+    established_baseline_ref: str
+    source_refs: tuple[str, ...]
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "envelope_id", _required_text(self.envelope_id, "envelope_id"))
+        object.__setattr__(
+            self,
+            "established_baseline_ref",
+            _required_text(self.established_baseline_ref, "established_baseline_ref"),
+        )
+        object.__setattr__(
+            self,
+            "source_refs",
+            _unique_text_tuple(self.source_refs, "source_refs"),
+        )
+
+        bounds = tuple(self.bounds)
+        if not bounds:
+            raise PlanningContractError("aggregate load envelope must contain at least one bound")
+        if len({bound.bound_id for bound in bounds}) != len(bounds):
+            raise PlanningContractError("aggregate load envelope contains duplicate bound_id")
+        if len({bound.semantic_key for bound in bounds}) != len(bounds):
+            raise PlanningContractError(
+                "aggregate load envelope contains duplicate semantic bounds"
+            )
+        object.__setattr__(self, "bounds", bounds)
+
+        if not isinstance(self.unknown_policy, UnknownAggregatePolicy):
+            raise PlanningContractError("unknown_policy must be UnknownAggregatePolicy")
+
+
+@dataclass(frozen=True)
+class StrategyRevision:
+    """Immutable strategic input consumed by the execution solver."""
+
+    revision_id: str
+    goal_set_hash: str
+    valid_from: date
+    valid_until: date
+    obligations: tuple[PlanningObligation, ...]
+    load_envelope: AggregateLoadEnvelope
+    source_refs: tuple[str, ...]
+    accepted_by: str
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "revision_id", _required_text(self.revision_id, "revision_id"))
+        object.__setattr__(self, "goal_set_hash", _required_text(self.goal_set_hash, "goal_set_hash"))
+        object.__setattr__(self, "accepted_by", _required_text(self.accepted_by, "accepted_by"))
+        object.__setattr__(
+            self,
+            "source_refs",
+            _unique_text_tuple(self.source_refs, "source_refs"),
+        )
+
+        if not isinstance(self.valid_from, date) or not isinstance(self.valid_until, date):
+            raise PlanningContractError("strategy valid_from and valid_until must be dates")
+        if self.valid_until < self.valid_from:
+            raise PlanningContractError("strategy valid_until cannot precede valid_from")
+
+        obligations = tuple(self.obligations)
+        if not obligations:
+            raise PlanningContractError("strategy revision must contain at least one obligation")
+        if len({item.obligation_id for item in obligations}) != len(obligations):
+            raise PlanningContractError("strategy revision contains duplicate obligation_id")
+        for obligation in obligations:
+            if obligation.valid_from < self.valid_from or obligation.valid_until > self.valid_until:
+                raise PlanningContractError(
+                    f"obligation {obligation.obligation_id} lies outside strategy validity"
+                )
+        object.__setattr__(self, "obligations", obligations)
+
+        if not isinstance(self.load_envelope, AggregateLoadEnvelope):
+            raise PlanningContractError("load_envelope must be AggregateLoadEnvelope")
+
+
+@dataclass(frozen=True)
+class PlanAuthorityState:
+    """Authoritative planning-state head for one canonical source revision.
+
+    CURRENT means a validated immutable PlanContent exists for exactly this
+    revision. BLOCKED means no mutable future prescription is authoritative for
+    the affected window at this revision.
+    """
+
+    status: PlanAuthorityStatus
+    source_revision: str
+    semantic_input_hash: str
+    strategy_revision_id: str
+    engine_version: str
+    plan_content_hash: str | None = None
+    previous_valid_plan_hash: str | None = None
+    blocked_reason_codes: tuple[str, ...] = ()
+    invalidated_workout_keys: tuple[str, ...] = ()
+    requires_user_input: bool = False
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.status, PlanAuthorityStatus):
+            raise PlanningContractError("status must be PlanAuthorityStatus")
+
+        for field in (
+            "source_revision",
+            "semantic_input_hash",
+            "strategy_revision_id",
+            "engine_version",
+        ):
+            object.__setattr__(self, field, _required_text(getattr(self, field), field))
+
+        reasons = _unique_text_tuple(
+            self.blocked_reason_codes,
+            "blocked_reason_codes",
+            allow_empty=True,
+        )
+        invalidated = _unique_text_tuple(
+            self.invalidated_workout_keys,
+            "invalidated_workout_keys",
+            allow_empty=True,
+        )
+        object.__setattr__(self, "blocked_reason_codes", reasons)
+        object.__setattr__(self, "invalidated_workout_keys", invalidated)
+
+        if self.previous_valid_plan_hash is not None:
+            object.__setattr__(
+                self,
+                "previous_valid_plan_hash",
+                _required_text(self.previous_valid_plan_hash, "previous_valid_plan_hash"),
+            )
+
+        if self.status is PlanAuthorityStatus.CURRENT:
+            object.__setattr__(
+                self,
+                "plan_content_hash",
+                _required_text(self.plan_content_hash or "", "plan_content_hash"),
+            )
+            if reasons:
+                raise PlanningContractError("CURRENT state cannot have blocked_reason_codes")
+            if invalidated:
+                raise PlanningContractError("CURRENT state cannot invalidate workout keys")
+            if self.requires_user_input:
+                raise PlanningContractError("CURRENT state cannot require user input")
+        else:
+            if self.plan_content_hash is not None:
+                raise PlanningContractError("BLOCKED state cannot expose current plan_content_hash")
+            if not reasons:
+                raise PlanningContractError("BLOCKED state requires blocked_reason_codes")
+
+    def is_fresh_for(self, source_revision: str) -> bool:
+        return self.source_revision == str(source_revision or "").strip()
+
+    @property
+    def has_current_prescription(self) -> bool:
+        return self.status is PlanAuthorityStatus.CURRENT
