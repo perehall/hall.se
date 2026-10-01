@@ -346,6 +346,8 @@ def _observed_credits(context: PlanValidationContext) -> dict[str, Fraction]:
         obligation = obligations.get(observed.contribution.obligation_id)
         if obligation is None or not obligation.active_on(observed.local_date):
             continue
+        if not obligation.accepts_observed_basis(observed.basis):
+            continue
         result[obligation.obligation_id] += _credit(observed.contribution)
     return result
 
