@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Strict Planning Engine v1 policy projection tests."""
+"""Strict global Planning Engine v1 policy projection tests."""
 
 from __future__ import annotations
 
@@ -44,29 +44,21 @@ def explicit_policy():
                         }
                     ],
                 },
-                "objective_policy": {
-                    "schedule": {
-                        "preferred_active_days": 5,
-                        "min_active_days": 0,
-                        "max_active_days": 7,
-                        "double_sessions": "sometimes",
-                    },
-                    "spacing_preferences": [
-                        {
-                            "subject_kind": "capability",
-                            "subject": "swim_aerobic",
-                            "desired_min_gap_days": 2,
-                            "min_level": "low",
-                        }
-                    ],
-                },
+                "spacing_preferences": [
+                    {
+                        "subject_kind": "capability",
+                        "subject": "swim_aerobic",
+                        "desired_min_gap_days": 2,
+                        "min_level": "low",
+                    }
+                ],
             },
         },
     }
 
 
 class V1PolicyProjectionTests(unittest.TestCase):
-    def test_explicit_policy_compiles_without_legacy_guard_inference(self):
+    def test_explicit_global_policy_compiles_without_athlete_defaults(self):
         result = compile_policy_projection(explicit_policy())
         self.assertEqual(result.revision_id, "policy-v1")
         self.assertEqual(
@@ -78,11 +70,7 @@ class V1PolicyProjectionTests(unittest.TestCase):
             1,
         )
         self.assertEqual(
-            result.objective_policy.schedule.preferred_active_days,
-            5,
-        )
-        self.assertEqual(
-            result.objective_policy.spacing_preferences[0].subject,
+            result.spacing_preferences[0].subject,
             "swim_aerobic",
         )
 
@@ -96,14 +84,21 @@ class V1PolicyProjectionTests(unittest.TestCase):
             "MISSING_V1_POLICY_PROJECTION",
         )
 
-    def test_schedule_preferences_must_be_explicit(self):
+    def test_athlete_schedule_preferences_are_forbidden_in_global_policy(self):
         document = explicit_policy()
-        del document["planning_engine_v1"]["policy_revision"]["objective_policy"]["schedule"]
+        document["planning_engine_v1"]["policy_revision"]["objective_policy"] = {
+            "schedule": {
+                "preferred_active_days": 5,
+                "min_active_days": 0,
+                "max_active_days": 7,
+                "double_sessions": "sometimes",
+            }
+        }
         with self.assertRaises(PolicyProjectionError) as raised:
             compile_policy_projection(document)
         self.assertEqual(
             raised.exception.code,
-            "INVALID_V1_POLICY_SOURCE",
+            "ATHLETE_PREFERENCES_IN_GLOBAL_POLICY",
         )
 
     def test_policy_projection_contains_no_legacy_planner_dependency(self):
@@ -113,6 +108,8 @@ class V1PolicyProjectionTests(unittest.TestCase):
         self.assertNotIn("adaptive_planner", source)
         self.assertNotIn("decision_guards", source)
         self.assertNotIn("microcycle_policy", source)
+        self.assertNotIn("preferred_active_days", source)
+        self.assertNotIn("double_sessions", source)
 
 
 if __name__ == "__main__":
