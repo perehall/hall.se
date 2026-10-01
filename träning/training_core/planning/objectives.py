@@ -351,7 +351,13 @@ def _spacing_penalty(
     return total_shortfall, pairs
 
 
-def _prescription_signature(workout) -> tuple:
+def _intent_signature(workout) -> tuple:
+    """Stable semantic planning intent independent of date and generated id.
+
+    Obligation contribution identity is what the strategy asked the workout to
+    serve. Components are included so a genuinely different multisport intent
+    is not treated as the same logical session.
+    """
     contributions = tuple(
         sorted(
             (
@@ -368,11 +374,13 @@ def _prescription_signature(workout) -> tuple:
         (item.discipline, item.order)
         for item in workout.components
     )
+    return contributions, components
+
+
+def _prescription_signature(workout) -> tuple:
     return (
         workout.recipe_id,
         workout.dose_option_id,
-        contributions,
-        components,
     )
 
 
@@ -380,32 +388,69 @@ def _stability_penalty(
     plan: PlanContent,
     previous: PlanContent | None,
 ) -> tuple[int, int, int, int]:
+    """Match old/new workouts by semantic intent, never by incidental ids.
+
+    Within one intent class, chronological pairing minimizes total absolute
+    date movement for indistinguishable exposures. This means moving one
+    workout remains a date move, while two identical sessions may swap
+    incidental generated ids without creating false churn.
+    """
     if previous is None:
         return 0, 0, 0, 0
 
-    previous_rows = {
-        item.workout_id: item
+    previous_rows = [
+        item
         for item in previous.workouts
         if plan.affected_from <= item.local_date <= plan.affected_until
-    }
-    current_rows = {item.workout_id: item for item in plan.workouts}
+    ]
+    current_rows = list(plan.workouts)
 
-    previous_ids = set(previous_rows)
-    current_ids = set(current_rows)
-    churn = len(previous_ids ^ current_ids)
+    previous_by_intent: dict[tuple, list] = {}
+    current_by_intent: dict[tuple, list] = {}
+    for item in previous_rows:
+        previous_by_intent.setdefault(_intent_signature(item), []).append(item)
+    for item in current_rows:
+        current_by_intent.setdefault(_intent_signature(item), []).append(item)
 
+    churn = 0
     date_moves = 0
     prescription_changes = 0
     order_changes = 0
-    for workout_id in previous_ids & current_ids:
-        before = previous_rows[workout_id]
-        after = current_rows[workout_id]
-        if before.local_date != after.local_date:
-            date_moves += 1
-        if _prescription_signature(before) != _prescription_signature(after):
-            prescription_changes += 1
-        if before.within_day_order != after.within_day_order:
-            order_changes += 1
+
+    for intent in sorted(
+        set(previous_by_intent) | set(current_by_intent),
+        key=repr,
+    ):
+        before_rows = sorted(
+            previous_by_intent.get(intent, []),
+            key=lambda item: (
+                item.local_date,
+                item.within_day_order if item.within_day_order is not None else 999,
+                item.recipe_id,
+                item.dose_option_id,
+            ),
+        )
+        after_rows = sorted(
+            current_by_intent.get(intent, []),
+            key=lambda item: (
+                item.local_date,
+                item.within_day_order if item.within_day_order is not None else 999,
+                item.recipe_id,
+                item.dose_option_id,
+            ),
+        )
+
+        paired = min(len(before_rows), len(after_rows))
+        churn += abs(len(before_rows) - len(after_rows))
+        for index in range(paired):
+            before = before_rows[index]
+            after = after_rows[index]
+            if before.local_date != after.local_date:
+                date_moves += 1
+            if _prescription_signature(before) != _prescription_signature(after):
+                prescription_changes += 1
+            if before.within_day_order != after.within_day_order:
+                order_changes += 1
 
     return churn, date_moves, prescription_changes, order_changes
 
