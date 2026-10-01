@@ -45,6 +45,7 @@ class CandidateAtom:
     local_date: date
     option: ApprovedWorkoutOption
     contributions: tuple[ObligationContribution, ...]
+    constraint_ids: tuple[str, ...] = ()
     instance_index: int = 1
 
     @property
@@ -55,6 +56,7 @@ class CandidateAtom:
             self.option.recipe_id,
             self.option.dose_option_id,
             self.instance_index,
+            self.constraint_ids,
             tuple(
                 (
                     item.obligation_id,
@@ -187,7 +189,35 @@ def generate_candidate_atoms(
                 if contribution is not None:
                     contributions.append(contribution)
 
-            if not contributions:
+            contribution_ids = tuple(
+                sorted(item.obligation_id for item in contributions)
+            )
+            placement_constraints = tuple(
+                item
+                for item in context.placement_constraints
+                if item.local_date == day
+                and item.option_key == option.option_key
+                and (
+                    not item.obligation_ids
+                    or item.obligation_ids == contribution_ids
+                )
+            )
+            required_placement = any(
+                item.min_occurrences > 0
+                for item in placement_constraints
+            )
+            option_is_eligible = any(
+                (option.recipe_id, option.dose_option_id, capability)
+                in eligibility
+                for capability in option.capabilities
+            )
+
+            if not contributions and not required_placement:
+                continue
+            if not contributions and not option_is_eligible:
+                # An explicit add cannot bypass athlete-specific dose
+                # eligibility. The final placement minimum will then make every
+                # candidate invalid and the solver returns BLOCKED.
                 continue
 
             obligation_by_id = {
@@ -206,6 +236,12 @@ def generate_candidate_atoms(
                 )
                 multiplicity = max(multiplicity, needed_int)
 
+            for placement in placement_constraints:
+                multiplicity = max(
+                    multiplicity,
+                    placement.min_occurrences,
+                )
+
             if rule is not None and rule.max_sessions is not None:
                 fixed_count = sum(
                     1
@@ -218,11 +254,19 @@ def generate_candidate_atoms(
                 )
 
             for instance_index in range(1, multiplicity + 1):
+                constraint_ids = tuple(
+                    sorted(
+                        item.constraint_id
+                        for item in placement_constraints
+                        if 0 < instance_index <= item.min_occurrences
+                    )
+                )
                 atoms.append(
                     CandidateAtom(
                         local_date=day,
                         option=option,
                         contributions=tuple(contributions),
+                        constraint_ids=constraint_ids,
                         instance_index=instance_index,
                     )
                 )
@@ -350,7 +394,12 @@ def enumerate_terminal_selections(
         # impossible or when a lower-priority combination is otherwise better.
         walk(selected, frozenset((*declined, target.obligation_id)))
 
-    walk((), frozenset())
+    mandatory = tuple(
+        index
+        for index, atom in enumerate(atoms)
+        if atom.constraint_ids
+    )
+    walk(mandatory, frozenset())
     return tuple(sorted(terminals))
 
 
@@ -444,6 +493,7 @@ def _base_workouts(
                 load_dimensions=atom.option.load_dimensions,
                 quantitative_load=atom.option.quantitative_load,
                 source_refs=("planning_v1:candidate_generation",),
+                constraint_ids=atom.constraint_ids,
             )
         )
     return tuple(
