@@ -51,6 +51,7 @@ class CandidateAtom:
     def key(self) -> tuple:
         return (
             self.local_date.isoformat(),
+            self.option.planning_priority,
             self.option.recipe_id,
             self.option.dose_option_id,
             self.instance_index,
@@ -165,7 +166,11 @@ def generate_candidate_atoms(
 
         for option in sorted(
             context.catalog_options,
-            key=lambda item: (item.recipe_id, item.dose_option_id),
+            key=lambda item: (
+                item.planning_priority,
+                item.recipe_id,
+                item.dose_option_id,
+            ),
         ):
             contributions = []
             for obligation in sorted(
