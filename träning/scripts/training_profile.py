@@ -644,6 +644,17 @@ def _explicit_stimuli(activity):
     return result
 
 
+def explicit_confirmed_stimuli(activity):
+    """Return only stimuli supported directly by the activity/user report.
+
+    This public boundary deliberately excludes plan matching and performance
+    fingerprints so consumers can use fresh canonical feedback without
+    importing legacy calendar intent.
+    """
+
+    return tuple(dict(item) for item in _explicit_stimuli(activity))
+
+
 def build_training_profile(
     activity,
     *,
