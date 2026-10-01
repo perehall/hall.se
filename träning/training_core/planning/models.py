@@ -83,6 +83,8 @@ class LoadDimensionExposure:
 class LoadEstimate:
     """Quantitative external-load estimate with an explicit uncertainty interval."""
 
+    scope: str
+    subject: str
     metric: str
     unit: str
     min_value: float
@@ -90,6 +92,8 @@ class LoadEstimate:
     provenance_refs: tuple[str, ...]
 
     def __post_init__(self) -> None:
+        object.__setattr__(self, "scope", _required_text(self.scope, "load_estimate.scope"))
+        object.__setattr__(self, "subject", _required_text(self.subject, "load_estimate.subject"))
         object.__setattr__(self, "metric", _required_text(self.metric, "load_estimate.metric"))
         object.__setattr__(self, "unit", _required_text(self.unit, "load_estimate.unit"))
         for field in ("min_value", "max_value"):
@@ -146,7 +150,10 @@ class FixedLoadCommitment:
         )
 
         quantitative = tuple(self.quantitative_load)
-        semantic_keys = [(item.metric, item.unit) for item in quantitative]
+        semantic_keys = [
+            (item.scope, item.subject, item.metric, item.unit)
+            for item in quantitative
+        ]
         if len(set(semantic_keys)) != len(semantic_keys):
             raise PlanningContractError(
                 "fixed commitment contains duplicate quantitative load metric/unit"
@@ -242,7 +249,10 @@ class PlannedTrainingWorkout:
         object.__setattr__(self, "load_dimensions", dimensions)
 
         quantitative = tuple(self.quantitative_load)
-        semantic_keys = [(item.metric, item.unit) for item in quantitative]
+        semantic_keys = [
+            (item.scope, item.subject, item.metric, item.unit)
+            for item in quantitative
+        ]
         if len(set(semantic_keys)) != len(semantic_keys):
             raise PlanningContractError(
                 "workout contains duplicate quantitative load metric/unit"
