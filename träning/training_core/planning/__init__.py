@@ -101,6 +101,11 @@ __all__ = [
     "PlanChangeTrace",
     "build_workout_decisions",
     "build_plan_changes",
+    "ProjectionBlocker",
+    "ProjectionKind",
+    "ShadowProjectionBundle",
+    "ShadowReadinessReport",
+    "assess_shadow_readiness",
 ]
 
 from .validation import (
@@ -159,4 +164,13 @@ from .trace import (
     WorkoutDecisionTrace,
     build_plan_changes,
     build_workout_decisions,
+)
+
+
+from .projections import (
+    ProjectionBlocker,
+    ProjectionKind,
+    ShadowProjectionBundle,
+    ShadowReadinessReport,
+    assess_shadow_readiness,
 )
