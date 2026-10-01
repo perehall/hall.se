@@ -1073,39 +1073,97 @@ def _validate_aggregate_load(
     context: PlanValidationContext,
     issues: list[ValidationIssue],
 ) -> None:
-    dated_loads: list[tuple[date, LoadEstimate, str]] = []
+    dated_exposures: list[tuple[date, tuple[LoadEstimate, ...], str, str]] = []
 
     for exposure in context.observed_load_exposures:
-        for load in exposure.quantitative_load:
-            dated_loads.append(
-                (exposure.local_date, load, exposure.exposure_id)
+        dated_exposures.append(
+            (
+                exposure.local_date,
+                tuple(exposure.quantitative_load),
+                exposure.exposure_id,
+                "observed",
             )
+        )
 
     for workout in plan.workouts:
-        for load in workout.quantitative_load:
-            dated_loads.append((workout.local_date, load, workout.workout_id))
+        dated_exposures.append(
+            (
+                workout.local_date,
+                tuple(workout.quantitative_load),
+                workout.workout_id,
+                "planned",
+            )
+        )
 
     for commitment in plan.fixed_commitments:
-        for load in commitment.quantitative_load:
-            dated_loads.append(
-                (commitment.local_date, load, commitment.commitment_id)
+        dated_exposures.append(
+            (
+                commitment.local_date,
+                tuple(commitment.quantitative_load),
+                commitment.commitment_id,
+                "fixed",
             )
+        )
 
-    for bound in context.strategy.load_envelope.bounds:
+    envelope = context.strategy.load_envelope
+    for bound in envelope.bounds:
+        horizon_from = plan.affected_from - timedelta(days=bound.window_days - 1)
+        relevant = [
+            (local_date, loads, exposure_id, kind)
+            for local_date, loads, exposure_id, kind in dated_exposures
+            if horizon_from <= local_date <= plan.affected_until
+        ]
+
+        if bound.requires_complete_coverage:
+            missing = tuple(
+                sorted(
+                    exposure_id
+                    for _, loads, exposure_id, _ in relevant
+                    if not any(_matching_load(load, bound) for load in loads)
+                )
+            )
+            if missing and plan.workouts:
+                if (
+                    envelope.unknown_policy.value
+                    == "hold_established_baseline"
+                ):
+                    code = "AGGREGATE_LOAD_BASELINE_HOLD_UNPROVEN"
+                    message = (
+                        "Aggregate load coverage is incomplete, so the established "
+                        "baseline hold cannot be proven for a plan that adds mutable training."
+                    )
+                else:
+                    code = "AGGREGATE_LOAD_UNKNOWN_BLOCKS_INCREASE"
+                    message = (
+                        "Aggregate load coverage is incomplete; automatic mutable "
+                        "training is blocked rather than treating unknown load as zero."
+                    )
+                issues.append(
+                    ValidationIssue(
+                        code,
+                        message,
+                        (bound.bound_id, *missing),
+                    )
+                )
+                # A numeric total from incomplete coverage is not trustworthy.
+                continue
+
         worst_total = None
         worst_day = None
-        end = plan.affected_from
-        while end <= plan.affected_until:
-            start = end - timedelta(days=bound.window_days - 1)
+        end_day = plan.affected_from
+        while end_day <= plan.affected_until:
+            start_day = end_day - timedelta(days=bound.window_days - 1)
             total = sum(
                 float(load.max_value)
-                for local_date, load, _ in dated_loads
-                if start <= local_date <= end and _matching_load(load, bound)
+                for local_date, loads, _, _ in dated_exposures
+                if start_day <= local_date <= end_day
+                for load in loads
+                if _matching_load(load, bound)
             )
             if worst_total is None or total > worst_total:
                 worst_total = total
-                worst_day = end
-            end += timedelta(days=1)
+                worst_day = end_day
+            end_day += timedelta(days=1)
 
         if worst_total is not None and worst_total > float(bound.max_value) + 1e-9:
             issues.append(
@@ -1121,7 +1179,6 @@ def _validate_aggregate_load(
                     ),
                 )
             )
-
 
 def validate_plan_content(
     plan: PlanContent,
