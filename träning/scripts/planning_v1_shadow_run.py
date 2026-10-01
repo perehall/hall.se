@@ -12,7 +12,9 @@ from __future__ import annotations
 import argparse
 import json
 import os
+from collections import defaultdict
 from datetime import date
+from fractions import Fraction
 from pathlib import Path
 from typing import Any
 
@@ -87,6 +89,105 @@ def append_audit_if_available(record: ShadowRunAuditRecord) -> str:
             inserted = cur.rowcount
             conn.commit()
             return "appended" if inserted == 1 else "already_exists"
+
+
+def _duration_minutes(option) -> float | None:
+    matches = [
+        item
+        for item in option.quantitative_load
+        if (
+            item.scope,
+            item.subject,
+            item.metric,
+            item.unit,
+        )
+        == ("global", "training_duration", "duration", "minutes")
+    ]
+    if not matches:
+        return None
+    return sum(float(item.max_value) for item in matches)
+
+
+def _shadow_acceptance(bundle) -> dict[str, Any]:
+    """Evaluate whether shadow output is informative enough for cutover review.
+
+    This is not another planner objective. It is a migration gate: obligations
+    already satisfied by canonical observed credit need no future option; every
+    remaining required obligation must have at least one athlete-eligible
+    catalog option whose wall-clock duration can be checked against hard
+    availability.
+    """
+
+    credits: dict[str, Fraction] = defaultdict(lambda: Fraction(0, 1))
+    for item in bundle.observed_credits:
+        credits[item.contribution.obligation_id] += Fraction(
+            item.contribution.credit_numerator,
+            item.contribution.credit_denominator,
+        )
+
+    eligibility = {
+        (item.recipe_id, item.dose_option_id, item.capability)
+        for item in bundle.option_eligibility
+    }
+    blockers: list[dict[str, Any]] = []
+    if any(
+        item.max_duration_minutes is not None
+        for item in bundle.availability
+    ):
+        for obligation in bundle.strategy.obligations:
+            achieved = credits[obligation.obligation_id]
+            required = Fraction(obligation.min_exposures, 1)
+            if achieved >= required:
+                continue
+
+            candidate_options = [
+                option
+                for option in bundle.workout_options
+                if (
+                    option.recipe_id in obligation.recipe_family
+                    and obligation.capability in option.capabilities
+                    and (
+                        option.recipe_id,
+                        option.dose_option_id,
+                        obligation.capability,
+                    )
+                    in eligibility
+                )
+            ]
+            if not candidate_options:
+                blockers.append(
+                    {
+                        "code": "NO_ELIGIBLE_OPTION_FOR_REQUIRED_OBLIGATION",
+                        "obligation_id": obligation.obligation_id,
+                        "capability": obligation.capability,
+                        "remaining_required": str(required - achieved),
+                    }
+                )
+                continue
+
+            timed = [
+                option
+                for option in candidate_options
+                if _duration_minutes(option) is not None
+            ]
+            if not timed:
+                blockers.append(
+                    {
+                        "code": "MISSING_REQUIRED_OPTION_DURATION_SEMANTICS",
+                        "obligation_id": obligation.obligation_id,
+                        "capability": obligation.capability,
+                        "remaining_required": str(required - achieved),
+                        "eligible_options": [
+                            f"{option.recipe_id}/{option.dose_option_id}"
+                            for option in candidate_options
+                        ],
+                    }
+                )
+
+    return {
+        "acceptable": not blockers,
+        "blockers": blockers,
+    }
 
 
 def _workout_summary(result) -> list[dict[str, Any]]:
@@ -170,6 +271,7 @@ def run_live_shadow(
     )
     solved = result.solve_result
     bundle = assembly.bundle
+    shadow_acceptance = _shadow_acceptance(bundle)
     return 0, {
         "readiness": {
             "ready": True,
@@ -179,6 +281,7 @@ def run_live_shadow(
         },
         "solver_ran": True,
         "solver_status": solved.authority_state.status.value,
+        "shadow_acceptance": shadow_acceptance,
         "blocked_reason_codes": list(
             solved.authority_state.blocked_reason_codes
         ),
