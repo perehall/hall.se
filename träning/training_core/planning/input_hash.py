@@ -153,6 +153,19 @@ def semantic_planning_input_payload(
         for item in context.availability
     ]
 
+    placement_constraints = [
+        (
+            item.constraint_id,
+            item.local_date.isoformat(),
+            item.recipe_id,
+            item.dose_option_id,
+            item.min_occurrences,
+            item.max_occurrences,
+            tuple(item.obligation_ids),
+        )
+        for item in context.placement_constraints
+    ]
+
     observed_credits = [
         (
             item.local_date.isoformat(),
@@ -210,6 +223,7 @@ def semantic_planning_input_payload(
             "rules": sorted(compatibility),
         },
         "availability": sorted(availability),
+        "placement_constraints": sorted(placement_constraints),
         "closed_dates": sorted(day.isoformat() for day in context.closed_dates),
         "observed_credits": sorted(observed_credits),
         "observed_load": sorted(observed_load, key=lambda item: item["id"]),
