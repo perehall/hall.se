@@ -214,6 +214,8 @@ def _obligation_credits(plan: PlanContent, context: ObjectiveContext) -> dict[st
         obligation = obligations.get(contribution.obligation_id)
         if obligation is None or not obligation.active_on(observed.local_date):
             continue
+        if not obligation.accepts_observed_basis(observed.basis):
+            continue
         result[contribution.obligation_id] += _credit(contribution)
 
     for workout in plan.workouts:
@@ -297,8 +299,19 @@ def _spacing_dates(
     dates = []
 
     if preference.subject_kind is SpacingSubjectKind.CAPABILITY:
+        obligations = {
+            item.obligation_id: item
+            for item in context.strategy.obligations
+        }
         for observed in context.observed_obligation_credits:
-            if observed.contribution.source_capability == preference.subject:
+            obligation = obligations.get(
+                observed.contribution.obligation_id
+            )
+            if (
+                obligation is not None
+                and obligation.accepts_observed_basis(observed.basis)
+                and observed.contribution.source_capability == preference.subject
+            ):
                 dates.append(observed.local_date)
         for workout in plan.workouts:
             if any(
