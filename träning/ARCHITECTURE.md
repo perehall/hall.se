@@ -67,6 +67,48 @@ sport/date-specific compatibility path.
 - Unknown provider activity type -> safe public fallback; no raw provider value
   can crash publication.
 
+
+## Architecture rule: no patches or scenario-specific fixes
+
+Architectural sustainability has higher priority than a quick fix for one reported failure.
+
+Before changing training-system behaviour:
+
+1. Identify the general contract, invariant or ownership boundary that was violated.
+2. Check whether more than one layer can independently change the same training decision or canonical state.
+3. Fix the problem in the component that owns that responsibility.
+4. Revalidate the complete decision flow after the change, not only the reported reproduction case.
+5. Add tests for the general rule and meaningful variations of the scenario.
+
+The following are prohibited:
+
+- sport-, date-, weekday- or exact workout-combination-specific fixes;
+- new conditionals whose primary purpose is to make one reported scenario pass;
+- downstream repair logic that compensates for an upstream ownership/design defect;
+- multiple layers independently adding, removing, moving or changing training content;
+- declaring a defect fixed only because its original reproduction case passes.
+
+If the correct fix requires restructuring, refactoring or replacing a component,
+do that instead of adding a local patch.
+
+For the planning engine the required authority flow is:
+
+```
+facts + constraints -> complete candidate plan -> final invariant validation -> commit
+```
+
+After commit, no later layer may add, remove, move or alter training content.
+Any requested plan change must return through the same planning authority and
+the complete affected planning window must be validated again before a new commit.
+
+When a defect is found, the default engineering question is:
+
+> Which general invariant or architecture boundary is missing?
+
+not:
+
+> Which extra rule can stop this exact case?
+
 ## Change policy
 
 Training changes go through a branch and PR. Required regression suites must be
