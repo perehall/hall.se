@@ -34,7 +34,6 @@ class ShadowPlanningRunInput:
     history_through: date
     future_context_through: date
     projections: ShadowProjectionBundle
-    closed_dates: tuple[date, ...] = ()
     previous_plan: PlanContent | None = None
     generation_limits: CandidateGenerationLimits = CandidateGenerationLimits()
 
@@ -73,6 +72,7 @@ def run_shadow_planning(
     assert bundle.observed_load is not None
     assert bundle.fixed_commitments is not None
     assert bundle.availability is not None
+    assert bundle.closed_dates is not None
     assert bundle.compatibility_policy is not None
     assert bundle.objective_policy is not None
 
@@ -87,7 +87,7 @@ def run_shadow_planning(
         fixed_commitments=bundle.fixed_commitments,
         compatibility_policy=bundle.compatibility_policy,
         availability=bundle.availability,
-        closed_dates=request.closed_dates,
+        closed_dates=bundle.closed_dates,
         observed_obligation_credits=bundle.observed_credits,
         observed_load_exposures=bundle.observed_load,
     )
