@@ -231,13 +231,21 @@ def _obligation_credits(plan: PlanContent, context: ObjectiveContext) -> dict[st
 def _tier_vectors(
     strategy: StrategyRevision,
     credits: dict[str, Fraction],
+    affected_from,
+    affected_until,
 ) -> tuple[
     tuple[Fraction, ...],
     tuple[int, ...],
     tuple[Fraction, ...],
     tuple[Fraction, ...],
 ]:
-    tiers = sorted({item.priority_tier for item in strategy.obligations})
+    relevant_obligations = tuple(
+        item
+        for item in strategy.obligations
+        if item.valid_from <= affected_until
+        and item.valid_until >= affected_from
+    )
+    tiers = sorted({item.priority_tier for item in relevant_obligations})
     required_deficits: list[Fraction] = []
     unserved_counts: list[int] = []
     max_deficits: list[Fraction] = []
@@ -245,7 +253,7 @@ def _tier_vectors(
 
     for tier in tiers:
         obligations = [
-            item for item in strategy.obligations
+            item for item in relevant_obligations
             if item.priority_tier == tier
         ]
         deficits = []
@@ -571,6 +579,8 @@ def evaluate_objectives(
     required, unserved, max_deficit, discretionary_excess = _tier_vectors(
         context.strategy,
         credits,
+        plan.affected_from,
+        plan.affected_until,
     )
     spacing_shortfall, spacing_pairs = _spacing_penalty(plan, context)
     churn, moves, prescription_changes, order_changes = _stability_penalty(
