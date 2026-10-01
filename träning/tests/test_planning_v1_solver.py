@@ -189,7 +189,7 @@ def context(
         source_revision="source-1",
         history_from=date(2026, 9, 29),
         history_through=date(2026, 10, 4),
-        future_context_through=date(2026, 10, 12),
+        future_context_through=date(2026, 10, 14),
         strategy=strategy(obligations, max_minutes=max_minutes),
         catalog_options=tuple(options),
         option_eligibility=tuple(
