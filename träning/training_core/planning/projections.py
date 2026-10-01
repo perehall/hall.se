@@ -8,6 +8,7 @@ Legacy planner output is intentionally not accepted as a fallback.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import date
 from enum import Enum
 
 from .objectives import ObjectivePolicy
@@ -32,6 +33,7 @@ class ProjectionKind(str, Enum):
     OBSERVED_LOAD = "observed_load_exposures"
     FIXED_COMMITMENTS = "fixed_commitments"
     AVAILABILITY = "availability"
+    CLOSED_DATES = "closed_dates"
     COMPATIBILITY = "load_compatibility_policy"
     OBJECTIVE_POLICY = "objective_policy"
 
@@ -48,6 +50,7 @@ class ShadowProjectionBundle:
     observed_load: tuple[ObservedLoadExposure, ...] | None = None
     fixed_commitments: tuple[FixedLoadCommitment, ...] | None = None
     availability: tuple[DailyAvailability, ...] | None = None
+    closed_dates: tuple[date, ...] | None = None
     compatibility_policy: LoadCompatibilityPolicy | None = None
     objective_policy: ObjectivePolicy | None = None
 
@@ -168,6 +171,13 @@ def assess_shadow_readiness(
             _missing(
                 ProjectionKind.AVAILABILITY,
                 "Declared availability projection is missing.",
+            )
+        )
+    if bundle.closed_dates is None:
+        blockers.append(
+            _missing(
+                ProjectionKind.CLOSED_DATES,
+                "Closed-date projection is missing.",
             )
         )
     if bundle.compatibility_policy is None:
