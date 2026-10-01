@@ -157,6 +157,20 @@ class PlanValidationContext:
             raise PlanningContractError(
                 "placement constraints must be compiled to one absolute count constraint per semantic placement"
             )
+        for index, first in enumerate(placement):
+            for second in placement[index + 1 :]:
+                if (
+                    first.local_date == second.local_date
+                    and first.option_key == second.option_key
+                    and (
+                        not first.obligation_ids
+                        or not second.obligation_ids
+                        or first.obligation_ids == second.obligation_ids
+                    )
+                ):
+                    raise PlanningContractError(
+                        "overlapping placement constraints must be compiled into one absolute count constraint"
+                    )
         for item in placement:
             if item.option_key not in catalog_keys:
                 raise PlanningContractError(
