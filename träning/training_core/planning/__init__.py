@@ -87,6 +87,8 @@ __all__ = [
     "PlanningSolveTrace",
     "PlanningSolveResult",
     "solve_planning_window",
+    "planning_input_hash",
+    "semantic_planning_input_payload",
 ]
 
 from .validation import (
@@ -121,4 +123,10 @@ from .solver import (
     PlanningSolveResult,
     PlanningSolveTrace,
     solve_planning_window,
+)
+
+
+from .input_hash import (
+    planning_input_hash,
+    semantic_planning_input_payload,
 )
