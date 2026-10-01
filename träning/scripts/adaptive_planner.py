@@ -3814,6 +3814,8 @@ def reconcile_unaffected_future_workouts(
     target_start,
     today,
     completed_context,
+    catalog=None,
+    athlete_profile=None,
 ):
     """Preserve unrelated future intents during an actual-driven live replan."""
     if not _actual_context_changed(current_plan, completed_context):
@@ -3828,6 +3830,27 @@ def reconcile_unaffected_future_workouts(
         for day in (day_map.get(capability) or [])
         if isinstance(day, int)
     }
+
+    catalog = catalog or load_json(CATALOG_FILE, {"recipes": {}})
+
+    def layout_rows(workouts):
+        rows = []
+        for workout in workouts:
+            workout_day = _workout_date(workout)
+            recipe_key = str(workout.get("recipe_key") or "").strip()
+            if (
+                workout_day is None
+                or not target_start <= workout_day <= target_start + timedelta(days=6)
+                or recipe_key not in (catalog.get("recipes") or {})
+            ):
+                continue
+            rows.append(
+                {
+                    "day_index": (workout_day - target_start).days + 1,
+                    "recipe_key": recipe_key,
+                }
+            )
+        return rows
 
     preserved = []
     for workout in canonical_planned_workouts(
@@ -3882,10 +3905,21 @@ def reconcile_unaffected_future_workouts(
             context="active-replan rebuilt plan",
         )
     )
+    skipped_preserved = []
+    baseline_failures = set(
+        microcycle_layout_failures(
+            layout_rows(future),
+            catalog,
+            target_start,
+            athlete_profile=athlete_profile,
+            planning_date=today,
+        )
+    )
     for old in preserved:
+        candidate = list(future)
         matching = [
             (index, row)
-            for index, row in enumerate(future)
+            for index, row in enumerate(candidate)
             if _workout_identity_match(old, row)
         ]
         if matching:
@@ -3898,9 +3932,36 @@ def reconcile_unaffected_future_workouts(
                     else 999
                 ),
             )
-            future[index] = old
+            candidate[index] = old
         else:
-            future.append(old)
+            candidate.append(old)
+
+        candidate_failures = set(
+            microcycle_layout_failures(
+                layout_rows(candidate),
+                catalog,
+                target_start,
+                athlete_profile=athlete_profile,
+                planning_date=today,
+            )
+        )
+        introduced_failures = sorted(candidate_failures - baseline_failures)
+        if introduced_failures:
+            skipped_preserved.append(
+                {
+                    "workout_key": str(
+                        old.get("workout_key")
+                        or old.get("microcycle_slot")
+                        or old.get("recipe_key")
+                        or ""
+                    ),
+                    "reasons": introduced_failures,
+                }
+            )
+            continue
+
+        future = candidate
+        baseline_failures = candidate_failures
 
     future.sort(
         key=lambda row: (
@@ -3924,6 +3985,7 @@ def reconcile_unaffected_future_workouts(
         "completed_context_signature": completed_context_signature(
             completed_context or {}
         ),
+        "skipped_preserved_workouts": skipped_preserved,
     }
     return reconciled
 
@@ -4048,6 +4110,8 @@ def rebuild_calendar(
     today=None,
     completed_context=None,
     upcoming_strategy=None,
+    catalog=None,
+    athlete_profile=None,
 ):
     if active_replan:
         source = previous_archived_plan(target_start)
@@ -4066,6 +4130,8 @@ def rebuild_calendar(
                 target_start=target_start,
                 today=today,
                 completed_context=completed_context,
+                catalog=catalog,
+                athlete_profile=athlete_profile,
             )
         upcoming = build_mesocycle_next_week(
             rebuilt,
@@ -4259,6 +4325,8 @@ def main(*, today_local=None, meso_request_fn=None, micro_request_fn=None):
         today=today,
         completed_context=current_completed_context,
         upcoming_strategy=upcoming_strategy,
+        catalog=catalog,
+        athlete_profile=athlete_profile,
     )
 
     target_calendar_after = load_json(
