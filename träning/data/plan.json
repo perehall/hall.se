@@ -75,7 +75,8 @@
           "20367593813",
           "20368346174",
           "20381137043",
-          "20396959391"
+          "20396959391",
+          "20410781977"
         ],
         "evidence_note": "Familjeexponeringar kommer från faktiskt registrerade aktiviteter i målveckan. Direct_capabilities kräver explicit daterad kapabilitetsevidens. Planning_credits kan dessutom komma från en durabel, entydig strukturell match mot ett närliggande planerat intent och används för att undvika redundant framtida ordination utan att påstå mer fysiologi än underlaget stödjer.",
         "swim_exposures": 1,
@@ -94,6 +95,9 @@
           "run": [
             2
           ],
+          "bike": [
+            4
+          ],
           "swim": [
             3
           ],
@@ -105,7 +109,7 @@
           ]
         },
         "strength_exposures": 1,
-        "completed_slot_days": 2,
+        "completed_slot_days": 3,
         "direct_capabilities": [
           "run_threshold"
         ],
@@ -122,7 +126,8 @@
         },
         "completed_day_indexes": [
           2,
-          3
+          3,
+          4
         ],
         "capability_day_indexes": {
           "run_threshold": [
@@ -153,6 +158,15 @@
         "swim_aerobic",
         "enduro_technical"
       ]
+    },
+    "live_reconciliation": {
+      "policy": "preserve_unaffected_future_intents",
+      "preserved_workout_keys": [
+        "run_easy_distance_1",
+        "swim_aerobic_technique_2"
+      ],
+      "skipped_preserved_workouts": [],
+      "completed_context_signature": "6402b0911630005d03da85afa998e14d46cc385d213091ea27228bfab2fc6217"
     },
     "microcycle_length_days": 7,
     "missing_protected_stimuli": [
@@ -272,9 +286,9 @@
         "status": "synced",
         "transport": "intervals_icu",
         "source_hash": "cdaf576c0dd6a63e462216996c5308e688194199948b400f4e5ae5c59ba8c7d5",
-        "updated_at_utc": "2026-10-01T06:17:37.150851+00:00",
+        "updated_at_utc": "2026-10-01T18:40:20.676198+00:00",
         "device_delivery": "unverified",
-        "verified_at_utc": "2026-10-01T06:17:37.150851+00:00",
+        "verified_at_utc": "2026-10-01T18:40:20.676198+00:00",
         "provider_event_id": 140396495
       },
       "block_intent": "establish",

@@ -7,10 +7,10 @@
       "activity_count": 23
     },
     "bike": {
-      "time_s": 32729,
-      "distance_m": 125096.4,
-      "active_days": 7,
-      "activity_count": 7
+      "time_s": 37439,
+      "distance_m": 138911.0,
+      "active_days": 8,
+      "activity_count": 8
     },
     "swim": {
       "time_s": 40381,
@@ -53,12 +53,17 @@
       "recent_7d": {
         "end": "2026-10-01",
         "start": "2026-09-25",
-        "time_s": 35196,
+        "time_s": 39906,
         "by_family": {
           "run": {
             "time_s": 13126,
             "active_days": 3,
             "activity_count": 3
+          },
+          "bike": {
+            "time_s": 4710,
+            "active_days": 1,
+            "activity_count": 1
           },
           "swim": {
             "time_s": 7904,
@@ -76,13 +81,13 @@
             "activity_count": 1
           }
         },
-        "active_days": 6,
-        "activity_count": 8
+        "active_days": 7,
+        "activity_count": 9
       },
       "recent_28d": {
         "end": "2026-10-01",
         "start": "2026-09-04",
-        "time_s": 152649,
+        "time_s": 157359,
         "by_family": {
           "run": {
             "time_s": 57968,
@@ -90,9 +95,9 @@
             "activity_count": 12
           },
           "bike": {
-            "time_s": 15859,
-            "active_days": 4,
-            "activity_count": 4
+            "time_s": 20569,
+            "active_days": 5,
+            "activity_count": 5
           },
           "swim": {
             "time_s": 28445,
@@ -110,8 +115,8 @@
             "activity_count": 4
           }
         },
-        "active_days": 27,
-        "activity_count": 33
+        "active_days": 28,
+        "activity_count": 34
       },
       "previous_7d": {
         "end": "2026-09-24",
@@ -1947,34 +1952,6 @@
   "schema_version": 1,
   "recent_sessions": [
     {
-      "id": 20144331562,
-      "date": "2026-09-12",
-      "label": "Enduro",
-      "family": "enduro",
-      "distance_m": 53916.2,
-      "user_report": null,
-      "max_heartrate": 154.0,
-      "classification": "training",
-      "elapsed_time_s": 13578,
-      "elevation_gain_m": 1490.4,
-      "training_profile": {
-        "stimuli": [],
-        "activity_id": 20144331562,
-        "source_hash": "ccb1ed49bababc53f3ca3941723ddb119e5ce24725c69b5c620d32071bf16321",
-        "uncertainties": [],
-        "intent_matches": [],
-        "schema_version": 2,
-        "planning_credits": [],
-        "observed_structure": {
-          "run_time_intervals": {
-            "structured": false
-          }
-        },
-        "interpretation_boundary": "Observerad struktur är mätdata. Fysiologiska stimulus kräver explicit evidens. Planning credit från strukturell intent-match betyder att den genomförda dosen kan ersätta ett entydigt närliggande planerat pass; det påstår inte mer om fysiologisk intensitet än källorna stödjer."
-      },
-      "average_heartrate": 124.9
-    },
-    {
       "id": 20153873263,
       "date": "2026-09-13",
       "label": "Ride",
@@ -2842,6 +2819,34 @@
         "interpretation_boundary": "Observerad struktur är mätdata. Fysiologiska stimulus kräver explicit evidens. Planning credit från strukturell intent-match betyder att den genomförda dosen kan ersätta ett entydigt närliggande planerat pass; det påstår inte mer om fysiologisk intensitet än källorna stödjer."
       },
       "average_heartrate": 128.8
+    },
+    {
+      "id": 20410781977,
+      "date": "2026-10-01",
+      "label": "MountainBikeRide",
+      "family": "bike",
+      "distance_m": 13814.6,
+      "user_report": null,
+      "max_heartrate": 150.0,
+      "classification": "training",
+      "elapsed_time_s": 4710,
+      "elevation_gain_m": 216.0,
+      "training_profile": {
+        "stimuli": [],
+        "activity_id": 20410781977,
+        "source_hash": "ca28e269430991ef3c65973523249c2a2fdd4847044381e6fca5563b9da5ce37",
+        "uncertainties": [],
+        "intent_matches": [],
+        "schema_version": 2,
+        "planning_credits": [],
+        "observed_structure": {
+          "run_time_intervals": {
+            "structured": false
+          }
+        },
+        "interpretation_boundary": "Observerad struktur är mätdata. Fysiologiska stimulus kräver explicit evidens. Planning credit från strukturell intent-match betyder att den genomförda dosen kan ersätta ett entydigt närliggande planerat pass; det påstår inte mer om fysiologisk intensitet än källorna stödjer."
+      },
+      "average_heartrate": 126.3
     }
   ],
   "capability_facts": {
@@ -2902,7 +2907,7 @@
       "verified_exposure_count": 3
     },
     "mtb_technical": {
-      "session_count": 7,
+      "session_count": 8,
       "longest_duration": {
         "date": "2026-09-03",
         "activity_id": 20024236347,
@@ -3169,7 +3174,7 @@
       "verified_exposure_count": 2
     }
   },
-  "generated_at_utc": "2026-10-01T06:15:59.181288+00:00",
+  "generated_at_utc": "2026-10-01T18:37:14.388020+00:00",
   "capability_states": {
     "model": "capability_feedback_state_v1",
     "principle": "Kvantitativ progression kräver verifierad capability-evidens och dose-response. Teknikförmågor kan vara observerade men blir inte automatiskt progressionsredo från tid eller distans.",

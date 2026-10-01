@@ -328,7 +328,7 @@
       "starting_state_hash": "52ff32e9ef09bd337669bbf6347085139222e7abd6a7cec41efd516a62e45cfe",
       "athlete_profile_hash": "559e0b6e5a587d351baa65817f81e04e433d0d46aac60b57a73429fd5b43d1bc",
       "mesocycle_source_hash": "9fb730125d779e8644a8486faa35467fe547c33194d479bd24aed65dfcf81994",
-      "microcycle_source_hash": "36e222f4f5fadce0380ea701587bc1338ea2068847d9b49b3b53fcbd47320c46",
+      "microcycle_source_hash": "15cd6f162c669d4b056bb3a47e8deb35f96a0eb5436931d0e7caca3e0dcaa1d1",
       "mesocycle_decision_source": "openai",
       "microcycle_decision_source": "deterministic_fallback_after_repair_guard"
     },
@@ -777,7 +777,8 @@
           "20367593813",
           "20368346174",
           "20381137043",
-          "20396959391"
+          "20396959391",
+          "20410781977"
         ],
         "evidence_note": "Familjeexponeringar kommer från faktiskt registrerade aktiviteter i målveckan. Direct_capabilities kräver explicit daterad kapabilitetsevidens. Planning_credits kan dessutom komma från en durabel, entydig strukturell match mot ett närliggande planerat intent och används för att undvika redundant framtida ordination utan att påstå mer fysiologi än underlaget stödjer.",
         "swim_exposures": 1,
@@ -796,6 +797,9 @@
           "run": [
             2
           ],
+          "bike": [
+            4
+          ],
           "swim": [
             3
           ],
@@ -807,7 +811,7 @@
           ]
         },
         "strength_exposures": 1,
-        "completed_slot_days": 2,
+        "completed_slot_days": 3,
         "direct_capabilities": [
           "run_threshold"
         ],
@@ -824,7 +828,8 @@
         },
         "completed_day_indexes": [
           2,
-          3
+          3,
+          4
         ],
         "capability_day_indexes": {
           "run_threshold": [
