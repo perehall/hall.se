@@ -97,6 +97,10 @@ __all__ = [
     "UserPlanChange",
     "compile_plan_change",
     "merge_placement_constraints",
+    "WorkoutDecisionTrace",
+    "PlanChangeTrace",
+    "build_workout_decisions",
+    "build_plan_changes",
 ]
 
 from .validation import (
@@ -147,4 +151,12 @@ from .plan_changes import (
     UserPlanChange,
     compile_plan_change,
     merge_placement_constraints,
+)
+
+
+from .trace import (
+    PlanChangeTrace,
+    WorkoutDecisionTrace,
+    build_plan_changes,
+    build_workout_decisions,
 )
