@@ -16,6 +16,7 @@ from datetime import date, timedelta
 from fractions import Fraction
 from hashlib import sha256
 from itertools import permutations, product
+from math import ceil
 
 from .models import (
     ApprovedWorkoutOption,
@@ -195,12 +196,9 @@ def generate_candidate_atoms(
                 # Bound identical same-day instances from the obligation ceiling
                 # and exact per-workout credit. This preserves arbitrary 0..N
                 # multipass semantics without creating an unbounded domain.
-                needed = (
-                    Fraction(obligation.max_exposures, 1) + credit - Fraction(1, 10**9)
-                ) // credit
-                needed_int = int(needed)
-                if Fraction(needed_int, 1) * credit < obligation.max_exposures:
-                    needed_int += 1
+                needed_int = ceil(
+                    Fraction(obligation.max_exposures, 1) / credit
+                )
                 multiplicity = max(multiplicity, needed_int)
 
             if rule is not None and rule.max_sessions is not None:
