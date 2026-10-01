@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from training_core.planning.content import plan_content_hash  # noqa: E402
+from training_core.planning.candidate_generation import CandidateGenerationLimits  # noqa: E402
 from training_core.planning.models import (  # noqa: E402
     AggregateLoadEnvelope,
     ApprovedWorkoutOption,
@@ -227,6 +228,7 @@ def solve(
     preferred_days=5,
     doubles=DoubleSessionPreference.SOMETIMES,
     previous_plan=None,
+    generation_limits=None,
 ):
     return solve_planning_window(
         PlanningSolveRequest(
@@ -238,6 +240,11 @@ def solve(
                 doubles=doubles,
             ),
             previous_plan=previous_plan,
+            generation_limits=(
+                generation_limits
+                if generation_limits is not None
+                else CandidateGenerationLimits()
+            ),
         )
     )
 
@@ -936,6 +943,44 @@ class PlanningSolverV1Tests(unittest.TestCase):
             "LOAD_COMPATIBILITY_GAP_VIOLATION",
             result.authority_state.blocked_reason_codes,
         )
+
+    def test_search_limit_fails_closed_instead_of_returning_approximate_plan(self):
+        easy = option(
+            "run_easy_distance",
+            "easy-60",
+            "run_easy_distance",
+            "run",
+            dimensions=(dim("cardiovascular", LoadDimensionLevel.LOW),),
+        )
+        swim = option(
+            "swim_aerobic",
+            "swim-3000",
+            "swim_aerobic",
+            "swim",
+            dimensions=(dim("upper_body", LoadDimensionLevel.MODERATE),),
+        )
+        result = solve(
+            context(
+                (
+                    obligation("easy", "run_easy_distance", "run_easy_distance"),
+                    obligation("swim", "swim_aerobic", "swim_aerobic"),
+                ),
+                (easy, swim),
+            ),
+            generation_limits=CandidateGenerationLimits(
+                max_search_states=1,
+                max_terminal_selections=100,
+                max_plan_variants=100,
+            ),
+        )
+        self.assertTrue(result.blocked)
+        self.assertIsNone(result.plan)
+        self.assertIsNone(result.objective_vector)
+        self.assertIn(
+            "SEARCH_SPACE_LIMIT_EXCEEDED",
+            result.authority_state.blocked_reason_codes,
+        )
+        self.assertIsNone(result.trace.selected_plan_hash)
 
     def test_aggregate_load_gate_can_force_unmet_soft_obligation_without_invalid_commit(self):
         easy = option(
