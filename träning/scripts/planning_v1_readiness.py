@@ -19,6 +19,10 @@ from pathlib import Path
 from typing import Any, Callable
 
 from athlete_profile_source import load_athlete_profile_for_planner
+from training_core.application.planning_catalog_materializer import (
+    CatalogMaterializationError,
+    materialize_catalog_document,
+)
 from training_core.application.planning_execution_facts_projection import (
     ExecutionFactsProjectionError,
 )
@@ -144,13 +148,27 @@ def build_readiness_report(
     if context_through < affected_until:
         raise ValueError("future_context_through cannot precede affected_until")
 
+    catalog_source = _read_json(data_dir / "workout_catalog.json")
     documents: dict[str, dict[str, Any]] = {
         "strategy": _read_json(data_dir / "training_strategy.json"),
-        "catalog": _read_json(data_dir / "workout_catalog.json"),
+        "catalog_source": catalog_source,
         "athlete_state": _read_json(data_dir / "athlete_state.json"),
         "policy": _read_json(data_dir / "planning_policy.json"),
     }
     source_blockers: list[dict[str, str]] = []
+
+    catalog_document: dict[str, Any] | None = None
+    try:
+        catalog_document = materialize_catalog_document(catalog_source)
+    except CatalogMaterializationError as exc:
+        source_blockers.append(
+            _source_blocker(
+                "catalog_source",
+                exc.code,
+                str(exc),
+            )
+        )
+    documents["catalog"] = catalog_document or {}
 
     profile_record, profile_metadata, profile_blocker = _canonical_profile_record(
         profile_loader
@@ -214,6 +232,11 @@ def build_readiness_report(
     projection_blockers = []
     for item in result.blockers:
         if (
+            item.stage == "catalog"
+            and "catalog_source" in source_stages
+        ):
+            continue
+        if (
             item.stage == "athlete_profile"
             and "athlete_profile_source" in source_stages
         ):
@@ -253,6 +276,11 @@ def build_readiness_report(
             "future_context_through": context_through.isoformat(),
         },
         "source_status": {
+            "catalog": (
+                "materialized_from_owned_source"
+                if catalog_document is not None
+                else "blocked"
+            ),
             "athlete_profile": profile_metadata,
             "fixed_commitments": (
                 "explicit_typed_document"
