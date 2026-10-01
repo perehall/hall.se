@@ -315,11 +315,15 @@ def solve_planning_window(request: PlanningSolveRequest) -> PlanningSolveResult:
         )
 
     selected_hash = plan_content_hash(selected)
-    valid_plans = tuple(item[1] for item in valid)
+    valid_ranked = tuple(
+        (item[1], item[2])
+        for item in valid
+    )
     plan_changes = build_plan_changes(selected, request.previous_plan)
     workout_decisions = build_workout_decisions(
         selected,
-        valid_plans,
+        vector,
+        valid_ranked,
         context,
         request.previous_plan,
     )
