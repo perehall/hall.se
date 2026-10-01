@@ -11,6 +11,7 @@ from dataclasses import dataclass
 from datetime import date
 
 from training_core.planning.candidate_generation import CandidateGenerationLimits
+from training_core.planning.input_hash import semantic_planning_input_payload
 from training_core.planning.models import PlanContent
 from training_core.planning.projections import (
     ShadowProjectionBundle,
@@ -42,6 +43,7 @@ class ShadowPlanningRunInput:
 class ShadowPlanningRunResult:
     readiness: ShadowReadinessReport
     solve_result: PlanningSolveResult | None
+    semantic_input_payload: dict | None = None
 
     @property
     def ran_solver(self) -> bool:
@@ -58,6 +60,7 @@ def run_shadow_planning(
         return ShadowPlanningRunResult(
             readiness=readiness,
             solve_result=None,
+            semantic_input_payload=None,
         )
 
     bundle = request.projections
@@ -88,6 +91,13 @@ def run_shadow_planning(
         observed_obligation_credits=bundle.observed_credits,
         observed_load_exposures=bundle.observed_load,
     )
+    semantic_input = semantic_planning_input_payload(
+        context,
+        bundle.objective_policy,
+        request.affected_from,
+        request.affected_until,
+        request.previous_plan,
+    )
     solve_result = solve_planning_window(
         PlanningSolveRequest(
             affected_from=request.affected_from,
@@ -101,4 +111,5 @@ def run_shadow_planning(
     return ShadowPlanningRunResult(
         readiness=readiness,
         solve_result=solve_result,
+        semantic_input_payload=semantic_input,
     )
