@@ -563,6 +563,17 @@ class PlanContent:
                 raise PlanningContractError(
                     f"fixed commitment {commitment.commitment_id} lies outside affected window"
                 )
+
+        combined_orders: set[tuple[date, int]] = set()
+        for item in (*workouts, *commitments):
+            if item.within_day_order is None:
+                continue
+            key = (item.local_date, item.within_day_order)
+            if key in combined_orders:
+                raise PlanningContractError(
+                    "planned workout/fixed commitment share one explicit within-day order"
+                )
+            combined_orders.add(key)
         object.__setattr__(self, "fixed_commitments", commitments)
 
 
