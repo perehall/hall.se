@@ -336,5 +336,23 @@
       "När två utvecklingsexponeringar för samma gren ryms i samma mikrocykel ska de normalt ha olika development_character om katalogen innehåller absorberbara alternativ.",
       "Sista mikrocykeln i blocket används för konsolidering eller review; detta innebär inte en mekanisk deload utan att faktisk belastning och respons avgör om dos ska reduceras."
     ]
+  },
+  "planning_engine_v1": {
+    "schema_version": 1,
+    "policy_revision": {
+      "revision_id": "policy-v1-2026-10-01",
+      "source_refs": [
+        "planning_policy:v1:reviewed_boundary",
+        "planning_policy:v1:no_inferred_hard_recovery_rules"
+      ],
+      "compatibility_policy": {
+        "policy_id": "compatibility-v1-explicit-only",
+        "source_refs": [
+          "planning_policy:v1:no_inferred_hard_recovery_rules"
+        ],
+        "rules": []
+      },
+      "spacing_preferences": []
+    }
   }
 }
