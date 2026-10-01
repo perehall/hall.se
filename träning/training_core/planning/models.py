@@ -65,6 +65,13 @@ class ContributionKind(str, Enum):
     PARTIAL = "partial"
 
 
+class ObservedCreditBasis(str, Enum):
+    """Evidence basis behind completed-training obligation credit."""
+
+    CONFIRMED_STIMULUS = "confirmed_stimulus"
+    STRUCTURAL_INTENT_MATCH = "structural_intent_match"
+
+
 @dataclass(frozen=True)
 class LoadDimensionExposure:
     """Categorical load used for compatibility when precise metrics are unavailable."""
@@ -220,10 +227,15 @@ class ObservedObligationCredit:
     local_date: date
     contribution: ObligationContribution
     source_refs: tuple[str, ...]
+    basis: ObservedCreditBasis = ObservedCreditBasis.CONFIRMED_STIMULUS
 
     def __post_init__(self) -> None:
         if not isinstance(self.local_date, date):
             raise PlanningContractError("observed obligation credit local_date must be a date")
+        if not isinstance(self.basis, ObservedCreditBasis):
+            raise PlanningContractError(
+                "observed obligation credit basis must be ObservedCreditBasis"
+            )
         object.__setattr__(
             self,
             "source_refs",
@@ -878,6 +890,9 @@ class PlanningObligation:
     progression_axes: tuple[str, ...] = ()
     partial_coverage: tuple[CoverageRule, ...] = ()
     prefer_character_variation: bool = False
+    accepted_observed_bases: tuple[ObservedCreditBasis, ...] = (
+        ObservedCreditBasis.CONFIRMED_STIMULUS,
+    )
 
     def __post_init__(self) -> None:
         object.__setattr__(self, "obligation_id", _required_text(self.obligation_id, "obligation_id"))
@@ -928,6 +943,27 @@ class PlanningObligation:
                 "partial_coverage must not restate the obligation's own capability"
             )
         object.__setattr__(self, "partial_coverage", coverage)
+
+        observed_bases = tuple(self.accepted_observed_bases)
+        if len(set(observed_bases)) != len(observed_bases):
+            raise PlanningContractError(
+                "accepted_observed_bases contains duplicates"
+            )
+        if any(
+            not isinstance(item, ObservedCreditBasis)
+            for item in observed_bases
+        ):
+            raise PlanningContractError(
+                "accepted_observed_bases must contain ObservedCreditBasis"
+            )
+        object.__setattr__(
+            self,
+            "accepted_observed_bases",
+            observed_bases,
+        )
+
+    def accepts_observed_basis(self, basis: ObservedCreditBasis) -> bool:
+        return basis in self.accepted_observed_bases
 
     def active_on(self, day: date) -> bool:
         return self.valid_from <= day <= self.valid_until
