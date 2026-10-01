@@ -1,7 +1,8 @@
-"""Strict Planning Engine v1 policy projection.
+"""Strict global Planning Engine v1 policy projection.
 
-Compatibility and objective policy must be explicit canonical data. Legacy
-decision guards, calendar templates and planner defaults are not interpreted.
+Global policy owns generic hard load compatibility and generic spacing
+preferences. Athlete-specific calendar frequency and double-session preferences
+are deliberately NOT accepted here; they belong to the athlete profile.
 """
 
 from __future__ import annotations
@@ -17,9 +18,6 @@ from training_core.planning.models import (
     SameDayOrderRule,
 )
 from training_core.planning.objectives import (
-    DoubleSessionPreference,
-    ObjectivePolicy,
-    SchedulePreferences,
     SpacingPreference,
     SpacingSubjectKind,
 )
@@ -35,7 +33,7 @@ class PolicyProjectionError(PlanningContractError):
 class PlanningPolicyProjection:
     revision_id: str
     compatibility_policy: LoadCompatibilityPolicy
-    objective_policy: ObjectivePolicy
+    spacing_preferences: tuple[SpacingPreference, ...]
     source_refs: tuple[str, ...]
 
     def __post_init__(self) -> None:
@@ -46,6 +44,11 @@ class PlanningPolicyProjection:
                 "revision_id must be non-empty",
             )
         object.__setattr__(self, "revision_id", revision)
+        object.__setattr__(
+            self,
+            "spacing_preferences",
+            tuple(self.spacing_preferences),
+        )
         refs = tuple(str(item or "").strip() for item in self.source_refs)
         if not refs or any(not item for item in refs) or len(set(refs)) != len(refs):
             raise PolicyProjectionError(
@@ -96,6 +99,14 @@ def compile_policy_projection(
         v1.get("policy_revision"),
         "planning_engine_v1.policy_revision",
     )
+
+    # Athlete schedule preferences are forbidden in global policy. This catches
+    # accidental migration of onboarding/UI defaults into planner authority.
+    if "objective_policy" in source or "schedule" in source:
+        raise PolicyProjectionError(
+            "ATHLETE_PREFERENCES_IN_GLOBAL_POLICY",
+            "schedule/double-session preferences must come from athlete profile",
+        )
 
     compatibility_source = _mapping(
         source.get("compatibility_policy"),
@@ -148,44 +159,18 @@ def compile_policy_projection(
                 str(exc),
             ) from exc
 
-    try:
-        compatibility = LoadCompatibilityPolicy(
-            policy_id=str(compatibility_source.get("policy_id") or ""),
-            rules=tuple(rules),
-            source_refs=_strings(
-                compatibility_source.get("source_refs"),
-                "policy_revision.compatibility_policy.source_refs",
-            ),
+    spacing = []
+    for index, raw in enumerate(
+        _list(
+            source.get("spacing_preferences"),
+            "policy_revision.spacing_preferences",
         )
-
-        objective_source = _mapping(
-            source.get("objective_policy"),
-            "policy_revision.objective_policy",
+    ):
+        row = _mapping(
+            raw,
+            f"policy_revision.spacing_preferences[{index}]",
         )
-        schedule_source = _mapping(
-            objective_source.get("schedule"),
-            "policy_revision.objective_policy.schedule",
-        )
-        schedule = SchedulePreferences(
-            preferred_active_days=schedule_source.get("preferred_active_days"),
-            min_active_days=schedule_source.get("min_active_days"),
-            max_active_days=schedule_source.get("max_active_days"),
-            double_sessions=DoubleSessionPreference(
-                str(schedule_source.get("double_sessions") or "")
-            ),
-        )
-
-        spacing = []
-        for index, raw in enumerate(
-            _list(
-                objective_source.get("spacing_preferences"),
-                "policy_revision.objective_policy.spacing_preferences",
-            )
-        ):
-            row = _mapping(
-                raw,
-                f"policy_revision.objective_policy.spacing_preferences[{index}]",
-            )
+        try:
             spacing.append(
                 SpacingPreference(
                     subject_kind=SpacingSubjectKind(
@@ -198,22 +183,30 @@ def compile_policy_projection(
                     ),
                 )
             )
+        except (PlanningContractError, ValueError, TypeError) as exc:
+            raise PolicyProjectionError(
+                "INVALID_V1_POLICY_CONTRACT",
+                str(exc),
+            ) from exc
 
-        objective = ObjectivePolicy(
-            schedule=schedule,
-            spacing_preferences=tuple(spacing),
+    try:
+        compatibility = LoadCompatibilityPolicy(
+            policy_id=str(compatibility_source.get("policy_id") or ""),
+            rules=tuple(rules),
+            source_refs=_strings(
+                compatibility_source.get("source_refs"),
+                "policy_revision.compatibility_policy.source_refs",
+            ),
         )
         return PlanningPolicyProjection(
             revision_id=str(source.get("revision_id") or ""),
             compatibility_policy=compatibility,
-            objective_policy=objective,
+            spacing_preferences=tuple(spacing),
             source_refs=_strings(
                 source.get("source_refs"),
                 "policy_revision.source_refs",
             ),
         )
-    except PolicyProjectionError:
-        raise
     except (PlanningContractError, ValueError, TypeError) as exc:
         raise PolicyProjectionError(
             "INVALID_V1_POLICY_CONTRACT",
