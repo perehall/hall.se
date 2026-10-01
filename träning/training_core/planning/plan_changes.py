@@ -165,7 +165,10 @@ def compile_plan_change(
         )
 
     target = _workout(base_plan, str(change.target_workout_id))
-    obligation_ids = _obligation_ids(target)
+    # User actions target the physical prescription. Obligation accounting is
+    # recomputed by the solver from the current StrategyRevision and must not
+    # become part of the UI identity of an otherwise identical workout.
+    obligation_ids: tuple[str, ...] = ()
     source_count = _matching_count(
         base_plan,
         local_date=target.local_date,
