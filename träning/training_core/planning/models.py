@@ -80,6 +80,36 @@ class LoadDimensionExposure:
 
 
 @dataclass(frozen=True)
+class LoadEstimate:
+    """Quantitative external-load estimate with an explicit uncertainty interval."""
+
+    metric: str
+    unit: str
+    min_value: float
+    max_value: float
+    provenance_refs: tuple[str, ...]
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "metric", _required_text(self.metric, "load_estimate.metric"))
+        object.__setattr__(self, "unit", _required_text(self.unit, "load_estimate.unit"))
+        for field in ("min_value", "max_value"):
+            value = getattr(self, field)
+            if isinstance(value, bool) or not isinstance(value, (int, float)):
+                raise PlanningContractError(f"load_estimate.{field} must be numeric")
+            if float(value) < 0:
+                raise PlanningContractError(f"load_estimate.{field} must be >= 0")
+        if float(self.max_value) < float(self.min_value):
+            raise PlanningContractError(
+                "load_estimate.max_value cannot be below min_value"
+            )
+        object.__setattr__(
+            self,
+            "provenance_refs",
+            _unique_text_tuple(self.provenance_refs, "load_estimate.provenance_refs"),
+        )
+
+
+@dataclass(frozen=True)
 class FixedLoadCommitment:
     """Immutable user/external training commitment presented to the solver as data."""
 
@@ -88,6 +118,7 @@ class FixedLoadCommitment:
     label: str
     load_dimensions: tuple[LoadDimensionExposure, ...]
     source_refs: tuple[str, ...]
+    quantitative_load: tuple[LoadEstimate, ...] = ()
     within_day_order: int | None = None
 
     def __post_init__(self) -> None:
@@ -113,6 +144,14 @@ class FixedLoadCommitment:
             "source_refs",
             _unique_text_tuple(self.source_refs, "source_refs"),
         )
+
+        quantitative = tuple(self.quantitative_load)
+        semantic_keys = [(item.metric, item.unit) for item in quantitative]
+        if len(set(semantic_keys)) != len(semantic_keys):
+            raise PlanningContractError(
+                "fixed commitment contains duplicate quantitative load metric/unit"
+            )
+        object.__setattr__(self, "quantitative_load", quantitative)
 
         if self.within_day_order is not None:
             if not isinstance(self.within_day_order, int) or self.within_day_order <= 0:
