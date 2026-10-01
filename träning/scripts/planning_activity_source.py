@@ -50,18 +50,35 @@ def load_canonical_training_activities(
             cur.execute(
                 """
                 select
-                  provider_activity_id,
-                  local_date,
-                  sport_family,
-                  classification,
-                  elapsed_time_s,
-                  distance_m
-                from training.activities
-                where is_current
-                  and local_date >= %s
-                  and local_date <= %s
-                  and classification = 'training'
-                order by local_date, started_at, provider_activity_id
+                  a.provider_activity_id,
+                  a.local_date,
+                  a.sport_family,
+                  a.classification,
+                  a.elapsed_time_s,
+                  a.distance_m,
+                  a.sport_type,
+                  a.raw ->> 'user_report' as raw_user_report,
+                  o.user_report as override_user_report,
+                  latest.feedback_text as latest_feedback_text
+                from training.activities a
+                left join training.activity_overrides o
+                  on o.activity_id = a.id
+                left join lateral (
+                  select f.feedback_text
+                  from training.activity_feedback f
+                  where f.activity_id = a.id
+                    and nullif(trim(f.feedback_text), '') is not null
+                  order by
+                    coalesce(f.submitted_at, f.created_at) desc,
+                    f.created_at desc,
+                    f.event_key desc
+                  limit 1
+                ) latest on true
+                where a.is_current
+                  and a.local_date >= %s
+                  and a.local_date <= %s
+                  and a.classification = 'training'
+                order by a.local_date, a.started_at, a.provider_activity_id
                 """,
                 (coverage_from, coverage_through),
             )
@@ -101,16 +118,23 @@ def load_canonical_training_activities(
             raise RuntimeError(
                 f"canonical training activity {source_id} has invalid distance_m"
             )
+        report_parts: list[str] = []
+        for value in (raw[7], raw[8], raw[9]):
+            text = str(value or "").strip()
+            if text and text not in report_parts:
+                report_parts.append(text)
         rows.append(
             {
                 "id": source_id,
                 "date": local_date,
                 "sport_family": str(raw[2] or "").strip(),
+                "sport_type": str(raw[6] or "").strip(),
                 "classification": "training",
                 "elapsed_time_s": float(elapsed),
                 "distance_m": (
                     None if distance is None else float(distance)
                 ),
+                "user_report": " ".join(report_parts),
             }
         )
 
