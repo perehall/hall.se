@@ -26,6 +26,11 @@ from training_core.planning.models import (  # noqa: E402
     UnknownAggregatePolicy,
     WorkoutComponentIntent,
 )
+from training_core.planning.objectives import (  # noqa: E402
+    DoubleSessionPreference,
+    ObjectivePolicy,
+    SchedulePreferences,
+)
 from training_core.planning.projections import (  # noqa: E402
     ShadowProjectionBundle,
     assess_shadow_readiness,
@@ -121,6 +126,7 @@ class ShadowProjectionReadinessTests(unittest.TestCase):
         )
         self.assertIn("MISSING_OPTION_ELIGIBILITY", report.blocker_codes)
         self.assertIn("MISSING_OBSERVED_LOAD_EXPOSURES", report.blocker_codes)
+        self.assertIn("MISSING_OBJECTIVE_POLICY", report.blocker_codes)
 
     def test_empty_is_distinct_from_missing_for_fact_collections(self):
         option = explicit_option()
@@ -146,6 +152,14 @@ class ShadowProjectionReadinessTests(unittest.TestCase):
                     policy_id="compat-v1",
                     rules=(),
                     source_refs=("policy:v1",),
+                ),
+                objective_policy=ObjectivePolicy(
+                    schedule=SchedulePreferences(
+                        preferred_active_days=5,
+                        min_active_days=0,
+                        max_active_days=7,
+                        double_sessions=DoubleSessionPreference.SOMETIMES,
+                    )
                 ),
             )
         )
