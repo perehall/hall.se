@@ -409,6 +409,8 @@ The envelope MUST be able to bound, where supported by evidence:
 
 When no trusted aggregate bound exists, automatic planning MUST NOT increase aggregate exposure above the most recent established comparable baseline solely to satisfy lower-priority objectives. A confirmed starting state may establish an initial ceiling; fresher caution evidence may lower it.
 
+A load bound MAY declare that its metric requires complete coverage across every relevant observed, fixed and planned exposure in its rolling window. When such coverage is incomplete, unknown load MUST NOT be treated as zero. A candidate that adds mutable training is invalid until the bound can be proven; a zero-new-training/defer outcome may remain valid. The envelope's unknown policy must therefore be executable validation semantics, not descriptive metadata.
+
 ### H17. Immutable plan content versus delivery metadata
 
 A committed `PlanContent` has a content hash. Downstream systems MAY attach delivery/publication metadata, but MUST NOT change anything that affects workout identity, date, recipe, dose, components, load semantics or planning status without a new solve and commit.
