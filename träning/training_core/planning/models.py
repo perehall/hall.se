@@ -479,6 +479,206 @@ class PlanContent:
         object.__setattr__(self, "fixed_commitments", commitments)
 
 
+class EligibilityKind(str, Enum):
+    ESTABLISH = "establish"
+    HOLD = "hold"
+    PROGRESS = "progress"
+    REDUCE = "reduce"
+
+
+class SameDayOrderRule(str, Enum):
+    ANY = "any"
+    FORBIDDEN = "forbidden"
+    FIRST_BEFORE_SECOND = "first_before_second"
+    SECOND_BEFORE_FIRST = "second_before_first"
+
+
+@dataclass(frozen=True)
+class OptionEligibility:
+    """Athlete-specific permission to use one approved recipe/dose option."""
+
+    recipe_id: str
+    dose_option_id: str
+    capability: str
+    kind: EligibilityKind
+    source_refs: tuple[str, ...]
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "recipe_id", _required_text(self.recipe_id, "eligibility.recipe_id"))
+        object.__setattr__(
+            self,
+            "dose_option_id",
+            _required_text(self.dose_option_id, "eligibility.dose_option_id"),
+        )
+        object.__setattr__(
+            self,
+            "capability",
+            _required_text(self.capability, "eligibility.capability"),
+        )
+        if not isinstance(self.kind, EligibilityKind):
+            raise PlanningContractError("eligibility.kind must be EligibilityKind")
+        object.__setattr__(
+            self,
+            "source_refs",
+            _unique_text_tuple(self.source_refs, "eligibility.source_refs"),
+        )
+
+    @property
+    def option_key(self) -> tuple[str, str]:
+        return self.recipe_id, self.dose_option_id
+
+
+@dataclass(frozen=True)
+class DailyAvailability:
+    """Hard athlete-declared availability for one local date."""
+
+    local_date: date
+    available: bool
+    source_refs: tuple[str, ...]
+    max_sessions: int | None = None
+    max_duration_minutes: float | None = None
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.local_date, date):
+            raise PlanningContractError("availability.local_date must be a date")
+        object.__setattr__(
+            self,
+            "source_refs",
+            _unique_text_tuple(self.source_refs, "availability.source_refs"),
+        )
+        if self.max_sessions is not None:
+            if not isinstance(self.max_sessions, int) or self.max_sessions < 0:
+                raise PlanningContractError("availability.max_sessions must be >= 0")
+        if self.max_duration_minutes is not None:
+            if (
+                isinstance(self.max_duration_minutes, bool)
+                or not isinstance(self.max_duration_minutes, (int, float))
+                or float(self.max_duration_minutes) < 0
+            ):
+                raise PlanningContractError(
+                    "availability.max_duration_minutes must be numeric and >= 0"
+                )
+        if not self.available:
+            if self.max_sessions not in (None, 0):
+                raise PlanningContractError(
+                    "unavailable day cannot declare positive max_sessions"
+                )
+            if self.max_duration_minutes not in (None, 0):
+                raise PlanningContractError(
+                    "unavailable day cannot declare positive max_duration_minutes"
+                )
+
+
+@dataclass(frozen=True)
+class ObservedLoadExposure:
+    """Completed categorical load used for cross-session compatibility checks."""
+
+    exposure_id: str
+    local_date: date
+    load_dimensions: tuple[LoadDimensionExposure, ...]
+    source_refs: tuple[str, ...]
+    within_day_order: int | None = None
+
+    def __post_init__(self) -> None:
+        object.__setattr__(
+            self,
+            "exposure_id",
+            _required_text(self.exposure_id, "observed_exposure.exposure_id"),
+        )
+        if not isinstance(self.local_date, date):
+            raise PlanningContractError("observed_exposure.local_date must be a date")
+        dimensions = tuple(self.load_dimensions)
+        if not dimensions:
+            raise PlanningContractError("observed exposure must declare load_dimensions")
+        if len({item.dimension for item in dimensions}) != len(dimensions):
+            raise PlanningContractError(
+                "observed exposure contains duplicate load dimension"
+            )
+        object.__setattr__(self, "load_dimensions", dimensions)
+        object.__setattr__(
+            self,
+            "source_refs",
+            _unique_text_tuple(self.source_refs, "observed_exposure.source_refs"),
+        )
+        if self.within_day_order is not None:
+            if not isinstance(self.within_day_order, int) or self.within_day_order <= 0:
+                raise PlanningContractError(
+                    "observed_exposure.within_day_order must be a positive integer"
+                )
+
+
+@dataclass(frozen=True)
+class LoadCompatibilityRule:
+    """Generic hard interaction rule between two load dimensions."""
+
+    rule_id: str
+    first_dimension: str
+    first_min_level: LoadDimensionLevel
+    second_dimension: str
+    second_min_level: LoadDimensionLevel
+    min_calendar_separation_days: int
+    same_day_order: SameDayOrderRule
+    source_refs: tuple[str, ...]
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "rule_id", _required_text(self.rule_id, "compatibility.rule_id"))
+        object.__setattr__(
+            self,
+            "first_dimension",
+            _required_text(self.first_dimension, "compatibility.first_dimension"),
+        )
+        object.__setattr__(
+            self,
+            "second_dimension",
+            _required_text(self.second_dimension, "compatibility.second_dimension"),
+        )
+        if not isinstance(self.first_min_level, LoadDimensionLevel):
+            raise PlanningContractError(
+                "compatibility.first_min_level must be LoadDimensionLevel"
+            )
+        if not isinstance(self.second_min_level, LoadDimensionLevel):
+            raise PlanningContractError(
+                "compatibility.second_min_level must be LoadDimensionLevel"
+            )
+        if (
+            not isinstance(self.min_calendar_separation_days, int)
+            or self.min_calendar_separation_days < 0
+        ):
+            raise PlanningContractError(
+                "compatibility.min_calendar_separation_days must be >= 0"
+            )
+        if not isinstance(self.same_day_order, SameDayOrderRule):
+            raise PlanningContractError(
+                "compatibility.same_day_order must be SameDayOrderRule"
+            )
+        object.__setattr__(
+            self,
+            "source_refs",
+            _unique_text_tuple(self.source_refs, "compatibility.source_refs"),
+        )
+
+
+@dataclass(frozen=True)
+class LoadCompatibilityPolicy:
+    """Versioned generic categorical-load interaction policy."""
+
+    policy_id: str
+    rules: tuple[LoadCompatibilityRule, ...]
+    source_refs: tuple[str, ...]
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "policy_id", _required_text(self.policy_id, "compatibility.policy_id"))
+        rules = tuple(self.rules)
+        if len({item.rule_id for item in rules}) != len(rules):
+            raise PlanningContractError("compatibility policy contains duplicate rule_id")
+        object.__setattr__(self, "rules", rules)
+        object.__setattr__(
+            self,
+            "source_refs",
+            _unique_text_tuple(self.source_refs, "compatibility.source_refs"),
+        )
+
+
 @dataclass(frozen=True)
 class CoverageRule:
     """Exact partial/full credit from one capability toward an obligation.
