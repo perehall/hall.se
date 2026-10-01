@@ -254,7 +254,7 @@ def _validate_history_coverage(
     )
     max_compat_gap = max(
         (
-            rule.min_calendar_separation_days
+            rule.max_separation_days
             for rule in context.compatibility_policy.rules
         ),
         default=0,
@@ -306,7 +306,7 @@ def _validate_future_context(
 ) -> None:
     max_gap = max(
         (
-            rule.min_calendar_separation_days
+            rule.max_separation_days
             for rule in context.compatibility_policy.rules
         ),
         default=0,
@@ -738,18 +738,32 @@ def _validate_load_compatibility(
                 if issue_key in emitted:
                     continue
 
-                if day_gap < rule.min_calendar_separation_days:
+                if first_role["date"] < second_role["date"]:
+                    required_gap = rule.first_to_second_days
+                    direction = "first_to_second"
+                elif second_role["date"] < first_role["date"]:
+                    required_gap = rule.second_to_first_days
+                    direction = "second_to_first"
+                else:
+                    # Same-day calendar separation is zero. The larger of the
+                    # directional day gaps is conservative; an explicitly
+                    # permitted same-day ordering only matters when both are 0.
+                    required_gap = rule.max_separation_days
+                    direction = "same_day"
+
+                if day_gap < required_gap:
                     emitted.add(issue_key)
                     issues.append(
                         ValidationIssue(
                             "LOAD_COMPATIBILITY_GAP_VIOLATION",
-                            "Two load exposures violate a generic minimum calendar separation rule.",
+                            "Two load exposures violate a generic directional separation rule.",
                             (
                                 rule.rule_id,
                                 first["id"],
                                 second["id"],
+                                direction,
                                 str(day_gap),
-                                str(rule.min_calendar_separation_days),
+                                str(required_gap),
                             ),
                         )
                     )
