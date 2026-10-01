@@ -12,6 +12,8 @@ import os
 from datetime import date
 from typing import Any, Callable
 
+from training_profile import explicit_confirmed_stimuli
+
 
 def _database_url(env: dict[str, str] | None = None) -> str:
     source = env if env is not None else os.environ
@@ -123,20 +125,23 @@ def load_canonical_training_activities(
             text = str(value or "").strip()
             if text and text not in report_parts:
                 report_parts.append(text)
-        rows.append(
-            {
-                "id": source_id,
-                "date": local_date,
-                "sport_family": str(raw[2] or "").strip(),
-                "sport_type": str(raw[6] or "").strip(),
-                "classification": "training",
-                "elapsed_time_s": float(elapsed),
-                "distance_m": (
-                    None if distance is None else float(distance)
-                ),
-                "user_report": " ".join(report_parts),
-            }
-        )
+        activity = {
+            "id": source_id,
+            "date": local_date,
+            "sport_family": str(raw[2] or "").strip(),
+            "sport_type": str(raw[6] or "").strip(),
+            "classification": "training",
+            "elapsed_time_s": float(elapsed),
+            "distance_m": (
+                None if distance is None else float(distance)
+            ),
+            "user_report": " ".join(report_parts),
+        }
+        activity["confirmed_stimuli"] = [
+            dict(item)
+            for item in explicit_confirmed_stimuli(activity)
+        ]
+        rows.append(activity)
 
     return rows, {
         "source": "supabase_db",
