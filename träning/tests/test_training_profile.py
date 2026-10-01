@@ -170,6 +170,35 @@ class TrainingProfileTests(unittest.TestCase):
         self.assertEqual(second["planning_credits"], ["run_threshold"])
         self.assertEqual(second["intent_matches"], first["intent_matches"])
 
+    def test_old_profile_schema_does_not_preserve_stale_intent_match(self):
+        activity = four_by_eight_activity(
+            report="Spontant pass: 4 × 8 min tröskel, kontrollerat."
+        )
+        current = build_training_profile(activity)
+        stale = dict(current)
+        stale["schema_version"] = 1
+        stale["intent_matches"] = [
+            {
+                "workout_key": "stale-easy-run",
+                "target_date": "2026-09-27",
+                "day_delta": -2,
+                "stimuli": ["run_easy_distance"],
+                "relation": "fulfills_planned_dose",
+                "confidence": "high",
+                "evidence": {"basis": "legacy_scalar_match"},
+            }
+        ]
+        stale["planning_credits"] = ["run_easy_distance", "run_threshold"]
+
+        rebuilt = build_training_profile(
+            activity,
+            planned_workouts=[],
+            previous_profile=stale,
+        )
+        self.assertEqual(rebuilt["schema_version"], 2)
+        self.assertEqual(rebuilt["planning_credits"], ["run_threshold"])
+        self.assertEqual(rebuilt["intent_matches"], [])
+
     def test_explicit_report_confirms_stimulus_independently_of_plan(self):
         activity = four_by_eight_activity(
             report="Spontant pass: 4 × 8 min tröskel, kontrollerat."
