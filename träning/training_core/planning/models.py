@@ -53,6 +53,74 @@ class PlanAuthorityStatus(str, Enum):
     BLOCKED = "blocked"
 
 
+class LoadDimensionLevel(str, Enum):
+    LOW = "low"
+    MODERATE = "moderate"
+    HIGH = "high"
+    UNKNOWN = "unknown"
+
+
+@dataclass(frozen=True)
+class LoadDimensionExposure:
+    """Categorical load used for compatibility when precise metrics are unavailable."""
+
+    dimension: str
+    level: LoadDimensionLevel
+    provenance_refs: tuple[str, ...]
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "dimension", _required_text(self.dimension, "dimension"))
+        if not isinstance(self.level, LoadDimensionLevel):
+            raise PlanningContractError("level must be LoadDimensionLevel")
+        object.__setattr__(
+            self,
+            "provenance_refs",
+            _unique_text_tuple(self.provenance_refs, "provenance_refs"),
+        )
+
+
+@dataclass(frozen=True)
+class FixedLoadCommitment:
+    """Immutable user/external training commitment presented to the solver as data."""
+
+    commitment_id: str
+    local_date: date
+    label: str
+    load_dimensions: tuple[LoadDimensionExposure, ...]
+    source_refs: tuple[str, ...]
+    within_day_order: int | None = None
+
+    def __post_init__(self) -> None:
+        object.__setattr__(
+            self,
+            "commitment_id",
+            _required_text(self.commitment_id, "commitment_id"),
+        )
+        object.__setattr__(self, "label", _required_text(self.label, "label"))
+        if not isinstance(self.local_date, date):
+            raise PlanningContractError("fixed commitment local_date must be a date")
+
+        dimensions = tuple(self.load_dimensions)
+        if not dimensions:
+            raise PlanningContractError("fixed commitment must declare load_dimensions")
+        if len({item.dimension for item in dimensions}) != len(dimensions):
+            raise PlanningContractError(
+                "fixed commitment contains duplicate load dimension"
+            )
+        object.__setattr__(self, "load_dimensions", dimensions)
+        object.__setattr__(
+            self,
+            "source_refs",
+            _unique_text_tuple(self.source_refs, "source_refs"),
+        )
+
+        if self.within_day_order is not None:
+            if not isinstance(self.within_day_order, int) or self.within_day_order <= 0:
+                raise PlanningContractError(
+                    "within_day_order must be a positive integer when supplied"
+                )
+
+
 @dataclass(frozen=True)
 class CoverageRule:
     """Exact partial/full credit from one capability toward an obligation.
@@ -178,8 +246,8 @@ class LoadBound:
             raise PlanningContractError("window_days must be a positive integer")
         if isinstance(self.max_value, bool) or not isinstance(self.max_value, (int, float)):
             raise PlanningContractError("max_value must be numeric")
-        if float(self.max_value) <= 0:
-            raise PlanningContractError("max_value must be > 0")
+        if float(self.max_value) < 0:
+            raise PlanningContractError("max_value must be >= 0")
 
         object.__setattr__(
             self,
@@ -288,6 +356,8 @@ class PlanAuthorityState:
     semantic_input_hash: str
     strategy_revision_id: str
     engine_version: str
+    affected_from: date
+    affected_until: date
     plan_content_hash: str | None = None
     previous_valid_plan_hash: str | None = None
     blocked_reason_codes: tuple[str, ...] = ()
@@ -305,6 +375,11 @@ class PlanAuthorityState:
             "engine_version",
         ):
             object.__setattr__(self, field, _required_text(getattr(self, field), field))
+
+        if not isinstance(self.affected_from, date) or not isinstance(self.affected_until, date):
+            raise PlanningContractError("affected_from and affected_until must be dates")
+        if self.affected_until < self.affected_from:
+            raise PlanningContractError("affected_until cannot precede affected_from")
 
         reasons = _unique_text_tuple(
             self.blocked_reason_codes,
