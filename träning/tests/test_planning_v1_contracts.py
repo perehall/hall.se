@@ -145,6 +145,8 @@ class PlanningObligationTests(unittest.TestCase):
 class LoadEstimateTests(unittest.TestCase):
     def test_quantitative_load_preserves_uncertainty_interval(self):
         estimate = LoadEstimate(
+            scope="global",
+            subject="training_duration",
             metric="duration",
             unit="minutes",
             min_value=60,
@@ -199,6 +201,8 @@ class FixedLoadCommitmentTests(unittest.TestCase):
             source_refs=("calendar:fixed-1",),
             quantitative_load=(
                 LoadEstimate(
+                    scope="global",
+                    subject="training_duration",
                     metric="duration",
                     unit="minutes",
                     min_value=60,
