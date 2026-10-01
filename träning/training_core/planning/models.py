@@ -946,6 +946,7 @@ class LoadBound:
     window_days: int
     max_value: float
     provenance_refs: tuple[str, ...]
+    requires_complete_coverage: bool = False
 
     def __post_init__(self) -> None:
         object.__setattr__(self, "bound_id", _required_text(self.bound_id, "bound_id"))
