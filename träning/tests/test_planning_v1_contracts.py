@@ -142,6 +142,18 @@ class PlanningObligationTests(unittest.TestCase):
             item.max_exposures = 99  # type: ignore[misc]
 
 
+class LoadBoundCoverageTests(unittest.TestCase):
+    def test_complete_coverage_requirement_is_explicit_and_defaults_false(self):
+        self.assertFalse(bound().requires_complete_coverage)
+        self.assertTrue(
+            bound(requires_complete_coverage=True).requires_complete_coverage
+        )
+
+    def test_complete_coverage_requirement_must_be_boolean(self):
+        with self.assertRaises(PlanningContractError):
+            bound(requires_complete_coverage="yes")
+
+
 class LoadEstimateTests(unittest.TestCase):
     def test_quantitative_load_preserves_uncertainty_interval(self):
         estimate = LoadEstimate(
