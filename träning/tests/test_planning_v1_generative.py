@@ -154,7 +154,6 @@ def make_case(case_id: int, rng: random.Random):
         ),
     )
     request = PlanningSolveRequest(
-        semantic_input_hash=f"input-{case_id}",
         affected_from=START,
         affected_until=END,
         validation_context=context,
