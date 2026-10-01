@@ -478,118 +478,69 @@
               "window_complete": true,
               "causal_interpretation": "not_inferred"
             }
-          },
-          {
-            "date": "2026-09-26",
-            "metric": "distance_m",
-            "dose_value": 3000.0,
-            "activity_id": 20337309419,
-            "evidence_basis": "confirmed_or_plan_matched",
-            "direct_response": {
-              "signal": "caution",
-              "rpe_values": [
-                8.0
-              ],
-              "caution_terms": [
-                "trött"
-              ],
-              "supportive_terms": []
-            },
-            "evidence_policy": "plan_matched_or_explicit",
-            "response_status": "caution",
-            "repeat_supported": true,
-            "recovery_context_24_72h": {
-              "signal": "caution",
-              "observations": [
-                {
-                  "date": "2026-09-27",
-                  "family": "run",
-                  "signal": "caution",
-                  "activity_id": 20350203020,
-                  "caution_terms": [
-                    "väldigt sliten",
-                    "sliten",
-                    "tunga ben"
-                  ],
-                  "supportive_terms": []
-                },
-                {
-                  "date": "2026-09-28",
-                  "family": "enduro",
-                  "signal": "supportive",
-                  "activity_id": 20367593813,
-                  "caution_terms": [],
-                  "supportive_terms": [
-                    "pigg"
-                  ]
-                },
-                {
-                  "date": "2026-09-28",
-                  "family": "strength",
-                  "signal": "supportive",
-                  "activity_id": 20368346174,
-                  "caution_terms": [],
-                  "supportive_terms": [
-                    "pigg"
-                  ]
-                }
-              ],
-              "window_complete": true,
-              "causal_interpretation": "not_inferred"
-            }
           }
         ],
         "absorbed_value": null,
         "evidence_state": "demonstrated",
         "latest_exposure": {
-          "date": "2026-09-26",
+          "date": "2026-09-23",
           "metric": "distance_m",
-          "dose_value": 3000.0,
-          "activity_id": 20337309419,
+          "dose_value": 3200.0,
+          "activity_id": 20300494236,
           "evidence_basis": "confirmed_or_plan_matched",
           "direct_response": {
-            "signal": "caution",
+            "signal": "supportive",
             "rpe_values": [
-              8.0
+              6.0
             ],
-            "caution_terms": [
-              "trött"
-            ],
-            "supportive_terms": []
+            "caution_terms": [],
+            "supportive_terms": [
+              "kunde gjort mer",
+              "väldigt bra kontroll",
+              "bra kontroll"
+            ]
           },
           "evidence_policy": "plan_matched_or_explicit",
-          "response_status": "caution",
+          "response_status": "tolerated_with_recovery_caution",
           "repeat_supported": true,
           "recovery_context_24_72h": {
             "signal": "caution",
             "observations": [
               {
-                "date": "2026-09-27",
-                "family": "run",
-                "signal": "caution",
-                "activity_id": 20350203020,
-                "caution_terms": [
-                  "väldigt sliten",
-                  "sliten",
-                  "tunga ben"
-                ],
-                "supportive_terms": []
-              },
-              {
-                "date": "2026-09-28",
-                "family": "enduro",
+                "date": "2026-09-24",
+                "family": "bike",
                 "signal": "supportive",
-                "activity_id": 20367593813,
+                "activity_id": 20314473143,
                 "caution_terms": [],
                 "supportive_terms": [
                   "pigg"
                 ]
               },
               {
-                "date": "2026-09-28",
-                "family": "strength",
+                "date": "2026-09-25",
+                "family": "run",
                 "signal": "supportive",
-                "activity_id": 20368346174,
+                "activity_id": 20326850936,
+                "caution_terms": [],
+                "supportive_terms": [
+                  "pigg"
+                ]
+              },
+              {
+                "date": "2026-09-26",
+                "family": "swim",
+                "signal": "caution",
+                "activity_id": 20337309419,
+                "caution_terms": [
+                  "trött"
+                ],
+                "supportive_terms": []
+              },
+              {
+                "date": "2026-09-26",
+                "family": "enduro",
+                "signal": "supportive",
+                "activity_id": 20337767421,
                 "caution_terms": [],
                 "supportive_terms": [
                   "pigg"
@@ -604,8 +555,8 @@
         "progression_ready": false,
         "progression_state": "hold",
         "demonstrated_value": 3500.0,
-        "progression_reason": "Senaste jämförbara exponeringen innehåller en explicit varningssignal från användaren.",
-        "progression_reason_code": "direct_caution"
+        "progression_reason": "Dos har demonstrerats/tolererats men saknar ännu upprepad stödjande respons för att klassas som absorberad.",
+        "progression_reason_code": "not_yet_absorbed"
       },
       "mtb_technical": {
         "metric": "duration_minutes",
@@ -1761,147 +1712,6 @@
         "metric": "duration_minutes",
         "exposures": [
           {
-            "date": "2026-09-15",
-            "metric": "duration_minutes",
-            "dose_value": 64.05,
-            "activity_id": 20188628588,
-            "evidence_basis": "confirmed_or_plan_matched",
-            "direct_response": {
-              "signal": "unknown",
-              "rpe_values": [],
-              "caution_terms": [],
-              "supportive_terms": []
-            },
-            "evidence_policy": "plan_matched_or_explicit",
-            "response_status": "demonstrated",
-            "repeat_supported": true,
-            "recovery_context_24_72h": {
-              "signal": "supportive",
-              "observations": [
-                {
-                  "date": "2026-09-18",
-                  "family": "run",
-                  "signal": "supportive",
-                  "activity_id": 20229568713,
-                  "caution_terms": [],
-                  "supportive_terms": [
-                    "superpigg",
-                    "pigg"
-                  ]
-                }
-              ],
-              "window_complete": true,
-              "causal_interpretation": "not_inferred"
-            }
-          },
-          {
-            "date": "2026-09-18",
-            "metric": "duration_minutes",
-            "dose_value": 77.93,
-            "activity_id": 20229568713,
-            "evidence_basis": "confirmed_or_plan_matched",
-            "direct_response": {
-              "signal": "supportive",
-              "rpe_values": [],
-              "caution_terms": [],
-              "supportive_terms": [
-                "superpigg",
-                "pigg"
-              ]
-            },
-            "evidence_policy": "plan_matched_or_explicit",
-            "response_status": "absorbed",
-            "repeat_supported": true,
-            "recovery_context_24_72h": {
-              "signal": "supportive",
-              "observations": [
-                {
-                  "date": "2026-09-21",
-                  "family": "enduro",
-                  "signal": "supportive",
-                  "activity_id": 20271537143,
-                  "caution_terms": [],
-                  "supportive_terms": [
-                    "pigg"
-                  ]
-                },
-                {
-                  "date": "2026-09-21",
-                  "family": "strength",
-                  "signal": "supportive",
-                  "activity_id": 20272196080,
-                  "caution_terms": [],
-                  "supportive_terms": [
-                    "pigg"
-                  ]
-                }
-              ],
-              "window_complete": true,
-              "causal_interpretation": "not_inferred"
-            }
-          },
-          {
-            "date": "2026-09-22",
-            "metric": "duration_minutes",
-            "dose_value": 61.45,
-            "activity_id": 20284663236,
-            "evidence_basis": "confirmed_or_plan_matched",
-            "direct_response": {
-              "signal": "supportive",
-              "rpe_values": [
-                6.0
-              ],
-              "caution_terms": [],
-              "supportive_terms": [
-                "kunde gjort mer",
-                "riktigt bra",
-                "god kontroll",
-                "kände mig stark",
-                "stark"
-              ]
-            },
-            "evidence_policy": "plan_matched_or_explicit",
-            "response_status": "absorbed",
-            "repeat_supported": true,
-            "recovery_context_24_72h": {
-              "signal": "supportive",
-              "observations": [
-                {
-                  "date": "2026-09-23",
-                  "family": "swim",
-                  "signal": "supportive",
-                  "activity_id": 20300494236,
-                  "caution_terms": [],
-                  "supportive_terms": [
-                    "kunde gjort mer"
-                  ]
-                },
-                {
-                  "date": "2026-09-24",
-                  "family": "bike",
-                  "signal": "supportive",
-                  "activity_id": 20314473143,
-                  "caution_terms": [],
-                  "supportive_terms": [
-                    "pigg"
-                  ]
-                },
-                {
-                  "date": "2026-09-25",
-                  "family": "run",
-                  "signal": "supportive",
-                  "activity_id": 20326850936,
-                  "caution_terms": [],
-                  "supportive_terms": [
-                    "pigg"
-                  ]
-                }
-              ],
-              "window_complete": true,
-              "causal_interpretation": "not_inferred"
-            }
-          },
-          {
             "date": "2026-09-27",
             "metric": "duration_minutes",
             "dose_value": 80.07,
@@ -1921,7 +1731,7 @@
             },
             "evidence_policy": "plan_matched_or_explicit",
             "response_status": "caution",
-            "repeat_supported": true,
+            "repeat_supported": false,
             "recovery_context_24_72h": {
               "signal": "supportive",
               "observations": [
@@ -1949,72 +1759,65 @@
               "window_complete": true,
               "causal_interpretation": "not_inferred"
             }
-          },
-          {
-            "date": "2026-09-29",
-            "metric": "duration_minutes",
-            "dose_value": 62.58,
-            "activity_id": 20381137043,
-            "evidence_basis": "confirmed_or_plan_matched",
-            "direct_response": {
-              "signal": "supportive",
-              "rpe_values": [
-                6.0
-              ],
-              "caution_terms": [],
-              "supportive_terms": [
-                "bra kontroll",
-                "kände mig stark",
-                "stark"
-              ]
-            },
-            "evidence_policy": "plan_matched_or_explicit",
-            "response_status": "tolerated_pending_recovery",
-            "repeat_supported": true,
-            "recovery_context_24_72h": {
-              "signal": "unobserved",
-              "observations": [],
-              "window_complete": false,
-              "causal_interpretation": "not_inferred"
-            }
           }
         ],
-        "absorbed_value": 77.93,
-        "evidence_state": "absorbed",
+        "absorbed_value": null,
+        "evidence_state": "demonstrated",
         "latest_exposure": {
-          "date": "2026-09-29",
+          "date": "2026-09-27",
           "metric": "duration_minutes",
-          "dose_value": 62.58,
-          "activity_id": 20381137043,
+          "dose_value": 80.07,
+          "activity_id": 20350203020,
           "evidence_basis": "confirmed_or_plan_matched",
           "direct_response": {
-            "signal": "supportive",
+            "signal": "caution",
             "rpe_values": [
-              6.0
+              4.0
             ],
-            "caution_terms": [],
-            "supportive_terms": [
-              "bra kontroll",
-              "kände mig stark",
-              "stark"
-            ]
+            "caution_terms": [
+              "väldigt sliten",
+              "sliten",
+              "tunga ben"
+            ],
+            "supportive_terms": []
           },
           "evidence_policy": "plan_matched_or_explicit",
-          "response_status": "tolerated_pending_recovery",
-          "repeat_supported": true,
+          "response_status": "caution",
+          "repeat_supported": false,
           "recovery_context_24_72h": {
-            "signal": "unobserved",
-            "observations": [],
-            "window_complete": false,
+            "signal": "supportive",
+            "observations": [
+              {
+                "date": "2026-09-28",
+                "family": "enduro",
+                "signal": "supportive",
+                "activity_id": 20367593813,
+                "caution_terms": [],
+                "supportive_terms": [
+                  "pigg"
+                ]
+              },
+              {
+                "date": "2026-09-28",
+                "family": "strength",
+                "signal": "supportive",
+                "activity_id": 20368346174,
+                "caution_terms": [],
+                "supportive_terms": [
+                  "pigg"
+                ]
+              }
+            ],
+            "window_complete": true,
             "causal_interpretation": "not_inferred"
           }
         },
-        "tolerated_value": 77.93,
+        "tolerated_value": null,
         "progression_ready": false,
         "progression_state": "hold",
         "demonstrated_value": 80.07,
-        "progression_reason": "Senaste jämförbara exponeringen har stödjande passrespons men 72 h-observationsfönstret är ännu inte komplett.",
-        "progression_reason_code": "recovery_window_open"
+        "progression_reason": "Senaste jämförbara exponeringen innehåller en explicit varningssignal från användaren.",
+        "progression_reason_code": "direct_caution"
       },
       "strength_unilateral": {
         "metric": "duration_minutes",
@@ -2160,7 +1963,7 @@
         "source_hash": "ccb1ed49bababc53f3ca3941723ddb119e5ce24725c69b5c620d32071bf16321",
         "uncertainties": [],
         "intent_matches": [],
-        "schema_version": 1,
+        "schema_version": 2,
         "planning_credits": [],
         "observed_structure": {
           "run_time_intervals": {
@@ -2188,7 +1991,7 @@
         "source_hash": "b785bf4fd23a26bd7a9cdb1d2aef6b3976d85fc372bcb53f9b8466fb29e97550",
         "uncertainties": [],
         "intent_matches": [],
-        "schema_version": 1,
+        "schema_version": 2,
         "planning_credits": [],
         "observed_structure": {
           "run_time_intervals": {
@@ -2216,7 +2019,7 @@
         "source_hash": "067ee4f8bd60f7b45980feb1464f80d18e14b5e5624df35fbeb66c2c6604f894",
         "uncertainties": [],
         "intent_matches": [],
-        "schema_version": 1,
+        "schema_version": 2,
         "planning_credits": [],
         "observed_structure": {
           "run_time_intervals": {
@@ -2244,7 +2047,7 @@
         "source_hash": "5a3edcd0ef0de077db0291286ab594b0a4999e0215be985911a3fd91f1c70cc0",
         "uncertainties": [],
         "intent_matches": [],
-        "schema_version": 1,
+        "schema_version": 2,
         "planning_credits": [],
         "observed_structure": {
           "run_time_intervals": {
@@ -2272,7 +2075,7 @@
         "source_hash": "06a60018199ccc2f955a3553e7973546d96e7f08099e0f50f43026a847748e8b",
         "uncertainties": [],
         "intent_matches": [],
-        "schema_version": 1,
+        "schema_version": 2,
         "planning_credits": [],
         "observed_structure": {
           "run_time_intervals": {
@@ -2299,30 +2102,9 @@
         "activity_id": 20188628588,
         "source_hash": "1eb1598de6293e1c562177b991eab1c5da7dfc4d465ef1ace50f4e43b7d12ac9",
         "uncertainties": [],
-        "intent_matches": [
-          {
-            "stimuli": [
-              "run_easy_distance"
-            ],
-            "evidence": {
-              "basis": "comparable_scalar_dose",
-              "metric": "duration_minutes",
-              "expected_value": 75.0,
-              "matching_basis": "same_discipline_and_comparable_planned_dose",
-              "observed_value": 64.05,
-              "relative_error": 0.146
-            },
-            "relation": "fulfills_planned_dose",
-            "day_delta": -2,
-            "confidence": "high",
-            "target_date": "2026-09-13",
-            "workout_key": "archive:2026-W37:legacy:2026-09-13:7"
-          }
-        ],
-        "schema_version": 1,
-        "planning_credits": [
-          "run_easy_distance"
-        ],
+        "intent_matches": [],
+        "schema_version": 2,
+        "planning_credits": [],
         "observed_structure": {
           "run_time_intervals": {
             "structured": false
@@ -2369,7 +2151,7 @@
             "workout_key": "archive:2026-W38:legacy:2026-09-16:3"
           }
         ],
-        "schema_version": 1,
+        "schema_version": 2,
         "planning_credits": [
           "swim_aerobic",
           "swim_technique"
@@ -2400,7 +2182,7 @@
         "source_hash": "2c179434e508bbb4f70984d7cc940c52503db92777fd8af1b492913df436d0ae",
         "uncertainties": [],
         "intent_matches": [],
-        "schema_version": 1,
+        "schema_version": 2,
         "planning_credits": [],
         "observed_structure": {
           "run_time_intervals": {
@@ -2438,29 +2220,9 @@
         "activity_id": 20229568713,
         "source_hash": "b670925b18f9f9575f54d4de0eafd7ef7938b6512845deddf9e580f4de686969",
         "uncertainties": [],
-        "intent_matches": [
-          {
-            "stimuli": [
-              "run_easy_distance"
-            ],
-            "evidence": {
-              "basis": "comparable_scalar_dose",
-              "metric": "duration_minutes",
-              "expected_value": 75.0,
-              "matching_basis": "same_discipline_and_comparable_planned_dose",
-              "observed_value": 77.93,
-              "relative_error": 0.0391
-            },
-            "relation": "fulfills_planned_dose",
-            "day_delta": 2,
-            "confidence": "high",
-            "target_date": "2026-09-20",
-            "workout_key": "archive:2026-W38:legacy:2026-09-20:7"
-          }
-        ],
-        "schema_version": 1,
+        "intent_matches": [],
+        "schema_version": 2,
         "planning_credits": [
-          "run_easy_distance",
           "run_hill_quality"
         ],
         "observed_structure": {
@@ -2489,7 +2251,7 @@
         "source_hash": "831f661a7b17305e00316e4785e52777091b82a410c18de155377924bfa7bb22",
         "uncertainties": [],
         "intent_matches": [],
-        "schema_version": 1,
+        "schema_version": 2,
         "planning_credits": [],
         "observed_structure": {
           "run_time_intervals": {
@@ -2517,7 +2279,7 @@
         "source_hash": "9cf3cca3ca5edd53b905eea5f096831175125ec44ce9f97722de2f6626f833cc",
         "uncertainties": [],
         "intent_matches": [],
-        "schema_version": 1,
+        "schema_version": 2,
         "planning_credits": [],
         "observed_structure": {
           "run_time_intervals": {
@@ -2545,7 +2307,7 @@
         "source_hash": "4594c5c269d0d551018811855659f3a8e5dda887acac8c94ed24e47ee194e22f",
         "uncertainties": [],
         "intent_matches": [],
-        "schema_version": 1,
+        "schema_version": 2,
         "planning_credits": [],
         "observed_structure": {
           "run_time_intervals": {
@@ -2591,35 +2353,11 @@
         "activity_id": 20272196080,
         "source_hash": "9642a0fd3707f34e31b5826fbde87904795b362028e287f2bcf08dee66e522f3",
         "uncertainties": [],
-        "intent_matches": [
-          {
-            "stimuli": [
-              "strength_unilateral",
-              "strength_core",
-              "swim_aerobic",
-              "swim_technique"
-            ],
-            "evidence": {
-              "basis": "comparable_scalar_dose",
-              "metric": "duration_minutes",
-              "expected_value": 25.0,
-              "matching_basis": "same_discipline_and_comparable_planned_dose",
-              "observed_value": 33.57,
-              "relative_error": 0.3427
-            },
-            "relation": "fulfills_planned_dose",
-            "day_delta": -2,
-            "confidence": "high",
-            "target_date": "2026-09-19",
-            "workout_key": "archive:2026-W38:legacy:2026-09-19:6"
-          }
-        ],
-        "schema_version": 1,
+        "intent_matches": [],
+        "schema_version": 2,
         "planning_credits": [
           "strength_core",
-          "strength_unilateral",
-          "swim_aerobic",
-          "swim_technique"
+          "strength_unilateral"
         ],
         "observed_structure": {
           "run_time_intervals": {
@@ -2657,29 +2395,9 @@
         "activity_id": 20284663236,
         "source_hash": "60633bb5b0648ab2140212d83a1341d56fd699d4327cc1ac8d7c2ab6d97b6f5e",
         "uncertainties": [],
-        "intent_matches": [
-          {
-            "stimuli": [
-              "run_easy_distance"
-            ],
-            "evidence": {
-              "basis": "comparable_scalar_dose",
-              "metric": "duration_minutes",
-              "expected_value": 75.0,
-              "matching_basis": "same_discipline_and_comparable_planned_dose",
-              "observed_value": 61.45,
-              "relative_error": 0.1807
-            },
-            "relation": "fulfills_planned_dose",
-            "day_delta": -2,
-            "confidence": "high",
-            "target_date": "2026-09-20",
-            "workout_key": "archive:2026-W38:legacy:2026-09-20:7"
-          }
-        ],
-        "schema_version": 1,
+        "intent_matches": [],
+        "schema_version": 2,
         "planning_credits": [
-          "run_easy_distance",
           "run_threshold"
         ],
         "observed_structure": {
@@ -2728,7 +2446,7 @@
             "workout_key": "archive:2026-W39:legacy:2026-09-23:3"
           }
         ],
-        "schema_version": 1,
+        "schema_version": 2,
         "planning_credits": [
           "swim_aerobic",
           "swim_technique"
@@ -2778,7 +2496,7 @@
         "source_hash": "588c2eae7b32f9c1d3b88641ac869312243c6f99a558715e357327926713ec2b",
         "uncertainties": [],
         "intent_matches": [],
-        "schema_version": 1,
+        "schema_version": 2,
         "planning_credits": [
           "mtb_aerobic",
           "mtb_technical"
@@ -2820,7 +2538,7 @@
         "source_hash": "50a4de58ac51cfa1d22b92ba4de7ec76f4d294561c07525e469b99be741c6c96",
         "uncertainties": [],
         "intent_matches": [],
-        "schema_version": 1,
+        "schema_version": 2,
         "planning_credits": [
           "run_hill_quality"
         ],
@@ -2849,32 +2567,9 @@
         "activity_id": 20337309419,
         "source_hash": "147c69a4dccf963d0267b2cb14d78ef12cf961342ba08fd63e747f2b02c81749",
         "uncertainties": [],
-        "intent_matches": [
-          {
-            "stimuli": [
-              "swim_aerobic",
-              "swim_technique"
-            ],
-            "evidence": {
-              "basis": "comparable_scalar_dose",
-              "metric": "distance_m",
-              "expected_value": 3200.0,
-              "matching_basis": "same_discipline_and_comparable_planned_dose",
-              "observed_value": 3000.0,
-              "relative_error": 0.0625
-            },
-            "relation": "fulfills_planned_dose",
-            "day_delta": -3,
-            "confidence": "high",
-            "target_date": "2026-09-23",
-            "workout_key": "archive:2026-W39:legacy:2026-09-23:3"
-          }
-        ],
-        "schema_version": 1,
-        "planning_credits": [
-          "swim_aerobic",
-          "swim_technique"
-        ],
+        "intent_matches": [],
+        "schema_version": 2,
+        "planning_credits": [],
         "observed_structure": {
           "run_time_intervals": {
             "structured": false
@@ -2901,7 +2596,7 @@
         "source_hash": "a676c18711434b5edd0cd82aab2637ae6c38e8b77cbebbfc7d18391193de274d",
         "uncertainties": [],
         "intent_matches": [],
-        "schema_version": 1,
+        "schema_version": 2,
         "planning_credits": [],
         "observed_structure": {
           "run_time_intervals": {
@@ -2939,7 +2634,7 @@
         "source_hash": "51d201799c9c1da133a1e40de5f6ccd4eb2a520e7a7ce0ca58eba84d822c2b73",
         "uncertainties": [],
         "intent_matches": [],
-        "schema_version": 1,
+        "schema_version": 2,
         "planning_credits": [
           "run_easy_distance"
         ],
@@ -2969,7 +2664,7 @@
         "source_hash": "c9a82d743ecedde5f397b3b907d8d964f37bf8dc0b3c552af77cd4f7f2ce6c00",
         "uncertainties": [],
         "intent_matches": [],
-        "schema_version": 1,
+        "schema_version": 2,
         "planning_credits": [],
         "observed_structure": {
           "run_time_intervals": {
@@ -3016,7 +2711,7 @@
         "source_hash": "254fc19f0c2597267075213ad47e9664613725e755e4d4f076aac316dd8f8a50",
         "uncertainties": [],
         "intent_matches": [],
-        "schema_version": 1,
+        "schema_version": 2,
         "planning_credits": [
           "strength_core",
           "strength_unilateral"
@@ -3045,31 +2740,12 @@
         "stimuli": [],
         "activity_id": 20381137043,
         "source_hash": "ec8e5806fce8adb3a04d34ce350cc42778e7ebc089d7caca34c96418a235fae9",
-        "uncertainties": [],
-        "intent_matches": [
-          {
-            "stimuli": [
-              "run_easy_distance"
-            ],
-            "evidence": {
-              "basis": "comparable_scalar_dose",
-              "metric": "duration_minutes",
-              "expected_value": 60.0,
-              "matching_basis": "same_discipline_and_comparable_planned_dose",
-              "observed_value": 62.58,
-              "relative_error": 0.0431
-            },
-            "relation": "fulfills_planned_dose",
-            "day_delta": -2,
-            "confidence": "high",
-            "target_date": "2026-09-27",
-            "workout_key": "archive:2026-W39:legacy:2026-09-27:7"
-          }
+        "uncertainties": [
+          "Intervallstruktur observerad men fysiologiskt stimulus kan inte fastställas från tillgänglig evidens."
         ],
-        "schema_version": 1,
-        "planning_credits": [
-          "run_easy_distance"
-        ],
+        "intent_matches": [],
+        "schema_version": 2,
+        "planning_credits": [],
         "observed_structure": {
           "run_time_intervals": {
             "structured": true,
@@ -3156,7 +2832,7 @@
         "source_hash": "5aae27398125b971d4d133d1af74b5f4d54f4044b983b1bfde1edd8af71450a5",
         "uncertainties": [],
         "intent_matches": [],
-        "schema_version": 1,
+        "schema_version": 2,
         "planning_credits": [],
         "observed_structure": {
           "run_time_intervals": {
@@ -3217,25 +2893,13 @@
           "activity_id": 20203770266
         },
         {
-          "date": "2026-09-21",
-          "family": "strength",
-          "source": "plan_matched",
-          "activity_id": 20272196080
-        },
-        {
           "date": "2026-09-23",
           "family": "swim",
           "source": "plan_matched",
           "activity_id": 20300494236
-        },
-        {
-          "date": "2026-09-26",
-          "family": "swim",
-          "source": "plan_matched",
-          "activity_id": 20337309419
         }
       ],
-      "verified_exposure_count": 5
+      "verified_exposure_count": 3
     },
     "mtb_technical": {
       "session_count": 7,
@@ -3359,25 +3023,13 @@
           "activity_id": 20203770266
         },
         {
-          "date": "2026-09-21",
-          "family": "strength",
-          "source": "plan_matched",
-          "activity_id": 20272196080
-        },
-        {
           "date": "2026-09-23",
           "family": "swim",
           "source": "plan_matched",
           "activity_id": 20300494236
-        },
-        {
-          "date": "2026-09-26",
-          "family": "swim",
-          "source": "plan_matched",
-          "activity_id": 20337309419
         }
       ],
-      "verified_exposure_count": 5
+      "verified_exposure_count": 3
     },
     "swim_threshold": {
       "evidence": [
@@ -3485,37 +3137,13 @@
       },
       "verified_exposures": [
         {
-          "date": "2026-09-15",
-          "family": "run",
-          "source": "plan_matched",
-          "activity_id": 20188628588
-        },
-        {
-          "date": "2026-09-18",
-          "family": "run",
-          "source": "plan_matched",
-          "activity_id": 20229568713
-        },
-        {
-          "date": "2026-09-22",
-          "family": "run",
-          "source": "plan_matched",
-          "activity_id": 20284663236
-        },
-        {
           "date": "2026-09-27",
           "family": "run",
           "source": "confirmed_stimulus",
           "activity_id": 20350203020
-        },
-        {
-          "date": "2026-09-29",
-          "family": "run",
-          "source": "plan_matched",
-          "activity_id": 20381137043
         }
       ],
-      "verified_exposure_count": 5
+      "verified_exposure_count": 1
     },
     "strength_unilateral": {
       "session_count": 7,
@@ -3541,7 +3169,7 @@
       "verified_exposure_count": 2
     }
   },
-  "generated_at_utc": "2026-10-01T01:13:48.814094+00:00",
+  "generated_at_utc": "2026-10-01T05:42:35.877489+00:00",
   "capability_states": {
     "model": "capability_feedback_state_v1",
     "principle": "Kvantitativ progression kräver verifierad capability-evidens och dose-response. Teknikförmågor kan vara observerade men blir inte automatiskt progressionsredo från tid eller distans.",
@@ -3644,7 +3272,7 @@
         "progression_ready": false,
         "progression_state": "hold",
         "demonstrated_value": 3500.0,
-        "progression_reason": "Senaste jämförbara exponeringen innehåller en explicit varningssignal från användaren.",
+        "progression_reason": "Dos har demonstrerats/tolererats men saknar ännu upprepad stödjande respons för att klassas som absorberad.",
         "verified_exposures": [
           {
             "date": "2026-09-09",
@@ -3663,39 +3291,23 @@
             "elapsed_time_s": 4323
           },
           {
-            "date": "2026-09-21",
-            "family": "strength",
-            "source": "plan_matched",
-            "distance_m": 0.0,
-            "activity_id": 20272196080,
-            "elapsed_time_s": 2014
-          },
-          {
             "date": "2026-09-23",
             "family": "swim",
             "source": "plan_matched",
             "distance_m": 3200.0,
             "activity_id": 20300494236,
             "elapsed_time_s": 3537
-          },
-          {
-            "date": "2026-09-26",
-            "family": "swim",
-            "source": "plan_matched",
-            "distance_m": 3000.0,
-            "activity_id": 20337309419,
-            "elapsed_time_s": 3822
           }
         ],
-        "progression_reason_code": "direct_caution",
-        "verified_exposure_count": 5,
+        "progression_reason_code": "not_yet_absorbed",
+        "verified_exposure_count": 3,
         "latest_verified_exposure": {
-          "date": "2026-09-26",
+          "date": "2026-09-23",
           "family": "swim",
           "source": "plan_matched",
-          "distance_m": 3000.0,
-          "activity_id": 20337309419,
-          "elapsed_time_s": 3822
+          "distance_m": 3200.0,
+          "activity_id": 20300494236,
+          "elapsed_time_s": 3537
         }
       },
       "mtb_technical": {
@@ -3893,39 +3505,23 @@
             "elapsed_time_s": 4323
           },
           {
-            "date": "2026-09-21",
-            "family": "strength",
-            "source": "plan_matched",
-            "distance_m": 0.0,
-            "activity_id": 20272196080,
-            "elapsed_time_s": 2014
-          },
-          {
             "date": "2026-09-23",
             "family": "swim",
             "source": "plan_matched",
             "distance_m": 3200.0,
             "activity_id": 20300494236,
             "elapsed_time_s": 3537
-          },
-          {
-            "date": "2026-09-26",
-            "family": "swim",
-            "source": "plan_matched",
-            "distance_m": 3000.0,
-            "activity_id": 20337309419,
-            "elapsed_time_s": 3822
           }
         ],
         "progression_reason_code": "qualitative_capability_requires_quality_review",
-        "verified_exposure_count": 5,
+        "verified_exposure_count": 3,
         "latest_verified_exposure": {
-          "date": "2026-09-26",
+          "date": "2026-09-23",
           "family": "swim",
           "source": "plan_matched",
-          "distance_m": 3000.0,
-          "activity_id": 20337309419,
-          "elapsed_time_s": 3822
+          "distance_m": 3200.0,
+          "activity_id": 20300494236,
+          "elapsed_time_s": 3537
         }
       },
       "swim_threshold": {
@@ -4057,9 +3653,9 @@
           "run_easy_distance",
           "run_easy_trail"
         ],
-        "absorbed_value": 77.93,
-        "evidence_state": "absorbed",
-        "tolerated_value": 77.93,
+        "absorbed_value": null,
+        "evidence_state": "demonstrated",
+        "tolerated_value": null,
         "progression_axes": [
           "session_duration",
           "terrain_specificity",
@@ -4068,32 +3664,8 @@
         "progression_ready": false,
         "progression_state": "hold",
         "demonstrated_value": 80.07,
-        "progression_reason": "Senaste jämförbara exponeringen har stödjande passrespons men 72 h-observationsfönstret är ännu inte komplett.",
+        "progression_reason": "Senaste jämförbara exponeringen innehåller en explicit varningssignal från användaren.",
         "verified_exposures": [
-          {
-            "date": "2026-09-15",
-            "family": "run",
-            "source": "plan_matched",
-            "distance_m": 13128.5,
-            "activity_id": 20188628588,
-            "elapsed_time_s": 3843
-          },
-          {
-            "date": "2026-09-18",
-            "family": "run",
-            "source": "plan_matched",
-            "distance_m": 15006.4,
-            "activity_id": 20229568713,
-            "elapsed_time_s": 4676
-          },
-          {
-            "date": "2026-09-22",
-            "family": "run",
-            "source": "plan_matched",
-            "distance_m": 12897.3,
-            "activity_id": 20284663236,
-            "elapsed_time_s": 3687
-          },
           {
             "date": "2026-09-27",
             "family": "run",
@@ -4101,25 +3673,17 @@
             "distance_m": 13455.0,
             "activity_id": 20350203020,
             "elapsed_time_s": 4804
-          },
-          {
-            "date": "2026-09-29",
-            "family": "run",
-            "source": "plan_matched",
-            "distance_m": 13135.4,
-            "activity_id": 20381137043,
-            "elapsed_time_s": 3755
           }
         ],
-        "progression_reason_code": "recovery_window_open",
-        "verified_exposure_count": 5,
+        "progression_reason_code": "direct_caution",
+        "verified_exposure_count": 1,
         "latest_verified_exposure": {
-          "date": "2026-09-29",
+          "date": "2026-09-27",
           "family": "run",
-          "source": "plan_matched",
-          "distance_m": 13135.4,
-          "activity_id": 20381137043,
-          "elapsed_time_s": 3755
+          "source": "confirmed_stimulus",
+          "distance_m": 13455.0,
+          "activity_id": 20350203020,
+          "elapsed_time_s": 4804
         }
       },
       "strength_unilateral": {

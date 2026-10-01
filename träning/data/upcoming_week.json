@@ -78,6 +78,7 @@
         "capability_refs": {},
         "enduro_exposures": 0,
         "planning_credits": [],
+        "family_day_indexes": {},
         "strength_exposures": 0,
         "completed_slot_days": 0,
         "direct_capabilities": [],
@@ -199,7 +200,7 @@
       "date": "2026-10-06",
       "label": "Tisdag",
       "sport": "swim",
-      "reason": "Lågmekanisk simexponering dagen efter fast enduro följer blockets planerade passkaraktär utan att anta att benen är redo för ny benkvalitet. Develop-vecka konsolideras för detta primära stimulus: Senaste jämförbara exponeringen innehåller en explicit varningssignal från användaren. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: consolidate; materialiserad relation: hold.",
+      "reason": "Lågmekanisk simexponering dagen efter fast enduro följer blockets planerade passkaraktär utan att anta att benen är redo för ny benkvalitet. Develop-vecka konsolideras för detta primära stimulus: Dos har demonstrerats/tolererats men saknar ännu upprepad stödjande respons för att klassas som absorberad. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: consolidate; materialiserad relation: hold.",
       "status": "preliminary",
       "session": "Simning · 3 200 m · aerob uthållighet",
       "stimuli": [
@@ -685,10 +686,10 @@
         "status": "synced",
         "transport": "intervals_icu",
         "source_hash": "944e4ff95b47682d54b06a0814b1c21ba38ca51672fa618b297ddf3218c0c8e9",
-        "updated_at_utc": "2026-10-01T01:18:26.197580+00:00",
+        "updated_at_utc": "2026-10-01T05:45:21.534864+00:00",
         "device_delivery": "unverified",
-        "verified_at_utc": "2026-10-01T01:18:26.197580+00:00",
-        "provider_event_id": 140362215
+        "verified_at_utc": "2026-10-01T05:45:21.534864+00:00",
+        "provider_event_id": 140390469
       },
       "block_intent": "develop",
       "dose_options": [
@@ -970,7 +971,7 @@
       "date": "2026-10-08",
       "label": "Torsdag",
       "sport": "swim",
-      "reason": "Lägg en självständig simexponering med en annan utvecklingskaraktär än veckans övriga simpass när katalog och belastningsordning stödjer det. Develop-vecka konsolideras för detta primära stimulus: Senaste jämförbara exponeringen innehåller en explicit varningssignal från användaren. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: establish; materialiserad relation: establish.",
+      "reason": "Lägg en självständig simexponering med en annan utvecklingskaraktär än veckans övriga simpass när katalog och belastningsordning stödjer det. Develop-vecka konsolideras för detta primära stimulus: Dos har demonstrerats/tolererats men saknar ännu upprepad stödjande respons för att klassas som absorberad. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: establish; materialiserad relation: establish.",
       "status": "preliminary",
       "session": "Simning · 3 200 m · grepp/teknik + aerob",
       "stimuli": [
@@ -1893,9 +1894,9 @@
       "date": "2026-10-10",
       "label": "Lördag",
       "sport": "run",
-      "reason": "Behåll lugn löptålighet med separation från löpkvalitet. Blueprint får variera passkaraktären men skapar inte en extra belastningsexponering. Dosgolvet utgår från absorberad nivå 77.93 i athlete_state.dose_response, inte från högsta genomförda värde. Veckobeslut: consolidate; materialiserad relation: hold.",
+      "reason": "Behåll lugn löptålighet med separation från löpkvalitet. Blueprint får variera passkaraktären men skapar inte en extra belastningsexponering. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 120 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: consolidate; materialiserad relation: hold.",
       "status": "preliminary",
-      "session": "Löpning · lugn stig/grus · 75 min",
+      "session": "Löpning · lugn stig/grus · 120 min",
       "stimuli": [
         "run_easy_distance"
       ],
@@ -1904,7 +1905,7 @@
       "device_sync": {
         "status": "deferred",
         "transport": "intervals_icu",
-        "source_hash": "46c2d2fe2d818d59d37163998ae77a1c4304a655e86a36ffc2604bccc2d7359b",
+        "source_hash": "b51c7b1b84a31bca7b367e73b1b4654983b0bf72e4a664c73bcd4ba110682d5b",
         "device_delivery": "unverified"
       },
       "block_intent": "develop",
@@ -1943,7 +1944,7 @@
       "priority_role": "flex",
       "device_workout": {
         "date": "2026-10-10",
-        "name": "Löpning · lugn stig/grus · 75 min",
+        "name": "Löpning · lugn stig/grus · 120 min",
         "sport": "run",
         "blocks": [
           {
@@ -1954,7 +1955,7 @@
                 "kind": "work",
                 "duration": {
                   "kind": "time",
-                  "seconds": 4500
+                  "seconds": 7200
                 },
                 "instruction": "Lugn tålighetslöpning på stig/grus med terrängvariation men utan fartjakt. Terräng väljs så att passet förblir aerobt och absorberbart.",
                 "intensity_class": "active"
@@ -1965,12 +1966,12 @@
         ],
         "transport": "intervals_icu",
         "external_id": "hall-device:2026-10-10:run:run_easy_trail_5",
-        "source_hash": "46c2d2fe2d818d59d37163998ae77a1c4304a655e86a36ffc2604bccc2d7359b",
+        "source_hash": "b51c7b1b84a31bca7b367e73b1b4654983b0bf72e4a664c73bcd4ba110682d5b",
         "detail_level": "structured",
         "provider_type": "Run",
         "target_policy": "explicit_single_primary_only",
         "schema_version": 1,
-        "source_candidate_id": "run-easy-trail-75"
+        "source_candidate_id": "run-easy-trail-120"
       },
       "microcycle_day": 6,
       "workout_design": {
@@ -1986,15 +1987,15 @@
         },
         "selection": {
           "method": "deterministic_constraint_scoring",
-          "reason_for_today": "Lateral terrängvariant med kontrollerad varaktighet.",
-          "preferred_dose_option_id": "run-easy-trail-75"
+          "reason_for_today": "Längre terrängdos endast när faktisk tålighet och närbelastning stödjer den.",
+          "preferred_dose_option_id": "run-easy-trail-120"
         },
         "candidates": [
           {
-            "id": "run-easy-trail-75",
+            "id": "run-easy-trail-120",
             "dose": {
               "kind": "duration_minutes",
-              "value": 75
+              "value": 120
             },
             "score": {
               "basis": "deterministic_constraint_alignment",
@@ -2007,8 +2008,8 @@
                 "prescription_specificity": 15
               }
             },
-            "intent": "Lateral terrängvariant med kontrollerad varaktighet.",
-            "session": "Löpning · lugn stig/grus · 75 min",
+            "intent": "Längre terrängdos endast när faktisk tålighet och närbelastning stödjer den.",
+            "session": "Löpning · lugn stig/grus · 120 min",
             "stimuli": [
               "run_easy_distance"
             ],
@@ -2017,7 +2018,7 @@
                 {
                   "name": "Pass",
                   "work": {
-                    "duration_s": 4500
+                    "duration_s": 7200
                   },
                   "intensity": "lugn",
                   "instruction": "Lugn tålighetslöpning på stig/grus med terrängvariation men utan fartjakt. Terräng väljs så att passet förblir aerobt och absorberbart."
@@ -2027,46 +2028,7 @@
               "executable": true,
               "completeness": "full"
             },
-            "dose_option_id": "run-easy-trail-75"
-          },
-          {
-            "id": "run-easy-trail-90",
-            "dose": {
-              "kind": "duration_minutes",
-              "value": 90
-            },
-            "score": {
-              "basis": "deterministic_constraint_alignment",
-              "total": 70,
-              "breakdown": {
-                "mesocycle_alignment": 30,
-                "microcycle_alignment": 10,
-                "near_term_resolution": 0,
-                "progression_alignment": 15,
-                "prescription_specificity": 15
-              }
-            },
-            "intent": "Lateral terrängvariant med kontrollerad varaktighet.",
-            "session": "Löpning · lugn stig/grus · 90 min",
-            "stimuli": [
-              "run_easy_distance"
-            ],
-            "prescription": {
-              "blocks": [
-                {
-                  "name": "Pass",
-                  "work": {
-                    "duration_s": 5400
-                  },
-                  "intensity": "lugn",
-                  "instruction": "Lugn tålighetslöpning på stig/grus med terrängvariation men utan fartjakt. Terräng väljs så att passet förblir aerobt och absorberbart."
-                }
-              ],
-              "source": "duration_session",
-              "executable": true,
-              "completeness": "full"
-            },
-            "dose_option_id": "run-easy-trail-90"
+            "dose_option_id": "run-easy-trail-120"
           },
           {
             "id": "run-easy-trail-105",
@@ -2108,10 +2070,10 @@
             "dose_option_id": "run-easy-trail-105"
           },
           {
-            "id": "run-easy-trail-120",
+            "id": "run-easy-trail-90",
             "dose": {
               "kind": "duration_minutes",
-              "value": 120
+              "value": 90
             },
             "score": {
               "basis": "deterministic_constraint_alignment",
@@ -2124,8 +2086,8 @@
                 "prescription_specificity": 15
               }
             },
-            "intent": "Längre terrängdos endast när faktisk tålighet och närbelastning stödjer den.",
-            "session": "Löpning · lugn stig/grus · 120 min",
+            "intent": "Lateral terrängvariant med kontrollerad varaktighet.",
+            "session": "Löpning · lugn stig/grus · 90 min",
             "stimuli": [
               "run_easy_distance"
             ],
@@ -2134,7 +2096,7 @@
                 {
                   "name": "Pass",
                   "work": {
-                    "duration_s": 7200
+                    "duration_s": 5400
                   },
                   "intensity": "lugn",
                   "instruction": "Lugn tålighetslöpning på stig/grus med terrängvariation men utan fartjakt. Terräng väljs så att passet förblir aerobt och absorberbart."
@@ -2144,7 +2106,46 @@
               "executable": true,
               "completeness": "full"
             },
-            "dose_option_id": "run-easy-trail-120"
+            "dose_option_id": "run-easy-trail-90"
+          },
+          {
+            "id": "run-easy-trail-75",
+            "dose": {
+              "kind": "duration_minutes",
+              "value": 75
+            },
+            "score": {
+              "basis": "deterministic_constraint_alignment",
+              "total": 70,
+              "breakdown": {
+                "mesocycle_alignment": 30,
+                "microcycle_alignment": 10,
+                "near_term_resolution": 0,
+                "progression_alignment": 15,
+                "prescription_specificity": 15
+              }
+            },
+            "intent": "Lateral terrängvariant med kontrollerad varaktighet.",
+            "session": "Löpning · lugn stig/grus · 75 min",
+            "stimuli": [
+              "run_easy_distance"
+            ],
+            "prescription": {
+              "blocks": [
+                {
+                  "name": "Pass",
+                  "work": {
+                    "duration_s": 4500
+                  },
+                  "intensity": "lugn",
+                  "instruction": "Lugn tålighetslöpning på stig/grus med terrängvariation men utan fartjakt. Terräng väljs så att passet förblir aerobt och absorberbart."
+                }
+              ],
+              "source": "duration_session",
+              "executable": true,
+              "completeness": "full"
+            },
+            "dose_option_id": "run-easy-trail-75"
           }
         ],
         "schema_version": 1,
@@ -2156,9 +2157,9 @@
           ],
           "selection_uses_only_preapproved_doses": true
         },
-        "selected_candidate_id": "run-easy-trail-75",
+        "selected_candidate_id": "run-easy-trail-120",
         "progression_from_previous": {
-          "reason": "Lateral terrängvariant med kontrollerad varaktighet.",
+          "reason": "Längre terrängdos endast när faktisk tålighet och närbelastning stödjer den.",
           "relation": "support",
           "demonstrated_floor_option_id": ""
         }
@@ -2166,8 +2167,8 @@
       "dose_resolution": {
         "kind": "duration_minutes",
         "state": "baseline",
-        "value": 75,
-        "option_id": "run-easy-trail-75"
+        "value": 120,
+        "option_id": "run-easy-trail-120"
       },
       "load_dimensions": [
         "cardiovascular",
@@ -2178,7 +2179,7 @@
       "planning_status": "preliminary",
       "microcycle_index": 2,
       "development_focus": "Lugn tålighetslöpning på stig/grus med terrängvariation men utan fartjakt. Terräng väljs så att passet förblir aerobt och absorberbart.",
-      "baseline_option_id": "run-easy-trail-75",
+      "baseline_option_id": "run-easy-trail-120",
       "development_character": "easy_trail"
     }
   ],

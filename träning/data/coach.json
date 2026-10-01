@@ -7,35 +7,35 @@
           "Simning · 3 700 m · 3 × (20 × 50 m): 3,70 km · 1:08:02 · snittpuls 128,8 · maxpuls 149.",
           "Användarrapport: 200 m insim. 3 × 50 m rotation med dolme, v 15 s. 2 × 75 m (1–2–3), v 15 s. Huvudserie: 3 × (20 × 50 m) med dolme + paddlar, cirka 35 s/50 m, v 15 s, serievila 90 s. 200 m avbad. Totalt 3 700 m. Genomfördes manuellt eftersom dagens planerade strukturerade simpass inte hann synkas till Garmin-klockan före start."
         ],
-        "summary": "Genomfört strukturerat simbasspass 3 700 m med stabil 60×50m huvudserie och konsekvent 68–72s/100m i huvudsetet.",
+        "summary": "Starkt genomfört strukturerat simpass: 3 700 m med huvudserie 3×(20×50 m) och stabila 50 m i 1:08–1:10/100m under serierna.",
         "unknowns": [
-          "24–72 h återhämtningsrespons (kan påverka nästa löppass).",
-          "Subjektiv RPE efter passet saknas — kan ändra beslut om trötthet rapporteras."
+          "Subjektiv återhämtning de närmaste 24–72 h (användarrapport saknar efterföljande dagseffekt)",
+          "Om nattens återhämtningsunderlaget/återhämtningsunderlaget påverkar toleransen för fredagarnas löppass"
         ],
         "confidence": "medium",
         "interpretations": [
-          "Passet visar god volym- och teknikexponering för swim_aerobic/technique och översteg planerat 3 200 m recept (gjorde 3 700 m).",
-          "Stabil pace över 60×50m (pace_first_to_last_delta 0s) indikerar konsekvent genomförande utan uppenbar försämring inom sessionen."
+          "Passet visar att 3 700 m simning med teknisk utrustning (dolme+paddlar) tolererades och genomfördes stabilt vilket stödjer mikrocykelns sim‑stimulus",
+          "Upprepad volym i simning denna vecka kräver att kommande 24–72 h beaktas innan hårdare benbelastning eller ökad simdos planeras"
         ],
-        "load_interpretation": "Kardiovaskulär och teknisk exponering kan inte nivåklassas mot personlig baslinje för simning samma dag men inga omedelbara varningssignaler i användarrapporten."
+        "load_interpretation": "Kardiovaskulär och teknisk simexponering är hög i kvällens pass; detta är en betydande simdos inom mikrocykelns 24–72 h‑fönster."
       },
       "auto_apply": {
-        "note": "Konservativ ändring applicerad på 2026-10-01: reduce.",
-        "applied": true
+        "note": "Ingen automatisk planändring.",
+        "applied": false
       },
       "activity_id": 20396959391,
       "plan_action": {
-        "action": "reduce",
-        "reason": "Utförd simdistans (3 700 m) överstiger planerat dosval 3 200 m samma dag; konservativt minska planerat simpass idag.",
-        "target_date": "2026-10-01",
+        "action": "keep",
+        "reason": "Simningen var genomförd och tolererbar; inga data indikerar att planerat lugnt löppass måste reduceras eller vila krävs.",
+        "target_date": "2026-10-02",
         "dose_option_id": "",
-        "recommendation": "Skala dagens planerade simpass 3 200 m ned till vila eller mycket lätt aktiv återhämtning (kort teknik/luftning 20–30 min i lugnt tempo) beroende på hur du känner dig nästa morgon. Om du känner dig helt pigg kan genomföra endast kort tekniskt set ±20–30 min; undvik ytterligare volym idag.",
+        "recommendation": "Behåll planerat lugnt löppass 2026-10-02 som schemalagt; undvik att lägga till extra benkvalitet innan 24–72 h‑respons är verifierad.",
         "requires_approval": false,
-        "target_workout_key": "20260928-run_threshold-swim_aerobic-swim_technique:mc1:2026-10-01:swim_aerobic_technique_1"
+        "target_workout_key": "20260928-run_threshold-swim_aerobic-swim_technique:mc1:2026-10-02:run_easy_distance_1"
       },
       "activity_date": "2026-09-30",
       "activity_name": "Simning på kvällen",
-      "generated_at_utc": "2026-10-01T01:18:24.601000+00:00",
+      "generated_at_utc": "2026-10-01T05:45:18.947225+00:00",
       "analysis_contract": {
         "pipeline_version": 4,
         "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
@@ -1371,9 +1371,9 @@
       "performance_protocol_key": null
     }
   ],
-  "last_run_utc": "2026-10-01T01:18:24.601000+00:00",
+  "last_run_utc": "2026-10-01T05:45:18.947225+00:00",
   "contract_version": 16,
-  "last_trigger_hash": "1ec5c3f87e673c40cac6f6f4ab7153368b78cec5ec551c22d0d683adc1bf55e6",
+  "last_trigger_hash": "8d965204c5a20dfbff01eddae2c4fcda1c71dc43c0498a37f357ced7e180766a",
   "analysed_activity_ids": [
     "20367593813",
     "20350203020",
