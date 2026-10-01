@@ -32,8 +32,17 @@ def dimension(name="mechanical_leg", level=LoadDimensionLevel.MODERATE):
     )
 
 
-def estimate(metric="duration", unit="minutes", low=60, high=60):
+def estimate(
+    metric="duration",
+    unit="minutes",
+    low=60,
+    high=60,
+    scope="global",
+    subject="training_duration",
+):
     return LoadEstimate(
+        scope=scope,
+        subject=subject,
         metric=metric,
         unit=unit,
         min_value=low,
