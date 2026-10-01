@@ -111,7 +111,7 @@ def _iso_day(value: Any, field: str) -> date:
         ) from exc
 
 
-def materialize_execution_facts(
+def materialize_execution_facts_document(
     *,
     canonical_profile_record: dict[str, Any],
     canonical_fixed_commitments: dict[str, Any],
@@ -119,7 +119,7 @@ def materialize_execution_facts(
     affected_until: date,
     future_context_through: date,
     planning_date: date,
-) -> ExecutionFactsProjection:
+) -> dict[str, Any]:
     if not all(
         isinstance(item, date)
         for item in (
@@ -260,4 +260,26 @@ def materialize_execution_facts(
             },
         },
     }
+    return document
+
+
+def materialize_execution_facts(
+    *,
+    canonical_profile_record: dict[str, Any],
+    canonical_fixed_commitments: dict[str, Any],
+    affected_from: date,
+    affected_until: date,
+    future_context_through: date,
+    planning_date: date,
+) -> ExecutionFactsProjection:
+    """Compile the exact document produced by the owned-source materializer."""
+
+    document = materialize_execution_facts_document(
+        canonical_profile_record=canonical_profile_record,
+        canonical_fixed_commitments=canonical_fixed_commitments,
+        affected_from=affected_from,
+        affected_until=affected_until,
+        future_context_through=future_context_through,
+        planning_date=planning_date,
+    )
     return compile_execution_facts_projection(document)
