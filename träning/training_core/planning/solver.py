@@ -67,6 +67,16 @@ class PlanningSolveRequest:
             raise PlanningContractError(
                 "solve affected window ends after StrategyRevision"
             )
+        outside_constraints = [
+            item.constraint_id
+            for item in context.placement_constraints
+            if not self.affected_from <= item.local_date <= self.affected_until
+        ]
+        if outside_constraints:
+            raise PlanningContractError(
+                "affected window must include every active placement constraint: "
+                + ", ".join(sorted(outside_constraints))
+            )
 
     @property
     def semantic_input_hash(self) -> str:
