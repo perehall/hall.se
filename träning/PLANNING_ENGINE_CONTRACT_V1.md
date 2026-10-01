@@ -139,6 +139,8 @@ The strategic layer MUST materialize bounded **planning obligations** rather tha
 - authorized progression axis/axes;
 - validity window.
 
+Exposure counts are scoped to that obligation's validity window. Recurrence is never implicit: a requirement such as "one threshold exposure per microcycle" MUST be represented by distinct date-scoped obligations (or a future explicit recurrence contract), not by one mesocycle-wide min/max count. Obligations whose validity does not intersect the affected solve window MUST NOT affect candidate generation or objective ranking.
+
 The solver may only create a non-fixed workout when it can reference an explicit planning obligation or an explicit user request. This prevents "more training" from improving the objective merely by adding duplicate sessions.
 
 ### 4.3 Athlete-declared constraints and preferences
