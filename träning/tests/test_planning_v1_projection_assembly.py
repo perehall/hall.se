@@ -133,6 +133,11 @@ def catalog_doc():
 
 def athlete_doc():
     return {
+        "fact_window": {
+            "start": (START - timedelta(days=6)).isoformat(),
+            "end": (START - timedelta(days=1)).isoformat(),
+        },
+        "recent_sessions": [],
         "capability_states": {
             "by_capability": {
                 "run_easy_distance": {
@@ -152,6 +157,8 @@ def athlete_doc():
             "schema_version": 1,
             "observed_training_revision": {
                 "revision_id": "observed-v1",
+                "coverage_from": (START - timedelta(days=6)).isoformat(),
+                "coverage_through": (START - timedelta(days=1)).isoformat(),
                 "source_refs": ["activity:test"],
                 "capability_evidence": [],
                 "load_exposures": [],
@@ -172,15 +179,28 @@ def policy_doc():
                     "rules": [],
                     "source_refs": ["policy:test"],
                 },
-                "objective_policy": {
-                    "schedule": {
-                        "preferred_active_days": 1,
-                        "min_active_days": 0,
-                        "max_active_days": 7,
-                        "double_sessions": "sometimes",
-                    },
-                    "spacing_preferences": [],
+                "spacing_preferences": [],
+            },
+        },
+    }
+
+
+def profile_doc():
+    return {
+        "status": "found",
+        "revision": 4,
+        "profile": {
+            "schema_version": 1,
+            "status": "complete",
+            "current_step": 12,
+            "preferences": {
+                "frequency": {
+                    "preferred_days": 1,
+                    "min_days": 1,
+                    "max_days": 7,
                 },
+                "double_sessions": "sometimes",
+                "rest_days": "load_driven",
             },
         },
     }
@@ -207,6 +227,7 @@ def assemble(**overrides):
         "canonical_strategy": strategy_doc(),
         "canonical_catalog": catalog_doc(),
         "canonical_athlete_state": athlete_doc(),
+        "canonical_athlete_profile": profile_doc(),
         "canonical_policy": policy_doc(),
         "canonical_execution_facts": execution_doc(),
     }
@@ -227,6 +248,7 @@ class V1ProjectionAssemblyTests(unittest.TestCase):
             dict(result.component_revisions),
             {
                 "catalog": "catalog-v1",
+                "athlete_profile": "athlete-profile:4",
                 "execution_facts": "facts-v1",
                 "observed_training": "observed-v1",
                 "policy": "policy-v1",
@@ -260,6 +282,7 @@ class V1ProjectionAssemblyTests(unittest.TestCase):
             canonical_strategy=empty,
             canonical_catalog=empty,
             canonical_athlete_state=empty,
+            canonical_athlete_profile=empty,
             canonical_policy=empty,
             canonical_execution_facts=empty,
         )
@@ -271,6 +294,7 @@ class V1ProjectionAssemblyTests(unittest.TestCase):
                 "strategy",
                 "catalog",
                 "observed_training",
+                "athlete_profile",
                 "policy",
                 "execution_facts",
             },
