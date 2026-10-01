@@ -48,6 +48,7 @@ def explicit_document():
                         "progression_axes": ["session_dose"],
                         "partial_coverage": [],
                         "prefer_character_variation": False,
+                        "accepted_observed_bases": ["confirmed_stimulus"],
                     }
                 ],
                 "load_envelope": {
@@ -94,6 +95,30 @@ class V1StrategyProjectionTests(unittest.TestCase):
         self.assertEqual(
             raised.exception.code,
             "MISSING_V1_STRATEGY_REVISION",
+        )
+
+    def test_observed_credit_basis_must_be_explicit_in_v1_strategy(self):
+        document = explicit_document()
+        obligation = document["planning_engine_v1"]["strategy_revision"]["obligations"][0]
+        obligation.pop("accepted_observed_bases")
+        with self.assertRaises(StrategyProjectionError) as raised:
+            compile_strategy_revision(document)
+        self.assertEqual(
+            raised.exception.code,
+            "INVALID_V1_STRATEGY_SOURCE",
+        )
+
+    def test_structural_credit_requires_explicit_strategy_opt_in(self):
+        document = explicit_document()
+        obligation = document["planning_engine_v1"]["strategy_revision"]["obligations"][0]
+        obligation["accepted_observed_bases"] = [
+            "confirmed_stimulus",
+            "structural_intent_match",
+        ]
+        result = compile_strategy_revision(document)
+        self.assertEqual(
+            tuple(item.value for item in result.obligations[0].accepted_observed_bases),
+            ("confirmed_stimulus", "structural_intent_match"),
         )
 
     def test_missing_exposure_bound_blocks_strategy_projection(self):
