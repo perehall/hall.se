@@ -1,10 +1,10 @@
-from .content import plan_content_hash, semantic_plan_payload
 """Planning Engine v1 domain boundary.
 
 This package is intentionally independent from the legacy adaptive planner.
 Only typed contracts live here until the new solver is implemented.
 """
 
+from .content import plan_content_hash, semantic_plan_payload
 from .models import (
     AggregateLoadEnvelope,
     CoverageRule,
@@ -14,10 +14,10 @@ from .models import (
     LoadDimensionLevel,
     LoadEstimate,
     PlanAuthorityState,
-    PlanningContractError,
     PlanAuthorityStatus,
     PlanContent,
     PlannedTrainingWorkout,
+    PlanningContractError,
     PlanningObligation,
     StrategyRevision,
     UnknownAggregatePolicy,
@@ -33,10 +33,10 @@ __all__ = [
     "LoadDimensionLevel",
     "LoadEstimate",
     "PlanAuthorityState",
-    "PlanningContractError",
     "PlanAuthorityStatus",
     "PlanContent",
     "PlannedTrainingWorkout",
+    "PlanningContractError",
     "PlanningObligation",
     "StrategyRevision",
     "UnknownAggregatePolicy",
