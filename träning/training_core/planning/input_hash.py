@@ -112,6 +112,9 @@ def semantic_planning_input_payload(
                 for rule in item.partial_coverage
             ),
             "prefer_character_variation": item.prefer_character_variation,
+            "accepted_observed_bases": sorted(
+                basis.value for basis in item.accepted_observed_bases
+            ),
         }
         for item in strategy.obligations
     ]
@@ -213,6 +216,7 @@ def semantic_planning_input_payload(
     observed_credits = [
         (
             item.local_date.isoformat(),
+            item.basis.value,
             *_contribution(item.contribution),
         )
         for item in context.observed_obligation_credits
