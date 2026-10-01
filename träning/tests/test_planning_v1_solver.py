@@ -831,6 +831,70 @@ class PlanningSolverV1Tests(unittest.TestCase):
             },
         )
 
+    def test_multi_capability_workout_cannot_bypass_missing_dose_eligibility(self):
+        combo = ApprovedWorkoutOption(
+            recipe_id="swim_combo",
+            dose_option_id="swim-combo-3600",
+            capabilities=("swim_aerobic", "swim_technique"),
+            components=(WorkoutComponentIntent("swim", 1),),
+            load_dimensions=(
+                dim("cardiovascular", LoadDimensionLevel.MODERATE),
+                dim("technical", LoadDimensionLevel.MODERATE),
+            ),
+            quantitative_load=(duration(70),),
+            source_refs=("catalog:test",),
+            development_character="aerobic_technique",
+        )
+        obligations = (
+            obligation(
+                "technique",
+                "swim_technique",
+                "swim_combo",
+            ),
+        )
+        technique_only = (
+            OptionEligibility(
+                recipe_id=combo.recipe_id,
+                dose_option_id=combo.dose_option_id,
+                capability="swim_technique",
+                kind=EligibilityKind.HOLD,
+                source_refs=("athlete:technique-only",),
+            ),
+        )
+        result = solve(
+            context(
+                obligations,
+                (combo,),
+                eligibility_values=technique_only,
+            )
+        )
+        self.assertFalse(result.blocked)
+        self.assertEqual(result.plan.workouts, ())
+        self.assertGreater(
+            result.objective_vector.required_deficit_by_tier[0],
+            0,
+        )
+
+        fully_eligible = technique_only + (
+            OptionEligibility(
+                recipe_id=combo.recipe_id,
+                dose_option_id=combo.dose_option_id,
+                capability="swim_aerobic",
+                kind=EligibilityKind.ESTABLISH,
+                source_refs=("athlete:aerobic-safe-dose",),
+            ),
+        )
+        result = solve(
+            context(
+                obligations,
+                (combo,),
+                eligibility_values=fully_eligible,
+            )
+        )
+        self.assertFalse(result.blocked)
+        self.assertEqual(len(result.plan.workouts), 1)
+        self.assertEqual(result.plan.workouts[0].recipe_id, "swim_combo")
+
     def test_user_remove_removes_placement_not_strategy_obligation(self):
         easy = option(
             "run_easy_distance",
