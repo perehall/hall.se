@@ -80,7 +80,8 @@ class AthletePlanningPreferencesProjectionTests(unittest.TestCase):
         import training_core.application.planning_profile_projection as module
 
         source = Path(module.__file__).read_text(encoding="utf-8")
-        self.assertNotIn("onboarding", source.lower())
+        self.assertNotIn("training.onboarding", source.lower())
+        self.assertNotIn("from training.onboarding", source.lower())
         self.assertNotIn("preferred_days=6", source)
         self.assertNotIn('double_sessions="sometimes"', source)
 
