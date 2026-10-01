@@ -594,7 +594,30 @@ def _validate_option_eligibility(
         (item.recipe_id, item.dose_option_id, item.capability)
         for item in context.option_eligibility
     }
+    catalog = _catalog_by_key(context.catalog_options)
     for workout in plan.workouts:
+        if not workout.obligation_contributions:
+            option = catalog.get((workout.recipe_id, workout.dose_option_id))
+            eligible_caps = {
+                capability
+                for recipe_id, dose_id, capability in allowed
+                if recipe_id == workout.recipe_id
+                and dose_id == workout.dose_option_id
+            }
+            if option is None or not eligible_caps.intersection(option.capabilities):
+                issues.append(
+                    ValidationIssue(
+                        "WORKOUT_OPTION_NOT_ELIGIBLE",
+                        "User-constrained workout is not athlete-eligible for any capability supplied by the approved option.",
+                        (
+                            workout.workout_id,
+                            workout.recipe_id,
+                            workout.dose_option_id,
+                        ),
+                    )
+                )
+            continue
+
         for contribution in workout.obligation_contributions:
             key = (
                 workout.recipe_id,
