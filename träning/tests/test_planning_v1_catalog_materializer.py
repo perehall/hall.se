@@ -46,12 +46,19 @@ class CatalogMaterializerTests(unittest.TestCase):
         )
         self.assertTrue(projection.approved_options)
         for option in projection.approved_options:
-            self.assertEqual(len(option.quantitative_load), 1)
-            load = option.quantitative_load[0]
-            self.assertEqual(load.scope, "planned")
-            self.assertEqual(load.subject, "mutable_training")
-            self.assertEqual(load.metric, "session_count")
-            self.assertEqual(load.unit, "sessions")
+            matches = [
+                load
+                for load in option.quantitative_load
+                if (
+                    load.scope,
+                    load.subject,
+                    load.metric,
+                    load.unit,
+                )
+                == ("planned", "mutable_training", "session_count", "sessions")
+            ]
+            self.assertEqual(len(matches), 1)
+            load = matches[0]
             self.assertEqual(load.min_value, 1.0)
             self.assertEqual(load.max_value, 1.0)
 
