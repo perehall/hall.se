@@ -91,6 +91,10 @@ __all__ = [
     "solve_planning_window",
     "planning_input_hash",
     "semantic_planning_input_payload",
+    "PlanChangeKind",
+    "UserPlanChange",
+    "compile_plan_change",
+    "merge_placement_constraints",
 ]
 
 from .validation import (
@@ -131,4 +135,12 @@ from .solver import (
 from .input_hash import (
     planning_input_hash,
     semantic_planning_input_payload,
+)
+
+
+from .requests import (
+    PlanChangeKind,
+    UserPlanChange,
+    compile_plan_change,
+    merge_placement_constraints,
 )
