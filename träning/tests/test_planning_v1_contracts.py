@@ -156,6 +156,8 @@ class LoadEstimateTests(unittest.TestCase):
     def test_quantitative_load_rejects_inverted_interval(self):
         with self.assertRaises(PlanningContractError):
             LoadEstimate(
+                scope="global",
+                subject="training_duration",
                 metric="duration",
                 unit="minutes",
                 min_value=120,
@@ -166,6 +168,8 @@ class LoadEstimateTests(unittest.TestCase):
     def test_quantitative_load_requires_provenance(self):
         with self.assertRaises(PlanningContractError):
             LoadEstimate(
+                scope="global",
+                subject="training_duration",
                 metric="duration",
                 unit="minutes",
                 min_value=60,
