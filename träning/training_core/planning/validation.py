@@ -349,6 +349,7 @@ def _validate_history_coverage(
             obligation.valid_from
             for obligation in context.strategy.obligations
             if obligation.valid_from < plan.affected_from
+            and obligation.valid_until >= plan.affected_from
         ),
         default=plan.affected_from,
     )
