@@ -212,7 +212,7 @@ def materialize_execution_facts_document(
             row.get("local_date"),
             f"fixed_commitments_revision.commitments[{index}].local_date",
         )
-        if local_date < affected_from or local_date > future_context_through:
+        if local_date < planning_date or local_date > future_context_through:
             continue
         # Preserve the typed semantics exactly. The downstream strict compiler
         # validates them; this layer never guesses dimensions or intensity.
