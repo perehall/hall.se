@@ -73,14 +73,58 @@ class PlanningV1ReadinessTests(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.data = Path(self.tmp.name)
-        for name in (
-            "training_strategy.json",
-            "planning_policy.json",
-        ):
-            (self.data / name).write_text(
-                json.dumps({"legacy": True}),
-                encoding="utf-8",
-            )
+        (self.data / "training_strategy.json").write_text(
+            json.dumps(
+                {
+                    "goal_contract": {"goal_hash": "goal-test"},
+                    "current_mesocycle": {
+                        "id": "meso-test",
+                        "start_date": "2026-10-05",
+                        "end_date": "2026-10-11",
+                        "contract": {
+                            "primary": ["run_easy_distance"],
+                            "protected_capacity": [],
+                        },
+                        "development_blueprint": [
+                            {
+                                "week_start": "2026-10-05",
+                                "week_end": "2026-10-11",
+                                "planned_variants": [
+                                    {
+                                        "role": "primary",
+                                        "capability": "run_easy_distance",
+                                        "recipe_key": "run_easy_distance",
+                                    }
+                                ],
+                                "protected_variants": [],
+                                "supporting_candidates": [],
+                            }
+                        ],
+                    },
+                }
+            ),
+            encoding="utf-8",
+        )
+        (self.data / "planning_policy.json").write_text(
+            json.dumps(
+                {
+                    "planning_engine_v1": {
+                        "schema_version": 1,
+                        "policy_revision": {
+                            "revision_id": "policy-test",
+                            "source_refs": ["policy:test"],
+                            "compatibility_policy": {
+                                "policy_id": "compat-test",
+                                "source_refs": ["policy:test"],
+                                "rules": [],
+                            },
+                            "spacing_preferences": [],
+                        },
+                    }
+                }
+            ),
+            encoding="utf-8",
+        )
         (self.data / "athlete_state.json").write_text(
             json.dumps(
                 {
@@ -163,7 +207,7 @@ class PlanningV1ReadinessTests(unittest.TestCase):
 
     def test_profile_and_execution_facts_are_built_from_owned_sources(self):
         report = self.report(verified_profile_loader())
-        self.assertFalse(report["ready"])
+        self.assertTrue(report["ready"], report["blockers"])
         self.assertEqual(
             report["source_status"]["athlete_profile"]["source"],
             "supabase_db",
@@ -176,13 +220,10 @@ class PlanningV1ReadinessTests(unittest.TestCase):
             report["source_status"]["execution_facts"],
             "materialized_from_owned_sources",
         )
-        codes = {item["code"] for item in report["blockers"]}
+        self.assertEqual(report["blockers"], [])
         self.assertEqual(
-            {
-                "MISSING_V1_STRATEGY_REVISION",
-                "MISSING_V1_POLICY_PROJECTION",
-            },
-            codes,
+            report["source_status"]["strategy"],
+            "materialized_from_mesocycle_blueprint",
         )
         self.assertEqual(
             report["source_status"]["catalog"],
