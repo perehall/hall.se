@@ -651,6 +651,8 @@ class DailyAvailability:
     def __post_init__(self) -> None:
         if not isinstance(self.local_date, date):
             raise PlanningContractError("availability.local_date must be a date")
+        if not isinstance(self.available, bool):
+            raise PlanningContractError("availability.available must be boolean")
         object.__setattr__(
             self,
             "source_refs",
