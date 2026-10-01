@@ -354,6 +354,73 @@ class PlannedTrainingWorkout:
 
 
 @dataclass(frozen=True)
+class ApprovedWorkoutOption:
+    """Planning projection of one approved recipe+dose catalog option."""
+
+    recipe_id: str
+    dose_option_id: str
+    capabilities: tuple[str, ...]
+    components: tuple[WorkoutComponentIntent, ...]
+    load_dimensions: tuple[LoadDimensionExposure, ...]
+    quantitative_load: tuple[LoadEstimate, ...]
+    source_refs: tuple[str, ...]
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "recipe_id", _required_text(self.recipe_id, "catalog.recipe_id"))
+        object.__setattr__(
+            self,
+            "dose_option_id",
+            _required_text(self.dose_option_id, "catalog.dose_option_id"),
+        )
+        object.__setattr__(
+            self,
+            "capabilities",
+            _unique_text_tuple(self.capabilities, "catalog.capabilities"),
+        )
+        object.__setattr__(
+            self,
+            "source_refs",
+            _unique_text_tuple(self.source_refs, "catalog.source_refs"),
+        )
+
+        components = tuple(self.components)
+        if not components:
+            raise PlanningContractError("catalog option must contain components")
+        orders = [item.order for item in components]
+        if len(set(orders)) != len(orders) or sorted(orders) != list(range(1, len(orders) + 1)):
+            raise PlanningContractError(
+                "catalog component order must be unique and contiguous starting at 1"
+            )
+        object.__setattr__(
+            self,
+            "components",
+            tuple(sorted(components, key=lambda item: item.order)),
+        )
+
+        dimensions = tuple(self.load_dimensions)
+        if not dimensions:
+            raise PlanningContractError("catalog option must declare load_dimensions")
+        if len({item.dimension for item in dimensions}) != len(dimensions):
+            raise PlanningContractError("catalog option contains duplicate load dimension")
+        object.__setattr__(self, "load_dimensions", dimensions)
+
+        quantitative = tuple(self.quantitative_load)
+        semantic_keys = [
+            (item.scope, item.subject, item.metric, item.unit)
+            for item in quantitative
+        ]
+        if len(set(semantic_keys)) != len(semantic_keys):
+            raise PlanningContractError(
+                "catalog option contains duplicate quantitative load semantic"
+            )
+        object.__setattr__(self, "quantitative_load", quantitative)
+
+    @property
+    def option_key(self) -> tuple[str, str]:
+        return self.recipe_id, self.dose_option_id
+
+
+@dataclass(frozen=True)
 class PlanContent:
     """Exact immutable training prescription for one affected planning window."""
 
