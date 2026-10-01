@@ -12,10 +12,12 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from training_core.planning import (  # noqa: E402
+    ContributionKind,
     FixedLoadCommitment,
     LoadDimensionExposure,
     LoadDimensionLevel,
     LoadEstimate,
+    ObligationContribution,
     PlanContent,
     PlannedTrainingWorkout,
     PlanningContractError,
@@ -57,7 +59,11 @@ def workout(
     day=date(2026, 10, 2),
     recipe_id="run_easy_distance",
     dose_option_id="run-easy-75",
-    obligation_ids=("easy-distance",),
+    obligation_id="easy-distance",
+    source_capability="run_easy_distance",
+    contribution_kind=ContributionKind.DIRECT,
+    credit_numerator=1,
+    credit_denominator=1,
     components=(WorkoutComponentIntent("run", 1),),
     within_day_order=None,
     source_refs=("solver:test",),
@@ -67,7 +73,15 @@ def workout(
         local_date=day,
         recipe_id=recipe_id,
         dose_option_id=dose_option_id,
-        obligation_ids=obligation_ids,
+        obligation_contributions=(
+            ObligationContribution(
+                obligation_id=obligation_id,
+                source_capability=source_capability,
+                kind=contribution_kind,
+                credit_numerator=credit_numerator,
+                credit_denominator=credit_denominator,
+            ),
+        ),
         components=components,
         load_dimensions=(dimension(),),
         quantitative_load=(estimate(low=75, high=75),),
@@ -131,7 +145,15 @@ class PlannedTrainingWorkoutTests(unittest.TestCase):
                 local_date=date(2026, 10, 2),
                 recipe_id="run_easy_distance",
                 dose_option_id="run-easy-75",
-                obligation_ids=("easy-distance",),
+                obligation_contributions=(
+                    ObligationContribution(
+                        obligation_id="easy-distance",
+                        source_capability="run_easy_distance",
+                        kind=ContributionKind.DIRECT,
+                        credit_numerator=1,
+                        credit_denominator=1,
+                    ),
+                ),
                 components=(WorkoutComponentIntent("run", 1),),
                 load_dimensions=(),
                 quantitative_load=(estimate(),),
@@ -187,7 +209,15 @@ class PlanContentHashTests(unittest.TestCase):
             local_date=date(2026, 10, 2),
             recipe_id="run_threshold",
             dose_option_id="run-threshold-4x8",
-            obligation_ids=("threshold",),
+            obligation_contributions=(
+                ObligationContribution(
+                    obligation_id="threshold",
+                    source_capability="run_threshold",
+                    kind=ContributionKind.DIRECT,
+                    credit_numerator=1,
+                    credit_denominator=1,
+                ),
+            ),
             components=(WorkoutComponentIntent("run", 1),),
             load_dimensions=(
                 dimension("cardiovascular", LoadDimensionLevel.HIGH),
@@ -201,7 +231,15 @@ class PlanContentHashTests(unittest.TestCase):
             local_date=date(2026, 10, 2),
             recipe_id="run_threshold",
             dose_option_id="run-threshold-4x8",
-            obligation_ids=("threshold",),
+            obligation_contributions=(
+                ObligationContribution(
+                    obligation_id="threshold",
+                    source_capability="run_threshold",
+                    kind=ContributionKind.DIRECT,
+                    credit_numerator=1,
+                    credit_denominator=1,
+                ),
+            ),
             components=(WorkoutComponentIntent("run", 1),),
             load_dimensions=tuple(reversed(first.load_dimensions)),
             quantitative_load=(estimate("work", "minutes", 32, 32),),
@@ -250,6 +288,28 @@ class PlanContentHashTests(unittest.TestCase):
         self.assertNotEqual(
             plan_content_hash(plan(workouts=(bike_run,))),
             plan_content_hash(plan(workouts=(run_bike,))),
+        )
+
+    def test_obligation_credit_change_changes_hash(self):
+        full = workout(
+            "w1",
+            obligation_id="easy-distance",
+            source_capability="run_easy_distance",
+            contribution_kind=ContributionKind.DIRECT,
+            credit_numerator=1,
+            credit_denominator=1,
+        )
+        half = workout(
+            "w1",
+            obligation_id="easy-distance",
+            source_capability="mtb_aerobic",
+            contribution_kind=ContributionKind.PARTIAL,
+            credit_numerator=1,
+            credit_denominator=2,
+        )
+        self.assertNotEqual(
+            plan_content_hash(plan(workouts=(full,))),
+            plan_content_hash(plan(workouts=(half,))),
         )
 
     def test_within_day_order_changes_hash(self):
