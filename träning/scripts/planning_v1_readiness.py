@@ -19,6 +19,7 @@ from pathlib import Path
 from typing import Any, Callable
 
 from athlete_profile_source import load_athlete_profile_for_planner
+from planning_activity_source import load_canonical_training_activities
 from training_core.application.planning_catalog_materializer import (
     CatalogMaterializationError,
     materialize_catalog_document,
@@ -32,6 +33,10 @@ from training_core.application.planning_execution_materializer import (
 from training_core.application.planning_fixed_commitments_source import (
     FixedCommitmentSourceError,
     resolve_fixed_commitments_document,
+)
+from training_core.application.planning_observed_materializer import (
+    ObservedTrainingMaterializationError,
+    materialize_observed_training_document,
 )
 from training_core.application.planning_projection_assembly import (
     assemble_canonical_shadow_projections,
@@ -132,6 +137,9 @@ def build_readiness_report(
     profile_loader: Callable[
         ..., tuple[dict[str, Any] | None, dict[str, Any]]
     ] = load_athlete_profile_for_planner,
+    activity_loader: Callable[
+        [date, date], tuple[list[dict[str, Any]], dict[str, Any]]
+    ] = load_canonical_training_activities,
 ) -> dict[str, Any]:
     """Inspect whether a real canonical shadow input can be assembled.
 
@@ -149,10 +157,11 @@ def build_readiness_report(
         raise ValueError("future_context_through cannot precede affected_until")
 
     catalog_source = _read_json(data_dir / "workout_catalog.json")
+    athlete_state_source = _read_json(data_dir / "athlete_state.json")
     documents: dict[str, dict[str, Any]] = {
         "strategy": _read_json(data_dir / "training_strategy.json"),
         "catalog_source": catalog_source,
-        "athlete_state": _read_json(data_dir / "athlete_state.json"),
+        "athlete_state_source": athlete_state_source,
         "policy": _read_json(data_dir / "planning_policy.json"),
     }
     source_blockers: list[dict[str, str]] = []
@@ -169,6 +178,63 @@ def build_readiness_report(
             )
         )
     documents["catalog"] = catalog_document or {}
+
+    observed_document: dict[str, Any] | None = None
+    observed_metadata: dict[str, Any] = {}
+    fact_window = athlete_state_source.get("fact_window")
+    if not isinstance(fact_window, dict):
+        source_blockers.append(
+            _source_blocker(
+                "observed_training_source",
+                "CANONICAL_FACT_WINDOW_MISSING",
+                "athlete_state.fact_window is required for observed-history coverage",
+            )
+        )
+    else:
+        try:
+            coverage_from = date.fromisoformat(str(fact_window.get("start")))
+            coverage_through = date.fromisoformat(str(fact_window.get("end")))
+            if coverage_through < coverage_from:
+                raise ValueError("coverage end precedes start")
+        except Exception:
+            source_blockers.append(
+                _source_blocker(
+                    "observed_training_source",
+                    "CANONICAL_FACT_WINDOW_INVALID",
+                    "athlete_state.fact_window must contain a valid start/end interval",
+                )
+            )
+        else:
+            try:
+                activity_rows, observed_metadata = activity_loader(
+                    coverage_from,
+                    coverage_through,
+                )
+                observed_document = materialize_observed_training_document(
+                    canonical_activities=activity_rows,
+                    canonical_athlete_state=athlete_state_source,
+                    canonical_catalog=catalog_source,
+                    coverage_from=coverage_from,
+                    coverage_through=coverage_through,
+                )
+            except ObservedTrainingMaterializationError as exc:
+                source_blockers.append(
+                    _source_blocker(
+                        "observed_training_source",
+                        exc.code,
+                        str(exc),
+                    )
+                )
+            except Exception as exc:
+                source_blockers.append(
+                    _source_blocker(
+                        "observed_training_source",
+                        "CANONICAL_ACTIVITY_HISTORY_UNAVAILABLE",
+                        f"activity source failed: {type(exc).__name__}",
+                    )
+                )
+
+    documents["athlete_state"] = observed_document or {}
 
     profile_record, profile_metadata, profile_blocker = _canonical_profile_record(
         profile_loader
@@ -237,6 +303,11 @@ def build_readiness_report(
         ):
             continue
         if (
+            item.stage == "athlete_state"
+            and "observed_training_source" in source_stages
+        ):
+            continue
+        if (
             item.stage == "athlete_profile"
             and "athlete_profile_source" in source_stages
         ):
@@ -280,6 +351,17 @@ def build_readiness_report(
                 "materialized_from_owned_source"
                 if catalog_document is not None
                 else "blocked"
+            ),
+            "observed_training": (
+                {
+                    "status": "materialized_from_canonical_activities",
+                    **observed_metadata,
+                }
+                if observed_document is not None
+                else {
+                    "status": "blocked",
+                    **observed_metadata,
+                }
             ),
             "athlete_profile": profile_metadata,
             "fixed_commitments": (
