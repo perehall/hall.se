@@ -610,7 +610,12 @@ class ObservedLoadExposure:
 
 @dataclass(frozen=True)
 class LoadCompatibilityRule:
-    """Generic hard interaction rule between two load dimensions."""
+    """Generic hard interaction rule between two load dimensions.
+
+    min_calendar_separation_days is the symmetric default. Optional directional
+    overrides let the model express different recovery interaction depending on
+    which load occurs first without introducing sport/day-specific rules.
+    """
 
     rule_id: str
     first_dimension: str
@@ -620,6 +625,8 @@ class LoadCompatibilityRule:
     min_calendar_separation_days: int
     same_day_order: SameDayOrderRule
     source_refs: tuple[str, ...]
+    min_first_to_second_days: int | None = None
+    min_second_to_first_days: int | None = None
 
     def __post_init__(self) -> None:
         object.__setattr__(self, "rule_id", _required_text(self.rule_id, "compatibility.rule_id"))
@@ -652,11 +659,42 @@ class LoadCompatibilityRule:
             raise PlanningContractError(
                 "compatibility.same_day_order must be SameDayOrderRule"
             )
+        for field in (
+            "min_first_to_second_days",
+            "min_second_to_first_days",
+        ):
+            value = getattr(self, field)
+            if value is not None and (
+                not isinstance(value, int) or value < 0
+            ):
+                raise PlanningContractError(
+                    f"compatibility.{field} must be >= 0 when supplied"
+                )
         object.__setattr__(
             self,
             "source_refs",
             _unique_text_tuple(self.source_refs, "compatibility.source_refs"),
         )
+
+    @property
+    def first_to_second_days(self) -> int:
+        return (
+            self.min_calendar_separation_days
+            if self.min_first_to_second_days is None
+            else self.min_first_to_second_days
+        )
+
+    @property
+    def second_to_first_days(self) -> int:
+        return (
+            self.min_calendar_separation_days
+            if self.min_second_to_first_days is None
+            else self.min_second_to_first_days
+        )
+
+    @property
+    def max_separation_days(self) -> int:
+        return max(self.first_to_second_days, self.second_to_first_days)
 
 
 @dataclass(frozen=True)
