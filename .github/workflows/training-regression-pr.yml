@@ -86,6 +86,40 @@ jobs:
           )
           PY
 
+      - name: Run Planning Engine v1 live shadow solve
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          test -n "$SUPABASE_DB_URL"
+          read -r PLANNING_DATE AFFECTED_FROM AFFECTED_UNTIL FUTURE_CONTEXT WEEK_KEY <<EOF
+          $(python - <<'PY'
+          from datetime import datetime, timedelta
+          from zoneinfo import ZoneInfo
+          today = datetime.now(ZoneInfo("Europe/Stockholm")).date()
+          start = today - timedelta(days=today.weekday())
+          end = start + timedelta(days=6)
+          future = end + timedelta(days=3)
+          iso = start.isocalendar()
+          print(
+              today.isoformat(),
+              start.isoformat(),
+              end.isoformat(),
+              future.isoformat(),
+              f"{iso.year}-W{iso.week:02d}",
+          )
+          PY
+          )
+          EOF
+          PYTHONPATH="träning" python "träning/scripts/planning_v1_shadow_run.py" \
+            --planning-date "$PLANNING_DATE" \
+            --affected-from "$AFFECTED_FROM" \
+            --affected-until "$AFFECTED_UNTIL" \
+            --future-context-through "$FUTURE_CONTEXT" \
+            --event-key "github:${GITHUB_RUN_ID}:${GITHUB_RUN_ATTEMPT}:planning-v1-shadow" \
+            --trigger-source "github_actions_pr_shadow" \
+            --microcycle-key "$WEEK_KEY" \
+            --audit-if-available
+
       - name: Probe architecture v2 directly against canonical PostgreSQL
         env:
           SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
