@@ -612,6 +612,34 @@ class PlanningSolverV1Tests(unittest.TestCase):
         self.assertFalse(first.blocked)
         self.assertFalse(second.blocked)
         self.assertEqual(plan_content_hash(first.plan), plan_content_hash(second.plan))
+        self.assertEqual(
+            first.trace.semantic_input_hash,
+            second.trace.semantic_input_hash,
+        )
+
+    def test_semantic_input_hash_changes_when_availability_changes(self):
+        easy = option(
+            "run_easy_distance",
+            "easy-60",
+            "run_easy_distance",
+            "run",
+            dimensions=(dim("cardiovascular", LoadDimensionLevel.LOW),),
+        )
+        obligations = (
+            obligation("easy", "run_easy_distance", "run_easy_distance"),
+        )
+        open_result = solve(context(obligations, (easy,)))
+        constrained_result = solve(
+            context(
+                obligations,
+                (easy,),
+                availability=only_day_available(date(2026, 10, 8)),
+            )
+        )
+        self.assertNotEqual(
+            open_result.trace.semantic_input_hash,
+            constrained_result.trace.semantic_input_hash,
+        )
 
     def test_unavoidable_fixed_conflict_blocks_instead_of_publishing_invalid_plan(self):
         dummy = option(
