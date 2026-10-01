@@ -189,6 +189,27 @@ def run_live_shadow(
             {"code": code, "count": count}
             for code, count in solved.trace.rejection_counts
         ],
+        "objective": (
+            {
+                "required_deficit_by_tier": [
+                    str(item)
+                    for item in solved.objective_vector.required_deficit_by_tier
+                ],
+                "unserved_required_by_tier": list(
+                    solved.objective_vector.unserved_required_by_tier
+                ),
+                "max_required_deficit_by_tier": [
+                    str(item)
+                    for item in solved.objective_vector.max_required_deficit_by_tier
+                ],
+                "discretionary_excess_by_tier": [
+                    str(item)
+                    for item in solved.objective_vector.discretionary_excess_by_tier
+                ],
+            }
+            if solved.objective_vector is not None
+            else None
+        ),
         "availability": [
             {
                 "date": item.local_date.isoformat(),
