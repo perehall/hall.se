@@ -97,6 +97,8 @@ __all__ = [
     "UserPlanChange",
     "compile_plan_change",
     "merge_placement_constraints",
+    "ObjectiveComparisonTrace",
+    "WorkoutAlternativeTrace",
     "WorkoutDecisionTrace",
     "PlanChangeTrace",
     "build_workout_decisions",
@@ -160,7 +162,9 @@ from .plan_changes import (
 
 
 from .trace import (
+    ObjectiveComparisonTrace,
     PlanChangeTrace,
+    WorkoutAlternativeTrace,
     WorkoutDecisionTrace,
     build_plan_changes,
     build_workout_decisions,
