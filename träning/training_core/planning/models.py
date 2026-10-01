@@ -60,6 +60,11 @@ class LoadDimensionLevel(str, Enum):
     UNKNOWN = "unknown"
 
 
+class ContributionKind(str, Enum):
+    DIRECT = "direct"
+    PARTIAL = "partial"
+
+
 @dataclass(frozen=True)
 class LoadDimensionExposure:
     """Categorical load used for compatibility when precise metrics are unavailable."""
@@ -168,6 +173,83 @@ class FixedLoadCommitment:
 
 
 @dataclass(frozen=True)
+class ObligationContribution:
+    """Exact contribution of one workout/exposure toward one obligation."""
+
+    obligation_id: str
+    source_capability: str
+    kind: ContributionKind
+    credit_numerator: int
+    credit_denominator: int
+
+    def __post_init__(self) -> None:
+        object.__setattr__(
+            self,
+            "obligation_id",
+            _required_text(self.obligation_id, "contribution.obligation_id"),
+        )
+        object.__setattr__(
+            self,
+            "source_capability",
+            _required_text(self.source_capability, "contribution.source_capability"),
+        )
+        if not isinstance(self.kind, ContributionKind):
+            raise PlanningContractError("contribution.kind must be ContributionKind")
+        if not isinstance(self.credit_numerator, int) or self.credit_numerator <= 0:
+            raise PlanningContractError(
+                "contribution.credit_numerator must be a positive integer"
+            )
+        if not isinstance(self.credit_denominator, int) or self.credit_denominator <= 0:
+            raise PlanningContractError(
+                "contribution.credit_denominator must be a positive integer"
+            )
+        if self.credit_numerator > self.credit_denominator:
+            raise PlanningContractError(
+                "obligation contribution cannot exceed one full exposure"
+            )
+
+    @property
+    def exact_credit(self) -> tuple[int, int]:
+        return self.credit_numerator, self.credit_denominator
+
+
+@dataclass(frozen=True)
+class ObservedObligationCredit:
+    """Immutable planning credit already earned by completed canonical training."""
+
+    local_date: date
+    contribution: ObligationContribution
+    source_refs: tuple[str, ...]
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.local_date, date):
+            raise PlanningContractError("observed obligation credit local_date must be a date")
+        object.__setattr__(
+            self,
+            "source_refs",
+            _unique_text_tuple(self.source_refs, "source_refs"),
+        )
+
+
+@dataclass(frozen=True)
+class ObservedLoadSample:
+    """Dated canonical load evidence used in rolling aggregate validation."""
+
+    local_date: date
+    load: LoadEstimate
+    source_refs: tuple[str, ...]
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.local_date, date):
+            raise PlanningContractError("observed load sample local_date must be a date")
+        object.__setattr__(
+            self,
+            "source_refs",
+            _unique_text_tuple(self.source_refs, "source_refs"),
+        )
+
+
+@dataclass(frozen=True)
 class WorkoutComponentIntent:
     """One ordered component of an intentionally multisport workout."""
 
@@ -192,7 +274,7 @@ class PlannedTrainingWorkout:
     local_date: date
     recipe_id: str
     dose_option_id: str
-    obligation_ids: tuple[str, ...]
+    obligation_contributions: tuple[ObligationContribution, ...]
     components: tuple[WorkoutComponentIntent, ...]
     load_dimensions: tuple[LoadDimensionExposure, ...]
     quantitative_load: tuple[LoadEstimate, ...]
@@ -214,11 +296,16 @@ class PlannedTrainingWorkout:
         if not isinstance(self.local_date, date):
             raise PlanningContractError("workout.local_date must be a date")
 
-        object.__setattr__(
-            self,
-            "obligation_ids",
-            _unique_text_tuple(self.obligation_ids, "obligation_ids"),
-        )
+        contributions = tuple(self.obligation_contributions)
+        if not contributions:
+            raise PlanningContractError(
+                "workout must declare at least one obligation contribution"
+            )
+        if len({item.obligation_id for item in contributions}) != len(contributions):
+            raise PlanningContractError(
+                "workout contains duplicate contribution for one obligation"
+            )
+        object.__setattr__(self, "obligation_contributions", contributions)
         object.__setattr__(
             self,
             "source_refs",
