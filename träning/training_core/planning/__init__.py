@@ -53,4 +53,15 @@ __all__ = [
     "WorkoutComponentIntent",
     "plan_content_hash",
     "semantic_plan_payload",
+    "PlanValidationContext",
+    "ValidationIssue",
+    "ValidationReport",
+    "validate_plan_content",
 ]
+
+from .validation import (
+    PlanValidationContext,
+    ValidationIssue,
+    ValidationReport,
+    validate_plan_content,
+)
