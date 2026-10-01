@@ -186,6 +186,7 @@ class PlanningV1ReadinessTests(unittest.TestCase):
                 "classification": "training",
                 "elapsed_time_s": 3600.0,
                 "distance_m": 12000.0,
+                "confirmed_stimuli": [],
             }
         ], {
             "source": "supabase_db",
