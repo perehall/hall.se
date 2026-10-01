@@ -43,6 +43,49 @@ jobs:
       - name: Install PostgreSQL driver for v2 read-only probe
         run: python -m pip install "psycopg[binary]>=3.2,<4"
 
+      - name: Probe Planning Engine v1 canonical-source readiness
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          test -n "$SUPABASE_DB_URL"
+          read -r PLANNING_DATE AFFECTED_FROM AFFECTED_UNTIL FUTURE_CONTEXT <<EOF
+          $(python - <<'PY'
+          from datetime import datetime, timedelta
+          from zoneinfo import ZoneInfo
+          today = datetime.now(ZoneInfo("Europe/Stockholm")).date()
+          start = today - timedelta(days=today.weekday())
+          end = start + timedelta(days=6)
+          future = end + timedelta(days=3)
+          print(today.isoformat(), start.isoformat(), end.isoformat(), future.isoformat())
+          PY
+          )
+          EOF
+          set +e
+          PYTHONPATH="träning" python "träning/scripts/planning_v1_readiness.py" \
+            --planning-date "$PLANNING_DATE" \
+            --affected-from "$AFFECTED_FROM" \
+            --affected-until "$AFFECTED_UNTIL" \
+            --future-context-through "$FUTURE_CONTEXT" \
+            > /tmp/planning-v1-readiness.json
+          readiness_exit=$?
+          set -e
+          cat /tmp/planning-v1-readiness.json
+          test "$readiness_exit" -eq 0 -o "$readiness_exit" -eq 2
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(Path("/tmp/planning-v1-readiness.json").read_text(encoding="utf-8"))
+          assert report["solver_ran"] is False
+          assert report["production_mutated"] is False
+          assert report["source_revision"].startswith("readiness:")
+          assert report["window"]["planning_date"]
+          print(
+              "PLANNING_V1_READINESS",
+              "ready=" + str(report["ready"]).lower(),
+              "blockers=" + ",".join(item["code"] for item in report["blockers"]),
+          )
+          PY
+
       - name: Probe architecture v2 directly against canonical PostgreSQL
         env:
           SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
