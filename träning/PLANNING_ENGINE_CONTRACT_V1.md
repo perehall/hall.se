@@ -50,8 +50,8 @@ There is no post-planning "reconciliation" layer with independent authority.
 
 The engine MUST be:
 
-1. **Safe by construction** — invalid plans cannot be committed.
-2. **Predictable** — the same canonical input and engine version produce the same plan and decision trace.
+1. **Contract-valid by construction** — a committed plan cannot violate known hard constraints. This is not a claim that software can guarantee injury prevention or physiological safety under unknown data.
+2. **Predictable** — the same frozen canonical input, strategy input and engine version produce the same plan and decision trace.
 3. **Explainable** — every planned workout can be traced back to goals, evidence, constraints and selection priorities.
 4. **Adaptive** — actual training can replace, satisfy, reduce, move or remove future work without relying on the old schedule as truth.
 5. **Conservative under uncertainty** — missing evidence never becomes invented capacity, recovery or tolerance.
@@ -111,6 +111,19 @@ The engine receives the already resolved strategic/mesocycle intent:
 
 The microcycle solver MUST NOT independently reinterpret the complete goal portfolio into a different strategy.
 
+The strategic layer MUST materialize bounded **planning obligations** rather than only broad labels such as "primary" or "protected". Each obligation MUST have a stable id and declare, where applicable:
+
+- capability/stimulus;
+- role and priority class;
+- minimum required exposure count;
+- maximum useful exposure count;
+- permitted recipe family;
+- whether partial coverage is allowed and the exact mapping that grants it;
+- authorized progression axis/axes;
+- validity window.
+
+The solver may only create a non-fixed workout when it can reference an explicit planning obligation or an explicit user request. This prevents "more training" from improving the objective merely by adding duplicate sessions.
+
 ### 4.3 Athlete-declared constraints and preferences
 
 Examples:
@@ -161,6 +174,21 @@ The previous plan is NOT a fact about what should still happen.
 
 It is used only for the soft objective **plan stability**. Any previous workout that conflicts with stronger priorities or newly observed facts is discarded by normal candidate selection. It is never reinserted afterward.
 
+### 4.7 Source revision and canonicalization
+
+Every planning input MUST carry a monotonic or otherwise concurrency-safe source revision plus a canonical semantic hash.
+
+The hash MUST exclude incidental ordering, generated timestamps and transport metadata. Equivalent semantic inputs therefore hash identically.
+
+The final plan records:
+- source revision;
+- semantic input hash;
+- strategy/mesocycle revision;
+- catalog/policy version;
+- engine version.
+
+A plan whose source revision no longer matches current canonical planning state is **stale**, even if its content was previously valid.
+
 ---
 
 ## 5. Planning window
@@ -188,6 +216,7 @@ Minimum fields:
 
 - stable workout identity;
 - date;
+- optional declared time window or within-day order;
 - ordered components if explicitly multisport;
 - recipe identity;
 - selected catalog dose option;
@@ -205,6 +234,8 @@ Rules:
 - A brick, swimrun or triathlon session is one workout only when intentionally modeled with ordered components.
 - A date is never a workout identity.
 - Renderer grouping MUST NOT alter workout semantics.
+- Same-day ordering/separation MUST be represented explicitly when it matters to compatibility.
+- The engine MUST NOT invent clock times. If exact timing is unknown, it may use only abstract order/separation states supported by the input and catalog.
 
 ---
 
@@ -248,6 +279,17 @@ Automatic progression MUST require the capability's explicit progression readine
 
 Completion alone is not tolerance. Demonstrated maximum is not absorbed dose.
 
+Progression is multi-axis. The engine MUST treat at least the following as potential progression:
+- per-session dose;
+- intensity or intensity-density;
+- repetition/exposure count;
+- reduced recovery;
+- mechanical demand;
+- specificity;
+- total microcycle exposure in the capability/load dimension.
+
+The engine MUST NOT hold per-session dose constant while silently progressing training by adding another exposure or increasing another axis unless that axis is explicitly authorized by the mesocycle and supported by progression evidence.
+
 When absorbed/tolerated evidence is absent, a self-reported starting level MAY act as an establishment ceiling, but fresher verified demonstrated evidence with caution MUST cap that starting level conservatively.
 
 ### H7. Stimulus identity
@@ -260,20 +302,23 @@ Example: a completed run-threshold session does not satisfy an easy-distance dev
 
 ### H8. Load compatibility
 
-Every planned day and adjacent-day combination MUST satisfy generic load-compatibility constraints based on load dimensions and recovery interaction, not sport names or weekdays.
+Every planned session and every relevant rolling interaction window MUST satisfy generic load-compatibility constraints based on load dimensions and recovery interaction, not sport names or weekdays.
 
-This includes same-day multipass compatibility.
+The horizon is defined by the constraint itself; it is NOT limited to adjacent days. Same-day, 24 h, 48 h, 72 h or longer interactions may exist when explicitly modeled.
+
+This includes same-day multipass compatibility, order and separation.
 
 The constraint system MUST be able to express:
 
 - incompatible high mechanical-load clustering;
-- high-quality run adjacency restrictions;
+- high-quality run spacing restrictions;
 - external-load recovery interaction;
 - MTB/technical mechanical interaction;
 - strength/plyometric interference;
+- same-day order/separation requirements;
 - explicitly permitted low-conflict doubles.
 
-The catalog/load model owns these semantics.
+The catalog/load model owns these semantics. Unknown load interaction MUST NOT be treated as proven compatibility.
 
 ### H9. Cross-boundary validity
 
@@ -290,7 +335,14 @@ It MUST NOT silently:
 - ignore availability;
 - weaken a load constraint.
 
-The previous committed plan remains published until a valid new plan is committed.
+A newly persisted canonical fact MUST NOT leave an older plan falsely presented as current. `NoValidPlan` therefore commits a **PlanningBlocked** state for the new source revision. The last valid plan remains available for audit, but it is no longer authoritative for the affected mutable window.
+
+A PlanningBlocked state:
+- preserves completed truth and fixed commitments as context;
+- contains no newly invented mutable prescription;
+- identifies which previous future workouts are no longer current;
+- blocks fresh device delivery of stale mutable workouts;
+- requires explicit resolution/replanning before those workouts can again be presented as current prescription.
 
 ### H11. Single-authority finality
 
@@ -317,6 +369,59 @@ Unknown recovery, tolerance, classification or capacity MUST NOT be converted in
 
 When a decision depends on missing evidence and no safe catalog option exists, the engine MUST hold/reduce/defer rather than invent.
 
+### H15. Workout justification and bounded obligations
+
+Every non-fixed planned workout MUST reference at least one explicit planning obligation or explicit user request.
+
+An obligation MUST define a bounded useful exposure range. Additional duplicate workouts beyond that range cannot improve the objective vector and MUST NOT be generated as calendar filler.
+
+### H16. Aggregate load envelope
+
+Per-session validity is insufficient. The complete candidate plan MUST fit an explicit aggregate load envelope derived from canonical athlete state, mesocycle policy and approved establishment/progression rules.
+
+The envelope MAY use categorical or numeric bounds, but every bound must have provenance. It MUST NOT fabricate TSS, recovery scores or precision that the input does not support.
+
+The envelope MUST be able to bound, where supported by evidence:
+- total exposure count per capability;
+- cumulative duration/distance/dose;
+- quality-session count;
+- high-mechanical-load count;
+- rolling load in relevant load dimensions.
+
+When no trusted aggregate bound exists, automatic planning MUST NOT increase aggregate exposure above the most recent established comparable baseline solely to satisfy lower-priority objectives. A confirmed starting state may establish an initial ceiling; fresher caution evidence may lower it.
+
+### H17. Immutable plan content versus delivery metadata
+
+A committed `PlanContent` has a content hash. Downstream systems MAY attach delivery/publication metadata, but MUST NOT change anything that affects workout identity, date, recipe, dose, components, load semantics or planning status without a new solve and commit.
+
+Device-sync status, renderer state and publication timestamps therefore live outside the immutable training-content hash.
+
+### H18. Concurrency-safe commit
+
+Planning uses optimistic concurrency.
+
+A solver result may commit only if the canonical source revision used to build `PlanningInput` is still current at commit time. If a newer activity, feedback event, availability change or commitment arrives during solving, the commit MUST abort and the engine MUST solve again from the new revision.
+
+Duplicate events and duplicate planning triggers MUST be idempotent.
+
+### H19. Proven selection within the bounded candidate domain
+
+The solver MUST NOT silently commit a heuristic or time-limited approximation as if it were the selected optimum.
+
+Within the explicitly bounded candidate domain, the committed plan MUST either:
+- be proven lexicographically optimal under the objective order; or
+- use a deterministic selection algorithm whose completeness for that domain is established by design.
+
+If search is incomplete or resource limits are hit before this can be established, the outcome is a planning failure, not a lower-quality silent commit.
+
+### H20. Planner-introduced versus immutable conflicts
+
+Hard compatibility rules constrain what the planner is allowed to add.
+
+If user-declared/fixed commitments themselves create an unavoidable conflict, the engine MUST NOT rewrite those commitments to manufacture validity. It records the immutable conflict, adds no mutable work that worsens it, and returns PlanningBlocked or an explicitly constrained plan state according to policy.
+
+This distinction preserves user agency while preventing the planner from compounding an already fixed load conflict.
+
 ---
 
 ## 8. Soft objectives and deterministic priority
@@ -325,13 +430,15 @@ Among valid candidates, selection uses a **lexicographic objective vector**. We 
 
 Earlier objectives always outrank later ones.
 
-### S1. Fulfil primary microcycle intent
+### S1. Fulfil highest-priority planning obligations
 
-Maximize direct coverage of primary development capabilities that remain unsatisfied by actual completed work.
+Minimize unmet required exposure within the bounded primary obligations that remain unsatisfied by actual completed work.
 
-### S2. Preserve required protected capacity
+Do not reward duplicate coverage beyond an obligation's maximum useful exposure count.
 
-Meet explicit mesocycle maintenance/protection commitments when compatible with S1 and hard constraints.
+### S2. Fulfil protected/maintenance obligations
+
+Minimize unmet protected/maintenance obligations, respecting their bounded exposure ranges, when compatible with S1 and hard constraints.
 
 ### S3. Absorbable distribution
 
@@ -369,14 +476,14 @@ No randomness is permitted in production plan selection.
 
 ## 9. Candidate generation
 
-The engine SHOULD generate candidate **complete plans**, not greedily mutate one calendar day at a time.
+The engine MUST reason over **complete candidate plans**, not greedily mutate one calendar day at a time and then repair consequences.
 
-A valid implementation may use deterministic backtracking/search because the planning space is small.
+The candidate domain MUST be explicitly bounded by planning obligations, approved recipe/dose options, fixed commitments and valid placement windows. A valid implementation may use deterministic backtracking, branch-and-bound or a constraint solver. The contract does not assume exhaustive naive enumeration will always be small.
 
 Conceptually:
 
-1. Determine remaining required/eligible stimuli from mesocycle intent minus valid actual-work credit.
-2. Determine allowable catalog recipes/doses from capability state.
+1. Determine remaining bounded planning obligations from mesocycle intent minus valid actual-work credit.
+2. Determine allowable catalog recipes/doses and aggregate exposure bounds from capability state.
 3. Create placement domains for every candidate workout.
 4. Include fixed commitments as immutable placements.
 5. Search combinations.
@@ -465,6 +572,8 @@ All AI proposals are untrusted inputs until deterministic validation succeeds.
 
 The engine MUST have a deterministic fallback that can produce a valid conservative plan or `NoValidPlan` without AI.
 
+AI interpretation MUST NOT create or relax hard constraints, progression readiness, tolerance/absorption facts or canonical activity semantics on its own. If an AI interpretation is to affect those domains, it must first become an explicit versioned canonical input through a deterministic rule or user-confirmed action. Frozen canonical interpretation is part of the input hash; model sampling is never part of plan selection.
+
 ---
 
 ## 12. Decision trace
@@ -490,7 +599,12 @@ At minimum:
   - which alternatives lost and on which higher-priority objective;
 - differences from previous committed plan;
 - explicit reason for every removed/moved workout;
-- final invariant result.
+- final invariant result;
+- source revision and commit revision;
+- search/optimality status;
+- stale/fresh plan status.
+
+The trace need not enumerate every combinatorial candidate. It MUST record the decisive alternatives and objective/constraint reasons needed to explain the selected result, plus aggregated rejection/search statistics.
 
 Public UI may summarize this, but the canonical trace remains inspectable.
 
@@ -512,7 +626,11 @@ Contains:
 
 ### Technical failure
 
-A technical failure MUST NOT publish a partially mutated plan. The last committed valid plan remains authoritative.
+A technical failure MUST NOT publish a partially mutated plan.
+
+If canonical planning inputs have not changed, the last committed valid plan remains authoritative.
+
+If canonical planning inputs HAVE changed, the previous plan becomes stale because its source revision no longer matches current facts. The application layer MUST expose that stale state and MUST NOT present affected future workouts as a freshly validated current prescription. Device delivery for newly stale mutable content is blocked until planning succeeds or an explicit PlanningBlocked state is committed.
 
 ### Invariant failure
 
@@ -588,7 +706,14 @@ Minimum properties:
 9. Cross-stimulus scalar similarity never creates planning credit.
 10. If no valid plan exists, solver returns `NoValidPlan` rather than an invalid plan.
 
-The CI target is at least **10,000 generated planning cases** per full planning-core test run, using reproducible seeds.
+The CI target is at least **10,000 generated planning cases** per full planning-core test run, using reproducible seeds. This number is a stress target, not evidence by itself that the planner is correct.
+
+Generative coverage MUST additionally include:
+- boundary values for every hard constraint;
+- pairwise interaction coverage across hard constraints and objective classes;
+- multi-event sequences, not only static snapshots;
+- concurrency/interleaving tests;
+- mutation tests proving that weakening/removing a hard guard causes tests to fail.
 
 ### 15.3 Metamorphic tests
 
@@ -600,11 +725,14 @@ Examples:
 - add a spontaneous completed primary stimulus -> the same primary requirement cannot also remain merely because its old slot existed;
 - replace a completed workout with a different stimulus of equal duration -> planning credit changes according to semantics, not duration;
 - remove availability -> candidate space may expand, never by mutating past truth;
-- cross a Sunday/Monday week boundary -> adjacency constraints remain identical.
+- cross a Sunday/Monday week boundary -> rolling compatibility constraints remain identical;
+- increase exposure count while holding per-session dose constant -> progression guard still applies;
+- add a concurrent feedback/activity event during solve -> stale solver result cannot commit;
+- downstream device/publication metadata changes -> PlanContent hash remains identical.
 
 ### 15.4 Historical replay
 
-Replay all available canonical history up to the last 8 weeks through the new engine.
+Replay all available canonical history available to the project, with a minimum target of the last 8 weeks, through the new engine. Historical evidence horizons used by athlete-state reconstruction may extend further than the mutable planning window.
 
 The replay MUST:
 - never violate a hard invariant;
@@ -650,6 +778,16 @@ These scenarios are acceptance fixtures. Expected results should generally asser
 28. Develop microcycle with progression-ready=true: at most the permitted progression axis/step.
 29. Develop microcycle without progression evidence: explicit consolidation/hold.
 30. Device-sync failure after commit: canonical plan remains unchanged.
+31. Added second exposure with unchanged per-session dose: treated as progression.
+32. Total microcycle load exceeds established envelope despite individually valid sessions: rejected.
+33. Two fixed commitments create unavoidable conflict: user commitments remain, planner adds no worsening load and surfaces blocked/constrained state.
+34. New canonical activity arrives while solver is running: stale solve cannot commit.
+35. Planner returns NoValidPlan after a new activity: old future prescription is not silently left current.
+36. Technical planning failure after new canonical facts: previous plan is marked stale and affected device delivery is blocked.
+37. Same-day double where order matters but exact times are unknown: engine uses declared abstract order/separation and never invents clock times.
+38. AI interpretation changes wording but canonical facts do not change: plan remains identical.
+39. Equivalent input with shuffled ordering/timestamps: semantic input hash and plan remain identical.
+40. Search limit/resource exhaustion: no approximate plan is silently committed.
 
 New production defects MUST normally expand a general property/constraint test. A new scenario fixture is added only when it represents a genuinely distinct domain situation, not to patch one date/sport combination.
 
@@ -672,19 +810,23 @@ The new engine MUST NOT become production authority until all conditions are met
 - 100% hard-constraint unit tests green.
 - Curated scenario suite green.
 - At least 10,000 reproducible generated cases green.
-- Historical replay over all available history up to 8 weeks has zero hard-invariant breaches.
+- Boundary, interaction, sequence, concurrency and mutation-test suites green.
+- Historical replay over all available project history (minimum 8 weeks) has zero hard-invariant breaches.
 - Deterministic replay produces identical semantic output on repeated runs.
-- Failure-injection tests prove no partial plan publication.
+- Failure-injection tests prove no partial plan publication and no stale plan can masquerade as current.
+- Solver optimality/completeness contract is verified for the bounded candidate domain.
 
 ### Shadow mode
 
 Before cutover, the new engine runs in shadow against real inputs.
 
 Required:
-- at least two complete live microcycles;
+- at least four complete live microcycles;
+- at least 20 genuine live replanning events;
 - every replan event recorded with decision trace;
-- deliberate review of spontaneous-workout, multipass, fixed-load and week-boundary cases;
+- deliberate review of spontaneous-workout, multipass, fixed-load, user-change and week-boundary cases (live where they occur, otherwise deterministic replay fixtures);
 - zero unexplained hard-invariant failures;
+- zero stale/obsolete solver commits under concurrent-event tests;
 - any surprising valid decision must be explainable from the documented objective order, not from hidden special cases.
 
 ### Human acceptance
@@ -723,7 +865,8 @@ After cutover, remove the legacy planning/reconciliation paths rather than keepi
 
 It means:
 
-- it never violates its declared hard rules;
+- it never violates its declared hard rules for the facts it actually knows;
+- it never claims that contract validity is a guarantee against injury or bad outcomes under unknown information;
 - it never invents missing evidence;
 - it never hides conflicting constraints;
 - it cannot be changed after validation by another layer;
