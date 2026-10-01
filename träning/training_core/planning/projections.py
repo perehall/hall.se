@@ -10,6 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum
 
+from .objectives import ObjectivePolicy
 from .models import (
     ApprovedWorkoutOption,
     DailyAvailability,
@@ -32,6 +33,7 @@ class ProjectionKind(str, Enum):
     FIXED_COMMITMENTS = "fixed_commitments"
     AVAILABILITY = "availability"
     COMPATIBILITY = "load_compatibility_policy"
+    OBJECTIVE_POLICY = "objective_policy"
 
 
 @dataclass(frozen=True)
@@ -47,6 +49,7 @@ class ShadowProjectionBundle:
     fixed_commitments: tuple[FixedLoadCommitment, ...] | None = None
     availability: tuple[DailyAvailability, ...] | None = None
     compatibility_policy: LoadCompatibilityPolicy | None = None
+    objective_policy: ObjectivePolicy | None = None
 
     def __post_init__(self) -> None:
         revision = str(self.source_revision or "").strip()
@@ -172,6 +175,13 @@ def assess_shadow_readiness(
             _missing(
                 ProjectionKind.COMPATIBILITY,
                 "Explicit generic load-compatibility policy is missing.",
+            )
+        )
+    if bundle.objective_policy is None:
+        blockers.append(
+            _missing(
+                ProjectionKind.OBJECTIVE_POLICY,
+                "Explicit schedule/spacing objective policy is missing.",
             )
         )
 
