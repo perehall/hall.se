@@ -70,6 +70,8 @@ class ObservedCapabilityEvidence:
 @dataclass(frozen=True)
 class ObservedTrainingProjection:
     revision_id: str
+    coverage_from: date
+    coverage_through: date
     capability_evidence: tuple[ObservedCapabilityEvidence, ...]
     load_exposures: tuple[ObservedLoadExposure, ...]
     source_refs: tuple[str, ...]
@@ -82,6 +84,18 @@ class ObservedTrainingProjection:
                 "revision_id must be non-empty",
             )
         object.__setattr__(self, "revision_id", revision)
+        if not isinstance(self.coverage_from, date) or not isinstance(
+            self.coverage_through, date
+        ):
+            raise ObservedTrainingProjectionError(
+                "INVALID_V1_OBSERVED_TRAINING",
+                "coverage_from/coverage_through must be dates",
+            )
+        if self.coverage_through < self.coverage_from:
+            raise ObservedTrainingProjectionError(
+                "INVALID_V1_OBSERVED_TRAINING",
+                "coverage_through cannot precede coverage_from",
+            )
 
         evidence = tuple(self.capability_evidence)
         ids = [item.evidence_id for item in evidence]
@@ -311,8 +325,67 @@ def compile_observed_training_projection(
                 str(exc),
             ) from exc
 
+    coverage_from = _date(
+        source.get("coverage_from"),
+        "observed_training_revision.coverage_from",
+    )
+    coverage_through = _date(
+        source.get("coverage_through"),
+        "observed_training_revision.coverage_through",
+    )
+
+    expected_activity_refs = {
+        f"activity:{item.get('id')}"
+        for item in root.get("recent_sessions", [])
+        if isinstance(item, dict)
+        and item.get("id") is not None
+        and str(item.get("classification") or "") == "training"
+        and coverage_from
+        <= _date(
+            item.get("date"),
+            "recent_sessions[].date",
+        )
+        <= coverage_through
+    }
+    actual_activity_refs = {
+        item.exposure_id
+        for item in loads
+        if item.exposure_id.startswith("activity:")
+    }
+
+    missing_activity_refs = sorted(
+        expected_activity_refs - actual_activity_refs
+    )
+    unexpected_activity_refs = sorted(
+        actual_activity_refs - expected_activity_refs
+    )
+    if missing_activity_refs or unexpected_activity_refs:
+        raise ObservedTrainingProjectionError(
+            "INCOMPLETE_V1_OBSERVED_LOAD_COVERAGE",
+            (
+                f"missing={missing_activity_refs} "
+                f"unexpected={unexpected_activity_refs}"
+            ),
+        )
+
+    fact_window = root.get("fact_window")
+    if isinstance(fact_window, dict):
+        fact_start = _date(fact_window.get("start"), "fact_window.start")
+        fact_end = _date(fact_window.get("end"), "fact_window.end")
+        if coverage_from < fact_start or coverage_through > fact_end:
+            raise ObservedTrainingProjectionError(
+                "V1_OBSERVED_COVERAGE_OUTSIDE_FACT_WINDOW",
+                (
+                    f"coverage={coverage_from.isoformat()}.."
+                    f"{coverage_through.isoformat()} fact_window="
+                    f"{fact_start.isoformat()}..{fact_end.isoformat()}"
+                ),
+            )
+
     return ObservedTrainingProjection(
         revision_id=str(source.get("revision_id") or ""),
+        coverage_from=coverage_from,
+        coverage_through=coverage_through,
         capability_evidence=tuple(evidence),
         load_exposures=tuple(loads),
         source_refs=_strings(
