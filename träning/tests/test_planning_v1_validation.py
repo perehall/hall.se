@@ -26,6 +26,7 @@ from training_core.planning import (  # noqa: E402
     LoadDimensionLevel,
     LoadEstimate,
     ObligationContribution,
+    ObservedCreditBasis,
     ObservedLoadExposure,
     ObservedObligationCredit,
     OptionEligibility,
@@ -127,7 +128,11 @@ def option_mtb():
     )
 
 
-def easy_obligation(*, max_exposures=2):
+def easy_obligation(
+    *,
+    max_exposures=2,
+    accepted_observed_bases=(ObservedCreditBasis.CONFIRMED_STIMULUS,),
+):
     return PlanningObligation(
         obligation_id="easy-distance",
         capability="run_easy_distance",
@@ -141,6 +146,7 @@ def easy_obligation(*, max_exposures=2):
         source_refs=("strategy:easy",),
         progression_axes=("session_dose", "exposure_count"),
         partial_coverage=(CoverageRule("mtb_aerobic", 1, 2),),
+        accepted_observed_bases=accepted_observed_bases,
     )
 
 
@@ -576,6 +582,80 @@ class FinalPlanningValidatorTests(unittest.TestCase):
             context(observed_credits=(observed,)),
         )
         self.assertIn("OBLIGATION_MAX_EXCEEDED", report.codes())
+
+    def test_structural_observed_credit_is_rejected_without_strategy_opt_in(self):
+        observed = ObservedObligationCredit(
+            local_date=AFFECTED_FROM,
+            contribution=direct("easy-distance", "run_easy_distance"),
+            source_refs=("intent-match:1",),
+            basis=ObservedCreditBasis.STRUCTURAL_INTENT_MATCH,
+        )
+        report = validate_plan_content(
+            valid_plan(),
+            context(observed_credits=(observed,)),
+        )
+        self.assertIn(
+            "OBSERVED_CREDIT_BASIS_NOT_ACCEPTED",
+            report.codes(),
+        )
+
+    def test_structural_observed_credit_is_valid_when_strategy_explicitly_accepts_it(self):
+        observed = ObservedObligationCredit(
+            local_date=AFFECTED_FROM,
+            contribution=direct("easy-distance", "run_easy_distance"),
+            source_refs=("intent-match:1",),
+            basis=ObservedCreditBasis.STRUCTURAL_INTENT_MATCH,
+        )
+        opted_in = StrategyRevision(
+            revision_id="strategy-a",
+            goal_set_hash="goalhash",
+            valid_from=AFFECTED_FROM,
+            valid_until=date(2026, 11, 1),
+            obligations=(
+                easy_obligation(
+                    accepted_observed_bases=(
+                        ObservedCreditBasis.CONFIRMED_STIMULUS,
+                        ObservedCreditBasis.STRUCTURAL_INTENT_MATCH,
+                    )
+                ),
+                threshold_obligation(),
+            ),
+            load_envelope=envelope(),
+            source_refs=("goal:v1", "review:accepted"),
+            accepted_by="user_review",
+        )
+        report = validate_plan_content(
+            valid_plan(workouts=()),
+            context(
+                strategy_value=opted_in,
+                observed_credits=(observed,),
+            ),
+        )
+        self.assertNotIn(
+            "OBSERVED_CREDIT_BASIS_NOT_ACCEPTED",
+            report.codes(),
+        )
+
+    def test_observed_credit_must_match_obligation_contribution_semantics(self):
+        observed = ObservedObligationCredit(
+            local_date=AFFECTED_FROM,
+            contribution=ObligationContribution(
+                obligation_id="easy-distance",
+                source_capability="mtb_aerobic",
+                kind=ContributionKind.DIRECT,
+                credit_numerator=1,
+                credit_denominator=1,
+            ),
+            source_refs=("activity:bad-credit",),
+        )
+        report = validate_plan_content(
+            valid_plan(),
+            context(observed_credits=(observed,)),
+        )
+        self.assertIn(
+            "OBSERVED_CREDIT_SEMANTICS_MISMATCH",
+            report.codes(),
+        )
 
     def test_observed_credit_outside_obligation_window_is_rejected(self):
         observed = ObservedObligationCredit(
