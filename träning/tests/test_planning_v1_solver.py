@@ -17,6 +17,7 @@ from training_core.planning.candidate_generation import CandidateGenerationLimit
 from training_core.planning.models import (  # noqa: E402
     AggregateLoadEnvelope,
     ApprovedWorkoutOption,
+    ContributionKind,
     CoverageRule,
     DailyAvailability,
     EligibilityKind,
@@ -27,7 +28,12 @@ from training_core.planning.models import (  # noqa: E402
     LoadDimensionExposure,
     LoadDimensionLevel,
     LoadEstimate,
+    ObligationContribution,
+    ObservedLoadExposure,
+    ObservedObligationCredit,
     OptionEligibility,
+    PlanContent,
+    PlannedTrainingWorkout,
     PlanningObligation,
     PlanningContractError,
     SameDayOrderRule,
@@ -202,6 +208,8 @@ def context(
     max_minutes=1000,
     eligibility_values=None,
     placement=(),
+    observed_credits=(),
+    observed_exposures=(),
 ):
     return PlanValidationContext(
         source_revision="source-1",
@@ -219,6 +227,8 @@ def context(
         compatibility_policy=compatibility or policy(),
         placement_constraints=tuple(placement),
         availability=tuple(availability),
+        observed_obligation_credits=tuple(observed_credits),
+        observed_load_exposures=tuple(observed_exposures),
     )
 
 
@@ -915,6 +925,168 @@ class PlanningSolverV1Tests(unittest.TestCase):
         )
         with self.assertRaises(PlanningContractError):
             compile_plan_change(change, base.plan)
+
+    def test_spontaneous_quality_never_allows_stale_future_quality_to_resurrect(self):
+        threshold = option(
+            "run_threshold",
+            "threshold-32",
+            "run_threshold",
+            "run",
+            dimensions=(
+                dim("cardiovascular", LoadDimensionLevel.HIGH),
+                dim("run_impact", LoadDimensionLevel.MODERATE),
+            ),
+            minutes=50,
+        )
+        stale_hill = option(
+            "run_hill_quality",
+            "hill-24",
+            "run_hill_quality",
+            "run",
+            dimensions=(
+                dim("neuromuscular", LoadDimensionLevel.HIGH),
+                dim("run_impact", LoadDimensionLevel.HIGH),
+            ),
+            minutes=45,
+        )
+        easy = option(
+            "run_easy_distance",
+            "easy-75",
+            "run_easy_distance",
+            "run",
+            dimensions=(
+                dim("cardiovascular", LoadDimensionLevel.LOW),
+                dim("run_impact", LoadDimensionLevel.MODERATE),
+            ),
+            minutes=75,
+        )
+        swim = option(
+            "swim_aerobic",
+            "swim-3200",
+            "swim_aerobic",
+            "swim",
+            dimensions=(dim("upper_body", LoadDimensionLevel.MODERATE),),
+            minutes=65,
+        )
+
+        obligations = (
+            obligation("threshold", "run_threshold", "run_threshold"),
+            obligation("easy", "run_easy_distance", "run_easy_distance"),
+            obligation(
+                "swim",
+                "swim_aerobic",
+                "swim_aerobic",
+                minimum=2,
+                maximum=2,
+            ),
+        )
+
+        observed_threshold = ObservedObligationCredit(
+            local_date=date(2026, 10, 4),
+            contribution=ObligationContribution(
+                obligation_id="threshold",
+                source_capability="run_threshold",
+                kind=ContributionKind.DIRECT,
+                credit_numerator=1,
+                credit_denominator=1,
+            ),
+            source_refs=("activity:spontaneous-threshold",),
+        )
+        observed_swim = ObservedObligationCredit(
+            local_date=date(2026, 10, 3),
+            contribution=ObligationContribution(
+                obligation_id="swim",
+                source_capability="swim_aerobic",
+                kind=ContributionKind.DIRECT,
+                credit_numerator=1,
+                credit_denominator=1,
+            ),
+            source_refs=("activity:completed-swim",),
+        )
+        observed_load = ObservedLoadExposure(
+            exposure_id="spontaneous-threshold-load",
+            local_date=date(2026, 10, 4),
+            load_dimensions=threshold.load_dimensions,
+            quantitative_load=threshold.quantitative_load,
+            source_refs=("activity:spontaneous-threshold",),
+        )
+
+        next_fixed = FixedLoadCommitment(
+            commitment_id="next-fixed-load",
+            local_date=date(2026, 10, 12),
+            label="Nästa fasta externa belastning",
+            load_dimensions=(dim("mechanical_leg", LoadDimensionLevel.HIGH),),
+            quantitative_load=(duration(90),),
+            source_refs=("user:fixed",),
+        )
+        compat = policy(
+            LoadCompatibilityRule(
+                rule_id="run-before-fixed-mechanical",
+                first_dimension="run_impact",
+                first_min_level=LoadDimensionLevel.MODERATE,
+                second_dimension="mechanical_leg",
+                second_min_level=LoadDimensionLevel.HIGH,
+                min_calendar_separation_days=2,
+                same_day_order=SameDayOrderRule.FORBIDDEN,
+                source_refs=("policy:test",),
+            )
+        )
+
+        old_hill_workout = PlannedTrainingWorkout(
+            workout_id="old-hill-friday",
+            local_date=date(2026, 10, 9),
+            recipe_id=stale_hill.recipe_id,
+            dose_option_id=stale_hill.dose_option_id,
+            obligation_contributions=(
+                ObligationContribution(
+                    obligation_id="threshold",
+                    source_capability="run_threshold",
+                    kind=ContributionKind.DIRECT,
+                    credit_numerator=1,
+                    credit_denominator=1,
+                ),
+            ),
+            components=stale_hill.components,
+            load_dimensions=stale_hill.load_dimensions,
+            quantitative_load=stale_hill.quantitative_load,
+            source_refs=("previous-plan",),
+        )
+        previous = PlanContent(
+            source_revision="old-source",
+            strategy_revision_id="strategy-test",
+            affected_from=START,
+            affected_until=END,
+            workouts=(old_hill_workout,),
+            fixed_commitments=(),
+        )
+
+        result = solve(
+            context(
+                obligations,
+                (threshold, stale_hill, easy, swim),
+                fixed=(next_fixed,),
+                compatibility=compat,
+                observed_credits=(observed_threshold, observed_swim),
+                observed_exposures=(observed_load,),
+            ),
+            previous_plan=previous,
+        )
+
+        self.assertFalse(result.blocked)
+        recipes = [item.recipe_id for item in result.plan.workouts]
+        self.assertEqual(sorted(recipes), ["run_easy_distance", "swim_aerobic"])
+        self.assertNotIn("run_threshold", recipes)
+        self.assertNotIn("run_hill_quality", recipes)
+        run_day = next(
+            item.local_date
+            for item in result.plan.workouts
+            if item.recipe_id == "run_easy_distance"
+        )
+        self.assertNotEqual(run_day, END)
+        self.assertIn(
+            "removed",
+            tuple(change.kind for change in result.trace.plan_changes),
+        )
 
     def test_unavoidable_fixed_conflict_blocks_instead_of_publishing_invalid_plan(self):
         dummy = option(
