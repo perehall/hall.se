@@ -27,6 +27,7 @@ from .models import (
     PlanningObligation,
     SameDayOrderRule,
     StrategyRevision,
+    WorkoutPlacementConstraint,
 )
 
 
@@ -60,6 +61,7 @@ class PlanValidationContext:
     option_eligibility: tuple[OptionEligibility, ...]
     fixed_commitments: tuple[FixedLoadCommitment, ...]
     compatibility_policy: LoadCompatibilityPolicy
+    placement_constraints: tuple[WorkoutPlacementConstraint, ...] = ()
     availability: tuple[DailyAvailability, ...] = ()
     closed_dates: tuple[date, ...] = ()
     observed_obligation_credits: tuple[ObservedObligationCredit, ...] = ()
@@ -135,6 +137,46 @@ class PlanValidationContext:
                 "fixed commitments contain duplicate known within-day order"
             )
         object.__setattr__(self, "fixed_commitments", commitments)
+
+        placement = tuple(self.placement_constraints)
+        constraint_ids = [item.constraint_id for item in placement]
+        if len(set(constraint_ids)) != len(constraint_ids):
+            raise PlanningContractError(
+                "validation context contains duplicate placement constraint id"
+            )
+        semantic_keys = [
+            (
+                item.local_date,
+                item.recipe_id,
+                item.dose_option_id,
+                item.obligation_ids,
+            )
+            for item in placement
+        ]
+        if len(set(semantic_keys)) != len(semantic_keys):
+            raise PlanningContractError(
+                "placement constraints must be compiled to one absolute count constraint per semantic placement"
+            )
+        for item in placement:
+            if item.option_key not in catalog_keys:
+                raise PlanningContractError(
+                    "placement constraint references recipe/dose outside approved catalog"
+                )
+            if not self.strategy.valid_from <= item.local_date <= self.strategy.valid_until:
+                raise PlanningContractError(
+                    "placement constraint lies outside StrategyRevision validity"
+                )
+            unknown_obligations = set(item.obligation_ids) - {
+                obligation.obligation_id
+                for obligation in self.strategy.obligations
+            }
+            if unknown_obligations:
+                raise PlanningContractError(
+                    "placement constraint references unknown obligations: "
+                    + ", ".join(sorted(unknown_obligations))
+                )
+        object.__setattr__(self, "placement_constraints", placement)
+
         object.__setattr__(
             self,
             "observed_obligation_credits",
@@ -895,6 +937,91 @@ def _validate_obligation_maxima(
             )
 
 
+def _validate_placement_constraints(
+    plan: PlanContent,
+    context: PlanValidationContext,
+    issues: list[ValidationIssue],
+) -> None:
+    constraints = {
+        item.constraint_id: item
+        for item in context.placement_constraints
+    }
+
+    for workout in plan.workouts:
+        for constraint_id in workout.constraint_ids:
+            constraint = constraints.get(constraint_id)
+            if constraint is None:
+                issues.append(
+                    ValidationIssue(
+                        "UNKNOWN_PLACEMENT_CONSTRAINT",
+                        "Workout references an unknown planning placement constraint.",
+                        (workout.workout_id, constraint_id),
+                    )
+                )
+                continue
+            if not constraint.matches(workout):
+                issues.append(
+                    ValidationIssue(
+                        "PLACEMENT_CONSTRAINT_ATTRIBUTION_MISMATCH",
+                        "Workout claims a placement constraint whose semantic selector it does not satisfy.",
+                        (workout.workout_id, constraint_id),
+                    )
+                )
+
+    for constraint in context.placement_constraints:
+        matches = [
+            workout
+            for workout in plan.workouts
+            if constraint.matches(workout)
+        ]
+        count = len(matches)
+        if count < constraint.min_occurrences:
+            issues.append(
+                ValidationIssue(
+                    "PLACEMENT_MIN_UNSATISFIED",
+                    "Resulting plan contains fewer matching workouts than the user planning constraint requires.",
+                    (
+                        constraint.constraint_id,
+                        str(count),
+                        str(constraint.min_occurrences),
+                    ),
+                )
+            )
+        if (
+            constraint.max_occurrences is not None
+            and count > constraint.max_occurrences
+        ):
+            issues.append(
+                ValidationIssue(
+                    "PLACEMENT_MAX_EXCEEDED",
+                    "Resulting plan contains more matching workouts than the user planning constraint permits.",
+                    (
+                        constraint.constraint_id,
+                        str(count),
+                        str(constraint.max_occurrences),
+                    ),
+                )
+            )
+
+        if constraint.min_occurrences:
+            attributed = sum(
+                constraint.constraint_id in workout.constraint_ids
+                for workout in matches
+            )
+            if attributed < constraint.min_occurrences:
+                issues.append(
+                    ValidationIssue(
+                        "PLACEMENT_REQUIRED_PROVENANCE_MISSING",
+                        "Required user-planning placement exists but is not explicitly attributed to its constraint.",
+                        (
+                            constraint.constraint_id,
+                            str(attributed),
+                            str(constraint.min_occurrences),
+                        ),
+                    )
+                )
+
+
 def _matching_load(load: LoadEstimate, bound) -> bool:
     return (
         load.scope == bound.scope
@@ -975,5 +1102,6 @@ def validate_plan_content(
     _validate_availability(plan, context, issues)
     _validate_load_compatibility(plan, context, issues)
     _validate_obligation_maxima(plan, context, issues)
+    _validate_placement_constraints(plan, context, issues)
     _validate_aggregate_load(plan, context, issues)
     return ValidationReport(tuple(issues))
