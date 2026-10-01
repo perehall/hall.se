@@ -128,6 +128,7 @@ def explicit_bundle():
         observed_load=(),
         fixed_commitments=(),
         availability=(),
+        closed_dates=(),
         compatibility_policy=LoadCompatibilityPolicy(
             policy_id="compat-v1",
             rules=(),
