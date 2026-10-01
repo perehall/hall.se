@@ -21,7 +21,7 @@ from datetime import date
 from statistics import mean, median
 
 
-PROFILE_SCHEMA_VERSION = 1
+PROFILE_SCHEMA_VERSION = 2
 RUN_TYPES = {"Run", "TrailRun", "VirtualRun"}
 SWIM_TYPES = {"Swim"}
 BIKE_TYPES = {"Ride", "MountainBikeRide", "VirtualRide"}
@@ -683,6 +683,7 @@ def build_training_profile(
     durable_matches = []
     if (
         isinstance(previous_profile, dict)
+        and previous_profile.get("schema_version") == PROFILE_SCHEMA_VERSION
         and previous_profile.get("source_hash") == source_hash
     ):
         durable_matches = [
