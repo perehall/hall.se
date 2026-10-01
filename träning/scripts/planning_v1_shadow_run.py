@@ -206,6 +206,26 @@ def run_live_shadow(
             }
             for item in bundle.fixed_commitments
         ],
+        "obligations": [
+            {
+                "obligation_id": item.obligation_id,
+                "capability": item.capability,
+                "role": item.role,
+                "min_exposures": item.min_exposures,
+                "max_exposures": item.max_exposures,
+                "recipe_family": list(item.recipe_family),
+            }
+            for item in bundle.strategy.obligations
+        ],
+        "observed_credits": [
+            {
+                "date": item.local_date.isoformat(),
+                "obligation_id": item.contribution.obligation_id,
+                "source_capability": item.contribution.source_capability,
+                "basis": item.basis.value,
+            }
+            for item in bundle.observed_credits
+        ],
         "closed_dates": [item.isoformat() for item in bundle.closed_dates],
         "planning_state_mutated": False,
         "audit_status": audit_status,
