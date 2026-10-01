@@ -335,6 +335,8 @@ class PlanAuthorityStateTests(unittest.TestCase):
             semantic_input_hash="newinput",
             strategy_revision_id="strategy-a",
             engine_version="v1",
+            affected_from=date(2026, 10, 1),
+            affected_until=date(2026, 10, 7),
             previous_valid_plan_hash="oldplan",
             blocked_reason_codes=("NO_VALID_PLAN",),
             invalidated_workout_keys=("future-run-1",),
@@ -389,6 +391,8 @@ class PlanAuthorityStateTests(unittest.TestCase):
             semantic_input_hash="inputhash",
             strategy_revision_id="strategy-a",
             engine_version="v1",
+            affected_from=date(2026, 10, 1),
+            affected_until=date(2026, 10, 7),
             plan_content_hash="planhash",
         )
         self.assertTrue(state.is_fresh_for("42"))
