@@ -230,6 +230,49 @@ def materialize_catalog_document(
                         ],
                     }
                 )
+            else:
+                option_v1 = option.get("planning_v1")
+                if option_v1 is not None and not isinstance(option_v1, dict):
+                    raise CatalogMaterializationError(
+                        "CATALOG_V1_DURATION_INVALID",
+                        f"{recipe_id}/{dose_option_id}.planning_v1 must be object",
+                    )
+                option_v1 = option_v1 or {}
+                duration_cap = option_v1.get("max_session_duration_minutes")
+                if duration_cap is not None:
+                    if (
+                        isinstance(duration_cap, bool)
+                        or not isinstance(duration_cap, (int, float))
+                        or float(duration_cap) <= 0
+                    ):
+                        raise CatalogMaterializationError(
+                            "CATALOG_V1_DURATION_INVALID",
+                            (
+                                f"{recipe_id}/{dose_option_id} explicit duration "
+                                "cap must be positive numeric minutes"
+                            ),
+                        )
+                    refs = _unique_strings(
+                        option_v1.get("duration_cap_source_refs"),
+                        (
+                            f"recipes.{recipe_id}.options[{option_index}]."
+                            "planning_v1.duration_cap_source_refs"
+                        ),
+                    )
+                    quantitative_load.append(
+                        {
+                            "scope": "global",
+                            "subject": "training_duration",
+                            "metric": "duration",
+                            "unit": "minutes",
+                            "min_value": 0,
+                            "max_value": duration_cap,
+                            "provenance_refs": [
+                                option_ref,
+                                *refs,
+                            ],
+                        }
+                    )
 
             options.append(
                 {
