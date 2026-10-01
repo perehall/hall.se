@@ -138,7 +138,7 @@ from .input_hash import (
 )
 
 
-from .requests import (
+from .plan_changes import (
     PlanChangeKind,
     UserPlanChange,
     compile_plan_change,
