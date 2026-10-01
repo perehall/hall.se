@@ -44,6 +44,23 @@ Weather, coaching text, rendering, device sync and publication are projections o
 
 There is no post-planning "reconciliation" layer with independent authority.
 
+### 1.1 Two planning levels, one explicit authority chain
+
+The replacement must not make the weekly solver robust while leaving the old mesocycle generator as a hidden second authority.
+
+Planning has two explicit levels:
+
+1. **Strategy revision** — goal portfolio -> mesocycle intent, bounded planning obligations, protected capacities, progression axes, evaluation triggers and load-envelope policy.
+2. **Execution solve** — one committed StrategyRevision + current canonical facts -> complete affected-window plan.
+
+A StrategyRevision is immutable and versioned once committed. The execution solver never edits strategy.
+
+For V1, a new StrategyRevision MAY be proposed by AI, but it MUST NOT become autonomous production authority merely because it validates structurally. Until an autonomous strategic-policy contract has its own acceptance tests, strategy changes require an explicit accepted revision through the coaching/user-review path.
+
+Cutover from the legacy adaptive planner is blocked if legacy mesocycle generation can still silently change the obligations consumed by the new solver.
+
+This keeps weekly execution deterministic while making strategic changes infrequent, inspectable and separately governable.
+
 ---
 
 ## 2. Design goals
@@ -109,7 +126,7 @@ The engine receives the already resolved strategic/mesocycle intent:
 - progression axes;
 - success criteria.
 
-The microcycle solver MUST NOT independently reinterpret the complete goal portfolio into a different strategy.
+The execution solver MUST NOT independently reinterpret the complete goal portfolio into a different strategy. It consumes one committed StrategyRevision.
 
 The strategic layer MUST materialize bounded **planning obligations** rather than only broad labels such as "primary" or "protected". Each obligation MUST have a stable id and declare, where applicable:
 
@@ -430,15 +447,15 @@ Among valid candidates, selection uses a **lexicographic objective vector**. We 
 
 Earlier objectives always outrank later ones.
 
-### S1. Fulfil highest-priority planning obligations
+### S1. Fulfil planning obligations by declared priority tier
 
-Minimize unmet required exposure within the bounded primary obligations that remain unsatisfied by actual completed work.
+Minimize unmet bounded obligations in explicit priority-tier order. Primary, protected and maintenance roles do not receive hidden priority merely from their names; the committed StrategyRevision defines their tier.
 
 Do not reward duplicate coverage beyond an obligation's maximum useful exposure count.
 
-### S2. Fulfil protected/maintenance obligations
+### S2. Preserve breadth within equal-priority obligations
 
-Minimize unmet protected/maintenance obligations, respecting their bounded exposure ranges, when compatible with S1 and hard constraints.
+When obligations share the same priority tier, prefer meeting their minimum useful exposure across the declared capability portfolio before adding extra exposure above another obligation's minimum. This prevents one capability from crowding out equally important protected breadth.
 
 ### S3. Absorbable distribution
 
@@ -800,7 +817,9 @@ The new engine MUST NOT become production authority until all conditions are met
 ### Code/architecture
 
 - New planning core has no dependency on legacy adaptive planner or JSON mutation pipeline.
-- There is exactly one training-content planning authority.
+- Legacy mesocycle generation cannot silently feed/change obligations after cutover.
+- StrategyRevision ownership is explicit and versioned.
+- There is exactly one training-content execution authority.
 - Manual overrides, coach suggestions and actual-driven replanning enter as solver inputs.
 - No stage after final plan commit can alter training content.
 - UI and device sync consume the same committed plan snapshot.
