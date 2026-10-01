@@ -41,7 +41,19 @@ def semantic_plan_payload(plan: PlanContent) -> dict:
                 "local_date": workout.local_date.isoformat(),
                 "recipe_id": workout.recipe_id,
                 "dose_option_id": workout.dose_option_id,
-                "obligation_ids": sorted(workout.obligation_ids),
+                "obligation_contributions": [
+                    {
+                        "obligation_id": contribution.obligation_id,
+                        "source_capability": contribution.source_capability,
+                        "kind": contribution.kind.value,
+                        "credit_numerator": contribution.credit_numerator,
+                        "credit_denominator": contribution.credit_denominator,
+                    }
+                    for contribution in sorted(
+                        workout.obligation_contributions,
+                        key=lambda contribution: contribution.obligation_id,
+                    )
+                ],
                 "components": [
                     {
                         "discipline": component.discipline,
