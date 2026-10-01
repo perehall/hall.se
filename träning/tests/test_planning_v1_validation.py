@@ -615,6 +615,104 @@ class FinalPlanningValidatorTests(unittest.TestCase):
         # 100 observed + 120 fixed upper bound + 75 easy + 50 threshold = 345 > 300.
         self.assertIn("AGGREGATE_LOAD_EXCEEDED", report.codes())
 
+    def test_unknown_required_aggregate_coverage_blocks_added_training(self):
+        strict_envelope = AggregateLoadEnvelope(
+            envelope_id="strict-duration",
+            bounds=(
+                LoadBound(
+                    bound_id="duration-complete-7d",
+                    scope="global",
+                    subject="training_duration",
+                    metric="duration",
+                    unit="minutes",
+                    window_days=7,
+                    max_value=600,
+                    provenance_refs=("strategy:explicit",),
+                    requires_complete_coverage=True,
+                ),
+            ),
+            unknown_policy=UnknownAggregatePolicy.BLOCK_INCREASE,
+            established_baseline_ref="athlete:explicit-baseline",
+            source_refs=("strategy:explicit",),
+        )
+        strict_strategy = StrategyRevision(
+            revision_id="strategy-a",
+            goal_set_hash="goalhash",
+            valid_from=AFFECTED_FROM,
+            valid_until=date(2026, 11, 1),
+            obligations=(easy_obligation(), threshold_obligation()),
+            load_envelope=strict_envelope,
+            source_refs=("goal:v1", "review:accepted"),
+            accepted_by="user_review",
+        )
+        unknown_observed = ObservedLoadExposure(
+            exposure_id="activity-without-duration-semantics",
+            local_date=date(2026, 10, 4),
+            load_dimensions=(dim("mechanical_leg", LoadDimensionLevel.MODERATE),),
+            quantitative_load=(),
+            source_refs=("activity:unknown-load",),
+        )
+        report = validate_plan_content(
+            valid_plan(),
+            context(
+                strategy_value=strict_strategy,
+                observed_exposures=(unknown_observed,),
+            ),
+        )
+        self.assertIn(
+            "AGGREGATE_LOAD_UNKNOWN_BLOCKS_INCREASE",
+            report.codes(),
+        )
+
+    def test_unknown_aggregate_coverage_allows_zero_new_mutable_training(self):
+        strict_envelope = AggregateLoadEnvelope(
+            envelope_id="strict-duration",
+            bounds=(
+                LoadBound(
+                    bound_id="duration-complete-7d",
+                    scope="global",
+                    subject="training_duration",
+                    metric="duration",
+                    unit="minutes",
+                    window_days=7,
+                    max_value=600,
+                    provenance_refs=("strategy:explicit",),
+                    requires_complete_coverage=True,
+                ),
+            ),
+            unknown_policy=UnknownAggregatePolicy.BLOCK_INCREASE,
+            established_baseline_ref="athlete:explicit-baseline",
+            source_refs=("strategy:explicit",),
+        )
+        strict_strategy = StrategyRevision(
+            revision_id="strategy-a",
+            goal_set_hash="goalhash",
+            valid_from=AFFECTED_FROM,
+            valid_until=date(2026, 11, 1),
+            obligations=(easy_obligation(), threshold_obligation()),
+            load_envelope=strict_envelope,
+            source_refs=("goal:v1", "review:accepted"),
+            accepted_by="user_review",
+        )
+        unknown_observed = ObservedLoadExposure(
+            exposure_id="activity-without-duration-semantics",
+            local_date=date(2026, 10, 4),
+            load_dimensions=(dim("mechanical_leg", LoadDimensionLevel.MODERATE),),
+            quantitative_load=(),
+            source_refs=("activity:unknown-load",),
+        )
+        report = validate_plan_content(
+            valid_plan(workouts=()),
+            context(
+                strategy_value=strict_strategy,
+                observed_exposures=(unknown_observed,),
+            ),
+        )
+        self.assertNotIn(
+            "AGGREGATE_LOAD_UNKNOWN_BLOCKS_INCREASE",
+            report.codes(),
+        )
+
     def test_selected_option_must_be_athlete_eligible(self):
         report = validate_plan_content(
             valid_plan(),
