@@ -7,12 +7,16 @@ Only typed contracts live here until the new solver is implemented.
 from .content import plan_content_hash, semantic_plan_payload
 from .models import (
     AggregateLoadEnvelope,
+    ContributionKind,
     CoverageRule,
     FixedLoadCommitment,
     LoadBound,
     LoadDimensionExposure,
     LoadDimensionLevel,
     LoadEstimate,
+    ObligationContribution,
+    ObservedLoadSample,
+    ObservedObligationCredit,
     PlanAuthorityState,
     PlanAuthorityStatus,
     PlanContent,
@@ -26,12 +30,16 @@ from .models import (
 
 __all__ = [
     "AggregateLoadEnvelope",
+    "ContributionKind",
     "CoverageRule",
     "FixedLoadCommitment",
     "LoadBound",
     "LoadDimensionExposure",
     "LoadDimensionLevel",
     "LoadEstimate",
+    "ObligationContribution",
+    "ObservedLoadSample",
+    "ObservedObligationCredit",
     "PlanAuthorityState",
     "PlanAuthorityStatus",
     "PlanContent",
