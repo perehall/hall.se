@@ -469,7 +469,14 @@ class FinalPlanningValidatorTests(unittest.TestCase):
         )
         report = validate_plan_content(
             valid_plan(workouts=(row,)),
-            context(catalog=(alternate, option_threshold(), option_mtb())),
+            context(
+                catalog=(
+                    option_easy(),
+                    alternate,
+                    option_threshold(),
+                    option_mtb(),
+                )
+            ),
         )
         self.assertIn("DIRECT_RECIPE_OUTSIDE_OBLIGATION_FAMILY", report.codes())
 
