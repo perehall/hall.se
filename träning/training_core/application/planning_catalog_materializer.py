@@ -187,6 +187,50 @@ def materialize_catalog_document(
                     )
 
             option_ref = f"workout_catalog:option:{dose_option_id}"
+            quantitative_load = [
+                {
+                    "scope": "planned",
+                    "subject": "mutable_training",
+                    "metric": "session_count",
+                    "unit": "sessions",
+                    "min_value": 1,
+                    "max_value": 1,
+                    "provenance_refs": [
+                        option_ref,
+                        "planning_v1:one_catalog_option_is_one_session",
+                    ],
+                }
+            ]
+            option_kind = str(option.get("kind") or "").strip()
+            option_value = option.get("value")
+            if option_kind == "duration_minutes":
+                if (
+                    isinstance(option_value, bool)
+                    or not isinstance(option_value, (int, float))
+                    or float(option_value) <= 0
+                ):
+                    raise CatalogMaterializationError(
+                        "CATALOG_V1_DURATION_INVALID",
+                        (
+                            f"{recipe_id}/{dose_option_id} duration_minutes "
+                            "requires positive numeric option.value"
+                        ),
+                    )
+                quantitative_load.append(
+                    {
+                        "scope": "global",
+                        "subject": "training_duration",
+                        "metric": "duration",
+                        "unit": "minutes",
+                        "min_value": option_value,
+                        "max_value": option_value,
+                        "provenance_refs": [
+                            option_ref,
+                            "workout_catalog:option_kind:duration_minutes",
+                        ],
+                    }
+                )
+
             options.append(
                 {
                     "recipe_id": recipe_id,
@@ -209,20 +253,7 @@ def materialize_catalog_document(
                         }
                         for dimension in dimensions
                     ],
-                    "quantitative_load": [
-                        {
-                            "scope": "planned",
-                            "subject": "mutable_training",
-                            "metric": "session_count",
-                            "unit": "sessions",
-                            "min_value": 1,
-                            "max_value": 1,
-                            "provenance_refs": [
-                                option_ref,
-                                "planning_v1:one_catalog_option_is_one_session",
-                            ],
-                        }
-                    ],
+                    "quantitative_load": quantitative_load,
                     "source_refs": [
                         f"workout_catalog:recipe:{recipe_id}",
                         option_ref,
