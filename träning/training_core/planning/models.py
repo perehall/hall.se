@@ -95,6 +95,7 @@ class LoadEstimate:
     min_value: float
     max_value: float
     provenance_refs: tuple[str, ...]
+    requires_complete_coverage: bool = False
 
     def __post_init__(self) -> None:
         object.__setattr__(self, "scope", _required_text(self.scope, "load_estimate.scope"))
@@ -959,6 +960,10 @@ class LoadBound:
             raise PlanningContractError("max_value must be numeric")
         if float(self.max_value) < 0:
             raise PlanningContractError("max_value must be >= 0")
+        if not isinstance(self.requires_complete_coverage, bool):
+            raise PlanningContractError(
+                "requires_complete_coverage must be boolean"
+            )
 
         object.__setattr__(
             self,
