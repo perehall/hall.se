@@ -100,6 +100,7 @@ def semantic_planning_input_payload(
             "dimensions": sorted(_dimension(value) for value in item.load_dimensions),
             "load": sorted(_load(value) for value in item.quantitative_load),
             "character": item.development_character,
+            "planning_priority": item.planning_priority,
         }
         for item in context.catalog_options
     ]
