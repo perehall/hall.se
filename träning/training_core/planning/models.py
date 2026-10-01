@@ -95,7 +95,6 @@ class LoadEstimate:
     min_value: float
     max_value: float
     provenance_refs: tuple[str, ...]
-    requires_complete_coverage: bool = False
 
     def __post_init__(self) -> None:
         object.__setattr__(self, "scope", _required_text(self.scope, "load_estimate.scope"))
