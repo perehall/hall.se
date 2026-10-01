@@ -54,15 +54,8 @@ def athlete_state():
                 "date": "2026-09-29",
                 "classification": "training",
                 "training_profile": {
-                    "stimuli": [
-                        {
-                            "key": "run_threshold",
-                            "status": "confirmed",
-                            "confidence": "high",
-                            "source": "explicit_user_report",
-                        }
-                    ],
-                    "planning_credits": ["run_threshold"],
+                    "stimuli": [],
+                    "planning_credits": [],
                     "intent_matches": [],
                 },
             },
@@ -71,14 +64,16 @@ def athlete_state():
                 "date": "2026-09-30",
                 "classification": "training",
                 "training_profile": {
-                    "stimuli": [],
-                    "planning_credits": ["run_threshold"],
-                    "intent_matches": [
+                    "stimuli": [
                         {
-                            "stimuli": ["run_threshold"],
-                            "relation": "fulfills_planned_dose",
+                            "key": "run_threshold",
+                            "status": "confirmed",
+                            "confidence": "high",
+                            "source": "stale_cache",
                         }
                     ],
+                    "planning_credits": ["run_threshold"],
+                    "intent_matches": [],
                 },
             },
         ],
@@ -98,6 +93,14 @@ def activities():
             "classification": "training",
             "elapsed_time_s": 3600.0,
             "distance_m": 12000.0,
+            "confirmed_stimuli": [
+                {
+                    "key": "run_threshold",
+                    "status": "confirmed",
+                    "confidence": "high",
+                    "source": "explicit_user_report",
+                }
+            ],
         },
         {
             "id": "run-2",
@@ -106,6 +109,7 @@ def activities():
             "classification": "training",
             "elapsed_time_s": 3000.0,
             "distance_m": 10000.0,
+            "confirmed_stimuli": [],
         },
         {
             "id": "enduro-1",
@@ -114,6 +118,7 @@ def activities():
             "classification": "training",
             "elapsed_time_s": 5400.0,
             "distance_m": 25000.0,
+            "confirmed_stimuli": [],
         },
     ]
 
@@ -164,7 +169,7 @@ class ObservedTrainingMaterializerTests(unittest.TestCase):
         self.assertEqual(evidence.capability, "run_threshold")
         self.assertEqual(evidence.basis, ObservedCreditBasis.CONFIRMED_STIMULUS)
 
-    def test_legacy_planning_credit_or_intent_match_never_becomes_v1_evidence(self):
+    def test_stale_athlete_state_stimulus_never_becomes_v1_evidence(self):
         projection = compile_observed_training_projection(self.document())
         refs = {
             item.exposure_ref
@@ -172,7 +177,7 @@ class ObservedTrainingMaterializerTests(unittest.TestCase):
         }
         self.assertNotIn("activity:run-2", refs)
 
-    def test_activity_absent_from_athlete_state_still_has_load_but_no_credit(self):
+    def test_activity_without_explicit_stimulus_still_has_load_but_no_credit(self):
         projection = compile_observed_training_projection(self.document())
         self.assertIn(
             "activity:enduro-1",
@@ -181,6 +186,22 @@ class ObservedTrainingMaterializerTests(unittest.TestCase):
         self.assertNotIn(
             "activity:enduro-1",
             {item.exposure_ref for item in projection.capability_evidence},
+        )
+
+    def test_missing_fresh_stimulus_projection_fails_closed(self):
+        rows = activities()
+        del rows[0]["confirmed_stimuli"]
+        with self.assertRaises(Exception) as raised:
+            materialize_observed_training_document(
+                canonical_activities=rows,
+                canonical_athlete_state=athlete_state(),
+                canonical_catalog=catalog(),
+                coverage_from=START,
+                coverage_through=END,
+            )
+        self.assertIn(
+            "OBSERVED_ACTIVITY_STIMULUS_EVIDENCE_MISSING",
+            str(raised.exception),
         )
 
     def test_duration_is_exact_canonical_quantitative_load(self):
