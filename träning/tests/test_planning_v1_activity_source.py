@@ -78,12 +78,20 @@ class PlanningActivitySourceTests(unittest.TestCase):
                     "training",
                     3600,
                     12000.0,
+                    "Run",
+                    "Spontant pass: 4 × 8 min tröskel, kontrollerat.",
+                    "",
+                    "",
                 )
             ]
         )
         self.assertEqual(rows[0]["id"], "1")
         self.assertEqual(rows[0]["date"], "2026-09-29")
         self.assertEqual(metadata["training_activity_count"], 1)
+        self.assertEqual(
+            [item["key"] for item in rows[0]["confirmed_stimuli"]],
+            ["run_threshold"],
+        )
         self.assertTrue(metadata["verified"])
         self.assertTrue(conn.rolled_back)
         first_query, first_params = conn.cursor_obj.calls[0]
@@ -101,12 +109,42 @@ class PlanningActivitySourceTests(unittest.TestCase):
             (date(2026, 9, 28), date(2026, 10, 1)),
         )
 
+    def test_latest_feedback_is_included_in_plan_independent_evidence(self):
+        (rows, _metadata), _conn = self.source(
+            [
+                (
+                    "2",
+                    date(2026, 9, 30),
+                    "run",
+                    "training",
+                    3700,
+                    13000.0,
+                    "Run",
+                    "",
+                    "Tidigare kommentar.",
+                    "4 x 8 min tröskel. Bra kontroll.",
+                )
+            ]
+        )
+        self.assertIn("Tidigare kommentar.", rows[0]["user_report"])
+        self.assertIn("4 x 8 min tröskel", rows[0]["user_report"])
+        self.assertEqual(
+            [item["key"] for item in rows[0]["confirmed_stimuli"]],
+            ["run_threshold"],
+        )
+
     def test_duplicate_provider_activity_id_fails_closed(self):
         with self.assertRaises(RuntimeError):
             self.source(
                 [
-                    ("1", date(2026, 9, 29), "run", "training", 3600, 10000),
-                    ("1", date(2026, 9, 30), "run", "training", 3000, 9000),
+                    (
+                        "1", date(2026, 9, 29), "run", "training",
+                        3600, 10000, "Run", "", "", "",
+                    ),
+                    (
+                        "1", date(2026, 9, 30), "run", "training",
+                        3000, 9000, "Run", "", "", "",
+                    ),
                 ]
             )
 
@@ -114,7 +152,10 @@ class PlanningActivitySourceTests(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             self.source(
                 [
-                    ("1", date(2026, 9, 29), "run", "training", None, 10000),
+                    (
+                        "1", date(2026, 9, 29), "run", "training",
+                        None, 10000, "Run", "", "", "",
+                    ),
                 ]
             )
 
