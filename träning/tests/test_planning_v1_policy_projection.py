@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import json
 import sys
 import unittest
 from pathlib import Path
@@ -72,6 +73,20 @@ class V1PolicyProjectionTests(unittest.TestCase):
         self.assertEqual(
             result.spacing_preferences[0].subject,
             "swim_aerobic",
+        )
+
+    def test_live_policy_explicitly_declares_no_inferred_hard_rules(self):
+        document = json.loads(
+            (ROOT / "data" / "planning_policy.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        result = compile_policy_projection(document)
+        self.assertEqual(result.compatibility_policy.rules, ())
+        self.assertEqual(result.spacing_preferences, ())
+        self.assertIn(
+            "planning_policy:v1:no_inferred_hard_recovery_rules",
+            result.source_refs,
         )
 
     def test_legacy_decision_guards_cannot_substitute_for_v1_policy(self):
