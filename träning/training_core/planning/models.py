@@ -262,6 +262,7 @@ class PlannedTrainingWorkout:
     quantitative_load: tuple[LoadEstimate, ...]
     source_refs: tuple[str, ...]
     within_day_order: int | None = None
+    constraint_ids: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
         object.__setattr__(
@@ -279,15 +280,21 @@ class PlannedTrainingWorkout:
             raise PlanningContractError("workout.local_date must be a date")
 
         contributions = tuple(self.obligation_contributions)
-        if not contributions:
-            raise PlanningContractError(
-                "workout must declare at least one obligation contribution"
-            )
         if len({item.obligation_id for item in contributions}) != len(contributions):
             raise PlanningContractError(
                 "workout contains duplicate contribution for one obligation"
             )
         object.__setattr__(self, "obligation_contributions", contributions)
+        constraint_ids = _unique_text_tuple(
+            self.constraint_ids,
+            "workout.constraint_ids",
+            allow_empty=True,
+        )
+        object.__setattr__(self, "constraint_ids", constraint_ids)
+        if not contributions and not constraint_ids:
+            raise PlanningContractError(
+                "workout requires an obligation contribution or explicit planning constraint"
+            )
         object.__setattr__(
             self,
             "source_refs",
@@ -409,6 +416,95 @@ class ApprovedWorkoutOption:
     @property
     def option_key(self) -> tuple[str, str]:
         return self.recipe_id, self.dose_option_id
+
+
+@dataclass(frozen=True)
+class WorkoutPlacementConstraint:
+    """Absolute count constraint for one semantic workout placement.
+
+    UI/user actions are compiled into these immutable constraints before the
+    solver runs. They describe the desired resulting plan, never a mutation:
+    add => raise minimum count, remove => lower maximum count, move => combine
+    an old-date maximum with a new-date minimum.
+
+    obligation_ids is optional. When non-empty, only workouts carrying exactly
+    that obligation-id set match; empty means recipe+dose placement regardless
+    of which current obligations the workout also serves.
+    """
+
+    constraint_id: str
+    local_date: date
+    recipe_id: str
+    dose_option_id: str
+    min_occurrences: int
+    max_occurrences: int | None
+    source_refs: tuple[str, ...]
+    obligation_ids: tuple[str, ...] = ()
+
+    def __post_init__(self) -> None:
+        object.__setattr__(
+            self,
+            "constraint_id",
+            _required_text(self.constraint_id, "placement.constraint_id"),
+        )
+        if not isinstance(self.local_date, date):
+            raise PlanningContractError("placement.local_date must be a date")
+        object.__setattr__(
+            self,
+            "recipe_id",
+            _required_text(self.recipe_id, "placement.recipe_id"),
+        )
+        object.__setattr__(
+            self,
+            "dose_option_id",
+            _required_text(self.dose_option_id, "placement.dose_option_id"),
+        )
+        if not isinstance(self.min_occurrences, int) or self.min_occurrences < 0:
+            raise PlanningContractError(
+                "placement.min_occurrences must be a non-negative integer"
+            )
+        if self.max_occurrences is not None:
+            if (
+                not isinstance(self.max_occurrences, int)
+                or self.max_occurrences < 0
+            ):
+                raise PlanningContractError(
+                    "placement.max_occurrences must be >= 0 when supplied"
+                )
+            if self.max_occurrences < self.min_occurrences:
+                raise PlanningContractError(
+                    "placement.max_occurrences cannot be below min_occurrences"
+                )
+        object.__setattr__(
+            self,
+            "source_refs",
+            _unique_text_tuple(self.source_refs, "placement.source_refs"),
+        )
+        object.__setattr__(
+            self,
+            "obligation_ids",
+            tuple(sorted(_unique_text_tuple(
+                self.obligation_ids,
+                "placement.obligation_ids",
+                allow_empty=True,
+            ))),
+        )
+
+    @property
+    def option_key(self) -> tuple[str, str]:
+        return self.recipe_id, self.dose_option_id
+
+    def matches(self, workout: "PlannedTrainingWorkout") -> bool:
+        if workout.local_date != self.local_date:
+            return False
+        if (workout.recipe_id, workout.dose_option_id) != self.option_key:
+            return False
+        if not self.obligation_ids:
+            return True
+        actual = tuple(
+            sorted(item.obligation_id for item in workout.obligation_contributions)
+        )
+        return actual == self.obligation_ids
 
 
 @dataclass(frozen=True)
