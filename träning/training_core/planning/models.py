@@ -364,6 +364,7 @@ class ApprovedWorkoutOption:
     load_dimensions: tuple[LoadDimensionExposure, ...]
     quantitative_load: tuple[LoadEstimate, ...]
     source_refs: tuple[str, ...]
+    development_character: str = ""
 
     def __post_init__(self) -> None:
         object.__setattr__(self, "recipe_id", _required_text(self.recipe_id, "catalog.recipe_id"))
