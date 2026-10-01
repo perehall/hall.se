@@ -1,7 +1,8 @@
 """Planning Engine v1 domain boundary.
 
 This package is intentionally independent from the legacy adaptive planner.
-Only typed contracts live here until the new solver is implemented.
+Contracts, candidate generation, hard validation and deterministic selection
+live here without persistence/provider/presentation dependencies.
 """
 
 from .content import plan_content_hash, semantic_plan_payload
@@ -80,6 +81,14 @@ __all__ = [
     "SpacingSubjectKind",
     "evaluate_objectives",
     "select_best_valid_plan",
+    "CandidateGenerationStats",
+    "generate_candidate_atoms",
+    "enumerate_candidate_plans",
+    "ENGINE_VERSION",
+    "PlanningSolveRequest",
+    "PlanningSolveTrace",
+    "PlanningSolveResult",
+    "solve_planning_window",
 ]
 
 from .validation import (
@@ -99,4 +108,19 @@ from .objectives import (
     SpacingSubjectKind,
     evaluate_objectives,
     select_best_valid_plan,
+)
+
+
+from .candidate_generation import (
+    CandidateGenerationStats,
+    enumerate_candidate_plans,
+    generate_candidate_atoms,
+)
+
+from .solver import (
+    ENGINE_VERSION,
+    PlanningSolveRequest,
+    PlanningSolveResult,
+    PlanningSolveTrace,
+    solve_planning_window,
 )
