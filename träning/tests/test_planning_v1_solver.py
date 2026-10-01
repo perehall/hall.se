@@ -311,6 +311,56 @@ class PlanningSolverV1Tests(unittest.TestCase):
         self.assertEqual(decision.obligation_ids, ("easy",))
         self.assertEqual(decision.recipe_id, "run_easy_distance")
         self.assertEqual(decision.stability_change, "added")
+        self.assertGreater(len(decision.alternative_comparisons), 0)
+        self.assertTrue(
+            all(
+                item.comparison.first_deciding_objective
+                == "canonical_tie_break"
+                for item in decision.alternative_comparisons
+            )
+        )
+
+    def test_trace_names_stability_objective_that_defeats_earlier_calendar_choice(self):
+        easy = option(
+            "run_easy_distance",
+            "easy-60",
+            "run_easy_distance",
+            "run",
+            dimensions=(dim("cardiovascular", LoadDimensionLevel.LOW),),
+        )
+        obligations = (
+            obligation("easy", "run_easy_distance", "run_easy_distance"),
+        )
+        target = date(2026, 10, 8)
+        previous = solve(
+            context(
+                obligations,
+                (easy,),
+                availability=only_day_available(target),
+            )
+        )
+        self.assertFalse(previous.blocked)
+        self.assertEqual(previous.plan.workouts[0].local_date, target)
+
+        replanned = solve(
+            context(obligations, (easy,)),
+            previous_plan=previous.plan,
+        )
+        self.assertFalse(replanned.blocked)
+        self.assertEqual(replanned.plan.workouts[0].local_date, target)
+
+        decision = replanned.trace.workout_decisions[0]
+        earlier = next(
+            item
+            for item in decision.alternative_comparisons
+            if item.local_date == START.isoformat()
+        )
+        self.assertEqual(
+            earlier.comparison.first_deciding_objective,
+            "stability_date_moves",
+        )
+        self.assertEqual(earlier.comparison.selected_value, "0")
+        self.assertEqual(earlier.comparison.alternative_value, "1")
 
     def test_fixed_load_and_generic_spacing_move_quality_without_enduro_special_case(self):
         threshold = option(
