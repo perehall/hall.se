@@ -32,6 +32,7 @@ from training_core.planning import (  # noqa: E402
     OptionEligibility,
     PlanContent,
     PlannedTrainingWorkout,
+    PlanningContractError,
     PlanningObligation,
     PlanValidationContext,
     StrategyRevision,
@@ -362,6 +363,53 @@ def context(
         observed_load_samples=tuple(observed_load),
         observed_load_exposures=tuple(observed_exposures),
     )
+
+
+class PlanningInputContractTests(unittest.TestCase):
+    def test_strategy_recipe_family_must_exist_in_catalog(self):
+        with self.assertRaises(PlanningContractError):
+            context(catalog=(option_threshold(), option_mtb()))
+
+    def test_option_eligibility_cannot_claim_missing_capability(self):
+        options = (option_easy(), option_threshold(), option_mtb())
+        invalid = (
+            OptionEligibility(
+                recipe_id="run_easy_distance",
+                dose_option_id="run-easy-75",
+                capability="run_threshold",
+                kind=EligibilityKind.HOLD,
+                source_refs=("athlete_state:bad",),
+            ),
+        )
+        with self.assertRaises(PlanningContractError):
+            context(catalog=options, eligibility=invalid)
+
+    def test_fixed_commitments_cannot_share_known_order_on_same_day(self):
+        first = fixed_commitment()
+        second = FixedLoadCommitment(
+            commitment_id="fixed-external-2",
+            local_date=AFFECTED_FROM,
+            label="Fast extern belastning 2",
+            load_dimensions=(
+                dim("mechanical_leg", LoadDimensionLevel.MODERATE),
+            ),
+            quantitative_load=(
+                load("global", "training_duration", "duration", "minutes", 30),
+            ),
+            source_refs=("user:confirmed-2",),
+            within_day_order=first.within_day_order or 1,
+        )
+        first_ordered = FixedLoadCommitment(
+            commitment_id=first.commitment_id,
+            local_date=first.local_date,
+            label=first.label,
+            load_dimensions=first.load_dimensions,
+            quantitative_load=first.quantitative_load,
+            source_refs=first.source_refs,
+            within_day_order=1,
+        )
+        with self.assertRaises(PlanningContractError):
+            context(fixed=(first_ordered, second))
 
 
 class FinalPlanningValidatorTests(unittest.TestCase):
