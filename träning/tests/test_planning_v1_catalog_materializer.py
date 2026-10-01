@@ -40,6 +40,21 @@ class CatalogMaterializerTests(unittest.TestCase):
             sum(len(item.capabilities) for item in projection.approved_options),
         )
 
+    def test_each_catalog_option_carries_exact_mutable_session_count(self):
+        projection = compile_catalog_projection(
+            materialize_catalog_document(canonical_catalog())
+        )
+        self.assertTrue(projection.approved_options)
+        for option in projection.approved_options:
+            self.assertEqual(len(option.quantitative_load), 1)
+            load = option.quantitative_load[0]
+            self.assertEqual(load.scope, "planned")
+            self.assertEqual(load.subject, "mutable_training")
+            self.assertEqual(load.metric, "session_count")
+            self.assertEqual(load.unit, "sessions")
+            self.assertEqual(load.min_value, 1.0)
+            self.assertEqual(load.max_value, 1.0)
+
     def test_unknown_load_level_is_conservative_not_invented(self):
         projection = compile_catalog_projection(
             materialize_catalog_document(canonical_catalog())
