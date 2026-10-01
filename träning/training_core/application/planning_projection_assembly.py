@@ -30,10 +30,16 @@ from training_core.application.planning_policy_projection import (
     PolicyProjectionError,
     compile_policy_projection,
 )
+from training_core.application.planning_profile_projection import (
+    AthletePlanningPreferencesProjection,
+    ProfileProjectionError,
+    compile_athlete_planning_preferences,
+)
 from training_core.application.planning_strategy_projection import (
     StrategyProjectionError,
     compile_strategy_revision,
 )
+from training_core.planning.objectives import ObjectivePolicy
 from training_core.planning.projections import ShadowProjectionBundle
 
 
@@ -70,6 +76,7 @@ def assemble_canonical_shadow_projections(
     canonical_strategy: dict[str, Any],
     canonical_catalog: dict[str, Any],
     canonical_athlete_state: dict[str, Any],
+    canonical_athlete_profile: dict[str, Any],
     canonical_policy: dict[str, Any],
     canonical_execution_facts: dict[str, Any],
 ) -> CanonicalProjectionAssemblyResult:
@@ -118,6 +125,15 @@ def assemble_canonical_shadow_projections(
         revisions.append(("policy", policy.revision_id))
     except PolicyProjectionError as exc:
         blockers.append(_blocker("policy", exc))
+
+    profile: AthletePlanningPreferencesProjection | None = None
+    try:
+        profile = compile_athlete_planning_preferences(
+            canonical_athlete_profile
+        )
+        revisions.append(("athlete_profile", profile.revision_id))
+    except ProfileProjectionError as exc:
+        blockers.append(_blocker("athlete_profile", exc))
 
     execution: ExecutionFactsProjection | None = None
     try:
@@ -198,6 +214,7 @@ def assemble_canonical_shadow_projections(
     assert catalog is not None
     assert observed is not None
     assert policy is not None
+    assert profile is not None
     assert execution is not None
     assert option_eligibility is not None
     assert observed_credits is not None
@@ -213,7 +230,10 @@ def assemble_canonical_shadow_projections(
         availability=execution.availability,
         closed_dates=execution.closed_dates,
         compatibility_policy=policy.compatibility_policy,
-        objective_policy=policy.objective_policy,
+        objective_policy=ObjectivePolicy(
+            schedule=profile.schedule,
+            spacing_preferences=policy.spacing_preferences,
+        ),
     )
     return CanonicalProjectionAssemblyResult(
         bundle=bundle,
