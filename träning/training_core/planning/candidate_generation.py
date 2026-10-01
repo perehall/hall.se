@@ -77,6 +77,50 @@ class CandidateGenerationStats:
     plan_variants: int
 
 
+@dataclass(frozen=True)
+class CandidateGenerationLimits:
+    """Deterministic resource guard for exhaustive candidate generation.
+
+    Hitting a limit is never permission to return an approximate plan. The
+    caller must fail closed because lexicographic optimality has not been proven.
+    """
+
+    max_search_states: int = 100_000
+    max_terminal_selections: int = 50_000
+    max_plan_variants: int = 100_000
+
+    def __post_init__(self) -> None:
+        for field in (
+            "max_search_states",
+            "max_terminal_selections",
+            "max_plan_variants",
+        ):
+            value = getattr(self, field)
+            if not isinstance(value, int) or value <= 0:
+                raise ValueError(f"{field} must be a positive integer")
+
+
+class CandidateSearchLimitExceeded(RuntimeError):
+    """Raised before an incomplete search could masquerade as a valid solve."""
+
+    def __init__(
+        self,
+        *,
+        stage: str,
+        observed: int,
+        limit: int,
+        generation: CandidateGenerationStats,
+    ) -> None:
+        self.stage = stage
+        self.observed = observed
+        self.limit = limit
+        self.generation = generation
+        super().__init__(
+            f"candidate search limit exceeded at {stage}: "
+            f"observed={observed} limit={limit}"
+        )
+
+
 def _credit(value) -> Fraction:
     return Fraction(value.credit_numerator, value.credit_denominator)
 
@@ -309,6 +353,7 @@ def _selection_credits(
 def enumerate_terminal_selections(
     context: PlanValidationContext,
     atoms: tuple[CandidateAtom, ...],
+    limits: CandidateGenerationLimits | None = None,
 ) -> tuple[tuple[int, ...], ...]:
     """Enumerate the complete anti-filler search domain.
 
@@ -319,6 +364,7 @@ def enumerate_terminal_selections(
     objective vector.
     """
 
+    limits = limits or CandidateGenerationLimits()
     base = _observed_credits(context)
     obligations = tuple(
         sorted(
@@ -347,6 +393,17 @@ def enumerate_terminal_selections(
         if state_key in visited:
             return
         visited.add(state_key)
+        if len(visited) > limits.max_search_states:
+            raise CandidateSearchLimitExceeded(
+                stage="search_states",
+                observed=len(visited),
+                limit=limits.max_search_states,
+                generation=CandidateGenerationStats(
+                    atoms=len(atoms),
+                    terminal_selections=len(terminals),
+                    plan_variants=0,
+                ),
+            )
 
         credits = _selection_credits(selected, atoms, base)
         target = next(
@@ -361,6 +418,17 @@ def enumerate_terminal_selections(
         )
         if target is None:
             terminals.add(selected)
+            if len(terminals) > limits.max_terminal_selections:
+                raise CandidateSearchLimitExceeded(
+                    stage="terminal_selections",
+                    observed=len(terminals),
+                    limit=limits.max_terminal_selections,
+                    generation=CandidateGenerationStats(
+                        atoms=len(atoms),
+                        terminal_selections=len(terminals),
+                        plan_variants=0,
+                    ),
+                )
             return
 
         selected_set = set(selected)
@@ -608,9 +676,11 @@ def enumerate_candidate_plans(
     context: PlanValidationContext,
     affected_from: date,
     affected_until: date,
+    limits: CandidateGenerationLimits | None = None,
 ) -> tuple[tuple[PlanContent, ...], CandidateGenerationStats]:
+    limits = limits or CandidateGenerationLimits()
     atoms = generate_candidate_atoms(context, affected_from, affected_until)
-    selections = enumerate_terminal_selections(context, atoms)
+    selections = enumerate_terminal_selections(context, atoms, limits)
     inside_commitments = tuple(
         item for item in context.fixed_commitments
         if affected_from <= item.local_date <= affected_until
@@ -651,6 +721,17 @@ def enumerate_candidate_plans(
                 continue
             semantic_seen.add(semantic)
             plans.append(plan)
+            if len(plans) > limits.max_plan_variants:
+                raise CandidateSearchLimitExceeded(
+                    stage="plan_variants",
+                    observed=len(plans),
+                    limit=limits.max_plan_variants,
+                    generation=CandidateGenerationStats(
+                        atoms=len(atoms),
+                        terminal_selections=len(selections),
+                        plan_variants=len(plans),
+                    ),
+                )
 
     plans = tuple(
         sorted(
