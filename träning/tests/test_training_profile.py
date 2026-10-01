@@ -210,6 +210,18 @@ class TrainingProfileTests(unittest.TestCase):
         self.assertEqual(profile["stimuli"][0]["source"], "explicit_user_report")
 
 
+    def test_explicit_swedish_compound_threshold_word_confirms_stimulus(self):
+        activity = four_by_eight_activity(
+            report=(
+                "Spontant löppass: 4 × 8 min / 90 s joggvila. "
+                "Samma struktur som veckans planerade kontrollerade löptröskel."
+            )
+        )
+        profile = build_training_profile(activity)
+        self.assertEqual(profile["planning_credits"], ["run_threshold"])
+        self.assertEqual(profile["stimuli"][0]["key"], "run_threshold")
+        self.assertEqual(profile["stimuli"][0]["source"], "explicit_user_report")
+
     def test_swim_same_day_comparable_dose_can_receive_planning_credit(self):
         activity = {
             "id": 500,
