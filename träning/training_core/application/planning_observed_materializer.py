@@ -143,6 +143,15 @@ def _activity_roster(
                 "OBSERVED_ACTIVITY_DURATION_MISSING",
                 source_id,
             )
+        confirmed_stimuli = row.get("confirmed_stimuli")
+        if not isinstance(confirmed_stimuli, list):
+            raise ObservedTrainingMaterializationError(
+                "OBSERVED_ACTIVITY_STIMULUS_EVIDENCE_MISSING",
+                (
+                    f"{source_id} lacks plan-independent "
+                    "confirmed_stimuli projection"
+                ),
+            )
         normalized = {
             "id": source_id,
             "date": local_day.isoformat(),
@@ -150,6 +159,11 @@ def _activity_roster(
             "sport_family": str(row.get("sport_family") or "").strip(),
             "elapsed_time_s": float(elapsed),
             "distance_m": row.get("distance_m"),
+            "confirmed_stimuli": [
+                dict(item)
+                for item in confirmed_stimuli
+                if isinstance(item, dict)
+            ],
         }
         rows.append(normalized)
         by_id[source_id] = normalized
@@ -159,34 +173,19 @@ def _activity_roster(
 
 
 def _confirmed_capability_evidence(
-    canonical_athlete_state: dict[str, Any],
     roster: dict[str, dict[str, Any]],
-    *,
-    coverage_from: date,
-    coverage_through: date,
 ) -> list[dict[str, Any]]:
+    """Compile only fresh, plan-independent explicit stimulus evidence."""
+
     evidence: list[dict[str, Any]] = []
     seen: set[tuple[str, str]] = set()
 
-    for index, raw_session in enumerate(
-        canonical_athlete_state.get("recent_sessions") or []
+    for source_id, row in sorted(
+        roster.items(),
+        key=lambda item: (item[1]["date"], item[0]),
     ):
-        if not isinstance(raw_session, dict):
-            continue
-        source_id = str(raw_session.get("id") or "").strip()
-        if not source_id or source_id not in roster:
-            continue
-        local_day = _iso_day(
-            raw_session.get("date"),
-            f"recent_sessions[{index}].date",
-        )
-        if not coverage_from <= local_day <= coverage_through:
-            continue
-
-        profile = raw_session.get("training_profile")
-        if not isinstance(profile, dict):
-            continue
-        for stimulus_index, raw_stimulus in enumerate(profile.get("stimuli") or []):
+        local_day = _iso_day(row.get("date"), f"activity:{source_id}.date")
+        for raw_stimulus in row.get("confirmed_stimuli") or []:
             if not isinstance(raw_stimulus, dict):
                 continue
             if raw_stimulus.get("status") != "confirmed":
@@ -201,12 +200,12 @@ def _confirmed_capability_evidence(
                 continue
             seen.add(semantic)
             source = str(raw_stimulus.get("source") or "").strip()
-            source_refs = [
+            refs = [
                 f"activity:{source_id}",
-                f"athlete_state:confirmed_stimulus:{source_id}:{capability}",
+                f"planning_activity_source:confirmed_stimulus:{capability}",
             ]
             if source:
-                source_refs.append(f"stimulus_source:{source}")
+                refs.append(f"stimulus_source:{source}")
             evidence.append(
                 {
                     "evidence_id": f"activity:{source_id}:capability:{capability}",
@@ -214,7 +213,7 @@ def _confirmed_capability_evidence(
                     "local_date": local_day.isoformat(),
                     "capability": capability,
                     "basis": "confirmed_stimulus",
-                    "source_refs": source_refs,
+                    "source_refs": refs,
                 }
             )
 
@@ -296,12 +295,7 @@ def materialize_observed_training_document(
             }
         )
 
-    evidence = _confirmed_capability_evidence(
-        state,
-        roster,
-        coverage_from=coverage_from,
-        coverage_through=coverage_through,
-    )
+    evidence = _confirmed_capability_evidence(roster)
 
     semantic = {
         "coverage_from": coverage_from.isoformat(),
@@ -338,7 +332,7 @@ def materialize_observed_training_document(
                 "load_exposures": load_exposures,
                 "source_refs": [
                     "planning_activity_source:supabase_db",
-                    "athlete_state:confirmed_stimuli",
+                    "planning_activity_source:plan_independent_confirmed_stimuli",
                     "workout_catalog:load_dimension_vocabulary",
                 ],
             },
