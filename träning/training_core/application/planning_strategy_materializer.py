@@ -1,7 +1,7 @@
 """Materialize a bounded Planning Engine v1 StrategyRevision from the canonical mesocycle blueprint.
 
-The materializer never reads calendar placements, forward_horizon day slots or
-legacy planner output. It consumes only the canonical mesocycle contract,
+The materializer never reads calendar placements or legacy planner output. It
+consumes only the canonical mesocycle contract,
 the matching development_blueprint microcycle and the canonical workout catalog.
 
 Mandatory obligations come from planned_variants + protected_variants.
