@@ -3,8 +3,10 @@
 
 from __future__ import annotations
 
+import json
 import sys
 import unittest
+from datetime import date
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -87,6 +89,36 @@ class FixedCommitmentSourceTests(unittest.TestCase):
             raised.exception.code,
             "INVALID_FIXED_COMMITMENT_SOURCE",
         )
+
+    def test_canonical_typed_commitment_file_preserves_confirmed_schedule_conservatively(self):
+        document = json.loads(
+            (ROOT / "data" / "planning_fixed_commitments.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        revision = document["planning_engine_v1"]["fixed_commitments_revision"]
+        rows = revision["commitments"]
+        self.assertEqual(len(rows), 8)
+        self.assertEqual(rows[0]["local_date"], "2026-08-24")
+        self.assertEqual(rows[-1]["local_date"], "2026-10-12")
+        self.assertTrue(
+            all(date.fromisoformat(row["local_date"]).weekday() == 0 for row in rows)
+        )
+        for row in rows:
+            self.assertEqual(row["quantitative_load"], [])
+            self.assertEqual(
+                {item["dimension"] for item in row["load_dimensions"]},
+                {
+                    "cardiovascular",
+                    "mechanical",
+                    "neuromuscular",
+                    "technical",
+                },
+            )
+            self.assertEqual(
+                {item["level"] for item in row["load_dimensions"]},
+                {"unknown"},
+            )
 
     def test_source_has_no_legacy_planner_or_text_parser_dependency(self):
         import training_core.application.planning_fixed_commitments_source as module
