@@ -1393,6 +1393,19 @@ def completed_microcycle_context(athlete_state, target_start):
             if day_value
         }
     )
+    family_day_indexes = {}
+    for row in rows:
+        family = str(row.get("family") or "").strip()
+        if not family:
+            continue
+        try:
+            row_day = iso(row.get("date"))
+        except (TypeError, ValueError):
+            continue
+        family_day_indexes.setdefault(family, set()).add(
+            (row_day - target_start).days + 1
+        )
+
     strength_rows = [row for row in rows if row.get("family") == "strength"]
     swim_rows = [row for row in rows if row.get("family") == "swim"]
     enduro_rows = [row for row in rows if row.get("family") == "enduro"]
@@ -1402,6 +1415,10 @@ def completed_microcycle_context(athlete_state, target_start):
         "enduro_exposures": len(enduro_rows),
         "completed_slot_days": len(completed_slot_dates),
         "completed_day_indexes": completed_day_indexes,
+        "family_day_indexes": {
+            key: sorted(values)
+            for key, values in sorted(family_day_indexes.items())
+        },
         "direct_capabilities": sorted(direct_capabilities),
         "planning_credits": sorted(planning_credits),
         "capability_refs": capability_refs,
@@ -1518,6 +1535,24 @@ def fallback_microcycle(
     completed_strength = int(completed_context.get("strength_exposures") or 0)
     completed_direct = set(completed_context.get("direct_capabilities") or [])
     completed_direct.update(completed_context.get("planning_credits") or [])
+    completed_family_day_indexes = {
+        str(family): {
+            int(day)
+            for day in (days or [])
+            if isinstance(day, int) and 1 <= day <= 7
+        }
+        for family, days in (completed_context.get("family_day_indexes") or {}).items()
+    }
+    spread_families = {
+        str(value)
+        for value in (
+            (policy.get("microcycle_policy") or {}).get(
+                "spread_repeated_session_families_when_possible"
+            )
+            or []
+        )
+        if str(value)
+    }
     profile_contract = profile_planning_contract(athlete_profile) if athlete_profile else {}
     closed_days = closed_planning_day_indexes(target_start, planning_date)
     allowed_profile_days = (
@@ -1627,6 +1662,37 @@ def fallback_microcycle(
             candidate_days = [preferred_same_day] + [
                 day for day in candidate_days if day != preferred_same_day
             ]
+
+        # Repeated exposures from the same session family should normally be
+        # distributed when an equally valid later/earlier day exists. This is a
+        # soft ordering rule, not a prohibition: if every structurally valid day
+        # is adjacent, the normal constraint checks still decide the placement.
+        recipe_family = str(catalog["recipes"][recipe].get("sport") or "").strip()
+        if recipe_family in spread_families:
+            existing_family_days = set(
+                completed_family_day_indexes.get(recipe_family) or set()
+            )
+            existing_family_days.update(
+                int(row["day_index"])
+                for row in slots
+                if str(
+                    (catalog.get("recipes") or {})
+                    .get(str(row.get("recipe_key") or ""), {})
+                    .get("sport")
+                    or ""
+                ).strip()
+                == recipe_family
+            )
+            if existing_family_days:
+                separated_days = [
+                    day
+                    for day in candidate_days
+                    if all(abs(day - existing) > 1 for existing in existing_family_days)
+                ]
+                adjacent_days = [
+                    day for day in candidate_days if day not in separated_days
+                ]
+                candidate_days = separated_days + adjacent_days
 
         for day in candidate_days:
             if day in closed_days:
