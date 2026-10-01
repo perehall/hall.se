@@ -73,7 +73,16 @@ def component(discipline):
     return (WorkoutComponentIntent(discipline=discipline, order=1),)
 
 
-def option(recipe, dose, capability, discipline, *, dimensions, minutes=60):
+def option(
+    recipe,
+    dose,
+    capability,
+    discipline,
+    *,
+    dimensions,
+    minutes=60,
+    planning_priority=100,
+):
     return ApprovedWorkoutOption(
         recipe_id=recipe,
         dose_option_id=dose,
@@ -83,6 +92,7 @@ def option(recipe, dose, capability, discipline, *, dimensions, minutes=60):
         quantitative_load=(duration(minutes),),
         source_refs=("catalog:test",),
         development_character=recipe,
+        planning_priority=planning_priority,
     )
 
 
@@ -587,6 +597,40 @@ class PlanningSolverV1Tests(unittest.TestCase):
             {item.recipe_id for item in result.plan.workouts},
             {"mtb_aerobic"},
         )
+
+    def test_explicit_catalog_priority_breaks_otherwise_equal_choice(self):
+        preferred = option(
+            "easy_preferred",
+            "easy-60-a",
+            "run_easy_distance",
+            "run",
+            dimensions=(dim("cardiovascular", LoadDimensionLevel.LOW),),
+            planning_priority=10,
+        )
+        alternate = option(
+            "easy_alternate",
+            "easy-60-b",
+            "run_easy_distance",
+            "run",
+            dimensions=(dim("cardiovascular", LoadDimensionLevel.LOW),),
+            planning_priority=20,
+        )
+        obligation_value = PlanningObligation(
+            obligation_id="easy",
+            capability="run_easy_distance",
+            role="primary",
+            priority_tier=1,
+            min_exposures=1,
+            max_exposures=1,
+            recipe_family=("easy_preferred", "easy_alternate"),
+            valid_from=START,
+            valid_until=END,
+            source_refs=("strategy:test",),
+            progression_axes=("exposure_count",),
+        )
+        result = solve(context((obligation_value,), (alternate, preferred)))
+        self.assertFalse(result.blocked)
+        self.assertEqual(result.plan.workouts[0].recipe_id, "easy_preferred")
 
     def test_catalog_input_order_does_not_change_semantic_result(self):
         easy = option(
