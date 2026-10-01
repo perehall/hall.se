@@ -127,6 +127,7 @@ class ShadowProjectionReadinessTests(unittest.TestCase):
         self.assertIn("MISSING_OPTION_ELIGIBILITY", report.blocker_codes)
         self.assertIn("MISSING_OBSERVED_LOAD_EXPOSURES", report.blocker_codes)
         self.assertIn("MISSING_OBJECTIVE_POLICY", report.blocker_codes)
+        self.assertIn("MISSING_CLOSED_DATES", report.blocker_codes)
 
     def test_empty_is_distinct_from_missing_for_fact_collections(self):
         option = explicit_option()
@@ -148,6 +149,7 @@ class ShadowProjectionReadinessTests(unittest.TestCase):
                 observed_load=(),
                 fixed_commitments=(),
                 availability=(),
+                closed_dates=(),
                 compatibility_policy=LoadCompatibilityPolicy(
                     policy_id="compat-v1",
                     rules=(),
