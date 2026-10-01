@@ -15,6 +15,10 @@ from training_core.application.planning_shadow import (  # noqa: E402
     ShadowPlanningRunInput,
     run_shadow_planning,
 )
+from training_core.application.planning_shadow_audit import (  # noqa: E402
+    append_shadow_audit_record,
+    build_shadow_audit_record,
+)
 from training_core.planning.models import (  # noqa: E402
     AggregateLoadEnvelope,
     ApprovedWorkoutOption,
@@ -167,6 +171,78 @@ class ShadowPlanningApplicationTests(unittest.TestCase):
         self.assertIsNotNone(result.solve_result)
         self.assertFalse(result.solve_result.blocked)
         self.assertEqual(len(result.solve_result.plan.workouts), 1)
+        self.assertIsNotNone(result.semantic_input_payload)
+        self.assertEqual(
+            result.semantic_input_payload["affected_from"],
+            START.isoformat(),
+        )
+
+    def test_shadow_audit_record_is_replayable_and_non_authoritative(self):
+        request = run_input(explicit_bundle())
+        result = run_shadow_planning(request)
+        record = build_shadow_audit_record(
+            request,
+            result,
+            event_key="event-1",
+            trigger_source="test",
+            microcycle_key="2026-W41",
+        )
+        self.assertEqual(record.readiness_status, "ready")
+        self.assertEqual(record.solver_status, "current")
+        self.assertEqual(
+            record.semantic_input_hash,
+            result.solve_result.authority_state.semantic_input_hash,
+        )
+        self.assertEqual(
+            record.plan_content_hash,
+            result.solve_result.authority_state.plan_content_hash,
+        )
+        self.assertEqual(
+            record.semantic_input["affected_from"],
+            START.isoformat(),
+        )
+        self.assertIn("solver", record.decision_trace)
+        self.assertEqual(
+            record.decision_trace["solver"]["selected_plan_hash"],
+            record.plan_content_hash,
+        )
+
+    def test_readiness_blocked_run_is_auditable_without_fake_solver_output(self):
+        request = run_input(
+            ShadowProjectionBundle(source_revision="source-v1")
+        )
+        result = run_shadow_planning(request)
+        record = build_shadow_audit_record(
+            request,
+            result,
+            event_key="event-blocked",
+            trigger_source="test",
+        )
+        self.assertEqual(record.readiness_status, "blocked")
+        self.assertIsNone(record.solver_status)
+        self.assertIsNone(record.semantic_input_hash)
+        self.assertIsNone(record.plan_content)
+        self.assertGreater(len(record.blocker_codes), 0)
+
+    def test_shadow_audit_append_is_one_way(self):
+        class FakeRepository:
+            def __init__(self):
+                self.records = []
+
+            def append(self, record):
+                self.records.append(record)
+
+        request = run_input(explicit_bundle())
+        result = run_shadow_planning(request)
+        repository = FakeRepository()
+        record = append_shadow_audit_record(
+            request,
+            result,
+            repository,
+            event_key="event-append",
+            trigger_source="test",
+        )
+        self.assertEqual(repository.records, [record])
 
     def test_shadow_service_has_no_repository_or_commit_dependency(self):
         import training_core.application.planning_shadow as module
@@ -176,6 +252,13 @@ class ShadowPlanningApplicationTests(unittest.TestCase):
         self.assertNotIn("supabase", source.lower())
         self.assertNotIn("device_sync", source.lower())
         self.assertNotIn("adaptive_planner", source)
+
+        import training_core.application.planning_shadow_audit as audit_module
+
+        audit_source = Path(audit_module.__file__).read_text(encoding="utf-8")
+        self.assertNotIn("planned_workouts", audit_source)
+        self.assertNotIn("commit_solve_result", audit_source)
+        self.assertNotIn("device_sync", audit_source.lower())
 
 
 if __name__ == "__main__":
