@@ -457,27 +457,29 @@ Do not reward duplicate coverage beyond an obligation's maximum useful exposure 
 
 When obligations share the same priority tier, prefer meeting their minimum useful exposure across the declared capability portfolio before adding extra exposure above another obligation's minimum. This prevents one capability from crowding out equally important protected breadth.
 
-### S3. Absorbable distribution
+### S3. Avoid discretionary exposure / calendar filler
+
+Once required obligations are equally satisfied, prefer the plan with less exposure above obligation minima.
+
+A declared training-frequency preference is never, by itself, a reason to create another workout. If additional exposure is strategically desired, that intent must exist in StrategyRevision as a higher minimum obligation.
+
+### S4. Absorbable distribution
 
 Prefer better spacing of repeated/high-load stimuli and avoid unnecessary concentration of mechanical or quality load.
 
-### S4. Plan stability
+### S5. Plan stability
 
 Minimize unnecessary changes to still-valid future workouts from the previous committed plan.
 
-This objective is deliberately below physiological/strategic validity. Stability never resurrects an inferior or conflicting old workout.
+This objective is deliberately below physiological/strategic validity and the anti-filler rule. Stability never resurrects an inferior, conflicting or no-longer-justified old workout.
 
-### S5. Athlete schedule preferences
+### S6. Athlete schedule preferences
 
-Prefer declared training-frequency range and double-session preference without adding training solely to fill the calendar.
+Prefer declared training-frequency range and double-session preference only when distributing already-justified training.
 
-### S6. Useful discipline/character variation
+### S7. Useful discipline/character variation
 
 Prefer planned variation when the mesocycle calls for development and valid catalog alternatives exist.
-
-### S7. Secondary/optional capacity
-
-Add secondary work only when already justified by strategy and compatible with all earlier objectives.
 
 ### S8. Canonical tie-break
 
@@ -540,7 +542,7 @@ Procedure:
 7. Commit atomically.
 8. Project the committed result to UI/device sync.
 
-There is no later "preserve unaffected workouts" mutation stage. Preservation is part of the S4 objective during the solve.
+There is no later "preserve unaffected workouts" mutation stage. Preservation is part of the plan-stability objective during the solve.
 
 ### 10.1 Spontaneous actual workout
 
