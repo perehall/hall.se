@@ -41,6 +41,10 @@ from training_core.application.planning_observed_materializer import (
 from training_core.application.planning_projection_assembly import (
     assemble_canonical_shadow_projections,
 )
+from training_core.application.planning_strategy_materializer import (
+    StrategyMaterializationError,
+    materialize_strategy_document,
+)
 
 
 HERE = Path(__file__).resolve().parent
@@ -158,8 +162,9 @@ def build_readiness_report(
 
     catalog_source = _read_json(data_dir / "workout_catalog.json")
     athlete_state_source = _read_json(data_dir / "athlete_state.json")
+    strategy_source = _read_json(data_dir / "training_strategy.json")
     documents: dict[str, dict[str, Any]] = {
-        "strategy": _read_json(data_dir / "training_strategy.json"),
+        "strategy_source": strategy_source,
         "catalog_source": catalog_source,
         "athlete_state_source": athlete_state_source,
         "policy": _read_json(data_dir / "planning_policy.json"),
@@ -178,6 +183,24 @@ def build_readiness_report(
             )
         )
     documents["catalog"] = catalog_document or {}
+
+    strategy_document: dict[str, Any] | None = None
+    try:
+        strategy_document = materialize_strategy_document(
+            canonical_strategy=strategy_source,
+            canonical_catalog=catalog_source,
+            affected_from=affected_from,
+            affected_until=affected_until,
+        )
+    except StrategyMaterializationError as exc:
+        source_blockers.append(
+            _source_blocker(
+                "strategy_source",
+                exc.code,
+                str(exc),
+            )
+        )
+    documents["strategy"] = strategy_document or {}
 
     observed_document: dict[str, Any] | None = None
     observed_metadata: dict[str, Any] = {}
@@ -298,6 +321,11 @@ def build_readiness_report(
     projection_blockers = []
     for item in result.blockers:
         if (
+            item.stage == "strategy"
+            and "strategy_source" in source_stages
+        ):
+            continue
+        if (
             item.stage == "catalog"
             and "catalog_source" in source_stages
         ):
@@ -347,6 +375,11 @@ def build_readiness_report(
             "future_context_through": context_through.isoformat(),
         },
         "source_status": {
+            "strategy": (
+                "materialized_from_mesocycle_blueprint"
+                if strategy_document is not None
+                else "blocked"
+            ),
             "catalog": (
                 "materialized_from_owned_source"
                 if catalog_document is not None
