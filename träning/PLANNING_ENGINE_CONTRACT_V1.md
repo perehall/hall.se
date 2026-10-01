@@ -823,12 +823,13 @@ Shadow mode MUST NOT be fed by an implicit translation of legacy planner output.
 Before any live shadow solve, the application layer must materialize the following V1 projections directly from canonical sources, each with source revision and provenance:
 
 - one accepted `StrategyRevision` containing bounded planning obligations;
-- approved workout options with explicit load semantics and executable dose identity;
-- athlete-specific `OptionEligibility` derived without importing legacy planner decisions;
-- canonical observed obligation credits;
-- canonical observed categorical and quantitative load exposures;
+- approved workout options with explicit load semantics, executable dose identity and capability-specific dose-evidence semantics;
+- athlete-specific `OptionEligibility` derived without importing legacy planner decisions; a multi-capability physical workout is eligible only when every capability carried by that option is eligible at that dose;
+- canonical observed capability evidence with explicit evidence basis; confirmed stimulus and structural intent-match are distinct, and structural match may satisfy an obligation only when that StrategyRevision explicitly opts in;
+- canonical observed categorical and quantitative load exposures; an explicitly unknown load level remains `UNKNOWN` and is handled conservatively rather than downgraded;
 - fixed commitments;
 - declared availability;
+- closed dates;
 - one explicit load-compatibility policy;
 - one explicit aggregate load envelope;
 - one explicit objective policy for schedule preferences and spacing.
@@ -842,7 +843,7 @@ In particular, it is prohibited to:
 - import `adaptive_planner.py` or any legacy reconciliation function to populate V1 contracts;
 - silently downgrade unknown load semantics to low load or compatibility.
 
-A shadow run is considered **input-ready** only when the complete `PlanningSolveRequest` can be reconstructed from these V1 projections without consulting legacy planning decisions except as the optional previous-plan stability input.
+A shadow run is considered **input-ready** only when the complete `PlanningSolveRequest` can be reconstructed from these V1 projections without consulting legacy planning decisions except as the optional previous-plan stability input. Strategy, catalog, athlete evidence, policy and execution facts are compiled independently; all projection blockers are surfaced together. No hard solver input, including closed dates, may enter through a side channel outside the canonical projection bundle.
 
 ## 17. Cutover criteria
 
