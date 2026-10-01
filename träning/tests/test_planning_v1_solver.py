@@ -290,6 +290,15 @@ class PlanningSolverV1Tests(unittest.TestCase):
             result.authority_state.plan_content_hash,
             plan_content_hash(result.plan),
         )
+        self.assertTrue(result.trace.search_complete)
+        self.assertTrue(result.trace.optimality_proven)
+        self.assertEqual(result.trace.final_validation_codes, ())
+        self.assertIn("load_bound:duration-7d", result.trace.hard_constraint_refs)
+        self.assertEqual(len(result.trace.workout_decisions), 1)
+        decision = result.trace.workout_decisions[0]
+        self.assertEqual(decision.obligation_ids, ("easy",))
+        self.assertEqual(decision.recipe_id, "run_easy_distance")
+        self.assertEqual(decision.stability_change, "added")
 
     def test_fixed_load_and_generic_spacing_move_quality_without_enduro_special_case(self):
         threshold = option(
@@ -744,6 +753,21 @@ class PlanningSolverV1Tests(unittest.TestCase):
             "user:move-1:move-to",
             replanned.plan.workouts[0].constraint_ids,
         )
+        self.assertEqual(
+            tuple(change.kind for change in replanned.trace.plan_changes),
+            ("moved",),
+        )
+        self.assertEqual(
+            replanned.trace.workout_decisions[0].stability_change,
+            "moved",
+        )
+        self.assertIn(
+            target.isoformat(),
+            {
+                replanned.trace.workout_decisions[0].local_date,
+                *replanned.trace.workout_decisions[0].alternative_dates,
+            },
+        )
 
     def test_user_remove_removes_placement_not_strategy_obligation(self):
         easy = option(
@@ -981,6 +1005,8 @@ class PlanningSolverV1Tests(unittest.TestCase):
             result.authority_state.blocked_reason_codes,
         )
         self.assertIsNone(result.trace.selected_plan_hash)
+        self.assertFalse(result.trace.search_complete)
+        self.assertFalse(result.trace.optimality_proven)
 
     def test_aggregate_load_gate_can_force_unmet_soft_obligation_without_invalid_commit(self):
         easy = option(
