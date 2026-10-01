@@ -34,6 +34,12 @@ from .objectives import (
     ObjectiveVector,
     evaluate_objectives,
 )
+from .trace import (
+    PlanChangeTrace,
+    WorkoutDecisionTrace,
+    build_plan_changes,
+    build_workout_decisions,
+)
 from .validation import PlanValidationContext, validate_plan_content
 
 
@@ -103,6 +109,13 @@ class PlanningSolveTrace:
     rejected_candidates: int
     rejection_counts: tuple[tuple[str, int], ...]
     selected_plan_hash: str | None
+    search_complete: bool = True
+    optimality_proven: bool = True
+    validation_contract: str = "planning-v1-final-validator"
+    hard_constraint_refs: tuple[str, ...] = ()
+    final_validation_codes: tuple[str, ...] = ()
+    workout_decisions: tuple[WorkoutDecisionTrace, ...] = ()
+    plan_changes: tuple[PlanChangeTrace, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -128,6 +141,31 @@ def _objective_context(request: PlanningSolveRequest) -> ObjectiveContext:
         previous_plan=request.previous_plan,
         policy=request.objective_policy,
     )
+
+
+def _hard_constraint_refs(context: PlanValidationContext) -> tuple[str, ...]:
+    refs = []
+    refs.extend(
+        f"compatibility:{item.rule_id}"
+        for item in context.compatibility_policy.rules
+    )
+    refs.extend(
+        f"load_bound:{item.bound_id}"
+        for item in context.strategy.load_envelope.bounds
+    )
+    refs.extend(
+        f"placement:{item.constraint_id}"
+        for item in context.placement_constraints
+    )
+    refs.extend(
+        f"availability:{item.local_date.isoformat()}"
+        for item in context.availability
+    )
+    refs.extend(
+        f"closed:{item.isoformat()}"
+        for item in context.closed_dates
+    )
+    return tuple(sorted(set(refs)))
 
 
 def _invalidated_workout_ids(request: PlanningSolveRequest) -> tuple[str, ...]:
@@ -189,6 +227,9 @@ def solve_planning_window(request: PlanningSolveRequest) -> PlanningSolveResult:
                 ),
             ),
             selected_plan_hash=None,
+            search_complete=False,
+            optimality_proven=False,
+            hard_constraint_refs=_hard_constraint_refs(context),
         )
         return PlanningSolveResult(
             authority_state=authority,
@@ -249,6 +290,9 @@ def solve_planning_window(request: PlanningSolveRequest) -> PlanningSolveResult:
             rejected_candidates=len(candidates),
             rejection_counts=rejection_counts,
             selected_plan_hash=None,
+            search_complete=True,
+            optimality_proven=True,
+            hard_constraint_refs=_hard_constraint_refs(context),
         )
         return PlanningSolveResult(
             authority_state=authority,
@@ -259,7 +303,26 @@ def solve_planning_window(request: PlanningSolveRequest) -> PlanningSolveResult:
 
     valid.sort(key=lambda item: item[0])
     _, selected, vector = valid[0]
+
+    # Re-run the independent final gate on the exact winning PlanContent.
+    # A failure here is a programming defect, never something to repair after
+    # selection or publication.
+    final_report = validate_plan_content(selected, context)
+    if not final_report.valid:
+        raise PlanningContractError(
+            "selected plan failed final invariant gate after candidate selection: "
+            + ", ".join(final_report.codes())
+        )
+
     selected_hash = plan_content_hash(selected)
+    valid_plans = tuple(item[1] for item in valid)
+    plan_changes = build_plan_changes(selected, request.previous_plan)
+    workout_decisions = build_workout_decisions(
+        selected,
+        valid_plans,
+        context,
+        request.previous_plan,
+    )
     authority = PlanAuthorityState(
         status=PlanAuthorityStatus.CURRENT,
         source_revision=context.source_revision,
@@ -286,6 +349,12 @@ def solve_planning_window(request: PlanningSolveRequest) -> PlanningSolveResult:
         rejected_candidates=len(candidates) - len(valid),
         rejection_counts=rejection_counts,
         selected_plan_hash=selected_hash,
+        search_complete=True,
+        optimality_proven=True,
+        hard_constraint_refs=_hard_constraint_refs(context),
+        final_validation_codes=final_report.codes(),
+        workout_decisions=workout_decisions,
+        plan_changes=plan_changes,
     )
     return PlanningSolveResult(
         authority_state=authority,
