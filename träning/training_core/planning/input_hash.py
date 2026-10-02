@@ -98,6 +98,7 @@ def semantic_planning_input_payload(
             "role": item.role,
             "priority": item.priority_tier,
             "min": item.min_exposures,
+            "target": item.target_exposures,
             "max": item.max_exposures,
             "recipes": sorted(item.recipe_family),
             "valid_from": item.valid_from.isoformat(),
