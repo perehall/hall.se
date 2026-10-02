@@ -182,6 +182,10 @@ def _contribution_for_obligation(
     if (
         obligation.capability in option.capabilities
         and option.recipe_id in obligation.recipe_family
+        and (
+            not obligation.allowed_dose_option_ids
+            or option.dose_option_id in obligation.allowed_dose_option_ids
+        )
         and (*option_key, obligation.capability) in eligibility
     ):
         return ObligationContribution(
