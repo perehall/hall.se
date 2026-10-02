@@ -19,6 +19,7 @@ def vector(
     required=(Fraction(0, 1),),
     unserved=(0,),
     max_deficit=(Fraction(0, 1),),
+    target=(Fraction(0, 1),),
     discretionary=(Fraction(0, 1),),
     spacing=0,
     stability=0,
@@ -29,6 +30,7 @@ def vector(
         required_deficit_by_tier=tuple(required),
         unserved_required_by_tier=tuple(unserved),
         max_required_deficit_by_tier=tuple(max_deficit),
+        target_deficit_by_tier=tuple(target),
         spacing_shortfall_days=spacing,
         spacing_violation_pairs=0,
         stability_identity_churn=stability,
@@ -55,6 +57,25 @@ class ObjectiveOrderingLawTests(unittest.TestCase):
         )
         missing = vector(required=(Fraction(1, 1),))
         self.assertLess(fulfilled.sort_key, missing.sort_key)
+
+    def test_soft_strategy_target_is_preferred_when_spacing_is_equal(self):
+        served = vector(target=(Fraction(0, 1),), stability=5)
+        omitted = vector(target=(Fraction(1, 1),), stability=0)
+        self.assertLess(served.sort_key, omitted.sort_key)
+
+    def test_spacing_can_override_optional_strategy_target(self):
+        well_spaced_without_support = vector(
+            target=(Fraction(1, 1),),
+            spacing=0,
+        )
+        clustered_with_support = vector(
+            target=(Fraction(0, 1),),
+            spacing=1,
+        )
+        self.assertLess(
+            well_spaced_without_support.sort_key,
+            clustered_with_support.sort_key,
+        )
 
     def test_anti_filler_outranks_calendar_preference(self):
         lean = vector(
