@@ -378,7 +378,11 @@ def materialize_strategy_document(
                 ],
                 "progression_axes": [],
                 "partial_coverage": [],
-                "prefer_character_variation": False,
+                "prefer_character_variation": (
+                    role_group == "primary"
+                    and target > 1
+                    and len(recipe_family[capability]) > 1
+                ),
                 "accepted_observed_bases": ["confirmed_stimulus"],
             }
         )
