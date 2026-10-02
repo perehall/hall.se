@@ -412,13 +412,13 @@ def enumerate_terminal_selections(
     affected_until: date,
     limits: CandidateGenerationLimits | None = None,
 ) -> tuple[tuple[int, ...], ...]:
-    """Enumerate the complete anti-filler search domain.
+    """Enumerate the complete bounded strategy-target search domain.
 
-    A branch either adds a workout that reduces the currently selected minimum
-    obligation deficit or explicitly leaves that obligation unmet. Once all
-    minima are met/declined, adding further workouts can only increase
-    discretionary exposure and therefore cannot improve the lexicographic
-    objective vector.
+    A branch either adds a workout that reduces the currently selected strategy
+    target deficit or explicitly declines that target. Required minima remain
+    higher-priority objective deficits, while target_exposures allows optional
+    support work to compete only when hard constraints and higher objectives
+    permit it. Work above a target is never enumerated merely to fill time.
     """
 
     limits = limits or CandidateGenerationLimits()
@@ -630,7 +630,7 @@ def enumerate_terminal_selections(
                 for obligation in obligations
                 if obligation.obligation_id not in declined
                 and credits.get(obligation.obligation_id, Fraction(0, 1))
-                < Fraction(obligation.min_exposures, 1)
+                < Fraction(obligation.target_exposures, 1)
             ),
             None,
         )
@@ -667,8 +667,11 @@ def enumerate_terminal_selections(
             )
             if _credit(contribution) <= 0:
                 continue
-            # The atom must actually improve this target's minimum deficit.
-            if current_credit >= Fraction(target.min_exposures, 1):
+            # The atom must improve the strategy target. Required minima are
+            # still enforced/ranked independently; target_exposures lets the
+            # domain represent support-if-absorbable work without making it
+            # mandatory.
+            if current_credit >= Fraction(target.target_exposures, 1):
                 continue
             branches.append(index)
 
