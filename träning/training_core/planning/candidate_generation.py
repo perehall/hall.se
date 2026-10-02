@@ -29,7 +29,7 @@ from .models import (
     PlanningObligation,
     SameDayOrderRule,
 )
-from .validation import PlanValidationContext
+from .validation import PlanValidationContext, validate_plan_content
 
 
 _LEVEL_RANK = {
@@ -447,18 +447,67 @@ def enumerate_terminal_selections(
     }
 
     terminals: set[tuple[int, ...]] = set()
-    visited: set[tuple[tuple[int, ...], tuple[str, ...]]] = set()
+    seen: set[tuple[tuple[int, ...], tuple[str, ...]]] = set()
+    viable_states: set[tuple[tuple[int, ...], tuple[str, ...]]] = set()
+
+    inside_commitments = tuple(
+        item
+        for item in context.fixed_commitments
+        if affected_from <= item.local_date <= affected_until
+    )
+    baseline_plan = PlanContent(
+        source_revision=context.source_revision,
+        strategy_revision_id=context.strategy.revision_id,
+        affected_from=affected_from,
+        affected_until=affected_until,
+        workouts=(),
+        fixed_commitments=inside_commitments,
+    )
+    baseline_issues = frozenset(
+        validate_plan_content(baseline_plan, context).issues
+    )
+    prefix_repairable_codes = frozenset(
+        {
+            "LOAD_COMPATIBILITY_ORDER_UNKNOWN",
+            "LOAD_COMPATIBILITY_ORDER_VIOLATION",
+            "PLACEMENT_MIN_UNSATISFIED",
+            "PLACEMENT_REQUIRED_PROVENANCE_MISSING",
+        }
+    )
+
+    def prefix_is_viable(selected: tuple[int, ...]) -> bool:
+        partial_plan = PlanContent(
+            source_revision=context.source_revision,
+            strategy_revision_id=context.strategy.revision_id,
+            affected_from=affected_from,
+            affected_until=affected_until,
+            workouts=_base_workouts(selected, atoms),
+            fixed_commitments=inside_commitments,
+        )
+        for issue in validate_plan_content(partial_plan, context).issues:
+            if issue in baseline_issues:
+                continue
+            if issue.code in prefix_repairable_codes:
+                continue
+            # Every remaining hard issue is monotonic under adding workouts:
+            # additions cannot undo excess load, max-count violations,
+            # unavailable dates, invalid catalog semantics or forbidden spacing.
+            return False
+        return True
 
     def walk(selected: tuple[int, ...], declined: frozenset[str]) -> None:
         selected = tuple(sorted(selected))
         state_key = (selected, tuple(sorted(declined)))
-        if state_key in visited:
+        if state_key in seen:
             return
-        visited.add(state_key)
-        if len(visited) > limits.max_search_states:
+        seen.add(state_key)
+        if not prefix_is_viable(selected):
+            return
+        viable_states.add(state_key)
+        if len(viable_states) > limits.max_search_states:
             raise CandidateSearchLimitExceeded(
                 stage="search_states",
-                observed=len(visited),
+                observed=len(viable_states),
                 limit=limits.max_search_states,
                 generation=CandidateGenerationStats(
                     atoms=len(atoms),
