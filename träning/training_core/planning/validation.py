@@ -66,6 +66,8 @@ class PlanValidationContext:
     closed_dates: tuple[date, ...] = ()
     observed_obligation_credits: tuple[ObservedObligationCredit, ...] = ()
     observed_load_exposures: tuple[ObservedLoadExposure, ...] = ()
+    prewindow_load_context_from: date | None = None
+    prewindow_load_context_through: date | None = None
 
     def __post_init__(self) -> None:
         revision = str(self.source_revision or "").strip()
@@ -79,6 +81,24 @@ class PlanValidationContext:
             raise PlanningContractError("validation history_through cannot precede history_from")
         if not isinstance(self.future_context_through, date):
             raise PlanningContractError("validation future_context_through must be a date")
+        prewindow_from = self.prewindow_load_context_from
+        prewindow_through = self.prewindow_load_context_through
+        if (prewindow_from is None) != (prewindow_through is None):
+            raise PlanningContractError(
+                "prewindow load context requires both coverage bounds"
+            )
+        if prewindow_from is not None:
+            if not isinstance(prewindow_from, date) or not isinstance(
+                prewindow_through,
+                date,
+            ):
+                raise PlanningContractError(
+                    "prewindow load context coverage must use dates"
+                )
+            if prewindow_through < prewindow_from:
+                raise PlanningContractError(
+                    "prewindow load context coverage cannot run backwards"
+                )
 
         options = tuple(self.catalog_options)
         keys = [item.option_key for item in options]
@@ -363,22 +383,56 @@ def _validate_history_coverage(
     if required_through < required_from:
         return
 
+    intervals = [
+        (context.history_from, context.history_through, "observed"),
+    ]
     if (
-        context.history_from > required_from
-        or context.history_through < required_through
+        context.prewindow_load_context_from is not None
+        and context.prewindow_load_context_through is not None
     ):
-        issues.append(
-            ValidationIssue(
-                "INSUFFICIENT_HISTORY_COVERAGE",
-                "Canonical observed history does not fully cover the horizon required by hard validation.",
-                (
-                    required_from.isoformat(),
-                    required_through.isoformat(),
-                    context.history_from.isoformat(),
-                    context.history_through.isoformat(),
-                ),
+        intervals.append(
+            (
+                context.prewindow_load_context_from,
+                context.prewindow_load_context_through,
+                "prewindow",
             )
         )
+
+    cursor = required_from
+    for coverage_from, coverage_through, _kind in sorted(intervals):
+        if coverage_through < cursor:
+            continue
+        if coverage_from > cursor:
+            break
+        cursor = max(cursor, coverage_through + timedelta(days=1))
+        if cursor > required_through:
+            return
+
+    issues.append(
+        ValidationIssue(
+            "INSUFFICIENT_HISTORY_COVERAGE",
+            (
+                "Canonical observed history plus explicit pre-window load "
+                "context do not fully cover the horizon required by hard validation."
+            ),
+            (
+                required_from.isoformat(),
+                required_through.isoformat(),
+                context.history_from.isoformat(),
+                context.history_through.isoformat(),
+                (
+                    context.prewindow_load_context_from.isoformat()
+                    if context.prewindow_load_context_from is not None
+                    else ""
+                ),
+                (
+                    context.prewindow_load_context_through.isoformat()
+                    if context.prewindow_load_context_through is not None
+                    else ""
+                ),
+            ),
+        )
+    )
 
 
 def _validate_future_context(
@@ -1168,7 +1222,7 @@ def _validate_aggregate_load(
             )
         )
 
-    for commitment in plan.fixed_commitments:
+    for commitment in context.fixed_commitments:
         dated_exposures.append(
             (
                 commitment.local_date,
