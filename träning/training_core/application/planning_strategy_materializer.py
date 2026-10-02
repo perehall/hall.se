@@ -4,12 +4,14 @@ The materializer never reads calendar placements or legacy planner output. It
 consumes only the canonical mesocycle contract,
 the matching development_blueprint microcycle and the canonical workout catalog.
 
-Mandatory obligations come from planned_variants + protected_variants.
-supporting_candidates remain optional and are deliberately excluded.
+Required obligations come from planned_variants + protected_variants.
+supporting_candidates become explicit soft targets: min=0, target=1, max=1.
+They can therefore preserve all-round continuity when absorbable without
+becoming mandatory or being added merely because a day is free.
 
 The aggregate envelope is structural rather than physiological: every mutable
 catalog option carries an exact planned-session count of one, and the blueprint
-declares how many mandatory mutable sessions exist in the microcycle.
+declares the maximum intended mutable session count in the microcycle.
 """
 
 from __future__ import annotations
@@ -177,10 +179,16 @@ def materialize_strategy_document(
             "contract.protected_capacity",
         )
     )
-    if primary & protected:
+    secondary = set(
+        _strings(
+            contract.get("secondary", []),
+            "contract.secondary",
+        )
+    )
+    if primary & protected or primary & secondary or protected & secondary:
         raise StrategyMaterializationError(
             "V1_STRATEGY_ROLE_OVERLAP",
-            "a capability cannot be both primary and protected",
+            "a capability cannot belong to more than one execution role",
         )
 
     blueprint = _find_blueprint(
@@ -207,11 +215,26 @@ def materialize_strategy_document(
             "blueprint must declare planned/protected variants",
         )
 
+    supporting_rows = [
+        (
+            "supporting_candidates",
+            _mapping(raw, f"blueprint.supporting_candidates[{index}]"),
+            "supporting",
+        )
+        for index, raw in enumerate(
+            _list(
+                blueprint.get("supporting_candidates", []),
+                "blueprint.supporting_candidates",
+            )
+        )
+    ]
+
     occurrence_count: dict[str, int] = defaultdict(int)
+    target_count: dict[str, int] = defaultdict(int)
     recipe_family: dict[str, set[str]] = defaultdict(set)
     capability_role: dict[str, str] = {}
 
-    for collection, row, role_group in mandatory_rows:
+    for collection, row, role_group in (*mandatory_rows, *supporting_rows):
         recipe_id = str(row.get("recipe_key") or "").strip()
         declared_capability = str(row.get("capability") or "").strip()
         if not recipe_id or recipe_id not in recipe_caps:
@@ -220,7 +243,12 @@ def materialize_strategy_document(
                 f"{collection}: unknown recipe {recipe_id!r}",
             )
 
-        allowed = primary if role_group == "primary" else protected
+        if role_group == "primary":
+            allowed = primary
+        elif role_group == "protected":
+            allowed = protected
+        else:
+            allowed = secondary
         provided = tuple(
             capability
             for capability in recipe_caps[recipe_id]
@@ -248,18 +276,23 @@ def materialize_strategy_document(
                     capability,
                 )
             capability_role[capability] = role_group
-            occurrence_count[capability] += 1
+            if role_group == "supporting":
+                target_count[capability] += 1
+            else:
+                occurrence_count[capability] += 1
+                target_count[capability] += 1
             recipe_family[capability].add(recipe_id)
 
     obligations = []
     for capability in sorted(
-        occurrence_count,
+        set(occurrence_count) | set(target_count),
         key=lambda item: (
-            1 if capability_role[item] == "primary" else 2,
+            {"primary": 1, "protected": 2, "supporting": 3}[capability_role[item]],
             item,
         ),
     ):
         count = occurrence_count[capability]
+        target = target_count[capability]
         role_group = capability_role[capability]
         obligations.append(
             {
@@ -268,9 +301,10 @@ def materialize_strategy_document(
                 ),
                 "capability": capability,
                 "role": role_group,
-                "priority_tier": 1 if role_group == "primary" else 2,
+                "priority_tier": {"primary": 1, "protected": 2, "supporting": 3}[role_group],
                 "min_exposures": count,
-                "max_exposures": count,
+                "target_exposures": target,
+                "max_exposures": target,
                 "recipe_family": sorted(recipe_family[capability]),
                 "valid_from": affected_from.isoformat(),
                 "valid_until": affected_until.isoformat(),
@@ -290,6 +324,7 @@ def materialize_strategy_document(
         )
 
     mandatory_session_count = len(mandatory_rows)
+    intended_session_count = mandatory_session_count + len(supporting_rows)
     semantic = {
         "goal_set_hash": goal_hash,
         "mesocycle_id": mesocycle_id,
@@ -297,6 +332,7 @@ def materialize_strategy_document(
         "affected_until": affected_until.isoformat(),
         "obligations": obligations,
         "mandatory_session_count": mandatory_session_count,
+        "intended_session_count": intended_session_count,
     }
     digest = hashlib.sha256(
         json.dumps(
@@ -331,7 +367,7 @@ def materialize_strategy_document(
                     "unknown_policy": "block_increase",
                     "established_baseline_ref": (
                         f"development_blueprint:{affected_from.isoformat()}:"
-                        f"mandatory_session_count:{mandatory_session_count}"
+                        f"intended_session_count:{intended_session_count}"
                     ),
                     "source_refs": [
                         (
@@ -353,7 +389,7 @@ def materialize_strategy_document(
                             "window_days": (
                                 affected_until - affected_from
                             ).days + 1,
-                            "max_value": mandatory_session_count,
+                            "max_value": intended_session_count,
                             "provenance_refs": [
                                 (
                                     f"development_blueprint:"
