@@ -26,27 +26,36 @@ def canonical_catalog():
             "run_threshold_short_reps": {
                 "sport": "run",
                 "stimuli": ["run_threshold"],
+                "options": [
+                    {"id": "run-threshold-short-5x6"},
+                    {"id": "run-threshold-short-6x6"},
+                ],
             },
             "run_threshold": {
                 "sport": "run",
                 "stimuli": ["run_threshold"],
+                "options": [{"id": "run-threshold-4x8"}],
             },
             "swim_aerobic_endurance": {
                 "sport": "swim",
                 "stimuli": ["swim_aerobic", "swim_technique"],
+                "options": [{"id": "swim-aerobic-endurance-3200"}],
             },
             "swim_aerobic_skills": {
                 "sport": "swim",
                 "stimuli": ["swim_aerobic", "swim_technique"],
+                "options": [{"id": "swim-aerobic-skills-3200"}],
             },
             "strength_core": {
                 "sport": "strength",
                 "stimuli": ["strength_unilateral", "strength_core"],
                 "optional_stimuli": ["plyometric"],
+                "options": [{"id": "strength-35"}],
             },
             "run_easy_trail": {
                 "sport": "run",
                 "stimuli": ["run_easy_distance"],
+                "options": [{"id": "run-easy-trail-75"}],
             },
         }
     }
@@ -81,16 +90,22 @@ def canonical_strategy():
                             "role": "primary",
                             "capability": "run_threshold",
                             "recipe_key": "run_threshold_short_reps",
+                            "baseline_option_id": "run-threshold-short-5x6",
+                            "progression_intent": "vary_structure",
                         },
                         {
                             "role": "primary",
                             "capability": "swim_aerobic",
                             "recipe_key": "swim_aerobic_endurance",
+                            "baseline_option_id": "swim-aerobic-endurance-3200",
+                            "progression_intent": "vary_structure",
                         },
                         {
                             "role": "primary_companion",
                             "capability": "swim_aerobic",
                             "recipe_key": "swim_aerobic_skills",
+                            "baseline_option_id": "swim-aerobic-skills-3200",
+                            "progression_intent": "vary_structure",
                         },
                     ],
                     "protected_variants": [
@@ -172,6 +187,14 @@ class StrategyMaterializerTests(unittest.TestCase):
         )
         self.assertEqual(obligations["run_threshold"].min_exposures, 1)
         self.assertEqual(obligations["run_threshold"].max_exposures, 1)
+        self.assertEqual(
+            obligations["run_threshold"].allowed_dose_option_ids,
+            ("run-threshold-short-5x6",),
+        )
+        self.assertEqual(
+            set(obligations["swim_aerobic"].allowed_dose_option_ids),
+            {"swim-aerobic-endurance-3200", "swim-aerobic-skills-3200"},
+        )
         self.assertEqual(obligations["swim_aerobic"].min_exposures, 2)
         self.assertEqual(obligations["swim_technique"].min_exposures, 2)
         self.assertEqual(obligations["strength_core"].min_exposures, 1)
