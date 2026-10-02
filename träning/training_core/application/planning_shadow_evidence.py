@@ -6,6 +6,11 @@ import json
 from typing import Any, Iterable
 
 
+REAL_REPLANNING_TRIGGER_SOURCES = frozenset({
+    "canonical_training_update_shadow",
+})
+
+
 @dataclass(frozen=True)
 class ShadowEvidenceRequirements:
     min_microcycles: int = 4
@@ -60,10 +65,16 @@ def evaluate_shadow_evidence(
         and row.get("engine_version")
     ]
 
-    event_keys = {
+    all_event_keys = {
         str(row["event_key"])
         for row in ready_rows
         if row.get("event_key")
+    }
+    real_event_keys = {
+        str(row["event_key"])
+        for row in ready_rows
+        if row.get("event_key")
+        and row.get("trigger_source") in REAL_REPLANNING_TRIGGER_SOURCES
     }
     microcycles = {
         str(row["microcycle_key"])
@@ -101,12 +112,12 @@ def evaluate_shadow_evidence(
                 "observed": len(microcycles),
             }
         )
-    if len(event_keys) < requirements.min_events:
+    if len(real_event_keys) < requirements.min_events:
         blockers.append(
             {
                 "code": "INSUFFICIENT_REAL_REPLANNING_EVENTS",
                 "required": requirements.min_events,
-                "observed": len(event_keys),
+                "observed": len(real_event_keys),
             }
         )
     if nondeterministic_inputs:
@@ -126,7 +137,8 @@ def evaluate_shadow_evidence(
         "evidence": {
             "total_rows": len(materialized),
             "ready_solver_rows": len(ready_rows),
-            "distinct_events": len(event_keys),
+            "distinct_events": len(all_event_keys),
+            "distinct_real_replanning_events": len(real_event_keys),
             "distinct_microcycles": len(microcycles),
             "current_outcomes": current_count,
             "blocked_outcomes": blocked_count,
