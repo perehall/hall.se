@@ -324,6 +324,12 @@ def run_live_shadow(
             if solved.objective_vector is not None
             else None
         ),
+        "schedule_preferences": {
+            "preferred_active_days": bundle.objective_policy.schedule.preferred_active_days,
+            "min_active_days": bundle.objective_policy.schedule.min_active_days,
+            "max_active_days": bundle.objective_policy.schedule.max_active_days,
+            "double_sessions": bundle.objective_policy.schedule.double_sessions.value,
+        },
         "availability": [
             {
                 "date": item.local_date.isoformat(),
