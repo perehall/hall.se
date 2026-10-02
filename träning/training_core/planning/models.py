@@ -896,6 +896,7 @@ class PlanningObligation:
         ObservedCreditBasis.CONFIRMED_STIMULUS,
     )
     target_exposures: int | None = None
+    allowed_dose_option_ids: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
         object.__setattr__(self, "obligation_id", _required_text(self.obligation_id, "obligation_id"))
@@ -925,6 +926,15 @@ class PlanningObligation:
             self,
             "recipe_family",
             _unique_text_tuple(self.recipe_family, "recipe_family"),
+        )
+        object.__setattr__(
+            self,
+            "allowed_dose_option_ids",
+            _unique_text_tuple(
+                self.allowed_dose_option_ids,
+                "allowed_dose_option_ids",
+                allow_empty=True,
+            ),
         )
         object.__setattr__(
             self,
