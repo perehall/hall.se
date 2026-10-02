@@ -328,9 +328,9 @@
       "starting_state_hash": "52ff32e9ef09bd337669bbf6347085139222e7abd6a7cec41efd516a62e45cfe",
       "athlete_profile_hash": "559e0b6e5a587d351baa65817f81e04e433d0d46aac60b57a73429fd5b43d1bc",
       "mesocycle_source_hash": "9fb730125d779e8644a8486faa35467fe547c33194d479bd24aed65dfcf81994",
-      "microcycle_source_hash": "15cd6f162c669d4b056bb3a47e8deb35f96a0eb5436931d0e7caca3e0dcaa1d1",
+      "microcycle_source_hash": "859d867abf522c2729a3d352b26139d048f85f0b68be0ae484dc926c3bb34890",
       "mesocycle_decision_source": "openai",
-      "microcycle_decision_source": "deterministic_fallback_after_repair_guard"
+      "microcycle_decision_source": "deterministic_fallback"
     },
     "evaluation_date": "2026-10-26",
     "forward_horizon": [
@@ -574,10 +574,10 @@
         "capability_directions": [
           {
             "label": "Kontrollerad löptröskel",
-            "direction": "Fortsätt eller konsolidera tills blockreview visar stöd för progression eller byte av utvecklingsaxel.",
+            "direction": "Om blockreview bekräftar fortsatt absorption: kandidat för nästa förgodkända steg eller ny progressionsaxel.",
             "capability": "run_threshold",
             "evidence_state_now": "absorbed",
-            "progression_ready_now": false,
+            "progression_ready_now": true,
             "candidate_recipe_characters": [
               "Löptröskel · längre repetitioner",
               "Löptröskel · kortare repetitioner"
@@ -653,10 +653,10 @@
         "capability_directions": [
           {
             "label": "Kontrollerad löptröskel",
-            "direction": "Fortsätt eller konsolidera tills blockreview visar stöd för progression eller byte av utvecklingsaxel.",
+            "direction": "Om blockreview bekräftar fortsatt absorption: kandidat för nästa förgodkända steg eller ny progressionsaxel.",
             "capability": "run_threshold",
             "evidence_state_now": "absorbed",
-            "progression_ready_now": false,
+            "progression_ready_now": true,
             "candidate_recipe_characters": [
               "Löptröskel · längre repetitioner",
               "Löptröskel · kortare repetitioner"
@@ -1370,7 +1370,7 @@
     "north_star_role": "Den långsiktiga målportföljen är överordnad: varaktiga utvecklingsmål anger vilken atlet som ska byggas, medan tidsatta prestationsmål lägger till prioritering och specificitet."
   },
   "development_roadmap": {
-    "as_of": "2026-10-01",
+    "as_of": "2026-10-02",
     "timeline": [
       {
         "id": "active-block",
@@ -1686,10 +1686,10 @@
           "capability_directions": [
             {
               "label": "Kontrollerad löptröskel",
-              "direction": "Fortsätt eller konsolidera tills blockreview visar stöd för progression eller byte av utvecklingsaxel.",
+              "direction": "Om blockreview bekräftar fortsatt absorption: kandidat för nästa förgodkända steg eller ny progressionsaxel.",
               "capability": "run_threshold",
               "evidence_state_now": "absorbed",
-              "progression_ready_now": false,
+              "progression_ready_now": true,
               "candidate_recipe_characters": [
                 "Löptröskel · längre repetitioner",
                 "Löptröskel · kortare repetitioner"
@@ -1765,10 +1765,10 @@
           "capability_directions": [
             {
               "label": "Kontrollerad löptröskel",
-              "direction": "Fortsätt eller konsolidera tills blockreview visar stöd för progression eller byte av utvecklingsaxel.",
+              "direction": "Om blockreview bekräftar fortsatt absorption: kandidat för nästa förgodkända steg eller ny progressionsaxel.",
               "capability": "run_threshold",
               "evidence_state_now": "absorbed",
-              "progression_ready_now": false,
+              "progression_ready_now": true,
               "candidate_recipe_characters": [
                 "Löptröskel · längre repetitioner",
                 "Löptröskel · kortare repetitioner"
@@ -2155,16 +2155,16 @@
           "run_threshold_short_reps"
         ],
         "evidence_state": "absorbed",
-        "evidence_summary": "Absorberad nivå finns dokumenterad i capability-state. Senaste jämförbara exponeringen har stödjande passrespons men 72 h-observationsfönstret är ännu inte komplett.",
+        "evidence_summary": "Absorberad nivå finns dokumenterad i capability-state. Upprepad jämförbar dos med stödjande respons ger stöd för att dosen är absorberad.",
         "next_review_date": "2026-10-26",
         "progression_axes": [
           "work_duration",
           "interval_structure",
           "consistency"
         ],
-        "progression_ready": false,
-        "progression_state": "hold",
-        "progression_reason": "Senaste jämförbara exponeringen har stödjande passrespons men 72 h-observationsfönstret är ännu inte komplett."
+        "progression_ready": true,
+        "progression_state": "ready",
+        "progression_reason": "Upprepad jämförbar dos med stödjande respons ger stöd för att dosen är absorberad."
       },
       {
         "key": "run_hill_quality",
