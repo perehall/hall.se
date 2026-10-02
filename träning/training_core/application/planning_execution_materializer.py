@@ -101,6 +101,59 @@ def _typed_commitment_revision(
     return revision, rows, refs
 
 
+def _typed_prewindow_revision(
+    document: dict[str, Any] | None,
+) -> tuple[str | None, date | None, date | None, list[dict[str, Any]], tuple[str, ...]]:
+    if document is None:
+        return None, None, None, [], ()
+    root = _mapping(document, "canonical_prewindow_load_context")
+    v1 = _mapping(
+        root.get("planning_engine_v1"),
+        "canonical_prewindow_load_context.planning_engine_v1",
+    )
+    if v1.get("schema_version") != 1:
+        raise ExecutionFactsProjectionError(
+            "UNSUPPORTED_PREWINDOW_CONTEXT_SCHEMA",
+            "planning_engine_v1.schema_version must equal 1",
+        )
+    source = _mapping(
+        v1.get("prewindow_load_context_revision"),
+        "planning_engine_v1.prewindow_load_context_revision",
+    )
+    revision = str(source.get("revision_id") or "").strip()
+    if not revision:
+        raise ExecutionFactsProjectionError(
+            "INVALID_EXECUTION_MATERIALIZER_SOURCE",
+            "prewindow context revision_id must be non-empty",
+        )
+    coverage_from = _iso_day(
+        source.get("coverage_from"),
+        "prewindow_load_context_revision.coverage_from",
+    )
+    coverage_through = _iso_day(
+        source.get("coverage_through"),
+        "prewindow_load_context_revision.coverage_through",
+    )
+    if coverage_through < coverage_from:
+        raise ExecutionFactsProjectionError(
+            "INVALID_EXECUTION_MATERIALIZER_SOURCE",
+            "prewindow context coverage cannot run backwards",
+        )
+    rows = source.get("commitments")
+    if not isinstance(rows, list):
+        raise ExecutionFactsProjectionError(
+            "INVALID_EXECUTION_MATERIALIZER_SOURCE",
+            "prewindow context commitments must be array",
+        )
+    refs = tuple(str(item or "").strip() for item in source.get("source_refs", []))
+    if not refs or any(not item for item in refs):
+        raise ExecutionFactsProjectionError(
+            "INVALID_EXECUTION_MATERIALIZER_SOURCE",
+            "prewindow context source_refs must be non-empty",
+        )
+    return revision, coverage_from, coverage_through, rows, refs
+
+
 def _iso_day(value: Any, field: str) -> date:
     try:
         return date.fromisoformat(str(value))
@@ -115,6 +168,7 @@ def materialize_execution_facts_document(
     *,
     canonical_profile_record: dict[str, Any],
     canonical_fixed_commitments: dict[str, Any],
+    canonical_prewindow_load_context: dict[str, Any] | None = None,
     affected_from: date,
     affected_until: date,
     future_context_through: date,
@@ -202,6 +256,25 @@ def materialize_execution_facts_document(
     fixed_revision, commitment_rows, fixed_refs = _typed_commitment_revision(
         canonical_fixed_commitments
     )
+    (
+        prewindow_revision,
+        prewindow_coverage_from,
+        prewindow_coverage_through,
+        prewindow_rows,
+        prewindow_refs,
+    ) = _typed_prewindow_revision(canonical_prewindow_load_context)
+    if prewindow_coverage_from is not None:
+        if prewindow_coverage_from < planning_date:
+            raise ExecutionFactsProjectionError(
+                "INVALID_PREWINDOW_CONTEXT_COVERAGE",
+                "prewindow load context cannot begin before planning_date",
+            )
+        if prewindow_coverage_through is None or prewindow_coverage_through >= affected_from:
+            raise ExecutionFactsProjectionError(
+                "INVALID_PREWINDOW_CONTEXT_COVERAGE",
+                "prewindow load context must end before affected_from",
+            )
+
     commitments = []
     for index, raw in enumerate(commitment_rows):
         row = _mapping(
@@ -218,6 +291,33 @@ def materialize_execution_facts_document(
         # validates them; this layer never guesses dimensions or intensity.
         commitments.append(row)
 
+    for index, raw in enumerate(prewindow_rows):
+        row = _mapping(
+            raw,
+            f"prewindow_load_context_revision.commitments[{index}]",
+        )
+        local_date = _iso_day(
+            row.get("local_date"),
+            f"prewindow_load_context_revision.commitments[{index}].local_date",
+        )
+        if (
+            prewindow_coverage_from is None
+            or prewindow_coverage_through is None
+            or not prewindow_coverage_from <= local_date <= prewindow_coverage_through
+        ):
+            raise ExecutionFactsProjectionError(
+                "INVALID_PREWINDOW_CONTEXT_COVERAGE",
+                "prewindow commitment lies outside declared coverage",
+            )
+        commitments.append(row)
+
+    ids = [str(item.get("commitment_id") or "") for item in commitments]
+    if any(not item for item in ids) or len(set(ids)) != len(ids):
+        raise ExecutionFactsProjectionError(
+            "INVALID_EXECUTION_MATERIALIZER_SOURCE",
+            "merged fixed/prewindow commitments require unique non-empty ids",
+        )
+
     closed_dates = []
     day = affected_from
     while day <= affected_until:
@@ -228,6 +328,17 @@ def materialize_execution_facts_document(
     semantic = {
         "profile_revision": profile_revision,
         "fixed_revision": fixed_revision,
+        "prewindow_revision": prewindow_revision,
+        "prewindow_coverage_from": (
+            prewindow_coverage_from.isoformat()
+            if prewindow_coverage_from is not None
+            else None
+        ),
+        "prewindow_coverage_through": (
+            prewindow_coverage_through.isoformat()
+            if prewindow_coverage_through is not None
+            else None
+        ),
         "affected_from": affected_from.isoformat(),
         "affected_until": affected_until.isoformat(),
         "future_context_through": future_context_through.isoformat(),
@@ -250,6 +361,12 @@ def materialize_execution_facts_document(
                 f"athlete_profile:revision:{profile_revision}",
                 f"fixed_commitments:{fixed_revision}",
                 *fixed_refs,
+                *(
+                    [f"prewindow_context:{prewindow_revision}"]
+                    if prewindow_revision is not None
+                    else []
+                ),
+                *prewindow_refs,
             ]
         )
     )
@@ -260,6 +377,15 @@ def materialize_execution_facts_document(
                 "revision_id": f"execution:{digest}",
                 "source_refs": source_refs,
                 "fixed_commitments": commitments,
+                "prewindow_load_context": (
+                    {
+                        "coverage_from": prewindow_coverage_from.isoformat(),
+                        "coverage_through": prewindow_coverage_through.isoformat(),
+                    }
+                    if prewindow_coverage_from is not None
+                    and prewindow_coverage_through is not None
+                    else None
+                ),
                 "availability": availability,
                 "closed_dates": closed_dates,
             },
@@ -272,6 +398,7 @@ def materialize_execution_facts(
     *,
     canonical_profile_record: dict[str, Any],
     canonical_fixed_commitments: dict[str, Any],
+    canonical_prewindow_load_context: dict[str, Any] | None = None,
     affected_from: date,
     affected_until: date,
     future_context_through: date,
@@ -282,6 +409,7 @@ def materialize_execution_facts(
     document = materialize_execution_facts_document(
         canonical_profile_record=canonical_profile_record,
         canonical_fixed_commitments=canonical_fixed_commitments,
+        canonical_prewindow_load_context=canonical_prewindow_load_context,
         affected_from=affected_from,
         affected_until=affected_until,
         future_context_through=future_context_through,
