@@ -196,7 +196,9 @@ class StrategyMaterializerTests(unittest.TestCase):
             {"swim-aerobic-endurance-3200", "swim-aerobic-skills-3200"},
         )
         self.assertEqual(obligations["swim_aerobic"].min_exposures, 2)
+        self.assertTrue(obligations["swim_aerobic"].prefer_character_variation)
         self.assertEqual(obligations["swim_technique"].min_exposures, 2)
+        self.assertTrue(obligations["swim_technique"].prefer_character_variation)
         self.assertEqual(obligations["strength_core"].min_exposures, 1)
         self.assertEqual(obligations["strength_unilateral"].min_exposures, 1)
         self.assertEqual(obligations["run_easy_distance"].min_exposures, 0)
