@@ -288,6 +288,56 @@ def only_day_available(day):
 
 
 class PlanningSolverV1Tests(unittest.TestCase):
+    def test_repeated_capability_uses_distinct_planned_characters_when_available(self):
+        endurance = option(
+            "swim_aerobic_endurance",
+            "swim-endurance-3200",
+            "swim_aerobic",
+            "swim",
+            dimensions=(dim("cardiovascular", LoadDimensionLevel.LOW),),
+            minutes=60,
+        )
+        skills = option(
+            "swim_aerobic_skills",
+            "swim-skills-3200",
+            "swim_aerobic",
+            "swim",
+            dimensions=(dim("technical", LoadDimensionLevel.MODERATE),),
+            minutes=60,
+        )
+        swim_requirement = PlanningObligation(
+            obligation_id="swim-two-characters",
+            capability="swim_aerobic",
+            role="primary",
+            priority_tier=1,
+            min_exposures=2,
+            target_exposures=2,
+            max_exposures=2,
+            recipe_family=("swim_aerobic_endurance", "swim_aerobic_skills"),
+            allowed_dose_option_ids=(
+                "swim-endurance-3200",
+                "swim-skills-3200",
+            ),
+            valid_from=START,
+            valid_until=END,
+            source_refs=("strategy:test",),
+            prefer_character_variation=True,
+        )
+        result = solve(
+            context(
+                (swim_requirement,),
+                (endurance, skills),
+            ),
+            preferred_days=2,
+        )
+        self.assertFalse(result.blocked)
+        self.assertEqual(len(result.plan.workouts), 2)
+        self.assertEqual(
+            {item.recipe_id for item in result.plan.workouts},
+            {"swim_aerobic_endurance", "swim_aerobic_skills"},
+        )
+        self.assertEqual(result.objective_vector.variation_repeat_penalty, 0)
+
     def test_strategy_dose_domain_excludes_other_eligible_doses(self):
         baseline = option(
             "run_threshold",
