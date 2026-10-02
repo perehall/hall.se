@@ -70,6 +70,7 @@ def canonical_strategy():
                     "strength_core",
                     "plyometric",
                 ],
+                "secondary": ["run_easy_distance"],
             },
             "development_blueprint": [
                 {
@@ -166,6 +167,7 @@ class StrategyMaterializerTests(unittest.TestCase):
                 "swim_technique",
                 "strength_core",
                 "strength_unilateral",
+                "run_easy_distance",
             },
         )
         self.assertEqual(obligations["run_threshold"].min_exposures, 1)
@@ -174,13 +176,21 @@ class StrategyMaterializerTests(unittest.TestCase):
         self.assertEqual(obligations["swim_technique"].min_exposures, 2)
         self.assertEqual(obligations["strength_core"].min_exposures, 1)
         self.assertEqual(obligations["strength_unilateral"].min_exposures, 1)
+        self.assertEqual(obligations["run_easy_distance"].min_exposures, 0)
+        self.assertEqual(obligations["run_easy_distance"].target_exposures, 1)
+        self.assertEqual(obligations["run_easy_distance"].max_exposures, 1)
+        self.assertEqual(obligations["run_easy_distance"].role, "supporting")
 
-    def test_supporting_candidate_does_not_become_mandatory_obligation(self):
+    def test_supporting_candidate_is_soft_target_not_mandatory_obligation(self):
         strategy = compile_strategy_revision(
             self.materialize("2026-10-05", "2026-10-11")
         )
-        capabilities = {item.capability for item in strategy.obligations}
-        self.assertNotIn("run_easy_distance", capabilities)
+        obligation = next(
+            item for item in strategy.obligations
+            if item.capability == "run_easy_distance"
+        )
+        self.assertEqual(obligation.min_exposures, 0)
+        self.assertEqual(obligation.target_exposures, 1)
 
     def test_optional_recipe_stimulus_does_not_become_protected_obligation(self):
         strategy = compile_strategy_revision(
@@ -199,7 +209,7 @@ class StrategyMaterializerTests(unittest.TestCase):
         self.assertEqual(bound.metric, "session_count")
         self.assertEqual(bound.unit, "sessions")
         self.assertEqual(bound.window_days, 7)
-        self.assertEqual(bound.max_value, 4)
+        self.assertEqual(bound.max_value, 5)
 
     def test_next_microcycle_uses_its_own_blueprint_recipe_families(self):
         strategy = compile_strategy_revision(
