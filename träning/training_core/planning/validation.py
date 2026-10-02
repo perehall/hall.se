@@ -757,34 +757,26 @@ def _validate_availability(
         ]
         sessions = len(workouts) + len(commitments)
 
-        # Availability constrains mutable placement. A user-confirmed fixed
-        # commitment is immutable input and may itself exceed or have unknown
-        # schedule capacity; that conflict is preserved rather than erased.
-        # The planner may not worsen it by adding mutable training.
-        if not rule.available and workouts:
+        if not rule.available and sessions:
             issues.append(
                 ValidationIssue(
                     "TRAINING_ON_UNAVAILABLE_DATE",
-                    "Planner placed mutable training on a date declared unavailable.",
-                    (day.isoformat(), str(len(workouts))),
+                    "Training exists on a date declared unavailable.",
+                    (day.isoformat(), str(sessions)),
                 )
             )
             continue
 
-        if (
-            rule.max_sessions is not None
-            and workouts
-            and sessions > rule.max_sessions
-        ):
+        if rule.max_sessions is not None and sessions > rule.max_sessions:
             issues.append(
                 ValidationIssue(
                     "AVAILABILITY_SESSION_LIMIT_EXCEEDED",
-                    "Mutable training plus fixed commitments exceeds declared daily availability.",
+                    "Planned/fixed session count exceeds declared daily availability.",
                     (day.isoformat(), str(sessions), str(rule.max_sessions)),
                 )
             )
 
-        if rule.max_duration_minutes is not None and workouts:
+        if rule.max_duration_minutes is not None and sessions:
             durations: list[float] = []
             unknown_ids: list[str] = []
             for item in workouts:
@@ -804,11 +796,7 @@ def _validate_availability(
                 issues.append(
                     ValidationIssue(
                         "AVAILABILITY_DURATION_UNKNOWN",
-                        (
-                            "Combined daily duration cannot be proven for a mutable "
-                            "addition because one or more same-day sessions lack "
-                            "duration semantics."
-                        ),
+                        "Daily duration limit cannot be proven because one or more sessions lack duration semantics.",
                         (day.isoformat(), *sorted(unknown_ids)),
                     )
                 )
@@ -816,7 +804,7 @@ def _validate_availability(
                 issues.append(
                     ValidationIssue(
                         "AVAILABILITY_DURATION_EXCEEDED",
-                        "Mutable training plus fixed commitments exceeds declared daily availability.",
+                        "Upper-bound session duration exceeds declared daily availability.",
                         (
                             day.isoformat(),
                             str(sum(durations)),
