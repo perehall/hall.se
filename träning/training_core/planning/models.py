@@ -895,6 +895,7 @@ class PlanningObligation:
     accepted_observed_bases: tuple[ObservedCreditBasis, ...] = (
         ObservedCreditBasis.CONFIRMED_STIMULUS,
     )
+    target_exposures: int | None = None
 
     def __post_init__(self) -> None:
         object.__setattr__(self, "obligation_id", _required_text(self.obligation_id, "obligation_id"))
@@ -911,6 +912,14 @@ class PlanningObligation:
             raise PlanningContractError("max_exposures cannot be lower than min_exposures")
         if self.max_exposures == 0:
             raise PlanningContractError("an obligation with max_exposures=0 must not exist")
+        target = self.min_exposures if self.target_exposures is None else self.target_exposures
+        if not isinstance(target, int) or target < 0:
+            raise PlanningContractError("target_exposures must be a non-negative integer")
+        if target < self.min_exposures or target > self.max_exposures:
+            raise PlanningContractError(
+                "target_exposures must lie between min_exposures and max_exposures"
+            )
+        object.__setattr__(self, "target_exposures", target)
 
         object.__setattr__(
             self,
