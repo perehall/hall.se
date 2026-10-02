@@ -43,6 +43,7 @@ def explicit_document():
                         "target_exposures": 1,
                         "max_exposures": 1,
                         "recipe_family": ["run_threshold"],
+                        "allowed_dose_option_ids": ["threshold-32"],
                         "valid_from": "2026-10-05",
                         "valid_until": "2026-10-11",
                         "source_refs": ["mesocycle:test"],
@@ -84,6 +85,10 @@ class V1StrategyProjectionTests(unittest.TestCase):
         self.assertEqual(len(result.obligations), 1)
         self.assertEqual(result.obligations[0].min_exposures, 1)
         self.assertEqual(result.obligations[0].target_exposures, 1)
+        self.assertEqual(
+            result.obligations[0].allowed_dose_option_ids,
+            ("threshold-32",),
+        )
         self.assertEqual(result.obligations[0].max_exposures, 1)
         self.assertTrue(
             result.load_envelope.bounds[0].requires_complete_coverage
