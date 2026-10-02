@@ -6,17 +6,17 @@
         "facts": [
           "MTB/XC: 13,81 km · 1:18:30 · 216 m+ · snittpuls 126,3 · maxpuls 150."
         ],
-        "summary": "13.8 km kvälls-MTB på 78 min med måttlig snittpuls (126 bpm) genomfört utan användarrapport.",
+        "summary": "Kvällens mountainbikepass 4.7 timmar och 13.8 km genomfört utan subjektiv rapport; puls snitt 126 bpm, max 150 bpm — teknisk/utomhus-MTB-exponering registrerad.",
         "unknowns": [
-          "Subjektiv trötthet/DOMS efter passet (användarrapport saknas)",
-          "Detaljerad intensitetsfördelning inom MTB-passet saknas i analysis_context"
+          "Subjektiv trötthet/smärta efter passet",
+          "Eventuell teknisk intensitet eller många högbelastande nedslag under endurodelen"
         ],
         "confidence": "medium",
         "interpretations": [
-          "Aktiviteten är en verklig MTB/external load som ökar benmekanisk exponering efter flera hårda löp- och endurodagar; den visar att cykelbelastning faktiskt genomförts.",
-          "Eftersom inga subjektiva varningssignaler registrerats och private återhämtningsunderlaget saknar akut avvikelse som kräver vila, finns inget starkt skäl att avbryta planerade lågintensiva löppass i morgon, men närbelastningen får inte ignoreras."
+          "Detta var en mekanisk/teknisk MTB-exponering som räknas som faktisk belastning för blocket och kan minska benberedskap för löpning nästa dag.",
+          "Ingen användarrapport finns; från data går det inte att avgöra lokal muskeltrötthet eller subjektiv återhämtning vilket ökar osäkerheten för nästa dag."
         ],
-        "load_interpretation": "Passet adderar kardiovaskulär och mekanisk cykelbelastning som bör vägas mot senaste 48–72h; inga direkta varningssignaler i data."
+        "load_interpretation": "Passet adderar verklig extern MTB/enduro-belastning innan kommande löppass; beakta detta i närmaste 48–72 timmar."
       },
       "auto_apply": {
         "note": "Ingen automatisk planändring.",
@@ -25,16 +25,16 @@
       "activity_id": 20410781977,
       "plan_action": {
         "action": "keep",
-        "reason": "Dagens MTB var genomfört men saknar varningssignaler som motiverar konservativ vila eller reducering av morgondagens flex‑lätta löppass.",
+        "reason": "Ingen tydlig varningssignal i föregående 48–72 h som kräver vila, och planen prioriterar att behålla den lugna löptåligheten.",
         "target_date": "2026-10-02",
         "dose_option_id": "",
-        "recommendation": "Genomför planerad lugn löpning 75 min enligt recept; håll passet kontrollerat aerobt och avbryt/skal ned om du känner ovanlig trötthet eller lokal bensmärta före start.",
+        "recommendation": "Genomför planerat lugnt löppass 60–75 min; håll det aerobt, undvik kvalitet och bedöm benkänsla före start. Om du känner lokal trötthet eller stelhet: reducera till 60 min eller vila.",
         "requires_approval": false,
         "target_workout_key": "20260928-run_threshold-swim_aerobic-swim_technique:mc1:2026-10-02:run_easy_distance_1"
       },
       "activity_date": "2026-10-01",
       "activity_name": "Evening Mountain Bike Ride",
-      "generated_at_utc": "2026-10-02T01:38:02.410322+00:00",
+      "generated_at_utc": "2026-10-02T12:10:29.274896+00:00",
       "analysis_contract": {
         "pipeline_version": 4,
         "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
@@ -1371,9 +1371,9 @@
       "performance_protocol_key": null
     }
   ],
-  "last_run_utc": "2026-10-02T01:38:02.410322+00:00",
+  "last_run_utc": "2026-10-02T12:10:29.274896+00:00",
   "contract_version": 16,
-  "last_trigger_hash": "809d54b7b1c85f71e7b7f587fe9f4b9d5b157a22b2986465dc32dfd81ad4f48d",
+  "last_trigger_hash": "0f71e0b87d7d183786ef63e41041b3f24637b1dd3b1978d584c76228a55d1277",
   "analysed_activity_ids": [
     "20367593813",
     "20350203020",

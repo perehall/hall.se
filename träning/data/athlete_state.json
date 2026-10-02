@@ -2714,15 +2714,26 @@
       "elapsed_time_s": 3755,
       "elevation_gain_m": 112.0,
       "training_profile": {
-        "stimuli": [],
+        "stimuli": [
+          {
+            "key": "run_threshold",
+            "dose": {
+              "protocol": "4x8min",
+              "work_minutes": 32.0
+            },
+            "source": "explicit_user_report",
+            "status": "confirmed",
+            "confidence": "high"
+          }
+        ],
         "activity_id": 20381137043,
         "source_hash": "ec8e5806fce8adb3a04d34ce350cc42778e7ebc089d7caca34c96418a235fae9",
-        "uncertainties": [
-          "Intervallstruktur observerad men fysiologiskt stimulus kan inte fastställas från tillgänglig evidens."
-        ],
+        "uncertainties": [],
         "intent_matches": [],
         "schema_version": 2,
-        "planning_credits": [],
+        "planning_credits": [
+          "run_threshold"
+        ],
         "observed_structure": {
           "run_time_intervals": {
             "structured": true,
@@ -2992,9 +3003,15 @@
           "family": "run",
           "source": "confirmed_stimulus",
           "activity_id": 20284663236
+        },
+        {
+          "date": "2026-09-29",
+          "family": "run",
+          "source": "confirmed_stimulus",
+          "activity_id": 20381137043
         }
       ],
-      "verified_exposure_count": 3
+      "verified_exposure_count": 4
     },
     "strength_core": {
       "verified_exposures": [
@@ -3174,7 +3191,7 @@
       "verified_exposure_count": 2
     }
   },
-  "generated_at_utc": "2026-10-02T01:35:00.089282+00:00",
+  "generated_at_utc": "2026-10-02T12:08:19.940604+00:00",
   "capability_states": {
     "model": "capability_feedback_state_v1",
     "principle": "Kvantitativ progression kräver verifierad capability-evidens och dose-response. Teknikförmågor kan vara observerade men blir inte automatiskt progressionsredo från tid eller distans.",
@@ -3413,17 +3430,25 @@
             "distance_m": 12897.3,
             "activity_id": 20284663236,
             "elapsed_time_s": 3687
+          },
+          {
+            "date": "2026-09-29",
+            "family": "run",
+            "source": "confirmed_stimulus",
+            "distance_m": 13135.4,
+            "activity_id": 20381137043,
+            "elapsed_time_s": 3755
           }
         ],
         "progression_reason_code": "absorbed_supportive_repeat",
-        "verified_exposure_count": 3,
+        "verified_exposure_count": 4,
         "latest_verified_exposure": {
-          "date": "2026-09-22",
+          "date": "2026-09-29",
           "family": "run",
           "source": "confirmed_stimulus",
-          "distance_m": 12897.3,
-          "activity_id": 20284663236,
-          "elapsed_time_s": 3687
+          "distance_m": 13135.4,
+          "activity_id": 20381137043,
+          "elapsed_time_s": 3755
         }
       },
       "strength_core": {

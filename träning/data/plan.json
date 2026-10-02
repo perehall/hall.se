@@ -277,10 +277,10 @@
         "status": "synced",
         "transport": "intervals_icu",
         "source_hash": "cdaf576c0dd6a63e462216996c5308e688194199948b400f4e5ae5c59ba8c7d5",
-        "updated_at_utc": "2026-10-02T01:38:04.064707+00:00",
+        "updated_at_utc": "2026-10-02T12:10:30.702276+00:00",
         "device_delivery": "unverified",
-        "verified_at_utc": "2026-10-02T01:38:04.064707+00:00",
-        "provider_event_id": 140632070
+        "verified_at_utc": "2026-10-02T12:10:30.702276+00:00",
+        "provider_event_id": 140743090
       },
       "block_intent": "establish",
       "dose_options": [
@@ -581,6 +581,14 @@
           "value": 3200,
           "intent": "Kortare etablerad simexponering.",
           "session": "Simning · 3 200 m · aerob/teknik",
+          "planning_v1": {
+            "duration_cap_source_refs": [
+              "activity:20300494236:3200m:elapsed_3537s",
+              "activity:20396959391:3700m:elapsed_4082s",
+              "planning_v1:explicit_execution_cap:90m"
+            ],
+            "max_session_duration_minutes": 90
+          },
           "watch_workout": {
             "name": "Aerob/teknik · kroppslinje och rotation · 3 200 m",
             "type": "Swim",

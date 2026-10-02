@@ -960,6 +960,22 @@
       "source_hash": "a5e9367de8bb4c9c6da7c934bd9dc34f253f2da913c6adf64b73114128c3e149",
       "generated_at_utc": "2026-10-02T01:37:55.941159+00:00",
       "summary": "Reparerar föregående förslag genom att ta bort tung benbelastning på dag 7 (söndag) före måndagens fasta enduro. Strength/core flyttas till en icke‑konfliktande dag (torsdag, day_index=4). Övriga val behålls enligt develop‑blueprint och mesocykelns guardrails (två simbassessioner, skyddad styrka, varierad tröskelstruktur, låg benbelastning dag 2)."
+    },
+    {
+      "kind": "microcycle",
+      "decision_id": "2026-W40",
+      "source": "deterministic_fallback",
+      "source_hash": "a1bd82c11295ce722ca56e98af2347aa02732e26bf25bad6e5f3a6a9aa0adcba",
+      "generated_at_utc": "2026-10-02T12:09:34.484283+00:00",
+      "summary": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern. Modellbedömning saknades: Planeringsmodellen misslyckades: oväntad modellstatus incomplete: {'reason': 'max_output_tokens'}"
+    },
+    {
+      "kind": "upcoming_microcycle",
+      "decision_id": "2026-W41",
+      "source": "deterministic_fallback_after_repair_guard",
+      "source_hash": "d993e9760cdca19e77da9fdf8f596f3354397464e99a4b1664d0dd3a51e63dc3",
+      "generated_at_utc": "2026-10-02T12:10:22.307883+00:00",
+      "summary": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern."
     }
   ]
 }
