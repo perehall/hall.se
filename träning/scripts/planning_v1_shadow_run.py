@@ -288,6 +288,13 @@ def run_live_shadow(
         "semantic_input_hash": solved.authority_state.semantic_input_hash,
         "plan_content_hash": solved.authority_state.plan_content_hash,
         "workouts": _workout_summary(result),
+        "generation": {
+            "atoms": solved.trace.generation.atoms,
+            "terminal_selections": solved.trace.generation.terminal_selections,
+            "plan_variants": solved.trace.generation.plan_variants,
+            "search_complete": solved.trace.search_complete,
+            "optimality_proven": solved.trace.optimality_proven,
+        },
         "rejection_counts": [
             {"code": code, "count": count}
             for code, count in solved.trace.rejection_counts
