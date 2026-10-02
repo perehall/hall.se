@@ -44,7 +44,10 @@ EASY_INTENT_WORD = re.compile(
 )
 DURATION_SESSION_RE = re.compile(r"(?<![×x])\b(?P<minutes>\d{2,3})\s*min\b", re.IGNORECASE)
 DISTANCE_SESSION_RE = re.compile(r"\b(?P<distance>\d[\d ]{2,})\s*m\b", re.IGNORECASE)
-THRESHOLD_WORD = re.compile(r"\b(trösk\w*|threshold|tempo)\b", re.IGNORECASE)
+THRESHOLD_WORD = re.compile(
+    r"\b(?:[\wåäö]*trösk\w*|threshold|tempo)\b",
+    re.IGNORECASE,
+)
 TIME_INTERVAL_REPORT = re.compile(
     r"(?P<count>\d+)\s*[x×]\s*(?P<minutes>\d+(?:[.,]\d+)?)\s*min",
     re.IGNORECASE,
@@ -642,6 +645,17 @@ def _explicit_stimuli(activity):
             )
 
     return result
+
+
+def explicit_confirmed_stimuli(activity):
+    """Return only stimuli supported directly by the activity/user report.
+
+    This public boundary deliberately excludes plan matching and performance
+    fingerprints so consumers can use fresh canonical feedback without
+    importing legacy calendar intent.
+    """
+
+    return tuple(dict(item) for item in _explicit_stimuli(activity))
 
 
 def build_training_profile(

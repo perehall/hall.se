@@ -34,7 +34,15 @@
           "kind": "structured",
           "value": 32,
           "session": "Löpning · kontrollerad tröskel · 4 × 8 min / 90 s jogg",
-          "intent": "Alternativ struktur med något större total arbetstid; används bara när faktisk historik stödjer den."
+          "intent": "Alternativ struktur med något större total arbetstid; används bara när faktisk historik stödjer den.",
+          "planning_v1": {
+            "max_session_duration_minutes": 90,
+            "duration_cap_source_refs": [
+              "activity:20284663236:4x8:elapsed_3687s",
+              "activity:20381137043:4x8:elapsed_3755s",
+              "planning_v1:explicit_execution_cap:90m"
+            ]
+          }
         },
         {
           "id": "run-threshold-4x9",
@@ -45,7 +53,15 @@
         }
       ],
       "development_character": "threshold_long_reps",
-      "blueprint_label": "Löptröskel · längre repetitioner"
+      "blueprint_label": "Löptröskel · längre repetitioner",
+      "planning_v1": {
+        "eligibility_basis": {
+          "run_threshold": {
+            "mode": "numeric",
+            "metric": "work_minutes"
+          }
+        }
+      }
     },
     "run_hill_quality": {
       "sport": "run",
@@ -126,7 +142,15 @@
         }
       ],
       "development_character": "hill_clustered_reps",
-      "blueprint_label": "Backkvalitet · klustrade 150 m-reps"
+      "blueprint_label": "Backkvalitet · klustrade 150 m-reps",
+      "planning_v1": {
+        "eligibility_basis": {
+          "run_hill_quality": {
+            "mode": "numeric",
+            "metric": "repetitions"
+          }
+        }
+      }
     },
     "run_easy_distance": {
       "sport": "run",
@@ -177,7 +201,15 @@
         }
       ],
       "development_character": "easy_steady",
-      "blueprint_label": "Lugn löpdistans · jämn"
+      "blueprint_label": "Lugn löpdistans · jämn",
+      "planning_v1": {
+        "eligibility_basis": {
+          "run_easy_distance": {
+            "mode": "numeric",
+            "metric": "duration_minutes"
+          }
+        }
+      }
     },
     "mtb_technical": {
       "sport": "bike",
@@ -224,7 +256,19 @@
         }
       ],
       "development_character": "technical_flow",
-      "blueprint_label": "MTB/XC · teknik och flyt"
+      "blueprint_label": "MTB/XC · teknik och flyt",
+      "planning_v1": {
+        "eligibility_basis": {
+          "mtb_technical": {
+            "mode": "numeric",
+            "metric": "duration_minutes"
+          },
+          "mtb_aerobic": {
+            "mode": "numeric",
+            "metric": "duration_minutes"
+          }
+        }
+      }
     },
     "swim_aerobic_technique": {
       "sport": "swim",
@@ -327,12 +371,31 @@
                 ]
               }
             ]
+          },
+          "planning_v1": {
+            "max_session_duration_minutes": 90,
+            "duration_cap_source_refs": [
+              "activity:20300494236:3200m:elapsed_3537s",
+              "activity:20396959391:3700m:elapsed_4082s",
+              "planning_v1:explicit_execution_cap:90m"
+            ]
           }
         }
       ],
       "catalog_note": "Fullt exekverbart lågmekaniskt aerob/teknik-recept. Garmin/Intervals-transporten lägger automatiskt Press LAP-setvila mellan huvudblocken.",
       "development_character": "technique_aerobic",
-      "blueprint_label": "Sim · aerob teknik"
+      "blueprint_label": "Sim · aerob teknik",
+      "planning_v1": {
+        "eligibility_basis": {
+          "swim_aerobic": {
+            "mode": "numeric",
+            "metric": "distance_m"
+          },
+          "swim_technique": {
+            "mode": "qualitative"
+          }
+        }
+      }
     },
     "strength_core": {
       "sport": "strength",
@@ -374,7 +437,19 @@
         }
       ],
       "development_character": "unilateral_core",
-      "blueprint_label": "Styrka/core · unilateral + bål"
+      "blueprint_label": "Styrka/core · unilateral + bål",
+      "planning_v1": {
+        "eligibility_basis": {
+          "strength_unilateral": {
+            "mode": "numeric",
+            "metric": "duration_minutes"
+          },
+          "strength_core": {
+            "mode": "numeric",
+            "metric": "duration_minutes"
+          }
+        }
+      }
     },
     "swim_aerobic_threshold": {
       "sport": "swim",
@@ -490,7 +565,22 @@
       ],
       "catalog_note": "Separat etablerat kvalitetsrecept. Det får väljas när mikrocykeln behöver swim_threshold; det ska inte behandlas som nästa linjära distanssteg från swim_aerobic_technique. Garmin/Intervals-transporten lägger Press LAP-setvila mellan huvudblocken.",
       "development_character": "controlled_threshold",
-      "blueprint_label": "Sim · aerob + kontrollerad tröskel"
+      "blueprint_label": "Sim · aerob + kontrollerad tröskel",
+      "planning_v1": {
+        "eligibility_basis": {
+          "swim_aerobic": {
+            "mode": "numeric",
+            "metric": "distance_m"
+          },
+          "swim_threshold": {
+            "mode": "numeric",
+            "metric": "distance_m"
+          },
+          "swim_technique": {
+            "mode": "qualitative"
+          }
+        }
+      }
     },
     "swim_aerobic_endurance": {
       "sport": "swim",
@@ -577,6 +667,14 @@
                 ]
               }
             ]
+          },
+          "planning_v1": {
+            "max_session_duration_minutes": 90,
+            "duration_cap_source_refs": [
+              "activity:20300494236:3200m:elapsed_3537s",
+              "activity:20396959391:3700m:elapsed_4082s",
+              "planning_v1:explicit_execution_cap:90m"
+            ]
           }
         },
         {
@@ -654,7 +752,18 @@
         }
       ],
       "catalog_note": "Separat aerob utvecklingskaraktär. Totaldistansen ligger inom redan demonstrerad 3,2–4,0 km-nivå; receptet antar ingen ny fart, puls eller tröskel och ska inte användas som automatisk volymökning.",
-      "blueprint_label": "Sim · aerob uthållighet"
+      "blueprint_label": "Sim · aerob uthållighet",
+      "planning_v1": {
+        "eligibility_basis": {
+          "swim_aerobic": {
+            "mode": "numeric",
+            "metric": "distance_m"
+          },
+          "swim_technique": {
+            "mode": "qualitative"
+          }
+        }
+      }
     },
     "run_threshold_short_reps": {
       "sport": "run",
@@ -676,14 +785,32 @@
           "kind": "structured",
           "value": 25,
           "session": "Löpning · kontrollerad tröskel · 5 × 5 min / 60 s jogg",
-          "intent": "Lateral variant med kortare repetitioner och fortsatt kontrollerad intensitetsavsikt."
+          "intent": "Lateral variant med kortare repetitioner och fortsatt kontrollerad intensitetsavsikt.",
+          "planning_v1": {
+            "max_session_duration_minutes": 90,
+            "duration_cap_source_refs": [
+              "activity:20284663236:4x8:elapsed_3687s",
+              "activity:20381137043:4x8:elapsed_3755s",
+              "planning_v1:duration_cap:short_threshold_mainset_bounded_by_evidenced_4x8",
+              "planning_v1:explicit_execution_cap:90m"
+            ]
+          }
         },
         {
           "id": "run-threshold-short-5x6",
           "kind": "structured",
           "value": 30,
           "session": "Löpning · kontrollerad tröskel · 5 × 6 min / 60 s jogg",
-          "intent": "Kontrollerad variant nära etablerad total arbetstid utan att kräva högre intensitet."
+          "intent": "Kontrollerad variant nära etablerad total arbetstid utan att kräva högre intensitet.",
+          "planning_v1": {
+            "max_session_duration_minutes": 90,
+            "duration_cap_source_refs": [
+              "activity:20284663236:4x8:elapsed_3687s",
+              "activity:20381137043:4x8:elapsed_3755s",
+              "planning_v1:duration_cap:short_threshold_mainset_bounded_by_evidenced_4x8",
+              "planning_v1:explicit_execution_cap:90m"
+            ]
+          }
         },
         {
           "id": "run-threshold-short-6x6",
@@ -692,7 +819,15 @@
           "session": "Löpning · kontrollerad tröskel · 6 × 6 min / 60 s jogg",
           "intent": "Förgodkänt arbetstidssteg när run_threshold-response uttryckligen stödjer progression."
         }
-      ]
+      ],
+      "planning_v1": {
+        "eligibility_basis": {
+          "run_threshold": {
+            "mode": "numeric",
+            "metric": "work_minutes"
+          }
+        }
+      }
     },
     "run_hill_continuous": {
       "sport": "run",
@@ -731,7 +866,15 @@
           "session": "Löpning · backkvalitet · 15 min lugnt + 24 × 150 m / lugn nedjogg + 10 min lugnt",
           "intent": "Lateral strukturvariant vid 24 kvalitativa repetitioner; ingen automatisk ökning över verifierad nivå."
         }
-      ]
+      ],
+      "planning_v1": {
+        "eligibility_basis": {
+          "run_hill_quality": {
+            "mode": "numeric",
+            "metric": "repetitions"
+          }
+        }
+      }
     },
     "run_easy_trail": {
       "sport": "run",
@@ -776,7 +919,15 @@
           "session": "Löpning · lugn stig/grus · 120 min",
           "intent": "Längre terrängdos endast när faktisk tålighet och närbelastning stödjer den."
         }
-      ]
+      ],
+      "planning_v1": {
+        "eligibility_basis": {
+          "run_easy_distance": {
+            "mode": "numeric",
+            "metric": "duration_minutes"
+          }
+        }
+      }
     },
     "mtb_aerobic_endurance": {
       "sport": "bike",
@@ -820,7 +971,15 @@
           "session": "MTB/XC · 105 min · lugn aerob stig/grus",
           "intent": "Förgodkänt längre steg som kräver stöd i faktisk tålighet."
         }
-      ]
+      ],
+      "planning_v1": {
+        "eligibility_basis": {
+          "mtb_aerobic": {
+            "mode": "numeric",
+            "metric": "duration_minutes"
+          }
+        }
+      }
     },
     "swim_aerobic_skills": {
       "sport": "swim",
@@ -925,6 +1084,14 @@
                 ]
               }
             ]
+          },
+          "planning_v1": {
+            "max_session_duration_minutes": 90,
+            "duration_cap_source_refs": [
+              "activity:20300494236:3200m:elapsed_3537s",
+              "activity:20396959391:3700m:elapsed_4082s",
+              "planning_v1:explicit_execution_cap:90m"
+            ]
           }
         },
         {
@@ -1018,7 +1185,18 @@
           }
         }
       ],
-      "catalog_note": "Alternativt exekverbart aerob/teknik-recept för strukturell variation utan automatisk intensitetsökning."
+      "catalog_note": "Alternativt exekverbart aerob/teknik-recept för strukturell variation utan automatisk intensitetsökning.",
+      "planning_v1": {
+        "eligibility_basis": {
+          "swim_aerobic": {
+            "mode": "numeric",
+            "metric": "distance_m"
+          },
+          "swim_technique": {
+            "mode": "qualitative"
+          }
+        }
+      }
     }
   },
   "capability_recipe_families": {
