@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from collections import defaultdict
 from dataclasses import dataclass
+import json
 from typing import Any, Iterable
 
 
@@ -18,10 +19,22 @@ class ShadowEvidenceRequirements:
 
 
 def _stable_outcome(row: dict[str, Any]) -> tuple[Any, ...]:
+    objective = row.get("objective_vector")
+    canonical_objective = (
+        json.dumps(
+            objective,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+            default=str,
+        )
+        if objective is not None
+        else None
+    )
     return (
         row.get("solver_status"),
         row.get("plan_content_hash"),
-        row.get("objective_vector"),
+        canonical_objective,
     )
 
 
