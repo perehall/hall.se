@@ -90,6 +90,8 @@ def run_shadow_planning(
         closed_dates=bundle.closed_dates,
         observed_obligation_credits=bundle.observed_credits,
         observed_load_exposures=bundle.observed_load,
+        prewindow_load_context_from=bundle.prewindow_load_context_from,
+        prewindow_load_context_through=bundle.prewindow_load_context_through,
     )
     semantic_input = semantic_planning_input_payload(
         context,
