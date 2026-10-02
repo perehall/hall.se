@@ -234,6 +234,8 @@ def assemble_canonical_shadow_projections(
             schedule=profile.schedule,
             spacing_preferences=policy.spacing_preferences,
         ),
+        prewindow_load_context_from=execution.prewindow_load_context_from,
+        prewindow_load_context_through=execution.prewindow_load_context_through,
     )
     return CanonicalProjectionAssemblyResult(
         bundle=bundle,
