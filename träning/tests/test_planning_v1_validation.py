@@ -347,6 +347,8 @@ def context(
     history_from=date(2026, 9, 29),
     history_through=date(2026, 10, 4),
     future_context_through=date(2026, 10, 12),
+    prewindow_load_context_from=None,
+    prewindow_load_context_through=None,
 ):
     catalog_values = tuple(catalog or (option_easy(), option_threshold(), option_mtb()))
     return PlanValidationContext(
@@ -365,6 +367,8 @@ def context(
         closed_dates=tuple(closed_dates),
         observed_obligation_credits=tuple(observed_credits),
         observed_load_exposures=tuple(observed_exposures),
+        prewindow_load_context_from=prewindow_load_context_from,
+        prewindow_load_context_through=prewindow_load_context_through,
     )
 
 
@@ -668,6 +672,18 @@ class FinalPlanningValidatorTests(unittest.TestCase):
             context(observed_credits=(observed,)),
         )
         self.assertIn("OBSERVED_CREDIT_OUTSIDE_OBLIGATION_WINDOW", report.codes())
+
+    def test_explicit_prewindow_context_bridges_future_week_history_gap(self):
+        report = validate_plan_content(
+            valid_plan(),
+            context(
+                history_from=date(2026, 9, 29),
+                history_through=date(2026, 10, 1),
+                prewindow_load_context_from=date(2026, 10, 2),
+                prewindow_load_context_through=date(2026, 10, 4),
+            ),
+        )
+        self.assertNotIn("INSUFFICIENT_HISTORY_COVERAGE", report.codes())
 
     def test_rolling_aggregate_load_includes_observed_fixed_and_planned(self):
         observed = ObservedLoadExposure(
