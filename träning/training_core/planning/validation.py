@@ -1195,6 +1195,29 @@ def _matching_load(load: LoadEstimate, bound) -> bool:
     )
 
 
+def _exposure_relevant_to_bound(
+    kind: str,
+    loads: tuple[LoadEstimate, ...],
+    bound,
+) -> bool:
+    # "planned" is planner-local accounting (for example the mutable-session
+    # budget of one affected window). A workout from an already-authoritative
+    # earlier plan is immutable context in this solve and must not consume the
+    # new window's mutable-session budget.
+    if bound.scope == "planned":
+        return kind == "planned"
+    # Global bounds apply to every training exposure and therefore require
+    # explicit metric coverage when complete coverage is requested.
+    if bound.scope == "global":
+        return True
+    # Capability/scoped bounds apply only to exposures that explicitly declare
+    # that semantic subject. Absence of another capability is not missing data.
+    return any(
+        load.scope == bound.scope and load.subject == bound.subject
+        for load in loads
+    )
+
+
 def _validate_aggregate_load(
     plan: PlanContent,
     context: PlanValidationContext,
@@ -1239,6 +1262,7 @@ def _validate_aggregate_load(
             (local_date, loads, exposure_id, kind)
             for local_date, loads, exposure_id, kind in dated_exposures
             if horizon_from <= local_date <= plan.affected_until
+            and _exposure_relevant_to_bound(kind, loads, bound)
         ]
 
         if bound.requires_complete_coverage:
@@ -1282,8 +1306,9 @@ def _validate_aggregate_load(
             start_day = end_day - timedelta(days=bound.window_days - 1)
             total = sum(
                 float(load.max_value)
-                for local_date, loads, _, _ in dated_exposures
+                for local_date, loads, _, kind in dated_exposures
                 if start_day <= local_date <= end_day
+                and _exposure_relevant_to_bound(kind, loads, bound)
                 for load in loads
                 if _matching_load(load, bound)
             )
