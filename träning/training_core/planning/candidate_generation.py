@@ -125,6 +125,23 @@ def _credit(value) -> Fraction:
     return Fraction(value.credit_numerator, value.credit_denominator)
 
 
+def _duration_upper_bound_minutes(item) -> float | None:
+    matches = [
+        estimate
+        for estimate in item.quantitative_load
+        if (
+            estimate.scope,
+            estimate.subject,
+            estimate.metric,
+            estimate.unit,
+        )
+        == ("global", "training_duration", "duration", "minutes")
+    ]
+    if not matches:
+        return None
+    return sum(float(estimate.max_value) for estimate in matches)
+
+
 def _date_range(first: date, last: date):
     current = first
     while current <= last:
@@ -301,16 +318,37 @@ def generate_candidate_atoms(
                     placement.min_occurrences,
                 )
 
+            day_commitments = tuple(
+                commitment
+                for commitment in context.fixed_commitments
+                if commitment.local_date == day
+            )
             if rule is not None and rule.max_sessions is not None:
-                fixed_count = sum(
-                    1
-                    for commitment in context.fixed_commitments
-                    if commitment.local_date == day
-                )
                 multiplicity = min(
                     multiplicity,
-                    max(0, rule.max_sessions - fixed_count),
+                    max(0, rule.max_sessions - len(day_commitments)),
                 )
+
+            if rule is not None and rule.max_duration_minutes is not None:
+                option_duration = _duration_upper_bound_minutes(option)
+                fixed_durations = tuple(
+                    _duration_upper_bound_minutes(commitment)
+                    for commitment in day_commitments
+                )
+                if (
+                    option_duration is not None
+                    and option_duration > 0
+                    and all(value is not None for value in fixed_durations)
+                ):
+                    remaining_minutes = max(
+                        0.0,
+                        float(rule.max_duration_minutes)
+                        - sum(float(value) for value in fixed_durations),
+                    )
+                    multiplicity = min(
+                        multiplicity,
+                        int(remaining_minutes // option_duration),
+                    )
 
             for instance_index in range(1, multiplicity + 1):
                 constraint_ids = tuple(
