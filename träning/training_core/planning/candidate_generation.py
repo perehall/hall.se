@@ -15,7 +15,7 @@ from dataclasses import dataclass, replace
 from datetime import date, timedelta
 from fractions import Fraction
 from hashlib import sha256
-from itertools import combinations, permutations, product
+from itertools import combinations, combinations_with_replacement, permutations, product
 from math import ceil
 
 from .models import (
@@ -949,6 +949,466 @@ def _ordered_plan_variants(
     return tuple(result)
 
 
+
+@dataclass(frozen=True)
+class _ContentFamily:
+    """One prescription/contribution identity with a deferred calendar domain."""
+
+    option: ApprovedWorkoutOption
+    contributions: tuple[ObligationContribution, ...]
+    eligible_dates: tuple[date, ...]
+    max_instances_by_date: tuple[tuple[date, int], ...]
+    max_total_instances: int
+
+    @property
+    def key(self) -> tuple:
+        return (
+            self.option.recipe_id,
+            self.option.dose_option_id,
+            tuple(
+                (
+                    item.obligation_id,
+                    item.source_capability,
+                    item.kind.value,
+                    item.credit_numerator,
+                    item.credit_denominator,
+                )
+                for item in self.contributions
+            ),
+        )
+
+    def day_capacity(self, day: date) -> int:
+        return dict(self.max_instances_by_date).get(day, 0)
+
+
+@dataclass(frozen=True)
+class _ContentAtom:
+    family_index: int
+    instance_index: int
+
+    @property
+    def key(self) -> tuple[int, int]:
+        return self.family_index, self.instance_index
+
+
+def _compact_search_applicable(
+    context: PlanValidationContext,
+    affected_from: date,
+    affected_until: date,
+) -> bool:
+    """Return whether date can be deferred without changing contribution semantics.
+
+    Placement constraints carry explicit date semantics and therefore stay on
+    the exact date-atom path. Likewise an obligation whose validity covers only
+    part of the solve window has date-dependent contribution semantics.
+    """
+
+    if context.placement_constraints:
+        return False
+    return all(
+        item.valid_from <= affected_from
+        and item.valid_until >= affected_until
+        for item in context.strategy.obligations
+    )
+
+
+def _content_families(
+    context: PlanValidationContext,
+    date_atoms: tuple[CandidateAtom, ...],
+) -> tuple[_ContentFamily, ...]:
+    grouped: dict[tuple, list[CandidateAtom]] = {}
+    for atom in date_atoms:
+        contribution_key = tuple(
+            (
+                item.obligation_id,
+                item.source_capability,
+                item.kind.value,
+                item.credit_numerator,
+                item.credit_denominator,
+            )
+            for item in atom.contributions
+        )
+        key = (
+            atom.option.recipe_id,
+            atom.option.dose_option_id,
+            contribution_key,
+        )
+        grouped.setdefault(key, []).append(atom)
+
+    obligation_by_id = {
+        item.obligation_id: item
+        for item in context.strategy.obligations
+    }
+    families = []
+    for _, rows in sorted(grouped.items(), key=lambda pair: pair[0]):
+        first = rows[0]
+        max_total = 1
+        for contribution in first.contributions:
+            obligation = obligation_by_id[contribution.obligation_id]
+            max_total = max(
+                max_total,
+                ceil(
+                    Fraction(obligation.max_exposures, 1)
+                    / _credit(contribution)
+                ),
+            )
+
+        capacities: dict[date, int] = {}
+        for row in rows:
+            capacities[row.local_date] = max(
+                capacities.get(row.local_date, 0),
+                row.instance_index,
+            )
+
+        families.append(
+            _ContentFamily(
+                option=first.option,
+                contributions=first.contributions,
+                eligible_dates=tuple(sorted(capacities)),
+                max_instances_by_date=tuple(sorted(capacities.items())),
+                max_total_instances=max_total,
+            )
+        )
+    return tuple(families)
+
+
+def _content_credits(
+    selected: tuple[int, ...],
+    content_atoms: tuple[_ContentAtom, ...],
+    families: tuple[_ContentFamily, ...],
+    base: dict[str, Fraction],
+) -> dict[str, Fraction]:
+    result = dict(base)
+    for index in selected:
+        family = families[content_atoms[index].family_index]
+        for contribution in family.contributions:
+            result[contribution.obligation_id] = (
+                result.get(contribution.obligation_id, Fraction(0, 1))
+                + _credit(contribution)
+            )
+    return result
+
+
+def _enumerate_content_selections(
+    context: PlanValidationContext,
+    families: tuple[_ContentFamily, ...],
+    affected_from: date,
+    affected_until: date,
+    limits: CandidateGenerationLimits,
+) -> tuple[tuple[tuple[int, ...], ...], tuple[_ContentAtom, ...], int]:
+    """Choose weekly prescription content before considering calendar dates."""
+
+    content_atoms = tuple(
+        _ContentAtom(family_index=family_index, instance_index=instance_index)
+        for family_index, family in enumerate(families)
+        for instance_index in range(1, family.max_total_instances + 1)
+    )
+    base = _observed_credits(context)
+    obligations = tuple(
+        sorted(
+            (
+                item
+                for item in context.strategy.obligations
+                if item.valid_from <= affected_until
+                and item.valid_until >= affected_from
+            ),
+            key=lambda item: (item.priority_tier, item.obligation_id),
+        )
+    )
+    indexes_by_obligation = {
+        obligation.obligation_id: tuple(
+            index
+            for index, content_atom in enumerate(content_atoms)
+            if any(
+                contribution.obligation_id == obligation.obligation_id
+                for contribution in families[
+                    content_atom.family_index
+                ].contributions
+            )
+        )
+        for obligation in obligations
+    }
+
+    terminals: set[tuple[int, ...]] = set()
+    seen: set[tuple[tuple[int, ...], tuple[str, ...]]] = set()
+    states = 0
+
+    def conflicts(selected: tuple[int, ...], credits: dict[str, Fraction]) -> bool:
+        by_family: dict[int, list[int]] = {}
+        for index in selected:
+            atom = content_atoms[index]
+            by_family.setdefault(atom.family_index, []).append(atom.instance_index)
+        for indexes in by_family.values():
+            normalized = sorted(indexes)
+            if normalized != list(range(1, len(normalized) + 1)):
+                return True
+
+        for obligation in obligations:
+            if credits.get(obligation.obligation_id, Fraction(0, 1)) > Fraction(
+                obligation.max_exposures,
+                1,
+            ):
+                return True
+        return False
+
+    def finish(selected: tuple[int, ...]) -> None:
+        terminals.add(tuple(sorted(selected)))
+        if len(terminals) > limits.max_terminal_selections:
+            raise CandidateSearchLimitExceeded(
+                stage="content_selections",
+                observed=len(terminals),
+                limit=limits.max_terminal_selections,
+                generation=CandidateGenerationStats(
+                    atoms=sum(
+                        len(family.eligible_dates) * family.max_total_instances
+                        for family in families
+                    ),
+                    terminal_selections=len(terminals),
+                    plan_variants=0,
+                ),
+            )
+
+    def walk(selected: tuple[int, ...], declined: frozenset[str]) -> None:
+        nonlocal states
+        selected = tuple(sorted(selected))
+        state = (selected, tuple(sorted(declined)))
+        if state in seen:
+            return
+        seen.add(state)
+
+        credits = _content_credits(selected, content_atoms, families, base)
+        if conflicts(selected, credits):
+            return
+
+        states += 1
+        if states > limits.max_search_states:
+            raise CandidateSearchLimitExceeded(
+                stage="content_search_states",
+                observed=states,
+                limit=limits.max_search_states,
+                generation=CandidateGenerationStats(
+                    atoms=sum(
+                        len(family.eligible_dates) * family.max_total_instances
+                        for family in families
+                    ),
+                    terminal_selections=len(terminals),
+                    plan_variants=0,
+                ),
+            )
+
+        target = next(
+            (
+                obligation
+                for obligation in obligations
+                if obligation.obligation_id not in declined
+                and credits.get(obligation.obligation_id, Fraction(0, 1))
+                < Fraction(obligation.target_exposures, 1)
+            ),
+            None,
+        )
+        if target is None:
+            finish(selected)
+            return
+
+        selected_set = set(selected)
+        current_credit = credits.get(target.obligation_id, Fraction(0, 1))
+        for index in indexes_by_obligation[target.obligation_id]:
+            if index in selected_set:
+                continue
+            atom = content_atoms[index]
+            if atom.instance_index > 1:
+                predecessor = next(
+                    (
+                        candidate_index
+                        for candidate_index, candidate in enumerate(content_atoms)
+                        if candidate.family_index == atom.family_index
+                        and candidate.instance_index == atom.instance_index - 1
+                    ),
+                    None,
+                )
+                if predecessor is not None and predecessor not in selected_set:
+                    continue
+            contribution = next(
+                item
+                for item in families[atom.family_index].contributions
+                if item.obligation_id == target.obligation_id
+            )
+            if _credit(contribution) <= 0:
+                continue
+            if current_credit >= Fraction(target.target_exposures, 1):
+                continue
+            walk(tuple((*selected, index)), declined)
+
+        walk(selected, frozenset((*declined, target.obligation_id)))
+
+    walk((), frozenset())
+    return tuple(sorted(terminals)), content_atoms, states
+
+
+def _family_date_multisets(
+    family: _ContentFamily,
+    count: int,
+) -> tuple[tuple[date, ...], ...]:
+    if count == 0:
+        return ((),)
+    values = []
+    for dates in combinations_with_replacement(family.eligible_dates, count):
+        per_day: dict[date, int] = {}
+        valid = True
+        for day in dates:
+            per_day[day] = per_day.get(day, 0) + 1
+            if per_day[day] > family.day_capacity(day):
+                valid = False
+                break
+        if valid:
+            values.append(dates)
+    return tuple(values)
+
+
+def _placement_selections(
+    selection: tuple[int, ...],
+    content_atoms: tuple[_ContentAtom, ...],
+    families: tuple[_ContentFamily, ...],
+) -> tuple[tuple[CandidateAtom, ...], ...]:
+    counts: dict[int, int] = {}
+    for index in selection:
+        family_index = content_atoms[index].family_index
+        counts[family_index] = counts.get(family_index, 0) + 1
+
+    family_indexes = tuple(sorted(counts))
+    domains = tuple(
+        _family_date_multisets(families[index], counts[index])
+        for index in family_indexes
+    )
+    if any(not domain for domain in domains):
+        return ()
+
+    placements = []
+    for assignment in product(*domains):
+        rows = []
+        for family_index, dates in zip(family_indexes, assignment):
+            family = families[family_index]
+            per_day_instance: dict[date, int] = {}
+            for day in dates:
+                instance = per_day_instance.get(day, 0) + 1
+                per_day_instance[day] = instance
+                rows.append(
+                    CandidateAtom(
+                        local_date=day,
+                        option=family.option,
+                        contributions=family.contributions,
+                        instance_index=instance,
+                    )
+                )
+        placements.append(tuple(sorted(rows, key=lambda item: item.key)))
+    return tuple(placements)
+
+
+def _enumerate_candidate_plans_compact(
+    context: PlanValidationContext,
+    affected_from: date,
+    affected_until: date,
+    limits: CandidateGenerationLimits,
+) -> tuple[tuple[PlanContent, ...], CandidateGenerationStats]:
+    """Exact two-stage search: weekly content first, calendar placement second."""
+
+    date_atoms = generate_candidate_atoms(context, affected_from, affected_until)
+    families = _content_families(context, date_atoms)
+    selections, content_atoms, _ = _enumerate_content_selections(
+        context,
+        families,
+        affected_from,
+        affected_until,
+        limits,
+    )
+    inside_commitments = tuple(
+        item
+        for item in context.fixed_commitments
+        if affected_from <= item.local_date <= affected_until
+    )
+
+    plans = []
+    semantic_seen = set()
+    for selection in selections:
+        for placed_atoms in _placement_selections(
+            selection,
+            content_atoms,
+            families,
+        ):
+            base = _base_workouts(
+                tuple(range(len(placed_atoms))),
+                placed_atoms,
+            )
+            for workouts in _ordered_plan_variants(
+                base,
+                context,
+                affected_from,
+                affected_until,
+            ):
+                plan = PlanContent(
+                    source_revision=context.source_revision,
+                    strategy_revision_id=context.strategy.revision_id,
+                    affected_from=affected_from,
+                    affected_until=affected_until,
+                    workouts=workouts,
+                    fixed_commitments=inside_commitments,
+                )
+                semantic = (
+                    tuple(
+                        (
+                            item.workout_id,
+                            item.local_date,
+                            item.within_day_order,
+                            item.recipe_id,
+                            item.dose_option_id,
+                        )
+                        for item in plan.workouts
+                    ),
+                    tuple(item.commitment_id for item in plan.fixed_commitments),
+                )
+                if semantic in semantic_seen:
+                    continue
+                semantic_seen.add(semantic)
+                plans.append(plan)
+                if len(plans) > limits.max_plan_variants:
+                    raise CandidateSearchLimitExceeded(
+                        stage="plan_variants",
+                        observed=len(plans),
+                        limit=limits.max_plan_variants,
+                        generation=CandidateGenerationStats(
+                            atoms=len(date_atoms),
+                            terminal_selections=len(selections),
+                            plan_variants=len(plans),
+                        ),
+                    )
+
+    plans = tuple(
+        sorted(
+            plans,
+            key=lambda plan: tuple(
+                (
+                    item.local_date.isoformat(),
+                    item.within_day_order
+                    if item.within_day_order is not None
+                    else 999,
+                    item.recipe_id,
+                    item.dose_option_id,
+                    item.workout_id,
+                )
+                for item in plan.workouts
+            ),
+        )
+    )
+    return (
+        plans,
+        CandidateGenerationStats(
+            atoms=len(date_atoms),
+            terminal_selections=len(selections),
+            plan_variants=len(plans),
+        ),
+    )
+
+
 def enumerate_candidate_plans(
     context: PlanValidationContext,
     affected_from: date,
@@ -956,6 +1416,14 @@ def enumerate_candidate_plans(
     limits: CandidateGenerationLimits | None = None,
 ) -> tuple[tuple[PlanContent, ...], CandidateGenerationStats]:
     limits = limits or CandidateGenerationLimits()
+    if _compact_search_applicable(context, affected_from, affected_until):
+        return _enumerate_candidate_plans_compact(
+            context,
+            affected_from,
+            affected_until,
+            limits,
+        )
+
     atoms = generate_candidate_atoms(context, affected_from, affected_until)
     selections = enumerate_terminal_selections(
         context,
