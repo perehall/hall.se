@@ -120,7 +120,9 @@ def obligation(
     priority=1,
     minimum=1,
     maximum=1,
+    target=None,
     partial=(),
+    allowed_doses=(),
 ):
     return PlanningObligation(
         obligation_id=oid,
@@ -128,7 +130,9 @@ def obligation(
         role="primary",
         priority_tier=priority,
         min_exposures=minimum,
+        target_exposures=minimum if target is None else target,
         max_exposures=maximum,
+        allowed_dose_option_ids=tuple(allowed_doses),
         recipe_family=(recipe,),
         valid_from=START,
         valid_until=END,
@@ -284,6 +288,41 @@ def only_day_available(day):
 
 
 class PlanningSolverV1Tests(unittest.TestCase):
+    def test_strategy_dose_domain_excludes_other_eligible_doses(self):
+        baseline = option(
+            "run_threshold",
+            "threshold-30",
+            "run_threshold",
+            "run",
+            dimensions=(dim("cardiovascular", LoadDimensionLevel.HIGH),),
+            minutes=50,
+        )
+        other = option(
+            "run_threshold",
+            "threshold-36",
+            "run_threshold",
+            "run",
+            dimensions=(dim("cardiovascular", LoadDimensionLevel.HIGH),),
+            minutes=55,
+        )
+        ctx = context(
+            (
+                obligation(
+                    "threshold",
+                    "run_threshold",
+                    "run_threshold",
+                    allowed_doses=("threshold-30",),
+                ),
+            ),
+            (baseline, other),
+        )
+        atoms = generate_candidate_atoms(ctx, START, END)
+        self.assertTrue(atoms)
+        self.assertEqual(
+            {item.option.dose_option_id for item in atoms},
+            {"threshold-30"},
+        )
+
     def test_solver_chooses_canonical_earliest_equivalent_valid_plan(self):
         easy = option(
             "run_easy_distance",
