@@ -16,6 +16,8 @@ from .models import (
     ApprovedWorkoutOption,
     FixedLoadCommitment,
     LoadDimensionLevel,
+    EligibilityKind,
+    OptionEligibility,
     ObservedLoadExposure,
     ObservedObligationCredit,
     PlanContent,
@@ -113,6 +115,7 @@ class ObjectivePolicy:
 class ObjectiveContext:
     strategy: StrategyRevision
     catalog_options: tuple[ApprovedWorkoutOption, ...]
+    option_eligibility: tuple[OptionEligibility, ...]
     observed_obligation_credits: tuple[ObservedObligationCredit, ...]
     observed_load_exposures: tuple[ObservedLoadExposure, ...]
     fixed_commitments: tuple[FixedLoadCommitment, ...]
@@ -125,6 +128,16 @@ class ObjectiveContext:
         if len(set(keys)) != len(keys):
             raise PlanningContractError("objective catalog contains duplicate option key")
         object.__setattr__(self, "catalog_options", options)
+        eligibility = tuple(self.option_eligibility)
+        eligibility_keys = [
+            (item.recipe_id, item.dose_option_id, item.capability)
+            for item in eligibility
+        ]
+        if len(set(eligibility_keys)) != len(eligibility_keys):
+            raise PlanningContractError(
+                "objective context contains duplicate option eligibility"
+            )
+        object.__setattr__(self, "option_eligibility", eligibility)
         object.__setattr__(
             self,
             "observed_obligation_credits",
@@ -147,23 +160,25 @@ class ObjectiveVector:
     max_required_deficit_by_tier: tuple[Fraction, ...]
     # S3: soft strategy targets after hard/required content and spacing.
     target_deficit_by_tier: tuple[Fraction, ...]
-    # S4
+    # S4: execution dose alignment for roles with explicit semantics.
+    dose_intent_penalty: int
+    # S5
     spacing_shortfall_days: int
     spacing_violation_pairs: int
-    # S5
+    # S6
     stability_identity_churn: int
     stability_date_moves: int
     stability_prescription_changes: int
     stability_order_changes: int
-    # S6
+    # S7
     schedule_range_violation: int
     schedule_preferred_distance: int
     schedule_double_penalty: int
-    # S7
-    variation_repeat_penalty: int
     # S8
-    discretionary_excess_by_tier: tuple[Fraction, ...]
+    variation_repeat_penalty: int
     # S9
+    discretionary_excess_by_tier: tuple[Fraction, ...]
+    # S10
     canonical_tie_key: tuple
 
     @property
@@ -183,6 +198,7 @@ class ObjectiveVector:
             # discretionary exposure always wins. A preferred active-day count
             # can therefore distribute justified training, never create it.
             self.discretionary_excess_by_tier,
+            self.dose_intent_penalty,
             self.spacing_shortfall_days,
             self.spacing_violation_pairs,
             self.target_deficit_by_tier,
@@ -514,6 +530,49 @@ def _schedule_penalty(
     return range_violation, preferred_distance, double_penalty
 
 
+def _dose_intent_penalty(
+    plan: PlanContent,
+    context: ObjectiveContext,
+) -> int:
+    """Prefer demonstrated HOLD dose for protected capacity.
+
+    This is deliberately narrow. Primary/supporting development intent belongs
+    to StrategyRevision dose domains and is not inferred here.
+    """
+
+    eligibility = {
+        (item.recipe_id, item.dose_option_id, item.capability): item.kind
+        for item in context.option_eligibility
+    }
+    obligations = {
+        item.obligation_id: item
+        for item in context.strategy.obligations
+    }
+    protected_rank = {
+        EligibilityKind.HOLD: 0,
+        EligibilityKind.ESTABLISH: 1,
+        EligibilityKind.REDUCE: 2,
+        EligibilityKind.PROGRESS: 3,
+    }
+    penalty = 0
+    for workout in plan.workouts:
+        for contribution in workout.obligation_contributions:
+            obligation = obligations.get(contribution.obligation_id)
+            if obligation is None or obligation.role != "protected":
+                continue
+            kind = eligibility.get(
+                (
+                    workout.recipe_id,
+                    workout.dose_option_id,
+                    contribution.source_capability,
+                )
+            )
+            if kind is None:
+                continue
+            penalty += protected_rank[kind]
+    return penalty
+
+
 def _variation_penalty(
     plan: PlanContent,
     context: ObjectiveContext,
@@ -592,6 +651,7 @@ def evaluate_objectives(
         plan.affected_from,
         plan.affected_until,
     )
+    dose_intent = _dose_intent_penalty(plan, context)
     spacing_shortfall, spacing_pairs = _spacing_penalty(plan, context)
     churn, moves, prescription_changes, order_changes = _stability_penalty(
         plan,
@@ -608,6 +668,7 @@ def evaluate_objectives(
         unserved_required_by_tier=unserved,
         max_required_deficit_by_tier=max_deficit,
         target_deficit_by_tier=target_deficit,
+        dose_intent_penalty=dose_intent,
         spacing_shortfall_days=spacing_shortfall,
         spacing_violation_pairs=spacing_pairs,
         stability_identity_churn=churn,
