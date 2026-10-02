@@ -101,6 +101,7 @@ def semantic_planning_input_payload(
             "target": item.target_exposures,
             "max": item.max_exposures,
             "recipes": sorted(item.recipe_family),
+            "allowed_doses": sorted(item.allowed_dose_option_ids),
             "valid_from": item.valid_from.isoformat(),
             "valid_until": item.valid_until.isoformat(),
             "progression_axes": sorted(item.progression_axes),
