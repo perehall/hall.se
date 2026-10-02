@@ -79,6 +79,7 @@ def _obligation(row: dict[str, Any], index: int) -> PlanningObligation:
         priority_tier=row.get("priority_tier"),
         min_exposures=row.get("min_exposures"),
         max_exposures=row.get("max_exposures"),
+        target_exposures=row.get("target_exposures", row.get("min_exposures")),
         recipe_family=_strings(row.get("recipe_family"), f"{field}.recipe_family"),
         valid_from=_date(row.get("valid_from"), f"{field}.valid_from"),
         valid_until=_date(row.get("valid_until"), f"{field}.valid_until"),
