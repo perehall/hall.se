@@ -7,17 +7,17 @@
           "Löpning: 12,64 km · 1:06:16 · 160 m+ · snittpuls 144,3 · maxpuls 158.",
           "Planstatus 2026-10-02: dagen är markerad genomförd i coachens beslutsunderlag."
         ],
-        "summary": "66 min terränglöpning med varierande 1 km‑lappar och snittpuls 144 visar ett genomfört backkvalitet/supportpass med inslag av snabbare slag men ingen strukturerad 3×8×150 registrerad.",
+        "summary": "66 min terränglöpning 12.6 km med varierande 1 km-snitt 5:14–5:50 och genomsnitts­puls 144 visar genomfört backkvalitetsstimulus men utan explicit intervallstruktur i datalagret.",
         "unknowns": [
-          "Subjektiv RPE/känsla efter passet (användarrapport saknas)",
-          "Exakt mängd neuromuskulär trötthet i ben (terräng/enduro påverkan)"
+          "Användarrapport/RPE efter passet (saknas)",
+          "Exakt repetitionslängd/intensitet jämfört med planens 150 m (inte verifierad)"
         ],
         "confidence": "medium",
         "interpretations": [
-          "Passet visar genomfört backkvalitetsstimulus/variant men matchar inte planens formella struktur 3×8×150 enligt plan_comparison.",
-          "Utfallet indikerar god genomförbarhet efter gårdagens MTB och tidigare 4×8min‑pass; inget tydligt ackumulerat återhämtningsproblem i tillgängliga data."
+          "Passet ersatte/uppfyllde dagens planerade run_hill_quality men analyslagret saknar verifierad 150 m‑repstruktur, så dosmatch är osäker.",
+          "Kombinationen av senaste 3 dagars arbete (4×8min tröskel, MTB 01/10, dagens terränglöp) ökar ackumulerad benmekanisk exponering i 48–72 h‑fönstret."
         ],
-        "load_interpretation": "Kardiovaskulär och mekanisk exponering idag är konkret och bör vägas mot MTB från gårdagen; inga tydliga varningssignaler i 24–48 h‑fönstret."
+        "load_interpretation": "Passet bidrar mekaniskt och neuromuskulärt (terräng) plus kardiovaskulärt; det ligger i samma mikrocykel med MTB och tidigare kvalitetspass de senaste 3 dagarna."
       },
       "auto_apply": {
         "note": "Ingen automatisk planändring.",
@@ -26,16 +26,16 @@
       "activity_id": 20422632242,
       "plan_action": {
         "action": "keep",
-        "reason": "Ingen stark indikation att reducera eller vila behövs; simpasset är lågmekaniskt och planerat som companion dagen efter löpning/enduro.",
+        "reason": "Simningen nästa dag är lågmekanisk och prioriterad som anchor; senaste 48–72 h visar ökad benexponering men inget som automatiskt kräver vila.",
         "target_date": "2026-10-03",
         "dose_option_id": "",
-        "recommendation": "Behåll planerad simning 2026-10-03 (3 200 m aerob/teknik) oförändrad; rapportera kort RPE/känsla efter dagens löppass om du vill att jag omprövar beslutet.",
+        "recommendation": "Behåll simpasset 2026-10-03 (3 200 m aerob/teknik) som planerat; håll det tekniskt och undvik benintensiva drillar. Rapportera gärna RPE/känsla efter dagens löpning för att ompröva om behov uppstår.",
         "requires_approval": false,
         "target_workout_key": "20260928-run_threshold-swim_aerobic-swim_technique:mc1:2026-10-03:swim_aerobic_technique_2"
       },
       "activity_date": "2026-10-02",
       "activity_name": "Terränglöpning på eftermiddagen",
-      "generated_at_utc": "2026-10-02T17:14:22.195300+00:00",
+      "generated_at_utc": "2026-10-02T17:33:04.008976+00:00",
       "analysis_contract": {
         "pipeline_version": 4,
         "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
@@ -1372,9 +1372,9 @@
       "performance_protocol_key": null
     }
   ],
-  "last_run_utc": "2026-10-02T17:14:22.195300+00:00",
+  "last_run_utc": "2026-10-02T17:33:04.008976+00:00",
   "contract_version": 16,
-  "last_trigger_hash": "55523050bc13a1a077977a4565262fa76e41eff4989bbe12fd0fbdc292c3a24a",
+  "last_trigger_hash": "8161003bd224883cbddd971a4bf486a38914e2a4b9911d662086cafd9a7b28cc",
   "analysed_activity_ids": [
     "20367593813",
     "20350203020",

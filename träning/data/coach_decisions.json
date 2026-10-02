@@ -4920,6 +4920,101 @@
       },
       "affected_workouts": [],
       "summary": "Simteknik: progression hålls. Kapaciteten har verifierad exponering, men progression kan inte avgöras från tid/distans utan kvalitativ eller specifik teknisk evidens."
+    },
+    {
+      "schema_version": 1,
+      "decision_id": "3cb77c4c599615acb17bbdadcd31938f9530f547e3351c908b96af885c0e2a9f",
+      "generated_at_utc": "2026-10-02T17:32:55.049807+00:00",
+      "planning_date": "2026-10-02",
+      "week_start": "2026-09-28",
+      "capability": "run_easy_distance",
+      "trigger": "completed_training",
+      "decision": "fulfill",
+      "reason_code": "completed_capability_credit",
+      "previous_state": {
+        "evidence_state": "demonstrated",
+        "progression_state": "hold",
+        "progression_ready": false,
+        "progression_reason_code": "missing_feedback",
+        "progression_reason": "Senaste jämförbara exponeringen är genomförd men saknar återkoppling; tystnad räknas inte som tolerans.",
+        "demonstrated_value": 80.07,
+        "tolerated_value": null,
+        "absorbed_value": null
+      },
+      "new_state": {
+        "evidence_state": "demonstrated",
+        "progression_state": "hold",
+        "progression_ready": false,
+        "progression_reason_code": "missing_feedback",
+        "progression_reason": "Senaste jämförbara exponeringen är genomförd men saknar återkoppling; tystnad räknas inte som tolerans.",
+        "demonstrated_value": 80.07,
+        "tolerated_value": null,
+        "absorbed_value": null
+      },
+      "evidence": {
+        "activity_refs": [
+          "20367593813",
+          "20368346174",
+          "20381137043",
+          "20396959391",
+          "20410781977",
+          "20422632242"
+        ],
+        "microcycle_source_hash": "11b23e7821e6b36df048c473a80845dde2a26c6e66c165952bfae4e3e01c41ee",
+        "microcycle_week_key": "2026-W40",
+        "slot_action": null,
+        "slot_recipe_key": null,
+        "slot_evidence_refs": [],
+        "capability_reason_code": "missing_feedback",
+        "completed_context_signature": "d3b3ce076ba28572626736b2ea64028625a47e9374770a33409b0e0e120991e1"
+      },
+      "affected_workouts": [],
+      "summary": "Lugn löpdistans / tålighet: genomfört stimulus har krediterats. Capability-state är demonstrated; återstående plan har granskats mot utfallet."
+    },
+    {
+      "schema_version": 1,
+      "decision_id": "61595b32a1be4dd5764efa9e22a9c1ee0e491e9668f16ccc8203b119c22cbd37",
+      "generated_at_utc": "2026-10-02T17:32:55.049807+00:00",
+      "planning_date": "2026-10-02",
+      "week_start": "2026-09-28",
+      "capability": "run_hill_quality",
+      "trigger": "live_replan",
+      "decision": "hold",
+      "reason_code": "recovery_context_caution",
+      "previous_state": {
+        "evidence_state": "absorbed",
+        "progression_state": "hold",
+        "progression_ready": false,
+        "progression_reason_code": "recovery_context_caution",
+        "progression_reason": "Senaste exponeringen har stödjande passrespons men 24–72 h-kontexten innehåller en varningssignal; kausalitet antas inte.",
+        "demonstrated_value": 24.0,
+        "tolerated_value": 24.0,
+        "absorbed_value": 24.0
+      },
+      "new_state": {
+        "evidence_state": "absorbed",
+        "progression_state": "hold",
+        "progression_ready": false,
+        "progression_reason_code": "recovery_context_caution",
+        "progression_reason": "Senaste exponeringen har stödjande passrespons men 24–72 h-kontexten innehåller en varningssignal; kausalitet antas inte.",
+        "demonstrated_value": 24.0,
+        "tolerated_value": 24.0,
+        "absorbed_value": 24.0
+      },
+      "evidence": {
+        "activity_refs": [],
+        "microcycle_source_hash": "11b23e7821e6b36df048c473a80845dde2a26c6e66c165952bfae4e3e01c41ee",
+        "microcycle_week_key": "2026-W40",
+        "slot_action": "consolidate",
+        "slot_recipe_key": "run_hill_quality",
+        "slot_evidence_refs": [
+          "planning_policy.microcycle_policy"
+        ],
+        "capability_reason_code": "recovery_context_caution",
+        "completed_context_signature": "d3b3ce076ba28572626736b2ea64028625a47e9374770a33409b0e0e120991e1"
+      },
+      "affected_workouts": [],
+      "summary": "Backstyrka / löpekonomi: progression hålls. Senaste exponeringen har stödjande passrespons men 24–72 h-kontexten innehåller en varningssignal; kausalitet antas inte."
     }
   ]
 }
