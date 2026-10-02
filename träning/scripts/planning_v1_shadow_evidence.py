@@ -2,6 +2,8 @@
 """Report accumulated Planning Engine v1 shadow evidence.
 
 This script is read-only. It never publishes or mutates a training plan.
+Evidence begins accumulating only after the dedicated append-only audit
+relation is available.
 """
 
 from __future__ import annotations
