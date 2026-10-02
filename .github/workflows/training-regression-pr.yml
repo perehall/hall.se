@@ -155,6 +155,13 @@ jobs:
             --microcycle-key "$WEEK_KEY" \
             --audit-if-available
 
+      - name: Report accumulated Planning Engine v1 shadow evidence
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          test -n "$SUPABASE_DB_URL"
+          PYTHONPATH="träning" python "träning/scripts/planning_v1_shadow_evidence.py"
+
       - name: Probe architecture v2 directly against canonical PostgreSQL
         env:
           SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
