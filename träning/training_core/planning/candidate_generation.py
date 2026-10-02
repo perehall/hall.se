@@ -1269,7 +1269,12 @@ def _placement_selections(
     selection: tuple[int, ...],
     content_atoms: tuple[_ContentAtom, ...],
     families: tuple[_ContentFamily, ...],
+    context: PlanValidationContext,
+    affected_from: date,
+    affected_until: date,
 ) -> tuple[tuple[CandidateAtom, ...], ...]:
+    """Place selected content while enforcing hard daily capacity incrementally."""
+
     counts: dict[int, int] = {}
     for index in selection:
         family_index = content_atoms[index].family_index
@@ -1283,16 +1288,99 @@ def _placement_selections(
     if any(not domain for domain in domains):
         return ()
 
+    availability = {
+        item.local_date: item
+        for item in context.availability
+    }
+    fixed_by_day: dict[date, list[FixedLoadCommitment]] = {}
+    for commitment in context.fixed_commitments:
+        if affected_from <= commitment.local_date <= affected_until:
+            fixed_by_day.setdefault(commitment.local_date, []).append(commitment)
+
+    base_sessions = {
+        day: len(rows)
+        for day, rows in fixed_by_day.items()
+    }
+    base_duration: dict[date, float | None] = {}
+    for day, rows in fixed_by_day.items():
+        values = tuple(_duration_upper_bound_minutes(item) for item in rows)
+        base_duration[day] = (
+            sum(float(value) for value in values)
+            if all(value is not None for value in values)
+            else None
+        )
+
     placements = []
-    for assignment in product(*domains):
-        rows = []
-        for family_index, dates in zip(family_indexes, assignment):
-            family = families[family_index]
+
+    def can_add_dates(
+        family: _ContentFamily,
+        dates: tuple[date, ...],
+        session_counts: dict[date, int],
+        durations: dict[date, float | None],
+    ) -> bool:
+        option_duration = _duration_upper_bound_minutes(family.option)
+        additions: dict[date, int] = {}
+        for day in dates:
+            additions[day] = additions.get(day, 0) + 1
+
+        for day, added_sessions in additions.items():
+            rule = availability.get(day)
+            total_sessions = session_counts.get(day, base_sessions.get(day, 0)) + added_sessions
+            if rule is not None and rule.max_sessions is not None:
+                if total_sessions > rule.max_sessions:
+                    return False
+
+            if rule is None or rule.max_duration_minutes is None:
+                continue
+            current_duration = durations.get(day, base_duration.get(day, 0.0))
+            if current_duration is None or option_duration is None:
+                # Unknown duration remains fail-closed in the final validator;
+                # it cannot be safely pruned here.
+                continue
+            total_duration = current_duration + option_duration * added_sessions
+            if total_duration > float(rule.max_duration_minutes):
+                return False
+        return True
+
+    def walk(
+        position: int,
+        rows: list[CandidateAtom],
+        session_counts: dict[date, int],
+        durations: dict[date, float | None],
+    ) -> None:
+        if position >= len(family_indexes):
+            placements.append(tuple(sorted(rows, key=lambda item: item.key)))
+            return
+
+        family_index = family_indexes[position]
+        family = families[family_index]
+        option_duration = _duration_upper_bound_minutes(family.option)
+        for dates in domains[position]:
+            if not can_add_dates(family, dates, session_counts, durations):
+                continue
+
+            next_counts = dict(session_counts)
+            next_durations = dict(durations)
             per_day_instance: dict[date, int] = {}
+            next_rows = list(rows)
             for day in dates:
                 instance = per_day_instance.get(day, 0) + 1
                 per_day_instance[day] = instance
-                rows.append(
+                next_counts[day] = next_counts.get(
+                    day,
+                    base_sessions.get(day, 0),
+                ) + 1
+
+                current_duration = next_durations.get(
+                    day,
+                    base_duration.get(day, 0.0),
+                )
+                if current_duration is None or option_duration is None:
+                    next_durations[day] = None
+                else:
+                    next_durations[day] = current_duration + option_duration
+
+                next_rows.append(
                     CandidateAtom(
                         local_date=day,
                         option=family.option,
@@ -1300,7 +1388,15 @@ def _placement_selections(
                         instance_index=instance,
                     )
                 )
-        placements.append(tuple(sorted(rows, key=lambda item: item.key)))
+
+            walk(
+                position + 1,
+                next_rows,
+                next_counts,
+                next_durations,
+            )
+
+    walk(0, [], {}, {})
     return tuple(placements)
 
 
@@ -1334,6 +1430,9 @@ def _enumerate_candidate_plans_compact(
             selection,
             content_atoms,
             families,
+            context,
+            affected_from,
+            affected_until,
         ):
             base = _base_workouts(
                 tuple(range(len(placed_atoms))),
