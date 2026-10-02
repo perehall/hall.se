@@ -305,6 +305,10 @@ def run_live_shadow(
                     str(item)
                     for item in solved.objective_vector.max_required_deficit_by_tier
                 ],
+                "target_deficit_by_tier": [
+                    str(item)
+                    for item in solved.objective_vector.target_deficit_by_tier
+                ],
                 "discretionary_excess_by_tier": [
                     str(item)
                     for item in solved.objective_vector.discretionary_excess_by_tier
@@ -336,6 +340,7 @@ def run_live_shadow(
                 "capability": item.capability,
                 "role": item.role,
                 "min_exposures": item.min_exposures,
+                "target_exposures": item.target_exposures,
                 "max_exposures": item.max_exposures,
                 "recipe_family": list(item.recipe_family),
             }
