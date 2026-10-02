@@ -125,6 +125,33 @@ def _recipe_capabilities(
     return result
 
 
+def _recipe_option_ids(
+    canonical_catalog: dict[str, Any],
+) -> dict[str, tuple[str, ...]]:
+    recipes = _mapping(
+        canonical_catalog.get("recipes"),
+        "canonical_catalog.recipes",
+    )
+    result: dict[str, tuple[str, ...]] = {}
+    for recipe_id, raw in recipes.items():
+        row = _mapping(raw, f"recipes.{recipe_id}")
+        options = _list(row.get("options", []), f"recipes.{recipe_id}.options")
+        option_ids = tuple(
+            str(
+                _mapping(option, f"recipes.{recipe_id}.options[{index}]").get("id")
+                or ""
+            ).strip()
+            for index, option in enumerate(options)
+        )
+        if any(not value for value in option_ids) or len(set(option_ids)) != len(option_ids):
+            raise StrategyMaterializationError(
+                "INVALID_CANONICAL_CATALOG_SOURCE",
+                f"recipes.{recipe_id}.options must have unique non-empty ids",
+            )
+        result[str(recipe_id)] = option_ids
+    return result
+
+
 def materialize_strategy_document(
     *,
     canonical_strategy: dict[str, Any],
@@ -197,6 +224,7 @@ def materialize_strategy_document(
         affected_until=affected_until,
     )
     recipe_caps = _recipe_capabilities(canonical_catalog)
+    recipe_options = _recipe_option_ids(canonical_catalog)
 
     mandatory_rows: list[tuple[str, dict[str, Any], str]] = []
     for collection, role_group in (
@@ -233,6 +261,8 @@ def materialize_strategy_document(
     target_count: dict[str, int] = defaultdict(int)
     recipe_family: dict[str, set[str]] = defaultdict(set)
     capability_role: dict[str, str] = {}
+    allowed_doses: dict[str, set[str]] = defaultdict(set)
+    has_explicit_dose_domain: dict[str, bool] = defaultdict(bool)
 
     for collection, row, role_group in (*mandatory_rows, *supporting_rows):
         recipe_id = str(row.get("recipe_key") or "").strip()
@@ -242,6 +272,28 @@ def materialize_strategy_document(
                 "V1_BLUEPRINT_RECIPE_NOT_IN_CATALOG",
                 f"{collection}: unknown recipe {recipe_id!r}",
             )
+
+        progression_intent = str(row.get("progression_intent") or "").strip()
+        baseline_option_id = str(row.get("baseline_option_id") or "").strip()
+        conditional_option_id = str(
+            row.get("conditional_target_option_id") or ""
+        ).strip()
+        explicit_dose_ids: tuple[str, ...] = ()
+        if baseline_option_id:
+            if baseline_option_id not in recipe_options.get(recipe_id, ()):
+                raise StrategyMaterializationError(
+                    "V1_BLUEPRINT_DOSE_NOT_IN_RECIPE",
+                    f"{collection}: {baseline_option_id!r} not in {recipe_id!r}",
+                )
+            explicit = [baseline_option_id]
+            if progression_intent == "progress_if_ready" and conditional_option_id:
+                if conditional_option_id not in recipe_options.get(recipe_id, ()):
+                    raise StrategyMaterializationError(
+                        "V1_BLUEPRINT_DOSE_NOT_IN_RECIPE",
+                        f"{collection}: {conditional_option_id!r} not in {recipe_id!r}",
+                    )
+                explicit.append(conditional_option_id)
+            explicit_dose_ids = tuple(explicit)
 
         if role_group == "primary":
             allowed = primary
@@ -276,6 +328,9 @@ def materialize_strategy_document(
                     capability,
                 )
             capability_role[capability] = role_group
+            if explicit_dose_ids:
+                has_explicit_dose_domain[capability] = True
+                allowed_doses[capability].update(explicit_dose_ids)
             if role_group == "supporting":
                 target_count[capability] += 1
             else:
@@ -306,6 +361,11 @@ def materialize_strategy_document(
                 "target_exposures": target,
                 "max_exposures": target,
                 "recipe_family": sorted(recipe_family[capability]),
+                "allowed_dose_option_ids": (
+                    sorted(allowed_doses[capability])
+                    if has_explicit_dose_domain[capability]
+                    else []
+                ),
                 "valid_from": affected_from.isoformat(),
                 "valid_until": affected_until.isoformat(),
                 "source_refs": [
