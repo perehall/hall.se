@@ -48,6 +48,7 @@ def load_shadow_rows(limit: int) -> tuple[str, list[dict[str, Any]]]:
                 """
                 select
                     event_key,
+                    trigger_source,
                     microcycle_key,
                     readiness_status,
                     solver_status,
