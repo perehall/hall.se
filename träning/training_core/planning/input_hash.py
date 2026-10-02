@@ -169,7 +169,7 @@ def semantic_planning_input_payload(
             "order": item.within_day_order,
         }
         for item in context.fixed_commitments
-        if affected_from <= item.local_date <= future_required_through
+        if history_required_from <= item.local_date <= future_required_through
     ]
 
     compatibility = [
@@ -249,6 +249,15 @@ def semantic_planning_input_payload(
         "affected_until": affected_until.isoformat(),
         "history_from": normalized_history_from.isoformat(),
         "history_through": normalized_history_through.isoformat(),
+        "prewindow_load_context": (
+            (
+                context.prewindow_load_context_from.isoformat(),
+                context.prewindow_load_context_through.isoformat(),
+            )
+            if context.prewindow_load_context_from is not None
+            and context.prewindow_load_context_through is not None
+            else None
+        ),
         "future_context_through": normalized_future_through.isoformat(),
         "strategy": {
             "revision_id": strategy.revision_id,
