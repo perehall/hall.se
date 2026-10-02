@@ -12,6 +12,7 @@ on:
           - check
           - write
           - audit
+          - planning-v1-bootstrap
 
 permissions:
   contents: read
@@ -59,6 +60,10 @@ jobs:
               ;;
             audit)
               python "träning/scripts/supabase_shadow_reader.py"
+              ;;
+            planning-v1-bootstrap)
+              PYTHONPATH="träning" python "träning/scripts/planning_v1_shadow_schema.py" --apply
+              PYTHONPATH="träning" python "träning/scripts/planning_v1_shadow_evidence.py"
               ;;
             *)
               echo "::error::Unsupported shadow mode"
