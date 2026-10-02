@@ -20,6 +20,7 @@ from typing import Any, Callable
 
 from athlete_profile_source import load_athlete_profile_for_planner
 from planning_activity_source import load_canonical_training_activities
+from planning_current_plan_source import load_canonical_current_planned_workouts
 from training_core.application.planning_catalog_materializer import (
     CatalogMaterializationError,
     materialize_catalog_document,
@@ -37,6 +38,10 @@ from training_core.application.planning_fixed_commitments_source import (
 from training_core.application.planning_observed_materializer import (
     ObservedTrainingMaterializationError,
     materialize_observed_training_document,
+)
+from training_core.application.planning_prewindow_context_materializer import (
+    PrewindowContextMaterializationError,
+    materialize_prewindow_load_context_document,
 )
 from training_core.application.planning_projection_assembly import (
     assemble_canonical_shadow_projections,
@@ -144,6 +149,9 @@ def build_readiness_report(
     activity_loader: Callable[
         [date, date], tuple[list[dict[str, Any]], dict[str, Any]]
     ] = load_canonical_training_activities,
+    current_plan_loader: Callable[
+        [date, date], tuple[list[dict[str, Any]], dict[str, Any]]
+    ] = load_canonical_current_planned_workouts,
     include_internal: bool = False,
 ) -> dict[str, Any]:
     """Inspect whether a real canonical shadow input can be assembled.
@@ -288,12 +296,78 @@ def build_readiness_report(
                 )
             )
 
+    prewindow_document: dict[str, Any] | None = None
+    prewindow_metadata: dict[str, Any] = {}
+    prewindow_required = False
+    prewindow_from: date | None = None
+    prewindow_through: date | None = None
+    if planning_date < affected_from and history_through is not None:
+        prewindow_from = max(
+            planning_date,
+            history_through + timedelta(days=1),
+        )
+        prewindow_through = affected_from - timedelta(days=1)
+        prewindow_required = prewindow_from <= prewindow_through
+
+    if (
+        prewindow_required
+        and prewindow_from is not None
+        and prewindow_through is not None
+        and catalog_document is not None
+        and fixed_document is not None
+    ):
+        try:
+            planned_rows, prewindow_metadata = current_plan_loader(
+                prewindow_from,
+                prewindow_through,
+            )
+            if not bool(prewindow_metadata.get("verified")):
+                raise RuntimeError("current planned-workout source is unverified")
+            if (
+                prewindow_metadata.get("coverage_from")
+                != prewindow_from.isoformat()
+                or prewindow_metadata.get("coverage_through")
+                != prewindow_through.isoformat()
+            ):
+                raise RuntimeError(
+                    "current planned-workout source returned mismatched coverage"
+                )
+            prewindow_document = materialize_prewindow_load_context_document(
+                canonical_planned_workouts=planned_rows,
+                canonical_catalog=catalog_document,
+                canonical_fixed_commitments=fixed_document,
+                coverage_from=prewindow_from,
+                coverage_through=prewindow_through,
+            )
+        except PrewindowContextMaterializationError as exc:
+            source_blockers.append(
+                _source_blocker(
+                    "prewindow_load_context_source",
+                    exc.code,
+                    str(exc),
+                )
+            )
+        except Exception as exc:
+            source_blockers.append(
+                _source_blocker(
+                    "prewindow_load_context_source",
+                    "CANONICAL_CURRENT_PLAN_UNAVAILABLE",
+                    f"current planned-workout source failed: {type(exc).__name__}",
+                )
+            )
+
     execution_document: dict[str, Any] | None = None
-    if profile_record is not None and fixed_document is not None:
+    prewindow_ready = not prewindow_required or prewindow_document is not None
+    if (
+        profile_record is not None
+        and fixed_document is not None
+        and prewindow_ready
+    ):
         try:
             execution_document = materialize_execution_facts_document(
                 canonical_profile_record=profile_record,
                 canonical_fixed_commitments=fixed_document,
+                canonical_prewindow_load_context=prewindow_document,
                 affected_from=affected_from,
                 affected_until=affected_until,
                 future_context_through=context_through,
@@ -309,6 +383,7 @@ def build_readiness_report(
             )
 
     documents["fixed_commitments"] = fixed_document or {}
+    documents["prewindow_load_context"] = prewindow_document or {}
     documents["execution_facts"] = execution_document or {}
     source_revision = diagnostic_source_revision(documents)
 
@@ -350,6 +425,7 @@ def build_readiness_report(
             and (
                 "execution_facts_source" in source_stages
                 or "fixed_commitments_source" in source_stages
+                or "prewindow_load_context_source" in source_stages
                 or "athlete_profile_source" in source_stages
             )
         ):
@@ -409,6 +485,21 @@ def build_readiness_report(
                     "profile_explicitly_empty"
                     if fixed_document is not None
                     else "blocked"
+                )
+            ),
+            "prewindow_load_context": (
+                {
+                    "status": "materialized_from_canonical_current_plan",
+                    **prewindow_metadata,
+                }
+                if prewindow_document is not None
+                else (
+                    {"status": "not_required"}
+                    if not prewindow_required
+                    else {
+                        "status": "blocked",
+                        **prewindow_metadata,
+                    }
                 )
             ),
             "execution_facts": (
