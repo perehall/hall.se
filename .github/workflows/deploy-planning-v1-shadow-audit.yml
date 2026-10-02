@@ -1,0 +1,95 @@
+name: Deploy Planning v1 shadow audit schema
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "supabase/migrations/20261001114500_planning_v1_shadow_runs.sql"
+      - ".github/workflows/deploy-planning-v1-shadow-audit.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: planning-v1-shadow-audit-schema
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install PostgreSQL driver
+        run: python -m pip install --disable-pip-version-check "psycopg[binary]>=3.2,<4"
+
+      - name: Create or verify append-only shadow audit table
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          test -n "$SUPABASE_DB_URL"
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          import psycopg
+
+          relation = "training.planning_v1_shadow_runs"
+          path = Path("supabase/migrations/20261001114500_planning_v1_shadow_runs.sql")
+          sql = path.read_text(encoding="utf-8")
+          lowered = sql.lower()
+
+          forbidden = (
+              "planned_workout",
+              "planned_workouts",
+              "training.activities",
+              "training.activity ",
+              "delete from",
+              "update ",
+              "insert into",
+              "truncate ",
+              "drop table",
+          )
+          for token in forbidden:
+              if token in lowered:
+                  raise SystemExit(
+                      f"refusing shadow audit migration: forbidden token {token!r}"
+                  )
+
+          required = (
+              "create table training.planning_v1_shadow_runs",
+              "alter table training.planning_v1_shadow_runs enable row level security",
+          )
+          for token in required:
+              if token not in lowered:
+                  raise SystemExit(
+                      f"refusing shadow audit migration: missing {token!r}"
+                  )
+
+          with psycopg.connect(
+              os.environ["SUPABASE_DB_URL"],
+              sslmode="require",
+              connect_timeout=15,
+          ) as conn:
+              with conn.cursor() as cur:
+                  cur.execute("select to_regclass(%s)", (relation,))
+                  if cur.fetchone()[0] is None:
+                      cur.execute(sql)
+                      cur.execute("select to_regclass(%s)", (relation,))
+                      if cur.fetchone()[0] is None:
+                          raise RuntimeError("shadow audit table missing after migration")
+                      conn.commit()
+                      print("PLANNING_V1_SHADOW_SCHEMA created")
+                  else:
+                      conn.rollback()
+                      print("PLANNING_V1_SHADOW_SCHEMA already_present")
+          PY
