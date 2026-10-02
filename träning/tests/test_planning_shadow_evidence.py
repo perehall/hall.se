@@ -14,9 +14,11 @@ def row(
     status: str = "current",
     plan_hash: str | None = "plan-1",
     objective=None,
+    trigger_source: str = "canonical_training_update_shadow",
 ):
     return {
         "event_key": event,
+        "trigger_source": trigger_source,
         "microcycle_key": microcycle,
         "readiness_status": "ready",
         "solver_status": status,
@@ -36,7 +38,27 @@ class ShadowEvidenceTests(unittest.TestCase):
         report = evaluate_shadow_evidence(rows)
         self.assertTrue(report["ready_for_cutover_review"])
         self.assertEqual(report["evidence"]["distinct_events"], 20)
+        self.assertEqual(report["evidence"]["distinct_real_replanning_events"], 20)
         self.assertEqual(report["evidence"]["distinct_microcycles"], 4)
+
+    def test_pr_probe_events_do_not_count_as_real_replanning(self):
+        rows = [
+            row(
+                f"event-{index}",
+                f"2026-W{40 + index % 4}",
+                f"input-{index}",
+                trigger_source="github_actions_pr_shadow",
+            )
+            for index in range(20)
+        ]
+        report = evaluate_shadow_evidence(rows)
+        self.assertFalse(report["ready_for_cutover_review"])
+        self.assertEqual(report["evidence"]["distinct_events"], 20)
+        self.assertEqual(report["evidence"]["distinct_real_replanning_events"], 0)
+        self.assertIn(
+            "INSUFFICIENT_REAL_REPLANNING_EVENTS",
+            {item["code"] for item in report["blockers"]},
+        )
 
     def test_blocked_solver_outcome_is_still_fail_closed_evidence(self):
         rows = [
