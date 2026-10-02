@@ -19,27 +19,14 @@
       ]
     }
   ],
-  "source": "deterministic_fallback_after_repair_guard",
+  "source": "deterministic_fallback",
   "week_key": "2026-W40",
-  "rationale": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern.",
+  "rationale": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern. Modellbedömning saknades: Planeringsmodellen misslyckades: oväntad modellstatus incomplete: {'reason': 'max_output_tokens'}",
   "week_start": "2026-09-28",
-  "source_hash": "36e222f4f5fadce0380ea701587bc1338ea2068847d9b49b3b53fcbd47320c46",
-  "guard_repair": {
-    "result": "fallback",
-    "attempted": true,
-    "repair_failures": [
-      "tung benbelastning får inte planeras på söndagen direkt före nästa fasta enduro: strength_core",
-      "run_threshold är redundant: primärt stimulus är redan faktiskt genomfört i mikrocykeln run_threshold",
-      "strength_core är redundant: styrka/core är redan faktiskt genomförd i mikrocykeln"
-    ],
-    "initial_failures": [
-      "tung benbelastning får inte planeras på söndagen direkt före nästa fasta enduro: run_easy_trail",
-      "run_threshold är redundant: primärt stimulus är redan faktiskt genomfört i mikrocykeln run_threshold"
-    ]
-  },
+  "source_hash": "859d867abf522c2729a3d352b26139d048f85f0b68be0ae484dc926c3bb34890",
   "mesocycle_id": "20260928-run_threshold-swim_aerobic-swim_technique",
   "schema_version": 1,
-  "generated_at_utc": "2026-10-01T05:44:06.842986+00:00",
+  "generated_at_utc": "2026-10-02T01:36:41.374283+00:00",
   "planner_revision": 17,
   "competition_context": {
     "as_of": "2026-09-28",
@@ -119,7 +106,8 @@
       "20367593813",
       "20368346174",
       "20381137043",
-      "20396959391"
+      "20396959391",
+      "20410781977"
     ],
     "evidence_note": "Familjeexponeringar kommer från faktiskt registrerade aktiviteter i målveckan. Direct_capabilities kräver explicit daterad kapabilitetsevidens. Planning_credits kan dessutom komma från en durabel, entydig strukturell match mot ett närliggande planerat intent och används för att undvika redundant framtida ordination utan att påstå mer fysiologi än underlaget stödjer.",
     "swim_exposures": 1,
@@ -138,6 +126,9 @@
       "run": [
         2
       ],
+      "bike": [
+        4
+      ],
       "swim": [
         3
       ],
@@ -149,7 +140,7 @@
       ]
     },
     "strength_exposures": 1,
-    "completed_slot_days": 2,
+    "completed_slot_days": 3,
     "direct_capabilities": [
       "run_threshold"
     ],
@@ -166,7 +157,8 @@
     },
     "completed_day_indexes": [
       2,
-      3
+      3,
+      4
     ],
     "capability_day_indexes": {
       "run_threshold": [

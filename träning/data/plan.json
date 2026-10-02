@@ -75,7 +75,8 @@
           "20367593813",
           "20368346174",
           "20381137043",
-          "20396959391"
+          "20396959391",
+          "20410781977"
         ],
         "evidence_note": "Familjeexponeringar kommer från faktiskt registrerade aktiviteter i målveckan. Direct_capabilities kräver explicit daterad kapabilitetsevidens. Planning_credits kan dessutom komma från en durabel, entydig strukturell match mot ett närliggande planerat intent och används för att undvika redundant framtida ordination utan att påstå mer fysiologi än underlaget stödjer.",
         "swim_exposures": 1,
@@ -94,6 +95,9 @@
           "run": [
             2
           ],
+          "bike": [
+            4
+          ],
           "swim": [
             3
           ],
@@ -105,7 +109,7 @@
           ]
         },
         "strength_exposures": 1,
-        "completed_slot_days": 2,
+        "completed_slot_days": 3,
         "direct_capabilities": [
           "run_threshold"
         ],
@@ -122,7 +126,8 @@
         },
         "completed_day_indexes": [
           2,
-          3
+          3,
+          4
         ],
         "capability_day_indexes": {
           "run_threshold": [
@@ -272,10 +277,10 @@
         "status": "synced",
         "transport": "intervals_icu",
         "source_hash": "cdaf576c0dd6a63e462216996c5308e688194199948b400f4e5ae5c59ba8c7d5",
-        "updated_at_utc": "2026-10-01T06:17:37.150851+00:00",
+        "updated_at_utc": "2026-10-02T01:38:04.064707+00:00",
         "device_delivery": "unverified",
-        "verified_at_utc": "2026-10-01T06:17:37.150851+00:00",
-        "provider_event_id": 140396495
+        "verified_at_utc": "2026-10-02T01:38:04.064707+00:00",
+        "provider_event_id": 140632070
       },
       "block_intent": "establish",
       "dose_options": [

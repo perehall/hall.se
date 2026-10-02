@@ -1,16 +1,16 @@
 {
   "by_family": {
     "run": {
-      "time_s": 99423,
-      "distance_m": 313340.8,
-      "active_days": 23,
-      "activity_count": 23
+      "time_s": 97611,
+      "distance_m": 308205.1,
+      "active_days": 22,
+      "activity_count": 22
     },
     "bike": {
-      "time_s": 32729,
-      "distance_m": 125096.4,
-      "active_days": 7,
-      "activity_count": 7
+      "time_s": 37439,
+      "distance_m": 138911.0,
+      "active_days": 8,
+      "activity_count": 8
     },
     "swim": {
       "time_s": 40381,
@@ -44,21 +44,26 @@
     }
   },
   "fact_window": {
-    "end": "2026-10-01",
-    "start": "2026-08-07",
+    "end": "2026-10-02",
+    "start": "2026-08-08",
     "lookback_days": 56
   },
   "load_windows": {
     "windows": {
       "recent_7d": {
-        "end": "2026-10-01",
-        "start": "2026-09-25",
-        "time_s": 35196,
+        "end": "2026-10-02",
+        "start": "2026-09-26",
+        "time_s": 35339,
         "by_family": {
           "run": {
-            "time_s": 13126,
-            "active_days": 3,
-            "activity_count": 3
+            "time_s": 8559,
+            "active_days": 2,
+            "activity_count": 2
+          },
+          "bike": {
+            "time_s": 4710,
+            "active_days": 1,
+            "activity_count": 1
           },
           "swim": {
             "time_s": 7904,
@@ -80,19 +85,19 @@
         "activity_count": 8
       },
       "recent_28d": {
-        "end": "2026-10-01",
-        "start": "2026-09-04",
-        "time_s": 152649,
+        "end": "2026-10-02",
+        "start": "2026-09-05",
+        "time_s": 153371,
         "by_family": {
           "run": {
-            "time_s": 57968,
-            "active_days": 12,
-            "activity_count": 12
+            "time_s": 53980,
+            "active_days": 11,
+            "activity_count": 11
           },
           "bike": {
-            "time_s": 15859,
-            "active_days": 4,
-            "activity_count": 4
+            "time_s": 20569,
+            "active_days": 5,
+            "activity_count": 5
           },
           "swim": {
             "time_s": 28445,
@@ -114,12 +119,12 @@
         "activity_count": 33
       },
       "previous_7d": {
-        "end": "2026-09-24",
-        "start": "2026-09-18",
-        "time_s": 36615,
+        "end": "2026-09-25",
+        "start": "2026-09-19",
+        "time_s": 36506,
         "by_family": {
           "run": {
-            "time_s": 15549,
+            "time_s": 15440,
             "active_days": 3,
             "activity_count": 3
           },
@@ -884,12 +889,12 @@
               ]
             },
             "evidence_policy": "confirmed_or_plan_matched",
-            "response_status": "tolerated_pending_recovery",
+            "response_status": "absorbed",
             "repeat_supported": true,
             "recovery_context_24_72h": {
               "signal": "unobserved",
               "observations": [],
-              "window_complete": false,
+              "window_complete": true,
               "causal_interpretation": "not_inferred"
             }
           }
@@ -915,21 +920,21 @@
             ]
           },
           "evidence_policy": "confirmed_or_plan_matched",
-          "response_status": "tolerated_pending_recovery",
+          "response_status": "absorbed",
           "repeat_supported": true,
           "recovery_context_24_72h": {
             "signal": "unobserved",
             "observations": [],
-            "window_complete": false,
+            "window_complete": true,
             "causal_interpretation": "not_inferred"
           }
         },
         "tolerated_value": 32.0,
-        "progression_ready": false,
-        "progression_state": "hold",
+        "progression_ready": true,
+        "progression_state": "ready",
         "demonstrated_value": 32.0,
-        "progression_reason": "Senaste jämförbara exponeringen har stödjande passrespons men 72 h-observationsfönstret är ännu inte komplett.",
-        "progression_reason_code": "recovery_window_open"
+        "progression_reason": "Upprepad jämförbar dos med stödjande respons ger stöd för att dosen är absorberad.",
+        "progression_reason_code": "absorbed_supportive_repeat"
       },
       "strength_core": {
         "metric": "duration_minutes",
@@ -1947,34 +1952,6 @@
   "schema_version": 1,
   "recent_sessions": [
     {
-      "id": 20144331562,
-      "date": "2026-09-12",
-      "label": "Enduro",
-      "family": "enduro",
-      "distance_m": 53916.2,
-      "user_report": null,
-      "max_heartrate": 154.0,
-      "classification": "training",
-      "elapsed_time_s": 13578,
-      "elevation_gain_m": 1490.4,
-      "training_profile": {
-        "stimuli": [],
-        "activity_id": 20144331562,
-        "source_hash": "ccb1ed49bababc53f3ca3941723ddb119e5ce24725c69b5c620d32071bf16321",
-        "uncertainties": [],
-        "intent_matches": [],
-        "schema_version": 2,
-        "planning_credits": [],
-        "observed_structure": {
-          "run_time_intervals": {
-            "structured": false
-          }
-        },
-        "interpretation_boundary": "Observerad struktur är mätdata. Fysiologiska stimulus kräver explicit evidens. Planning credit från strukturell intent-match betyder att den genomförda dosen kan ersätta ett entydigt närliggande planerat pass; det påstår inte mer om fysiologisk intensitet än källorna stödjer."
-      },
-      "average_heartrate": 124.9
-    },
-    {
       "id": 20153873263,
       "date": "2026-09-13",
       "label": "Ride",
@@ -2842,6 +2819,34 @@
         "interpretation_boundary": "Observerad struktur är mätdata. Fysiologiska stimulus kräver explicit evidens. Planning credit från strukturell intent-match betyder att den genomförda dosen kan ersätta ett entydigt närliggande planerat pass; det påstår inte mer om fysiologisk intensitet än källorna stödjer."
       },
       "average_heartrate": 128.8
+    },
+    {
+      "id": 20410781977,
+      "date": "2026-10-01",
+      "label": "MountainBikeRide",
+      "family": "bike",
+      "distance_m": 13814.6,
+      "user_report": null,
+      "max_heartrate": 150.0,
+      "classification": "training",
+      "elapsed_time_s": 4710,
+      "elevation_gain_m": 216.0,
+      "training_profile": {
+        "stimuli": [],
+        "activity_id": 20410781977,
+        "source_hash": "ca28e269430991ef3c65973523249c2a2fdd4847044381e6fca5563b9da5ce37",
+        "uncertainties": [],
+        "intent_matches": [],
+        "schema_version": 2,
+        "planning_credits": [],
+        "observed_structure": {
+          "run_time_intervals": {
+            "structured": false
+          }
+        },
+        "interpretation_boundary": "Observerad struktur är mätdata. Fysiologiska stimulus kräver explicit evidens. Planning credit från strukturell intent-match betyder att den genomförda dosen kan ersätta ett entydigt närliggande planerat pass; det påstår inte mer om fysiologisk intensitet än källorna stödjer."
+      },
+      "average_heartrate": 126.3
     }
   ],
   "capability_facts": {
@@ -2902,7 +2907,7 @@
       "verified_exposure_count": 3
     },
     "mtb_technical": {
-      "session_count": 7,
+      "session_count": 8,
       "longest_duration": {
         "date": "2026-09-03",
         "activity_id": 20024236347,
@@ -3169,7 +3174,7 @@
       "verified_exposure_count": 2
     }
   },
-  "generated_at_utc": "2026-10-01T06:15:59.181288+00:00",
+  "generated_at_utc": "2026-10-02T01:35:00.089282+00:00",
   "capability_states": {
     "model": "capability_feedback_state_v1",
     "principle": "Kvantitativ progression kräver verifierad capability-evidens och dose-response. Teknikförmågor kan vara observerade men blir inte automatiskt progressionsredo från tid eller distans.",
@@ -3380,10 +3385,10 @@
           "interval_structure",
           "consistency"
         ],
-        "progression_ready": false,
-        "progression_state": "hold",
+        "progression_ready": true,
+        "progression_state": "ready",
         "demonstrated_value": 32.0,
-        "progression_reason": "Senaste jämförbara exponeringen har stödjande passrespons men 72 h-observationsfönstret är ännu inte komplett.",
+        "progression_reason": "Upprepad jämförbar dos med stödjande respons ger stöd för att dosen är absorberad.",
         "verified_exposures": [
           {
             "date": "2026-08-25",
@@ -3410,7 +3415,7 @@
             "elapsed_time_s": 3687
           }
         ],
-        "progression_reason_code": "recovery_window_open",
+        "progression_reason_code": "absorbed_supportive_repeat",
         "verified_exposure_count": 3,
         "latest_verified_exposure": {
           "date": "2026-09-22",
