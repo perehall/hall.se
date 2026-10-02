@@ -13,7 +13,10 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from training_core.planning.content import plan_content_hash  # noqa: E402
-from training_core.planning.candidate_generation import CandidateGenerationLimits  # noqa: E402
+from training_core.planning.candidate_generation import (  # noqa: E402
+    CandidateGenerationLimits,
+    generate_candidate_atoms,
+)
 from training_core.planning.models import (  # noqa: E402
     AggregateLoadEnvelope,
     ApprovedWorkoutOption,
@@ -1256,6 +1259,57 @@ class PlanningSolverV1Tests(unittest.TestCase):
             "LOAD_COMPATIBILITY_GAP_VIOLATION",
             result.authority_state.blocked_reason_codes,
         )
+
+    def test_atom_generation_respects_hard_daily_duration_capacity(self):
+        swim = option(
+            "swim_aerobic",
+            "swim-60",
+            "swim_aerobic",
+            "swim",
+            dimensions=(dim("upper_body", LoadDimensionLevel.MODERATE),),
+            minutes=60,
+        )
+        obligations = (
+            obligation(
+                "swim",
+                "swim_aerobic",
+                "swim_aerobic",
+                minimum=2,
+                maximum=2,
+            ),
+        )
+        availability = tuple(
+            DailyAvailability(
+                local_date=current,
+                available=True,
+                max_duration_minutes=90,
+                source_refs=("user:availability",),
+            )
+            for current in (
+                date(2026, 10, 5),
+                date(2026, 10, 6),
+                date(2026, 10, 7),
+                date(2026, 10, 8),
+                date(2026, 10, 9),
+                date(2026, 10, 10),
+                date(2026, 10, 11),
+            )
+        )
+        atoms = generate_candidate_atoms(
+            context(
+                obligations,
+                (swim,),
+                availability=availability,
+            ),
+            START,
+            END,
+        )
+        by_day = {}
+        for atom in atoms:
+            by_day.setdefault(atom.local_date, []).append(atom)
+        self.assertEqual(set(by_day), set(current.local_date for current in availability))
+        self.assertTrue(all(len(items) == 1 for items in by_day.values()))
+        self.assertTrue(all(items[0].instance_index == 1 for items in by_day.values()))
 
     def test_search_limit_fails_closed_instead_of_returning_approximate_plan(self):
         easy = option(
