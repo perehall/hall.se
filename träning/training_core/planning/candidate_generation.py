@@ -15,7 +15,7 @@ from dataclasses import dataclass, replace
 from datetime import date, timedelta
 from fractions import Fraction
 from hashlib import sha256
-from itertools import permutations, product
+from itertools import combinations, permutations, product
 from math import ceil
 
 from .models import (
@@ -475,25 +475,127 @@ def enumerate_terminal_selections(
         }
     )
 
-    def prefix_is_viable(selected: tuple[int, ...]) -> bool:
+    def monotonic_issues(selection: tuple[int, ...]):
         partial_plan = PlanContent(
             source_revision=context.source_revision,
             strategy_revision_id=context.strategy.revision_id,
             affected_from=affected_from,
             affected_until=affected_until,
-            workouts=_base_workouts(selected, atoms),
+            workouts=_base_workouts(selection, atoms),
             fixed_commitments=inside_commitments,
         )
-        for issue in validate_plan_content(partial_plan, context).issues:
-            if issue in baseline_issues:
+        return tuple(
+            issue
+            for issue in validate_plan_content(partial_plan, context).issues
+            if issue not in baseline_issues
+            and issue.code not in prefix_repairable_codes
+        )
+
+    # Hard compatibility, per-session availability and most max constraints are
+    # unary or pairwise. Prove those conflicts once, then reuse the result in
+    # the exhaustive search instead of running the full validator at every node.
+    invalid_singletons = {
+        index
+        for index in range(len(atoms))
+        if monotonic_issues((index,))
+    }
+    incompatible_pairs = {
+        (first, second)
+        for first, second in combinations(range(len(atoms)), 2)
+        if first not in invalid_singletons
+        and second not in invalid_singletons
+        and monotonic_issues((first, second))
+    }
+
+    availability_by_day = {
+        item.local_date: item
+        for item in context.availability
+    }
+    fixed_by_day = {
+        day: tuple(
+            item
+            for item in inside_commitments
+            if item.local_date == day
+        )
+        for day in _date_range(affected_from, affected_until)
+    }
+
+    def selection_has_monotonic_conflict(
+        selected: tuple[int, ...],
+        credits: dict[str, Fraction],
+    ) -> bool:
+        selected_set = set(selected)
+        if selected_set & invalid_singletons:
+            return True
+        if any(
+            first in selected_set and second in selected_set
+            for first, second in incompatible_pairs
+        ):
+            return True
+
+        obligations_by_id = {
+            item.obligation_id: item
+            for item in obligations
+        }
+        for obligation_id, credit in credits.items():
+            obligation = obligations_by_id.get(obligation_id)
+            if obligation is not None and credit > Fraction(
+                obligation.max_exposures,
+                1,
+            ):
+                return True
+
+        selected_by_day: dict[date, list[CandidateAtom]] = {}
+        for index in selected:
+            selected_by_day.setdefault(
+                atoms[index].local_date,
+                [],
+            ).append(atoms[index])
+        for day, selected_atoms in selected_by_day.items():
+            rule = availability_by_day.get(day)
+            if rule is None:
                 continue
-            if issue.code in prefix_repairable_codes:
+            fixed = fixed_by_day.get(day, ())
+            if (
+                rule.max_sessions is not None
+                and len(fixed) + len(selected_atoms) > rule.max_sessions
+            ):
+                return True
+            if rule.max_duration_minutes is None:
                 continue
-            # Every remaining hard issue is monotonic under adding workouts:
-            # additions cannot undo excess load, max-count violations,
-            # unavailable dates, invalid catalog semantics or forbidden spacing.
-            return False
-        return True
+            fixed_durations = tuple(
+                _duration_upper_bound_minutes(item)
+                for item in fixed
+            )
+            selected_durations = tuple(
+                _duration_upper_bound_minutes(item.option)
+                for item in selected_atoms
+            )
+            if all(
+                value is not None
+                for value in (*fixed_durations, *selected_durations)
+            ):
+                total = sum(
+                    float(value)
+                    for value in (*fixed_durations, *selected_durations)
+                )
+                if total > float(rule.max_duration_minutes):
+                    return True
+        return False
+
+    def add_rejected_terminal(selected: tuple[int, ...]) -> None:
+        terminals.add(selected)
+        if len(terminals) > limits.max_terminal_selections:
+            raise CandidateSearchLimitExceeded(
+                stage="terminal_selections",
+                observed=len(terminals),
+                limit=limits.max_terminal_selections,
+                generation=CandidateGenerationStats(
+                    atoms=len(atoms),
+                    terminal_selections=len(terminals),
+                    plan_variants=0,
+                ),
+            )
 
     def walk(selected: tuple[int, ...], declined: frozenset[str]) -> None:
         selected = tuple(sorted(selected))
@@ -501,24 +603,14 @@ def enumerate_terminal_selections(
         if state_key in seen:
             return
         seen.add(state_key)
-        if not prefix_is_viable(selected):
-            # Preserve one minimal invalid representative for the solver's
-            # rejection diagnostics. Every strict superset is also invalid by
-            # monotonicity, so enumerating those supersets would add cost but
-            # no new feasible plan.
-            terminals.add(selected)
-            if len(terminals) > limits.max_terminal_selections:
-                raise CandidateSearchLimitExceeded(
-                    stage="terminal_selections",
-                    observed=len(terminals),
-                    limit=limits.max_terminal_selections,
-                    generation=CandidateGenerationStats(
-                        atoms=len(atoms),
-                        terminal_selections=len(terminals),
-                        plan_variants=0,
-                    ),
-                )
+
+        credits = _selection_credits(selected, atoms, base)
+        if selection_has_monotonic_conflict(selected, credits):
+            # Keep one minimal invalid representative so solver diagnostics
+            # still report the hard reason that caused the branch to be cut.
+            add_rejected_terminal(selected)
             return
+
         viable_states.add(state_key)
         if len(viable_states) > limits.max_search_states:
             raise CandidateSearchLimitExceeded(
@@ -532,7 +624,6 @@ def enumerate_terminal_selections(
                 ),
             )
 
-        credits = _selection_credits(selected, atoms, base)
         target = next(
             (
                 obligation
