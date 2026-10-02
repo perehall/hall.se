@@ -675,13 +675,64 @@ def enumerate_terminal_selections(
                 continue
             branches.append(index)
 
+        def unresolved_after(
+            selected_value: tuple[int, ...],
+            declined_value: frozenset[str],
+        ) -> bool:
+            future_credits = _selection_credits(
+                tuple(sorted(selected_value)),
+                atoms,
+                base,
+            )
+            return any(
+                obligation.obligation_id not in declined_value
+                and future_credits.get(
+                    obligation.obligation_id,
+                    Fraction(0, 1),
+                )
+                < Fraction(obligation.target_exposures, 1)
+                for obligation in obligations
+            )
+
+        def finish_or_walk(
+            selected_value: tuple[int, ...],
+            declined_value: frozenset[str],
+        ) -> None:
+            normalized = tuple(sorted(selected_value))
+            if unresolved_after(normalized, declined_value):
+                walk(normalized, declined_value)
+                return
+
+            # A terminal leaf is a result, not another planning decision.
+            # Validate monotonic conflicts directly and record the complete
+            # selection without consuming one more search-state slot. This
+            # preserves the exact candidate domain while avoiding a duplicate
+            # DFS state for every completed week.
+            final_credits = _selection_credits(normalized, atoms, base)
+            if selection_has_monotonic_conflict(normalized, final_credits):
+                add_rejected_terminal(normalized)
+                return
+            terminals.add(normalized)
+            if len(terminals) > limits.max_terminal_selections:
+                raise CandidateSearchLimitExceeded(
+                    stage="terminal_selections",
+                    observed=len(terminals),
+                    limit=limits.max_terminal_selections,
+                    generation=CandidateGenerationStats(
+                        atoms=len(atoms),
+                        terminal_selections=len(terminals),
+                        plan_variants=0,
+                    ),
+                )
+
         for index in branches:
-            walk(tuple((*selected, index)), declined)
+            finish_or_walk(tuple((*selected, index)), declined)
 
         # An unmet obligation is allowed as a soft deficit. This branch is
         # required for completeness when hard constraints make fulfilment
         # impossible or when a lower-priority combination is otherwise better.
-        walk(selected, frozenset((*declined, target.obligation_id)))
+        declined_next = frozenset((*declined, target.obligation_id))
+        finish_or_walk(selected, declined_next)
 
     mandatory = tuple(
         index
