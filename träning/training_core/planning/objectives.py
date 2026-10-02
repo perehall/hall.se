@@ -145,23 +145,25 @@ class ObjectiveVector:
     required_deficit_by_tier: tuple[Fraction, ...]
     unserved_required_by_tier: tuple[int, ...]
     max_required_deficit_by_tier: tuple[Fraction, ...]
-    # S3
+    # S3: soft strategy targets after hard/required content and spacing.
+    target_deficit_by_tier: tuple[Fraction, ...]
+    # S4
     spacing_shortfall_days: int
     spacing_violation_pairs: int
-    # S4
+    # S5
     stability_identity_churn: int
     stability_date_moves: int
     stability_prescription_changes: int
     stability_order_changes: int
-    # S5
+    # S6
     schedule_range_violation: int
     schedule_preferred_distance: int
     schedule_double_penalty: int
-    # S6
-    variation_repeat_penalty: int
     # S7
-    discretionary_excess_by_tier: tuple[Fraction, ...]
+    variation_repeat_penalty: int
     # S8
+    discretionary_excess_by_tier: tuple[Fraction, ...]
+    # S9
     canonical_tie_key: tuple
 
     @property
@@ -183,6 +185,7 @@ class ObjectiveVector:
             self.discretionary_excess_by_tier,
             self.spacing_shortfall_days,
             self.spacing_violation_pairs,
+            self.target_deficit_by_tier,
             self.stability_identity_churn,
             self.stability_date_moves,
             self.stability_prescription_changes,
@@ -238,6 +241,7 @@ def _tier_vectors(
     tuple[int, ...],
     tuple[Fraction, ...],
     tuple[Fraction, ...],
+    tuple[Fraction, ...],
 ]:
     relevant_obligations = tuple(
         item
@@ -249,6 +253,7 @@ def _tier_vectors(
     required_deficits: list[Fraction] = []
     unserved_counts: list[int] = []
     max_deficits: list[Fraction] = []
+    target_deficits: list[Fraction] = []
     discretionary_excess: list[Fraction] = []
 
     for tier in tiers:
@@ -258,6 +263,7 @@ def _tier_vectors(
         ]
         deficits = []
         unserved = 0
+        target_deficit = Fraction(0, 1)
         excess = Fraction(0, 1)
 
         for obligation in obligations:
@@ -270,23 +276,27 @@ def _tier_vectors(
                 deficits.append(deficit)
                 if achieved <= 0:
                     unserved += 1
-            # Exposure above the required minimum is discretionary. The
-            # conservative S7 objective prefers not to add it merely because
-            # capacity remains below max_exposures.
+            target = Fraction(obligation.target_exposures, 1)
+            target_deficit += max(Fraction(0, 1), target - achieved)
+            # Exposure above the strategy target is discretionary. A soft
+            # target can therefore represent support-if-absorbable work
+            # without turning every candidate into mandatory training.
             excess += max(
                 Fraction(0, 1),
-                achieved - Fraction(obligation.min_exposures, 1),
+                achieved - target,
             )
 
         required_deficits.append(sum(deficits, Fraction(0, 1)))
         unserved_counts.append(unserved)
         max_deficits.append(max(deficits, default=Fraction(0, 1)))
+        target_deficits.append(target_deficit)
         discretionary_excess.append(excess)
 
     return (
         tuple(required_deficits),
         tuple(unserved_counts),
         tuple(max_deficits),
+        tuple(target_deficits),
         tuple(discretionary_excess),
     )
 
@@ -576,7 +586,7 @@ def evaluate_objectives(
     context: ObjectiveContext,
 ) -> ObjectiveVector:
     credits = _obligation_credits(plan, context)
-    required, unserved, max_deficit, discretionary_excess = _tier_vectors(
+    required, unserved, max_deficit, target_deficit, discretionary_excess = _tier_vectors(
         context.strategy,
         credits,
         plan.affected_from,
@@ -597,6 +607,7 @@ def evaluate_objectives(
         required_deficit_by_tier=required,
         unserved_required_by_tier=unserved,
         max_required_deficit_by_tier=max_deficit,
+        target_deficit_by_tier=target_deficit,
         spacing_shortfall_days=spacing_shortfall,
         spacing_violation_pairs=spacing_pairs,
         stability_identity_churn=churn,
