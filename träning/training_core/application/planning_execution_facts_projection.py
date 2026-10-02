@@ -34,6 +34,8 @@ class ExecutionFactsProjection:
     availability: tuple[DailyAvailability, ...]
     closed_dates: tuple[date, ...]
     source_refs: tuple[str, ...]
+    prewindow_load_context_from: date | None = None
+    prewindow_load_context_through: date | None = None
 
     def __post_init__(self) -> None:
         revision = str(self.revision_id or "").strip()
@@ -77,6 +79,28 @@ class ExecutionFactsProjection:
                 "source_refs must be unique and non-empty",
             )
         object.__setattr__(self, "source_refs", refs)
+
+        coverage_from = self.prewindow_load_context_from
+        coverage_through = self.prewindow_load_context_through
+        if (coverage_from is None) != (coverage_through is None):
+            raise ExecutionFactsProjectionError(
+                "INVALID_V1_EXECUTION_FACTS",
+                "prewindow load context requires both coverage bounds",
+            )
+        if coverage_from is not None:
+            if not isinstance(coverage_from, date) or not isinstance(
+                coverage_through,
+                date,
+            ):
+                raise ExecutionFactsProjectionError(
+                    "INVALID_V1_EXECUTION_FACTS",
+                    "prewindow load context coverage must use dates",
+                )
+            if coverage_through < coverage_from:
+                raise ExecutionFactsProjectionError(
+                    "INVALID_V1_EXECUTION_FACTS",
+                    "prewindow load context coverage cannot run backwards",
+                )
 
 
 def _mapping(value: Any, field: str) -> dict[str, Any]:
@@ -265,6 +289,23 @@ def compile_execution_facts_projection(
                 str(exc),
             ) from exc
 
+    prewindow = source.get("prewindow_load_context")
+    prewindow_from = None
+    prewindow_through = None
+    if prewindow is not None:
+        prewindow = _mapping(
+            prewindow,
+            "execution_facts_revision.prewindow_load_context",
+        )
+        prewindow_from = _date(
+            prewindow.get("coverage_from"),
+            "execution_facts_revision.prewindow_load_context.coverage_from",
+        )
+        prewindow_through = _date(
+            prewindow.get("coverage_through"),
+            "execution_facts_revision.prewindow_load_context.coverage_through",
+        )
+
     return ExecutionFactsProjection(
         revision_id=str(source.get("revision_id") or ""),
         fixed_commitments=tuple(commitments),
@@ -285,4 +326,6 @@ def compile_execution_facts_projection(
             source.get("source_refs"),
             "execution_facts_revision.source_refs",
         ),
+        prewindow_load_context_from=prewindow_from,
+        prewindow_load_context_through=prewindow_through,
     )
