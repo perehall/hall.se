@@ -53,6 +53,8 @@ class ShadowProjectionBundle:
     closed_dates: tuple[date, ...] | None = None
     compatibility_policy: LoadCompatibilityPolicy | None = None
     objective_policy: ObjectivePolicy | None = None
+    prewindow_load_context_from: date | None = None
+    prewindow_load_context_through: date | None = None
 
     def __post_init__(self) -> None:
         revision = str(self.source_revision or "").strip()
