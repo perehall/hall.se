@@ -785,14 +785,32 @@
           "kind": "structured",
           "value": 25,
           "session": "Löpning · kontrollerad tröskel · 5 × 5 min / 60 s jogg",
-          "intent": "Lateral variant med kortare repetitioner och fortsatt kontrollerad intensitetsavsikt."
+          "intent": "Lateral variant med kortare repetitioner och fortsatt kontrollerad intensitetsavsikt.",
+          "planning_v1": {
+            "max_session_duration_minutes": 90,
+            "duration_cap_source_refs": [
+              "activity:20284663236:4x8:elapsed_3687s",
+              "activity:20381137043:4x8:elapsed_3755s",
+              "planning_v1:duration_cap:short_threshold_mainset_bounded_by_evidenced_4x8",
+              "planning_v1:explicit_execution_cap:90m"
+            ]
+          }
         },
         {
           "id": "run-threshold-short-5x6",
           "kind": "structured",
           "value": 30,
           "session": "Löpning · kontrollerad tröskel · 5 × 6 min / 60 s jogg",
-          "intent": "Kontrollerad variant nära etablerad total arbetstid utan att kräva högre intensitet."
+          "intent": "Kontrollerad variant nära etablerad total arbetstid utan att kräva högre intensitet.",
+          "planning_v1": {
+            "max_session_duration_minutes": 90,
+            "duration_cap_source_refs": [
+              "activity:20284663236:4x8:elapsed_3687s",
+              "activity:20381137043:4x8:elapsed_3755s",
+              "planning_v1:duration_cap:short_threshold_mainset_bounded_by_evidenced_4x8",
+              "planning_v1:explicit_execution_cap:90m"
+            ]
+          }
         },
         {
           "id": "run-threshold-short-6x6",
