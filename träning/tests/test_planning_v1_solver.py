@@ -1472,6 +1472,84 @@ class PlanningSolverV1Tests(unittest.TestCase):
         self.assertTrue(all(len(items) == 1 for items in by_day.values()))
         self.assertTrue(all(items[0].instance_index == 1 for items in by_day.values()))
 
+    def test_soft_support_target_does_not_reintroduce_calendar_search_explosion(self):
+        threshold = option(
+            "run_threshold",
+            "threshold-30",
+            "run_threshold",
+            "run",
+            dimensions=(dim("cardiovascular", LoadDimensionLevel.HIGH),),
+            minutes=50,
+        )
+        swim = option(
+            "swim_aerobic",
+            "swim-60",
+            "swim_aerobic",
+            "swim",
+            dimensions=(dim("upper_body", LoadDimensionLevel.MODERATE),),
+            minutes=60,
+        )
+        strength = option(
+            "strength_core",
+            "strength-35",
+            "strength_core",
+            "strength",
+            dimensions=(dim("mechanical_leg", LoadDimensionLevel.MODERATE),),
+            minutes=35,
+        )
+        easy = option(
+            "run_easy_distance",
+            "easy-60",
+            "run_easy_distance",
+            "run",
+            dimensions=(dim("cardiovascular", LoadDimensionLevel.LOW),),
+            minutes=60,
+        )
+        support = PlanningObligation(
+            obligation_id="easy-support",
+            capability="run_easy_distance",
+            role="supporting",
+            priority_tier=3,
+            min_exposures=0,
+            target_exposures=1,
+            max_exposures=1,
+            recipe_family=("run_easy_distance",),
+            valid_from=START,
+            valid_until=END,
+            source_refs=("strategy:test",),
+        )
+        result = solve(
+            context(
+                (
+                    obligation("threshold", "run_threshold", "run_threshold"),
+                    obligation(
+                        "swim",
+                        "swim_aerobic",
+                        "swim_aerobic",
+                        minimum=2,
+                        maximum=2,
+                        target=2,
+                    ),
+                    obligation("strength", "strength_core", "strength_core", priority=2),
+                    support,
+                ),
+                (threshold, swim, strength, easy),
+            ),
+            generation_limits=CandidateGenerationLimits(
+                max_search_states=100,
+                max_terminal_selections=1000,
+                max_plan_variants=100000,
+            ),
+        )
+        self.assertFalse(result.blocked)
+        self.assertIn(
+            "run_easy_distance",
+            {item.recipe_id for item in result.plan.workouts},
+        )
+        self.assertLessEqual(result.trace.generation.terminal_selections, 1000)
+        self.assertTrue(result.trace.search_complete)
+        self.assertTrue(result.trace.optimality_proven)
+
     def test_search_limit_fails_closed_instead_of_returning_approximate_plan(self):
         easy = option(
             "run_easy_distance",
