@@ -3,8 +3,8 @@
     {
       "action": "consolidate",
       "day_index": 5,
-      "rationale": "Behåll lugn löptålighet med separation från löpkvalitet. Blueprint får variera passkaraktären men skapar inte en extra belastningsexponering.",
-      "recipe_key": "run_easy_distance",
+      "rationale": "Blockets preliminära grundplan föreslår denna stödjande passkaraktär; den tas bara med när ingen redan planerad exponering fyller samma stödroll och belastningsordningen tillåter.",
+      "recipe_key": "run_hill_quality",
       "evidence_refs": [
         "planning_policy.microcycle_policy"
       ]
@@ -19,14 +19,28 @@
       ]
     }
   ],
-  "source": "deterministic_fallback",
+  "source": "deterministic_fallback_after_repair_guard",
   "week_key": "2026-W40",
-  "rationale": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern. Modellbedömning saknades: Planeringsmodellen misslyckades: oväntad modellstatus incomplete: {'reason': 'max_output_tokens'}",
+  "rationale": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern.",
   "week_start": "2026-09-28",
-  "source_hash": "a1bd82c11295ce722ca56e98af2347aa02732e26bf25bad6e5f3a6a9aa0adcba",
+  "source_hash": "11b23e7821e6b36df048c473a80845dde2a26c6e66c165952bfae4e3e01c41ee",
+  "guard_repair": {
+    "result": "fallback",
+    "attempted": true,
+    "repair_failures": [
+      "tung benbelastning får inte planeras på söndagen direkt före nästa fasta enduro: mtb_technical, run_easy_trail",
+      "löptröskel/backkvalitet/lång löpdistans får inte staplas på två på varandra följande dagar",
+      "dubbelpass klustras samtidigt som en deklarerat tillgänglig träningsdag lämnas oanvänd; fördela befintliga stimuli innan dubbelpass används"
+    ],
+    "initial_failures": [
+      "tung benbelastning får inte planeras på söndagen direkt före nästa fasta enduro: mtb_technical",
+      "dubbelpass klustras samtidigt som en deklarerat tillgänglig träningsdag lämnas oanvänd; fördela befintliga stimuli innan dubbelpass används",
+      "strength_core är redundant: styrka/core är redan faktiskt genomförd i mikrocykeln"
+    ]
+  },
   "mesocycle_id": "20260928-run_threshold-swim_aerobic-swim_technique",
   "schema_version": 1,
-  "generated_at_utc": "2026-10-02T12:09:34.484283+00:00",
+  "generated_at_utc": "2026-10-02T17:12:46.168434+00:00",
   "planner_revision": 17,
   "competition_context": {
     "as_of": "2026-09-28",
@@ -107,7 +121,8 @@
       "20368346174",
       "20381137043",
       "20396959391",
-      "20410781977"
+      "20410781977",
+      "20422632242"
     ],
     "evidence_note": "Familjeexponeringar kommer från faktiskt registrerade aktiviteter i målveckan. Direct_capabilities kräver explicit daterad kapabilitetsevidens. Planning_credits kan dessutom komma från en durabel, entydig strukturell match mot ett närliggande planerat intent och används för att undvika redundant framtida ordination utan att påstå mer fysiologi än underlaget stödjer.",
     "swim_exposures": 1,
@@ -118,13 +133,15 @@
     },
     "enduro_exposures": 1,
     "planning_credits": [
+      "run_easy_distance",
       "run_threshold",
       "strength_core",
       "strength_unilateral"
     ],
     "family_day_indexes": {
       "run": [
-        2
+        2,
+        5
       ],
       "bike": [
         4
@@ -140,7 +157,7 @@
       ]
     },
     "strength_exposures": 1,
-    "completed_slot_days": 3,
+    "completed_slot_days": 4,
     "direct_capabilities": [
       "run_threshold"
     ],
@@ -151,6 +168,9 @@
       "strength_core": [
         "20368346174"
       ],
+      "run_easy_distance": [
+        "20422632242"
+      ],
       "strength_unilateral": [
         "20368346174"
       ]
@@ -158,7 +178,8 @@
     "completed_day_indexes": [
       2,
       3,
-      4
+      4,
+      5
     ],
     "capability_day_indexes": {
       "run_threshold": [
@@ -166,6 +187,9 @@
       ],
       "strength_core": [
         1
+      ],
+      "run_easy_distance": [
+        5
       ],
       "strength_unilateral": [
         1

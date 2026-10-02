@@ -4,6 +4,52 @@
       "model": "gpt-5-mini",
       "assessment": {
         "facts": [
+          "Löpning: 12,64 km · 1:06:16 · 160 m+ · snittpuls 144,3 · maxpuls 158.",
+          "Planstatus 2026-10-02: dagen är markerad genomförd i coachens beslutsunderlag."
+        ],
+        "summary": "66 min terränglöpning med varierande 1 km‑lappar och snittpuls 144 visar ett genomfört backkvalitet/supportpass med inslag av snabbare slag men ingen strukturerad 3×8×150 registrerad.",
+        "unknowns": [
+          "Subjektiv RPE/känsla efter passet (användarrapport saknas)",
+          "Exakt mängd neuromuskulär trötthet i ben (terräng/enduro påverkan)"
+        ],
+        "confidence": "medium",
+        "interpretations": [
+          "Passet visar genomfört backkvalitetsstimulus/variant men matchar inte planens formella struktur 3×8×150 enligt plan_comparison.",
+          "Utfallet indikerar god genomförbarhet efter gårdagens MTB och tidigare 4×8min‑pass; inget tydligt ackumulerat återhämtningsproblem i tillgängliga data."
+        ],
+        "load_interpretation": "Kardiovaskulär och mekanisk exponering idag är konkret och bör vägas mot MTB från gårdagen; inga tydliga varningssignaler i 24–48 h‑fönstret."
+      },
+      "auto_apply": {
+        "note": "Ingen automatisk planändring.",
+        "applied": false
+      },
+      "activity_id": 20422632242,
+      "plan_action": {
+        "action": "keep",
+        "reason": "Ingen stark indikation att reducera eller vila behövs; simpasset är lågmekaniskt och planerat som companion dagen efter löpning/enduro.",
+        "target_date": "2026-10-03",
+        "dose_option_id": "",
+        "recommendation": "Behåll planerad simning 2026-10-03 (3 200 m aerob/teknik) oförändrad; rapportera kort RPE/känsla efter dagens löppass om du vill att jag omprövar beslutet.",
+        "requires_approval": false,
+        "target_workout_key": "20260928-run_threshold-swim_aerobic-swim_technique:mc1:2026-10-03:swim_aerobic_technique_2"
+      },
+      "activity_date": "2026-10-02",
+      "activity_name": "Terränglöpning på eftermiddagen",
+      "generated_at_utc": "2026-10-02T17:14:22.195300+00:00",
+      "analysis_contract": {
+        "pipeline_version": 4,
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
+        "analysis_code_sha256": "3323209316fd3786118440b80471660165354ea9f5a4df5bc883275747d2cc5e",
+        "plan_comparison_version": 3,
+        "workout_context_version": 3
+      },
+      "performance_marker_id": null,
+      "performance_protocol_key": null
+    },
+    {
+      "model": "gpt-5-mini",
+      "assessment": {
+        "facts": [
           "MTB/XC: 13,81 km · 1:18:30 · 216 m+ · snittpuls 126,3 · maxpuls 150."
         ],
         "summary": "Kvällens mountainbikepass 4.7 timmar och 13.8 km genomfört utan subjektiv rapport; puls snitt 126 bpm, max 150 bpm — teknisk/utomhus-MTB-exponering registrerad.",
@@ -1324,56 +1370,11 @@
       },
       "performance_marker_id": null,
       "performance_protocol_key": null
-    },
-    {
-      "model": "gpt-5-mini",
-      "assessment": {
-        "facts": [
-          "Styrka: 27:39 · snittpuls 75,7 · maxpuls 112.",
-          "Planstatus 2026-09-07: dagen är markerad genomförd i coachens beslutsunderlag."
-        ],
-        "summary": "36 minuter styrketräning (1659 s) registrerat efter dagens enduro; pulsnivå låg–måttlig (avg 75.7, max 112) vilket tyder på låg metabol belastning från styrkepasset.",
-        "unknowns": [
-          "Användarrapport för styrkepasset saknas (subjektiv trötthet/ömhet)",
-          "Eventuell lokal muskeltrötthet från endurons mekaniska krav är okänt utan subjektiv input"
-        ],
-        "confidence": "medium",
-        "interpretations": [
-          "Styrkepasset var lågintensivt kardiovaskulärt men representerar konkret mekanisk/neuromuskulär exponering som skyddad styrka/core.",
-          "Ingen signal i puls eller närbelastningsmönster talar för att skydda eller reducera morgondagens planerade löptröskel; planen kan hållas om subjektiv återhämtning är OK."
-        ],
-        "load_interpretation": "I närbelastningsfönstret finns dessutom en lång endurosession (elapsed 5718 s) och en 22 km löpning två dagar tidigare; dagens styrka ger liten extra kardiovaskulär…"
-      },
-      "auto_apply": {
-        "note": "Ingen automatisk planändring.",
-        "applied": false
-      },
-      "activity_id": 20079150228,
-      "plan_action": {
-        "action": "keep",
-        "reason": "Närbelastningen visar absorberbar styrka efter enduro utan tydlig återhämtningssignal som skulle kräva reduktion.",
-        "target_date": "2026-09-08",
-        "dose_option_id": "",
-        "recommendation": "Behåll planerat tröskelpass 3×10 min i dag; vila/avstå endast om du känner ovanlig trötthet eller lokal muskelsmärta. Rapportera hur benen känns före uppvärmning om något avviker.",
-        "requires_approval": false
-      },
-      "activity_date": "2026-09-07",
-      "activity_name": "Styrketräning på natten",
-      "generated_at_utc": "2026-09-08T13:05:34.738291+00:00",
-      "analysis_contract": {
-        "pipeline_version": 1,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
-        "analysis_code_sha256": "eca5b921283f06098c0bca80840d04f9fbc044dacc81a9084774be7dfe2f724d",
-        "plan_comparison_version": 1,
-        "workout_context_version": 2
-      },
-      "performance_marker_id": null,
-      "performance_protocol_key": null
     }
   ],
-  "last_run_utc": "2026-10-02T12:10:29.274896+00:00",
+  "last_run_utc": "2026-10-02T17:14:22.195300+00:00",
   "contract_version": 16,
-  "last_trigger_hash": "0f71e0b87d7d183786ef63e41041b3f24637b1dd3b1978d584c76228a55d1277",
+  "last_trigger_hash": "55523050bc13a1a077977a4565262fa76e41eff4989bbe12fd0fbdc292c3a24a",
   "analysed_activity_ids": [
     "20367593813",
     "20350203020",
@@ -1411,7 +1412,8 @@
     "20092166843",
     "20381137043",
     "20396959391",
-    "20410781977"
+    "20410781977",
+    "20422632242"
   ],
   "analysis_ledger_version": 1,
   "output_contract_version": 19,
