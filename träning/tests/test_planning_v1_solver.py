@@ -288,6 +288,78 @@ def only_day_available(day):
 
 
 class PlanningSolverV1Tests(unittest.TestCase):
+    def test_protected_capacity_prefers_hold_dose_over_reduce_or_progress(self):
+        reduced = option(
+            "strength_core",
+            "strength-25",
+            "strength_core",
+            "strength",
+            dimensions=(dim("mechanical_leg", LoadDimensionLevel.MODERATE),),
+            minutes=25,
+        )
+        hold = option(
+            "strength_core",
+            "strength-35",
+            "strength_core",
+            "strength",
+            dimensions=(dim("mechanical_leg", LoadDimensionLevel.MODERATE),),
+            minutes=35,
+        )
+        progressed = option(
+            "strength_core",
+            "strength-45",
+            "strength_core",
+            "strength",
+            dimensions=(dim("mechanical_leg", LoadDimensionLevel.MODERATE),),
+            minutes=45,
+        )
+        requirement = PlanningObligation(
+            obligation_id="strength-protected",
+            capability="strength_core",
+            role="protected",
+            priority_tier=2,
+            min_exposures=1,
+            target_exposures=1,
+            max_exposures=1,
+            recipe_family=("strength_core",),
+            valid_from=START,
+            valid_until=END,
+            source_refs=("strategy:test",),
+        )
+        eligibility_values = (
+            OptionEligibility(
+                recipe_id="strength_core",
+                dose_option_id="strength-25",
+                capability="strength_core",
+                kind=EligibilityKind.REDUCE,
+                source_refs=("athlete:test",),
+            ),
+            OptionEligibility(
+                recipe_id="strength_core",
+                dose_option_id="strength-35",
+                capability="strength_core",
+                kind=EligibilityKind.HOLD,
+                source_refs=("athlete:test",),
+            ),
+            OptionEligibility(
+                recipe_id="strength_core",
+                dose_option_id="strength-45",
+                capability="strength_core",
+                kind=EligibilityKind.PROGRESS,
+                source_refs=("athlete:test",),
+            ),
+        )
+        result = solve(
+            context(
+                (requirement,),
+                (reduced, hold, progressed),
+                eligibility_values=eligibility_values,
+            )
+        )
+        self.assertFalse(result.blocked)
+        self.assertEqual(result.plan.workouts[0].dose_option_id, "strength-35")
+        self.assertEqual(result.objective_vector.dose_intent_penalty, 0)
+
     def test_repeated_capability_uses_distinct_planned_characters_when_available(self):
         endurance = option(
             "swim_aerobic_endurance",
