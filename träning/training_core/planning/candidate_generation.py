@@ -174,18 +174,19 @@ def _contribution_for_obligation(
     option_key = (option.recipe_id, option.dose_option_id)
 
     # Multi-capability options are indivisible physical prescriptions. A
-    # workout cannot bypass an unsafe dose by claiming only its easiest
-    # capability as the obligation source.
+    # workout cannot bypass athlete eligibility or the StrategyRevision's
+    # explicit dose domain through either direct or partial credit.
     if not _option_fully_eligible(option, eligibility):
+        return None
+    if (
+        obligation.allowed_dose_option_ids
+        and option.dose_option_id not in obligation.allowed_dose_option_ids
+    ):
         return None
 
     if (
         obligation.capability in option.capabilities
         and option.recipe_id in obligation.recipe_family
-        and (
-            not obligation.allowed_dose_option_ids
-            or option.dose_option_id in obligation.allowed_dose_option_ids
-        )
         and (*option_key, obligation.capability) in eligibility
     ):
         return ObligationContribution(
