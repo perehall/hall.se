@@ -1,6 +1,11 @@
+import sys
 import unittest
+from pathlib import Path
 
-from scripts.planning_v1_shadow_schema import _validate_migration_scope
+SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
+sys.path.insert(0, str(SCRIPTS))
+
+from planning_v1_shadow_schema import _validate_migration_scope
 
 
 class PlanningV1ShadowSchemaScopeTests(unittest.TestCase):
