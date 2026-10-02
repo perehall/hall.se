@@ -164,6 +164,30 @@ def _iso_day(value: Any, field: str) -> date:
         ) from exc
 
 
+def _raw_duration_upper_minutes(row: dict[str, Any]) -> float | None:
+    loads = row.get("quantitative_load", [])
+    if not isinstance(loads, list):
+        return None
+    matches = [
+        item
+        for item in loads
+        if isinstance(item, dict)
+        and item.get("scope") == "global"
+        and item.get("subject") == "training_duration"
+        and item.get("metric") == "duration"
+        and item.get("unit") == "minutes"
+    ]
+    if not matches:
+        return None
+    values = []
+    for item in matches:
+        value = item.get("max_value")
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            return None
+        values.append(float(value))
+    return sum(values)
+
+
 def materialize_execution_facts_document(
     *,
     canonical_profile_record: dict[str, Any],
@@ -316,6 +340,53 @@ def materialize_execution_facts_document(
         raise ExecutionFactsProjectionError(
             "INVALID_EXECUTION_MATERIALIZER_SOURCE",
             "merged fixed/prewindow commitments require unique non-empty ids",
+        )
+
+    # A finite daily time budget plus a same-day fixed commitment whose
+    # duration is unknown leaves no provable residual time for mutable
+    # training. Preserve the commitment without inventing a duration by
+    # saturating session capacity for that date. The generic final validator
+    # remains strict.
+    for availability_row in availability:
+        if not availability_row["available"]:
+            continue
+        if availability_row["max_duration_minutes"] is None:
+            continue
+        day = _iso_day(
+            availability_row["local_date"],
+            "availability.local_date",
+        )
+        same_day_fixed = [
+            row
+            for row in commitments
+            if _iso_day(row.get("local_date"), "commitment.local_date") == day
+        ]
+        unknown_duration = [
+            row
+            for row in same_day_fixed
+            if _raw_duration_upper_minutes(row) is None
+        ]
+        if not unknown_duration:
+            continue
+        fixed_count = len(same_day_fixed)
+        existing_session_cap = availability_row.get("max_sessions")
+        if (
+            existing_session_cap is None
+            or existing_session_cap > fixed_count
+        ):
+            availability_row["max_sessions"] = fixed_count
+        availability_row["max_duration_minutes"] = None
+        availability_row["source_refs"] = list(
+            dict.fromkeys(
+                [
+                    *availability_row["source_refs"],
+                    "planning_v1:unknown_fixed_duration:no_proven_residual_time",
+                    *[
+                        f"fixed_commitment:{row.get('commitment_id')}"
+                        for row in unknown_duration
+                    ],
+                ]
+            )
         )
 
     closed_dates = []
