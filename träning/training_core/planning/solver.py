@@ -135,6 +135,7 @@ def _objective_context(request: PlanningSolveRequest) -> ObjectiveContext:
     return ObjectiveContext(
         strategy=context.strategy,
         catalog_options=context.catalog_options,
+        option_eligibility=context.option_eligibility,
         observed_obligation_credits=context.observed_obligation_credits,
         observed_load_exposures=context.observed_load_exposures,
         fixed_commitments=context.fixed_commitments,
