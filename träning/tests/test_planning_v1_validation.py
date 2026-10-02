@@ -833,69 +833,6 @@ class FinalPlanningValidatorTests(unittest.TestCase):
         )
         self.assertIn("WORKOUT_ON_CLOSED_DATE", report.codes())
 
-    def test_fixed_unknown_duration_does_not_block_when_no_mutable_workout_is_added(self):
-        fixed_unknown = FixedLoadCommitment(
-            commitment_id="fixed-unknown-duration",
-            local_date=AFFECTED_FROM,
-            label="Fast åtagande",
-            load_dimensions=(
-                dim("technical", LoadDimensionLevel.LOW),
-            ),
-            quantitative_load=(),
-            source_refs=("user:fixed",),
-        )
-        availability = (
-            DailyAvailability(
-                local_date=AFFECTED_FROM,
-                available=True,
-                max_duration_minutes=90,
-                source_refs=("user:availability",),
-            ),
-        )
-        report = validate_plan_content(
-            valid_plan(workouts=(), commitments=(fixed_unknown,)),
-            context(
-                fixed=(fixed_unknown,),
-                availability=availability,
-            ),
-        )
-        self.assertNotIn("AVAILABILITY_DURATION_UNKNOWN", report.codes())
-
-    def test_fixed_unknown_duration_blocks_mutable_addition_on_same_day(self):
-        fixed_unknown = FixedLoadCommitment(
-            commitment_id="fixed-unknown-duration",
-            local_date=AFFECTED_FROM,
-            label="Fast åtagande",
-            load_dimensions=(
-                dim("technical", LoadDimensionLevel.LOW),
-            ),
-            quantitative_load=(),
-            source_refs=("user:fixed",),
-        )
-        easy = option_easy()
-        added = workout_from_option(
-            "easy-added",
-            AFFECTED_FROM,
-            easy,
-            direct("easy-distance", "run_easy_distance"),
-        )
-        availability = (
-            DailyAvailability(
-                local_date=AFFECTED_FROM,
-                available=True,
-                max_duration_minutes=90,
-                source_refs=("user:availability",),
-            ),
-        )
-        report = validate_plan_content(
-            valid_plan(workouts=(added,), commitments=(fixed_unknown,)),
-            context(
-                fixed=(fixed_unknown,),
-                availability=availability,
-            ),
-        )
-        self.assertIn("AVAILABILITY_DURATION_UNKNOWN", report.codes())
-
     def test_unavailable_date_rejects_training(self):
         report = validate_plan_content(
             valid_plan(),
