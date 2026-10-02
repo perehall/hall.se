@@ -502,6 +502,22 @@ def enumerate_terminal_selections(
             return
         seen.add(state_key)
         if not prefix_is_viable(selected):
+            # Preserve one minimal invalid representative for the solver's
+            # rejection diagnostics. Every strict superset is also invalid by
+            # monotonicity, so enumerating those supersets would add cost but
+            # no new feasible plan.
+            terminals.add(selected)
+            if len(terminals) > limits.max_terminal_selections:
+                raise CandidateSearchLimitExceeded(
+                    stage="terminal_selections",
+                    observed=len(terminals),
+                    limit=limits.max_terminal_selections,
+                    generation=CandidateGenerationStats(
+                        atoms=len(atoms),
+                        terminal_selections=len(terminals),
+                        plan_variants=0,
+                    ),
+                )
             return
         viable_states.add(state_key)
         if len(viable_states) > limits.max_search_states:
