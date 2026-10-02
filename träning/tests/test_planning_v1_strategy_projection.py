@@ -40,6 +40,7 @@ def explicit_document():
                         "role": "primary",
                         "priority_tier": 1,
                         "min_exposures": 1,
+                        "target_exposures": 1,
                         "max_exposures": 1,
                         "recipe_family": ["run_threshold"],
                         "valid_from": "2026-10-05",
@@ -82,6 +83,7 @@ class V1StrategyProjectionTests(unittest.TestCase):
         self.assertEqual(result.goal_set_hash, "goal-1")
         self.assertEqual(len(result.obligations), 1)
         self.assertEqual(result.obligations[0].min_exposures, 1)
+        self.assertEqual(result.obligations[0].target_exposures, 1)
         self.assertEqual(result.obligations[0].max_exposures, 1)
         self.assertTrue(
             result.load_envelope.bounds[0].requires_complete_coverage
@@ -131,6 +133,14 @@ class V1StrategyProjectionTests(unittest.TestCase):
             raised.exception.code,
             "INVALID_V1_STRATEGY_CONTRACT",
         )
+
+    def test_target_exposure_must_lie_inside_required_and_max_bounds(self):
+        document = explicit_document()
+        obligation = document["planning_engine_v1"]["strategy_revision"]["obligations"][0]
+        obligation["target_exposures"] = 0
+        with self.assertRaises(StrategyProjectionError) as raised:
+            compile_strategy_revision(document)
+        self.assertEqual(raised.exception.code, "INVALID_V1_STRATEGY_CONTRACT")
 
     def test_goal_change_invalidates_stale_strategy_revision(self):
         document = explicit_document()
