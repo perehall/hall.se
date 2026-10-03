@@ -280,13 +280,18 @@
       "label": "Lördag",
       "sport": "swim",
       "reason": "Lågmekanisk simexponering dagen efter fast enduro följer blockets planerade passkaraktär utan att anta att benen är redo för ny benkvalitet. Verifierad tolererad/absorberad dos saknas. Atletens bekräftade startläge anger 3000 i receptets dosvariabel; närmaste konservativa katalogsteg används endast som etableringspunkt. Självrapporten räknas inte som tolererad eller absorberad dos. Veckobeslut: consolidate; materialiserad relation: hold.",
-      "status": "preliminary",
+      "status": "conditional",
       "session": "Simning · 3 200 m · aerob/teknik",
       "stimuli": [
         "swim_aerobic",
         "swim_technique"
       ],
       "dose_open": false,
+      "auto_coach": {
+        "action": "reduce",
+        "reason": "Dagens långa endurosession ökar mekanisk/neuromuskulär belastning och skapar risk för nedsatt simteknisk kvalitet imorgon.",
+        "applied_at_utc": "2026-10-03T12:10:39.355694+00:00"
+      },
       "recipe_key": "swim_aerobic_technique",
       "block_intent": "establish",
       "dose_options": [
@@ -623,6 +628,7 @@
         "technical"
       ],
       "microcycle_slot": "swim_aerobic_technique_1",
+      "coach_adjustment": "Skala ned passet. Skala dagens planerade simpass 3 200 m ner till ett kort teknikfokuserat pass (alternativ: reducerad struktur eller kortare totaldistans). Om du känner dig fräsch imorgon kan hel dos återgå efter subjektiv kontroll; annars håll reducerad teknikvariant.",
       "development_step": {
         "reason": "Mikrocykelbeslutet valde consolidate och dosen materialiserades från verifierad träningsrespons, bekräftat startläge eller konservativ katalogbas utan att höja flera belastningsvariabler samtidigt.",
         "relation": "hold",
@@ -630,6 +636,7 @@
         "microcycle": 1
       },
       "microcycle_index": 1,
+      "original_session": "Simning · 3 200 m · aerob/teknik",
       "development_focus": "Teknisk kvalitet och stabil aerob rytm; simningen ska kunna stödja helheten med låg mekanisk kostnad för benen.",
       "baseline_option_id": "swim-3200",
       "development_character": "technique_aerobic",
@@ -664,10 +671,10 @@
         "status": "synced",
         "transport": "intervals_icu",
         "source_hash": "e13e20a872ce2e8e53c7dc84e65f3a87f0ca7d64dea0cdc6c509798ca7794beb",
-        "updated_at_utc": "2026-10-03T12:06:58.177129+00:00",
+        "updated_at_utc": "2026-10-03T12:10:41.299762+00:00",
         "device_delivery": "unverified",
-        "verified_at_utc": "2026-10-03T12:06:58.177129+00:00",
-        "provider_event_id": 141032047
+        "verified_at_utc": "2026-10-03T12:10:41.299762+00:00",
+        "provider_event_id": 141032733
       },
       "block_intent": "establish",
       "dose_options": [
