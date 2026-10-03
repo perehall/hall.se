@@ -9,13 +9,13 @@
         ],
         "summary": "Enduropasset omfattade 1:43:18 totalt och 684 m+; det räknas som faktisk teknisk och mekanisk träningsbelastning inför nästa prioriterade pass.",
         "unknowns": [
-          "Subjektiv svar/benstatus efter passet (user_report tom)",
-          "Detaljerad teknisk intensitet under enduron som påverkar lokal muskeltrötthet"
+          "Subjektiv trötthet/smärta efter passet (user_report saknas)",
+          "Om enduron innehöll många tekniska/påfrestande lyft eller krascher som ökar lokal mekanisk belastning"
         ],
         "confidence": "medium",
         "interpretations": [
-          "Passet levererar teknisk/neuromuskulär och mekanisk exponering som bör väga tungt mot nästa dagars benbelastning.",
-          "Full återhämtning från dagens pass är ännu inte verifierad."
+          "Denna enduro ersätter eller ökar faktisk extern belastning som bör vägas mot planerade sim‑pass samma dag (planerat swim 3 200 m)",
+          "Givet varaktighet/intensitetsindikatorer och senaste 3 dagars aktivitet finns skäl att hålla simpasset som planerat endast om mekanisk benpåverkan bedöms låg — men användarrapport saknas för bekräftelse"
         ],
         "load_interpretation": "För Enduro används hela 1:43:18 som tidsomfattning; Stravas rörelsetid 1:30:41 och snittpuls 130 beskriver inte den tekniska/mekaniska belastningen ensamma."
       },
@@ -25,17 +25,17 @@
       },
       "activity_id": 20432126692,
       "plan_action": {
-        "action": "keep",
-        "reason": "Planen prioriterar lågmekanisk simning dag efter enduro men verifierad simexponering saknas; konservativt behålls planens simpass oförändrat för eftervärdering.",
+        "action": "review",
+        "reason": "Enduron är en faktisk högvaraktighetsbelastning samma dag som planerad simning och användarrapport saknas för att bedöma tolerans.",
         "target_date": "2026-10-03",
         "dose_option_id": "",
-        "recommendation": "Genomför planerat simpass (3 200 m) endast om du känner dig fräsch i axlar/överkropp och benen känns ok vid gång/trappa; annars vila eller ersätt med mycket lätt teknik‑fokus i bassängen (max 30–40 min lätt).",
-        "requires_approval": false,
+        "recommendation": "Kontrollera subjektivt läge (ben, nacke, allmän trötthet). Behåll simningen på 3 200 m endast om du känner dig opåverkad och kan hålla teknik; annars ersätt dagens simpass med vila eller mycket lätt teknik‑läge och planera om enligt mesocykelens konservativa princip.",
+        "requires_approval": true,
         "target_workout_key": "20260928-run_threshold-swim_aerobic-swim_technique:mc1:2026-10-03:swim_aerobic_technique_1"
       },
       "activity_date": "2026-10-03",
       "activity_name": "Enduro vid lunch",
-      "generated_at_utc": "2026-10-03T12:03:35.700462+00:00",
+      "generated_at_utc": "2026-10-03T12:06:56.671949+00:00",
       "analysis_contract": {
         "pipeline_version": 4,
         "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
@@ -1372,9 +1372,9 @@
       "performance_protocol_key": null
     }
   ],
-  "last_run_utc": "2026-10-03T12:03:35.700462+00:00",
+  "last_run_utc": "2026-10-03T12:06:56.671949+00:00",
   "contract_version": 16,
-  "last_trigger_hash": "a7872bdb65d434915626d4c0dc9e69a3edb15ec40f1a2c69611e000fd9328c5f",
+  "last_trigger_hash": "4ed33df9d80173c94966515ed77a0f2f0ed1a0196cfd23bf15ce80103d2153d8",
   "analysed_activity_ids": [
     "20367593813",
     "20350203020",
