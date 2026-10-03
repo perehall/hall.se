@@ -1016,6 +1016,22 @@
       "source_hash": "4a765b8ed7cf10c51cd38f14c46b8edafb113d7ccc3544d9c69eada42e60b02e",
       "generated_at_utc": "2026-10-03T01:07:52.147799+00:00",
       "summary": "Följer mikrocykel-blueprint (develop) samtidigt som mångmålspolicyn och mesocyklens guardrails skyddas: måndagens fasta enduro blockerar dag 1 och dag 2 hålls låg benbelastning. Run_threshold (absorberad och progression_ready) varieras i struktur denna vecka (kortare reps) som blockets utvecklingspunkt; sim exponeras två gånger (spridda) på konservativ nivå för att bevara teknik och undvika volymprogression då swim progression inte är ready. Minst en styrke/core-session skyddas. Lugn löpdistans hanteras som konsolidering (support_if_absorbable) och inga två tungt benbelastande löppass ligger intill varandra. Beslut speglar observerad dose_response och 24–72h‑kontext (caution för vissa sim-/runfönster) och introducerar ingen odokumenterad volym- eller intensitetsökning."
+    },
+    {
+      "kind": "microcycle",
+      "decision_id": "2026-W40",
+      "source": "deterministic_fallback_after_repair_guard",
+      "source_hash": "ce074d19ced9ac2d771f1a92b04576a5c49bf7b4c808f4376f8f4a109c8b75f3",
+      "generated_at_utc": "2026-10-03T12:01:13.001278+00:00",
+      "summary": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern."
+    },
+    {
+      "kind": "upcoming_microcycle",
+      "decision_id": "2026-W41",
+      "source": "openai_repaired",
+      "source_hash": "eed75e47fc4ae94b7fff2695d7626fb079a5ca8363a0995cc4af8d6a378d8d03",
+      "generated_at_utc": "2026-10-03T12:03:28.137851+00:00",
+      "summary": "Åtgärdar två guard‑fel: styrka/core får inte ligga dag 2 (dagen efter fast enduro) och tung löpning får inte ligga söndag före nästa fasta enduro. Behåller blockets avsikt (kortare tröskelreps + två simbassessioner + skyddad styrka), sprider simning och undviker intilliggande löpkvaliteter."
     }
   ]
 }

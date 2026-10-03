@@ -23,24 +23,24 @@
   "week_key": "2026-W40",
   "rationale": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern.",
   "week_start": "2026-09-28",
-  "source_hash": "6b84a08403350ba61e80c371252a60eb5c27e2944bb088a916af8f21200754c3",
+  "source_hash": "ce074d19ced9ac2d771f1a92b04576a5c49bf7b4c808f4376f8f4a109c8b75f3",
   "guard_repair": {
     "result": "fallback",
     "attempted": true,
     "repair_failures": [
-      "tung benbelastning får inte planeras på söndagen direkt före nästa fasta enduro: run_easy_trail",
+      "tung benbelastning får inte planeras på söndagen direkt före nästa fasta enduro: mtb_technical, run_easy_trail, strength_core",
       "dubbelpass klustras samtidigt som en deklarerat tillgänglig träningsdag lämnas oanvänd; fördela befintliga stimuli innan dubbelpass används",
       "strength_core är redundant: styrka/core är redan faktiskt genomförd i mikrocykeln"
     ],
     "initial_failures": [
-      "tung benbelastning får inte planeras på söndagen direkt före nästa fasta enduro: mtb_technical, run_easy_trail",
+      "tung benbelastning får inte planeras på söndagen direkt före nästa fasta enduro: mtb_technical, run_easy_trail, strength_core",
       "dubbelpass klustras samtidigt som en deklarerat tillgänglig träningsdag lämnas oanvänd; fördela befintliga stimuli innan dubbelpass används",
       "strength_core är redundant: styrka/core är redan faktiskt genomförd i mikrocykeln"
     ]
   },
   "mesocycle_id": "20260928-run_threshold-swim_aerobic-swim_technique",
   "schema_version": 1,
-  "generated_at_utc": "2026-10-03T01:06:58.164999+00:00",
+  "generated_at_utc": "2026-10-03T12:01:13.001278+00:00",
   "planner_revision": 17,
   "competition_context": {
     "as_of": "2026-09-28",
@@ -122,7 +122,8 @@
       "20381137043",
       "20396959391",
       "20410781977",
-      "20422632242"
+      "20422632242",
+      "20432126692"
     ],
     "evidence_note": "Familjeexponeringar kommer från faktiskt registrerade aktiviteter i målveckan. Direct_capabilities kräver explicit daterad kapabilitetsevidens. Planning_credits kan dessutom komma från en durabel, entydig strukturell match mot ett närliggande planerat intent och används för att undvika redundant framtida ordination utan att påstå mer fysiologi än underlaget stödjer.",
     "swim_exposures": 1,
@@ -131,7 +132,7 @@
         "20381137043"
       ]
     },
-    "enduro_exposures": 1,
+    "enduro_exposures": 2,
     "planning_credits": [
       "run_easy_distance",
       "run_threshold",
@@ -150,14 +151,15 @@
         3
       ],
       "enduro": [
-        1
+        1,
+        6
       ],
       "strength": [
         1
       ]
     },
     "strength_exposures": 1,
-    "completed_slot_days": 4,
+    "completed_slot_days": 5,
     "direct_capabilities": [
       "run_threshold"
     ],
@@ -179,7 +181,8 @@
       2,
       3,
       4,
-      5
+      5,
+      6
     ],
     "capability_day_indexes": {
       "run_threshold": [

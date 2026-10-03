@@ -328,7 +328,7 @@
       "starting_state_hash": "52ff32e9ef09bd337669bbf6347085139222e7abd6a7cec41efd516a62e45cfe",
       "athlete_profile_hash": "559e0b6e5a587d351baa65817f81e04e433d0d46aac60b57a73429fd5b43d1bc",
       "mesocycle_source_hash": "9fb730125d779e8644a8486faa35467fe547c33194d479bd24aed65dfcf81994",
-      "microcycle_source_hash": "6b84a08403350ba61e80c371252a60eb5c27e2944bb088a916af8f21200754c3",
+      "microcycle_source_hash": "ce074d19ced9ac2d771f1a92b04576a5c49bf7b4c808f4376f8f4a109c8b75f3",
       "mesocycle_decision_source": "openai",
       "microcycle_decision_source": "deterministic_fallback_after_repair_guard"
     },
@@ -779,7 +779,8 @@
           "20381137043",
           "20396959391",
           "20410781977",
-          "20422632242"
+          "20422632242",
+          "20432126692"
         ],
         "evidence_note": "Familjeexponeringar kommer från faktiskt registrerade aktiviteter i målveckan. Direct_capabilities kräver explicit daterad kapabilitetsevidens. Planning_credits kan dessutom komma från en durabel, entydig strukturell match mot ett närliggande planerat intent och används för att undvika redundant framtida ordination utan att påstå mer fysiologi än underlaget stödjer.",
         "swim_exposures": 1,
@@ -788,7 +789,7 @@
             "20381137043"
           ]
         },
-        "enduro_exposures": 1,
+        "enduro_exposures": 2,
         "planning_credits": [
           "run_easy_distance",
           "run_threshold",
@@ -807,14 +808,15 @@
             3
           ],
           "enduro": [
-            1
+            1,
+            6
           ],
           "strength": [
             1
           ]
         },
         "strength_exposures": 1,
-        "completed_slot_days": 4,
+        "completed_slot_days": 5,
         "direct_capabilities": [
           "run_threshold"
         ],
@@ -836,7 +838,8 @@
           2,
           3,
           4,
-          5
+          5,
+          6
         ],
         "capability_day_indexes": {
           "run_threshold": [
@@ -2401,15 +2404,15 @@
         "role_label": "Extern belastning",
         "recipe_family": [],
         "evidence_state": "absorbed",
-        "evidence_summary": "Absorberad nivå finns dokumenterad i capability-state. Upprepad jämförbar dos med stödjande respons ger stöd för att dosen är absorberad.",
+        "evidence_summary": "Absorberad nivå finns dokumenterad i capability-state. Senaste jämförbara exponeringen är genomförd men saknar återkoppling; tystnad räknas inte som tolerans.",
         "next_review_date": null,
         "progression_axes": [
           "technical_quality",
           "duration"
         ],
-        "progression_ready": true,
-        "progression_state": "ready",
-        "progression_reason": "Upprepad jämförbar dos med stödjande respons ger stöd för att dosen är absorberad."
+        "progression_ready": false,
+        "progression_state": "hold",
+        "progression_reason": "Senaste jämförbara exponeringen är genomförd men saknar återkoppling; tystnad räknas inte som tolerans."
       }
     ],
     "schema_version": 1,

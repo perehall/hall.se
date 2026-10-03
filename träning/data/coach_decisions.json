@@ -5476,6 +5476,339 @@
         }
       ],
       "summary": "Simteknik: passkaraktär eller recept ersätts efter omprövning av mikrocykeln."
+    },
+    {
+      "schema_version": 1,
+      "decision_id": "46aba36bc0fdad932c0b1db9500f7ffffe0a5da7eab7069045fd18b472823520",
+      "generated_at_utc": "2026-10-03T12:03:28.152167+00:00",
+      "planning_date": "2026-10-03",
+      "week_start": "2026-09-28",
+      "capability": "mtb_aerobic",
+      "trigger": "live_replan",
+      "decision": "hold",
+      "reason_code": "not_yet_absorbed",
+      "previous_state": {
+        "evidence_state": "tolerated",
+        "progression_state": "hold",
+        "progression_ready": false,
+        "progression_reason_code": "not_yet_absorbed",
+        "progression_reason": "Dos har demonstrerats/tolererats men saknar ännu upprepad stödjande respons för att klassas som absorberad.",
+        "demonstrated_value": 82.93,
+        "tolerated_value": 82.93,
+        "absorbed_value": null
+      },
+      "new_state": {
+        "evidence_state": "tolerated",
+        "progression_state": "hold",
+        "progression_ready": false,
+        "progression_reason_code": "not_yet_absorbed",
+        "progression_reason": "Dos har demonstrerats/tolererats men saknar ännu upprepad stödjande respons för att klassas som absorberad.",
+        "demonstrated_value": 82.93,
+        "tolerated_value": 82.93,
+        "absorbed_value": null
+      },
+      "evidence": {
+        "activity_refs": [],
+        "microcycle_source_hash": "ce074d19ced9ac2d771f1a92b04576a5c49bf7b4c808f4376f8f4a109c8b75f3",
+        "microcycle_week_key": "2026-W40",
+        "slot_action": "consolidate",
+        "slot_recipe_key": "mtb_aerobic_endurance",
+        "slot_evidence_refs": [
+          "planning_policy.microcycle_policy"
+        ],
+        "capability_reason_code": "not_yet_absorbed",
+        "completed_context_signature": "91bf5d791d53e37c817cc692f66c0dce3135ebb00da08b3092f5ae5a6b87217c"
+      },
+      "affected_workouts": [],
+      "summary": "MTB/XC aerob kapacitet: progression hålls. Dos har demonstrerats/tolererats men saknar ännu upprepad stödjande respons för att klassas som absorberad."
+    },
+    {
+      "schema_version": 1,
+      "decision_id": "6da1a84d2f155f2bf7528fba70e70a94e6a2958a450e8c5f663f0bff1e9b02f5",
+      "generated_at_utc": "2026-10-03T12:03:28.152167+00:00",
+      "planning_date": "2026-10-03",
+      "week_start": "2026-09-28",
+      "capability": "run_easy_distance",
+      "trigger": "completed_training",
+      "decision": "fulfill",
+      "reason_code": "completed_capability_credit",
+      "previous_state": {
+        "evidence_state": "demonstrated",
+        "progression_state": "hold",
+        "progression_ready": false,
+        "progression_reason_code": "missing_feedback",
+        "progression_reason": "Senaste jämförbara exponeringen är genomförd men saknar återkoppling; tystnad räknas inte som tolerans.",
+        "demonstrated_value": 80.07,
+        "tolerated_value": null,
+        "absorbed_value": null
+      },
+      "new_state": {
+        "evidence_state": "demonstrated",
+        "progression_state": "hold",
+        "progression_ready": false,
+        "progression_reason_code": "missing_feedback",
+        "progression_reason": "Senaste jämförbara exponeringen är genomförd men saknar återkoppling; tystnad räknas inte som tolerans.",
+        "demonstrated_value": 80.07,
+        "tolerated_value": null,
+        "absorbed_value": null
+      },
+      "evidence": {
+        "activity_refs": [
+          "20367593813",
+          "20368346174",
+          "20381137043",
+          "20396959391",
+          "20410781977",
+          "20422632242",
+          "20432126692"
+        ],
+        "microcycle_source_hash": "ce074d19ced9ac2d771f1a92b04576a5c49bf7b4c808f4376f8f4a109c8b75f3",
+        "microcycle_week_key": "2026-W40",
+        "slot_action": null,
+        "slot_recipe_key": null,
+        "slot_evidence_refs": [],
+        "capability_reason_code": "missing_feedback",
+        "completed_context_signature": "91bf5d791d53e37c817cc692f66c0dce3135ebb00da08b3092f5ae5a6b87217c"
+      },
+      "affected_workouts": [],
+      "summary": "Lugn löpdistans / tålighet: genomfört stimulus har krediterats. Capability-state är demonstrated; återstående plan har granskats mot utfallet."
+    },
+    {
+      "schema_version": 1,
+      "decision_id": "cd412b14f368db0abc8e3fcefe19103a897cfaa2b03e4d437d64fc08a33a514c",
+      "generated_at_utc": "2026-10-03T12:03:28.152167+00:00",
+      "planning_date": "2026-10-03",
+      "week_start": "2026-09-28",
+      "capability": "run_threshold",
+      "trigger": "completed_training",
+      "decision": "fulfill",
+      "reason_code": "completed_capability_credit",
+      "previous_state": {
+        "evidence_state": "absorbed",
+        "progression_state": "ready",
+        "progression_ready": true,
+        "progression_reason_code": "absorbed_supportive_repeat",
+        "progression_reason": "Upprepad jämförbar dos med stödjande respons ger stöd för att dosen är absorberad.",
+        "demonstrated_value": 32.0,
+        "tolerated_value": 32.0,
+        "absorbed_value": 32.0
+      },
+      "new_state": {
+        "evidence_state": "absorbed",
+        "progression_state": "ready",
+        "progression_ready": true,
+        "progression_reason_code": "absorbed_supportive_repeat",
+        "progression_reason": "Upprepad jämförbar dos med stödjande respons ger stöd för att dosen är absorberad.",
+        "demonstrated_value": 32.0,
+        "tolerated_value": 32.0,
+        "absorbed_value": 32.0
+      },
+      "evidence": {
+        "activity_refs": [
+          "20381137043"
+        ],
+        "microcycle_source_hash": "ce074d19ced9ac2d771f1a92b04576a5c49bf7b4c808f4376f8f4a109c8b75f3",
+        "microcycle_week_key": "2026-W40",
+        "slot_action": null,
+        "slot_recipe_key": null,
+        "slot_evidence_refs": [],
+        "capability_reason_code": "absorbed_supportive_repeat",
+        "completed_context_signature": "91bf5d791d53e37c817cc692f66c0dce3135ebb00da08b3092f5ae5a6b87217c"
+      },
+      "affected_workouts": [],
+      "summary": "Kontrollerad löptröskel: genomfört stimulus har krediterats. Capability-state är absorbed; återstående plan har granskats mot utfallet."
+    },
+    {
+      "schema_version": 1,
+      "decision_id": "53051ec7ea4a16c478a7f986447c20eeaba68eac2670d80fd756ab611f8722b6",
+      "generated_at_utc": "2026-10-03T12:03:28.152167+00:00",
+      "planning_date": "2026-10-03",
+      "week_start": "2026-09-28",
+      "capability": "strength_core",
+      "trigger": "completed_training",
+      "decision": "fulfill",
+      "reason_code": "completed_capability_credit",
+      "previous_state": {
+        "evidence_state": "absorbed",
+        "progression_state": "ready",
+        "progression_ready": true,
+        "progression_reason_code": "absorbed_supportive_repeat",
+        "progression_reason": "Upprepad jämförbar dos med stödjande respons ger stöd för att dosen är absorberad.",
+        "demonstrated_value": 36.87,
+        "tolerated_value": 36.87,
+        "absorbed_value": 36.87
+      },
+      "new_state": {
+        "evidence_state": "absorbed",
+        "progression_state": "ready",
+        "progression_ready": true,
+        "progression_reason_code": "absorbed_supportive_repeat",
+        "progression_reason": "Upprepad jämförbar dos med stödjande respons ger stöd för att dosen är absorberad.",
+        "demonstrated_value": 36.87,
+        "tolerated_value": 36.87,
+        "absorbed_value": 36.87
+      },
+      "evidence": {
+        "activity_refs": [
+          "20367593813",
+          "20368346174",
+          "20381137043",
+          "20396959391",
+          "20410781977",
+          "20422632242",
+          "20432126692"
+        ],
+        "microcycle_source_hash": "ce074d19ced9ac2d771f1a92b04576a5c49bf7b4c808f4376f8f4a109c8b75f3",
+        "microcycle_week_key": "2026-W40",
+        "slot_action": null,
+        "slot_recipe_key": null,
+        "slot_evidence_refs": [],
+        "capability_reason_code": "absorbed_supportive_repeat",
+        "completed_context_signature": "91bf5d791d53e37c817cc692f66c0dce3135ebb00da08b3092f5ae5a6b87217c"
+      },
+      "affected_workouts": [],
+      "summary": "Core: genomfört stimulus har krediterats. Capability-state är absorbed; återstående plan har granskats mot utfallet."
+    },
+    {
+      "schema_version": 1,
+      "decision_id": "b3fcda76a964a07a68fe4f52b94f8e82e5ee634474697a4ee7d70350f443989f",
+      "generated_at_utc": "2026-10-03T12:03:28.152167+00:00",
+      "planning_date": "2026-10-03",
+      "week_start": "2026-09-28",
+      "capability": "strength_unilateral",
+      "trigger": "completed_training",
+      "decision": "fulfill",
+      "reason_code": "completed_capability_credit",
+      "previous_state": {
+        "evidence_state": "absorbed",
+        "progression_state": "ready",
+        "progression_ready": true,
+        "progression_reason_code": "absorbed_supportive_repeat",
+        "progression_reason": "Upprepad jämförbar dos med stödjande respons ger stöd för att dosen är absorberad.",
+        "demonstrated_value": 36.87,
+        "tolerated_value": 36.87,
+        "absorbed_value": 36.87
+      },
+      "new_state": {
+        "evidence_state": "absorbed",
+        "progression_state": "ready",
+        "progression_ready": true,
+        "progression_reason_code": "absorbed_supportive_repeat",
+        "progression_reason": "Upprepad jämförbar dos med stödjande respons ger stöd för att dosen är absorberad.",
+        "demonstrated_value": 36.87,
+        "tolerated_value": 36.87,
+        "absorbed_value": 36.87
+      },
+      "evidence": {
+        "activity_refs": [
+          "20367593813",
+          "20368346174",
+          "20381137043",
+          "20396959391",
+          "20410781977",
+          "20422632242",
+          "20432126692"
+        ],
+        "microcycle_source_hash": "ce074d19ced9ac2d771f1a92b04576a5c49bf7b4c808f4376f8f4a109c8b75f3",
+        "microcycle_week_key": "2026-W40",
+        "slot_action": null,
+        "slot_recipe_key": null,
+        "slot_evidence_refs": [],
+        "capability_reason_code": "absorbed_supportive_repeat",
+        "completed_context_signature": "91bf5d791d53e37c817cc692f66c0dce3135ebb00da08b3092f5ae5a6b87217c"
+      },
+      "affected_workouts": [],
+      "summary": "Unilateral benstyrka: genomfört stimulus har krediterats. Capability-state är absorbed; återstående plan har granskats mot utfallet."
+    },
+    {
+      "schema_version": 1,
+      "decision_id": "4fa4399707fcd0df3e01addb9325ac005a9bc4a246c142619fc70b2f334a0ab8",
+      "generated_at_utc": "2026-10-03T12:03:28.152167+00:00",
+      "planning_date": "2026-10-03",
+      "week_start": "2026-09-28",
+      "capability": "swim_aerobic",
+      "trigger": "live_replan",
+      "decision": "hold",
+      "reason_code": "not_yet_absorbed",
+      "previous_state": {
+        "evidence_state": "demonstrated",
+        "progression_state": "hold",
+        "progression_ready": false,
+        "progression_reason_code": "not_yet_absorbed",
+        "progression_reason": "Dos har demonstrerats/tolererats men saknar ännu upprepad stödjande respons för att klassas som absorberad.",
+        "demonstrated_value": 3500.0,
+        "tolerated_value": null,
+        "absorbed_value": null
+      },
+      "new_state": {
+        "evidence_state": "demonstrated",
+        "progression_state": "hold",
+        "progression_ready": false,
+        "progression_reason_code": "not_yet_absorbed",
+        "progression_reason": "Dos har demonstrerats/tolererats men saknar ännu upprepad stödjande respons för att klassas som absorberad.",
+        "demonstrated_value": 3500.0,
+        "tolerated_value": null,
+        "absorbed_value": null
+      },
+      "evidence": {
+        "activity_refs": [],
+        "microcycle_source_hash": "ce074d19ced9ac2d771f1a92b04576a5c49bf7b4c808f4376f8f4a109c8b75f3",
+        "microcycle_week_key": "2026-W40",
+        "slot_action": "consolidate",
+        "slot_recipe_key": "swim_aerobic_technique",
+        "slot_evidence_refs": [
+          "mesocycle.primary_capabilities"
+        ],
+        "capability_reason_code": "not_yet_absorbed",
+        "completed_context_signature": "91bf5d791d53e37c817cc692f66c0dce3135ebb00da08b3092f5ae5a6b87217c"
+      },
+      "affected_workouts": [],
+      "summary": "Sim aerob kapacitet: progression hålls. Dos har demonstrerats/tolererats men saknar ännu upprepad stödjande respons för att klassas som absorberad."
+    },
+    {
+      "schema_version": 1,
+      "decision_id": "e455863ca875d41946d4a7a67aa0d6c043682d6a1a29226c68e8bbaf1a35d942",
+      "generated_at_utc": "2026-10-03T12:03:28.152167+00:00",
+      "planning_date": "2026-10-03",
+      "week_start": "2026-09-28",
+      "capability": "swim_technique",
+      "trigger": "live_replan",
+      "decision": "hold",
+      "reason_code": "qualitative_capability_requires_quality_review",
+      "previous_state": {
+        "evidence_state": "observed",
+        "progression_state": "qualitative_review",
+        "progression_ready": false,
+        "progression_reason_code": "qualitative_capability_requires_quality_review",
+        "progression_reason": "Kapaciteten har verifierad exponering, men progression kan inte avgöras från tid/distans utan kvalitativ eller specifik teknisk evidens.",
+        "demonstrated_value": null,
+        "tolerated_value": null,
+        "absorbed_value": null
+      },
+      "new_state": {
+        "evidence_state": "observed",
+        "progression_state": "qualitative_review",
+        "progression_ready": false,
+        "progression_reason_code": "qualitative_capability_requires_quality_review",
+        "progression_reason": "Kapaciteten har verifierad exponering, men progression kan inte avgöras från tid/distans utan kvalitativ eller specifik teknisk evidens.",
+        "demonstrated_value": null,
+        "tolerated_value": null,
+        "absorbed_value": null
+      },
+      "evidence": {
+        "activity_refs": [],
+        "microcycle_source_hash": "ce074d19ced9ac2d771f1a92b04576a5c49bf7b4c808f4376f8f4a109c8b75f3",
+        "microcycle_week_key": "2026-W40",
+        "slot_action": "consolidate",
+        "slot_recipe_key": "swim_aerobic_technique",
+        "slot_evidence_refs": [
+          "mesocycle.primary_capabilities"
+        ],
+        "capability_reason_code": "qualitative_capability_requires_quality_review",
+        "completed_context_signature": "91bf5d791d53e37c817cc692f66c0dce3135ebb00da08b3092f5ae5a6b87217c"
+      },
+      "affected_workouts": [],
+      "summary": "Simteknik: progression hålls. Kapaciteten har verifierad exponering, men progression kan inte avgöras från tid/distans utan kvalitativ eller specifik teknisk evidens."
     }
   ]
 }

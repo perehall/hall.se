@@ -19,10 +19,10 @@
       "activity_count": 10
     },
     "enduro": {
-      "time_s": 59189,
-      "distance_m": 211249.3,
-      "active_days": 9,
-      "activity_count": 9
+      "time_s": 65387,
+      "distance_m": 242547.8,
+      "active_days": 10,
+      "activity_count": 10
     },
     "swimrun": {
       "time_s": 9940,
@@ -53,7 +53,7 @@
       "recent_7d": {
         "end": "2026-10-03",
         "start": "2026-09-27",
-        "time_s": 29431,
+        "time_s": 35629,
         "by_family": {
           "run": {
             "time_s": 12535,
@@ -71,9 +71,9 @@
             "activity_count": 1
           },
           "enduro": {
-            "time_s": 5892,
-            "active_days": 1,
-            "activity_count": 1
+            "time_s": 12090,
+            "active_days": 2,
+            "activity_count": 2
           },
           "strength": {
             "time_s": 2212,
@@ -81,13 +81,13 @@
             "activity_count": 1
           }
         },
-        "active_days": 6,
-        "activity_count": 7
+        "active_days": 7,
+        "activity_count": 8
       },
       "recent_28d": {
         "end": "2026-10-03",
         "start": "2026-09-06",
-        "time_s": 152914,
+        "time_s": 159112,
         "by_family": {
           "run": {
             "time_s": 57956,
@@ -105,9 +105,9 @@
             "activity_count": 6
           },
           "enduro": {
-            "time_s": 42403,
-            "active_days": 6,
-            "activity_count": 6
+            "time_s": 48601,
+            "active_days": 7,
+            "activity_count": 7
           },
           "strength": {
             "time_s": 7974,
@@ -115,8 +115,8 @@
             "activity_count": 4
           }
         },
-        "active_days": 27,
-        "activity_count": 33
+        "active_days": 28,
+        "activity_count": 34
       },
       "previous_7d": {
         "end": "2026-09-26",
@@ -1142,28 +1142,6 @@
         "metric": "duration_minutes",
         "exposures": [
           {
-            "date": "2026-08-24",
-            "metric": "duration_minutes",
-            "dose_value": 97.35,
-            "activity_id": 19882521682,
-            "evidence_basis": "external_observed",
-            "direct_response": {
-              "signal": "unknown",
-              "rpe_values": [],
-              "caution_terms": [],
-              "supportive_terms": []
-            },
-            "evidence_policy": "external_observed",
-            "response_status": "demonstrated",
-            "repeat_supported": true,
-            "recovery_context_24_72h": {
-              "signal": "unobserved",
-              "observations": [],
-              "window_complete": true,
-              "causal_interpretation": "not_inferred"
-            }
-          },
-          {
             "date": "2026-08-31",
             "metric": "duration_minutes",
             "dose_value": 100.4,
@@ -1404,42 +1382,60 @@
               "window_complete": true,
               "causal_interpretation": "not_inferred"
             }
+          },
+          {
+            "date": "2026-10-03",
+            "metric": "duration_minutes",
+            "dose_value": 103.3,
+            "activity_id": 20432126692,
+            "evidence_basis": "external_observed",
+            "direct_response": {
+              "signal": "unknown",
+              "rpe_values": [],
+              "caution_terms": [],
+              "supportive_terms": []
+            },
+            "evidence_policy": "external_observed",
+            "response_status": "demonstrated",
+            "repeat_supported": true,
+            "recovery_context_24_72h": {
+              "signal": "unobserved",
+              "observations": [],
+              "window_complete": false,
+              "causal_interpretation": "not_inferred"
+            }
           }
         ],
         "absorbed_value": 98.2,
         "evidence_state": "absorbed",
         "latest_exposure": {
-          "date": "2026-09-28",
+          "date": "2026-10-03",
           "metric": "duration_minutes",
-          "dose_value": 98.2,
-          "activity_id": 20367593813,
+          "dose_value": 103.3,
+          "activity_id": 20432126692,
           "evidence_basis": "external_observed",
           "direct_response": {
-            "signal": "supportive",
-            "rpe_values": [
-              4.0
-            ],
+            "signal": "unknown",
+            "rpe_values": [],
             "caution_terms": [],
-            "supportive_terms": [
-              "pigg"
-            ]
+            "supportive_terms": []
           },
           "evidence_policy": "external_observed",
-          "response_status": "absorbed",
+          "response_status": "demonstrated",
           "repeat_supported": true,
           "recovery_context_24_72h": {
             "signal": "unobserved",
             "observations": [],
-            "window_complete": true,
+            "window_complete": false,
             "causal_interpretation": "not_inferred"
           }
         },
         "tolerated_value": 98.2,
-        "progression_ready": true,
-        "progression_state": "ready",
+        "progression_ready": false,
+        "progression_state": "hold",
         "demonstrated_value": 226.3,
-        "progression_reason": "Upprepad jämförbar dos med stödjande respons ger stöd för att dosen är absorberad.",
-        "progression_reason_code": "absorbed_supportive_repeat"
+        "progression_reason": "Senaste jämförbara exponeringen är genomförd men saknar återkoppling; tystnad räknas inte som tolerans.",
+        "progression_reason_code": "missing_feedback"
       },
       "run_hill_quality": {
         "metric": "repetitions",
@@ -1946,34 +1942,6 @@
   },
   "schema_version": 1,
   "recent_sessions": [
-    {
-      "id": 20157600319,
-      "date": "2026-09-13",
-      "label": "TrailRun",
-      "family": "run",
-      "distance_m": 18746.1,
-      "user_report": null,
-      "max_heartrate": 150.0,
-      "classification": "training",
-      "elapsed_time_s": 6462,
-      "elevation_gain_m": 237.0,
-      "training_profile": {
-        "stimuli": [],
-        "activity_id": 20157600319,
-        "source_hash": "067ee4f8bd60f7b45980feb1464f80d18e14b5e5624df35fbeb66c2c6604f894",
-        "uncertainties": [],
-        "intent_matches": [],
-        "schema_version": 2,
-        "planning_credits": [],
-        "observed_structure": {
-          "run_time_intervals": {
-            "structured": false
-          }
-        },
-        "interpretation_boundary": "Observerad struktur är mätdata. Fysiologiska stimulus kräver explicit evidens. Planning credit från strukturell intent-match betyder att den genomförda dosen kan ersätta ett entydigt närliggande planerat pass; det påstår inte mer om fysiologisk intensitet än källorna stödjer."
-      },
-      "average_heartrate": 137.2
-    },
     {
       "id": 20175536586,
       "date": "2026-09-14",
@@ -2874,6 +2842,34 @@
         "interpretation_boundary": "Observerad struktur är mätdata. Fysiologiska stimulus kräver explicit evidens. Planning credit från strukturell intent-match betyder att den genomförda dosen kan ersätta ett entydigt närliggande planerat pass; det påstår inte mer om fysiologisk intensitet än källorna stödjer."
       },
       "average_heartrate": 144.3
+    },
+    {
+      "id": 20432126692,
+      "date": "2026-10-03",
+      "label": "Enduro",
+      "family": "enduro",
+      "distance_m": 31298.5,
+      "user_report": null,
+      "max_heartrate": 154.0,
+      "classification": "training",
+      "elapsed_time_s": 6198,
+      "elevation_gain_m": 684.0,
+      "training_profile": {
+        "stimuli": [],
+        "activity_id": 20432126692,
+        "source_hash": "2f36d9143386cbe31d1bd31ad31b1a5837fd64c8d897ea8c6e7092a06b78cc53",
+        "uncertainties": [],
+        "intent_matches": [],
+        "schema_version": 2,
+        "planning_credits": [],
+        "observed_structure": {
+          "run_time_intervals": {
+            "structured": false
+          }
+        },
+        "interpretation_boundary": "Observerad struktur är mätdata. Fysiologiska stimulus kräver explicit evidens. Planning credit från strukturell intent-match betyder att den genomförda dosen kan ersätta ett entydigt närliggande planerat pass; det påstår inte mer om fysiologisk intensitet än källorna stödjer."
+      },
+      "average_heartrate": 130.5
     }
   ],
   "capability_facts": {
@@ -3213,7 +3209,7 @@
       "verified_exposure_count": 2
     }
   },
-  "generated_at_utc": "2026-10-03T01:05:22.432902+00:00",
+  "generated_at_utc": "2026-10-03T11:59:33.219458+00:00",
   "capability_states": {
     "model": "capability_feedback_state_v1",
     "principle": "Kvantitativ progression kräver verifierad capability-evidens och dose-response. Teknikförmågor kan vara observerade men blir inte automatiskt progressionsredo från tid eller distans.",
@@ -3625,12 +3621,12 @@
           "technical_quality",
           "duration"
         ],
-        "progression_ready": true,
-        "progression_state": "ready",
+        "progression_ready": false,
+        "progression_state": "hold",
         "demonstrated_value": 226.3,
-        "progression_reason": "Upprepad jämförbar dos med stödjande respons ger stöd för att dosen är absorberad.",
+        "progression_reason": "Senaste jämförbara exponeringen är genomförd men saknar återkoppling; tystnad räknas inte som tolerans.",
         "verified_exposures": [],
-        "progression_reason_code": "absorbed_supportive_repeat",
+        "progression_reason_code": "missing_feedback",
         "verified_exposure_count": 0,
         "latest_verified_exposure": null
       },

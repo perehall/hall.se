@@ -4,6 +4,52 @@
       "model": "gpt-5-mini",
       "assessment": {
         "facts": [
+          "Enduro: 31,30 km · 1:43:18 · 684 m+ · snittpuls 130,5 · maxpuls 154.",
+          "Planerat simpass 3200 m; genomfört 31298.5 m."
+        ],
+        "summary": "Enduropasset omfattade 1:43:18 totalt och 684 m+; det räknas som faktisk teknisk och mekanisk träningsbelastning inför nästa prioriterade pass.",
+        "unknowns": [
+          "Subjektiv svar/benstatus efter passet (user_report tom)",
+          "Detaljerad teknisk intensitet under enduron som påverkar lokal muskeltrötthet"
+        ],
+        "confidence": "medium",
+        "interpretations": [
+          "Passet levererar teknisk/neuromuskulär och mekanisk exponering som bör väga tungt mot nästa dagars benbelastning.",
+          "Full återhämtning från dagens pass är ännu inte verifierad."
+        ],
+        "load_interpretation": "För Enduro används hela 1:43:18 som tidsomfattning; Stravas rörelsetid 1:30:41 och snittpuls 130 beskriver inte den tekniska/mekaniska belastningen ensamma."
+      },
+      "auto_apply": {
+        "note": "Ingen automatisk planändring.",
+        "applied": false
+      },
+      "activity_id": 20432126692,
+      "plan_action": {
+        "action": "keep",
+        "reason": "Planen prioriterar lågmekanisk simning dag efter enduro men verifierad simexponering saknas; konservativt behålls planens simpass oförändrat för eftervärdering.",
+        "target_date": "2026-10-03",
+        "dose_option_id": "",
+        "recommendation": "Genomför planerat simpass (3 200 m) endast om du känner dig fräsch i axlar/överkropp och benen känns ok vid gång/trappa; annars vila eller ersätt med mycket lätt teknik‑fokus i bassängen (max 30–40 min lätt).",
+        "requires_approval": false,
+        "target_workout_key": "20260928-run_threshold-swim_aerobic-swim_technique:mc1:2026-10-03:swim_aerobic_technique_1"
+      },
+      "activity_date": "2026-10-03",
+      "activity_name": "Enduro vid lunch",
+      "generated_at_utc": "2026-10-03T12:03:35.700462+00:00",
+      "analysis_contract": {
+        "pipeline_version": 4,
+        "coach_prompt_sha256": "7e290bcd87ab7f7357617cfcdd550c8afd908220c874690254e4bb6ce1df3806",
+        "analysis_code_sha256": "3323209316fd3786118440b80471660165354ea9f5a4df5bc883275747d2cc5e",
+        "plan_comparison_version": 3,
+        "workout_context_version": 3
+      },
+      "performance_marker_id": null,
+      "performance_protocol_key": null
+    },
+    {
+      "model": "gpt-5-mini",
+      "assessment": {
+        "facts": [
           "Löpning: 12,64 km · 1:06:16 · 160 m+ · snittpuls 144,3 · maxpuls 158."
         ],
         "summary": "12.6 km trail på 66 min/snitt 5:15/km med varierande 1km-tempon och genomsnittspuls 144 visar ett genomfört långt terrängpass utan strukturerade intervaller.",
@@ -1324,56 +1370,11 @@
       },
       "performance_marker_id": null,
       "performance_protocol_key": null
-    },
-    {
-      "model": "gpt-5-mini",
-      "assessment": {
-        "facts": [
-          "Simning: 3,20 km · 58:38 · snittpuls 128,4 · maxpuls 157.",
-          "Planstatus 2026-09-09: dagen är markerad genomförd i coachens beslutsunderlag."
-        ],
-        "summary": "Genomfört simpass 3 200 m med strukturerad serie (1×400, 6×50, 4×500, 6×50, 1×200) och uppvisar stabila 500 m-block och snabbare 50:or mot slutet.",
-        "unknowns": [
-          "Subjektiv känsla efter passet saknas i användarrapport vilket kan ändra återhämtningsbedömning",
-          "kommande enduro-planerat pass (lördag) ännu ej genomfört och kan påverka söndagens distansbeslut"
-        ],
-        "confidence": "medium",
-        "interpretations": [
-          "Passet visar väl genomförd simstruktur och bibehållen teknisk/aerob kapacitet — 500 m-seten var stabila vilket talar för absorberbar simdos",
-          "Ingen indikation i dessa data eller användarrapport att simpasset kräver reducering av kommande prioriterade löppass"
-        ],
-        "load_interpretation": "Simningen var ett tekniskt/aerobt underhållspass som inte indikerar behov av att ändra närmaste träning i sig."
-      },
-      "auto_apply": {
-        "note": "Ingen automatisk planändring.",
-        "applied": false
-      },
-      "activity_id": 20106458579,
-      "plan_action": {
-        "action": "keep",
-        "reason": "Simpasset var underhåll/teknikorienterat och visar inga tecken som kräver kortsiktig nedskalning av planerad MTB-stöddos.",
-        "target_date": "2026-09-10",
-        "dose_option_id": "",
-        "recommendation": "Behåll planerad MTB/XC 60 min…",
-        "requires_approval": false
-      },
-      "activity_date": "2026-09-09",
-      "activity_name": "Simning på kvällen",
-      "generated_at_utc": "2026-09-10T16:23:29.841094+00:00",
-      "analysis_contract": {
-        "pipeline_version": 1,
-        "coach_prompt_sha256": "77c1ede914e13437b2820daf92791338eda794f8893dbaa712e1d26c739fc8be",
-        "analysis_code_sha256": "7f516df31a5e82dd8cab3dc218fb5637f38c55d89cdf66aa63f9e81b72369f28",
-        "plan_comparison_version": 1,
-        "workout_context_version": 3
-      },
-      "performance_marker_id": null,
-      "performance_protocol_key": null
     }
   ],
-  "last_run_utc": "2026-10-03T01:07:58.607517+00:00",
+  "last_run_utc": "2026-10-03T12:03:35.700462+00:00",
   "contract_version": 16,
-  "last_trigger_hash": "6ed803fdd1dc546be6922aeba06b078d472d06bf84e405be213241f6754d7f49",
+  "last_trigger_hash": "a7872bdb65d434915626d4c0dc9e69a3edb15ec40f1a2c69611e000fd9328c5f",
   "analysed_activity_ids": [
     "20367593813",
     "20350203020",
@@ -1412,7 +1413,8 @@
     "20381137043",
     "20396959391",
     "20410781977",
-    "20422632242"
+    "20422632242",
+    "20432126692"
   ],
   "analysis_ledger_version": 1,
   "output_contract_version": 19,
