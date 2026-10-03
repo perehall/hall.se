@@ -1000,6 +1000,22 @@
       "source_hash": "d52b54da7ddffea742fab7488977c9b5e0850482f62c1cbd01eedea5b361ccb8",
       "generated_at_utc": "2026-10-02T17:32:55.039498+00:00",
       "summary": "Dag 1-slotten (mtb_technical) tas bort eftersom måndagen är blockad av faktisk enduro och nya sessioner aldrig får läggas där. Övriga val behålls eftersom de uppfyller hard_requirements: primära kapaciteter täcks direkt (run_threshold + 2 simpass inkl. teknik), minst en styrke/core‑session finns, max löpkvaliteter är respekterade, dag 2 är låg benbelastning efter enduro och antalet slots ligger inom tillåtet spann."
+    },
+    {
+      "kind": "microcycle",
+      "decision_id": "2026-W40",
+      "source": "deterministic_fallback_after_repair_guard",
+      "source_hash": "6b84a08403350ba61e80c371252a60eb5c27e2944bb088a916af8f21200754c3",
+      "generated_at_utc": "2026-10-03T01:06:58.164999+00:00",
+      "summary": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern."
+    },
+    {
+      "kind": "upcoming_microcycle",
+      "decision_id": "2026-W41",
+      "source": "openai",
+      "source_hash": "4a765b8ed7cf10c51cd38f14c46b8edafb113d7ccc3544d9c69eada42e60b02e",
+      "generated_at_utc": "2026-10-03T01:07:52.147799+00:00",
+      "summary": "Följer mikrocykel-blueprint (develop) samtidigt som mångmålspolicyn och mesocyklens guardrails skyddas: måndagens fasta enduro blockerar dag 1 och dag 2 hålls låg benbelastning. Run_threshold (absorberad och progression_ready) varieras i struktur denna vecka (kortare reps) som blockets utvecklingspunkt; sim exponeras två gånger (spridda) på konservativ nivå för att bevara teknik och undvika volymprogression då swim progression inte är ready. Minst en styrke/core-session skyddas. Lugn löpdistans hanteras som konsolidering (support_if_absorbable) och inga två tungt benbelastande löppass ligger intill varandra. Beslut speglar observerad dose_response och 24–72h‑kontext (caution för vissa sim-/runfönster) och introducerar ingen odokumenterad volym- eller intensitetsökning."
     }
   ]
 }

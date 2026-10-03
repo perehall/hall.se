@@ -2,20 +2,20 @@
   "slots": [
     {
       "action": "consolidate",
-      "day_index": 5,
-      "rationale": "Blockets preliminära grundplan föreslår denna stödjande passkaraktär; den tas bara med när ingen redan planerad exponering fyller samma stödroll och belastningsordningen tillåter.",
-      "recipe_key": "run_hill_quality",
-      "evidence_refs": [
-        "planning_policy.microcycle_policy"
-      ]
-    },
-    {
-      "action": "consolidate",
       "day_index": 6,
       "rationale": "Lågmekanisk simexponering dagen efter fast enduro följer blockets planerade passkaraktär utan att anta att benen är redo för ny benkvalitet.",
       "recipe_key": "swim_aerobic_technique",
       "evidence_refs": [
         "mesocycle.primary_capabilities"
+      ]
+    },
+    {
+      "action": "consolidate",
+      "day_index": 7,
+      "rationale": "Vald sekundär exponering för mtb_aerobic; övriga sekundära kapaciteter behöver inte täckas varje mikrocykel.",
+      "recipe_key": "mtb_aerobic_endurance",
+      "evidence_refs": [
+        "planning_policy.microcycle_policy"
       ]
     }
   ],
@@ -23,24 +23,24 @@
   "week_key": "2026-W40",
   "rationale": "Deterministisk reservkomposition som täcker primära stimuli och skyddad kapacitet, respekterar fast enduro och lämnar återhämtningsutrymme i stället för att fylla kalendern.",
   "week_start": "2026-09-28",
-  "source_hash": "11b23e7821e6b36df048c473a80845dde2a26c6e66c165952bfae4e3e01c41ee",
+  "source_hash": "6b84a08403350ba61e80c371252a60eb5c27e2944bb088a916af8f21200754c3",
   "guard_repair": {
     "result": "fallback",
     "attempted": true,
     "repair_failures": [
-      "tung benbelastning får inte planeras på söndagen direkt före nästa fasta enduro: mtb_technical, run_easy_trail",
-      "löptröskel/backkvalitet/lång löpdistans får inte staplas på två på varandra följande dagar",
-      "dubbelpass klustras samtidigt som en deklarerat tillgänglig träningsdag lämnas oanvänd; fördela befintliga stimuli innan dubbelpass används"
+      "tung benbelastning får inte planeras på söndagen direkt före nästa fasta enduro: run_easy_trail",
+      "dubbelpass klustras samtidigt som en deklarerat tillgänglig träningsdag lämnas oanvänd; fördela befintliga stimuli innan dubbelpass används",
+      "strength_core är redundant: styrka/core är redan faktiskt genomförd i mikrocykeln"
     ],
     "initial_failures": [
-      "tung benbelastning får inte planeras på söndagen direkt före nästa fasta enduro: mtb_technical",
+      "tung benbelastning får inte planeras på söndagen direkt före nästa fasta enduro: mtb_technical, run_easy_trail",
       "dubbelpass klustras samtidigt som en deklarerat tillgänglig träningsdag lämnas oanvänd; fördela befintliga stimuli innan dubbelpass används",
       "strength_core är redundant: styrka/core är redan faktiskt genomförd i mikrocykeln"
     ]
   },
   "mesocycle_id": "20260928-run_threshold-swim_aerobic-swim_technique",
   "schema_version": 1,
-  "generated_at_utc": "2026-10-02T17:12:46.168434+00:00",
+  "generated_at_utc": "2026-10-03T01:06:58.164999+00:00",
   "planner_revision": 17,
   "competition_context": {
     "as_of": "2026-09-28",
